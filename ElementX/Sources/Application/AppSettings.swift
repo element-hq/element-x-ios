@@ -81,38 +81,22 @@ final class AppSettings {
     
     // MARK: - Hooks
     
-    func override(defaultHomeserverAddress: String? = nil,
-                  oidcRedirectURL: URL? = nil,
-                  websiteURL: URL? = nil,
-                  logoURL: URL? = nil,
-                  copyrightURL: URL? = nil,
-                  acceptableUseURL: URL? = nil,
-                  privacyURL: URL? = nil,
-                  supportEmailAddress: String? = nil) {
-        if let defaultHomeserverAddress {
-            self.defaultHomeserverAddress = defaultHomeserverAddress
-        }
-        if let oidcRedirectURL {
-            self.oidcRedirectURL = oidcRedirectURL
-        }
-        if let websiteURL {
-            self.websiteURL = websiteURL
-        }
-        if let logoURL {
-            self.logoURL = logoURL
-        }
-        if let copyrightURL {
-            self.copyrightURL = copyrightURL
-        }
-        if let acceptableUseURL {
-            self.acceptableUseURL = acceptableUseURL
-        }
-        if let privacyURL {
-            self.privacyURL = privacyURL
-        }
-        if let supportEmailAddress {
-            self.supportEmailAddress = supportEmailAddress
-        }
+    func override(defaultHomeserverAddress: String,
+                  oidcRedirectURL: URL,
+                  websiteURL: URL,
+                  logoURL: URL,
+                  copyrightURL: URL,
+                  acceptableUseURL: URL,
+                  privacyURL: URL,
+                  supportEmailAddress: String) {
+        self.defaultHomeserverAddress = defaultHomeserverAddress
+        self.oidcRedirectURL = oidcRedirectURL
+        self.websiteURL = websiteURL
+        self.logoURL = logoURL
+        self.copyrightURL = copyrightURL
+        self.acceptableUseURL = acceptableUseURL
+        self.privacyURL = privacyURL
+        self.supportEmailAddress = supportEmailAddress
     }
     
     // MARK: - Application
