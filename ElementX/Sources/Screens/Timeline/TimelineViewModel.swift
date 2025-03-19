@@ -841,11 +841,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case let .user(id):
             let isOwnMention = id == state.ownUserID
             if let profile = state.members[id] {
-                var name = id
-                if let displayName = profile.displayName {
-                    name = "@\(displayName)"
-                }
-                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: name)
+                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: PillUtilities.userPillDisplayText(username: profile.displayName, userID: id))
             } else {
                 pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: id)
                 pillContext.cancellable = context.$viewState
@@ -854,49 +850,29 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                         guard let pillContext else {
                             return
                         }
-                        
-                        var name = id
-                        if let displayName = profile.displayName {
-                            name = "@\(displayName)"
-                        }
-                        pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: name)
+                        pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: PillUtilities.userPillDisplayText(username: profile.displayName, userID: id))
                         pillContext.cancellable = nil
                     }
             }
         case .allUsers:
-            pillContext.viewState = .mention(isOwnMention: true, displayText: PillConstants.atRoom)
+            pillContext.viewState = .mention(isOwnMention: true, displayText: PillUtilities.atRoom)
         case .event(let room):
-            var pillViewState: PillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(L10n.commonRoom))
-            defer {
-                pillContext.viewState = pillViewState
-            }
-            
+            let pillViewState: PillViewState
             switch room {
             case .roomAlias(let alias):
-                guard let roomSummary = clientProxy.roomSummaryForAlias(alias) else {
-                    return
-                }
-                // We always show the link image for event permalinks
-                pillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(roomSummary.name))
+                let roomSummary = clientProxy.roomSummaryForAlias(alias)
+                pillViewState = .reference(displayText: PillUtilities.eventPillDisplayText(roomName: roomSummary?.name, rawRoomText: alias))
             case .roomID(let id):
-                guard let roomSummary = clientProxy.roomSummaryForIdentifier(id) else {
-                    return
-                }
-                // We always show the link image for event permalinks
-                pillViewState = .reference(avatar: .link, displayText: L10n.screenRoomEventPill(roomSummary.name))
+                let roomSummary = clientProxy.roomSummaryForIdentifier(id)
+                pillViewState = .reference(displayText: PillUtilities.eventPillDisplayText(roomName: roomSummary?.name, rawRoomText: id))
             }
+            pillContext.viewState = pillViewState
         case .roomAlias(let alias):
-            guard let roomSummary = clientProxy.roomSummaryForAlias(alias) else {
-                pillContext.viewState = .reference(avatar: .link, displayText: alias)
-                return
-            }
-            pillContext.viewState = .reference(avatar: .roomAvatar(roomSummary.avatar), displayText: roomSummary.name)
+            let roomSummary = clientProxy.roomSummaryForAlias(alias)
+            pillContext.viewState = .reference(displayText: PillUtilities.roomPillDisplayText(roomName: roomSummary?.name, rawRoomText: alias))
         case .roomID(let id):
-            guard let roomSummary = clientProxy.roomSummaryForIdentifier(id) else {
-                pillContext.viewState = .reference(avatar: .link, displayText: id)
-                return
-            }
-            pillContext.viewState = .reference(avatar: .roomAvatar(roomSummary.avatar), displayText: roomSummary.name)
+            let roomSummary = clientProxy.roomSummaryForIdentifier(id)
+            pillContext.viewState = .reference(displayText: PillUtilities.roomPillDisplayText(roomName: roomSummary?.name, rawRoomText: id))
         }
     }
     

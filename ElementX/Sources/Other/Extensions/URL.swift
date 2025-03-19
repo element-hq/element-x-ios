@@ -101,6 +101,20 @@ extension URL: @retroactive ExpressibleByStringLiteral {
         return nil
     }
     
+    static let confirmationScheme = "confirm"
+    
+    var requiresConfirmation: Bool {
+        scheme == Self.confirmationScheme
+    }
+    
+    var confirmationParameters: ConfirmURLParameters? {
+        guard requiresConfirmation,
+              let queryItems = URLComponents(url: self, resolvingAgainstBaseURL: true)?.queryItems else {
+            return nil
+        }
+        return ConfirmURLParameters(queryItems: queryItems)
+    }
+    
     // MARK: Mocks
     
     static var mockMXCAudio: URL { "mxc://matrix.org/1234567890AuDiO" }
@@ -109,4 +123,29 @@ extension URL: @retroactive ExpressibleByStringLiteral {
     static var mockMXCVideo: URL { "mxc://matrix.org/1234567890ViDeO" }
     static var mockMXCAvatar: URL { "mxc://matrix.org/1234567890AvAtAr" }
     static var mockMXCUserAvatar: URL { "mxc://matrix.org/1234567890AvAtArUsEr" }
+}
+
+struct ConfirmURLParameters {
+    static let internalURLKey = "internalURL"
+    static let displayStringKey = "displayString"
+    
+    let internalURL: URL
+    let displayString: String
+    
+    var urlQueryItems: [URLQueryItem] {
+        [URLQueryItem(name: Self.internalURLKey, value: internalURL.absoluteString),
+         URLQueryItem(name: Self.displayStringKey, value: displayString)]
+    }
+}
+
+extension ConfirmURLParameters {
+    init?(queryItems: [URLQueryItem]) {
+        guard let internalURLString = queryItems.first(where: { $0.name == Self.internalURLKey })?.value,
+              let internalURL = URL(string: internalURLString),
+              let externalURLString = queryItems.first(where: { $0.name == Self.displayStringKey })?.value else {
+            return nil
+        }
+        displayString = externalURLString
+        self.internalURL = internalURL
+    }
 }

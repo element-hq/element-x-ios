@@ -83,7 +83,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         
         if canMentionAllUsers,
            !roomProxy.isDirectOneToOneRoom,
-           Self.shouldIncludeMember(userID: PillConstants.atRoom, displayName: PillConstants.everyone, searchText: suggestionTrigger.text) {
+           Self.shouldIncludeMember(userID: PillUtilities.atRoom, displayName: PillUtilities.everyone, searchText: suggestionTrigger.text) {
             membersSuggestion
                 .insert(SuggestionItem(suggestionType: .allUsers(roomProxy.details.avatar), range: suggestionTrigger.range, rawSuggestionText: suggestionTrigger.text), at: 0)
         }

@@ -13,5 +13,7 @@ protocol AppCoordinatorProtocol: CoordinatorProtocol {
     
     @discardableResult func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool
     
+    func handlePotentialPhishingAttempt(url: URL, openURLAction: @escaping (URL) -> Void) -> Bool
+    
     func handleUserActivity(_ userActivity: NSUserActivity)
 }

@@ -136,9 +136,9 @@ class AttributedStringBuilderTests: XCTestCase {
     }
     
     func testRenderHTMLStringWithLinkInHeader() {
-        let h1HTMLString = "<h1><a href=\"https://www.matrix.org/\">Matrix.org</a></h1>"
-        let h2HTMLString = "<h2><a href=\"https://www.matrix.org/\">Matrix.org</a></h2>"
-        let h3HTMLString = "<h3><a href=\"https://www.matrix.org/\">Matrix.org</a></h3>"
+        let h1HTMLString = "<h1><a href=\"https://matrix.org/\">Matrix.org</a></h1>"
+        let h2HTMLString = "<h2><a href=\"https://matrix.org/\">Matrix.org</a></h2>"
+        let h3HTMLString = "<h3><a href=\"https://matrix.org/\">Matrix.org</a></h3>"
         
         guard let h1AttributedString = attributedStringBuilder.fromHTML(h1HTMLString),
               let h2AttributedString = attributedStringBuilder.fromHTML(h2HTMLString),
@@ -168,9 +168,9 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssert(h1Font.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
         XCTAssert(h1Font.pointSize <= maxHeaderPointSize)
         
-        XCTAssertEqual(h1AttributedString.runs.first?.link?.host, "www.matrix.org")
-        XCTAssertEqual(h2AttributedString.runs.first?.link?.host, "www.matrix.org")
-        XCTAssertEqual(h3AttributedString.runs.first?.link?.host, "www.matrix.org")
+        XCTAssertEqual(h1AttributedString.runs.first?.link?.host, "matrix.org")
+        XCTAssertEqual(h2AttributedString.runs.first?.link?.host, "matrix.org")
+        XCTAssertEqual(h3AttributedString.runs.first?.link?.host, "matrix.org")
     }
     
     func testRenderHTMLStringWithIFrame() {
@@ -704,6 +704,321 @@ class AttributedStringBuilderTests: XCTestCase {
         }
         XCTAssertEqual(foundLink, url)
         XCTAssertEqual(foundAttachments, 2)
+    }
+    
+    // MARK: - Phishing prevention
+    
+    func testPhishingLink() {
+        let htmlString = "Hey check the following link <a href=\"https://matrix.org\">https://element.io</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "Hey check the following link https://element.io")
+        
+        XCTAssertEqual(attributedString.runs.count, 2)
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertTrue(link.requiresConfirmation)
+        XCTAssertEqual(link.confirmationParameters?.internalURL.absoluteString, "https://matrix.org")
+        XCTAssertEqual(link.confirmationParameters?.displayString, "https://element.io")
+    }
+    
+    func testValidLink() {
+        let htmlString = "Hey check the following <a href=\"https://matrix.org\">link</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+                
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertFalse(link.requiresConfirmation)
+        XCTAssertEqual(link.absoluteString, "https://matrix.org")
+    }
+    
+    func testValidLinkWithRTLOverride() {
+        let htmlString = "<a href=\"https://matrix.org\">\u{202E}https://matrix.org</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+                
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertFalse(link.requiresConfirmation)
+        XCTAssertEqual(link.absoluteString, "https://matrix.org")
+    }
+    
+    func testPhishingUserID() {
+        let htmlString = "Hey check the following user <a href=\"https://matrix.org\">@alice:matrix.org</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "Hey check the following user @alice:matrix.org")
+        
+        XCTAssertEqual(attributedString.runs.count, 2)
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertTrue(link.requiresConfirmation)
+        XCTAssertEqual(link.confirmationParameters?.internalURL.absoluteString, "https://matrix.org")
+        XCTAssertEqual(link.confirmationParameters?.displayString, "@alice:matrix.org")
+    }
+    
+    func testValidUserIDLink() {
+        let htmlString = "Hey check the following user <a href=\"https://matrix.to/#/@alice:matrix.org\">@alice:matrix.org</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        checkAttachment(attributedString: attributedString, expectedRuns: 2)
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertFalse(link.requiresConfirmation)
+        XCTAssertEqual(link.absoluteString, "https://matrix.to/#/@alice:matrix.org")
+    }
+    
+    func testPhishingUserIDWithAnotherUserIDPermalink() {
+        let htmlString = "Hey check the following user <a href=\"https://matrix.to/#/@bob:matrix.org\">@alice:matrix.org</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "Hey check the following user @alice:matrix.org")
+        
+        XCTAssertEqual(attributedString.runs.count, 2)
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertTrue(link.requiresConfirmation)
+        XCTAssertEqual(link.confirmationParameters?.internalURL.absoluteString, "https://matrix.to/#/@bob:matrix.org")
+        XCTAssertEqual(link.confirmationParameters?.displayString, "@alice:matrix.org")
+    }
+    
+    func testPhishingUserIDWithDistractingCharacters() {
+        let htmlString = "Hey check the following user <a href=\"https://matrix.org\">👉️ @alice:matrix.org</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "Hey check the following user 👉️ @alice:matrix.org")
+        
+        XCTAssertEqual(attributedString.runs.count, 2)
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertTrue(link.requiresConfirmation)
+        XCTAssertEqual(link.confirmationParameters?.internalURL.absoluteString, "https://matrix.org")
+        XCTAssertEqual(link.confirmationParameters?.displayString, "👉️ @alice:matrix.org")
+    }
+    
+    func testPhishingLinkWithDistractingCharacters() {
+        let htmlString = "Hey check the following link <a href=\"https://matrix.org\">👉️ https://element.io</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "Hey check the following link 👉️ https://element.io")
+        
+        XCTAssertEqual(attributedString.runs.count, 2)
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertTrue(link.requiresConfirmation)
+        XCTAssertEqual(link.confirmationParameters?.internalURL.absoluteString, "https://matrix.org")
+        XCTAssertEqual(link.confirmationParameters?.displayString, "👉️ https://element.io")
+    }
+    
+    func testValidLinkWithDistractingCharacters() {
+        let htmlString = "Hey check the following link <a href=\"https://element.io\">👉️ https://element.io</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        XCTAssertEqual(String(attributedString.characters), "Hey check the following link 👉️ https://element.io")
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        
+        XCTAssertFalse(link.requiresConfirmation)
+        XCTAssertEqual(link.absoluteString, "https://element.io")
+    }
+    
+    func testPhishingLinkWithFakeDotCharacter() {
+        let htmlString = "Hey check the following link <a href=\"https://matrix.org\">https://element﹒io</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "Hey check the following link https://element﹒io")
+        
+        XCTAssertEqual(attributedString.runs.count, 2)
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertTrue(link.requiresConfirmation)
+        XCTAssertEqual(link.confirmationParameters?.internalURL.absoluteString, "https://matrix.org")
+        XCTAssertEqual(link.confirmationParameters?.displayString, "https://element﹒io")
+    }
+    
+    func testPhishingMatrixPermalinks() {
+        let htmlString = "Hey check the following room <a href=\"https://matrix.to/#/#offensive-room:matrix.org\">https://matrix.to/#/#beautiful-room:matrix.org</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(attributedString.runs.count, 2)
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        
+        XCTAssertTrue(link.requiresConfirmation)
+        XCTAssertEqual(link.confirmationParameters?.internalURL.absoluteString, "https://matrix.to/#/%23offensive-room:matrix.org")
+        XCTAssertEqual(link.confirmationParameters?.displayString, "https://matrix.to/#/#beautiful-room:matrix.org")
+    }
+    
+    func testValidMatrixPermalinks() {
+        let htmlString = "Hey check the following room <a href=\"https://matrix.to/#/#beautiful-room:matrix.org\">https://matrix.to/#/#beautiful-room:matrix.org</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        checkAttachment(attributedString: attributedString, expectedRuns: 2)
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        
+        XCTAssertFalse(link.requiresConfirmation)
+        XCTAssertEqual(link.absoluteString, "https://matrix.to/#/%23beautiful-room:matrix.org")
+    }
+    
+    func testPhishingRoomAlias() {
+        let htmlString = "Hey check the following room <a href=\"https://matrix.org\">#room:matrix.org</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "Hey check the following room #room:matrix.org")
+        
+        XCTAssertEqual(attributedString.runs.count, 2)
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertTrue(link.requiresConfirmation)
+        XCTAssertEqual(link.confirmationParameters?.internalURL.absoluteString, "https://matrix.org")
+        XCTAssertEqual(link.confirmationParameters?.displayString, "#room:matrix.org")
+    }
+    
+    func testValidRoomAliasLink() {
+        let htmlString = "Hey check the following user <a href=\"https://matrix.to/#/#room:matrix.org\">#room:matrix.org</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        checkAttachment(attributedString: attributedString, expectedRuns: 2)
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertFalse(link.requiresConfirmation)
+        XCTAssertEqual(link.absoluteString, "https://matrix.to/#/%23room:matrix.org")
+    }
+    
+    func testPhishingRoomAliasWithAnotherRoomAliasPermalink() {
+        let htmlString = "Hey check the following room <a href=\"https://matrix.to/#/#another-room:matrix.org\">#room:matrix.org</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "Hey check the following room #room:matrix.org")
+        
+        XCTAssertEqual(attributedString.runs.count, 2)
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertTrue(link.requiresConfirmation)
+        XCTAssertEqual(link.confirmationParameters?.internalURL.absoluteString, "https://matrix.to/#/%23another-room:matrix.org")
+        XCTAssertEqual(link.confirmationParameters?.displayString, "#room:matrix.org")
+    }
+    
+    func testRoomAliasWithDistractingCharacters() {
+        let htmlString = "Hey check the following user <a href=\"https://matrix.org\">👉️ #room:matrix.org</a>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "Hey check the following user 👉️ #room:matrix.org")
+        
+        XCTAssertEqual(attributedString.runs.count, 2)
+        
+        guard let link = attributedString.runs.first(where: { $0.link != nil })?.link else {
+            XCTFail("Couldn't find the link")
+            return
+        }
+        XCTAssertTrue(link.requiresConfirmation)
+        XCTAssertEqual(link.confirmationParameters?.internalURL.absoluteString, "https://matrix.org")
+        XCTAssertEqual(link.confirmationParameters?.displayString, "👉️ #room:matrix.org")
     }
     
     // MARK: - Private
