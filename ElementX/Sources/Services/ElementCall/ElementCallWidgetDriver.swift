@@ -50,6 +50,7 @@ struct ElementCallWidgetMessage: Codable {
 class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriverProtocol {
     private let room: RoomProtocol
     private let deviceID: String
+    
     private var widgetDriver: WidgetDriverAndHandle?
     
     let widgetID = UUID().uuidString
@@ -65,14 +66,14 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         self.deviceID = deviceID
     }
     
-    func start(baseURL: URL, clientID: String, colorScheme: ColorScheme) async -> Result<URL, ElementCallWidgetDriverError> {
+    func start(baseURL: URL, clientID: String, colorScheme: ColorScheme, analyticsConfiguration: ElementCallAnalyticsConfiguration?) async -> Result<URL, ElementCallWidgetDriverError> {
         guard let room = room as? Room else {
             return .failure(.roomInvalid)
         }
         
         let useEncryption = await (try? room.latestEncryptionState() == .encrypted) ?? false
-        
         let widgetSettings: WidgetSettings
+        
         do {
             widgetSettings = try newVirtualElementCallWidget(props: .init(elementCallUrl: baseURL.absoluteString,
                                                                           widgetId: widgetID,
@@ -84,13 +85,13 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
                                                                           confineToRoom: true,
                                                                           font: nil,
                                                                           encryption: useEncryption ? .perParticipantKeys : .unencrypted,
-                                                                          intent: .startCall,
-                                                                          hideScreensharing: false, // The web view will hide it automatically
+                                                                          intent: nil,
+                                                                          hideScreensharing: false,
                                                                           posthogUserId: nil,
-                                                                          posthogApiHost: nil,
-                                                                          posthogApiKey: nil,
-                                                                          rageshakeSubmitUrl: nil,
-                                                                          sentryDsn: nil,
+                                                                          posthogApiHost: analyticsConfiguration?.posthogAPIHost,
+                                                                          posthogApiKey: analyticsConfiguration?.posthogAPIKey,
+                                                                          rageshakeSubmitUrl: analyticsConfiguration?.rageshakeSubmitURL,
+                                                                          sentryDsn: analyticsConfiguration?.sentryDSN,
                                                                           sentryEnvironment: nil))
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")

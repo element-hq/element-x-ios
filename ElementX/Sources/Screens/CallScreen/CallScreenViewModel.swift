@@ -16,6 +16,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     private let elementCallService: ElementCallServiceProtocol
     private let configuration: ElementCallConfiguration
     private let isPictureInPictureAllowed: Bool
+    private let appSettings: AppSettings
+    private let analyticsService: AnalyticsService
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
     
@@ -33,9 +35,13 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     init(elementCallService: ElementCallServiceProtocol,
          configuration: ElementCallConfiguration,
          allowPictureInPicture: Bool,
-         appHooks: AppHooks) {
+         appHooks: AppHooks,
+         appSettings: AppSettings,
+         analyticsService: AnalyticsService) {
         self.elementCallService = elementCallService
         self.configuration = configuration
+        self.appSettings = appSettings
+        self.analyticsService = analyticsService
         isPictureInPictureAllowed = allowPictureInPicture
         
         switch configuration.kind {
@@ -148,7 +154,15 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                     elementCallBaseURL
                 }
                 
-                switch await widgetDriver.start(baseURL: baseURL, clientID: clientID, colorScheme: colorScheme) {
+                // We only set the analytics configuration if analytics are enabled
+                let analyticsConfiguration = analyticsService.isEnabled ? ElementCallAnalyticsConfiguration(posthogAPIHost: appSettings.elementCallPosthogAPIHost,
+                                                                                                            posthogAPIKey: appSettings.elementCallPosthogAPIKey,
+                                                                                                            rageshakeSubmitURL: Secrets.rageshakeServerURL,
+                                                                                                            sentryDSN: appSettings.elementCallPosthogSentryDSN) : nil
+                switch await widgetDriver.start(baseURL: baseURL,
+                                                clientID: clientID,
+                                                colorScheme: colorScheme,
+                                                analyticsConfiguration: analyticsConfiguration) {
                 case .success(let url):
                     state.url = url
                 case .failure(let error):

@@ -43,7 +43,9 @@ final class CallScreenCoordinator: CoordinatorProtocol {
         viewModel = CallScreenViewModel(elementCallService: parameters.elementCallService,
                                         configuration: parameters.configuration,
                                         allowPictureInPicture: parameters.allowPictureInPicture,
-                                        appHooks: parameters.appHooks)
+                                        appHooks: parameters.appHooks,
+                                        appSettings: ServiceLocator.shared.settings,
+                                        analyticsService: ServiceLocator.shared.analytics)
     }
     
     func start() {

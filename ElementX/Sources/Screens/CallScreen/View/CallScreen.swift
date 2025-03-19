@@ -286,7 +286,7 @@ struct CallScreen_Previews: PreviewProvider {
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
         widgetDriver.underlyingActions = PassthroughSubject<ElementCallWidgetDriverAction, Never>().eraseToAnyPublisher()
-        widgetDriver.startBaseURLClientIDColorSchemeReturnValue = .success(URL.userDirectory)
+        widgetDriver.startBaseURLClientIDColorSchemeAnalyticsConfigurationReturnValue = .success(URL.userDirectory)
         
         roomProxy.elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
         
@@ -299,7 +299,9 @@ struct CallScreen_Previews: PreviewProvider {
                                                         colorScheme: .light,
                                                         notifyOtherParticipants: false),
                                    allowPictureInPicture: false,
-                                   appHooks: AppHooks())
+                                   appHooks: AppHooks(),
+                                   appSettings: ServiceLocator.shared.settings,
+                                   analyticsService: ServiceLocator.shared.analytics)
     }()
     
     static var previews: some View {

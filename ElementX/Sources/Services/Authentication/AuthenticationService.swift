@@ -106,10 +106,10 @@ class AuthenticationService: AuthenticationServiceProtocol {
         await client.abortOidcAuth(authorizationData: data.underlyingData)
     }
     
-    func loginWithOIDCCallback(_ callbackURL: URL, data: OIDCAuthorizationDataProxy) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func loginWithOIDCCallback(_ callbackURL: URL) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         guard let client else { return .failure(.failedLoggingIn) }
         do {
-            try await client.loginWithOidcCallback(authorizationData: data.underlyingData, callbackUrl: callbackURL.absoluteString)
+            try await client.loginWithOidcCallback(callbackUrl: callbackURL.absoluteString)
             return await userSession(for: client)
         } catch OidcError.Cancelled {
             return .failure(.oidcError(.userCancellation))
