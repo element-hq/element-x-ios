@@ -12,13 +12,12 @@ opt_in_rules:
   - trailing_closure
 
 included:
-  - ElementX
-  - UnitTests
-  - UITests
+  - "*/Sources/*"
   - Tools/Scripts/Templates
 excluded:
-  - IntegrationTests
-  - ElementX/Sources/Generated
+  - "*/Sources/Generated/*"
+  - IntegrationTests # prints to stdout for performance tests.
+  - Tools/Sources # Our command-line tools use a lot of print commands.
 
 line_length:
   warning: 250
