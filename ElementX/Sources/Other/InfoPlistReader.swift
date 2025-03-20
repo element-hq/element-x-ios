@@ -104,9 +104,14 @@ struct InfoPlistReader {
         let exportedTypes: [[String: Any]] = infoPlistValue(forKey: Keys.utExportedTypeDeclarationsKey)
         guard let mentionPills = exportedTypes.first(where: { $0[Keys.utDescriptionKey] as? String == Values.mentionPills }),
               let utType = mentionPills[Keys.utTypeIdentifierKey] as? String else {
-            fatalError("Add properly \(Values.mentionPills) exported type into your target's Info.plst")
+            fatalError("Add properly \(Values.mentionPills) exported type into your target's Info.plist")
         }
-        return utType
+        
+        // The pills type is formed from the baseBundleIdentifier, however weirdly, if a fork sets that with a value
+        // that includes one or more uppercase characters, pill rendering breaks. If we lowercase the type identifier
+        // the bug is fixed, even though the value used in the fork's Info.plist no longer matches the value returned.
+        // Maybe in the future the fork should set their own PILLS_UT_TYPE_IDENTIFIER, but for now this works 🤷‍♂️🤷‍♂️🤷‍♂️
+        return utType.lowercased()
     }
     
     // MARK: - Private

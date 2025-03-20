@@ -21,7 +21,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: nschloe/action-cached-lfs-checkout@v1
+      - uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 #v1.2.3
 
       - uses: actions/cache@v4
         with:
@@ -59,7 +59,7 @@ jobs:
         run: xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/UITests.xcresult > fastlane/test_output/ui-cobertura.xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457 # v3.1.6
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -72,7 +72,7 @@ jobs:
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/test-results-action@f2dba722c67b86c6caa034178c6e4d35335f6706 #v1.1.0
         continue-on-error: true
         with:
           fail_ci_if_error: false
