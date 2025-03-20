@@ -27,7 +27,7 @@ struct HomeScreenRoomList: View {
                 HomeScreenRoomCell(room: room, context: context, isSelected: false)
                     .redacted(reason: .placeholder)
             case .invite:
-                HomeScreenInviteCell(room: room, context: context)
+                HomeScreenInviteCell(room: room, context: context, hideInviteAvatars: context.viewState.hideInviteAvatars)
             case .knock:
                 HomeScreenKnockedCell(room: room, context: context)
             case .room:

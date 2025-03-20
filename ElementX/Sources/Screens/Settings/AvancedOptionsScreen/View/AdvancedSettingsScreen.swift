@@ -32,20 +32,25 @@ struct AdvancedSettingsScreen: View {
                     .onChange(of: context.optimizeMediaUploads) {
                         context.send(viewAction: .optimizeMediaUploadsChanged)
                     }
-                
-                // TODO: Waiting for designs and copies
-                ListRow(label: .plain(title: "hide avatars",
-                                      description: ""),
-                        kind: .toggle($context.hideInviteAvatars))
-                
-                ListRow(label: .plain(title: "hide media",
-                                      description: ""),
-                        kind: .toggle($context.hideTimelineMedia))
             }
+            
+            moderationAndSafetySection
         }
         .compoundList()
         .navigationTitle(L10n.commonAdvancedSettings)
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private var moderationAndSafetySection: some View {
+        Section {
+            ListRow(label: .plain(title: L10n.screenAdvancedSettingsHideTimelineMediaToggleTitle),
+                    kind: .toggle($context.hideTimelineMedia))
+            ListRow(label: .plain(title: L10n.screenAdvancedSettingsHideInviteAvatarsToggleTitle),
+                    kind: .toggle($context.hideInviteAvatars))
+        } header: {
+            Text(L10n.screenAdvancedSettingsModerationAndSafetySectionTitle)
+                .compoundListSectionHeader()
+        }
     }
 }
 
