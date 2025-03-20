@@ -33,10 +33,8 @@ struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
     var avatarURL: URL? { roomInfo.avatarUrl.flatMap(URL.init) }
     /// The room's avatar info for use in a ``RoomAvatarImage``.
     var avatar: RoomAvatar {
-        if isDirect, avatarURL == nil {
-            if heroes.count == 1 {
-                return .heroes(heroes.map(UserProfileProxy.init))
-            }
+        if isDirect, avatarURL == nil, heroes.count == 1 {
+            return .heroes(heroes.map(UserProfileProxy.init))
         }
         
         return .room(id: id, name: displayName, avatarURL: avatarURL)
@@ -127,12 +125,9 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     
     /// The room's avatar info for use in a ``RoomAvatarImage``.
     var avatar: RoomAvatar {
-        if isDirect, avatarURL == nil {
-            if heroes.count == 1 {
-                return .heroes(heroes.map(UserProfileProxy.init))
-            }
+        if isDirect, avatarURL == nil, heroes.count == 1 {
+            return .heroes(heroes.map(UserProfileProxy.init))
         }
-        
         return .room(id: id, name: displayName, avatarURL: avatarURL)
     }
 }

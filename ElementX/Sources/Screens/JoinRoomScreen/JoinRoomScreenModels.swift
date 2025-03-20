@@ -82,10 +82,11 @@ struct JoinRoomScreenViewState: BindableState {
     }
     
     var avatar: RoomAvatar? {
+        // DM invites avatars are broken, this is a workaround
         if isDMInvite, let inviter = roomDetails?.inviter {
             return .room(id: roomID, name: inviter.displayName, avatarURL: hideInviteAvatars ? nil : inviter.avatarURL)
         } else if let roomDetails, let avatar = roomDetails.avatar {
-            return shouldHideAvatars ? .room(id: roomID, name: roomDetails.name, avatarURL: nil) : avatar
+            return shouldHideAvatars ? avatar.removingAvatar : avatar
         } else if let name = roomDetails?.name {
             return .room(id: roomID, name: name, avatarURL: nil)
         } else {

@@ -105,14 +105,14 @@ extension UNMutableNotificationContent {
                        forcePlaceholder: Bool = false) async throws -> UNMutableNotificationContent {
         var fetchedImage: INImage?
         let image: INImage
-        if !forcePlaceholder, let mediaSource = icon.mediaSource {
-            switch await mediaProvider?.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
+        if !forcePlaceholder,
+           let mediaProvider,
+           let mediaSource = icon.mediaSource {
+            switch await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
             case .success(let data):
                 fetchedImage = INImage(imageData: data)
             case .failure(let error):
                 MXLog.error("Couldn't add sender icon: \(error)")
-            case .none:
-                break
             }
         }
 
