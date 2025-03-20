@@ -30,7 +30,7 @@ final class UserPreference<T: Codable> {
     ///   - key: The key used to store and retrieve the value.
     ///   - defaultValue: The default value to use if no stored value exists or if `forceDefault` is `true`.
     ///   - keyedStorage: The storage instance where the value is saved.
-    ///   - forceDefault: A publisher that determines whether the default value should always be used. Defaults to  publish`false`. Useful in the context of MDM settings.
+    ///   - forceDefault: A publisher that determines whether the default value should always be used. Defaults to publish `false`. Useful in the context of remote settings.
     init(key: String,
          defaultValue: @autoclosure @escaping () -> T,
          keyedStorage: any KeyedStorage<T>,

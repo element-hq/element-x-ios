@@ -13,6 +13,15 @@ enum RoomAvatar: Equatable {
     case room(id: String, name: String?, avatarURL: URL?)
     /// An avatar generated from the room's heroes.
     case heroes([UserProfileProxy])
+    
+    var removingAvatar: RoomAvatar {
+        switch self {
+        case let .room(id, name, _):
+            return .room(id: id, name: name, avatarURL: nil)
+        case let .heroes(users):
+            return .heroes(users.map { .init(userID: $0.userID, displayName: $0.displayName, avatarURL: nil) })
+        }
+    }
 }
 
 /// A view that shows the avatar for a room, or a cluster of heroes if provided.

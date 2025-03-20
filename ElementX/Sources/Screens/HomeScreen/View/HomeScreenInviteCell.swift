@@ -18,7 +18,7 @@ struct HomeScreenInviteCell: View {
     let hideInviteAvatars: Bool
     
     private var avatar: RoomAvatar {
-        hideInviteAvatars ? .room(id: room.id, name: room.name, avatarURL: nil) : room.avatar
+        hideInviteAvatars ? room.avatar.removingAvatar : room.avatar
     }
     
     var body: some View {
@@ -156,7 +156,7 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
             
             HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org", avatarURL: .mockMXCAvatar),
                                  context: viewModel().context, hideInviteAvatars: false)
-            HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org", avatarURL: .mockMXCAvatar),
+            HomeScreenInviteCell(room: .roomInvite(alias: "#footest-hidden-avatars:somewhere.org", avatarURL: .mockMXCAvatar),
                                  context: viewModel(hideInviteAvatars: true).context, hideInviteAvatars: true)
             HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org"),
                                  context: viewModel().context, hideInviteAvatars: false)

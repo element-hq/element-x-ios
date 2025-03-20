@@ -109,6 +109,7 @@ extension RoomSummary {
         isFavourite = false
     }
     
+    // This doesn't have to work properly for DM invites, the heroes are always empty
     var avatar: RoomAvatar {
         if isDirect, avatarURL == nil, heroes.count == 1 {
             .heroes(heroes)
