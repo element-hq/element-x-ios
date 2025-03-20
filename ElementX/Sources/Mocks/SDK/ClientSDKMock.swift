@@ -42,7 +42,7 @@ extension ClientSDKMock {
         userIdServerNameThrowableError = MockError.generic
         serverReturnValue = "https://\(configuration.serverAddress)"
         getUrlUrlReturnValue = configuration.elementWellKnown
-        urlForOidcOidcConfigurationPromptReturnValue = OidcAuthorizationDataSDKMock(configuration: configuration)
+        urlForOidcOidcConfigurationPromptReturnValue = OAuthAuthorizationDataSDKMock(configuration: configuration)
         loginUsernamePasswordInitialDeviceNameDeviceIdClosure = { username, password, _, _ in
             guard username == configuration.validCredentials.username,
                   password == configuration.validCredentials.password else {
@@ -66,7 +66,7 @@ extension HomeserverLoginDetailsSDKMock {
     }
 }
 
-extension OidcAuthorizationDataSDKMock {
+extension OAuthAuthorizationDataSDKMock {
     convenience init(configuration: ClientSDKMock.Configuration) {
         self.init()
         

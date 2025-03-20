@@ -2347,6 +2347,7 @@
 		CDE3F3911FF7CC639BDE5844 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CEE20623EB4A9B88FB29F2BA /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SAS.strings; sourceTree = "<group>"; };
 		CEE41494C837AA403A06A5D9 /* UnitTests.xctestplan */ = {isa = PBXFileReference; path = UnitTests.xctestplan; sourceTree = "<group>"; };
+		CF05437C99730E5B3357FC51 /* matrix-rust-sdk */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "matrix-rust-sdk"; path = "../matrix-rust-sdk"; sourceTree = SOURCE_ROOT; };
 		D01FD1171FF40E34D707FD00 /* BigIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigIcon.swift; sourceTree = "<group>"; };
 		D046ABB22E680F7C5054441B /* SecurityAndPrivacyScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityAndPrivacyScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		D071F86CD47582B9196C9D16 /* UserDiscoverySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDiscoverySection.swift; sourceTree = "<group>"; };
@@ -3507,6 +3508,7 @@
 				823ED0EC3F1B6CF47D284011 /* Tools */,
 				A8002CB4F20B6282850A614C /* DevelopmentAssets */,
 				B04B538A859CD012755DC19C /* NSE */,
+				9413F680ECDFB2B0DDB0DEF2 /* Packages */,
 				1803CD2B96BF06009334BB61 /* PreviewTests */,
 				2197234282B4BC0CE79AAC74 /* Secrets */,
 				D0111119CDF3E28E6D7768E8 /* ShareExtension */,
@@ -4803,6 +4805,14 @@
 				832EB453B3A5D04C18D86117 /* View */,
 			);
 			path = UserProfileScreen;
+			sourceTree = "<group>";
+		};
+		9413F680ECDFB2B0DDB0DEF2 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				CF05437C99730E5B3357FC51 /* matrix-rust-sdk */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 		948DD12A5533BE1BC260E437 /* LocationSharing */ = {
@@ -6344,7 +6354,6 @@
 				CCD235515AFCEE6D2005B705 /* XCRemoteSwiftPackageReference "LRUCache" */,
 				4BDA7F6042968E8422470F3F /* XCRemoteSwiftPackageReference "LoremSwiftum" */,
 				0CBF57301AA172C21F76CE86 /* XCRemoteSwiftPackageReference "maplibre-gl-native-distribution" */,
-				6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */,
 				96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */,
 				A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				E9C4F3A12AA1F65C13A8C8EB /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
@@ -6352,6 +6361,7 @@
 				6582B5AF3F104B0F7E031E7D /* XCRemoteSwiftPackageReference "SwiftState" */,
 				EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */,
 				EE40B0E16A55BD23ECBFFD22 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */,
+				8FB6F8BBB0A235E3C8DCF8F7 /* XCLocalSwiftPackageReference "../matrix-rust-sdk" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -8552,14 +8562,6 @@
 				minimumVersion = 6.0.0;
 			};
 		};
-		6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
-			requirement = {
-				kind = exactVersion;
-				version = 25.03.13;
-			};
-		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nicklockwood/GZIP";
@@ -8689,6 +8691,13 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		8FB6F8BBB0A235E3C8DCF8F7 /* XCLocalSwiftPackageReference "../matrix-rust-sdk" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = "../matrix-rust-sdk";
+		};
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		020597E28A4BC8E1BE8EDF6E /* KeychainAccess */ = {
@@ -8823,7 +8832,6 @@
 		};
 		6647C55D93508C7CE9D954A5 /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		67E7A6F388D3BF85767609D9 /* Sentry */ = {
@@ -8908,7 +8916,6 @@
 		};
 		A678E40E917620059695F067 /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		A7CA6F33C553805035C3B114 /* DeviceKit */ = {
@@ -8923,7 +8930,6 @@
 		};
 		B1E8B697DF78FE7F61FC6CA4 /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		BA93CD75CCE486660C9040BD /* Collections */ = {
@@ -8933,7 +8939,6 @@
 		};
 		BB111AE9D390233CDD2C7FD5 /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		BC01130651CB23340B899032 /* DeviceKit */ = {
@@ -8948,7 +8953,6 @@
 		};
 		C07EA60CAB296D7726210F5B /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		C1BF15833233CD3BDB7E2B1D /* Mapbox */ = {
@@ -8958,12 +8962,10 @@
 		};
 		C2C69B8BA5A9702E7A8BC08F /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		C79D91A7F9F378CECEF64B5A /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6FC4820D8D4559CEECA064D7 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */ = {

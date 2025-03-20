@@ -46,11 +46,11 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var abortOidcAuthAuthorizationDataCalled: Bool {
         return abortOidcAuthAuthorizationDataCallsCount > 0
     }
-    open var abortOidcAuthAuthorizationDataReceivedAuthorizationData: OidcAuthorizationData?
-    open var abortOidcAuthAuthorizationDataReceivedInvocations: [OidcAuthorizationData] = []
-    open var abortOidcAuthAuthorizationDataClosure: ((OidcAuthorizationData) async -> Void)?
+    open var abortOidcAuthAuthorizationDataReceivedAuthorizationData: OAuthAuthorizationData?
+    open var abortOidcAuthAuthorizationDataReceivedInvocations: [OAuthAuthorizationData] = []
+    open var abortOidcAuthAuthorizationDataClosure: ((OAuthAuthorizationData) async -> Void)?
 
-    open override func abortOidcAuth(authorizationData: OidcAuthorizationData) async {
+    open override func abortOidcAuth(authorizationData: OAuthAuthorizationData) async {
         abortOidcAuthAuthorizationDataCallsCount += 1
         abortOidcAuthAuthorizationDataReceivedAuthorizationData = authorizationData
         DispatchQueue.main.async {
@@ -2595,11 +2595,11 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var loginWithOidcCallbackAuthorizationDataCallbackUrlCalled: Bool {
         return loginWithOidcCallbackAuthorizationDataCallbackUrlCallsCount > 0
     }
-    open var loginWithOidcCallbackAuthorizationDataCallbackUrlReceivedArguments: (authorizationData: OidcAuthorizationData, callbackUrl: String)?
-    open var loginWithOidcCallbackAuthorizationDataCallbackUrlReceivedInvocations: [(authorizationData: OidcAuthorizationData, callbackUrl: String)] = []
-    open var loginWithOidcCallbackAuthorizationDataCallbackUrlClosure: ((OidcAuthorizationData, String) async throws -> Void)?
+    open var loginWithOidcCallbackAuthorizationDataCallbackUrlReceivedArguments: (authorizationData: OAuthAuthorizationData, callbackUrl: String)?
+    open var loginWithOidcCallbackAuthorizationDataCallbackUrlReceivedInvocations: [(authorizationData: OAuthAuthorizationData, callbackUrl: String)] = []
+    open var loginWithOidcCallbackAuthorizationDataCallbackUrlClosure: ((OAuthAuthorizationData, String) async throws -> Void)?
 
-    open override func loginWithOidcCallback(authorizationData: OidcAuthorizationData, callbackUrl: String) async throws {
+    open override func loginWithOidcCallback(authorizationData: OAuthAuthorizationData, callbackUrl: String) async throws {
         if let error = loginWithOidcCallbackAuthorizationDataCallbackUrlThrowableError {
             throw error
         }
@@ -4189,13 +4189,13 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var urlForOidcOidcConfigurationPromptReceivedArguments: (oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?)?
     open var urlForOidcOidcConfigurationPromptReceivedInvocations: [(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?)] = []
 
-    var urlForOidcOidcConfigurationPromptUnderlyingReturnValue: OidcAuthorizationData!
-    open var urlForOidcOidcConfigurationPromptReturnValue: OidcAuthorizationData! {
+    var urlForOidcOidcConfigurationPromptUnderlyingReturnValue: OAuthAuthorizationData!
+    open var urlForOidcOidcConfigurationPromptReturnValue: OAuthAuthorizationData! {
         get {
             if Thread.isMainThread {
                 return urlForOidcOidcConfigurationPromptUnderlyingReturnValue
             } else {
-                var returnValue: OidcAuthorizationData? = nil
+                var returnValue: OAuthAuthorizationData? = nil
                 DispatchQueue.main.sync {
                     returnValue = urlForOidcOidcConfigurationPromptUnderlyingReturnValue
                 }
@@ -4213,9 +4213,9 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             }
         }
     }
-    open var urlForOidcOidcConfigurationPromptClosure: ((OidcConfiguration, OidcPrompt?) async throws -> OidcAuthorizationData)?
+    open var urlForOidcOidcConfigurationPromptClosure: ((OidcConfiguration, OidcPrompt?) async throws -> OAuthAuthorizationData)?
 
-    open override func urlForOidc(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?) async throws -> OidcAuthorizationData {
+    open override func urlForOidc(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?) async throws -> OAuthAuthorizationData {
         if let error = urlForOidcOidcConfigurationPromptThrowableError {
             throw error
         }
@@ -9737,6 +9737,52 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
         try await setCallEnabledEnabledClosure?(enabled)
     }
 
+    //MARK: - setCustomPushRule
+
+    open var setCustomPushRuleRuleIdRuleKindActionsConditionsThrowableError: Error?
+    var setCustomPushRuleRuleIdRuleKindActionsConditionsUnderlyingCallsCount = 0
+    open var setCustomPushRuleRuleIdRuleKindActionsConditionsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setCustomPushRuleRuleIdRuleKindActionsConditionsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setCustomPushRuleRuleIdRuleKindActionsConditionsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setCustomPushRuleRuleIdRuleKindActionsConditionsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setCustomPushRuleRuleIdRuleKindActionsConditionsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var setCustomPushRuleRuleIdRuleKindActionsConditionsCalled: Bool {
+        return setCustomPushRuleRuleIdRuleKindActionsConditionsCallsCount > 0
+    }
+    open var setCustomPushRuleRuleIdRuleKindActionsConditionsReceivedArguments: (ruleId: String, ruleKind: RuleKind, actions: [Action], conditions: [PushCondition])?
+    open var setCustomPushRuleRuleIdRuleKindActionsConditionsReceivedInvocations: [(ruleId: String, ruleKind: RuleKind, actions: [Action], conditions: [PushCondition])] = []
+    open var setCustomPushRuleRuleIdRuleKindActionsConditionsClosure: ((String, RuleKind, [Action], [PushCondition]) async throws -> Void)?
+
+    open override func setCustomPushRule(ruleId: String, ruleKind: RuleKind, actions: [Action], conditions: [PushCondition]) async throws {
+        if let error = setCustomPushRuleRuleIdRuleKindActionsConditionsThrowableError {
+            throw error
+        }
+        setCustomPushRuleRuleIdRuleKindActionsConditionsCallsCount += 1
+        setCustomPushRuleRuleIdRuleKindActionsConditionsReceivedArguments = (ruleId: ruleId, ruleKind: ruleKind, actions: actions, conditions: conditions)
+        DispatchQueue.main.async {
+            self.setCustomPushRuleRuleIdRuleKindActionsConditionsReceivedInvocations.append((ruleId: ruleId, ruleKind: ruleKind, actions: actions, conditions: conditions))
+        }
+        try await setCustomPushRuleRuleIdRuleKindActionsConditionsClosure?(ruleId, ruleKind, actions, conditions)
+    }
+
     //MARK: - setDefaultRoomNotificationMode
 
     open var setDefaultRoomNotificationModeIsEncryptedIsOneToOneModeThrowableError: Error?
@@ -10055,7 +10101,7 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
         try await unmuteRoomRoomIdIsEncryptedIsOneToOneClosure?(roomId, isEncrypted, isOneToOne)
     }
 }
-open class OidcAuthorizationDataSDKMock: MatrixRustSDK.OidcAuthorizationData, @unchecked Sendable {
+open class OAuthAuthorizationDataSDKMock: MatrixRustSDK.OAuthAuthorizationData, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
     }

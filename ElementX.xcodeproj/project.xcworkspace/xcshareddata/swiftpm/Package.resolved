@@ -1,5 +1,4 @@
 {
-  "originHash" : "f9011692b20e61e6f0df94b6e0946a4c8f4d58429a88998f249712bb1fee47f1",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -145,15 +144,6 @@
       }
     },
     {
-      "identity" : "matrix-rust-components-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/element-hq/matrix-rust-components-swift",
-      "state" : {
-        "revision" : "8f2da37eb65525a62b33c93edb41549ad94107e3",
-        "version" : "25.3.13"
-      }
-    },
-    {
       "identity" : "ogg-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/ogg-swift.git",
@@ -289,5 +279,5 @@
       }
     }
   ],
-  "version" : 3
+  "version" : 2
 }

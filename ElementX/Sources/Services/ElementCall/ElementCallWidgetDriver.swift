@@ -80,12 +80,18 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
                                                                           hideHeader: nil,
                                                                           preload: nil,
                                                                           fontScale: nil,
-                                                                          appPrompt: false,
-                                                                          skipLobby: true,
-                                                                          confineToRoom: true,
+                                                                          appPrompt: nil,
+                                                                          confineToRoom: nil,
                                                                           font: nil,
-                                                                          analyticsId: nil,
-                                                                          encryption: useEncryption ? .perParticipantKeys : .unencrypted))
+                                                                          encryption: useEncryption ? .perParticipantKeys : .unencrypted,
+                                                                          intent: nil,
+                                                                          hideScreensharing: true,
+                                                                          posthogUserId: nil,
+                                                                          posthogApiHost: nil,
+                                                                          posthogApiKey: nil,
+                                                                          rageshakeSubmitUrl: nil,
+                                                                          sentryDsn: nil,
+                                                                          sentryEnvironment: nil))
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)
