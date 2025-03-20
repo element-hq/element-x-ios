@@ -8,28 +8,59 @@
 import Combine
 import Foundation
 
-/// Property wrapper that allows to store data into a keyed storage.
-/// It also exposes a Combine publisher for listening to value changes.
-/// The publisher isn't supposed to skip consecutive duplicates if any,
-/// there is no concept of Equatable at this level.
+/// A property wrapper that allows storing data in a keyed storage while also exposing a Combine publisher
+/// to listen for value changes. The publisher does not skip consecutive duplicates, as there is no
+/// `Equatable` enforcement at this level.
+///
+/// - Note: This wrapper allows enforcing a default value through the `forceDefault` closure.
 @propertyWrapper
 final class UserPreference<T: Codable> {
     private let key: String
     private var keyedStorage: any KeyedStorage<T>
-    private let defaultValue: T
+    private let defaultValue: () -> T
     private let subject: PassthroughSubject<T, Never> = .init()
+    private var cancellable: AnyCancellable?
     
-    init(key: String, defaultValue: T, keyedStorage: any KeyedStorage<T>) {
+    /// A publisher that determines whether the default value is always being enforced.
+    let forceDefault: CurrentValuePublisher<Bool, Never>
+    
+    /// Initializes the property wrapper.
+    ///
+    /// - Parameters:
+    ///   - key: The key used to store and retrieve the value.
+    ///   - defaultValue: The default value to use if no stored value exists or if `forceDefault` is `true`.
+    ///   - keyedStorage: The storage instance where the value is saved.
+    ///   - forceDefault: A publisher that determines whether the default value should always be used. Defaults to  publish`false`. Useful in the context of MDM settings.
+    init(key: String,
+         defaultValue: @autoclosure @escaping () -> T,
+         keyedStorage: any KeyedStorage<T>,
+         forceDefault: CurrentValuePublisher<Bool, Never> = .init(.init(false))) {
         self.key = key
         self.defaultValue = defaultValue
         self.keyedStorage = keyedStorage
+        self.forceDefault = forceDefault
+        
+        cancellable = forceDefault
+            .sink { [weak self] value in
+                guard value else {
+                    return
+                }
+                // If we are now forcing the default value, we need to update the subject with the default value.
+                self?.subject.send(defaultValue())
+            }
     }
     
     var wrappedValue: T {
         get {
-            keyedStorage[key] ?? defaultValue
+            guard !forceDefault.value else {
+                return defaultValue()
+            }
+            return keyedStorage[key] ?? defaultValue()
         }
         set {
+            guard !forceDefault.value else {
+                return
+            }
             keyedStorage[key] = newValue
             subject.send(wrappedValue)
         }
