@@ -19,7 +19,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: nschloe/action-cached-lfs-checkout@v1
+      - uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 #v1.2.3
 
       - uses: actions/cache@v4
         with:
@@ -60,7 +60,8 @@ jobs:
           xcresultparser -q -o cobertura -t ElementX -p $(pwd) fastlane/test_output/PreviewTests.xcresult > fastlane/test_output/preview-cobertura.xml
       
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }} # Skip in forks
+        uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457 # v3.1.6
         with:
           fail_ci_if_error: true
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -73,8 +74,8 @@ jobs:
           xcresultparser -q -o junit -p $(pwd) fastlane/test_output/PreviewTests.xcresult > fastlane/test_output/preview-junit.xml
 
       - name: Upload test results to Codecov
-        if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        if: ${{ !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+        uses: codecov/test-results-action@f2dba722c67b86c6caa034178c6e4d35335f6706 #v1.1.0
         continue-on-error: true
         with:
           fail_ci_if_error: false

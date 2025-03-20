@@ -29,7 +29,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private var isFetchPostsInProgress = false
     private var isFetchMyPostsInProgress = false
     
-    private var channelRoomMap: [String: RoomSummary] = [:]
+    private var channelRoomMap: [String: RoomInfoProxy] = [:]
     
     init(userSession: UserSessionProtocol,
          analyticsService: AnalyticsService,
@@ -657,7 +657,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 let mappedChannels = zIds.sorted().map { HomeScreenChannel(channelZId: $0) }
                 state.channels = mappedChannels.uniqued(on: \.id)
                 state.channelsListMode = .channels
-                mapChannelsToRoom()
+                mapChannelsToRoomInfo()
             }
         case .failure(let error):
             state.channelsListMode = .empty
@@ -684,15 +684,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             let roomAliasResult = await userSession.clientProxy.resolveRoomAlias(channel.id)
             switch roomAliasResult {
             case .success(let roomInfo):
-                getRoomSummaryFromAlias(channel.id)
                 actionsSubject.send(.presentRoom(roomIdentifier: roomInfo.roomId))
+                getRoomInfoFromAlias(channel.id)
             case .failure(let error):
                 MXLog.error("Failed to resolve room alias: \(channel.id). Error: \(error)")
                 let joinChannelResult = await userSession.clientProxy.joinChannel(roomAliasOrId: channel.id)
                 switch joinChannelResult {
                 case .success(let roomId):
-                    getRoomSummaryFromAlias(channel.id)
                     actionsSubject.send(.presentRoom(roomIdentifier: roomId))
+                    getRoomInfoFromAlias(channel.id)
                 case .failure(let failure):
                     MXLog.error("Failed to join channel: \(failure)")
                     displayError()
@@ -701,20 +701,24 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
-    private func getRoomSummaryFromAlias(_ alias: String) {
-        if let roomSummary = userSession.clientProxy.roomSummaryForAlias(alias) {
-            channelRoomMap[alias] = roomSummary
+    private func getRoomInfoFromAlias(_ alias: String) {
+        Task {
+            if let roomInfo = await userSession.clientProxy.roomInfoForAlias(alias) {
+                channelRoomMap[alias] = roomInfo
+            }
         }
     }
     
-    private func mapChannelsToRoom() {
-        state.channels = state.channels.map { homeChannel in
-            var updatedChannel = homeChannel
-            if let roomSummary = userSession.clientProxy.roomSummaryForAlias(homeChannel.id) {
-                channelRoomMap[homeChannel.id] = roomSummary
-                updatedChannel.notificationsCount = roomSummary.unreadMessagesCount
+    private func mapChannelsToRoomInfo() {
+        Task {
+            state.channels = await state.channels.asyncMap { homeChannel in
+                var updatedChannel = homeChannel
+                if let roomInfo = await self.userSession.clientProxy.roomInfoForAlias(homeChannel.id) {
+                    self.channelRoomMap[homeChannel.id] = roomInfo
+                    updatedChannel.notificationsCount = roomInfo.unreadMessagesCount
+                }
+                return updatedChannel
             }
-            return updatedChannel
         }
     }
     

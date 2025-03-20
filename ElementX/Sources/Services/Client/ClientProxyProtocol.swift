@@ -159,6 +159,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func roomSummaryForAlias(_ alias: String) -> RoomSummary?
     
+    func roomInfoForAlias(_ alias: String) async -> RoomInfoProxy?
+    
     @discardableResult func loadUserDisplayName() async -> Result<Void, ClientProxyError>
     
     func setUserInfo(_ name: String, primaryZId: String?) async -> Result<Void, ClientProxyError>

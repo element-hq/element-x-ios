@@ -79,7 +79,7 @@ enum OIDCError: Error {
 }
 
 struct OIDCAuthorizationDataProxy: Equatable {
-    let underlyingData: OidcAuthorizationData
+    let underlyingData: OAuthAuthorizationData
     
     var url: URL {
         guard let url = URL(string: underlyingData.loginUrl()) else {
@@ -89,8 +89,8 @@ struct OIDCAuthorizationDataProxy: Equatable {
     }
 }
 
-extension OidcAuthorizationData: @retroactive Equatable {
-    public static func == (lhs: MatrixRustSDK.OidcAuthorizationData, rhs: MatrixRustSDK.OidcAuthorizationData) -> Bool {
+extension OAuthAuthorizationData: @retroactive Equatable {
+    public static func == (lhs: MatrixRustSDK.OAuthAuthorizationData, rhs: MatrixRustSDK.OAuthAuthorizationData) -> Bool {
         lhs.loginUrl() == rhs.loginUrl()
     }
 }

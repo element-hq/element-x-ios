@@ -1,3 +1,51 @@
+## Changes in 25.03.3 (2025-03-20)
+
+### What's Changed
+
+✨ Features
+* Alert for phishing attempts by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3895
+
+🙌 Improvements
+* Added @room to suggestion view for room mentions by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3896
+* Removed images in pills in favour of text decorations by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3905
+
+🐛 Bugfixes
+* Fix sharing from in-app QuickLook to itself by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3902
+* Fix: completion service matches now any character by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3911
+* Fix an issue rendering pills in some forks. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3913
+* Attempt to fix the wrong timeline start display by defaulting the backwards publisher to .idle by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3924
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3885
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3903
+
+🧱 Build
+* Improve next release flow to rebase main by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3876
+* Check if the git is shallow before fetching by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3879
+* CI: git fetch unshallow only in post-clone by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3880
+* Use updated Fastlane lane. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3877
+* Prefix our release tags with `release/` by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3894
+* Remove the unused TestMeasurementParser and lint integration tests again by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3918
+* Stop CI from uploading Codecov results when a PR comes from a fork. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3917
+
+Others
+* ClientProxy refactor by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3875
+* Change badge label colors to blue when not highlighted by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3882
+* Update sentry to 8.35 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3888
+* Update sentry to 8.35.1 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3890
+* SDK update by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3891
+* Update dependency fastlane to v2.227.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/3900
+* Update the Enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3899
+* Added a test to check if URLs with RTL are not marked as phishing by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3907
+* Pin all 3rd party github actions to their full length commit SHA by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3908
+* Update codecov/codecov-action action to v3.1.6 by @renovate in https://github.com/element-hq/element-x-ios/pull/3915
+* Add overrides for OIDC configuration. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3910
+* Run the 'prevent blocked' workflow even if PR has conflicts by @robintown in https://github.com/element-hq/element-x-ios/pull/3914
+* Update the SDK to 25.03.20. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3925
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/25.03.2...release/25.03.3
+
 ## Changes in 25.03.2 (2025-03-06)
 
 ### What's Changed

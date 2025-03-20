@@ -3473,6 +3473,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return roomSummaryForAliasReturnValue
         }
     }
+    //MARK: - roomInfoForAlias
+
+    var roomInfoForAliasUnderlyingCallsCount = 0
+    var roomInfoForAliasCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomInfoForAliasUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomInfoForAliasUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomInfoForAliasUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomInfoForAliasUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var roomInfoForAliasCalled: Bool {
+        return roomInfoForAliasCallsCount > 0
+    }
+    var roomInfoForAliasReceivedAlias: String?
+    var roomInfoForAliasReceivedInvocations: [String] = []
+
+    var roomInfoForAliasUnderlyingReturnValue: RoomInfoProxy?
+    var roomInfoForAliasReturnValue: RoomInfoProxy? {
+        get {
+            if Thread.isMainThread {
+                return roomInfoForAliasUnderlyingReturnValue
+            } else {
+                var returnValue: RoomInfoProxy?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomInfoForAliasUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomInfoForAliasUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomInfoForAliasUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var roomInfoForAliasClosure: ((String) async -> RoomInfoProxy?)?
+
+    func roomInfoForAlias(_ alias: String) async -> RoomInfoProxy? {
+        roomInfoForAliasCallsCount += 1
+        roomInfoForAliasReceivedAlias = alias
+        DispatchQueue.main.async {
+            self.roomInfoForAliasReceivedInvocations.append(alias)
+        }
+        if let roomInfoForAliasClosure = roomInfoForAliasClosure {
+            return await roomInfoForAliasClosure(alias)
+        } else {
+            return roomInfoForAliasReturnValue
+        }
+    }
     //MARK: - loadUserDisplayName
 
     var loadUserDisplayNameUnderlyingCallsCount = 0

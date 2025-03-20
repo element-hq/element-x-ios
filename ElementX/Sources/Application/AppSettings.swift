@@ -86,10 +86,22 @@ final class AppSettings {
     
     // MARK: - Hooks
     
-    func override(defaultHomeserverAddress: String? = nil) {
-        if let defaultHomeserverAddress {
-            self.defaultHomeserverAddress = defaultHomeserverAddress
-        }
+    func override(defaultHomeserverAddress: String,
+                  oidcRedirectURL: URL,
+                  websiteURL: URL,
+                  logoURL: URL,
+                  copyrightURL: URL,
+                  acceptableUseURL: URL,
+                  privacyURL: URL,
+                  supportEmailAddress: String) {
+        self.defaultHomeserverAddress = defaultHomeserverAddress
+        self.oidcRedirectURL = oidcRedirectURL
+        self.websiteURL = websiteURL
+        self.logoURL = logoURL
+        self.copyrightURL = copyrightURL
+        self.acceptableUseURL = acceptableUseURL
+        self.privacyURL = privacyURL
+        self.supportEmailAddress = supportEmailAddress
     }
     
     // MARK: - Application
@@ -123,17 +135,17 @@ final class AppSettings {
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"
 
     /// A URL where users can go read more about the app.
-    let websiteURL: URL = "https://element.io"
+    private(set) var websiteURL: URL = "https://element.io"
     /// A URL that contains the app's logo that may be used when showing content in a web view.
-    let logoURL: URL = "https://element.io/mobile-icon.png"
+    private(set) var logoURL: URL = "https://element.io/mobile-icon.png"
     /// A URL that contains that app's copyright notice.
-    let copyrightURL: URL = "https://element.io/copyright"
+    private(set) var copyrightURL: URL = "https://element.io/copyright"
     /// A URL that contains the app's Terms of use.
-    let acceptableUseURL: URL = "https://element.io/acceptable-use-policy-terms"
+    private(set) var acceptableUseURL: URL = "https://element.io/acceptable-use-policy-terms"
     /// A URL that contains the app's Privacy Policy.
-    let privacyURL: URL = "https://element.io/privacy"
+    private(set) var privacyURL: URL = "https://element.io/privacy"
     /// An email address that should be used for support requests.
-    let supportEmailAddress = "support@element.io"
+    private(set) var supportEmailAddress = "support@element.io"
     /// A URL where users can go read more about encryption in general.
     let encryptionURL: URL = "https://element.io/help#encryption"
     /// A URL where users can go read more about the chat backup.
@@ -166,7 +178,7 @@ final class AppSettings {
     /// Any pre-defined static client registrations for OIDC issuers.
     let oidcStaticRegistrations: [URL: String] = ["https://id.thirdroom.io/realms/thirdroom": "elementx"]
     /// The redirect URL used for OIDC. This no longer uses universal links so we don't need the bundle ID to avoid conflicts between Element X, Nightly and PR builds.
-    let oidcRedirectURL: URL = "https://element.io/oidc/login"
+    private(set) var oidcRedirectURL: URL = "https://element.io/oidc/login"
     
     private(set) lazy var oidcConfiguration = OIDCConfigurationProxy(clientName: InfoPlistReader.main.bundleDisplayName,
                                                                      redirectURI: oidcRedirectURL,
