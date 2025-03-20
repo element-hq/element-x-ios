@@ -11482,6 +11482,7 @@
 		4CB921EC997F763064B8E436 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_GROUP_IDENTIFIER = "group.$(BASE_APP_GROUP_IDENTIFIER)";
 				APP_NAME = Zero;
 				BASE_APP_GROUP_IDENTIFIER = com.zero.ios.messenger;
 				BASE_BUNDLE_IDENTIFIER = com.zero.ios.messenger;
@@ -11489,6 +11490,7 @@
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = UDZQVRDAAC;
 				INFOPLIST_FILE = NSE/SupportingFiles/Info.plist;
+				KEYCHAIN_ACCESS_GROUP_IDENTIFIER = "$(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -11829,6 +11831,7 @@
 		A46EFA0820A3F5A3A0C74CFE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_GROUP_IDENTIFIER = "group.$(BASE_APP_GROUP_IDENTIFIER)";
 				APP_NAME = Zero;
 				BASE_APP_GROUP_IDENTIFIER = com.zero.ios.messenger;
 				BASE_BUNDLE_IDENTIFIER = com.zero.ios.messenger;
@@ -11836,6 +11839,7 @@
 				CURRENT_PROJECT_VERSION = "$(CURRENT_PROJECT_VERSION)";
 				DEVELOPMENT_TEAM = UDZQVRDAAC;
 				INFOPLIST_FILE = NSE/SupportingFiles/Info.plist;
+				KEYCHAIN_ACCESS_GROUP_IDENTIFIER = "$(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
