@@ -291,6 +291,7 @@ def rebase_main_onto_current_branch
   UI.message("Current branch: #{current_branch}")
 
   # Switch to main and update it
+  sh("git checkout -- .")
   sh("git checkout main")
   sh("git pull origin main")
   sh("git rebase #{current_branch}")
