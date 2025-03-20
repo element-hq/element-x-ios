@@ -583,6 +583,21 @@ class ClientProxy: ClientProxyProtocol {
     func roomSummaryForAlias(_ alias: String) -> RoomSummary? {
         staticRoomSummaryProvider.roomListPublisher.value.first { $0.canonicalAlias == alias || $0.alternativeAliases.contains(alias) }
     }
+    
+    func roomInfoForAlias(_ alias: String) async -> RoomInfoProxy? {
+        do {
+            if let resolvedRoomAlias = try await client.resolveRoomAlias(roomAlias: alias) {
+                let roomId = resolvedRoomAlias.roomId
+                let roomInfo = try await roomListService.room(roomId: roomId).roomInfo()
+                return RoomInfoProxy(roomInfo: roomInfo, roomAvatarCached: nil)
+            } else {
+                return nil
+            }
+        } catch {
+            MXLog.error("Failed to load room for alias with error: \(error)")
+            return nil
+        }
+    }
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
         do {
