@@ -12,6 +12,7 @@ import XCTest
 final class UserPreferenceTests: XCTestCase {
     override func setUpWithError() throws {
         UserDefaults.testDefaults.removeVolatileDomain(forName: .userDefaultsSuiteName)
+        UserDefaults.testDefaults.removePersistentDomain(forName: .userDefaultsSuiteName)
     }
 
     func testStorePlistValue() throws {
@@ -119,6 +120,29 @@ final class UserPreferenceTests: XCTestCase {
 
         XCTAssertNil(value.codable)
         XCTAssertNil(UserDefaults.testDefaults.data(forKey: .key3))
+    }
+    
+    func testLocalOverRemoteValue() {
+        @UserPreference(key: "testKey", defaultValue: "", storageType: .userDefaults(.testDefaults)) var preference
+        XCTAssertEqual(preference, "")
+        
+        _preference.remoteValue = "remote"
+        XCTAssertEqual(preference, "remote")
+        
+        preference = "local"
+        XCTAssertEqual(preference, "local")
+    }
+    
+    func testRemoteOverLocalValue() {
+        @UserPreference(key: "testKey", defaultValue: "", storageType: .userDefaults(.testDefaults), mode: .remoteOverLocal) var preference
+        XCTAssertEqual(preference, "")
+        
+        _preference.remoteValue = "remote"
+        XCTAssertEqual(preference, "remote")
+        
+        preference = "local"
+        XCTAssertEqual(preference, "remote")
+        XCTAssertTrue(_preference.isLockedToRemote)
     }
 }
 

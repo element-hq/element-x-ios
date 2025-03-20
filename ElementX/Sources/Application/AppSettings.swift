@@ -55,6 +55,7 @@ final class AppSettings {
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
+    private static var remoteSuiteName = "\(InfoPlistReader.main.appGroupIdentifier).remote"
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)

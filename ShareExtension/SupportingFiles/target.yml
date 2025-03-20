@@ -91,4 +91,3 @@ targets:
     - path: ../../ElementX/Sources/Other/Logging
     - path: ../../ElementX/Sources/Other/UserPreference.swift
     - path: ../../ElementX/Sources/UITests/UITestsScreenIdentifier.swift
-    - path: ../../ElementX/Sources/Other/CurrentValuePublisher.swift
