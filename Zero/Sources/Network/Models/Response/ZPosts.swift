@@ -82,7 +82,7 @@ struct ProfileSummary: Codable {
     let firstName: String
     let lastName: String
     let primaryEmail: String?
-    let profileImage: String
+    let profileImage: String?
 }
 
 extension ProfileSummary {
