@@ -73,6 +73,11 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         let useEncryption = await (try? room.latestEncryptionState() == .encrypted) ?? false
         
         let widgetSettings: WidgetSettings
+        // If the user has opted out of analytics, we should configure these values as nil
+        let widgetSecrets = ServiceLocator.shared.analytics.isEnabled ? WidgetSecrets(posthogApiHost: Secrets.postHogHost,
+                                                                                      posthogApiKey: Secrets.postHogAPIKey,
+                                                                                      rageshakeSubmitUrl: Secrets.rageshakeServerURL,
+                                                                                      sentryDsn: Secrets.sentryDSN) : nil
         do {
             widgetSettings = try newVirtualElementCallWidget(props: .init(elementCallUrl: baseURL.absoluteString,
                                                                           widgetId: widgetID,
@@ -81,11 +86,18 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
                                                                           preload: nil,
                                                                           fontScale: nil,
                                                                           appPrompt: false,
-                                                                          skipLobby: true,
                                                                           confineToRoom: true,
                                                                           font: nil,
-                                                                          analyticsId: nil,
-                                                                          encryption: useEncryption ? .perParticipantKeys : .unencrypted))
+                                                                          encryption: useEncryption ? .perParticipantKeys : .unencrypted,
+                                                                          // We should use this until EC is updated
+                                                                          intent: .startCall,
+                                                                          hideScreensharing: false,
+                                                                          posthogUserId: nil,
+                                                                          posthogApiHost: widgetSecrets?.posthogApiHost,
+                                                                          posthogApiKey: widgetSecrets?.posthogApiKey,
+                                                                          rageshakeSubmitUrl: widgetSecrets?.rageshakeSubmitUrl,
+                                                                          sentryDsn: widgetSecrets?.sentryDsn,
+                                                                          sentryEnvironment: nil))
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)
@@ -200,4 +212,11 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
             MXLog.verbose("Failed processing widget message with error: \(error)")
         }
     }
+}
+
+private struct WidgetSecrets {
+    let posthogApiHost: String
+    let posthogApiKey: String
+    let rageshakeSubmitUrl: String
+    let sentryDsn: String
 }
