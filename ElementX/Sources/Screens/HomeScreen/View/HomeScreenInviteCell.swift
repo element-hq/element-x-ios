@@ -15,9 +15,10 @@ struct HomeScreenInviteCell: View {
     
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
+    let hideInviteAvatars: Bool
     
     private var avatar: RoomAvatar {
-        context.viewState.hideInviteAvatars ? .room(id: room.id, name: room.name, avatarURL: nil) : room.avatar
+        hideInviteAvatars ? .room(id: room.id, name: room.name, avatarURL: nil) : room.avatar
     }
     
     var body: some View {
@@ -140,32 +141,32 @@ struct HomeScreenInviteCell: View {
 
 struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                HomeScreenInviteCell(room: .dmInvite,
-                                     context: viewModel().context)
-                
-                HomeScreenInviteCell(room: .dmInvite,
-                                     context: viewModel().context)
-                
-                HomeScreenInviteCell(room: .roomInvite(),
-                                     context: viewModel().context)
-                
-                HomeScreenInviteCell(room: .roomInvite(),
-                                     context: viewModel().context)
-                
-                HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org", avatarURL: .mockMXCAvatar),
-                                     context: viewModel().context)
-                
-                HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org"),
-                                     context: viewModel().context)
-                    .dynamicTypeSize(.accessibility1)
-                    .previewDisplayName("Aliased room (AX1)")
-            }
+        VStack(spacing: 0) {
+            HomeScreenInviteCell(room: .dmInvite,
+                                 context: viewModel().context, hideInviteAvatars: false)
+            
+            HomeScreenInviteCell(room: .dmInvite,
+                                 context: viewModel().context, hideInviteAvatars: false)
+            
+            HomeScreenInviteCell(room: .roomInvite(),
+                                 context: viewModel().context, hideInviteAvatars: false)
+            
+            HomeScreenInviteCell(room: .roomInvite(),
+                                 context: viewModel().context, hideInviteAvatars: false)
+            
+            HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org", avatarURL: .mockMXCAvatar),
+                                 context: viewModel().context, hideInviteAvatars: false)
+            HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org", avatarURL: .mockMXCAvatar),
+                                 context: viewModel(hideInviteAvatars: true).context, hideInviteAvatars: true)
+            HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org"),
+                                 context: viewModel().context, hideInviteAvatars: false)
+                .dynamicTypeSize(.accessibility1)
+                .previewDisplayName("Aliased room (AX1)")
         }
+        .previewLayout(.sizeThatFits)
     }
     
-    static func viewModel() -> HomeScreenViewModel {
+    static func viewModel(hideInviteAvatars: Bool = false) -> HomeScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
