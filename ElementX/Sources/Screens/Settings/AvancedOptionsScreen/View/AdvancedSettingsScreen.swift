@@ -32,6 +32,15 @@ struct AdvancedSettingsScreen: View {
                     .onChange(of: context.optimizeMediaUploads) {
                         context.send(viewAction: .optimizeMediaUploadsChanged)
                     }
+                
+                // TODO: Waiting for designs and copies
+                ListRow(label: .plain(title: "hide avatars",
+                                      description: ""),
+                        kind: .toggle($context.hideInviteAvatars))
+                
+                ListRow(label: .plain(title: "hide media",
+                                      description: ""),
+                        kind: .toggle($context.hideTimelineMedia))
             }
         }
         .compoundList()

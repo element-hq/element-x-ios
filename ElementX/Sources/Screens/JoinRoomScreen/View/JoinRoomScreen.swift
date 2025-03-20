@@ -333,7 +333,9 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     @ViewBuilder
-    static func makePreview(viewModel: JoinRoomScreenViewModel, mode: JoinRoomScreenMode) -> some View {
+    static func makePreview(viewModel: JoinRoomScreenViewModel,
+                            mode: JoinRoomScreenMode,
+                            customPreviewName: String? = nil) -> some View {
         if mode == .forbidden {
             NavigationStack {
                 JoinRoomScreen(context: viewModel.context)
@@ -344,7 +346,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
             .onAppear {
                 forbiddenViewModel.context.send(viewAction: .join)
             }
-            .previewDisplayName(mode.previewDisplayName)
+            .previewDisplayName(customPreviewName ?? mode.previewDisplayName)
         } else {
             NavigationStack {
                 JoinRoomScreen(context: viewModel.context)
@@ -352,7 +354,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
             .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
                 state.roomDetails != nil
             })
-            .previewDisplayName(mode.previewDisplayName)
+            .previewDisplayName(customPreviewName ?? mode.previewDisplayName)
         }
     }
     
