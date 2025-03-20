@@ -1044,7 +1044,6 @@
 		D02DEB36D32A72A1B365E452 /* SessionVerificationScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796CBD0C56FA0D3AEDAB255B /* SessionVerificationScreenCoordinator.swift */; };
 		D050D7756E92CA061ED0ABF0 /* SecureBackupLogoutConfirmationScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E08B8A66948E9690F38B94 /* SecureBackupLogoutConfirmationScreenViewModelProtocol.swift */; };
 		D0A965852D6C04138FA55181 /* SecureBackupLogoutConfirmationScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCF239C619971FDE48132550 /* SecureBackupLogoutConfirmationScreenModels.swift */; };
-		D104B27C5DA0626B41CE78D3 /* CurrentValuePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127C8472672A5BA09EF1ACF8 /* CurrentValuePublisher.swift */; };
 		D10BA4F041DC58580A440A32 /* RoomRolesAndPermissionsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B1DC3B3FB40A7F4AE9B7BF /* RoomRolesAndPermissionsScreen.swift */; };
 		D12F440F7973F1489F61389D /* NotificationSettingsScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F64447FF544298A6A3BEF85 /* NotificationSettingsScreenModels.swift */; };
 		D181AC8FF236B7F91C0A8C28 /* MapTiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AA3F4B285570805CB0CCDD /* MapTiler.swift */; };
@@ -3065,7 +3064,6 @@
 			isa = PBXGroup;
 			children = (
 				01C4C7DB37597D7D8379511A /* Assets.xcassets */,
-				D174C6E7DCA00AAFC0169925 /* ElementCall */,
 				A0C06C0F6A8621B22BFAEB56 /* Localizations */,
 				8AEA6A91159FA0D3EAFCCB0D /* Sounds */,
 			);
@@ -5502,13 +5500,6 @@
 			path = ShareExtension;
 			sourceTree = "<group>";
 		};
-		D174C6E7DCA00AAFC0169925 /* ElementCall */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = ElementCall;
-			sourceTree = "<group>";
-		};
 		D382E465AF067C1BF888BF8E /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -6816,7 +6807,6 @@
 			files = (
 				B8EC8A544162B0A41B9AB339 /* AppSettings.swift in Sources */,
 				2F2906AE9BC3D0E79A6F98F8 /* Bundle.swift in Sources */,
-				D104B27C5DA0626B41CE78D3 /* CurrentValuePublisher.swift in Sources */,
 				F38D32C1B0232AAFE6A0822C /* ExtensionLogger.swift in Sources */,
 				C022284E2774A5E1EF683B4D /* FileManager.swift in Sources */,
 				05FF0CD80EDAB3A7C0D4700A /* InfoPlistReader.swift in Sources */,

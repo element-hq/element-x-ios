@@ -11,61 +11,76 @@ import Foundation
 /// A property wrapper that allows storing data in a keyed storage while also exposing a Combine publisher
 /// to listen for value changes. The publisher does not skip consecutive duplicates, as there is no
 /// `Equatable` enforcement at this level.
-///
-/// - Note: This wrapper allows enforcing a default value through the `forceDefault` closure.
 @propertyWrapper
 final class UserPreference<T: Codable> {
+    static var remotePrefix: String {
+        "remote-"
+    }
+    
+    enum Mode {
+        case localOverRemote
+        case remoteOverLocal
+    }
+    
     private let key: String
+    private var remoteKey: String { "\(Self.remotePrefix)\(key)" }
     private var keyedStorage: any KeyedStorage<T>
-    private let defaultValue: () -> T
+    private let defaultValue: T
     private let subject: PassthroughSubject<T, Never> = .init()
-    private var cancellable: AnyCancellable?
+    private let mode: Mode
     
-    /// A publisher that determines whether the default value is always being enforced.
-    let forceDefault: CurrentValuePublisher<Bool, Never>
+    // This can be used to check if is still possible for the user to change the value or not
+    // Can only be accessed by using `_preferenceName.isLockedToRemote`
+    var isLockedToRemote: Bool {
+        mode == .remoteOverLocal && remoteValue != nil
+    }
     
-    /// Initializes the property wrapper.
+    /// Initializes the property wrapper with a static default value.
     ///
     /// - Parameters:
     ///   - key: The key used to store and retrieve the value.
     ///   - defaultValue: The default value to use if no stored value exists or if `forceDefault` is `true`.
     ///   - keyedStorage: The storage instance where the value is saved.
-    ///   - forceDefault: A publisher that determines whether the default value should always be used. Defaults to publish `false`. Useful in the context of remote settings.
+    ///   - forceDefault: A publisher that determines whether the default value should always be used. Defaults to publish `false`. Useful in the context of remote settings that need to override the local value.
     init(key: String,
-         defaultValue: @autoclosure @escaping () -> T,
+         defaultValue: T,
          keyedStorage: any KeyedStorage<T>,
-         forceDefault: CurrentValuePublisher<Bool, Never> = .init(.init(false))) {
+         mode: Mode) {
         self.key = key
         self.defaultValue = defaultValue
         self.keyedStorage = keyedStorage
-        self.forceDefault = forceDefault
-        
-        cancellable = forceDefault
-            .sink { [weak self] value in
-                guard value else {
-                    return
-                }
-                // If we are now forcing the default value, we need to update the subject with the default value.
-                self?.subject.send(defaultValue())
-            }
+        self.mode = mode
     }
     
+    // The wrapped value is supposed to be the one updated by the user so it can only control the local value
     var wrappedValue: T {
         get {
-            guard !forceDefault.value else {
-                return defaultValue()
+            switch mode {
+            case .localOverRemote:
+                return keyedStorage[key] ?? keyedStorage[remoteKey] ?? defaultValue
+            case .remoteOverLocal:
+                return keyedStorage[remoteKey] ?? keyedStorage[key] ?? defaultValue
             }
-            return keyedStorage[key] ?? defaultValue()
         }
         set {
-            guard !forceDefault.value else {
-                return
-            }
             keyedStorage[key] = newValue
             subject.send(wrappedValue)
         }
     }
     
+    // This is supposed to be the value that is set by the remote settings
+    // So it can only be accessed by doing `AppSettings._preferenceName.remoteValue`
+    var remoteValue: T? {
+        get {
+            keyedStorage[remoteKey]
+        } set {
+            keyedStorage[remoteKey] = newValue
+            if mode == .remoteOverLocal || keyedStorage[key] == nil {
+                subject.send(wrappedValue)
+            }
+        }
+    }
+                
     var projectedValue: AnyPublisher<T, Never> {
         subject
             .prepend(wrappedValue)
@@ -77,11 +92,11 @@ final class UserPreference<T: Codable> {
 
 extension UserPreference {
     enum StorageType {
-        case userDefaults(UserDefaults = .standard)
+        case userDefaults(UserDefaults)
         case volatile
     }
     
-    convenience init(key: String, defaultValue: T, storageType: StorageType) {
+    convenience init(key: String, defaultValue: T, storageType: StorageType, mode: Mode = .localOverRemote) {
         let storage: any KeyedStorage<T>
         
         switch storageType {
@@ -91,19 +106,19 @@ extension UserPreference {
             storage = [String: T]()
         }
         
-        self.init(key: key, defaultValue: defaultValue, keyedStorage: storage)
+        self.init(key: key, defaultValue: defaultValue, keyedStorage: storage, mode: mode)
     }
     
-    convenience init<R: RawRepresentable>(key: R, defaultValue: T, storageType: StorageType) where R.RawValue == String {
-        self.init(key: key.rawValue, defaultValue: defaultValue, storageType: storageType)
+    convenience init<R: RawRepresentable>(key: R, defaultValue: T, storageType: StorageType, mode: Mode = .localOverRemote) where R.RawValue == String {
+        self.init(key: key.rawValue, defaultValue: defaultValue, storageType: storageType, mode: mode)
     }
     
-    convenience init(key: String, storageType: StorageType) where T: ExpressibleByNilLiteral {
-        self.init(key: key, defaultValue: nil, storageType: storageType)
+    convenience init(key: String, storageType: StorageType, mode: Mode = .localOverRemote) where T: ExpressibleByNilLiteral {
+        self.init(key: key, defaultValue: nil, storageType: storageType, mode: mode)
     }
     
-    convenience init<R: RawRepresentable>(key: R, storageType: StorageType) where R: RawRepresentable, R.RawValue == String, T: ExpressibleByNilLiteral {
-        self.init(key: key.rawValue, storageType: storageType)
+    convenience init<R: RawRepresentable>(key: R, storageType: StorageType, mode: Mode = .localOverRemote) where R: RawRepresentable, R.RawValue == String, T: ExpressibleByNilLiteral {
+        self.init(key: key.rawValue, storageType: storageType, mode: mode)
     }
 }
 
