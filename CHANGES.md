@@ -1,3 +1,13 @@
+## Changes in 25.03.4 (2025-03-20)
+
+### What's Changed
+
+🧱 Build
+* Discard any changes before rebasing main. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3927
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.03.3...release/25.03.4
+
 ## Changes in 25.03.3 (2025-03-20)
 
 ### What's Changed
