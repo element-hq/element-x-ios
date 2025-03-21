@@ -11,6 +11,7 @@ import SwiftUI
 // Common settings between app and NSE
 protocol CommonSettingsProtocol {
     var logLevel: LogLevel { get }
+    var traceLogPacks: Set<TraceLogPack> { get }
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var hideInviteAvatars: Bool { get }
     var hideTimelineMedia: Bool { get }
@@ -36,6 +37,7 @@ final class AppSettings {
         case enableInAppNotifications
         case pusherProfileTag
         case logLevel
+        case traceLogPacks
         case viewSourceEnabled
         case optimizeMediaUploads
         case appAppearance
@@ -305,6 +307,9 @@ final class AppSettings {
         
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: LogLevel.info, storageType: .userDefaults(store))
     var logLevel
+    
+    @UserPreference(key: UserDefaultsKeys.traceLogPacks, defaultValue: [], storageType: .userDefaults(store))
+    var traceLogPacks: Set<TraceLogPack>
     
     /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
     @UserPreference(key: UserDefaultsKeys.enableOnlySignedDeviceIsolationMode, defaultValue: false, storageType: .userDefaults(store))

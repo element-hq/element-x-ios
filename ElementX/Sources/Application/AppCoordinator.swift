@@ -69,7 +69,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         let appSettings = appHooks.appSettingsHook.configure(AppSettings())
         
-        Target.mainApp.configure(logLevel: appSettings.logLevel)
+        Target.mainApp.configure(logLevel: appSettings.logLevel, traceLogPacks: appSettings.traceLogPacks)
         
         let appName = InfoPlistReader.main.bundleDisplayName
         let appVersion = InfoPlistReader.main.bundleShortVersionString

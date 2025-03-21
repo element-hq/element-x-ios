@@ -21,6 +21,14 @@ struct DeveloperOptionsScreen: View {
         Form {
             Section("Logging") {
                 LogLevelConfigurationView(logLevel: $context.logLevel)
+                
+                DisclosureGroup("SDK trace packs") {
+                    ForEach(TraceLogPack.allCases, id: \.self) { pack in
+                        Toggle(isOn: $context.traceLogPacks[pack]) {
+                            Text(pack.title)
+                        }
+                    }
+                }
             }
             
             Section("General") {
@@ -150,6 +158,20 @@ private struct LogLevelConfigurationView: View {
     /// Allows the picker to work with associated values
     private var logLevels: [LogLevel] {
         [.error, .warn, .info, .debug, .trace]
+    }
+}
+
+private extension Set<TraceLogPack> {
+    /// A custom subscript that allows binding a toggle to add/remove a pack from the array.
+    subscript(pack: TraceLogPack) -> Bool {
+        get { contains(pack) }
+        set {
+            if newValue {
+                insert(pack)
+            } else {
+                remove(pack)
+            }
+        }
     }
 }
 
