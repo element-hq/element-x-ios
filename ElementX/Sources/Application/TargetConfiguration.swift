@@ -15,23 +15,35 @@ enum Target: String {
     
     private static var isConfigured = false
     
-    func configure(logLevel: LogLevel, logPacks: Set<LogPack>) {
+    func configure(logLevel: LogLevel, traceLogPacks: Set<TraceLogPack>) {
         guard !Self.isConfigured else {
             return
         }
         
         switch self {
         case .mainApp:
-            let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel, logPacks: logPacks, currentTarget: rawValue, filePrefix: nil)
+            let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
+                                                                  traceLogPacks: traceLogPacks,
+                                                                  currentTarget: rawValue,
+                                                                  filePrefix: nil)
             initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: false)
         case .nse:
-            let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel, logPacks: logPacks, currentTarget: rawValue, filePrefix: rawValue)
+            let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
+                                                                  traceLogPacks: traceLogPacks,
+                                                                  currentTarget: rawValue,
+                                                                  filePrefix: rawValue)
             initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: true)
         case .shareExtension:
-            let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel, logPacks: logPacks, currentTarget: rawValue, filePrefix: rawValue)
+            let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
+                                                                  traceLogPacks: traceLogPacks,
+                                                                  currentTarget: rawValue,
+                                                                  filePrefix: rawValue)
             initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: true)
         case .tests:
-            let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel, logPacks: logPacks, currentTarget: rawValue, filePrefix: rawValue)
+            let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
+                                                                  traceLogPacks: traceLogPacks,
+                                                                  currentTarget: rawValue,
+                                                                  filePrefix: rawValue)
             initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: false)
         }
         

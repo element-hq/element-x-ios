@@ -22,7 +22,7 @@ class LoggingTests: XCTestCase {
         let target = "tests"
         XCTAssertTrue(Tracing.logFiles.isEmpty)
         
-        Target.tests.configure(logLevel: .info, logPacks: [])
+        Target.tests.configure(logLevel: .info, traceLogPacks: [])
         
         // There is something weird with Rust logging where the file writing handle doesn't
         // notice that the file it is writing to was deleted, so we can't run these checks
@@ -179,7 +179,7 @@ class LoggingTests: XCTestCase {
                                                               contentType: nil))
         
         // When logging that value
-        Target.tests.configure(logLevel: .info, logPacks: [])
+        Target.tests.configure(logLevel: .info, traceLogPacks: [])
         
         MXLog.info(textMessage)
         MXLog.info(noticeMessage)

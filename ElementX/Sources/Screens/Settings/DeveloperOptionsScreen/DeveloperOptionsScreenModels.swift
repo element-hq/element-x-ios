@@ -37,7 +37,7 @@ enum DeveloperOptionsScreenViewAction {
 
 protocol DeveloperOptionsProtocol: AnyObject {
     var logLevel: LogLevel { get set }
-    var logPacks: Set<LogPack> { get set }
+    var traceLogPacks: Set<TraceLogPack> { get set }
     var publicSearchEnabled: Bool { get set }
     var hideUnreadMessagesBadge: Bool { get set }
     var fuzzyRoomListSearchEnabled: Bool { get set }

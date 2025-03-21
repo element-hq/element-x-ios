@@ -8,7 +8,7 @@
 import Foundation
 import MatrixRustSDK
 
-enum LogPack: Codable, CaseIterable {
+enum TraceLogPack: Codable, CaseIterable {
     case eventCache, sendQueue, timeline
     
     var title: String {
@@ -23,7 +23,7 @@ enum LogPack: Codable, CaseIterable {
     }
 }
 
-extension LogPack {
+extension TraceLogPack {
     // periphery:ignore - Unused, but added to detect new cases when updating the SDK.
     init(rustLogPack: MatrixRustSDK.TraceLogPacks) {
         switch rustLogPack {
