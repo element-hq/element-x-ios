@@ -23,7 +23,7 @@ enum Tracing {
     
     static let fileExtension = "log"
     
-    static func buildConfiguration(logLevel: LogLevel, currentTarget: String, filePrefix: String?) -> TracingConfiguration {
+    static func buildConfiguration(logLevel: LogLevel, logPacks: Set<LogPack>, currentTarget: String, filePrefix: String?) -> TracingConfiguration {
         let fileName = if let filePrefix {
             "\(Tracing.filePrefix)-\(filePrefix)"
         } else {
@@ -39,6 +39,7 @@ enum Tracing {
         let level: LogLevel = ProcessInfo.isRunningIntegrationTests ? .trace : logLevel
         
         return .init(logLevel: level.rustLogLevel,
+                     traceLogPacks: logPacks.map(\.rustLogPack),
                      extraTargets: [currentTarget],
                      writeToStdoutOrSystem: true,
                      writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),

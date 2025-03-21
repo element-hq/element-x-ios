@@ -11,6 +11,7 @@ struct DeveloperOptionsScreen: View {
     @ObservedObject var context: DeveloperOptionsScreenViewModel.Context
     @State private var showConfetti = false
     @State private var elementCallURLOverrideString: String
+    @State private var logPacks: Set<LogPack> = []
     
     init(context: DeveloperOptionsScreenViewModel.Context) {
         self.context = context
@@ -21,6 +22,14 @@ struct DeveloperOptionsScreen: View {
         Form {
             Section("Logging") {
                 LogLevelConfigurationView(logLevel: $context.logLevel)
+                
+                DisclosureGroup("SDK trace packs") {
+                    ForEach(LogPack.allCases, id: \.self) { pack in
+                        Toggle(isOn: $context.logPacks[pack]) {
+                            Text(pack.title)
+                        }
+                    }
+                }
             }
             
             Section("General") {
@@ -150,6 +159,20 @@ private struct LogLevelConfigurationView: View {
     /// Allows the picker to work with associated values
     private var logLevels: [LogLevel] {
         [.error, .warn, .info, .debug, .trace]
+    }
+}
+
+private extension Set<LogPack> {
+    /// A custom subscript that allows binding a toggle to add/remove a pack from the array.
+    subscript(pack: LogPack) -> Bool {
+        get { contains(pack) }
+        set {
+            if newValue {
+                insert(pack)
+            } else {
+                remove(pack)
+            }
+        }
     }
 }
 
