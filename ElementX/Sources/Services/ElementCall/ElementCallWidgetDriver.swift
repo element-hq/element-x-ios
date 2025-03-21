@@ -81,11 +81,17 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
                                                                           preload: nil,
                                                                           fontScale: nil,
                                                                           appPrompt: false,
-                                                                          skipLobby: true,
                                                                           confineToRoom: true,
                                                                           font: nil,
-                                                                          analyticsId: nil,
-                                                                          encryption: useEncryption ? .perParticipantKeys : .unencrypted))
+                                                                          encryption: useEncryption ? .perParticipantKeys : .unencrypted,
+                                                                          intent: .startCall,
+                                                                          hideScreensharing: false, // The web view will hide it automatically
+                                                                          posthogUserId: nil,
+                                                                          posthogApiHost: nil,
+                                                                          posthogApiKey: nil,
+                                                                          rageshakeSubmitUrl: nil,
+                                                                          sentryDsn: nil,
+                                                                          sentryEnvironment: nil))
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)
