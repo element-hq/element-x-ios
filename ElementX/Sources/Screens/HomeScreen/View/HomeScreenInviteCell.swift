@@ -18,7 +18,13 @@ struct HomeScreenInviteCell: View {
     let hideInviteAvatars: Bool
     
     private var avatar: RoomAvatar {
-        hideInviteAvatars ? room.avatar.removingAvatar : room.avatar
+        // DM invites avatars are broken, this is a workaround
+        // https://github.com/matrix-org/matrix-rust-sdk/issues/4825
+        if room.isDirect, let inviter = room.inviter {
+            .heroes([.init(userID: inviter.id, displayName: inviter.displayName, avatarURL: hideInviteAvatars ? nil : inviter.avatarURL)])
+        } else {
+            hideInviteAvatars ? room.avatar.removingAvatar : room.avatar
+        }
     }
     
     var body: some View {
@@ -77,7 +83,7 @@ struct HomeScreenInviteCell: View {
         if let inviter = room.inviter,
            !room.isDirect {
             RoomInviterLabel(inviter: inviter,
-                             shouldHideAvatar: context.viewState.hideInviteAvatars,
+                             shouldHideAvatar: hideInviteAvatars,
                              mediaProvider: context.mediaProvider)
                 .font(.compound.bodyMD)
                 .foregroundStyle(.compound.textSecondary)
@@ -157,7 +163,7 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
             HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org", avatarURL: .mockMXCAvatar),
                                  context: viewModel().context, hideInviteAvatars: false)
             HomeScreenInviteCell(room: .roomInvite(alias: "#footest-hidden-avatars:somewhere.org", avatarURL: .mockMXCAvatar),
-                                 context: viewModel(hideInviteAvatars: true).context, hideInviteAvatars: true)
+                                 context: viewModel().context, hideInviteAvatars: true)
             HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org"),
                                  context: viewModel().context, hideInviteAvatars: false)
                 .dynamicTypeSize(.accessibility1)
@@ -166,7 +172,7 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
         .previewLayout(.sizeThatFits)
     }
     
-    static func viewModel(hideInviteAvatars: Bool = false) -> HomeScreenViewModel {
+    static func viewModel() -> HomeScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
@@ -183,8 +189,8 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
 private extension HomeScreenRoom {
     static var dmInvite: HomeScreenRoom {
         let inviter = RoomMemberProxyMock()
-        inviter.displayName = "Jack"
-        inviter.userID = "@jack:somewhere.com"
+        inviter.displayName = "Some Guy"
+        inviter.userID = "@someone:somewhere.com"
         
         let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
                                   id: "@someone:somewhere.com",

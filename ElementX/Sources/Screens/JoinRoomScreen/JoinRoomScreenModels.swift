@@ -83,14 +83,15 @@ struct JoinRoomScreenViewState: BindableState {
     
     var avatar: RoomAvatar? {
         // DM invites avatars are broken, this is a workaround
+        // https://github.com/matrix-org/matrix-rust-sdk/issues/4825
         if isDMInvite, let inviter = roomDetails?.inviter {
-            return .room(id: roomID, name: inviter.displayName, avatarURL: hideInviteAvatars ? nil : inviter.avatarURL)
+            .heroes([.init(userID: inviter.id, displayName: inviter.displayName, avatarURL: hideInviteAvatars ? nil : inviter.avatarURL)])
         } else if let roomDetails, let avatar = roomDetails.avatar {
-            return shouldHideAvatars ? avatar.removingAvatar : avatar
+            shouldHideAvatars ? avatar.removingAvatar : avatar
         } else if let name = roomDetails?.name {
-            return .room(id: roomID, name: name, avatarURL: nil)
+            .room(id: roomID, name: name, avatarURL: nil)
         } else {
-            return nil
+            nil
         }
     }
     
