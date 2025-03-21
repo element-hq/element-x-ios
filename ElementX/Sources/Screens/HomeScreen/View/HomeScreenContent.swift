@@ -45,6 +45,27 @@ struct HomeScreenContent: View {
                     }
                 case .rooms:
                     LazyVStack(spacing: 0) {
+                        if !context.manualSearchTriggered, !context.viewState.visibleRooms.isEmpty {
+                            TextField("Search", text: $context.searchQuery)
+                                .padding(.vertical, 4)
+                                .padding(.horizontal, 40)
+                                .background(Asset.Colors.zeroDarkGrey.swiftUIColor)
+                                .cornerRadius(10)
+                                .padding(.horizontal)
+                                .padding(.vertical, 12)
+                                .overlay(
+                                    CompoundIcon(\.search)
+                                        .frame(width: 8, height: 8)
+                                        .padding(.leading, 32)
+                                        .foregroundStyle(.compound.textDisabled),
+                                    alignment: .leading
+                                )
+                                .disabled(true)
+                                .onTapGesture {
+                                    context.manualSearchTriggered = true
+                                }
+                        }
+                        
                         Section {
                             if !context.viewState.shouldShowEmptyFilterState {
                                 HomeScreenRoomList(context: context)
@@ -54,7 +75,7 @@ struct HomeScreenContent: View {
                         }
                     }
                     .isSearching($context.isSearchFieldFocused)
-                    .searchable(text: $context.searchQuery)
+                    .searchable(text: $context.searchQuery, isPresented: $context.manualSearchTriggered)
                     .compoundSearchField()
                     .disableAutocorrection(true)
                 }

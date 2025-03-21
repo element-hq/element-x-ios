@@ -25,32 +25,38 @@ struct HomeScreen: View {
     @State private var selectedTab: HomeTab = .chat
     
     var body: some View {
-        HomeTabView(
-            chatTabContent: {
+        Group {
+            if selectedTab == .chat, context.manualSearchTriggered {
                 HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
-            },
-            channelTabContent: {
-                HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-            },
-            notificationsTabContent: {
-                HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-            },
-            homeTabContent: {
-                HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-            },
-            myFeedTabContent: {
-                HomeMyPostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-            },
-            onTabSelected: { _, tab in
-                selectedTab = tab
+            } else {
+                HomeTabView(
+                    tabContent: { tab in
+                        switch tab {
+                        case .chat:
+                            HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                        case .channels:
+                            HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                        case .feed:
+                            HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                        case .notifications:
+                            HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                        case .myFeed:
+                            HomeMyPostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                        }
+                    },
+                    onTabSelected: { tab in
+                        selectedTab = tab
+                    }
+                )
             }
-        )
+        }
             .alert(item: $context.alertInfo)
             .alert(item: $context.leaveRoomAlertItem,
                    actions: leaveRoomAlertActions,
                    message: leaveRoomAlertMessage)
 //            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
             .toolbar { toolbar }
+            .toolbarBackground(.visible, for: .navigationBar)
             .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
 //            .track(screen: .Home)
 //            .introspect(.viewController, on: .supportedVersions) { controller in

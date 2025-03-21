@@ -229,6 +229,8 @@ struct HomeScreenViewStateBindings {
     var searchQuery = ""
     var isSearchFieldFocused = false
     
+    var manualSearchTriggered = false
+    
     var alertInfo: AlertInfo<UUID>?
     var leaveRoomAlertItem: LeaveRoomAlertItem?
 }
