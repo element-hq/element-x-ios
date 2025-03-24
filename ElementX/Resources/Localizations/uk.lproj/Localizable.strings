@@ -49,6 +49,7 @@
 "action_delete_poll" = "Видалити опитування";
 "action_disable" = "Вимкнути";
 "action_discard" = "Відкинути";
+"action_dismiss" = "Dismiss";
 "action_done" = "Готово";
 "action_edit" = "Редагувати";
 "action_edit_caption" = "Редагувати підпис";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Немає результатів";
 "common_no_room_name" = "Немає назви кімнати";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "Не в мережі";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "або";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "Чекаємо на це повідомлення";
 "common.copied_to_clipboard" = "Скопійовано до буферу обміну";
 "common.do_not_show_this_again" = "Не показувати це знову";
+"common.empty_file" = "Empty file";
+"common.line_copied_to_clipboard" = "Line copied to clipboard";
 "common.open_source_licenses" = "Ліцензії відкритого коду";
 "common.pinned" = "Закріплено";
 "common.send_to" = "Надіслати до";
@@ -279,8 +283,8 @@
 "crypto_identity_change_profile_pin_violation" = "Верифікована ідентичність %1$@ змінилася.";
 "crypto_identity_change_verification_violation_new" = "Верифіковано особистість %1$@ %2$@ змінилася. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Відкликати верифікацію";
-"dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
-"dialog_confirm_link_title" = "Double-check this link";
+"dialog_confirm_link_message" = "Посилання %1$@ спрямовує вас на інший сайт %2$@\n\nВи впевнені, що хочете продовжити?";
+"dialog_confirm_link_title" = "Уважно перевірте це посилання";
 "dialog_permission_camera" = "Щоб дозволити застосунку використовувати камеру, надайте дозвіл у системних налаштуваннях.";
 "dialog_permission_generic" = "Надайте дозвіл в системних налаштуваннях.";
 "dialog_permission_location_description_ios" = "Надайте доступ в Налаштуваннях -> Місцезнаходження.";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "Користувацька URL-адреса Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Встановіть URL-адресу для Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Неправильна URL-адреса. Переконайтеся, що ви вказали протокол (http/https) та правильну адресу.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Надіслати запрошення";
 "screen_bottom_sheet_create_dm_message" = "Хочете розпочати бесіду з %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Надіслати запрошення?";

@@ -128,6 +128,8 @@ internal enum L10n {
   internal static var actionDisable: String { return L10n.tr("Localizable", "action_disable") }
   /// Discard
   internal static var actionDiscard: String { return L10n.tr("Localizable", "action_discard") }
+  /// Dismiss
+  internal static var actionDismiss: String { return L10n.tr("Localizable", "action_dismiss") }
   /// Done
   internal static var actionDone: String { return L10n.tr("Localizable", "action_done") }
   /// Edit
@@ -424,6 +426,8 @@ internal enum L10n {
   internal static var commonNoResults: String { return L10n.tr("Localizable", "common_no_results") }
   /// No room name
   internal static var commonNoRoomName: String { return L10n.tr("Localizable", "common_no_room_name") }
+  /// Not encrypted
+  internal static var commonNotEncrypted: String { return L10n.tr("Localizable", "common_not_encrypted") }
   /// Offline
   internal static var commonOffline: String { return L10n.tr("Localizable", "common_offline") }
   /// Optic ID
@@ -546,7 +550,7 @@ internal enum L10n {
   internal static var commonUnableToDecryptInsecureDevice: String { return L10n.tr("Localizable", "common_unable_to_decrypt_insecure_device") }
   /// You don't have access to this message
   internal static var commonUnableToDecryptNoAccess: String { return L10n.tr("Localizable", "common_unable_to_decrypt_no_access") }
-  /// Sender's verified identity has changed
+  /// Sender's verified identity was reset
   internal static var commonUnableToDecryptVerificationViolation: String { return L10n.tr("Localizable", "common_unable_to_decrypt_verification_violation") }
   /// Invites couldn't be sent to one or more users.
   internal static var commonUnableToInviteMessage: String { return L10n.tr("Localizable", "common_unable_to_invite_message") }
@@ -596,11 +600,11 @@ internal enum L10n {
   internal static func crashDetectionDialogContent(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crash_detection_dialog_content", String(describing: p1))
   }
-  /// %1$@'s identity appears to have changed. %2$@
+  /// %1$@'s identity was reset. %2$@
   internal static func cryptoIdentityChangePinViolation(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation", String(describing: p1), String(describing: p2))
   }
-  /// %1$@’s %2$@ identity appears to have changed. %3$@
+  /// %1$@’s %2$@ identity was reset. %3$@
   internal static func cryptoIdentityChangePinViolationNew(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation_new", String(describing: p1), String(describing: p2), String(describing: p3))
   }
@@ -608,11 +612,11 @@ internal enum L10n {
   internal static func cryptoIdentityChangePinViolationNewUserId(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation_new_user_id", String(describing: p1))
   }
-  /// %1$@’s verified identity has changed.
+  /// %1$@’s identity was reset.
   internal static func cryptoIdentityChangeProfilePinViolation(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_profile_pin_violation", String(describing: p1))
   }
-  /// %1$@’s %2$@ verified identity has changed.  %3$@
+  /// %1$@’s %2$@ identity was reset.  %3$@
   internal static func cryptoIdentityChangeVerificationViolationNew(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_verification_violation_new", String(describing: p1), String(describing: p2), String(describing: p3))
   }
@@ -1820,7 +1824,7 @@ internal enum L10n {
   internal static func screenResolveSendFailureChangedIdentitySubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_resolve_send_failure_changed_identity_subtitle", String(describing: p1))
   }
-  /// Your message was not sent because %1$@’s verified identity has changed
+  /// Your message was not sent because %1$@’s verified identity was reset
   internal static func screenResolveSendFailureChangedIdentityTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_resolve_send_failure_changed_identity_title", String(describing: p1))
   }
@@ -2490,7 +2494,7 @@ internal enum L10n {
   internal static var screenStartChatJoinRoomByAddressRoomNotFound: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_room_not_found") }
   /// e.g. #room-name:matrix.org
   internal static var screenStartChatJoinRoomByAddressSupportingText: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_supporting_text") }
-  /// Message not sent because %1$@’s verified identity has changed.
+  /// Message not sent because %1$@’s verified identity was reset.
   internal static func screenTimelineItemMenuSendFailureChangedIdentity(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_changed_identity", String(describing: p1))
   }

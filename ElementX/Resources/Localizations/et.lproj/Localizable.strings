@@ -49,6 +49,7 @@
 "action_delete_poll" = "Kustuta küsitlus";
 "action_disable" = "Lülita välja";
 "action_discard" = "Loobu";
+"action_dismiss" = "Dismiss";
 "action_done" = "Valmis";
 "action_edit" = "Muuda";
 "action_edit_caption" = "Muuda selgitust";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Otsingul pole tulemusi";
 "common_no_room_name" = "Jututoal puudub nimi";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "Võrgust väljas";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "või";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "Ootame selle sõnumi dekrüptimisvõtit";
 "common.copied_to_clipboard" = "Kopeeritud lõikelauale";
 "common.do_not_show_this_again" = "Ära enam näita seda uuesti";
+"common.empty_file" = "Tühi fail";
+"common.line_copied_to_clipboard" = "Rida on kopeeritud lõikelauale";
 "common.open_source_licenses" = "Avatud lähtekoodiga litsentsid";
 "common.pinned" = "Esiletõstetud";
 "common.send_to" = "Saada kasutajale";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "Element Calli kohandatud teenuseaadress";
 "screen_advanced_settings_element_call_base_url_description" = "Seadista kohandatud teenuseaadress Element Calli jaoks.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Vigane url. Palun vaata, et url algaks protokolliga (http/https) ning aadress ise oleks ka õige.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Saada kutse";
 "screen_bottom_sheet_create_dm_message" = "Kas sa soovid alustada vestlust kasutajaga %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Kas saadame kutse?";

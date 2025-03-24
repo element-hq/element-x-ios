@@ -49,6 +49,7 @@
 "action_delete_poll" = "Umfrage löschen";
 "action_disable" = "Deaktivieren";
 "action_discard" = "Verwerfen";
+"action_dismiss" = "Dismiss";
 "action_done" = "Erledigt";
 "action_edit" = "Bearbeiten";
 "action_edit_caption" = "Bildunterschrift bearbeiten";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@(%2$@)";
 "common_no_results" = "Keine Ergebnisse";
 "common_no_room_name" = "Kein Raumname";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "Offline";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "oder";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "Warte auf diese Nachricht";
 "common.copied_to_clipboard" = "In die Zwischenablage kopiert";
 "common.do_not_show_this_again" = "Nicht mehr anzeigen";
+"common.empty_file" = "Leere Datei";
+"common.line_copied_to_clipboard" = "Zeile in die Zwischenablage kopiert";
 "common.open_source_licenses" = "Open-Source-Lizenzen";
 "common.pinned" = "Fixiert";
 "common.send_to" = "Senden an";
@@ -279,8 +283,8 @@
 "crypto_identity_change_profile_pin_violation" = "Die verifizierte Identität von %1$@ hat sich geändert.";
 "crypto_identity_change_verification_violation_new" = "Die verifizierte Identität von %1$@'s %2$@ hat sich geändert. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Verifizierung zurückziehen";
-"dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
-"dialog_confirm_link_title" = "Double-check this link";
+"dialog_confirm_link_message" = "Der Link%1$@ führt Sie zu einer anderen Seite%2$@. \n\nMöchten Sie wirklich fortfahren?";
+"dialog_confirm_link_title" = "Überprüfen Sie diesen Link noch einmal";
 "dialog_permission_camera" = "Damit die Anwendung die Kamera verwenden kann, erteile bitte die Erlaubnis in den Systemeinstellungen.";
 "dialog_permission_generic" = "Bitte erteile die Erlaubnis in den Systemeinstellungen.";
 "dialog_permission_location_description_ios" = "Erlaube den Zugriff unter Einstellungen -> Standort.";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "Benutzerdefinierte Element-Aufruf-Basis-URL";
 "screen_advanced_settings_element_call_base_url_description" = "Lege eine eigene Basis-URL für Element Call fest.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Ungültige URL, bitte stelle sicher, dass du das Protokoll (http/https) und die richtige Adresse angibst.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Avatare in Einladungsanfragen im Raum ausblenden";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Medienvorschauen in der Zeitleiste ausblenden";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation und Sicherheit";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Einladung senden";
 "screen_bottom_sheet_create_dm_message" = "Möchten Sie einen Chat mit %1$@ starten?";
 "screen_bottom_sheet_create_dm_title" = "Einladung senden?";

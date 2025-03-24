@@ -49,6 +49,7 @@
 "action_delete_poll" = "Poista kysely";
 "action_disable" = "Poista käytöstä";
 "action_discard" = "Hylkää";
+"action_dismiss" = "Dismiss";
 "action_done" = "Valmis";
 "action_edit" = "Muokkaa";
 "action_edit_caption" = "Muokkaa kuvatekstiä";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Ei tuloksia";
 "common_no_room_name" = "Nimetön huone";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "Ei yhteyttä";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "tai";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "Odotetaan viestiä";
 "common.copied_to_clipboard" = "Kopioitu leikepöydälle";
 "common.do_not_show_this_again" = "Älä näytä tätä uudelleen";
+"common.empty_file" = "Empty file";
+"common.line_copied_to_clipboard" = "Line copied to clipboard";
 "common.open_source_licenses" = "Avoimen lähdekoodin lisenssit";
 "common.pinned" = "Kiinnitetty";
 "common.send_to" = "Jaa";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "Mukautettu Element Call URL-osoite";
 "screen_advanced_settings_element_call_base_url_description" = "Aseta mukautettu URL-osoite Element Callille.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Virheellinen URL-osoite. Varmista, että sisällytät protokollan (http/https) ja oikean osoitteen.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Lähetä kutsu";
 "screen_bottom_sheet_create_dm_message" = "Haluaisitko aloittaa keskustelun käyttäjän %1$@ kanssa?";
 "screen_bottom_sheet_create_dm_title" = "Lähetetäänkö kutsu?";

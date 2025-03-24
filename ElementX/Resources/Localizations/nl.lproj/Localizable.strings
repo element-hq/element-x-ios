@@ -49,6 +49,7 @@
 "action_delete_poll" = "Peiling verwijderen";
 "action_disable" = "Uitschakelen";
 "action_discard" = "Verwerpen";
+"action_dismiss" = "Dismiss";
 "action_done" = "Gereed";
 "action_edit" = "Bewerken";
 "action_edit_caption" = "Edit caption";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Geen resultaten";
 "common_no_room_name" = "Geen kamernaam";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "Offline";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "of";
@@ -262,12 +264,14 @@
 "common_waiting_for_decryption_key" = "Wachten op dit bericht";
 "common.copied_to_clipboard" = "Gekopieerd naar klembord";
 "common.do_not_show_this_again" = "Dit niet meer weergeven";
+"common.empty_file" = "Empty file";
+"common.line_copied_to_clipboard" = "Line copied to clipboard";
 "common.open_source_licenses" = "Open-sourcelicenties";
 "common.pinned" = "Vastgezet";
 "common.send_to" = "Sturen naar";
 "common.you" = "Jij";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
-"common_unable_to_decrypt_verification_violation" = "Sender's verified identity has changed";
+"common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Je chatback-up is momenteel niet gesynchroniseerd. Je moet je herstelsleutel invoeren om toegang te behouden tot je chatback-up.";
 "confirm_recovery_key_banner_primary_button_title" = "Enter your recovery key";
 "confirm_recovery_key_banner_secondary_button_title" = "Forgot your recovery key?";
@@ -276,8 +280,8 @@
 "crypto_identity_change_pin_violation" = "%1$@'s identiteit lijkt te zijn veranderd. %2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@'s %2$@ identiteit lijkt te zijn veranderd. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
-"crypto_identity_change_profile_pin_violation" = "%1$@’s verified identity has changed.";
-"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
+"crypto_identity_change_profile_pin_violation" = "%1$@’s identity was reset.";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ identity was reset.  %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
 "dialog_confirm_link_title" = "Double-check this link";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "Aangepaste basis-URL voor Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Stel een aangepaste basis-URL in voor Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Ongeldige URL, zorg ervoor dat je het protocol (http/https) en het juiste adres invult.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";

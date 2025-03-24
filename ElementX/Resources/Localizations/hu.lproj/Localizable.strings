@@ -49,6 +49,7 @@
 "action_delete_poll" = "Szavazás törlése";
 "action_disable" = "Letiltás";
 "action_discard" = "Elvetés";
+"action_dismiss" = "Eltüntetés";
 "action_done" = "Kész";
 "action_edit" = "Szerkesztés";
 "action_edit_caption" = "Felirat szerkesztése";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Nincs találat";
 "common_no_room_name" = "Nincs szobanév";
+"common_not_encrypted" = "Nincs titkosítva";
 "common_offline" = "Kapcsolat nélkül";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "vagy";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "Várakozás a visszafejtési kulcsra";
 "common.copied_to_clipboard" = "A vágólapra másolva";
 "common.do_not_show_this_again" = "Ne jelenjen meg többé";
+"common.empty_file" = "Üres fájl";
+"common.line_copied_to_clipboard" = "A sor a vágólapra másolva";
 "common.open_source_licenses" = "Nyílt forráskódú licencek";
 "common.pinned" = "Kitűzve";
 "common.send_to" = "Címzett";
@@ -273,14 +277,14 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Elfelejtette a helyreállítási kulcsot?";
 "confirm_recovery_key_banner_title" = "A kulcstároló nincs szinkronizálva";
 "crash_detection_dialog_content" = "Az %1$@ összeomlott a legutóbbi használata óta. Megosztja velünk az összeomlás-jelentést?";
-"crypto_identity_change_pin_violation" = "Úgy tűnik, hogy %1$@ személyazonossága megváltozott. %2$@";
-"crypto_identity_change_pin_violation_new" = "Úgy tűnik, hogy %1$@ %2$@ személyazonossága megváltozott. %3$@";
+"crypto_identity_change_pin_violation" = "%1$@ személyazonossága megváltozott. %2$@";
+"crypto_identity_change_pin_violation_new" = "%1$@ (%2$@) személyazonossága megváltozott. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
-"crypto_identity_change_profile_pin_violation" = "%1$@ ellenőrzött személyazonossága megváltozott.";
-"crypto_identity_change_verification_violation_new" = "%1$@, %2$@ ellenőrzött személyazonossága megváltozott. %3$@";
+"crypto_identity_change_profile_pin_violation" = "%1$@ személyazonossága megváltozott.";
+"crypto_identity_change_verification_violation_new" = "%1$@ (%2$@) ellenőrzött személyazonossága megváltozott. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Ellenőrzés visszavonása";
-"dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
-"dialog_confirm_link_title" = "Double-check this link";
+"dialog_confirm_link_message" = "A(z) %1$@ hivatkozás átviszi egy másik webhelyre: %2$@\n\nBiztos, hogy folytatja?";
+"dialog_confirm_link_title" = "Ellenőrizze újra ezt a hivatkozást";
 "dialog_permission_camera" = "Hogy az alkalmazás használhassa a kamerát, adja meg az engedélyt a rendszerbeállításokban.";
 "dialog_permission_generic" = "Adja meg az engedélyt a rendszerbeállításokban.";
 "dialog_permission_location_description_ios" = "Adjon hozzáférést a Beállítások -> Hely menüpontban.";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "Egyéni Element Call alapwebcím";
 "screen_advanced_settings_element_call_base_url_description" = "Egyéni alapwebcím beállítása az Element Callhoz.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Érvénytelen webcím, győződjön meg arról, hogy szerepel-e benne a protokoll (http/https), és hogy helyes-e a cím.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Profilképek elrejtése a szobameghívókban";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Médiaelőnézetek elrejtése az idővonalon";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderálás és biztonság";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Meghívó küldése";
 "screen_bottom_sheet_create_dm_message" = "Csevegést kezd vele: %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Meghívó küldése?";
@@ -444,7 +451,7 @@
 "screen_reset_encryption_password_error" = "Ismeretlen hiba történt. Ellenőrizze, hogy a fiókja jelszava helyes-e, és próbálja meg újra.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Ellenőrzés visszavonása és elküldés";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Visszavonhatja az ellenőrzést, és ennek ellenére elküldheti ezt az üzenetet, vagy egyelőre törölheti, és %1$@ újbóli ellenőrzése után újra megpróbálhatja.";
-"screen_resolve_send_failure_changed_identity_title" = "Az üzenete nem lett elküldve, mert %1$@ ellenőrzött személyazonossága megváltozott.";
+"screen_resolve_send_failure_changed_identity_title" = "Az üzenete nem lett elküldve, mert %1$@ személyazonossága megváltozott.";
 "screen_resolve_send_failure_unsigned_device_primary_button_title" = "Üzenet elküldése mindenképp";
 "screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ egy vagy több ellenőrizetlen eszközt használ. Így is elküldheti az üzenetet, vagy megszakíthatja most, és megpróbálhatja újra, miután %2$@ ellenőrizte az összes eszközét.";
 "screen_resolve_send_failure_unsigned_device_title" = "Az üzenet nem lett elküldve, mert %1$@ nem ellenőrizte az összes eszközét";
