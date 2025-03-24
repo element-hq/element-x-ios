@@ -192,6 +192,8 @@ struct HomeScreenViewState: BindableState {
     var userRewards = ZeroRewards.empty()
     var showNewUserRewardsIntimation = false
     
+    var hideInviteAvatars = false
+    
     var bindings = HomeScreenViewStateBindings()
     
     var placeholderRooms: [HomeScreenRoom] {

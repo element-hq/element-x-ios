@@ -928,10 +928,16 @@ internal enum L10n {
   internal static var screenAdvancedSettingsElementCallBaseUrlDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_element_call_base_url_description") }
   /// Invalid URL, please make sure you include the protocol (http/https) and the correct address.
   internal static var screenAdvancedSettingsElementCallBaseUrlValidationError: String { return L10n.tr("Localizable", "screen_advanced_settings_element_call_base_url_validation_error") }
+  /// Hide avatars in room invite requests
+  internal static var screenAdvancedSettingsHideInviteAvatarsToggleTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_hide_invite_avatars_toggle_title") }
+  /// Hide media previews in timeline
+  internal static var screenAdvancedSettingsHideTimelineMediaToggleTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_hide_timeline_media_toggle_title") }
   /// Upload photos and videos faster and reduce data usage
   internal static var screenAdvancedSettingsMediaCompressionDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_media_compression_description") }
   /// Optimise media quality
   internal static var screenAdvancedSettingsMediaCompressionTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_media_compression_title") }
+  /// Moderation and Safety
+  internal static var screenAdvancedSettingsModerationAndSafetySectionTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_moderation_and_safety_section_title") }
   /// Disable the rich text editor to type Markdown manually.
   internal static var screenAdvancedSettingsRichTextEditorDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_rich_text_editor_description") }
   /// Read receipts
@@ -2879,6 +2885,10 @@ internal enum L10n {
     internal static var copiedToClipboard: String { return L10n.tr("Localizable", "common.copied_to_clipboard") }
     /// Do not show this again
     internal static var doNotShowThisAgain: String { return L10n.tr("Localizable", "common.do_not_show_this_again") }
+    /// Empty file
+    internal static var emptyFile: String { return L10n.tr("Localizable", "common.empty_file") }
+    /// Line copied to clipboard
+    internal static var lineCopiedToClipboard: String { return L10n.tr("Localizable", "common.line_copied_to_clipboard") }
     /// Open source licenses
     internal static var openSourceLicenses: String { return L10n.tr("Localizable", "common.open_source_licenses") }
     /// Pinned

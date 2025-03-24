@@ -41,6 +41,10 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         
         super.init(initialViewState: JoinRoomScreenViewState(roomID: roomID), mediaProvider: mediaProvider)
         
+        appSettings.$hideInviteAvatars
+            .weakAssign(to: \.state.hideInviteAvatars, on: self)
+            .store(in: &cancellables)
+        
         context.$viewState.map(\.mode)
             .removeDuplicates()
             .sink { mode in

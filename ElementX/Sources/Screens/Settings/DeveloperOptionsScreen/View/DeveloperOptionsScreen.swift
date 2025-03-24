@@ -19,56 +19,58 @@ struct DeveloperOptionsScreen: View {
     
     var body: some View {
         Form {
-//            Section("Logging") {
-//                LogLevelConfigurationView(logLevel: $context.logLevel)
-//            }
-//            
-//            Section("General") {
-//                Toggle(isOn: $context.eventCacheEnabled) {
-//                    Text("Event cache")
-//                }
-//                .onChange(of: context.eventCacheEnabled) {
-//                    context.send(viewAction: .clearCache)
-//                }
-//            }
-//            
-//            Section("Room List") {
-//                Toggle(isOn: $context.publicSearchEnabled) {
-//                    Text("Public search")
-//                }
-//                
-//                Toggle(isOn: $context.hideUnreadMessagesBadge) {
-//                    Text("Hide grey dots")
-//                }
-//                
-//                Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
-//                    Text("Fuzzy searching")
-//                }
-//            }
-//            
-//            Section("Room") {
-//                Toggle(isOn: $context.hideTimelineMedia) {
-//                    Text("Hide image & video previews")
-//                }
-//            }
-//            
-//            Section("Join rules") {
-//                Toggle(isOn: $context.knockingEnabled) {
-//                    Text("Knocking")
-//                    Text("Ask to join rooms")
-//                }
-//            }
-//            
-//            Section {
-//                Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
-//                    Text("Exclude insecure devices when sending/receiving messages")
-//                    Text("Requires app reboot")
-//                }
-//            } header: {
-//                Text("Trust and Decoration")
-//            } footer: {
-//                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
-//            }
+            Section("Logging") {
+                LogLevelConfigurationView(logLevel: $context.logLevel)
+                
+                DisclosureGroup("SDK trace packs") {
+                    ForEach(TraceLogPack.allCases, id: \.self) { pack in
+                        Toggle(isOn: $context.traceLogPacks[pack]) {
+                            Text(pack.title)
+                        }
+                    }
+                }
+            }
+            
+            Section("General") {
+                Toggle(isOn: $context.eventCacheEnabled) {
+                    Text("Event cache")
+                }
+                .onChange(of: context.eventCacheEnabled) {
+                    context.send(viewAction: .clearCache)
+                }
+            }
+            
+            Section("Room List") {
+                Toggle(isOn: $context.publicSearchEnabled) {
+                    Text("Public search")
+                }
+                
+                Toggle(isOn: $context.hideUnreadMessagesBadge) {
+                    Text("Hide grey dots")
+                }
+                
+                Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
+                    Text("Fuzzy searching")
+                }
+            }
+            
+            Section("Join rules") {
+                Toggle(isOn: $context.knockingEnabled) {
+                    Text("Knocking")
+                    Text("Ask to join rooms")
+                }
+            }
+            
+            Section {
+                Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
+                    Text("Exclude insecure devices when sending/receiving messages")
+                    Text("Requires app reboot")
+                }
+            } header: {
+                Text("Trust and Decoration")
+            } footer: {
+                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
+            }
 
             Section {
                 Button(role: .destructive) {
@@ -128,6 +130,20 @@ private struct LogLevelConfigurationView: View {
     /// Allows the picker to work with associated values
     private var logLevels: [LogLevel] {
         [.error, .warn, .info, .debug, .trace]
+    }
+}
+
+private extension Set<TraceLogPack> {
+    /// A custom subscript that allows binding a toggle to add/remove a pack from the array.
+    subscript(pack: TraceLogPack) -> Bool {
+        get { contains(pack) }
+        set {
+            if newValue {
+                insert(pack)
+            } else {
+                remove(pack)
+            }
+        }
     }
 }
 

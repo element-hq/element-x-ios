@@ -23,6 +23,15 @@ enum JoinRoomScreenMode: Equatable {
     case knocked
     case banned(sender: String?, reason: String?)
     case forbidden
+    
+    var isInvite: Bool {
+        switch self {
+        case .invited:
+            true
+        default:
+            false
+        }
+    }
 }
 
 struct JoinRoomScreenRoomDetails {
@@ -41,8 +50,14 @@ struct JoinRoomScreenViewState: BindableState {
     var roomDetails: JoinRoomScreenRoomDetails?
     
     var mode: JoinRoomScreenMode = .loading
+    
+    var hideInviteAvatars = false
         
     var bindings = JoinRoomScreenViewStateBindings()
+    
+    var shouldHideAvatars: Bool {
+        hideInviteAvatars && mode.isInvite
+    }
     
     var title: String {
         if isDMInvite, let inviter = roomDetails?.inviter {
@@ -67,14 +82,16 @@ struct JoinRoomScreenViewState: BindableState {
     }
     
     var avatar: RoomAvatar? {
+        // DM invites avatars are broken, this is a workaround
+        // https://github.com/matrix-org/matrix-rust-sdk/issues/4825
         if isDMInvite, let inviter = roomDetails?.inviter {
-            return .room(id: roomID, name: inviter.displayName, avatarURL: inviter.avatarURL)
-        } else if let avatar = roomDetails?.avatar {
-            return avatar
+            .heroes([.init(userID: inviter.id, displayName: inviter.displayName, avatarURL: hideInviteAvatars ? nil : inviter.avatarURL)])
+        } else if let roomDetails, let avatar = roomDetails.avatar {
+            shouldHideAvatars ? avatar.removingAvatar : avatar
         } else if let name = roomDetails?.name {
-            return .room(id: roomID, name: name, avatarURL: nil)
+            .room(id: roomID, name: name, avatarURL: nil)
         } else {
-            return nil
+            nil
         }
     }
     
