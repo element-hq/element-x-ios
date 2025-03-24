@@ -49,6 +49,7 @@
 "action_delete_poll" = "Διαγραφή Δημοσκόπησης";
 "action_disable" = "Απενεργοποίηση";
 "action_discard" = "Απόρριψη";
+"action_dismiss" = "Dismiss";
 "action_done" = "Έγινε";
 "action_edit" = "Επεξεργασία";
 "action_edit_caption" = "Επεξεργασία λεζάντας";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Κανένα αποτέλεσμα";
 "common_no_room_name" = "Χωρίς όνομα δωματίου";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "Εκτός σύνδεσης";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "ή";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "Αναμονή για αυτό το μήνυμα";
 "common.copied_to_clipboard" = "Αντιγράφηκε στο πρόχειρο";
 "common.do_not_show_this_again" = "Να μην εμφανιστεί ξανά";
+"common.empty_file" = "Empty file";
+"common.line_copied_to_clipboard" = "Line copied to clipboard";
 "common.open_source_licenses" = "Άδειες ανοιχτού κώδικα";
 "common.pinned" = "Καρφιτσωμένο";
 "common.send_to" = "Αποστολή σε";
@@ -276,8 +280,8 @@
 "crypto_identity_change_pin_violation" = "Η ταυτότητα του χρήστη %1$@ φαίνεται να έχει αλλάξει. %2$@";
 "crypto_identity_change_pin_violation_new" = "Η ταυτότητα του %1$@ %2$@ φαίνεται να έχει αλλάξει. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
-"crypto_identity_change_profile_pin_violation" = "%1$@’s verified identity has changed.";
-"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
+"crypto_identity_change_profile_pin_violation" = "%1$@’s identity was reset.";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ identity was reset.  %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
 "dialog_confirm_link_title" = "Double-check this link";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "Προσαρμοσμένο URL βάσης κλήσεων Element";
 "screen_advanced_settings_element_call_base_url_description" = "Όρισε μια προσαρμοσμένη διεύθυνση βάσης URL για κλήση Element.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Μη έγκυρη διεύθυνση URL, βεβαιώσου ότι έχεις συμπεριλάβει το πρωτόκολλο (http/https) και τη σωστή διεύθυνση.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";
