@@ -13,7 +13,6 @@ struct HomeScreenNotificationCell: View {
     
     var notificationText: AttributedString {
         let isRoomDM = room.isDirect
-        let isChannel = room.isAChannel
         let baseText: String
 
         switch room.type {
@@ -27,11 +26,9 @@ struct HomeScreenNotificationCell: View {
                     "\(room.unreadNotificationsCount) unread message in your conversation with \(room.name)"
             }
             else {
-                let channelPostfix = isChannel ? "feed channel." : "channel."
-                
                 baseText = room.unreadNotificationsCount > 1 ?
-                "\(room.unreadNotificationsCount) unread messages in the \(room.name) \(channelPostfix)" :
-                "\(room.unreadNotificationsCount) unread message in the \(room.name) \(channelPostfix)"
+                "\(room.unreadNotificationsCount) unread messages in \(room.name)" :
+                "\(room.unreadNotificationsCount) unread message in \(room.name)"
             }
         default:
             baseText = "You may have new messages in \(room.name)"
@@ -39,10 +36,10 @@ struct HomeScreenNotificationCell: View {
         
         var attributedText = AttributedString(baseText)
         if let roomNameRange = attributedText.range(of: room.name) {
-            attributedText[roomNameRange].font = .compound.bodyMDSemibold
+            attributedText[roomNameRange].foregroundColor = .compound.textPrimary
         }
         if room.unreadNotificationsCount > 1, let unreadCountRange = attributedText.range(of: String(room.unreadNotificationsCount)) {
-            attributedText[unreadCountRange].font = .compound.bodyMDSemibold
+            attributedText[unreadCountRange].foregroundColor = .compound.textPrimary
         }
         return attributedText
     }
@@ -57,7 +54,7 @@ struct HomeScreenNotificationCell: View {
                 
                 Text(notificationText)
                     .font(.zero.bodyMD)
-                    .foregroundStyle(.compound.textPrimary)
+                    .foregroundStyle(.compound.textSecondary)
             }
             .padding()
             

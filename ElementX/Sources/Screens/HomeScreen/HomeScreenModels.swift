@@ -361,7 +361,7 @@ struct HomeScreenPost: Identifiable, Equatable {
 struct HomeScreenChannel: Identifiable, Equatable {
     let id: String
     let channelFullName: String
-    let displayName: AttributedString
+    let displayName: String
     
     var notificationsCount: UInt = 0
     
@@ -520,18 +520,13 @@ extension HomeScreenPost {
 extension HomeScreenChannel {
     init(channelZId: String) {
         let channelDisplayName = String((channelZId.split(separator: ".").first ?? ""))
-        var attributedChannelDisplayName = AttributedString(channelDisplayName)
-        if let prefixRange = attributedChannelDisplayName.range(of: ZeroContants.ZERO_CHANNEL_PREFIX) {
-            attributedChannelDisplayName[prefixRange].foregroundColor = .compound.textSecondary
-        }
-        
         let rootChannelName = channelDisplayName.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "")
         let channelId = "#\(rootChannelName):\(ZeroContants.appServer.matrixHomeServerPostfix)"
         
         self.init(
             id: channelId,
             channelFullName: channelZId,
-            displayName: attributedChannelDisplayName
+            displayName: channelDisplayName
         )
     }
 }
