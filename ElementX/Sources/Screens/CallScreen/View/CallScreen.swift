@@ -99,8 +99,7 @@ private struct CallView: UIViewRepresentable {
             let userContentController = WKUserContentController()
             userContentController.add(WKScriptMessageHandlerWrapper(self), name: viewModelContext.viewState.messageHandler)
             
-            // These two lines are required to allow a webview that uses file URL to load its own assets
-            configuration.setValue(true, forKey: "allowUniversalAccessFromFileURLs")
+            // Required to allow a webview that uses file URL to load its own assets
             configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
             configuration.userContentController = userContentController
             configuration.allowsInlineMediaPlayback = true
