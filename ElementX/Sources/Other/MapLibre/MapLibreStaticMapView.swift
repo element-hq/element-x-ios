@@ -66,7 +66,7 @@ struct MapLibreStaticMapView<PinAnnotation: View>: View {
     }
 
     private var placeholderImage: some View {
-        Image("mapBlurred")
+        Image(asset: Asset.Images.mapBlurred)
             .resizable()
             .scaledToFill()
     }
