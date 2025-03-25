@@ -34,7 +34,7 @@ struct MapLibreMapView: UIViewRepresentable {
     
     @Environment(\.colorScheme) private var colorScheme
     
-    let builder: MapTilerStyleBuilderProtocol
+    let mapURLBuilder: MapTilerURLBuilderProtocol
 
     let options: Options
     
@@ -64,7 +64,7 @@ struct MapLibreMapView: UIViewRepresentable {
         // Don't set the same value twice. Otherwise, if there is an error loading the map, a loop
         // is caused as the `error` binding being set, which triggers this update, which sets a
         // new URL, which causes another error, and so it goes on round and round in a circle.
-        let dynamicMapURL = builder.dynamicMapURL(for: .init(colorScheme))
+        let dynamicMapURL = mapURLBuilder.dynamicMapURL(for: .init(colorScheme))
         if mapView.styleURL != dynamicMapURL {
             mapView.styleURL = dynamicMapURL
         }
@@ -85,7 +85,7 @@ struct MapLibreMapView: UIViewRepresentable {
     }
     
     private func makeMapView() -> MGLMapView {
-        let mapView = MGLMapView(frame: .zero, styleURL: colorScheme == .dark ? builder.dynamicMapURL(for: .dark) : builder.dynamicMapURL(for: .light))
+        let mapView = MGLMapView(frame: .zero, styleURL: mapURLBuilder.dynamicMapURL(for: colorScheme == .dark ? .dark : .light))
         mapView.logoViewPosition = .topLeft
         mapView.attributionButtonPosition = .topLeft
         mapView.attributionButtonMargins = .init(x: mapView.logoView.frame.maxX + 8, y: mapView.logoView.center.y / 2)

@@ -40,7 +40,7 @@ final class MapTilerURLBuildersTests: XCTestCase {
     }
 
     func testDynamicMapBuilder() {
-        let builder = MapTilerStyleBuilder(baseURL: Self.baseURL, key: Self.apiKey)
+        let builder = MapTilerConfiguration(baseURL: Self.baseURL, key: Self.apiKey)
         let url = builder.dynamicMapURL(for: .dark)
         let expectedURL: URL = "http://www.foo.com/dea61faf-292b-4774-9660-58fcef89a7f3/style.json?key=some_key"
         XCTAssertEqual(url, expectedURL)

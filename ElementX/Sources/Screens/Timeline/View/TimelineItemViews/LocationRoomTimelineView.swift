@@ -68,8 +68,7 @@ private extension MapLibreStaticMapView {
         self.init(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
                   zoomLevel: 15,
                   attributionPlacement: .bottomLeft,
-                  mapTilerStatic: MapTilerStaticMap(baseURL: ServiceLocator.shared.settings.mapTilerBaseURL,
-                                                    key: ServiceLocator.shared.settings.mapTilerApiKey),
+                  mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
                   mapSize: mapSize,
                   pinAnnotationView: pinAnnotationView)
     }

@@ -32,13 +32,13 @@ git update-index assume-unchanged Secrets/Secrets.swift
 ``` 
 this will prevent pushing any update of the file `Secrets.swift`.
 
-Finally you need to setup your map styles overriding the values you find in the code:
+Finally you need to setup your map styles overriding the values you find in AppSettings.swift:
 
 ```swift
-enum MapTilerStyle: String {
-    case light = “your_style_id_light”
-    case dark = “your_style_id_dark”
-}
+MapTilerConfiguration(baseURL: "https://api.maptiler.com/maps",
+                      apiKey: Secrets.mapLibreAPIKey,
+                      lightStyleID: "your_style_id_light",
+                      darkStyleID: "your_style_id_dark")
 ```
 
 You aren’t required to use custom styles here. You can use already available styles like `basic-v2` and `basic-v2-dark`

@@ -11,7 +11,7 @@ import SwiftUI
 struct StaticLocationScreen: View {
     @ObservedObject var context: StaticLocationScreenViewModel.Context
     
-    private let builder = MapTilerStyleBuilder(appSettings: ServiceLocator.shared.settings)
+    private let mapURLBuilder: MapTilerURLBuilderProtocol = ServiceLocator.shared.settings.mapTilerConfiguration
     
     var body: some View {
         VStack(spacing: 0) {
@@ -34,7 +34,7 @@ struct StaticLocationScreen: View {
     
     private var mapView: some View {
         ZStack(alignment: .center) {
-            MapLibreMapView(builder: builder,
+            MapLibreMapView(mapURLBuilder: mapURLBuilder,
                             options: mapOptions,
                             showsUserLocationMode: $context.showsUserLocationMode,
                             error: $context.mapError,

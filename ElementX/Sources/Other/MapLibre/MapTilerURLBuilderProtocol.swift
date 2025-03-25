@@ -7,7 +7,9 @@
 
 import CoreLocation
 
-protocol MapTilerStaticMapProtocol {
+protocol MapTilerURLBuilderProtocol {
+    func dynamicMapURL(for style: MapTilerStyle) -> URL?
+    
     func staticMapURL(for style: MapTilerStyle,
                       coordinates: CLLocationCoordinate2D,
                       zoomLevel: Double,
