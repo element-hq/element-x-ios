@@ -185,12 +185,12 @@ private struct CallView: UIViewRepresentable {
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
             if let navigationURL = navigationAction.request.url {
                 // Do not allow navigation to a different URL scheme.
-                if url.scheme != navigationURL.scheme {
+                if navigationURL.scheme != url.scheme {
                     return .cancel
                 }
                 
                 // Allow any content from the main URL.
-                if navigationAction.request.url?.host == url.host {
+                if navigationURL.host == url.host {
                     return .allow
                 }
             }
