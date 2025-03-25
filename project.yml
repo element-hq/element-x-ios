@@ -136,7 +136,7 @@ packages:
     minorVersion: 2.1.0
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.9.0-release-test.3
+    exactVersion: 0.9.0-rc.3
 
 aggregateTargets:
   Periphery:
