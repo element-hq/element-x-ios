@@ -117,6 +117,12 @@ struct TimelineViewState: BindableState {
     /// A closure that updates the associated pill context
     var pillContextUpdater: (@MainActor (PillContext) -> Void)?
     
+    /// A closure that returns the associated room name give its id
+    var roomNameForIDResolver: (@MainActor (String) -> String?)?
+    
+    /// A closure that returns the associated room name give its alias
+    var roomNameForAliasResolver: (@MainActor (String) -> String?)?
+    
     var emojiProvider: EmojiProviderProtocol
 }
 
