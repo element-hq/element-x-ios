@@ -99,6 +99,7 @@ private struct CallView: UIViewRepresentable {
             let userContentController = WKUserContentController()
             userContentController.add(WKScriptMessageHandlerWrapper(self), name: viewModelContext.viewState.messageHandler)
             
+            // These two lines are required to allow a webview that uses file URL to load its own assets
             configuration.setValue(true, forKey: "allowUniversalAccessFromFileURLs")
             configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
             configuration.userContentController = userContentController
@@ -182,9 +183,16 @@ private struct CallView: UIViewRepresentable {
         }
         
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
-            // Allow any content from the main URL.
-            if navigationAction.request.url?.host == url.host {
-                return .allow
+            if let navigationURL = navigationAction.request.url {
+                // Do not allow navigation to a different URL scheme.
+                if url.scheme != navigationURL.scheme {
+                    return .cancel
+                }
+                
+                // Allow any content from the main URL.
+                if navigationAction.request.url?.host == url.host {
+                    return .allow
+                }
             }
             
             // Additionally allow any embedded content such as captchas.

@@ -81,6 +81,9 @@ packages:
     url: https://github.com/element-hq/matrix-rich-text-editor-swift
     exactVersion: 2.37.12
     # path: ../matrix-rich-text-editor/platforms/ios/lib/WysiwygComposer
+  EmbeddedElementCall:
+    url: https://github.com/element-hq/element-call-swift
+    exactVersion: 0.9.0-rc.3
   
   # External dependencies
   Algorithms:
@@ -134,9 +137,6 @@ packages:
   Version:
     url: https://github.com/mxcl/Version
     minorVersion: 2.1.0
-  EmbeddedElementCall:
-    url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.9.0-rc.3
 
 aggregateTargets:
   Periphery:
