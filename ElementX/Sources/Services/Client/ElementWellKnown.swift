@@ -9,20 +9,9 @@ import Foundation
 import MatrixRustSDK
 
 struct ElementWellKnown {
-    struct Call {
-        let widgetURL: URL
-        
-        init?(_ wellKnown: MatrixRustSDK.ElementCallWellKnown) {
-            guard let widgetURL = URL(string: wellKnown.widgetUrl) else { return nil }
-            self.widgetURL = widgetURL
-        }
-    }
-    
-    let call: Call?
     let registrationHelperURL: URL?
     
     init?(_ wellKnown: MatrixRustSDK.ElementWellKnown) {
-        call = wellKnown.call.flatMap(Call.init)
         registrationHelperURL = wellKnown.registrationHelperUrl.flatMap(URL.init)
     }
 }

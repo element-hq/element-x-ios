@@ -5,6 +5,10 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+#if canImport(EmbeddedElementCall)
+import EmbeddedElementCall
+#endif
+
 import Foundation
 import SwiftUI
 
@@ -267,7 +271,8 @@ final class AppSettings {
 
     // MARK: - Element Call
     
-    let elementCallBaseURL: URL = "https://call.element.io/room"
+    // swiftlint:disable:next force_unwrapping
+    let elementCallBaseURL: URL = EmbeddedElementCall.appURL!
     
     // These are publicly availble on https://call.element.io so we don't neeed to treat them as secrets
     let elementCallPosthogAPIHost = "https://posthog-element-call.element.io"
