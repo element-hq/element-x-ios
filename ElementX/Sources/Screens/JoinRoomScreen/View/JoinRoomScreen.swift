@@ -58,7 +58,9 @@ struct JoinRoomScreen: View {
     private var defaultView: some View {
         VStack(spacing: 16) {
             if let inviter = context.viewState.roomDetails?.inviter {
-                RoomInviterLabel(inviter: inviter, mediaProvider: context.mediaProvider)
+                RoomInviterLabel(inviter: inviter,
+                                 shouldHideAvatar: context.viewState.hideInviteAvatars,
+                                 mediaProvider: context.mediaProvider)
                     .multilineTextAlignment(.center)
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textSecondary)
@@ -313,6 +315,8 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
     static let inviteRequiredViewModel = makeViewModel(mode: .inviteRequired)
     static let invitedViewModel = makeViewModel(mode: .invited(isDM: false))
     static let invitedDMViewModel = makeViewModel(mode: .invited(isDM: true))
+    static let invitedViewModelWithHiddenAvatars = makeViewModel(mode: .invited(isDM: false), hideInviteAvatars: true)
+    static let invitedDMViewModelWithHiddenAvatars = makeViewModel(mode: .invited(isDM: true), hideInviteAvatars: true)
     static let knockableViewModel = makeViewModel(mode: .knockable)
     static let knockedViewModel = makeViewModel(mode: .knocked)
     static let bannedViewModel = makeViewModel(mode: .banned(sender: "Bob", reason: "Spamming"))
@@ -325,6 +329,9 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         makePreview(viewModel: inviteRequiredViewModel, mode: .inviteRequired)
         makePreview(viewModel: invitedViewModel, mode: .invited(isDM: false))
         makePreview(viewModel: invitedDMViewModel, mode: .invited(isDM: true))
+        makePreview(viewModel: invitedViewModelWithHiddenAvatars,
+                    mode: .invited(isDM: false),
+                    customPreviewName: "InvitedWithHiddenAvatars")
         makePreview(viewModel: knockableViewModel, mode: .knockable)
         makePreview(viewModel: knockedViewModel, mode: .knocked)
         makePreview(viewModel: bannedViewModel, mode: .banned(sender: nil, reason: nil))
@@ -332,7 +339,9 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     @ViewBuilder
-    static func makePreview(viewModel: JoinRoomScreenViewModel, mode: JoinRoomScreenMode) -> some View {
+    static func makePreview(viewModel: JoinRoomScreenViewModel,
+                            mode: JoinRoomScreenMode,
+                            customPreviewName: String? = nil) -> some View {
         if mode == .forbidden {
             NavigationStack {
                 JoinRoomScreen(context: viewModel.context)
@@ -343,7 +352,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
             .onAppear {
                 forbiddenViewModel.context.send(viewAction: .join)
             }
-            .previewDisplayName(mode.previewDisplayName)
+            .previewDisplayName(customPreviewName ?? mode.previewDisplayName)
         } else {
             NavigationStack {
                 JoinRoomScreen(context: viewModel.context)
@@ -351,12 +360,14 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
             .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
                 state.roomDetails != nil
             })
-            .previewDisplayName(mode.previewDisplayName)
+            .previewDisplayName(customPreviewName ?? mode.previewDisplayName)
         }
     }
     
-    static func makeViewModel(mode: JoinRoomScreenMode) -> JoinRoomScreenViewModel {
-        ServiceLocator.shared.settings.knockingEnabled = true
+    static func makeViewModel(mode: JoinRoomScreenMode, hideInviteAvatars: Bool = false) -> JoinRoomScreenViewModel {
+        let appSettings = AppSettings()
+        appSettings.knockingEnabled = true
+        appSettings.hideInviteAvatars = hideInviteAvatars
         
         let clientProxy = ClientProxyMock(.init())
         
@@ -410,7 +421,7 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         
         return JoinRoomScreenViewModel(roomID: "1",
                                        via: [],
-                                       appSettings: ServiceLocator.shared.settings,
+                                       appSettings: appSettings,
                                        clientProxy: clientProxy,
                                        mediaProvider: MediaProviderMock(configuration: .init()),
                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)

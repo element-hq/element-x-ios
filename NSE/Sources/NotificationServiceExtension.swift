@@ -79,7 +79,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             return contentHandler(request.content)
         }
         
-        Target.nse.configure(logLevel: settings.logLevel)
+        Target.nse.configure(logLevel: settings.logLevel, traceLogPacks: settings.traceLogPacks)
 
         handler = contentHandler
         modifiedContent = request.content.mutableCopy() as? UNMutableNotificationContent

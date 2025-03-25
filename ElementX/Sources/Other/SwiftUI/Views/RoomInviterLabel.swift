@@ -40,12 +40,13 @@ struct RoomInviterDetails: Equatable {
 
 struct RoomInviterLabel: View {
     let inviter: RoomInviterDetails
+    var shouldHideAvatar = false
     
     let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
-            LoadableAvatarImage(url: inviter.avatarURL,
+            LoadableAvatarImage(url: shouldHideAvatar ? nil : inviter.avatarURL,
                                 name: inviter.displayName,
                                 contentID: inviter.id,
                                 avatarSize: .custom(16),

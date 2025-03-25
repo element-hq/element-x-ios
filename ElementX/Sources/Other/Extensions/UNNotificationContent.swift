@@ -101,32 +101,24 @@ extension UNMutableNotificationContent {
     func addSenderIcon(using mediaProvider: MediaProviderProtocol?,
                        senderID: String,
                        senderName: String,
-                       icon: NotificationIcon) async throws -> UNMutableNotificationContent {
-        // We display the placeholder only if...
-        var needsPlaceholder = false
-
+                       icon: NotificationIcon,
+                       forcePlaceholder: Bool = false) async throws -> UNMutableNotificationContent {
         var fetchedImage: INImage?
         let image: INImage
-        if let mediaSource = icon.mediaSource {
-            switch await mediaProvider?.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
+        if !forcePlaceholder,
+           let mediaProvider,
+           let mediaSource = icon.mediaSource {
+            switch await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
             case .success(let data):
                 fetchedImage = INImage(imageData: data)
             case .failure(let error):
                 MXLog.error("Couldn't add sender icon: \(error)")
-                // ...The provider failed to fetch
-                needsPlaceholder = true
-            case .none:
-                break
             }
-        } else {
-            // ...There is no media
-            needsPlaceholder = true
         }
 
         if let fetchedImage {
             image = fetchedImage
-        } else if needsPlaceholder,
-                  let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.name ?? senderName,
+        } else if let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.name ?? senderName,
                                                                  id: icon.groupInfo?.id ?? senderID) {
             image = INImage(imageData: data)
         } else {

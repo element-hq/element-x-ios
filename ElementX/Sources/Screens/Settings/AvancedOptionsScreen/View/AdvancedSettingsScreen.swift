@@ -33,10 +33,24 @@ struct AdvancedSettingsScreen: View {
                         context.send(viewAction: .optimizeMediaUploadsChanged)
                     }
             }
+            
+            moderationAndSafetySection
         }
         .zeroList()
         .navigationTitle(L10n.commonAdvancedSettings)
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private var moderationAndSafetySection: some View {
+        Section {
+            ListRow(label: .plain(title: L10n.screenAdvancedSettingsHideTimelineMediaToggleTitle),
+                    kind: .toggle($context.hideTimelineMedia))
+            ListRow(label: .plain(title: L10n.screenAdvancedSettingsHideInviteAvatarsToggleTitle),
+                    kind: .toggle($context.hideInviteAvatars))
+        } header: {
+            Text(L10n.screenAdvancedSettingsModerationAndSafetySectionTitle)
+                .compoundListSectionHeader()
+        }
     }
 }
 

@@ -262,6 +262,8 @@
 "common_waiting_for_decryption_key" = "Waiting for this message";
 "common.copied_to_clipboard" = "Copied to clipboard";
 "common.do_not_show_this_again" = "Do not show this again";
+"common.empty_file" = "Empty file";
+"common.line_copied_to_clipboard" = "Line copied to clipboard";
 "common.open_source_licenses" = "Open source licenses";
 "common.pinned" = "Pinned";
 "common.send_to" = "Send to";
@@ -381,6 +383,9 @@
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";

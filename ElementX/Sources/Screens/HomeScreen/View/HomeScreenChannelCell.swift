@@ -11,24 +11,28 @@ struct HomeScreenChannelCell: View {
     let channel: HomeScreenChannel
     let onChannelSelected: (HomeScreenChannel) -> Void
     
+    var attributedDisplayName: AttributedString {
+        var channelAttributedName = AttributedString(channel.displayName)
+        if channel.notificationsCount > 0 {
+            if let prefixRange = channelAttributedName.range(of: ZeroContants.ZERO_CHANNEL_PREFIX) {
+                channelAttributedName[prefixRange].foregroundColor = .compound.textSecondary
+            }
+        }
+        return channelAttributedName
+    }
+    
     var body: some View {
         HStack {
-            Text(channel.displayName)
+            Text(attributedDisplayName)
                 .font(.zero.bodyLG)
-                .foregroundStyle(.compound.textPrimary)
+                .foregroundStyle(channel.notificationsCount > 0 ? .compound.textPrimary : .compound.textSecondary)
                 .lineLimit(1)
             
             Spacer()
             
             if channel.notificationsCount > 0 {
-                Text(channel.notificationsCount > 99 ? "99+" : String(channel.notificationsCount))
-                    .font(.compound.bodyXSSemibold)
-                    .foregroundStyle(.zero.bgAccentRest)
-                    .background {
-                        Circle()
-                            .frame(width: 20, height: 20)
-                            .foregroundStyle(.zero.bgAccentRest.opacity(0.2))
-                    }
+                Circle()
+                    .frame(width: 6, height: 6)
             }
         }
         .contentShape(Rectangle())

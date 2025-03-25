@@ -11,7 +11,9 @@ import SwiftUI
 // Common settings between app and NSE
 protocol CommonSettingsProtocol {
     var logLevel: LogLevel { get }
+    var traceLogPacks: Set<TraceLogPack> { get }
     var enableOnlySignedDeviceIsolationMode: Bool { get }
+    var hideInviteAvatars: Bool { get }
     var hideTimelineMedia: Bool { get }
     var eventCacheEnabled: Bool { get }
     
@@ -37,11 +39,13 @@ final class AppSettings {
         case enableInAppNotifications
         case pusherProfileTag
         case logLevel
+        case traceLogPacks
         case viewSourceEnabled
         case optimizeMediaUploads
         case appAppearance
         case sharePresence
         case hideUnreadMessagesBadge
+        case hideInviteAvatars
         case hideTimelineMedia
         
         case elementCallBaseURLOverride
@@ -58,6 +62,7 @@ final class AppSettings {
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
+    private static var remoteSuiteName = "\(InfoPlistReader.main.appGroupIdentifier).remote"
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
@@ -309,9 +314,15 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.logLevel, defaultValue: LogLevel.info, storageType: .userDefaults(store))
     var logLevel
     
+    @UserPreference(key: UserDefaultsKeys.traceLogPacks, defaultValue: [], storageType: .userDefaults(store))
+    var traceLogPacks: Set<TraceLogPack>
+    
     /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
     @UserPreference(key: UserDefaultsKeys.enableOnlySignedDeviceIsolationMode, defaultValue: false, storageType: .userDefaults(store))
     var enableOnlySignedDeviceIsolationMode
+    
+    @UserPreference(key: UserDefaultsKeys.hideInviteAvatars, defaultValue: false, storageType: .userDefaults(store))
+    var hideInviteAvatars
     
     @UserPreference(key: UserDefaultsKeys.hideTimelineMedia, defaultValue: false, storageType: .userDefaults(store))
     var hideTimelineMedia

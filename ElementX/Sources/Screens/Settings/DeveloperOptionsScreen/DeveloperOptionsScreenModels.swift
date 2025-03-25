@@ -40,10 +40,10 @@ enum DeveloperOptionsScreenViewAction {
 
 protocol DeveloperOptionsProtocol: AnyObject {
     var logLevel: LogLevel { get set }
+    var traceLogPacks: Set<TraceLogPack> { get set }
     var publicSearchEnabled: Bool { get set }
     var hideUnreadMessagesBadge: Bool { get set }
     var fuzzyRoomListSearchEnabled: Bool { get set }
-    var hideTimelineMedia: Bool { get set }
     var enableOnlySignedDeviceIsolationMode: Bool { get set }
     var elementCallBaseURLOverride: URL? { get set }
     var knockingEnabled: Bool { get set }

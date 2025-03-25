@@ -46,24 +46,31 @@ struct HomeScreenContent: View {
                 case .rooms:
                     LazyVStack(spacing: 0) {
                         if !context.manualSearchTriggered, !context.viewState.visibleRooms.isEmpty {
-                            TextField("Search", text: $context.searchQuery)
-                                .padding(.vertical, 4)
-                                .padding(.horizontal, 40)
-                                .background(Asset.Colors.zeroDarkGrey.swiftUIColor)
-                                .cornerRadius(10)
-                                .padding(.horizontal)
-                                .padding(.vertical, 12)
-                                .overlay(
-                                    CompoundIcon(\.search)
-                                        .frame(width: 8, height: 8)
-                                        .padding(.leading, 32)
-                                        .foregroundStyle(.compound.textDisabled),
-                                    alignment: .leading
-                                )
-                                .disabled(true)
-                                .onTapGesture {
-                                    context.manualSearchTriggered = true
-                                }
+                            HStack {
+                                CompoundIcon(\.search)
+                                    .frame(width: 8, height: 8)
+                                    .foregroundStyle(Color.white.opacity(0.275))
+                                
+                                TextField("Search", text: $context.searchQuery)
+                                    .disabled(true)
+                                    .padding(.leading, 6)
+                                    .onTapGesture {
+                                        context.manualSearchTriggered = true
+                                    }
+                            }
+                            .contentShape(Rectangle())
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 6)
+                            .background {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.white.opacity(0.275), lineWidth: 1)
+                            }
+                            .disabled(true)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .onTapGesture {
+                                context.manualSearchTriggered = true
+                            }
                         }
                         
                         Section {
