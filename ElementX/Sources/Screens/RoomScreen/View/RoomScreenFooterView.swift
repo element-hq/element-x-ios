@@ -58,7 +58,7 @@ struct RoomScreenFooterView: View {
                     .foregroundColor(.compound.textPrimary)
             }
             
-            Button(L10n.actionOk) {
+            Button(L10n.actionDismiss) {
                 callback(.resolvePinViolation(userID: member.userID))
             }
             .buttonStyle(.compound(.primary, size: .medium))
