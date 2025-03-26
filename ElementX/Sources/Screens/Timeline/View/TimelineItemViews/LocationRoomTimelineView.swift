@@ -86,6 +86,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
             }
         }
         .environmentObject(viewModel.context)
+        .environment(\.timelineContext, viewModel.context)
         .previewDisplayName("Bubbles")
     }
 
