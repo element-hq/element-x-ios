@@ -893,8 +893,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             // Attempt to stop the background task sync loop cleanly, only if the app not already running
             return
         }
-        userSession?.clientProxy.stopSync(completion: completion)
-        clientProxyObserver = nil
+        
+        MainActor.assumeIsolated {
+            userSession?.clientProxy.stopSync(completion: completion)
+            clientProxyObserver = nil
+        }
     }
 
     private func startSync() {
@@ -1036,7 +1039,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // This is important for the app to keep refreshing in the background
         scheduleBackgroundAppRefresh()
         
-        task.expirationHandler = { [weak self] in
+        /// We have a lot of crashes stemming here which we previously believed are caused by stopSync not being async
+        /// on the client proxy side (see the comment on that method). We have now realised that will likely not fix anything but
+        /// we also noticed this does not crash on the main thread, even though the whole AppCoordinator is on the Main actor.
+        /// As such, we introduced a MainActor conformance on the expirationHandler but we are also assuming main actor
+        /// isolated in the `stopSync` method above.
+        /// https://sentry.tools.element.io/organizations/element/issues/4477794/
+        task.expirationHandler = { @MainActor [weak self] in
             MXLog.info("Background app refresh task is about to expire.")
             
             self?.stopSync(isBackgroundTask: true) {
