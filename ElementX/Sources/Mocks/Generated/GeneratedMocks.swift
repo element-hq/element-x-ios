@@ -2318,11 +2318,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingDirectMemberZeroProfilePublisher = value }
     }
     var underlyingDirectMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never>!
-    var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser?, Never> {
+    var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser, Never> {
         get { return underlyingZeroCurrentUserPublisher }
         set(value) { underlyingZeroCurrentUserPublisher = value }
     }
-    var underlyingZeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser?, Never>!
+    var underlyingZeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser, Never>!
 
     //MARK: - isOnlyDeviceLeft
 

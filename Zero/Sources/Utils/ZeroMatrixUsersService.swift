@@ -86,6 +86,7 @@ class ZeroMatrixUsersService {
         let result = try await zeroUsersApi.fetchCurrentUser()
         switch result {
         case .success(let user):
+            appSettings.zeroLoggedInUser = user
             return user
         case .failure(let failure):
             MXLog.error(failure)

@@ -60,7 +60,7 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
             .sink { [weak self] currentUser in
                 guard let self else { return }
 
-                state.currentPrimaryZId = currentUser?.primaryZID ?? state.nonePrimaryZId
+                state.currentPrimaryZId = currentUser.primaryZID ?? state.nonePrimaryZId
                 state.bindings.primaryZId = state.currentPrimaryZId
             }
             .store(in: &cancellables)

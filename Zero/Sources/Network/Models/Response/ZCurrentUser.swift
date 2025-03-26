@@ -25,6 +25,18 @@ public struct ZCurrentUser: Codable, Identifiable {
         
         return ""
     }
+    
+    static let placeholder: ZCurrentUser = .init(
+        id: .init("placeholder_id"),
+        profileId: "",
+        matrixAccessToken: nil,
+        matrixId: nil,
+        profileSummary: nil,
+        primaryZID: nil,
+        totalRewards: nil,
+        wallets: nil,
+        primaryWalletAddress: nil
+    )
 }
 
 extension ZCurrentUser: Equatable {

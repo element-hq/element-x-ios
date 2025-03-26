@@ -20,8 +20,6 @@ protocol CommonSettingsProtocol {
     var hideInviteAvatars: Bool { get }
     var hideTimelineMedia: Bool { get }
     var eventCacheEnabled: Bool { get }
-    
-    var zeroMatrixUsers: [ZMatrixUser]? { get }
 }
 
 /// Store Element specific app settings.
@@ -61,8 +59,8 @@ final class AppSettings {
         case knockingEnabled
         case eventCacheEnabledV2
         case zeroAccessToken
-        case zeroMatrixUsers
         case zeroRewardsCredit
+        case zeroLoggedInUser
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -345,15 +343,14 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.zeroAccessToken, defaultValue: nil, storageType: .userDefaults(store))
     var zeroAccessToken: String?
     
-    // MARK: - ZERO Users
-    
-    @UserPreference(key: UserDefaultsKeys.zeroMatrixUsers, defaultValue: nil, storageType: .userDefaults(store))
-    var zeroMatrixUsers: [ZMatrixUser]?
-    
     // MARK: - ZERO Rewards
     
     @UserPreference(key: UserDefaultsKeys.zeroRewardsCredit, defaultValue: ZeroRewards.empty(), storageType: .userDefaults(store))
     var zeroRewardsCredit: ZeroRewards
+    
+    // MARK: - ZERO User
+    @UserPreference(key: UserDefaultsKeys.zeroLoggedInUser, defaultValue: ZCurrentUser.placeholder, storageType: .userDefaults(store))
+    var zeroLoggedInUser: ZCurrentUser
 }
 
 extension AppSettings: CommonSettingsProtocol { }
