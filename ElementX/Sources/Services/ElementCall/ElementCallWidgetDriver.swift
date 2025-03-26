@@ -66,7 +66,11 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         self.deviceID = deviceID
     }
     
-    func start(baseURL: URL, clientID: String, colorScheme: ColorScheme, analyticsConfiguration: ElementCallAnalyticsConfiguration?) async -> Result<URL, ElementCallWidgetDriverError> {
+    func start(baseURL: URL,
+               clientID: String,
+               colorScheme: ColorScheme,
+               rageshakeURL: String?,
+               analyticsConfiguration: ElementCallAnalyticsConfiguration?) async -> Result<URL, ElementCallWidgetDriverError> {
         guard let room = room as? Room else {
             return .failure(.roomInvalid)
         }
@@ -85,12 +89,12 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
                                                                           confineToRoom: true,
                                                                           font: nil,
                                                                           encryption: useEncryption ? .perParticipantKeys : .unencrypted,
-                                                                          intent: nil,
+                                                                          intent: .startCall,
                                                                           hideScreensharing: false,
                                                                           posthogUserId: nil,
                                                                           posthogApiHost: analyticsConfiguration?.posthogAPIHost,
                                                                           posthogApiKey: analyticsConfiguration?.posthogAPIKey,
-                                                                          rageshakeSubmitUrl: analyticsConfiguration?.rageshakeSubmitURL,
+                                                                          rageshakeSubmitUrl: rageshakeURL,
                                                                           sentryDsn: analyticsConfiguration?.sentryDSN,
                                                                           sentryEnvironment: nil))
         } catch {

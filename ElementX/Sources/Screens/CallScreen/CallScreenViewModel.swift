@@ -142,7 +142,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             state.url = url
             // We need widget messaging to work before enabling CallKit, otherwise mute, hangup etc do nothing.
             
-        case .roomCall(let roomProxy, let clientProxy, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme, let notifyOtherParticipants):
+        case .roomCall(let roomProxy, _, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme, let notifyOtherParticipants):
             Task { [weak self] in
                 guard let self else { return }
                 
@@ -155,11 +155,11 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 // We only set the analytics configuration if analytics are enabled
                 let analyticsConfiguration = analyticsService.isEnabled ? ElementCallAnalyticsConfiguration(posthogAPIHost: appSettings.elementCallPosthogAPIHost,
                                                                                                             posthogAPIKey: appSettings.elementCallPosthogAPIKey,
-                                                                                                            rageshakeSubmitURL: Secrets.rageshakeServerURL,
                                                                                                             sentryDSN: appSettings.elementCallPosthogSentryDSN) : nil
                 switch await widgetDriver.start(baseURL: baseURL,
                                                 clientID: clientID,
                                                 colorScheme: colorScheme,
+                                                rageshakeURL: Secrets.rageshakeServerURL,
                                                 analyticsConfiguration: analyticsConfiguration) {
                 case .success(let url):
                     state.url = url
