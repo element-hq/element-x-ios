@@ -21,6 +21,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appSettings: AppSettings
     private let appMediator: AppMediatorProtocol
     private let emojiProvider: EmojiProviderProtocol
     
@@ -36,6 +37,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
          timelineControllerFactory: TimelineControllerFactoryProtocol,
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
+         appSettings: AppSettings,
          appMediator: AppMediatorProtocol,
          emojiProvider: EmojiProviderProtocol) {
         self.navigationStackCoordinator = navigationStackCoordinator
@@ -43,6 +45,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         self.timelineControllerFactory = timelineControllerFactory
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
+        self.appSettings = appSettings
         self.appMediator = appMediator
         self.emojiProvider = emojiProvider
     }
@@ -106,7 +109,9 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private func presentMapNavigator(geoURI: GeoURI, description: String?) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let params = StaticLocationScreenCoordinatorParameters(interactionMode: .viewOnly(geoURI: geoURI, description: description), appMediator: appMediator)
+        let params = StaticLocationScreenCoordinatorParameters(interactionMode: .viewOnly(geoURI: geoURI, description: description),
+                                                               mapURLBuilder: appSettings.mapTilerConfiguration,
+                                                               appMediator: appMediator)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in

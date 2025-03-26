@@ -94,8 +94,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
                                                        hideTimelineMedia: appSettings.hideTimelineMedia,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
-                                                       bindings: .init(reactionsCollapsed: [:]),
-                                                       emojiProvider: emojiProvider),
+                                                       emojiProvider: emojiProvider,
+                                                       mapURLBuilder: appSettings.mapTilerConfiguration,
+                                                       bindings: .init(reactionsCollapsed: [:])),
                    mediaProvider: mediaProvider)
         
         if focussedEventID != nil {

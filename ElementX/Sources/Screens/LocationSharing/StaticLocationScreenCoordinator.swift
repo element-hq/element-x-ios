@@ -10,6 +10,7 @@ import SwiftUI
 
 struct StaticLocationScreenCoordinatorParameters {
     let interactionMode: StaticLocationInteractionMode
+    let mapURLBuilder: MapTilerURLBuilderProtocol
     let appMediator: AppMediatorProtocol
 }
 
@@ -32,7 +33,7 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
     init(parameters: StaticLocationScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = StaticLocationScreenViewModel(interactionMode: parameters.interactionMode)
+        viewModel = StaticLocationScreenViewModel(interactionMode: parameters.interactionMode, mapURLBuilder: parameters.mapURLBuilder)
     }
     
     // MARK: - Public

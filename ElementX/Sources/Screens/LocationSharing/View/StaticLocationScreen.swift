@@ -11,8 +11,6 @@ import SwiftUI
 struct StaticLocationScreen: View {
     @ObservedObject var context: StaticLocationScreenViewModel.Context
     
-    private let builder = MapTilerStyleBuilder(appSettings: ServiceLocator.shared.settings)
-    
     var body: some View {
         VStack(spacing: 0) {
             if let locationDescription = context.viewState.locationDescription {
@@ -34,7 +32,7 @@ struct StaticLocationScreen: View {
     
     private var mapView: some View {
         ZStack(alignment: .center) {
-            MapLibreMapView(builder: builder,
+            MapLibreMapView(mapURLBuilder: context.viewState.mapURLBuilder,
                             options: mapOptions,
                             showsUserLocationMode: $context.showsUserLocationMode,
                             error: $context.mapError,
@@ -148,19 +146,29 @@ struct StaticLocationScreen: View {
 // MARK: - Previews
 
 struct StaticLocationScreenViewer_Previews: PreviewProvider, TestablePreview {
+    static let viewModel = StaticLocationScreenViewModel(interactionMode: .viewOnly(geoURI: .init(latitude: 41.9027835,
+                                                                                                  longitude: 12.4963655)),
+                                                         mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration)
+    static let pickerViewModel = StaticLocationScreenViewModel(interactionMode: .picker,
+                                                               mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration)
+    static let descriptionViewModel = StaticLocationScreenViewModel(interactionMode: .viewOnly(geoURI: .init(latitude: 41.9027835,
+                                                                                                             longitude: 12.4963655),
+                                                                                               description: "Cool position"),
+                                                                    mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration)
+    
     static var previews: some View {
         NavigationStack {
-            StaticLocationScreen(context: StaticLocationScreenViewModel(interactionMode: .picker).context)
+            StaticLocationScreen(context: pickerViewModel.context)
         }
         .previewDisplayName("Picker")
 
         NavigationStack {
-            StaticLocationScreen(context: StaticLocationScreenViewModel(interactionMode: .viewOnly(geoURI: .init(latitude: 41.9027835, longitude: 12.4963655))).context)
+            StaticLocationScreen(context: viewModel.context)
         }
         .previewDisplayName("View Only")
 
         NavigationStack {
-            StaticLocationScreen(context: StaticLocationScreenViewModel(interactionMode: .viewOnly(geoURI: .init(latitude: 41.9027835, longitude: 12.4963655), description: "Cool position")).context)
+            StaticLocationScreen(context: descriptionViewModel.context)
         }
         .previewDisplayName("View Only (with description)")
     }
