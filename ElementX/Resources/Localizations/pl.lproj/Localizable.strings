@@ -49,6 +49,7 @@
 "action_delete_poll" = "Usuń ankietę";
 "action_disable" = "Wyłącz";
 "action_discard" = "Odrzuć";
+"action_dismiss" = "Dismiss";
 "action_done" = "Gotowe";
 "action_edit" = "Edytuj";
 "action_edit_caption" = "Edytuj opis";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Brak wyników";
 "common_no_room_name" = "Brak nazwy pokoju";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "Offline";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "lub";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "Oczekiwanie na tę wiadomość";
 "common.copied_to_clipboard" = "Skopiowano do schowka";
 "common.do_not_show_this_again" = "Nie pokazuj ponownie";
+"common.empty_file" = "Empty file";
+"common.line_copied_to_clipboard" = "Line copied to clipboard";
 "common.open_source_licenses" = "Licencje open-source";
 "common.pinned" = "Przypięte";
 "common.send_to" = "Wyślij do";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "Własny bazowy URL dla połączeń Element";
 "screen_advanced_settings_element_call_base_url_description" = "Ustaw własny bazowy URL dla połączeń Element";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Nieprawidłowy adres URL, upewnij się, że zawiera protokół (http/https) i poprawny adres.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Wyślij zaproszenie";
 "screen_bottom_sheet_create_dm_message" = "Czy chcesz rozpocząć czat z %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Wysłać zaproszenie?";

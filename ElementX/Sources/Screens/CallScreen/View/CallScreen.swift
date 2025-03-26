@@ -7,6 +7,7 @@
 
 import AVKit
 import Combine
+import EmbeddedElementCall
 import SFSafeSymbols
 import SwiftUI
 import WebKit
@@ -98,6 +99,8 @@ private struct CallView: UIViewRepresentable {
             let userContentController = WKUserContentController()
             userContentController.add(WKScriptMessageHandlerWrapper(self), name: viewModelContext.viewState.messageHandler)
             
+            // Required to allow a webview that uses file URL to load its own assets
+            configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
             configuration.userContentController = userContentController
             configuration.allowsInlineMediaPlayback = true
             configuration.allowsPictureInPictureMediaPlayback = true
@@ -133,8 +136,13 @@ private struct CallView: UIViewRepresentable {
         
         func load(_ url: URL) {
             self.url = url
-            let request = URLRequest(url: url)
-            webView.load(request)
+            // The only file URL we allow is the one coming from our own local ElementCall bundle, so it's okay to allow read permission only to our local EC bundle
+            if url.isFileURL {
+                webView.loadFileURL(url, allowingReadAccessTo: EmbeddedElementCall.bundle.bundleURL)
+            } else {
+                let request = URLRequest(url: url)
+                webView.load(request)
+            }
         }
         
         func evaluateJavaScript(_ script: String) async throws -> Any? {
@@ -159,8 +167,8 @@ private struct CallView: UIViewRepresentable {
         // MARK: - WKUIDelegate
         
         func webView(_ webView: WKWebView, decideMediaCapturePermissionsFor origin: WKSecurityOrigin, initiatedBy frame: WKFrameInfo, type: WKMediaCaptureType) async -> WKPermissionDecision {
-            // Don't allow permissions for domains different than what the call was started on
-            guard origin.host == url.host else {
+            // Allow if the origin is local, otherwise don't allow permissions for domains different than what the call was started on
+            guard origin.protocol == "file" || origin.host == url.host else {
                 return .deny
             }
             
@@ -174,9 +182,16 @@ private struct CallView: UIViewRepresentable {
         }
         
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
-            // Allow any content from the main URL.
-            if navigationAction.request.url?.host == url.host {
-                return .allow
+            if let navigationURL = navigationAction.request.url {
+                // Do not allow navigation to a different URL scheme.
+                if navigationURL.scheme != url.scheme {
+                    return .cancel
+                }
+                
+                // Allow any content from the main URL.
+                if navigationURL.host == url.host {
+                    return .allow
+                }
             }
             
             // Additionally allow any embedded content such as captchas.
@@ -286,7 +301,7 @@ struct CallScreen_Previews: PreviewProvider {
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
         widgetDriver.underlyingActions = PassthroughSubject<ElementCallWidgetDriverAction, Never>().eraseToAnyPublisher()
-        widgetDriver.startBaseURLClientIDColorSchemeReturnValue = .success(URL.userDirectory)
+        widgetDriver.startBaseURLClientIDColorSchemeAnalyticsConfigurationReturnValue = .success(URL.userDirectory)
         
         roomProxy.elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
         
@@ -299,7 +314,9 @@ struct CallScreen_Previews: PreviewProvider {
                                                         colorScheme: .light,
                                                         notifyOtherParticipants: false),
                                    allowPictureInPicture: false,
-                                   appHooks: AppHooks())
+                                   appHooks: AppHooks(),
+                                   appSettings: ServiceLocator.shared.settings,
+                                   analyticsService: ServiceLocator.shared.analytics)
     }()
     
     static var previews: some View {

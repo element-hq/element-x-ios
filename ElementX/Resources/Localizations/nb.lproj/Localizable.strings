@@ -49,6 +49,7 @@
 "action_delete_poll" = "Slett avstemning";
 "action_disable" = "Deaktiver";
 "action_discard" = "Forkast";
+"action_dismiss" = "Dismiss";
 "action_done" = "Ferdig";
 "action_edit" = "Rediger";
 "action_edit_caption" = "Rediger bildetekst";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Ingen resultater";
 "common_no_room_name" = "Ingen romnavn";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "Frakoblet";
 "common_optic_id_ios" = "Optisk ID";
 "common_or" = "eller";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "Venter på denne meldingen";
 "common.copied_to_clipboard" = "Kopiert til utklippstavlen";
 "common.do_not_show_this_again" = "Ikke vis dette igjen";
+"common.empty_file" = "Empty file";
+"common.line_copied_to_clipboard" = "Line copied to clipboard";
 "common.open_source_licenses" = "Åpen kildekode-lisenser";
 "common.pinned" = "Festet";
 "common.send_to" = "Sendt til";
@@ -274,10 +278,10 @@
 "confirm_recovery_key_banner_title" = "Your key storage is out of sync";
 "crash_detection_dialog_content" = "%1$@ krasjet sist gang den ble brukt. Vil du dele en krasjrapport med oss?";
 "crypto_identity_change_pin_violation" = "%1$@ identiteten ser ut til å ha endret seg. %2$@";
-"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity appears to have changed. %3$@";
+"crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity was reset. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
-"crypto_identity_change_profile_pin_violation" = "%1$@’s verified identity has changed.";
-"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ verified identity has changed.  %3$@";
+"crypto_identity_change_profile_pin_violation" = "%1$@’s identity was reset.";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ identity was reset.  %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
 "dialog_confirm_link_title" = "Double-check this link";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
 "screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Ugyldig URL. Pass på at du inkluderer protokollen (http/https) og riktig adresse.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invitasjon";
 "screen_bottom_sheet_create_dm_message" = "Vil du starte en chat med %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Vil du sende invitasjon?";

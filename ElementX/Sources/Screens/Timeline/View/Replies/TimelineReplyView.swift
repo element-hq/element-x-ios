@@ -200,6 +200,28 @@ struct TimelineReplyView: View {
                 if attributes[.MatrixAllUsersMention] as? Bool == true {
                     attributedString.replaceCharacters(in: range, with: PillUtilities.atRoom)
                 }
+                
+                if let roomAlias = attributes[.MatrixRoomAlias] as? String {
+                    let roomName = context.viewState.roomNameForAliasResolver?(roomAlias)
+                    attributedString.replaceCharacters(in: range, with: PillUtilities.roomPillDisplayText(roomName: roomName, rawRoomText: roomAlias))
+                }
+                
+                if let roomID = attributes[.MatrixRoomID] as? String {
+                    let roomName = context.viewState.roomNameForIDResolver?(roomID)
+                    attributedString.replaceCharacters(in: range, with: PillUtilities.roomPillDisplayText(roomName: roomName, rawRoomText: roomID))
+                }
+                
+                if let eventOnRoomID = attributes[.MatrixEventOnRoomID] as? EventOnRoomIDAttribute.Value {
+                    let roomID = eventOnRoomID.roomID
+                    let roomName = context.viewState.roomNameForIDResolver?(roomID)
+                    attributedString.replaceCharacters(in: range, with: PillUtilities.eventPillDisplayText(roomName: roomName, rawRoomText: roomID))
+                }
+                
+                if let eventOnRoomAlias = attributes[.MatrixEventOnRoomAlias] as? EventOnRoomAliasAttribute.Value {
+                    let roomAlias = eventOnRoomAlias.alias
+                    let roomName = context.viewState.roomNameForAliasResolver?(roomAlias)
+                    attributedString.replaceCharacters(in: range, with: PillUtilities.eventPillDisplayText(roomName: roomName, rawRoomText: eventOnRoomAlias.alias))
+                }
             }
             return attributedString.string
         }
@@ -218,6 +240,30 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
     static let attributedStringWithAtRoomMention = {
         var attributedString = AttributedString("to be replaced")
         attributedString.allUsersMention = true
+        return attributedString
+    }()
+    
+    static let attributedStringWithRoomAliasMention = {
+        var attributedString = AttributedString("to be replaced")
+        attributedString.roomAlias = "#room:matrix.org"
+        return attributedString
+    }()
+    
+    static let attributedStringWithRoomIDMention = {
+        var attributedString = AttributedString("to be replaced")
+        attributedString.roomID = "!room:matrix.org"
+        return attributedString
+    }()
+    
+    static let attributedStringWithEventOnRoomIDMention = {
+        var attributedString = AttributedString("to be replaced")
+        attributedString.eventOnRoomID = .init(roomID: "!room:matrix.org", eventID: "$event")
+        return attributedString
+    }()
+    
+    static let attributedStringWithEventOnRoomAliasMention = {
+        var attributedString = AttributedString("to be replaced")
+        attributedString.eventOnRoomAlias = .init(alias: "#room:matrix.org", eventID: "$event")
         return attributedString
     }()
     
@@ -301,6 +347,22 @@ struct TimelineReplyView_Previews: PreviewProvider, TestablePreview {
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
                                                                 eventID: "123",
                                                                 eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithAtRoomMention))))),
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                eventID: "123",
+                                                                eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithRoomAliasMention))))),
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                eventID: "123",
+                                                                eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithRoomIDMention))))),
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                eventID: "123",
+                                                                eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithEventOnRoomIDMention))))),
+            TimelineReplyView(placement: .timeline,
+                              timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
+                                                                eventID: "123",
+                                                                eventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithEventOnRoomAliasMention))))),
             TimelineReplyView(placement: .timeline,
                               timelineItemReplyDetails: .loaded(sender: .init(id: "", displayName: "Bob"),
                                                                 eventID: "123",

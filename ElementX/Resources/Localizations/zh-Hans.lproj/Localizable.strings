@@ -49,6 +49,7 @@
 "action_delete_poll" = "删除投票";
 "action_disable" = "禁用";
 "action_discard" = "丢弃";
+"action_dismiss" = "Dismiss";
 "action_done" = "完成";
 "action_edit" = "编辑";
 "action_edit_caption" = "编辑标题";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "没有结果";
 "common_no_room_name" = "无聊天室名";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "离线";
 "common_optic_id_ios" = "光学 ID";
 "common_or" = "或";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "正在等待解密密钥";
 "common.copied_to_clipboard" = "已复制到剪贴板";
 "common.do_not_show_this_again" = "不再显示此内容";
+"common.empty_file" = "Empty file";
+"common.line_copied_to_clipboard" = "Line copied to clipboard";
 "common.open_source_licenses" = "开源许可证";
 "common.pinned" = "已置顶";
 "common.send_to" = "发送至";
@@ -276,7 +280,7 @@
 "crypto_identity_change_pin_violation" = "%1$@ 的身份似乎已经改变。%2$@";
 "crypto_identity_change_pin_violation_new" = "%1$@ 的 %2$@ 身份似乎已经改变。%3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
-"crypto_identity_change_profile_pin_violation" = "%1$@’s verified identity has changed.";
+"crypto_identity_change_profile_pin_violation" = "%1$@’s identity was reset.";
 "crypto_identity_change_verification_violation_new" = "%1$@ 的 %2$@ 已验证身份已发生改变。%3$@";
 "crypto_identity_change_withdraw_verification_action" = "撤回验证";
 "dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "自定义 Element Call URL";
 "screen_advanced_settings_element_call_base_url_description" = "为 Element 通话设置根 URL。";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL 无效，请确保包含协议（http/https）和正确的地址。";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";

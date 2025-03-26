@@ -2567,16 +2567,16 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - loginWithOidcCallback
 
-    open var loginWithOidcCallbackAuthorizationDataCallbackUrlThrowableError: Error?
-    var loginWithOidcCallbackAuthorizationDataCallbackUrlUnderlyingCallsCount = 0
-    open var loginWithOidcCallbackAuthorizationDataCallbackUrlCallsCount: Int {
+    open var loginWithOidcCallbackCallbackUrlThrowableError: Error?
+    var loginWithOidcCallbackCallbackUrlUnderlyingCallsCount = 0
+    open var loginWithOidcCallbackCallbackUrlCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return loginWithOidcCallbackAuthorizationDataCallbackUrlUnderlyingCallsCount
+                return loginWithOidcCallbackCallbackUrlUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loginWithOidcCallbackAuthorizationDataCallbackUrlUnderlyingCallsCount
+                    returnValue = loginWithOidcCallbackCallbackUrlUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -2584,31 +2584,31 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                loginWithOidcCallbackAuthorizationDataCallbackUrlUnderlyingCallsCount = newValue
+                loginWithOidcCallbackCallbackUrlUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loginWithOidcCallbackAuthorizationDataCallbackUrlUnderlyingCallsCount = newValue
+                    loginWithOidcCallbackCallbackUrlUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var loginWithOidcCallbackAuthorizationDataCallbackUrlCalled: Bool {
-        return loginWithOidcCallbackAuthorizationDataCallbackUrlCallsCount > 0
+    open var loginWithOidcCallbackCallbackUrlCalled: Bool {
+        return loginWithOidcCallbackCallbackUrlCallsCount > 0
     }
-    open var loginWithOidcCallbackAuthorizationDataCallbackUrlReceivedArguments: (authorizationData: OAuthAuthorizationData, callbackUrl: String)?
-    open var loginWithOidcCallbackAuthorizationDataCallbackUrlReceivedInvocations: [(authorizationData: OAuthAuthorizationData, callbackUrl: String)] = []
-    open var loginWithOidcCallbackAuthorizationDataCallbackUrlClosure: ((OAuthAuthorizationData, String) async throws -> Void)?
+    open var loginWithOidcCallbackCallbackUrlReceivedCallbackUrl: String?
+    open var loginWithOidcCallbackCallbackUrlReceivedInvocations: [String] = []
+    open var loginWithOidcCallbackCallbackUrlClosure: ((String) async throws -> Void)?
 
-    open override func loginWithOidcCallback(authorizationData: OAuthAuthorizationData, callbackUrl: String) async throws {
-        if let error = loginWithOidcCallbackAuthorizationDataCallbackUrlThrowableError {
+    open override func loginWithOidcCallback(callbackUrl: String) async throws {
+        if let error = loginWithOidcCallbackCallbackUrlThrowableError {
             throw error
         }
-        loginWithOidcCallbackAuthorizationDataCallbackUrlCallsCount += 1
-        loginWithOidcCallbackAuthorizationDataCallbackUrlReceivedArguments = (authorizationData: authorizationData, callbackUrl: callbackUrl)
+        loginWithOidcCallbackCallbackUrlCallsCount += 1
+        loginWithOidcCallbackCallbackUrlReceivedCallbackUrl = callbackUrl
         DispatchQueue.main.async {
-            self.loginWithOidcCallbackAuthorizationDataCallbackUrlReceivedInvocations.append((authorizationData: authorizationData, callbackUrl: callbackUrl))
+            self.loginWithOidcCallbackCallbackUrlReceivedInvocations.append(callbackUrl)
         }
-        try await loginWithOidcCallbackAuthorizationDataCallbackUrlClosure?(authorizationData, callbackUrl)
+        try await loginWithOidcCallbackCallbackUrlClosure?(callbackUrl)
     }
 
     //MARK: - logout
