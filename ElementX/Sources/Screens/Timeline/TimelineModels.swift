@@ -109,8 +109,6 @@ struct TimelineViewState: BindableState {
     /// an openURL closure which opens URLs first using the App's environment rather than skipping out to external apps
     var openURL: OpenURLAction?
     
-    var bindings: TimelineViewStateBindings
-    
     /// A closure providing the associated audio player state for an item in the timeline.
     var audioPlayerStateProvider: (@MainActor (_ itemId: TimelineItemIdentifier) -> AudioPlayerState?)?
     
@@ -118,6 +116,10 @@ struct TimelineViewState: BindableState {
     var pillContextUpdater: (@MainActor (PillContext) -> Void)?
     
     var emojiProvider: EmojiProviderProtocol
+    
+    var mapURLBuilder: MapTilerURLBuilderProtocol
+    
+    var bindings: TimelineViewStateBindings
 }
 
 struct TimelineViewStateBindings {

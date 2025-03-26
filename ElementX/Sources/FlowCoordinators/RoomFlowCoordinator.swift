@@ -1076,7 +1076,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentMapNavigator(interactionMode: StaticLocationInteractionMode) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode, appMediator: appMediator)
+        let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode,
+                                                               mapURLBuilder: appSettings.mapTilerConfiguration,
+                                                               appMediator: appMediator)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
@@ -1563,6 +1565,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                   timelineControllerFactory: timelineControllerFactory,
                                                                   roomProxy: roomProxy,
                                                                   userIndicatorController: userIndicatorController,
+                                                                  appSettings: appSettings,
                                                                   appMediator: appMediator,
                                                                   emojiProvider: emojiProvider)
         

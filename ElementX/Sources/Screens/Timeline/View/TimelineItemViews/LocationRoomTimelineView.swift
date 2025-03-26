@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LocationRoomTimelineView: View {
-    @Environment(\.timelineContext) private var context
+    @Environment(\.timelineContext) private var context: TimelineViewModel.Context!
     let timelineItem: LocationRoomTimelineItem
     
     var body: some View {
@@ -17,7 +17,7 @@ struct LocationRoomTimelineView: View {
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(accessibilityLabel)
                 .onTapGesture {
-                    context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
+                    context.send(viewAction: .mediaTapped(itemID: timelineItem.id))
                 }
         }
     }
@@ -29,7 +29,9 @@ struct LocationRoomTimelineView: View {
                 descriptionView
                     .frame(maxWidth: mapAspectRatio * mapMaxHeight, alignment: .leading)
                 
-                MapLibreStaticMapView(geoURI: geoURI, mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
+                MapLibreStaticMapView(geoURI: geoURI,
+                                      mapURLBuilder: context.viewState.mapURLBuilder,
+                                      mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
                     LocationMarkerView()
                 }
                 .frame(maxHeight: mapMaxHeight)
@@ -64,11 +66,11 @@ struct LocationRoomTimelineView: View {
 }
 
 private extension MapLibreStaticMapView {
-    init(geoURI: GeoURI, mapSize: CGSize, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
+    init(geoURI: GeoURI, mapURLBuilder: MapTilerURLBuilderProtocol, mapSize: CGSize, @ViewBuilder pinAnnotationView: () -> PinAnnotation) {
         self.init(coordinates: .init(latitude: geoURI.latitude, longitude: geoURI.longitude),
                   zoomLevel: 15,
                   attributionPlacement: .bottomLeft,
-                  mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+                  mapURLBuilder: mapURLBuilder,
                   mapSize: mapSize,
                   pinAnnotationView: pinAnnotationView)
     }
