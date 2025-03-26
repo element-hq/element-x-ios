@@ -7216,15 +7216,15 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol, @unchecked S
 
     //MARK: - start
 
-    var startBaseURLClientIDColorSchemeAnalyticsConfigurationUnderlyingCallsCount = 0
-    var startBaseURLClientIDColorSchemeAnalyticsConfigurationCallsCount: Int {
+    var startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationUnderlyingCallsCount = 0
+    var startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return startBaseURLClientIDColorSchemeAnalyticsConfigurationUnderlyingCallsCount
+                return startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = startBaseURLClientIDColorSchemeAnalyticsConfigurationUnderlyingCallsCount
+                    returnValue = startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7232,29 +7232,29 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol, @unchecked S
         }
         set {
             if Thread.isMainThread {
-                startBaseURLClientIDColorSchemeAnalyticsConfigurationUnderlyingCallsCount = newValue
+                startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    startBaseURLClientIDColorSchemeAnalyticsConfigurationUnderlyingCallsCount = newValue
+                    startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var startBaseURLClientIDColorSchemeAnalyticsConfigurationCalled: Bool {
-        return startBaseURLClientIDColorSchemeAnalyticsConfigurationCallsCount > 0
+    var startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationCalled: Bool {
+        return startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationCallsCount > 0
     }
-    var startBaseURLClientIDColorSchemeAnalyticsConfigurationReceivedArguments: (baseURL: URL, clientID: String, colorScheme: ColorScheme, analyticsConfiguration: ElementCallAnalyticsConfiguration?)?
-    var startBaseURLClientIDColorSchemeAnalyticsConfigurationReceivedInvocations: [(baseURL: URL, clientID: String, colorScheme: ColorScheme, analyticsConfiguration: ElementCallAnalyticsConfiguration?)] = []
+    var startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationReceivedArguments: (baseURL: URL, clientID: String, colorScheme: ColorScheme, rageshakeURL: String?, analyticsConfiguration: ElementCallAnalyticsConfiguration?)?
+    var startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationReceivedInvocations: [(baseURL: URL, clientID: String, colorScheme: ColorScheme, rageshakeURL: String?, analyticsConfiguration: ElementCallAnalyticsConfiguration?)] = []
 
-    var startBaseURLClientIDColorSchemeAnalyticsConfigurationUnderlyingReturnValue: Result<URL, ElementCallWidgetDriverError>!
-    var startBaseURLClientIDColorSchemeAnalyticsConfigurationReturnValue: Result<URL, ElementCallWidgetDriverError>! {
+    var startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationUnderlyingReturnValue: Result<URL, ElementCallWidgetDriverError>!
+    var startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationReturnValue: Result<URL, ElementCallWidgetDriverError>! {
         get {
             if Thread.isMainThread {
-                return startBaseURLClientIDColorSchemeAnalyticsConfigurationUnderlyingReturnValue
+                return startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationUnderlyingReturnValue
             } else {
                 var returnValue: Result<URL, ElementCallWidgetDriverError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = startBaseURLClientIDColorSchemeAnalyticsConfigurationUnderlyingReturnValue
+                    returnValue = startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7262,26 +7262,26 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol, @unchecked S
         }
         set {
             if Thread.isMainThread {
-                startBaseURLClientIDColorSchemeAnalyticsConfigurationUnderlyingReturnValue = newValue
+                startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    startBaseURLClientIDColorSchemeAnalyticsConfigurationUnderlyingReturnValue = newValue
+                    startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var startBaseURLClientIDColorSchemeAnalyticsConfigurationClosure: ((URL, String, ColorScheme, ElementCallAnalyticsConfiguration?) async -> Result<URL, ElementCallWidgetDriverError>)?
+    var startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationClosure: ((URL, String, ColorScheme, String?, ElementCallAnalyticsConfiguration?) async -> Result<URL, ElementCallWidgetDriverError>)?
 
-    func start(baseURL: URL, clientID: String, colorScheme: ColorScheme, analyticsConfiguration: ElementCallAnalyticsConfiguration?) async -> Result<URL, ElementCallWidgetDriverError> {
-        startBaseURLClientIDColorSchemeAnalyticsConfigurationCallsCount += 1
-        startBaseURLClientIDColorSchemeAnalyticsConfigurationReceivedArguments = (baseURL: baseURL, clientID: clientID, colorScheme: colorScheme, analyticsConfiguration: analyticsConfiguration)
+    func start(baseURL: URL, clientID: String, colorScheme: ColorScheme, rageshakeURL: String?, analyticsConfiguration: ElementCallAnalyticsConfiguration?) async -> Result<URL, ElementCallWidgetDriverError> {
+        startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationCallsCount += 1
+        startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationReceivedArguments = (baseURL: baseURL, clientID: clientID, colorScheme: colorScheme, rageshakeURL: rageshakeURL, analyticsConfiguration: analyticsConfiguration)
         DispatchQueue.main.async {
-            self.startBaseURLClientIDColorSchemeAnalyticsConfigurationReceivedInvocations.append((baseURL: baseURL, clientID: clientID, colorScheme: colorScheme, analyticsConfiguration: analyticsConfiguration))
+            self.startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationReceivedInvocations.append((baseURL: baseURL, clientID: clientID, colorScheme: colorScheme, rageshakeURL: rageshakeURL, analyticsConfiguration: analyticsConfiguration))
         }
-        if let startBaseURLClientIDColorSchemeAnalyticsConfigurationClosure = startBaseURLClientIDColorSchemeAnalyticsConfigurationClosure {
-            return await startBaseURLClientIDColorSchemeAnalyticsConfigurationClosure(baseURL, clientID, colorScheme, analyticsConfiguration)
+        if let startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationClosure = startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationClosure {
+            return await startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationClosure(baseURL, clientID, colorScheme, rageshakeURL, analyticsConfiguration)
         } else {
-            return startBaseURLClientIDColorSchemeAnalyticsConfigurationReturnValue
+            return startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationReturnValue
         }
     }
     //MARK: - handleMessage

@@ -29,7 +29,11 @@ protocol ElementCallWidgetDriverProtocol {
     var messagePublisher: PassthroughSubject<String, Never> { get }
     var actions: AnyPublisher<ElementCallWidgetDriverAction, Never> { get }
     
-    func start(baseURL: URL, clientID: String, colorScheme: ColorScheme, analyticsConfiguration: ElementCallAnalyticsConfiguration?) async -> Result<URL, ElementCallWidgetDriverError>
+    func start(baseURL: URL,
+               clientID: String,
+               colorScheme: ColorScheme,
+               rageshakeURL: String?,
+               analyticsConfiguration: ElementCallAnalyticsConfiguration?) async -> Result<URL, ElementCallWidgetDriverError>
     
     /// Passes a message from the Widget to the SDK to handle, returning a Bool that represents whether or not the widget driver is still running.
     func handleMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError>
@@ -38,6 +42,5 @@ protocol ElementCallWidgetDriverProtocol {
 struct ElementCallAnalyticsConfiguration {
     let posthogAPIHost: String
     let posthogAPIKey: String
-    let rageshakeSubmitURL: String
     let sentryDSN: String
 }
