@@ -22,13 +22,13 @@ struct HomeScreenNotificationCell: View {
             
             if isRoomDM {
                 baseText = room.unreadNotificationsCount > 1 ?
-                    "\(room.unreadNotificationsCount) unread messages in your conversation with \(room.name)" :
-                    "\(room.unreadNotificationsCount) unread message in your conversation with \(room.name)"
+                    "\(room.unreadNotificationsCount) messages in your conversation with \(room.name)" :
+                    "\(room.unreadNotificationsCount) message in your conversation with \(room.name)"
             }
             else {
                 baseText = room.unreadNotificationsCount > 1 ?
-                "\(room.unreadNotificationsCount) unread messages in \(room.name)" :
-                "\(room.unreadNotificationsCount) unread message in \(room.name)"
+                "\(room.unreadNotificationsCount) messages in \(room.name)" :
+                "\(room.unreadNotificationsCount) message in \(room.name)"
             }
         default:
             baseText = "You may have new messages in \(room.name)"
@@ -45,7 +45,7 @@ struct HomeScreenNotificationCell: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 RoomAvatarImage(avatar: room.avatar,
                                 avatarSize: .room(on: .notificationSettings),
@@ -55,6 +55,7 @@ struct HomeScreenNotificationCell: View {
                 Text(notificationText)
                     .font(.zero.bodyMD)
                     .foregroundStyle(.compound.textSecondary)
+                    .lineSpacing(2)
             }
             .padding()
             

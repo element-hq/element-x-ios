@@ -36,6 +36,7 @@ internal enum Asset {
     internal static let zeroChatBubbleOutgoing = ColorAsset(name: "colors/zero-chat-bubble-outgoing")
     internal static let zeroContentBackgroundColor = ColorAsset(name: "colors/zero-content-background-color")
     internal static let zeroDarkGrey = ColorAsset(name: "colors/zero-dark-grey")
+    internal static let zeroNewBackground = ColorAsset(name: "colors/zero-new-background")
   }
   internal enum Images {
     internal static let appLogo = ImageAsset(name: "images/app-logo")
