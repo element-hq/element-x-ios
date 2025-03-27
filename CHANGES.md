@@ -1,3 +1,16 @@
+## Changes in 25.03.8 (2025-03-27)
+
+### What's Changed
+
+🐛 Bugfixes
+* Revert "Attempt to prevent crashes after expiring background refreshes." by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3946
+
+⚠️ API Changes
+* Refactor the MapTiler configuration into a single place. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3944
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.03.7...release/25.03.8
+
 ## Changes in 25.03.7 (2025-03-26)
 
 ### What's Changed
