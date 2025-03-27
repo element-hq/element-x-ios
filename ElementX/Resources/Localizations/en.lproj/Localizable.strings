@@ -1,6 +1,8 @@
 "Notification" = "Notification";
+"a11y_avatar" = "Avatar";
 "a11y_delete" = "Delete";
 "a11y_hide_password" = "Hide password";
+"a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "Jump to bottom";
 "a11y_notifications_mentions_only" = "Mentions only";
 "a11y_notifications_muted" = "Muted";
