@@ -35,6 +35,10 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
             .weakAssign(to: \.state.bindings.enableNotifications, on: self)
             .store(in: &cancellables)
         
+        appSettings.$ringForGroupCallsEnabled
+            .weakAssign(to: \.state.bindings.ringForGroupCallsEnabled, on: self)
+            .store(in: &cancellables)
+
         setupDidBecomeActiveSubscription()
         setupNotificationSettingsSubscription()
     }
@@ -68,6 +72,8 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                 return
             }
             Task { await enableInvitations(state.bindings.invitationsEnabled) }
+        case .ringForGroupCallsChanged:
+            appSettings.ringForGroupCallsEnabled.toggle()
         case .close:
             actionsSubject.send(.close)
         case .fixConfigurationMismatchTapped:
@@ -150,12 +156,14 @@ class NotificationSettingsScreenViewModel: NotificationSettingsScreenViewModelTy
                                                                           roomMentionsEnabled: roomMentionsEnabled,
                                                                           callsEnabled: callEnabled,
                                                                           invitationsEnabled: invitationsEnabled,
+                                                                          ringForGroupCallsEnabled: appSettings.ringForGroupCallsEnabled,
                                                                           inconsistentSettings: inconsistentSettings)
 
             state.settings = notificationSettings
             state.bindings.roomMentionsEnabled = notificationSettings.roomMentionsEnabled ?? false
             state.bindings.callsEnabled = notificationSettings.callsEnabled ?? false
             state.bindings.invitationsEnabled = notificationSettings.invitationsEnabled ?? false
+            state.bindings.ringForGroupCallsEnabled = notificationSettings.ringForGroupCallsEnabled ?? false
         }
     }
     

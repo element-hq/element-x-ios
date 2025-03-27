@@ -20,6 +20,7 @@ protocol CommonSettingsProtocol {
     var hideInviteAvatars: Bool { get }
     var hideTimelineMedia: Bool { get }
     var eventCacheEnabled: Bool { get }
+    var ringForGroupCallsEnabled: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -58,6 +59,7 @@ final class AppSettings {
         case enableOnlySignedDeviceIsolationMode
         case knockingEnabled
         case eventCacheEnabledV2
+        case ringForGroupCallsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -335,6 +337,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.eventCacheEnabledV2, defaultValue: true, storageType: .userDefaults(store))
     var eventCacheEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.ringForGroupCallsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var ringForGroupCallsEnabled
 }
 
 extension AppSettings: CommonSettingsProtocol { }

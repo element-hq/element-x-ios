@@ -1588,6 +1588,8 @@ internal enum L10n {
   internal static var screenNotificationSettingsModeMentions: String { return L10n.tr("Localizable", "screen_notification_settings_mode_mentions") }
   /// Notify me for
   internal static var screenNotificationSettingsNotificationSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_notification_section_title") }
+  /// Ring for group calls
+  internal static var screenNotificationSettingsRingForGroupCallsLabel: String { return L10n.tr("Localizable", "screen_notification_settings_ring_for_group_calls_label") }
   /// Notify me on @room
   internal static var screenNotificationSettingsRoomMentionLabel: String { return L10n.tr("Localizable", "screen_notification_settings_room_mention_label") }
   /// To receive notifications, please change your %1$@.

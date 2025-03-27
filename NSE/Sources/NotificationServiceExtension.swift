@@ -254,7 +254,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 
                 return .processedShouldDiscard
             case .callNotify(let notifyType):
-                return await handleCallNotification(notifyType: notifyType,
+                let notificationType = settings.ringForGroupCallsEnabled ? .ring : notifyType
+                return await handleCallNotification(notifyType: notificationType,
                                                     timestamp: event.timestamp(),
                                                     roomID: itemProxy.roomID,
                                                     roomDisplayName: itemProxy.roomDisplayName)

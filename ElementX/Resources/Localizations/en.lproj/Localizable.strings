@@ -708,6 +708,7 @@
 "screen_notification_settings_failed_fixing_configuration" = "The configuration has not been corrected, please try again.";
 "screen_notification_settings_group_chats" = "Group chats";
 "screen_notification_settings_invite_for_me_label" = "Invitations";
+"screen_notification_settings_ring_for_group_calls_label" = "Ring for group calls";
 "screen_notification_settings_mentions_only_disclaimer" = "Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms.";
 "screen_notification_settings_mode_all" = "All";
 "screen_notification_settings_mode_mentions" = "Mentions";

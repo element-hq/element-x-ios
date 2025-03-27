@@ -33,7 +33,8 @@ struct NotificationSettingsScreen: View {
                         callsSection
                     }
                     
-                    if context.viewState.settings?.invitationsEnabled != nil {
+                    if context.viewState.settings?.invitationsEnabled != nil ||
+                       context.viewState.settings?.ringForGroupCallsEnabled != nil {
                         additionalSettingsSection
                     }
                 }
@@ -154,12 +155,22 @@ struct NotificationSettingsScreen: View {
     
     private var additionalSettingsSection: some View {
         Section {
+            // Invitations
             ListRow(label: .plain(title: L10n.screenNotificationSettingsInviteForMeLabel),
                     kind: .toggle($context.invitationsEnabled))
                 .disabled(context.viewState.settings?.invitationsEnabled == nil)
                 .allowsHitTesting(!context.viewState.applyingChange)
                 .onChange(of: context.invitationsEnabled) {
                     context.send(viewAction: .invitationsChanged)
+                }
+
+            // CallKit for group incoming calls
+            ListRow(label: .plain(title: L10n.screenNotificationSettingsRingForGroupCallsLabel),
+                    kind: .toggle($context.ringForGroupCallsEnabled))
+                .disabled(context.viewState.settings?.ringForGroupCallsEnabled == nil)
+                .allowsHitTesting(!context.viewState.applyingChange)
+                .onChange(of: context.ringForGroupCallsEnabled) {
+                    context.send(viewAction: .ringForGroupCallsChanged)
                 }
         } header: {
             Text(L10n.screenNotificationSettingsAdditionalSettingsSectionTitle)
