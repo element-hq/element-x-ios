@@ -49,6 +49,7 @@
 "action_delete_poll" = "Elimina sondaggio";
 "action_disable" = "Disabilita";
 "action_discard" = "Annulla";
+"action_dismiss" = "Dismiss";
 "action_done" = "Fine";
 "action_edit" = "Modifica";
 "action_edit_caption" = "Modifica didascalia";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Nessun risultato";
 "common_no_room_name" = "Nessun nome della stanza";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "Non in linea";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "o";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "In attesa del messaggio";
 "common.copied_to_clipboard" = "Copiato negli appunti";
 "common.do_not_show_this_again" = "Non mostrarlo più";
+"common.empty_file" = "Empty file";
+"common.line_copied_to_clipboard" = "Line copied to clipboard";
 "common.open_source_licenses" = "Licenze open source";
 "common.pinned" = "Fissato";
 "common.send_to" = "Invia a";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "URL base di Element Call personalizzato";
 "screen_advanced_settings_element_call_base_url_description" = "Imposta un URL di base personalizzato per Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL non valido, assicurati di includere il protocollo (http/https) e l'indirizzo corretto.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Invia invito";
 "screen_bottom_sheet_create_dm_message" = "Vuoi iniziare una conversazione con%1$@?";
 "screen_bottom_sheet_create_dm_title" = "Inviare invito?";

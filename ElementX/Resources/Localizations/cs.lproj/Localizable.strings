@@ -49,6 +49,7 @@
 "action_delete_poll" = "Odstranit hlasování";
 "action_disable" = "Zakázat";
 "action_discard" = "Vyřadit";
+"action_dismiss" = "Dismiss";
 "action_done" = "Hotovo";
 "action_edit" = "Upravit";
 "action_edit_caption" = "Upravit titulek";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Žádné výsledky";
 "common_no_room_name" = "Žádný název místnosti";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "Offline";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "nebo";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
 "common.copied_to_clipboard" = "Zkopírováno do schránky";
 "common.do_not_show_this_again" = "Znovu nezobrazovat";
+"common.empty_file" = "Prázdný soubor";
+"common.line_copied_to_clipboard" = "Řádek zkopírován do schránky";
 "common.open_source_licenses" = "Licence s otevřeným zdrojovým kódem";
 "common.pinned" = "Připnuto";
 "common.send_to" = "Odeslat do";
@@ -279,8 +283,8 @@
 "crypto_identity_change_profile_pin_violation" = "Ověřená identita %1$@ se změnila.";
 "crypto_identity_change_verification_violation_new" = "Ověřená identita uživatele %1$@ %2$@ se změnila. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Zrušit ověření";
-"dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
-"dialog_confirm_link_title" = "Double-check this link";
+"dialog_confirm_link_message" = "Odkaz %1$@ vás přesměruje na jinou stránku %2$@\n\nOpravdu chcete pokračovat?";
+"dialog_confirm_link_title" = "Zkontrolujte tento odkaz";
 "dialog_permission_camera" = "Aby mohla aplikace používat fotoaparát, udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_generic" = "Udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_location_description_ios" = "Udělte přístup v Nastavení -> Poloha.";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "Vlastní URL pro Element Call";
 "screen_advanced_settings_element_call_base_url_description" = "Nastavte vlastní URL pro Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatné URL, ujistěte se, že jste uvedli protokol (http/https) a správnou adresu.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Skrýt avatary v žádostech o pozvání do místnosti";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Skrýt náhledy médií na časové ose";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderování a bezpečnost";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Poslat pozvánku";
 "screen_bottom_sheet_create_dm_message" = "Chcete začít chatovat s %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Poslat pozvánku?";

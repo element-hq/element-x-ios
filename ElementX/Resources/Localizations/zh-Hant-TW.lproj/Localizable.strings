@@ -49,6 +49,7 @@
 "action_delete_poll" = "刪除投票";
 "action_disable" = "停用";
 "action_discard" = "捨棄";
+"action_dismiss" = "Dismiss";
 "action_done" = "完成";
 "action_edit" = "編輯";
 "action_edit_caption" = "編輯標題";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "查無結果";
 "common_no_room_name" = "無聊天室名稱";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "離線";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "或";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "等待此則訊息";
 "common.copied_to_clipboard" = "已複製到剪貼簿";
 "common.do_not_show_this_again" = "不再顯示";
+"common.empty_file" = "Empty file";
+"common.line_copied_to_clipboard" = "Line copied to clipboard";
 "common.open_source_licenses" = "開放原始碼授權條款";
 "common.pinned" = "已釘選";
 "common.send_to" = "傳送給";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "自訂 Element 通話基礎 URL";
 "screen_advanced_settings_element_call_base_url_description" = "設定 Element 通話的自訂基礎 URL。";
 "screen_advanced_settings_element_call_base_url_validation_error" = "無效的 URL，請確定包含了協定 (http/https) 與正確的地址。";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "傳送邀請";
 "screen_bottom_sheet_create_dm_message" = "您想要開始與 %1$@ 聊天嗎？";
 "screen_bottom_sheet_create_dm_title" = "傳送邀請？";

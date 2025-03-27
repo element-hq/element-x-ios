@@ -1029,13 +1029,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         if !isProfileCheckInProgress {
             isProfileCheckInProgress = true
             Task {
+                defer {
+                    self.isProfileCheckInProgress = false
+                    hideLoadingIndicator()
+                }
+                showLoadingIndicator()
                 let hasPendingSignup = await userSession.clientProxy.isProfileCompletionRequired()
                 if hasPendingSignup {
                     presentCompleteProfileScreen(execute)
                 } else {
                     execute()
                 }
-                self.isProfileCheckInProgress = false
             }
         }
     }

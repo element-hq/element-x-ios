@@ -23,7 +23,11 @@ class GenericCallLinkWidgetDriver: ElementCallWidgetDriverProtocol {
         self.url = url
     }
     
-    func start(baseURL: URL, clientID: String, colorScheme: ColorScheme) async -> Result<URL, ElementCallWidgetDriverError> {
+    func start(baseURL: URL,
+               clientID: String,
+               colorScheme: ColorScheme,
+               rageshakeURL: String?,
+               analyticsConfiguration: ElementCallAnalyticsConfiguration?) async -> Result<URL, ElementCallWidgetDriverError> {
         MXLog.error("Nothing to start, use the configuration's URL directly instead.")
         return .success(url)
     }

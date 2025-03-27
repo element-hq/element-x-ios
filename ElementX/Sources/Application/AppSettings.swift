@@ -5,6 +5,10 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+#if canImport(EmbeddedElementCall)
+import EmbeddedElementCall
+#endif
+
 import Foundation
 import SwiftUI
 
@@ -16,8 +20,6 @@ protocol CommonSettingsProtocol {
     var hideInviteAvatars: Bool { get }
     var hideTimelineMedia: Bool { get }
     var eventCacheEnabled: Bool { get }
-    
-    var zeroMatrixUsers: [ZMatrixUser]? { get }
 }
 
 /// Store Element specific app settings.
@@ -57,8 +59,8 @@ final class AppSettings {
         case knockingEnabled
         case eventCacheEnabledV2
         case zeroAccessToken
-        case zeroMatrixUsers
         case zeroRewardsCredit
+        case zeroLoggedInUser
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -98,7 +100,8 @@ final class AppSettings {
                   copyrightURL: URL,
                   acceptableUseURL: URL,
                   privacyURL: URL,
-                  supportEmailAddress: String) {
+                  supportEmailAddress: String,
+                  mapTilerConfiguration: MapTilerConfiguration) {
         self.defaultHomeserverAddress = defaultHomeserverAddress
         self.oidcRedirectURL = oidcRedirectURL
         self.websiteURL = websiteURL
@@ -107,6 +110,7 @@ final class AppSettings {
         self.acceptableUseURL = acceptableUseURL
         self.privacyURL = privacyURL
         self.supportEmailAddress = supportEmailAddress
+        self.mapTilerConfiguration = mapTilerConfiguration
     }
     
     // MARK: - Application
@@ -273,7 +277,13 @@ final class AppSettings {
 
     // MARK: - Element Call
     
-    let elementCallBaseURL: URL = "https://call.element.io"
+    // swiftlint:disable:next force_unwrapping
+    let elementCallBaseURL: URL = EmbeddedElementCall.appURL!
+    
+    // These are publicly availble on https://call.element.io so we don't neeed to treat them as secrets
+    let elementCallPosthogAPIHost = "https://posthog-element-call.element.io"
+    let elementCallPosthogAPIKey = "phc_rXGHx9vDmyEvyRxPziYtdVIv0ahEv8A9uLWFcCi1WcU"
+    let elementCallPosthogSentryDSN = "https://3bd2f95ba5554d4497da7153b552ffb5@sentry.tools.element.io/41"
     
     @UserPreference(key: UserDefaultsKeys.elementCallBaseURLOverride, defaultValue: nil, storageType: .userDefaults(store))
     var elementCallBaseURLOverride: URL?
@@ -286,10 +296,10 @@ final class AppSettings {
     // MARK: - Maps
     
     // maptiler base url
-    let mapTilerBaseURL: URL = "https://api.maptiler.com/maps"
-
-    // maptiler api key
-    let mapTilerApiKey = Secrets.mapLibreAPIKey
+    private(set) var mapTilerConfiguration = MapTilerConfiguration(baseURL: "https://api.maptiler.com/maps",
+                                                                   apiKey: Secrets.mapLibreAPIKey,
+                                                                   lightStyleID: "9bc819c8-e627-474a-a348-ec144fe3d810",
+                                                                   darkStyleID: "dea61faf-292b-4774-9660-58fcef89a7f3")
     
     // MARK: - Presence
 
@@ -335,15 +345,14 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.zeroAccessToken, defaultValue: nil, storageType: .userDefaults(store))
     var zeroAccessToken: String?
     
-    // MARK: - ZERO Users
-    
-    @UserPreference(key: UserDefaultsKeys.zeroMatrixUsers, defaultValue: nil, storageType: .userDefaults(store))
-    var zeroMatrixUsers: [ZMatrixUser]?
-    
     // MARK: - ZERO Rewards
     
     @UserPreference(key: UserDefaultsKeys.zeroRewardsCredit, defaultValue: ZeroRewards.empty(), storageType: .userDefaults(store))
     var zeroRewardsCredit: ZeroRewards
+    
+    // MARK: - ZERO User
+    @UserPreference(key: UserDefaultsKeys.zeroLoggedInUser, defaultValue: ZCurrentUser.placeholder, storageType: .userDefaults(store))
+    var zeroLoggedInUser: ZCurrentUser
 }
 
 extension AppSettings: CommonSettingsProtocol { }

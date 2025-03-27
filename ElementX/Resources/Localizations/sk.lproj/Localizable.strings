@@ -49,6 +49,7 @@
 "action_delete_poll" = "Odstrániť anketu";
 "action_disable" = "Vypnúť";
 "action_discard" = "Zahodiť";
+"action_dismiss" = "Dismiss";
 "action_done" = "Hotovo";
 "action_edit" = "Upraviť";
 "action_edit_caption" = "Upraviť titulok";
@@ -187,6 +188,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Žiadne výsledky";
 "common_no_room_name" = "Žiadny názov miestnosti";
+"common_not_encrypted" = "Not encrypted";
 "common_offline" = "Offline";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "alebo";
@@ -262,6 +264,8 @@
 "common_waiting_for_decryption_key" = "Čaká sa na dešifrovací kľúč";
 "common.copied_to_clipboard" = "Skopírované do schránky";
 "common.do_not_show_this_again" = "Nezobrazovať toto znova";
+"common.empty_file" = "Prázdny súbor";
+"common.line_copied_to_clipboard" = "Riadok skopírovaný do schránky";
 "common.open_source_licenses" = "Licencie s otvoreným zdrojom";
 "common.pinned" = "Pripnuté";
 "common.send_to" = "Odoslať";
@@ -381,6 +385,9 @@
 "screen_advanced_settings_element_call_base_url" = "Vlastná Element Call základná URL adresa";
 "screen_advanced_settings_element_call_base_url_description" = "Nastaviť vlastnú základnú URL adresu pre Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatná adresa URL, uistite sa, že ste uviedli protokol (http/https) a správnu adresu.";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
+"screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
+"screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Odoslať pozvánku";
 "screen_bottom_sheet_create_dm_message" = "Chceli by ste začať rozhovor s používateľom %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Poslať pozvánku?";

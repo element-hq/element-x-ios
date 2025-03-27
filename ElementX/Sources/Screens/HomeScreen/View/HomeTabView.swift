@@ -39,6 +39,7 @@ struct HomeTabView<Content: View>: View {
         TabView(selection: $selectedTab) {
             ForEach(tabs, id: \.tab) { tabInfo in
                 tabContent(tabInfo.tab)
+                    .background(.zero.bgCanvasDefault)
                     .tabItem {
                         Image(asset: tabInfo.icon)
                             .foregroundStyle(tabInfo.tab == selectedTab ? .zero.bgAccentRest : .compound.iconSecondary)

@@ -33,6 +33,7 @@ struct HomeScreenChannelCell: View {
             if channel.notificationsCount > 0 {
                 Circle()
                     .frame(width: 6, height: 6)
+                    .foregroundStyle(.zero.bgAccentRest)
             }
         }
         .contentShape(Rectangle())

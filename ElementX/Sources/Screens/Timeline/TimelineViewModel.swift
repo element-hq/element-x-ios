@@ -94,8 +94,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
                                                        hideTimelineMedia: appSettings.hideTimelineMedia,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
-                                                       bindings: .init(reactionsCollapsed: [:]),
-                                                       emojiProvider: emojiProvider),
+                                                       emojiProvider: emojiProvider,
+                                                       mapURLBuilder: appSettings.mapTilerConfiguration,
+                                                       bindings: .init(reactionsCollapsed: [:])),
                    mediaProvider: mediaProvider)
         
         if focussedEventID != nil {
@@ -119,6 +120,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         state.pillContextUpdater = { [weak self] pillContext in
             self?.pillContextUpdater(pillContext)
+        }
+        
+        state.roomNameForIDResolver = { [weak self] roomID in
+            self?.clientProxy.roomSummaryForIdentifier(roomID)?.name
+        }
+        
+        state.roomNameForAliasResolver = { [weak self] alias in
+            self?.clientProxy.roomSummaryForAlias(alias)?.name
         }
         
         state.timelineState.paginationState = timelineController.paginationState
@@ -935,19 +944,22 @@ extension TimelineViewModel {
     static let mock = mock(timelineKind: .live)
     
     static func mock(timelineKind: TimelineKind = .live, timelineController: MockTimelineController? = nil) -> TimelineViewModel {
-        TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
-                          focussedEventID: nil,
-                          timelineController: timelineController ?? MockTimelineController(timelineKind: timelineKind),
-                          mediaProvider: MediaProviderMock(configuration: .init()),
-                          mediaPlayerProvider: MediaPlayerProviderMock(),
-                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                          appMediator: AppMediatorMock.default,
-                          appSettings: ServiceLocator.shared.settings,
-                          analyticsService: ServiceLocator.shared.analytics,
-                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                          clientProxy: ClientProxyMock(.init()))
+        let clientProxyMock = ClientProxyMock(.init())
+        clientProxyMock.roomSummaryForAliasReturnValue = .mock(id: "!room:matrix.org", name: "Room")
+        clientProxyMock.roomSummaryForIdentifierReturnValue = .mock(id: "!room:matrix.org", name: "Room", canonicalAlias: "#room:matrix.org")
+        return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
+                                 focussedEventID: nil,
+                                 timelineController: timelineController ?? MockTimelineController(timelineKind: timelineKind),
+                                 mediaProvider: MediaProviderMock(configuration: .init()),
+                                 mediaPlayerProvider: MediaPlayerProviderMock(),
+                                 voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                 appMediator: AppMediatorMock.default,
+                                 appSettings: ServiceLocator.shared.settings,
+                                 analyticsService: ServiceLocator.shared.analytics,
+                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                 clientProxy: clientProxyMock)
     }
 }
 

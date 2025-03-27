@@ -119,7 +119,7 @@ extension JoinedRoomProxyMock {
             fatalError()
         }
         
-        widgetDriver.startBaseURLClientIDColorSchemeReturnValue = .success(url)
+        widgetDriver.startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationReturnValue = .success(url)
         
         elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
         sendCallNotificationIfNeededReturnValue = .success(())

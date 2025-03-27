@@ -113,7 +113,9 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     private func presentMapNavigator(geoURI: GeoURI, description: String?) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let params = StaticLocationScreenCoordinatorParameters(interactionMode: .viewOnly(geoURI: geoURI, description: description), appMediator: appMediator)
+        let params = StaticLocationScreenCoordinatorParameters(interactionMode: .viewOnly(geoURI: geoURI, description: description),
+                                                               mapURLBuilder: appSettings.mapTilerConfiguration,
+                                                               appMediator: appMediator)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in

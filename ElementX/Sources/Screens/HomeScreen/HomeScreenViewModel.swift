@@ -59,7 +59,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         userSession.clientProxy.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
-                self?.state.primaryZeroId = currentUser?.primaryZID
+                self?.state.primaryZeroId = currentUser.primaryZID
             }
             .store(in: &cancellables)
         
@@ -673,6 +673,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private func joinZeroChannel(_ channel: HomeScreenChannel) {
         if let channelRoom = channelRoomMap[channel.id] {
             actionsSubject.send(.presentRoom(roomIdentifier: channelRoom.id))
+            markChannelRead(channel)
             return
         }
         
@@ -689,6 +690,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             switch roomAliasResult {
             case .success(let roomInfo):
                 actionsSubject.send(.presentRoom(roomIdentifier: roomInfo.roomId))
+                markChannelRead(channel)
                 getRoomInfoFromAlias(channel.id)
             case .failure(let error):
                 MXLog.error("Failed to resolve room alias: \(channel.id). Error: \(error)")
@@ -696,6 +698,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 switch joinChannelResult {
                 case .success(let roomId):
                     actionsSubject.send(.presentRoom(roomIdentifier: roomId))
+                    markChannelRead(channel)
                     getRoomInfoFromAlias(channel.id)
                 case .failure(let failure):
                     MXLog.error("Failed to join channel: \(failure)")
@@ -723,6 +726,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 }
                 return updatedChannel
             }
+        }
+    }
+    
+    private func markChannelRead(_ channel: HomeScreenChannel) {
+        var mChannel = channel
+        mChannel.notificationsCount = 0
+        if let index = state.channels.firstIndex(where: { $0.id == channel.id }) {
+            state.channels[index] = mChannel
         }
     }
     

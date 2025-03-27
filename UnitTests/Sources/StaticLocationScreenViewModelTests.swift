@@ -22,7 +22,8 @@ class StaticLocationScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         cancellables.removeAll()
-        let viewModel = StaticLocationScreenViewModel(interactionMode: .picker)
+        let viewModel = StaticLocationScreenViewModel(interactionMode: .picker,
+                                                      mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration)
         viewModel.state.bindings.isLocationAuthorized = true
         self.viewModel = viewModel
     }

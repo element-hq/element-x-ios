@@ -157,8 +157,8 @@ class ClientProxy: ClientProxyProtocol {
         directMemberZeroProfileSubject.asCurrentValuePublisher()
     }
     
-    private let zeroCurrentUserSubject = CurrentValueSubject<ZCurrentUser?, Never>(nil)
-    var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser?, Never> {
+    private let zeroCurrentUserSubject = CurrentValueSubject<ZCurrentUser, Never>(ZCurrentUser.placeholder)
+    var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser, Never> {
         zeroCurrentUserSubject.asCurrentValuePublisher()
     }
     
@@ -601,6 +601,8 @@ class ClientProxy: ClientProxyProtocol {
 
     func loadUserDisplayName() async -> Result<Void, ClientProxyError> {
         do {
+            userDisplayNameSubject.send(appSettings.zeroLoggedInUser.displayName)
+            
             let displayName = try await client.displayName()
             userDisplayNameSubject.send(displayName)
             return .success(())
@@ -981,6 +983,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func checkAndLinkZeroUser() async {
         do {
+            zeroCurrentUserSubject.send(appSettings.zeroLoggedInUser)
             guard let currentUser = try await fetchZeroCurrentUser() else { return }
             if currentUser.matrixId == nil {
                 _ = try await zeroApiProxy.createAccountApi.linkMatrixUserToZero(matrixUserId: userID)
@@ -1396,7 +1399,9 @@ class ClientProxy: ClientProxyProtocol {
     
     private func fetchZeroCurrentUser() async throws -> ZCurrentUser? {
         let currentUser = try await zeroApiProxy.matrixUsersService.fetchCurrentUser()
-        zeroCurrentUserSubject.send(currentUser)
+        if currentUser != nil {
+            zeroCurrentUserSubject.send(currentUser!)
+        }
         return currentUser
     }
 }

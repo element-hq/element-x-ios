@@ -42,8 +42,8 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
         clientProxy.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
-                self?.currentUserWalletAddress = currentUser?.thirdWebWalletAddress
-                self?.defaultChannelZId = currentUser?.primaryZID
+                self?.currentUserWalletAddress = currentUser.thirdWebWalletAddress
+                self?.defaultChannelZId = currentUser.primaryZID
             }
             .store(in: &cancellables)
     }

@@ -41,7 +41,7 @@ settings:
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
   APP_NAME: ZERO
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)"
-  MARKETING_VERSION: 25.03.6
+  MARKETING_VERSION: 25.03.9
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
 
@@ -60,7 +60,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 25.03.21
+    exactVersion: 25.03.24
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
@@ -82,6 +82,9 @@ packages:
     url: https://github.com/element-hq/matrix-rich-text-editor-swift
     exactVersion: 2.37.12
     # path: ../matrix-rich-text-editor/platforms/ios/lib/WysiwygComposer
+  EmbeddedElementCall:
+    url: https://github.com/element-hq/element-call-swift
+    exactVersion: 0.9.0-rc.4
   
   # External dependencies
   Algorithms:

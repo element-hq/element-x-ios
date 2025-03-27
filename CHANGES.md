@@ -1,3 +1,74 @@
+## Changes in 25.03.8 (2025-03-27)
+
+### What's Changed
+
+🐛 Bugfixes
+* Revert "Attempt to prevent crashes after expiring background refreshes." by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3946
+
+⚠️ API Changes
+* Refactor the MapTiler configuration into a single place. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3944
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.03.7...release/25.03.8
+
+## Changes in 25.03.7 (2025-03-26)
+
+### What's Changed
+
+✨ Features
+* Hide invite avatars when such flag is on by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3919
+
+🐛 Bugfixes
+* FIX: DM invites now render avatars correctly by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3931
+* FIX: Reply view will now render pills as plain text by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3938
+* EC Embedding improvements by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3943
+* Attempt to prevent crashes after expiring background refreshes. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3942
+
+⚠️ API Changes
+* Updated the SDK to 25.03.24 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3916
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3932
+
+Others
+* Add developer options for Rust's Log Packs. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3929
+* Update GitHub Actions to v5 (major) by @renovate in https://github.com/element-hq/element-x-ios/pull/3928
+* Update apple-actions/import-codesign-certs digest to cfd6eb3 by @renovate in https://github.com/element-hq/element-x-ios/pull/3937
+* Use 'Dismiss' to close pinned identity changes, instead of 'Ok' by @andybalaam in https://github.com/element-hq/element-x-ios/pull/3936
+* Add NSPrivacyTracking and NSPrivacyCollectedDataTypes to PrivacyInfo.xcprivacy by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3935
+* Embed element call by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3939
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.03.5...release/25.03.7
+
+## Changes in 25.03.6 (2025-03-25)
+
+### What's Changed
+
+✨ Features
+* Hide invite avatars when such flag is on by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3919
+
+🐛 Bugfixes
+* FIX: DM invites now render avatars correctly by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3931
+* FIX: Reply view will now render pills as plain text by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3938
+
+⚠️ API Changes
+* Updated the SDK to 25.03.24 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3916
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3932
+
+Others
+* Add developer options for Rust's Log Packs. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3929
+* Update GitHub Actions to v5 (major) by @renovate in https://github.com/element-hq/element-x-ios/pull/3928
+* Update apple-actions/import-codesign-certs digest to cfd6eb3 by @renovate in https://github.com/element-hq/element-x-ios/pull/3937
+* Use 'Dismiss' to close pinned identity changes, instead of 'Ok' by @andybalaam in https://github.com/element-hq/element-x-ios/pull/3936
+* Add NSPrivacyTracking and NSPrivacyCollectedDataTypes to PrivacyInfo.xcprivacy by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3935
+* Embed element call by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3939
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.03.5...release/25.03.6
+
 ## Changes in 25.03.5 (2025-03-21)
 
 ### What's Changed

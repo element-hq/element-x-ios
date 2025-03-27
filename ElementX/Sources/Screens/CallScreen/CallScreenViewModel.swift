@@ -16,6 +16,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     private let elementCallService: ElementCallServiceProtocol
     private let configuration: ElementCallConfiguration
     private let isPictureInPictureAllowed: Bool
+    private let appSettings: AppSettings
+    private let analyticsService: AnalyticsService
     
     private let widgetDriver: ElementCallWidgetDriverProtocol
     
@@ -33,9 +35,13 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     init(elementCallService: ElementCallServiceProtocol,
          configuration: ElementCallConfiguration,
          allowPictureInPicture: Bool,
-         appHooks: AppHooks) {
+         appHooks: AppHooks,
+         appSettings: AppSettings,
+         analyticsService: AnalyticsService) {
         self.elementCallService = elementCallService
         self.configuration = configuration
+        self.appSettings = appSettings
+        self.analyticsService = analyticsService
         isPictureInPictureAllowed = allowPictureInPicture
         
         switch configuration.kind {
@@ -136,19 +142,25 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             state.url = url
             // We need widget messaging to work before enabling CallKit, otherwise mute, hangup etc do nothing.
             
-        case .roomCall(let roomProxy, let clientProxy, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme, let notifyOtherParticipants):
+        case .roomCall(let roomProxy, _, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme, let notifyOtherParticipants):
             Task { [weak self] in
                 guard let self else { return }
                 
                 let baseURL = if let elementCallBaseURLOverride {
                     elementCallBaseURLOverride
-                } else if case .success(let wellKnown) = await clientProxy.getElementWellKnown(), let wellKnownCall = wellKnown?.call {
-                    wellKnownCall.widgetURL
                 } else {
                     elementCallBaseURL
                 }
                 
-                switch await widgetDriver.start(baseURL: baseURL, clientID: clientID, colorScheme: colorScheme) {
+                // We only set the analytics configuration if analytics are enabled
+                let analyticsConfiguration = analyticsService.isEnabled ? ElementCallAnalyticsConfiguration(posthogAPIHost: appSettings.elementCallPosthogAPIHost,
+                                                                                                            posthogAPIKey: appSettings.elementCallPosthogAPIKey,
+                                                                                                            sentryDSN: appSettings.elementCallPosthogSentryDSN) : nil
+                switch await widgetDriver.start(baseURL: baseURL,
+                                                clientID: clientID,
+                                                colorScheme: colorScheme,
+                                                rageshakeURL: Secrets.rageshakeServerURL,
+                                                analyticsConfiguration: analyticsConfiguration) {
                 case .success(let url):
                     state.url = url
                 case .failure(let error):

@@ -36,6 +36,7 @@ internal enum Asset {
     internal static let zeroChatBubbleOutgoing = ColorAsset(name: "colors/zero-chat-bubble-outgoing")
     internal static let zeroContentBackgroundColor = ColorAsset(name: "colors/zero-content-background-color")
     internal static let zeroDarkGrey = ColorAsset(name: "colors/zero-dark-grey")
+    internal static let zeroNewBackground = ColorAsset(name: "colors/zero-new-background")
   }
   internal enum Images {
     internal static let appLogo = ImageAsset(name: "images/app-logo")
@@ -46,6 +47,7 @@ internal enum Asset {
     internal static let stopRecording = ImageAsset(name: "images/stop-recording")
     internal static let launchBackground = ImageAsset(name: "images/launch-background")
     internal static let locationMarkerShape = ImageAsset(name: "images/location-marker-shape")
+    internal static let mapBlurred = ImageAsset(name: "images/mapBlurred")
     internal static let mediaPause = ImageAsset(name: "images/media-pause")
     internal static let mediaPlay = ImageAsset(name: "images/media-play")
     internal static let notificationsPromptGraphic = ImageAsset(name: "images/notifications-prompt-graphic")
