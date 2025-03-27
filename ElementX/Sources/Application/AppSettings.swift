@@ -100,7 +100,8 @@ final class AppSettings {
                   copyrightURL: URL,
                   acceptableUseURL: URL,
                   privacyURL: URL,
-                  supportEmailAddress: String) {
+                  supportEmailAddress: String,
+                  mapTilerConfiguration: MapTilerConfiguration) {
         self.defaultHomeserverAddress = defaultHomeserverAddress
         self.oidcRedirectURL = oidcRedirectURL
         self.websiteURL = websiteURL
@@ -109,6 +110,7 @@ final class AppSettings {
         self.acceptableUseURL = acceptableUseURL
         self.privacyURL = privacyURL
         self.supportEmailAddress = supportEmailAddress
+        self.mapTilerConfiguration = mapTilerConfiguration
     }
     
     // MARK: - Application
@@ -294,10 +296,10 @@ final class AppSettings {
     // MARK: - Maps
     
     // maptiler base url
-    let mapTilerBaseURL: URL = "https://api.maptiler.com/maps"
-
-    // maptiler api key
-    let mapTilerApiKey = Secrets.mapLibreAPIKey
+    private(set) var mapTilerConfiguration = MapTilerConfiguration(baseURL: "https://api.maptiler.com/maps",
+                                                                   apiKey: Secrets.mapLibreAPIKey,
+                                                                   lightStyleID: "9bc819c8-e627-474a-a348-ec144fe3d810",
+                                                                   darkStyleID: "dea61faf-292b-4774-9660-58fcef89a7f3")
     
     // MARK: - Presence
 

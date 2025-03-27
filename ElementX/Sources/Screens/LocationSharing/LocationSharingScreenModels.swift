@@ -25,24 +25,26 @@ enum StaticLocationInteractionMode: Hashable {
 }
 
 struct StaticLocationScreenViewState: BindableState {
-    init(interactionMode: StaticLocationInteractionMode) {
+    init(interactionMode: StaticLocationInteractionMode, mapURLBuilder: MapTilerURLBuilderProtocol) {
         self.interactionMode = interactionMode
-        switch interactionMode {
-        case .picker:
-            bindings.showsUserLocationMode = .showAndFollow
-        case .viewOnly:
-            bindings.showsUserLocationMode = .show
+        self.mapURLBuilder = mapURLBuilder
+        
+        bindings.showsUserLocationMode = switch interactionMode {
+        case .picker: .showAndFollow
+        case .viewOnly: .show
         }
     }
 
     let interactionMode: StaticLocationInteractionMode
+    let mapURLBuilder: MapTilerURLBuilderProtocol
+    
+    var bindings = StaticLocationScreenBindings(showsUserLocationMode: .hide)
+ 
     /// Indicates whether the user is sharing his current location
     var isSharingUserLocation: Bool {
         bindings.isLocationAuthorized == true && bindings.showsUserLocationMode == .showAndFollow
     }
     
-    var bindings = StaticLocationScreenBindings(showsUserLocationMode: .hide)
- 
     var initialMapCenter: CLLocationCoordinate2D {
         switch interactionMode {
         case .picker:
