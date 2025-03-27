@@ -14,7 +14,7 @@ private struct TimelineItemAccessibilityModifier: ViewModifier {
     @ViewBuilder
     func body(content: Content) -> some View {
         switch timelineItem {
-        case is PollRoomTimelineItem, is VoiceMessageRoomTimelineItem:
+        case is PollRoomTimelineItem:
             content
                 .accessibilityActions {
                     Button(L10n.commonMessageActions) {

@@ -34,6 +34,10 @@ internal enum L10n {
   }
   /// Pause
   internal static var a11yPause: String { return L10n.tr("Localizable", "a11y_pause") }
+  /// Voice message, duration: %1$@, current position: %2$@
+  internal static func a11yPausedVoiceMessage(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "a11y_paused_voice_message", String(describing: p1), String(describing: p2))
+  }
   /// PIN field
   internal static var a11yPinField: String { return L10n.tr("Localizable", "a11y_pin_field") }
   /// Play
@@ -76,6 +80,10 @@ internal enum L10n {
   internal static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
   /// User menu
   internal static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
+  /// Voice message, duration: %1$@
+  internal static func a11yVoiceMessage(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "a11y_voice_message", String(describing: p1))
+  }
   /// Record voice message.
   internal static var a11yVoiceMessageRecord: String { return L10n.tr("Localizable", "a11y_voice_message_record") }
   /// Stop recording

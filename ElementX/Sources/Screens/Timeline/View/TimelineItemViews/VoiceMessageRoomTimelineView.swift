@@ -16,7 +16,6 @@ struct VoiceMessageRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             VoiceMessageRoomTimelineContent(timelineItem: timelineItem,
                                             playerState: playerState)
-                .accessibilityLabel(L10n.commonVoiceMessage)
                 .frame(maxWidth: 400)
         }
     }
