@@ -122,6 +122,7 @@ struct HomeScreenRoomCell: View {
                 if room.badges.isDotShown {
                     Circle()
                         .frame(width: 12, height: 12)
+                        .foregroundStyle(.zero.bgAccentRest)
 //                    ZStack {
 //                        Circle()
 //                            .frame(width: 16, height: 16, alignment: .center)
@@ -148,6 +149,7 @@ struct HomeScreenRoomCell: View {
         if let lastMessage = room.lastMessage {
             Text(lastMessage)
                 .lastMessageFormatting()
+                .foregroundColor(room.badges.isDotShown ? .compound.textPrimary : .compound.textSecondary)
         }
     }
 }
@@ -167,7 +169,7 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
 private extension View {
     func lastMessageFormatting() -> some View {
         font(.compound.bodyMD)
-            .foregroundColor(.compound.textSecondary)
+            //.foregroundColor(.compound.textSecondary)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
     }

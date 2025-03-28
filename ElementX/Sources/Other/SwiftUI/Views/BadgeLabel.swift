@@ -26,7 +26,7 @@ private struct BadgeLabelStyle: LabelStyle {
     let isHighlighted: Bool
     
     var titleColor: Color {
-        isHighlighted ? .zero._badgeTextSuccess : .compound._badgeTextSubtle
+        isHighlighted ? .zero._badgeTextSuccess : .compound.textBadgeInfo
     }
     
     var iconColor: Color {

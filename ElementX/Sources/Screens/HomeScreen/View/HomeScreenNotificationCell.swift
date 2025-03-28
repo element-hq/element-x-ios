@@ -19,17 +19,9 @@ struct HomeScreenNotificationCell: View {
         case .invite:
             baseText = isRoomDM ? "\(room.name) invited you to chat" : "You are invited to join \(room.name)"
         case .room:
-            
-            if isRoomDM {
-                baseText = room.unreadNotificationsCount > 1 ?
-                    "\(room.unreadNotificationsCount) messages in your conversation with \(room.name)" :
-                    "\(room.unreadNotificationsCount) message in your conversation with \(room.name)"
-            }
-            else {
-                baseText = room.unreadNotificationsCount > 1 ?
-                "\(room.unreadNotificationsCount) messages in \(room.name)" :
-                "\(room.unreadNotificationsCount) message in \(room.name)"
-            }
+            baseText = room.unreadNotificationsCount > 1 ?
+            "\(room.unreadNotificationsCount) messages in \(room.name)" :
+            "\(room.unreadNotificationsCount) message in \(room.name)"
         default:
             baseText = "You may have new messages in \(room.name)"
         }
@@ -38,7 +30,7 @@ struct HomeScreenNotificationCell: View {
         if let roomNameRange = attributedText.range(of: room.name) {
             attributedText[roomNameRange].foregroundColor = .compound.textPrimary
         }
-        if room.unreadNotificationsCount > 1, let unreadCountRange = attributedText.range(of: String(room.unreadNotificationsCount)) {
+        if room.unreadNotificationsCount >= 1, let unreadCountRange = attributedText.range(of: String(room.unreadNotificationsCount)) {
             attributedText[unreadCountRange].foregroundColor = .compound.textPrimary
         }
         return attributedText
