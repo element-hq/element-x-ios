@@ -139,12 +139,16 @@ struct AvatarHeaderView<Footer: View>: View {
                             avatarSize: avatarSize,
                             mediaProvider: mediaProvider,
                             onAvatarTap: onAvatarTap)
+                .accessibilityLabel(L10n.a11yAvatar)
+            
         case .user(let userProfile):
             LoadableAvatarImage(url: userProfile.avatarURL,
                                 name: userProfile.displayName,
                                 contentID: userProfile.userID,
                                 avatarSize: avatarSize,
-                                mediaProvider: mediaProvider)
+                                mediaProvider: mediaProvider,
+                                onTap: onAvatarTap)
+                .accessibilityLabel(L10n.a11yAvatar)
         }
     }
     

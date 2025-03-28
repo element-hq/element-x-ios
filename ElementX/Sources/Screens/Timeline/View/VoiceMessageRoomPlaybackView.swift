@@ -18,18 +18,6 @@ struct VoiceMessageRoomPlaybackView: View {
     let onPlayPause: () -> Void
     let onSeek: (Double) -> Void
     let onScrubbing: (Bool) -> Void
-
-    var timeLabelContent: String {
-        // Display the duration if progress is 0.0
-        let percent = playerState.progress > 0.0 ? playerState.progress : 1.0
-        // If the duration is greater or equal 10 minutes, use the long format
-        let elapsed = Date(timeIntervalSinceReferenceDate: playerState.duration * percent)
-        if playerState.duration >= 600 {
-            return DateFormatter.longElapsedTimeFormatter.string(from: elapsed)
-        } else {
-            return DateFormatter.elapsedTimeFormatter.string(from: elapsed)
-        }
-    }
     
     var body: some View {
         HStack(spacing: 8) {
@@ -53,6 +41,38 @@ struct VoiceMessageRoomPlaybackView: View {
         .padding(.trailing, 8)
         .onChange(of: isDragging) { _, newValue in
             onScrubbing(newValue)
+        }
+        .accessibilityLabel(accessibilityLabel)
+    }
+    
+    // MARK: - Private
+    
+    private var durationString: String {
+        let duration = Date(timeIntervalSinceReferenceDate: playerState.duration)
+        return if playerState.duration >= 600 {
+            DateFormatter.longElapsedTimeFormatter.string(from: duration)
+        } else {
+            DateFormatter.elapsedTimeFormatter.string(from: duration)
+        }
+    }
+
+    private var timeLabelContent: String {
+        // Display the duration if progress is 0.0
+        let percent = playerState.progress > 0.0 ? playerState.progress : 1.0
+        // If the duration is greater or equal 10 minutes, use the long format
+        let elapsed = Date(timeIntervalSinceReferenceDate: playerState.duration * percent)
+        if playerState.duration >= 600 {
+            return DateFormatter.longElapsedTimeFormatter.string(from: elapsed)
+        } else {
+            return DateFormatter.elapsedTimeFormatter.string(from: elapsed)
+        }
+    }
+    
+    private var accessibilityLabel: String {
+        if playerState.progress > 0.0 {
+            L10n.a11yPausedVoiceMessage(durationString, timeLabelContent)
+        } else {
+            L10n.a11yVoiceMessage(durationString)
         }
     }
 

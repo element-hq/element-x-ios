@@ -236,6 +236,7 @@ struct RoomScreen: View {
                     .labelStyle(.titleAndIcon)
             }
             .buttonStyle(ElementCallButtonStyle())
+            .accessibilityLabel(L10n.a11yJoinCall)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         } else {
             Button {
@@ -243,6 +244,7 @@ struct RoomScreen: View {
             } label: {
                 CompoundIcon(\.videoCallSolid)
             }
+            .accessibilityLabel(L10n.a11yStartCall)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         }
     }

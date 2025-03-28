@@ -10,6 +10,8 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum L10n {
+  /// Avatar
+  internal static var a11yAvatar: String { return L10n.tr("Localizable", "a11y_avatar") }
   /// Delete
   internal static var a11yDelete: String { return L10n.tr("Localizable", "a11y_delete") }
   /// Plural format key: "%#@COUNT@"
@@ -18,6 +20,8 @@ internal enum L10n {
   }
   /// Hide password
   internal static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
+  /// Join call
+  internal static var a11yJoinCall: String { return L10n.tr("Localizable", "a11y_join_call") }
   /// Jump to bottom
   internal static var a11yJumpToBottom: String { return L10n.tr("Localizable", "a11y_jump_to_bottom") }
   /// Mentions only
@@ -30,6 +34,10 @@ internal enum L10n {
   }
   /// Pause
   internal static var a11yPause: String { return L10n.tr("Localizable", "a11y_pause") }
+  /// Voice message, duration: %1$@, current position: %2$@
+  internal static func a11yPausedVoiceMessage(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "a11y_paused_voice_message", String(describing: p1), String(describing: p2))
+  }
   /// PIN field
   internal static var a11yPinField: String { return L10n.tr("Localizable", "a11y_pin_field") }
   /// Play
@@ -38,6 +46,8 @@ internal enum L10n {
   internal static var a11yPoll: String { return L10n.tr("Localizable", "a11y_poll") }
   /// Ended poll
   internal static var a11yPollEnd: String { return L10n.tr("Localizable", "a11y_poll_end") }
+  /// Profile picture
+  internal static var a11yProfilePicture: String { return L10n.tr("Localizable", "a11y_profile_picture") }
   /// React with %1$@
   internal static func a11yReactWith(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_react_with", String(describing: p1))
@@ -70,6 +80,10 @@ internal enum L10n {
   internal static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
   /// User menu
   internal static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
+  /// Voice message, duration: %1$@
+  internal static func a11yVoiceMessage(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "a11y_voice_message", String(describing: p1))
+  }
   /// Record voice message.
   internal static var a11yVoiceMessageRecord: String { return L10n.tr("Localizable", "a11y_voice_message_record") }
   /// Stop recording
