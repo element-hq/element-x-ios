@@ -100,6 +100,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                             appSettings: ServiceLocator.shared.settings,
                                              analyticsService: ServiceLocator.shared.analytics,
                                              composerDraftService: draftServiceMock)
         
@@ -684,6 +685,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                             appSettings: ServiceLocator.shared.settings,
                                              analyticsService: ServiceLocator.shared.analytics,
                                              composerDraftService: draftServiceMock)
         
@@ -727,6 +729,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                             appSettings: ServiceLocator.shared.settings,
                                              analyticsService: ServiceLocator.shared.analytics,
                                              composerDraftService: draftServiceMock)
         
@@ -760,6 +763,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              completionSuggestionService: mockCompletionSuggestionService,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                             appSettings: ServiceLocator.shared.settings,
                                              analyticsService: ServiceLocator.shared.analytics,
                                              composerDraftService: draftServiceMock)
         
@@ -794,6 +798,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
                                              completionSuggestionService: completionSuggestionServiceMock,
                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                              mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                             appSettings: ServiceLocator.shared.settings,
                                              analyticsService: ServiceLocator.shared.analytics,
                                              composerDraftService: draftServiceMock)
         viewModel.context.composerFormattingEnabled = true
