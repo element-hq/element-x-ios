@@ -98,7 +98,6 @@ final class AppSettings {
                   acceptableUseURL: URL,
                   privacyURL: URL,
                   supportEmailAddress: String,
-                  analyticsTermsURL: URL?,
                   mapTilerConfiguration: MapTilerConfiguration) {
         self.defaultHomeserverAddress = defaultHomeserverAddress
         self.oidcRedirectURL = oidcRedirectURL
@@ -108,7 +107,6 @@ final class AppSettings {
         self.acceptableUseURL = acceptableUseURL
         self.privacyURL = privacyURL
         self.supportEmailAddress = supportEmailAddress
-        self.analyticsTermsURL = analyticsTermsURL
         self.mapTilerConfiguration = mapTilerConfiguration
     }
     
