@@ -45,6 +45,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: SettingsScreenCoordinatorParameters) {
         viewModel = SettingsScreenViewModel(userSession: parameters.userSession,
+                                            appSettings: parameters.appSettings,
                                             isBugReportServiceEnabled: parameters.isBugReportServiceEnabled)
         
         viewModel.actions

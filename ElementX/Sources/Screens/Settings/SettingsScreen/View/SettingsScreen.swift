@@ -149,12 +149,14 @@ struct SettingsScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.reportBug)
             }
             
-            ListRow(label: .default(title: L10n.commonAnalytics,
-                                    icon: \.chart),
-                    kind: .navigationLink {
-                        context.send(viewAction: .analytics)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.analytics)
+            if context.viewState.showAnalyticsSettings {
+                ListRow(label: .default(title: L10n.commonAnalytics,
+                                        icon: \.chart),
+                        kind: .navigationLink {
+                            context.send(viewAction: .analytics)
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.analytics)
+            }
             
             ListRow(label: .default(title: L10n.commonAdvancedSettings,
                                     icon: \.settings),
@@ -257,6 +259,7 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com",
                                                                                    deviceID: "AAAAAAAAAAA"))))
         return SettingsScreenViewModel(userSession: userSession,
+                                       appSettings: ServiceLocator.shared.settings,
                                        isBugReportServiceEnabled: isBugReportServiceEnabled)
     }
 }

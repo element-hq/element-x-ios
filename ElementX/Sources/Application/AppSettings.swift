@@ -98,6 +98,7 @@ final class AppSettings {
                   acceptableUseURL: URL,
                   privacyURL: URL,
                   supportEmailAddress: String,
+                  analyticsTermsURL: URL?,
                   mapTilerConfiguration: MapTilerConfiguration) {
         self.defaultHomeserverAddress = defaultHomeserverAddress
         self.oidcRedirectURL = oidcRedirectURL
@@ -107,6 +108,7 @@ final class AppSettings {
         self.acceptableUseURL = acceptableUseURL
         self.privacyURL = privacyURL
         self.supportEmailAddress = supportEmailAddress
+        self.analyticsTermsURL = analyticsTermsURL
         self.mapTilerConfiguration = mapTilerConfiguration
     }
     
@@ -232,14 +234,12 @@ final class AppSettings {
     
     // MARK: - Analytics
     
-    /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
-    ///
-    /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork you will
-    /// need to regenerate the Secrets file with your PostHog server and API key before enabling.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element."),
-                                                        host: Secrets.postHogHost,
-                                                        apiKey: Secrets.postHogAPIKey,
-                                                        termsURL: "https://element.io/cookie-policy")
+    /// The configuration to use for analytics. Set to `nil` to disable analytics.
+    let analyticsConfiguration: AnalyticsConfiguration? = AnalyticsConfiguration(host: Secrets.postHogHost, apiKey: Secrets.postHogAPIKey)
+    /// The URL to open with more information about analytics terms. When this is `nil` the "Learn more" link will be hidden.
+    private(set) var analyticsTermsURL: URL? = "https://element.io/cookie-policy"
+    /// Whether or not there the app is able ask for user consent to enable analytics or sentry reporting.
+    var canPromptForAnalytics: Bool { analyticsConfiguration != nil || bugReportSentryURL != nil }
     
     /// Whether the user has opted in to send analytics.
     @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))
