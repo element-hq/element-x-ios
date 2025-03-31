@@ -1,11 +1,14 @@
 "Notification" = "Oznámení";
+"a11y_avatar" = "Profilový obrázek";
 "a11y_delete" = "Smazat";
 "a11y_hide_password" = "Skrýt heslo";
+"a11y_join_call" = "Připojit se k hovoru";
 "a11y_jump_to_bottom" = "Přejít dolů";
 "a11y_notifications_mentions_only" = "Pouze zmínky";
 "a11y_notifications_muted" = "Ztišeno";
 "a11y_page_n" = "Strana %1$d";
 "a11y_pause" = "Pozastavit";
+"a11y_paused_voice_message" = "Hlasová zpráva, délka: %1$@, aktuální pozice: %2$@";
 "a11y_pin_field" = "Pole pro PIN";
 "a11y_play" = "Přehrát";
 "a11y_poll_end" = "Hlasování ukončeno";
@@ -19,6 +22,7 @@
 "a11y_show_password" = "Zobrazit heslo";
 "a11y_start_call" = "Zahájit hovor";
 "a11y_user_menu" = "Uživatelské menu";
+"a11y_voice_message" = "Hlasová zpráva, délka: %1$@";
 "a11y_voice_message_record" = "Nahrajte hlasovou zprávu.";
 "a11y_voice_message_stop_recording" = "Zastavit nahrávání";
 "a11y.view_details" = "Zobrazit podrobnosti";
@@ -49,7 +53,7 @@
 "action_delete_poll" = "Odstranit hlasování";
 "action_disable" = "Zakázat";
 "action_discard" = "Vyřadit";
-"action_dismiss" = "Dismiss";
+"action_dismiss" = "Zavřít";
 "action_done" = "Hotovo";
 "action_edit" = "Upravit";
 "action_edit_caption" = "Upravit titulek";
@@ -188,7 +192,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Žádné výsledky";
 "common_no_room_name" = "Žádný název místnosti";
-"common_not_encrypted" = "Not encrypted";
+"common_not_encrypted" = "Nešifrováno";
 "common_offline" = "Offline";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "nebo";
@@ -256,7 +260,7 @@
 "common_verification_failed" = "Ověření se nezdařilo";
 "common_verified" = "Ověřeno";
 "common_verify_device" = "Ověřit zařízení";
-"common_verify_identity" = "Ověření totožnosti";
+"common_verify_identity" = "Ověření identity";
 "common_verify_user" = "Ověřit uživatele";
 "common_video" = "Video";
 "common_voice_message" = "Hlasová zpráva";
@@ -277,11 +281,11 @@
 "confirm_recovery_key_banner_secondary_button_title" = "Zapomněli jste klíč pro obnovení?";
 "confirm_recovery_key_banner_title" = "Vaše úložiště klíčů není synchronizováno";
 "crash_detection_dialog_content" = "%1$@ havaroval při posledním použití. Chcete se s námi podělit o zprávu o selhání?";
-"crypto_identity_change_pin_violation" = "Zdá se, že se identita %1$@ změnila. %2$@";
-"crypto_identity_change_pin_violation_new" = "Zdá se, že identita %1$@ %2$@ se změnila. %3$@";
+"crypto_identity_change_pin_violation" = "Identita uživatele %1$@ se změnila. %2$@";
+"crypto_identity_change_pin_violation_new" = "Identita uživatele %1$@ %2$@ se změnila. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
-"crypto_identity_change_profile_pin_violation" = "Ověřená identita %1$@ se změnila.";
-"crypto_identity_change_verification_violation_new" = "Ověřená identita uživatele %1$@ %2$@ se změnila. %3$@";
+"crypto_identity_change_profile_pin_violation" = "Identita uživatele %1$@ se změnila.";
+"crypto_identity_change_verification_violation_new" = "Identita uživatele %1$@ %2$@ se změnila. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Zrušit ověření";
 "dialog_confirm_link_message" = "Odkaz %1$@ vás přesměruje na jinou stránku %2$@\n\nOpravdu chcete pokračovat?";
 "dialog_confirm_link_title" = "Zkontrolujte tento odkaz";
@@ -798,8 +802,8 @@
 "screen_report_content_hint" = "Důvod nahlášení tohoto obsahu";
 "screen_reset_encryption_confirmation_alert_action" = "Ano, resetovat nyní";
 "screen_reset_encryption_confirmation_alert_subtitle" = "Tento proces je nevratný.";
-"screen_reset_encryption_confirmation_alert_title" = "Opravdu chcete obnovit šifrování?";
-"screen_reset_encryption_password_subtitle" = "Potvrďte, že chcete obnovit šifrování.";
+"screen_reset_encryption_confirmation_alert_title" = "Opravdu chcete obnovit svou identitu?";
+"screen_reset_encryption_password_subtitle" = "Potvrďte, že chcete obnovit svou identitu.";
 "screen_reset_encryption_password_title" = "Pro pokračování zadejte heslo k účtu";
 "screen_reset_identity_confirmation_subtitle" = "Chystáte se přejít na svůj %1$@ účet a obnovit svou identitu. Poté budete přesměrováni zpět do aplikace.";
 "screen_reset_identity_confirmation_title" = "Nemůžete to potvrdit? Přejděte na svůj účet a resetujte svou identitu.";
@@ -981,7 +985,7 @@
 "screen_session_verification_use_another_device_title" = "Otevřete aplikaci na jiném ověřeném zařízení";
 "screen_session_verification_user_initiator_subtitle" = "Pro větší bezpečnost ověřte tohoto uživatele porovnáním sady emotikonů na svých zařízeních. Proveďte to pomocí důvěryhodného způsobu komunikace.";
 "screen_session_verification_user_initiator_title" = "Ověřte tohoto uživatele?";
-"screen_session_verification_user_responder_subtitle" = "Pro větší bezpečnost chce jiný uživatel ověřit vaši totožnost. Zobrazí se vám sada emotikonů k porovnání.";
+"screen_session_verification_user_responder_subtitle" = "Pro větší bezpečnost chce jiný uživatel ověřit vaši identitu. Zobrazí se vám sada emotikonů k porovnání.";
 "screen_session_verification_waiting_another_device_subtitle" = "Na druhém zařízení byste měli vidět vyskakovací okno. Začněte s ověrením tam.";
 "screen_session_verification_waiting_another_device_title" = "Spusťte ověření na druhém zařízení";
 "screen_session_verification_waiting_other_device_title" = "Čekání na druhé zařízení";
@@ -1095,7 +1099,7 @@
 "timeline_decryption_failure_historical_event_unverified_device" = "Pro přístup k historickým zprávám musíte toto zařízení ověřit";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Nemáte přístup k této zprávě";
 "timeline_decryption_failure_unable_to_decrypt" = "Nelze dešifrovat zprávu";
-"timeline_decryption_failure_withheld_unverified" = "Tato zpráva byla zablokována buď proto, že jste neověřili své zařízení, nebo proto, že odesílatel potřebuje ověřit vaši totožnost.";
+"timeline_decryption_failure_withheld_unverified" = "Tato zpráva byla zablokována buď proto, že jste neověřili své zařízení, nebo proto, že odesílatel potřebuje ověřit vaši identitu.";
 "troubleshoot_notifications_entry_point_section" = "Odstraňování problémů";
 "troubleshoot_notifications_screen_action" = "Spustit testy";
 "troubleshoot_notifications_screen_action_again" = "Spustit testy znovu";

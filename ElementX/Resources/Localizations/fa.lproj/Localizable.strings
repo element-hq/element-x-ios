@@ -1,11 +1,14 @@
 "Notification" = "آگاهی";
+"a11y_avatar" = "Avatar";
 "a11y_delete" = "حذف";
 "a11y_hide_password" = "نهفتن گذرواژه";
+"a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "به پایین بروید";
 "a11y_notifications_mentions_only" = "فقط اشاره‌ها";
 "a11y_notifications_muted" = "خموش";
 "a11y_page_n" = "صفحهٔ %1$d";
 "a11y_pause" = "مکث";
+"a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "زمینهٔ پین";
 "a11y_play" = "پخش";
 "a11y_poll_end" = "نظرسنجی پایان یافته";
@@ -19,6 +22,7 @@
 "a11y_show_password" = "نمایش گذرواژه";
 "a11y_start_call" = "آغاز یک تماس";
 "a11y_user_menu" = "فهرست کاربر";
+"a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "ضبط پیام صوتی.";
 "a11y_voice_message_stop_recording" = "توقّف ضبط";
 "a11y.view_details" = "View details";

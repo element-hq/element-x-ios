@@ -1,11 +1,14 @@
 "Notification" = "Bildirim";
+"a11y_avatar" = "Avatar";
 "a11y_delete" = "Sil";
 "a11y_hide_password" = "Şifreyi gizle";
+"a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "Aşağıya atla";
 "a11y_notifications_mentions_only" = "Yalnızca bahsetmeler";
 "a11y_notifications_muted" = "Sessiz";
 "a11y_page_n" = "Sayfa %1$d";
 "a11y_pause" = "Duraklat";
+"a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "PIN alanı";
 "a11y_play" = "Oynat";
 "a11y_poll_end" = "Anket sona erdi";
@@ -19,6 +22,7 @@
 "a11y_show_password" = "Şifreyi göster";
 "a11y_start_call" = "Bir arama başlatın";
 "a11y_user_menu" = "Kullanıcı menüsü";
+"a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Sesli mesajı kaydedin.";
 "a11y_voice_message_stop_recording" = "Kaydı durdur";
 "a11y.view_details" = "Ayrıntıları görüntüle";
