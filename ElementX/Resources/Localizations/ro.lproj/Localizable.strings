@@ -1,11 +1,14 @@
 "Notification" = "Notificare";
+"a11y_avatar" = "Avatar";
 "a11y_delete" = "Ștergere";
 "a11y_hide_password" = "Ascundeți parola";
+"a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "Mergeți în jos";
 "a11y_notifications_mentions_only" = "Doar mențiuni";
 "a11y_notifications_muted" = "Notificări dezactivate";
 "a11y_page_n" = "Pagina %1$d";
 "a11y_pause" = "Pauză";
+"a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "Câmp PIN";
 "a11y_play" = "Redați";
 "a11y_poll_end" = "Sondaj încheiat";
@@ -19,6 +22,7 @@
 "a11y_show_password" = "Afișați parola";
 "a11y_start_call" = "Începeți un apel";
 "a11y_user_menu" = "Meniu utilizator";
+"a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Înregistrați un mesaj vocal";
 "a11y_voice_message_stop_recording" = "Opriți înregistrarea";
 "a11y.view_details" = "View details";

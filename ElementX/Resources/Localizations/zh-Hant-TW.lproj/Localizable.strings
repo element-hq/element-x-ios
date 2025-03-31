@@ -1,11 +1,14 @@
 "Notification" = "通知";
+"a11y_avatar" = "Avatar";
 "a11y_delete" = "刪除";
 "a11y_hide_password" = "隱藏密碼";
+"a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "跳至底部";
 "a11y_notifications_mentions_only" = "僅限提及";
 "a11y_notifications_muted" = "已關閉通知";
 "a11y_page_n" = "第 %1$d 頁";
 "a11y_pause" = "暫停";
+"a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "PIN 碼欄位";
 "a11y_play" = "播放";
 "a11y_poll_end" = "投票已結束";
@@ -19,6 +22,7 @@
 "a11y_show_password" = "顯示密碼";
 "a11y_start_call" = "開始通話";
 "a11y_user_menu" = "使用者選單";
+"a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "錄製語音訊息。";
 "a11y_voice_message_stop_recording" = "停止錄音";
 "a11y.view_details" = "檢視詳細資訊";
