@@ -782,6 +782,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private static func setupSentry(appSettings: AppSettings) {
+        guard let bugReportSentryURL = appSettings.bugReportSentryURL else { return }
+        
         let options: Options = .init()
         
         #if DEBUG
@@ -790,7 +792,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         options.enabled = appSettings.analyticsConsentState == .optedIn
         #endif
 
-        options.dsn = appSettings.bugReportSentryURL.absoluteString
+        options.dsn = bugReportSentryURL.absoluteString
         
         if AppSettings.isDevelopmentBuild {
             options.environment = "development"
