@@ -83,7 +83,7 @@ packages:
     # path: ../matrix-rich-text-editor/platforms/ios/lib/WysiwygComposer
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.9.0-rc.4
+    exactVersion: 0.9.0
   
   # External dependencies
   Algorithms:
