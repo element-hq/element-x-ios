@@ -45,6 +45,8 @@ struct SettingsScreenViewState: BindableState {
     
     var showBlockedUsers = false
     
+    let isBugReportServiceEnabled: Bool
+    
     var bindings = SettingsScreenViewStateBindings()
 }
 

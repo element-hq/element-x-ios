@@ -12,8 +12,8 @@ import Sentry
 import UIKit
 
 class BugReportService: NSObject, BugReportServiceProtocol {
-    private let baseURL: URL
-    private let applicationId: String
+    private let baseURL: URL?
+    private let applicationID: String
     private let sdkGitSHA: String
     private let maxUploadSize: Int
     private let session: URLSession
@@ -23,16 +23,17 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     private let progressSubject = PassthroughSubject<Double, Never>()
     private var cancellables = Set<AnyCancellable>()
     
+    var isEnabled: Bool { baseURL != nil }
     var lastCrashEventID: String?
     
-    init(withBaseURL baseURL: URL,
-         applicationId: String,
+    init(baseURL: URL?,
+         applicationID: String,
          sdkGitSHA: String,
          maxUploadSize: Int,
          session: URLSession = .shared,
          appHooks: AppHooks) {
         self.baseURL = baseURL
-        self.applicationId = applicationId
+        self.applicationID = applicationID
         self.sdkGitSHA = sdkGitSHA
         self.maxUploadSize = maxUploadSize
         self.session = session
@@ -49,6 +50,10 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     // swiftlint:disable:next cyclomatic_complexity
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
+        guard let baseURL else {
+            fatalError("No bug report URL set, the screen should not be shown in this case.")
+        }
+        
         let bugReport = appHooks.bugReportHook.update(bugReport)
         
         var params = [
@@ -153,7 +158,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         let (localTime, utcTime) = localAndUTCTime(for: Date())
         return [
             MultipartFormData(key: "user_agent", type: .text(value: "iOS")),
-            MultipartFormData(key: "app", type: .text(value: applicationId)),
+            MultipartFormData(key: "app", type: .text(value: applicationID)),
             MultipartFormData(key: "version", type: .text(value: InfoPlistReader.main.bundleShortVersionString)),
             MultipartFormData(key: "build", type: .text(value: InfoPlistReader.main.bundleVersion)),
             MultipartFormData(key: "sdk_sha", type: .text(value: sdkGitSHA)),

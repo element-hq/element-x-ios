@@ -140,12 +140,14 @@ struct SettingsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.about)
             
-            ListRow(label: .default(title: L10n.commonReportAProblem,
-                                    icon: \.chatProblem),
-                    kind: .navigationLink {
-                        context.send(viewAction: .reportBug)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.reportBug)
+            if context.viewState.isBugReportServiceEnabled {
+                ListRow(label: .default(title: L10n.commonReportAProblem,
+                                        icon: \.chatProblem),
+                        kind: .navigationLink {
+                            context.send(viewAction: .reportBug)
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.reportBug)
+            }
             
             ListRow(label: .default(title: L10n.commonAnalytics,
                                     icon: \.chart),
@@ -230,18 +232,31 @@ struct SettingsScreen: View {
 // MARK: - Previews
 
 struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = {
-        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com",
-                                                                                   deviceID: "AAAAAAAAAAA"))))
-        return SettingsScreenViewModel(userSession: userSession)
-    }()
+    static let viewModel = makeViewModel()
+    static let bugReportDisabledViewModel = makeViewModel(isBugReportServiceEnabled: false)
     
     static var previews: some View {
         NavigationStack {
             SettingsScreen(context: viewModel.context)
-                .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
-                    state.accountSessionsListURL != nil
-                })
         }
+        .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
+            state.accountSessionsListURL != nil
+        })
+        .previewDisplayName("Default")
+        
+        NavigationStack {
+            SettingsScreen(context: bugReportDisabledViewModel.context)
+        }
+        .snapshotPreferences(expect: bugReportDisabledViewModel.context.$viewState.map { state in
+            state.accountSessionsListURL != nil
+        })
+        .previewDisplayName("Bug report disabled")
+    }
+    
+    static func makeViewModel(isBugReportServiceEnabled: Bool = true) -> SettingsScreenViewModel {
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com",
+                                                                                   deviceID: "AAAAAAAAAAA"))))
+        return SettingsScreenViewModel(userSession: userSession,
+                                       isBugReportServiceEnabled: isBugReportServiceEnabled)
     }
 }

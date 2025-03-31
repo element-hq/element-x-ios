@@ -2130,6 +2130,11 @@ class BannedRoomProxyMock: BannedRoomProxyProtocol, @unchecked Sendable {
     }
 }
 class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sendable {
+    var isEnabled: Bool {
+        get { return underlyingIsEnabled }
+        set(value) { underlyingIsEnabled = value }
+    }
+    var underlyingIsEnabled: Bool!
     var crashedLastRun: Bool {
         get { return underlyingCrashedLastRun }
         set(value) { underlyingCrashedLastRun = value }

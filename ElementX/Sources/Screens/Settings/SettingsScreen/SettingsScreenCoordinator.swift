@@ -11,6 +11,7 @@ import SwiftUI
 struct SettingsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let appSettings: AppSettings
+    let isBugReportServiceEnabled: Bool
 }
 
 enum SettingsScreenCoordinatorAction {
@@ -43,7 +44,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     // MARK: - Setup
     
     init(parameters: SettingsScreenCoordinatorParameters) {
-        viewModel = SettingsScreenViewModel(userSession: parameters.userSession)
+        viewModel = SettingsScreenViewModel(userSession: parameters.userSession,
+                                            isBugReportServiceEnabled: parameters.isBugReportServiceEnabled)
         
         viewModel.actions
             .sink { [weak self] action in

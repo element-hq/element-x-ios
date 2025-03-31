@@ -223,10 +223,10 @@ final class AppSettings {
         
     // MARK: - Bug report
 
-    let bugReportServiceBaseURL: URL! = URL(string: Secrets.rageshakeServerURL)
+    let bugReportServiceBaseURL: URL? = URL(string: Secrets.rageshakeServerURL)! // swiftlint:disable:this force_unwrapping
     let bugReportSentryURL: URL! = URL(string: Secrets.sentryDSN)
-    // Use the name allocated by the bug report server
-    let bugReportApplicationId = "element-x-ios"
+    /// The name allocated by the bug report server
+    let bugReportApplicationID = "element-x-ios"
     /// The maximum size of the upload request. Default value is just below CloudFlare's max request size.
     let bugReportMaxUploadSize = 50 * 1024 * 1024
     
