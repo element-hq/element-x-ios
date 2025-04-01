@@ -623,9 +623,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     // MARK: - Moderation
     
-    func kickUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+    func kickUser(_ userID: String, reason: String?) async -> Result<Void, RoomProxyError> {
         do {
-            try await room.kickUser(userId: userID, reason: nil)
+            try await room.kickUser(userId: userID, reason: reason)
             return .success(())
         } catch {
             MXLog.error("Failed kicking \(userID) with error: \(error)")
@@ -633,9 +633,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    func banUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+    func banUser(_ userID: String, reason: String?) async -> Result<Void, RoomProxyError> {
         do {
-            try await room.banUser(userId: userID, reason: nil)
+            try await room.banUser(userId: userID, reason: reason)
             return .success(())
         } catch {
             MXLog.error("Failed banning \(userID) with error: \(error)")

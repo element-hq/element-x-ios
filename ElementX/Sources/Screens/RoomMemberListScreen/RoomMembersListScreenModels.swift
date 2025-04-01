@@ -111,4 +111,6 @@ enum RoomMembersListScreenViewAction {
 
 enum RoomMembersListScreenAlertType: Hashable {
     case unbanConfirmation(RoomMemberDetails)
+    case kickConfirmation
+    case banConfirmation
 }
