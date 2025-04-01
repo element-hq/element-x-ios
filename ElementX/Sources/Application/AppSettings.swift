@@ -90,6 +90,7 @@ final class AppSettings {
     
     // MARK: - Hooks
     
+    // swiftlint:disable:next function_parameter_count
     func override(defaultHomeserverAddress: String,
                   oidcRedirectURL: URL,
                   websiteURL: URL,
@@ -98,6 +99,8 @@ final class AppSettings {
                   acceptableUseURL: URL,
                   privacyURL: URL,
                   supportEmailAddress: String,
+                  bugReportApplicationID: String,
+                  analyticsTermsURL: URL?,
                   mapTilerConfiguration: MapTilerConfiguration) {
         self.defaultHomeserverAddress = defaultHomeserverAddress
         self.oidcRedirectURL = oidcRedirectURL
@@ -107,6 +110,8 @@ final class AppSettings {
         self.acceptableUseURL = acceptableUseURL
         self.privacyURL = privacyURL
         self.supportEmailAddress = supportEmailAddress
+        self.bugReportApplicationID = bugReportApplicationID
+        self.analyticsTermsURL = analyticsTermsURL
         self.mapTilerConfiguration = mapTilerConfiguration
     }
     
@@ -226,7 +231,7 @@ final class AppSettings {
     let bugReportServiceBaseURL: URL? = Secrets.rageshakeServerURL.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     let bugReportSentryURL: URL? = Secrets.sentryDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     /// The name allocated by the bug report server
-    let bugReportApplicationID = "element-x-ios"
+    private(set) var bugReportApplicationID = "element-x-ios"
     /// The maximum size of the upload request. Default value is just below CloudFlare's max request size.
     let bugReportMaxUploadSize = 50 * 1024 * 1024
     
