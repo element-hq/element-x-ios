@@ -2599,16 +2599,16 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var directRoomForUserIDClosure: ((String) async -> Result<String?, ClientProxyError>)?
+    var directRoomForUserIDClosure: ((String) -> Result<String?, ClientProxyError>)?
 
-    func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
+    func directRoomForUserID(_ userID: String) -> Result<String?, ClientProxyError> {
         directRoomForUserIDCallsCount += 1
         directRoomForUserIDReceivedUserID = userID
         DispatchQueue.main.async {
             self.directRoomForUserIDReceivedInvocations.append(userID)
         }
         if let directRoomForUserIDClosure = directRoomForUserIDClosure {
-            return await directRoomForUserIDClosure(userID)
+            return directRoomForUserIDClosure(userID)
         } else {
             return directRoomForUserIDReturnValue
         }
@@ -15143,15 +15143,15 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
     }
     var retryDecryptionSessionIDsReceivedSessionIDs: [String]?
     var retryDecryptionSessionIDsReceivedInvocations: [[String]?] = []
-    var retryDecryptionSessionIDsClosure: (([String]?) async -> Void)?
+    var retryDecryptionSessionIDsClosure: (([String]?) -> Void)?
 
-    func retryDecryption(sessionIDs: [String]?) async {
+    func retryDecryption(sessionIDs: [String]?) {
         retryDecryptionSessionIDsCallsCount += 1
         retryDecryptionSessionIDsReceivedSessionIDs = sessionIDs
         DispatchQueue.main.async {
             self.retryDecryptionSessionIDsReceivedInvocations.append(sessionIDs)
         }
-        await retryDecryptionSessionIDsClosure?(sessionIDs)
+        retryDecryptionSessionIDsClosure?(sessionIDs)
     }
     //MARK: - paginateBackwards
 

@@ -392,6 +392,7 @@ class TimelineController: TimelineControllerProtocol {
         isSwitchingTimelines = false
         
         let isDM = roomProxy.isDirectOneToOneRoom
+        let displayName = roomProxy.infoPublisher.value.displayName
         
         var newTimelineItems = await Task.detached { [timelineItemFactory, activeTimeline] in
             var newTimelineItems = [RoomTimelineItemProtocol]()
@@ -404,6 +405,7 @@ class TimelineController: TimelineControllerProtocol {
                 let items = collapsibleChunk.compactMap { itemProxy in
                     let timelineItem = self.buildTimelineItem(for: itemProxy,
                                                               isDM: isDM,
+                                                              roomDisplayName: displayName,
                                                               timelineItemFactory: timelineItemFactory,
                                                               activeTimeline: activeTimeline)
                     
@@ -432,14 +434,9 @@ class TimelineController: TimelineControllerProtocol {
         
         // Check if we need to add anything to the top of the timeline.
         switch paginationState.backward {
-        case .timelineEndReached:
-            if timelineKind != .pinned, !roomProxy.isDirectOneToOneRoom {
-                let timelineStart = TimelineStartRoomTimelineItem(name: roomProxy.infoPublisher.value.displayName)
-                newTimelineItems.insert(timelineStart, at: 0)
-            }
         case .paginating:
             newTimelineItems.insert(PaginationIndicatorRoomTimelineItem(position: .start), at: 0)
-        case .idle:
+        case .idle, .timelineEndReached:
             break
         }
         
@@ -458,6 +455,7 @@ class TimelineController: TimelineControllerProtocol {
     
     private nonisolated func buildTimelineItem(for itemProxy: TimelineItemProxy,
                                                isDM: Bool,
+                                               roomDisplayName: String?,
                                                timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                                activeTimeline: TimelineProxyProtocol) -> RoomTimelineItemProtocol? {
         switch itemProxy {
@@ -480,6 +478,8 @@ class TimelineController: TimelineControllerProtocol {
                 return SeparatorRoomTimelineItem(id: .virtual(uniqueID: uniqueID), timestamp: date)
             case .readMarker:
                 return ReadMarkerRoomTimelineItem(id: .virtual(uniqueID: uniqueID))
+            case .timelineStart:
+                return isDM ? nil : TimelineStartRoomTimelineItem(name: roomDisplayName)
             }
         case .unknown:
             return nil

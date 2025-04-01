@@ -224,9 +224,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
             .sink { [weak self] _ in
-                Task {
-                    await self?.roomProxy.timeline.retryDecryption()
-                }
+                self?.roomProxy.timeline.retryDecryption(sessionIDs: nil)
             }
             .store(in: &cancellables)
     }

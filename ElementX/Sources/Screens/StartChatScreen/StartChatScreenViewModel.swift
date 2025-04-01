@@ -59,19 +59,18 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
             actionsSubject.send(.createRoom)
         case .selectUser(let user):
             showLoadingIndicator(delay: .milliseconds(200))
-            Task {
-                let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(user.userID)
-                switch currentDirectRoom {
-                case .success(.some(let roomId)):
-                    hideLoadingIndicator()
-                    actionsSubject.send(.showRoom(withIdentifier: roomId))
-                case .success:
-                    hideLoadingIndicator()
-                    state.bindings.selectedUserToInvite = user
-                case .failure:
-                    hideLoadingIndicator()
-                    displayError()
-                }
+            
+            let currentDirectRoom = userSession.clientProxy.directRoomForUserID(user.userID)
+            switch currentDirectRoom {
+            case .success(.some(let roomId)):
+                hideLoadingIndicator()
+                actionsSubject.send(.showRoom(withIdentifier: roomId))
+            case .success:
+                hideLoadingIndicator()
+                state.bindings.selectedUserToInvite = user
+            case .failure:
+                hideLoadingIndicator()
+                displayError()
             }
         case .createDM(let user):
             Task { await createDirectRoom(user: user) }
