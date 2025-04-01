@@ -17,6 +17,7 @@ struct LocationRoomTimelineView: View {
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(accessibilityLabel)
                 .onTapGesture {
+                    guard context.viewState.mapTilerConfiguration.isEnabled else { return }
                     context.send(viewAction: .mediaTapped(itemID: timelineItem.id))
                 }
         }
@@ -30,7 +31,7 @@ struct LocationRoomTimelineView: View {
                     .frame(maxWidth: mapAspectRatio * mapMaxHeight, alignment: .leading)
                 
                 MapLibreStaticMapView(geoURI: geoURI,
-                                      mapURLBuilder: context.viewState.mapURLBuilder,
+                                      mapURLBuilder: context.viewState.mapTilerConfiguration,
                                       mapSize: .init(width: mapAspectRatio * mapMaxHeight, height: mapMaxHeight)) {
                     LocationMarkerView()
                 }

@@ -37,7 +37,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol, SecureWindowManagerDelegate
         AppSettings.configureWithSuiteName("io.element.elementx.uitests")
         AppSettings.resetAllSettings()
         ServiceLocator.shared.register(appSettings: AppSettings())
-        ServiceLocator.shared.register(bugReportService: BugReportServiceMock())
+        ServiceLocator.shared.register(bugReportService: BugReportServiceMock(.init()))
         
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false
@@ -124,7 +124,7 @@ class MockScreen: Identifiable {
         case .authenticationFlow:
             let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: AuthenticationService.mock,
                                                                 qrCodeLoginService: QRCodeLoginServiceMock(),
-                                                                bugReportService: BugReportServiceMock(),
+                                                                bugReportService: BugReportServiceMock(.init()),
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 appMediator: AppMediatorMock.default,
                                                                 appSettings: ServiceLocator.shared.settings,
@@ -228,7 +228,7 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-            let coordinator = BugReportScreenCoordinator(parameters: .init(bugReportService: BugReportServiceMock(),
+            let coordinator = BugReportScreenCoordinator(parameters: .init(bugReportService: BugReportServiceMock(.init()),
                                                                            userSession: userSession,
                                                                            userIndicatorController: nil,
                                                                            screenshot: nil,
@@ -557,7 +557,7 @@ class MockScreen: Identifiable {
                                                              navigationRootCoordinator: navigationRootCoordinator,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                             appSettings: ServiceLocator.shared.settings),
-                                                             bugReportService: BugReportServiceMock(),
+                                                             bugReportService: BugReportServiceMock(.init()),
                                                              elementCallService: ElementCallServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                                              appMediator: appMediator,
@@ -711,7 +711,7 @@ class MockScreen: Identifiable {
                                                              navigationRootCoordinator: navigationRootCoordinator,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                             appSettings: ServiceLocator.shared.settings),
-                                                             bugReportService: BugReportServiceMock(),
+                                                             bugReportService: BugReportServiceMock(.init()),
                                                              elementCallService: ElementCallServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init(timelineController: timelineController)),
                                                              appMediator: AppMediatorMock.default,

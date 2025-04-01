@@ -44,6 +44,9 @@ struct SettingsScreenViewState: BindableState {
     var showSecuritySectionBadge = false
     
     var showBlockedUsers = false
+    let showAnalyticsSettings: Bool
+    
+    let isBugReportServiceEnabled: Bool
     
     var bindings = SettingsScreenViewStateBindings()
 }
