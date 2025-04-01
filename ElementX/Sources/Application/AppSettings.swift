@@ -223,8 +223,8 @@ final class AppSettings {
         
     // MARK: - Bug report
 
-    let bugReportServiceBaseURL: URL? = URL(string: Secrets.rageshakeServerURL)! // swiftlint:disable:this force_unwrapping
-    let bugReportSentryURL: URL? = URL(string: Secrets.sentryDSN)! // swiftlint:disable:this force_unwrapping
+    let bugReportServiceBaseURL: URL? = Secrets.rageshakeServerURL.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
+    let bugReportSentryURL: URL? = Secrets.sentryDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     /// The name allocated by the bug report server
     let bugReportApplicationID = "element-x-ios"
     /// The maximum size of the upload request. Default value is just below CloudFlare's max request size.
@@ -233,11 +233,16 @@ final class AppSettings {
     // MARK: - Analytics
     
     /// The configuration to use for analytics. Set to `nil` to disable analytics.
-    let analyticsConfiguration: AnalyticsConfiguration? = AnalyticsConfiguration(host: Secrets.postHogHost, apiKey: Secrets.postHogAPIKey)
+    let analyticsConfiguration: AnalyticsConfiguration? = AppSettings.makeAnalyticsConfiguration()
     /// The URL to open with more information about analytics terms. When this is `nil` the "Learn more" link will be hidden.
     private(set) var analyticsTermsURL: URL? = "https://element.io/cookie-policy"
     /// Whether or not there the app is able ask for user consent to enable analytics or sentry reporting.
     var canPromptForAnalytics: Bool { analyticsConfiguration != nil || bugReportSentryURL != nil }
+    
+    private static func makeAnalyticsConfiguration() -> AnalyticsConfiguration? {
+        guard let host = Secrets.postHogHost, let apiKey = Secrets.postHogAPIKey else { return nil }
+        return AnalyticsConfiguration(host: host, apiKey: apiKey)
+    }
     
     /// Whether the user has opted in to send analytics.
     @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))

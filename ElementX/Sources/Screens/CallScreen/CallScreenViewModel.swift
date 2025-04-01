@@ -159,7 +159,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 switch await widgetDriver.start(baseURL: baseURL,
                                                 clientID: clientID,
                                                 colorScheme: colorScheme,
-                                                rageshakeURL: Secrets.rageshakeServerURL,
+                                                rageshakeURL: appSettings.bugReportServiceBaseURL?.absoluteString,
                                                 analyticsConfiguration: analyticsConfiguration) {
                 case .success(let url):
                     state.url = url

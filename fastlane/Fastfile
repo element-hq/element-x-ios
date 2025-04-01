@@ -429,7 +429,6 @@ end
 
 lane :config_secrets do
   Dir.chdir "../Secrets" do
-    sh("pkl eval -f yaml -o secrets.yml Secrets.pkl")
-    sh("swiftgen run yaml -n inline-swift5 --param enumName=Secrets -o Secrets.swift secrets.yml")
+    sh("pkl eval -o Secrets.swift Secrets.pkl")
   end
 end
