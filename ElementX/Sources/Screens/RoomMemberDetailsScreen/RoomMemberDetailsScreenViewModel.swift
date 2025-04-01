@@ -80,7 +80,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         case .displayAvatar(let url):
             Task { await displayFullScreenAvatar(url) }
         case .openDirectChat:
-            Task { await openDirectChat() }
+            openDirectChat()
         case .createDirectChat:
             Task { await createDirectChat() }
         case .startCall(let roomID):
@@ -100,7 +100,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             roomMemberProxy = member
             state.memberDetails = RoomMemberDetails(withProxy: member)
             state.isOwnMemberDetails = member.userID == roomProxy.ownUserID
-            switch await clientProxy.directRoomForUserID(member.userID) {
+            switch clientProxy.directRoomForUserID(member.userID) {
             case .success(let roomID):
                 state.dmRoomID = roomID
             case .failure:
@@ -184,7 +184,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         }
     }
     
-    private func openDirectChat() async {
+    private func openDirectChat() {
         guard let roomMemberProxy else { fatalError() }
         
         let loadingIndicatorIdentifier = "openDirectChatLoadingIndicator"
@@ -195,7 +195,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
                                                 delay: .milliseconds(200))
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
         
-        switch await clientProxy.directRoomForUserID(roomMemberProxy.userID) {
+        switch clientProxy.directRoomForUserID(roomMemberProxy.userID) {
         case .success(let roomID):
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))

@@ -61,7 +61,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         case .displayAvatar(let url):
             Task { await displayFullScreenAvatar(url) }
         case .openDirectChat:
-            Task { await openDirectChat() }
+            openDirectChat()
         case .createDirectChat:
             Task { await createDirectChat() }
         case .startCall(let roomID):
@@ -81,7 +81,8 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         case .success(let userProfile):
             state.userProfile = userProfile
             state.permalink = (try? matrixToUserPermalink(userId: state.userID)).flatMap(URL.init(string:))
-            switch await clientProxy.directRoomForUserID(userProfile.userID) {
+            
+            switch clientProxy.directRoomForUserID(userProfile.userID) {
             case .success(let roomID):
                 state.dmRoomID = roomID
             case .failure:
@@ -112,13 +113,13 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         }
     }
     
-    private func openDirectChat() async {
+    private func openDirectChat() {
         guard let userProfile = state.userProfile else { fatalError() }
         
         showLoadingIndicator(allowsInteraction: false)
         defer { hideLoadingIndicator() }
         
-        switch await clientProxy.directRoomForUserID(userProfile.userID) {
+        switch clientProxy.directRoomForUserID(userProfile.userID) {
         case .success(let roomID):
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))

@@ -353,15 +353,13 @@ class ClientProxy: ClientProxyProtocol {
         try? await client.accountUrl(action: action).flatMap(URL.init(string:))
     }
     
-    func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
-        await Task.dispatch(on: clientQueue) {
-            do {
-                let roomID = try self.client.getDmRoom(userId: userID)?.id()
-                return .success(roomID)
-            } catch {
-                MXLog.error("Failed retrieving direct room for userID: \(userID) with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+    func directRoomForUserID(_ userID: String) -> Result<String?, ClientProxyError> {
+        do {
+            let roomID = try client.getDmRoom(userId: userID)?.id()
+            return .success(roomID)
+        } catch {
+            MXLog.error("Failed retrieving direct room for userID: \(userID) with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
     

@@ -209,6 +209,8 @@ private extension VirtualTimelineItem {
             return "DayDiviver(\(timestamp))"
         case .readMarker:
             return "ReadMarker"
+        case .timelineStart:
+            return "TimelineStart"
         }
     }
 }

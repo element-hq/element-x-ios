@@ -122,7 +122,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
         
     func accountURL(action: AccountManagementAction) async -> URL?
     
-    func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError>
+    func directRoomForUserID(_ userID: String) -> Result<String?, ClientProxyError>
     
     func createDirectRoom(with userID: String, expectedRoomName: String?) async -> Result<String, ClientProxyError>
     
