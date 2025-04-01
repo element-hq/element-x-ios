@@ -24,17 +24,21 @@ enum AnalyticsSettingsScreenViewAction {
 struct AnalyticsSettingsScreenStrings {
     let sectionFooter: AttributedString
     
-    init(termsURL: URL) {
+    init(termsURL: URL?) {
         let content = AttributedString(L10n.screenAnalyticsPromptHelpUsImprove)
         
-        // Create the 'read terms' with a placeholder.
-        let linkPlaceholder = "{link}"
-        var readTerms = AttributedString(L10n.screenAnalyticsSettingsReadTerms(linkPlaceholder))
-        var linkString = AttributedString(L10n.screenAnalyticsSettingsReadTermsContentLink)
-        linkString.link = termsURL
-        linkString.bold()
-        readTerms.replace(linkPlaceholder, with: linkString)
-        
-        sectionFooter = content + "\n\n" + readTerms
+        if let termsURL {
+            // Create the 'read terms' with a placeholder.
+            let linkPlaceholder = "{link}"
+            var readTerms = AttributedString(L10n.screenAnalyticsSettingsReadTerms(linkPlaceholder))
+            var linkString = AttributedString(L10n.screenAnalyticsSettingsReadTermsContentLink)
+            linkString.link = termsURL
+            linkString.bold()
+            readTerms.replace(linkPlaceholder, with: linkString)
+            
+            sectionFooter = content + "\n\n" + readTerms
+        } else {
+            sectionFooter = content
+        }
     }
 }

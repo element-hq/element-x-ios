@@ -379,7 +379,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
 
     private func presentAnalyticsPromptScreen() {
-        let coordinator = AnalyticsPromptScreenCoordinator(analytics: analyticsService, termsURL: appSettings.analyticsConfiguration.termsURL)
+        let coordinator = AnalyticsPromptScreenCoordinator(analytics: analyticsService, termsURL: appSettings.analyticsTermsURL)
         
         coordinator.actions
             .sink { [weak self] action in

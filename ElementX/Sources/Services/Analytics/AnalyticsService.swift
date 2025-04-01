@@ -39,7 +39,7 @@ class AnalyticsService {
     /// Whether to show the user the analytics opt in prompt.
     var shouldShowAnalyticsPrompt: Bool {
         // Only show the prompt once, and when analytics are enabled in BuildSettings.
-        appSettings.analyticsConsentState == .unknown && appSettings.analyticsConfiguration.isEnabled
+        appSettings.analyticsConsentState == .unknown && appSettings.canPromptForAnalytics
     }
     
     var isEnabled: Bool {
@@ -65,9 +65,9 @@ class AnalyticsService {
     
     /// Starts the analytics client if the user has opted in, otherwise does nothing.
     func startIfEnabled() {
-        guard isEnabled, !client.isRunning else { return }
+        guard isEnabled, !client.isRunning, let configuration = appSettings.analyticsConfiguration else { return }
         
-        client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
+        client.start(analyticsConfiguration: configuration)
 
         // Sanity check in case something went wrong.
         guard client.isRunning else { return }

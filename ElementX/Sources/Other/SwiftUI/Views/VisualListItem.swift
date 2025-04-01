@@ -55,7 +55,7 @@ private struct VisualListItemLabelStyle: LabelStyle {
 // MARK: - Previews
 
 struct VisualListItem_Previews: PreviewProvider, TestablePreview {
-    static let strings = AnalyticsPromptScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
+    static let strings = AnalyticsPromptScreenStrings(termsURL: ServiceLocator.shared.settings.analyticsTermsURL)
 
     @ViewBuilder
     static var testImage1: some View {

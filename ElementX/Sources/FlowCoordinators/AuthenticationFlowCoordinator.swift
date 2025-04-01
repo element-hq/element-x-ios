@@ -68,7 +68,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func showStartScreen() {
-        let parameters = AuthenticationStartScreenParameters(webRegistrationEnabled: appSettings.webRegistrationEnabled)
+        let parameters = AuthenticationStartScreenParameters(webRegistrationEnabled: appSettings.webRegistrationEnabled,
+                                                             isBugReportServiceEnabled: bugReportService.isEnabled)
         let coordinator = AuthenticationStartScreenCoordinator(parameters: parameters)
         
         coordinator.actions

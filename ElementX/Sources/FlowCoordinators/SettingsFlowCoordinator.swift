@@ -86,7 +86,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator = NavigationStackCoordinator()
         
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: parameters.userSession,
-                                                                                    appSettings: parameters.appSettings))
+                                                                                    appSettings: parameters.appSettings,
+                                                                                    isBugReportServiceEnabled: parameters.bugReportService.isEnabled))
         
         settingsScreenCoordinator.actions
             .sink { [weak self] action in

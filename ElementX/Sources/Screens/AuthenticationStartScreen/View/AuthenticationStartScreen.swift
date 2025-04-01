@@ -34,15 +34,17 @@ struct AuthenticationStartScreen: View {
             }
             .frame(maxHeight: .infinity)
             .safeAreaInset(edge: .bottom) {
-                Button {
-                    context.send(viewAction: .reportProblem)
-                } label: {
-                    Text(L10n.commonReportAProblem)
-                        .font(.compound.bodySM)
-                        .foregroundColor(.compound.textSecondary)
-                        .padding(.bottom)
+                if context.viewState.isBugReportServiceEnabled {
+                    Button {
+                        context.send(viewAction: .reportProblem)
+                    } label: {
+                        Text(L10n.commonReportAProblem)
+                            .font(.compound.bodySM)
+                            .foregroundColor(.compound.textSecondary)
+                            .padding(.bottom)
+                    }
+                    .frame(width: geometry.size.width)
                 }
-                .frame(width: geometry.size.width)
             }
         }
         .navigationBarHidden(true)
@@ -116,9 +118,18 @@ struct AuthenticationStartScreen: View {
 // MARK: - Previews
 
 struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = AuthenticationStartScreenViewModel(webRegistrationEnabled: true)
+    static let viewModel = makeViewModel()
+    static let bugReportDisabledViewModel = makeViewModel(isBugReportServiceEnabled: false)
     
     static var previews: some View {
         AuthenticationStartScreen(context: viewModel.context)
+            .previewDisplayName("Default")
+        AuthenticationStartScreen(context: bugReportDisabledViewModel.context)
+            .previewDisplayName("Bug report disabled")
+    }
+    
+    static func makeViewModel(isBugReportServiceEnabled: Bool = true) -> AuthenticationStartScreenViewModel {
+        AuthenticationStartScreenViewModel(webRegistrationEnabled: true,
+                                           isBugReportServiceEnabled: isBugReportServiceEnabled)
     }
 }

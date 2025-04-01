@@ -50,6 +50,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
          completionSuggestionService: CompletionSuggestionServiceProtocol,
          mediaProvider: MediaProviderProtocol,
          mentionDisplayHelper: MentionDisplayHelper,
+         appSettings: AppSettings,
          analyticsService: AnalyticsService,
          composerDraftService: ComposerDraftServiceProtocol) {
         self.initialText = initialText
@@ -65,6 +66,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview, title: L10n.commonVoiceMessage, duration: 0),
                                                               audioRecorderState: .init(),
                                                               isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
+                                                              isLocationSharingEnabled: appSettings.mapTilerConfiguration.isEnabled,
                                                               bindings: .init()),
                    mediaProvider: mediaProvider)
         

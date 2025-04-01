@@ -41,18 +41,30 @@ class BugReportServiceTests: XCTestCase {
     }
     
     func testInitialStateWithRealService() throws {
-        let service = BugReportService(withBaseURL: "https://www.example.com",
-                                       applicationId: "mock_app_id",
+        let service = BugReportService(baseURL: "https://www.example.com",
+                                       applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
                                        session: .mock,
                                        appHooks: AppHooks())
+        XCTAssertTrue(service.isEnabled)
+        XCTAssertFalse(service.crashedLastRun)
+    }
+    
+    func testInitialStateWithRealServiceAndNoURL() throws {
+        let service = BugReportService(baseURL: nil,
+                                       applicationID: "mock_app_id",
+                                       sdkGitSHA: "1234",
+                                       maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
+                                       session: .mock,
+                                       appHooks: AppHooks())
+        XCTAssertFalse(service.isEnabled)
         XCTAssertFalse(service.crashedLastRun)
     }
     
     @MainActor func testSubmitBugReportWithRealService() async throws {
-        let service = BugReportService(withBaseURL: "https://www.example.com",
-                                       applicationId: "mock_app_id",
+        let service = BugReportService(baseURL: "https://www.example.com",
+                                       applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
                                        session: .mock,

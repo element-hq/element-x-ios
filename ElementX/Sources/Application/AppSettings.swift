@@ -223,23 +223,21 @@ final class AppSettings {
         
     // MARK: - Bug report
 
-    let bugReportServiceBaseURL: URL! = URL(string: Secrets.rageshakeServerURL)
-    let bugReportSentryURL: URL! = URL(string: Secrets.sentryDSN)
-    // Use the name allocated by the bug report server
-    let bugReportApplicationId = "element-x-ios"
+    let bugReportServiceBaseURL: URL? = URL(string: Secrets.rageshakeServerURL)! // swiftlint:disable:this force_unwrapping
+    let bugReportSentryURL: URL? = URL(string: Secrets.sentryDSN)! // swiftlint:disable:this force_unwrapping
+    /// The name allocated by the bug report server
+    let bugReportApplicationID = "element-x-ios"
     /// The maximum size of the upload request. Default value is just below CloudFlare's max request size.
     let bugReportMaxUploadSize = 50 * 1024 * 1024
     
     // MARK: - Analytics
     
-    /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
-    ///
-    /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork you will
-    /// need to regenerate the Secrets file with your PostHog server and API key before enabling.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element."),
-                                                        host: Secrets.postHogHost,
-                                                        apiKey: Secrets.postHogAPIKey,
-                                                        termsURL: "https://element.io/cookie-policy")
+    /// The configuration to use for analytics. Set to `nil` to disable analytics.
+    let analyticsConfiguration: AnalyticsConfiguration? = AnalyticsConfiguration(host: Secrets.postHogHost, apiKey: Secrets.postHogAPIKey)
+    /// The URL to open with more information about analytics terms. When this is `nil` the "Learn more" link will be hidden.
+    private(set) var analyticsTermsURL: URL? = "https://element.io/cookie-policy"
+    /// Whether or not there the app is able ask for user consent to enable analytics or sentry reporting.
+    var canPromptForAnalytics: Bool { analyticsConfiguration != nil || bugReportSentryURL != nil }
     
     /// Whether the user has opted in to send analytics.
     @UserPreference(key: UserDefaultsKeys.analyticsConsentState, defaultValue: AnalyticsConsentState.unknown, storageType: .userDefaults(store))

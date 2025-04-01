@@ -44,6 +44,7 @@ enum BugReportServiceError: LocalizedError {
 
 // sourcery: AutoMockable
 protocol BugReportServiceProtocol: AnyObject {
+    var isEnabled: Bool { get }
     var crashedLastRun: Bool { get }
     
     var lastCrashEventID: String? { get set }

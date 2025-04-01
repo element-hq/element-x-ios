@@ -355,8 +355,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private static func setupServiceLocator(appSettings: AppSettings, appHooks: AppHooks) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         ServiceLocator.shared.register(appSettings: appSettings)
-        ServiceLocator.shared.register(bugReportService: BugReportService(withBaseURL: appSettings.bugReportServiceBaseURL,
-                                                                          applicationId: appSettings.bugReportApplicationId,
+        ServiceLocator.shared.register(bugReportService: BugReportService(baseURL: appSettings.bugReportServiceBaseURL,
+                                                                          applicationID: appSettings.bugReportApplicationID,
                                                                           sdkGitSHA: sdkGitSha(),
                                                                           maxUploadSize: appSettings.bugReportMaxUploadSize,
                                                                           appHooks: appHooks))
@@ -782,6 +782,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private static func setupSentry(appSettings: AppSettings) {
+        guard let bugReportSentryURL = appSettings.bugReportSentryURL else { return }
+        
         let options: Options = .init()
         
         #if DEBUG
@@ -790,7 +792,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         options.enabled = appSettings.analyticsConsentState == .optedIn
         #endif
 
-        options.dsn = appSettings.bugReportSentryURL.absoluteString
+        options.dsn = bugReportSentryURL.absoluteString
         
         if AppSettings.isDevelopmentBuild {
             options.environment = "development"

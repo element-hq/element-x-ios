@@ -26,6 +26,7 @@ enum AuthenticationStartScreenViewModelAction {
 struct AuthenticationStartScreenViewState: BindableState {
     let isWebRegistrationEnabled: Bool
     let isQRCodeLoginEnabled: Bool
+    let isBugReportServiceEnabled: Bool
 }
 
 enum AuthenticationStartScreenViewAction {
