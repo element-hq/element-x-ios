@@ -208,6 +208,7 @@
 "common_privacy_policy" = "Privacy policy";
 "common_reaction" = "Reaction";
 "common_reactions" = "Reactions";
+"common_reason" = "Reason";
 "common_recovery_key" = "Recovery key";
 "common_refreshing" = "Refreshing…";
 "common_replying_to" = "Replying to %1$@";
@@ -875,6 +876,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Are you sure you want to ban this member?";
 "screen_room_member_list_banned_empty" = "There are no banned users in this room.";
 "screen_room_member_list_banning_user" = "Banning %1$@";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "Remove and ban member";
 "screen_room_member_list_manage_member_remove" = "Remove from room";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Only remove member";
