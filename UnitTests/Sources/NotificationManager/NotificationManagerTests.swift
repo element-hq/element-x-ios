@@ -73,7 +73,7 @@ final class NotificationManagerTests: XCTestCase {
         }
         
         XCTAssertEqual(configuration.identifiers.pushkey, pushkeyData.base64EncodedString())
-        XCTAssertEqual(configuration.identifiers.appId, appSettings.pusherAppId)
+        XCTAssertEqual(configuration.identifiers.appId, appSettings.pusherAppID)
         XCTAssertEqual(configuration.appDisplayName, "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
         XCTAssertEqual(configuration.deviceDisplayName, UIDevice.current.name)
         XCTAssertNotNil(configuration.profileTag)
@@ -82,7 +82,7 @@ final class NotificationManagerTests: XCTestCase {
             XCTFail("Http kind expected")
             return
         }
-        XCTAssertEqual(data.url, appSettings.pushGatewayBaseURL.absoluteString)
+        XCTAssertEqual(data.url, appSettings.pushGatewayNotifyEndpoint.absoluteString)
         XCTAssertEqual(data.format, .eventIdOnly)
         let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
                                                       alert: APSAlert(locKey: "Notification",

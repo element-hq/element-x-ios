@@ -92,6 +92,7 @@ final class AppSettings {
     
     // swiftlint:disable:next function_parameter_count
     func override(defaultHomeserverAddress: String,
+                  pushGatewayBaseURL: URL,
                   oidcRedirectURL: URL,
                   websiteURL: URL,
                   logoURL: URL,
@@ -103,6 +104,7 @@ final class AppSettings {
                   analyticsTermsURL: URL?,
                   mapTilerConfiguration: MapTilerConfiguration) {
         self.defaultHomeserverAddress = defaultHomeserverAddress
+        self.pushGatewayBaseURL = pushGatewayBaseURL
         self.oidcRedirectURL = oidcRedirectURL
         self.websiteURL = websiteURL
         self.logoURL = logoURL
@@ -206,7 +208,7 @@ final class AppSettings {
     
     // MARK: - Notifications
     
-    var pusherAppId: String {
+    var pusherAppID: String {
         #if DEBUG
         InfoPlistReader.main.baseBundleIdentifier + ".ios.dev"
         #else
@@ -214,7 +216,8 @@ final class AppSettings {
         #endif
     }
     
-    let pushGatewayBaseURL: URL = "https://matrix.org/_matrix/push/v1/notify"
+    private(set) var pushGatewayBaseURL: URL = "https://matrix.org"
+    var pushGatewayNotifyEndpoint: URL { pushGatewayBaseURL.appending(path: "_matrix/push/v1/notify") }
     
     @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
     var enableNotifications
