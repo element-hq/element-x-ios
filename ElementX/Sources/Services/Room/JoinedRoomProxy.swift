@@ -255,6 +255,16 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    func reportRoom(reason: String?) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.reportRoom(reason: reason)
+            return .success(())
+        } catch {
+            MXLog.error("Failed reporting room: \(id) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func updateMembers() async {
         // We always update members first using the no sync API in case internet is not readily available
         // To get the members stored on disk first, this API call is very fast.

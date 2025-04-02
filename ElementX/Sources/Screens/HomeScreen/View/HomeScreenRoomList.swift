@@ -69,6 +69,14 @@ struct HomeScreenRoomList: View {
                             Label(L10n.commonSettings, icon: \.settings)
                         }
                         
+                        if context.viewState.reportRoomEnabled {
+                            Button(role: .destructive) {
+                                context.send(viewAction: .reportRoom(roomIdentifier: room.id))
+                            } label: {
+                                Label(L10n.actionReportRoom, icon: \.chatProblem)
+                            }
+                        }
+                        
                         Button(role: .destructive) {
                             context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
                         } label: {

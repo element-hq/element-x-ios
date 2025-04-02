@@ -105,6 +105,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.hideInviteAvatars, on: self)
             .store(in: &cancellables)
         
+        appSettings.$reportRoomEnabled
+            .weakAssign(to: \.state.reportRoomEnabled, on: self)
+            .store(in: &cancellables)
+        
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         let activeFilters = context.$viewState.map(\.bindings.filtersState.activeFilters)
@@ -136,12 +140,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         switch viewAction {
         case .selectRoom(let roomIdentifier):
             actionsSubject.send(.presentRoom(roomIdentifier: roomIdentifier))
-        case .showRoomDetails(roomIdentifier: let roomIdentifier):
+        case .showRoomDetails(let roomIdentifier):
             actionsSubject.send(.presentRoomDetails(roomIdentifier: roomIdentifier))
-        case .leaveRoom(roomIdentifier: let roomIdentifier):
+        case .leaveRoom(let roomIdentifier):
             startLeaveRoomProcess(roomID: roomIdentifier)
-        case .confirmLeaveRoom(roomIdentifier: let roomIdentifier):
+        case .confirmLeaveRoom(let roomIdentifier):
             Task { await leaveRoom(roomID: roomIdentifier) }
+        case .reportRoom(let roomIdentifier):
+            actionsSubject.send(.presentReportRoom(roomIdentifier: roomIdentifier))
         case .showSettings:
             actionsSubject.send(.presentSettingsScreen)
         case .setupRecovery:
