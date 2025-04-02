@@ -26,6 +26,7 @@ enum RoomDetailsScreenViewModelAction: Equatable {
     case displayMediaEventsTimeline
     case displayKnockingRequests
     case displaySecurityAndPrivacy
+    case displayReportRoom
 }
 
 // MARK: View
@@ -218,6 +219,7 @@ enum RoomDetailsScreenViewAction {
     case processTapPinnedEvents
     case processTapMediaEvents
     case processTapRequestsToJoin
+    case processTapReport
 }
 
 enum RoomDetailsScreenViewShortcut {

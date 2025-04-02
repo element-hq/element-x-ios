@@ -70,6 +70,12 @@ struct HomeScreenRoomList: View {
                         }
                         
                         Button(role: .destructive) {
+                            context.send(viewAction: .reportRoom(roomIdentifier: room.id))
+                        } label: {
+                            Label(L10n.actionReportRoom, icon: \.chatProblem)
+                        }
+                        
+                        Button(role: .destructive) {
                             context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
                         } label: {
                             Label(L10n.actionLeaveRoom, icon: \.leave)

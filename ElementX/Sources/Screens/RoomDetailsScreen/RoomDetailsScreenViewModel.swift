@@ -174,6 +174,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 return
             }
             actionsSubject.send(.requestRecipientDetailsPresentation(userID: userID))
+        case .processTapReport:
+            actionsSubject.send(.displayReportRoom)
         }
     }
     

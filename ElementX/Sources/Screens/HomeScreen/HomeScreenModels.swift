@@ -12,6 +12,7 @@ import UIKit
 enum HomeScreenViewModelAction: Equatable {
     case presentRoom(roomIdentifier: String)
     case presentRoomDetails(roomIdentifier: String)
+    case presentReportRoom(roomIdentifier: String)
     case roomLeft(roomIdentifier: String)
     case presentSecureBackupSettings
     case presentRecoveryKeyScreen
@@ -29,6 +30,7 @@ enum HomeScreenViewAction {
     case showRoomDetails(roomIdentifier: String)
     case leaveRoom(roomIdentifier: String)
     case confirmLeaveRoom(roomIdentifier: String)
+    case reportRoom(roomIdentifier: String)
     case showSettings
     case startChat
     case setupRecovery
