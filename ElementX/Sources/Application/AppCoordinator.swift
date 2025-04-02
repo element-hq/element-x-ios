@@ -63,6 +63,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         let appHooks = AppHooks()
         appHooks.setUp()
         
+        // Override colours before we start building any UI components.
+        appHooks.compoundHook.override(colors: Color.compound, uiColors: UIColor.compound)
+        
         windowManager = WindowManager(appDelegate: appDelegate)
         let networkMonitor = NetworkMonitor()
         appMediator = AppMediator(windowManager: windowManager, networkMonitor: networkMonitor)

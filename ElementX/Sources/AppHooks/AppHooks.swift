@@ -14,6 +14,11 @@ class AppHooks: AppHooksProtocol {
         appSettingsHook = hook
     }
     
+    private(set) var compoundHook: CompoundHookProtocol = DefaultCompoundHook()
+    func registerCompoundHook(_ hook: CompoundHookProtocol) {
+        compoundHook = hook
+    }
+    
     private(set) var bugReportHook: BugReportHookProtocol = DefaultBugReportHook()
     func registerBugReportHook(_ hook: BugReportHookProtocol) {
         bugReportHook = hook
