@@ -61,7 +61,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     init(appDelegate: AppDelegate) {
         let appHooks = AppHooks()
-        appHooks.configure()
+        appHooks.setUp()
         
         windowManager = WindowManager(appDelegate: appDelegate)
         let networkMonitor = NetworkMonitor()

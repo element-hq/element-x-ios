@@ -32,9 +32,9 @@ class AppHooks: AppHooksProtocol {
 }
 
 protocol AppHooksProtocol {
-    func configure()
+    func setUp()
 }
 
 extension AppHooksProtocol {
-    func configure() { }
+    func setUp() { }
 }
