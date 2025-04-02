@@ -53,7 +53,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         case .kickMember(let member):
             var reason: String?
             let binding: Binding<String> = .init(get: { reason ?? "" },
-                                                 set: { reason = $0.isEmpty ? nil : $0 })
+                                                 set: { reason = $0.isBlank ? nil : $0 })
             state.bindings.alertInfo = .init(id: .kickConfirmation,
                                              title: L10n.screenRoomMemberListKickMemberConfirmationTitle,
                                              message: L10n.screenRoomMemberListKickMemberConfirmationDescription,
@@ -66,7 +66,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         case .banMember(let member):
             var reason: String?
             let binding: Binding<String> = .init(get: { reason ?? "" },
-                                                 set: { reason = $0.isEmpty ? nil : $0 })
+                                                 set: { reason = $0.isBlank ? nil : $0 })
             state.bindings.alertInfo = .init(id: .banConfirmation,
                                              title: L10n.screenRoomMemberListBanMemberConfirmationTitle,
                                              message: L10n.screenRoomMemberListBanMemberConfirmationDescription,

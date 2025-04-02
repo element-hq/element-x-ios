@@ -275,9 +275,19 @@ struct RoomDetailsScreen: View {
     private var leaveRoomTitle: String {
         context.viewState.dmRecipientInfo == nil ? L10n.screenRoomDetailsLeaveRoomTitle : L10n.screenRoomDetailsLeaveConversationTitle
     }
+    
+    private var reportRoomTitle: String {
+        context.viewState.dmRecipientInfo == nil ? L10n.actionReportRoom : L10n.actionReport
+    }
 
     private var leaveRoomSection: some View {
         Section {
+            if context.viewState.reportRoomEnabled {
+                ListRow(label: .action(title: reportRoomTitle,
+                                       icon: \.chatProblem,
+                                       role: .destructive),
+                        kind: .button { context.send(viewAction: .processTapReport) })
+            }
             ListRow(label: .action(title: leaveRoomTitle,
                                    icon: \.leave,
                                    role: .destructive),

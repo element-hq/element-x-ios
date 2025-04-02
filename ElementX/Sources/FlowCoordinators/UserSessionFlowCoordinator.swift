@@ -172,7 +172,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             
         case .roomDetails(let roomID):
-            if stateMachine.state.selectedRoomID == roomID {
+            if stateMachine.state.roomListSelectedRoomID == roomID {
                 roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             } else {
                 stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .roomDetails), userInfo: .init(animated: animated))
@@ -245,8 +245,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.initial, .start, .roomList):
                 presentHomeScreen()
                 attemptStartingOnboarding()
-            case(.roomList(let selectedRoomID), .selectRoom(let roomID, let via, let entryPoint), .roomList):
-                if selectedRoomID == roomID,
+            case(.roomList(let roomListSelectedRoomID), .selectRoom(let roomID, let via, let entryPoint), .roomList):
+                if roomListSelectedRoomID == roomID,
                    !entryPoint.isEventID, // Don't reuse the existing room so the live timeline is hidden while the detached timeline is loading.
                    let roomFlowCoordinator {
                     let route: AppRoute = switch entryPoint {
@@ -307,9 +307,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.userProfileScreen, .dismissedUserProfileScreen, .roomList):
                 break
                 
-            case (.roomList(let selectedRoomID), .showShareExtensionRoomList, .shareExtensionRoomList(let sharePayload)):
+            case (.roomList, .presentReportRoomScreen(let roomID), .reportRoomScreen):
+                Task { await self.presentReportRoom(for: roomID) }
+            case (.reportRoomScreen, .dismissedReportRoomScreen, .roomList):
+                break
+                
+            case (.roomList(let roomListSelectedRoomID), .showShareExtensionRoomList, .shareExtensionRoomList(let sharePayload)):
                 Task {
-                    if selectedRoomID != nil {
+                    if roomListSelectedRoomID != nil {
                         self.clearRoute(animated: animated)
                         try? await Task.sleep(for: .seconds(1.5))
                     }
@@ -326,8 +331,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine.addTransitionHandler { [weak self] context in
             switch context.toState {
-            case .roomList(let selectedRoomID):
-                self?.selectedRoomSubject.send(selectedRoomID)
+            case .roomList(let roomListSelectedRoomID):
+                self?.selectedRoomSubject.send(roomListSelectedRoomID)
             default:
                 break
             }
@@ -496,9 +501,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     handleAppRoute(.room(roomID: roomID, via: []), animated: true)
                 case .presentRoomDetails(let roomID):
                     handleAppRoute(.roomDetails(roomID: roomID), animated: true)
+                case .presentReportRoom(let roomID):
+                    stateMachine.processEvent(.presentReportRoomScreen(roomID: roomID))
                 case .roomLeft(let roomID):
-                    if case .roomList(selectedRoomID: let selectedRoomID) = stateMachine.state,
-                       selectedRoomID == roomID {
+                    if case .roomList(roomListSelectedRoomID: let roomListSelectedRoomID) = stateMachine.state,
+                       roomListSelectedRoomID == roomID {
                         clearRoute(animated: true)
                     }
                 case .presentSettingsScreen:
@@ -526,6 +533,35 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
         
         navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
+    }
+    
+    private func presentReportRoom(for roomID: String) async {
+        guard let roomProxyType = await userSession.clientProxy.roomForIdentifier(roomID),
+              case let .joined(roomProxy) = roomProxyType else {
+            MXLog.error("Failed to get room proxy for room: \(roomID)")
+            return
+        }
+        
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let coordinator = ReportRoomScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController))
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss(let shouldLeaveRoom):
+                if shouldLeaveRoom,
+                   case .roomList(let roomListSelectedRoomID) = stateMachine.state,
+                   roomListSelectedRoomID == roomID {
+                    clearRoute(animated: true)
+                }
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedReportRoomScreen)
+        }
     }
     
     private func runLogoutFlow() async {
