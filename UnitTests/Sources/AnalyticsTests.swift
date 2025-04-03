@@ -155,11 +155,11 @@ class AnalyticsTests: XCTestCase {
         XCTAssertEqual(client.pendingUserProperties?.numSpaces, 5, "The number of spaces should have been updated.")
     }
     
-    func testSendingUserProperties() {
+    func testSendingUserProperties() throws {
         // Given a client with user properties set
         
         let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
-        client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
+        try client.start(analyticsConfiguration: XCTUnwrap(appSettings.analyticsConfiguration))
         
         client.updateUserProperties(AnalyticsEvent.UserProperties(allChatsActiveFilter: nil, ftueUseCaseSelection: .PersonalMessaging,
                                                                   numFavouriteRooms: nil,
@@ -204,10 +204,10 @@ class AnalyticsTests: XCTestCase {
         XCTAssertTrue(ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt)
     }
     
-    func testSendingAndUpdatingSuperProperties() {
+    func testSendingAndUpdatingSuperProperties() throws {
         // Given a client with user properties set
         let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
-        client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
+        try client.start(analyticsConfiguration: XCTUnwrap(appSettings.analyticsConfiguration))
         
         client.updateSuperProperties(
             AnalyticsEvent.SuperProperties(appPlatform: .EXI,
@@ -264,7 +264,7 @@ class AnalyticsTests: XCTestCase {
         XCTAssertEqual(capturedEvent2?.properties?["cryptoSDKVersion"] as? String, "001")
     }
     
-    func testShouldNotReportIfNotStarted() {
+    func testShouldNotReportIfNotStarted() throws {
         // Given a client with user properties set
         let client = PostHogAnalyticsClient(posthogFactory: MockPostHogFactory(mock: posthogMock))
     
@@ -291,7 +291,7 @@ class AnalyticsTests: XCTestCase {
         XCTAssertEqual(posthogMock.capturePropertiesUserPropertiesCalled, false)
         
         // start now
-        client.start(analyticsConfiguration: appSettings.analyticsConfiguration)
+        try client.start(analyticsConfiguration: XCTUnwrap(appSettings.analyticsConfiguration))
         XCTAssertEqual(posthogMock.optInCalled, true)
         
         client.capture(someEvent)

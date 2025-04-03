@@ -14727,6 +14727,7 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - subscribeToIdentityStatusChanges
 
+    open var subscribeToIdentityStatusChangesListenerThrowableError: Error?
     var subscribeToIdentityStatusChangesListenerUnderlyingCallsCount = 0
     open var subscribeToIdentityStatusChangesListenerCallsCount: Int {
         get {
@@ -14781,16 +14782,19 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             }
         }
     }
-    open var subscribeToIdentityStatusChangesListenerClosure: ((IdentityStatusChangeListener) -> TaskHandle)?
+    open var subscribeToIdentityStatusChangesListenerClosure: ((IdentityStatusChangeListener) async throws -> TaskHandle)?
 
-    open override func subscribeToIdentityStatusChanges(listener: IdentityStatusChangeListener) -> TaskHandle {
+    open override func subscribeToIdentityStatusChanges(listener: IdentityStatusChangeListener) async throws -> TaskHandle {
+        if let error = subscribeToIdentityStatusChangesListenerThrowableError {
+            throw error
+        }
         subscribeToIdentityStatusChangesListenerCallsCount += 1
         subscribeToIdentityStatusChangesListenerReceivedListener = listener
         DispatchQueue.main.async {
             self.subscribeToIdentityStatusChangesListenerReceivedInvocations.append(listener)
         }
         if let subscribeToIdentityStatusChangesListenerClosure = subscribeToIdentityStatusChangesListenerClosure {
-            return subscribeToIdentityStatusChangesListenerClosure(listener)
+            return try await subscribeToIdentityStatusChangesListenerClosure(listener)
         } else {
             return subscribeToIdentityStatusChangesListenerReturnValue
         }
@@ -20227,9 +20231,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     }
     open var endPollPollStartEventIdTextReceivedArguments: (pollStartEventId: String, text: String)?
     open var endPollPollStartEventIdTextReceivedInvocations: [(pollStartEventId: String, text: String)] = []
-    open var endPollPollStartEventIdTextClosure: ((String, String) throws -> Void)?
+    open var endPollPollStartEventIdTextClosure: ((String, String) async throws -> Void)?
 
-    open override func endPoll(pollStartEventId: String, text: String) throws {
+    open override func endPoll(pollStartEventId: String, text: String) async throws {
         if let error = endPollPollStartEventIdTextThrowableError {
             throw error
         }
@@ -20238,7 +20242,7 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         DispatchQueue.main.async {
             self.endPollPollStartEventIdTextReceivedInvocations.append((pollStartEventId: pollStartEventId, text: text))
         }
-        try endPollPollStartEventIdTextClosure?(pollStartEventId, text)
+        try await endPollPollStartEventIdTextClosure?(pollStartEventId, text)
     }
 
     //MARK: - fetchDetailsForEvent
@@ -21310,6 +21314,52 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
             self.sendReplyMsgEventIdReceivedInvocations.append((msg: msg, eventId: eventId))
         }
         try await sendReplyMsgEventIdClosure?(msg, eventId)
+    }
+
+    //MARK: - sendThreadReply
+
+    open var sendThreadReplyMsgEventIdIsReplyThrowableError: Error?
+    var sendThreadReplyMsgEventIdIsReplyUnderlyingCallsCount = 0
+    open var sendThreadReplyMsgEventIdIsReplyCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendThreadReplyMsgEventIdIsReplyUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendThreadReplyMsgEventIdIsReplyUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendThreadReplyMsgEventIdIsReplyUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendThreadReplyMsgEventIdIsReplyUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var sendThreadReplyMsgEventIdIsReplyCalled: Bool {
+        return sendThreadReplyMsgEventIdIsReplyCallsCount > 0
+    }
+    open var sendThreadReplyMsgEventIdIsReplyReceivedArguments: (msg: RoomMessageEventContentWithoutRelation, eventId: String, isReply: Bool)?
+    open var sendThreadReplyMsgEventIdIsReplyReceivedInvocations: [(msg: RoomMessageEventContentWithoutRelation, eventId: String, isReply: Bool)] = []
+    open var sendThreadReplyMsgEventIdIsReplyClosure: ((RoomMessageEventContentWithoutRelation, String, Bool) async throws -> Void)?
+
+    open override func sendThreadReply(msg: RoomMessageEventContentWithoutRelation, eventId: String, isReply: Bool) async throws {
+        if let error = sendThreadReplyMsgEventIdIsReplyThrowableError {
+            throw error
+        }
+        sendThreadReplyMsgEventIdIsReplyCallsCount += 1
+        sendThreadReplyMsgEventIdIsReplyReceivedArguments = (msg: msg, eventId: eventId, isReply: isReply)
+        DispatchQueue.main.async {
+            self.sendThreadReplyMsgEventIdIsReplyReceivedInvocations.append((msg: msg, eventId: eventId, isReply: isReply))
+        }
+        try await sendThreadReplyMsgEventIdIsReplyClosure?(msg, eventId, isReply)
     }
 
     //MARK: - sendVideo

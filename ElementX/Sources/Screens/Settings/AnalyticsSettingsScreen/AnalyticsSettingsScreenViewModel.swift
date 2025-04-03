@@ -16,7 +16,7 @@ class AnalyticsSettingsScreenViewModel: AnalyticsSettingsScreenViewModelType, An
     init(appSettings: AppSettings, analytics: AnalyticsService) {
         self.analytics = analytics
         
-        let strings = AnalyticsSettingsScreenStrings(termsURL: appSettings.analyticsConfiguration.termsURL)
+        let strings = AnalyticsSettingsScreenStrings(termsURL: appSettings.analyticsTermsURL)
         let bindings = AnalyticsSettingsScreenViewStateBindings(enableAnalytics: analytics.isEnabled)
         let state = AnalyticsSettingsScreenViewState(strings: strings, bindings: bindings)
         

@@ -107,8 +107,8 @@ extension JoinedRoomProxyMock {
         canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
         canUserPinOrUnpinUserIDReturnValue = .success(configuration.canUserPin)
         
-        kickUserReturnValue = .success(())
-        banUserReturnValue = .success(())
+        kickUserReasonReturnValue = .success(())
+        banUserReasonReturnValue = .success(())
         unbanUserReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()

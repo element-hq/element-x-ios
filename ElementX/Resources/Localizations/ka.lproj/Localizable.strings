@@ -1,11 +1,14 @@
 "Notification" = "შეტყობინება";
+"a11y_avatar" = "Avatar";
 "a11y_delete" = "წაშლა";
 "a11y_hide_password" = "პაროლის დამალვა";
+"a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "ბოლოში გადასვლა";
 "a11y_notifications_mentions_only" = "მხოლოდ მოხსენიებები";
 "a11y_notifications_muted" = "დადუმებულია";
 "a11y_page_n" = "გვერდი %1$d";
 "a11y_pause" = "პაუზა";
+"a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "PIN ველი";
 "a11y_play" = "დაკვრა";
 "a11y_poll_end" = "დასრულდა გამოკითხვა";
@@ -19,6 +22,7 @@
 "a11y_show_password" = "პაროლის ჩვენება";
 "a11y_start_call" = "დარეკვა";
 "a11y_user_menu" = "მომხმარებლის მენიუ";
+"a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "ხმოვანი შეტყობინების ჩაწერა.";
 "a11y_voice_message_stop_recording" = "ჩაწერის შეწყვეტა";
 "a11y.view_details" = "დეტალების ნახვა";

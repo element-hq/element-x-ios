@@ -161,8 +161,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     // MARK: - Moderation
     
-    func kickUser(_ userID: String) async -> Result<Void, RoomProxyError>
-    func banUser(_ userID: String) async -> Result<Void, RoomProxyError>
+    func kickUser(_ userID: String, reason: String?) async -> Result<Void, RoomProxyError>
+    func banUser(_ userID: String, reason: String?) async -> Result<Void, RoomProxyError>
     func unbanUser(_ userID: String) async -> Result<Void, RoomProxyError>
     
     // MARK: - Element Call

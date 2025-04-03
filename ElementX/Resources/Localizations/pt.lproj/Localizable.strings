@@ -1,11 +1,14 @@
 "Notification" = "Notificação";
+"a11y_avatar" = "Avatar";
 "a11y_delete" = "Eliminar";
 "a11y_hide_password" = "Ocultar senha";
+"a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "Saltar para o fundo";
 "a11y_notifications_mentions_only" = "Apenas menções";
 "a11y_notifications_muted" = "Silenciado";
 "a11y_page_n" = "Página %1$d";
 "a11y_pause" = "Pausar";
+"a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "Campo para PIN";
 "a11y_play" = "Reproduzir";
 "a11y_poll_end" = "Sondagem concluída";
@@ -19,6 +22,7 @@
 "a11y_show_password" = "Mostrar senha";
 "a11y_start_call" = "Iniciar chamada";
 "a11y_user_menu" = "Menu de utilizador";
+"a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Gravar mensagem de voz.";
 "a11y_voice_message_stop_recording" = "Parar gravação";
 "a11y.view_details" = "Ver detalhes";

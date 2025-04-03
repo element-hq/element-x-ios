@@ -51,4 +51,24 @@ final class MapTilerURLBuilderTests: XCTestCase {
         let expectedURL: URL = "http://www.foo.com/dea61faf-292b-4774-9660-58fcef89a7f3/style.json?key=some_key"
         XCTAssertEqual(url, expectedURL)
     }
+    
+    func testNilAPIKey() {
+        let configuration = MapTilerConfiguration(baseURL: Self.baseURL,
+                                                  apiKey: nil,
+                                                  lightStyleID: Self.lightStyleID,
+                                                  darkStyleID: Self.darkStyleID)
+        XCTAssertFalse(configuration.isEnabled)
+        
+        builder = configuration
+        
+        let staticMapURL = builder.staticMapURL(for: .dark,
+                                                coordinates: .init(latitude: 1, longitude: 2),
+                                                zoomLevel: 5,
+                                                size: .init(width: 300, height: 200),
+                                                attribution: .topLeft)
+        XCTAssertNil(staticMapURL)
+        
+        let dynamicMapURL = builder.dynamicMapURL(for: .light)
+        XCTAssertNil(dynamicMapURL)
+    }
 }

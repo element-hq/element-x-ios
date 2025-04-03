@@ -9,12 +9,8 @@ import Foundation
 
 /// A type that represents how to set up the analytics module in the app.
 struct AnalyticsConfiguration {
-    /// Whether or not analytics should be enabled.
-    let isEnabled: Bool
     /// The host to use for PostHog analytics.
     let host: String
     /// The public key for submitting analytics.
     let apiKey: String
-    /// The URL to open with more information about analytics terms.
-    let termsURL: URL
 }

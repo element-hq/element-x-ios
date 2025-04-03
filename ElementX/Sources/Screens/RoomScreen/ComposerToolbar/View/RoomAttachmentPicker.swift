@@ -54,6 +54,22 @@ struct RoomAttachmentPicker: View {
 //            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
             
             Button {
+                context.send(viewAction: .attach(.poll))
+            } label: {
+                Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
+            }
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
+            
+            if context.viewState.isLocationSharingEnabled {
+                Button {
+                    context.send(viewAction: .attach(.location))
+                } label: {
+                    Label(L10n.screenRoomAttachmentSourceLocation, icon: \.locationPin)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
+            }
+            
+            Button {
                 context.send(viewAction: .attach(.file))
             } label: {
                 Label(L10n.screenRoomAttachmentSourceFiles, icon: \.attachment)
@@ -90,6 +106,7 @@ struct RoomAttachmentPicker_Previews: PreviewProvider, TestablePreview {
                                                     completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                     mediaProvider: MediaProviderMock(configuration: .init()),
                                                     mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                    appSettings: ServiceLocator.shared.settings,
                                                     analyticsService: ServiceLocator.shared.analytics,
                                                     composerDraftService: ComposerDraftServiceMock())
 

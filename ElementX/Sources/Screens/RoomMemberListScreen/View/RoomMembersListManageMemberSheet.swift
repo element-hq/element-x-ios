@@ -14,8 +14,6 @@ struct RoomMembersListManageMemberSheet: View {
     
     @ObservedObject var context: RoomMembersListScreenViewModel.Context
     
-    @State private var isPresentingBanConfirmation = false
-    
     var body: some View {
         Form {
             AvatarHeaderView(member: member,
@@ -37,6 +35,13 @@ struct RoomMembersListManageMemberSheet: View {
                                 kind: .button {
                                     context.send(viewAction: .kickMember(member))
                                 })
+                if actions.contains(.ban) {
+                    ListRow(label: .default(title: L10n.screenRoomMemberListManageMemberBan,
+                                            icon: \.block,
+                                            role: .destructive),
+                            kind: .button {
+                                context.send(viewAction: .banMember(member))
+                            })
                 }
                 
 //                if actions.contains(.ban) {
@@ -53,14 +58,6 @@ struct RoomMembersListManageMemberSheet: View {
         .scrollBounceBehavior(.basedOnSize)
         .presentationDragIndicator(.visible)
         .presentationDetents([.large, .fraction(0.54)]) // Maybe find a way to use the ideal height somehow?
-        .alert(L10n.screenRoomMemberListBanMemberConfirmationTitle, isPresented: $isPresentingBanConfirmation) {
-            Button(L10n.actionCancel, role: .cancel) { }
-            Button(L10n.screenRoomMemberListBanMemberConfirmationAction) {
-                context.send(viewAction: .banMember(member))
-            }
-        } message: {
-            Text(L10n.screenRoomMemberListBanMemberConfirmationDescription)
-        }
     }
 }
 

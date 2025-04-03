@@ -10,6 +10,7 @@ import SwiftUI
 
 struct AuthenticationStartScreenParameters {
     let webRegistrationEnabled: Bool
+    let isBugReportServiceEnabled: Bool
 }
 
 final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
@@ -22,7 +23,8 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: AuthenticationStartScreenParameters) {
-        viewModel = AuthenticationStartScreenViewModel(webRegistrationEnabled: parameters.webRegistrationEnabled)
+        viewModel = AuthenticationStartScreenViewModel(webRegistrationEnabled: parameters.webRegistrationEnabled,
+                                                       isBugReportServiceEnabled: parameters.isBugReportServiceEnabled)
     }
     
     // MARK: - Public

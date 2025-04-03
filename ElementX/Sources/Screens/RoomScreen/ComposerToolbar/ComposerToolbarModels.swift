@@ -74,6 +74,7 @@ struct ComposerToolbarViewState: BindableState {
     var audioRecorderState: AudioRecorderState
     
     var isRoomEncrypted: Bool
+    var isLocationSharingEnabled: Bool
     
     var bindings: ComposerToolbarViewStateBindings
 

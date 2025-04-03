@@ -18,7 +18,7 @@ class AnalyticsPromptScreenViewModel: AnalyticsPromptScreenViewModelType, Analyt
     }
     
     /// Initialize a view model with the specified prompt type and app display name.
-    init(termsURL: URL) {
+    init(termsURL: URL?) {
         let promptStrings = AnalyticsPromptScreenStrings(termsURL: termsURL)
         super.init(initialViewState: AnalyticsPromptScreenViewState(strings: promptStrings))
     }

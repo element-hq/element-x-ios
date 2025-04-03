@@ -22,7 +22,7 @@ final class AnalyticsPromptScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(analytics: AnalyticsService, termsURL: URL) {
+    init(analytics: AnalyticsService, termsURL: URL?) {
         self.analytics = analytics
         viewModel = AnalyticsPromptScreenViewModel(termsURL: termsURL)
     }

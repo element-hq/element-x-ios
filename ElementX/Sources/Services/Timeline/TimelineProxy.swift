@@ -169,15 +169,13 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
-    func retryDecryption(sessionIDs: [String]?) async {
+    func retryDecryption(sessionIDs: [String]?) {
         let sessionIDs = sessionIDs ?? []
         
         MXLog.info("Retrying decryption for sessionIDs: \(sessionIDs)")
         
-        await Task.dispatch(on: .global()) { [weak self] in
-            self?.timeline.retryDecryption(sessionIds: sessionIDs)
-            MXLog.info("Finished retrying decryption for sessionID: \(sessionIDs)")
-        }
+        timeline.retryDecryption(sessionIds: sessionIDs)
+        MXLog.info("Finished retrying decryption for sessionID: \(sessionIDs)")
     }
     
     func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID, newContent: EditedContent) async -> Result<Void, TimelineProxyError> {
@@ -525,17 +523,15 @@ final class TimelineProxy: TimelineProxyProtocol {
     func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Ending poll with eventID: \(pollStartID)")
         
-        return await Task.dispatch(on: .global()) {
-            do {
-                try self.timeline.endPoll(pollStartEventId: pollStartID, text: text)
-                
-                MXLog.info("Finished ending poll with eventID: \(pollStartID)")
-                
-                return .success(())
-            } catch {
-                MXLog.error("Failed ending poll with eventID: \(pollStartID) with error: \(error)")
-                return .failure(.sdkError(error))
-            }
+        do {
+            try await timeline.endPoll(pollStartEventId: pollStartID, text: text)
+            
+            MXLog.info("Finished ending poll with eventID: \(pollStartID)")
+            
+            return .success(())
+        } catch {
+            MXLog.error("Failed ending poll with eventID: \(pollStartID) with error: \(error)")
+            return .failure(.sdkError(error))
         }
     }
 

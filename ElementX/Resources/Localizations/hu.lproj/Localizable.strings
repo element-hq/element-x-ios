@@ -1,11 +1,14 @@
 "Notification" = "Értesítés";
+"a11y_avatar" = "Avatar";
 "a11y_delete" = "Törlés";
 "a11y_hide_password" = "Jelszó elrejtése";
+"a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "Ugrás az aljára";
 "a11y_notifications_mentions_only" = "Csak megemlítések";
 "a11y_notifications_muted" = "Némítva";
 "a11y_page_n" = "%1$d. oldal";
 "a11y_pause" = "Szüneteltetés";
+"a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "PIN-mező";
 "a11y_play" = "Lejátszás";
 "a11y_poll_end" = "Befejezett szavazás";
@@ -19,6 +22,7 @@
 "a11y_show_password" = "Jelszó megjelenítése";
 "a11y_start_call" = "Hanghívás indítása";
 "a11y_user_menu" = "Felhasználói menü";
+"a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Hangüzenet felvétele.";
 "a11y_voice_message_stop_recording" = "Rögzítés leállítása";
 "a11y.view_details" = "Részletek megtekintése";
