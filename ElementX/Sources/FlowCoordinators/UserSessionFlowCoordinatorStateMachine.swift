@@ -44,6 +44,8 @@ class UserSessionFlowCoordinatorStateMachine {
         
         case shareExtensionRoomList(sharePayload: ShareExtensionPayload)
         
+        case declineAndBlockUserScreen(selectedRoomID: String?)
+        
         /// The selected room ID from the state if available.
         var selectedRoomID: String? {
             switch self {
@@ -56,7 +58,8 @@ class UserSessionFlowCoordinatorStateMachine {
                  .encryptionResetFlow(let selectedRoomID),
                  .startChatScreen(let selectedRoomID),
                  .logoutConfirmationScreen(let selectedRoomID),
-                 .roomDirectorySearchScreen(let selectedRoomID):
+                 .roomDirectorySearchScreen(let selectedRoomID),
+                 .declineAndBlockUserScreen(let selectedRoomID):
                 selectedRoomID
             }
         }
@@ -121,6 +124,9 @@ class UserSessionFlowCoordinatorStateMachine {
         
         case showShareExtensionRoomList(sharePayload: ShareExtensionPayload)
         case dismissedShareExtensionRoomList
+        
+        case presentDeclineAndBlockScreen(userID: String, roomID: String)
+        case dismissedDeclineAndBlockScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -193,6 +199,11 @@ class UserSessionFlowCoordinatorStateMachine {
                 return .shareExtensionRoomList(sharePayload: sharePayload)
             case (.shareExtensionRoomList, .dismissedShareExtensionRoomList):
                 return .roomList(selectedRoomID: nil)
+                
+            case(.roomList(let selectedRoomID), .presentDeclineAndBlockScreen):
+                return .declineAndBlockUserScreen(selectedRoomID: selectedRoomID)
+            case (.declineAndBlockUserScreen(let selectedRoomID), .dismissedDeclineAndBlockScreen):
+                return .roomList(selectedRoomID: selectedRoomID)
                 
             default:
                 return nil

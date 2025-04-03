@@ -323,25 +323,9 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func showDeclineAndBlockConfirmationAlert(userID: String) {
-        state.bindings.alertInfo = .init(id: .declineInviteAndBlock,
-                                         title: L10n.screenJoinRoomDeclineAndBlockAlertTitle,
-                                         message: L10n.screenJoinRoomDeclineAndBlockAlertMessage(userID),
-                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                         secondaryButton: .init(title: L10n.screenJoinRoomDeclineAndBlockAlertConfirmation, role: .destructive) { Task { await self.declineAndBlock(userID: userID) } })
+        actionsSubject.send(.presentDeclineAndBlock(userID: userID))
     }
     
-    private func declineAndBlock(userID: String) async {
-        guard await declineInvite() else {
-            return
-        }
-        // The decline alert and the view are already dismissed at this point so we can dispatch this separately as a best effort
-        // but only if the decline invite was succesfull
-        Task {
-            await clientProxy.ignoreUser(userID)
-        }
-    }
-    
-    @discardableResult
     private func declineInvite() async -> Bool {
         defer {
             userIndicatorController.retractIndicatorWithId(roomID)
