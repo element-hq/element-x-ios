@@ -34,9 +34,6 @@ struct HomeChannelsContent: View {
                     HomeChannelsEmptyView()
                 case .channels:
                     LazyVStack(alignment: .leading, spacing: 0) {
-                        Rectangle().frame(height: 20)
-                            .opacity(0)
-
                         ForEach(context.viewState.visibleChannels, id: \.id) { channel in
                             HomeScreenChannelCell(channel: channel, onChannelSelected: { channel in
                                 context.send(viewAction: .channelTapped(channel))
