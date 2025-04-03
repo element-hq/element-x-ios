@@ -236,6 +236,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                               caption: caption,
                                                               formattedCaption: nil, // Rust will build this from the caption's markdown.
                                                               mentions: nil,
+                                                              replyParams: nil,
                                                               useSendQueue: true),
                                                 audioInfo: audioInfo,
                                                 progressWatcher: nil)
@@ -263,6 +264,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                              caption: caption,
                                                              formattedCaption: nil, // Rust will build this from the caption's markdown.
                                                              mentions: nil,
+                                                             replyParams: nil,
                                                              useSendQueue: true),
                                                fileInfo: fileInfo,
                                                progressWatcher: nil)
@@ -291,6 +293,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                               caption: caption,
                                                               formattedCaption: nil, // Rust will build this from the caption's markdown.
                                                               mentions: nil,
+                                                              replyParams: nil,
                                                               useSendQueue: true),
                                                 thumbnailPath: thumbnailURL.path(percentEncoded: false),
                                                 imageInfo: imageInfo,
@@ -338,6 +341,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                               caption: caption,
                                                               formattedCaption: nil,
                                                               mentions: nil,
+                                                              replyParams: nil,
                                                               useSendQueue: true),
                                                 thumbnailPath: thumbnailURL.path(percentEncoded: false),
                                                 videoInfo: videoInfo,
@@ -366,6 +370,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                                      caption: nil,
                                                                      formattedCaption: nil,
                                                                      mentions: nil,
+                                                                     replyParams: nil,
                                                                      useSendQueue: true),
                                                        audioInfo: audioInfo,
                                                        waveform: waveform,

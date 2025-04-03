@@ -40,7 +40,7 @@ final class NSEUserSession {
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
-            .passphrase(passphrase: credentials.restorationToken.passphrase)
+            .sessionPassphrase(passphrase: credentials.restorationToken.passphrase)
         
         baseClient = try await clientBuilder.build()
         delegateHandle = baseClient.setDelegate(delegate: ClientDelegateWrapper())
