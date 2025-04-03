@@ -123,13 +123,12 @@ class UserSessionStore: UserSessionStoreProtocol {
                          slidingSync: .restored,
                          sessionDelegate: keychainController,
                          appHooks: appHooks,
-                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
-                         eventCacheEnabled: appSettings.eventCacheEnabled)
+                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode)
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
-            .passphrase(passphrase: credentials.restorationToken.passphrase)
+            .sessionPassphrase(passphrase: credentials.restorationToken.passphrase)
         
         do {
             let client = try await builder.build()

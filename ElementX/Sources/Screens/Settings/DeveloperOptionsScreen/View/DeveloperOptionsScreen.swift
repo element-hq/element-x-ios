@@ -30,16 +30,7 @@ struct DeveloperOptionsScreen: View {
                     }
                 }
             }
-            
-            Section("General") {
-                Toggle(isOn: $context.eventCacheEnabled) {
-                    Text("Event cache")
-                }
-                .onChange(of: context.eventCacheEnabled) {
-                    context.send(viewAction: .clearCache)
-                }
-            }
-            
+                        
             Section("Room List") {
                 Toggle(isOn: $context.publicSearchEnabled) {
                     Text("Public search")

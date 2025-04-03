@@ -82,7 +82,7 @@ final class NotificationManagerTests: XCTestCase {
             XCTFail("Http kind expected")
             return
         }
-        XCTAssertEqual(data.url, appSettings.pushGatewayBaseURL.absoluteString)
+        XCTAssertEqual(data.url, appSettings.pushGatewayNotifyEndpoint.absoluteString)
         XCTAssertEqual(data.format, .eventIdOnly)
         let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
                                                       alert: APSAlert(locKey: "Notification",

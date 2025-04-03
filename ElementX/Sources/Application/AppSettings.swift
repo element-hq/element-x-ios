@@ -19,7 +19,6 @@ protocol CommonSettingsProtocol {
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var hideInviteAvatars: Bool { get }
     var hideTimelineMedia: Bool { get }
-    var eventCacheEnabled: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -57,7 +56,6 @@ final class AppSettings {
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
         case knockingEnabled
-        case eventCacheEnabledV2
         case zeroAccessToken
         case zeroRewardsCredit
         case zeroLoggedInUser
@@ -95,6 +93,7 @@ final class AppSettings {
     
     // swiftlint:disable:next function_parameter_count
     func override(defaultHomeserverAddress: String,
+                  pushGatewayBaseURL: URL,
                   oidcRedirectURL: URL,
                   websiteURL: URL,
                   logoURL: URL,
@@ -106,6 +105,7 @@ final class AppSettings {
                   analyticsTermsURL: URL?,
                   mapTilerConfiguration: MapTilerConfiguration) {
         self.defaultHomeserverAddress = defaultHomeserverAddress
+        self.pushGatewayBaseURL = pushGatewayBaseURL
         self.oidcRedirectURL = oidcRedirectURL
         self.websiteURL = websiteURL
         self.logoURL = logoURL
@@ -218,7 +218,8 @@ final class AppSettings {
         InfoPlistReader.main.baseBundleIdentifier
     }
     
-    let pushGatewayBaseURL: URL = "https://zos-push-gateway-c101e2f4da49.herokuapp.com/_matrix/push/v1/notify"
+    var pushGatewayBaseURL: URL = "https://zos-push-gateway-c101e2f4da49.herokuapp.com/_matrix/push/v1/notify"
+    var pushGatewayNotifyEndpoint: URL { pushGatewayBaseURL.appending(path: "_matrix/push/v1/notify") }
     
     @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
     var enableNotifications
@@ -344,9 +345,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.hideTimelineMedia, defaultValue: false, storageType: .userDefaults(store))
     var hideTimelineMedia
-    
-    @UserPreference(key: UserDefaultsKeys.eventCacheEnabledV2, defaultValue: true, storageType: .userDefaults(store))
-    var eventCacheEnabled
     
     // MARK: - ZERO Access Token
     

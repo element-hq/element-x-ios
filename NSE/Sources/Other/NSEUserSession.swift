@@ -19,7 +19,11 @@ final class NSEUserSession {
                                                                                networkMonitor: nil)
     private let delegateHandle: TaskHandle?
 
-    init(credentials: KeychainCredentials, clientSessionDelegate: ClientSessionDelegate, appHooks: AppHooks, appSettings: CommonSettingsProtocol) async throws {
+    init(credentials: KeychainCredentials,
+         roomID: String,
+         clientSessionDelegate: ClientSessionDelegate,
+         appHooks: AppHooks,
+         appSettings: CommonSettingsProtocol) async throws {
         sessionDirectories = credentials.restorationToken.sessionDirectories
         
         userID = credentials.userID
@@ -34,17 +38,18 @@ final class NSEUserSession {
                          slidingSync: .restored,
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks,
-                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
-                         eventCacheEnabled: appSettings.eventCacheEnabled)
+                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode)
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
-            .passphrase(passphrase: credentials.restorationToken.passphrase)
+            .sessionPassphrase(passphrase: credentials.restorationToken.passphrase)
         
         baseClient = try await clientBuilder.build()
         delegateHandle = baseClient.setDelegate(delegate: ClientDelegateWrapper())
-        try await baseClient.restoreSession(session: credentials.restorationToken.session)
+        
+        try await baseClient.restoreSessionWith(session: credentials.restorationToken.session,
+                                                roomLoadSettings: .one(roomId: roomID))
         
         notificationClient = try await baseClient.notificationClient(processSetup: .multipleProcesses)
     }

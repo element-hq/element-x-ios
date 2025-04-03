@@ -2927,6 +2927,52 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         try await restoreSessionSessionClosure?(session)
     }
 
+    //MARK: - restoreSessionWith
+
+    open var restoreSessionWithSessionRoomLoadSettingsThrowableError: Error?
+    var restoreSessionWithSessionRoomLoadSettingsUnderlyingCallsCount = 0
+    open var restoreSessionWithSessionRoomLoadSettingsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return restoreSessionWithSessionRoomLoadSettingsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = restoreSessionWithSessionRoomLoadSettingsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                restoreSessionWithSessionRoomLoadSettingsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    restoreSessionWithSessionRoomLoadSettingsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var restoreSessionWithSessionRoomLoadSettingsCalled: Bool {
+        return restoreSessionWithSessionRoomLoadSettingsCallsCount > 0
+    }
+    open var restoreSessionWithSessionRoomLoadSettingsReceivedArguments: (session: Session, roomLoadSettings: RoomLoadSettings)?
+    open var restoreSessionWithSessionRoomLoadSettingsReceivedInvocations: [(session: Session, roomLoadSettings: RoomLoadSettings)] = []
+    open var restoreSessionWithSessionRoomLoadSettingsClosure: ((Session, RoomLoadSettings) async throws -> Void)?
+
+    open override func restoreSessionWith(session: Session, roomLoadSettings: RoomLoadSettings) async throws {
+        if let error = restoreSessionWithSessionRoomLoadSettingsThrowableError {
+            throw error
+        }
+        restoreSessionWithSessionRoomLoadSettingsCallsCount += 1
+        restoreSessionWithSessionRoomLoadSettingsReceivedArguments = (session: session, roomLoadSettings: roomLoadSettings)
+        DispatchQueue.main.async {
+            self.restoreSessionWithSessionRoomLoadSettingsReceivedInvocations.append((session: session, roomLoadSettings: roomLoadSettings))
+        }
+        try await restoreSessionWithSessionRoomLoadSettingsClosure?(session, roomLoadSettings)
+    }
+
     //MARK: - roomAliasExists
 
     open var roomAliasExistsRoomAliasThrowableError: Error?
@@ -5210,77 +5256,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 
-    //MARK: - passphrase
-
-    var passphrasePassphraseUnderlyingCallsCount = 0
-    open var passphrasePassphraseCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return passphrasePassphraseUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = passphrasePassphraseUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                passphrasePassphraseUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    passphrasePassphraseUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var passphrasePassphraseCalled: Bool {
-        return passphrasePassphraseCallsCount > 0
-    }
-    open var passphrasePassphraseReceivedPassphrase: String?
-    open var passphrasePassphraseReceivedInvocations: [String?] = []
-
-    var passphrasePassphraseUnderlyingReturnValue: ClientBuilder!
-    open var passphrasePassphraseReturnValue: ClientBuilder! {
-        get {
-            if Thread.isMainThread {
-                return passphrasePassphraseUnderlyingReturnValue
-            } else {
-                var returnValue: ClientBuilder? = nil
-                DispatchQueue.main.sync {
-                    returnValue = passphrasePassphraseUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                passphrasePassphraseUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    passphrasePassphraseUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var passphrasePassphraseClosure: ((String?) -> ClientBuilder)?
-
-    open override func passphrase(passphrase: String?) -> ClientBuilder {
-        passphrasePassphraseCallsCount += 1
-        passphrasePassphraseReceivedPassphrase = passphrase
-        DispatchQueue.main.async {
-            self.passphrasePassphraseReceivedInvocations.append(passphrase)
-        }
-        if let passphrasePassphraseClosure = passphrasePassphraseClosure {
-            return passphrasePassphraseClosure(passphrase)
-        } else {
-            return passphrasePassphraseReturnValue
-        }
-    }
-
     //MARK: - proxy
 
     var proxyUrlUnderlyingCallsCount = 0
@@ -5707,6 +5682,219 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 
+    //MARK: - sessionCacheSize
+
+    var sessionCacheSizeCacheSizeUnderlyingCallsCount = 0
+    open var sessionCacheSizeCacheSizeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sessionCacheSizeCacheSizeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sessionCacheSizeCacheSizeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sessionCacheSizeCacheSizeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sessionCacheSizeCacheSizeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var sessionCacheSizeCacheSizeCalled: Bool {
+        return sessionCacheSizeCacheSizeCallsCount > 0
+    }
+    open var sessionCacheSizeCacheSizeReceivedCacheSize: UInt32?
+    open var sessionCacheSizeCacheSizeReceivedInvocations: [UInt32?] = []
+
+    var sessionCacheSizeCacheSizeUnderlyingReturnValue: ClientBuilder!
+    open var sessionCacheSizeCacheSizeReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return sessionCacheSizeCacheSizeUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sessionCacheSizeCacheSizeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sessionCacheSizeCacheSizeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sessionCacheSizeCacheSizeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var sessionCacheSizeCacheSizeClosure: ((UInt32?) -> ClientBuilder)?
+
+    open override func sessionCacheSize(cacheSize: UInt32?) -> ClientBuilder {
+        sessionCacheSizeCacheSizeCallsCount += 1
+        sessionCacheSizeCacheSizeReceivedCacheSize = cacheSize
+        DispatchQueue.main.async {
+            self.sessionCacheSizeCacheSizeReceivedInvocations.append(cacheSize)
+        }
+        if let sessionCacheSizeCacheSizeClosure = sessionCacheSizeCacheSizeClosure {
+            return sessionCacheSizeCacheSizeClosure(cacheSize)
+        } else {
+            return sessionCacheSizeCacheSizeReturnValue
+        }
+    }
+
+    //MARK: - sessionJournalSizeLimit
+
+    var sessionJournalSizeLimitLimitUnderlyingCallsCount = 0
+    open var sessionJournalSizeLimitLimitCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sessionJournalSizeLimitLimitUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sessionJournalSizeLimitLimitUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sessionJournalSizeLimitLimitUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sessionJournalSizeLimitLimitUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var sessionJournalSizeLimitLimitCalled: Bool {
+        return sessionJournalSizeLimitLimitCallsCount > 0
+    }
+    open var sessionJournalSizeLimitLimitReceivedLimit: UInt32?
+    open var sessionJournalSizeLimitLimitReceivedInvocations: [UInt32?] = []
+
+    var sessionJournalSizeLimitLimitUnderlyingReturnValue: ClientBuilder!
+    open var sessionJournalSizeLimitLimitReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return sessionJournalSizeLimitLimitUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sessionJournalSizeLimitLimitUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sessionJournalSizeLimitLimitUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sessionJournalSizeLimitLimitUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var sessionJournalSizeLimitLimitClosure: ((UInt32?) -> ClientBuilder)?
+
+    open override func sessionJournalSizeLimit(limit: UInt32?) -> ClientBuilder {
+        sessionJournalSizeLimitLimitCallsCount += 1
+        sessionJournalSizeLimitLimitReceivedLimit = limit
+        DispatchQueue.main.async {
+            self.sessionJournalSizeLimitLimitReceivedInvocations.append(limit)
+        }
+        if let sessionJournalSizeLimitLimitClosure = sessionJournalSizeLimitLimitClosure {
+            return sessionJournalSizeLimitLimitClosure(limit)
+        } else {
+            return sessionJournalSizeLimitLimitReturnValue
+        }
+    }
+
+    //MARK: - sessionPassphrase
+
+    var sessionPassphrasePassphraseUnderlyingCallsCount = 0
+    open var sessionPassphrasePassphraseCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sessionPassphrasePassphraseUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sessionPassphrasePassphraseUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sessionPassphrasePassphraseUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sessionPassphrasePassphraseUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var sessionPassphrasePassphraseCalled: Bool {
+        return sessionPassphrasePassphraseCallsCount > 0
+    }
+    open var sessionPassphrasePassphraseReceivedPassphrase: String?
+    open var sessionPassphrasePassphraseReceivedInvocations: [String?] = []
+
+    var sessionPassphrasePassphraseUnderlyingReturnValue: ClientBuilder!
+    open var sessionPassphrasePassphraseReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return sessionPassphrasePassphraseUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sessionPassphrasePassphraseUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sessionPassphrasePassphraseUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sessionPassphrasePassphraseUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var sessionPassphrasePassphraseClosure: ((String?) -> ClientBuilder)?
+
+    open override func sessionPassphrase(passphrase: String?) -> ClientBuilder {
+        sessionPassphrasePassphraseCallsCount += 1
+        sessionPassphrasePassphraseReceivedPassphrase = passphrase
+        DispatchQueue.main.async {
+            self.sessionPassphrasePassphraseReceivedInvocations.append(passphrase)
+        }
+        if let sessionPassphrasePassphraseClosure = sessionPassphrasePassphraseClosure {
+            return sessionPassphrasePassphraseClosure(passphrase)
+        } else {
+            return sessionPassphrasePassphraseReturnValue
+        }
+    }
+
     //MARK: - sessionPaths
 
     var sessionPathsDataPathCachePathUnderlyingCallsCount = 0
@@ -5775,6 +5963,77 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
             return sessionPathsDataPathCachePathClosure(dataPath, cachePath)
         } else {
             return sessionPathsDataPathCachePathReturnValue
+        }
+    }
+
+    //MARK: - sessionPoolMaxSize
+
+    var sessionPoolMaxSizePoolMaxSizeUnderlyingCallsCount = 0
+    open var sessionPoolMaxSizePoolMaxSizeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sessionPoolMaxSizePoolMaxSizeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sessionPoolMaxSizePoolMaxSizeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sessionPoolMaxSizePoolMaxSizeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sessionPoolMaxSizePoolMaxSizeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var sessionPoolMaxSizePoolMaxSizeCalled: Bool {
+        return sessionPoolMaxSizePoolMaxSizeCallsCount > 0
+    }
+    open var sessionPoolMaxSizePoolMaxSizeReceivedPoolMaxSize: UInt32?
+    open var sessionPoolMaxSizePoolMaxSizeReceivedInvocations: [UInt32?] = []
+
+    var sessionPoolMaxSizePoolMaxSizeUnderlyingReturnValue: ClientBuilder!
+    open var sessionPoolMaxSizePoolMaxSizeReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return sessionPoolMaxSizePoolMaxSizeUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sessionPoolMaxSizePoolMaxSizeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sessionPoolMaxSizePoolMaxSizeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sessionPoolMaxSizePoolMaxSizeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var sessionPoolMaxSizePoolMaxSizeClosure: ((UInt32?) -> ClientBuilder)?
+
+    open override func sessionPoolMaxSize(poolMaxSize: UInt32?) -> ClientBuilder {
+        sessionPoolMaxSizePoolMaxSizeCallsCount += 1
+        sessionPoolMaxSizePoolMaxSizeReceivedPoolMaxSize = poolMaxSize
+        DispatchQueue.main.async {
+            self.sessionPoolMaxSizePoolMaxSizeReceivedInvocations.append(poolMaxSize)
+        }
+        if let sessionPoolMaxSizePoolMaxSizeClosure = sessionPoolMaxSizePoolMaxSizeClosure {
+            return sessionPoolMaxSizePoolMaxSizeClosure(poolMaxSize)
+        } else {
+            return sessionPoolMaxSizePoolMaxSizeReturnValue
         }
     }
 

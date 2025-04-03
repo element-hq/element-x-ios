@@ -146,7 +146,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
 
             let configuration = try await PusherConfiguration(identifiers: .init(pushkey: deviceToken.base64EncodedString(),
                                                                                  appId: appSettings.pusherAppId),
-                                                              kind: .http(data: .init(url: appSettings.pushGatewayBaseURL.absoluteString,
+                                                              kind: .http(data: .init(url: appSettings.pushGatewayNotifyEndpoint.absoluteString,
                                                                                       format: .eventIdOnly,
                                                                                       defaultPayload: defaultPayload.toJsonString())),
                                                               // appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
