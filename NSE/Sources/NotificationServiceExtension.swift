@@ -28,25 +28,24 @@ import UserNotifications
 // but it will always be called on different threads. It may or may not be
 // called on the same instance of `NotificationService` as a previous
 // notification.
-//
-// We keep a global `environment` singleton to ensure that our app context,
-// database, logging, etc. are only ever setup once per *process*
 
 private let settings: CommonSettingsProtocol = AppSettings()
-private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()), destination: .notification),
-                                                                    settings: settings)
+
 private let keychainController = KeychainController(service: .sessions,
                                                     accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+
+private let eventStringBuilder = RoomMessageEventStringBuilder(attributedStringBuilder: AttributedStringBuilder(mentionBuilder: PlainMentionBuilder()),
+                                                               destination: .notification)
+
+private let notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: eventStringBuilder,
+                                                                    settings: settings)
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
     private var handler: ((UNNotificationContent) -> Void)?
     private var modifiedContent: UNMutableNotificationContent?
     
     private let appHooks = AppHooks()
-    
-    // Used to create one single UserSession across process/instances/runs
-    private static let serialQueue = DispatchQueue(label: "io.element.elementx.nse")
-    
+            
     deinit {
         cleanUp()
         ExtensionLogger.logMemory(with: tag)
@@ -74,63 +73,49 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         modifiedContent = request.content.mutableCopy() as? UNMutableNotificationContent
         
         MXLog.info("\(tag) #########################################")
-        ExtensionLogger.logMemory(with: tag)
-        MXLog.info("\(tag) Payload came: \(request.content.userInfo)")
         
-        Self.serialQueue.sync {
-            // If the session directories have changed, the user has logged out and back in (even if they entered the same user ID).
-            // We can't do this comparison with the access token of the existing session here due to token refresh when using OIDC.
-            if Self.userSession == nil || Self.userSession?.sessionDirectories != credentials.restorationToken.sessionDirectories {
-                // This function might be run concurrently and from different processes
-                // It's imperative that we create **at most** one UserSession/Client per process
-                Task.synchronous { [appHooks] in
-                    do {
-                        Self.userSession = try await NSEUserSession(credentials: credentials,
-                                                                    clientSessionDelegate: keychainController,
-                                                                    appHooks: appHooks,
-                                                                    appSettings: settings)
-                    } catch {
-                        MXLog.error("Failed creating user session with error: \(error)")
-                    }
-                }
-            }
-            
-            if Self.userSession == nil {
-                return discard(unreadCount: request.unreadCount)
-            }
-        }
+        ExtensionLogger.logMemory(with: tag)
+        MXLog.info("\(tag) Received payload: \(request.content.userInfo)")
         
         Task {
-            await run(with: credentials,
-                      roomID: roomID,
-                      eventID: eventID,
-                      unreadCount: request.unreadCount)
+            do {
+                let userSession = try await NSEUserSession(credentials: credentials,
+                                                           roomID: roomID,
+                                                           clientSessionDelegate: keychainController,
+                                                           appHooks: appHooks,
+                                                           appSettings: settings)
+                
+                ExtensionLogger.logMemory(with: tag)
+                MXLog.info("\(tag) Configured user session")
+                
+                await processEvent(eventID,
+                                   roomID: roomID,
+                                   unreadCount: request.unreadCount,
+                                   userSession: userSession)
+            } catch {
+                MXLog.error("Failed creating user session with error: \(error)")
+            }
         }
     }
     
     override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
-        MXLog.warning("\(tag) serviceExtensionTimeWillExpire")
+        MXLog.warning("\(tag) Extension time will expire")
         notify(unreadCount: nil)
     }
     
     // MARK: - Private
 
-    private func run(with credentials: KeychainCredentials,
-                     roomID: String,
-                     eventID: String,
-                     unreadCount: Int?) async {
-        MXLog.info("\(tag) run with roomId: \(roomID), eventId: \(eventID)")
+    private func processEvent(_ eventID: String,
+                              roomID: String,
+                              unreadCount: Int?,
+                              userSession: NSEUserSession) async {
+        MXLog.info("\(tag) Processing event: \(eventID) in room: \(roomID)")
         
-        guard let userSession = Self.userSession else {
-            MXLog.error("Invalid NSE User Session, discarding.")
-            return discard(unreadCount: unreadCount)
-        }
-
         do {
             guard let itemProxy = await userSession.notificationItemProxy(roomID: roomID, eventID: eventID) else {
-                MXLog.info("\(tag) no notification for the event, discard")
+                MXLog.error("\(tag) Failed retrieving notification item")
                 return discard(unreadCount: unreadCount)
             }
                   
@@ -141,39 +126,34 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 break
             }
             
-            // After the first processing, update the modified content
             modifiedContent = try await notificationContentBuilder.content(for: itemProxy, mediaProvider: nil)
             
             guard itemProxy.hasMedia else {
-                MXLog.info("\(tag) no media needed")
-
-                // We've processed the item and no media operations needed, so no need to go further
+                MXLog.info("\(tag) Notification item doesn't contain media")
                 return notify(unreadCount: unreadCount)
             }
 
-            MXLog.info("\(tag) process with media")
-
-            // There is some media to load, process it again
+            MXLog.info("\(tag) Processing media")
             if let latestContent = try? await notificationContentBuilder.content(for: itemProxy, mediaProvider: userSession.mediaProvider) {
-                // Processing finished, hopefully with some media
                 modifiedContent = latestContent
+            } else {
+                MXLog.error("\(tag) Failed processing notification media")
             }
-            // We still notify, but without the media attachment if it fails to load
             
             return notify(unreadCount: unreadCount)
         } catch {
-            MXLog.error("NSE run error: \(error)")
+            MXLog.error("Failed processing with error: \(error)")
             return discard(unreadCount: unreadCount)
         }
     }
     
     private func notify(unreadCount: Int?) {
-        MXLog.info("\(tag) notify")
-
         guard let modifiedContent else {
-            MXLog.info("\(tag) notify: no modified content")
+            MXLog.error("\(tag) Notification modified content invalid")
             return discard(unreadCount: unreadCount)
         }
+        
+        MXLog.info("\(tag) Displaying notification")
         
         if let unreadCount {
             modifiedContent.badge = NSNumber(value: unreadCount)
@@ -184,7 +164,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
 
     private func discard(unreadCount: Int?) {
-        MXLog.info("\(tag) discard")
+        MXLog.info("\(tag) Discarding notification")
         
         let content = UNMutableNotificationContent()
         
@@ -226,7 +206,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 }
             case .roomRedaction(let redactedEventID, _):
                 guard let redactedEventID else {
-                    MXLog.error("Unable to handle redact notification due to missing event ID.")
+                    MXLog.error("Unable to handle redact notification due to missing event ID")
                     return .processedShouldDiscard
                 }
                 
