@@ -52,6 +52,6 @@ struct AuthenticationClientBuilder: AuthenticationClientBuilderProtocol {
                          eventCacheEnabled: appSettings.eventCacheEnabled)
             .sessionPaths(dataPath: sessionDirectories.dataPath,
                           cachePath: sessionDirectories.cachePath)
-            .passphrase(passphrase: passphrase)
+            .sessionPassphrase(passphrase: passphrase)
     }
 }
