@@ -47,17 +47,6 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     // Used to create one single UserSession across process/instances/runs
     private static let serialQueue = DispatchQueue(label: "io.element.elementx.nse")
     
-    // Temporary. We need to make sure the NSE and the main app pass in the same value.
-    // The NSE has a tendency of staying alive for longer so use this to manually kill it
-    // when the feature flag doesn't match.
-    private static var eventCacheEnabled = false
-    
-    private static var userSession: NSEUserSession? {
-        didSet {
-            eventCacheEnabled = settings.eventCacheEnabled
-        }
-    }
-    
     deinit {
         cleanUp()
         ExtensionLogger.logMemory(with: tag)
@@ -111,11 +100,6 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             }
         }
         
-        guard Self.eventCacheEnabled == settings.eventCacheEnabled else {
-            MXLog.error("Found missmatch `eventCacheEnabled` feature flag missmatch, restarting the NSE.")
-            exit(0)
-        }
-
         Task {
             await run(with: credentials,
                       roomID: roomID,
