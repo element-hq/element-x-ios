@@ -321,7 +321,7 @@ class HomeScreenViewModelTests: XCTestCase {
             
             return .invited(roomProxy)
         }
-        context.viewState.bindings.alertInfo?.primaryButton.action?()
+        context.viewState.bindings.alertInfo?.secondaryButton?.action?()
         await fulfillment(of: [rejectExpectation], timeout: 1.0)
         
         XCTAssertEqual(appSettings.seenInvites, [invitedRoomIDs[1]])

@@ -45,6 +45,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var elementCallBaseURLOverride: URL? { get set }
     var knockingEnabled: Bool { get set }
     var reportRoomEnabled: Bool { get set }
+    var reportInviteEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

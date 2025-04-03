@@ -57,6 +57,7 @@ final class AppSettings {
         case enableOnlySignedDeviceIsolationMode
         case knockingEnabled
         case reportRoomEnabled
+        case reportInviteEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -332,6 +333,9 @@ final class AppSettings {
     var knockingEnabled
     
     @UserPreference(key: UserDefaultsKeys.reportRoomEnabled, defaultValue: false, storageType: .userDefaults(store)) var reportRoomEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.reportInviteEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var reportInviteEnabled
     
     #endif
     

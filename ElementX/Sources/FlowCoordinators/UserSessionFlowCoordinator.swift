@@ -312,6 +312,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.reportRoomScreen, .dismissedReportRoomScreen, .roomList):
                 break
                 
+            case (.roomList, .presentDeclineAndBlockScreen(let userID, let roomID), .declineAndBlockUserScreen):
+                presentDeclineAndBlockScreen(userID: userID, roomID: roomID)
+            case (.declineAndBlockUserScreen, .dismissedDeclineAndBlockScreen, .roomList):
+                break
+                
             case (.roomList(let roomListSelectedRoomID), .showShareExtensionRoomList, .shareExtensionRoomList(let sharePayload)):
                 Task {
                     if roomListSelectedRoomID != nil {
@@ -526,6 +531,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     self.actionsSubject.send(.logout)
                 case .logout:
                     Task { await self.runLogoutFlow() }
+                case .presentDeclineAndBlock(let userID, let roomID):
+                    stateMachine.processEvent(.presentDeclineAndBlockScreen(userID: userID, roomID: roomID))
                 }
             }
             .store(in: &cancellables)
@@ -561,6 +568,28 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setRootCoordinator(coordinator)
         navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
             self?.stateMachine.processEvent(.dismissedReportRoomScreen)
+        }
+    }
+    
+    private func presentDeclineAndBlockScreen(userID: String, roomID: String) {
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = DeclineAndBlockScreenCoordinator(parameters: .init(userID: userID,
+                                                                             roomID: roomID,
+                                                                             clientProxy: userSession.clientProxy,
+                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController))
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .dismiss:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedDeclineAndBlockScreen)
         }
     }
     

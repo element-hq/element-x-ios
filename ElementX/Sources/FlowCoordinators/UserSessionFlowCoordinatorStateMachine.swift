@@ -47,6 +47,8 @@ class UserSessionFlowCoordinatorStateMachine {
         
         case shareExtensionRoomList(sharePayload: ShareExtensionPayload)
         
+        case declineAndBlockUserScreen(roomListSelectedRoomID: String?)
+        
         /// The selected room ID from the state if available.
         var roomListSelectedRoomID: String? {
             switch self {
@@ -60,7 +62,8 @@ class UserSessionFlowCoordinatorStateMachine {
                  .startChatScreen(let roomListSelectedRoomID),
                  .logoutConfirmationScreen(let roomListSelectedRoomID),
                  .roomDirectorySearchScreen(let roomListSelectedRoomID),
-                 .reportRoomScreen(let roomListSelectedRoomID):
+                 .reportRoomScreen(let roomListSelectedRoomID),
+                 .declineAndBlockUserScreen(let roomListSelectedRoomID):
                 roomListSelectedRoomID
             }
         }
@@ -128,6 +131,9 @@ class UserSessionFlowCoordinatorStateMachine {
         
         case presentReportRoomScreen(roomID: String)
         case dismissedReportRoomScreen
+        
+        case presentDeclineAndBlockScreen(userID: String, roomID: String)
+        case dismissedDeclineAndBlockScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -204,6 +210,11 @@ class UserSessionFlowCoordinatorStateMachine {
             case (.roomList(let roomListSelectedRoomID), .presentReportRoomScreen):
                 return .reportRoomScreen(roomListSelectedRoomID: roomListSelectedRoomID)
             case (.reportRoomScreen(let roomListSelectedRoomID), .dismissedReportRoomScreen):
+                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
+                
+            case(.roomList(let roomListSelectedRoomID), .presentDeclineAndBlockScreen):
+                return .declineAndBlockUserScreen(roomListSelectedRoomID: roomListSelectedRoomID)
+            case (.declineAndBlockUserScreen(let roomListSelectedRoomID), .dismissedDeclineAndBlockScreen):
                 return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                 
             default:

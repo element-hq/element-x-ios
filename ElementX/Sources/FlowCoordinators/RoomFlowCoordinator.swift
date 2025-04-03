@@ -419,6 +419,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return .reportRoom(previousState: fromState)
             case (.reportRoom(let previousState), .dismissReportRoomScreen):
                 return previousState
+                
+            case (.joinRoomScreen, .presentDeclineAndBlockScreen):
+                return .declineAndBlockScreen
+            case (.declineAndBlockScreen, .dismissDeclineAndBlockScreen):
+                return .joinRoomScreen
             
             default:
                 return nil
@@ -594,6 +599,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .presentReportRoomScreen, .reportRoom):
                 presentReportRoom()
             case (.reportRoom, .dismissReportRoomScreen, .roomDetails):
+                break
+                
+            case (.joinRoomScreen, .presentDeclineAndBlockScreen(let userID), .declineAndBlockScreen):
+                presentDeclineAndBlockScreen(userID: userID)
+            case (.declineAndBlockScreen, .dismissDeclineAndBlockScreen, .joinRoomScreen):
                 break
             
             // Child flow
@@ -799,6 +809,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     }
                 case .cancelled:
                     stateMachine.tryEvent(.dismissJoinRoomScreen)
+                case .presentDeclineAndBlock(let userID):
+                    stateMachine.tryEvent(.presentDeclineAndBlockScreen(userID: userID))
                 }
             }
             .store(in: &cancellables)
@@ -1551,6 +1563,30 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    private func presentDeclineAndBlockScreen(userID: String) {
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = DeclineAndBlockScreenCoordinator(parameters: .init(userID: userID,
+                                                                             roomID: roomID,
+                                                                             clientProxy: userSession.clientProxy,
+                                                                             userIndicatorController: userIndicatorController))
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss(let hasDeclined):
+                if hasDeclined {
+                    stateMachine.tryEvent(.dismissFlow)
+                }
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissDeclineAndBlockScreen)
+        }
+    }
+    
     // MARK: - Other flows
     
     private func startChildFlow(for roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint) async {
@@ -1722,6 +1758,7 @@ private extension RoomFlowCoordinator {
         case mediaEventsTimeline(previousState: State)
         case securityAndPrivacy(previousState: State)
         case reportRoom(previousState: State)
+        case declineAndBlockScreen
         
         /// A child flow is in progress.
         case presentingChild(childRoomID: String, previousState: State)
@@ -1811,5 +1848,8 @@ private extension RoomFlowCoordinator {
         
         case presentReportRoomScreen
         case dismissReportRoomScreen
+        
+        case presentDeclineAndBlockScreen(userID: String)
+        case dismissDeclineAndBlockScreen
     }
 }

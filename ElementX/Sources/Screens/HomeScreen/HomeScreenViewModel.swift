@@ -426,11 +426,24 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         let title = room.isDirect ? L10n.screenInvitesDeclineDirectChatTitle : L10n.screenInvitesDeclineChatTitle
         let message = room.isDirect ? L10n.screenInvitesDeclineDirectChatMessage(roomPlaceholder) : L10n.screenInvitesDeclineChatMessage(roomPlaceholder)
         
-        state.bindings.alertInfo = .init(id: UUID(),
-                                         title: title,
-                                         message: message,
-                                         primaryButton: .init(title: L10n.actionDecline, role: .destructive) { Task { await self.declineInvite(roomID: room.id) } },
-                                         secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+        if appSettings.reportInviteEnabled, let userID = room.inviter?.id {
+            state.bindings.alertInfo = .init(id: UUID(),
+                                             title: title,
+                                             message: message,
+                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                             secondaryButton: .init(title: L10n.actionDeclineAndBlock, role: .destructive) { [weak self] in self?.declineAndBlockInvite(userID: userID, roomID: roomID) },
+                                             verticalButtons: [.init(title: L10n.actionDecline) { [weak self] in Task { await self?.declineInvite(roomID: room.id) } }])
+        } else {
+            state.bindings.alertInfo = .init(id: UUID(),
+                                             title: title,
+                                             message: message,
+                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                             secondaryButton: .init(title: L10n.actionDecline, role: .destructive) { [weak self] in Task { await self?.declineInvite(roomID: room.id) } })
+        }
+    }
+    
+    private func declineAndBlockInvite(userID: String, roomID: String) {
+        actionsSubject.send(.presentDeclineAndBlock(userID: userID, roomID: roomID))
     }
     
     private func declineInvite(roomID: String) async {

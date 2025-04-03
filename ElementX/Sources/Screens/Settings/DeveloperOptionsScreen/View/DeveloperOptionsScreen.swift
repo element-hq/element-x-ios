@@ -68,6 +68,10 @@ struct DeveloperOptionsScreen: View {
                     Text("Report rooms")
                     Text("Report API might not work properly")
                 }
+                Toggle(isOn: $context.reportInviteEnabled) {
+                    Text("Report invites")
+                    Text("Report API might not work properly")
+                }
             }
 
             Section {
