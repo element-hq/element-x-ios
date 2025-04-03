@@ -19,7 +19,6 @@ protocol CommonSettingsProtocol {
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var hideInviteAvatars: Bool { get }
     var hideTimelineMedia: Bool { get }
-    var eventCacheEnabled: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -57,7 +56,6 @@ final class AppSettings {
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
         case knockingEnabled
-        case eventCacheEnabledV2
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -340,9 +338,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.hideTimelineMedia, defaultValue: false, storageType: .userDefaults(store))
     var hideTimelineMedia
-    
-    @UserPreference(key: UserDefaultsKeys.eventCacheEnabledV2, defaultValue: true, storageType: .userDefaults(store))
-    var eventCacheEnabled
 }
 
 extension AppSettings: CommonSettingsProtocol { }
