@@ -17,6 +17,7 @@ included:
 excluded:
   - "*/Sources/Generated/*"
   - Tools/Sources # Our command-line tools use a lot of print commands.
+  - Secrets
 
 line_length:
   warning: 250

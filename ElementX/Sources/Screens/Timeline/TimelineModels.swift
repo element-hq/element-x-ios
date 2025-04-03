@@ -123,7 +123,7 @@ struct TimelineViewState: BindableState {
     
     var emojiProvider: EmojiProviderProtocol
     
-    var mapURLBuilder: MapTilerURLBuilderProtocol
+    var mapTilerConfiguration: MapTilerConfiguration
     
     var bindings: TimelineViewStateBindings
 }

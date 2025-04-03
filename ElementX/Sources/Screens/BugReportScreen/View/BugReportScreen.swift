@@ -141,7 +141,7 @@ struct BugReportScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         NavigationStack {
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
-            BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
+            BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(.init()),
                                                               clientProxy: clientProxy,
                                                               screenshot: nil,
                                                               isModallyPresented: false).context)
@@ -150,7 +150,7 @@ struct BugReportScreen_Previews: PreviewProvider, TestablePreview {
         
         NavigationStack {
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
-            BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(),
+            BugReportScreen(context: BugReportScreenViewModel(bugReportService: BugReportServiceMock(.init()),
                                                               clientProxy: clientProxy,
                                                               screenshot: Asset.Images.appLogo.image,
                                                               isModallyPresented: false).context)

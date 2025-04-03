@@ -36,7 +36,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 appLockService: AppLockServiceMock(),
-                                                                bugReportService: BugReportServiceMock(),
+                                                                bugReportService: BugReportServiceMock(.init()),
                                                                 elementCallService: ElementCallServiceMock(.init()),
                                                                 timelineControllerFactory: timelineControllerFactory,
                                                                 appMediator: AppMediatorMock.default,

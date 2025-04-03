@@ -78,7 +78,7 @@ struct HomeScreenRoomCell: View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
                 .font(.zero.bodyLG)
-                .foregroundColor(.compound.textPrimary)
+                .foregroundColor(room.badges.isDotShown ? .compound.textPrimary : .compound.textSecondary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
@@ -149,7 +149,6 @@ struct HomeScreenRoomCell: View {
         if let lastMessage = room.lastMessage {
             Text(lastMessage)
                 .lastMessageFormatting()
-                .foregroundColor(room.badges.isDotShown ? .compound.textPrimary : .compound.textSecondary)
         }
     }
 }
@@ -169,7 +168,7 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
 private extension View {
     func lastMessageFormatting() -> some View {
         font(.compound.bodyMD)
-            //.foregroundColor(.compound.textSecondary)
+            .foregroundColor(.compound.textSecondary)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
     }

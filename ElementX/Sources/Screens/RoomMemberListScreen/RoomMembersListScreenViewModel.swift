@@ -51,9 +51,31 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         case .showMemberDetails(let member):
             showMemberDetails(member)
         case .kickMember(let member):
-            Task { await kickMember(member) }
+            var reason: String?
+            let binding: Binding<String> = .init(get: { reason ?? "" },
+                                                 set: { reason = $0.isEmpty ? nil : $0 })
+            state.bindings.alertInfo = .init(id: .kickConfirmation,
+                                             title: L10n.screenRoomMemberListKickMemberConfirmationTitle,
+                                             message: L10n.screenRoomMemberListKickMemberConfirmationDescription,
+                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },
+                                             secondaryButton: .init(title: L10n.screenRoomMemberListKickMemberConfirmationAction) { [weak self] in Task { await self?.kickMember(member, reason: reason) } },
+                                             textFields: [.init(placeholder: L10n.commonReason,
+                                                                text: binding,
+                                                                autoCapitalization: .sentences,
+                                                                autoCorrectionDisabled: false)])
         case .banMember(let member):
-            Task { await banMember(member) }
+            var reason: String?
+            let binding: Binding<String> = .init(get: { reason ?? "" },
+                                                 set: { reason = $0.isEmpty ? nil : $0 })
+            state.bindings.alertInfo = .init(id: .banConfirmation,
+                                             title: L10n.screenRoomMemberListBanMemberConfirmationTitle,
+                                             message: L10n.screenRoomMemberListBanMemberConfirmationDescription,
+                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },
+                                             secondaryButton: .init(title: L10n.screenRoomMemberListBanMemberConfirmationAction) { [weak self] in Task { await self?.banMember(member, reason: reason) } },
+                                             textFields: [.init(placeholder: L10n.commonReason,
+                                                                text: binding,
+                                                                autoCapitalization: .sentences,
+                                                                autoCorrectionDisabled: false)])
         case .unbanMember(let member):
             Task { await unbanMember(member) }
         case .invite:
@@ -183,11 +205,11 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     
     // MARK: - Member Management
     
-    private func kickMember(_ member: RoomMemberDetails) async {
+    private func kickMember(_ member: RoomMemberDetails, reason: String?) async {
         let indicatorTitle = L10n.screenRoomMemberListRemovingUser(member.name ?? member.id)
         showManageMemberIndicator(title: indicatorTitle)
         
-        switch await roomProxy.kickUser(member.id) {
+        switch await roomProxy.kickUser(member.id, reason: reason) {
         case .success:
             state.bindings.memberToManage = nil
             hideManageMemberIndicator(title: indicatorTitle)
@@ -197,11 +219,11 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         }
     }
     
-    private func banMember(_ member: RoomMemberDetails) async {
+    private func banMember(_ member: RoomMemberDetails, reason: String?) async {
         let indicatorTitle = L10n.screenRoomMemberListBanningUser(member.name ?? member.id)
         showManageMemberIndicator(title: indicatorTitle)
         
-        switch await roomProxy.banUser(member.id) {
+        switch await roomProxy.banUser(member.id, reason: reason) {
         case .success:
             state.bindings.memberToManage = nil
             hideManageMemberIndicator(title: indicatorTitle)

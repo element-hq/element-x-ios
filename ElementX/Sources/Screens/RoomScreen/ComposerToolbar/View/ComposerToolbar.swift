@@ -341,6 +341,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
                                                             completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init(suggestions: suggestions)),
                                                             mediaProvider: MediaProviderMock(configuration: .init()),
                                                             mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                            appSettings: ServiceLocator.shared.settings,
                                                             analyticsService: ServiceLocator.shared.analytics,
                                                             composerDraftService: ComposerDraftServiceMock())
     
@@ -391,6 +392,7 @@ extension ComposerToolbar {
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                 appSettings: ServiceLocator.shared.settings,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
             model.state.composerEmpty = focused
@@ -409,6 +411,7 @@ extension ComposerToolbar {
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                 appSettings: ServiceLocator.shared.settings,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
             model.state.composerEmpty = focused
@@ -427,6 +430,7 @@ extension ComposerToolbar {
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                 appSettings: ServiceLocator.shared.settings,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
             model.state.composerMode = .recordVoiceMessage(state: AudioRecorderState())
@@ -446,6 +450,7 @@ extension ComposerToolbar {
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                 appSettings: ServiceLocator.shared.settings,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
             model.state.composerMode = .previewVoiceMessage(state: AudioPlayerState(id: .recorderPreview,
@@ -468,6 +473,7 @@ extension ComposerToolbar {
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                 appSettings: ServiceLocator.shared.settings,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
             model.state.composerMode = isLoading ? .reply(eventID: UUID().uuidString,
@@ -492,6 +498,7 @@ extension ComposerToolbar {
                                                  completionSuggestionService: CompletionSuggestionServiceMock(configuration: .init()),
                                                  mediaProvider: MediaProviderMock(configuration: .init()),
                                                  mentionDisplayHelper: ComposerMentionDisplayHelper.mock,
+                                                 appSettings: ServiceLocator.shared.settings,
                                                  analyticsService: ServiceLocator.shared.analytics,
                                                  composerDraftService: ComposerDraftServiceMock())
             model.state.canSend = false

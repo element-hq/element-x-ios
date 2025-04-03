@@ -2130,6 +2130,11 @@ class BannedRoomProxyMock: BannedRoomProxyProtocol, @unchecked Sendable {
     }
 }
 class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sendable {
+    var isEnabled: Bool {
+        get { return underlyingIsEnabled }
+        set(value) { underlyingIsEnabled = value }
+    }
+    var underlyingIsEnabled: Bool!
     var crashedLastRun: Bool {
         get { return underlyingCrashedLastRun }
         set(value) { underlyingCrashedLastRun = value }
@@ -2619,16 +2624,16 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var directRoomForUserIDClosure: ((String) async -> Result<String?, ClientProxyError>)?
+    var directRoomForUserIDClosure: ((String) -> Result<String?, ClientProxyError>)?
 
-    func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
+    func directRoomForUserID(_ userID: String) -> Result<String?, ClientProxyError> {
         directRoomForUserIDCallsCount += 1
         directRoomForUserIDReceivedUserID = userID
         DispatchQueue.main.async {
             self.directRoomForUserIDReceivedInvocations.append(userID)
         }
         if let directRoomForUserIDClosure = directRoomForUserIDClosure {
-            return await directRoomForUserIDClosure(userID)
+            return directRoomForUserIDClosure(userID)
         } else {
             return directRoomForUserIDReturnValue
         }
@@ -10304,15 +10309,15 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
     }
     //MARK: - kickUser
 
-    var kickUserUnderlyingCallsCount = 0
-    var kickUserCallsCount: Int {
+    var kickUserReasonUnderlyingCallsCount = 0
+    var kickUserReasonCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return kickUserUnderlyingCallsCount
+                return kickUserReasonUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = kickUserUnderlyingCallsCount
+                    returnValue = kickUserReasonUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -10320,29 +10325,29 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                kickUserUnderlyingCallsCount = newValue
+                kickUserReasonUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    kickUserUnderlyingCallsCount = newValue
+                    kickUserReasonUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var kickUserCalled: Bool {
-        return kickUserCallsCount > 0
+    var kickUserReasonCalled: Bool {
+        return kickUserReasonCallsCount > 0
     }
-    var kickUserReceivedUserID: String?
-    var kickUserReceivedInvocations: [String] = []
+    var kickUserReasonReceivedArguments: (userID: String, reason: String?)?
+    var kickUserReasonReceivedInvocations: [(userID: String, reason: String?)] = []
 
-    var kickUserUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var kickUserReturnValue: Result<Void, RoomProxyError>! {
+    var kickUserReasonUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var kickUserReasonReturnValue: Result<Void, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return kickUserUnderlyingReturnValue
+                return kickUserReasonUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = kickUserUnderlyingReturnValue
+                    returnValue = kickUserReasonUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -10350,39 +10355,39 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                kickUserUnderlyingReturnValue = newValue
+                kickUserReasonUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    kickUserUnderlyingReturnValue = newValue
+                    kickUserReasonUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var kickUserClosure: ((String) async -> Result<Void, RoomProxyError>)?
+    var kickUserReasonClosure: ((String, String?) async -> Result<Void, RoomProxyError>)?
 
-    func kickUser(_ userID: String) async -> Result<Void, RoomProxyError> {
-        kickUserCallsCount += 1
-        kickUserReceivedUserID = userID
+    func kickUser(_ userID: String, reason: String?) async -> Result<Void, RoomProxyError> {
+        kickUserReasonCallsCount += 1
+        kickUserReasonReceivedArguments = (userID: userID, reason: reason)
         DispatchQueue.main.async {
-            self.kickUserReceivedInvocations.append(userID)
+            self.kickUserReasonReceivedInvocations.append((userID: userID, reason: reason))
         }
-        if let kickUserClosure = kickUserClosure {
-            return await kickUserClosure(userID)
+        if let kickUserReasonClosure = kickUserReasonClosure {
+            return await kickUserReasonClosure(userID, reason)
         } else {
-            return kickUserReturnValue
+            return kickUserReasonReturnValue
         }
     }
     //MARK: - banUser
 
-    var banUserUnderlyingCallsCount = 0
-    var banUserCallsCount: Int {
+    var banUserReasonUnderlyingCallsCount = 0
+    var banUserReasonCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return banUserUnderlyingCallsCount
+                return banUserReasonUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = banUserUnderlyingCallsCount
+                    returnValue = banUserReasonUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -10390,29 +10395,29 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                banUserUnderlyingCallsCount = newValue
+                banUserReasonUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    banUserUnderlyingCallsCount = newValue
+                    banUserReasonUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var banUserCalled: Bool {
-        return banUserCallsCount > 0
+    var banUserReasonCalled: Bool {
+        return banUserReasonCallsCount > 0
     }
-    var banUserReceivedUserID: String?
-    var banUserReceivedInvocations: [String] = []
+    var banUserReasonReceivedArguments: (userID: String, reason: String?)?
+    var banUserReasonReceivedInvocations: [(userID: String, reason: String?)] = []
 
-    var banUserUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var banUserReturnValue: Result<Void, RoomProxyError>! {
+    var banUserReasonUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var banUserReasonReturnValue: Result<Void, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return banUserUnderlyingReturnValue
+                return banUserReasonUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = banUserUnderlyingReturnValue
+                    returnValue = banUserReasonUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -10420,26 +10425,26 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                banUserUnderlyingReturnValue = newValue
+                banUserReasonUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    banUserUnderlyingReturnValue = newValue
+                    banUserReasonUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var banUserClosure: ((String) async -> Result<Void, RoomProxyError>)?
+    var banUserReasonClosure: ((String, String?) async -> Result<Void, RoomProxyError>)?
 
-    func banUser(_ userID: String) async -> Result<Void, RoomProxyError> {
-        banUserCallsCount += 1
-        banUserReceivedUserID = userID
+    func banUser(_ userID: String, reason: String?) async -> Result<Void, RoomProxyError> {
+        banUserReasonCallsCount += 1
+        banUserReasonReceivedArguments = (userID: userID, reason: reason)
         DispatchQueue.main.async {
-            self.banUserReceivedInvocations.append(userID)
+            self.banUserReasonReceivedInvocations.append((userID: userID, reason: reason))
         }
-        if let banUserClosure = banUserClosure {
-            return await banUserClosure(userID)
+        if let banUserReasonClosure = banUserReasonClosure {
+            return await banUserReasonClosure(userID, reason)
         } else {
-            return banUserReturnValue
+            return banUserReasonReturnValue
         }
     }
     //MARK: - unbanUser
@@ -16371,15 +16376,15 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
     }
     var retryDecryptionSessionIDsReceivedSessionIDs: [String]?
     var retryDecryptionSessionIDsReceivedInvocations: [[String]?] = []
-    var retryDecryptionSessionIDsClosure: (([String]?) async -> Void)?
+    var retryDecryptionSessionIDsClosure: (([String]?) -> Void)?
 
-    func retryDecryption(sessionIDs: [String]?) async {
+    func retryDecryption(sessionIDs: [String]?) {
         retryDecryptionSessionIDsCallsCount += 1
         retryDecryptionSessionIDsReceivedSessionIDs = sessionIDs
         DispatchQueue.main.async {
             self.retryDecryptionSessionIDsReceivedInvocations.append(sessionIDs)
         }
-        await retryDecryptionSessionIDsClosure?(sessionIDs)
+        retryDecryptionSessionIDsClosure?(sessionIDs)
     }
     //MARK: - paginateBackwards
 

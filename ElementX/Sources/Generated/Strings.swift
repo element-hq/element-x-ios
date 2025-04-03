@@ -46,8 +46,6 @@ internal enum L10n {
   internal static var a11yPoll: String { return L10n.tr("Localizable", "a11y_poll") }
   /// Ended poll
   internal static var a11yPollEnd: String { return L10n.tr("Localizable", "a11y_poll_end") }
-  /// Profile picture
-  internal static var a11yProfilePicture: String { return L10n.tr("Localizable", "a11y_profile_picture") }
   /// React with %1$@
   internal static func a11yReactWith(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_react_with", String(describing: p1))
@@ -480,6 +478,8 @@ internal enum L10n {
   internal static var commonReaction: String { return L10n.tr("Localizable", "common_reaction") }
   /// Reactions
   internal static var commonReactions: String { return L10n.tr("Localizable", "common_reactions") }
+  /// Reason
+  internal static var commonReason: String { return L10n.tr("Localizable", "common_reason") }
   /// Recovery key
   internal static var commonRecoveryKey: String { return L10n.tr("Localizable", "common_recovery_key") }
   /// Refreshing…
@@ -2052,6 +2052,12 @@ internal enum L10n {
   internal static func screenRoomMemberListHeaderTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_member_list_header_title", p1)
   }
+  /// Remove
+  internal static var screenRoomMemberListKickMemberConfirmationAction: String { return L10n.tr("Localizable", "screen_room_member_list_kick_member_confirmation_action") }
+  /// They will be able to join this room again if invited.
+  internal static var screenRoomMemberListKickMemberConfirmationDescription: String { return L10n.tr("Localizable", "screen_room_member_list_kick_member_confirmation_description") }
+  /// Are you sure you want to remove this member?
+  internal static var screenRoomMemberListKickMemberConfirmationTitle: String { return L10n.tr("Localizable", "screen_room_member_list_kick_member_confirmation_title") }
   /// Remove and ban member
   internal static var screenRoomMemberListManageMemberBan: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_ban") }
   /// Remove from room

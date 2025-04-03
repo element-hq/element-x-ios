@@ -167,7 +167,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             await subscribeToKnockRequests()
             
             if infoPublisher.value.isEncrypted {
-                subscribeToIdentityStatusChanges()
+                await subscribeToIdentityStatusChanges()
             }
         }
     }
@@ -670,9 +670,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     // MARK: - Moderation
     
-    func kickUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+    func kickUser(_ userID: String, reason: String?) async -> Result<Void, RoomProxyError> {
         do {
-            try await room.kickUser(userId: userID, reason: nil)
+            try await room.kickUser(userId: userID, reason: reason)
             return .success(())
         } catch {
             MXLog.error("Failed kicking \(userID) with error: \(error)")
@@ -680,9 +680,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    func banUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+    func banUser(_ userID: String, reason: String?) async -> Result<Void, RoomProxyError> {
         do {
-            try await room.banUser(userId: userID, reason: nil)
+            try await room.banUser(userId: userID, reason: reason)
             return .success(())
         } catch {
             MXLog.error("Failed banning \(userID) with error: \(error)")
@@ -810,14 +810,18 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         })
     }
     
-    private func subscribeToIdentityStatusChanges() {
-        identityStatusChangesObservationToken = room.subscribeToIdentityStatusChanges(listener: RoomIdentityStatusChangeListener { [weak self] changes in
-            guard let self else { return }
-            
-            MXLog.info("Received identity status changes: \(changes)")
-            
-            identityStatusChangesSubject.send(changes)
-        })
+    private func subscribeToIdentityStatusChanges() async {
+        do {
+            identityStatusChangesObservationToken = try await room.subscribeToIdentityStatusChanges(listener: RoomIdentityStatusChangeListener { [weak self] changes in
+                guard let self else { return }
+                
+                MXLog.info("Received identity status changes: \(changes)")
+                
+                identityStatusChangesSubject.send(changes)
+            })
+        } catch {
+            MXLog.error("Failed subscribing to identity status changes with error: \(error)")
+        }
     }
     
     private func subscribeToKnockRequests() async {

@@ -24,6 +24,18 @@ struct HomeScreen: View {
     
     @State private var selectedTab: HomeTab = .chat
     
+    init(context: HomeScreenViewModel.Context) {
+        self.context = context
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundEffect = UIBlurEffect(style: .regular)
+        appearance.backgroundColor = UIColor.black.withAlphaComponent(0.15)
+        
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+    }
+    
     var body: some View {
         Group {
             if selectedTab == .chat, context.manualSearchTriggered {
@@ -56,7 +68,6 @@ struct HomeScreen: View {
                    message: leaveRoomAlertMessage)
 //            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
             .toolbar { toolbar }
-            .toolbarBackground(.visible, for: .navigationBar)
             .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
 //            .track(screen: .Home)
 //            .introspect(.viewController, on: .supportedVersions) { controller in

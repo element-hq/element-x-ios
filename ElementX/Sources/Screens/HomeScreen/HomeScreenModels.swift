@@ -207,8 +207,8 @@ struct HomeScreenViewState: BindableState {
         }
     }
     var placeholderChannels: [HomeScreenChannel] {
-        (1...20).map { _ in
-            HomeScreenChannel.placeholder()
+        (1...20).map { index in
+            HomeScreenChannel.placeholder(index)
         }
     }
     
@@ -365,10 +365,10 @@ struct HomeScreenChannel: Identifiable, Equatable {
     
     var notificationsCount: UInt = 0
     
-    static func placeholder() -> HomeScreenChannel {
+    static func placeholder(_ index: Int) -> HomeScreenChannel {
         .init(id: UUID().uuidString,
-              channelFullName: "Placeholder Channel Name",
-              displayName: "Placeholder Channel Display Name")
+              channelFullName: "0://placeholderChannel\(index).name",
+              displayName: "0://placeholderChannel\(index)")
     }
 }
 

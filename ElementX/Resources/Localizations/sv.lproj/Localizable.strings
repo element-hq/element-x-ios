@@ -1,11 +1,14 @@
 "Notification" = "notis";
+"a11y_avatar" = "Avatar";
 "a11y_delete" = "Radera";
 "a11y_hide_password" = "Dölj lösenord";
+"a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "Hoppa till botten";
 "a11y_notifications_mentions_only" = "Endast omnämningar";
 "a11y_notifications_muted" = "Tystad";
 "a11y_page_n" = "Sida %1$d";
 "a11y_pause" = "Pausa";
+"a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "PIN-fält";
 "a11y_play" = "Spela upp";
 "a11y_poll_end" = "Avslutade omröstning";
@@ -19,6 +22,7 @@
 "a11y_show_password" = "Visa lösenord";
 "a11y_start_call" = "Starta ett samtal";
 "a11y_user_menu" = "Användarmeny";
+"a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Spela in röstmeddelande.";
 "a11y_voice_message_stop_recording" = "Stoppa inspelning";
 "a11y.view_details" = "Visa detaljer";

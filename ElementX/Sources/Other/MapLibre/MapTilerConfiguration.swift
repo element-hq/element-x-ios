@@ -13,17 +13,21 @@ import CoreLocation
 /// [FORKING.md](https://github.com/element-hq/element-x-ios/blob/develop/docs/FORKING.md#setup-the-location-sharing)
 struct MapTilerConfiguration {
     let baseURL: URL
-    let apiKey: String
+    /// The API key for fetching map tiles. When not set, location sharing will be disabled and
+    /// any received locations will be shown in the timeline with a generic blurred map image.
+    let apiKey: String?
     /// A MapLibre style ID for a light-mode map.
     let lightStyleID: String
     /// A MapLibre style ID for a dark-mode map.
     let darkStyleID: String
+    
+    var isEnabled: Bool { apiKey != nil }
 }
 
 extension MapTilerConfiguration: MapTilerURLBuilderProtocol {
     func dynamicMapURL(for style: MapTilerStyle) -> URL? {
         var url = makeNewURL(for: style)
-        url.appendPathComponent("style.json", conformingTo: .json)
+        url?.appendPathComponent("style.json", conformingTo: .json)
         return url
     }
     
@@ -33,20 +37,22 @@ extension MapTilerConfiguration: MapTilerURLBuilderProtocol {
                       size: CGSize,
                       attribution: MapTilerAttributionPlacement) -> URL? {
         var url = makeNewURL(for: style)
-        url.appendPathComponent(String(format: "static/%f,%f,%f/%dx%d@2x.png",
-                                       coordinates.longitude,
-                                       coordinates.latitude,
-                                       zoomLevel,
-                                       Int(size.width),
-                                       Int(size.height)),
-                                conformingTo: .png)
-        url.append(queryItems: [.init(name: "attribution", value: attribution.rawValue)])
+        url?.appendPathComponent(String(format: "static/%f,%f,%f/%dx%d@2x.png",
+                                        coordinates.longitude,
+                                        coordinates.latitude,
+                                        zoomLevel,
+                                        Int(size.width),
+                                        Int(size.height)),
+                                 conformingTo: .png)
+        url?.append(queryItems: [.init(name: "attribution", value: attribution.rawValue)])
         return url
     }
     
     // MARK: Private
     
-    private func makeNewURL(for style: MapTilerStyle) -> URL {
+    private func makeNewURL(for style: MapTilerStyle) -> URL? {
+        guard let apiKey else { return nil }
+        
         var url: URL = baseURL
         url.appendPathComponent(styleID(for: style), conformingTo: .item)
         url.append(queryItems: [URLQueryItem(name: "key", value: apiKey)])

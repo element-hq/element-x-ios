@@ -17,11 +17,13 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol) {
+    init(userSession: UserSessionProtocol, appSettings: AppSettings, isBugReportServiceEnabled: Bool) {
         super.init(initialViewState: .init(deviceID: userSession.clientProxy.deviceID,
                                            userID: userSession.clientProxy.userID,
                                            showAccountDeactivation: userSession.clientProxy.canDeactivateAccount,
-                                           showDeveloperOptions: AppSettings.isDevelopmentBuild),
+                                           showDeveloperOptions: AppSettings.isDevelopmentBuild,
+                                           showAnalyticsSettings: appSettings.canPromptForAnalytics,
+                                           isBugReportServiceEnabled: isBugReportServiceEnabled),
                    mediaProvider: userSession.mediaProvider)
         
         userSession.clientProxy.userAvatarURLPublisher

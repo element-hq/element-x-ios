@@ -33,6 +33,14 @@ struct HomeTabView<Content: View>: View {
          onTabSelected: @escaping (HomeTab) -> Void) {
         self.tabContent = tabContent
         self.onTabSelected = onTabSelected
+        
+        let appearance = UITabBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundEffect = UIBlurEffect(style: .regular)
+        appearance.backgroundColor = UIColor.black.withAlphaComponent(0.15) // Tint color
+        
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
     }
     
     var body: some View {

@@ -1,11 +1,14 @@
 "Notification" = "Melding";
+"a11y_avatar" = "Avatar";
 "a11y_delete" = "Verwijderen";
 "a11y_hide_password" = "Wachtwoord verbergen";
+"a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "Spring naar einde";
 "a11y_notifications_mentions_only" = "Alleen vermeldingen";
 "a11y_notifications_muted" = "Gedempt";
 "a11y_page_n" = "Pagina %1$d";
 "a11y_pause" = "Pauzeren";
+"a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
 "a11y_pin_field" = "PIN-veld";
 "a11y_play" = "Afspelen";
 "a11y_poll_end" = "Beeïndigde peiling";
@@ -19,6 +22,7 @@
 "a11y_show_password" = "Wachtwoord weergeven";
 "a11y_start_call" = "Begin een oproep";
 "a11y_user_menu" = "Gebruikersmenu";
+"a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Spraakbericht opnemen.";
 "a11y_voice_message_stop_recording" = "Opnemen stoppen";
 "a11y.view_details" = "Details bekijken";

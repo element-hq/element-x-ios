@@ -249,28 +249,42 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     
     func testKickMember() async throws {
         setup(with: .allMembersAsAdmin)
-        let deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
+        var deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
         try await deferred.fulfill()
+        
+        let expectation = XCTestExpectation(description: "Ban member")
+        roomProxy.kickUserReasonClosure = { _, _ in
+            defer { expectation.fulfill() }
+            return .success(())
+        }
         
         context.send(viewAction: .kickMember(viewModel.state.visibleJoinedMembers[0].member))
         
-        // Calling the mock won't actually change any view state, so sleep instead.
-        try await Task.sleep(for: .milliseconds(100))
+        deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
+        try await deferred.fulfill()
         
-        XCTAssert(roomProxy.kickUserCalled)
+        context.alertInfo?.secondaryButton?.action?()
+        await fulfillment(of: [expectation])
     }
     
     func testBanMember() async throws {
         setup(with: .allMembersAsAdmin)
-        let deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
+        var deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
         try await deferred.fulfill()
+        
+        let expectation = XCTestExpectation(description: "Ban member")
+        roomProxy.banUserReasonClosure = { _, _ in
+            defer { expectation.fulfill() }
+            return .success(())
+        }
         
         context.send(viewAction: .banMember(viewModel.state.visibleJoinedMembers[0].member))
         
-        // Calling the mock won't actually change any view state, so sleep instead.
-        try await Task.sleep(for: .milliseconds(100))
+        deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
+        try await deferred.fulfill()
         
-        XCTAssert(roomProxy.banUserCalled)
+        context.alertInfo?.secondaryButton?.action?()
+        await fulfillment(of: [expectation])
     }
     
     func testUnbanMember() async throws {
