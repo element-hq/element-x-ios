@@ -219,7 +219,7 @@ struct SettingsScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.settingsScreen.about)
             
             if context.viewState.isBugReportServiceEnabled {
-                ListRow(label: .default(title: L10n.commonReportAProblem,
+                ZeroListRow(label: .default(title: L10n.commonReportAProblem,
                                         icon: \.chatProblem),
                         kind: .navigationLink {
                             context.send(viewAction: .reportBug)
@@ -228,7 +228,7 @@ struct SettingsScreen: View {
             }
             
             if context.viewState.showAnalyticsSettings {
-                ListRow(label: .default(title: L10n.commonAnalytics,
+                ZeroListRow(label: .default(title: L10n.commonAnalytics,
                                         icon: \.chart),
                         kind: .navigationLink {
                             context.send(viewAction: .analytics)

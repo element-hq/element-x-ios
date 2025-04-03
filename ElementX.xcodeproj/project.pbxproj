@@ -1878,6 +1878,7 @@
 		7984575F2D60849F0039623F /* HomeScreenPostMeowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7984575D2D60849D0039623F /* HomeScreenPostMeowButton.swift */; };
 		798457612D6090DD0039623F /* FeedDetailsUpdatedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798457602D6090D20039623F /* FeedDetailsUpdatedProtocol.swift */; };
 		798457622D6090DD0039623F /* FeedDetailsUpdatedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798457602D6090D20039623F /* FeedDetailsUpdatedProtocol.swift */; };
+		79894B732D9E75A100311B4F /* BugReportServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7FC9580CABF797A2E6213A /* BugReportServiceMock.swift */; };
 		798BF3072137833FBD3F4C96 /* TimelineDeliveryStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F91544AC136BF6477BDAB8 /* TimelineDeliveryStatusView.swift */; };
 		798C78842D79394E00C1272F /* ElementTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7673F2B0B038FAB2A8D16AD /* ElementTextFieldStyle.swift */; };
 		798C78852D79397700C1272F /* JoinRoomByAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A13364350970987B93F6018 /* JoinRoomByAddressView.swift */; };
@@ -9806,6 +9807,7 @@
 				7903938A2D53A1D60022E293 /* TimelineProvider.swift in Sources */,
 				18E9A6642C9829970082DDA4 /* RoomProxyProtocol.swift in Sources */,
 				18E9A6652C9829970082DDA4 /* RoomRolesAndPermissionsFlowCoordinator.swift in Sources */,
+				79894B732D9E75A100311B4F /* BugReportServiceMock.swift in Sources */,
 				795CF4462D834F5E0014B537 /* HomeMyPostsContent.swift in Sources */,
 				18E9A6662C9829970082DDA4 /* RoomRolesAndPermissionsScreen.swift in Sources */,
 				18E9A6672C9829970082DDA4 /* RoomRolesAndPermissionsScreenCoordinator.swift in Sources */,

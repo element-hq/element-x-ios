@@ -39,7 +39,7 @@ struct AuthenticationStartScreen: View {
                         context.send(viewAction: .reportProblem)
                     } label: {
                         Text(L10n.commonReportAProblem)
-                            .font(.compound.bodySM)
+                            .font(.zero.bodySM)
                             .foregroundColor(.compound.textSecondary)
                             .padding(.bottom)
                     }

@@ -33,23 +33,15 @@ struct RoomMembersListManageMemberSheet: View {
                     ZeroListRow(label: .default(title: L10n.screenRoomMemberListManageMemberRemove,
                                                 icon: \.close),
                                 kind: .button {
-                                    context.send(viewAction: .kickMember(member))
-                                })
-                if actions.contains(.ban) {
-                    ListRow(label: .default(title: L10n.screenRoomMemberListManageMemberBan,
-                                            icon: \.block,
-                                            role: .destructive),
-                            kind: .button {
-                                context.send(viewAction: .banMember(member))
-                            })
+                        context.send(viewAction: .kickMember(member))
+                    })
                 }
-                
 //                if actions.contains(.ban) {
 //                    ZeroListRow(label: .default(title: L10n.screenRoomMemberListManageMemberBan,
 //                                            icon: \.block,
 //                                            role: .destructive),
 //                            kind: .button {
-//                                isPresentingBanConfirmation = true
+//                                context.send(viewAction: .banMember(member))
 //                            })
 //                }
             }

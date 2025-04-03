@@ -67,7 +67,8 @@ class StartChatScreenViewModel: StartChatScreenViewModelType, StartChatScreenVie
                 actionsSubject.send(.showRoom(withIdentifier: roomId))
             case .success:
                 hideLoadingIndicator()
-                state.bindings.selectedUserToInvite = user
+                //state.bindings.selectedUserToInvite = user
+                Task { await createDirectRoom(user: user) }
             case .failure:
                 hideLoadingIndicator()
                 displayError()
