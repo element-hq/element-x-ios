@@ -7,9 +7,10 @@
 
 import Foundation
 
-enum JoinRoomScreenViewModelAction {
+enum JoinRoomScreenViewModelAction: Equatable {
     case joined
     case dismiss
+    case presentDeclineAndBlock(userID: String)
 }
 
 enum JoinRoomScreenMode: Equatable {
