@@ -42,6 +42,9 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Showing the user profile screen. This screen clears the navigation.
         case userProfileScreen
         
+        /// Showing the report room screen, for the given room identrifier
+        case reportRoomScreen(selectedRoomID: String?)
+        
         case shareExtensionRoomList(sharePayload: ShareExtensionPayload)
         
         /// The selected room ID from the state if available.
@@ -56,7 +59,8 @@ class UserSessionFlowCoordinatorStateMachine {
                  .encryptionResetFlow(let selectedRoomID),
                  .startChatScreen(let selectedRoomID),
                  .logoutConfirmationScreen(let selectedRoomID),
-                 .roomDirectorySearchScreen(let selectedRoomID):
+                 .roomDirectorySearchScreen(let selectedRoomID),
+                 .reportRoomScreen(let selectedRoomID):
                 selectedRoomID
             }
         }
@@ -121,6 +125,9 @@ class UserSessionFlowCoordinatorStateMachine {
         
         case showShareExtensionRoomList(sharePayload: ShareExtensionPayload)
         case dismissedShareExtensionRoomList
+        
+        case presentReportRoomScreen(roomID: String)
+        case dismissedReportRoomScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -193,6 +200,11 @@ class UserSessionFlowCoordinatorStateMachine {
                 return .shareExtensionRoomList(sharePayload: sharePayload)
             case (.shareExtensionRoomList, .dismissedShareExtensionRoomList):
                 return .roomList(selectedRoomID: nil)
+                
+            case (.roomList(let selectedRoomID), .presentReportRoomScreen):
+                return .reportRoomScreen(selectedRoomID: selectedRoomID)
+            case (.reportRoomScreen(let selectedRoomID), .dismissedReportRoomScreen):
+                return .roomList(selectedRoomID: selectedRoomID)
                 
             default:
                 return nil

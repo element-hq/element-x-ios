@@ -307,6 +307,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case (.userProfileScreen, .dismissedUserProfileScreen, .roomList):
                 break
                 
+            case (.roomList, .presentReportRoomScreen(let roomID), .reportRoomScreen):
+                Task { await self.presentReportRoom(for: roomID) }
+            case (.reportRoomScreen, .dismissedReportRoomScreen, .roomList):
+                break
+                
             case (.roomList(let selectedRoomID), .showShareExtensionRoomList, .shareExtensionRoomList(let sharePayload)):
                 Task {
                     if selectedRoomID != nil {
@@ -496,6 +501,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     handleAppRoute(.room(roomID: roomID, via: []), animated: true)
                 case .presentRoomDetails(let roomID):
                     handleAppRoute(.roomDetails(roomID: roomID), animated: true)
+                case .presentReportRoom(let roomID):
+                    stateMachine.processEvent(.presentReportRoomScreen(roomID: roomID))
                 case .roomLeft(let roomID):
                     if case .roomList(selectedRoomID: let selectedRoomID) = stateMachine.state,
                        selectedRoomID == roomID {
@@ -526,6 +533,35 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
         
         navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
+    }
+    
+    private func presentReportRoom(for roomID: String) async {
+        guard let roomProxyType = await userSession.clientProxy.roomForIdentifier(roomID),
+              case let .joined(roomProxy) = roomProxyType else {
+            MXLog.error("Failed to get room proxy for room: \(roomID)")
+            return
+        }
+        
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let coordinator = ReportRoomScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController))
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss(let shouldLeaveRoom):
+                if shouldLeaveRoom,
+                   case .roomList(let selectedRoomID) = stateMachine.state,
+                   selectedRoomID == roomID {
+                    clearRoute(animated: true)
+                }
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedReportRoomScreen)
+        }
     }
     
     private func runLogoutFlow() async {

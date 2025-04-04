@@ -6689,6 +6689,76 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return reportContentReasonReturnValue
         }
     }
+    //MARK: - reportRoom
+
+    var reportRoomReasonUnderlyingCallsCount = 0
+    var reportRoomReasonCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return reportRoomReasonUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = reportRoomReasonUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                reportRoomReasonUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    reportRoomReasonUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var reportRoomReasonCalled: Bool {
+        return reportRoomReasonCallsCount > 0
+    }
+    var reportRoomReasonReceivedReason: String?
+    var reportRoomReasonReceivedInvocations: [String?] = []
+
+    var reportRoomReasonUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var reportRoomReasonReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return reportRoomReasonUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = reportRoomReasonUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                reportRoomReasonUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    reportRoomReasonUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var reportRoomReasonClosure: ((String?) async -> Result<Void, RoomProxyError>)?
+
+    func reportRoom(reason: String?) async -> Result<Void, RoomProxyError> {
+        reportRoomReasonCallsCount += 1
+        reportRoomReasonReceivedReason = reason
+        DispatchQueue.main.async {
+            self.reportRoomReasonReceivedInvocations.append(reason)
+        }
+        if let reportRoomReasonClosure = reportRoomReasonClosure {
+            return await reportRoomReasonClosure(reason)
+        } else {
+            return reportRoomReasonReturnValue
+        }
+    }
     //MARK: - leaveRoom
 
     var leaveRoomUnderlyingCallsCount = 0
