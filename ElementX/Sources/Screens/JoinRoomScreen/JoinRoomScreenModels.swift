@@ -10,6 +10,7 @@ import Foundation
 enum JoinRoomScreenViewModelAction {
     case joined
     case dismiss
+    case presentDeclineAndBlock(userID: String)
 }
 
 enum JoinRoomScreenMode: Equatable {

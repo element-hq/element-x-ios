@@ -20,6 +20,7 @@ struct JoinRoomScreenCoordinatorParameters {
 enum JoinRoomScreenCoordinatorAction {
     case joined
     case cancelled
+    case presentDeclineAndBlock(userID: String)
 }
 
 final class JoinRoomScreenCoordinator: CoordinatorProtocol {
@@ -51,6 +52,8 @@ final class JoinRoomScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.joined)
             case .dismiss:
                 actionsSubject.send(.cancelled)
+            case .presentDeclineAndBlock(let userID):
+                actionsSubject.send(.presentDeclineAndBlock(userID: userID))
             }
         }
         .store(in: &cancellables)
