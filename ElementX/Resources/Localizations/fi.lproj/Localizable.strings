@@ -50,6 +50,7 @@
 "action_deactivate" = "Deaktivoi";
 "action_deactivate_account" = "Deaktivoi tili";
 "action_decline" = "Hylkää";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "Poista kysely";
 "action_disable" = "Poista käytöstä";
 "action_discard" = "Hylkää";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Poista viesti";
 "action_reply" = "Vastaa";
 "action_reply_in_thread" = "Vastaa ketjuun";
+"action_report" = "Report";
 "action_report_bug" = "Ilmoita virheestä";
 "action_report_content" = "Ilmoita sisällöstä";
+"action_report_room" = "Report room";
 "action_reset" = "Nollaa";
 "action_reset_identity" = "Nollaa identiteetti";
 "action_retry" = "Yritä uudelleen";
@@ -200,6 +203,7 @@
 "common_people" = "Ihmiset";
 "common_permalink" = "Pysyvä linkki";
 "common_permission" = "Lupa";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Odota hetki...";
 "common_poll_end_confirmation" = "Haluatko varmasti lopettaa tämän kyselyn?";
 "common_poll_summary" = "Kysely: %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "Tietosuojakäytäntö";
 "common_reaction" = "Reaktio";
 "common_reactions" = "Reaktiot";
+"common_reason" = "Reason";
 "common_recovery_key" = "Palautusavain";
 "common_refreshing" = "Päivitetään...";
 "common_replying_to" = "Vastataan käyttäjälle %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ tarvitsee luvan mikrofonin käyttöön.";
 "dialog_permission_notification" = "Jotta sovellus voisi näyttää ilmoituksia, anna lupa järjestelmän asetuksista.";
 "dialog_permission_photo_library_title_ios" = "%1$@ -sovelluksella ei ole pääsyä kuvakirjastoosi.";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "Vahvistus";
 "dialog_title_warning" = "Varoitus";
 "dialog_unsaved_changes_description_ios" = "Muutoksiasi ei tallenneta";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Pyydä liittymistä";
 "screen_create_room_room_address_section_footer" = "Jotta tämä huone näkyisi julkisessa huonehakemistossa, tarvitset huoneen osoitteen.";
 "screen_create_room_room_visibility_section_title" = "Huoneen näkyvyys";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "Tarvitset huoneen osoitteen, jotta se näkyy hakemistossa.";
 "screen_edit_room_address_title" = "Huoneen osoite";
 "screen_join_room_cancel_knock_action" = "Peruuta pyyntö";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Median lähettäminen epäonnistui, yritä uudelleen.";
 "screen_pinned_timeline_empty_state_description" = "Paina viestiä ja valitse “%1$@” lisätäksesi sen tänne.";
 "screen_pinned_timeline_empty_state_headline" = "Kiinnitä tärkeät viestit, jotta ne löytyvät helposti.";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "Tapahtui tuntematon virhe. Tarkista, että tilisi salasana on oikein ja yritä uudelleen.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Peruuta vahvistus ja lähetä";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Voit peruuttaa vahvistuksen ja lähettää tämän viestin silti, tai voit peruuttaa viestin lähettämisen toistaiseksi ja yrittää uudelleen myöhemmin, kun olet vahvistanut käyttäjän %1$@ uudelleen.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Haluatko varmasti antaa tälle jäsenelle porttikiellon?";
 "screen_room_member_list_banned_empty" = "Tässä huoneessa ei ole porttikieltoja";
 "screen_room_member_list_banning_user" = "Annetaan porttikieltoa käyttäjälle %1$@";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "Poista jäsen huoneesta ja anna porttikielto";
 "screen_room_member_list_manage_member_remove" = "Poista huoneesta";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Poista vain jäsen huoneesta";

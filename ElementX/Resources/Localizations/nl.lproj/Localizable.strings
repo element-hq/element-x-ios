@@ -50,6 +50,7 @@
 "action_deactivate" = "Sluiten";
 "action_deactivate_account" = "Account sluiten";
 "action_decline" = "Weigeren";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "Peiling verwijderen";
 "action_disable" = "Uitschakelen";
 "action_discard" = "Verwerpen";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Remove message";
 "action_reply" = "Antwoorden";
 "action_reply_in_thread" = "Antwoord in subchat";
+"action_report" = "Report";
 "action_report_bug" = "Probleem melden";
 "action_report_content" = "Inhoud melden";
+"action_report_room" = "Report room";
 "action_reset" = "Opnieuw instellen";
 "action_reset_identity" = "Identiteit opnieuw instellen";
 "action_retry" = "Opnieuw proberen";
@@ -200,6 +203,7 @@
 "common_people" = "Personen";
 "common_permalink" = "Permalink";
 "common_permission" = "Toestemming";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Even geduld...";
 "common_poll_end_confirmation" = "Weet je zeker dat je deze peiling wilt beëindigen?";
 "common_poll_summary" = "Peiling: %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "Privacybeleid";
 "common_reaction" = "Reactie";
 "common_reactions" = "Reacties";
+"common_reason" = "Reason";
 "common_recovery_key" = "Herstelsleutel";
 "common_refreshing" = "Verversen...";
 "common_replying_to" = "Reageren op %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ heeft toegang tot je microfoon nodig.";
 "dialog_permission_notification" = "Geef toestemming in de systeeminstellingen om de applicatie meldingen te laten weergeven.";
 "dialog_permission_photo_library_title_ios" = "%1$@ does not have access to your photo library.";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "Bevestiging";
 "dialog_title_warning" = "Waarschuwing";
 "dialog_unsaved_changes_description_ios" = "Je wijzigingen worden niet opgeslagen";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Vraag om toe te treden";
 "screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
 "screen_create_room_room_visibility_section_title" = "Room visibility";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
 "screen_edit_room_address_title" = "Room address";
 "screen_join_room_cancel_knock_action" = "Cancel request";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Het uploaden van media is mislukt. Probeer het opnieuw.";
 "screen_pinned_timeline_empty_state_description" = "Druk op een bericht en kies „%1$@” om het hier toe te voegen.";
 "screen_pinned_timeline_empty_state_headline" = "Zet belangrijke berichten vast zodat ze gemakkelijk te vinden zijn";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "Er is een onbekende fout opgetreden. Controleer of het wachtwoord van je account juist is en probeer het opnieuw.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Verificatie intrekken en verzenden";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Je kunt je verificatie intrekken en dit bericht toch verzenden, of je kunt het voorlopig annuleren en het later opnieuw proberen nadat je %1$@ opnieuw hebt geverifieerd.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Weet je zeker dat je dit lid wilt verbannen?";
 "screen_room_member_list_banned_empty" = "Er zijn geen verbannen gebruikers in deze kamer.";
 "screen_room_member_list_banning_user" = "%1$@ verbannen";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "Lid verwijderen en verbannen";
 "screen_room_member_list_manage_member_remove" = "Verwijderen uit kamer";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Alleen lid verwijderen";

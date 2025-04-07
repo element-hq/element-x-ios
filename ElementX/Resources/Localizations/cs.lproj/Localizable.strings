@@ -50,6 +50,7 @@
 "action_deactivate" = "Deaktivovat";
 "action_deactivate_account" = "Deaktivovat účet";
 "action_decline" = "Odmítnout";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "Odstranit hlasování";
 "action_disable" = "Zakázat";
 "action_discard" = "Vyřadit";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Odstranit zprávu";
 "action_reply" = "Odpovědět";
 "action_reply_in_thread" = "Odpovědět ve vlákně";
+"action_report" = "Report";
 "action_report_bug" = "Nahlásit chybu";
 "action_report_content" = "Nahlásit obsah";
+"action_report_room" = "Report room";
 "action_reset" = "Obnovit";
 "action_reset_identity" = "Obnovit identitu";
 "action_retry" = "Zkusit znovu";
@@ -200,6 +203,7 @@
 "common_people" = "Lidé";
 "common_permalink" = "Trvalý odkaz";
 "common_permission" = "Oprávnění";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Počkejte prosím...";
 "common_poll_end_confirmation" = "Opravdu chcete ukončit toto hlasování?";
 "common_poll_summary" = "Hlasování: %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "Zásady ochrany osobních údajů";
 "common_reaction" = "Reakce";
 "common_reactions" = "Reakce";
+"common_reason" = "Reason";
 "common_recovery_key" = "Klíč pro obnovení";
 "common_refreshing" = "Obnovování...";
 "common_replying_to" = "Odpověď na %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ potřebuje povolení k přístupu k mikrofonu.";
 "dialog_permission_notification" = "Aby aplikace mohla zobrazovat upozornění, udělte prosím oprávnění v nastavení systému.";
 "dialog_permission_photo_library_title_ios" = "%1$@ nemá přístup do vaší knihovny fotografií.";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "Potvrzení";
 "dialog_title_warning" = "Upozornění";
 "dialog_unsaved_changes_description_ios" = "Vaše změny nebudou uloženy";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Požádat o připojení";
 "screen_create_room_room_address_section_footer" = "Aby byla tato místnost viditelná v adresáři veřejných místností, budete potřebovat adresu místnosti.";
 "screen_create_room_room_visibility_section_title" = "Viditelnost místnosti";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "Aby byla místnost v adresáři viditelná, je třeba zadat její adresu.";
 "screen_edit_room_address_title" = "Adresa místnosti";
 "screen_join_room_cancel_knock_action" = "Zrušit žádost";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Nahrání média se nezdařilo, zkuste to prosím znovu.";
 "screen_pinned_timeline_empty_state_description" = "Přidržte zprávu a vyberte „%1$@“, kterou chcete zahrnout sem.";
 "screen_pinned_timeline_empty_state_headline" = "Připněte důležité zprávy, aby je bylo možné snadno najít";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "Došlo k neznámé chybě. Zkontrolujte, zda je heslo k účtu správné a zkuste to znovu.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Zrušit ověření a odeslat";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Ověření můžete zrušit a přesto odeslat tuto zprávu, nebo můžete prozatím zrušit a zkusit to znovu později po opětovném ověření %1$@.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Jste si jisti, že chcete vykázat tohoto člena?";
 "screen_room_member_list_banned_empty" = "V této místnosti nejsou žádní vykázaní uživatelé.";
 "screen_room_member_list_banning_user" = "Vykazování %1$@";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "Odebrat a vykázat člena";
 "screen_room_member_list_manage_member_remove" = "Odebrat z místnosti";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Pouze odebrat člena";

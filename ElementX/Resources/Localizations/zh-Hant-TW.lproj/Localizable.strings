@@ -50,6 +50,7 @@
 "action_deactivate" = "停用";
 "action_deactivate_account" = "停用帳號";
 "action_decline" = "拒絕";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "刪除投票";
 "action_disable" = "停用";
 "action_discard" = "捨棄";
@@ -95,8 +96,10 @@
 "action_remove_message" = "移除訊息";
 "action_reply" = "回覆";
 "action_reply_in_thread" = "在討論串中回覆";
+"action_report" = "Report";
 "action_report_bug" = "回報程式錯誤";
 "action_report_content" = "檢舉內容";
+"action_report_room" = "Report room";
 "action_reset" = "重設";
 "action_reset_identity" = "重設身份";
 "action_retry" = "再試一次";
@@ -200,6 +203,7 @@
 "common_people" = "夥伴";
 "common_permalink" = "永久連結";
 "common_permission" = "權限";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "請稍等...";
 "common_poll_end_confirmation" = "您確定要結束這項投票嗎？";
 "common_poll_summary" = "投票：%1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "隱私權政策";
 "common_reaction" = "回應";
 "common_reactions" = "回應";
+"common_reason" = "Reason";
 "common_recovery_key" = "復原金鑰";
 "common_refreshing" = "重新整理中...";
 "common_replying_to" = "正在回覆%1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ 需要權限存取麥克風。";
 "dialog_permission_notification" = "為了讓應用程式顯示通知，請到系統設定中開啟權限。";
 "dialog_permission_photo_library_title_ios" = "%1$@ 無法存取您的相片庫。";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "確認";
 "dialog_title_warning" = "警告";
 "dialog_unsaved_changes_description_ios" = "您的變更不會儲存";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "要求加入";
 "screen_create_room_room_address_section_footer" = "為了讓此聊天室在公開聊天室目錄中可見，您需要聊天室地址。";
 "screen_create_room_room_visibility_section_title" = "聊天室能見度";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "您需要聊天室地址才能在目錄中顯示它。";
 "screen_edit_room_address_title" = "聊天室地址";
 "screen_join_room_cancel_knock_action" = "取消請求";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "無法上傳媒體檔案，請稍後再試。";
 "screen_pinned_timeline_empty_state_description" = "按一下訊息，然後選擇「%1$@」以加入至此。";
 "screen_pinned_timeline_empty_state_headline" = "釘選重要訊息，如此才能輕鬆發現";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "發生了未知錯誤。請檢查您帳號的密碼是否正確，然後再試一次。";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "撤回驗證並傳送";
 "screen_resolve_send_failure_changed_identity_subtitle" = "您可以撤回您的驗證並仍傳送此訊息，或者您也可以立刻取消並在重新驗證 %1$@ 後再試一次。";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "您確定要將此成員加入黑名單？";
 "screen_room_member_list_banned_empty" = "此聊天室沒有黑名單。";
 "screen_room_member_list_banning_user" = "正在將 %1$@ 加入黑名單";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "踢出並加入黑名單";
 "screen_room_member_list_manage_member_remove" = "踢出聊天室";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "僅移除成員";

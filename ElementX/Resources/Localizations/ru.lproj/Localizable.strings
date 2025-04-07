@@ -50,6 +50,7 @@
 "action_deactivate" = "Отключить";
 "action_deactivate_account" = "Отключить учётную запись";
 "action_decline" = "Отклонить";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "Удалить опрос";
 "action_disable" = "Отключить";
 "action_discard" = "Отменить";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Удалить сообщение";
 "action_reply" = "Ответить";
 "action_reply_in_thread" = "Ответить в теме";
+"action_report" = "Report";
 "action_report_bug" = "Сообщить об ошибке";
 "action_report_content" = "Пожаловаться на содержание";
+"action_report_room" = "Report room";
 "action_reset" = "Сбросить";
 "action_reset_identity" = "Сбросить идентификацию";
 "action_retry" = "Повторить";
@@ -200,6 +203,7 @@
 "common_people" = "Пользователи";
 "common_permalink" = "Постоянная ссылка";
 "common_permission" = "Разрешение";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Подождите...";
 "common_poll_end_confirmation" = "Вы действительно хотите завершить данный опрос?";
 "common_poll_summary" = "Опрос: %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "Политика конфиденциальности";
 "common_reaction" = "Реакция";
 "common_reactions" = "Реакции";
+"common_reason" = "Reason";
 "common_recovery_key" = "Ключ восстановления";
 "common_refreshing" = "Обновление…";
 "common_replying_to" = "Отвечает на %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ требуется разрешение на доступ к микрофону.";
 "dialog_permission_notification" = "Чтобы приложение отображало уведомления, предоставьте разрешение в системных настройках.";
 "dialog_permission_photo_library_title_ios" = "%1$@ не имеет доступа к вашей библиотеке фотографий.";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "Подтверждение";
 "dialog_title_warning" = "Предупреждение";
 "dialog_unsaved_changes_description_ios" = "Ваши изменения не будут сохранены";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Попросить присоединиться";
 "screen_create_room_room_address_section_footer" = "Чтобы эта комната была видна в каталоге общедоступных, вам необходим ее адрес";
 "screen_create_room_room_visibility_section_title" = "Видимость комнаты";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "Вам понадобится адрес комнаты, чтобы сделать ее видимой в каталоге.";
 "screen_edit_room_address_title" = "Адрес комнаты";
 "screen_join_room_cancel_knock_action" = "Отменить запрос";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Не удалось загрузить медиафайлы, попробуйте еще раз.";
 "screen_pinned_timeline_empty_state_description" = "Нажмите на сообщение и выберите “%1$@”, чтобы добавить его сюда.";
 "screen_pinned_timeline_empty_state_headline" = "Закрепите важные сообщения, чтобы их можно было легко найти";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "Произошла неизвестная ошибка. Проверьте правильность пароля учетной записи и повторите попытку.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Отозвать статус и отправить";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Вы можете либо отозвать свой статус подтверждения и всё равно отправить это сообщение, либо отменить его сейчас и повторить попытку после повторного подтверждения %1$@.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Вы уверены, что хотите заблокировать этого участника?";
 "screen_room_member_list_banned_empty" = "В этой комнате нет заблокированных пользователей.";
 "screen_room_member_list_banning_user" = "Блокировка %1$@";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "Удалить и заблокировать участника";
 "screen_room_member_list_manage_member_remove" = "Удалить участника из комнаты";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Только удалить участника";

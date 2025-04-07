@@ -134,6 +134,8 @@ internal enum L10n {
   internal static var actionDeactivateAccount: String { return L10n.tr("Localizable", "action_deactivate_account") }
   /// Decline
   internal static var actionDecline: String { return L10n.tr("Localizable", "action_decline") }
+  /// Decline and block
+  internal static var actionDeclineAndBlock: String { return L10n.tr("Localizable", "action_decline_and_block") }
   /// Delete Poll
   internal static var actionDeletePoll: String { return L10n.tr("Localizable", "action_delete_poll") }
   /// Disable
@@ -228,10 +230,14 @@ internal enum L10n {
   internal static var actionReply: String { return L10n.tr("Localizable", "action_reply") }
   /// Reply in thread
   internal static var actionReplyInThread: String { return L10n.tr("Localizable", "action_reply_in_thread") }
+  /// Report
+  internal static var actionReport: String { return L10n.tr("Localizable", "action_report") }
   /// Report bug
   internal static var actionReportBug: String { return L10n.tr("Localizable", "action_report_bug") }
   /// Report content
   internal static var actionReportContent: String { return L10n.tr("Localizable", "action_report_content") }
+  /// Report room
+  internal static var actionReportRoom: String { return L10n.tr("Localizable", "action_report_room") }
   /// Reset
   internal static var actionReset: String { return L10n.tr("Localizable", "action_reset") }
   /// Reset identity
@@ -454,6 +460,8 @@ internal enum L10n {
   internal static var commonPermalink: String { return L10n.tr("Localizable", "common_permalink") }
   /// Permission
   internal static var commonPermission: String { return L10n.tr("Localizable", "common_permission") }
+  /// Please check your internet connection
+  internal static var commonPleaseCheckInternetConnection: String { return L10n.tr("Localizable", "common_please_check_internet_connection") }
   /// Please wait…
   internal static var commonPleaseWait: String { return L10n.tr("Localizable", "common_please_wait") }
   /// Are you sure you want to end this poll?
@@ -668,6 +676,10 @@ internal enum L10n {
   internal static func dialogPermissionPhotoLibraryTitleIos(_ p1: Any) -> String {
     return L10n.tr("Localizable", "dialog_permission_photo_library_title_ios", String(describing: p1))
   }
+  /// Room reported
+  internal static var dialogRoomReported: String { return L10n.tr("Localizable", "dialog_room_reported") }
+  /// Reported and left room
+  internal static var dialogRoomReportedAndLeft: String { return L10n.tr("Localizable", "dialog_room_reported_and_left") }
   /// Confirmation
   internal static var dialogTitleConfirmation: String { return L10n.tr("Localizable", "dialog_title_confirmation") }
   /// Error
@@ -1268,6 +1280,14 @@ internal enum L10n {
   internal static var screenDeactivateAccountListItem4: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_4") }
   /// Deactivate account
   internal static var screenDeactivateAccountTitle: String { return L10n.tr("Localizable", "screen_deactivate_account_title") }
+  /// You will not see any messages or room invites from this user
+  internal static var screenDeclineAndBlockBlockUserOptionDescription: String { return L10n.tr("Localizable", "screen_decline_and_block_block_user_option_description") }
+  /// Block user
+  internal static var screenDeclineAndBlockBlockUserOptionTitle: String { return L10n.tr("Localizable", "screen_decline_and_block_block_user_option_title") }
+  /// Report this room to your account provider.
+  internal static var screenDeclineAndBlockReportUserOptionDescription: String { return L10n.tr("Localizable", "screen_decline_and_block_report_user_option_description") }
+  /// Decline and block
+  internal static var screenDeclineAndBlockTitle: String { return L10n.tr("Localizable", "screen_decline_and_block_title") }
   /// Block
   internal static var screenDmDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_dm_details_block_alert_action") }
   /// Blocked users won't be able to send you messages and all their messages will be hidden. You can unblock them anytime.
@@ -1812,6 +1832,16 @@ internal enum L10n {
   internal static var screenReportContentExplanation: String { return L10n.tr("Localizable", "screen_report_content_explanation") }
   /// Reason for reporting this content
   internal static var screenReportContentHint: String { return L10n.tr("Localizable", "screen_report_content_hint") }
+  /// Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.
+  internal static var screenReportRoomLeaveFailedAlertMessage: String { return L10n.tr("Localizable", "screen_report_room_leave_failed_alert_message") }
+  /// Unable to Leave Room
+  internal static var screenReportRoomLeaveFailedAlertTitle: String { return L10n.tr("Localizable", "screen_report_room_leave_failed_alert_title") }
+  /// Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.
+  internal static var screenReportRoomReasonFooter: String { return L10n.tr("Localizable", "screen_report_room_reason_footer") }
+  /// Describe the reason…
+  internal static var screenReportRoomReasonPlaceholder: String { return L10n.tr("Localizable", "screen_report_room_reason_placeholder") }
+  /// Report room
+  internal static var screenReportRoomTitle: String { return L10n.tr("Localizable", "screen_report_room_title") }
   /// Yes, reset now
   internal static var screenResetEncryptionConfirmationAlertAction: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_action") }
   /// This process is irreversible.

@@ -50,6 +50,7 @@
 "action_deactivate" = "Nonaktifkan";
 "action_deactivate_account" = "Nonaktifkan akun";
 "action_decline" = "Tolak";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "Hapus pemungutan suara";
 "action_disable" = "Nonaktifkan";
 "action_discard" = "Abaikan";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Hapus pesan";
 "action_reply" = "Balas";
 "action_reply_in_thread" = "Balas dalam utas";
+"action_report" = "Report";
 "action_report_bug" = "Laporkan kutu";
 "action_report_content" = "Laporkan Konten";
+"action_report_room" = "Report room";
 "action_reset" = "Atur ulang";
 "action_reset_identity" = "Atur ulang identitas";
 "action_retry" = "Coba lagi";
@@ -200,6 +203,7 @@
 "common_people" = "Orang";
 "common_permalink" = "Tautan Permanen";
 "common_permission" = "Perizinan";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Mohon tunggu…";
 "common_poll_end_confirmation" = "Apakah Anda yakin ingin mengakhiri pemungutan suara ini?";
 "common_poll_summary" = "Pemungutan suara: %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "Kebijakan privasi";
 "common_reaction" = "Reaksi";
 "common_reactions" = "Reaksi";
+"common_reason" = "Reason";
 "common_recovery_key" = "Kunci pemulihan";
 "common_refreshing" = "Menyegarkan…";
 "common_replying_to" = "Membalas %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ memerlukan izin untuk mengakses mikrofon Anda.";
 "dialog_permission_notification" = "Supaya aplikasinya dapat menampilkan notifikasi, berikan izin dalam pengaturan sistem.";
 "dialog_permission_photo_library_title_ios" = "%1$@ does not have access to your photo library.";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "Konfirmasi";
 "dialog_title_warning" = "Peringatan";
 "dialog_unsaved_changes_description_ios" = "Perubahan Anda tidak akan disimpan";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Minta untuk bergabung";
 "screen_create_room_room_address_section_footer" = "Supaya ruangan ini terlihat di direktori ruangan publik, Anda memerlukan alamat ruangan.";
 "screen_create_room_room_visibility_section_title" = "Keterlihatan ruangan";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
 "screen_edit_room_address_title" = "Room address";
 "screen_join_room_cancel_knock_action" = "Batalkan permintaan";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Gagal mengunggah media, silakan coba lagi.";
 "screen_pinned_timeline_empty_state_description" = "Tekan pesan dan pilih “%1$@” untuk disertakan di sini.";
 "screen_pinned_timeline_empty_state_headline" = "Sematkan pesan penting agar mudah ditemukan";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "Terjadi kesalahan yang tidak diketahui. Harap periksa apakah kata sandi akun Anda sudah benar dan coba lagi.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Tarik verifikasi dan kirim";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Anda dapat menarik verifikasi dan tetap mengirim pesan ini, atau Anda dapat membatalkan untuk saat ini dan mencoba lagi nanti setelah memverifikasi ulang %1$@.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Apakah Anda yakin ingin mencekal anggota ini?";
 "screen_room_member_list_banned_empty" = "Tidak ada pengguna yang dicekal dalam ruangan ini.";
 "screen_room_member_list_banning_user" = "Mencekal %1$@";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "Keluarkan dan cekal anggota";
 "screen_room_member_list_manage_member_remove" = "Keluarkan dari ruangan";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Hanya keluarkan anggota";
