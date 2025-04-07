@@ -98,6 +98,10 @@ final class AppSettings {
                   acceptableUseURL: URL,
                   privacyURL: URL,
                   supportEmailAddress: String,
+                  encryptionURL: URL,
+                  chatBackupDetailsURL: URL,
+                  identityPinningViolationDetailsURL: URL,
+                  elementWebHosts: [String],
                   bugReportApplicationID: String,
                   analyticsTermsURL: URL?,
                   mapTilerConfiguration: MapTilerConfiguration) {
@@ -110,6 +114,10 @@ final class AppSettings {
         self.acceptableUseURL = acceptableUseURL
         self.privacyURL = privacyURL
         self.supportEmailAddress = supportEmailAddress
+        self.encryptionURL = encryptionURL
+        self.chatBackupDetailsURL = chatBackupDetailsURL
+        self.identityPinningViolationDetailsURL = identityPinningViolationDetailsURL
+        self.elementWebHosts = elementWebHosts
         self.bugReportApplicationID = bugReportApplicationID
         self.analyticsTermsURL = analyticsTermsURL
         self.mapTilerConfiguration = mapTilerConfiguration
@@ -158,13 +166,13 @@ final class AppSettings {
     /// An email address that should be used for support requests.
     private(set) var supportEmailAddress = "support@element.io"
     /// A URL where users can go read more about encryption in general.
-    let encryptionURL: URL = "https://element.io/help#encryption"
+    private(set) var encryptionURL: URL = "https://element.io/help#encryption"
     /// A URL where users can go read more about the chat backup.
-    let chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
+    private(set) var chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
     /// A URL where users can go read more about identity pinning violations
-    let identityPinningViolationDetailsURL: URL = "https://element.io/help#encryption18"
+    private(set) var identityPinningViolationDetailsURL: URL = "https://element.io/help#encryption18"
     /// Any domains that Element web may be hosted on - used for handling links.
-    let elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
+    private(set) var elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
     
     @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))
     var appAppearance: AppAppearance
