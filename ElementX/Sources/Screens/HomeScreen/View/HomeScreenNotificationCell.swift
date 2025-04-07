@@ -48,10 +48,12 @@ struct HomeScreenNotificationCell: View {
                     .font(.zero.bodyMD)
                     .foregroundStyle(.compound.textSecondary)
                     .lineSpacing(2)
+                
+                Spacer()
             }
             .padding()
             
-            Divider()
+            // Divider()
         }
         .onTapGesture {
             context.send(viewAction: .selectRoom(roomIdentifier: room.id))
