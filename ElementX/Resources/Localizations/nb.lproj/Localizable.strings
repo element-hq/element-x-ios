@@ -50,6 +50,7 @@
 "action_deactivate" = "Deaktiver";
 "action_deactivate_account" = "Deaktiver kontoen";
 "action_decline" = "Avslå";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "Slett avstemning";
 "action_disable" = "Deaktiver";
 "action_discard" = "Forkast";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Remove message";
 "action_reply" = "Svar";
 "action_reply_in_thread" = "Svar i tråden";
+"action_report" = "Report";
 "action_report_bug" = "Rapporter feil";
 "action_report_content" = "Rapporter innhold";
+"action_report_room" = "Report room";
 "action_reset" = "Tilbakestill";
 "action_reset_identity" = "Tilbakestill identitet";
 "action_retry" = "Prøv på nytt";
@@ -200,6 +203,7 @@
 "common_people" = "Personer";
 "common_permalink" = "Permalenke";
 "common_permission" = "Tillatelse";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Vennligst vent...";
 "common_poll_end_confirmation" = "Er du sikker på at du vil avslutte denne avstemningen?";
 "common_poll_summary" = "Avstemning: %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "Retningslinjer for personvern";
 "common_reaction" = "Reaksjon";
 "common_reactions" = "Reaksjoner";
+"common_reason" = "Reason";
 "common_recovery_key" = "Gjenopprettingsnøkkel";
 "common_refreshing" = "Oppdaterer…";
 "common_replying_to" = "Svar til %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ trenger tillatelse til å få tilgang til mikrofonen din.";
 "dialog_permission_notification" = "For å la applikasjonen vise varsler, må du gi tillatelse til dette i systeminnstillingene.";
 "dialog_permission_photo_library_title_ios" = "%1$@ does not have access to your photo library.";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "Bekreftelse";
 "dialog_title_warning" = "Advarsel";
 "dialog_unsaved_changes_description_ios" = "Endringene dine blir ikke lagret";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Be om å bli med";
 "screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
 "screen_create_room_room_visibility_section_title" = "Romsynlighet";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "Du trenger en adresse til rommet for å gjøre det synlig i katalogen.";
 "screen_edit_room_address_title" = "Romadresse";
 "screen_join_room_cancel_knock_action" = "Avbryt forespørsel";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Opplasting av medier mislyktes, vennligst prøv igjen.";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Fest viktige meldinger slik at de lett kan ses";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "En ukjent feil har oppstått. Vennligst sjekk at passordet ditt er riktig og prøv igjen.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Trekk tilbake verifikasjon og send";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Du kan trekke tilbake verifiseringen og sende denne meldingen likevel, eller du kan avbryte for nå og prøve igjen senere etter at du har reverifisert %1$@.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Er du sikker på at du vil utestenge dette medlemmet?";
 "screen_room_member_list_banned_empty" = "Det er ingen utestengte brukere i dette rommet.";
 "screen_room_member_list_banning_user" = "Utestenger %1$@";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "Fjern og utesteng medlem";
 "screen_room_member_list_manage_member_remove" = "Fjern fra rommet";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Bare fjern medlem";

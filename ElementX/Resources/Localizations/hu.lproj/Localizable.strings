@@ -1,14 +1,14 @@
 "Notification" = "Értesítés";
-"a11y_avatar" = "Avatar";
+"a11y_avatar" = "Profilkép";
 "a11y_delete" = "Törlés";
 "a11y_hide_password" = "Jelszó elrejtése";
-"a11y_join_call" = "Join call";
+"a11y_join_call" = "Csatlakozás a híváshoz";
 "a11y_jump_to_bottom" = "Ugrás az aljára";
 "a11y_notifications_mentions_only" = "Csak megemlítések";
 "a11y_notifications_muted" = "Némítva";
 "a11y_page_n" = "%1$d. oldal";
 "a11y_pause" = "Szüneteltetés";
-"a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
+"a11y_paused_voice_message" = "Hangüzenet, időtartam:%1$@, jelenlegi pozíció:%2$@";
 "a11y_pin_field" = "PIN-mező";
 "a11y_play" = "Lejátszás";
 "a11y_poll_end" = "Befejezett szavazás";
@@ -22,7 +22,7 @@
 "a11y_show_password" = "Jelszó megjelenítése";
 "a11y_start_call" = "Hanghívás indítása";
 "a11y_user_menu" = "Felhasználói menü";
-"a11y_voice_message" = "Voice message, duration: %1$@";
+"a11y_voice_message" = "Hangüzenet, időtartam: %1$@";
 "a11y_voice_message_record" = "Hangüzenet felvétele.";
 "a11y_voice_message_stop_recording" = "Rögzítés leállítása";
 "a11y.view_details" = "Részletek megtekintése";
@@ -50,6 +50,7 @@
 "action_deactivate" = "Deaktiválás";
 "action_deactivate_account" = "Fiók deaktiválása";
 "action_decline" = "Elutasítás";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "Szavazás törlése";
 "action_disable" = "Letiltás";
 "action_discard" = "Elvetés";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Üzenet eltávolítása";
 "action_reply" = "Válasz";
 "action_reply_in_thread" = "Válasz az üzenetszálban";
+"action_report" = "Report";
 "action_report_bug" = "Hiba jelentése";
 "action_report_content" = "Tartalom jelentése";
+"action_report_room" = "Report room";
 "action_reset" = "Visszaállítás";
 "action_reset_identity" = "Személyazonosság visszaállítása";
 "action_retry" = "Újra";
@@ -200,6 +203,7 @@
 "common_people" = "Emberek";
 "common_permalink" = "Állandó hivatkozás";
 "common_permission" = "Engedély";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Kis türelmet…";
 "common_poll_end_confirmation" = "Biztos, hogy befejezi ezt a szavazást?";
 "common_poll_summary" = "Szavazás: %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "Adatvédelmi nyilatkozat";
 "common_reaction" = "Reakció";
 "common_reactions" = "Reakciók";
+"common_reason" = "Ok";
 "common_recovery_key" = "Helyreállítási kulcs";
 "common_refreshing" = "Frissítés…";
 "common_replying_to" = "Válasz %1$@ számára";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "Az %1$@ engedélyt igényel, hogy elérje a mikrofonját.";
 "dialog_permission_notification" = "Hogy az alkalmazás megjeleníthesse az értesítéseket, adja meg az engedélyt a rendszerbeállításokban.";
 "dialog_permission_photo_library_title_ios" = "Az %1$@ nem fér hozzá a fényképtárához.";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "Megerősítés";
 "dialog_title_warning" = "Figyelmeztetés";
 "dialog_unsaved_changes_description_ios" = "A módosításai nem lesznek mentve";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Csatlakozás kérése";
 "screen_create_room_room_address_section_footer" = "Ahhoz, hogy ez a szoba látható legyen a nyilvános szobák címtárában, meg kell adnia a szoba címét.";
 "screen_create_room_room_visibility_section_title" = "Szoba láthatósága";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "Szüksége lesz egy szobacímre, hogy láthatóvá tegye a szobakatalógusban.";
 "screen_edit_room_address_title" = "A szoba címe";
 "screen_join_room_cancel_knock_action" = "Kérés visszavonása";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Nem sikerült a média feltöltése, próbálja újra.";
 "screen_pinned_timeline_empty_state_description" = "Nyomjon hosszan az üzenetre, és válassza a „%1$@” lehetőséget, hogy itt szerepeljen.";
 "screen_pinned_timeline_empty_state_headline" = "Tűzze ki a fontos üzeneteket, hogy könnyen felfedezhetők legyenek";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "Ismeretlen hiba történt. Ellenőrizze, hogy a fiókja jelszava helyes-e, és próbálja meg újra.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Ellenőrzés visszavonása és elküldés";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Visszavonhatja az ellenőrzést, és ennek ellenére elküldheti ezt az üzenetet, vagy egyelőre törölheti, és %1$@ újbóli ellenőrzése után újra megpróbálhatja.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Biztos, hogy kitiltja ezt a tagot?";
 "screen_room_member_list_banned_empty" = "Ebben a szobában nincsenek kitiltott felhasználók.";
 "screen_room_member_list_banning_user" = "%1$@ kitiltása";
+"screen_room_member_list_kick_member_confirmation_action" = "Eltávolítás";
+"screen_room_member_list_kick_member_confirmation_description" = "Ehhez a szobához is csatlakozhat, ha meghívják.";
+"screen_room_member_list_kick_member_confirmation_title" = "Biztos, hogy eltávolítja ezt a tagot?";
 "screen_room_member_list_manage_member_ban" = "Eltávolítás és a tag kitiltása";
 "screen_room_member_list_manage_member_remove" = "Eltávolítás a szobából";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Csak a tag eltávolítása";

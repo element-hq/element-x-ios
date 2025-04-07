@@ -50,6 +50,7 @@
 "action_deactivate" = "停用";
 "action_deactivate_account" = "停用账户";
 "action_decline" = "拒绝";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "删除投票";
 "action_disable" = "禁用";
 "action_discard" = "丢弃";
@@ -95,8 +96,10 @@
 "action_remove_message" = "删除消息";
 "action_reply" = "回复";
 "action_reply_in_thread" = "在消息列中回复";
+"action_report" = "Report";
 "action_report_bug" = "报告错误";
 "action_report_content" = "举报内容";
+"action_report_room" = "Report room";
 "action_reset" = "重置";
 "action_reset_identity" = "重置身份";
 "action_retry" = "重试";
@@ -200,6 +203,7 @@
 "common_people" = "用户";
 "common_permalink" = "固定链接";
 "common_permission" = "权限";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "请稍候……";
 "common_poll_end_confirmation" = "确定要结束这个投票吗？";
 "common_poll_summary" = "投票：%1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "隐私政策";
 "common_reaction" = "回应";
 "common_reactions" = "回应";
+"common_reason" = "Reason";
 "common_recovery_key" = "恢复密钥";
 "common_refreshing" = "正在刷新…";
 "common_replying_to" = "正在回复 %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ 需要权限才能访问麦克风。";
 "dialog_permission_notification" = "为了让应用程序显示通知，请在系统设置中授予权限。";
 "dialog_permission_photo_library_title_ios" = "%1$@无权访问您的照片库。";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "确认";
 "dialog_title_warning" = "警告";
 "dialog_unsaved_changes_description_ios" = "更改不会保存";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "请求加入";
 "screen_create_room_room_address_section_footer" = "要使该房间在公开房间目录中可见，您需要一个房间地址。";
 "screen_create_room_room_visibility_section_title" = "房间可见性";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "你需要房间地址才能使其在目录中可见。";
 "screen_edit_room_address_title" = "房间地址";
 "screen_join_room_cancel_knock_action" = "取消请求";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "上传媒体失败，请重试。";
 "screen_pinned_timeline_empty_state_description" = "按下消息并选择 “%1$@” 将其包含在此处。";
 "screen_pinned_timeline_empty_state_headline" = "固定重要消息，以便轻松发现它们";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "发生未知错误。请检查您的帐户密码是否正确，然后重试。";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "撤回验证并发送";
 "screen_resolve_send_failure_changed_identity_subtitle" = "您可以撤回验证并仍然发送此消息；也可以暂时取消验证，在重新验证 %1$@ 后重试。";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "您确定要封禁该成员吗？";
 "screen_room_member_list_banned_empty" = "此聊天室里没有被封禁的用户。";
 "screen_room_member_list_banning_user" = "封禁 %1$@";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "移除并封禁成员";
 "screen_room_member_list_manage_member_remove" = "从聊天室移除";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "仅移除成员";

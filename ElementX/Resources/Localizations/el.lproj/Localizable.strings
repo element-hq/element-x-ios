@@ -50,6 +50,7 @@
 "action_deactivate" = "Απενεργοποίηση";
 "action_deactivate_account" = "Απενεργοποίηση λογαριασμού";
 "action_decline" = "Απόρριψη";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "Διαγραφή Δημοσκόπησης";
 "action_disable" = "Απενεργοποίηση";
 "action_discard" = "Απόρριψη";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Αφαίρεση μηνύματος";
 "action_reply" = "Απάντηση";
 "action_reply_in_thread" = "Απάντηση στο θέμα";
+"action_report" = "Report";
 "action_report_bug" = "Αναφορά σφάλματος";
 "action_report_content" = "Αναφορά περιεχομένου";
+"action_report_room" = "Report room";
 "action_reset" = "Επαναφορά";
 "action_reset_identity" = "Επαναφορά ταυτότητας";
 "action_retry" = "Επανάληψη";
@@ -200,6 +203,7 @@
 "common_people" = "Άτομα";
 "common_permalink" = "Μόνιμος σύνδεσμος";
 "common_permission" = "Αδεια";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Παρακαλώ περίμενε...";
 "common_poll_end_confirmation" = "Θες σίγουρα να τερματίσεις αυτή τη δημοσκόπηση;";
 "common_poll_summary" = "Δημοσκόπηση: %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "Πολιτική απορρήτου";
 "common_reaction" = "Αντίδραση";
 "common_reactions" = "Αντιδράσεις";
+"common_reason" = "Reason";
 "common_recovery_key" = "Κλειδί ανάκτησης";
 "common_refreshing" = "Ανανέωση…";
 "common_replying_to" = "Απάντηση σε %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "Το %1$@ χρειάζεται άδεια για πρόσβαση στο μικρόφωνό σου.";
 "dialog_permission_notification" = "Για να επιτρέψεις στην εφαρμογή να εμφανίζει ειδοποιήσεις, παραχώρησε την άδεια στις ρυθμίσεις συστήματος.";
 "dialog_permission_photo_library_title_ios" = "%1$@ does not have access to your photo library.";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "Επιβεβαίωση";
 "dialog_title_warning" = "Προειδοποίηση";
 "dialog_unsaved_changes_description_ios" = "Οι αλλαγές σου δεν θα αποθηκευτούν";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Αίτημα συμμετοχής";
 "screen_create_room_room_address_section_footer" = "Για να είναι ορατό αυτό το δωμάτιο στον κατάλογο των δημόσιων δωματίων, θα χρειαστείς μια διεύθυνση δωματίου.";
 "screen_create_room_room_visibility_section_title" = "Ορατότητα δωματίου";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
 "screen_edit_room_address_title" = "Room address";
 "screen_join_room_cancel_knock_action" = "Ακύρωση αιτήματος";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Αποτυχία μεταφόρτωσης πολυμέσων, δοκίμασε ξανά.";
 "screen_pinned_timeline_empty_state_description" = "Πάτα σε ένα μήνυμα και επέλεξε «%1$@» για να συμπεριληφθεί εδώ.";
 "screen_pinned_timeline_empty_state_headline" = "Καρφίτσωσε σημαντικά μηνύματα, ώστε να μπορούν να εντοπιστούν εύκολα";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "Συνέβη ένα άγνωστο σφάλμα. Έλεγξε ότι ο κωδικός πρόσβασης του λογαριασμού σου είναι σωστός και δοκίμασε ξανά.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Ανάκληση επαλήθευσης και αποστολή";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Μπορείτε να ανακαλέσεις την επαλήθευσή σου και να στείλεις αυτό το μήνυμα όπως και να 'χει ή μπορείς να το ακυρώσεις προς το παρόν και να προσπαθήσεις ξανά αργότερα μετά την επαλήθευση του χρήστη %1$@.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Θες σίγουρα να αποκλείσεις αυτό το μέλος;";
 "screen_room_member_list_banned_empty" = "Δεν υπάρχουν αποκλεισμένοι χρήστες σε αυτό το δωμάτιο.";
 "screen_room_member_list_banning_user" = "Αποκλεισμός %1$@";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "Αφαίρεση και αποκλεισμός μέλους";
 "screen_room_member_list_manage_member_remove" = "Αφαίρεση από το δωμάτιο";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Μόνο αφαίρεση μέλους";

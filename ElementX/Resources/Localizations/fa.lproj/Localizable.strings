@@ -50,6 +50,7 @@
 "action_deactivate" = "غیرفعّال";
 "action_deactivate_account" = "غیرفعّال‌سازی حساب";
 "action_decline" = "رد";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "حذف نظرسنجی";
 "action_disable" = "از کار انداختن";
 "action_discard" = "دور ریختن";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Remove message";
 "action_reply" = "پاسخ";
 "action_reply_in_thread" = "پاسخ در رشته";
+"action_report" = "Report";
 "action_report_bug" = "گزارش اشکال";
 "action_report_content" = "گزارش محتوا";
+"action_report_room" = "Report room";
 "action_reset" = "بازنشانی";
 "action_reset_identity" = "بازنشانی هویت";
 "action_retry" = "تلاش دوباره";
@@ -200,6 +203,7 @@
 "common_people" = "افراد";
 "common_permalink" = "پایاپیوند";
 "common_permission" = "اجازه";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "لطفا صبر کنید…";
 "common_poll_end_confirmation" = "مطئنید که می‌خواهید این نظرسنجی را پایان دهید؟";
 "common_poll_summary" = "نظرسنجی: %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "سیاست محرمانگی";
 "common_reaction" = "واکنش";
 "common_reactions" = "واکنش‌ها";
+"common_reason" = "Reason";
 "common_recovery_key" = "کلید بازیابی";
 "common_refreshing" = "تازه سازی…";
 "common_replying_to" = "پاسخ دادن به %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ needs permission to access your microphone.";
 "dialog_permission_notification" = "In order to let the application display notifications, please grant the permission in the system settings.";
 "dialog_permission_photo_library_title_ios" = "%1$@ does not have access to your photo library.";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "تایید";
 "dialog_title_warning" = "هشدار";
 "dialog_unsaved_changes_description_ios" = "تغییراتتان ذخیره نمی‌شوند";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Ask to join";
 "screen_create_room_room_address_section_footer" = "In order for this room to be visible in the public room directory, you will need a room address.";
 "screen_create_room_room_visibility_section_title" = "Room visibility";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
 "screen_edit_room_address_title" = "Room address";
 "screen_join_room_cancel_knock_action" = "Cancel request";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "بارگذاری رسانه شکست خورد. لطفاً دوباره تلاش کنید.";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "An unknown error happened. Please check your account password is correct and try again.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Withdraw verification and send";
 "screen_resolve_send_failure_changed_identity_subtitle" = "You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Are you sure you want to ban this member?";
 "screen_room_member_list_banned_empty" = "There are no banned users in this room.";
 "screen_room_member_list_banning_user" = "تحریم کردن %1$@";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "برداشت و تحریم عضو";
 "screen_room_member_list_manage_member_remove" = "برداشتن از اتاق";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "تنها برداشتن عضو";
