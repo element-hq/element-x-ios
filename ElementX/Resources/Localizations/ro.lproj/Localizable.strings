@@ -50,6 +50,7 @@
 "action_deactivate" = "Dezactivați";
 "action_deactivate_account" = "Dezactivați contul";
 "action_decline" = "Refuzați";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "Ștergeți sondajul";
 "action_disable" = "Dezactivați";
 "action_discard" = "Renunţare";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Remove message";
 "action_reply" = "Răspundeți";
 "action_reply_in_thread" = "Răspundeți în fir";
+"action_report" = "Report";
 "action_report_bug" = "Raportați o eroare";
 "action_report_content" = "Raportați conținutul";
+"action_report_room" = "Report room";
 "action_reset" = "Resetare";
 "action_reset_identity" = "Resetați identitatea";
 "action_retry" = "Reîncercați";
@@ -200,6 +203,7 @@
 "common_people" = "Persoane";
 "common_permalink" = "Permalink";
 "common_permission" = "Permisiune";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Va rugam asteptati…";
 "common_poll_end_confirmation" = "Sunteți sigur că doriți să încheiați acest sondaj?";
 "common_poll_summary" = "Sondajul %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "Politica de confidențialitate";
 "common_reaction" = "Reacţie";
 "common_reactions" = "Reacții";
+"common_reason" = "Reason";
 "common_recovery_key" = "Cheie de recuperare";
 "common_refreshing" = "Se actualizează";
 "common_replying_to" = "Răspuns pentru %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ are nevoie de permisiune pentru a accesa microfonul.";
 "dialog_permission_notification" = "Pentru a permite aplicației să afișeze notificări, vă rugăm să acordați permisiunea în setările sistemului.";
 "dialog_permission_photo_library_title_ios" = "%1$@ does not have access to your photo library.";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "Confirmare";
 "dialog_title_warning" = "Avertisment";
 "dialog_unsaved_changes_description_ios" = "Modificările dumneavoastră nu vor fi salvate";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Cereți să vă alăturați";
 "screen_create_room_room_address_section_footer" = "Pentru ca această cameră să fie vizibilă în directorul de camere publice, veți avea nevoie de o adresă de cameră.";
 "screen_create_room_room_visibility_section_title" = "Room visibility";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
 "screen_edit_room_address_title" = "Room address";
 "screen_join_room_cancel_knock_action" = "Anulați solicitarea";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Încărcarea fișierelor media a eșuat, încercați din nou.";
 "screen_pinned_timeline_empty_state_description" = "Apăsați pe un mesaj și alegeți \"%1$@\" pentru a-l include aici.";
 "screen_pinned_timeline_empty_state_headline" = "Fixați mesajele importante, astfel încât să poată fi descoperite cu ușurință";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "S-a produs o eroare necunoscută. Vă rugăm să verificați dacă parola contului dvs. este corectă și să încercați din nou.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Retrageți verificarea și trimiteți";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Puteți să vă retrageți verificarea și să trimiteți acest mesaj oricum, sau puteți anula pentru moment și să încercați din nou mai târziu după reverificarea lui %1$@.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Sunteți sigur că doriți să interziceți acest membru?";
 "screen_room_member_list_banned_empty" = "Nu există utilizatori interziși în această cameră.";
 "screen_room_member_list_banning_user" = "Se interzice %1$@";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "Eliminați și interziceți membrul";
 "screen_room_member_list_manage_member_remove" = "Înlăturați membrul";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Doar înlăturare";

@@ -50,6 +50,7 @@
 "action_deactivate" = "Деактивувати";
 "action_deactivate_account" = "Деактивувати обліковий запис";
 "action_decline" = "Відхилити";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "Видалити опитування";
 "action_disable" = "Вимкнути";
 "action_discard" = "Відкинути";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Вилучити повідомлення";
 "action_reply" = "Відповісти";
 "action_reply_in_thread" = "Відповісти в гілці";
+"action_report" = "Report";
 "action_report_bug" = "Повідомити про помилку";
 "action_report_content" = "Повідомити про вміст";
+"action_report_room" = "Report room";
 "action_reset" = "Скинути";
 "action_reset_identity" = "Скинути ідентичність";
 "action_retry" = "Спробувати ще раз";
@@ -200,6 +203,7 @@
 "common_people" = "Люди";
 "common_permalink" = "Постійне посилання";
 "common_permission" = "Дозвіл";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Будь ласка, зачекайте…";
 "common_poll_end_confirmation" = "Ви впевнені, що хочете закінчити це опитування?";
 "common_poll_summary" = "Опитування: %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "Політика конфіденційності";
 "common_reaction" = "Реакція";
 "common_reactions" = "Реакції";
+"common_reason" = "Reason";
 "common_recovery_key" = "Ключ відновлення";
 "common_refreshing" = "Оновлення…";
 "common_replying_to" = "Відповідь %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ потрібен дозвіл на доступ до мікрофона.";
 "dialog_permission_notification" = "Щоб застосунок показував сповіщення, надайте дозвіл у налаштуваннях системи.";
 "dialog_permission_photo_library_title_ios" = "%1$@ не має доступу до вашої фотобібліотеки.";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "Підтвердження";
 "dialog_title_warning" = "Попередження";
 "dialog_unsaved_changes_description_ios" = "Внесені зміни не буде збережено";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Запросити приєднатися";
 "screen_create_room_room_address_section_footer" = "Щоб цю кімнату було видно в каталозі загальнодоступних кімнат, вам знадобиться її адреса.";
 "screen_create_room_room_visibility_section_title" = "Видимість кімнати";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "Вам знадобиться адреса кімнати, щоб зробити її видимою в каталозі.";
 "screen_edit_room_address_title" = "Адреса кімнати";
 "screen_join_room_cancel_knock_action" = "Скасувати запит";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Не вдалося завантажити медіафайл, спробуйте ще раз.";
 "screen_pinned_timeline_empty_state_description" = "Натисніть на повідомлення і виберіть \"%1$@\", щоб додати його сюди.";
 "screen_pinned_timeline_empty_state_headline" = "Закріпіть важливі повідомлення, щоб їх можна було легко знайти";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "Сталася невідома помилка. Будь ласка, перевірте правильність пароля свого облікового запису та повторіть спробу.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Відкликати верифікацію та відправити";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Ви все одно можете відкликати підтвердження та надіслати це повідомлення, або ви можете скасувати підписку на даний момент і спробувати пізніше після повторної перевірки %1$@.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Ви точно хочете заблокувати цього користувача?";
 "screen_room_member_list_banned_empty" = "У цій кімнаті немає заблокованих користувачів.";
 "screen_room_member_list_banning_user" = "Блокування %1$@";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "Вилучити й заблокувати учасника";
 "screen_room_member_list_manage_member_remove" = "Вилучити з кімнати";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Лише вилучити учасника";

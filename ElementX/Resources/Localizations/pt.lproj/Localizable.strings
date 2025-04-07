@@ -50,6 +50,7 @@
 "action_deactivate" = "Desativar";
 "action_deactivate_account" = "Desativar conta";
 "action_decline" = "Rejeitar";
+"action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "Eliminar sondagem";
 "action_disable" = "Desativar";
 "action_discard" = "Descartar";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Remover mensagem";
 "action_reply" = "Responder";
 "action_reply_in_thread" = "Responder ao tópico";
+"action_report" = "Report";
 "action_report_bug" = "Comunicar problema";
 "action_report_content" = "Denunciar conteúdo";
+"action_report_room" = "Report room";
 "action_reset" = "Repor";
 "action_reset_identity" = "Repor identidade";
 "action_retry" = "Tentar novamente";
@@ -200,6 +203,7 @@
 "common_people" = "Pessoas";
 "common_permalink" = "Ligação permanente";
 "common_permission" = "Permissão";
+"common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Por favor, aguarde…";
 "common_poll_end_confirmation" = "Tens a certeza que queres concluir esta sondagem?";
 "common_poll_summary" = "Sondagem: %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "Política de privacidade";
 "common_reaction" = "Reação";
 "common_reactions" = "Reações";
+"common_reason" = "Reason";
 "common_recovery_key" = "Chave de recuperação";
 "common_refreshing" = "A atualizar…";
 "common_replying_to" = "Em resposta a %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "A %1$@ precisa de permissão para aceder ao teu microfone.";
 "dialog_permission_notification" = "Para permitir que a aplicação apresente notificações, concede a permissão nas configurações do sistema.";
 "dialog_permission_photo_library_title_ios" = "A %1$@ não tem acesso à tua galeria de fotos.";
+"dialog_room_reported" = "Room reported";
+"dialog_room_reported_and_left" = "Reported and left room";
 "dialog_title_confirmation" = "Confirmação";
 "dialog_title_warning" = "Aviso";
 "dialog_unsaved_changes_description_ios" = "As tuas alterações não serão guardadas";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Pedir para participar";
 "screen_create_room_room_address_section_footer" = "Para que esta sala seja visível no diretório público de salas, precisas de um endereço de sala.";
 "screen_create_room_room_visibility_section_title" = "Visibilidade da sala";
+"screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
+"screen_decline_and_block_block_user_option_title" = "Block user";
+"screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "É necessário um endereço para tornar a sala visível no diretório.";
 "screen_edit_room_address_title" = "Endereço da sala";
 "screen_join_room_cancel_knock_action" = "Cancelar pedido";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Falhar ao carregar multimédia, por favor tente novamente.";
 "screen_pinned_timeline_empty_state_description" = "Pressione uma mensagem e escolha \"%1$@\" para incluir aqui.";
 "screen_pinned_timeline_empty_state_headline" = "Fixa mensagens importantes para que possam ser facilmente descobertas";
+"screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
+"screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
+"screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
+"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "Um erro desconhecido aconteceu. Verifique se a senha da sua conta está correta e tente novamente.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Retirar verificação e enviar";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Podes retirar a tua verificação e enviar esta mensagem na mesma, ou podes cancelar por agora e tentar novamente mais tarde depois de reverificares %1$@.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Tens a certeza que queres banir este participante?";
 "screen_room_member_list_banned_empty" = "Não há nenhum utilizador banido desta sala.";
 "screen_room_member_list_banning_user" = "A banir %1$@";
+"screen_room_member_list_kick_member_confirmation_action" = "Remove";
+"screen_room_member_list_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
+"screen_room_member_list_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_room_member_list_manage_member_ban" = "Remover e banir participante";
 "screen_room_member_list_manage_member_remove" = "Remover da sala";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Remover apenas";

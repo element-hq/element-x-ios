@@ -50,6 +50,7 @@
 "action_deactivate" = "Eemalda konto";
 "action_deactivate_account" = "Eemalda konto kasutusest";
 "action_decline" = "Keeldu";
+"action_decline_and_block" = "Keeldu ja blokeeri";
 "action_delete_poll" = "Kustuta küsitlus";
 "action_disable" = "Lülita välja";
 "action_discard" = "Loobu";
@@ -95,8 +96,10 @@
 "action_remove_message" = "Eemalda sõnum";
 "action_reply" = "Vasta";
 "action_reply_in_thread" = "Vasta jutulõngas";
+"action_report" = "Teata";
 "action_report_bug" = "Teata veast";
 "action_report_content" = "Teata sisust haldurile";
+"action_report_room" = "Teata jututoast";
 "action_reset" = "Lähtesta";
 "action_reset_identity" = "Lähtesta oma identiteet";
 "action_retry" = "Proovi uuesti";
@@ -200,6 +203,7 @@
 "common_people" = "Inimesed";
 "common_permalink" = "Püsilink";
 "common_permission" = "Õigus";
+"common_please_check_internet_connection" = "Palun kontrolli oma nutiseadme internetiühendust";
 "common_please_wait" = "Palun oota…";
 "common_poll_end_confirmation" = "Kas oled kindel, et soovid selle küsitluse lõpetada?";
 "common_poll_summary" = "Küsitlus: %1$@";
@@ -208,6 +212,7 @@
 "common_privacy_policy" = "Privaatsuspoliitika";
 "common_reaction" = "Reaktsioon";
 "common_reactions" = "Reaktsioonid";
+"common_reason" = "Põhjus";
 "common_recovery_key" = "Taastevõti";
 "common_refreshing" = "Värskendame andmeid…";
 "common_replying_to" = "Vastates kasutajale %1$@";
@@ -298,6 +303,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ vajab sinu nutiseadme mikrofoni kasutamiseks luba.";
 "dialog_permission_notification" = "Selleks, et rakendus saaks kuvada teavitusi, palun anna vajalikud õiguse süsteemi seadistustes.";
 "dialog_permission_photo_library_title_ios" = "Rakendusel %1$@ puudub ligipääs sinu nutiseadme fotopanka.";
+"dialog_room_reported" = "Teatasid jututoast";
+"dialog_room_reported_and_left" = "Teatasid jututoast ja lahkusid sealt";
 "dialog_title_confirmation" = "Kinnitus";
 "dialog_title_warning" = "Hoiatus";
 "dialog_unsaved_changes_description_ios" = "Sinu tehtud muudatused jäävad salvestamata";
@@ -402,6 +409,10 @@
 "screen_create_room_room_access_section_knocking_option_title" = "Küsi võimalust liitumiseks";
 "screen_create_room_room_address_section_footer" = "Selleks, et see jututuba oleks nähtav jututubade avalikus kataloogis, sa vajad jututoa aadressi.";
 "screen_create_room_room_visibility_section_title" = "Jututoa nähtavus";
+"screen_decline_and_block_block_user_option_description" = "Sa ei näe enam selle kasutaja saadetud sõnumeid ja jututubade kutseid";
+"screen_decline_and_block_block_user_option_title" = "Blokeeri kasutaja";
+"screen_decline_and_block_report_user_option_description" = "Teata sellest jututoast oma teenusepakkujale.";
+"screen_decline_and_block_title" = "Keeldu ja blokeeri";
 "screen_edit_room_address_room_address_section_footer" = "Selleks, et jututuba oleks nähtav jututubade kataloogis, vajab ta aadressi.";
 "screen_edit_room_address_title" = "Jututoa aadress";
 "screen_join_room_cancel_knock_action" = "Tühista liitumispalve";
@@ -452,6 +463,11 @@
 "screen_media_upload_preview_error_failed_sending" = "Meediafaili üleslaadimine ei õnnestunud. Palun proovi uuesti.";
 "screen_pinned_timeline_empty_state_description" = "Siia lisamiseks vajuta sõnumil ja vali „%1$@“.";
 "screen_pinned_timeline_empty_state_headline" = "Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile";
+"screen_report_room_leave_failed_alert_message" = "Jututoast haldajale teatamine õnnestus, kuid jututost lahkumisel tekkis viga. Palun proovi uuesti lahkuda.";
+"screen_report_room_leave_failed_alert_title" = "Pole võimalik lahkuda jututoast";
+"screen_report_room_reason_footer" = "Teata sellest jututoast süsteemi haldajale. Kui sõnumid on krüptitud, ei saa haldaja neid lugeda.";
+"screen_report_room_reason_placeholder" = "Kirjelda põhjust...";
+"screen_report_room_title" = "Teata jututoast";
 "screen_reset_encryption_password_error" = "Tekkis teadmata viga. Palun kontrolli, kas sinu kasutajakonto salasõna on õige ja proovi uuesti.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Unusta verifitseerimine ja saada ikkagi";
 "screen_resolve_send_failure_changed_identity_subtitle" = "Sa võid jätta verifitseerimisvea tähelepanuta ja sõnumi ikkagi saata või katkestad saatmise ja peale kasutaja %1$@ verifitseerimist proovid seda uuesti.";
@@ -875,6 +891,9 @@
 "screen_room_member_list_ban_member_confirmation_title" = "Kas sa oled kindel, et soovid sellele kasutajale seada suhtluskeelu?";
 "screen_room_member_list_banned_empty" = "Jututoas pole suhtluskeeluga kasutajaid";
 "screen_room_member_list_banning_user" = "Seame kasutajale %1$@ suhtluskeelu";
+"screen_room_member_list_kick_member_confirmation_action" = "Eemalda";
+"screen_room_member_list_kick_member_confirmation_description" = "Uue kutse saamisel on tal võimalik selle jututoaga uuesti liituda.";
+"screen_room_member_list_kick_member_confirmation_title" = "Kas sa oled kindel, et soovid selle osaleja eemaldada?";
 "screen_room_member_list_manage_member_ban" = "Eemalda ja sea suhtluskeeld";
 "screen_room_member_list_manage_member_remove" = "Eemalda kasutaja jututoast";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Ainult eemalda kasutaja";

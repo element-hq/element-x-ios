@@ -29,7 +29,10 @@ class EncryptionSettingsUITests: XCTestCase {
         try await app.assertScreenshot(step: Step.secureBackupScreenSetUp)
         
         // Toggle key storage off.
-        app.switches[A11yIdentifiers.secureBackupScreen.keyStorage].tap()
+        // app.switches[A11yIdentifiers.secureBackupScreen.keyStorage].tap()
+        // Broken by https://github.com/element-hq/compound-ios/pull/140
+        app.switches[A11yIdentifiers.secureBackupScreen.keyStorage].switches.firstMatch.tap()
+        
         try await app.assertScreenshot(step: Step.keyBackupScreen)
         
         // Confirm deletion of keys.
@@ -38,8 +41,11 @@ class EncryptionSettingsUITests: XCTestCase {
         try await app.assertScreenshot(step: Step.secureBackupScreenDisabled)
         
         // Toggle key storage back on and set up recovery.
-        app.switches[A11yIdentifiers.secureBackupScreen.keyStorage].tap()
+        // app.switches[A11yIdentifiers.secureBackupScreen.keyStorage].tap()
+        // Broken by https://github.com/element-hq/compound-ios/pull/140
+        app.switches[A11yIdentifiers.secureBackupScreen.keyStorage].switches.firstMatch.switches.firstMatch.tap()
         app.buttons[A11yIdentifiers.secureBackupScreen.recoveryKey].tap()
+        
         try await app.assertScreenshot(step: Step.setUpRecovery)
         
         // Generate and copy a new recovery key.
