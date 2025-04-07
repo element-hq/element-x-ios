@@ -59,6 +59,7 @@ enum TimelineViewAction {
     case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
     case displayEmojiPicker(itemID: TimelineItemIdentifier)
     case displayReadReceipts(itemID: TimelineItemIdentifier)
+    case displayThread(itemID: TimelineItemIdentifier)
     
     case handlePasteOrDrop(provider: NSItemProvider)
     case handlePollAction(TimelineViewPollAction)

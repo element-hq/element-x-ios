@@ -23,13 +23,8 @@ final class RoomPreviewProxy: RoomPreviewProxyProtocol {
                 return nil
             }
             
-            var senderRoomMember: RoomMemberProxy?
-            if let member = details.senderRoomMember {
-                senderRoomMember = .init(member: member)
-            }
-            
-            return RoomMembershipDetailsProxy(ownRoomMember: RoomMemberProxy(member: details.ownRoomMember),
-                                              senderRoomMember: senderRoomMember)
+            return RoomMembershipDetailsProxy(ownRoomMember: RoomMemberProxy(member: details.roomMember),
+                                              senderRoomMember: details.senderInfo.map(RoomMemberProxy.init(member:)))
         }
     }
 }

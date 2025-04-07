@@ -1001,6 +1001,12 @@ extension PreviewTests {
         }
     }
 
+    func testTimelineThreadSummaryView() async throws {
+        for (index, preview) in TimelineThreadSummaryView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testTimelineView() async throws {
         for (index, preview) in TimelineView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
