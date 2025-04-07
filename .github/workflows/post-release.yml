@@ -1,0 +1,29 @@
+name: Post-release
+
+on:
+  push:
+    tags:
+      - 'release/**'
+
+jobs:
+  post-release:
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'element-hq/element-x-ios'
+
+    steps:
+      - name: Trigger pipeline
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const tag = context.ref.replace('refs/tags/', '');
+            const inputs = { git_tag: tag };
+            await github.actions.createWorkflowDispatch({
+              owner: 'element-hq',
+              repo: 'element-enterprise',
+              workflow_id: 'ios-pipeline.yml',
+              ref: 'main',
+              inputs: inputs
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
