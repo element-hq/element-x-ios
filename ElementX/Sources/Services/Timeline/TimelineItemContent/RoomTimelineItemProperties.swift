@@ -13,6 +13,8 @@ struct RoomTimelineItemProperties: Hashable {
     var replyDetails: TimelineItemReplyDetails?
     // Whether it's part of a thread or not
     var isThreaded = false
+    // Information about the thread this message is the root of, if any
+    var threadSummary: TimelineItemThreadSummary?
     /// Whether the item has been edited.
     var isEdited = false
     /// The aggregated reactions that have been sent for this item.
