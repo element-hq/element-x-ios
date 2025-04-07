@@ -39,7 +39,8 @@ class AnalyticsService {
     /// Whether to show the user the analytics opt in prompt.
     var shouldShowAnalyticsPrompt: Bool {
         // Only show the prompt once, and when analytics are enabled in BuildSettings.
-        appSettings.analyticsConsentState == .unknown && appSettings.canPromptForAnalytics
+        // appSettings.analyticsConsentState == .unknown && appSettings.canPromptForAnalytics
+        false
     }
     
     var isEnabled: Bool {
