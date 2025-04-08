@@ -38,3 +38,7 @@ build
 ## macOS Files
 .DS_Store
 ._*
+
+# Commit any Pkl packages that we're using (there may be other caches in here).
+Secrets/vendor/*
+!Secrets/vendor/package-2

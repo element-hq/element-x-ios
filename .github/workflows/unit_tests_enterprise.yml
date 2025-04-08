@@ -36,13 +36,6 @@ jobs:
 
       - name: Setup environment
         run: source ci_scripts/ci_common.sh && setup_github_actions_environment
-
-      - uses: actions/cache@v4
-        with:
-          path: ~/.pkl/cache
-          key: ${{ runner.os }}-pkl-${{ hashFiles('Secrets/Secrets.pkl') }}
-          restore-keys: |
-            ${{ runner.os }}-pkl-
       
       - name: Configure Enterprise
         run: bundle exec fastlane config_element_pro
