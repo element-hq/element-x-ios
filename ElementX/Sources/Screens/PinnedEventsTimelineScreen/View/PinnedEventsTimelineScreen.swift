@@ -28,6 +28,9 @@ struct PinnedEventsTimelineScreen: View {
             .background(.compound.bgCanvasDefault)
             .interactiveDismissDisabled()
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
+            .sheet(item: $timelineContext.manageMemberViewModel) {
+                ManageRoomMemberSheetView(context: $0.context)
+            }
             .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }
             .sheet(item: $timelineContext.actionMenuInfo) { info in
                 let actions = TimelineItemMenuActionProvider(timelineItem: info.item,

@@ -47,8 +47,8 @@ struct RoomMembersListScreen: View {
         .autocorrectionDisabled()
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .navigationTitle(L10n.commonPeople)
-        .sheet(item: $context.memberToManage) {
-            RoomMembersListManageMemberSheet(member: $0.member, actions: $0.actions, context: context)
+        .sheet(item: $context.manageMemeberViewModel) {
+            ManageRoomMemberSheetView(context: $0.context)
         }
         .alert(item: $context.alertInfo)
         .toolbar { toolbar }
