@@ -69,7 +69,7 @@ final class SecureBackupRecoveryKeyScreenCoordinator: CoordinatorProtocol {
     
     private func showSuccessIndicator(title: String) {
         parameters.userIndicatorController.submitIndicator(.init(id: .init(),
-                                                                 type: .modal(progress: .none, interactiveDismissDisabled: false, allowsInteraction: false),
+                                                                 type: .toast(progress: nil),
                                                                  title: title,
                                                                  iconName: "checkmark",
                                                                  persistent: false))
