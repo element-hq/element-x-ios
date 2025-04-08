@@ -208,8 +208,7 @@ final class AppSettings {
                                                                      tosURI: acceptableUseURL,
                                                                      policyURI: privacyURL,
                                                                      contacts: [supportEmailAddress],
-                                                                     staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString },
-                                                                     dynamicRegistrationsFile: .sessionsBaseDirectory.appending(path: "oidc/registrations.json"))
+                                                                     staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString })
     
     /// A temporary hack to allow registration on matrix.org until MAS is deployed.
     let webRegistrationEnabled = true
