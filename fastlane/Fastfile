@@ -429,6 +429,6 @@ end
 
 lane :config_secrets do
   Dir.chdir "../Secrets" do
-    sh("pkl eval -o Secrets.swift Secrets.pkl")
+    sh("pkl eval --cache-dir vendor -o Secrets.swift Secrets.pkl")
   end
 end
