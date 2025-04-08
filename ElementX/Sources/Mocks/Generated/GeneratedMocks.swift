@@ -3478,6 +3478,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return roomSummaryForAliasReturnValue
         }
     }
+    //MARK: - reportRoomForIdentifier
+
+    var reportRoomForIdentifierReasonUnderlyingCallsCount = 0
+    var reportRoomForIdentifierReasonCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return reportRoomForIdentifierReasonUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = reportRoomForIdentifierReasonUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                reportRoomForIdentifierReasonUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    reportRoomForIdentifierReasonUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var reportRoomForIdentifierReasonCalled: Bool {
+        return reportRoomForIdentifierReasonCallsCount > 0
+    }
+    var reportRoomForIdentifierReasonReceivedArguments: (identifier: String, reason: String?)?
+    var reportRoomForIdentifierReasonReceivedInvocations: [(identifier: String, reason: String?)] = []
+
+    var reportRoomForIdentifierReasonUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var reportRoomForIdentifierReasonReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return reportRoomForIdentifierReasonUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = reportRoomForIdentifierReasonUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                reportRoomForIdentifierReasonUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    reportRoomForIdentifierReasonUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var reportRoomForIdentifierReasonClosure: ((String, String?) async -> Result<Void, ClientProxyError>)?
+
+    func reportRoomForIdentifier(_ identifier: String, reason: String?) async -> Result<Void, ClientProxyError> {
+        reportRoomForIdentifierReasonCallsCount += 1
+        reportRoomForIdentifierReasonReceivedArguments = (identifier: identifier, reason: reason)
+        DispatchQueue.main.async {
+            self.reportRoomForIdentifierReasonReceivedInvocations.append((identifier: identifier, reason: reason))
+        }
+        if let reportRoomForIdentifierReasonClosure = reportRoomForIdentifierReasonClosure {
+            return await reportRoomForIdentifierReasonClosure(identifier, reason)
+        } else {
+            return reportRoomForIdentifierReasonReturnValue
+        }
+    }
     //MARK: - roomInfoForAlias
 
     var roomInfoForAliasUnderlyingCallsCount = 0
@@ -7919,6 +7989,76 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return await reportContentReasonClosure(eventID, reason)
         } else {
             return reportContentReasonReturnValue
+        }
+    }
+    //MARK: - reportRoom
+
+    var reportRoomReasonUnderlyingCallsCount = 0
+    var reportRoomReasonCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return reportRoomReasonUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = reportRoomReasonUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                reportRoomReasonUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    reportRoomReasonUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var reportRoomReasonCalled: Bool {
+        return reportRoomReasonCallsCount > 0
+    }
+    var reportRoomReasonReceivedReason: String?
+    var reportRoomReasonReceivedInvocations: [String?] = []
+
+    var reportRoomReasonUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var reportRoomReasonReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return reportRoomReasonUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = reportRoomReasonUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                reportRoomReasonUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    reportRoomReasonUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var reportRoomReasonClosure: ((String?) async -> Result<Void, RoomProxyError>)?
+
+    func reportRoom(reason: String?) async -> Result<Void, RoomProxyError> {
+        reportRoomReasonCallsCount += 1
+        reportRoomReasonReceivedReason = reason
+        DispatchQueue.main.async {
+            self.reportRoomReasonReceivedInvocations.append(reason)
+        }
+        if let reportRoomReasonClosure = reportRoomReasonClosure {
+            return await reportRoomReasonClosure(reason)
+        } else {
+            return reportRoomReasonReturnValue
         }
     }
     //MARK: - leaveRoom

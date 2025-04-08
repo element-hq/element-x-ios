@@ -56,6 +56,8 @@ final class AppSettings {
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
         case knockingEnabled
+        case reportRoomEnabled
+        case reportInviteEnabled
         case zeroAccessToken
         case zeroRewardsCredit
         case zeroLoggedInUser
@@ -209,8 +211,7 @@ final class AppSettings {
                                                                      tosURI: acceptableUseURL,
                                                                      policyURI: privacyURL,
                                                                      contacts: [supportEmailAddress],
-                                                                     staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString },
-                                                                     dynamicRegistrationsFile: .sessionsBaseDirectory.appending(path: "oidc/registrations.json"))
+                                                                     staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString })
     
     /// A temporary hack to allow registration on matrix.org until MAS is deployed.
     let webRegistrationEnabled = true
@@ -333,6 +334,11 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.reportRoomEnabled, defaultValue: false, storageType: .userDefaults(store)) var reportRoomEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.reportInviteEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var reportInviteEnabled
     
     #endif
     

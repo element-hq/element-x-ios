@@ -41,6 +41,7 @@ enum ClientProxyError: Error {
     case roomPreviewIsPrivate
     case failedRetrievingUserIdentity
     case failedResolvingRoomAlias
+    case roomNotInLocalStore
     
     case failedCompletingUserProfile
 }
@@ -158,6 +159,9 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func roomSummaryForIdentifier(_ identifier: String) -> RoomSummary?
     
     func roomSummaryForAlias(_ alias: String) -> RoomSummary?
+    
+    /// Will only work for rooms that are in our room list/local store
+    func reportRoomForIdentifier(_ identifier: String, reason: String?) async -> Result<Void, ClientProxyError>
     
     func roomInfoForAlias(_ alias: String) async -> RoomInfoProxy?
     

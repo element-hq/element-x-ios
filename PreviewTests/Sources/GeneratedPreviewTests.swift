@@ -143,6 +143,12 @@ extension PreviewTests {
         }
     }
 
+    func testDeclineAndBlockScreen() async throws {
+        for (index, preview) in DeclineAndBlockScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testEditRoomAddressScreen() async throws {
         for (index, preview) in EditRoomAddressScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
@@ -595,6 +601,12 @@ extension PreviewTests {
 
     func testReportContentScreen() async throws {
         for (index, preview) in ReportContentScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    func testReportRoomScreen() async throws {
+        for (index, preview) in ReportRoomScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }

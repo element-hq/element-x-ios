@@ -26,6 +26,7 @@ enum RoomDetailsScreenViewModelAction: Equatable {
     case displayMediaEventsTimeline
     case displayKnockingRequests
     case displaySecurityAndPrivacy
+    case displayReportRoom
 }
 
 // MARK: View
@@ -64,6 +65,8 @@ struct RoomDetailsScreenViewState: BindableState {
     var knockingEnabled = false
     var isKnockableRoom = false
     var knockRequestsCount = 0
+    
+    var reportRoomEnabled = false
     
     var canSeeKnockingRequests: Bool {
         knockingEnabled && dmRecipientInfo == nil && isKnockableRoom && (canInviteUsers || canKickUsers || canBanUsers)
@@ -221,6 +224,7 @@ enum RoomDetailsScreenViewAction {
     case processTapPinnedEvents
     case processTapMediaEvents
     case processTapRequestsToJoin
+    case processTapReport
 }
 
 enum RoomDetailsScreenViewShortcut {

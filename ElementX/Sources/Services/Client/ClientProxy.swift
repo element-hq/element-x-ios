@@ -582,6 +582,20 @@ class ClientProxy: ClientProxyProtocol {
         staticRoomSummaryProvider.roomListPublisher.value.first { $0.canonicalAlias == alias || $0.alternativeAliases.contains(alias) }
     }
     
+    func reportRoomForIdentifier(_ identifier: String, reason: String?) async -> Result<Void, ClientProxyError> {
+        do {
+            guard let room = try client.getRoom(roomId: identifier) else {
+                MXLog.error("Failed reporting room with identifier: \(identifier), room not in local store")
+                return .failure(.roomNotInLocalStore)
+            }
+            try await room.reportRoom(reason: reason)
+            return .success(())
+        } catch {
+            MXLog.error("Failed reporting room with identifier: \(identifier), with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func roomInfoForAlias(_ alias: String) async -> RoomInfoProxy? {
         do {
             if let resolvedRoomAlias = try await client.resolveRoomAlias(roomAlias: alias) {

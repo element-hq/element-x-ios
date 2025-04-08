@@ -128,6 +128,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .weakAssign(to: \.state.hideInviteAvatars, on: self)
             .store(in: &cancellables)
         
+        appSettings.$reportRoomEnabled
+            .weakAssign(to: \.state.reportRoomEnabled, on: self)
+            .store(in: &cancellables)
+        
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
         let activeFilters = context.$viewState.map(\.bindings.filtersState.activeFilters)
@@ -161,12 +165,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         switch viewAction {
         case .selectRoom(let roomIdentifier):
             actionsSubject.send(.presentRoom(roomIdentifier: roomIdentifier))
-        case .showRoomDetails(roomIdentifier: let roomIdentifier):
+        case .showRoomDetails(let roomIdentifier):
             actionsSubject.send(.presentRoomDetails(roomIdentifier: roomIdentifier))
-        case .leaveRoom(roomIdentifier: let roomIdentifier):
+        case .leaveRoom(let roomIdentifier):
             startLeaveRoomProcess(roomID: roomIdentifier)
-        case .confirmLeaveRoom(roomIdentifier: let roomIdentifier):
+        case .confirmLeaveRoom(let roomIdentifier):
             Task { await leaveRoom(roomID: roomIdentifier) }
+        case .reportRoom(let roomIdentifier):
+            actionsSubject.send(.presentReportRoom(roomIdentifier: roomIdentifier))
         case .showSettings:
             actionsSubject.send(.presentSettingsScreen)
         case .setupRecovery:
@@ -477,11 +483,24 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         let title = room.isDirect ? L10n.screenInvitesDeclineDirectChatTitle : L10n.screenInvitesDeclineChatTitle
         let message = room.isDirect ? L10n.screenInvitesDeclineDirectChatMessage(roomPlaceholder) : L10n.screenInvitesDeclineChatMessage(roomPlaceholder)
         
-        state.bindings.alertInfo = .init(id: UUID(),
-                                         title: title,
-                                         message: message,
-                                         primaryButton: .init(title: L10n.actionDecline, role: .destructive) { Task { await self.declineInvite(roomID: room.id) } },
-                                         secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+        if appSettings.reportInviteEnabled, let userID = room.inviter?.id {
+            state.bindings.alertInfo = .init(id: UUID(),
+                                             title: title,
+                                             message: message,
+                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                             secondaryButton: .init(title: L10n.actionDeclineAndBlock, role: .destructive) { [weak self] in self?.declineAndBlockInvite(userID: userID, roomID: roomID) },
+                                             verticalButtons: [.init(title: L10n.actionDecline) { [weak self] in Task { await self?.declineInvite(roomID: room.id) } }])
+        } else {
+            state.bindings.alertInfo = .init(id: UUID(),
+                                             title: title,
+                                             message: message,
+                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                             secondaryButton: .init(title: L10n.actionDecline, role: .destructive) { [weak self] in Task { await self?.declineInvite(roomID: room.id) } })
+        }
+    }
+    
+    private func declineAndBlockInvite(userID: String, roomID: String) {
+        actionsSubject.send(.presentDeclineAndBlock(userID: userID, roomID: roomID))
     }
     
     private func declineInvite(roomID: String) async {

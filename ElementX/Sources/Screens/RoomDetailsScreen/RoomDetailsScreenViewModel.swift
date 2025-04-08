@@ -79,6 +79,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .weakAssign(to: \.state.knockingEnabled, on: self)
             .store(in: &cancellables)
         
+        appSettings.$reportRoomEnabled
+            .weakAssign(to: \.state.reportRoomEnabled, on: self)
+            .store(in: &cancellables)
+        
         appMediator.networkMonitor.reachabilityPublisher
             .filter { $0 == .reachable }
             .receive(on: DispatchQueue.main)
@@ -184,6 +188,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 return
             }
             actionsSubject.send(.requestRecipientDetailsPresentation(userID: userID))
+        case .processTapReport:
+            actionsSubject.send(.displayReportRoom)
         }
     }
     

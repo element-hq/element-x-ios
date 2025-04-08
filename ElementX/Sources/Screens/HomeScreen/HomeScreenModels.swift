@@ -13,6 +13,8 @@ import SwiftUI
 enum HomeScreenViewModelAction {
     case presentRoom(roomIdentifier: String)
     case presentRoomDetails(roomIdentifier: String)
+    case presentReportRoom(roomIdentifier: String)
+    case presentDeclineAndBlock(userID: String, roomID: String)
     case roomLeft(roomIdentifier: String)
     case presentSecureBackupSettings
     case presentRecoveryKeyScreen
@@ -32,6 +34,7 @@ enum HomeScreenViewAction {
     case showRoomDetails(roomIdentifier: String)
     case leaveRoom(roomIdentifier: String)
     case confirmLeaveRoom(roomIdentifier: String)
+    case reportRoom(roomIdentifier: String)
     case showSettings
     case startChat
     case newFeed
@@ -160,6 +163,10 @@ struct HomeScreenViewState: BindableState {
         
     var selectedRoomID: String?
     
+    var hideInviteAvatars = false
+    
+    var reportRoomEnabled = false
+    
     var visibleRooms: [HomeScreenRoom] {
         if roomListMode == .skeletons {
             return placeholderRooms
@@ -167,6 +174,7 @@ struct HomeScreenViewState: BindableState {
         
         return rooms
     }
+        
     var visiblePosts: [HomeScreenPost] {
         if postListMode == .skeletons {
             return placeholderPosts
@@ -191,9 +199,7 @@ struct HomeScreenViewState: BindableState {
     
     var userRewards = ZeroRewards.empty()
     var showNewUserRewardsIntimation = false
-    
-    var hideInviteAvatars = false
-    
+        
     var bindings = HomeScreenViewStateBindings()
     
     var placeholderRooms: [HomeScreenRoom] {

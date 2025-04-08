@@ -33,6 +33,7 @@ enum RoomDetailsScreenCoordinatorAction {
     case presentMediaEventsTimeline
     case presentKnockingRequestsListScreen
     case presentSecurityAndPrivacyScreen
+    case presentReportRoomScreen
 }
 
 final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
@@ -91,6 +92,8 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentSecurityAndPrivacyScreen)
                 case .requestRecipientDetailsPresentation(let userID):
                     actionsSubject.send(.presentRecipientDetails(userID: userID))
+                case .displayReportRoom:
+                    actionsSubject.send(.presentReportRoomScreen)
                 }
             }
             .store(in: &cancellables)

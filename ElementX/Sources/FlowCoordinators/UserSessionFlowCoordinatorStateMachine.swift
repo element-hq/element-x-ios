@@ -15,49 +15,56 @@ class UserSessionFlowCoordinatorStateMachine {
         /// The initial state, used before the coordinator starts
         case initial
                 
-        /// Showing the home screen. The `selectedRoomID` represents the timeline shown on the detail panel (if any)
-        case roomList(selectedRoomID: String?)
+        /// Showing the home screen. The `roomListSelectedRoomID` represents the timeline shown on the detail panel (if any)
+        case roomList(roomListSelectedRoomID: String?)
                 
         /// Showing the feedback screen.
-        case feedbackScreen(selectedRoomID: String?)
+        case feedbackScreen(roomListSelectedRoomID: String?)
         
         /// Showing the settings screen
-        case settingsScreen(selectedRoomID: String?)
+        case settingsScreen(roomListSelectedRoomID: String?)
         
         /// Showing the recovery key screen.
-        case recoveryKeyScreen(selectedRoomID: String?)
+        case recoveryKeyScreen(roomListSelectedRoomID: String?)
         
         /// Showing the encryption reset flow.
-        case encryptionResetFlow(selectedRoomID: String?)
+        case encryptionResetFlow(roomListSelectedRoomID: String?)
         
         /// Showing the start chat screen
-        case startChatScreen(selectedRoomID: String?)
+        case startChatScreen(roomListSelectedRoomID: String?)
         
         /// Showing the logout flows
-        case logoutConfirmationScreen(selectedRoomID: String?)
+        case logoutConfirmationScreen(roomListSelectedRoomID: String?)
         
         /// Showing Room Directory Search screen
-        case roomDirectorySearchScreen(selectedRoomID: String?)
+        case roomDirectorySearchScreen(roomListSelectedRoomID: String?)
         
         /// Showing the user profile screen. This screen clears the navigation.
         case userProfileScreen
         
+        /// Showing the report room screen, for the given room identrifier
+        case reportRoomScreen(roomListSelectedRoomID: String?)
+        
         case shareExtensionRoomList(sharePayload: ShareExtensionPayload)
         
+        case declineAndBlockUserScreen(roomListSelectedRoomID: String?)
+        
         /// The selected room ID from the state if available.
-        var selectedRoomID: String? {
+        var roomListSelectedRoomID: String? {
             switch self {
             case .initial, .userProfileScreen, .shareExtensionRoomList:
                 nil
-            case .roomList(let selectedRoomID),
-                 .feedbackScreen(let selectedRoomID),
-                 .settingsScreen(let selectedRoomID),
-                 .recoveryKeyScreen(let selectedRoomID),
-                 .encryptionResetFlow(let selectedRoomID),
-                 .startChatScreen(let selectedRoomID),
-                 .logoutConfirmationScreen(let selectedRoomID),
-                 .roomDirectorySearchScreen(let selectedRoomID):
-                selectedRoomID
+            case .roomList(let roomListSelectedRoomID),
+                 .feedbackScreen(let roomListSelectedRoomID),
+                 .settingsScreen(let roomListSelectedRoomID),
+                 .recoveryKeyScreen(let roomListSelectedRoomID),
+                 .encryptionResetFlow(let roomListSelectedRoomID),
+                 .startChatScreen(let roomListSelectedRoomID),
+                 .logoutConfirmationScreen(let roomListSelectedRoomID),
+                 .roomDirectorySearchScreen(let roomListSelectedRoomID),
+                 .reportRoomScreen(let roomListSelectedRoomID),
+                 .declineAndBlockUserScreen(let roomListSelectedRoomID):
+                roomListSelectedRoomID
             }
         }
     }
@@ -121,6 +128,12 @@ class UserSessionFlowCoordinatorStateMachine {
         
         case showShareExtensionRoomList(sharePayload: ShareExtensionPayload)
         case dismissedShareExtensionRoomList
+        
+        case presentReportRoomScreen(roomID: String)
+        case dismissedReportRoomScreen
+        
+        case presentDeclineAndBlockScreen(userID: String, roomID: String)
+        case dismissedDeclineAndBlockScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -140,59 +153,69 @@ class UserSessionFlowCoordinatorStateMachine {
     }
 
     private func configure() {
-        stateMachine.addRoutes(event: .start, transitions: [.initial => .roomList(selectedRoomID: nil)])
+        stateMachine.addRoutes(event: .start, transitions: [.initial => .roomList(roomListSelectedRoomID: nil)])
 
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (fromState, event) {
             case (.roomList, .selectRoom(let roomID, _, _)):
-                return .roomList(selectedRoomID: roomID)
+                return .roomList(roomListSelectedRoomID: roomID)
             case (.roomList, .deselectRoom):
-                return .roomList(selectedRoomID: nil)
+                return .roomList(roomListSelectedRoomID: nil)
 
-            case (.roomList(let selectedRoomID), .showSettingsScreen):
-                return .settingsScreen(selectedRoomID: selectedRoomID)
-            case (.settingsScreen(let selectedRoomID), .dismissedSettingsScreen):
-                return .roomList(selectedRoomID: selectedRoomID)
+            case (.roomList(let roomListSelectedRoomID), .showSettingsScreen):
+                return .settingsScreen(roomListSelectedRoomID: roomListSelectedRoomID)
+            case (.settingsScreen(let roomListSelectedRoomID), .dismissedSettingsScreen):
+                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                 
-            case (.roomList(let selectedRoomID), .feedbackScreen):
-                return .feedbackScreen(selectedRoomID: selectedRoomID)
-            case (.feedbackScreen(let selectedRoomID), .dismissedFeedbackScreen):
-                return .roomList(selectedRoomID: selectedRoomID)
+            case (.roomList(let roomListSelectedRoomID), .feedbackScreen):
+                return .feedbackScreen(roomListSelectedRoomID: roomListSelectedRoomID)
+            case (.feedbackScreen(let roomListSelectedRoomID), .dismissedFeedbackScreen):
+                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                 
-            case (.roomList(let selectedRoomID), .showRecoveryKeyScreen):
-                return .recoveryKeyScreen(selectedRoomID: selectedRoomID)
-            case (.recoveryKeyScreen(let selectedRoomID), .dismissedRecoveryKeyScreen):
-                return .roomList(selectedRoomID: selectedRoomID)
+            case (.roomList(let roomListSelectedRoomID), .showRecoveryKeyScreen):
+                return .recoveryKeyScreen(roomListSelectedRoomID: roomListSelectedRoomID)
+            case (.recoveryKeyScreen(let roomListSelectedRoomID), .dismissedRecoveryKeyScreen):
+                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                 
-            case (.roomList(let selectedRoomID), .startEncryptionResetFlow):
-                return .encryptionResetFlow(selectedRoomID: selectedRoomID)
-            case (.encryptionResetFlow(let selectedRoomID), .finishedEncryptionResetFlow):
-                return .roomList(selectedRoomID: selectedRoomID)
+            case (.roomList(let roomListSelectedRoomID), .startEncryptionResetFlow):
+                return .encryptionResetFlow(roomListSelectedRoomID: roomListSelectedRoomID)
+            case (.encryptionResetFlow(let roomListSelectedRoomID), .finishedEncryptionResetFlow):
+                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                 
-            case (.roomList(let selectedRoomID), .showStartChatScreen):
-                return .startChatScreen(selectedRoomID: selectedRoomID)
-            case (.startChatScreen(let selectedRoomID), .dismissedStartChatScreen):
-                return .roomList(selectedRoomID: selectedRoomID)
+            case (.roomList(let roomListSelectedRoomID), .showStartChatScreen):
+                return .startChatScreen(roomListSelectedRoomID: roomListSelectedRoomID)
+            case (.startChatScreen(let roomListSelectedRoomID), .dismissedStartChatScreen):
+                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                             
-            case (.roomList(let selectedRoomID), .showLogoutConfirmationScreen):
-                return .logoutConfirmationScreen(selectedRoomID: selectedRoomID)
-            case (.logoutConfirmationScreen(let selectedRoomID), .dismissedLogoutConfirmationScreen):
-                return .roomList(selectedRoomID: selectedRoomID)
+            case (.roomList(let roomListSelectedRoomID), .showLogoutConfirmationScreen):
+                return .logoutConfirmationScreen(roomListSelectedRoomID: roomListSelectedRoomID)
+            case (.logoutConfirmationScreen(let roomListSelectedRoomID), .dismissedLogoutConfirmationScreen):
+                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                 
-            case (.roomList(let selectedRoomID), .showRoomDirectorySearchScreen):
-                return .roomDirectorySearchScreen(selectedRoomID: selectedRoomID)
-            case (.roomDirectorySearchScreen(let selectedRoomID), .dismissedRoomDirectorySearchScreen):
-                return .roomList(selectedRoomID: selectedRoomID)
+            case (.roomList(let roomListSelectedRoomID), .showRoomDirectorySearchScreen):
+                return .roomDirectorySearchScreen(roomListSelectedRoomID: roomListSelectedRoomID)
+            case (.roomDirectorySearchScreen(let roomListSelectedRoomID), .dismissedRoomDirectorySearchScreen):
+                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
             
             case (_, .showUserProfileScreen):
                 return .userProfileScreen
             case (.userProfileScreen, .dismissedUserProfileScreen):
-                return .roomList(selectedRoomID: nil)
+                return .roomList(roomListSelectedRoomID: nil)
                 
             case (.roomList, .showShareExtensionRoomList(let sharePayload)):
                 return .shareExtensionRoomList(sharePayload: sharePayload)
             case (.shareExtensionRoomList, .dismissedShareExtensionRoomList):
-                return .roomList(selectedRoomID: nil)
+                return .roomList(roomListSelectedRoomID: nil)
+                
+            case (.roomList(let roomListSelectedRoomID), .presentReportRoomScreen):
+                return .reportRoomScreen(roomListSelectedRoomID: roomListSelectedRoomID)
+            case (.reportRoomScreen(let roomListSelectedRoomID), .dismissedReportRoomScreen):
+                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
+                
+            case(.roomList(let roomListSelectedRoomID), .presentDeclineAndBlockScreen):
+                return .declineAndBlockUserScreen(roomListSelectedRoomID: roomListSelectedRoomID)
+            case (.declineAndBlockUserScreen(let roomListSelectedRoomID), .dismissedDeclineAndBlockScreen):
+                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                 
             default:
                 return nil
@@ -231,8 +254,8 @@ class UserSessionFlowCoordinatorStateMachine {
     /// Flag indicating the machine is displaying room screen with given room identifier
     func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
         switch stateMachine.state {
-        case .roomList(let selectedRoomID):
-            return roomID == selectedRoomID
+        case .roomList(let roomListSelectedRoomID):
+            return roomID == roomListSelectedRoomID
         default:
             return false
         }

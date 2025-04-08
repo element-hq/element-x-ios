@@ -323,11 +323,15 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     }
     
     private func showDeclineAndBlockConfirmationAlert(userID: String) {
-        state.bindings.alertInfo = .init(id: .declineInviteAndBlock,
-                                         title: L10n.screenJoinRoomDeclineAndBlockAlertTitle,
-                                         message: L10n.screenJoinRoomDeclineAndBlockAlertMessage(userID),
-                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                         secondaryButton: .init(title: L10n.screenJoinRoomDeclineAndBlockAlertConfirmation, role: .destructive) { Task { await self.declineAndBlock(userID: userID) } })
+        if appSettings.reportInviteEnabled {
+            actionsSubject.send(.presentDeclineAndBlock(userID: userID))
+        } else {
+            state.bindings.alertInfo = .init(id: .declineInviteAndBlock,
+                                             title: L10n.screenJoinRoomDeclineAndBlockAlertTitle,
+                                             message: L10n.screenJoinRoomDeclineAndBlockAlertMessage(userID),
+                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                             secondaryButton: .init(title: L10n.screenJoinRoomDeclineAndBlockAlertConfirmation, role: .destructive) { Task { await self.declineAndBlock(userID: userID) } })
+        }
     }
     
     private func declineAndBlock(userID: String) async {

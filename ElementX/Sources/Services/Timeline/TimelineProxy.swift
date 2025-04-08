@@ -423,7 +423,11 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         do {
             if let inReplyToEventID {
-                try await timeline.sendReply(msg: messageContent, eventId: inReplyToEventID)
+                // `enforceThread` will force send the message a thread with `inReplyToEventID` while
+                // `replyWithinThread` will create an in-reply-to associated field *within* that same thread
+                try await timeline.sendReply(msg: messageContent, replyParams: .init(eventId: inReplyToEventID,
+                                                                                     enforceThread: false,
+                                                                                     replyWithinThread: false))
                 MXLog.info("Finished sending reply to eventID: \(inReplyToEventID)")
             } else {
                 _ = try await timeline.send(msg: messageContent)

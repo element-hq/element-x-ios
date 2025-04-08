@@ -39,6 +39,7 @@ final class NSEUserSession {
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks,
                          enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode)
+            .systemIsMemoryConstrained()
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
             .username(username: credentials.userID)
