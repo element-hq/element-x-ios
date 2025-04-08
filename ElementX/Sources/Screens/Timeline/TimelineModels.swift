@@ -19,7 +19,7 @@ enum TimelineViewModelAction {
     case displayLocationPicker
     case displayPollForm(mode: PollFormMode)
     case displayMediaUploadPreviewScreen(url: URL)
-    case tappedOnSenderDetails(userID: String)
+    case displaySenderDetails(userID: String)
     case displayMessageForwarding(forwardingItem: MessageForwardingItem)
     case displayMediaPreview(TimelineMediaPreviewViewModel)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
@@ -99,6 +99,8 @@ struct TimelineViewState: BindableState {
     var canCurrentUserRedactOthers = false
     var canCurrentUserRedactSelf = false
     var canCurrentUserPin = false
+    var canCurrentUserKick = false
+    var canCurrentUserBan = false
     var isViewSourceEnabled: Bool
     var hideTimelineMedia: Bool
         
@@ -135,7 +137,7 @@ struct TimelineViewStateBindings {
     /// Key is itemID, value is the collapsed state.
     var reactionsCollapsed: [TimelineItemIdentifier: Bool]
     
-    var alertInfo: AlertInfo<RoomScreenAlertInfoType>?
+    var alertInfo: AlertInfo<TimelineAlertInfoType>?
     
     var debugInfo: TimelineItemDebugInfo?
     
@@ -144,6 +146,8 @@ struct TimelineViewStateBindings {
     var reactionSummaryInfo: ReactionSummaryInfo?
     
     var readReceiptsSummaryInfo: ReadReceiptSummaryInfo?
+    
+    var manageMemberViewModel: ManageRoomMemberSheetViewModel?
 }
 
 struct TimelineItemActionMenuInfo: Equatable, Identifiable {
@@ -172,7 +176,7 @@ struct ReadReceiptSummaryInfo: Identifiable {
     let id: TimelineItemIdentifier
 }
 
-enum RoomScreenAlertInfoType: Hashable {
+enum TimelineAlertInfoType: Hashable {
     case audioRecodingPermissionError
     case pollEndConfirmation(String)
     case sendingFailed

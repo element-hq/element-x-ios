@@ -350,6 +350,117 @@ class TimelineViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
+    func testShowManageUserAsAdmin() async throws {
+        let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "",
+                                                                               members: [RoomMemberProxyMock.mockAdmin,
+                                                                                         RoomMemberProxyMock.mockAlice],
+                                                                               ownUserID: RoomMemberProxyMock.mockAdmin.userID)),
+                                          timelineController: MockTimelineController(),
+                                          mediaProvider: MediaProviderMock(configuration: .init()),
+                                          mediaPlayerProvider: MediaPlayerProviderMock(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                          userIndicatorController: userIndicatorControllerMock,
+                                          appMediator: AppMediatorMock.default,
+                                          appSettings: ServiceLocator.shared.settings,
+                                          analyticsService: ServiceLocator.shared.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                          clientProxy: ClientProxyMock(.init()))
+        
+        var deferred = deferFulfillment(viewModel.context.$viewState) { value in
+            value.canCurrentUserKick && value.canCurrentUserBan
+        }
+        
+        try await deferred.fulfill()
+        
+        deferred = deferFulfillment(viewModel.context.$viewState) { value in
+            value.bindings.manageMemberViewModel != nil
+        }
+        
+        viewModel.context.send(viewAction: .tappedOnSenderDetails(userID: RoomMemberProxyMock.mockAlice.userID))
+        try await deferred.fulfill()
+        
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.member.id, RoomMemberProxyMock.mockAlice.userID)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.canBan, true)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.canKick, true)
+    }
+    
+    func testShowDetailsForAnAdmin() async throws {
+        let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "",
+                                                                               members: [RoomMemberProxyMock.mockAdmin,
+                                                                                         RoomMemberProxyMock.mockAlice],
+                                                                               ownUserID: RoomMemberProxyMock.mockAlice.userID)),
+                                          timelineController: MockTimelineController(),
+                                          mediaProvider: MediaProviderMock(configuration: .init()),
+                                          mediaPlayerProvider: MediaPlayerProviderMock(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                          userIndicatorController: userIndicatorControllerMock,
+                                          appMediator: AppMediatorMock.default,
+                                          appSettings: ServiceLocator.shared.settings,
+                                          analyticsService: ServiceLocator.shared.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                          clientProxy: ClientProxyMock(.init()))
+        
+        let deferredState = deferFulfillment(viewModel.context.$viewState) { value in
+            !value.canCurrentUserKick && !value.canCurrentUserBan
+        }
+        
+        try await deferredState.fulfill()
+        
+        let deferredAction = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .displaySenderDetails(let userID):
+                return userID == RoomMemberProxyMock.mockAdmin.userID
+            default:
+                return false
+            }
+        }
+        
+        viewModel.context.send(viewAction: .tappedOnSenderDetails(userID: RoomMemberProxyMock.mockAdmin.userID))
+        try await deferredAction.fulfill()
+        
+        XCTAssertNil(viewModel.context.manageMemberViewModel)
+    }
+    
+    func testShowDetailsForABannedUser() async throws {
+        let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "",
+                                                                               members: [RoomMemberProxyMock.mockAdmin,
+                                                                                         RoomMemberProxyMock.mockBanned[0]],
+                                                                               ownUserID: RoomMemberProxyMock.mockAdmin.userID)),
+                                          timelineController: MockTimelineController(),
+                                          mediaProvider: MediaProviderMock(configuration: .init()),
+                                          mediaPlayerProvider: MediaPlayerProviderMock(),
+                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                          userIndicatorController: userIndicatorControllerMock,
+                                          appMediator: AppMediatorMock.default,
+                                          appSettings: ServiceLocator.shared.settings,
+                                          analyticsService: ServiceLocator.shared.analytics,
+                                          emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                          clientProxy: ClientProxyMock(.init()))
+        
+        let deferredState = deferFulfillment(viewModel.context.$viewState) { value in
+            value.canCurrentUserKick && value.canCurrentUserBan
+        }
+        
+        try await deferredState.fulfill()
+        
+        let deferredAction = deferFulfillment(viewModel.actions) { action in
+            switch action {
+            case .displaySenderDetails(let userID):
+                return userID == RoomMemberProxyMock.mockBanned[0].userID
+            default:
+                return false
+            }
+        }
+        
+        viewModel.context.send(viewAction: .tappedOnSenderDetails(userID: RoomMemberProxyMock.mockBanned[0].userID))
+        try await deferredAction.fulfill()
+        
+        XCTAssertNil(viewModel.context.manageMemberViewModel)
+    }
+    
     // MARK: - Pins
     
     func testPinnedEvents() async throws {

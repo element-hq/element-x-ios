@@ -401,6 +401,12 @@ extension PreviewTests {
         }
     }
 
+    func testManageRoomMemberSheetView() async throws {
+        for (index, preview) in ManageRoomMemberSheetView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testMapLibreStaticMapView() async throws {
         for (index, preview) in MapLibreStaticMapView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
@@ -703,12 +709,6 @@ extension PreviewTests {
 
     func testRoomMemberDetailsScreen() async throws {
         for (index, preview) in RoomMemberDetailsScreen_Previews._allPreviews.enumerated() {
-            try await assertSnapshots(matching: preview, step: index)
-        }
-    }
-
-    func testRoomMembersListManageMemberSheet() async throws {
-        for (index, preview) in RoomMembersListManageMemberSheet_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
         }
     }
