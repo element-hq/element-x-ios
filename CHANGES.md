@@ -1,3 +1,53 @@
+## Changes in 25.04.0 (2025-04-08)
+
+### What's Changed
+
+✨ Features
+* Add alerts with reason for kick and ban by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3967
+
+🙌 Improvements
+* Update the app icon. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3977
+
+🐛 Bugfixes
+* fix: update compound to fix accessibility in pickers and toggles by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3947
+* Bring back the background refresh stop sync crash fix by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3960
+* Load single rooms in the notification service extension by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3973
+
+⚠️ API Changes
+* Add the push gateway to settings overrides and remove the endpoint path from it. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3970
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3959
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/3984
+
+🧱 Build
+* Make the secrets optional. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3966
+* Add a post-release workflow. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3986
+* Prepare for version 25.04.x. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3994
+* Vendor our StaticCode pkl package inside the project. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3993
+
+🚧 In development 🚧
+* feat: report a room by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3971
+* feat:  decline and block screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3989
+
+Others
+* a11y: accessibility labels for calls by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3949
+* a11y: add profile picture accessibility label by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3948
+* a11y: better voice over for voice messages by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3950
+* Allow the services that are configured by secrets to be disabled. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3961
+* Bump the RustSDK to v25.03.31 by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3964
+* Updated EC to 0.9.0 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3962
+* Allow overriding the bug report app ID and analytics cookies URL. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3969
+* Add the build number to rageshakes. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3978
+* Add a Compound hook. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3979
+* Fix UI test toggle tapping after compound accessibility change. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3985
+* Add support URLs to the app setting overrides. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3987
+* Update actions/github-script action to v7 by @renovate in https://github.com/element-hq/element-x-ios/pull/3988
+* Bump the Rust SDK, futher decrease NSE memory consumption by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/3992
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.03.8...release/25.04.0
+
 ## Changes in 25.03.8 (2025-03-27)
 
 ### What's Changed
