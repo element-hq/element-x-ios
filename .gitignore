@@ -39,6 +39,6 @@ build
 .DS_Store
 ._*
 
-# Commit any Pkl packages that we're using (there may be other caches in here).
+# Only commit Pkl packages (there may be other caches in here).
 Secrets/vendor/*
 !Secrets/vendor/package-2
