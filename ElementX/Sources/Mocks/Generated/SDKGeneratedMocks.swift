@@ -6179,6 +6179,71 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 
+    //MARK: - systemIsMemoryConstrained
+
+    var systemIsMemoryConstrainedUnderlyingCallsCount = 0
+    open var systemIsMemoryConstrainedCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return systemIsMemoryConstrainedUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = systemIsMemoryConstrainedUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                systemIsMemoryConstrainedUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    systemIsMemoryConstrainedUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var systemIsMemoryConstrainedCalled: Bool {
+        return systemIsMemoryConstrainedCallsCount > 0
+    }
+
+    var systemIsMemoryConstrainedUnderlyingReturnValue: ClientBuilder!
+    open var systemIsMemoryConstrainedReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return systemIsMemoryConstrainedUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = systemIsMemoryConstrainedUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                systemIsMemoryConstrainedUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    systemIsMemoryConstrainedUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var systemIsMemoryConstrainedClosure: (() -> ClientBuilder)?
+
+    open override func systemIsMemoryConstrained() -> ClientBuilder {
+        systemIsMemoryConstrainedCallsCount += 1
+        if let systemIsMemoryConstrainedClosure = systemIsMemoryConstrainedClosure {
+            return systemIsMemoryConstrainedClosure()
+        } else {
+            return systemIsMemoryConstrainedReturnValue
+        }
+    }
+
     //MARK: - useEventCachePersistentStorage
 
     var useEventCachePersistentStorageValueUnderlyingCallsCount = 0
@@ -21531,16 +21596,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - sendReply
 
-    open var sendReplyMsgEventIdThrowableError: Error?
-    var sendReplyMsgEventIdUnderlyingCallsCount = 0
-    open var sendReplyMsgEventIdCallsCount: Int {
+    open var sendReplyMsgReplyParamsThrowableError: Error?
+    var sendReplyMsgReplyParamsUnderlyingCallsCount = 0
+    open var sendReplyMsgReplyParamsCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendReplyMsgEventIdUnderlyingCallsCount
+                return sendReplyMsgReplyParamsUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendReplyMsgEventIdUnderlyingCallsCount
+                    returnValue = sendReplyMsgReplyParamsUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -21548,77 +21613,31 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendReplyMsgEventIdUnderlyingCallsCount = newValue
+                sendReplyMsgReplyParamsUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendReplyMsgEventIdUnderlyingCallsCount = newValue
+                    sendReplyMsgReplyParamsUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendReplyMsgEventIdCalled: Bool {
-        return sendReplyMsgEventIdCallsCount > 0
+    open var sendReplyMsgReplyParamsCalled: Bool {
+        return sendReplyMsgReplyParamsCallsCount > 0
     }
-    open var sendReplyMsgEventIdReceivedArguments: (msg: RoomMessageEventContentWithoutRelation, eventId: String)?
-    open var sendReplyMsgEventIdReceivedInvocations: [(msg: RoomMessageEventContentWithoutRelation, eventId: String)] = []
-    open var sendReplyMsgEventIdClosure: ((RoomMessageEventContentWithoutRelation, String) async throws -> Void)?
+    open var sendReplyMsgReplyParamsReceivedArguments: (msg: RoomMessageEventContentWithoutRelation, replyParams: ReplyParameters)?
+    open var sendReplyMsgReplyParamsReceivedInvocations: [(msg: RoomMessageEventContentWithoutRelation, replyParams: ReplyParameters)] = []
+    open var sendReplyMsgReplyParamsClosure: ((RoomMessageEventContentWithoutRelation, ReplyParameters) async throws -> Void)?
 
-    open override func sendReply(msg: RoomMessageEventContentWithoutRelation, eventId: String) async throws {
-        if let error = sendReplyMsgEventIdThrowableError {
+    open override func sendReply(msg: RoomMessageEventContentWithoutRelation, replyParams: ReplyParameters) async throws {
+        if let error = sendReplyMsgReplyParamsThrowableError {
             throw error
         }
-        sendReplyMsgEventIdCallsCount += 1
-        sendReplyMsgEventIdReceivedArguments = (msg: msg, eventId: eventId)
+        sendReplyMsgReplyParamsCallsCount += 1
+        sendReplyMsgReplyParamsReceivedArguments = (msg: msg, replyParams: replyParams)
         DispatchQueue.main.async {
-            self.sendReplyMsgEventIdReceivedInvocations.append((msg: msg, eventId: eventId))
+            self.sendReplyMsgReplyParamsReceivedInvocations.append((msg: msg, replyParams: replyParams))
         }
-        try await sendReplyMsgEventIdClosure?(msg, eventId)
-    }
-
-    //MARK: - sendThreadReply
-
-    open var sendThreadReplyMsgEventIdIsReplyThrowableError: Error?
-    var sendThreadReplyMsgEventIdIsReplyUnderlyingCallsCount = 0
-    open var sendThreadReplyMsgEventIdIsReplyCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return sendThreadReplyMsgEventIdIsReplyUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sendThreadReplyMsgEventIdIsReplyUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sendThreadReplyMsgEventIdIsReplyUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sendThreadReplyMsgEventIdIsReplyUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var sendThreadReplyMsgEventIdIsReplyCalled: Bool {
-        return sendThreadReplyMsgEventIdIsReplyCallsCount > 0
-    }
-    open var sendThreadReplyMsgEventIdIsReplyReceivedArguments: (msg: RoomMessageEventContentWithoutRelation, eventId: String, isReply: Bool)?
-    open var sendThreadReplyMsgEventIdIsReplyReceivedInvocations: [(msg: RoomMessageEventContentWithoutRelation, eventId: String, isReply: Bool)] = []
-    open var sendThreadReplyMsgEventIdIsReplyClosure: ((RoomMessageEventContentWithoutRelation, String, Bool) async throws -> Void)?
-
-    open override func sendThreadReply(msg: RoomMessageEventContentWithoutRelation, eventId: String, isReply: Bool) async throws {
-        if let error = sendThreadReplyMsgEventIdIsReplyThrowableError {
-            throw error
-        }
-        sendThreadReplyMsgEventIdIsReplyCallsCount += 1
-        sendThreadReplyMsgEventIdIsReplyReceivedArguments = (msg: msg, eventId: eventId, isReply: isReply)
-        DispatchQueue.main.async {
-            self.sendThreadReplyMsgEventIdIsReplyReceivedInvocations.append((msg: msg, eventId: eventId, isReply: isReply))
-        }
-        try await sendThreadReplyMsgEventIdIsReplyClosure?(msg, eventId, isReply)
+        try await sendReplyMsgReplyParamsClosure?(msg, replyParams)
     }
 
     //MARK: - sendVideo
