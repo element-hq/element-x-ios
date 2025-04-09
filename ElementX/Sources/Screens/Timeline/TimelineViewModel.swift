@@ -528,18 +528,20 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .store(in: &cancellables)
         
         appSettings.$timelineMediaVisibility
-            .combineLatest(roomProxy.infoPublisher
-                .map(\.isPublic)
-                .removeDuplicates()
-                .receive(on: DispatchQueue.main))
-            .map { timelineMediaVisibility, isPublic in
+            .removeDuplicates()
+            .flatMap { [weak self] timelineMediaVisibility -> AnyPublisher<Bool, Never> in
                 switch timelineMediaVisibility {
                 case .always:
-                    false
-                case .privateOnly:
-                    isPublic
+                    return Just(false).eraseToAnyPublisher()
                 case .never:
-                    true
+                    return Just(true).eraseToAnyPublisher()
+                case .privateOnly:
+                    guard let self else { return Just(false).eraseToAnyPublisher() }
+                    return roomProxy.infoPublisher
+                        .map(\.isPublic)
+                        .removeDuplicates()
+                        .receive(on: DispatchQueue.main)
+                        .eraseToAnyPublisher()
                 }
             }
             .weakAssign(to: \.state.hideTimelineMedia, on: self)

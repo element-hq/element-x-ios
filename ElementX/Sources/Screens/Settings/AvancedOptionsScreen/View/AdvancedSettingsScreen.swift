@@ -54,12 +54,9 @@ struct AdvancedSettingsScreen: View {
     
     private var timelineMediaSection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenAdvancedSettingsShowMediaTimelineAlwaysShow),
-                    kind: .selection(isSelected: context.timelineMediaVisibility == .always) { context.timelineMediaVisibility = .always })
-            ListRow(label: .plain(title: L10n.screenAdvancedSettingsShowMediaTimelinePrivateRooms),
-                    kind: .selection(isSelected: context.timelineMediaVisibility == .privateOnly) { context.timelineMediaVisibility = .privateOnly })
-            ListRow(label: .plain(title: L10n.screenAdvancedSettingsShowMediaTimelineAlwaysHide),
-                    kind: .selection(isSelected: context.timelineMediaVisibility == .never) { context.timelineMediaVisibility = .never })
+            ListRow(label: .plain(title: L10n.screenAdvancedSettingsShowMediaTimelineTitle),
+                    kind: .inlinePicker(selection: $context.timelineMediaVisibility,
+                                        items: TimelineMediaVisibility.items))
         } header: {
             Text(L10n.screenAdvancedSettingsShowMediaTimelineTitle)
                 .compoundListSectionHeader()
@@ -92,5 +89,13 @@ struct AdvancedSettingsScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             AdvancedSettingsScreen(context: viewModel.context)
         }
+    }
+}
+
+private extension TimelineMediaVisibility {
+    static var items: [(title: String, tag: TimelineMediaVisibility)] {
+        [(title: L10n.screenAdvancedSettingsShowMediaTimelineAlwaysShow, tag: .always),
+         (title: L10n.screenAdvancedSettingsShowMediaTimelinePrivateRooms, tag: .privateOnly),
+         (title: L10n.screenAdvancedSettingsShowMediaTimelineAlwaysHide, tag: .never)]
     }
 }

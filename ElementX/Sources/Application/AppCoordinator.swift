@@ -371,6 +371,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     /// Perform any required migrations for the app to function correctly.
     private func performMigrationsIfNecessary(from oldVersion: Version, to newVersion: Version) {
+        // Migration for the old `hideTimelineMedia` flag.
+        if let userDefaults = UserDefaults(suiteName: InfoPlistReader.main.appGroupIdentifier),
+           let hideTimelineMedia = userDefaults.value(forKey: "hideTimelineMedia") as? Bool {
+            appSettings.timelineMediaVisibility = hideTimelineMedia ? .never : .always
+            userDefaults.removeObject(forKey: "hideTimelineMedia")
+        }
+        
         guard oldVersion != newVersion else { return }
         
         MXLog.info("The app was upgraded from \(oldVersion) to \(newVersion)")
