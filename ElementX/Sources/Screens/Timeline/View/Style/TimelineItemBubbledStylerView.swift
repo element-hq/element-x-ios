@@ -378,6 +378,9 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                                                                      eventContent: .message(.text(.init(body: "Short")))))),
                                                   groupStyle: .single))
             
+            let properties = RoomTimelineItemProperties(replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                              eventID: "123",
+                                                                              eventContent: .message(.text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout.")))))
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
                                                                              timestamp: .mock,
                                                                              isOutgoing: true,
@@ -385,9 +388,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              canBeRepliedTo: true,
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "Short message"),
-                                                                             properties: .init(replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                                                                     eventID: "123",
-                                                                                                                     eventContent: .message(.text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout.")))))),
+                                                                             properties: properties),
                                                   groupStyle: .single))
         }
         .environmentObject(viewModel.context)
