@@ -123,8 +123,6 @@ class EventTimelineItemProxy {
                          avatarURL: nil)
         }
     }()
-
-    lazy var reactions = item.reactions
     
     lazy var timestamp = Date(timeIntervalSince1970: TimeInterval(item.timestamp / 1000))
     
