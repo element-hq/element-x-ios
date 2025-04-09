@@ -215,6 +215,19 @@ class ClientProxy: ClientProxyProtocol {
                 }
             }
             .store(in: &cancellables)
+        
+        Task {
+            do {
+                try await client.setMediaRetentionPolicy(policy: .init(maxCacheSize: nil,
+                                                                       maxFileSize: nil,
+                                                                       // 30 days in seconds
+                                                                       lastAccessExpiry: 30 * 24 * 60 * 60,
+                                                                       // 1 day in seconds
+                                                                       cleanupFrequency: 24 * 60 * 60))
+            } catch {
+                MXLog.error("Failed setting media retention policy with error: \(error)")
+            }
+        }
     }
     
     var userID: String {
