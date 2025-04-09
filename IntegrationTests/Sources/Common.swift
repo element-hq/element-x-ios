@@ -90,6 +90,9 @@ extension XCUIApplication {
         // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924
         profileButton.tapCenter()
         
+        // Make the logout button visible
+        swipeUp()
+        
         // Logout
         let logoutButton = buttons[A11yIdentifiers.settingsScreen.logout]
         XCTAssertTrue(logoutButton.waitForExistence(timeout: 10.0))
