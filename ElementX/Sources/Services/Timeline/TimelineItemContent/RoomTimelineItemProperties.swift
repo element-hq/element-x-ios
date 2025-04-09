@@ -9,6 +9,10 @@ import Foundation
 
 /// Properties of a matrix event that are common between all timeline items.
 struct RoomTimelineItemProperties: Hashable {
+    // Information on the item this one replying to
+    var replyDetails: TimelineItemReplyDetails?
+    // Whether it's part of a thread or not
+    var isThreaded = false
     /// Whether the item has been edited.
     var isEdited = false
     /// The aggregated reactions that have been sent for this item.

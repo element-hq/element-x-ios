@@ -9,12 +9,10 @@ import Foundation
 
 struct LocationRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
-
     let timestamp: Date
     let isOutgoing: Bool
     let isEditable: Bool
     let canBeRepliedTo: Bool
-    let isThreaded: Bool
     
     let sender: TimelineItemSender
 
@@ -23,8 +21,6 @@ struct LocationRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatabl
     var body: String {
         content.body
     }
-
-    var replyDetails: TimelineItemReplyDetails?
 
     var properties = RoomTimelineItemProperties()
 

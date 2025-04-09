@@ -14,14 +14,11 @@ struct FileRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let isOutgoing: Bool
     let isEditable: Bool
     let canBeRepliedTo: Bool
-    let isThreaded: Bool
     var shouldBoost = false
     
     let sender: TimelineItemSender
     
     let content: FileRoomTimelineItemContent
-    
-    var replyDetails: TimelineItemReplyDetails?
     
     var properties = RoomTimelineItemProperties()
     

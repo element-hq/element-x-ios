@@ -20,9 +20,7 @@ enum EventBasedMessageTimelineItemContentType: Hashable {
 }
 
 protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {
-    var replyDetails: TimelineItemReplyDetails? { get }
     var contentType: EventBasedMessageTimelineItemContentType { get }
-    var isThreaded: Bool { get }
 }
 
 extension EventBasedMessageTimelineItemProtocol {

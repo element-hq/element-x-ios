@@ -442,7 +442,6 @@ private extension TextRoomTimelineItem {
                   isOutgoing: sender == "bob",
                   isEditable: sender == "bob",
                   canBeRepliedTo: true,
-                  isThreaded: false,
                   sender: .init(id: "@\(sender):server.com", displayName: sender),
                   content: .init(body: text),
                   properties: RoomTimelineItemProperties(reactions: reactions, orderedReadReceipts: addReadReceipts))
@@ -462,7 +461,6 @@ private extension TextRoomTimelineItem {
                   isOutgoing: false,
                   isEditable: false,
                   canBeRepliedTo: true,
-                  isThreaded: false,
                   sender: .init(id: ""),
                   content: .init(body: "Hello, World!"))
     }

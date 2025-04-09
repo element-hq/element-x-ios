@@ -529,7 +529,7 @@ class TimelineInteractionHandler {
     private func buildReplyInfo(for item: EventBasedTimelineItemProtocol) -> ReplyInfo {
         switch item {
         case let messageItem as EventBasedMessageTimelineItemProtocol:
-            return .init(type: .message(messageItem.contentType), isThread: messageItem.isThreaded)
+            return .init(type: .message(messageItem.contentType), isThread: messageItem.properties.isThreaded)
         case let pollItem as PollRoomTimelineItem:
             return .init(type: .poll(question: pollItem.poll.question), isThread: false)
         default:
