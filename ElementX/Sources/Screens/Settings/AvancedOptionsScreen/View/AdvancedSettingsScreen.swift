@@ -35,6 +35,7 @@ struct AdvancedSettingsScreen: View {
             }
             
             moderationAndSafetySection
+            timelineMediaSection
         }
         .compoundList()
         .navigationTitle(L10n.commonAdvancedSettings)
@@ -43,13 +44,28 @@ struct AdvancedSettingsScreen: View {
     
     private var moderationAndSafetySection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenAdvancedSettingsHideTimelineMediaToggleTitle),
-                    kind: .toggle($context.hideTimelineMedia))
             ListRow(label: .plain(title: L10n.screenAdvancedSettingsHideInviteAvatarsToggleTitle),
                     kind: .toggle($context.hideInviteAvatars))
         } header: {
             Text(L10n.screenAdvancedSettingsModerationAndSafetySectionTitle)
                 .compoundListSectionHeader()
+        }
+    }
+    
+    private var timelineMediaSection: some View {
+        Section {
+            ListRow(label: .plain(title: L10n.screenAdvancedSettingsShowMediaTimelineAlwaysShow),
+                    kind: .selection(isSelected: context.timelineMediaVisibility == .always) { context.timelineMediaVisibility = .always })
+            ListRow(label: .plain(title: L10n.screenAdvancedSettingsShowMediaTimelinePrivateRooms),
+                    kind: .selection(isSelected: context.timelineMediaVisibility == .privateOnly) { context.timelineMediaVisibility = .privateOnly })
+            ListRow(label: .plain(title: L10n.screenAdvancedSettingsShowMediaTimelineAlwaysHide),
+                    kind: .selection(isSelected: context.timelineMediaVisibility == .never) { context.timelineMediaVisibility = .never })
+        } header: {
+            Text(L10n.screenAdvancedSettingsShowMediaTimelineTitle)
+                .compoundListSectionHeader()
+        } footer: {
+            Text(L10n.screenAdvancedSettingsShowMediaTimelineSubtitle)
+                .compoundListSectionFooter()
         }
     }
 }

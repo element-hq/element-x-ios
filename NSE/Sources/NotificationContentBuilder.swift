@@ -106,7 +106,9 @@ struct NotificationContentBuilder {
         let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
         notification.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName).characters)
         
-        guard !settings.hideTimelineMedia else { return notification }
+        // For now we are fine hiding all images if the visibility is not `always` while we wait for an `isPublic` flag
+        // to be implemented in the SDK.
+        guard settings.timelineMediaVisibility == .always else { return notification }
         
         switch messageType {
         case .image(content: let content):
