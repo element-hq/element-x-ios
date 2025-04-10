@@ -638,7 +638,7 @@ internal enum L10n {
   internal static func cryptoIdentityChangeProfilePinViolation(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_profile_pin_violation", String(describing: p1))
   }
-  /// %1$@’s %2$@ identity was reset.  %3$@
+  /// %1$@’s %2$@ identity was reset. %3$@
   internal static func cryptoIdentityChangeVerificationViolationNew(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_verification_violation_new", String(describing: p1), String(describing: p2), String(describing: p3))
   }
@@ -1324,6 +1324,8 @@ internal enum L10n {
   internal static var screenDeclineAndBlockBlockUserOptionTitle: String { return L10n.tr("Localizable", "screen_decline_and_block_block_user_option_title") }
   /// Report this room to your account provider.
   internal static var screenDeclineAndBlockReportUserOptionDescription: String { return L10n.tr("Localizable", "screen_decline_and_block_report_user_option_description") }
+  /// Describe the reason to report…
+  internal static var screenDeclineAndBlockReportUserReasonPlaceholder: String { return L10n.tr("Localizable", "screen_decline_and_block_report_user_reason_placeholder") }
   /// Decline and block
   internal static var screenDeclineAndBlockTitle: String { return L10n.tr("Localizable", "screen_decline_and_block_title") }
   /// Block
@@ -1710,6 +1712,8 @@ internal enum L10n {
   internal static var screenPollsHistoryFilterPast: String { return L10n.tr("Localizable", "screen_polls_history_filter_past") }
   /// Polls
   internal static var screenPollsHistoryTitle: String { return L10n.tr("Localizable", "screen_polls_history_title") }
+  /// Push history
+  internal static var screenPushHistoryTitle: String { return L10n.tr("Localizable", "screen_push_history_title") }
   /// Establishing a secure connection
   internal static var screenQrCodeLoginConnectingSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_connecting_subtitle") }
   /// A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.
@@ -2836,6 +2840,8 @@ internal enum L10n {
   internal static var timelineDecryptionFailureUnableToDecrypt: String { return L10n.tr("Localizable", "timeline_decryption_failure_unable_to_decrypt") }
   /// This message was blocked either because you did not verify your device or because the sender needs to verify your identity.
   internal static var timelineDecryptionFailureWithheldUnverified: String { return L10n.tr("Localizable", "timeline_decryption_failure_withheld_unverified") }
+  /// Push history
+  internal static var troubleshootNotificationsEntryPointPushHistoryTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_entry_point_push_history_title") }
   /// Troubleshoot
   internal static var troubleshootNotificationsEntryPointSection: String { return L10n.tr("Localizable", "troubleshoot_notifications_entry_point_section") }
   /// Troubleshoot notifications

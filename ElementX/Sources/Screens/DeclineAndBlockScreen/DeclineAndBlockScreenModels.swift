@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum DeclineAndBlockScreenViewModelAction {
+enum DeclineAndBlockScreenViewModelAction: Equatable {
     case dismiss(hasDeclined: Bool)
 }
 
