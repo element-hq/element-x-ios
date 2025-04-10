@@ -143,7 +143,8 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
                 
                 let presenter = OIDCAuthenticationPresenter(authenticationService: parameters.authenticationService,
                                                             oidcRedirectURL: ServiceLocator.shared.settings.oidcRedirectURL,
-                                                            presentationAnchor: presentationAnchor)
+                                                            presentationAnchor: presentationAnchor,
+                                                            userIndicatorController: parameters.userIndicatorController)
                 self.oidcPresenter = presenter
                 switch await presenter.authenticate(using: oidcData) {
                 case .success(let userSession):
