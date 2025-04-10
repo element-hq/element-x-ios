@@ -138,8 +138,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             } shouldStartAction: {
                 timelineItem.canBeRepliedTo
             } action: {
-                let isThread = (timelineItem as? EventBasedMessageTimelineItemProtocol)?.isThreaded ?? false
-                context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id, action: .reply(isThread: isThread)))
+                context.send(viewAction: .handleTimelineItemMenuAction(itemID: timelineItem.id,
+                                                                       action: .reply(isThread: timelineItem.properties.isThreaded)))
             }
             .contextMenu {
                 let provider = TimelineItemMenuActionProvider(timelineItem: timelineItem,
@@ -170,35 +170,33 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder
     var contentWithReply: some View {
         TimelineBubbleLayout(spacing: 8) {
-            if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
-                if messageTimelineItem.isThreaded {
-                    ThreadDecorator()
-                        .padding(.leading, 4)
-                        .layoutPriority(TimelineBubbleLayout.Priority.regularText)
-                }
+            if timelineItem.properties.isThreaded {
+                ThreadDecorator()
+                    .padding(.leading, 4)
+                    .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+            }
+            
+            if let replyDetails = timelineItem.properties.replyDetails {
+                // The rendered reply bubble with a greedy width. The custom layout prevents
+                // the infinite width from increasing the overall width of the view.
                 
-                if let replyDetails = messageTimelineItem.replyDetails {
-                    // The rendered reply bubble with a greedy width. The custom layout prevents
-                    // the infinite width from increasing the overall width of the view.
-                    
-                    TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(4.0)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.compound.bgCanvasDefault)
-                        .cornerRadius(8)
-                        .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
-                        .onTapGesture {
-                            context.send(viewAction: .focusOnEventID(replyDetails.eventID))
-                        }
-                    
-                    // Add a fixed width reply bubble that is used for layout calculations but won't be rendered.
-                    TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(4.0)
-                        .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
-                        .hidden()
-                }
+                TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(4.0)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.compound.bgCanvasDefault)
+                    .cornerRadius(8)
+                    .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
+                    .onTapGesture {
+                        context.send(viewAction: .focusOnEventID(replyDetails.eventID))
+                    }
+                
+                // Add a fixed width reply bubble that is used for layout calculations but won't be rendered.
+                TimelineReplyView(placement: .timeline, timelineItemReplyDetails: replyDetails)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(4.0)
+                    .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
+                    .hidden()
             }
             
             content()
@@ -224,16 +222,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 private extension EventBasedTimelineItemProtocol {
     var bubbleBackgroundColor: Color? {
         let defaultColor: Color = isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming
-
+        
         switch self {
-        case let self as EventBasedMessageTimelineItemProtocol:
-            switch self {
-            case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
-                // In case a reply detail or a thread decorator is present we render the color and the padding
-                return self.replyDetails != nil || self.isThreaded || self.hasMediaCaption ? defaultColor : nil
-            default:
-                return defaultColor
-            }
+        case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
+            // In case a reply detail or a thread decorator is present we render the color and the padding
+            return properties.replyDetails != nil || properties.isThreaded || hasMediaCaption ? defaultColor : nil
         case is StickerRoomTimelineItem:
             return nil
         default:
@@ -251,30 +244,22 @@ private extension EventBasedTimelineItemProtocol {
             return .zero
         case is PollRoomTimelineItem:
             return .init(top: 12, leading: 12, bottom: 4, trailing: 12)
-        case let self as EventBasedMessageTimelineItemProtocol:
-            switch self {
-            // In case a reply detail or a thread decorator is present we render the color and the padding
-            case is ImageRoomTimelineItem,
-                 is VideoRoomTimelineItem:
-                return self.replyDetails != nil || self.isThreaded || self.hasMediaCaption ? defaultInsets : .zero
-            case let locationTimelineItem as LocationRoomTimelineItem:
-                return locationTimelineItem.content.geoURI == nil ||
-                    self.replyDetails != nil ||
-                    self.isThreaded ? defaultInsets : .zero
-            default:
-                return defaultInsets
-            }
+        // In case a reply detail or a thread decorator is present we render the color and the padding
+        case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
+            return properties.replyDetails != nil || properties.isThreaded || hasMediaCaption ? defaultInsets : .zero
+        case let locationTimelineItem as LocationRoomTimelineItem:
+            return locationTimelineItem.content.geoURI == nil ||
+                properties.replyDetails != nil ||
+                properties.isThreaded ? defaultInsets : .zero
         default:
             return defaultInsets
         }
     }
     
     var contentCornerRadius: CGFloat {
-        guard let message = self as? EventBasedMessageTimelineItemProtocol else { return .zero }
-        
-        switch message {
+        switch self {
         case is ImageRoomTimelineItem, is VideoRoomTimelineItem, is LocationRoomTimelineItem:
-            return message.replyDetails != nil || message.isThreaded ? 8 : .zero
+            return properties.replyDetails != nil || properties.isThreaded ? 8 : .zero
         default:
             return .zero
         }
@@ -386,25 +371,24 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              isOutgoing: true,
                                                                              isEditable: false,
                                                                              canBeRepliedTo: true,
-                                                                             isThreaded: false,
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "A long message that should be on multiple lines."),
-                                                                             replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                                                   eventID: "123",
-                                                                                                   eventContent: .message(.text(.init(body: "Short"))))),
+                                                                             properties: .init(replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                                                                     eventID: "123",
+                                                                                                                     eventContent: .message(.text(.init(body: "Short")))))),
                                                   groupStyle: .single))
-
+            
+            let properties = RoomTimelineItemProperties(replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
+                                                                              eventID: "123",
+                                                                              eventContent: .message(.text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout.")))))
             RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: .randomEvent,
                                                                              timestamp: .mock,
                                                                              isOutgoing: true,
                                                                              isEditable: false,
                                                                              canBeRepliedTo: true,
-                                                                             isThreaded: false,
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "Short message"),
-                                                                             replyDetails: .loaded(sender: .init(id: "", displayName: "Alice"),
-                                                                                                   eventID: "123",
-                                                                                                   eventContent: .message(.text(.init(body: "A long message that should be on more than 2 lines and so will be clipped by the layout."))))),
+                                                                             properties: properties),
                                                   groupStyle: .single))
         }
         .environmentObject(viewModel.context)
@@ -434,7 +418,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              isOutgoing: true,
                                                                              isEditable: false,
                                                                              canBeRepliedTo: true,
-                                                                             isThreaded: false,
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "A long message that should be on multiple lines."),
                                                                              properties: RoomTimelineItemProperties(encryptionAuthenticity: .unsignedDevice(color: .red))),
@@ -445,7 +428,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              isOutgoing: true,
                                                                              isEditable: false,
                                                                              canBeRepliedTo: true,
-                                                                             isThreaded: false,
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "A long message that should be on multiple lines."),
                                                                              properties: RoomTimelineItemProperties(isEdited: true,
@@ -457,7 +439,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              isOutgoing: false,
                                                                              isEditable: false,
                                                                              canBeRepliedTo: true,
-                                                                             isThreaded: false,
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "Short message"),
                                                                              properties: RoomTimelineItemProperties(encryptionAuthenticity: .unknownDevice(color: .red))),
@@ -468,7 +449,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                              isOutgoing: false,
                                                                              isEditable: false,
                                                                              canBeRepliedTo: true,
-                                                                             isThreaded: false,
                                                                              sender: .init(id: "whoever"),
                                                                              content: .init(body: "Message goes Here"),
                                                                              properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))),
@@ -479,7 +459,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       canBeRepliedTo: true,
-                                                                      isThreaded: false,
                                                                       sender: .init(id: "Bob"),
                                                                       content: .init(filename: "other.png",
                                                                                      imageInfo: .mockImage,
@@ -492,7 +471,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                              isOutgoing: true,
                                                              isEditable: false,
                                                              canBeRepliedTo: true,
-                                                             isThreaded: true,
                                                              sender: .init(id: ""),
                                                              content: .init(filename: "audio.ogg",
                                                                             duration: 100,
@@ -500,7 +478,8 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                                                             source: nil,
                                                                             fileSize: nil,
                                                                             contentType: nil),
-                                                             properties: RoomTimelineItemProperties(encryptionAuthenticity: .notGuaranteed(color: .gray))),
+                                                             properties: RoomTimelineItemProperties(isThreaded: true,
+                                                                                                    encryptionAuthenticity: .notGuaranteed(color: .gray))),
                                          playerState: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent),
                                                                        title: L10n.commonVoiceMessage,
                                                                        duration: 10,
@@ -521,10 +500,9 @@ private struct MockTimelineContent: View {
                                                                          isOutgoing: true,
                                                                          isEditable: false,
                                                                          canBeRepliedTo: true,
-                                                                         isThreaded: isThreaded,
                                                                          sender: .init(id: "whoever"),
                                                                          content: .init(body: "A long message that should be on multiple lines."),
-                                                                         replyDetails: replyDetails),
+                                                                         properties: .init(replyDetails: replyDetails, isThreaded: isThreaded)),
                                               groupStyle: .single))
 
         AudioRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
@@ -532,7 +510,6 @@ private struct MockTimelineContent: View {
                                                   isOutgoing: true,
                                                   isEditable: false,
                                                   canBeRepliedTo: true,
-                                                  isThreaded: isThreaded,
                                                   sender: .init(id: ""),
                                                   content: .init(filename: "audio.ogg",
                                                                  duration: 100,
@@ -540,14 +517,13 @@ private struct MockTimelineContent: View {
                                                                  source: nil,
                                                                  fileSize: nil,
                                                                  contentType: nil),
-                                                  replyDetails: replyDetails))
+                                                  properties: .init(replyDetails: replyDetails, isThreaded: isThreaded)))
         
         FileRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
                                                  timestamp: .mock,
                                                  isOutgoing: false,
                                                  isEditable: false,
                                                  canBeRepliedTo: true,
-                                                 isThreaded: isThreaded,
                                                  sender: .init(id: ""),
                                                  content: .init(filename: "file.txt",
                                                                 caption: "File",
@@ -555,50 +531,46 @@ private struct MockTimelineContent: View {
                                                                 fileSize: nil,
                                                                 thumbnailSource: nil,
                                                                 contentType: nil),
-                                                 replyDetails: replyDetails))
+                                                 properties: .init(replyDetails: replyDetails, isThreaded: isThreaded)))
         
         ImageRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
                                                   timestamp: .mock,
                                                   isOutgoing: true,
                                                   isEditable: true,
                                                   canBeRepliedTo: true,
-                                                  isThreaded: isThreaded,
                                                   sender: .init(id: ""),
                                                   content: .init(filename: "image.jpg",
                                                                  imageInfo: .mockImage,
                                                                  thumbnailInfo: nil),
-                                                  replyDetails: replyDetails))
+                                                  properties: .init(replyDetails: replyDetails, isThreaded: isThreaded)))
         
         LocationRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
                                                      timestamp: .mock,
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
-                                                     isThreaded: isThreaded,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782,
                                                                                   longitude: 12.496366),
                                                                     description: "Location description description description description description description description description"),
-                                                     replyDetails: replyDetails))
+                                                     properties: .init(replyDetails: replyDetails, isThreaded: isThreaded)))
         
         LocationRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
                                                      timestamp: .mock,
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
-                                                     isThreaded: isThreaded,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil),
-                                                     replyDetails: replyDetails))
+                                                     properties: .init(replyDetails: replyDetails, isThreaded: isThreaded)))
         
         VoiceMessageRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
                                                          timestamp: .mock,
                                                          isOutgoing: true,
                                                          isEditable: false,
                                                          canBeRepliedTo: true,
-                                                         isThreaded: isThreaded,
                                                          sender: .init(id: ""),
                                                          content: .init(filename: "audio.ogg",
                                                                         duration: 100,
@@ -606,7 +578,7 @@ private struct MockTimelineContent: View {
                                                                         source: nil,
                                                                         fileSize: nil,
                                                                         contentType: nil),
-                                                         replyDetails: replyDetails),
+                                                         properties: .init(replyDetails: replyDetails, isThreaded: isThreaded)),
                                      playerState: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent),
                                                                    title: L10n.commonVoiceMessage,
                                                                    duration: 10,

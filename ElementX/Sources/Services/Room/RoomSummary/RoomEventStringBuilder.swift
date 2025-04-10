@@ -24,27 +24,40 @@ struct RoomEventStringBuilder {
         }
         
         switch eventItemProxy.content {
-        case .unableToDecrypt(let encryptedMessage):
-            let errorMessage = switch encryptedMessage {
-            case .megolmV1AesSha2(_, .sentBeforeWeJoined): L10n.commonUnableToDecryptNoAccess
-            case .megolmV1AesSha2(_, .verificationViolation): L10n.commonUnableToDecryptVerificationViolation
-            case .megolmV1AesSha2(_, .unknownDevice), .megolmV1AesSha2(_, .unsignedDevice): L10n.commonUnableToDecryptInsecureDevice
-            default: L10n.commonWaitingForDecryptionKey
+        case .msgLike(let messageLikeContent):
+            switch messageLikeContent.kind {
+            case .message(let messageContent):
+                return messageEventStringBuilder.buildAttributedString(for: messageContent.msgType, senderDisplayName: displayName)
+            case .sticker:
+                if messageEventStringBuilder.destination == .pinnedEvent {
+                    var string = AttributedString(L10n.commonSticker)
+                    string.bold()
+                    return string
+                }
+                return prefix(L10n.commonSticker, with: displayName)
+            case .poll(let question, _, _, _, _, _, _):
+                if messageEventStringBuilder.destination == .pinnedEvent {
+                    let questionPlaceholder = "{question}"
+                    var finalString = AttributedString(L10n.commonPollSummary(questionPlaceholder))
+                    finalString.bold()
+                    let normalString = AttributedString(question)
+                    finalString.replace(questionPlaceholder, with: normalString)
+                    return finalString
+                }
+                return prefix(L10n.commonPollSummary(question), with: displayName)
+            case .redacted:
+                return prefix(L10n.commonMessageRemoved, with: displayName)
+            case .unableToDecrypt(let encryptedMessage):
+                let errorMessage = switch encryptedMessage {
+                case .megolmV1AesSha2(_, .sentBeforeWeJoined): L10n.commonUnableToDecryptNoAccess
+                case .megolmV1AesSha2(_, .verificationViolation): L10n.commonUnableToDecryptVerificationViolation
+                case .megolmV1AesSha2(_, .unknownDevice), .megolmV1AesSha2(_, .unsignedDevice): L10n.commonUnableToDecryptInsecureDevice
+                default: L10n.commonWaitingForDecryptionKey
+                }
+                return prefix(errorMessage, with: displayName)
             }
-            return prefix(errorMessage, with: displayName)
-        case .redactedMessage:
-            return prefix(L10n.commonMessageRemoved, with: displayName)
-        case .sticker:
-            if messageEventStringBuilder.destination == .pinnedEvent {
-                var string = AttributedString(L10n.commonSticker)
-                string.bold()
-                return string
-            }
-            return prefix(L10n.commonSticker, with: displayName)
         case .failedToParseMessageLike, .failedToParseState:
             return prefix(L10n.commonUnsupportedEvent, with: displayName)
-        case .message(let messageContent):
-            return messageEventStringBuilder.buildAttributedString(for: messageContent.msgType, senderDisplayName: displayName)
         case .state(_, let state):
             return stateEventStringBuilder
                 .buildString(for: state, sender: sender, isOutgoing: isOutgoing)
@@ -62,16 +75,6 @@ struct RoomEventStringBuilder {
                                           member: sender.id,
                                           memberIsYou: isOutgoing)
                 .map(AttributedString.init)
-        case .poll(let question, _, _, _, _, _, _):
-            if messageEventStringBuilder.destination == .pinnedEvent {
-                let questionPlaceholder = "{question}"
-                var finalString = AttributedString(L10n.commonPollSummary(questionPlaceholder))
-                finalString.bold()
-                let normalString = AttributedString(question)
-                finalString.replace(questionPlaceholder, with: normalString)
-                return finalString
-            }
-            return prefix(L10n.commonPollSummary(question), with: displayName)
         case .callInvite:
             return prefix(L10n.commonUnsupportedCall, with: displayName)
         case .callNotify:

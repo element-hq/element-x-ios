@@ -77,7 +77,8 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     func messageEventContent(for timelineItemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
         guard let content = await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.content,
-              case let .message(messageContent) = content else {
+              case let .msgLike(messageLikeContent) = content,
+              case let .message(messageContent) = messageLikeContent.kind else {
             return nil
         }
         

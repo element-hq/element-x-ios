@@ -13,12 +13,10 @@ struct VoiceMessageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equa
     let isOutgoing: Bool
     let isEditable: Bool
     let canBeRepliedTo: Bool
-    let isThreaded: Bool
+    
     let sender: TimelineItemSender
     
     let content: AudioRoomTimelineItemContent
-    
-    var replyDetails: TimelineItemReplyDetails?
 
     var properties = RoomTimelineItemProperties()
     
