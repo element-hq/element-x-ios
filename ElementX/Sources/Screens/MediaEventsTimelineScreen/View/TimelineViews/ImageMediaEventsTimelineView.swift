@@ -71,7 +71,6 @@ struct ImageMediaEventsTimelineView_Previews: PreviewProvider, TestablePreview {
                               isOutgoing: false,
                               isEditable: false,
                               canBeRepliedTo: true,
-                              isThreaded: false,
                               sender: .init(id: "Bob"),
                               content: .init(filename: "image.jpg",
                                              imageInfo: .mockImage,

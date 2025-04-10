@@ -125,6 +125,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         if let previousVersion = appSettings.lastVersionLaunched.flatMap(Version.init) {
             performMigrationsIfNecessary(from: previousVersion, to: currentVersion)
+            
+            // Manual clean to handle the potential case where the app crashes before moving a shared file.
+            cleanAppGroupTemporaryDirectory()
         } else {
             // The app has been deleted since the previous run. Reset everything.
             wipeUserData(includingSettings: true)
@@ -252,12 +255,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 } else {
                     handleAppRoute(.childEventOnRoomAlias(eventID: eventID, alias: alias))
                 }
-            case .share:
+            case .share(let payload):
                 guard isExternalURL else {
                     MXLog.error("Received unexpected internal share route")
                     break
                 }
-                handleAppRoute(route)
+                
+                do {
+                    try handleAppRoute(.share(payload.withDefaultTemporaryDirectory()))
+                } catch {
+                    MXLog.error("Failed moving payload out of the app group container: \(error)")
+                }
             default:
                 break
             }
@@ -387,6 +395,15 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             Tracing.deleteLogFiles()
             MXLog.info("Migrating to v1.6.7, log files have been wiped")
         }
+        
+        if oldVersion < Version(25, 4, 2) {
+            MXLog.info("Migrating to v25.04.2, checking if hideTimelineMedia flag can be migrated to timelineMediaVisibility")
+            // Migration for the old `hideTimelineMedia` flag.
+            if let userDefaults = UserDefaults(suiteName: InfoPlistReader.main.appGroupIdentifier),
+               let hideTimelineMedia = userDefaults.value(forKey: "hideTimelineMedia") as? Bool {
+                appSettings.timelineMediaVisibility = hideTimelineMedia ? .never : .always
+            }
+        }
     }
     
     /// Clears the keychain, app support directory etc ready for a fresh use.
@@ -397,6 +414,31 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             appLockFlowCoordinator.appLockService.disable()
         }
         userSessionStore.reset()
+    }
+    
+    /// Manually cleans up any files in the app group's `tmp` directory.
+    ///
+    /// **Note:** If there is a single file we consider it to be an active share payload and ignore it.
+    private func cleanAppGroupTemporaryDirectory() {
+        let fileURLs: [URL]
+        do {
+            fileURLs = try FileManager.default.contentsOfDirectory(at: URL.appGroupTemporaryDirectory, includingPropertiesForKeys: nil, options: [])
+        } catch {
+            MXLog.warning("Failed to enumerate app group temporary directory: \(error)")
+            return
+        }
+        
+        guard fileURLs.count > 1 else {
+            return // If there is only a single item in here, there's likely a pending share payload that is yet to be processed.
+        }
+        
+        for url in fileURLs {
+            do {
+                try FileManager.default.removeItem(at: url)
+            } catch {
+                MXLog.warning("Failed to remove file from app group temporary directory: \(error)")
+            }
+        }
     }
     
     private func setupStateMachine() {

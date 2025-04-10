@@ -48,7 +48,7 @@ struct TimelineItemMenuActionProvider {
 
         if item.canBeRepliedTo {
             if let messageItem = item as? EventBasedMessageTimelineItemProtocol {
-                actions.append(.reply(isThread: messageItem.isThreaded))
+                actions.append(.reply(isThread: messageItem.properties.isThreaded))
             } else {
                 actions.append(.reply(isThread: false))
             }

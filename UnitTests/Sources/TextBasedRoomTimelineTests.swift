@@ -16,7 +16,6 @@ final class TextBasedRoomTimelineTests: XCTestCase {
                                                 isOutgoing: true,
                                                 isEditable: true,
                                                 canBeRepliedTo: true,
-                                                isThreaded: false,
                                                 sender: .init(id: UUID().uuidString),
                                                 content: .init(body: "Test"))
         XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.formattedTime().count + 1)
@@ -29,7 +28,6 @@ final class TextBasedRoomTimelineTests: XCTestCase {
                                                 isOutgoing: true,
                                                 isEditable: true,
                                                 canBeRepliedTo: true,
-                                                isThreaded: false,
                                                 sender: .init(id: UUID().uuidString),
                                                 content: .init(body: "Test"))
         XCTAssertEqual(timelineItem.additionalWhitespaces(), timestamp.formattedTime().count + 1)
@@ -42,7 +40,6 @@ final class TextBasedRoomTimelineTests: XCTestCase {
                                                 isOutgoing: true,
                                                 isEditable: true,
                                                 canBeRepliedTo: true,
-                                                isThreaded: false,
                                                 sender: .init(id: UUID().uuidString),
                                                 content: .init(body: "Test"))
         timelineItem.properties.isEdited = true
@@ -57,7 +54,6 @@ final class TextBasedRoomTimelineTests: XCTestCase {
                                                 isOutgoing: true,
                                                 isEditable: true,
                                                 canBeRepliedTo: true,
-                                                isThreaded: false,
                                                 sender: .init(id: UUID().uuidString),
                                                 content: .init(body: "Test"))
         timelineItem.properties.isEdited = true

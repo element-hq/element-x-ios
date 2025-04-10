@@ -18,7 +18,7 @@ protocol CommonSettingsProtocol {
     var traceLogPacks: Set<TraceLogPack> { get }
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var hideInviteAvatars: Bool { get }
-    var hideTimelineMedia: Bool { get }
+    var timelineMediaVisibility: TimelineMediaVisibility { get }
 }
 
 /// Store Element specific app settings.
@@ -47,7 +47,7 @@ final class AppSettings {
         case sharePresence
         case hideUnreadMessagesBadge
         case hideInviteAvatars
-        case hideTimelineMedia
+        case timelineMediaVisibility
         
         case elementCallBaseURLOverride
         
@@ -357,8 +357,8 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.hideInviteAvatars, defaultValue: false, storageType: .userDefaults(store))
     var hideInviteAvatars
     
-    @UserPreference(key: UserDefaultsKeys.hideTimelineMedia, defaultValue: false, storageType: .userDefaults(store))
-    var hideTimelineMedia
+    @UserPreference(key: UserDefaultsKeys.timelineMediaVisibility, defaultValue: TimelineMediaVisibility.always, storageType: .userDefaults(store))
+    var timelineMediaVisibility
     
     // MARK: - ZERO Access Token
     
@@ -376,3 +376,9 @@ final class AppSettings {
 }
 
 extension AppSettings: CommonSettingsProtocol { }
+
+enum TimelineMediaVisibility: Codable {
+    case always
+    case privateOnly
+    case never
+}

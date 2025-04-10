@@ -24,7 +24,6 @@ struct SwipeToReplyView_Previews: PreviewProvider, TestablePreview {
                                                    isOutgoing: true,
                                                    isEditable: true,
                                                    canBeRepliedTo: true,
-                                                   isThreaded: false,
                                                    sender: .init(id: ""),
                                                    content: .init(body: ""))
     

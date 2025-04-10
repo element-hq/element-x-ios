@@ -22,6 +22,7 @@ extension ClientBuilder {
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
             .requestConfig(config: .init(retryLimit: 0, timeout: 25000, maxConcurrentRequests: nil, retryTimeout: nil))
+            .useEventCachePersistentStorage(value: true)
         
         builder = switch slidingSync {
         case .restored: builder

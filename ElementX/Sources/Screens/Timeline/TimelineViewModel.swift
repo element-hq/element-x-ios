@@ -88,13 +88,21 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 timelineControllerFactory: timelineControllerFactory,
                                                                 clientProxy: clientProxy)
         
+        let hideTimelineMedia = switch appSettings.timelineMediaVisibility {
+        case .always:
+            false
+        case .privateOnly:
+            roomProxy.infoPublisher.value.isPublic
+        case .never:
+            true
+        }
         super.init(initialViewState: TimelineViewState(timelineKind: timelineController.timelineKind,
                                                        roomID: roomProxy.id,
                                                        isDirectOneToOneRoom: roomProxy.isDirectOneToOneRoom,
                                                        timelineState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
-                                                       hideTimelineMedia: appSettings.hideTimelineMedia,
+                                                       hideTimelineMedia: hideTimelineMedia,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
                                                        mapTilerConfiguration: appSettings.mapTilerConfiguration,
@@ -519,7 +527,23 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .weakAssign(to: \.state.isViewSourceEnabled, on: self)
             .store(in: &cancellables)
         
-        appSettings.$hideTimelineMedia
+        appSettings.$timelineMediaVisibility
+            .removeDuplicates()
+            .flatMap { [weak self] timelineMediaVisibility -> AnyPublisher<Bool, Never> in
+                switch timelineMediaVisibility {
+                case .always:
+                    return Just(false).eraseToAnyPublisher()
+                case .never:
+                    return Just(true).eraseToAnyPublisher()
+                case .privateOnly:
+                    guard let self else { return Just(false).eraseToAnyPublisher() }
+                    return roomProxy.infoPublisher
+                        .map(\.isPublic)
+                        .removeDuplicates()
+                        .receive(on: DispatchQueue.main)
+                        .eraseToAnyPublisher()
+                }
+            }
             .weakAssign(to: \.state.hideTimelineMedia, on: self)
             .store(in: &cancellables)
     }

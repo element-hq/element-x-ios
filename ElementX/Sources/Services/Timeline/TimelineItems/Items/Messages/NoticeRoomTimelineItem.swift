@@ -13,13 +13,10 @@ struct NoticeRoomTimelineItem: TextBasedRoomTimelineItem, Equatable {
     let isOutgoing: Bool
     let isEditable: Bool
     let canBeRepliedTo: Bool
-    let isThreaded: Bool
     
     let sender: TimelineItemSender
     
     let content: NoticeRoomTimelineItemContent
-    
-    var replyDetails: TimelineItemReplyDetails?
     
     var properties = RoomTimelineItemProperties()
     

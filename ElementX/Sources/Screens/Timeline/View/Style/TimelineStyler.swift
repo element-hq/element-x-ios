@@ -62,7 +62,6 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                            isOutgoing: true,
                                            isEditable: false,
                                            canBeRepliedTo: true,
-                                           isThreaded: false,
                                            sender: .test,
                                            content: .init(body: "Test"))
 
@@ -85,7 +84,6 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                           isOutgoing: true,
                                           isEditable: false,
                                           canBeRepliedTo: true,
-                                          isThreaded: false,
                                           sender: .test,
                                           content: .init(body: "Test"))
         result.properties.deliveryStatus = .sending
@@ -105,7 +103,6 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                           isOutgoing: true,
                                           isEditable: false,
                                           canBeRepliedTo: true,
-                                          isThreaded: false,
                                           sender: .test,
                                           content: .init(body: "Test"))
         return result
@@ -116,7 +113,6 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                 isOutgoing: true,
                                                 isEditable: false,
                                                 canBeRepliedTo: true,
-                                                isThreaded: false,
                                                 sender: .test, content: .init(body: "house!"))
 
     static let rtlString = TextRoomTimelineItem(id: .randomEvent,
@@ -124,7 +120,6 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                 isOutgoing: true,
                                                 isEditable: false,
                                                 canBeRepliedTo: true,
-                                                isThreaded: false,
                                                 sender: .test, content: .init(body: "באמת!"))
 
     static let ltrStringThatContainsRtl = TextRoomTimelineItem(id: .randomEvent,
@@ -132,7 +127,6 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                                isOutgoing: true,
                                                                isEditable: false,
                                                                canBeRepliedTo: true,
-                                                               isThreaded: false,
                                                                sender: .test,
                                                                content: .init(body: "house! -- באמת‏! -- house!"))
 
@@ -141,7 +135,6 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                                isOutgoing: true,
                                                                isEditable: false,
                                                                canBeRepliedTo: true,
-                                                               isThreaded: false,
                                                                sender: .test,
                                                                content: .init(body: "באמת‏! -- house! -- באמת!"))
 
@@ -150,7 +143,6 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                                  isOutgoing: true,
                                                                  isEditable: false,
                                                                  canBeRepliedTo: true,
-                                                                 isThreaded: false,
                                                                  sender: .test,
                                                                  content: .init(body: "house! -- באמת!"))
 
@@ -159,7 +151,6 @@ struct TimelineItemStyler_Previews: PreviewProvider, TestablePreview {
                                                                  isOutgoing: true,
                                                                  isEditable: false,
                                                                  canBeRepliedTo: true,
-                                                                 isThreaded: false,
                                                                  sender: .test,
                                                                  content: .init(body: "באמת‏! -- house!"))
 

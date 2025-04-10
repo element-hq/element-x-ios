@@ -35,6 +35,7 @@ struct AdvancedSettingsScreen: View {
             }
             
             moderationAndSafetySection
+            timelineMediaSection
         }
         .zeroList()
         .navigationTitle(L10n.commonAdvancedSettings)
@@ -43,13 +44,25 @@ struct AdvancedSettingsScreen: View {
     
     private var moderationAndSafetySection: some View {
         Section {
-            ListRow(label: .plain(title: L10n.screenAdvancedSettingsHideTimelineMediaToggleTitle),
-                    kind: .toggle($context.hideTimelineMedia))
             ListRow(label: .plain(title: L10n.screenAdvancedSettingsHideInviteAvatarsToggleTitle),
                     kind: .toggle($context.hideInviteAvatars))
         } header: {
             Text(L10n.screenAdvancedSettingsModerationAndSafetySectionTitle)
                 .compoundListSectionHeader()
+        }
+    }
+    
+    private var timelineMediaSection: some View {
+        Section {
+            ListRow(label: .plain(title: L10n.screenAdvancedSettingsShowMediaTimelineTitle),
+                    kind: .inlinePicker(selection: $context.timelineMediaVisibility,
+                                        items: TimelineMediaVisibility.items))
+        } header: {
+            Text(L10n.screenAdvancedSettingsShowMediaTimelineTitle)
+                .compoundListSectionHeader()
+        } footer: {
+            Text(L10n.screenAdvancedSettingsShowMediaTimelineSubtitle)
+                .compoundListSectionFooter()
         }
     }
 }
@@ -76,5 +89,13 @@ struct AdvancedSettingsScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             AdvancedSettingsScreen(context: viewModel.context)
         }
+    }
+}
+
+private extension TimelineMediaVisibility {
+    static var items: [(title: String, tag: TimelineMediaVisibility)] {
+        [(title: L10n.screenAdvancedSettingsShowMediaTimelineAlwaysShow, tag: .always),
+         (title: L10n.screenAdvancedSettingsShowMediaTimelinePrivateRooms, tag: .privateOnly),
+         (title: L10n.screenAdvancedSettingsShowMediaTimelineAlwaysHide, tag: .never)]
     }
 }
