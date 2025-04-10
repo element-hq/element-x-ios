@@ -1,3 +1,28 @@
+## Changes in 25.04.3 (2025-04-10)
+
+### What's Changed
+
+✨ Features
+* Setup the client media retention policy by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4001
+
+🙌 Improvements
+* Also show the room member management sheet when tapping on a profile in the timeline. by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3995
+* Add an option to hiding timeline media only in public rooms by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4004
+
+🐛 Bugfixes
+* Manually enable the event cache  by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4005
+
+🧱 Build
+* Fix the post-release workflow. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3996
+
+Others
+* Update dependency fastlane to v2.227.1 by @renovate in https://github.com/element-hq/element-x-ios/pull/3999
+* Re-write integration test login for OIDC. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3997
+* Only use the appGroupTemporaryDirectory to access a file from the share extension. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4002
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.04.0...release/25.04.3
+
 ## Changes in 25.04.2 (2025-04-10)
 
 ### What's Changed
