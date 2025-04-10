@@ -16,7 +16,8 @@ struct ServerConfirmationScreenCoordinatorParameters {
 }
 
 enum ServerConfirmationScreenCoordinatorAction {
-    case `continue`(UIWindow?)
+    case continueWithOIDC(data: OIDCAuthorizationDataProxy, window: UIWindow)
+    case continueWithPassword
     case changeServer
 }
 
@@ -41,10 +42,12 @@ final class ServerConfirmationScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .confirm:
-                self.actionsSubject.send(.continue(viewModel.context.viewState.window))
+            case .continueWithOIDC(let oidcData, let window):
+                actionsSubject.send(.continueWithOIDC(data: oidcData, window: window))
+            case .continueWithPassword:
+                actionsSubject.send(.continueWithPassword)
             case .changeServer:
-                self.actionsSubject.send(.changeServer)
+                actionsSubject.send(.changeServer)
             }
         }
         .store(in: &cancellables)
