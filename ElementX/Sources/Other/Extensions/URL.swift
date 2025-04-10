@@ -75,7 +75,10 @@ extension URL: @retroactive ExpressibleByStringLiteral {
         return url
     }
     
-    /// The app group temporary directory
+    /// The app group temporary directory (useful for transferring files between different bundles).
+    ///
+    /// **Note:** This `tmp` directory doesn't appear to behave as expected as it isn't being tidied up by the system.
+    /// Make sure to manually tidy up any files you place in here once you've transferred them from one bundle to another.
     static var appGroupTemporaryDirectory: URL {
         let url = appGroupContainerDirectory
             .appendingPathComponent("tmp", isDirectory: true)

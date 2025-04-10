@@ -44,7 +44,7 @@ class ShareExtensionViewController: UIViewController {
         
         let roomID = (extensionContext?.intent as? INSendMessageIntent)?.conversationIdentifier
         
-        if let fileURL = await itemProvider.storeData() {
+        if let fileURL = await itemProvider.storeData(withinAppGroupContainer: true) {
             return .mediaFile(roomID: roomID, mediaFile: .init(url: fileURL, suggestedName: fileURL.lastPathComponent))
         } else if let url = await itemProvider.loadTransferable(type: URL.self) {
             return .text(roomID: roomID, text: url.absoluteString)

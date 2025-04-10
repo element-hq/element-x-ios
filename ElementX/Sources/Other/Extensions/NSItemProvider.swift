@@ -28,20 +28,23 @@ extension NSItemProvider {
         try? await loadItem(forTypeIdentifier: UTType.text.identifier) as? String
     }
     
-    func storeData() async -> URL? {
+    /// Stores the item's data from the provider within the temporary directory, returning the URL on success.
+    /// - Parameter withinAppGroupContainer: Whether the data needs to be shared between bundles.
+    /// If passing `true` you will need to manually clean up the file once you have the data in the receiving bundle.
+    func storeData(withinAppGroupContainer: Bool = false) async -> URL? {
         guard let contentType = preferredContentType else {
             MXLog.error("Invalid NSItemProvider: \(self)")
             return nil
         }
         
         if contentType.type.identifier == UTType.image.identifier {
-            return await generateURLForUIImage(contentType)
+            return await generateURLForUIImage(contentType, withinAppGroupContainer: withinAppGroupContainer)
         } else {
-            return await generateURLForGenericData(contentType)
+            return await generateURLForGenericData(contentType, withinAppGroupContainer: withinAppGroupContainer)
         }
     }
     
-    private func generateURLForUIImage(_ contentType: PreferredContentType) async -> URL? {
+    private func generateURLForUIImage(_ contentType: PreferredContentType, withinAppGroupContainer: Bool) async -> URL? {
         guard let uiImage = try? await loadItem(forTypeIdentifier: contentType.type.identifier) as? UIImage else {
             MXLog.error("Failed casting UIImage, invalid NSItemProvider: \(self)")
             return nil
@@ -52,22 +55,25 @@ extension NSItemProvider {
             return nil
         }
         
+        let filename = if let suggestedName = suggestedName as NSString?,
+                          // Suggestions are nice but their extension is `jpeg`
+                          let filename = (suggestedName.deletingPathExtension as NSString).appendingPathExtension(contentType.fileExtension) {
+            filename
+        } else {
+            "\(UUID().uuidString).\(contentType.fileExtension)"
+        }
+        
         do {
-            if let suggestedName = suggestedName as? NSString,
-               // Suggestions are nice but their extension is `jpeg`
-               let filename = (suggestedName.deletingPathExtension as NSString).appendingPathExtension(contentType.fileExtension) {
-                return try FileManager.default.writeDataToTemporaryDirectory(data: pngData, fileName: filename)
-            } else {
-                let filename = "\(UUID().uuidString).\(contentType.fileExtension)"
-                return try FileManager.default.writeDataToTemporaryDirectory(data: pngData, fileName: filename)
-            }
+            return try FileManager.default.writeDataToTemporaryDirectory(data: pngData,
+                                                                         fileName: filename,
+                                                                         withinAppGroupContainer: withinAppGroupContainer)
         } catch {
             MXLog.error("Failed storing NSItemProvider data \(self) with error: \(error)")
             return nil
         }
     }
     
-    private func generateURLForGenericData(_ contentType: PreferredContentType) async -> URL? {
+    private func generateURLForGenericData(_ contentType: PreferredContentType, withinAppGroupContainer: Bool) async -> URL? {
         let providerDescription = description
         let shareData: Data? = await withCheckedContinuation { continuation in
             _ = loadDataRepresentation(for: contentType.type) { data, error in
@@ -92,15 +98,19 @@ extension NSItemProvider {
             return nil
         }
         
+        let filename = if let suggestedName = suggestedName as NSString?,
+                          suggestedName.hasPathExtension {
+            suggestedName as String
+        } else if let suggestedName {
+            "\(suggestedName).\(contentType.fileExtension)"
+        } else {
+            "\(UUID().uuidString).\(contentType.fileExtension)"
+        }
+        
         do {
-            if let filename = suggestedName {
-                let hasExtension = !(filename as NSString).pathExtension.isEmpty
-                let filename = hasExtension ? filename : "\(filename).\(contentType.fileExtension)"
-                return try FileManager.default.writeDataToTemporaryDirectory(data: shareData, fileName: filename)
-            } else {
-                let filename = "\(UUID().uuidString).\(contentType.fileExtension)"
-                return try FileManager.default.writeDataToTemporaryDirectory(data: shareData, fileName: filename)
-            }
+            return try FileManager.default.writeDataToTemporaryDirectory(data: shareData,
+                                                                         fileName: filename,
+                                                                         withinAppGroupContainer: withinAppGroupContainer)
         } catch {
             MXLog.error("Failed storing NSItemProvider data \(self) with error: \(error)")
             return nil
@@ -163,4 +173,8 @@ extension NSItemProvider {
         
         return mimeType.hasPrefix("image/") || mimeType.hasPrefix("video/") || mimeType.hasPrefix("application/")
     }
+}
+
+private extension NSString {
+    var hasPathExtension: Bool { !pathExtension.isEmpty }
 }
