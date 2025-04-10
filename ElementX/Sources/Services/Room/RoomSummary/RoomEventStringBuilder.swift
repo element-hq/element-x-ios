@@ -24,8 +24,8 @@ struct RoomEventStringBuilder {
         }
         
         switch eventItemProxy.content {
-        case .msgLike(let msgLikeContent):
-            switch msgLikeContent.kind {
+        case .msgLike(let messageLikeContent):
+            switch messageLikeContent.kind {
             case .message(let messageContent):
                 return messageEventStringBuilder.buildAttributedString(for: messageContent.msgType, senderDisplayName: displayName)
             case .sticker:
