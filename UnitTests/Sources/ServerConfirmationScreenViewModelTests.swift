@@ -89,9 +89,9 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
     
     func testRegistrationNotSupportedAlert() async throws {
         // Given a view model for registration using a service that hasn't been configured and the default server doesn't support registration.
-        setupViewModel(authenticationFlow: .register, supportsRegistrationHelper: false)
+        // Note: We don't currently take the create prompt into account when determining registration support.
+        setupViewModel(authenticationFlow: .register, supportsOIDC: false, supportsOIDCCreatePrompt: false)
         XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertFalse(service.homeserver.value.supportsRegistration)
         XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
         XCTAssertNil(context.alertInfo)
         
@@ -100,16 +100,15 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
-        // Then the configured homeserver should be used and no additional call should be made to the service.
+        // Then the configuration should fail with an alert about not supporting registration.
         XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
         XCTAssertEqual(context.alertInfo?.id, .registration)
     }
     
     func testLoginNotSupportedAlert() async throws {
         // Given a view model for login using a service that hasn't been configured and the default server doesn't support login.
-        setupViewModel(authenticationFlow: .login, supportsRegistrationHelper: false, supportsPasswordLogin: false)
+        setupViewModel(authenticationFlow: .login, supportsOIDC: false, supportsOIDCCreatePrompt: false, supportsPasswordLogin: false)
         XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertFalse(service.homeserver.value.supportsRegistration)
         XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
         XCTAssertNil(context.alertInfo)
         
@@ -125,14 +124,11 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func setupViewModel(authenticationFlow: AuthenticationFlow, supportsRegistrationHelper: Bool = true, supportsPasswordLogin: Bool = true) {
+    private func setupViewModel(authenticationFlow: AuthenticationFlow, supportsOIDC: Bool = true, supportsOIDCCreatePrompt: Bool = true, supportsPasswordLogin: Bool = true) {
         // Manually create a configuration as the default homeserver address setting is immutable.
-        let clientConfiguration: ClientSDKMock.Configuration = if supportsRegistrationHelper {
-            .init(supportsPasswordLogin: supportsPasswordLogin)
-        } else {
-            .init(supportsPasswordLogin: supportsPasswordLogin, elementWellKnown: "")
-        }
-        let client = ClientSDKMock(configuration: clientConfiguration)
+        let client = ClientSDKMock(configuration: .init(oidcLoginURL: supportsOIDC ? "https://account.matrix.org/authorize" : nil,
+                                                        supportsOIDCCreatePrompt: supportsOIDCCreatePrompt,
+                                                        supportsPasswordLogin: supportsPasswordLogin))
         let configuration = AuthenticationClientBuilderMock.Configuration(homeserverClients: ["matrix.org": client],
                                                                           qrCodeClient: client)
         

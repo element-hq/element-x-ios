@@ -68,7 +68,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func showStartScreen() {
-        let parameters = AuthenticationStartScreenParameters(webRegistrationEnabled: appSettings.webRegistrationEnabled,
+        let parameters = AuthenticationStartScreenParameters(showCreateAccountButton: appSettings.showCreateAccountButton,
                                                              isBugReportServiceEnabled: bugReportService.isEnabled)
         let coordinator = AuthenticationStartScreenCoordinator(parameters: parameters)
         
@@ -145,10 +145,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             
             switch action {
             case .continue(let window):
-                if authenticationService.homeserver.value.loginMode == .oidc, let window {
+                if authenticationService.homeserver.value.loginMode.supportsOIDCFlow, let window {
                     showOIDCAuthentication(presentationAnchor: window)
-                } else if authenticationFlow == .register {
-                    showWebRegistration()
                 } else {
                     showLoginScreen()
                 }
@@ -185,26 +183,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationCoordinator.setRootCoordinator(coordinator)
         navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
-    }
-    
-    private func showWebRegistration() {
-        let parameters = WebRegistrationScreenCoordinatorParameters(authenticationService: authenticationService,
-                                                                    userIndicatorController: userIndicatorController)
-        let coordinator = WebRegistrationScreenCoordinator(parameters: parameters)
-        
-        coordinator.actionsPublisher.sink { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .cancel:
-                navigationStackCoordinator.setSheetCoordinator(nil)
-            case .signedIn(let userSession):
-                userHasSignedIn(userSession: userSession)
-            }
-        }
-        .store(in: &cancellables)
-        
-        navigationStackCoordinator.setSheetCoordinator(coordinator)
     }
     
     private func showOIDCAuthentication(presentationAnchor: UIWindow) {

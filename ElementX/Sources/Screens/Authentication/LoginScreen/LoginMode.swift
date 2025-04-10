@@ -12,7 +12,7 @@ enum LoginMode: Equatable {
     /// The login mode hasn't been determined yet.
     case unknown
     /// The homeserver supports login via OpenID Connect.
-    case oidc
+    case oidc(supportsCreatePrompt: Bool)
     /// The homeserver supports login with a password.
     case password
     /// The homeserver only allows login with unsupported mechanisms. Use fallback instead.

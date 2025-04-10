@@ -21,7 +21,6 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         // Given a view model for login.
         setupViewModel(authenticationFlow: .login)
         XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertFalse(service.homeserver.value.supportsRegistration)
         XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
         
         // When selecting matrix.org.
@@ -39,7 +38,6 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         // Given a view model for login.
         setupViewModel(authenticationFlow: .login)
         XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertFalse(service.homeserver.value.supportsRegistration)
         XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
         XCTAssertNil(context.alertInfo)
         
@@ -58,7 +56,6 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         // Given a view model for registration.
         setupViewModel(authenticationFlow: .register)
         XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertFalse(service.homeserver.value.supportsRegistration)
         XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
         
         // When selecting matrix.org.
@@ -76,7 +73,6 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         // Given a view model for registration.
         setupViewModel(authenticationFlow: .register)
         XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertFalse(service.homeserver.value.supportsRegistration)
         XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
         XCTAssertNil(context.alertInfo)
         
