@@ -222,6 +222,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func verifyUserPassword(_ password: String) async -> Result<Void, ClientProxyError>
     
+    func setRoomNotificationModeProtocol(_ listener: RoomNotificationModeUpdatedProtocol)
+    
+    func roomNotificationModeUpdated(roomId: String, notificationMode: RoomNotificationModeProxy)
+    
     // MARK: - Zero Rewards
     
     var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> { get }

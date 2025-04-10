@@ -5385,6 +5385,88 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return verifyUserPasswordReturnValue
         }
     }
+    //MARK: - setRoomNotificationModeProtocol
+
+    var setRoomNotificationModeProtocolUnderlyingCallsCount = 0
+    var setRoomNotificationModeProtocolCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setRoomNotificationModeProtocolUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setRoomNotificationModeProtocolUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setRoomNotificationModeProtocolUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setRoomNotificationModeProtocolUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setRoomNotificationModeProtocolCalled: Bool {
+        return setRoomNotificationModeProtocolCallsCount > 0
+    }
+    var setRoomNotificationModeProtocolReceivedListener: RoomNotificationModeUpdatedProtocol?
+    var setRoomNotificationModeProtocolReceivedInvocations: [RoomNotificationModeUpdatedProtocol] = []
+    var setRoomNotificationModeProtocolClosure: ((RoomNotificationModeUpdatedProtocol) -> Void)?
+
+    func setRoomNotificationModeProtocol(_ listener: RoomNotificationModeUpdatedProtocol) {
+        setRoomNotificationModeProtocolCallsCount += 1
+        setRoomNotificationModeProtocolReceivedListener = listener
+        DispatchQueue.main.async {
+            self.setRoomNotificationModeProtocolReceivedInvocations.append(listener)
+        }
+        setRoomNotificationModeProtocolClosure?(listener)
+    }
+    //MARK: - roomNotificationModeUpdated
+
+    var roomNotificationModeUpdatedRoomIdNotificationModeUnderlyingCallsCount = 0
+    var roomNotificationModeUpdatedRoomIdNotificationModeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomNotificationModeUpdatedRoomIdNotificationModeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomNotificationModeUpdatedRoomIdNotificationModeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomNotificationModeUpdatedRoomIdNotificationModeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomNotificationModeUpdatedRoomIdNotificationModeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var roomNotificationModeUpdatedRoomIdNotificationModeCalled: Bool {
+        return roomNotificationModeUpdatedRoomIdNotificationModeCallsCount > 0
+    }
+    var roomNotificationModeUpdatedRoomIdNotificationModeReceivedArguments: (roomId: String, notificationMode: RoomNotificationModeProxy)?
+    var roomNotificationModeUpdatedRoomIdNotificationModeReceivedInvocations: [(roomId: String, notificationMode: RoomNotificationModeProxy)] = []
+    var roomNotificationModeUpdatedRoomIdNotificationModeClosure: ((String, RoomNotificationModeProxy) -> Void)?
+
+    func roomNotificationModeUpdated(roomId: String, notificationMode: RoomNotificationModeProxy) {
+        roomNotificationModeUpdatedRoomIdNotificationModeCallsCount += 1
+        roomNotificationModeUpdatedRoomIdNotificationModeReceivedArguments = (roomId: roomId, notificationMode: notificationMode)
+        DispatchQueue.main.async {
+            self.roomNotificationModeUpdatedRoomIdNotificationModeReceivedInvocations.append((roomId: roomId, notificationMode: notificationMode))
+        }
+        roomNotificationModeUpdatedRoomIdNotificationModeClosure?(roomId, notificationMode)
+    }
     //MARK: - getUserRewards
 
     var getUserRewardsShouldCheckRewardsIntiamtionUnderlyingCallsCount = 0

@@ -268,11 +268,11 @@ struct HomeScreenRoom: Identifiable, Equatable {
         return nil
     }
     
-    let badges: Badges
+    var badges: Badges
     struct Badges: Equatable {
         let isDotShown: Bool
         let isMentionShown: Bool
-        let isMuteShown: Bool
+        var isMuteShown: Bool
         let isCallShown: Bool
     }
     

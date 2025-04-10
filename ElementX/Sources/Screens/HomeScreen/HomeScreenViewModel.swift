@@ -12,7 +12,11 @@ import SwiftUI
 
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
 
-class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol, CreateFeedProtocol {
+protocol RoomNotificationModeUpdatedProtocol {
+    func onRoomNotificationModeUpdated(for roomId: String, mode: RoomNotificationModeProxy)
+}
+
+class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol, CreateFeedProtocol, RoomNotificationModeUpdatedProtocol {
     private let userSession: UserSessionProtocol
     private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
@@ -30,6 +34,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private var isFetchMyPostsInProgress = false
     
     private var channelRoomMap: [String: RoomInfoProxy] = [:]
+    private var roomNotificationUpdateMap: [String: RoomNotificationModeProxy] = [:]
     
     init(userSession: UserSessionProtocol,
          analyticsService: AnalyticsService,
@@ -235,6 +240,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             showDeclineInviteConfirmationAlert(roomID: roomIdentifier)
         case .loadRewards:
             loadUserRewards()
+            checkAndUpdateRoomNotificationMode()
         case .rewardsIntimated:
             dismissNewRewardsIntimation()
         case .loadMorePostsIfNeeded(let forMyPosts):
@@ -294,6 +300,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func setupRoomListSubscriptions() {
+        userSession.clientProxy.setRoomNotificationModeProtocol(self)
+        
         guard let roomSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
@@ -778,5 +786,21 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             await (fetchPosts(isForceRefresh: true),
                    fetchMyPosts(isForceRefresh: true))
         }
+    }
+    
+    func onRoomNotificationModeUpdated(for roomId: String, mode: RoomNotificationModeProxy) {
+        roomNotificationUpdateMap[roomId] = mode
+    }
+    
+    private func checkAndUpdateRoomNotificationMode() {
+        roomNotificationUpdateMap.forEach { roomId, mode in
+            guard let roomSummary = state.rooms.first(where: { $0.roomID == roomId }) else { return }
+            var mRoomSummary = roomSummary
+            mRoomSummary.badges.isMuteShown = mode == .mute
+            if let index = state.rooms.firstIndex(where: { $0.roomID == roomId }) {
+                state.rooms[index] = mRoomSummary
+            }
+        }
+        roomNotificationUpdateMap.removeAll()
     }
 }

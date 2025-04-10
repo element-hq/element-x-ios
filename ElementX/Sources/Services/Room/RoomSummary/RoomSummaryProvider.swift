@@ -284,7 +284,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             inviterProxy = RoomMemberProxy(member: inviter)
         }
         
-        let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
+        // let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
+        let notificationMode = fetchRoomNotificationMode(roomListItem: roomListItem, roomInfo: roomInfo)
         
         let joinRequestType: RoomSummary.JoinRequestType? = switch roomInfo.membership {
         case .invited: .invite(inviter: inviterProxy)
@@ -314,6 +315,26 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            hasOngoingCall: roomInfo.hasRoomCall,
                            isMarkedUnread: roomInfo.isMarkedUnread,
                            isFavourite: roomInfo.isFavourite)
+    }
+    
+    private func fetchRoomNotificationMode(roomListItem: RoomListItem, roomInfo: RoomInfo) -> RoomNotificationModeProxy? {
+        var notificationModeProxy: RoomNotificationModeProxy?
+        let semaphore = DispatchSemaphore(value: 0)
+        Task {
+            do {
+                let isRoomEncrypted = await roomListItem.isEncrypted()
+                let notificationMode = try await notificationSettings.getNotificationSettings(roomId: roomInfo.id,
+                                                                                                   isEncrypted: isRoomEncrypted,
+                                                                                                   isOneToOne: roomInfo.activeMembersCount == 2)
+                notificationModeProxy = notificationMode.mode
+            } catch {
+                notificationModeProxy = roomInfo.cachedUserDefinedNotificationMode
+                    .flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
+            }
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return notificationModeProxy
     }
     
     private func joinRoomIfRequired(_ roomListItem: RoomListItem) async {

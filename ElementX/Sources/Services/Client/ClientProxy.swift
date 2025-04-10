@@ -168,6 +168,8 @@ class ClientProxy: ClientProxyProtocol {
     
     private let zeroApiProxy: ZeroApiProxyProtocol
     
+    private var roomNotificationModeUpdateProtocol: RoomNotificationModeUpdatedProtocol? = nil
+    
     init(client: ClientProtocol,
          needsSlidingSyncMigration: Bool,
          networkMonitor: NetworkMonitorProtocol,
@@ -1428,6 +1430,14 @@ class ClientProxy: ClientProxyProtocol {
             zeroCurrentUserSubject.send(currentUser!)
         }
         return currentUser
+    }
+    
+    func setRoomNotificationModeProtocol(_ listener: any RoomNotificationModeUpdatedProtocol) {
+        roomNotificationModeUpdateProtocol = listener
+    }
+    
+    func roomNotificationModeUpdated(roomId: String, notificationMode: RoomNotificationModeProxy) {
+        roomNotificationModeUpdateProtocol?.onRoomNotificationModeUpdated(for: roomId, mode: notificationMode)
     }
 }
 
