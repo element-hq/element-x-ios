@@ -409,7 +409,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     /// Manually cleans up any files in the app group's `tmp` directory.
     ///
-    /// **Note:** If there is a single file we consider it to bar an active share payload and it is ignored.
+    /// **Note:** If there is a single file we consider it to be an active share payload and ignore it.
     private func cleanAppGroupTemporaryDirectory() {
         let fileURLs: [URL]
         do {
