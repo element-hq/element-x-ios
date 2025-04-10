@@ -36,26 +36,27 @@ extension XCUIApplication {
         XCTAssertTrue(continueButton.waitForExistence(timeout: 30.0))
         continueButton.tapCenter()
         
-        let usernameTextField = textFields[A11yIdentifiers.loginScreen.emailUsername]
-        XCTAssertTrue(usernameTextField.waitForExistence(timeout: 10.0))
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let webAuthenticationSessionAlertContinueButton = springboard.buttons["Continue"].firstMatch
+        XCTAssertTrue(webAuthenticationSessionAlertContinueButton.waitForExistence(timeout: 30.0))
+        webAuthenticationSessionAlertContinueButton.tapCenter()
         
-        usernameTextField.clearAndTypeText(username, app: self)
+        let webAuthenticationView = webViews.firstMatch
+        XCTAssertTrue(webAuthenticationView.waitForExistence(timeout: 10.0))
+        webAuthenticationView.tap() // Tap the web view to properly focus the app again.
         
-        let passwordTextField = secureTextFields[A11yIdentifiers.loginScreen.password]
-        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 10.0))
+        let webUsernameTextField = textFields["Username"]
+        XCTAssertTrue(webUsernameTextField.waitForExistence(timeout: 10.0))
+        webUsernameTextField.clearAndTypeText(username, app: self)
         
-        passwordTextField.clearAndTypeText(password, app: self)
+        let webPasswordTextField = secureTextFields["Password"]
+        XCTAssertTrue(webPasswordTextField.waitForExistence(timeout: 10.0))
+        webPasswordTextField.clearAndTypeText(password, app: self)
         
-        let nextButton = buttons[A11yIdentifiers.loginScreen.continue]
-        XCTAssertTrue(nextButton.waitForExistence(timeout: 10.0))
-        XCTAssertTrue(nextButton.isEnabled)
+        let webLoginButton = webAuthenticationView.buttons["Continue"]
+        XCTAssertTrue(webLoginButton.waitForExistence(timeout: 10.0))
+        webLoginButton.tapCenter()
         
-        nextButton.tapCenter()
-        
-        // Wait for login to finish
-        currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: usernameTextField)
-        currentTestCase.waitForExpectations(timeout: 300.0)
-                
         // Handle the password saving dialog
         let savePasswordButton = buttons["Save Password"]
         if savePasswordButton.waitForExistence(timeout: 10.0) {
@@ -64,6 +65,14 @@ extension XCUIApplication {
             
             savePasswordButton.tapCenter()
         }
+        
+        let webConsentButton = webAuthenticationView.buttons["Continue"]
+        XCTAssertTrue(webConsentButton.waitForExistence(timeout: 10.0))
+        webConsentButton.tapCenter()
+        
+        // Wait for login to finish
+        currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: webUsernameTextField)
+        currentTestCase.waitForExpectations(timeout: 300.0)
                 
         // Wait for the home screen to become visible.
         let profileButton = buttons[A11yIdentifiers.homeScreen.userAvatar]
@@ -80,6 +89,9 @@ extension XCUIApplication {
                 
         // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924
         profileButton.tapCenter()
+        
+        // Make the logout button visible
+        swipeUp()
         
         // Logout
         let logoutButton = buttons[A11yIdentifiers.settingsScreen.logout]

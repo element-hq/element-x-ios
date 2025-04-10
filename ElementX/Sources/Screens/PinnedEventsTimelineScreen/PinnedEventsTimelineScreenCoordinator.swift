@@ -78,7 +78,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .tappedOnSenderDetails(let userID):
+            case .displaySenderDetails(let userID):
                 actionsSubject.send(.displayUser(userID: userID))
             case .displayMessageForwarding(let forwardingItem):
                 actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
