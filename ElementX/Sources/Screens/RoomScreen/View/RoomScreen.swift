@@ -138,9 +138,13 @@ struct RoomScreen: View {
     private var knockRequestsBanner: some View {
         Group {
             if roomContext.viewState.shouldSeeKnockRequests {
+                // Fixes "Ambiguous use of 'init(content:)'" errors when enabling
+                // strict concurrency
+                let acceptCallback = roomContext.viewState.canAcceptKnocks ? acceptKnockRequest : nil
+                
                 KnockRequestsBannerView(requests: roomContext.viewState.displayedKnockRequests,
                                         onDismiss: dismissKnockRequestsBanner,
-                                        onAccept: roomContext.viewState.canAcceptKnocks ? acceptKnockRequest : nil,
+                                        onAccept: acceptCallback,
                                         onViewAll: onViewAllKnockRequests,
                                         mediaProvider: roomContext.mediaProvider)
                     .padding(.top, 16)

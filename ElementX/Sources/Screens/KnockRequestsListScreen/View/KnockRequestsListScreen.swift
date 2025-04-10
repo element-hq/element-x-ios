@@ -42,13 +42,19 @@ struct KnockRequestsListScreen: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 if context.viewState.shouldDisplayRequests {
+                    // Fixes "Ambiguous use of 'init(content:)'" errors when enabling
+                    // strict concurrency
+                    let acceptCallback = context.viewState.canAccept ? onAccept : nil
+                    let declineCallback = context.viewState.canDecline ? onDecline : nil
+                    let declineAndBanCallback = context.viewState.canBan ? onDeclineAndBan : nil
+                    
                     ForEach(context.viewState.displayedRequests) { requestInfo in
                         ListRow(kind: .custom {
                             KnockRequestCell(cellInfo: requestInfo,
                                              mediaProvider: context.mediaProvider,
-                                             onAccept: context.viewState.canAccept ? onAccept : nil,
-                                             onDecline: context.viewState.canDecline ? onDecline : nil,
-                                             onDeclineAndBan: context.viewState.canBan ? onDeclineAndBan : nil)
+                                             onAccept: acceptCallback,
+                                             onDecline: declineCallback,
+                                             onDeclineAndBan: declineAndBanCallback)
                         })
                     }
                 }
