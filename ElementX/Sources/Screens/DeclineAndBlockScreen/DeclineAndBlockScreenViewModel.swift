@@ -54,27 +54,27 @@ class DeclineAndBlockScreenViewModel: DeclineAndBlockScreenViewModelType, Declin
             return
         }
         
-        let result = await roomProxy.rejectInvitation()
-        hideLoadingIndicator()
-        
-        // TODO: Check with design how to handle the error cases and what message to present for success and error
-        switch result {
+        switch await roomProxy.rejectInvitation() {
         case .success:
+            var shouldShowFailure = false
             if state.bindings.shouldReport {
-                Task {
-                    await clientProxy.reportRoomForIdentifier(roomID, reason: state.bindings.reportReason.isBlank ? nil : state.bindings.reportReason)
-                }
+                shouldShowFailure = await clientProxy.reportRoomForIdentifier(roomID, reason: state.bindings.reportReason.isBlank ? nil : state.bindings.reportReason).isFailure
             }
             
             if state.bindings.shouldBlockUser {
-                Task {
-                    await clientProxy.ignoreUser(userID)
-                }
+                shouldShowFailure = await clientProxy.ignoreUser(userID).isFailure
             }
             
+            hideLoadingIndicator()
+            if shouldShowFailure {
+                showError()
+            } else {
+                showSuccess()
+            }
             actionsSubject.send(.dismiss(hasDeclined: true))
         case .failure:
-            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+            hideLoadingIndicator()
+            showError()
         }
     }
     
@@ -95,5 +95,9 @@ class DeclineAndBlockScreenViewModel: DeclineAndBlockScreenViewModelType, Declin
     
     private func showError() {
         userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+    }
+    
+    private func showSuccess() {
+        userIndicatorController.submitIndicator(.init(title: L10n.commonSuccess, iconName: "checkmark"))
     }
 }
