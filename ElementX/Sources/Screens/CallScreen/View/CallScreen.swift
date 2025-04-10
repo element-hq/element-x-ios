@@ -292,7 +292,6 @@ private struct CallView: UIViewRepresentable {
 struct CallScreen_Previews: PreviewProvider {
     static let viewModel = {
         let clientProxy = ClientProxyMock()
-        clientProxy.getElementWellKnownReturnValue = .success(nil)
         clientProxy.deviceID = "call-device-id"
         
         let roomProxy = JoinedRoomProxyMock()

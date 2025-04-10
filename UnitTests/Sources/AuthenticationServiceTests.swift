@@ -16,10 +16,10 @@ class AuthenticationServiceTests: XCTestCase {
     
     var service: AuthenticationService!
     
-    func testLogin() async {
-        setupMocks()
+    func testPasswordLogin() async {
+        setupMocks(serverAddress: "example.com")
         
-        switch await service.configure(for: "matrix.org", flow: .login) {
+        switch await service.configure(for: "example.com", flow: .login) {
         case .success:
             break
         case .failure(let error):
@@ -27,7 +27,7 @@ class AuthenticationServiceTests: XCTestCase {
         }
         
         XCTAssertEqual(service.flow, .login)
-        XCTAssertEqual(service.homeserver.value, .mockMatrixDotOrg)
+        XCTAssertEqual(service.homeserver.value, .mockBasicServer)
         
         switch await service.login(username: "alice", password: "12345678", initialDeviceName: nil, deviceID: nil) {
         case .success:
@@ -40,7 +40,21 @@ class AuthenticationServiceTests: XCTestCase {
         }
     }
     
-    func testConfigureRegister() async {
+    func testConfigureLoginWithOIDC() async {
+        setupMocks()
+        
+        switch await service.configure(for: "matrix.org", flow: .login) {
+        case .success:
+            break
+        case .failure(let error):
+            XCTFail("Unexpected failure: \(error)")
+        }
+        
+        XCTAssertEqual(service.flow, .login)
+        XCTAssertEqual(service.homeserver.value, .mockMatrixDotOrg)
+    }
+    
+    func testConfigureRegisterWithOIDC() async {
         setupMocks()
         
         switch await service.configure(for: "matrix.org", flow: .register) {

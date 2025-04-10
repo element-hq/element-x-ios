@@ -703,10 +703,6 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError> {
-        await client.getElementWellKnown().map(ElementWellKnown.init)
-    }
-    
     func clearCaches() async -> Result<Void, ClientProxyError> {
         do {
             return try await .success(client.clearCaches())

@@ -210,8 +210,10 @@ final class AppSettings {
                                                                      contacts: [supportEmailAddress],
                                                                      staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString })
     
-    /// A temporary hack to allow registration on matrix.org until MAS is deployed.
-    let webRegistrationEnabled = true
+    /// Whether or not the Create Account button is shown on the start screen.
+    ///
+    /// **Note:** Setting this to false doesn't prevent someone from creating an account when the selected homeserver's MAS allows registration.
+    let showCreateAccountButton = true
     
     // MARK: - Notifications
     

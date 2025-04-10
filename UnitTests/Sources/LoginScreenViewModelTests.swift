@@ -17,7 +17,7 @@ class LoginScreenViewModelTests: XCTestCase {
     var clientBuilderFactory: AuthenticationClientBuilderFactoryMock!
     var service: AuthenticationServiceProtocol!
     
-    private func setupViewModel(homeserverAddress: String = "matrix.org") async {
+    private func setupViewModel(homeserverAddress: String = "example.com") async {
         clientBuilderFactory = AuthenticationClientBuilderFactoryMock(configuration: .init())
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
@@ -36,18 +36,9 @@ class LoginScreenViewModelTests: XCTestCase {
                                          analytics: ServiceLocator.shared.analytics)
     }
     
-    func testMatrixDotOrg() async {
-        // Given the initial view model configured for matrix.org.
-        await setupViewModel()
-        
-        // Then the view state should contain a homeserver that matches matrix.org and show the login form.
-        XCTAssertEqual(context.viewState.homeserver, .mockMatrixDotOrg, "The homeserver data should match the default homeserver.")
-        XCTAssertEqual(context.viewState.loginMode, .password, "The login form should be shown.")
-    }
-    
     func testBasicServer() async {
         // Given the view model configured for a basic server example.com that only supports password authentication.
-        await setupViewModel(homeserverAddress: "example.com")
+        await setupViewModel()
         
         // Then the view state should be updated with the homeserver and show the login form.
         XCTAssertEqual(context.viewState.homeserver, .mockBasicServer, "The homeserver data should should match the new homeserver.")
