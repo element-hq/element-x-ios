@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 /// The screen shown at the beginning of the onboarding flow.
@@ -105,9 +106,8 @@ struct AuthenticationStartScreen: View {
             if context.viewState.showCreateAccountButton {
                 Button { context.send(viewAction: .register) } label: {
                     Text(L10n.screenCreateAccountTitle)
-                        .padding(14)
                 }
-                .buttonStyle(.compound(.plain))
+                .buttonStyle(.compound(.tertiary))
             }
         }
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)

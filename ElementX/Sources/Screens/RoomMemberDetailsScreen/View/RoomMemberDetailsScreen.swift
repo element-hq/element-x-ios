@@ -77,8 +77,11 @@ struct RoomMemberDetailsScreen: View {
                     .font(.compound.bodyMDSemibold)
             }
             
-            Button(L10n.cryptoIdentityChangeWithdrawVerificationAction) {
+            Button {
                 context.send(viewAction: .withdrawVerification)
+            } label: {
+                Text(L10n.cryptoIdentityChangeWithdrawVerificationAction)
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.compound(.secondary, size: .medium))
         }

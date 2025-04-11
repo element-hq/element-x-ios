@@ -103,13 +103,10 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
             }
             .buttonStyle(.compound(.primary))
             
-            Button {
+            Button(L10n.actionCancel) {
                 dismiss()
-            } label: {
-                Text(L10n.actionCancel)
-                    .padding(.vertical, 14)
             }
-            .buttonStyle(.compound(.plain))
+            .buttonStyle(.compound(.tertiary))
         }
         .padding(.bottom, 16)
         .padding(.horizontal, 16)

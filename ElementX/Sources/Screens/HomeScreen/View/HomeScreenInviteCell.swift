@@ -109,13 +109,19 @@ struct HomeScreenInviteCell: View {
     
     private var buttons: some View {
         HStack(spacing: 12) {
-            Button(L10n.actionDecline) {
+            Button {
                 context.send(viewAction: .declineInvite(roomIdentifier: room.id))
+            } label: {
+                Text(L10n.actionDecline)
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.compound(.secondary, size: .medium))
             
-            Button(L10n.actionAccept) {
+            Button {
                 context.send(viewAction: .acceptInvite(roomIdentifier: room.id))
+            } label: {
+                Text(L10n.actionAccept)
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.compound(.primary, size: .medium))
         }

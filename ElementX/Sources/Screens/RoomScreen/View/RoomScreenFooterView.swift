@@ -58,8 +58,11 @@ struct RoomScreenFooterView: View {
                     .foregroundColor(.compound.textPrimary)
             }
             
-            Button(L10n.actionDismiss) {
+            Button {
                 callback(.resolvePinViolation(userID: member.userID))
+            } label: {
+                Text(L10n.actionDismiss)
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.compound(.primary, size: .medium))
         }
@@ -85,8 +88,11 @@ struct RoomScreenFooterView: View {
                     .foregroundColor(.compound.textCriticalPrimary)
             }
             
-            Button(L10n.cryptoIdentityChangeWithdrawVerificationAction) {
+            Button {
                 callback(.resolveVerificationViolation(userID: member.userID))
+            } label: {
+                Text(L10n.cryptoIdentityChangeWithdrawVerificationAction)
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.compound(.primary, size: .medium))
         }
