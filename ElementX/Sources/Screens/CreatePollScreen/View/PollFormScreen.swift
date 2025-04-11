@@ -167,7 +167,7 @@ private struct PollFormOptionRow: View {
                         CompoundIcon(\.delete)
                     }
                     .disabled(!canDeleteItem)
-                    .buttonStyle(.compound(.plain))
+                    .buttonStyle(.compound(.textLink))
                     .accessibilityLabel(L10n.actionRemove)
                 }
                 

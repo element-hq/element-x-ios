@@ -81,9 +81,8 @@ struct SendInviteConfirmationView: View {
                 dismiss()
             } label: {
                 Text(L10n.actionCancel)
-                    .padding(.vertical, 14)
             }
-            .buttonStyle(.compound(.plain))
+            .buttonStyle(.compound(.tertiary))
         }
         .padding(.horizontal, 16)
     }

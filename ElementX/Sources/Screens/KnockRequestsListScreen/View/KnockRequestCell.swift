@@ -38,7 +38,7 @@ struct KnockRequestCell: View {
                                 contentID: cellInfo.userID,
                                 avatarSize: .user(on: .knockingUserList),
                                 mediaProvider: mediaProvider)
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 16) {
                 header
                 if let reason = cellInfo.reason {
                     DisclosableText(text: reason)
@@ -80,19 +80,25 @@ struct KnockRequestCell: View {
     
     @ViewBuilder
     private var actions: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 16) {
             if onDecline != nil || onAccept != nil {
                 HStack(spacing: 16) {
                     if let onDecline {
-                        Button(L10n.actionDecline) {
+                        Button {
                             onDecline(cellInfo.eventID)
+                        } label: {
+                            Text(L10n.actionDecline)
+                                .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.compound(.secondary, size: .medium))
                     }
                     
                     if let onAccept {
-                        Button(L10n.actionAccept) {
+                        Button {
                             onAccept(cellInfo.eventID)
+                        } label: {
+                            Text(L10n.actionAccept)
+                                .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.compound(.primary, size: .medium))
                     }
@@ -104,12 +110,10 @@ struct KnockRequestCell: View {
                     onDeclineAndBan(cellInfo.eventID)
                 } label: {
                     Text(L10n.screenKnockRequestsListDeclineAndBanActionTitle)
-                        .padding(.top, 8)
-                        .padding(.bottom, 4)
+                        .frame(maxWidth: .infinity)
                 }
-                .frame(maxWidth: .infinity)
-                .buttonStyle(.compound(.plain))
-                .padding(.top, 16)
+                .buttonStyle(.compound(.tertiary, size: .small))
+                .padding(.top, 4)
             }
         }
         .padding(.bottom, 16)

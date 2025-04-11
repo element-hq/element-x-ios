@@ -39,7 +39,7 @@ struct AppLockSetupPINScreen: View {
                     Button(L10n.screenAppLockForgotPin) {
                         context.send(viewAction: .forgotPIN)
                     }
-                    .buttonStyle(.compound(.plain))
+                    .buttonStyle(.compound(.tertiary, size: .medium))
                 }
             }
             .padding(.horizontal, 16)
