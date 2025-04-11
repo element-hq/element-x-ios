@@ -10,6 +10,7 @@ import SwiftUI
 /// The custom keypad shown on the App Lock screen when biometrics are disabled.
 struct AppLockScreenPINKeypad: View {
     @Binding var pinCode: String
+    @FocusState private var isFocused
     
     var body: some View {
         Grid(horizontalSpacing: 24, verticalSpacing: 16) {
@@ -36,6 +37,30 @@ struct AppLockScreenPINKeypad: View {
             }
         }
         .buttonStyle(KeypadButtonStyle())
+        .focusable()
+        .focused($isFocused)
+        .onKeyPress(keys: Self.supportedKeys) { keyPress in
+            guard keyPress.key != .delete else {
+                // Since the key press event is handled through a view update we need to update the view on the next main loop
+                DispatchQueue.main.async {
+                    pressDelete()
+                }
+                return .handled
+            }
+            
+            guard let digit = Int(keyPress.characters) else {
+                return .ignored
+            }
+            
+            // Since the key press event is handled through a view update we need to update the view on the next main loop
+            DispatchQueue.main.async {
+                press(digit)
+            }
+            return .handled
+        }
+        .onAppear {
+            isFocused = true
+        }
     }
     
     func press(_ digit: Int) {
@@ -64,6 +89,20 @@ private struct KeypadButtonStyle: ButtonStyle {
             }
             .opacity(configuration.isPressed ? 0.3 : 1.0)
     }
+}
+
+private extension AppLockScreenPINKeypad {
+    static let supportedKeys: Set<KeyEquivalent> = [.init("0"),
+                                                    .init("1"),
+                                                    .init("2"),
+                                                    .init("3"),
+                                                    .init("4"),
+                                                    .init("5"),
+                                                    .init("6"),
+                                                    .init("7"),
+                                                    .init("8"),
+                                                    .init("9"),
+                                                    .delete]
 }
 
 // MARK: - Previews
