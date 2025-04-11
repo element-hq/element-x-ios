@@ -122,4 +122,6 @@ protocol TimelineProxyProtocol {
     func buildMessageContentFor(_ message: String,
                                 html: String?,
                                 intentionalMentions: Mentions) -> RoomMessageEventContentWithoutRelation
+    
+    func getTimelineItemByEventId(_ eventId: String) -> EventTimelineItemProxy?
 }

@@ -31,6 +31,8 @@ final class TimelineProxy: TimelineProxyProtocol {
     var timelineProvider: TimelineProviderProtocol {
         innerTimelineProvider
     }
+    
+    private var repliedToEventCacheMap: [String: EventTimelineItemProxy] = [:]
         
     deinit {
         backPaginationStatusObservationToken?.cancel()
@@ -583,6 +585,26 @@ final class TimelineProxy: TimelineProxyProtocol {
             }
         }
         return content.withMentions(mentions: intentionalMentions)
+    }
+    
+    func getTimelineItemByEventId(_ eventId: String) -> EventTimelineItemProxy? {
+        var result: EventTimelineItemProxy? = repliedToEventCacheMap[eventId]
+        if result == nil {
+            let semaphore = DispatchSemaphore(value: 0)
+            Task {
+                do {
+                    let originalEvent = try await timeline.getEventTimelineItemByEventId(eventId: eventId)
+                    result = EventTimelineItemProxy(item: originalEvent, uniqueID: .init(eventId))
+                    repliedToEventCacheMap[eventId] = result
+                } catch {
+                    MXLog.error("Failed to fetch event \(eventId) with error: \(error)")
+                    result = nil
+                }
+                semaphore.signal()
+            }
+            semaphore.wait()
+        }
+        return result
     }
     
     // MARK: - Private

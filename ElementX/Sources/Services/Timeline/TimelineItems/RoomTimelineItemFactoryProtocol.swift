@@ -10,6 +10,6 @@ import Foundation
 import MatrixRustSDK
 
 protocol RoomTimelineItemFactoryProtocol {
-    func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy, isDM: Bool) -> RoomTimelineItemProtocol?
-    func buildReply(details: InReplyToDetails) -> TimelineItemReply
+    func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy, isDM: Bool, repliedToEvent: EventTimelineItemProxy?) -> RoomTimelineItemProtocol?
+    func buildReply(details: InReplyToDetails, repliedToEvent: EventTimelineItemProxy?) -> TimelineItemReply
 }

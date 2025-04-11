@@ -18118,6 +18118,76 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
             return buildMessageContentForHtmlIntentionalMentionsReturnValue
         }
     }
+    //MARK: - getTimelineItemByEventId
+
+    var getTimelineItemByEventIdUnderlyingCallsCount = 0
+    var getTimelineItemByEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getTimelineItemByEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getTimelineItemByEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getTimelineItemByEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getTimelineItemByEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getTimelineItemByEventIdCalled: Bool {
+        return getTimelineItemByEventIdCallsCount > 0
+    }
+    var getTimelineItemByEventIdReceivedEventId: String?
+    var getTimelineItemByEventIdReceivedInvocations: [String] = []
+
+    var getTimelineItemByEventIdUnderlyingReturnValue: EventTimelineItemProxy?
+    var getTimelineItemByEventIdReturnValue: EventTimelineItemProxy? {
+        get {
+            if Thread.isMainThread {
+                return getTimelineItemByEventIdUnderlyingReturnValue
+            } else {
+                var returnValue: EventTimelineItemProxy?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getTimelineItemByEventIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getTimelineItemByEventIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getTimelineItemByEventIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getTimelineItemByEventIdClosure: ((String) -> EventTimelineItemProxy?)?
+
+    func getTimelineItemByEventId(_ eventId: String) -> EventTimelineItemProxy? {
+        getTimelineItemByEventIdCallsCount += 1
+        getTimelineItemByEventIdReceivedEventId = eventId
+        DispatchQueue.main.async {
+            self.getTimelineItemByEventIdReceivedInvocations.append(eventId)
+        }
+        if let getTimelineItemByEventIdClosure = getTimelineItemByEventIdClosure {
+            return getTimelineItemByEventIdClosure(eventId)
+        } else {
+            return getTimelineItemByEventIdReturnValue
+        }
+    }
 }
 class UserDiscoveryServiceMock: UserDiscoveryServiceProtocol, @unchecked Sendable {
 

@@ -7,6 +7,7 @@
 
 import Compound
 import SwiftUI
+import Kingfisher
 
 enum TimelineReplyViewPlacement {
     case timeline
@@ -39,10 +40,17 @@ struct TimelineReplyView: View {
                                   formattedBody: content.formattedCaption,
                                   icon: .init(kind: .icon(\.document), cornerRadii: iconCornerRadii))
                     case .image(let content):
-                        ReplyView(sender: sender,
-                                  plainBody: content.caption ?? content.filename,
-                                  formattedBody: content.formattedCaption,
-                                  icon: .init(kind: .mediaSource(content.thumbnailInfo?.source ?? content.imageInfo.source), cornerRadii: iconCornerRadii))
+                        if content.isZeroImage, content.imageURL != nil {
+                            ReplyView(sender: sender,
+                                      plainBody: content.caption ?? content.filename,
+                                      formattedBody: content.formattedCaption,
+                                      icon: .init(kind: .zeroGiphy(URL(string: content.imageURL!)!), cornerRadii: iconCornerRadii))
+                        } else {
+                            ReplyView(sender: sender,
+                                      plainBody: content.caption ?? content.filename,
+                                      formattedBody: content.formattedCaption,
+                                      icon: .init(kind: .mediaSource(content.thumbnailInfo?.source ?? content.imageInfo.source), cornerRadii: iconCornerRadii))
+                        }
                     case .notice(let content):
                         ReplyView(sender: sender,
                                   plainBody: content.body,
@@ -107,6 +115,7 @@ struct TimelineReplyView: View {
                 case systemIcon(String)
                 case iconAsset(ImageAsset)
                 case icon(KeyPath<CompoundIcons, Image>)
+                case zeroGiphy(URL)
             }
             
             let kind: Kind
@@ -172,6 +181,12 @@ struct TimelineReplyView: View {
                         .padding(8.0)
                 case .icon(let keyPath):
                     CompoundIcon(keyPath, size: .small, relativeTo: .body)
+                case .zeroGiphy(let url):
+                    KFAnimatedImage(url)
+                        .placeholder {
+                            Image(systemName: "photo")
+                                .padding(4.0)
+                        }
                 }
             }
         }

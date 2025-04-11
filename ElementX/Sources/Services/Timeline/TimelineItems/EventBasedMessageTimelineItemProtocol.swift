@@ -48,7 +48,19 @@ extension EventBasedMessageTimelineItemProtocol {
         }
     }
     
+    var giphySource: String? {
+        switch contentType {
+        case .image(let content):
+            content.imageURL
+        default: nil
+        }
+    }
+    
     var hasMediaCaption: Bool {
         mediaCaption != nil
+    }
+    
+    var isGiphySource: Bool {
+        giphySource != nil
     }
 }
