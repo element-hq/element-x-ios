@@ -289,6 +289,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (_, .dismissFlow):
                 return .complete
                 
+            case (_, .presentThread(let itemID)):
+                return .thread(itemID: itemID)
+            case (_, .dismissThread):
+                return .room
+                
             case (.initial, .presentRoomDetails):
                 return .roomDetails(isRoot: true)
             case (.room, .presentRoomDetails):
@@ -449,6 +454,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
             case (_, .dismissFlow, .complete):
                 dismissFlow(animated: animated)
+                
+            case (.room, .presentThread(let itemID), .thread):
+                Task { await self.presentThread(itemID: itemID) }
+            case (.thread, .dismissThread, .room):
+                break
             
             case (.initial, .presentRoomDetails, .roomDetails(let isRoot)),
                  (.room, .presentRoomDetails, .roomDetails(let isRoot)),
@@ -605,7 +615,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentDeclineAndBlockScreen(userID: userID)
             case (.declineAndBlockScreen, .dismissDeclineAndBlockScreen, .joinRoomScreen):
                 break
-            
+                
             // Child flow
             case (_, .startChildFlow(let roomID, let via, let entryPoint), .presentingChild):
                 Task { await self.startChildFlow(for: roomID, via: via, entryPoint: entryPoint) }
@@ -769,11 +779,48 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
                 case .presentKnockRequestsList:
                     stateMachine.tryEvent(.presentKnockRequestsListScreen)
+                case .presentThread(let itemID):
+                    stateMachine.tryEvent(.presentThread(itemID: itemID))
                 }
             }
             .store(in: &cancellables)
         
         return coordinator
+    }
+    
+    private func presentThread(itemID: TimelineItemIdentifier) async {
+        showLoadingIndicator()
+        defer { hideLoadingIndicator() }
+        
+        let timelineItemFactory = RoomTimelineItemFactory(userID: userSession.clientProxy.userID,
+                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
+        
+        guard let eventID = itemID.eventID else {
+            fatalError("Invalid thread event ID")
+        }
+        
+        guard case let .success(timelineController) = await timelineControllerFactory.buildThreadTimelineController(eventID: eventID,
+                                                                                                                    roomProxy: roomProxy,
+                                                                                                                    timelineItemFactory: timelineItemFactory,
+                                                                                                                    mediaProvider: userSession.mediaProvider) else {
+            MXLog.error("Failed presenting media timeline")
+            return
+        }
+        
+        let coordinator = ThreadTimelineScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                            timelineController: timelineController,
+                                                                            mediaProvider: userSession.mediaProvider,
+                                                                            mediaPlayerProvider: MediaPlayerProvider(),
+                                                                            voiceMessageMediaManager: userSession.voiceMessageMediaManager,
+                                                                            appMediator: appMediator,
+                                                                            emojiProvider: emojiProvider,
+                                                                            timelineControllerFactory: timelineControllerFactory,
+                                                                            clientProxy: userSession.clientProxy))
+                
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissThread)
+        }
     }
     
     private func presentJoinRoomScreen(via: [String], animated: Bool) {
@@ -1734,6 +1781,7 @@ private extension RoomFlowCoordinator {
         case initial
         case joinRoomScreen
         case room
+        case thread(itemID: TimelineItemIdentifier)
         case roomDetails(isRoot: Bool)
         case roomDetailsEditScreen
         case notificationSettings
@@ -1776,6 +1824,9 @@ private extension RoomFlowCoordinator {
         
         case presentRoom(presentationAction: PresentationAction?)
         case dismissFlow
+        
+        case presentThread(itemID: TimelineItemIdentifier)
+        case dismissThread
         
         case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
         case dismissReportContent
