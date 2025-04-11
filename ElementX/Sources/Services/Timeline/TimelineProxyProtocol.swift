@@ -13,6 +13,7 @@ enum TimelineKind: Equatable {
     case live
     case detached
     case pinned
+    case thread
     
     enum MediaPresentation { case roomScreenLive, roomScreenDetached, pinnedEventsScreen, mediaFilesScreen }
     case media(MediaPresentation)
@@ -21,6 +22,7 @@ enum TimelineKind: Equatable {
 enum TimelineFocus {
     case live
     case eventID(String)
+    case thread(eventID: String)
     case pinned
 }
 

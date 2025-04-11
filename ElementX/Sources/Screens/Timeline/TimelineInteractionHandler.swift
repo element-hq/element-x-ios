@@ -551,6 +551,8 @@ class TimelineInteractionHandler {
             }
             newTimelineFocus = .eventID(eventID)
             newTimelinePresentation = .roomScreenDetached
+        case .thread:
+            break // We don't need to create a new timeline as it is already filtered.
         case .pinned:
             newTimelineFocus = .pinned
             newTimelinePresentation = .pinnedEventsScreen
