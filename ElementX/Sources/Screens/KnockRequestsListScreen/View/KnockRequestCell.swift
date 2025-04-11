@@ -103,6 +103,7 @@ struct KnockRequestCell: View {
                         .buttonStyle(.compound(.primary, size: .medium))
                     }
                 }
+                .fixedSize(horizontal: false, vertical: true)
             }
             
             if let onDeclineAndBan {
