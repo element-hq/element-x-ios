@@ -929,6 +929,12 @@ extension PreviewTests {
         }
     }
 
+    func testThreadTimelineScreen() async throws {
+        for (index, preview) in ThreadTimelineScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testTimelineDeliveryStatusView() async throws {
         for (index, preview) in TimelineDeliveryStatusView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
