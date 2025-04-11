@@ -191,8 +191,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             displayReactionSummary(for: itemID, selectedKey: key)
         case .displayReadReceipts(let itemID):
             displayReadReceipts(for: itemID)
-        case .displayThread:
-            break
+        case .displayThread(let itemID):
+            actionsSubject.send(.displayThread(itemID: itemID))
         case .handlePasteOrDrop(let provider):
             timelineInteractionHandler.handlePasteOrDrop(provider)
         case .handlePollAction(let pollAction):
