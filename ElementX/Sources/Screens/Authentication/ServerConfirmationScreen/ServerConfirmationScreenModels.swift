@@ -8,8 +8,10 @@
 import SwiftUI
 
 enum ServerConfirmationScreenViewModelAction {
-    /// The user would like to continue with the current homeserver.
-    case confirm
+    /// Continue the flow using the provided OIDC parameters.
+    case continueWithOIDC(data: OIDCAuthorizationDataProxy, window: UIWindow)
+    /// Continue the flow using password authentication.
+    case continueWithPassword
     /// The user would like to change to a different homeserver.
     case changeServer
 }

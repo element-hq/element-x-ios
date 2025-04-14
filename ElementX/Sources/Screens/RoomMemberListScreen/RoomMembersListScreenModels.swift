@@ -80,31 +80,15 @@ struct RoomMembersListScreenViewStateBindings {
     var searchQuery = ""
     /// The current mode the screen is in.
     var mode: RoomMembersListScreenMode = .members
-    /// A selected member to kick, ban, promote etc.
-    var memberToManage: RoomMembersListScreenManagementDetails?
+    /// A sheet model for the selected member to kick, ban, promote etc.
+    var manageMemeberViewModel: ManageRoomMemberSheetViewModel?
 
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomMembersListScreenAlertType>?
 }
 
-/// Information about managing a particular room member.
-struct RoomMembersListScreenManagementDetails: Identifiable {
-    var id: String { member.id }
-    
-    /// The member that is being managed.
-    let member: RoomMemberDetails
-    
-    /// A management action that can be performed on the member.
-    enum Action { case kick, ban }
-    /// The management actions available for `member`.
-    let actions: [Action]
-}
-
 enum RoomMembersListScreenViewAction {
     case selectMember(RoomMemberDetails)
-    case showMemberDetails(RoomMemberDetails)
-    case kickMember(RoomMemberDetails)
-    case banMember(RoomMemberDetails)
     case unbanMember(RoomMemberDetails)
     case invite
 }

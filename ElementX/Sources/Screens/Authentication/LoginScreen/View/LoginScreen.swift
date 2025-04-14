@@ -139,7 +139,7 @@ struct LoginScreen_Previews: PreviewProvider, TestablePreview {
         .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
             state.homeserver.loginMode == .password
         })
-        .previewDisplayName("matrix.org")
+        .previewDisplayName("Initial State")
         
         NavigationStack {
             LoginScreen(context: credentialsViewModel.context)
@@ -155,7 +155,7 @@ struct LoginScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Unsupported")
     }
     
-    static func makeViewModel(homeserverAddress: String = "matrix.org", withCredentials: Bool = false) -> LoginScreenViewModel {
+    static func makeViewModel(homeserverAddress: String = "example.com", withCredentials: Bool = false) -> LoginScreenViewModel {
         let authenticationService = AuthenticationService.mock
         
         Task { await authenticationService.configure(for: homeserverAddress, flow: .login) }

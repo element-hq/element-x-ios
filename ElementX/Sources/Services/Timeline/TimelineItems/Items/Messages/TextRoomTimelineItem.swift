@@ -9,19 +9,15 @@ import UIKit
 
 struct TextRoomTimelineItem: TextBasedRoomTimelineItem, Equatable {
     let id: TimelineItemIdentifier
-    
     let timestamp: Date
     let isOutgoing: Bool
     let isEditable: Bool
     let canBeRepliedTo: Bool
-    let isThreaded: Bool
     var shouldBoost = false
     
     let sender: TimelineItemSender
     
     let content: TextRoomTimelineItemContent
-    
-    var replyDetails: TimelineItemReplyDetails?
     
     var properties = RoomTimelineItemProperties()
     

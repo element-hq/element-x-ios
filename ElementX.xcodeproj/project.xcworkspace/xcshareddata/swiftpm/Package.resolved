@@ -33,7 +33,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "500e734ae918dc93dde7b1b50e5599b9807d4285"
+        "revision" : "0251fe8abe8f7baa8560febfc3f1b67e3bf7894c"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/emojibase-bindings",
       "state" : {
-        "revision" : "d4682a2ad5e68cfd2f41544c3c6c970b4d524bd1",
-        "version" : "1.3.3"
+        "revision" : "81e483cff9827fdbc8138b9ec9a409c20cd9850c",
+        "version" : "1.4.1"
       }
     },
     {
@@ -185,8 +185,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "ed17777f10cca2282b2331e6e61f0b1c281f52ea",
-        "version" : "25.4.8"
+        "revision" : "1f43ea9360f43ecd3d6674048265823709c96f1a",
+        "version" : "25.4.14"
       }
     },
     {

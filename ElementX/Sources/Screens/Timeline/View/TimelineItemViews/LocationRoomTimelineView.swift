@@ -98,7 +98,6 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
-                                                     isThreaded: false,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description")))
 
@@ -107,7 +106,6 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
-                                                     isThreaded: false,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description")))
@@ -116,12 +114,12 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
-                                                     isThreaded: true,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description"),
-                                                     replyDetails: .loaded(sender: .init(id: "Someone"),
-                                                                           eventID: "123",
-                                                                           eventContent: .message(.text(.init(body: "The thread content goes 'ere."))))))
+                                                     properties: .init(replyDetails: .loaded(sender: .init(id: "Someone"),
+                                                                                             eventID: "123",
+                                                                                             eventContent: .message(.text(.init(body: "The thread content goes 'ere.")))),
+                                                                       isThreaded: true)))
     }
 }

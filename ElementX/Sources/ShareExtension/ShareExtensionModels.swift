@@ -22,9 +22,30 @@ enum ShareExtensionPayload: Hashable, Codable {
             roomID
         }
     }
+    
+    /// Moves any files in the payload from our `appGroupTemporaryDirectory` to the
+    /// system's `temporaryDirectory` returning a modified payload with updated file URLs.
+    func withDefaultTemporaryDirectory() throws -> Self {
+        switch self {
+        case .mediaFile(let roomID, let mediaFile):
+            let path = mediaFile.url.path.replacing(URL.appGroupTemporaryDirectory.path, with: "").trimmingPrefix("/")
+            let newURL = URL.temporaryDirectory.appending(path: path)
+            
+            try? FileManager.default.removeItem(at: newURL)
+            try FileManager.default.moveItem(at: mediaFile.url, to: newURL)
+            
+            return .mediaFile(roomID: roomID, mediaFile: mediaFile.replacingURL(with: newURL))
+        case .text:
+            return self
+        }
+    }
 }
 
 struct ShareExtensionMediaFile: Hashable, Codable {
     let url: URL
     let suggestedName: String?
+    
+    fileprivate func replacingURL(with newURL: URL) -> ShareExtensionMediaFile {
+        ShareExtensionMediaFile(url: newURL, suggestedName: suggestedName)
+    }
 }

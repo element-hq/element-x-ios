@@ -81,7 +81,7 @@ struct SessionVerificationScreen: View {
                 Button(L10n.actionLearnMore) {
                     UIApplication.shared.open(context.viewState.learnMoreURL)
                 }
-                .buttonStyle(.compound(.plain))
+                .buttonStyle(.compound(.tertiary, size: .small))
             default:
                 EmptyView()
             }
@@ -132,7 +132,7 @@ struct SessionVerificationScreen: View {
                     Button(L10n.actionIgnore) {
                         context.send(viewAction: .ignoreVerificationRequest)
                     }
-                    .buttonStyle(.compound(.plain))
+                    .buttonStyle(.compound(.tertiary))
                     .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.ignoreVerificationRequest)
                 }
             }
@@ -158,7 +158,7 @@ struct SessionVerificationScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.startSasVerification)
         
         case .showingChallenge:
-            VStack(spacing: 32) {
+            VStack(spacing: 16) {
                 Button(L10n.screenSessionVerificationTheyMatch) {
                     context.send(viewAction: .accept)
                 }
@@ -168,7 +168,7 @@ struct SessionVerificationScreen: View {
                 Button(L10n.screenSessionVerificationTheyDontMatch) {
                     context.send(viewAction: .decline)
                 }
-                .buttonStyle(.compound(.plain))
+                .buttonStyle(.compound(.tertiary))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.declineChallenge)
             }
             

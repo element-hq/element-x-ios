@@ -109,4 +109,9 @@ extension EventBasedTimelineItemProtocol {
         guard let messageBasedItem = self as? EventBasedMessageTimelineItemProtocol else { return false }
         return messageBasedItem.hasMediaCaption
     }
+    
+    var isGiphySource: Bool {
+        guard let messageBasedItem = self as? EventBasedMessageTimelineItemProtocol else { return false }
+        return messageBasedItem.isGiphySource
+    }
 }

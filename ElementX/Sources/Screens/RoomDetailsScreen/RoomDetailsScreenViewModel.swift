@@ -364,7 +364,19 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                                      message: L10n.screenRoomDetailsErrorMuting)
             }
         }
+        await notifyRoomNotificationModeUpdated()
         state.isProcessingMuteToggleAction = false
+    }
+    
+    private func notifyRoomNotificationModeUpdated() async {
+        do {
+            let notificationMode = try await notificationSettingsProxy.getNotificationSettings(roomId: roomProxy.id,
+                                                                                               isEncrypted: roomProxy.infoPublisher.value.isEncrypted,
+                                                                                               isOneToOne: roomProxy.infoPublisher.value.activeMembersCount == 2)
+            clientProxy.roomNotificationModeUpdated(roomId: roomProxy.id, notificationMode: notificationMode.mode)
+        } catch {
+            MXLog.error("Failed to notify about updated notification mode with error: \(error)")
+        }
     }
     
     private func toggleFavourite(_ isFavourite: Bool) async {

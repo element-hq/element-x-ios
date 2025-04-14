@@ -14,14 +14,11 @@ struct ImageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let isOutgoing: Bool
     let isEditable: Bool
     let canBeRepliedTo: Bool
-    let isThreaded: Bool
     var shouldBoost = false
     
     let sender: TimelineItemSender
     
     let content: ImageRoomTimelineItemContent
-    
-    var replyDetails: TimelineItemReplyDetails?
     
     var properties = RoomTimelineItemProperties()
     

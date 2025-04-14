@@ -460,7 +460,13 @@ class TimelineController: TimelineControllerProtocol {
                                                activeTimeline: TimelineProxyProtocol) -> RoomTimelineItemProtocol? {
         switch itemProxy {
         case .event(let eventTimelineItem):
-            let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem, isDM: isDM)
+            var eventRepliedTo: EventTimelineItemProxy? = nil
+//            if case .msgLike(let content) = eventTimelineItem.content, let eventId = content.inReplyTo?.eventId() {
+//                eventRepliedTo = activeTimeline.getTimelineItemByEventId(eventId)
+//            }
+            let timelineItem = timelineItemFactory.buildTimelineItem(for: eventTimelineItem,
+                                                                     isDM: isDM,
+                                                                     repliedToEvent: eventRepliedTo)
             
             if let messageTimelineItem = timelineItem as? EventBasedMessageTimelineItemProtocol {
                 // Avoid fetching this over and over again as it changes states if it keeps failing to load
@@ -493,7 +499,7 @@ class TimelineController: TimelineControllerProtocol {
             return
         }
 
-        switch timelineItem.replyDetails {
+        switch timelineItem.properties.replyDetails {
         case .notLoaded:
             activeTimeline.fetchDetails(for: eventID)
         case .error:

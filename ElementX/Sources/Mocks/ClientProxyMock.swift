@@ -76,8 +76,6 @@ extension ClientProxyMock {
         recentlyVisitedRoomsReturnValue = .success([])
         recentConversationCounterpartsReturnValue = []
         
-        getElementWellKnownReturnValue = .success(nil)
-        
         loadMediaContentForSourceThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
         loadMediaFileForSourceFilenameThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)

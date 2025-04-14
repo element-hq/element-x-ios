@@ -12,8 +12,9 @@ import MatrixRustSDK
 struct EventTimelineItemSDKMockConfiguration {
     var eventID: String = UUID().uuidString
     var sender = ""
+    var senderProfile: ProfileDetails?
     var isOwn = false
-    var content: TimelineItemContent = .redactedMessage
+    var content: TimelineItemContent = .msgLike(content: .init(kind: .redacted, reactions: [], threadRoot: nil, inReplyTo: nil))
 }
 
 extension EventTimelineItem {
@@ -21,12 +22,11 @@ extension EventTimelineItem {
         self.init(isRemote: true,
                   eventOrTransactionId: .eventId(eventId: configuration.eventID),
                   sender: configuration.sender,
-                  senderProfile: .pending,
+                  senderProfile: configuration.senderProfile ?? .pending,
                   isOwn: configuration.isOwn,
                   isEditable: false,
                   content: configuration.content,
                   timestamp: 0,
-                  reactions: [],
                   localSendState: nil,
                   localCreatedAt: nil,
                   readReceipts: [:],
@@ -39,12 +39,13 @@ extension EventTimelineItem {
         let body = Lorem.sentences(Int.random(in: 1...5))
         let messageType = MessageType.text(content: .init(body: body, formatted: nil))
         
-        let content = TimelineItemContent.message(content: .init(msgType: messageType,
-                                                                 body: body,
-                                                                 inReplyTo: nil,
+        let content = TimelineItemContent.msgLike(content: .init(kind: .message(content: .init(msgType: messageType,
+                                                                                               body: body,
+                                                                                               isEdited: false,
+                                                                                               mentions: nil)),
+                                                                 reactions: [],
                                                                  threadRoot: nil,
-                                                                 isEdited: false,
-                                                                 mentions: nil))
+                                                                 inReplyTo: nil))
         
         return .init(configuration: .init(content: content))
     }

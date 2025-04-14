@@ -15,19 +15,21 @@ extension AuthenticationClientBuilderMock {
             "example.com": ClientSDKMock(configuration: .init(serverAddress: "example.com",
                                                               homeserverURL: "https://matrix.example.com",
                                                               slidingSyncVersion: .native,
-                                                              supportsPasswordLogin: true,
-                                                              elementWellKnown: "")),
+                                                              oidcLoginURL: nil,
+                                                              supportsOIDCCreatePrompt: false,
+                                                              supportsPasswordLogin: true)),
             "company.com": ClientSDKMock(configuration: .init(serverAddress: "company.com",
                                                               homeserverURL: "https://matrix.company.com",
                                                               slidingSyncVersion: .native,
                                                               oidcLoginURL: "https://auth.company.com/oidc",
-                                                              supportsPasswordLogin: false,
-                                                              elementWellKnown: "")),
+                                                              supportsOIDCCreatePrompt: false,
+                                                              supportsPasswordLogin: false)),
             "server.net": ClientSDKMock(configuration: .init(serverAddress: "server.net",
                                                              homeserverURL: "https://matrix.example.com",
                                                              slidingSyncVersion: .native,
-                                                             supportsPasswordLogin: false,
-                                                             elementWellKnown: ""))
+                                                             oidcLoginURL: nil,
+                                                             supportsOIDCCreatePrompt: false,
+                                                             supportsPasswordLogin: false))
         ]
         var qrCodeClient = ClientSDKMock(configuration: .init())
     }

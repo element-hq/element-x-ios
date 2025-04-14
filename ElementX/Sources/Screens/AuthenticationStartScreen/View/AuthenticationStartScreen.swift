@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 /// The screen shown at the beginning of the onboarding flow.
@@ -102,12 +103,11 @@ struct AuthenticationStartScreen: View {
             .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.signIn)
             
-            if context.viewState.isWebRegistrationEnabled {
+            if context.viewState.showCreateAccountButton {
                 Button { context.send(viewAction: .register) } label: {
                     Text(L10n.screenCreateAccountTitle)
-                        .padding(14)
                 }
-                .buttonStyle(.compound(.plain))
+                .buttonStyle(.compound(.tertiary))
             }
         }
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
@@ -129,7 +129,7 @@ struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel(isBugReportServiceEnabled: Bool = true) -> AuthenticationStartScreenViewModel {
-        AuthenticationStartScreenViewModel(webRegistrationEnabled: true,
+        AuthenticationStartScreenViewModel(showCreateAccountButton: true,
                                            isBugReportServiceEnabled: isBugReportServiceEnabled)
     }
 }

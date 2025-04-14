@@ -28,7 +28,7 @@ enum AuthenticationStartScreenViewModelAction {
 struct AuthenticationStartScreenViewState: BindableState {
     let VALID_INVITE_CODE_LENGTH = 6
     
-    let isWebRegistrationEnabled: Bool
+    let showCreateAccountButton: Bool
     let isQRCodeLoginEnabled: Bool
     let isBugReportServiceEnabled: Bool
     

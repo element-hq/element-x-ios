@@ -268,11 +268,11 @@ struct HomeScreenRoom: Identifiable, Equatable {
         return nil
     }
     
-    let badges: Badges
+    var badges: Badges
     struct Badges: Equatable {
         let isDotShown: Bool
         let isMentionShown: Bool
-        let isMuteShown: Bool
+        var isMuteShown: Bool
         let isCallShown: Bool
     }
     
@@ -384,7 +384,7 @@ extension HomeScreenRoom {
         
         let hasUnreadMessages = hideUnreadMessagesBadge ? false : summary.hasUnreadMessages
         let isUnseenInvite = summary.joinRequestType?.isInvite == true && !seenInvites.contains(roomID)
-        
+
         let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
         let isMuteShown = summary.isMuted

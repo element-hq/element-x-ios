@@ -33,7 +33,7 @@ struct TimelineItemMenu: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 0.0) {
-                    if !actions.reactions.isEmpty {
+                    if !actions.reactions.isEmpty, !item.isGiphySource {
                         reactionsSection
                             .padding(.bottom, 8.0)
 

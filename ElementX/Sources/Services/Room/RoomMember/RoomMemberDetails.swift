@@ -21,6 +21,7 @@ struct RoomMemberDetails: Identifiable, Hashable {
     
     enum Role { case administrator, moderator, user }
     let role: Role
+    let powerLevel: Int
     
     func matches(searchQuery: String) -> Bool {
         guard !searchQuery.isEmpty else { return true }
@@ -40,6 +41,7 @@ extension RoomMemberDetails {
         isIgnored = proxy.isIgnored
         isBanned = proxy.membership == .ban
         role = .init(proxy.role)
+        powerLevel = proxy.powerLevel
     }
 }
 

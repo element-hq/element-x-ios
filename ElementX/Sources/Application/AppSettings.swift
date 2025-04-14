@@ -18,7 +18,7 @@ protocol CommonSettingsProtocol {
     var traceLogPacks: Set<TraceLogPack> { get }
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var hideInviteAvatars: Bool { get }
-    var hideTimelineMedia: Bool { get }
+    var timelineMediaVisibility: TimelineMediaVisibility { get }
 }
 
 /// Store Element specific app settings.
@@ -47,7 +47,7 @@ final class AppSettings {
         case sharePresence
         case hideUnreadMessagesBadge
         case hideInviteAvatars
-        case hideTimelineMedia
+        case timelineMediaVisibility
         
         case elementCallBaseURLOverride
         
@@ -213,8 +213,10 @@ final class AppSettings {
                                                                      contacts: [supportEmailAddress],
                                                                      staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString })
     
-    /// A temporary hack to allow registration on matrix.org until MAS is deployed.
-    let webRegistrationEnabled = true
+    /// Whether or not the Create Account button is shown on the start screen.
+    ///
+    /// **Note:** Setting this to false doesn't prevent someone from creating an account when the selected homeserver's MAS allows registration.
+    let showCreateAccountButton = true
     
     // MARK: - Notifications
     
@@ -357,8 +359,8 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.hideInviteAvatars, defaultValue: false, storageType: .userDefaults(store))
     var hideInviteAvatars
     
-    @UserPreference(key: UserDefaultsKeys.hideTimelineMedia, defaultValue: false, storageType: .userDefaults(store))
-    var hideTimelineMedia
+    @UserPreference(key: UserDefaultsKeys.timelineMediaVisibility, defaultValue: TimelineMediaVisibility.always, storageType: .userDefaults(store))
+    var timelineMediaVisibility
     
     // MARK: - ZERO Access Token
     
@@ -376,3 +378,9 @@ final class AppSettings {
 }
 
 extension AppSettings: CommonSettingsProtocol { }
+
+enum TimelineMediaVisibility: Codable {
+    case always
+    case privateOnly
+    case never
+}

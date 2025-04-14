@@ -20,9 +20,7 @@ enum EventBasedMessageTimelineItemContentType: Hashable {
 }
 
 protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {
-    var replyDetails: TimelineItemReplyDetails? { get }
     var contentType: EventBasedMessageTimelineItemContentType { get }
-    var isThreaded: Bool { get }
 }
 
 extension EventBasedMessageTimelineItemProtocol {
@@ -50,7 +48,19 @@ extension EventBasedMessageTimelineItemProtocol {
         }
     }
     
+    var giphySource: String? {
+        switch contentType {
+        case .image(let content):
+            content.imageURL
+        default: nil
+        }
+    }
+    
     var hasMediaCaption: Bool {
         mediaCaption != nil
+    }
+    
+    var isGiphySource: Bool {
+        giphySource != nil
     }
 }

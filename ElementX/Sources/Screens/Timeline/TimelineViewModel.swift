@@ -42,6 +42,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private var currentUserProxy: RoomMemberProxyProtocol?
+    
     private var paginateBackwardsTask: Task<Void, Never>?
     private var paginateForwardsTask: Task<Void, Never>?
 
@@ -86,13 +88,21 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 timelineControllerFactory: timelineControllerFactory,
                                                                 clientProxy: clientProxy)
         
+        let hideTimelineMedia = switch appSettings.timelineMediaVisibility {
+        case .always:
+            false
+        case .privateOnly:
+            !roomProxy.infoPublisher.value.isPrivate
+        case .never:
+            true
+        }
         super.init(initialViewState: TimelineViewState(timelineKind: timelineController.timelineKind,
                                                        roomID: roomProxy.id,
                                                        isDirectOneToOneRoom: roomProxy.isDirectOneToOneRoom,
                                                        timelineState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
-                                                       hideTimelineMedia: appSettings.hideTimelineMedia,
+                                                       hideTimelineMedia: hideTimelineMedia,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
                                                        mapTilerConfiguration: appSettings.mapTilerConfiguration,
@@ -173,7 +183,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .handleTimelineItemMenuAction(let itemID, let action):
             timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
         case .tappedOnSenderDetails(userID: let userID):
-            actionsSubject.send(.tappedOnSenderDetails(userID: userID))
+            handleTappedOnSenderDetails(userID: userID)
         case .displayEmojiPicker(let itemID):
             timelineInteractionHandler.displayEmojiPicker(for: itemID)
         case .displayReactionSummary(let itemID, let key):
@@ -257,6 +267,41 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     // MARK: - Private
+    
+    private func handleTappedOnSenderDetails(userID: String) {
+        // We also need to make sure the user is in the joined state, otherwise we just show the details.
+        guard let memberProxy = roomProxy.membersPublisher.value.first(where: { $0.userID == userID && $0.membership == .join }),
+              let currentUserProxy,
+              currentUserProxy.powerLevel > memberProxy.powerLevel else {
+            actionsSubject.send(.displaySenderDetails(userID: userID))
+            return
+        }
+        
+        if state.canCurrentUserBan || state.canCurrentUserKick {
+            let member = RoomMemberDetails(withProxy: memberProxy)
+            let manageMemeberViewModel = ManageRoomMemberSheetViewModel(member: member,
+                                                                        canKick: state.canCurrentUserKick,
+                                                                        canBan: state.canCurrentUserBan,
+                                                                        roomProxy: roomProxy,
+                                                                        userIndicatorController: userIndicatorController,
+                                                                        analyticsService: analyticsService,
+                                                                        mediaProvider: mediaProvider)
+            manageMemeberViewModel.actions.sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .dismiss(let shouldShowDetails):
+                    state.bindings.manageMemberViewModel = nil
+                    if shouldShowDetails {
+                        actionsSubject.send(.displaySenderDetails(userID: userID))
+                    }
+                }
+            }
+            .store(in: &cancellables)
+            state.bindings.manageMemberViewModel = manageMemeberViewModel
+        } else {
+            actionsSubject.send(.displaySenderDetails(userID: userID))
+        }
+    }
     
     private func focusLive() {
         timelineController.focusLive()
@@ -348,6 +393,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
         state.members = members.reduce(into: [String: RoomMemberState]()) { dictionary, member in
             dictionary[member.userID] = RoomMemberState(displayName: member.displayName, avatarURL: member.avatarURL)
+            if member.userID == roomProxy.ownUserID {
+                currentUserProxy = member
+            }
         }
     }
     
@@ -368,6 +416,18 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             state.canCurrentUserPin = value
         } else {
             state.canCurrentUserPin = false
+        }
+        
+        if case let .success(value) = await roomProxy.canUserKick(userID: roomProxy.ownUserID) {
+            state.canCurrentUserKick = value
+        } else {
+            state.canCurrentUserKick = false
+        }
+        
+        if case let .success(value) = await roomProxy.canUserBan(userID: roomProxy.ownUserID) {
+            state.canCurrentUserBan = value
+        } else {
+            state.canCurrentUserBan = false
         }
     }
     
@@ -467,7 +527,23 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .weakAssign(to: \.state.isViewSourceEnabled, on: self)
             .store(in: &cancellables)
         
-        appSettings.$hideTimelineMedia
+        appSettings.$timelineMediaVisibility
+            .removeDuplicates()
+            .flatMap { [weak self] timelineMediaVisibility -> AnyPublisher<Bool, Never> in
+                switch timelineMediaVisibility {
+                case .always:
+                    return Just(false).eraseToAnyPublisher()
+                case .never:
+                    return Just(true).eraseToAnyPublisher()
+                case .privateOnly:
+                    guard let self else { return Just(false).eraseToAnyPublisher() }
+                    return roomProxy.infoPublisher
+                        .map { !$0.isPrivate }
+                        .removeDuplicates()
+                        .receive(on: DispatchQueue.main)
+                        .eraseToAnyPublisher()
+                }
+            }
             .weakAssign(to: \.state.hideTimelineMedia, on: self)
             .store(in: &cancellables)
     }
@@ -898,7 +974,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         userIndicatorController.retractIndicatorWithId(Constants.focusTimelineToastIndicatorID)
     }
     
-    private func displayAlert(_ type: RoomScreenAlertInfoType) {
+    private func displayAlert(_ type: TimelineAlertInfoType) {
         switch type {
         case .audioRecodingPermissionError:
             state.bindings.alertInfo = .init(id: type,

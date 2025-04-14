@@ -8,7 +8,7 @@
         "output": "ElementX/Resources/Localizations/${iosLprojFolder}/Localizable.strings",
         "excludeKeys": ["REGEX:.*_android"],
         "conditions": [
-          "equals: ${languageCode}, en | equals: ${file}, content.json"
+          "equals: ${langIosStrings}, en | equals: ${file}, content.json"
         ],
         "filterPlurals": true,
         "replacements": {
@@ -24,7 +24,7 @@
         "output": "ElementX/Resources/Localizations/${iosLprojFolder}/Localizable.stringsdict",
         "excludeKeys": ["REGEX:.*_android"],
         "conditions": [
-          "equals: ${languageCode}, en | equals: ${file}, content.json"
+          "equals: ${langIosStrings}, en | equals: ${file}, content.json"
         ],
         "replacements": {
           "%s": "%@",
@@ -40,7 +40,7 @@
         "changeExtension": "strings",
         "output": "ElementX/Resources/Localizations/${iosLprojFolder}/${file}",
         "conditions": [
-          "equals: ${languageCode}, en | equals: ${file}, InfoPlist.json"
+          "equals: ${langIosStrings}, en | equals: ${file}, InfoPlist.json"
         ]
       },
 
@@ -52,7 +52,7 @@
         "output": "ElementX/Resources/Localizations/${iosLprojFolder}/Localizable.strings",
         "excludeKeys": ["REGEX:.*_android"],
         "conditions": [
-          "!equals: ${languageCode}, en | equals: ${file}, content.json"
+          "equals: ${file}, content.json"
         ],
         "filterPlurals": true,
         "replacements": {
@@ -69,7 +69,7 @@
         "output": "ElementX/Resources/Localizations/${iosLprojFolder}/Localizable.stringsdict",
         "excludeKeys": ["REGEX:.*_android"],
         "conditions": [
-          "!equals: ${languageCode}, en | equals: ${file}, content.json"
+          "equals: ${file}, content.json"
         ],
         "replacements": {
           "%s": "%@",
@@ -86,7 +86,7 @@
         "changeExtension": "strings",
         "output": "ElementX/Resources/Localizations/${iosLprojFolder}/${file}",
         "conditions": [
-          "!equals: ${languageCode}, en | equals: ${file}, InfoPlist.json"
+          "equals: ${file}, InfoPlist.json"
         ]
       }
     ]

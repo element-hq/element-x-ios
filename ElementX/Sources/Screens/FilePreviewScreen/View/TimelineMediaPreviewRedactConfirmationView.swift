@@ -103,13 +103,10 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
             }
             .buttonStyle(.compound(.primary))
             
-            Button {
+            Button(L10n.actionCancel) {
                 dismiss()
-            } label: {
-                Text(L10n.actionCancel)
-                    .padding(.vertical, 14)
             }
-            .buttonStyle(.compound(.plain))
+            .buttonStyle(.compound(.tertiary))
         }
         .padding(.bottom, 16)
         .padding(.horizontal, 16)
@@ -135,7 +132,6 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
                                          isOutgoing: false,
                                          isEditable: true,
                                          canBeRepliedTo: true,
-                                         isThreaded: false,
                                          sender: .init(id: "@alice:matrix.org",
                                                        displayName: "Alice",
                                                        avatarURL: .mockMXCUserAvatar),

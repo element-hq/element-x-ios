@@ -48,7 +48,7 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
             guard state.window != window else { return }
             Task { state.window = window }
         case .confirm:
-            Task { await configureAndContinue() }
+            Task { await confirmHomeserver() }
         case .changeServer:
             actionsSubject.send(.changeServer)
         }
@@ -56,13 +56,13 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
     
     // MARK: - Private
     
-    private func configureAndContinue() async {
+    private func confirmHomeserver() async {
         let homeserver = authenticationService.homeserver.value
         
         // If the login mode is unknown, the service hasn't be configured and we need to do it now.
         // Otherwise we can continue the flow as server selection has been performed and succeeded.
         guard homeserver.loginMode == .unknown || authenticationService.flow != authenticationFlow else {
-            actionsSubject.send(.confirm)
+            await fetchLoginURLIfNeededAndContinue()
             return
         }
         
@@ -71,7 +71,7 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
         
         switch await authenticationService.configure(for: homeserver.address, flow: authenticationFlow) {
         case .success:
-            actionsSubject.send(.confirm)
+            await fetchLoginURLIfNeededAndContinue()
         case .failure(let error):
             switch error {
             case .invalidServer, .invalidHomeserverAddress:
@@ -90,14 +90,39 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
         }
     }
     
-    private func startLoading(label: String = L10n.commonLoading) {
-        userIndicatorController.submitIndicator(UserIndicator(type: .modal,
-                                                              title: label,
+    private func fetchLoginURLIfNeededAndContinue() async {
+        guard authenticationService.homeserver.value.loginMode.supportsOIDCFlow else {
+            actionsSubject.send(.continueWithPassword)
+            return
+        }
+        
+        guard let window = state.window else {
+            displayError(.unknownError)
+            return
+        }
+        
+        startLoading() // Uses the same ID, so no need to worry if the indicator already exists
+        defer { stopLoading() }
+        
+        switch await authenticationService.urlForOIDCLogin() {
+        case .success(let oidcData):
+            actionsSubject.send(.continueWithOIDC(data: oidcData, window: window))
+        case .failure:
+            displayError(.unknownError)
+        }
+    }
+    
+    private let loadingIndicatorID = "\(ServerConfirmationScreenViewModel.self)-Loading"
+    
+    private func startLoading() {
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorID,
+                                                              type: .modal,
+                                                              title: L10n.commonLoading,
                                                               persistent: true))
     }
     
     private func stopLoading() {
-        userIndicatorController.retractAllIndicators()
+        userIndicatorController.retractIndicatorWithId(loadingIndicatorID)
     }
     
     private func displayError(_ type: ServerConfirmationScreenAlert) {

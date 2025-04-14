@@ -117,7 +117,7 @@ struct LandingScreen: View {
 }
 
 #Preview {
-    let viewModel = AuthenticationStartScreenViewModel(webRegistrationEnabled: false, isBugReportServiceEnabled: false)
+    let viewModel = AuthenticationStartScreenViewModel(showCreateAccountButton: false, isBugReportServiceEnabled: false)
     
     LandingScreen(context: viewModel.context)
 }

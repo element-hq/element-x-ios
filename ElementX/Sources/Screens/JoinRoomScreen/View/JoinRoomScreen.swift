@@ -276,13 +276,10 @@ struct JoinRoomScreen: View {
     @ViewBuilder
     var declineAndBlockButton: some View {
         if let inviter = context.viewState.roomDetails?.inviter {
-            Button(role: .destructive) {
+            Button(L10n.screenJoinRoomDeclineAndBlockButtonTitle, role: .destructive) {
                 context.send(viewAction: .declineInviteAndBlock(userID: inviter.id))
-            } label: {
-                Text(L10n.screenJoinRoomDeclineAndBlockButtonTitle)
-                    .padding(.vertical, 14)
             }
-            .buttonStyle(.compound(.plain))
+            .buttonStyle(.compound(.tertiary))
         }
     }
     

@@ -191,8 +191,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func isAliasAvailable(_ alias: String) async -> Result<Bool, ClientProxyError>
     
-    func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError>
-    
     @discardableResult func clearCaches() async -> Result<Void, ClientProxyError>
 
     // MARK: - Ignored users
@@ -221,6 +219,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>
     
     func verifyUserPassword(_ password: String) async -> Result<Void, ClientProxyError>
+    
+    func setRoomNotificationModeProtocol(_ listener: RoomNotificationModeUpdatedProtocol)
+    
+    func roomNotificationModeUpdated(roomId: String, notificationMode: RoomNotificationModeProxy)
     
     // MARK: - Zero Rewards
     

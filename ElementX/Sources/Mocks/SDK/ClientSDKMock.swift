@@ -15,9 +15,9 @@ extension ClientSDKMock {
         var serverAddress = "matrix.org"
         var homeserverURL = "https://matrix-client.matrix.org"
         var slidingSyncVersion = SlidingSyncVersion.native
-        var oidcLoginURL: String?
+        var oidcLoginURL: String? = "https://account.matrix.org/authorize"
+        var supportsOIDCCreatePrompt = true
         var supportsPasswordLogin = true
-        var elementWellKnown = "{\"registration_helper_url\":\"https://develop.element.io/#/mobile_register\"}"
         var validCredentials = (username: "alice", password: "12345678")
         
         // MARK: Session
@@ -41,7 +41,6 @@ extension ClientSDKMock {
         slidingSyncVersionReturnValue = configuration.slidingSyncVersion
         userIdServerNameThrowableError = MockError.generic
         serverReturnValue = "https://\(configuration.serverAddress)"
-        getUrlUrlReturnValue = configuration.elementWellKnown
         urlForOidcOidcConfigurationPromptReturnValue = OAuthAuthorizationDataSDKMock(configuration: configuration)
         loginUsernamePasswordInitialDeviceNameDeviceIdClosure = { username, password, _, _ in
             guard username == configuration.validCredentials.username,
@@ -62,6 +61,11 @@ extension HomeserverLoginDetailsSDKMock {
         slidingSyncVersionReturnValue = configuration.slidingSyncVersion
         supportsPasswordLoginReturnValue = configuration.supportsPasswordLogin
         supportsOidcLoginReturnValue = configuration.oidcLoginURL != nil
+        supportedOidcPromptsReturnValue = switch (configuration.oidcLoginURL, configuration.supportsOIDCCreatePrompt) {
+        case (.none, _): []
+        case (.some, true): [.consent, .create]
+        case (.some, false): [.consent]
+        }
         urlReturnValue = configuration.homeserverURL
     }
 }

@@ -168,6 +168,8 @@ class ClientProxy: ClientProxyProtocol {
     
     private let zeroApiProxy: ZeroApiProxyProtocol
     
+    private var roomNotificationModeUpdateProtocol: RoomNotificationModeUpdatedProtocol? = nil
+    
     init(client: ClientProtocol,
          needsSlidingSyncMigration: Bool,
          networkMonitor: NetworkMonitorProtocol,
@@ -250,6 +252,19 @@ class ClientProxy: ClientProxyProtocol {
                 }
             }
             .store(in: &cancellables)
+        
+        Task {
+            do {
+                try await client.setMediaRetentionPolicy(policy: .init(maxCacheSize: nil,
+                                                                       maxFileSize: nil,
+                                                                       // 30 days in seconds
+                                                                       lastAccessExpiry: 30 * 24 * 60 * 60,
+                                                                       // 1 day in seconds
+                                                                       cleanupFrequency: 24 * 60 * 60))
+            } catch {
+                MXLog.error("Failed setting media retention policy with error: \(error)")
+            }
+        }
         
         _ = await loadZeroMessengerInvite()
     }
@@ -464,7 +479,7 @@ class ClientProxy: ClientProxyProtocol {
             await waitForRoomToSync(roomID: roomID, timeout: .seconds(30))
             
             return .success(())
-        } catch ClientError.MatrixApi(.forbidden, _, _) {
+        } catch ClientError.MatrixApi(.forbidden, _, _, _) {
             MXLog.error("Failed joining roomAlias: \(roomID) forbidden")
             return .failure(.forbiddenAccess)
         } catch {
@@ -480,7 +495,7 @@ class ClientProxy: ClientProxyProtocol {
             await waitForRoomToSync(roomID: room.id(), timeout: .seconds(30))
             
             return .success(())
-        } catch ClientError.MatrixApi(.forbidden, _, _) {
+        } catch ClientError.MatrixApi(.forbidden, _, _, _) {
             MXLog.error("Failed joining roomAlias: \(roomAlias) forbidden")
             return .failure(.forbiddenAccess)
         } catch {
@@ -521,7 +536,7 @@ class ClientProxy: ClientProxyProtocol {
             let data = try Data(contentsOf: media.url)
             let matrixUrl = try await client.uploadMedia(mimeType: mimeType, data: data, progressWatcher: nil)
             return .success(matrixUrl)
-        } catch let ClientError.MatrixApi(errorKind, _, _) {
+        } catch let ClientError.MatrixApi(errorKind, _, _, _) {
             MXLog.error("Failed uploading media with error kind: \(errorKind)")
             return .failure(ClientProxyError.failedUploadingMedia(errorKind))
         } catch {
@@ -565,7 +580,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)
             return try .success(RoomPreviewProxy(roomId: identifier, roomPreview: roomPreview, zeroUsersService: zeroApiProxy.matrixUsersService))
-        } catch ClientError.MatrixApi(.forbidden, _, _) {
+        } catch ClientError.MatrixApi(.forbidden, _, _, _) {
             MXLog.error("Failed retrieving preview for room: \(identifier) is private")
             return .failure(.roomPreviewIsPrivate)
         } catch {
@@ -783,10 +798,6 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed checking if alias: \(alias) is available with error: \(error)")
             return .failure(.sdkError(error))
         }
-    }
-    
-    func getElementWellKnown() async -> Result<ElementWellKnown?, ClientProxyError> {
-        await client.getElementWellKnown().map(ElementWellKnown.init)
     }
     
     func clearCaches() async -> Result<Void, ClientProxyError> {
@@ -1415,6 +1426,14 @@ class ClientProxy: ClientProxyProtocol {
             zeroCurrentUserSubject.send(currentUser!)
         }
         return currentUser
+    }
+    
+    func setRoomNotificationModeProtocol(_ listener: any RoomNotificationModeUpdatedProtocol) {
+        roomNotificationModeUpdateProtocol = listener
+    }
+    
+    func roomNotificationModeUpdated(roomId: String, notificationMode: RoomNotificationModeProxy) {
+        roomNotificationModeUpdateProtocol?.onRoomNotificationModeUpdated(for: roomId, mode: notificationMode)
     }
 }
 

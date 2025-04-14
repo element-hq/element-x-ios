@@ -121,7 +121,7 @@ struct HomeScreenRoomCell: View {
                 
                 if room.badges.isDotShown {
                     Circle()
-                        .frame(width: 12, height: 12)
+                        .frame(width: 6, height: 6)
                         .foregroundStyle(.zero.bgAccentRest)
 //                    ZStack {
 //                        Circle()

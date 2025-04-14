@@ -106,7 +106,9 @@ struct NotificationContentBuilder {
         let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
         notification.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName).characters)
         
-        guard !settings.hideTimelineMedia else { return notification }
+        guard settings.timelineMediaVisibility == .always ||
+            (settings.timelineMediaVisibility == .privateOnly && notificationItem.isRoomPrivate)
+        else { return notification }
         
         switch messageType {
         case .image(content: let content):

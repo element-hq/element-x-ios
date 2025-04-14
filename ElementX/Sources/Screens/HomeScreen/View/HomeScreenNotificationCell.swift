@@ -55,6 +55,7 @@ struct HomeScreenNotificationCell: View {
             
             // Divider()
         }
+        .contentShape(Rectangle())
         .onTapGesture {
             context.send(viewAction: .selectRoom(roomIdentifier: room.id))
         }
