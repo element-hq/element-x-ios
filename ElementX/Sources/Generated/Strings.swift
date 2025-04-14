@@ -236,6 +236,8 @@ internal enum L10n {
   internal static var actionReportBug: String { return L10n.tr("Localizable", "action_report_bug") }
   /// Report content
   internal static var actionReportContent: String { return L10n.tr("Localizable", "action_report_content") }
+  /// Report conversation
+  internal static var actionReportDm: String { return L10n.tr("Localizable", "action_report_dm") }
   /// Report room
   internal static var actionReportRoom: String { return L10n.tr("Localizable", "action_report_room") }
   /// Reset

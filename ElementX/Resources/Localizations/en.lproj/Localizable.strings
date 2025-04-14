@@ -99,6 +99,7 @@
 "action_report" = "Report";
 "action_report_bug" = "Report bug";
 "action_report_content" = "Report content";
+"action_report_dm" = "Report conversation";
 "action_report_room" = "Report room";
 "action_reset" = "Reset";
 "action_reset_identity" = "Reset identity";
