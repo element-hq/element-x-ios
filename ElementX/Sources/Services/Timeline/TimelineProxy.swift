@@ -354,6 +354,33 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         return .success(())
     }
+
+    func sendTranscriptEvent(transcript: String, relatedEventId: String? = nil) async -> Result<Void, TimelineProxyError> {
+        // Create a custom message type
+        let messageType = MessageType.other(msgtype: "m.voyzme.raw_stt", body: transcript)
+        
+        do {
+            // Use the Timeline API to create the message content
+            guard let messageContent = try timeline.createMessageContent(msgType: messageType) else {
+                return .failure(.sdkError(NSError(domain: "CustomEventError", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to create message content"])))
+            }
+            
+            // If we have a related event ID, use sendWithReference to create an m.reference relation
+            if let relatedEventId = relatedEventId {
+                try await timeline.sendWithReference(msg: messageContent, eventId: relatedEventId)
+                MXLog.info("Finished sending transcript event with reference to: \(relatedEventId)")
+            } else {
+                // Otherwise, just send the message content
+                _ = try await timeline.send(msg: messageContent)
+                MXLog.info("Finished sending transcript event")
+            }
+            
+            return .success(())
+        } catch {
+            MXLog.error("Failed to send transcript event: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
     
     func sendVoiceMessage(url: URL,
                           audioInfo: AudioInfo,
@@ -431,6 +458,16 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Finished sending message content")
         
         return .success(())
+    }
+    
+    /// Sends a message with an m.reference relation to another event.
+    /// This is different from a reply (which creates an m.in_reply_to relation).
+    /// @param messageContent The message content to send
+    /// @param eventId The ID of the event to reference
+    func sendWithReference(msg messageContent: RoomMessageEventContentWithoutRelation, eventId: String) async throws {
+        MXLog.info("Sending message with reference to event: \(eventId)")
+        _ = try await timeline.sendWithReference(msg: messageContent, eventId: eventId)
+        MXLog.info("Finished sending message with reference")
     }
     
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError> {

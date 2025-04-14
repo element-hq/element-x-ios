@@ -20139,6 +20139,81 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline {
         }
     }
 
+    //MARK: - sendWithReference
+
+    open var sendWithReferenceMsgEventIdThrowableError: Error?
+    var sendWithReferenceMsgEventIdUnderlyingCallsCount = 0
+    open var sendWithReferenceMsgEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendWithReferenceMsgEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendWithReferenceMsgEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendWithReferenceMsgEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendWithReferenceMsgEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var sendWithReferenceMsgEventIdCalled: Bool {
+        return sendWithReferenceMsgEventIdCallsCount > 0
+    }
+    open var sendWithReferenceMsgEventIdReceivedArguments: (msg: RoomMessageEventContentWithoutRelation, eventId: String)?
+    open var sendWithReferenceMsgEventIdReceivedInvocations: [(msg: RoomMessageEventContentWithoutRelation, eventId: String)] = []
+
+    var sendWithReferenceMsgEventIdUnderlyingReturnValue: SendHandle!
+    open var sendWithReferenceMsgEventIdReturnValue: SendHandle! {
+        get {
+            if Thread.isMainThread {
+                return sendWithReferenceMsgEventIdUnderlyingReturnValue
+            } else {
+                var returnValue: SendHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendWithReferenceMsgEventIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendWithReferenceMsgEventIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendWithReferenceMsgEventIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var sendWithReferenceMsgEventIdClosure: ((RoomMessageEventContentWithoutRelation, String) async throws -> SendHandle)?
+
+    open override func sendWithReference(msg: RoomMessageEventContentWithoutRelation, eventId: String) async throws -> SendHandle {
+        if let error = sendWithReferenceMsgEventIdThrowableError {
+            throw error
+        }
+        sendWithReferenceMsgEventIdCallsCount += 1
+        sendWithReferenceMsgEventIdReceivedArguments = (msg: msg, eventId: eventId)
+        DispatchQueue.main.async {
+            self.sendWithReferenceMsgEventIdReceivedInvocations.append((msg: msg, eventId: eventId))
+        }
+        if let sendWithReferenceMsgEventIdClosure = sendWithReferenceMsgEventIdClosure {
+            return try await sendWithReferenceMsgEventIdClosure(msg, eventId)
+        } else {
+            return sendWithReferenceMsgEventIdReturnValue
+        }
+    }
+
     //MARK: - subscribeToBackPaginationStatus
 
     open var subscribeToBackPaginationStatusListenerThrowableError: Error?

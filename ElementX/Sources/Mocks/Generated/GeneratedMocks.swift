@@ -14773,6 +14773,76 @@ class TimelineProxyMock: TimelineProxyProtocol {
             return sendVideoUrlThumbnailURLVideoInfoProgressSubjectRequestHandleReturnValue
         }
     }
+    //MARK: - sendTranscriptEvent
+
+    var sendTranscriptEventTranscriptRelatedEventIdUnderlyingCallsCount = 0
+    var sendTranscriptEventTranscriptRelatedEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sendTranscriptEventTranscriptRelatedEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendTranscriptEventTranscriptRelatedEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendTranscriptEventTranscriptRelatedEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendTranscriptEventTranscriptRelatedEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var sendTranscriptEventTranscriptRelatedEventIdCalled: Bool {
+        return sendTranscriptEventTranscriptRelatedEventIdCallsCount > 0
+    }
+    var sendTranscriptEventTranscriptRelatedEventIdReceivedArguments: (transcript: String, relatedEventId: String?)?
+    var sendTranscriptEventTranscriptRelatedEventIdReceivedInvocations: [(transcript: String, relatedEventId: String?)] = []
+
+    var sendTranscriptEventTranscriptRelatedEventIdUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var sendTranscriptEventTranscriptRelatedEventIdReturnValue: Result<Void, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return sendTranscriptEventTranscriptRelatedEventIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sendTranscriptEventTranscriptRelatedEventIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sendTranscriptEventTranscriptRelatedEventIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sendTranscriptEventTranscriptRelatedEventIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var sendTranscriptEventTranscriptRelatedEventIdClosure: ((String, String?) async -> Result<Void, TimelineProxyError>)?
+
+    func sendTranscriptEvent(transcript: String, relatedEventId: String?) async -> Result<Void, TimelineProxyError> {
+        sendTranscriptEventTranscriptRelatedEventIdCallsCount += 1
+        sendTranscriptEventTranscriptRelatedEventIdReceivedArguments = (transcript: transcript, relatedEventId: relatedEventId)
+        DispatchQueue.main.async {
+            self.sendTranscriptEventTranscriptRelatedEventIdReceivedInvocations.append((transcript: transcript, relatedEventId: relatedEventId))
+        }
+        if let sendTranscriptEventTranscriptRelatedEventIdClosure = sendTranscriptEventTranscriptRelatedEventIdClosure {
+            return await sendTranscriptEventTranscriptRelatedEventIdClosure(transcript, relatedEventId)
+        } else {
+            return sendTranscriptEventTranscriptRelatedEventIdReturnValue
+        }
+    }
     //MARK: - sendVoiceMessage
 
     var sendVoiceMessageUrlAudioInfoWaveformProgressSubjectRequestHandleUnderlyingCallsCount = 0

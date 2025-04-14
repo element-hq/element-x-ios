@@ -77,6 +77,8 @@ protocol TimelineProxyProtocol {
                    progressSubject: CurrentValueSubject<Double, Never>?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
+    func sendTranscriptEvent(transcript: String, relatedEventId: String?) async -> Result<Void, TimelineProxyError>
+
     func sendVoiceMessage(url: URL,
                           audioInfo: AudioInfo,
                           waveform: [UInt16],
