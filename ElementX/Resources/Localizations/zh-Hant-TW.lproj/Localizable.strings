@@ -271,6 +271,7 @@
 "common_voice_message" = "語音訊息";
 "common_waiting" = "等待中...";
 "common_waiting_for_decryption_key" = "等待此則訊息";
+"common_you" = "您";
 "common.copied_to_clipboard" = "已複製到剪貼簿";
 "common.do_not_show_this_again" = "不再顯示";
 "common.empty_file" = "Empty file";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "開放原始碼授權條款";
 "common.pinned" = "已釘選";
 "common.send_to" = "傳送給";
-"common.you" = "您";
 "common_unable_to_decrypt_insecure_device" = "從不安全的裝置傳送";
 "common_unable_to_decrypt_verification_violation" = "傳送者的驗證身份已變更";
 "confirm_recovery_key_banner_message" = "確認您的復原金鑰以維持對金鑰儲存空間與訊息歷史紀錄的存取權。";

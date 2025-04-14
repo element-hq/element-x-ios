@@ -271,6 +271,7 @@
 "common_voice_message" = "Talemelding";
 "common_waiting" = "Venter...";
 "common_waiting_for_decryption_key" = "Venter på denne meldingen";
+"common_you" = "Du";
 "common.copied_to_clipboard" = "Kopiert til utklippstavlen";
 "common.do_not_show_this_again" = "Ikke vis dette igjen";
 "common.empty_file" = "Tom fil";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Åpen kildekode-lisenser";
 "common.pinned" = "Festet";
 "common.send_to" = "Sendt til";
-"common.you" = "Du";
 "common_unable_to_decrypt_insecure_device" = "Sendt fra en usikker enhet";
 "common_unable_to_decrypt_verification_violation" = "Avsenderens verifiserte identitet ble tilbakestilt";
 "confirm_recovery_key_banner_message" = "Verifiser gjenopprettingsnøkkelen for å opprettholde tilgangen til nøkkellageret og meldingshistorikken.";
@@ -403,7 +403,7 @@
 "screen_advanced_settings_show_media_timeline_always_show" = "Vis alltid";
 "screen_advanced_settings_show_media_timeline_private_rooms" = "I private rom";
 "screen_advanced_settings_show_media_timeline_subtitle" = "Et skjult medium kan alltid vises ved å trykke på det";
-"screen_advanced_settings_show_media_timeline_title" = "Vis media i tidslinjen";
+"screen_advanced_settings_show_media_timeline_title" = "Vis medier i tidslinjen";
 "screen_bottom_sheet,manage_room_member_remove" = "Fjern fra rommet";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invitasjon";
 "screen_bottom_sheet_create_dm_message" = "Vil du starte en chat med %1$@?";

@@ -271,6 +271,7 @@
 "common_voice_message" = "Message vocal";
 "common_waiting" = "En attente…";
 "common_waiting_for_decryption_key" = "En attente de la clé de déchiffrement";
+"common_you" = "Vous";
 "common.copied_to_clipboard" = "Copié dans le presse-papiers";
 "common.do_not_show_this_again" = "Ne plus afficher";
 "common.empty_file" = "Fichier vide";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Licences open source";
 "common.pinned" = "Épinglé";
 "common.send_to" = "Envoyer vers";
-"common.you" = "Vous";
 "common_unable_to_decrypt_insecure_device" = "Envoyé depuis un appareil non sécurisé";
 "common_unable_to_decrypt_verification_violation" = "L'identité vérifiée de l'expéditeur a été réinitialisée";
 "confirm_recovery_key_banner_message" = "Confirmez votre clé de récupération pour conserver l’accès à votre stockage de clés et à l’historique des messages.";

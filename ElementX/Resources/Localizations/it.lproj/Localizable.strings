@@ -271,6 +271,7 @@
 "common_voice_message" = "Messaggio vocale";
 "common_waiting" = "In attesa…";
 "common_waiting_for_decryption_key" = "In attesa del messaggio";
+"common_you" = "Tu";
 "common.copied_to_clipboard" = "Copiato negli appunti";
 "common.do_not_show_this_again" = "Non mostrarlo più";
 "common.empty_file" = "File vuoto";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Licenze open source";
 "common.pinned" = "Fissato";
 "common.send_to" = "Invia a";
-"common.you" = "Tu";
 "common_unable_to_decrypt_insecure_device" = "Inviato da un dispositivo non sicuro";
 "common_unable_to_decrypt_verification_violation" = "L'identità verificata del mittente è stata reimpostata";
 "confirm_recovery_key_banner_message" = "Conferma la chiave di recupero per mantenere l'accesso all'archiviazione delle chiavi e alla cronologia dei messaggi.";

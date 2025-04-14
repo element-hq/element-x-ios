@@ -271,6 +271,7 @@
 "common_voice_message" = "Wiadomość głosowa";
 "common_waiting" = "Oczekiwanie…";
 "common_waiting_for_decryption_key" = "Oczekiwanie na tę wiadomość";
+"common_you" = "Ty";
 "common.copied_to_clipboard" = "Skopiowano do schowka";
 "common.do_not_show_this_again" = "Nie pokazuj ponownie";
 "common.empty_file" = "Pusty plik";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Licencje open-source";
 "common.pinned" = "Przypięte";
 "common.send_to" = "Wyślij do";
-"common.you" = "Ty";
 "common_unable_to_decrypt_insecure_device" = "Wysłane z niebezpiecznego urządzenia";
 "common_unable_to_decrypt_verification_violation" = "Zweryfikowana tożsamość nadawcy uległa zmianie";
 "confirm_recovery_key_banner_message" = "Potwierdź klucz przywracania, aby zachować dostęp do magazynu kluczy i historii wiadomości.";

@@ -271,6 +271,7 @@
 "common_voice_message" = "Голосове повідомлення";
 "common_waiting" = "Очікування...";
 "common_waiting_for_decryption_key" = "Чекаємо на це повідомлення";
+"common_you" = "Ви";
 "common.copied_to_clipboard" = "Скопійовано до буферу обміну";
 "common.do_not_show_this_again" = "Не показувати це знову";
 "common.empty_file" = "Порожній файл";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Ліцензії відкритого коду";
 "common.pinned" = "Закріплено";
 "common.send_to" = "Надіслати до";
-"common.you" = "Ви";
 "common_unable_to_decrypt_insecure_device" = "Надіслано з незахищеного пристрою";
 "common_unable_to_decrypt_verification_violation" = "Ідентичність відправника скинуто";
 "confirm_recovery_key_banner_message" = "Підтвердіть свій ключ відновлення, щоб мати доступ до сховища ключів та історії повідомлень.";

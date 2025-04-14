@@ -12,6 +12,7 @@ import MatrixRustSDK
 struct EventTimelineItemSDKMockConfiguration {
     var eventID: String = UUID().uuidString
     var sender = ""
+    var senderProfile: ProfileDetails?
     var isOwn = false
     var content: TimelineItemContent = .msgLike(content: .init(kind: .redacted, reactions: [], threadRoot: nil, inReplyTo: nil))
 }
@@ -21,7 +22,7 @@ extension EventTimelineItem {
         self.init(isRemote: true,
                   eventOrTransactionId: .eventId(eventId: configuration.eventID),
                   sender: configuration.sender,
-                  senderProfile: .pending,
+                  senderProfile: configuration.senderProfile ?? .pending,
                   isOwn: configuration.isOwn,
                   isEditable: false,
                   content: configuration.content,

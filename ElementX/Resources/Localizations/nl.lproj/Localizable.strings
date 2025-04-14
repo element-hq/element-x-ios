@@ -271,6 +271,7 @@
 "common_voice_message" = "Spraakbericht";
 "common_waiting" = "Wachten…";
 "common_waiting_for_decryption_key" = "Wachten op dit bericht";
+"common_you" = "Jij";
 "common.copied_to_clipboard" = "Gekopieerd naar klembord";
 "common.do_not_show_this_again" = "Dit niet meer weergeven";
 "common.empty_file" = "Empty file";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Open-sourcelicenties";
 "common.pinned" = "Vastgezet";
 "common.send_to" = "Sturen naar";
-"common.you" = "Jij";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Je chatback-up is momenteel niet gesynchroniseerd. Je moet je herstelsleutel invoeren om toegang te behouden tot je chatback-up.";

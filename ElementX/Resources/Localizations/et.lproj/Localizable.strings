@@ -271,6 +271,7 @@
 "common_voice_message" = "Häälsõnum";
 "common_waiting" = "Ootame…";
 "common_waiting_for_decryption_key" = "Ootame selle sõnumi dekrüptimisvõtit";
+"common_you" = "Sina";
 "common.copied_to_clipboard" = "Kopeeritud lõikelauale";
 "common.do_not_show_this_again" = "Ära enam näita seda uuesti";
 "common.empty_file" = "Tühi fail";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Avatud lähtekoodiga litsentsid";
 "common.pinned" = "Esiletõstetud";
 "common.send_to" = "Saada kasutajale";
-"common.you" = "Sina";
 "common_unable_to_decrypt_insecure_device" = "Saadetud ebaturvalisest seadmest";
 "common_unable_to_decrypt_verification_violation" = "Saatja verifitseeritud identiteet on lähtestatud";
 "confirm_recovery_key_banner_message" = "Säilitamaks ligipääsu vestluste ja krüptovõtmete varukoopiale, palun sisesta kinnituseks oma taastevõti.";

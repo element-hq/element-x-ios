@@ -271,6 +271,7 @@
 "common_voice_message" = "Sesli Mesaj";
 "common_waiting" = "Bekleniyor…";
 "common_waiting_for_decryption_key" = "Bu mesajı bekliyorum";
+"common_you" = "Sen";
 "common.copied_to_clipboard" = "Panoya kopyalandı";
 "common.do_not_show_this_again" = "Bunu bir daha gösterme";
 "common.empty_file" = "Empty file";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Açık kaynak lisansları";
 "common.pinned" = "Sabitlendi";
 "common.send_to" = "Şuraya gönder";
-"common.you" = "Sen";
 "common_unable_to_decrypt_insecure_device" = "Güvenli olmayan bir cihazdan gönderildi";
 "common_unable_to_decrypt_verification_violation" = "Gönderenin doğrulanmış kimliği değişti";
 "confirm_recovery_key_banner_message" = "Anahtar depolama alanınıza ve mesaj geçmişinize erişimi sürdürmek için kurtarma anahtarınızı onaylayın.";

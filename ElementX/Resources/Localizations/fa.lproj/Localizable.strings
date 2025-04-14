@@ -271,6 +271,7 @@
 "common_voice_message" = "پیام صوتی";
 "common_waiting" = "در انتظار…";
 "common_waiting_for_decryption_key" = "در انتظار این پیام";
+"common_you" = "شما";
 "common.copied_to_clipboard" = "در تخته‌گیره رونوشت شد";
 "common.do_not_show_this_again" = "این مورد را دوباره نشان نده";
 "common.empty_file" = "Empty file";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "پروانه‌های نرم‌افزاری آزاد";
 "common.pinned" = "سنجاق شده";
 "common.send_to" = "فرستادن به";
-"common.you" = "شما";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Confirm your recovery key to maintain access to your key storage and message history.";

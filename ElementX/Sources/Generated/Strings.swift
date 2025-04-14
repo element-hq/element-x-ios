@@ -610,6 +610,8 @@ internal enum L10n {
   internal static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
   /// Waiting for this message
   internal static var commonWaitingForDecryptionKey: String { return L10n.tr("Localizable", "common_waiting_for_decryption_key") }
+  /// You
+  internal static var commonYou: String { return L10n.tr("Localizable", "common_you") }
   /// Confirm your recovery key to maintain access to your key storage and message history.
   internal static var confirmRecoveryKeyBannerMessage: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_message") }
   /// Enter your recovery key
@@ -2969,8 +2971,6 @@ internal enum L10n {
     internal static var pinned: String { return L10n.tr("Localizable", "common.pinned") }
     /// Send to
     internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
-    /// You
-    internal static var you: String { return L10n.tr("Localizable", "common.you") }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
