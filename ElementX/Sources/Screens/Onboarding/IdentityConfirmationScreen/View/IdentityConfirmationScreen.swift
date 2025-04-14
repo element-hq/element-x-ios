@@ -51,11 +51,11 @@ struct IdentityConfirmationScreen: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
             
-            Button(L10n.actionLearnMore) {
-                UIApplication.shared.open(context.viewState.learnMoreURL)
-            }
-            .buttonStyle(.compound(.tertiary, size: .small))
-            .padding(.top, 16)
+//            Button(L10n.actionLearnMore) {
+//                UIApplication.shared.open(context.viewState.learnMoreURL)
+//            }
+//            .buttonStyle(.compound(.tertiary, size: .small))
+//            .padding(.top, 16)
         }
     }
     

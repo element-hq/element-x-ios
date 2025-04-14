@@ -579,7 +579,7 @@ class ClientProxy: ClientProxyProtocol {
     func roomPreviewForIdentifier(_ identifier: String, via: [String]) async -> Result<RoomPreviewProxyProtocol, ClientProxyError> {
         do {
             let roomPreview = try await client.getRoomPreviewFromRoomId(roomId: identifier, viaServers: via)
-            return try .success(RoomPreviewProxy(roomPreview: roomPreview))
+            return try .success(RoomPreviewProxy(roomId: identifier, roomPreview: roomPreview, zeroUsersService: zeroApiProxy.matrixUsersService))
         } catch ClientError.MatrixApi(.forbidden, _, _, _) {
             MXLog.error("Failed retrieving preview for room: \(identifier) is private")
             return .failure(.roomPreviewIsPrivate)

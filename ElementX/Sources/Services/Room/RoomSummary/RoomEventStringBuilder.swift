@@ -17,14 +17,18 @@ struct RoomEventStringBuilder {
     func buildAttributedString(for eventItemProxy: EventTimelineItemProxy, lastMessageSender: UserProfile?) -> AttributedString? {
         let sender = eventItemProxy.sender
         let isOutgoing = eventItemProxy.isOwn
+//        let displayName = if isOutgoing {
+//            L10n.commonYou
+//        } else if shouldDisambiguateDisplayNames {
+//            sender.disambiguatedDisplayName ?? sender.id
+//        } else {
+//            sender.displayName ?? sender.id
+//        }
         let displayName = if isOutgoing {
             L10n.commonYou
-        } else if shouldDisambiguateDisplayNames {
-            sender.disambiguatedDisplayName ?? sender.id
         } else {
-            sender.displayName ?? sender.id
+            lastMessageSender?.displayName ?? sender.displayName ?? sender.id
         }
-        let displayName = lastMessageSender?.displayName ?? sender.displayName ?? sender.id
         
         switch eventItemProxy.content {
         case .msgLike(let messageLikeContent):

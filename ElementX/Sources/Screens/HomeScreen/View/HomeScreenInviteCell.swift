@@ -138,7 +138,7 @@ struct HomeScreenInviteCell: View {
     }
     
     private var subtitle: String? {
-        room.isDirect ? room.inviter?.id : nil
+        // room.isDirect ? room.inviter?.id : nil
         nil
     }
     

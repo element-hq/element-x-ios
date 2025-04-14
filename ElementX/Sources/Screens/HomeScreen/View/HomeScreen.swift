@@ -239,7 +239,7 @@ struct HomeScreen: View {
             } label: {
                 CompoundIcon(\.plus)
             }
-            .buttonStyle(.compound(.super, size: .toolbarIcon))
+            //.buttonStyle(.compound(.super, size: .toolbarIcon))
             .accessibilityLabel(L10n.actionStartChat)
             .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)
         default:

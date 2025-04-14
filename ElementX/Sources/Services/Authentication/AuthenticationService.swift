@@ -140,8 +140,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .failure:
                 return .failure(.failedLoggingIn)
             }
-            
-            return await userSession(for: client)
         } catch let ClientError.MatrixApi(errorKind, _, _, _) {
             MXLog.error("Failed logging in with error kind: \(errorKind)")
             switch errorKind {
@@ -179,7 +177,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .failure(_):
                 return .failure(.failedLoggingIn)
             }
-        } catch let ClientError.MatrixApi(errorKind, _, _) {
+        } catch let ClientError.MatrixApi(errorKind, _, _, _) {
             MXLog.error("Failed logging in with error kind: \(errorKind)")
             switch errorKind {
             case .forbidden:
@@ -192,25 +190,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
         } catch {
             MXLog.error("Failed logging in with error: \(error)")
             return .failure(.failedLoggingIn)
-        }
-    }
-    
-    func completeWebRegistration(using credentials: WebRegistrationCredentials) async -> Result<any UserSessionProtocol, AuthenticationServiceError> {
-        guard let client else { return .failure(.failedLoggingIn) }
-        let session = Session(accessToken: credentials.accessToken,
-                              refreshToken: nil,
-                              userId: credentials.userID,
-                              deviceId: credentials.deviceID,
-                              homeserverUrl: client.homeserver(),
-                              oidcData: nil,
-                              slidingSyncVersion: client.slidingSyncVersion())
-        
-        do {
-            try await client.restoreSession(session: session)
-            return await userSession(for: client)
-        } catch {
-            MXLog.error("Failed restoring the client using the provided credentials.")
-            return .failure(.failedUsingWebCredentials)
         }
     }
     
