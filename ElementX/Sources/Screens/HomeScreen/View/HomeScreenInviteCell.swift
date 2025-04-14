@@ -138,7 +138,7 @@ struct HomeScreenInviteCell: View {
     }
     
     private var subtitle: String? {
-        room.isDirect ? room.inviter?.id : room.canonicalAlias
+        room.isDirect ? room.inviter?.id : nil
     }
     
     @ViewBuilder
