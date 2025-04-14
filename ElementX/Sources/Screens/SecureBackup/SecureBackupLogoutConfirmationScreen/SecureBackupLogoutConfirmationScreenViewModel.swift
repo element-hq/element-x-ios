@@ -17,6 +17,8 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     // periphery:ignore - auto cancels when reassigned
     @CancellableTask
     private var keyUploadWaitingTask: Task<Void, Never>?
+    @CancellableTask
+    private var keyUploadStalledTask: Task<Void, Error>?
     
     private var actionsSubject: PassthroughSubject<SecureBackupLogoutConfirmationScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<SecureBackupLogoutConfirmationScreenViewModelAction, Never> {
@@ -37,11 +39,7 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
                     return
                 }
                 
-                if reachability == .reachable {
-                    state.mode = .backupOngoing
-                } else {
-                    state.mode = .offline
-                }
+                updateMode(with: reachability)
             }
             .store(in: &cancellables)
     }
@@ -65,8 +63,8 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     // MARK: - Private
     
     private func attemptLogout() {
-        if state.mode == .saveRecoveryKey {
-            state.mode = appMediator.networkMonitor.reachabilityPublisher.value == .reachable ? .backupOngoing : .offline
+        if case .saveRecoveryKey = state.mode {
+            updateMode(with: appMediator.networkMonitor.reachabilityPublisher.value)
             
             keyUploadWaitingTask = Task {
                 var result = await waitForKeyBackupUpload()
@@ -93,7 +91,24 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     
     private func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError> {
         await secureBackupController.waitForKeyBackupUpload { [weak self] progress in
-            self?.state.uploadProgress = progress
+            self?.state.mode = .backupOngoing(progress: progress)
+        }
+    }
+    
+    private func updateMode(with reachability: NetworkMonitorReachability) {
+        if reachability == .reachable {
+            state.mode = .waitingToStart(hasStalled: false)
+            monitorUploadProgress()
+        } else {
+            state.mode = .offline
+        }
+    }
+    
+    private func monitorUploadProgress() {
+        keyUploadStalledTask = Task { [weak self] in
+            try await Task.sleep(for: .seconds(2))
+            guard let self, case .waitingToStart(hasStalled: false) = state.mode else { return }
+            state.mode = .waitingToStart(hasStalled: true)
         }
     }
 }

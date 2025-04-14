@@ -13,15 +13,15 @@ enum SecureBackupLogoutConfirmationScreenViewModelAction {
     case logout
 }
 
-enum SecureBackupLogoutConfirmationScreenViewMode {
+enum SecureBackupLogoutConfirmationScreenViewMode: Equatable {
     case saveRecoveryKey
-    case backupOngoing
+    case waitingToStart(hasStalled: Bool)
+    case backupOngoing(progress: Double)
     case offline
 }
 
 struct SecureBackupLogoutConfirmationScreenViewState: BindableState {
     var mode: SecureBackupLogoutConfirmationScreenViewMode
-    var uploadProgress = 0.0
     var bindings = SecureBackupLogoutConfirmationScreenBindings()
 }
 

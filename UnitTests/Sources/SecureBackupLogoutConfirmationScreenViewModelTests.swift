@@ -44,18 +44,23 @@ class SecureBackupLogoutConfirmationScreenViewModelTests: XCTestCase {
         
         let progressExpectation = expectation(description: "The upload progress callback should be called.")
         secureBackupController.waitForKeyBackupUploadProgressCallbackClosure = { progressCallback in
+            try? await Task.sleep(for: .seconds(4))
             progressCallback?(mockProgress)
             progressExpectation.fulfill()
-            try? await Task.sleep(for: .seconds(10))
             return .success(())
         }
         
-        let deferred = deferFulfillment(context.$viewState) { $0.mode == .backupOngoing }
+        let deferredWaiting = deferFulfillment(context.$viewState) { $0.mode == .waitingToStart(hasStalled: false) }
         context.send(viewAction: .logout)
-        try await deferred.fulfill()
+        try await deferredWaiting.fulfill()
         
+        // Wait for the 2-second timeout.
+        let deferredHasStalled = deferFulfillment(context.$viewState) { $0.mode == .waitingToStart(hasStalled: true) }
+        try await deferredHasStalled.fulfill()
+        
+        // Wait for the progress to be reported.
         await fulfillment(of: [progressExpectation])
-        XCTAssertEqual(context.viewState.uploadProgress, mockProgress)
+        XCTAssertEqual(context.viewState.mode, .backupOngoing(progress: mockProgress))
     }
     
     func testOfflineState() async throws {
