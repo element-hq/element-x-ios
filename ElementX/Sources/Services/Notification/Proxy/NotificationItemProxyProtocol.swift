@@ -29,6 +29,8 @@ protocol NotificationItemProxyProtocol {
     var roomJoinedMembers: Int { get }
 
     var isRoomDirect: Bool { get }
+    
+    var isRoomPrivate: Bool { get }
 
     var isNoisy: Bool { get }
 

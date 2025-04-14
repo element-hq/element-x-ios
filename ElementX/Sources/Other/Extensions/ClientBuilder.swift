@@ -21,7 +21,7 @@ extension ClientBuilder {
             .enableOidcRefreshLock()
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
-            .requestConfig(config: .init(retryLimit: 0, timeout: 30000, maxConcurrentRequests: nil, retryTimeout: nil))
+            .requestConfig(config: .init(retryLimit: 0, timeout: 30000, maxConcurrentRequests: nil, maxRetryTime: nil))
             .useEventCachePersistentStorage(value: true)
         
         builder = switch slidingSync {

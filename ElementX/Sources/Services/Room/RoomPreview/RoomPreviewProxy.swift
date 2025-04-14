@@ -24,11 +24,11 @@ final class RoomPreviewProxy: RoomPreviewProxyProtocol {
             }
             
             var senderRoomMember: RoomMemberProxy?
-            if let member = details.senderRoomMember {
+            if let member = details.senderInfo {
                 senderRoomMember = .init(member: member)
             }
             
-            return RoomMembershipDetailsProxy(ownRoomMember: RoomMemberProxy(member: details.ownRoomMember),
+            return RoomMembershipDetailsProxy(ownRoomMember: RoomMemberProxy(member: details.roomMember),
                                               senderRoomMember: senderRoomMember)
         }
     }

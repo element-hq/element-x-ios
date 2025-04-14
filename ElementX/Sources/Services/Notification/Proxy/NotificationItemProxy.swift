@@ -39,6 +39,15 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
     var isRoomDirect: Bool {
         notificationItem.roomInfo.isDirect
     }
+    
+    var isRoomPrivate: Bool {
+        switch notificationItem.roomInfo.joinRule {
+        case .invite, .knock, .restricted, .knockRestricted:
+            true
+        default:
+            false
+        }
+    }
 
     var roomJoinedMembers: Int {
         Int(notificationItem.roomInfo.joinedMembersCount)
@@ -89,6 +98,8 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
     var isNoisy: Bool { false }
 
     var isRoomDirect: Bool { false }
+    
+    var isRoomPrivate: Bool { false }
 
     var senderAvatarMediaSource: MediaSourceProxy? { nil }
 
