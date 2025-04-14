@@ -73,7 +73,7 @@ struct HomeScreenRoomList: View {
                             Button(role: .destructive) {
                                 context.send(viewAction: .reportRoom(roomIdentifier: room.id))
                             } label: {
-                                Label(L10n.actionReportRoom, icon: \.chatProblem)
+                                Label(room.isDirect ? L10n.actionReportDm : L10n.actionReportRoom, icon: \.chatProblem)
                             }
                         }
                         
