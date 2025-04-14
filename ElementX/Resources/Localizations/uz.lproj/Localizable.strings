@@ -271,6 +271,7 @@
 "common_voice_message" = "Ovozli xabar";
 "common_waiting" = "Kutilmoqda…";
 "common_waiting_for_decryption_key" = "Waiting for this message";
+"common_you" = "You";
 "common.copied_to_clipboard" = "Copied to clipboard";
 "common.do_not_show_this_again" = "Do not show this again";
 "common.empty_file" = "Empty file";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Open source licenses";
 "common.pinned" = "Pinned";
 "common.send_to" = "Send to";
-"common.you" = "You";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Confirm your recovery key to maintain access to your key storage and message history.";

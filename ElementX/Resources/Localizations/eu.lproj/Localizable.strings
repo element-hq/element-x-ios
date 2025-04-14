@@ -271,6 +271,7 @@
 "common_voice_message" = "Ahots-mezua";
 "common_waiting" = "Zain…";
 "common_waiting_for_decryption_key" = "Mezu honen zain";
+"common_you" = "Zeu";
 "common.copied_to_clipboard" = "Arbelean kopiatu da";
 "common.do_not_show_this_again" = "Ez erakutsi berriro";
 "common.empty_file" = "Fitxategia hutsik dago";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Kode irekiko lizentziak";
 "common.pinned" = "Finkatuta";
 "common.send_to" = "Bidali";
-"common.you" = "Zeu";
 "common_unable_to_decrypt_insecure_device" = "Egiaztatu gabeko gailu batetik bidalia";
 "common_unable_to_decrypt_verification_violation" = "Igorlearen egiaztatutako identitatea berrezarri da";
 "confirm_recovery_key_banner_message" = "Confirm your recovery key to maintain access to your key storage and message history.";

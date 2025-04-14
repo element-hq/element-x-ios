@@ -271,6 +271,7 @@
 "common_voice_message" = "Галасавое паведамленне";
 "common_waiting" = "Чакаем…";
 "common_waiting_for_decryption_key" = "Чакаю гэта паведамленне";
+"common_you" = "Вы";
 "common.copied_to_clipboard" = "Скапіравана ў буфер абмену";
 "common.do_not_show_this_again" = "Не паказваць гэта зноў";
 "common.empty_file" = "Empty file";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Ліцэнзіі з адкрытым зыходным кодам";
 "common.pinned" = "Замацаваны";
 "common.send_to" = "Адправіць";
-"common.you" = "Вы";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Ваша рэзервовая копія чата зараз не сінхранізавана. Вам трэба пацвердзіць ключ аднаўлення, каб захаваць доступ да рэзервовай копіі чата.";

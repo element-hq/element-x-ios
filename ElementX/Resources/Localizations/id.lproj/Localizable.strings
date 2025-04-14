@@ -271,6 +271,7 @@
 "common_voice_message" = "Pesan suara";
 "common_waiting" = "Menunggu…";
 "common_waiting_for_decryption_key" = "Menunggu pesan ini";
+"common_you" = "Anda";
 "common.copied_to_clipboard" = "Disalin ke papan klip";
 "common.do_not_show_this_again" = "Jangan tampilkan ini lagi";
 "common.empty_file" = "Empty file";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Lisensi sumber terbuka";
 "common.pinned" = "Disematkan";
 "common.send_to" = "Kirim ke";
-"common.you" = "Anda";
 "common_unable_to_decrypt_insecure_device" = "Dikirim dari perangkat yang tidak aman";
 "common_unable_to_decrypt_verification_violation" = "Identitas terverifikasi pengirim diatur ulang";
 "confirm_recovery_key_banner_message" = "Konfirmasikan kunci pemulihan Anda untuk mempertahankan akses ke penyimpanan kunci dan riwayat pesan Anda.";

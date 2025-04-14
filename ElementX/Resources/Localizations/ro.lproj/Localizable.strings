@@ -271,6 +271,7 @@
 "common_voice_message" = "Mesaj vocal";
 "common_waiting" = "Se aşteaptă…";
 "common_waiting_for_decryption_key" = "Mesaj în așteptare";
+"common_you" = "Dumneavoastră";
 "common.copied_to_clipboard" = "Copiat în clipboard";
 "common.do_not_show_this_again" = "Nu mai afișa acest mesaj";
 "common.empty_file" = "Empty file";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Licențe open source";
 "common.pinned" = "Fixat";
 "common.send_to" = "Trimiteți către";
-"common.you" = "Dumneavoastră";
 "common_unable_to_decrypt_insecure_device" = "Trimis de pe un dispozitiv nesigur";
 "common_unable_to_decrypt_verification_violation" = "Identitatea verificată a expeditorului s-a schimbat";
 "confirm_recovery_key_banner_message" = "Backup-ul pentru chat nu este sincronizat în prezent. Trebuie să confirmați cheia de recuperare pentru a menține accesul la backup.";

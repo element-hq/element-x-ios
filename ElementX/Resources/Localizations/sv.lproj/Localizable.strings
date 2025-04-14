@@ -271,6 +271,7 @@
 "common_voice_message" = "Röstmeddelande";
 "common_waiting" = "Väntar …";
 "common_waiting_for_decryption_key" = "Väntar på detta meddelande";
+"common_you" = "Du";
 "common.copied_to_clipboard" = "Kopierad till klippbordet";
 "common.do_not_show_this_again" = "Visa inte detta igen";
 "common.empty_file" = "Tom fil";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Licenser för öppen källkod";
 "common.pinned" = "Fäst";
 "common.send_to" = "Skicka till";
-"common.you" = "Du";
 "common_unable_to_decrypt_insecure_device" = "Skickad från en osäker enhet";
 "common_unable_to_decrypt_verification_violation" = "Avsändarens verifierade identitet återställdes";
 "confirm_recovery_key_banner_message" = "Bekräfta din återställningsnyckel för att behålla åtkomsten till din nyckellagring och meddelandehistorik.";

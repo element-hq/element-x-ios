@@ -271,6 +271,7 @@
 "common_voice_message" = "Ääniviesti";
 "common_waiting" = "Odotetaan…";
 "common_waiting_for_decryption_key" = "Odotetaan viestiä";
+"common_you" = "Sinä";
 "common.copied_to_clipboard" = "Kopioitu leikepöydälle";
 "common.do_not_show_this_again" = "Älä näytä tätä uudelleen";
 "common.empty_file" = "Tyhjä tiedosto";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Avoimen lähdekoodin lisenssit";
 "common.pinned" = "Kiinnitetty";
 "common.send_to" = "Jaa";
-"common.you" = "Sinä";
 "common_unable_to_decrypt_insecure_device" = "Lähetetty suojaamattomasta laitteesta";
 "common_unable_to_decrypt_verification_violation" = "Lähettäjän vahvistettu identiteetti nollattiin";
 "confirm_recovery_key_banner_message" = "Vahvista palautusavaimesi, jotta pääset edelleen käyttämään avainten säilytystä ja viestihistoriaa.";

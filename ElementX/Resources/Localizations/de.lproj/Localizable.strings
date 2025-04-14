@@ -271,6 +271,7 @@
 "common_voice_message" = "Sprachnachricht";
 "common_waiting" = "Warten…";
 "common_waiting_for_decryption_key" = "Warte auf diese Nachricht";
+"common_you" = "Sie";
 "common.copied_to_clipboard" = "In die Zwischenablage kopiert";
 "common.do_not_show_this_again" = "Nicht mehr anzeigen";
 "common.empty_file" = "Leere Datei";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Open-Source-Lizenzen";
 "common.pinned" = "Fixiert";
 "common.send_to" = "Senden an";
-"common.you" = "Sie";
 "common_unable_to_decrypt_insecure_device" = "Von einem ungesicherten Gerät gesendet";
 "common_unable_to_decrypt_verification_violation" = "Die verifizierte Identität des Senders hat sich geändert";
 "confirm_recovery_key_banner_message" = "Bestätigen Sie die Validität Ihres Wiederherstellungsschlüssels, um weiterhin auf Ihren Schlüsselspeicher und den Nachrichtenverlauf zugreifen zu können.";

@@ -271,6 +271,7 @@
 "common_voice_message" = "Hlasová správa";
 "common_waiting" = "Čaká sa…";
 "common_waiting_for_decryption_key" = "Čaká sa na dešifrovací kľúč";
+"common_you" = "Vy";
 "common.copied_to_clipboard" = "Skopírované do schránky";
 "common.do_not_show_this_again" = "Nezobrazovať toto znova";
 "common.empty_file" = "Prázdny súbor";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Licencie s otvoreným zdrojom";
 "common.pinned" = "Pripnuté";
 "common.send_to" = "Odoslať";
-"common.you" = "Vy";
 "common_unable_to_decrypt_insecure_device" = "Odoslané z nezabezpečeného zariadenia";
 "common_unable_to_decrypt_verification_violation" = "Overená totožnosť odosielateľa bola obnovená";
 "confirm_recovery_key_banner_message" = "Potvrďte svoj kľúč na obnovenie, aby ste zachovali prístup k úložisku kľúčov a histórii správ.";

@@ -271,6 +271,7 @@
 "common_voice_message" = "Φωνητικό μήνυμα";
 "common_waiting" = "Αναμονή…";
 "common_waiting_for_decryption_key" = "Αναμονή για αυτό το μήνυμα";
+"common_you" = "Εσύ";
 "common.copied_to_clipboard" = "Αντιγράφηκε στο πρόχειρο";
 "common.do_not_show_this_again" = "Να μην εμφανιστεί ξανά";
 "common.empty_file" = "Empty file";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Άδειες ανοιχτού κώδικα";
 "common.pinned" = "Καρφιτσωμένο";
 "common.send_to" = "Αποστολή σε";
-"common.you" = "Εσύ";
 "common_unable_to_decrypt_insecure_device" = "Στάλθηκε από μια μη ασφαλής συσκευή";
 "common_unable_to_decrypt_verification_violation" = "Η επαληθευμένη ταυτότητα του αποστολέα έχει επαναφερθεί";
 "confirm_recovery_key_banner_message" = "Επιβεβαίωσε το κλειδί ανάκτησης για να διατηρήσεις την πρόσβαση στο χώρο αποθήκευσης κλειδιών και στο ιστορικό μηνυμάτων.";

@@ -271,6 +271,7 @@
 "common_voice_message" = "Голосовое сообщение";
 "common_waiting" = "Ожидание…";
 "common_waiting_for_decryption_key" = "Ожидание ключа расшифровки";
+"common_you" = "Вы";
 "common.copied_to_clipboard" = "Скопировано в буфер обмена";
 "common.do_not_show_this_again" = "Не показывать больше";
 "common.empty_file" = "Пустой файл";
@@ -278,7 +279,6 @@
 "common.open_source_licenses" = "Лицензии с открытым исходным кодом";
 "common.pinned" = "Закрепленный";
 "common.send_to" = "Отправить";
-"common.you" = "Вы";
 "common_unable_to_decrypt_insecure_device" = "Отправлено с незащищенного устройства";
 "common_unable_to_decrypt_verification_violation" = "Подтвержденная личность отправителя была сброшена";
 "confirm_recovery_key_banner_message" = "Подтвердите ключ восстановления, чтобы сохранить доступ к хранилищу ключей и истории сообщений.";

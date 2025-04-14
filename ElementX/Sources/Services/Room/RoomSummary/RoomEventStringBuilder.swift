@@ -17,7 +17,9 @@ struct RoomEventStringBuilder {
     func buildAttributedString(for eventItemProxy: EventTimelineItemProxy) -> AttributedString? {
         let sender = eventItemProxy.sender
         let isOutgoing = eventItemProxy.isOwn
-        let displayName = if shouldDisambiguateDisplayNames {
+        let displayName = if isOutgoing {
+            L10n.commonYou
+        } else if shouldDisambiguateDisplayNames {
             sender.disambiguatedDisplayName ?? sender.id
         } else {
             sender.displayName ?? sender.id
