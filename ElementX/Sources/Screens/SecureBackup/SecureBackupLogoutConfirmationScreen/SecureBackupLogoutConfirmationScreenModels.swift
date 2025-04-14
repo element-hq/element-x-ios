@@ -21,6 +21,7 @@ enum SecureBackupLogoutConfirmationScreenViewMode {
 
 struct SecureBackupLogoutConfirmationScreenViewState: BindableState {
     var mode: SecureBackupLogoutConfirmationScreenViewMode
+    var uploadProgress = 0.0
     var bindings = SecureBackupLogoutConfirmationScreenBindings()
 }
 

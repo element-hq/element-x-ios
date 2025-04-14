@@ -69,11 +69,11 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
             state.mode = appMediator.networkMonitor.reachabilityPublisher.value == .reachable ? .backupOngoing : .offline
             
             keyUploadWaitingTask = Task {
-                var result = await secureBackupController.waitForKeyBackupUpload()
+                var result = await waitForKeyBackupUpload()
                 
                 if case .failure = result {
                     // Retry the upload first, conditions might have changed.
-                    result = await secureBackupController.waitForKeyBackupUpload()
+                    result = await waitForKeyBackupUpload()
                 }
                 
                 guard case .success = result else {
@@ -88,6 +88,12 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
             }
         } else {
             actionsSubject.send(.logout)
+        }
+    }
+    
+    private func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError> {
+        await secureBackupController.waitForKeyBackupUpload { [weak self] progress in
+            self?.state.uploadProgress = progress
         }
     }
 }

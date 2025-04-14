@@ -42,7 +42,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
         
         if context.viewState.mode == .backupOngoing {
             Spacer()
-            ProgressView()
+            ProgressView(value: context.viewState.uploadProgress)
         }
     }
     
@@ -102,25 +102,49 @@ struct SecureBackupLogoutConfirmationScreen: View {
 // MARK: - Previews
 
 struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = buildViewModel()
+    static let viewModel = makeViewModel(mode: .saveRecoveryKey)
+    static let ongoingViewModel = makeViewModel(mode: .backupOngoing)
+    static let offlineViewModel = makeViewModel(mode: .offline)
     
     static var previews: some View {
         NavigationStack {
             SecureBackupLogoutConfirmationScreen(context: viewModel.context)
         }
+        .previewDisplayName("Confirmation")
+        
+        NavigationStack {
+            SecureBackupLogoutConfirmationScreen(context: ongoingViewModel.context)
+        }
+        .previewDisplayName("Ongoing")
+        
+        NavigationStack {
+            SecureBackupLogoutConfirmationScreen(context: offlineViewModel.context)
+        }
+        .previewDisplayName("Offline")
     }
     
-    static func buildViewModel() -> SecureBackupLogoutConfirmationScreenViewModelType {
+    static func makeViewModel(mode: SecureBackupLogoutConfirmationScreenViewMode) -> SecureBackupLogoutConfirmationScreenViewModel {
         let secureBackupController = SecureBackupControllerMock()
         secureBackupController.underlyingKeyBackupState = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled).asCurrentValuePublisher()
+        secureBackupController.waitForKeyBackupUploadProgressCallbackClosure = { uploadProgress in
+            uploadProgress?(0.5)
+            return .success(())
+        }
         
+        let reachability: NetworkMonitorReachability = mode == .offline ? .unreachable : .reachable
         let networkMonitor = NetworkMonitorMock()
-        networkMonitor.underlyingReachabilityPublisher = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable).asCurrentValuePublisher()
+        networkMonitor.underlyingReachabilityPublisher = CurrentValueSubject<NetworkMonitorReachability, Never>(reachability).asCurrentValuePublisher()
         
         let appMediator = AppMediatorMock()
         appMediator.underlyingNetworkMonitor = networkMonitor
         
-        return SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                             appMediator: appMediator)
+        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
+                                                                      appMediator: appMediator)
+        
+        if mode != .saveRecoveryKey {
+            viewModel.context.send(viewAction: .logout)
+        }
+        
+        return viewModel
     }
 }

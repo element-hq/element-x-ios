@@ -35,7 +35,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
     init(encryption: Encryption) {
         self.encryption = encryption
         
-        backupStateListenerTaskHandle = encryption.backupStateListener(listener: SecureBackupControllerBackupStateListener { [weak self] state in
+        backupStateListenerTaskHandle = encryption.backupStateListener(listener: SecureBackupControllerListener { [weak self] state in
             guard let self else { return }
             
             switch state {
@@ -62,7 +62,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
             }
         })
         
-        recoveryStateListenerTaskHandle = encryption.recoveryStateListener(listener: SecureBackupRecoveryStateListener { [weak self] state in
+        recoveryStateListenerTaskHandle = encryption.recoveryStateListener(listener: SecureBackupControllerListener { [weak self] state in
             guard let self else { return }
             
             switch state {
@@ -121,7 +121,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
             MXLog.info("Enabling recovery")
             
             var keyUploadErrored = false
-            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, passphrase: nil, progressListener: SecureBackupEnableRecoveryProgressListener { [weak self] state in
+            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, passphrase: nil, progressListener: SecureBackupControllerListener { [weak self] state in
                 guard let self else { return }
                 
                 switch state {
@@ -154,10 +154,14 @@ class SecureBackupController: SecureBackupControllerProtocol {
         }
     }
         
-    func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError> {
+    func waitForKeyBackupUpload(progressCallback: ((Double) -> Void)?) async -> Result<Void, SecureBackupControllerError> {
         do {
             MXLog.info("Waiting for backup upload steady state")
-            try await encryption.waitForBackupUploadSteadyState(progressListener: nil)
+            try await encryption.waitForBackupUploadSteadyState(progressListener: SecureBackupControllerListener { state in
+                guard case let .uploading(backedUpCount, totalCount) = state else { return }
+                let progress = Double(backedUpCount) / Double(totalCount)
+                progressCallback?(progress)
+            })
             return .success(())
         } catch let error as SteadyStateError {
             MXLog.error("Failed waiting for backup upload steady state with error: \(error)")
@@ -202,38 +206,19 @@ class SecureBackupController: SecureBackupControllerProtocol {
     }
 }
 
-private final class SecureBackupControllerBackupStateListener: BackupStateListener {
-    private let onUpdateClosure: (BackupState) -> Void
+private final class SecureBackupControllerListener<T> {
+    private let onUpdateClosure: (T) -> Void
     
-    init(_ onUpdateClosure: @escaping (BackupState) -> Void) {
+    init(_ onUpdateClosure: @escaping (T) -> Void) {
         self.onUpdateClosure = onUpdateClosure
     }
     
-    func onUpdate(status: BackupState) {
+    func onUpdate(status: T) {
         onUpdateClosure(status)
     }
 }
 
-private final class SecureBackupRecoveryStateListener: RecoveryStateListener {
-    private let onUpdateClosure: (RecoveryState) -> Void
-    
-    init(_ onUpdateClosure: @escaping (RecoveryState) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(status: RecoveryState) {
-        onUpdateClosure(status)
-    }
-}
-
-private final class SecureBackupEnableRecoveryProgressListener: EnableRecoveryProgressListener {
-    private let onUpdateClosure: (EnableRecoveryProgress) -> Void
-    
-    init(_ onUpdateClosure: @escaping (EnableRecoveryProgress) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(status: EnableRecoveryProgress) {
-        onUpdateClosure(status)
-    }
-}
+extension SecureBackupControllerListener: BackupStateListener where T == BackupState { }
+extension SecureBackupControllerListener: RecoveryStateListener where T == RecoveryState { }
+extension SecureBackupControllerListener: EnableRecoveryProgressListener where T == EnableRecoveryProgress { }
+extension SecureBackupControllerListener: BackupSteadyStateListener where T == BackupUploadState { }

@@ -14154,15 +14154,15 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sen
     }
     //MARK: - waitForKeyBackupUpload
 
-    var waitForKeyBackupUploadUnderlyingCallsCount = 0
-    var waitForKeyBackupUploadCallsCount: Int {
+    var waitForKeyBackupUploadProgressCallbackUnderlyingCallsCount = 0
+    var waitForKeyBackupUploadProgressCallbackCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return waitForKeyBackupUploadUnderlyingCallsCount
+                return waitForKeyBackupUploadProgressCallbackUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = waitForKeyBackupUploadUnderlyingCallsCount
+                    returnValue = waitForKeyBackupUploadProgressCallbackUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14170,27 +14170,27 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sen
         }
         set {
             if Thread.isMainThread {
-                waitForKeyBackupUploadUnderlyingCallsCount = newValue
+                waitForKeyBackupUploadProgressCallbackUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    waitForKeyBackupUploadUnderlyingCallsCount = newValue
+                    waitForKeyBackupUploadProgressCallbackUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var waitForKeyBackupUploadCalled: Bool {
-        return waitForKeyBackupUploadCallsCount > 0
+    var waitForKeyBackupUploadProgressCallbackCalled: Bool {
+        return waitForKeyBackupUploadProgressCallbackCallsCount > 0
     }
 
-    var waitForKeyBackupUploadUnderlyingReturnValue: Result<Void, SecureBackupControllerError>!
-    var waitForKeyBackupUploadReturnValue: Result<Void, SecureBackupControllerError>! {
+    var waitForKeyBackupUploadProgressCallbackUnderlyingReturnValue: Result<Void, SecureBackupControllerError>!
+    var waitForKeyBackupUploadProgressCallbackReturnValue: Result<Void, SecureBackupControllerError>! {
         get {
             if Thread.isMainThread {
-                return waitForKeyBackupUploadUnderlyingReturnValue
+                return waitForKeyBackupUploadProgressCallbackUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, SecureBackupControllerError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = waitForKeyBackupUploadUnderlyingReturnValue
+                    returnValue = waitForKeyBackupUploadProgressCallbackUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -14198,22 +14198,22 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sen
         }
         set {
             if Thread.isMainThread {
-                waitForKeyBackupUploadUnderlyingReturnValue = newValue
+                waitForKeyBackupUploadProgressCallbackUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    waitForKeyBackupUploadUnderlyingReturnValue = newValue
+                    waitForKeyBackupUploadProgressCallbackUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var waitForKeyBackupUploadClosure: (() async -> Result<Void, SecureBackupControllerError>)?
+    var waitForKeyBackupUploadProgressCallbackClosure: ((((Double) -> Void)?) async -> Result<Void, SecureBackupControllerError>)?
 
-    func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError> {
-        waitForKeyBackupUploadCallsCount += 1
-        if let waitForKeyBackupUploadClosure = waitForKeyBackupUploadClosure {
-            return await waitForKeyBackupUploadClosure()
+    func waitForKeyBackupUpload(progressCallback: ((Double) -> Void)?) async -> Result<Void, SecureBackupControllerError> {
+        waitForKeyBackupUploadProgressCallbackCallsCount += 1
+        if let waitForKeyBackupUploadProgressCallbackClosure = waitForKeyBackupUploadProgressCallbackClosure {
+            return await waitForKeyBackupUploadProgressCallbackClosure(progressCallback)
         } else {
-            return waitForKeyBackupUploadReturnValue
+            return waitForKeyBackupUploadProgressCallbackReturnValue
         }
     }
 }
