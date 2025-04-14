@@ -30,6 +30,9 @@ struct DeclineAndBlockScreen: View {
         Section {
             ListRow(label: .plain(title: L10n.screenDeclineAndBlockBlockUserOptionTitle),
                     kind: .toggle($context.shouldBlockUser))
+        } footer: {
+            Text(L10n.screenDeclineAndBlockBlockUserOptionDescription)
+                .compoundListSectionFooter()
         }
     }
     
@@ -37,12 +40,15 @@ struct DeclineAndBlockScreen: View {
         Section {
             ListRow(label: .plain(title: L10n.actionReportRoom),
                     kind: .toggle($context.shouldReport))
+        } footer: {
+            Text(L10n.screenDeclineAndBlockReportUserOptionDescription)
+                .compoundListSectionFooter()
         }
     }
     
     private var reportReasonSection: some View {
         Section {
-            ListRow(label: .plain(title: ""),
+            ListRow(label: .plain(title: L10n.screenDeclineAndBlockReportUserReasonPlaceholder),
                     kind: .textField(text: $context.reportReason, axis: .vertical))
                 .lineLimit(4, reservesSpace: true)
         }

@@ -16,6 +16,12 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Splash Screen: Tap get started button
         app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
         
+        // Server Confirmation: Tap change server button
+        app.buttons[A11yIdentifiers.serverConfirmationScreen.changeServer].tap()
+        
+        // Server Selection: Clear the default, enter OIDC server and continue.
+        app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("example.com\n", app: app)
+        
         // Server Confirmation: Tap continue button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
         
@@ -39,6 +45,12 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         
         // Splash Screen: Tap get started button
         app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
+        
+        // Server Confirmation: Tap change server button
+        app.buttons[A11yIdentifiers.serverConfirmationScreen.changeServer].tap()
+        
+        // Server Selection: Clear the default, enter OIDC server and continue.
+        app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("example.com\n", app: app)
         
         // Server Confirmation: Tap continue button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
@@ -65,6 +77,12 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         
         // Splash Screen: Tap get started button
         app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
+        
+        // Server Confirmation: Tap change server button
+        app.buttons[A11yIdentifiers.serverConfirmationScreen.changeServer].tap()
+        
+        // Server Selection: Clear the default, enter OIDC server and continue.
+        app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("example.com\n", app: app)
         
         // Server Confirmation: Tap continue button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
@@ -96,7 +114,8 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Server Confirmation: Tap continue button
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
         
-        // Then the login form shouldn't be shown as OIDC will be used instead.
-        XCTAssertFalse(app.buttons[A11yIdentifiers.loginScreen.continue].waitForExistence(timeout: 1), "The login screen should not be shown after selecting a homeserver with OIDC.")
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        XCTAssertTrue(springboard.staticTexts["“ElementX” Wants to Use “company.com” to Sign In"].waitForExistence(timeout: 2),
+                      "The web authentication prompt should be shown after selecting a homeserver with OIDC.")
     }
 }

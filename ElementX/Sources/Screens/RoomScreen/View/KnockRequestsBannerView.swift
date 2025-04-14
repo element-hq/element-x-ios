@@ -100,11 +100,18 @@ private struct SingleKnockRequestBannerContent: View {
     
     private var actions: some View {
         HStack(spacing: 12) {
-            Button(L10n.screenRoomSingleKnockRequestViewButtonTitle, action: onViewAll)
-                .buttonStyle(.compound(.secondary, size: .medium))
+            Button(action: onViewAll) {
+                Text(L10n.screenRoomSingleKnockRequestViewButtonTitle)
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.compound(.secondary, size: .medium))
+            
             if let onAccept {
-                Button(L10n.screenRoomSingleKnockRequestAcceptButtonTitle) { onAccept(request.eventID) }
-                    .buttonStyle(.compound(.primary, size: .medium))
+                Button { onAccept(request.eventID) } label: {
+                    Text(L10n.screenRoomSingleKnockRequestAcceptButtonTitle)
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.compound(.primary, size: .medium))
             }
         }
         .padding(.top, request.reason == nil ? 0 : 2)
@@ -146,8 +153,11 @@ private struct MultipleKnockRequestsBannerContent: View {
                     KnockRequestsBannerDismissButton(onDismiss: onDismiss)
                 }
             }
-            Button(L10n.screenRoomMultipleKnockRequestsViewAllButtonTitle) {
+            Button {
                 onViewAll()
+            } label: {
+                Text(L10n.screenRoomMultipleKnockRequestsViewAllButtonTitle)
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.compound(.primary, size: .medium))
         }

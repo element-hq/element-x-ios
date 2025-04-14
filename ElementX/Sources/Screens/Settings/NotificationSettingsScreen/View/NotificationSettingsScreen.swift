@@ -182,6 +182,7 @@ struct NotificationSettingsScreen: View {
                         context.send(viewAction: .fixConfigurationMismatchTapped)
                     } label: {
                         Text(L10n.actionContinue)
+                            .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.compound(.primary, size: .medium))
                     .disabled(context.viewState.fixingConfigurationMismatch)

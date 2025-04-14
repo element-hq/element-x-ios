@@ -282,7 +282,7 @@ struct RoomDetailsScreen: View {
     }
     
     private var reportRoomTitle: String {
-        context.viewState.dmRecipientInfo == nil ? L10n.actionReportRoom : L10n.actionReport
+        context.viewState.dmRecipientInfo == nil ? L10n.actionReportRoom : L10n.actionReportDm
     }
 
     private var leaveRoomSection: some View {

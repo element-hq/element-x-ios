@@ -52,27 +52,21 @@ class AuthenticationService: AuthenticationServiceProtocol {
             
             let client = try await makeClientBuilder().build(homeserverAddress: homeserverAddress)
             let loginDetails = await client.homeserverLoginDetails()
-            let elementWellKnown = await client.getElementWellKnown()
             
             MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
             
             homeserver.loginMode = if loginDetails.supportsOidcLogin() {
-                .oidc
+                .oidc(supportsCreatePrompt: loginDetails.supportedOidcPrompts().contains(.create))
             } else if loginDetails.supportsPasswordLogin() {
                 .password
             } else {
                 .unsupported
             }
             
-            homeserver.registrationHelperURL = switch elementWellKnown {
-            case .success(let wellKnown): wellKnown.registrationHelperUrl.flatMap(URL.init)
-            case .failure: nil
-            }
-            
             if flow == .login, homeserver.loginMode == .unsupported {
                 return .failure(.loginNotSupported)
             }
-            if flow == .register, !homeserver.supportsRegistration {
+            if flow == .register, !homeserver.loginMode.supportsOIDCFlow {
                 return .failure(.registrationNotSupported)
             }
             
@@ -95,6 +89,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
     func urlForOIDCLogin() async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError> {
         guard let client else { return .failure(.oidcError(.urlFailure)) }
         do {
+            // The create prompt is broken: https://github.com/element-hq/matrix-authentication-service/issues/3429
+            // let prompt: OidcPrompt = flow == .register ? .create : .consent
             let oidcData = try await client.urlForOidc(oidcConfiguration: appSettings.oidcConfiguration.rustValue,
                                                        prompt: .consent)
             return .success(OIDCAuthorizationDataProxy(underlyingData: oidcData))
@@ -144,7 +140,9 @@ class AuthenticationService: AuthenticationServiceProtocol {
             case .failure:
                 return .failure(.failedLoggingIn)
             }
-        } catch let ClientError.MatrixApi(errorKind, _, _) {
+            
+            return await userSession(for: client)
+        } catch let ClientError.MatrixApi(errorKind, _, _, _) {
             MXLog.error("Failed logging in with error kind: \(errorKind)")
             switch errorKind {
             case .forbidden:

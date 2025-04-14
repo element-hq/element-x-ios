@@ -13,11 +13,16 @@ class OIDCAuthenticationPresenter: NSObject {
     private let authenticationService: AuthenticationServiceProtocol
     private let oidcRedirectURL: URL
     private let presentationAnchor: UIWindow
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
-    init(authenticationService: AuthenticationServiceProtocol, oidcRedirectURL: URL, presentationAnchor: UIWindow) {
+    init(authenticationService: AuthenticationServiceProtocol,
+         oidcRedirectURL: URL,
+         presentationAnchor: UIWindow,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.oidcRedirectURL = oidcRedirectURL
         self.presentationAnchor = presentationAnchor
+        self.userIndicatorController = userIndicatorController
         super.init()
     }
     
@@ -39,20 +44,43 @@ class OIDCAuthenticationPresenter: NSObject {
             if let nsError = error as? NSError,
                nsError.domain == ASWebAuthenticationSessionErrorDomain,
                nsError.code == ASWebAuthenticationSessionError.canceledLogin.rawValue {
+                // No need to show an error here, just abort and return a failure.
                 await authenticationService.abortOIDCLogin(data: oidcData)
                 return .failure(.oidcError(.userCancellation))
             }
             
+            MXLog.error("Missing callback URL from the web authentication session.")
+            userIndicatorController.alertInfo = AlertInfo(id: UUID())
             await authenticationService.abortOIDCLogin(data: oidcData)
             return .failure(.oidcError(.unknown))
         }
+        
+        // Exchanging the callback with the homeserver can be slow, so show the loading indicator while we wait (the modal has already been dismissed).
+        startLoading(delay: .milliseconds(50)) // Small delay to handle a cancellation callback without the indicator showing.
+        defer { stopLoading() }
         
         switch await authenticationService.loginWithOIDCCallback(url) {
         case .success(let userSession):
             return .success(userSession)
         case .failure(let error):
+            MXLog.error("Error occurred: \(error)")
+            userIndicatorController.alertInfo = AlertInfo(id: UUID())
             return .failure(error)
         }
+    }
+    
+    private static let loadingIndicatorID = "\(OIDCAuthenticationPresenter.self)-Loading"
+    
+    private func startLoading(delay: Duration? = nil) {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorID,
+                                                              type: .modal,
+                                                              title: L10n.commonLoading,
+                                                              persistent: true),
+                                                delay: delay)
+    }
+    
+    private func stopLoading() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
     }
 }
 

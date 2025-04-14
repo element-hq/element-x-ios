@@ -17,8 +17,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(webRegistrationEnabled: Bool, isBugReportServiceEnabled: Bool) {
-        super.init(initialViewState: AuthenticationStartScreenViewState(isWebRegistrationEnabled: webRegistrationEnabled,
+    init(showCreateAccountButton: Bool, isBugReportServiceEnabled: Bool) {
+        super.init(initialViewState: AuthenticationStartScreenViewState(showCreateAccountButton: showCreateAccountButton,
                                                                         isQRCodeLoginEnabled: !ProcessInfo.processInfo.isiOSAppOnMac,
                                                                         isBugReportServiceEnabled: isBugReportServiceEnabled))
     }

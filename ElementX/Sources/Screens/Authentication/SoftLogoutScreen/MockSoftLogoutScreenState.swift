@@ -29,11 +29,11 @@ enum MockSoftLogoutScreenState: String, CaseIterable {
         switch self {
         case .emptyPassword:
             return SoftLogoutScreenViewModel(credentials: credentials,
-                                             homeserver: .mockMatrixDotOrg,
+                                             homeserver: .mockBasicServer,
                                              keyBackupNeeded: false)
         case .enteredPassword:
             return SoftLogoutScreenViewModel(credentials: credentials,
-                                             homeserver: .mockMatrixDotOrg,
+                                             homeserver: .mockBasicServer,
                                              keyBackupNeeded: false,
                                              password: "12345678")
         case .oidc:
@@ -46,7 +46,7 @@ enum MockSoftLogoutScreenState: String, CaseIterable {
                                              keyBackupNeeded: false)
         case .keyBackupNeeded:
             return SoftLogoutScreenViewModel(credentials: credentials,
-                                             homeserver: .mockMatrixDotOrg,
+                                             homeserver: .mockBasicServer,
                                              keyBackupNeeded: true)
         }
     }

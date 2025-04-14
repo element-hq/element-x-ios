@@ -58,9 +58,8 @@ struct ResolveVerifiedUserSendFailureScreen: View {
             
             Button { context.send(viewAction: .cancel) } label: {
                 Text(L10n.actionCancelForNow)
-                    .padding(.vertical, 14)
             }
-            .buttonStyle(.compound(.plain))
+            .buttonStyle(.compound(.tertiary))
         }
     }
 }

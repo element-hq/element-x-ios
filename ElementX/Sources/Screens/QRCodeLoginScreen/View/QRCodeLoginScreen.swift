@@ -383,9 +383,7 @@ struct QRCodeLoginScreen: View {
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
                 }
-                .padding(.vertical, 13)
-                .frame(maxWidth: .infinity)
-                .buttonStyle(.compound(.plain))
+                .buttonStyle(.compound(.tertiary))
             }
         }
     }

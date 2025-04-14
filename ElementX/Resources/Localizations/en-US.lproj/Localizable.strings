@@ -99,6 +99,7 @@
 "action_report" = "Report";
 "action_report_bug" = "Report bug";
 "action_report_content" = "Report content";
+"action_report_dm" = "Report conversation";
 "action_report_room" = "Report room";
 "action_reset" = "Reset";
 "action_reset_identity" = "Reset identity";
@@ -271,6 +272,7 @@
 "common_voice_message" = "Voice message";
 "common_waiting" = "Waiting…";
 "common_waiting_for_decryption_key" = "Waiting for this message";
+"common_you" = "You";
 "common.copied_to_clipboard" = "Copied to clipboard";
 "common.do_not_show_this_again" = "Do not show this again";
 "common.empty_file" = "Empty file";
@@ -278,7 +280,6 @@
 "common.open_source_licenses" = "Open source licenses";
 "common.pinned" = "Pinned";
 "common.send_to" = "Send to";
-"common.you" = "You";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Confirm your recovery key to maintain access to your key storage and message history.";
@@ -290,7 +291,7 @@
 "crypto_identity_change_pin_violation_new" = "%1$@’s %2$@ identity was reset. %3$@";
 "crypto_identity_change_pin_violation_new_user_id" = "(%1$@)";
 "crypto_identity_change_profile_pin_violation" = "%1$@’s identity was reset.";
-"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ identity was reset.  %3$@";
+"crypto_identity_change_verification_violation_new" = "%1$@’s %2$@ identity was reset. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
 "dialog_confirm_link_title" = "Double-check this link";
@@ -429,6 +430,7 @@
 "screen_decline_and_block_block_user_option_description" = "You will not see any messages or room invites from this user";
 "screen_decline_and_block_block_user_option_title" = "Block user";
 "screen_decline_and_block_report_user_option_description" = "Report this room to your account provider.";
+"screen_decline_and_block_report_user_reason_placeholder" = "Describe the reason to report…";
 "screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
 "screen_edit_room_address_title" = "Room address";
@@ -480,6 +482,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
+"screen_push_history_title" = "Push history";
 "screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
 "screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
 "screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
@@ -1124,6 +1127,7 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "You don't have access to this message";
 "timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
 "timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
+"troubleshoot_notifications_entry_point_push_history_title" = "Push history";
 "troubleshoot_notifications_entry_point_section" = "Troubleshoot";
 "troubleshoot_notifications_screen_action" = "Run tests";
 "troubleshoot_notifications_screen_action_again" = "Run tests again";

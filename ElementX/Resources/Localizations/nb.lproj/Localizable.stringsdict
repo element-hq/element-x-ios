@@ -237,9 +237,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ +%2$d other want to join this room</string>
+			<string>%1$@ +%2$d andre ønsker å bli med i dette rommet</string>
 			<key>other</key>
-			<string>%1$@ +%2$d others want to join this room</string>
+			<string>%1$@ +%2$d andre ønsker å bli med i dette rommet</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
@@ -317,9 +317,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Found %1$d push provider: %2$@</string>
+			<string>Fant %1$d push-leverandør: %2$@</string>
 			<key>other</key>
-			<string>Found %1$d push providers: %2$@</string>
+			<string>Fant %1$d push-leverandører: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
@@ -333,9 +333,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d distributor found: %2$@.</string>
+			<string>%1$d distributør funnet: %2$@.</string>
 			<key>other</key>
-			<string>%1$d distributors found: %2$@.</string>
+			<string>%1$d distributører funnet: %2$@.</string>
 		</dict>
 	</dict>
 </dict>

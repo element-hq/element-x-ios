@@ -51,11 +51,11 @@ struct IdentityConfirmationScreen: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
             
-//            Button(L10n.actionLearnMore) {
-//                UIApplication.shared.open(context.viewState.learnMoreURL)
-//            }
-//            .buttonStyle(.compound(.plain))
-//            .padding(.top, 16)
+            Button(L10n.actionLearnMore) {
+                UIApplication.shared.open(context.viewState.learnMoreURL)
+            }
+            .buttonStyle(.compound(.tertiary, size: .small))
+            .padding(.top, 16)
         }
     }
     
@@ -85,8 +85,7 @@ struct IdentityConfirmationScreen: View {
                 Button("\(L10n.actionSkip) 🙉") {
                     context.send(viewAction: .skip)
                 }
-                .buttonStyle(.compound(.plain))
-                .padding(.vertical, 14)
+                .buttonStyle(.compound(.tertiary))
             }
         }
     }
