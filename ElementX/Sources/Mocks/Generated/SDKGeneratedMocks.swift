@@ -13641,6 +13641,81 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
+    //MARK: - memberWithSenderInfo
+
+    open var memberWithSenderInfoUserIdThrowableError: Error?
+    var memberWithSenderInfoUserIdUnderlyingCallsCount = 0
+    open var memberWithSenderInfoUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return memberWithSenderInfoUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = memberWithSenderInfoUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                memberWithSenderInfoUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    memberWithSenderInfoUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var memberWithSenderInfoUserIdCalled: Bool {
+        return memberWithSenderInfoUserIdCallsCount > 0
+    }
+    open var memberWithSenderInfoUserIdReceivedUserId: String?
+    open var memberWithSenderInfoUserIdReceivedInvocations: [String] = []
+
+    var memberWithSenderInfoUserIdUnderlyingReturnValue: RoomMemberWithSenderInfo!
+    open var memberWithSenderInfoUserIdReturnValue: RoomMemberWithSenderInfo! {
+        get {
+            if Thread.isMainThread {
+                return memberWithSenderInfoUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: RoomMemberWithSenderInfo? = nil
+                DispatchQueue.main.sync {
+                    returnValue = memberWithSenderInfoUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                memberWithSenderInfoUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    memberWithSenderInfoUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var memberWithSenderInfoUserIdClosure: ((String) async throws -> RoomMemberWithSenderInfo)?
+
+    open override func memberWithSenderInfo(userId: String) async throws -> RoomMemberWithSenderInfo {
+        if let error = memberWithSenderInfoUserIdThrowableError {
+            throw error
+        }
+        memberWithSenderInfoUserIdCallsCount += 1
+        memberWithSenderInfoUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.memberWithSenderInfoUserIdReceivedInvocations.append(userId)
+        }
+        if let memberWithSenderInfoUserIdClosure = memberWithSenderInfoUserIdClosure {
+            return try await memberWithSenderInfoUserIdClosure(userId)
+        } else {
+            return memberWithSenderInfoUserIdReturnValue
+        }
+    }
+
     //MARK: - members
 
     open var membersThrowableError: Error?
@@ -18625,13 +18700,13 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
         return ownMembershipDetailsCallsCount > 0
     }
 
-    var ownMembershipDetailsUnderlyingReturnValue: RoomMembershipDetails?
-    open var ownMembershipDetailsReturnValue: RoomMembershipDetails? {
+    var ownMembershipDetailsUnderlyingReturnValue: RoomMemberWithSenderInfo?
+    open var ownMembershipDetailsReturnValue: RoomMemberWithSenderInfo? {
         get {
             if Thread.isMainThread {
                 return ownMembershipDetailsUnderlyingReturnValue
             } else {
-                var returnValue: RoomMembershipDetails?? = nil
+                var returnValue: RoomMemberWithSenderInfo?? = nil
                 DispatchQueue.main.sync {
                     returnValue = ownMembershipDetailsUnderlyingReturnValue
                 }
@@ -18649,9 +18724,9 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
             }
         }
     }
-    open var ownMembershipDetailsClosure: (() async -> RoomMembershipDetails?)?
+    open var ownMembershipDetailsClosure: (() async -> RoomMemberWithSenderInfo?)?
 
-    open override func ownMembershipDetails() async -> RoomMembershipDetails? {
+    open override func ownMembershipDetails() async -> RoomMemberWithSenderInfo? {
         ownMembershipDetailsCallsCount += 1
         if let ownMembershipDetailsClosure = ownMembershipDetailsClosure {
             return await ownMembershipDetailsClosure()

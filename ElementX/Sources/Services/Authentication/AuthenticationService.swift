@@ -128,7 +128,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             }
             
             return await userSession(for: client)
-        } catch let ClientError.MatrixApi(errorKind, _, _) {
+        } catch let ClientError.MatrixApi(errorKind, _, _, _) {
             MXLog.error("Failed logging in with error kind: \(errorKind)")
             switch errorKind {
             case .forbidden:

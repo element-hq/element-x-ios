@@ -1533,6 +1533,7 @@
 		227AC5D71A4CE43512062243 /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
 		22DB19219E6CC4D002E15D48 /* GlobalSearchScreenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSearchScreenCell.swift; sourceTree = "<group>"; };
 		2355398E4A55DA5A89128AD1 /* EncryptionKeyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionKeyProvider.swift; sourceTree = "<group>"; };
+		23674BF78CE814366EBD8762 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2389732B0E115A999A069083 /* NotificationSettingsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsScreenCoordinator.swift; sourceTree = "<group>"; };
 		23E6EB7960BC9D0F7396B3BD /* RoomChangeRolesScreenRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomChangeRolesScreenRow.swift; sourceTree = "<group>"; };
 		23EE69982BBA18C6D51AD08E /* UserProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileScreen.swift; sourceTree = "<group>"; };
@@ -1584,6 +1585,7 @@
 		2AE83A3DD63BCFBB956FE5CB /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		2AF715D4FD4710EBB637D661 /* SettingsScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		2B1FB56520A847DD2532D5C8 /* VideoMediaEventsTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMediaEventsTimelineView.swift; sourceTree = "<group>"; };
+		2B9BCACD0CC4CB8E37F17732 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = lt; path = lt.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		2BA894BC09972DC45E497D37 /* TimelineInteractionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineInteractionHandler.swift; sourceTree = "<group>"; };
 		2BB385E148DE55C85C0A02D6 /* SoftLogoutScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftLogoutScreenModels.swift; sourceTree = "<group>"; };
 		2BDB3E65A79779EDA5D33D8A /* AudioPlayerState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerState.swift; sourceTree = "<group>"; };
@@ -2209,6 +2211,7 @@
 		B08CBE1E670690ECF11C2C6A /* eu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = eu; path = eu.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		B0A307A44F952CD73E63AE31 /* RoomEventStringBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomEventStringBuilder.swift; sourceTree = "<group>"; };
 		B0BA67B3E4EF9D29D14A78CE /* AppLockSettingsScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockSettingsScreenViewModelTests.swift; sourceTree = "<group>"; };
+		B0C5E5931A668B18D8C09028 /* cy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cy; path = cy.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B0F5CC38803B8382D2C63222 /* TimelineControllerFactoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineControllerFactoryMock.swift; sourceTree = "<group>"; };
 		B14B1DE3E2D5D26732C49036 /* RoomChangeRolesScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomChangeRolesScreenViewModel.swift; sourceTree = "<group>"; };
 		B16048D30F0438731C41F775 /* StateRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateRoomTimelineItem.swift; sourceTree = "<group>"; };
@@ -2394,6 +2397,7 @@
 		D622EC7898469BB1D0881CDD /* PollFormScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollFormScreen.swift; sourceTree = "<group>"; };
 		D653265D006E708E4E51AD64 /* HomeScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenCoordinator.swift; sourceTree = "<group>"; };
 		D66B5D86A9AB95E0E01BED82 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D67CBAFA48ED0B6FCE74F88F /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D6DC38E64A5ED3FDB201029A /* BugReportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportService.swift; sourceTree = "<group>"; };
 		D7149BDDE47F8AD104E644E2 /* TraceLogPack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceLogPack.swift; sourceTree = "<group>"; };
 		D7673F2B0B038FAB2A8D16AD /* ElementTextFieldStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementTextFieldStyle.swift; sourceTree = "<group>"; };
@@ -6350,6 +6354,7 @@
 				be,
 				bg,
 				cs,
+				cy,
 				de,
 				el,
 				en,
@@ -6364,6 +6369,7 @@
 				id,
 				it,
 				ka,
+				lt,
 				nb,
 				nl,
 				pl,
@@ -7916,6 +7922,7 @@
 				475D47D0BFE961B02BAC5D49 /* id */,
 				6FC5015B9634698BDB8701AF /* it */,
 				D1896F6288D80E1F3EFB3DF8 /* ka */,
+				2B9BCACD0CC4CB8E37F17732 /* lt */,
 				7720ACAC6155AB7F9C70B546 /* nb */,
 				2AE83A3DD63BCFBB956FE5CB /* nl */,
 				4C8D988E82A8DFA13BE46F7C /* pl */,
@@ -7940,6 +7947,7 @@
 				F0205C03F98BE861EDABCB0D /* be */,
 				49193CB0C248D621A96FB2AA /* bg */,
 				8D8169443E5AC5FF71BFB3DB /* cs */,
+				B0C5E5931A668B18D8C09028 /* cy */,
 				35AFCF4C05DEED04E3DB1A16 /* de */,
 				113356152C099951A6D17D85 /* el */,
 				CACA846B3E3E9A521D98B178 /* en */,
@@ -7954,6 +7962,7 @@
 				EF98A02DED04075F7CF0C721 /* id */,
 				7B04BD3874D736127A8156B8 /* it */,
 				4629710C0337ADD9C8909542 /* ka */,
+				D67CBAFA48ED0B6FCE74F88F /* lt */,
 				F51D674A5B5F1FE1B878E20F /* nb */,
 				CDE3F3911FF7CC639BDE5844 /* nl */,
 				8140010A796DB2C7977B6643 /* pl */,
@@ -7978,6 +7987,7 @@
 				34ED3AB7E0287552A5648AB3 /* be */,
 				EA880E78AF4BD24E45A7808C /* bg */,
 				8D1FA20DAB853C1156054912 /* cs */,
+				23674BF78CE814366EBD8762 /* cy */,
 				84311D707B09854D67F78BBF /* de */,
 				8585C636A10B8141A7AE909F /* el */,
 				1215A4FC53D2319E81AE8970 /* en */,
@@ -8617,7 +8627,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 25.04.09;
+				version = 25.04.14;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {

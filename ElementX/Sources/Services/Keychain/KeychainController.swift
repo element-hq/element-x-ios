@@ -97,7 +97,7 @@ class KeychainController: KeychainControllerProtocol {
     func retrieveSessionFromKeychain(userId: String) throws -> Session {
         MXLog.info("Retrieving an updated Session from the keychain.")
         guard let session = restorationTokenForUsername(userId)?.session else {
-            throw ClientError.Generic(msg: "Failed to find RestorationToken in the Keychain.")
+            throw ClientError.Generic(msg: "Failed to find RestorationToken in the Keychain.", details: nil)
         }
         return session
     }
