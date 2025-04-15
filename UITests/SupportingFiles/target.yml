@@ -39,6 +39,8 @@ targets:
     - package: GZIP
     - package: Sentry
     - package: SnapshotTesting
+      products:
+        - SnapshotUITesting
     - package: Collections
     - package: SwiftOGG
 

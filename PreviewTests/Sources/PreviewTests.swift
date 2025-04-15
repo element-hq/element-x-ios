@@ -10,7 +10,7 @@ import SwiftUI
 import XCTest
 
 @testable import ElementX
-@testable import SnapshotTesting
+@testable import SnapshotTestingCore
 
 @MainActor
 class PreviewTests: XCTestCase {

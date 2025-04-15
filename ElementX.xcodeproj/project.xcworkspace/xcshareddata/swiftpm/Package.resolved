@@ -257,8 +257,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
-        "revision" : "1be8144023c367c5de701a6313ed29a3a10bf59b",
-        "version" : "1.18.3"
+        "revision" : "b467f413c83e2ceba59ba798583a1c57db9700cb"
       }
     },
     {
@@ -302,8 +301,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
       "state" : {
-        "revision" : "39de59b2d47f7ef3ca88a039dff3084688fe27f4",
-        "version" : "1.5.2"
+        "branch" : "test-traits",
+        "revision" : "ccc75ae935e2fee1b2c7d8040c21538def4310d8"
       }
     }
   ],
