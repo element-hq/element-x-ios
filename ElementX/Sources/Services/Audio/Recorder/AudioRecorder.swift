@@ -48,6 +48,7 @@ class AudioRecorder: AudioRecorderProtocol {
     
     // Callback for real-time audio buffer processing (used for transcription)
     private var audioBufferCallback: (([UInt8]) -> Void)?
+    private var audioBufferCallbackRegistered = false
     
     init(audioSession: AudioSessionProtocol = AVAudioSession.sharedInstance()) {
         self.audioSession = audioSession
@@ -102,7 +103,9 @@ class AudioRecorder: AudioRecorderProtocol {
     }
     
     func setAudioBufferCallback(_ callback: @escaping ([UInt8]) -> Void) {
+        MXLog.debug("Audio buffer callback registered")
         audioBufferCallback = callback
+        audioBufferCallbackRegistered = true
     }
     
     // MARK: - Private
@@ -212,12 +215,15 @@ class AudioRecorder: AudioRecorderProtocol {
             }
 
             // Install tap to process audio buffers coming from the mixer
+            MXLog.debug("Installing audio tap with bufferSize: 1024, format: \(mixerFormat)")
             mixer.installTap(onBus: 0, bufferSize: 1024, format: mixerFormat) { [weak self] buffer, _ in
                 self?.processAudioBuffer(buffer)
             }
 
             do {
                 try audioEngine.start()
+                MXLog.debug("Audio engine started successfully")
+                MXLog.debug("Starting recording with audioBufferCallback registered: \(self.audioBufferCallbackRegistered)")
                 completion(.success(()))
             } catch {
                 MXLog.error("audio recording failed to start. \(error)")
@@ -279,8 +285,12 @@ class AudioRecorder: AudioRecorderProtocol {
     
     private func processAudioBuffer(_ buffer: AVAudioPCMBuffer) {
         guard let audioFile else {
+            MXLog.debug("processAudioBuffer called but audioFile is nil")
             return
         }
+        
+        // Log buffer details
+        MXLog.debug("Processing audio buffer: frameLength=\(buffer.frameLength), format=\(buffer.format)")
         
         var inputBuffer = buffer
         if let audioConverter {
@@ -305,6 +315,7 @@ class AudioRecorder: AudioRecorderProtocol {
                 return
             }
             inputBuffer = convertedBuffer
+            MXLog.debug("Converted buffer: frameLength=\(convertedBuffer.frameLength), format=\(convertedBuffer.format)")
         }
         
         // Write the buffer into the audio file
@@ -314,8 +325,14 @@ class AudioRecorder: AudioRecorderProtocol {
             // Compute the sample value for the waveform
             updateMeterLevel(inputBuffer)
             
+            // Check if we have a callback registered
+            MXLog.debug("Audio buffer processed, callback registered: \(audioBufferCallbackRegistered)")
+            
             // Send audio data to callback if registered (for transcription)
             if let callback = audioBufferCallback, let channelData = inputBuffer.floatChannelData?.pointee {
+                // Log that we're about to process audio for transcription
+                MXLog.debug("Processing audio buffer for transcription: \(inputBuffer.frameLength) frames")
+                
                 // Convert float audio data to bytes for the Rust SDK
                 let frameCount = Int(inputBuffer.frameLength)
                 let byteCount = frameCount * 2 // 16-bit PCM = 2 bytes per sample
@@ -330,7 +347,14 @@ class AudioRecorder: AudioRecorderProtocol {
                 }
                 
                 // Send bytes to callback
+                MXLog.debug("Calling audio buffer callback with \(bytes.count) bytes")
                 callback(bytes)
+            } else if audioBufferCallback == nil {
+                // Log that no callback is registered
+                MXLog.debug("No audio buffer callback registered for transcription")
+            } else if inputBuffer.floatChannelData?.pointee == nil {
+                // Log that channel data is missing
+                MXLog.debug("Audio buffer has no channel data")
             }
             
             // Update the recording duration only if we succeed to write the buffer

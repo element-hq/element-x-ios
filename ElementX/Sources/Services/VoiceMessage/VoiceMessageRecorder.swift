@@ -65,6 +65,8 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         self.mediaPlayerProvider = mediaPlayerProvider
         self.voiceMessageCache = voiceMessageCache
         
+        MXLog.debug("VoiceMessageRecorder initialized with audioRecorder: \(type(of: audioRecorder))")
+        
         addObservers()
     }
     
@@ -80,47 +82,69 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         recordingCancelled = false
 
         // --- Live Transcription Setup ---
-        let apiKey = ProcessInfo.processInfo.environment["TRANSCRIPTION_API_KEY"] ?? "default-api-key"
+        let apiKey = ProcessInfo.processInfo.environment["TRANSCRIPTION_API_KEY"] ?? "72c5eb32007f5e45904c20a8176756c168f8f018"
         let language = "en" // TODO: Get from user settings if needed
-        do {
-            // Create a callback implementation that conforms to the TranscriptUpdateCallback protocol
-            class TranscriptCallbackImpl: TranscriptUpdateCallback {
-                private let onUpdate: (String) -> Void
-                
-                init(onUpdate: @escaping (String) -> Void) {
-                    self.onUpdate = onUpdate
-                }
-                
-                func onTranscriptUpdate(transcript: String) {
-                    onUpdate(transcript)
-                }
+        
+        MXLog.debug("Starting voice recording with transcription, API key length: \(apiKey.count)")
+        MXLog.debug("Using audioRecorder instance: \(type(of: audioRecorder)), isRecording: \(audioRecorder.isRecording)")
+        
+        // Create a callback implementation that conforms to the TranscriptUpdateCallback protocol
+        class TranscriptCallbackImpl: TranscriptUpdateCallback {
+            private let onUpdate: (String) -> Void
+            
+            init(onUpdate: @escaping (String) -> Void) {
+                self.onUpdate = onUpdate
             }
             
-            let callback = TranscriptCallbackImpl { [weak self] transcript in
-                DispatchQueue.main.async {
-                    self?.currentTranscript = transcript
-                    MXLog.info("Transcript update: \(transcript)")
-                }
+            func onTranscriptUpdate(transcript: String) {
+                onUpdate(transcript)
             }
+        }
+        
+        let callback = TranscriptCallbackImpl { [weak self] transcript in
+            DispatchQueue.main.async {
+                self?.currentTranscript = transcript
+                MXLog.info("Transcript update received: '\(transcript)'")
+                MXLog.info("Transcript length: \(transcript.count) characters")
+            }
+        }
+        
+        // Initialize the transcription engine first
+        do {
+            MXLog.debug("Initializing transcription engine")
             audioTranscription = try AudioStreamTranscription(callback: callback,
                                                               language: language,
                                                               apiKey: apiKey)
+            MXLog.info("Successfully initialized transcription engine")
+            
+            // Explicitly create a strong reference to audioRecorder to prevent potential issues
+            let recorder = audioRecorder
+            
+            // Set up audio buffer callback BEFORE starting recording
+            MXLog.debug("About to set audio buffer callback on \(type(of: recorder))")
+            recorder.setAudioBufferCallback { [weak self] (buffer: [UInt8]) in
+                guard let self = self, let audioTranscription = self.audioTranscription else {
+                    MXLog.warning("Audio buffer received but transcription is nil or self is deallocated")
+                    return
+                }
+                
+                // Add WAV header to the buffer
+                let wavBuffer = self.createWavHeaderForBuffer(buffer)
+
+                MXLog.debug("Sending audio buffer: original size=\(buffer.count) bytes, with WAV header=\(wavBuffer.count) bytes")
+
+                // Convert buffer to Data object expected by the Rust SDK bindings
+                let data = Data(wavBuffer)
+                audioTranscription.addAudioData(data: data)
+            }
+            
+            // Now start recording after the callback is set up
+            MXLog.debug("Starting audio recording with \(type(of: recorder))")
+            await recorder.record(audioFileURL: voiceMessageCache.urlForRecording)
+            
         } catch {
             MXLog.error("Failed to initialize transcription: \(error)")
             audioTranscription = nil
-        }
-        // -------------------------------
-
-        // Start recording and hook up audio data streaming for transcription
-        await audioRecorder.record(audioFileURL: voiceMessageCache.urlForRecording)
-        
-        // Set up audio buffer processing if your AudioRecorder supports it
-        audioRecorder.setAudioBufferCallback { [weak self] (buffer: [UInt8]) in
-            guard let self = self, let audioTranscription = self.audioTranscription else { return }
-            
-            // Convert buffer to Data object expected by the Rust SDK bindings
-            let data = Data(buffer)
-            audioTranscription.addAudioData(data: data)
         }
     }
     
@@ -259,9 +283,8 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         
         // Check if voice message was sent successfully
         if case .success(let eventId) = result {
-            // Voyzme: at the moment STT is not available yet; let's pretend it's there at the moment the audio is ready to be
-            // sent, and use gibberish data.
-            let result_stt = await roomProxy.timeline.sendTranscriptEvent(transcript: "test", relatedEventId: eventId)
+            // Use the actual transcript we generated during recording
+            let result_stt = await roomProxy.timeline.sendTranscriptEvent(transcript: currentTranscript, relatedEventId: eventId)
             MXLog.info("Finished sending transcript event: \(result_stt)")
         } else if case .failure(let error) = result {
             MXLog.error("Failed to send the voice message. \(error)")
@@ -330,5 +353,47 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         previewAudioPlayer = audioPlayer
         
         return .success(())
+    }
+
+    // In VoiceMessageRecorder.swift, add this helper function:
+    private func createWavHeaderForBuffer(_ buffer: [UInt8]) -> [UInt8] {
+        let sampleRate: UInt32 = 48000 // Match your actual sample rate
+        let channels: UInt16 = 1
+        let bitsPerSample: UInt16 = 16
+    
+        // Calculate derived values
+        let bytesPerSample = bitsPerSample / 8
+        let bytesPerSecond = sampleRate * UInt32(bytesPerSample) * UInt32(channels)
+        let blockAlign = bytesPerSample * channels
+        let dataSize = UInt32(buffer.count)
+        let fileSize = dataSize + 36 // File size minus 8 bytes for RIFF header
+    
+        // Create header
+        var header = [UInt8]()
+    
+        // RIFF header
+        header.append(contentsOf: "RIFF".utf8)
+        header.append(contentsOf: withUnsafeBytes(of: fileSize.littleEndian) { Array($0) })
+        header.append(contentsOf: "WAVE".utf8)
+    
+        // fmt chunk
+        header.append(contentsOf: "fmt ".utf8)
+        header.append(contentsOf: withUnsafeBytes(of: UInt32(16).littleEndian) { Array($0) }) // fmt chunk size
+        header.append(contentsOf: withUnsafeBytes(of: UInt16(1).littleEndian) { Array($0) }) // PCM format
+        header.append(contentsOf: withUnsafeBytes(of: channels.littleEndian) { Array($0) })
+        header.append(contentsOf: withUnsafeBytes(of: sampleRate.littleEndian) { Array($0) })
+        header.append(contentsOf: withUnsafeBytes(of: bytesPerSecond.littleEndian) { Array($0) })
+        header.append(contentsOf: withUnsafeBytes(of: blockAlign.littleEndian) { Array($0) })
+        header.append(contentsOf: withUnsafeBytes(of: bitsPerSample.littleEndian) { Array($0) })
+    
+        // data chunk
+        header.append(contentsOf: "data".utf8)
+        header.append(contentsOf: withUnsafeBytes(of: dataSize.littleEndian) { Array($0) })
+    
+        // Combine header and buffer
+        var wavData = header
+        wavData.append(contentsOf: buffer)
+    
+        return wavData
     }
 }
