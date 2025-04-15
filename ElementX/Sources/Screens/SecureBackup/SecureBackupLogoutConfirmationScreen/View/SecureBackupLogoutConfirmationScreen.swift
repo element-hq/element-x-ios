@@ -152,9 +152,9 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
         let secureBackupController = SecureBackupControllerMock()
         secureBackupController.underlyingKeyBackupState = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled).asCurrentValuePublisher()
         
-        secureBackupController.waitForKeyBackupUploadProgressCallbackClosure = { uploadProgress in
-            if case let .backupOngoing(progress) = mode {
-                uploadProgress?(progress)
+        secureBackupController.waitForKeyBackupUploadUploadStateSubjectClosure = { uploadStateSubject in
+            if case .backupOngoing = mode {
+                uploadStateSubject.send(.uploading(uploadedKeyCount: 50, totalKeyCount: 100))
             }
             
             return .success(())

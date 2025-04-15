@@ -14,6 +14,8 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     private let secureBackupController: SecureBackupControllerProtocol
     private let appMediator: AppMediatorProtocol
     
+    private let backupUploadStateSubject: CurrentValueSubject<SecureBackupSteadyState, Never> = .init(.waiting)
+    
     // periphery:ignore - auto cancels when reassigned
     @CancellableTask
     private var keyUploadWaitingTask: Task<Void, Never>?
@@ -31,15 +33,11 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         
         super.init(initialViewState: .init(mode: .saveRecoveryKey))
         
-        appMediator.networkMonitor.reachabilityPublisher
+        backupUploadStateSubject.combineLatest(appMediator.networkMonitor.reachabilityPublisher)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] reachability in
-                guard let self,
-                      state.mode != .saveRecoveryKey else {
-                    return
-                }
-                
-                updateMode(with: reachability)
+            .sink { [weak self] backupState, reachability in
+                guard let self, state.mode != .saveRecoveryKey else { return }
+                updateMode(backupState: backupState, reachability: reachability)
             }
             .store(in: &cancellables)
     }
@@ -64,14 +62,14 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     
     private func attemptLogout() {
         if case .saveRecoveryKey = state.mode {
-            updateMode(with: appMediator.networkMonitor.reachabilityPublisher.value)
+            updateMode(backupState: backupUploadStateSubject.value, reachability: appMediator.networkMonitor.reachabilityPublisher.value)
             
             keyUploadWaitingTask = Task {
-                var result = await waitForKeyBackupUpload()
+                var result = await secureBackupController.waitForKeyBackupUpload(uploadStateSubject: backupUploadStateSubject)
                 
                 if case .failure = result {
                     // Retry the upload first, conditions might have changed.
-                    result = await waitForKeyBackupUpload()
+                    result = await secureBackupController.waitForKeyBackupUpload(uploadStateSubject: backupUploadStateSubject)
                 }
                 
                 guard case .success = result else {
@@ -89,22 +87,24 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         }
     }
     
-    private func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError> {
-        await secureBackupController.waitForKeyBackupUpload { [weak self] progress in
-            self?.state.mode = .backupOngoing(progress: progress)
-        }
-    }
-    
-    private func updateMode(with reachability: NetworkMonitorReachability) {
-        if reachability == .reachable {
+    private func updateMode(backupState: SecureBackupSteadyState, reachability: NetworkMonitorReachability) {
+        switch (backupState, reachability) {
+        case (.waiting, .reachable):
             state.mode = .waitingToStart(hasStalled: false)
-            monitorUploadProgress()
-        } else {
+            monitorWaitingState()
+        case (.uploading(let uploadedKeyCount, let totalKeyCount), .reachable):
+            state.mode = .backupOngoing(progress: Double(uploadedKeyCount) / Double(totalKeyCount))
+        case (.error, .reachable):
+            break // Nothing to do here, it will be handled with the result.
+        case (.done, .reachable):
+            state.mode = .backupOngoing(progress: 1.0)
+        case (_, .unreachable):
             state.mode = .offline
         }
     }
     
-    private func monitorUploadProgress() {
+    /// If we stay in the waiting state for more than 2-seconds we ask the user to check their connection.
+    private func monitorWaitingState() {
         keyUploadStalledTask = Task { [weak self] in
             try await Task.sleep(for: .seconds(2))
             guard let self, case .waitingToStart(hasStalled: false) = state.mode else { return }

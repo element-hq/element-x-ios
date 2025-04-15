@@ -40,12 +40,10 @@ class SecureBackupLogoutConfirmationScreenViewModelTests: XCTestCase {
     func testOngoingState() async throws {
         testInitialState()
         
-        let mockProgress = 0.5
-        
         let progressExpectation = expectation(description: "The upload progress callback should be called.")
-        secureBackupController.waitForKeyBackupUploadProgressCallbackClosure = { progressCallback in
+        secureBackupController.waitForKeyBackupUploadUploadStateSubjectClosure = { stateSubject in
             try? await Task.sleep(for: .seconds(4))
-            progressCallback?(mockProgress)
+            stateSubject.send(.uploading(uploadedKeyCount: 50, totalKeyCount: 100))
             progressExpectation.fulfill()
             return .success(())
         }
@@ -60,7 +58,7 @@ class SecureBackupLogoutConfirmationScreenViewModelTests: XCTestCase {
         
         // Wait for the progress to be reported.
         await fulfillment(of: [progressExpectation])
-        XCTAssertEqual(context.viewState.mode, .backupOngoing(progress: mockProgress))
+        XCTAssertEqual(context.viewState.mode, .backupOngoing(progress: 0.5))
     }
     
     func testOfflineState() async throws {

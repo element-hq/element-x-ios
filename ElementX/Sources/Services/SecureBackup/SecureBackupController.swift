@@ -154,13 +154,18 @@ class SecureBackupController: SecureBackupControllerProtocol {
         }
     }
         
-    func waitForKeyBackupUpload(progressCallback: ((Double) -> Void)?) async -> Result<Void, SecureBackupControllerError> {
+    func waitForKeyBackupUpload(uploadStateSubject: CurrentValueSubject<SecureBackupSteadyState, Never>) async -> Result<Void, SecureBackupControllerError> {
         do {
             MXLog.info("Waiting for backup upload steady state")
             try await encryption.waitForBackupUploadSteadyState(progressListener: SecureBackupControllerListener { state in
-                guard case let .uploading(backedUpCount, totalCount) = state else { return }
-                let progress = Double(backedUpCount) / Double(totalCount)
-                progressCallback?(progress)
+                let uploadState: SecureBackupSteadyState = switch state {
+                case .waiting: .waiting
+                case .uploading(let backedUpCount, let totalCount): .uploading(uploadedKeyCount: Int(backedUpCount), totalKeyCount: Int(totalCount))
+                case .error: .error
+                case .done: .done
+                }
+                
+                uploadStateSubject.send(uploadState)
             })
             return .success(())
         } catch let error as SteadyStateError {
