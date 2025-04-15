@@ -1384,15 +1384,15 @@ internal enum L10n {
   internal static var screenOnboardingSignInWithQrCode: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_with_qr_code") }
   /// Create account
   internal static var screenOnboardingSignUp: String { return L10n.tr("Localizable", "screen_onboarding_sign_up") }
-  /// Welcome to the fastest %1$@ ever. Supercharged for speed and simplicity.
+  /// Welcome to %1$@. Communication made natural.
   internal static func screenOnboardingWelcomeMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_welcome_message", String(describing: p1))
   }
-  /// Welcome to %1$@. Supercharged, for speed and simplicity.
+  /// Welcome to %1$@. Communication made natural.
   internal static func screenOnboardingWelcomeSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_welcome_subtitle", String(describing: p1))
   }
-  /// Be in your element
+  /// Just Drop it!
   internal static var screenOnboardingWelcomeTitle: String { return L10n.tr("Localizable", "screen_onboarding_welcome_title") }
   /// Press on a message and choose “%1$@” to include here.
   internal static func screenPinnedTimelineEmptyStateDescription(_ p1: Any) -> String {
