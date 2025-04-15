@@ -21,12 +21,32 @@ struct VoiceMessageRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            VoiceMessageRoomPlaybackView(playerState: playerState,
-                                         onPlayPause: onPlaybackPlayPause,
-                                         onSeek: { onPlaybackSeek($0) },
-                                         onScrubbing: { onPlaybackScrubbing($0) })
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: 400)
+            HStack(alignment: .center, spacing: 8) {
+                VoiceMessageRoomPlaybackView(playerState: playerState,
+                                             onPlayPause: onPlaybackPlayPause,
+                                             onSeek: { onPlaybackSeek($0) },
+                                             onScrubbing: { onPlaybackScrubbing($0) })
+                    .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: 400)
+                // --- Custom Buttons ---
+                Button(action: { /* TODO: Add Tt action */ }) {
+                    Text("Tt")
+                        .font(.system(size: 16, weight: .bold, design: .default))
+                        .foregroundColor(.primary)
+                        .frame(width: 32, height: 32)
+                        .background(Color.compound.bgSubtlePrimary)
+                        .cornerRadius(8)
+                }
+                Button(action: { /* TODO: Add S action */ }) {
+                    Text("S")
+                        .font(.system(size: 16, weight: .bold, design: .default))
+                        .foregroundColor(.primary)
+                        .frame(width: 32, height: 32)
+                        .background(Color.compound.bgSubtlePrimary)
+                        .cornerRadius(8)
+                }
+                // --- End Custom Buttons ---
+            }
         }
     }
     
