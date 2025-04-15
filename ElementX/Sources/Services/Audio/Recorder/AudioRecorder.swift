@@ -46,6 +46,9 @@ class AudioRecorder: AudioRecorderProtocol {
     private let dispatchQueue = DispatchQueue(label: "io.element.elementx.audio_recorder", qos: .userInitiated)
     private var stopped = false
     
+    // Callback for real-time audio buffer processing (used for transcription)
+    private var audioBufferCallback: (([UInt8]) -> Void)?
+    
     init(audioSession: AudioSessionProtocol = AVAudioSession.sharedInstance()) {
         self.audioSession = audioSession
     }
@@ -96,6 +99,10 @@ class AudioRecorder: AudioRecorderProtocol {
         
     func averagePower() -> Float {
         meterLevel
+    }
+    
+    func setAudioBufferCallback(_ callback: @escaping ([UInt8]) -> Void) {
+        audioBufferCallback = callback
     }
     
     // MARK: - Private
@@ -306,6 +313,25 @@ class AudioRecorder: AudioRecorderProtocol {
 
             // Compute the sample value for the waveform
             updateMeterLevel(inputBuffer)
+            
+            // Send audio data to callback if registered (for transcription)
+            if let callback = audioBufferCallback, let channelData = inputBuffer.floatChannelData?.pointee {
+                // Convert float audio data to bytes for the Rust SDK
+                let frameCount = Int(inputBuffer.frameLength)
+                let byteCount = frameCount * 2 // 16-bit PCM = 2 bytes per sample
+                var bytes = [UInt8](repeating: 0, count: byteCount)
+                
+                // Convert float samples to 16-bit PCM
+                for i in 0..<frameCount {
+                    let sample = Int16(channelData[i] * 32767.0) // Convert -1.0...1.0 to -32767...32767
+                    let byteIndex = i * 2
+                    bytes[byteIndex] = UInt8(sample & 0xFF) // Low byte
+                    bytes[byteIndex + 1] = UInt8(sample >> 8 & 0xFF) // High byte
+                }
+                
+                // Send bytes to callback
+                callback(bytes)
+            }
             
             // Update the recording duration only if we succeed to write the buffer
             currentTime += Double(inputBuffer.frameLength) / inputBuffer.format.sampleRate

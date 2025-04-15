@@ -10,6 +10,19 @@ import DSWaveformImage
 import Foundation
 import MatrixRustSDK
 
+// Proper callback implementation for UniFFI
+class TranscriptCallbackImpl: TranscriptUpdateCallback {
+    private let callback: (String) -> Void
+    
+    init(callback: @escaping (String) -> Void) {
+        self.callback = callback
+    }
+    
+    func onTranscriptUpdate(transcript: String) {
+        callback(transcript)
+    }
+}
+
 class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     let audioRecorder: AudioRecorderProtocol
     private let voiceMessageCache: VoiceMessageCacheProtocol
@@ -36,6 +49,11 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     private var recordingCancelled = false
 
+    // --- Live Transcription ---
+    private var audioTranscription: AudioStreamTranscription?
+    private(set) var currentTranscript = ""
+    // -------------------------
+
     private(set) var previewAudioPlayerState: AudioPlayerState?
     private(set) var previewAudioPlayer: AudioPlayerProtocol?
     private var cancellables = Set<AnyCancellable>()
@@ -57,17 +75,70 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     // MARK: - Recording
     
     func startRecording() async {
-        // Voyzme: should prolly plug the real-time STT somewhere here.
         await stopPlayback()
         previewAudioPlayer?.reset()
         recordingCancelled = false
-        
+
+        // --- Live Transcription Setup ---
+        let apiKey = ProcessInfo.processInfo.environment["TRANSCRIPTION_API_KEY"] ?? "default-api-key"
+        let language = "en" // TODO: Get from user settings if needed
+        do {
+            // Create a callback implementation that conforms to the TranscriptUpdateCallback protocol
+            class TranscriptCallbackImpl: TranscriptUpdateCallback {
+                private let onUpdate: (String) -> Void
+                
+                init(onUpdate: @escaping (String) -> Void) {
+                    self.onUpdate = onUpdate
+                }
+                
+                func onTranscriptUpdate(transcript: String) {
+                    onUpdate(transcript)
+                }
+            }
+            
+            let callback = TranscriptCallbackImpl { [weak self] transcript in
+                DispatchQueue.main.async {
+                    self?.currentTranscript = transcript
+                    MXLog.info("Transcript update: \(transcript)")
+                }
+            }
+            audioTranscription = try AudioStreamTranscription(callback: callback,
+                                                              language: language,
+                                                              apiKey: apiKey)
+        } catch {
+            MXLog.error("Failed to initialize transcription: \(error)")
+            audioTranscription = nil
+        }
+        // -------------------------------
+
+        // Start recording and hook up audio data streaming for transcription
         await audioRecorder.record(audioFileURL: voiceMessageCache.urlForRecording)
+        
+        // Set up audio buffer processing if your AudioRecorder supports it
+        audioRecorder.setAudioBufferCallback { [weak self] (buffer: [UInt8]) in
+            guard let self = self, let audioTranscription = self.audioTranscription else { return }
+            
+            // Convert buffer to Data object expected by the Rust SDK bindings
+            let data = Data(buffer)
+            audioTranscription.addAudioData(data: data)
+        }
     }
     
     func stopRecording() async {
         recordingCancelled = false
         await audioRecorder.stopRecording()
+        // Stop transcription and get the final transcript
+        if let audioTranscription = audioTranscription {
+            do {
+                let finalTranscript = try audioTranscription.stop()
+                MXLog.info("Final transcript: \(finalTranscript)")
+                // Store the final transcript for later use (e.g., sending with the voice message)
+                currentTranscript = finalTranscript
+            } catch {
+                MXLog.error("Error stopping transcription: \(error)")
+            }
+        }
+        audioTranscription = nil
     }
     
     func cancelRecording() async {
@@ -77,6 +148,9 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         await audioRecorder.deleteRecording()
         previewAudioPlayerState = nil
         previewAudioPlayer?.reset()
+        // Clean up transcription
+        audioTranscription = nil
+        currentTranscript = ""
     }
     
     func deleteRecording() async {

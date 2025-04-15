@@ -1639,6 +1639,47 @@ class AudioRecorderMock: AudioRecorderProtocol {
             return averagePowerReturnValue
         }
     }
+    //MARK: - setAudioBufferCallback
+
+    var setAudioBufferCallbackUnderlyingCallsCount = 0
+    var setAudioBufferCallbackCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setAudioBufferCallbackUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setAudioBufferCallbackUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setAudioBufferCallbackUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setAudioBufferCallbackUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setAudioBufferCallbackCalled: Bool {
+        return setAudioBufferCallbackCallsCount > 0
+    }
+    var setAudioBufferCallbackReceivedCallback: (([UInt8]) -> Void)?
+    var setAudioBufferCallbackReceivedInvocations: [(([UInt8]) -> Void)] = []
+    var setAudioBufferCallbackClosure: ((@escaping ([UInt8]) -> Void) -> Void)?
+
+    func setAudioBufferCallback(_ callback: @escaping ([UInt8]) -> Void) {
+        setAudioBufferCallbackCallsCount += 1
+        setAudioBufferCallbackReceivedCallback = callback
+        DispatchQueue.main.async {
+            self.setAudioBufferCallbackReceivedInvocations.append(callback)
+        }
+        setAudioBufferCallbackClosure?(callback)
+    }
 }
 class AudioSessionMock: AudioSessionProtocol {
 

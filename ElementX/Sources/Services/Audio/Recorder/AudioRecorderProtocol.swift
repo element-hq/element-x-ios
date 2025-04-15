@@ -34,6 +34,10 @@ protocol AudioRecorderProtocol: AnyObject {
     func stopRecording() async
     func deleteRecording() async
     func averagePower() -> Float
+    
+    /// Set a callback to receive audio buffer data during recording
+    /// - Parameter callback: A closure that receives audio buffer data as [UInt8]
+    func setAudioBufferCallback(_ callback: @escaping ([UInt8]) -> Void)
 }
 
 // sourcery: AutoMockable

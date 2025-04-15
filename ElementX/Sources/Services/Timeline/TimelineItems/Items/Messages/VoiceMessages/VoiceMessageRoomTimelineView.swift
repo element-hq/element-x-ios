@@ -30,10 +30,10 @@ struct VoiceMessageRoomTimelineView: View {
                     .frame(maxWidth: 400)
                 // --- Custom Buttons ---
                 Button(action: { /* TODO: Add Tt action */ }) {
-                    Text("Tt")
+                    Text("T")
                         .font(.system(size: 16, weight: .bold, design: .default))
                         .foregroundColor(.primary)
-                        .frame(width: 32, height: 32)
+                        .frame(width: 25, height: 25)
                         .background(Color.compound.bgSubtlePrimary)
                         .cornerRadius(8)
                 }
@@ -41,7 +41,7 @@ struct VoiceMessageRoomTimelineView: View {
                     Text("S")
                         .font(.system(size: 16, weight: .bold, design: .default))
                         .foregroundColor(.primary)
-                        .frame(width: 32, height: 32)
+                        .frame(width: 25, height: 25)
                         .background(Color.compound.bgSubtlePrimary)
                         .cornerRadius(8)
                 }
