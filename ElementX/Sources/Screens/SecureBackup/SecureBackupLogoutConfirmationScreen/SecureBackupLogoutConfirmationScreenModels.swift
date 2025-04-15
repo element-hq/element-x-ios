@@ -13,9 +13,10 @@ enum SecureBackupLogoutConfirmationScreenViewModelAction {
     case logout
 }
 
-enum SecureBackupLogoutConfirmationScreenViewMode {
+enum SecureBackupLogoutConfirmationScreenViewMode: Equatable {
     case saveRecoveryKey
-    case backupOngoing
+    case waitingToStart(hasStalled: Bool)
+    case backupOngoing(progress: Double)
     case offline
 }
 

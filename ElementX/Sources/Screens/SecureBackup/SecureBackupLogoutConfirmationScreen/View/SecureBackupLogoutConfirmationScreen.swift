@@ -40,16 +40,25 @@ struct SecureBackupLogoutConfirmationScreen: View {
             .font(.compound.bodyMD)
             .multilineTextAlignment(.center)
         
-        if context.viewState.mode == .backupOngoing {
+        if case let .waitingToStart(hasStalled) = context.viewState.mode {
             Spacer()
             ProgressView()
+            
+            if hasStalled {
+                Text(L10n.commonPleaseCheckInternetConnection)
+                    .font(.compound.bodySM)
+                    .foregroundColor(.compound.textPrimary)
+            }
+        } else if case let .backupOngoing(progress) = context.viewState.mode {
+            Spacer()
+            ProgressView(value: progress)
         }
     }
     
     @ViewBuilder
     private var footer: some View {
         VStack(spacing: 16.0) {
-            if context.viewState.mode == .saveRecoveryKey {
+            if case .saveRecoveryKey = context.viewState.mode {
                 Button {
                     context.send(viewAction: .settings)
                 } label: {
@@ -80,7 +89,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
         switch context.viewState.mode {
         case .saveRecoveryKey:
             return L10n.screenSignoutSaveRecoveryKeyTitle
-        case .backupOngoing:
+        case .waitingToStart, .backupOngoing:
             return L10n.screenSignoutKeyBackupOngoingTitle
         case .offline:
             return L10n.screenSignoutKeyBackupOfflineTitle
@@ -91,7 +100,7 @@ struct SecureBackupLogoutConfirmationScreen: View {
         switch context.viewState.mode {
         case .saveRecoveryKey:
             return L10n.screenSignoutSaveRecoveryKeySubtitle
-        case .backupOngoing:
+        case .waitingToStart, .backupOngoing:
             return L10n.screenSignoutKeyBackupOngoingSubtitle
         case .offline:
             return L10n.screenSignoutKeyBackupOfflineSubtitle
@@ -102,25 +111,69 @@ struct SecureBackupLogoutConfirmationScreen: View {
 // MARK: - Previews
 
 struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = buildViewModel()
+    static let viewModel = makeViewModel(mode: .saveRecoveryKey)
+    static let waitingViewModel = makeViewModel(mode: .waitingToStart(hasStalled: false))
+    static let ongoingViewModel = makeViewModel(mode: .backupOngoing(progress: 0.5))
+    static let offlineViewModel = makeViewModel(mode: .offline)
     
     static var previews: some View {
         NavigationStack {
             SecureBackupLogoutConfirmationScreen(context: viewModel.context)
         }
+        .previewDisplayName("Confirmation")
+        
+        NavigationStack {
+            SecureBackupLogoutConfirmationScreen(context: waitingViewModel.context)
+        }
+        .previewDisplayName("Waiting")
+        .snapshotPreferences(expect: waitingViewModel.context.$viewState.map { $0.mode == .waitingToStart(hasStalled: false) })
+        
+        NavigationStack {
+            SecureBackupLogoutConfirmationScreen(context: ongoingViewModel.context)
+        }
+        .previewDisplayName("Ongoing")
+        .snapshotPreferences(expect: ongoingViewModel.context.$viewState.map { $0.mode == .backupOngoing(progress: 0.5) })
+        
+        // Uses the same view model as Waiting but with a different expectation.
+        NavigationStack {
+            SecureBackupLogoutConfirmationScreen(context: waitingViewModel.context)
+        }
+        .previewDisplayName("Stalled")
+        .snapshotPreferences(expect: waitingViewModel.context.$viewState.map { $0.mode == .waitingToStart(hasStalled: true) })
+        
+        NavigationStack {
+            SecureBackupLogoutConfirmationScreen(context: offlineViewModel.context)
+        }
+        .previewDisplayName("Offline")
+        .snapshotPreferences(expect: offlineViewModel.context.$viewState.map { $0.mode == .offline })
     }
     
-    static func buildViewModel() -> SecureBackupLogoutConfirmationScreenViewModelType {
+    static func makeViewModel(mode: SecureBackupLogoutConfirmationScreenViewMode) -> SecureBackupLogoutConfirmationScreenViewModel {
         let secureBackupController = SecureBackupControllerMock()
         secureBackupController.underlyingKeyBackupState = CurrentValueSubject<SecureBackupKeyBackupState, Never>(.enabled).asCurrentValuePublisher()
         
+        secureBackupController.waitForKeyBackupUploadUploadStateSubjectClosure = { uploadStateSubject in
+            if case .backupOngoing = mode {
+                uploadStateSubject.send(.uploading(uploadedKeyCount: 50, totalKeyCount: 100))
+            }
+            
+            return .success(())
+        }
+        
+        let reachability: NetworkMonitorReachability = mode == .offline ? .unreachable : .reachable
         let networkMonitor = NetworkMonitorMock()
-        networkMonitor.underlyingReachabilityPublisher = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable).asCurrentValuePublisher()
+        networkMonitor.underlyingReachabilityPublisher = CurrentValueSubject<NetworkMonitorReachability, Never>(reachability).asCurrentValuePublisher()
         
         let appMediator = AppMediatorMock()
         appMediator.underlyingNetworkMonitor = networkMonitor
         
-        return SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                             appMediator: appMediator)
+        let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
+                                                                      appMediator: appMediator)
+        
+        if mode != .saveRecoveryKey {
+            viewModel.context.send(viewAction: .logout)
+        }
+        
+        return viewModel
     }
 }
