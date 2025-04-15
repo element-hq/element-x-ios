@@ -324,6 +324,7 @@
 		3ED2725734568F6B8CC87544 /* AttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C6FBF97B6EED3D4FA5EFF /* AttributedStringBuilder.swift */; };
 		3F2148F11164C7C5609984EB /* GZIP in Frameworks */ = {isa = PBXBuildFile; productRef = 2B788C81F6369D164ADEB917 /* GZIP */; };
 		3F327A62D233933F54F0F33A /* SwiftOGG in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE40E79C36E7903121E6E3B /* SwiftOGG */; };
+		3F55721B5C08E8D9F1295592 /* SDKListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5CD2993048222B64C45006 /* SDKListener.swift */; };
 		3F70E237CE4C3FAB02FC227F /* NotificationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C830A64609CBD152F06E0457 /* NotificationConstants.swift */; };
 		401BB28CD6B7DD6B4E7863E7 /* ServerConfirmationScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9342F5D6729627B6393AF853 /* ServerConfirmationScreenModels.swift */; };
 		407DCE030E0F9B7C9861D38A /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = 1A6B622CCFDEFB92D9CF1CA5 /* LoremSwiftum */; };
@@ -2578,6 +2579,7 @@
 		FDEDD4D2DE0646DA724985D5 /* QRCodeLoginScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeLoginScreenModels.swift; sourceTree = "<group>"; };
 		FDF73F49E6B6683F7E2D26F0 /* SecureBackupScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupScreenCoordinator.swift; sourceTree = "<group>"; };
 		FE1E6FAA3719E9B7A2D5510B /* FormattingToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattingToolbar.swift; sourceTree = "<group>"; };
+		FE5CD2993048222B64C45006 /* SDKListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKListener.swift; sourceTree = "<group>"; };
 		FF720BA68256297680980481 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		FFECCE59967018204876D0A5 /* LocationMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMarkerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -5367,6 +5369,7 @@
 				6A580295A56B55A856CC4084 /* InfoPlistReader.swift */,
 				6AD1A853D605C2146B0DC028 /* MatrixEntityRegex.swift */,
 				53482ECA4B6633961EC224F5 /* ScrollViewAdapter.swift */,
+				FE5CD2993048222B64C45006 /* SDKListener.swift */,
 				4481799F455B3DA243BDA2AC /* ShareToMapsAppActivity.swift */,
 				B1E227F34BE43B08E098796E /* TestablePreview.swift */,
 				1F2529D434C750ED78ADF1ED /* UserAgentBuilder.swift */,
@@ -7549,6 +7552,7 @@
 				41CE5E1289C8768FC5B6490C /* RoomTimelineItemViewState.swift in Sources */,
 				B2F8E01ABA1BA30265B4ECBE /* RoundedCornerShape.swift in Sources */,
 				D43F0503EF2CBC55272538FE /* SDKGeneratedMocks.swift in Sources */,
+				3F55721B5C08E8D9F1295592 /* SDKListener.swift in Sources */,
 				88CBF1595E39CE697928DE48 /* SFNumberedListView.swift in Sources */,
 				FB595EC9C00AB32F39034055 /* SceneDelegate.swift in Sources */,
 				0437765FF480249486893CC7 /* ScreenTrackerViewModifier.swift in Sources */,

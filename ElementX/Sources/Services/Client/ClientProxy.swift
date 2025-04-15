@@ -192,7 +192,7 @@ class ClientProxy: ClientProxyProtocol {
         
         await updateVerificationState(client.encryption().verificationState())
         
-        verificationStateListenerTaskHandle = client.encryption().verificationStateListener(listener: VerificationStateListenerProxy { [weak self] verificationState in
+        verificationStateListenerTaskHandle = client.encryption().verificationStateListener(listener: SDKListener { [weak self] verificationState in
             Task { await self?.updateVerificationState(verificationState) }
         })
         
@@ -838,7 +838,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func createSyncServiceStateObserver(_ syncService: SyncService) -> TaskHandle {
-        syncService.state(listener: SyncServiceStateObserverProxy { [weak self] state in
+        syncService.state(listener: SDKListener { [weak self] state in
             guard let self else { return }
             
             MXLog.info("Received sync service update: \(state)")
@@ -856,7 +856,7 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     private func createRoomListServiceObserver(_ roomListService: RoomListService) -> TaskHandle {
-        roomListService.state(listener: RoomListStateListenerProxy { [weak self] state in
+        roomListService.state(listener: SDKListener { [weak self] state in
             guard let self else { return }
             
             MXLog.info("Received room list update: \(state)")
@@ -877,7 +877,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func createRoomListLoadingStateUpdateObserver(_ roomListService: RoomListService) -> TaskHandle {
-        roomListService.syncIndicator(delayBeforeShowingInMs: 1000, delayBeforeHidingInMs: 0, listener: RoomListServiceSyncIndicatorListenerProxy { [weak self] state in
+        roomListService.syncIndicator(delayBeforeShowingInMs: 1000, delayBeforeHidingInMs: 0, listener: SDKListener { [weak self] state in
             guard let self else { return }
             
             switch state {
@@ -1036,54 +1036,6 @@ extension ClientProxy: MediaLoaderProtocol {
     
     func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy {
         try await mediaLoader.loadMediaFileForSource(source, filename: filename)
-    }
-}
-
-private class SyncServiceStateObserverProxy: SyncServiceStateObserver {
-    private let onUpdateClosure: (SyncServiceState) -> Void
-
-    init(onUpdateClosure: @escaping (SyncServiceState) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-
-    func onUpdate(state: SyncServiceState) {
-        onUpdateClosure(state)
-    }
-}
-
-private class RoomListStateListenerProxy: RoomListServiceStateListener {
-    private let onUpdateClosure: (RoomListServiceState) -> Void
-
-    init(onUpdateClosure: @escaping (RoomListServiceState) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-
-    func onUpdate(state: RoomListServiceState) {
-        onUpdateClosure(state)
-    }
-}
-
-private class RoomListServiceSyncIndicatorListenerProxy: RoomListServiceSyncIndicatorListener {
-    private let onUpdateClosure: (RoomListServiceSyncIndicator) -> Void
-
-    init(onUpdateClosure: @escaping (RoomListServiceSyncIndicator) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(syncIndicator: RoomListServiceSyncIndicator) {
-        onUpdateClosure(syncIndicator)
-    }
-}
-
-private class VerificationStateListenerProxy: VerificationStateListener {
-    private let onUpdateClosure: (VerificationState) -> Void
-
-    init(onUpdateClosure: @escaping (VerificationState) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(status: VerificationState) {
-        onUpdateClosure(status)
     }
 }
 
