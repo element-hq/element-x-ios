@@ -67,18 +67,20 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
             keyUploadWaitingTask = Task {
                 var result = await secureBackupController.waitForKeyBackupUpload(uploadStateSubject: backupUploadStateSubject)
                 
+                guard !Task.isCancelled else { return }
+                
                 if case .failure = result {
                     // Retry the upload first, conditions might have changed.
                     result = await secureBackupController.waitForKeyBackupUpload(uploadStateSubject: backupUploadStateSubject)
                 }
+                
+                guard !Task.isCancelled else { return }
                 
                 guard case .success = result else {
                     MXLog.error("Aborting logout due to failure waiting for backup upload.")
                     state.bindings.alertInfo = .init(id: .backupUploadFailed)
                     return
                 }
-                
-                guard !Task.isCancelled else { return }
                 
                 actionsSubject.send(.logout)
             }
@@ -91,7 +93,7 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         switch (backupState, reachability) {
         case (.waiting, .reachable):
             state.mode = .waitingToStart(hasStalled: false)
-            monitorWaitingState()
+            showAsStalledAfterTimeout()
         case (.uploading(let uploadedKeyCount, let totalKeyCount), .reachable):
             state.mode = .backupOngoing(progress: Double(uploadedKeyCount) / Double(totalKeyCount))
         case (.error, .reachable):
@@ -104,7 +106,7 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     }
     
     /// If we stay in the waiting state for more than 2-seconds we ask the user to check their connection.
-    private func monitorWaitingState() {
+    private func showAsStalledAfterTimeout() {
         keyUploadStalledTask = Task { [weak self] in
             try await Task.sleep(for: .seconds(2))
             guard let self, case .waitingToStart(hasStalled: false) = state.mode else { return }
