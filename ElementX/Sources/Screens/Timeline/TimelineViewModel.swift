@@ -102,6 +102,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        timelineState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
+                                                       areThreadsEnabled: appSettings.threadsEnabled,
                                                        hideTimelineMedia: hideTimelineMedia,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
@@ -190,7 +191,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             displayReactionSummary(for: itemID, selectedKey: key)
         case .displayReadReceipts(let itemID):
             displayReadReceipts(for: itemID)
-        case .displayThread(let itemID):
+        case .displayThread:
             break
         case .handlePasteOrDrop(let provider):
             timelineInteractionHandler.handlePasteOrDrop(provider)

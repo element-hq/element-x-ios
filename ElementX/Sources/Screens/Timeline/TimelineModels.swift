@@ -103,6 +103,7 @@ struct TimelineViewState: BindableState {
     var canCurrentUserKick = false
     var canCurrentUserBan = false
     var isViewSourceEnabled: Bool
+    var areThreadsEnabled: Bool
     var hideTimelineMedia: Bool
         
     // The `pinnedEventIDs` are used only to determine if an item is already pinned or not.

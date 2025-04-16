@@ -30,7 +30,13 @@ struct DeveloperOptionsScreen: View {
                     }
                 }
             }
-                        
+            
+            Section("General") {
+                Toggle(isOn: $context.threadsEnabled) {
+                    Text("Threads")
+                }
+            }
+            
             Section("Room List") {
                 Toggle(isOn: $context.publicSearchEnabled) {
                     Text("Public search")
