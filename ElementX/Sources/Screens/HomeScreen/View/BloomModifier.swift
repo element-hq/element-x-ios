@@ -22,6 +22,9 @@ extension View {
 }
 
 struct NewBloomModifier: ViewModifier {
+    @State private var standardAppearance = UINavigationBarAppearance()
+    @State private var scrollEdgeAppearance = UINavigationBarAppearance()
+    
     @State private var bloomGradientImage: UIImage?
     
     func body(content: Content) -> some View {
@@ -30,22 +33,23 @@ struct NewBloomModifier: ViewModifier {
     }
     
     private func configureBloom(controller: UIViewController) {
-        guard let navigationController = controller.navigationController else { return }
-        let navigationBar = navigationController.navigationBar
-        
-        if navigationController.topViewController == controller {
-            let image = makeBloomImage()
-            navigationBar.standardAppearance.backgroundImage = image
-            navigationBar.standardAppearance.backgroundImageContentMode = .scaleToFill
-            navigationBar.scrollEdgeAppearance = navigationBar.standardAppearance.copy()
-            navigationBar.scrollEdgeAppearance?.configureWithTransparentBackground() // Match the default behaviour when scrollEdgeAppearance is nil.
-            navigationBar.scrollEdgeAppearance?.backgroundImage = image
-            navigationBar.scrollEdgeAppearance?.backgroundImageContentMode = .scaleToFill
-            navigationBar.scrollEdgeAppearance?.backgroundColor = .compound.bgCanvasDefault
-        } else {
-            navigationBar.standardAppearance.configureWithDefaultBackground()
-            navigationBar.scrollEdgeAppearance = nil
+        guard controller.navigationItem.standardAppearance != standardAppearance,
+              controller.navigationItem.scrollEdgeAppearance != scrollEdgeAppearance else {
+            return
         }
+        
+        let image = makeBloomImage()
+        
+        standardAppearance.configureWithDefaultBackground()
+        standardAppearance.backgroundImage = image
+        standardAppearance.backgroundImageContentMode = .scaleToFill
+        controller.navigationItem.standardAppearance = standardAppearance
+        
+        scrollEdgeAppearance.configureWithTransparentBackground()
+        scrollEdgeAppearance.backgroundImage = image
+        scrollEdgeAppearance.backgroundImageContentMode = .scaleToFill
+        scrollEdgeAppearance.backgroundColor = .compound.bgCanvasDefault
+        controller.navigationItem.scrollEdgeAppearance = scrollEdgeAppearance
     }
     
     private func makeBloomImage() -> UIImage? {
