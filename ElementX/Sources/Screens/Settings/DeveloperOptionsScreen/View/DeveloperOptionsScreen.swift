@@ -49,6 +49,11 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
                     Text("Fuzzy searching")
                 }
+                
+                Toggle(isOn: $context.isNewBloomEnabled) {
+                    Text("New bloom appearance")
+                    Text("Requires app reboot")
+                }
             }
             
             Section("Join rules") {
