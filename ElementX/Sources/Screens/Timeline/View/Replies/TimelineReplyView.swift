@@ -131,10 +131,10 @@ struct TimelineReplyView: View {
                     .cornerRadius(icon?.cornerRadii ?? 0.0, corners: .allCorners)
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(sender.displayName ?? sender.id)
+                    Text(sender.disambiguatedDisplayName ?? sender.id)
                         .font(.compound.bodySMSemibold)
                         .foregroundColor(.compound.textPrimary)
-                        .accessibilityLabel(L10n.commonInReplyTo(sender.displayName ?? sender.id))
+                        .accessibilityLabel(L10n.commonInReplyTo(sender.disambiguatedDisplayName ?? sender.id))
                     
                     Text(messagePreview)
                         .font(.compound.bodyMD)

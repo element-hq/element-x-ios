@@ -9,91 +9,83 @@ import Compound
 import SwiftUI
 
 struct TimelineThreadSummaryView: View {
-    let threadSummary: TimelineItemThreadSummary?
+    let threadSummary: TimelineItemThreadSummary
     var onTap: (() -> Void)?
     
     var body: some View {
-        if threadSummary != nil {
-            Button {
-                onTap?()
-            } label: {
-                content
-            }
-        } else {
-            EmptyView()
+        Button {
+            onTap?()
+        } label: {
+            content
         }
     }
     
     @ViewBuilder
     private var content: some View {
-        if let threadSummary {
-            switch threadSummary {
-            case .loaded(let senderID, let sender, let latestEventContent):
-                switch latestEventContent {
-                case .message(let content):
-                    switch content {
-                    case .audio(let content):
-                        ThreadView(senderID: senderID,
-                                   sender: sender,
-                                   plainBody: content.caption ?? content.filename,
-                                   formattedBody: content.formattedCaption)
-                    case .emote(let content):
-                        ThreadView(senderID: senderID,
-                                   sender: sender,
-                                   plainBody: content.body,
-                                   formattedBody: content.formattedBody)
-                    case .file(let content):
-                        ThreadView(senderID: senderID,
-                                   sender: sender,
-                                   plainBody: content.caption ?? content.filename,
-                                   formattedBody: content.formattedCaption)
-                    case .image(let content):
-                        ThreadView(senderID: senderID,
-                                   sender: sender,
-                                   plainBody: content.caption ?? content.filename,
-                                   formattedBody: content.formattedCaption)
-                    case .notice(let content):
-                        ThreadView(senderID: senderID,
-                                   sender: sender,
-                                   plainBody: content.body,
-                                   formattedBody: content.formattedBody)
-                    case .text(let content):
-                        ThreadView(senderID: senderID,
-                                   sender: sender,
-                                   plainBody: content.body,
-                                   formattedBody: content.formattedBody)
-                    case .video(let content):
-                        ThreadView(senderID: senderID,
-                                   sender: sender,
-                                   plainBody: content.caption ?? content.filename,
-                                   formattedBody: content.formattedCaption)
-                    case .voice:
-                        ThreadView(senderID: senderID,
-                                   sender: sender,
-                                   plainBody: L10n.commonVoiceMessage,
-                                   formattedBody: nil)
-                    case .location:
-                        ThreadView(senderID: senderID,
-                                   sender: sender,
-                                   plainBody: L10n.commonSharedLocation,
-                                   formattedBody: nil)
-                    }
-                case .poll(let question):
+        switch threadSummary {
+        case .loaded(let senderID, let sender, let latestEventContent):
+            switch latestEventContent {
+            case .message(let content):
+                switch content {
+                case .audio(let content):
                     ThreadView(senderID: senderID,
                                sender: sender,
-                               plainBody: question,
+                               plainBody: content.caption ?? content.filename,
+                               formattedBody: content.formattedCaption)
+                case .emote(let content):
+                    ThreadView(senderID: senderID,
+                               sender: sender,
+                               plainBody: content.body,
+                               formattedBody: content.formattedBody)
+                case .file(let content):
+                    ThreadView(senderID: senderID,
+                               sender: sender,
+                               plainBody: content.caption ?? content.filename,
+                               formattedBody: content.formattedCaption)
+                case .image(let content):
+                    ThreadView(senderID: senderID,
+                               sender: sender,
+                               plainBody: content.caption ?? content.filename,
+                               formattedBody: content.formattedCaption)
+                case .notice(let content):
+                    ThreadView(senderID: senderID,
+                               sender: sender,
+                               plainBody: content.body,
+                               formattedBody: content.formattedBody)
+                case .text(let content):
+                    ThreadView(senderID: senderID,
+                               sender: sender,
+                               plainBody: content.body,
+                               formattedBody: content.formattedBody)
+                case .video(let content):
+                    ThreadView(senderID: senderID,
+                               sender: sender,
+                               plainBody: content.caption ?? content.filename,
+                               formattedBody: content.formattedCaption)
+                case .voice:
+                    ThreadView(senderID: senderID,
+                               sender: sender,
+                               plainBody: L10n.commonVoiceMessage,
                                formattedBody: nil)
-                case .redacted:
+                case .location:
                     ThreadView(senderID: senderID,
                                sender: sender,
-                               plainBody: L10n.commonMessageRemoved,
+                               plainBody: L10n.commonSharedLocation,
                                formattedBody: nil)
                 }
-            default:
-                LoadingThreadView()
+            case .poll(let question):
+                ThreadView(senderID: senderID,
+                           sender: sender,
+                           plainBody: question,
+                           formattedBody: nil)
+            case .redacted:
+                ThreadView(senderID: senderID,
+                           sender: sender,
+                           plainBody: L10n.commonMessageRemoved,
+                           formattedBody: nil)
             }
-        } else {
-            EmptyView()
+        default:
+            LoadingThreadView()
         }
     }
     
@@ -123,10 +115,10 @@ struct TimelineThreadSummaryView: View {
                                     avatarSize: .user(on: .threadSummary),
                                     mediaProvider: context.mediaProvider)
                 
-                Text(sender?.displayName ?? senderID)
+                Text(sender?.disambiguatedDisplayName ?? senderID)
                     .font(.compound.bodyXSSemibold)
                     .foregroundColor(.compound.textPrimary)
-                    .accessibilityLabel(L10n.commonInReplyTo(sender?.displayName ?? senderID))
+                    .accessibilityLabel(L10n.commonInReplyTo(sender?.disambiguatedDisplayName ?? senderID))
                 
                 Text(messagePreview)
                     .font(.compound.bodyXS)

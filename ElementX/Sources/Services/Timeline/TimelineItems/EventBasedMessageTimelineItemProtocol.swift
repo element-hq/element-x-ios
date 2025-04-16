@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MatrixRustSDK
 
 enum EventBasedMessageTimelineItemContentType: Hashable {
     case audio(AudioRoomTimelineItemContent)

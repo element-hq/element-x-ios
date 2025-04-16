@@ -652,25 +652,24 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .ready(let senderID, let senderProfile, let content):
             let sender = buildTimelineItemSender(senderID: senderID, senderProfile: senderProfile)
             
-            var latestEventContent: TimelineEventContent
-            switch content {
+            let latestEventContent: TimelineEventContent = switch content {
             case .msgLike(let messageLikeContent):
                 switch messageLikeContent.kind {
                 case .message(let messageContent):
-                    latestEventContent = .message(buildMessageTimelineItemContent(messageType: messageContent.msgType,
-                                                                                  senderID: senderID,
-                                                                                  senderDisplayName: sender.displayName))
+                    .message(buildMessageTimelineItemContent(messageType: messageContent.msgType,
+                                                             senderID: senderID,
+                                                             senderDisplayName: sender.displayName))
                 case .poll(let question, _, _, _, _, _, _):
-                    latestEventContent = .poll(question: question)
+                    .poll(question: question)
                 case .sticker(let body, _, _):
-                    latestEventContent = .message(.text(.init(body: body)))
+                    .message(.text(.init(body: body)))
                 case .redacted:
-                    latestEventContent = .redacted
+                    .redacted
                 default:
-                    latestEventContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
+                    .message(.text(.init(body: L10n.commonUnsupportedEvent)))
                 }
             default:
-                latestEventContent = .message(.text(.init(body: L10n.commonUnsupportedEvent)))
+                .message(.text(.init(body: L10n.commonUnsupportedEvent)))
             }
             
             return .loaded(senderID: senderID,
@@ -832,26 +831,26 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         switch messageType {
         case .audio(let content):
             if content.voice != nil {
-                return .voice(buildAudioTimelineItemContent(content))
+                .voice(buildAudioTimelineItemContent(content))
             } else {
-                return .audio(buildAudioTimelineItemContent(content))
+                .audio(buildAudioTimelineItemContent(content))
             }
         case .emote(let content):
-            return .emote(buildEmoteTimelineItemContent(senderDisplayName: senderDisplayName, senderID: senderID, messageContent: content))
+            .emote(buildEmoteTimelineItemContent(senderDisplayName: senderDisplayName, senderID: senderID, messageContent: content))
         case .file(let content):
-            return .file(buildFileTimelineItemContent(content))
+            .file(buildFileTimelineItemContent(content))
         case .image(let content):
-            return .image(buildImageTimelineItemContent(content))
+            .image(buildImageTimelineItemContent(content))
         case .notice(let content):
-            return .notice(buildNoticeTimelineItemContent(content))
+            .notice(buildNoticeTimelineItemContent(content))
         case .text(let content):
-            return .text(buildTextTimelineItemContent(content))
+            .text(buildTextTimelineItemContent(content))
         case .video(let content):
-            return .video(buildVideoTimelineItemContent(content))
+            .video(buildVideoTimelineItemContent(content))
         case .location(let content):
-            return .location(buildLocationTimelineItemContent(content))
+            .location(buildLocationTimelineItemContent(content))
         case .other, .none:
-            return .text(.init(body: L10n.commonUnsupportedEvent))
+            .text(.init(body: L10n.commonUnsupportedEvent))
         }
     }
 }
