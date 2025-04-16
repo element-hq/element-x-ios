@@ -5,13 +5,65 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 import SwiftUIIntrospect
 
 extension View {
     // Note: The dependency on HomeScreenViewModel.Context will be removed in the next iteration.
-    func bloom(context: HomeScreenViewModel.Context, scrollViewAdapter: ScrollViewAdapter) -> some View {
-        modifier(BloomModifier(context: context, scrollViewAdapter: scrollViewAdapter))
+    @ViewBuilder
+    func bloom(context: HomeScreenViewModel.Context, scrollViewAdapter: ScrollViewAdapter, isNewBloomEnabled: Bool) -> some View {
+        if isNewBloomEnabled {
+            modifier(NewBloomModifier())
+        } else {
+            modifier(BloomModifier(context: context, scrollViewAdapter: scrollViewAdapter))
+        }
+    }
+}
+
+struct NewBloomModifier: ViewModifier {
+    @State private var bloomGradientImage: UIImage?
+    
+    func body(content: Content) -> some View {
+        content
+            .introspect(.viewController, on: .supportedVersions, customize: configureBloom)
+    }
+    
+    private func configureBloom(controller: UIViewController) {
+        guard let navigationController = controller.navigationController else { return }
+        let navigationBar = navigationController.navigationBar
+        
+        if navigationController.topViewController == controller {
+            let image = makeBloomImage()
+            navigationBar.standardAppearance.backgroundImage = image
+            navigationBar.standardAppearance.backgroundImageContentMode = .scaleToFill
+            navigationBar.scrollEdgeAppearance = navigationBar.standardAppearance.copy()
+            navigationBar.scrollEdgeAppearance?.configureWithTransparentBackground() // Match the default behaviour when scrollEdgeAppearance is nil.
+            navigationBar.scrollEdgeAppearance?.backgroundImage = image
+            navigationBar.scrollEdgeAppearance?.backgroundImageContentMode = .scaleToFill
+            navigationBar.scrollEdgeAppearance?.backgroundColor = .compound.bgCanvasDefault
+        } else {
+            navigationBar.standardAppearance.configureWithDefaultBackground()
+            navigationBar.scrollEdgeAppearance = nil
+        }
+    }
+    
+    private func makeBloomImage() -> UIImage? {
+        if let bloomGradientImage {
+            return bloomGradientImage
+        }
+        
+        let newImage = ImageRenderer(content: bloomGradient).uiImage
+        Task { bloomGradientImage = newImage }
+        return newImage
+    }
+    
+    private var bloomGradient: some View {
+        LinearGradient(colors: [.compound._bgOwnPill, .clear], // This isn't the final gradient.
+                       startPoint: .top,
+                       endPoint: .bottom)
+            .ignoresSafeArea(edges: .all)
+            .frame(width: 100, height: 100)
     }
 }
 

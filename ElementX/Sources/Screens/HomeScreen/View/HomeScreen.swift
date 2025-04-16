@@ -25,7 +25,9 @@ struct HomeScreen: View {
             .toolbar { toolbar }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .track(screen: .Home)
-            .bloom(context: context, scrollViewAdapter: scrollViewAdapter)
+            .bloom(context: context,
+                   scrollViewAdapter: scrollViewAdapter,
+                   isNewBloomEnabled: false)
             .sentryTrace("\(Self.self)")
     }
     
