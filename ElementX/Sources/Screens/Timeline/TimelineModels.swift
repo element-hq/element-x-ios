@@ -240,3 +240,56 @@ enum ScrollDirection: Equatable {
     case top
     case bottom
 }
+
+extension TimelineViewState {
+    /// The string shown as the message preview.
+    ///
+    /// This converts the formatted body to a plain string to remove formatting
+    /// and render with a consistent font size. This conversion is done to avoid
+    /// showing markdown characters in the preview for messages with formatting.
+    func buildMessagePreview(formattedBody: AttributedString?, plainBody: String) -> String {
+        guard let formattedBody,
+              let attributedString = try? NSMutableAttributedString(formattedBody, including: \.elementX) else {
+            return plainBody
+        }
+        
+        let range = NSRange(location: 0, length: attributedString.length)
+        attributedString.enumerateAttributes(in: range) { attributes, range, _ in
+            if let userID = attributes[.MatrixUserID] as? String {
+                if let displayName = members[userID]?.displayName {
+                    attributedString.replaceCharacters(in: range, with: "@\(displayName)")
+                } else {
+                    attributedString.replaceCharacters(in: range, with: userID)
+                }
+            }
+            
+            if attributes[.MatrixAllUsersMention] as? Bool == true {
+                attributedString.replaceCharacters(in: range, with: PillUtilities.atRoom)
+            }
+            
+            if let roomAlias = attributes[.MatrixRoomAlias] as? String {
+                let roomName = roomNameForAliasResolver?(roomAlias)
+                attributedString.replaceCharacters(in: range, with: PillUtilities.roomPillDisplayText(roomName: roomName, rawRoomText: roomAlias))
+            }
+            
+            if let roomID = attributes[.MatrixRoomID] as? String {
+                let roomName = roomNameForIDResolver?(roomID)
+                attributedString.replaceCharacters(in: range, with: PillUtilities.roomPillDisplayText(roomName: roomName, rawRoomText: roomID))
+            }
+            
+            if let eventOnRoomID = attributes[.MatrixEventOnRoomID] as? EventOnRoomIDAttribute.Value {
+                let roomID = eventOnRoomID.roomID
+                let roomName = roomNameForIDResolver?(roomID)
+                attributedString.replaceCharacters(in: range, with: PillUtilities.eventPillDisplayText(roomName: roomName, rawRoomText: roomID))
+            }
+            
+            if let eventOnRoomAlias = attributes[.MatrixEventOnRoomAlias] as? EventOnRoomAliasAttribute.Value {
+                let roomAlias = eventOnRoomAlias.alias
+                let roomName = roomNameForAliasResolver?(roomAlias)
+                attributedString.replaceCharacters(in: range, with: PillUtilities.eventPillDisplayText(roomName: roomName, rawRoomText: eventOnRoomAlias.alias))
+            }
+        }
+        
+        return attributedString.string
+    }
+}
