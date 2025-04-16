@@ -345,6 +345,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                             mode: .edit(originalEventOrTransactionID: .eventID(UUID().uuidString), type: .editCaption))
         }
         .padding(.horizontal)
+        .environmentObject(viewModel.context)
         
         ScrollView {
             VStack(spacing: 8) {

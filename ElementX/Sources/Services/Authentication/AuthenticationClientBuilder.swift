@@ -13,7 +13,7 @@ protocol AuthenticationClientBuilderProtocol {
     func build(homeserverAddress: String) async throws -> ClientProtocol
     func buildWithQRCode(qrCodeData: QrCodeData,
                          oidcConfiguration: OIDCConfigurationProxy,
-                         progressListener: QrLoginProgressListenerProxy) async throws -> ClientProtocol
+                         progressListener: SDKListener<QrLoginProgress>) async throws -> ClientProtocol
 }
 
 /// A wrapper around `ClientBuilder` to share reusable code between Normal and QR logins.
@@ -33,7 +33,7 @@ struct AuthenticationClientBuilder: AuthenticationClientBuilderProtocol {
     /// Builds a Client, authenticating with the given QR code data.
     func buildWithQRCode(qrCodeData: QrCodeData,
                          oidcConfiguration: OIDCConfigurationProxy,
-                         progressListener: QrLoginProgressListenerProxy) async throws -> ClientProtocol {
+                         progressListener: SDKListener<QrLoginProgress>) async throws -> ClientProtocol {
         try await makeClientBuilder().buildWithQrCode(qrCodeData: qrCodeData,
                                                       oidcConfiguration: oidcConfiguration.rustValue,
                                                       progressListener: progressListener)

@@ -43,7 +43,7 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
             return .failure(.invalidQRCode)
         }
         
-        let listener = QrLoginProgressListenerProxy { [weak self] progress in
+        let listener = SDKListener { [weak self] progress in
             self?.qrLoginProgressSubject.send(progress)
         }
         
@@ -89,18 +89,6 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
             MXLog.error("QRCode login failed error: \(error)")
             return .failure(.failedLoggingIn)
         }
-    }
-}
-
-final class QrLoginProgressListenerProxy: QrLoginProgressListener {
-    private let onUpdateClosure: (QrLoginProgress) -> Void
-    
-    init(onUpdateClosure: @escaping (QrLoginProgress) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(state: QrLoginProgress) {
-        onUpdateClosure(state)
     }
 }
 

@@ -313,6 +313,7 @@ struct ComposerToolbar: View {
 // MARK: - Previews
 
 struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
+    static let viewModel = TimelineViewModel.mock
     static let wysiwygViewModel = WysiwygComposerViewModel()
     static let composerViewModel = ComposerToolbarViewModel(roomProxy: JoinedRoomProxyMock(.init()),
                                                             wysiwygViewModel: wysiwygViewModel,
@@ -352,6 +353,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
             ComposerToolbar.replyLoadingPreviewMock(isLoading: true)
             ComposerToolbar.replyLoadingPreviewMock(isLoading: false)
         }
+        .environmentObject(viewModel.context)
         .previewDisplayName("Reply")
         
         VStack(spacing: 8) {

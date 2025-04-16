@@ -14,7 +14,11 @@ struct EventTimelineItemSDKMockConfiguration {
     var sender = ""
     var senderProfile: ProfileDetails?
     var isOwn = false
-    var content: TimelineItemContent = .msgLike(content: .init(kind: .redacted, reactions: [], threadRoot: nil, inReplyTo: nil))
+    var content: TimelineItemContent = .msgLike(content: .init(kind: .redacted,
+                                                               reactions: [],
+                                                               inReplyTo: nil,
+                                                               threadRoot: nil,
+                                                               threadSummary: nil))
 }
 
 extension EventTimelineItem {
@@ -44,8 +48,9 @@ extension EventTimelineItem {
                                                                                                isEdited: false,
                                                                                                mentions: nil)),
                                                                  reactions: [],
+                                                                 inReplyTo: nil,
                                                                  threadRoot: nil,
-                                                                 inReplyTo: nil))
+                                                                 threadSummary: nil))
         
         return .init(configuration: .init(content: content))
     }

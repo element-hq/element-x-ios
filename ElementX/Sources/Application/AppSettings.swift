@@ -48,6 +48,7 @@ final class AppSettings {
         case hideUnreadMessagesBadge
         case hideInviteAvatars
         case timelineMediaVisibility
+        case isNewBloomEnabled
         
         case elementCallBaseURLOverride
         
@@ -58,6 +59,7 @@ final class AppSettings {
         case knockingEnabled
         case reportRoomEnabled
         case reportInviteEnabled
+        case threadsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -338,6 +340,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.reportInviteEnabled, defaultValue: false, storageType: .userDefaults(store))
     var reportInviteEnabled
     
+    @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var threadsEnabled
+    
     #endif
     
     // MARK: - Shared
@@ -357,6 +362,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.timelineMediaVisibility, defaultValue: TimelineMediaVisibility.always, storageType: .userDefaults(store))
     var timelineMediaVisibility
+    
+    @UserPreference(key: UserDefaultsKeys.isNewBloomEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var isNewBloomEnabled
 }
 
 extension AppSettings: CommonSettingsProtocol { }

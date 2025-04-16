@@ -30,7 +30,13 @@ struct DeveloperOptionsScreen: View {
                     }
                 }
             }
-                        
+            
+            Section("General") {
+                Toggle(isOn: $context.threadsEnabled) {
+                    Text("Threads")
+                }
+            }
+            
             Section("Room List") {
                 Toggle(isOn: $context.publicSearchEnabled) {
                     Text("Public search")
@@ -42,6 +48,11 @@ struct DeveloperOptionsScreen: View {
                 
                 Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
                     Text("Fuzzy searching")
+                }
+                
+                Toggle(isOn: $context.isNewBloomEnabled) {
+                    Text("New bloom appearance")
+                    Text("Requires app reboot")
                 }
             }
             
