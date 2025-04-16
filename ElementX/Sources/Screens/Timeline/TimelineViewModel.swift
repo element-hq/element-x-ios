@@ -182,14 +182,16 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
             timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
-        case .tappedOnSenderDetails(userID: let userID):
+        case .tappedOnSenderDetails(let userID):
             handleTappedOnSenderDetails(userID: userID)
         case .displayEmojiPicker(let itemID):
             timelineInteractionHandler.displayEmojiPicker(for: itemID)
         case .displayReactionSummary(let itemID, let key):
             displayReactionSummary(for: itemID, selectedKey: key)
-        case .displayReadReceipts(itemID: let itemID):
+        case .displayReadReceipts(let itemID):
             displayReadReceipts(for: itemID)
+        case .displayThread(let itemID):
+            break
         case .handlePasteOrDrop(let provider):
             timelineInteractionHandler.handlePasteOrDrop(provider)
         case .handlePollAction(let pollAction):
