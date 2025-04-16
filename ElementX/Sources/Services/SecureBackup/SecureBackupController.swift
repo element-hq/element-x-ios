@@ -35,7 +35,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
     init(encryption: Encryption) {
         self.encryption = encryption
         
-        backupStateListenerTaskHandle = encryption.backupStateListener(listener: SecureBackupControllerListener { [weak self] state in
+        backupStateListenerTaskHandle = encryption.backupStateListener(listener: SDKListener { [weak self] state in
             guard let self else { return }
             
             switch state {
@@ -62,7 +62,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
             }
         })
         
-        recoveryStateListenerTaskHandle = encryption.recoveryStateListener(listener: SecureBackupControllerListener { [weak self] state in
+        recoveryStateListenerTaskHandle = encryption.recoveryStateListener(listener: SDKListener { [weak self] state in
             guard let self else { return }
             
             switch state {
@@ -121,7 +121,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
             MXLog.info("Enabling recovery")
             
             var keyUploadErrored = false
-            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, passphrase: nil, progressListener: SecureBackupControllerListener { [weak self] state in
+            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, passphrase: nil, progressListener: SDKListener { [weak self] state in
                 guard let self else { return }
                 
                 switch state {
@@ -157,7 +157,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
     func waitForKeyBackupUpload(uploadStateSubject: CurrentValueSubject<SecureBackupSteadyState, Never>) async -> Result<Void, SecureBackupControllerError> {
         do {
             MXLog.info("Waiting for backup upload steady state")
-            try await encryption.waitForBackupUploadSteadyState(progressListener: SecureBackupControllerListener { state in
+            try await encryption.waitForBackupUploadSteadyState(progressListener: SDKListener { state in
                 let uploadState: SecureBackupSteadyState = switch state {
                 case .waiting: .waiting
                 case .uploading(let backedUpCount, let totalCount): .uploading(uploadedKeyCount: Int(backedUpCount), totalKeyCount: Int(totalCount))
@@ -210,20 +210,3 @@ class SecureBackupController: SecureBackupControllerProtocol {
         }
     }
 }
-
-private final class SecureBackupControllerListener<T> {
-    private let onUpdateClosure: (T) -> Void
-    
-    init(_ onUpdateClosure: @escaping (T) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(status: T) {
-        onUpdateClosure(status)
-    }
-}
-
-extension SecureBackupControllerListener: BackupStateListener where T == BackupState { }
-extension SecureBackupControllerListener: RecoveryStateListener where T == RecoveryState { }
-extension SecureBackupControllerListener: EnableRecoveryProgressListener where T == EnableRecoveryProgress { }
-extension SecureBackupControllerListener: BackupSteadyStateListener where T == BackupUploadState { }
