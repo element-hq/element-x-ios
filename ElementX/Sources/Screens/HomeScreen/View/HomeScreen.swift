@@ -27,7 +27,7 @@ struct HomeScreen: View {
             .track(screen: .Home)
             .bloom(context: context,
                    scrollViewAdapter: scrollViewAdapter,
-                   isNewBloomEnabled: false)
+                   isNewBloomEnabled: context.viewState.isNewBloomEnabled)
             .sentryTrace("\(Self.self)")
     }
     
