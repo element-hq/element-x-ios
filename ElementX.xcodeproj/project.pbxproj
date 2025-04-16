@@ -1504,6 +1504,7 @@
 		3ED2725734568F6B8CC87544 /* AttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C6FBF97B6EED3D4FA5EFF /* AttributedStringBuilder.swift */; };
 		3F2148F11164C7C5609984EB /* GZIP in Frameworks */ = {isa = PBXBuildFile; productRef = 2B788C81F6369D164ADEB917 /* GZIP */; };
 		3F327A62D233933F54F0F33A /* SwiftOGG in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE40E79C36E7903121E6E3B /* SwiftOGG */; };
+		3F55721B5C08E8D9F1295592 /* SDKListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5CD2993048222B64C45006 /* SDKListener.swift */; };
 		3F70E237CE4C3FAB02FC227F /* NotificationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C830A64609CBD152F06E0457 /* NotificationConstants.swift */; };
 		401BB28CD6B7DD6B4E7863E7 /* ServerConfirmationScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9342F5D6729627B6393AF853 /* ServerConfirmationScreenModels.swift */; };
 		407DCE030E0F9B7C9861D38A /* LoremSwiftum in Frameworks */ = {isa = PBXBuildFile; productRef = 1A6B622CCFDEFB92D9CF1CA5 /* LoremSwiftum */; };
@@ -1901,6 +1902,7 @@
 		7995C3BC2D89655700E4D98E /* ListRowTrailingSectionSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61652CF85F5600921644 /* ListRowTrailingSectionSpacing.swift */; };
 		7999A7DD2D955CD700738A7C /* MapTilerURLBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1033290D99D5BBA1AF3560A /* MapTilerURLBuilderProtocol.swift */; };
 		7999A7DE2D955CF300738A7C /* MapTilerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A1FAE3EEAB27D8D38E3273 /* MapTilerConfiguration.swift */; };
+		799D7F212DB03A5800B17C18 /* SDKListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5CD2993048222B64C45006 /* SDKListener.swift */; };
 		79A49F702D917196005D365D /* TraceLogPack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7149BDDE47F8AD104E644E2 /* TraceLogPack.swift */; };
 		79AD65502D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
 		79AD65512D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
@@ -4067,6 +4069,7 @@
 		FDEDD4D2DE0646DA724985D5 /* QRCodeLoginScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeLoginScreenModels.swift; sourceTree = "<group>"; };
 		FDF73F49E6B6683F7E2D26F0 /* SecureBackupScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupScreenCoordinator.swift; sourceTree = "<group>"; };
 		FE1E6FAA3719E9B7A2D5510B /* FormattingToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattingToolbar.swift; sourceTree = "<group>"; };
+		FE5CD2993048222B64C45006 /* SDKListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKListener.swift; sourceTree = "<group>"; };
 		FF720BA68256297680980481 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		FFECCE59967018204876D0A5 /* LocationMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMarkerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -7370,6 +7373,7 @@
 				6A580295A56B55A856CC4084 /* InfoPlistReader.swift */,
 				6AD1A853D605C2146B0DC028 /* MatrixEntityRegex.swift */,
 				53482ECA4B6633961EC224F5 /* ScrollViewAdapter.swift */,
+				FE5CD2993048222B64C45006 /* SDKListener.swift */,
 				4481799F455B3DA243BDA2AC /* ShareToMapsAppActivity.swift */,
 				B1E227F34BE43B08E098796E /* TestablePreview.swift */,
 				1F2529D434C750ED78ADF1ED /* UserAgentBuilder.swift */,
@@ -9391,6 +9395,7 @@
 				18E9A4DA2C9829970082DDA4 /* ElementCallService.swift in Sources */,
 				18E9A4DB2C9829970082DDA4 /* ElementCallServiceConstants.swift in Sources */,
 				18E9A4DC2C9829970082DDA4 /* ElementCallServiceMock.swift in Sources */,
+				799D7F212DB03A5800B17C18 /* SDKListener.swift in Sources */,
 				18E9A4DD2C9829970082DDA4 /* ElementCallServiceProtocol.swift in Sources */,
 				7944A76C2D589F6900B75DAC /* CreateFeedScreenView.swift in Sources */,
 				18E9A4DE2C9829970082DDA4 /* ElementCallWidgetDriver.swift in Sources */,
@@ -11025,6 +11030,7 @@
 				41CE5E1289C8768FC5B6490C /* RoomTimelineItemViewState.swift in Sources */,
 				B2F8E01ABA1BA30265B4ECBE /* RoundedCornerShape.swift in Sources */,
 				D43F0503EF2CBC55272538FE /* SDKGeneratedMocks.swift in Sources */,
+				3F55721B5C08E8D9F1295592 /* SDKListener.swift in Sources */,
 				793FA5B72D5B33E700893AC4 /* HomeScreenPostCell.swift in Sources */,
 				88CBF1595E39CE697928DE48 /* SFNumberedListView.swift in Sources */,
 				FB595EC9C00AB32F39034055 /* SceneDelegate.swift in Sources */,

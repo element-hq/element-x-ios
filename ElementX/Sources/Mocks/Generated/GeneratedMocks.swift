@@ -2002,8 +2002,8 @@ class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol, @unc
     var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerCalled: Bool {
         return buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerCallsCount > 0
     }
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments: (qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: QrLoginProgressListenerProxy)?
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations: [(qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: QrLoginProgressListenerProxy)] = []
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments: (qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: SDKListener<QrLoginProgress>)?
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations: [(qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: SDKListener<QrLoginProgress>)] = []
 
     var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue: ClientProtocol!
     var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReturnValue: ClientProtocol! {
@@ -2029,9 +2029,9 @@ class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol, @unc
             }
         }
     }
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerClosure: ((QrCodeData, OIDCConfigurationProxy, QrLoginProgressListenerProxy) async throws -> ClientProtocol)?
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerClosure: ((QrCodeData, OIDCConfigurationProxy, SDKListener<QrLoginProgress>) async throws -> ClientProtocol)?
 
-    func buildWithQRCode(qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: QrLoginProgressListenerProxy) async throws -> ClientProtocol {
+    func buildWithQRCode(qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: SDKListener<QrLoginProgress>) async throws -> ClientProtocol {
         if let error = buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerThrowableError {
             throw error
         }
