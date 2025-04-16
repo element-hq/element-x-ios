@@ -35,7 +35,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
     init(encryption: Encryption) {
         self.encryption = encryption
         
-        backupStateListenerTaskHandle = encryption.backupStateListener(listener: SecureBackupControllerBackupStateListener { [weak self] state in
+        backupStateListenerTaskHandle = encryption.backupStateListener(listener: SDKListener { [weak self] state in
             guard let self else { return }
             
             switch state {
@@ -62,7 +62,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
             }
         })
         
-        recoveryStateListenerTaskHandle = encryption.recoveryStateListener(listener: SecureBackupRecoveryStateListener { [weak self] state in
+        recoveryStateListenerTaskHandle = encryption.recoveryStateListener(listener: SDKListener { [weak self] state in
             guard let self else { return }
             
             switch state {
@@ -121,7 +121,7 @@ class SecureBackupController: SecureBackupControllerProtocol {
             MXLog.info("Enabling recovery")
             
             var keyUploadErrored = false
-            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, passphrase: nil, progressListener: SecureBackupEnableRecoveryProgressListener { [weak self] state in
+            let recoveryKey = try await encryption.enableRecovery(waitForBackupsToUpload: false, passphrase: nil, progressListener: SDKListener { [weak self] state in
                 guard let self else { return }
                 
                 switch state {
@@ -154,10 +154,19 @@ class SecureBackupController: SecureBackupControllerProtocol {
         }
     }
         
-    func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError> {
+    func waitForKeyBackupUpload(uploadStateSubject: CurrentValueSubject<SecureBackupSteadyState, Never>) async -> Result<Void, SecureBackupControllerError> {
         do {
             MXLog.info("Waiting for backup upload steady state")
-            try await encryption.waitForBackupUploadSteadyState(progressListener: nil)
+            try await encryption.waitForBackupUploadSteadyState(progressListener: SDKListener { state in
+                let uploadState: SecureBackupSteadyState = switch state {
+                case .waiting: .waiting
+                case .uploading(let backedUpCount, let totalCount): .uploading(uploadedKeyCount: Int(backedUpCount), totalKeyCount: Int(totalCount))
+                case .error: .error
+                case .done: .done
+                }
+                
+                uploadStateSubject.send(uploadState)
+            })
             return .success(())
         } catch let error as SteadyStateError {
             MXLog.error("Failed waiting for backup upload steady state with error: \(error)")
@@ -199,41 +208,5 @@ class SecureBackupController: SecureBackupControllerProtocol {
                 }
             }
         }
-    }
-}
-
-private final class SecureBackupControllerBackupStateListener: BackupStateListener {
-    private let onUpdateClosure: (BackupState) -> Void
-    
-    init(_ onUpdateClosure: @escaping (BackupState) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(status: BackupState) {
-        onUpdateClosure(status)
-    }
-}
-
-private final class SecureBackupRecoveryStateListener: RecoveryStateListener {
-    private let onUpdateClosure: (RecoveryState) -> Void
-    
-    init(_ onUpdateClosure: @escaping (RecoveryState) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(status: RecoveryState) {
-        onUpdateClosure(status)
-    }
-}
-
-private final class SecureBackupEnableRecoveryProgressListener: EnableRecoveryProgressListener {
-    private let onUpdateClosure: (EnableRecoveryProgress) -> Void
-    
-    init(_ onUpdateClosure: @escaping (EnableRecoveryProgress) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(status: EnableRecoveryProgress) {
-        onUpdateClosure(status)
     }
 }

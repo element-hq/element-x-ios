@@ -620,7 +620,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     private func subscribeToPagination() async {
         switch kind {
         case .live:
-            let backPaginationListener = RoomPaginationStatusListener { [weak self] status in
+            let backPaginationListener = SDKListener<RoomPaginationStatus> { [weak self] status in
                 guard let self else {
                     return
                 }
@@ -649,32 +649,6 @@ final class TimelineProxy: TimelineProxyProtocol {
         case .pinned:
             backPaginationStatusSubject.send(.timelineEndReached)
             forwardPaginationStatusSubject.send(.timelineEndReached)
-        }
-    }
-}
-
-private final class RoomPaginationStatusListener: PaginationStatusListener {
-    private let onUpdateClosure: (RoomPaginationStatus) -> Void
-
-    init(_ onUpdateClosure: @escaping (RoomPaginationStatus) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-
-    func onUpdate(status: RoomPaginationStatus) {
-        onUpdateClosure(status)
-    }
-}
-
-private final class UploadProgressListener: ProgressWatcher {
-    private let onUpdateClosure: (Double) -> Void
-    
-    init(_ onUpdateClosure: @escaping (Double) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func transmissionProgress(progress: TransmissionProgress) {
-        DispatchQueue.main.async { [weak self] in
-            self?.onUpdateClosure(Double(progress.current) / Double(progress.total))
         }
     }
 }

@@ -14,9 +14,13 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     private let secureBackupController: SecureBackupControllerProtocol
     private let appMediator: AppMediatorProtocol
     
+    private let backupUploadStateSubject: CurrentValueSubject<SecureBackupSteadyState, Never> = .init(.waiting)
+    
     // periphery:ignore - auto cancels when reassigned
     @CancellableTask
     private var keyUploadWaitingTask: Task<Void, Never>?
+    @CancellableTask
+    private var keyUploadStalledTask: Task<Void, Error>?
     
     private var actionsSubject: PassthroughSubject<SecureBackupLogoutConfirmationScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<SecureBackupLogoutConfirmationScreenViewModelAction, Never> {
@@ -29,19 +33,11 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
         
         super.init(initialViewState: .init(mode: .saveRecoveryKey))
         
-        appMediator.networkMonitor.reachabilityPublisher
+        backupUploadStateSubject.combineLatest(appMediator.networkMonitor.reachabilityPublisher)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] reachability in
-                guard let self,
-                      state.mode != .saveRecoveryKey else {
-                    return
-                }
-                
-                if reachability == .reachable {
-                    state.mode = .backupOngoing
-                } else {
-                    state.mode = .offline
-                }
+            .sink { [weak self] backupState, reachability in
+                guard let self, state.mode != .saveRecoveryKey else { return }
+                updateMode(backupState: backupState, reachability: reachability)
             }
             .store(in: &cancellables)
     }
@@ -65,16 +61,20 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
     // MARK: - Private
     
     private func attemptLogout() {
-        if state.mode == .saveRecoveryKey {
-            state.mode = appMediator.networkMonitor.reachabilityPublisher.value == .reachable ? .backupOngoing : .offline
+        if case .saveRecoveryKey = state.mode {
+            updateMode(backupState: backupUploadStateSubject.value, reachability: appMediator.networkMonitor.reachabilityPublisher.value)
             
             keyUploadWaitingTask = Task {
-                var result = await secureBackupController.waitForKeyBackupUpload()
+                var result = await secureBackupController.waitForKeyBackupUpload(uploadStateSubject: backupUploadStateSubject)
+                
+                guard !Task.isCancelled else { return }
                 
                 if case .failure = result {
                     // Retry the upload first, conditions might have changed.
-                    result = await secureBackupController.waitForKeyBackupUpload()
+                    result = await secureBackupController.waitForKeyBackupUpload(uploadStateSubject: backupUploadStateSubject)
                 }
+                
+                guard !Task.isCancelled else { return }
                 
                 guard case .success = result else {
                     MXLog.error("Aborting logout due to failure waiting for backup upload.")
@@ -82,12 +82,35 @@ class SecureBackupLogoutConfirmationScreenViewModel: SecureBackupLogoutConfirmat
                     return
                 }
                 
-                guard !Task.isCancelled else { return }
-                
                 actionsSubject.send(.logout)
             }
         } else {
             actionsSubject.send(.logout)
+        }
+    }
+    
+    private func updateMode(backupState: SecureBackupSteadyState, reachability: NetworkMonitorReachability) {
+        switch (backupState, reachability) {
+        case (.waiting, .reachable):
+            state.mode = .waitingToStart(hasStalled: false)
+            showAsStalledAfterTimeout()
+        case (.uploading(let uploadedKeyCount, let totalKeyCount), .reachable):
+            state.mode = .backupOngoing(progress: Double(uploadedKeyCount) / Double(totalKeyCount))
+        case (.error, .reachable):
+            break // Nothing to do here, it will be handled with the result.
+        case (.done, .reachable):
+            state.mode = .backupOngoing(progress: 1.0)
+        case (_, .unreachable):
+            state.mode = .offline
+        }
+    }
+    
+    /// If we stay in the waiting state for more than 2-seconds we ask the user to check their connection.
+    private func showAsStalledAfterTimeout() {
+        keyUploadStalledTask = Task { [weak self] in
+            try await Task.sleep(for: .seconds(2))
+            guard let self, case .waitingToStart(hasStalled: false) = state.mode else { return }
+            state.mode = .waitingToStart(hasStalled: true)
         }
     }
 }

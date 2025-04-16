@@ -96,7 +96,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.roomList = roomList
         
         do {
-            listUpdatesSubscriptionResult = roomList.entriesWithDynamicAdapters(pageSize: try UInt32(roomListPageSize), listener: RoomListEntriesListenerProxy { [weak self] updates in
+            listUpdatesSubscriptionResult = roomList.entriesWithDynamicAdapters(pageSize: try UInt32(roomListPageSize), listener: SDKListener { [weak self] updates in
                 guard let self else { return }
                 diffsPublisher.send(updates)
             })
@@ -104,7 +104,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             // Forces the listener above to be called with the current state
             setFilter(.all(filters: []))
             
-            let stateUpdatesSubscriptionResult = try roomList.loadingState(listener: RoomListStateObserver { [weak self] state in
+            let stateUpdatesSubscriptionResult = try roomList.loadingState(listener: SDKListener { [weak self] state in
                 guard let self else { return }
                 MXLog.info("\(name): Received state update: \(state)")
                 stateSubject.send(RoomSummaryProviderState(roomListState: state))
@@ -222,7 +222,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     struct RoomDetails {
         var roomInfo: RoomInfo?
         var latestEvent: EventTimelineItem?
-        var directUserProfile: UserProfile?
         var lastMessageSenderProfile: UserProfile?
     }
 
@@ -232,27 +231,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         Task {
             do {
-//                await joinRoomIfRequired(roomListItem)
-                
                 roomDetails.latestEvent = await roomListItem.latestEvent()
                 let roomInfo = try await roomListItem.roomInfo()
                 roomDetails.roomInfo = roomInfo
-                
-                let isDirectChat = (roomInfo.joinedMembersCount <= 2) || (roomInfo.isDirect && roomInfo.joinedMembersCount <= 2)
-                let shouldFetchProfile = (roomInfo.avatarUrl ?? "").isBlank
-                if isDirectChat, shouldFetchProfile {
-                    if let userInfo = roomInfo.heroes.first {
-                        roomDetails.directUserProfile = UserProfile(userId: userInfo.userId, displayName: userInfo.displayName, avatarUrl: userInfo.avatarUrl)
-                    } else if let directUserId = roomInfo.userPowerLevels.keys.first(where: { $0 != zeroUsersService.loggedInUserId }) {
-                        roomDetails.directUserProfile = try await zeroUsersService.getMatrixUserProfile(userId: directUserId)
-                    }
-                }
-                
-//                let lastMessageSenderName = roomDetails.latestEvent?.senderName ?? ""
-//                let lastMessageSenderId = roomDetails.latestEvent?.sender ?? ""
-//                if lastMessageSenderName.isDisplayNameAmbiguous(), !lastMessageSenderId.isBlank {
-//                    roomDetails.lastMessageSenderProfile = try await zeroUsersService.getMatrixUserProfile(userId: lastMessageSenderId)
-//                }
             } catch {
                 MXLog.error("Failed fetching room info with error: \(error)")
             }
@@ -293,8 +274,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         default: nil
         }
         
-        let displayName: String? = roomInfo.displayName ?? roomDetails.directUserProfile?.displayName ?? roomInfo.rawName
-        let roomAvatar: String? = roomInfo.avatarUrl ?? roomDetails.directUserProfile?.avatarUrl
+        let isDirectRoom = (roomInfo.joinedMembersCount <= 2) || (roomInfo.isDirect && roomInfo.joinedMembersCount <= 2)
+        let displayName: String? = getDisplayNameFromRoomInfo(roomInfo, isDirectRoom: isDirectRoom)
+        let roomAvatar: String? = getRoomAvatarFromRoomInfo(roomInfo, isDirectRoom: isDirectRoom)
         zeroUsersService.setRoomAvatarInCache(roomId: roomInfo.id, avatarUrl: roomAvatar)
         
         return RoomSummary(roomListItem: roomListItem,
@@ -315,6 +297,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            hasOngoingCall: roomInfo.hasRoomCall,
                            isMarkedUnread: roomInfo.isMarkedUnread,
                            isFavourite: roomInfo.isFavourite)
+    }
+    
+    private func getDisplayNameFromRoomInfo(_ roomInfo: RoomInfo, isDirectRoom: Bool) -> String? {
+        roomInfo.displayName ?? (isDirectRoom ? roomInfo.heroes.first?.displayName : roomInfo.rawName)
+    }
+    
+    private func getRoomAvatarFromRoomInfo(_ roomInfo: RoomInfo, isDirectRoom: Bool) -> String? {
+        return roomInfo.avatarUrl ?? (isDirectRoom ? roomInfo.heroes.first?.avatarUrl : nil)
     }
     
     private func fetchRoomNotificationMode(roomListItem: RoomListItem, roomInfo: RoomInfo) -> RoomNotificationModeProxy? {
@@ -444,30 +434,6 @@ extension RoomSummaryProviderState {
         case .loaded(let maximumNumberOfRooms):
             self = .loaded(totalNumberOfRooms: UInt(maximumNumberOfRooms ?? 0))
         }
-    }
-}
-
-private class RoomListEntriesListenerProxy: RoomListEntriesListener {
-    private let onUpdateClosure: ([RoomListEntriesUpdate]) -> Void
-   
-    init(_ onUpdateClosure: @escaping ([RoomListEntriesUpdate]) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(roomEntriesUpdate: [RoomListEntriesUpdate]) {
-        onUpdateClosure(roomEntriesUpdate)
-    }
-}
-
-private class RoomListStateObserver: RoomListLoadingStateListener {
-    private let onUpdateClosure: (RoomListLoadingState) -> Void
-   
-    init(_ onUpdateClosure: @escaping (RoomListLoadingState) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func onUpdate(state: RoomListLoadingState) {
-        onUpdateClosure(state)
     }
 }
 

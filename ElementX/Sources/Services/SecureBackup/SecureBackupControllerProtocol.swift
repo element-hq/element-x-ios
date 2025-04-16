@@ -27,6 +27,14 @@ enum SecureBackupKeyBackupState {
     case disabling
 }
 
+/// Represents the progress towards a complete backup before logging out.
+enum SecureBackupSteadyState {
+    case waiting
+    case uploading(uploadedKeyCount: Int, totalKeyCount: Int)
+    case error
+    case done
+}
+
 enum SecureBackupControllerError: Error {
     case failedEnablingBackup
     case failedDisablingBackup
@@ -49,5 +57,5 @@ protocol SecureBackupControllerProtocol {
     func generateRecoveryKey() async -> Result<String, SecureBackupControllerError>
     func confirmRecoveryKey(_ key: String) async -> Result<Void, SecureBackupControllerError>
     
-    func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError>
+    func waitForKeyBackupUpload(uploadStateSubject: CurrentValueSubject<SecureBackupSteadyState, Never>) async -> Result<Void, SecureBackupControllerError>
 }

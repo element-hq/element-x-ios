@@ -2002,8 +2002,8 @@ class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol, @unc
     var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerCalled: Bool {
         return buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerCallsCount > 0
     }
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments: (qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: QrLoginProgressListenerProxy)?
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations: [(qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: QrLoginProgressListenerProxy)] = []
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments: (qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: SDKListener<QrLoginProgress>)?
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations: [(qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: SDKListener<QrLoginProgress>)] = []
 
     var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue: ClientProtocol!
     var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReturnValue: ClientProtocol! {
@@ -2029,9 +2029,9 @@ class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol, @unc
             }
         }
     }
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerClosure: ((QrCodeData, OIDCConfigurationProxy, QrLoginProgressListenerProxy) async throws -> ClientProtocol)?
+    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerClosure: ((QrCodeData, OIDCConfigurationProxy, SDKListener<QrLoginProgress>) async throws -> ClientProtocol)?
 
-    func buildWithQRCode(qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: QrLoginProgressListenerProxy) async throws -> ClientProtocol {
+    func buildWithQRCode(qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: SDKListener<QrLoginProgress>) async throws -> ClientProtocol {
         if let error = buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerThrowableError {
             throw error
         }
@@ -15469,15 +15469,15 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sen
     }
     //MARK: - waitForKeyBackupUpload
 
-    var waitForKeyBackupUploadUnderlyingCallsCount = 0
-    var waitForKeyBackupUploadCallsCount: Int {
+    var waitForKeyBackupUploadUploadStateSubjectUnderlyingCallsCount = 0
+    var waitForKeyBackupUploadUploadStateSubjectCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return waitForKeyBackupUploadUnderlyingCallsCount
+                return waitForKeyBackupUploadUploadStateSubjectUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = waitForKeyBackupUploadUnderlyingCallsCount
+                    returnValue = waitForKeyBackupUploadUploadStateSubjectUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -15485,27 +15485,29 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sen
         }
         set {
             if Thread.isMainThread {
-                waitForKeyBackupUploadUnderlyingCallsCount = newValue
+                waitForKeyBackupUploadUploadStateSubjectUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    waitForKeyBackupUploadUnderlyingCallsCount = newValue
+                    waitForKeyBackupUploadUploadStateSubjectUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var waitForKeyBackupUploadCalled: Bool {
-        return waitForKeyBackupUploadCallsCount > 0
+    var waitForKeyBackupUploadUploadStateSubjectCalled: Bool {
+        return waitForKeyBackupUploadUploadStateSubjectCallsCount > 0
     }
+    var waitForKeyBackupUploadUploadStateSubjectReceivedUploadStateSubject: CurrentValueSubject<SecureBackupSteadyState, Never>?
+    var waitForKeyBackupUploadUploadStateSubjectReceivedInvocations: [CurrentValueSubject<SecureBackupSteadyState, Never>] = []
 
-    var waitForKeyBackupUploadUnderlyingReturnValue: Result<Void, SecureBackupControllerError>!
-    var waitForKeyBackupUploadReturnValue: Result<Void, SecureBackupControllerError>! {
+    var waitForKeyBackupUploadUploadStateSubjectUnderlyingReturnValue: Result<Void, SecureBackupControllerError>!
+    var waitForKeyBackupUploadUploadStateSubjectReturnValue: Result<Void, SecureBackupControllerError>! {
         get {
             if Thread.isMainThread {
-                return waitForKeyBackupUploadUnderlyingReturnValue
+                return waitForKeyBackupUploadUploadStateSubjectUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, SecureBackupControllerError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = waitForKeyBackupUploadUnderlyingReturnValue
+                    returnValue = waitForKeyBackupUploadUploadStateSubjectUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -15513,22 +15515,26 @@ class SecureBackupControllerMock: SecureBackupControllerProtocol, @unchecked Sen
         }
         set {
             if Thread.isMainThread {
-                waitForKeyBackupUploadUnderlyingReturnValue = newValue
+                waitForKeyBackupUploadUploadStateSubjectUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    waitForKeyBackupUploadUnderlyingReturnValue = newValue
+                    waitForKeyBackupUploadUploadStateSubjectUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var waitForKeyBackupUploadClosure: (() async -> Result<Void, SecureBackupControllerError>)?
+    var waitForKeyBackupUploadUploadStateSubjectClosure: ((CurrentValueSubject<SecureBackupSteadyState, Never>) async -> Result<Void, SecureBackupControllerError>)?
 
-    func waitForKeyBackupUpload() async -> Result<Void, SecureBackupControllerError> {
-        waitForKeyBackupUploadCallsCount += 1
-        if let waitForKeyBackupUploadClosure = waitForKeyBackupUploadClosure {
-            return await waitForKeyBackupUploadClosure()
+    func waitForKeyBackupUpload(uploadStateSubject: CurrentValueSubject<SecureBackupSteadyState, Never>) async -> Result<Void, SecureBackupControllerError> {
+        waitForKeyBackupUploadUploadStateSubjectCallsCount += 1
+        waitForKeyBackupUploadUploadStateSubjectReceivedUploadStateSubject = uploadStateSubject
+        DispatchQueue.main.async {
+            self.waitForKeyBackupUploadUploadStateSubjectReceivedInvocations.append(uploadStateSubject)
+        }
+        if let waitForKeyBackupUploadUploadStateSubjectClosure = waitForKeyBackupUploadUploadStateSubjectClosure {
+            return await waitForKeyBackupUploadUploadStateSubjectClosure(uploadStateSubject)
         } else {
-            return waitForKeyBackupUploadReturnValue
+            return waitForKeyBackupUploadUploadStateSubjectReturnValue
         }
     }
 }

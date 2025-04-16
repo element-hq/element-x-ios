@@ -45,7 +45,7 @@ extension XCUIApplication {
         XCTAssertTrue(webAuthenticationView.waitForExistence(timeout: 10.0))
         webAuthenticationView.tap() // Tap the web view to properly focus the app again.
         
-        let webUsernameTextField = textFields["Username"]
+        let webUsernameTextField = textFields["Username or Email"]
         XCTAssertTrue(webUsernameTextField.waitForExistence(timeout: 10.0))
         webUsernameTextField.clearAndTypeText(username, app: self)
         
