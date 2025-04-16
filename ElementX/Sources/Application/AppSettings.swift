@@ -58,6 +58,7 @@ final class AppSettings {
         case knockingEnabled
         case reportRoomEnabled
         case reportInviteEnabled
+        case threadsEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -337,6 +338,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.reportInviteEnabled, defaultValue: false, storageType: .userDefaults(store))
     var reportInviteEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var threadsEnabled
     
     #endif
     

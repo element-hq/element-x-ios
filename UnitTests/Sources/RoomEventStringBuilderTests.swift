@@ -56,8 +56,9 @@ class RoomEventStringBuilderTests: XCTestCase {
                                                                                                               isEdited: false,
                                                                                                               mentions: nil)),
                                                                                 reactions: [],
+                                                                                inReplyTo: nil,
                                                                                 threadRoot: nil,
-                                                                                inReplyTo: nil)))),
+                                                                                threadSummary: nil)))),
               uniqueID: .init("0"))
     }
     

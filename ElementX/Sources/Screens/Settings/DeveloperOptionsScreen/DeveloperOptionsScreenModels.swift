@@ -46,6 +46,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var knockingEnabled: Bool { get set }
     var reportRoomEnabled: Bool { get set }
     var reportInviteEnabled: Bool { get set }
+    var threadsEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
