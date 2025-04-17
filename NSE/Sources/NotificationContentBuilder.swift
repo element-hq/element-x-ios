@@ -9,6 +9,10 @@ import Foundation
 import MatrixRustSDK
 import UserNotifications
 
+import Intents
+import SwiftUI
+import Version
+
 struct NotificationContentBuilder {
     let messageEventStringBuilder: RoomMessageEventStringBuilder
     let settings: CommonSettingsProtocol
@@ -101,11 +105,12 @@ struct NotificationContentBuilder {
         notificationContent.body = body
         
         do {
-            return try await notificationContent.addSenderIcon(senderID: notificationItem.senderID,
-                                                               senderName: notificationItem.senderDisplayName ?? notificationItem.roomDisplayName,
-                                                               icon: icon(for: notificationItem),
-                                                               forcePlaceholder: settings.hideInviteAvatars,
-                                                               mediaProvider: mediaProvider)
+            return try await addSenderIcon(notificationContent: notificationContent,
+                                           senderID: notificationItem.senderID,
+                                           senderName: notificationItem.senderDisplayName ?? notificationItem.roomDisplayName,
+                                           icon: icon(for: notificationItem),
+                                           forcePlaceholder: settings.hideInviteAvatars,
+                                           mediaProvider: mediaProvider)
         } catch {
             return notificationContent
         }
@@ -127,16 +132,17 @@ struct NotificationContentBuilder {
         }
         
         do {
-            return try await notificationContent.addSenderIcon(senderID: notificationItem.senderID,
-                                                               senderName: senderName,
-                                                               icon: icon(for: notificationItem),
-                                                               mediaProvider: mediaProvider)
+            return try await addSenderIcon(notificationContent: notificationContent,
+                                           senderID: notificationItem.senderID,
+                                           senderName: senderName,
+                                           icon: icon(for: notificationItem),
+                                           mediaProvider: mediaProvider)
         } catch {
             return notificationContent
         }
     }
     
-    func icon(for notificationItem: NotificationItemProxyProtocol) -> NotificationIcon {
+    private func icon(for notificationItem: NotificationItemProxyProtocol) -> NotificationIcon {
         if notificationItem.isDM {
             return NotificationIcon(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
         } else {
@@ -160,21 +166,169 @@ struct NotificationContentBuilder {
         
         switch messageType {
         case .image(content: let content):
-            await notificationContent.addMediaAttachment(using: mediaProvider,
-                                                         mediaSource: .init(source: content.source,
-                                                                            mimeType: content.info?.mimetype))
+            await addMediaAttachment(notificationContent: notificationContent,
+                                     using: mediaProvider,
+                                     mediaSource: .init(source: content.source,
+                                                        mimeType: content.info?.mimetype))
         case .audio(content: let content):
-            await notificationContent.addMediaAttachment(using: mediaProvider,
-                                                         mediaSource: .init(source: content.source,
-                                                                            mimeType: content.info?.mimetype))
+            await addMediaAttachment(notificationContent: notificationContent,
+                                     using: mediaProvider,
+                                     mediaSource: .init(source: content.source,
+                                                        mimeType: content.info?.mimetype))
         case .video(content: let content):
-            await notificationContent.addMediaAttachment(using: mediaProvider,
-                                                         mediaSource: .init(source: content.source,
-                                                                            mimeType: content.info?.mimetype))
+            await addMediaAttachment(notificationContent: notificationContent,
+                                     using: mediaProvider,
+                                     mediaSource: .init(source: content.source,
+                                                        mimeType: content.info?.mimetype))
         default:
             break
         }
         
         return notificationContent
+    }
+    
+    private func addMediaAttachment(notificationContent: UNMutableNotificationContent,
+                                    using mediaProvider: MediaProviderProtocol,
+                                    mediaSource: MediaSourceProxy) async {
+        switch await mediaProvider.loadFileFromSource(mediaSource) {
+        case .success(let file):
+            do {
+                guard let url = file.url else {
+                    MXLog.error("Couldn't add media attachment: URL is nil")
+                    return
+                }
+                
+                let identifier = ProcessInfo.processInfo.globallyUniqueString
+                let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: url, with: "\(identifier).\(url.pathExtension)")
+                let attachment = try UNNotificationAttachment(identifier: identifier,
+                                                              url: newURL,
+                                                              options: nil)
+                
+                notificationContent.attachments.append(attachment)
+            } catch {
+                MXLog.error("Couldn't add media attachment:: \(error)")
+                return
+            }
+        case .failure(let error):
+            MXLog.error("Couldn't load the file for media attachment: \(error)")
+        }
+    }
+
+    private func addSenderIcon(notificationContent: UNMutableNotificationContent,
+                               senderID: String,
+                               senderName: String,
+                               icon: NotificationIcon,
+                               forcePlaceholder: Bool = false,
+                               mediaProvider: MediaProviderProtocol) async throws -> UNMutableNotificationContent {
+        var fetchedImage: INImage?
+        let image: INImage
+        if !forcePlaceholder,
+           let mediaSource = icon.mediaSource {
+            switch await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
+            case .success(let data):
+                fetchedImage = INImage(imageData: data)
+            case .failure(let error):
+                MXLog.error("Couldn't add sender icon: \(error)")
+            }
+        }
+
+        if let fetchedImage {
+            image = fetchedImage
+        } else if let data = await getPlaceholderAvatarImageData(name: icon.groupInfo?.name ?? senderName,
+                                                                 id: icon.groupInfo?.id ?? senderID) {
+            image = INImage(imageData: data)
+        } else {
+            image = INImage(named: "")
+        }
+
+        let senderHandle = INPersonHandle(value: senderID, type: .unknown)
+        let sender = INPerson(personHandle: senderHandle,
+                              nameComponents: nil,
+                              displayName: senderName,
+                              image: !icon.shouldDisplayAsGroup ? image : nil,
+                              contactIdentifier: nil,
+                              customIdentifier: nil)
+
+        // These are required to show the group name as subtitle
+        var speakableGroupName: INSpeakableString?
+        var recipients: [INPerson]?
+        if let groupInfo = icon.groupInfo {
+            let meHandle = INPersonHandle(value: notificationContent.receiverID, type: .unknown)
+            let me = INPerson(personHandle: meHandle, nameComponents: nil, displayName: nil, image: nil, contactIdentifier: nil, customIdentifier: nil, isMe: true)
+            speakableGroupName = INSpeakableString(spokenPhrase: groupInfo.name)
+            recipients = [sender, me]
+        }
+
+        let intent = INSendMessageIntent(recipients: recipients,
+                                         outgoingMessageType: .outgoingMessageText,
+                                         content: nil,
+                                         speakableGroupName: speakableGroupName,
+                                         conversationIdentifier: notificationContent.roomID,
+                                         serviceName: nil,
+                                         sender: sender,
+                                         attachments: nil)
+        if speakableGroupName != nil {
+            intent.setImage(image, forParameterNamed: \.speakableGroupName)
+        }
+
+        // Use the intent to initialize the interaction.
+        let interaction = INInteraction(intent: intent, response: nil)
+
+        // Interaction direction is incoming because the user is
+        // receiving this message.
+        interaction.direction = .incoming
+
+        // Donate the interaction before updating notification content.
+        try await interaction.donate()
+        
+        // Update notification content before displaying the
+        // communication notification.
+        let updatedContent = try notificationContent.updating(from: intent)
+
+        // swiftlint:disable:next force_cast
+        return updatedContent.mutableCopy() as! UNMutableNotificationContent
+    }
+
+    @MainActor
+    func getPlaceholderAvatarImageData(name: String, id: String) async -> Data? {
+        // The version value is used in case the design of the placeholder is updated to force a replacement
+        let prefix = "notification_placeholderV9"
+        
+        let fileName = "\(prefix)_\(name)_\(id).png"
+        if let data = try? Data(contentsOf: URL.temporaryDirectory.appendingPathComponent(fileName)) {
+            MXLog.info("Found existing notification icon placeholder")
+            return data
+        }
+        
+        MXLog.info("Generating notification icon placeholder")
+        
+        let data = Avatars.generatePlaceholderAvatarImageData(name: name, id: id, size: .init(width: 50, height: 50))
+        
+        if let data {
+            do {
+                // cache image data
+                try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: fileName)
+            } catch {
+                MXLog.error("Could not store placeholder image")
+                return data
+            }
+        }
+        
+        return data
+    }
+}
+
+private struct NotificationIcon {
+    struct GroupInfo {
+        let name: String
+        let id: String
+    }
+    
+    let mediaSource: MediaSourceProxy?
+    // Required as the key to set images for groups
+    let groupInfo: GroupInfo?
+    
+    var shouldDisplayAsGroup: Bool {
+        groupInfo != nil
     }
 }
