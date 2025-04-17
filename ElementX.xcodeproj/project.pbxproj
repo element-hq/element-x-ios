@@ -425,7 +425,6 @@
 		510C4EDF826CA9C6CEEC6C95 /* ManageRoomMemberSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A34D9BCA1A7D9A56E1EAF1D /* ManageRoomMemberSheetViewModel.swift */; };
 		5139F4BD5A5DF6F8D11A9BDE /* NotificationPermissionsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D0BA44B1838E65B507B277 /* NotificationPermissionsScreen.swift */; };
 		513AF15E0E84711B80D04B1B /* ReportRoomScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3E9684DCE6B66BD0B5DF67 /* ReportRoomScreenViewModelTests.swift */; };
-		518C93DC6516D3D018DE065F /* UNNotificationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E751D7EDB6043238111D90 /* UNNotificationRequest.swift */; };
 		51B3B19FA5F91B455C807BA7 /* RoomPollsHistoryScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E964AF2DFEB31E2B799999F /* RoomPollsHistoryScreenModels.swift */; };
 		523C6800ED85D5810CF18C19 /* OIDCAccountSettingsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D737F4672021D0A7D218CD /* OIDCAccountSettingsPresenter.swift */; };
 		52473A4D7B1FBD4CD1E770C8 /* MatrixEntityRegex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD1A853D605C2146B0DC028 /* MatrixEntityRegex.swift */; };
@@ -1747,7 +1746,6 @@
 		49ABAB186CF00B15C5521D04 /* MenuSheetLabelStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuSheetLabelStyle.swift; sourceTree = "<group>"; };
 		49D2C8E66E83EA578A7F318A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		49E6066092ED45E36BB306F7 /* zh-Hant-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hant-TW"; path = "zh-Hant-TW.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
-		49E751D7EDB6043238111D90 /* UNNotificationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UNNotificationRequest.swift; sourceTree = "<group>"; };
 		4A2B5274C1D3D2999D643786 /* EncryptionResetPasswordScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionResetPasswordScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		4A5B4CD611DE7E94F5BA87B2 /* AppLockTimerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockTimerTests.swift; sourceTree = "<group>"; };
 		4AB29A2D95D3469B5F016655 /* SecureBackupControllerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupControllerMock.swift; sourceTree = "<group>"; };
@@ -3955,7 +3953,6 @@
 			children = (
 				4959CECEC984B3995616F427 /* DataProtectionManager.swift */,
 				EEAA2832D93EC7D2608703FB /* NSEUserSession.swift */,
-				49E751D7EDB6043238111D90 /* UNNotificationRequest.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -6733,7 +6730,6 @@
 				DDB47D29C6865669288BF87C /* UIFont+AttributedStringBuilder.m in Sources */,
 				45D6DC594816288983627484 /* UITestsScreenIdentifier.swift in Sources */,
 				281BED345D59A9A6A99E9D98 /* UNNotificationContent.swift in Sources */,
-				518C93DC6516D3D018DE065F /* UNNotificationRequest.swift in Sources */,
 				06B55882911B4BF5B14E9851 /* URL.swift in Sources */,
 				D98B5EE8C4F5A2CE84687AE8 /* UTType.swift in Sources */,
 				34357B287357BC0B9715DD51 /* UserAgentBuilder.swift in Sources */,

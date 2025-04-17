@@ -18,70 +18,78 @@ struct NotificationContentBuilder {
     ///   - notificationItem: The notification item
     ///   - mediaProvider: Media provider to process also media. May be passed nil to ignore media operations.
     /// - Returns: A notification content object if the notification should be displayed. Otherwise nil.
-    func content(for notificationItem: NotificationItemProxyProtocol, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
+    func process(notificationContent: UNMutableNotificationContent,
+                 notificationItem: NotificationItemProxyProtocol,
+                 mediaProvider: MediaProviderProtocol) async -> UNMutableNotificationContent {
+        notificationContent.receiverID = notificationItem.receiverID
+        notificationContent.roomID = notificationItem.roomID
+        
+        switch notificationItem.event {
+        case .timeline(let event):
+            notificationContent.eventID = event.eventId()
+        case .invite, .none:
+            notificationContent.eventID = nil
+        }
+        
+        // So that the UI groups notification that are received for the same room but also for the same user
+        // Removing the @ fixes an iOS bug where the notification crashes if the mute button is tapped
+        notificationContent.threadIdentifier = "\(notificationItem.receiverID)\(notificationItem.roomID)".replacingOccurrences(of: "@", with: "")
+        
+        MXLog.info("isNoisy: \(notificationItem.isNoisy)")
+        notificationContent.sound = notificationItem.isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
+        
         switch notificationItem.event {
         case .none:
-            return processEmpty(notificationItem: notificationItem)
+            return processEmpty(notificationContent)
         case .invite:
-            return try await processInvited(notificationItem: notificationItem, mediaProvider: mediaProvider)
+            return await processInvited(notificationContent: notificationContent,
+                                        notificationItem: notificationItem,
+                                        mediaProvider: mediaProvider)
         case .timeline(let event):
-            guard let eventType = try? event.eventType() else {
-                return processEmpty(notificationItem: notificationItem)
+            guard let eventType = try? event.eventType(),
+                  case let .messageLike(content) = eventType else {
+                return processEmpty(notificationContent)
             }
-
-            switch eventType {
-            case let .messageLike(content):
-                switch content {
-                case .roomMessage(let messageType, _):
-                    return try await processRoomMessage(notificationItem: notificationItem, messageType: messageType, mediaProvider: mediaProvider)
-                case .poll(let question):
-                    return try await processPollStartEvent(notificationItem: notificationItem, pollQuestion: question, mediaProvider: mediaProvider)
-                case .callInvite:
-                    return try await processCallInviteEvent(notificationItem: notificationItem, mediaProvider: mediaProvider)
-                case .callNotify:
-                    return try await processCallNotifyEvent(notificationItem: notificationItem, mediaProvider: mediaProvider)
-                default:
-                    return processEmpty(notificationItem: notificationItem)
-                }
-            case .state:
-                return processEmpty(notificationItem: notificationItem)
+            
+            let notificationContent = await processMessageLike(notificationContent: notificationContent,
+                                                               notificationItem: notificationItem,
+                                                               mediaProvider: mediaProvider)
+            
+            switch content {
+            case .roomMessage(let messageType, _):
+                return await processRoomMessage(notificationContent: notificationContent,
+                                                notificationItem: notificationItem,
+                                                messageType: messageType,
+                                                mediaProvider: mediaProvider)
+            case .poll(let question):
+                notificationContent.body = L10n.commonPollSummary(question)
+                return notificationContent
+            case .callInvite:
+                notificationContent.body = L10n.commonUnsupportedCall
+                return notificationContent
+            case .callNotify:
+                notificationContent.body = L10n.notificationIncomingCall
+                return notificationContent
+            default:
+                return processEmpty(notificationContent)
             }
         }
     }
 
     // MARK: - Private
     
-    func baseMutableContent(for notificationItem: NotificationItemProxyProtocol) -> UNMutableNotificationContent {
-        let notification = UNMutableNotificationContent()
+    private func processEmpty(_ notificationContent: UNMutableNotificationContent) -> UNMutableNotificationContent {
+        notificationContent.title = InfoPlistReader(bundle: .app).bundleDisplayName
+        notificationContent.body = L10n.notification
+        notificationContent.categoryIdentifier = NotificationConstants.Category.message
         
-        notification.receiverID = notificationItem.receiverID
-        notification.roomID = notificationItem.roomID
-        notification.eventID = switch notificationItem.event {
-        case .timeline(let event): event.eventId()
-        case .invite, .none: nil
-        }
-        // So that the UI groups notification that are received for the same room but also for the same user
-        // Removing the @ fixes an iOS bug where the notification crashes if the mute button is tapped
-        notification.threadIdentifier = "\(notificationItem.receiverID)\(notificationItem.roomID)".replacingOccurrences(of: "@", with: "")
-        
-        MXLog.info("isNoisy: \(notificationItem.isNoisy)")
-        notification.sound = notificationItem.isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
-        
-        return notification
-    }
-    
-    private func processEmpty(notificationItem: NotificationItemProxyProtocol) -> UNMutableNotificationContent {
-        let notification = baseMutableContent(for: notificationItem)
-        notification.title = InfoPlistReader(bundle: .app).bundleDisplayName
-        notification.body = L10n.notification
-        notification.categoryIdentifier = NotificationConstants.Category.message
-        return notification
+        return notificationContent
     }
 
-    private func processInvited(notificationItem: NotificationItemProxyProtocol, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = baseMutableContent(for: notificationItem)
-
-        notification.categoryIdentifier = NotificationConstants.Category.invite
+    private func processInvited(notificationContent: UNMutableNotificationContent,
+                                notificationItem: NotificationItemProxyProtocol,
+                                mediaProvider: MediaProviderProtocol) async -> UNMutableNotificationContent {
+        notificationContent.categoryIdentifier = NotificationConstants.Category.invite
 
         let body: String
         if !notificationItem.isDM {
@@ -89,83 +97,43 @@ struct NotificationContentBuilder {
         } else {
             body = L10n.notificationInviteBody
         }
-
-        notification = try await notification.addSenderIcon(using: mediaProvider,
-                                                            senderID: notificationItem.senderID,
-                                                            senderName: notificationItem.senderDisplayName ?? notificationItem.roomDisplayName,
-                                                            icon: icon(for: notificationItem),
-                                                            forcePlaceholder: settings.hideInviteAvatars)
-        notification.body = body
         
-        return notification
-    }
-
-    private func processRoomMessage(notificationItem: NotificationItemProxyProtocol, messageType: MessageType, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
+        notificationContent.body = body
         
-        let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
-        notification.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName, isOutgoing: false).characters)
-        
-        guard settings.timelineMediaVisibility == .always ||
-            (settings.timelineMediaVisibility == .privateOnly && notificationItem.isRoomPrivate)
-        else { return notification }
-        
-        switch messageType {
-        case .image(content: let content):
-            notification = await notification.addMediaAttachment(using: mediaProvider,
-                                                                 mediaSource: .init(source: content.source,
-                                                                                    mimeType: content.info?.mimetype))
-        case .audio(content: let content):
-            notification = await notification.addMediaAttachment(using: mediaProvider,
-                                                                 mediaSource: .init(source: content.source,
-                                                                                    mimeType: content.info?.mimetype))
-        case .video(content: let content):
-            notification = await notification.addMediaAttachment(using: mediaProvider,
-                                                                 mediaSource: .init(source: content.source,
-                                                                                    mimeType: content.info?.mimetype))
-        default:
-            break
+        do {
+            return try await notificationContent.addSenderIcon(senderID: notificationItem.senderID,
+                                                               senderName: notificationItem.senderDisplayName ?? notificationItem.roomDisplayName,
+                                                               icon: icon(for: notificationItem),
+                                                               forcePlaceholder: settings.hideInviteAvatars,
+                                                               mediaProvider: mediaProvider)
+        } catch {
+            return notificationContent
         }
-        
-        return notification
-    }
-
-    private func processPollStartEvent(notificationItem: NotificationItemProxyProtocol, pollQuestion: String, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
-        notification.body = L10n.commonPollSummary(pollQuestion)
-        return notification
     }
     
-    private func processCallInviteEvent(notificationItem: NotificationItemProxyProtocol, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
-        notification.body = L10n.commonUnsupportedCall
-        return notification
-    }
-    
-    private func processCallNotifyEvent(notificationItem: NotificationItemProxyProtocol, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
-        notification.body = L10n.notificationIncomingCall
-        return notification
-    }
-
-    private func processCommonRoomMessage(notificationItem: NotificationItemProxyProtocol, mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = baseMutableContent(for: notificationItem)
-        notification.title = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
-        if notification.title != notificationItem.roomDisplayName {
-            notification.subtitle = notificationItem.roomDisplayName
+    private func processMessageLike(notificationContent: UNMutableNotificationContent,
+                                    notificationItem: NotificationItemProxyProtocol,
+                                    mediaProvider: MediaProviderProtocol) async -> UNMutableNotificationContent {
+        notificationContent.title = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
+        if notificationContent.title != notificationItem.roomDisplayName {
+            notificationContent.subtitle = notificationItem.roomDisplayName
         }
-        notification.categoryIdentifier = NotificationConstants.Category.message
-
+        notificationContent.categoryIdentifier = NotificationConstants.Category.message
+        
         let senderName = if let displayName = notificationItem.senderDisplayName {
             notificationItem.hasMention ? L10n.notificationSenderMentionReply(displayName) : displayName
         } else {
             notificationItem.roomDisplayName
         }
-        notification = try await notification.addSenderIcon(using: mediaProvider,
-                                                            senderID: notificationItem.senderID,
-                                                            senderName: senderName,
-                                                            icon: icon(for: notificationItem))
-        return notification
+        
+        do {
+            return try await notificationContent.addSenderIcon(senderID: notificationItem.senderID,
+                                                               senderName: senderName,
+                                                               icon: icon(for: notificationItem),
+                                                               mediaProvider: mediaProvider)
+        } catch {
+            return notificationContent
+        }
     }
     
     func icon(for notificationItem: NotificationItemProxyProtocol) -> NotificationIcon {
@@ -175,5 +143,38 @@ struct NotificationContentBuilder {
             return NotificationIcon(mediaSource: notificationItem.roomAvatarMediaSource,
                                     groupInfo: .init(name: notificationItem.roomDisplayName, id: notificationItem.roomID))
         }
+    }
+
+    private func processRoomMessage(notificationContent: UNMutableNotificationContent,
+                                    notificationItem: NotificationItemProxyProtocol,
+                                    messageType: MessageType,
+                                    mediaProvider: MediaProviderProtocol) async -> UNMutableNotificationContent {
+        let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
+        notificationContent.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName, isOutgoing: false).characters)
+        
+        guard settings.timelineMediaVisibility == .always ||
+            (settings.timelineMediaVisibility == .privateOnly && notificationItem.isRoomPrivate)
+        else {
+            return notificationContent
+        }
+        
+        switch messageType {
+        case .image(content: let content):
+            await notificationContent.addMediaAttachment(using: mediaProvider,
+                                                         mediaSource: .init(source: content.source,
+                                                                            mimeType: content.info?.mimetype))
+        case .audio(content: let content):
+            await notificationContent.addMediaAttachment(using: mediaProvider,
+                                                         mediaSource: .init(source: content.source,
+                                                                            mimeType: content.info?.mimetype))
+        case .video(content: let content):
+            await notificationContent.addMediaAttachment(using: mediaProvider,
+                                                         mediaSource: .init(source: content.source,
+                                                                            mimeType: content.info?.mimetype))
+        default:
+            break
+        }
+        
+        return notificationContent
     }
 }
