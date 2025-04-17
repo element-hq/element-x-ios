@@ -104,7 +104,7 @@ struct NotificationContentBuilder {
         var notification = try await processCommonRoomMessage(notificationItem: notificationItem, mediaProvider: mediaProvider)
         
         let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
-        notification.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName).characters)
+        notification.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName, isOutgoing: false).characters)
         
         guard settings.timelineMediaVisibility == .always ||
             (settings.timelineMediaVisibility == .privateOnly && notificationItem.isRoomPrivate)
