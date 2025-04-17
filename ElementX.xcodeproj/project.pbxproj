@@ -823,6 +823,7 @@
 		A009BDFB0A6816D4C392ADCB /* SettingsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2AF715D4FD4710EBB637D661 /* SettingsScreenViewModelProtocol.swift */; };
 		A021827B528F1EDC9101CA58 /* AppCoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBC776F301D374A3298C69DA /* AppCoordinatorProtocol.swift */; };
 		A0601810597769B81C2358AF /* EncryptionResetPasswordScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2B5274C1D3D2999D643786 /* EncryptionResetPasswordScreenViewModelProtocol.swift */; };
+		A07178337F3C0B208B5A77A8 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB6ED50FE104992419310EEB /* NotificationHandler.swift */; };
 		A0861B727B273B5B3DD7FBF6 /* KnockRequestsListScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09227E671DB30795C43FFFD /* KnockRequestsListScreenViewModel.swift */; };
 		A0868BDE84D2140A885BE3C9 /* EncryptionResetScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E8562F4D7DE073BC32902AB /* EncryptionResetScreenViewModelProtocol.swift */; };
 		A0D7E5BD0298A97DCBDCE40B /* Version in Frameworks */ = {isa = PBXBuildFile; productRef = A05AF81DDD14AD58CB0E1B9B /* Version */; };
@@ -2276,6 +2277,7 @@
 		BB284643AF7AB131E307DCE0 /* AudioSessionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionProtocol.swift; sourceTree = "<group>"; };
 		BB576F4118C35E6B5124FA22 /* test_apple_image.heic */ = {isa = PBXFileReference; path = test_apple_image.heic; sourceTree = "<group>"; };
 		BB5B00A014307CE37B2812CD /* TimelineViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewModelProtocol.swift; sourceTree = "<group>"; };
+		BB6ED50FE104992419310EEB /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
 		BB8BC4C791D0E88CFCF4E5DF /* ServerSelectionScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionScreenCoordinator.swift; sourceTree = "<group>"; };
 		BBEC57C204D77908E355EF42 /* AudioRecorderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorderProtocol.swift; sourceTree = "<group>"; };
 		BC51BF90469412ABDE658CDD /* portrait_test_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = portrait_test_image.jpg; sourceTree = "<group>"; };
@@ -4705,6 +4707,7 @@
 			isa = PBXGroup;
 			children = (
 				D7BB243B26D54EF1A0C422C0 /* NotificationContentBuilder.swift */,
+				BB6ED50FE104992419310EEB /* NotificationHandler.swift */,
 				27A1AD6389A4659AF0CEAE62 /* NotificationServiceExtension.swift */,
 				566F2B84465726112B830CF6 /* Other */,
 			);
@@ -6709,6 +6712,7 @@
 				4DEEFB73181C3B023DB42686 /* NetworkMonitorProtocol.swift in Sources */,
 				5C02841B2A86327B2C377682 /* NotificationConstants.swift in Sources */,
 				2689D22EF1D10D22B0A4DAEA /* NotificationContentBuilder.swift in Sources */,
+				A07178337F3C0B208B5A77A8 /* NotificationHandler.swift in Sources */,
 				5D70FAE4D2BF4553AFFFFE41 /* NotificationItemProxy.swift in Sources */,
 				B89990DD875B0B603D4D4332 /* NotificationItemProxyProtocol.swift in Sources */,
 				B14BC354E56616B6B7D9A3D7 /* NotificationServiceExtension.swift in Sources */,
