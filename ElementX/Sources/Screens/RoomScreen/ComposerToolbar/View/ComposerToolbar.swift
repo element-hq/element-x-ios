@@ -9,6 +9,27 @@ import Compound
 import SwiftUI
 import WysiwygComposer
 
+struct TranscriptPopupView: View {
+    var transcript: String
+    
+    var body: some View {
+        ScrollView {
+            Text(transcript)
+                .font(.compound.bodyMD)
+                .foregroundColor(.compound.textPrimary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(12)
+        }
+        .frame(maxHeight: 120) // Fixed maximum height
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.compound.bgCanvasDefault)
+                .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+        )
+        .padding(.horizontal, 12)
+    }
+}
+
 struct ComposerToolbar: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
     
@@ -22,17 +43,27 @@ struct ComposerToolbar: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     var body: some View {
-        VStack(spacing: 8) {
-            topBar
+        ZStack(alignment: .top) {
+            // Transcript popup that persists across different composer modes
+            if context.viewState.showTranscript, !context.viewState.currentTranscript.isEmpty {
+                TranscriptPopupView(transcript: context.viewState.currentTranscript)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .zIndex(1) // Ensure it appears above everything
+                    .offset(y: -8) // Position it above the composer
+            }
             
-            if context.composerFormattingEnabled {
-                if verticalSizeClass != .compact,
-                   context.composerExpanded {
-                    suggestionView
-                        .padding(.leading, -5)
-                        .padding(.trailing, -8)
+            VStack(spacing: 8) {
+                topBar
+                
+                if context.composerFormattingEnabled {
+                    if verticalSizeClass != .compact,
+                       context.composerExpanded {
+                        suggestionView
+                            .padding(.leading, -5)
+                            .padding(.trailing, -8)
+                    }
+                    bottomBar
                 }
-                bottomBar
             }
         }
         .padding(.leading, 5)
@@ -42,6 +73,12 @@ struct ComposerToolbar: View {
             if verticalSizeClass != .compact, !context.composerExpanded {
                 suggestionView
                     .offset(y: -frame.height)
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: context.viewState.showTranscript && !context.viewState.currentTranscript.isEmpty)
+        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("VoiceMessageTranscriptUpdate"))) { notification in
+            if let transcript = notification.object as? String {
+                context.send(viewAction: .updateTranscript(transcript: transcript))
             }
         }
         .alert(item: $context.alertInfo)
@@ -205,6 +242,9 @@ struct ComposerToolbar: View {
         // sending e.g. accepting current autocorrection.
         // Fixes https://github.com/element-hq/element-x-ios/issues/3216
         context.presendCallback?()
+        
+        // Clear transcript when sending the message
+        context.send(viewAction: .updateTranscript(transcript: ""))
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             context.send(viewAction: .sendMessage)

@@ -178,6 +178,9 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             processVoiceMessageAction(voiceMessageAction)
         case .plainComposerTextChanged:
             completionSuggestionService.processTextMessage(state.bindings.plainComposerText.string)
+        case .updateTranscript(let transcript):
+            state.currentTranscript = transcript
+            state.showTranscript = !transcript.isEmpty
         case .didToggleFormattingOptions:
             if context.composerFormattingEnabled {
                 guard !context.plainComposerText.string.isEmpty else {

@@ -51,6 +51,7 @@ enum ComposerToolbarViewAction {
     
     case voiceMessage(ComposerToolbarVoiceMessageAction)
     
+    case updateTranscript(transcript: String)
     case plainComposerTextChanged
     case didToggleFormattingOptions
 }
@@ -69,6 +70,8 @@ struct ComposerToolbarViewState: BindableState {
     var suggestions: [SuggestionItem] = []
     var audioPlayerState: AudioPlayerState
     var audioRecorderState: AudioRecorderState
+    var currentTranscript = ""
+    var showTranscript = false
     
     var bindings: ComposerToolbarViewStateBindings
 
