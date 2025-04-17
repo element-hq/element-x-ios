@@ -387,39 +387,22 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         userSession.clientProxy.actionsPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
-                guard let self, case let .receivedDecryptionError(info) = action else {
-                    return
-                }
+                guard let self else { return }
                 
-                let timeToDecryptMs: Int
-                if let unsignedTimeToDecryptMs = info.timeToDecryptMs {
-                    timeToDecryptMs = Int(unsignedTimeToDecryptMs)
-                } else {
-                    timeToDecryptMs = -1
+                switch action {
+                case .receivedDecryptionError(let info):
+                    processDecryptionError(info)
+                case .receivedSyncUpdate:
+                    Task {
+                        let roomSummaries = self.userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher.value
+                        await self.notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries)
+                    }
+                default:
+                    break
                 }
-                
-                let errorName: AnalyticsEvent.Error.Name = switch info.cause {
-                case .unknown: .OlmKeysNotSentError
-                case .unknownDevice, .unsignedDevice: .ExpectedSentByInsecureDevice
-                case .verificationViolation: .ExpectedVerificationViolation
-                case .sentBeforeWeJoined: .ExpectedDueToMembership
-                case .historicalMessageAndBackupIsDisabled, .historicalMessageAndDeviceIsUnverified: .HistoricalMessage
-                case .withheldForUnverifiedOrInsecureDevice: .RoomKeysWithheldForUnverifiedDevice
-                case .withheldBySender: .OlmKeysNotSentError
-                }
-                
-                analytics.trackError(context: nil,
-                                     domain: .E2EE,
-                                     name: errorName,
-                                     timeToDecryptMillis: timeToDecryptMs,
-                                     eventLocalAgeMillis: Int(truncatingIfNeeded: info.eventLocalAgeMillis),
-                                     isFederated: info.ownHomeserver != info.senderHomeserver,
-                                     isMatrixDotOrg: info.ownHomeserver == "matrix.org",
-                                     userTrustsOwnIdentity: info.userTrustsOwnIdentity,
-                                     wasVisibleToUser: nil)
             }
             .store(in: &cancellables)
-                
+        
         elementCallService.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
@@ -442,6 +425,35 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    private func processDecryptionError(_ info: UnableToDecryptInfo) {
+        let timeToDecryptMs: Int
+        if let unsignedTimeToDecryptMs = info.timeToDecryptMs {
+            timeToDecryptMs = Int(unsignedTimeToDecryptMs)
+        } else {
+            timeToDecryptMs = -1
+        }
+        
+        let errorName: AnalyticsEvent.Error.Name = switch info.cause {
+        case .unknown: .OlmKeysNotSentError
+        case .unknownDevice, .unsignedDevice: .ExpectedSentByInsecureDevice
+        case .verificationViolation: .ExpectedVerificationViolation
+        case .sentBeforeWeJoined: .ExpectedDueToMembership
+        case .historicalMessageAndBackupIsDisabled, .historicalMessageAndDeviceIsUnverified: .HistoricalMessage
+        case .withheldForUnverifiedOrInsecureDevice: .RoomKeysWithheldForUnverifiedDevice
+        case .withheldBySender: .OlmKeysNotSentError
+        }
+        
+        analytics.trackError(context: nil,
+                             domain: .E2EE,
+                             name: errorName,
+                             timeToDecryptMillis: timeToDecryptMs,
+                             eventLocalAgeMillis: Int(truncatingIfNeeded: info.eventLocalAgeMillis),
+                             isFederated: info.ownHomeserver != info.senderHomeserver,
+                             isMatrixDotOrg: info.ownHomeserver == "matrix.org",
+                             userTrustsOwnIdentity: info.userTrustsOwnIdentity,
+                             wasVisibleToUser: nil)
     }
     
     private func setupSessionVerificationRequestsObserver() {
