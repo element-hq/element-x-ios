@@ -387,7 +387,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         userSession.clientProxy.actionsPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
-                guard let self, case let .receivedDecryptionError(info) = action else {
+                guard let self else { return }
+                
+                if case .receivedSyncUpdate = action {
+                    Task {
+                        let roomSummaries = self.userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher.value
+                        await self.notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries)
+                    }
+                }
+                
+                guard case let .receivedDecryptionError(info) = action else {
                     return
                 }
                 

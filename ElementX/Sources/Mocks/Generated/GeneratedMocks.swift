@@ -12026,6 +12026,47 @@ class NotificationManagerMock: NotificationManagerProtocol, @unchecked Sendable 
         }
         await removeDeliveredMessageNotificationsForClosure?(roomID)
     }
+    //MARK: - removeDeliveredNotificationsForFullyReadRooms
+
+    var removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount = 0
+    var removeDeliveredNotificationsForFullyReadRoomsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var removeDeliveredNotificationsForFullyReadRoomsCalled: Bool {
+        return removeDeliveredNotificationsForFullyReadRoomsCallsCount > 0
+    }
+    var removeDeliveredNotificationsForFullyReadRoomsReceivedRooms: [RoomSummary]?
+    var removeDeliveredNotificationsForFullyReadRoomsReceivedInvocations: [[RoomSummary]] = []
+    var removeDeliveredNotificationsForFullyReadRoomsClosure: (([RoomSummary]) async -> Void)?
+
+    func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary]) async {
+        removeDeliveredNotificationsForFullyReadRoomsCallsCount += 1
+        removeDeliveredNotificationsForFullyReadRoomsReceivedRooms = rooms
+        DispatchQueue.main.async {
+            self.removeDeliveredNotificationsForFullyReadRoomsReceivedInvocations.append(rooms)
+        }
+        await removeDeliveredNotificationsForFullyReadRoomsClosure?(rooms)
+    }
 }
 class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol, @unchecked Sendable {
     var callbacks: PassthroughSubject<NotificationSettingsProxyCallback, Never> {
