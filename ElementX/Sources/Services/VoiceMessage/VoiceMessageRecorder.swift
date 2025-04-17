@@ -106,6 +106,9 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
                 self?.currentTranscript = transcript
                 MXLog.info("Transcript update received: '\(transcript)'")
                 MXLog.info("Transcript length: \(transcript.count) characters")
+                
+                // Post notification with the updated transcript for UI updates
+                NotificationCenter.default.post(name: Notification.Name("VoiceMessageTranscriptUpdate"), object: transcript)
             }
         }
         
@@ -163,6 +166,9 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
                 MXLog.info("Final transcript: \(finalTranscript)")
                 // Store the final transcript for later use (e.g., sending with the voice message)
                 currentTranscript = finalTranscript
+                
+                // Post notification with the final transcript for UI updates
+                NotificationCenter.default.post(name: Notification.Name("VoiceMessageTranscriptUpdate"), object: finalTranscript)
             } catch {
                 MXLog.error("Error stopping transcription: \(error)")
             }
