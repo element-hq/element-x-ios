@@ -41,8 +41,8 @@ private let notificationContentBuilder = NotificationContentBuilder(messageEvent
                                                                     settings: settings)
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
-    private var handler: ((UNNotificationContent) -> Void)?
-    private var modifiedContent: UNMutableNotificationContent?
+    private var contentHandler: ((UNNotificationContent) -> Void)!
+    private var notificationContent: UNMutableNotificationContent!
     
     private let appHooks = AppHooks()
             
@@ -55,9 +55,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
-              let roomID = request.roomID,
-              let eventID = request.eventID,
-              let clientID = request.pusherNotificationClientIdentifier,
+              let roomID = request.content.roomID,
+              let eventID = request.content.eventID,
+              let clientID = request.content.pusherNotificationClientIdentifier,
               let credentials = keychainController.restorationTokens().first(where: { $0.restorationToken.pusherNotificationClientIdentifier == clientID }) else {
             // We cannot process this notification, it might be due to one of these:
             // - Device rebooted and locked
@@ -67,10 +67,14 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             return contentHandler(request.content)
         }
         
+        guard let mutableContent = request.content.mutableCopy() as? UNMutableNotificationContent else {
+            return contentHandler(request.content)
+        }
+        
         Target.nse.configure(logLevel: settings.logLevel, traceLogPacks: settings.traceLogPacks)
 
-        handler = contentHandler
-        modifiedContent = request.content.mutableCopy() as? UNMutableNotificationContent
+        self.contentHandler = contentHandler
+        notificationContent = mutableContent
         
         MXLog.info("\(tag) #########################################")
         
@@ -90,7 +94,6 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 
                 await processEvent(eventID,
                                    roomID: roomID,
-                                   unreadCount: request.unreadCount,
                                    userSession: userSession)
             } catch {
                 MXLog.error("Failed creating user session with error: \(error)")
@@ -102,77 +105,51 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         // Called just before the extension will be terminated by the system.
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
         MXLog.warning("\(tag) Extension time will expire")
-        notify(unreadCount: nil)
+        deliverNotification()
     }
     
     // MARK: - Private
 
     private func processEvent(_ eventID: String,
                               roomID: String,
-                              unreadCount: Int?,
                               userSession: NSEUserSession) async {
         MXLog.info("\(tag) Processing event: \(eventID) in room: \(roomID)")
         
-        do {
-            guard let itemProxy = await userSession.notificationItemProxy(roomID: roomID, eventID: eventID) else {
-                MXLog.error("\(tag) Failed retrieving notification item")
-                return discard(unreadCount: unreadCount)
-            }
-                  
-            switch await preprocessNotification(itemProxy) {
-            case .processedShouldDiscard, .unsupportedShouldDiscard:
-                return discard(unreadCount: unreadCount)
-            case .shouldDisplay:
-                break
-            }
+        guard let notificationItemProxy = await userSession.notificationItemProxy(roomID: roomID, eventID: eventID) else {
+            MXLog.error("\(tag) Failed retrieving notification item")
+            discardNotification()
+            return
+        }
+        
+        switch await preprocessNotification(notificationItemProxy) {
+        case .processedShouldDiscard, .unsupportedShouldDiscard:
+            discardNotification()
+        case .shouldDisplay:
+            notificationContent = await notificationContentBuilder.process(notificationContent: notificationContent,
+                                                                           notificationItem: notificationItemProxy,
+                                                                           mediaProvider: userSession.mediaProvider)
             
-            modifiedContent = try await notificationContentBuilder.content(for: itemProxy, mediaProvider: nil)
-            
-            guard itemProxy.hasMedia else {
-                MXLog.info("\(tag) Notification item doesn't contain media")
-                return notify(unreadCount: unreadCount)
-            }
-
-            MXLog.info("\(tag) Processing media")
-            if let latestContent = try? await notificationContentBuilder.content(for: itemProxy, mediaProvider: userSession.mediaProvider) {
-                modifiedContent = latestContent
-            } else {
-                MXLog.error("\(tag) Failed processing notification media")
-            }
-            
-            return notify(unreadCount: unreadCount)
-        } catch {
-            MXLog.error("Failed processing with error: \(error)")
-            return discard(unreadCount: unreadCount)
+            deliverNotification()
         }
     }
     
-    private func notify(unreadCount: Int?) {
-        guard let modifiedContent else {
-            MXLog.error("\(tag) Notification modified content invalid")
-            return discard(unreadCount: unreadCount)
-        }
-        
+    private func deliverNotification() {
         MXLog.info("\(tag) Displaying notification")
         
-        if let unreadCount {
-            modifiedContent.badge = NSNumber(value: unreadCount)
-        }
-
-        handler?(modifiedContent)
+        contentHandler(notificationContent)
         cleanUp()
     }
 
-    private func discard(unreadCount: Int?) {
+    private func discardNotification() {
         MXLog.info("\(tag) Discarding notification")
         
         let content = UNMutableNotificationContent()
         
-        if let unreadCount {
+        if let unreadCount = notificationContent.unreadCount {
             content.badge = NSNumber(value: unreadCount)
         }
-
-        handler?(content)
+        
+        contentHandler(content)
         cleanUp()
     }
 
@@ -181,8 +158,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
 
     private func cleanUp() {
-        handler = nil
-        modifiedContent = nil
+        contentHandler = nil
+        notificationContent = nil
     }
     
     private func preprocessNotification(_ itemProxy: NotificationItemProxyProtocol) async -> NotificationProcessingResult {

@@ -39,6 +39,10 @@ extension UNNotificationContent {
     @objc var eventID: String? {
         userInfo[NotificationConstants.UserInfoKey.eventIdentifier] as? String
     }
+
+    @objc var pusherNotificationClientIdentifier: String? {
+        userInfo[NotificationConstants.UserInfoKey.pusherNotificationClientIdentifier] as? String
+    }
 }
 
 extension UNMutableNotificationContent {
@@ -68,19 +72,21 @@ extension UNMutableNotificationContent {
             userInfo[NotificationConstants.UserInfoKey.eventIdentifier] = newValue
         }
     }
+    
+    var unreadCount: Int? {
+        userInfo[NotificationConstants.UserInfoKey.unreadCount] as? Int
+    }
 
-    func addMediaAttachment(using mediaProvider: MediaProviderProtocol?,
-                            mediaSource: MediaSourceProxy) async -> UNMutableNotificationContent {
-        guard let mediaProvider else {
-            return self
-        }
+    func addMediaAttachment(using mediaProvider: MediaProviderProtocol,
+                            mediaSource: MediaSourceProxy) async {
         switch await mediaProvider.loadFileFromSource(mediaSource) {
         case .success(let file):
             do {
                 guard let url = file.url else {
                     MXLog.error("Couldn't add media attachment: URL is nil")
-                    return self
+                    return
                 }
+                
                 let identifier = ProcessInfo.processInfo.globallyUniqueString
                 let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: url, with: "\(identifier).\(url.pathExtension)")
                 let attachment = try UNNotificationAttachment(identifier: identifier,
@@ -89,24 +95,21 @@ extension UNMutableNotificationContent {
                 attachments.append(attachment)
             } catch {
                 MXLog.error("Couldn't add media attachment:: \(error)")
-                return self
+                return
             }
         case .failure(let error):
             MXLog.error("Couldn't load the file for media attachment: \(error)")
         }
-
-        return self
     }
 
-    func addSenderIcon(using mediaProvider: MediaProviderProtocol?,
-                       senderID: String,
+    func addSenderIcon(senderID: String,
                        senderName: String,
                        icon: NotificationIcon,
-                       forcePlaceholder: Bool = false) async throws -> UNMutableNotificationContent {
+                       forcePlaceholder: Bool = false,
+                       mediaProvider: MediaProviderProtocol) async throws -> UNMutableNotificationContent {
         var fetchedImage: INImage?
         let image: INImage
         if !forcePlaceholder,
-           let mediaProvider,
            let mediaSource = icon.mediaSource {
             switch await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
             case .success(let data):
@@ -164,6 +167,7 @@ extension UNMutableNotificationContent {
 
         // Donate the interaction before updating notification content.
         try await interaction.donate()
+        
         // Update notification content before displaying the
         // communication notification.
         let updatedContent = try updating(from: intent)

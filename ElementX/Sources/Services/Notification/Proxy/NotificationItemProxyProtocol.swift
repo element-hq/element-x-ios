@@ -41,32 +41,4 @@ extension NotificationItemProxyProtocol {
     var isDM: Bool {
         isRoomDirect && roomJoinedMembers <= 2
     }
-    
-    var hasMedia: Bool {
-        if (isDM && senderAvatarMediaSource != nil) ||
-            (!isDM && roomAvatarMediaSource != nil) {
-            return true
-        }
-        switch event {
-        case .invite, .none:
-            return false
-        case .timeline(let event):
-            switch try? event.eventType() {
-            case .state, .none:
-                return false
-            case let .messageLike(content):
-                switch content {
-                case let .roomMessage(messageType, _):
-                    switch messageType {
-                    case .image, .video, .audio:
-                        return true
-                    default:
-                        return false
-                    }
-                default:
-                    return false
-                }
-            }
-        }
-    }
 }
