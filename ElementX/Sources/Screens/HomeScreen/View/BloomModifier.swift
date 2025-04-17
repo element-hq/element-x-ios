@@ -65,9 +65,9 @@ struct NewBloomModifier: ViewModifier {
     private var bloomGradient: some View {
         LinearGradient(colors: [.compound._bgOwnPill, .clear], // This isn't the final gradient.
                        startPoint: .top,
-                       endPoint: .bottom)
+                       endPoint: .init(x: 0.5, y: 0.7))
             .ignoresSafeArea(edges: .all)
-            .frame(width: 100, height: 100)
+            .frame(width: 256, height: 256)
     }
 }
 
