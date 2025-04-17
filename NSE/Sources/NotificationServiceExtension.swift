@@ -125,9 +125,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         case .processedShouldDiscard, .unsupportedShouldDiscard:
             discardNotification()
         case .shouldDisplay:
-            notificationContent = await notificationContentBuilder.process(notificationContent: notificationContent,
-                                                                           notificationItem: notificationItemProxy,
-                                                                           mediaProvider: userSession.mediaProvider)
+            await notificationContentBuilder.process(notificationContent: &notificationContent,
+                                                     notificationItem: notificationItemProxy,
+                                                     mediaProvider: userSession.mediaProvider)
             
             deliverNotification()
         }
