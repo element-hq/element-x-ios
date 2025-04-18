@@ -15,7 +15,10 @@ struct DeclineAndBlockScreenViewState: BindableState {
     var bindings = DeclineAndBlockScreenViewStateBindings()
     
     var isDeclineDisabled: Bool {
-        !bindings.shouldBlockUser && !bindings.shouldReport
+        if bindings.shouldReport {
+            return bindings.reportReason.isEmpty
+        }
+        return !bindings.shouldBlockUser && !bindings.shouldReport
     }
 }
 
@@ -23,9 +26,15 @@ struct DeclineAndBlockScreenViewStateBindings {
     var shouldBlockUser = true
     var shouldReport = false
     var reportReason = ""
+    
+    var alert: AlertInfo<DeclineAndBlockAlertType>?
 }
 
 enum DeclineAndBlockScreenViewAction {
     case decline
     case dismiss
+}
+
+enum DeclineAndBlockAlertType {
+    case declineFailed
 }

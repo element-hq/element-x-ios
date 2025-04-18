@@ -24,6 +24,7 @@ struct DeclineAndBlockScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .animation(.elementDefault, value: context.shouldReport)
+        .alert(item: $context.alert)
     }
     
     private var blockUserSection: some View {
