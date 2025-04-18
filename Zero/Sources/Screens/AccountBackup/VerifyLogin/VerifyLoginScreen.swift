@@ -164,7 +164,6 @@ struct VerifyLoginScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             VerifyLoginScreen(context: viewModel.context)
         }
-        .snapshot(delay: 0.25)
     }
     
     private static var viewModel: IdentityConfirmationScreenViewModel {

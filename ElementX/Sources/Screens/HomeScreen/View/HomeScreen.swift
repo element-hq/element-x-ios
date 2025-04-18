@@ -61,11 +61,11 @@ struct HomeScreen: View {
                    message: leaveRoomAlertMessage)
 //            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
             .toolbar { toolbar }
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+            .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
             .track(screen: .Home)
-            .bloom(context: context,
-                   scrollViewAdapter: scrollViewAdapter,
-                   isNewBloomEnabled: context.viewState.isNewBloomEnabled)
+//            .bloom(context: context,
+//                   scrollViewAdapter: scrollViewAdapter,
+//                   isNewBloomEnabled: context.viewState.isNewBloomEnabled)
             .sentryTrace("\(Self.self)")
     }
     

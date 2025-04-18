@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -174,9 +174,9 @@
 		182D06FD2CC1A3CF00BFF155 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		182D06FE2CC1A46B00BFF155 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		182D532B736178A1DED9F76E /* ReportRoomScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FCAE847556719BBE7A0882 /* ReportRoomScreenModels.swift */; };
-		18386B777FDA74E4B3282D4F /* TimelineItemThreadSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C6A082F2B2A15E1B9BE280 /* TimelineItemThreadSummary.swift */; };
 		18326FD82CA53E7400389CB2 /* ZeroColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18326FD72CA53E6D00389CB2 /* ZeroColors.swift */; };
 		18326FD92CA53E7400389CB2 /* ZeroColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18326FD72CA53E6D00389CB2 /* ZeroColors.swift */; };
+		18386B777FDA74E4B3282D4F /* TimelineItemThreadSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C6A082F2B2A15E1B9BE280 /* TimelineItemThreadSummary.swift */; };
 		184025642D369AC5006EC169 /* Tracing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B574805B9812C111D6215D /* Tracing.swift */; };
 		184025652D369AD8006EC169 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2711E5996016ABD6EAAEB58A /* LogLevel.swift */; };
 		184A8B552CCFC9F300446DE4 /* RoomInfoProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A66E8BC8D9AE4A08EFB2DF /* RoomInfoProxy.swift */; };
@@ -545,7 +545,7 @@
 		18E9A4882C9829970082DDA4 /* BlockedUsersScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8642512079EEFD622E3AA66B /* BlockedUsersScreenModels.swift */; };
 		18E9A4892C9829970082DDA4 /* BlockedUsersScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A010B8EAD1A9F6B4686DF2F4 /* BlockedUsersScreenViewModel.swift */; };
 		18E9A48A2C9829970082DDA4 /* BlockedUsersScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76A706B3EEA32B882DA5E2D /* BlockedUsersScreenViewModelProtocol.swift */; };
-		18E9A48B2C9829970082DDA4 /* BloomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7BEB970F500BFB248443FA1 /* BloomView.swift */; };
+		18E9A48B2C9829970082DDA4 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		18E9A48C2C9829970082DDA4 /* BlurHashDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5272BC4A60B6AD7553BACA1 /* BlurHashDecode.swift */; };
 		18E9A48D2C9829970082DDA4 /* BlurHashEncode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9332DFE9642F0A46ECA0497B /* BlurHashEncode.swift */; };
 		18E9A48E2C9829970082DDA4 /* BugReportFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7367B3B9A8CAF902220F31D1 /* BugReportFlowCoordinator.swift */; };
@@ -1835,6 +1835,10 @@
 		791DEF882D93959C0057E6C5 /* ZCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1828CE432D010108002FF640 /* ZCurrentUser.swift */; };
 		791DEF892D93959C0057E6C5 /* ZCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1828CE432D010108002FF640 /* ZCurrentUser.swift */; };
 		792A87AA2DAD8F51009C3E4F /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADECBBB672497BCD4822468 /* Result.swift */; };
+		7937A5922DB287E9001A60CB /* TimelineItemThreadSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C6A082F2B2A15E1B9BE280 /* TimelineItemThreadSummary.swift */; };
+		7937A5932DB28819001A60CB /* TimelineEventContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F926D08EB3D622A480BCA71 /* TimelineEventContent.swift */; };
+		7937A5942DB289A0001A60CB /* TimelineThreadSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2E6ADAE685F4109B1FE795 /* TimelineThreadSummaryView.swift */; };
+		7937A5952DB28A0F001A60CB /* BloomModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D152423EE6CF0ECCC84091A /* BloomModifier.swift */; };
 		793FA5B72D5B33E700893AC4 /* HomeScreenPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */; };
 		793FA5B82D5B33E700893AC4 /* HomeScreenPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */; };
 		7944A75F2D589F3000B75DAC /* CreateFeedScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A75E2D589F2700B75DAC /* CreateFeedScreenCoordinator.swift */; };
@@ -8576,7 +8580,6 @@
 				18C853082D11AE4B009AF206 /* XCRemoteSwiftPackageReference "Starscream" */,
 				18C8530B2D11AEAE009AF206 /* XCRemoteSwiftPackageReference "Web3" */,
 			);
-			preferredProjectObjectVersion = 54;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -9305,13 +9308,14 @@
 				18E9A4852C9829970082DDA4 /* BlankFormCoordinator.swift in Sources */,
 				18E9A4862C9829970082DDA4 /* BlockedUsersScreen.swift in Sources */,
 				7968A4332D540A0900E9056A /* FeedDetailsScreenModels.swift in Sources */,
+				7937A5932DB28819001A60CB /* TimelineEventContent.swift in Sources */,
 				791341542D6F58E1000E497F /* Secrets.swift in Sources */,
 				18E9A4872C9829970082DDA4 /* BlockedUsersScreenCoordinator.swift in Sources */,
 				18E9A4882C9829970082DDA4 /* BlockedUsersScreenModels.swift in Sources */,
 				18E9A4892C9829970082DDA4 /* BlockedUsersScreenViewModel.swift in Sources */,
 				7968A43C2D553AFF00E9056A /* FeedDetailsContent.swift in Sources */,
 				18E9A48A2C9829970082DDA4 /* BlockedUsersScreenViewModelProtocol.swift in Sources */,
-				18E9A48B2C9829970082DDA4 /* BloomView.swift in Sources */,
+				18E9A48B2C9829970082DDA4 /* (null) in Sources */,
 				18E9A48C2C9829970082DDA4 /* BlurHashDecode.swift in Sources */,
 				18E9A48D2C9829970082DDA4 /* BlurHashEncode.swift in Sources */,
 				18E9A48E2C9829970082DDA4 /* BugReportFlowCoordinator.swift in Sources */,
@@ -9864,6 +9868,7 @@
 				18E9A6312C9829970082DDA4 /* RoomDirectorySearchProxy.swift in Sources */,
 				18E9A6322C9829970082DDA4 /* RoomDirectorySearchProxyProtocol.swift in Sources */,
 				18E9A6332C9829970082DDA4 /* RoomDirectorySearchScreen.swift in Sources */,
+				7937A5922DB287E9001A60CB /* TimelineItemThreadSummary.swift in Sources */,
 				18E9A6342C9829970082DDA4 /* RoomDirectorySearchScreenCoordinator.swift in Sources */,
 				18F3D1F42CD41A77002D2677 /* VisualListItem.swift in Sources */,
 				18E9A6352C9829970082DDA4 /* RoomDirectorySearchScreenModels.swift in Sources */,
@@ -9990,6 +9995,7 @@
 				187112542CF75350001E8964 /* View+Extensions.swift in Sources */,
 				18E9A68C2C9829970082DDA4 /* (null) in Sources */,
 				18E9A68D2C9829970082DDA4 /* SceneDelegate.swift in Sources */,
+				7937A5942DB289A0001A60CB /* TimelineThreadSummaryView.swift in Sources */,
 				18E9A68E2C9829970082DDA4 /* ScreenTrackerViewModifier.swift in Sources */,
 				18E9A68F2C9829970082DDA4 /* ScrollViewAdapter.swift in Sources */,
 				18E9A6902C9829970082DDA4 /* Search.swift in Sources */,
@@ -10205,6 +10211,7 @@
 				1885A5C52D140A61003F7B3B /* TimelineMediaPreviewFileExportPicker.swift in Sources */,
 				18E9A7372C9829970082DDA4 /* UserProfileListRow.swift in Sources */,
 				18E9A7382C9829970082DDA4 /* UserProfileProxy.swift in Sources */,
+				7937A5952DB28A0F001A60CB /* BloomModifier.swift in Sources */,
 				18E9A7392C9829970082DDA4 /* UserProfileScreen.swift in Sources */,
 				18E9A73A2C9829970082DDA4 /* UserProfileScreenCoordinator.swift in Sources */,
 				18E9A73B2C9829970082DDA4 /* UserProfileScreenModels.swift in Sources */,
@@ -11600,7 +11607,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.13.3;
+				MARKETING_VERSION = 0.13.4;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -11636,7 +11643,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.13.3;
+				MARKETING_VERSION = 0.13.4;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

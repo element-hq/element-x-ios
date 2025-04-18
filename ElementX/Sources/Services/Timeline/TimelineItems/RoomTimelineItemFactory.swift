@@ -142,7 +142,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              shouldBoost: eventItemProxy.shouldBoost,
                              sender: eventItemProxy.sender,
                              content: buildTextTimelineItemContent(textMessageContent),
-                             properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
+                             properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                isThreaded: messageLikeContent.threadRoot != nil,
                                                threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                isEdited: messageContent.isEdited,
@@ -186,7 +186,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               shouldBoost: eventItemProxy.shouldBoost,
                               sender: eventItemProxy.sender,
                               content: buildImageTimelineItemContent(imageMessageContent),
-                              properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
+                              properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                 isThreaded: messageLikeContent.threadRoot != nil,
                                                 threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                 isEdited: messageContent.isEdited,
@@ -210,7 +210,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               shouldBoost: eventItemProxy.shouldBoost,
                               sender: eventItemProxy.sender,
                               content: buildVideoTimelineItemContent(videoMessageContent),
-                              properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
+                              properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                 isThreaded: messageLikeContent.threadRoot != nil,
                                                 threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                 isEdited: messageContent.isEdited,
@@ -234,7 +234,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               shouldBoost: eventItemProxy.shouldBoost,
                               sender: eventItemProxy.sender,
                               content: buildAudioTimelineItemContent(audioMessageContent),
-                              properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
+                              properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                 isThreaded: messageLikeContent.threadRoot != nil,
                                                 threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                 isEdited: messageContent.isEdited,
@@ -257,7 +257,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                      sender: eventItemProxy.sender,
                                      content: buildAudioTimelineItemContent(audioMessageContent),
-                                     properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
+                                     properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                        isThreaded: messageLikeContent.threadRoot != nil,
                                                        threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                        isEdited: messageContent.isEdited,
@@ -281,7 +281,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              shouldBoost: eventItemProxy.shouldBoost,
                              sender: eventItemProxy.sender,
                              content: buildFileTimelineItemContent(fileMessageContent),
-                             properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
+                             properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                isThreaded: messageLikeContent.threadRoot != nil,
                                                threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                isEdited: messageContent.isEdited,
@@ -304,7 +304,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                sender: eventItemProxy.sender,
                                content: buildNoticeTimelineItemContent(noticeMessageContent),
-                               properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
+                               properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                  isThreaded: messageLikeContent.threadRoot != nil,
                                                  threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                  isEdited: messageContent.isEdited,
@@ -327,7 +327,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                               sender: eventItemProxy.sender,
                               content: buildEmoteTimelineItemContent(senderDisplayName: eventItemProxy.sender.displayName, senderID: eventItemProxy.sender.id, messageContent: emoteMessageContent),
-                              properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
+                              properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                 isThreaded: messageLikeContent.threadRoot != nil,
                                                 threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                 isEdited: messageContent.isEdited,
@@ -350,7 +350,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                  canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                  sender: eventItemProxy.sender,
                                  content: buildLocationTimelineItemContent(locationMessageContent),
-                                 properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
+                                 properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                    isThreaded: messageLikeContent.threadRoot != nil,
                                                    threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                    isEdited: messageContent.isEdited,
@@ -378,7 +378,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                        sender: eventItemProxy.sender,
                                        imageInfo: imageInfo,
                                        blurhash: info.blurhash,
-                                       properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
+                                       properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                          isThreaded: messageLikeContent.threadRoot != nil,
                                                          threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                          reactions: buildAggregatedReactions(messageLikeContent.reactions),
@@ -438,7 +438,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     isEditable: eventItemProxy.isEditable,
                                     canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                     sender: eventItemProxy.sender,
-                                    properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
+                                    properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                       isThreaded: messageLikeContent.threadRoot != nil,
                                                       threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
                                                       isEdited: edited,
@@ -459,7 +459,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                  isEditable: eventItemProxy.isEditable,
                                  canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                  sender: eventItemProxy.sender,
-                                 properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
+                                 properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                    isThreaded: messageLikeContent.threadRoot != nil))
     }
     
@@ -512,9 +512,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                          isEditable: eventItemProxy.isEditable,
                                          canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                                          sender: eventItemProxy.sender,
-                                         properties: .init(replyDetails: buildReplyToDetailsFromDetailsIfAvailable(details: messageLikeContent.inReplyTo,repliedToEvent: repliedToEvent),
-                                                           isThreaded: messageLikeContent.threadRoot != nil))
-                                         properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
+                                         properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                            isThreaded: messageLikeContent.threadRoot != nil,
                                                            threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary)))
     }
@@ -889,16 +887,17 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     // MARK: - Reply details
     
-    private func buildTimelineItemReplyDetails(_ details: MatrixRustSDK.InReplyToDetails?) -> TimelineItemReplyDetails? {
+    private func buildTimelineItemReplyDetails(_ details: MatrixRustSDK.InReplyToDetails?,
+                                               repliedToEvent: EventTimelineItemProxy?) -> TimelineItemReplyDetails? {
         guard let details else {
             return nil
         }
         
-        return buildTimelineItemReply(details).details
+        return buildTimelineItemReply(details, repliedToEvent: repliedToEvent).details
     }
     
-    func buildTimelineItemReply(_ details: MatrixRustSDK.InReplyToDetails) -> TimelineItemReply {
-    func buildReply(details: InReplyToDetails,  repliedToEvent: EventTimelineItemProxy?) -> TimelineItemReply {
+    func buildTimelineItemReply(_ details: MatrixRustSDK.InReplyToDetails,
+                                repliedToEvent: EventTimelineItemProxy?) -> TimelineItemReply {
         let isThreaded = details.event().isThreaded
         switch details.event() {
         case .unavailable:
