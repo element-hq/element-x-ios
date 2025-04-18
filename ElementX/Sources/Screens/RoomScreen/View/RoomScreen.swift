@@ -9,6 +9,27 @@ import Compound
 import SwiftUI
 import WysiwygComposer
 
+struct TranscriptPopupView: View {
+    var transcript: String
+    
+    var body: some View {
+        ScrollView {
+            Text(transcript)
+                .font(.compound.bodyMD)
+                .foregroundColor(.compound.textPrimary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(12)
+        }
+        .frame(maxHeight: 120) // Fixed maximum height
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.compound.bgCanvasDefault)
+                .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+        )
+        .padding(.horizontal, 12)
+    }
+}
+
 struct RoomScreen: View {
     @ObservedObject var roomContext: RoomScreenViewModel.Context
     @ObservedObject var timelineContext: TimelineViewModel.Context
@@ -42,6 +63,17 @@ struct RoomScreen: View {
                                          mediaProvider: roomContext.mediaProvider) { action in
                         roomContext.send(viewAction: .footerViewAction(action))
                     }
+                    
+                    // Transcript popup that persists across different composer modes
+                    ZStack {
+                        if composerToolbarContext.viewState.showTranscript, !composerToolbarContext.viewState.currentTranscript.isEmpty {
+                            TranscriptPopupView(transcript: composerToolbarContext.viewState.currentTranscript)
+                                .transition(.move(edge: .top).combined(with: .opacity))
+                                .zIndex(1) // Ensure it appears above everything
+                                .padding(.bottom, 8) // Add space between popup and toolbar
+                        }
+                    }
+                    .animation(.easeInOut(duration: 0.2), value: composerToolbarContext.viewState.showTranscript && !composerToolbarContext.viewState.currentTranscript.isEmpty)
                     
                     composerToolbar
                         .padding(.bottom, composerToolbarContext.composerFormattingEnabled ? 8 : 12)

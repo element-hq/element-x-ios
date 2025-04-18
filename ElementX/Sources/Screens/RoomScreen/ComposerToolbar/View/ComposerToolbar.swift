@@ -9,27 +9,6 @@ import Compound
 import SwiftUI
 import WysiwygComposer
 
-struct TranscriptPopupView: View {
-    var transcript: String
-    
-    var body: some View {
-        ScrollView {
-            Text(transcript)
-                .font(.compound.bodyMD)
-                .foregroundColor(.compound.textPrimary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(12)
-        }
-        .frame(maxHeight: 120) // Fixed maximum height
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.compound.bgCanvasDefault)
-                .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
-        )
-        .padding(.horizontal, 12)
-    }
-}
-
 struct ComposerToolbar: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
     
@@ -44,14 +23,6 @@ struct ComposerToolbar: View {
     
     var body: some View {
         ZStack(alignment: .top) {
-            // Transcript popup that persists across different composer modes
-            if context.viewState.showTranscript, !context.viewState.currentTranscript.isEmpty {
-                TranscriptPopupView(transcript: context.viewState.currentTranscript)
-                    .transition(.move(edge: .top).combined(with: .opacity))
-                    .zIndex(1) // Ensure it appears above everything
-                    .offset(y: -8) // Position it above the composer
-            }
-            
             VStack(spacing: 8) {
                 topBar
                 
@@ -75,7 +46,6 @@ struct ComposerToolbar: View {
                     .offset(y: -frame.height)
             }
         }
-        .animation(.easeInOut(duration: 0.2), value: context.viewState.showTranscript && !context.viewState.currentTranscript.isEmpty)
         .onReceive(NotificationCenter.default.publisher(for: Notification.Name("VoiceMessageTranscriptUpdate"))) { notification in
             if let transcript = notification.object as? String {
                 context.send(viewAction: .updateTranscript(transcript: transcript))

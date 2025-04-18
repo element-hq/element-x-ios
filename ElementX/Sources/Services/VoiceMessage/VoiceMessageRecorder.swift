@@ -157,11 +157,6 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         // Stop transcription and get the final transcript
         if let audioTranscription = audioTranscription {
             do {
-                // Give the transcription engine some time to process any remaining audio buffers
-                // This helps ensure we get the complete transcript
-                MXLog.info("Waiting for transcription to complete...")
-                try await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds
-                
                 let finalTranscript = try audioTranscription.stop()
                 MXLog.info("Final transcript: \(finalTranscript)")
                 // Store the final transcript for later use (e.g., sending with the voice message)
