@@ -12,13 +12,38 @@ import WysiwygComposer
 struct TranscriptPopupView: View {
     var transcript: String
     
+    // ScrollView reader to control scroll position
+    @State private var scrollViewProxy: ScrollViewProxy? = nil
+    @State private var lastTranscript: String = ""
+    
     var body: some View {
-        ScrollView {
-            Text(transcript)
-                .font(.compound.bodyMD)
-                .foregroundColor(.compound.textPrimary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(12)
+        ScrollViewReader { proxy in
+            ScrollView {
+                Text(transcript)
+                    .font(.compound.bodyMD)
+                    .foregroundColor(.compound.textPrimary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(12)
+                    .id("transcriptEnd") // Mark the end with an ID for scrolling
+            }
+            .onChange(of: transcript) { newTranscript in
+                // Scroll to bottom whenever transcript changes
+                withAnimation {
+                    proxy.scrollTo("transcriptEnd", anchor: .bottom)
+                }
+                lastTranscript = newTranscript
+            }
+            .onAppear {
+                // Store the proxy for later use
+                scrollViewProxy = proxy
+                
+                // Initial scroll to bottom
+                DispatchQueue.main.async {
+                    withAnimation {
+                        proxy.scrollTo("transcriptEnd", anchor: .bottom)
+                    }
+                }
+            }
         }
         .frame(maxHeight: 120) // Fixed maximum height
         .background(

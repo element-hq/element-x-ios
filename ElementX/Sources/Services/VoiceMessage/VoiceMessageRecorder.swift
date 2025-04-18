@@ -153,22 +153,64 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     
     func stopRecording() async {
         recordingCancelled = false
+        
         await audioRecorder.stopRecording()
         // Stop transcription and get the final transcript
-        if let audioTranscription = audioTranscription {
+        
+        // Store the local reference to avoid capturing self in the Task
+        let localTranscription = audioTranscription
+        audioTranscription = nil  // Clear this early to avoid any potential race conditions
+        
+        if let localTranscription = localTranscription {
             do {
-                let finalTranscript = try audioTranscription.stop()
-                MXLog.info("Final transcript: \(finalTranscript)")
-                // Store the final transcript for later use (e.g., sending with the voice message)
-                currentTranscript = finalTranscript
+                // Create a task to handle the potentially blocking stop operation
+                // This ensures we properly wait for the stop function to complete
+                // even though it has a delay to check all chunks have been processed
+                let transcriptWithTiming = try await Task { 
+                    // This executes on a background thread
+                    let transcriptJson = try localTranscription.stop()
+                    return transcriptJson 
+                }.value
                 
-                // Post notification with the final transcript for UI updates
-                NotificationCenter.default.post(name: Notification.Name("VoiceMessageTranscriptUpdate"), object: finalTranscript)
+                // Ensure all UI updates happen on the main thread
+                await MainActor.run {
+                    MXLog.info("Transcript with timing received: \(transcriptWithTiming)")
+                    
+                    // Parse the JSON to extract transcript and timing information
+                    if let jsonData = transcriptWithTiming.data(using: .utf8) {
+                        do {
+                            // Parse the JSON object containing transcript and word timings
+                            if let transcriptObj = try JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
+                               let plainTranscript = transcriptObj["text"] as? String,
+                               let wordTimings = transcriptObj["words"] as? [[String: Any]] {
+                                
+                                MXLog.info("Final transcript (plain text): \(plainTranscript)")
+                                
+                                // Store the final transcript for later use (e.g., sending with the voice message)
+                                currentTranscript = plainTranscript
+                                
+                                // Post notification with the final transcript for UI updates
+                                NotificationCenter.default.post(name: Notification.Name("VoiceMessageTranscriptUpdate"), object: plainTranscript)
+                                
+                                // Store the timing information for potential future use
+                                // You could add a property to store this if needed
+                                MXLog.debug("Word timing information available: \(wordTimings.count) words with timing")
+                            } else {
+                                MXLog.error("Failed to extract text or words from transcript JSON")
+                            }
+                        } catch {
+                            MXLog.error("Error parsing transcript timing JSON: \(error)")
+                        }
+                    } else {
+                        MXLog.error("Failed to convert transcript timing to data")
+                    }
+                }
             } catch {
-                MXLog.error("Error stopping transcription: \(error)")
+                await MainActor.run {
+                    MXLog.error("Error stopping transcription: \(error)")
+                }
             }
         }
-        audioTranscription = nil
     }
     
     func cancelRecording() async {

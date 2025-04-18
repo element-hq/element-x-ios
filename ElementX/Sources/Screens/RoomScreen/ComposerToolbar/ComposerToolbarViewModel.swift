@@ -407,8 +407,14 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             actionsSubject.send(.voiceMessage(.stopRecording))
         case .cancelRecording:
             actionsSubject.send(.voiceMessage(.cancelRecording))
+            // Clear transcript when recording is cancelled
+            state.currentTranscript = ""
+            state.showTranscript = false
         case .deleteRecording:
             actionsSubject.send(.voiceMessage(.deleteRecording))
+            // Clear transcript when voice message is deleted
+            state.currentTranscript = ""
+            state.showTranscript = false
         case .startPlayback:
             actionsSubject.send(.voiceMessage(.startPlayback))
         case .pausePlayback:
