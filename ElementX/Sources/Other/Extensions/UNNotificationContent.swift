@@ -6,26 +6,7 @@
 //
 
 import Foundation
-import Intents
-import SwiftUI
 import UserNotifications
-
-import Version
-
-struct NotificationIcon {
-    struct GroupInfo {
-        let name: String
-        let id: String
-    }
-
-    let mediaSource: MediaSourceProxy?
-    // Required as the key to set images for groups
-    let groupInfo: GroupInfo?
-
-    var shouldDisplayAsGroup: Bool {
-        groupInfo != nil
-    }
-}
 
 extension UNNotificationContent {
     @objc var receiverID: String? {
@@ -38,6 +19,10 @@ extension UNNotificationContent {
     
     @objc var eventID: String? {
         userInfo[NotificationConstants.UserInfoKey.eventIdentifier] as? String
+    }
+
+    @objc var pusherNotificationClientIdentifier: String? {
+        userInfo[NotificationConstants.UserInfoKey.pusherNotificationClientIdentifier] as? String
     }
 }
 
@@ -68,34 +53,9 @@ extension UNMutableNotificationContent {
             userInfo[NotificationConstants.UserInfoKey.eventIdentifier] = newValue
         }
     }
-
-    func addMediaAttachment(using mediaProvider: MediaProviderProtocol?,
-                            mediaSource: MediaSourceProxy) async -> UNMutableNotificationContent {
-        guard let mediaProvider else {
-            return self
-        }
-        switch await mediaProvider.loadFileFromSource(mediaSource) {
-        case .success(let file):
-            do {
-                guard let url = file.url else {
-                    MXLog.error("Couldn't add media attachment: URL is nil")
-                    return self
-                }
-                let identifier = ProcessInfo.processInfo.globallyUniqueString
-                let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: url, with: "\(identifier).\(url.pathExtension)")
-                let attachment = try UNNotificationAttachment(identifier: identifier,
-                                                              url: newURL,
-                                                              options: nil)
-                attachments.append(attachment)
-            } catch {
-                MXLog.error("Couldn't add media attachment:: \(error)")
-                return self
-            }
-        case .failure(let error):
-            MXLog.error("Couldn't load the file for media attachment: \(error)")
-        }
-
-        return self
+    
+    var unreadCount: Int? {
+        userInfo[NotificationConstants.UserInfoKey.unreadCount] as? Int
     }
 
     func addSenderIcon(using mediaProvider: MediaProviderProtocol?,

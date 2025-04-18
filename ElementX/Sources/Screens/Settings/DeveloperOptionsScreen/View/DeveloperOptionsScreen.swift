@@ -19,60 +19,71 @@ struct DeveloperOptionsScreen: View {
     
     var body: some View {
         Form {
-//            Section("Logging") {
-//                LogLevelConfigurationView(logLevel: $context.logLevel)
-//                
-//                DisclosureGroup("SDK trace packs") {
-//                    ForEach(TraceLogPack.allCases, id: \.self) { pack in
-//                        Toggle(isOn: $context.traceLogPacks[pack]) {
-//                            Text(pack.title)
-//                        }
-//                    }
-//                }
-//            }
-//                        
-//            Section("Room List") {
-//                Toggle(isOn: $context.publicSearchEnabled) {
-//                    Text("Public search")
-//                }
-//                
-//                Toggle(isOn: $context.hideUnreadMessagesBadge) {
-//                    Text("Hide grey dots")
-//                }
-//                
-//                Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
-//                    Text("Fuzzy searching")
-//                }
-//            }
-//            
-//            Section("Join rules") {
-//                Toggle(isOn: $context.knockingEnabled) {
-//                    Text("Knocking")
-//                    Text("Ask to join rooms")
-//                }
-//            }
-//            
-//            Section {
-//                Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
-//                    Text("Exclude insecure devices when sending/receiving messages")
-//                    Text("Requires app reboot")
-//                }
-//            } header: {
-//                Text("Trust and Decoration")
-//            } footer: {
-//                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
-//            }
-//            
-//            Section("Reporting") {
-//                Toggle(isOn: $context.reportRoomEnabled) {
-//                    Text("Report rooms")
-//                    Text("Report API might not work properly")
-//                }
-//                Toggle(isOn: $context.reportInviteEnabled) {
-//                    Text("Report invites")
-//                    Text("Report API might not work properly")
-//                }
-//            }
+            Section("Logging") {
+                LogLevelConfigurationView(logLevel: $context.logLevel)
+                
+                DisclosureGroup("SDK trace packs") {
+                    ForEach(TraceLogPack.allCases, id: \.self) { pack in
+                        Toggle(isOn: $context.traceLogPacks[pack]) {
+                            Text(pack.title)
+                        }
+                    }
+                }
+            }
+            
+            Section("General") {
+                Toggle(isOn: $context.threadsEnabled) {
+                    Text("Threads")
+                }
+            }
+            
+            Section("Room List") {
+                Toggle(isOn: $context.publicSearchEnabled) {
+                    Text("Public search")
+                }
+                
+                Toggle(isOn: $context.hideUnreadMessagesBadge) {
+                    Text("Hide grey dots")
+                }
+                
+                Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
+                    Text("Fuzzy searching")
+                }
+                
+                Toggle(isOn: $context.isNewBloomEnabled) {
+                    Text("New bloom appearance")
+                    Text("Requires app reboot")
+                }
+            }
+            
+            Section("Join rules") {
+                Toggle(isOn: $context.knockingEnabled) {
+                    Text("Knocking")
+                    Text("Ask to join rooms")
+                }
+            }
+            
+            Section {
+                Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
+                    Text("Exclude insecure devices when sending/receiving messages")
+                    Text("Requires app reboot")
+                }
+            } header: {
+                Text("Trust and Decoration")
+            } footer: {
+                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
+            }
+            
+            Section("Reporting") {
+                Toggle(isOn: $context.reportRoomEnabled) {
+                    Text("Report rooms")
+                    Text("Report API might not work properly")
+                }
+                Toggle(isOn: $context.reportInviteEnabled) {
+                    Text("Report invites")
+                    Text("Report API might not work properly")
+                }
+            }
 
             Section {
                 Button(role: .destructive) {

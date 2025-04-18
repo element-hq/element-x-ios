@@ -10,13 +10,13 @@ import SwiftUI
 import XCTest
 
 @testable import ElementX
-@testable import SnapshotTesting
+@testable import SnapshotTestingCore
 
 @MainActor
 class PreviewTests: XCTestCase {
     private let deviceConfig: ViewImageConfig = .iPhoneX
     private let simulatorDevice: String? = "iPhone14,6" // iPhone SE 3rd Generation
-    private let requiredOSVersion = (major: 18, minor: 1)
+    private let requiredOSVersion = (major: 18, minor: 4)
     private let snapshotDevices = ["iPhone 16", "iPad"]
     private var recordMode: SnapshotTestingConfiguration.Record = .missing
 
@@ -87,9 +87,13 @@ class PreviewTests: XCTestCase {
                 testName = "\(deviceName)-\(localeCode)-\(step)"
             }
             
+            let isScreen = switch preview.layout {
+            case .device: true
+            default: false
+            }
             if let failure = assertSnapshots(matching: preview.content,
                                              name: testName,
-                                             isScreen: preview.layout == .device,
+                                             isScreen: isScreen,
                                              device: device,
                                              testName: sanitizedSuiteName,
                                              traits: traits,

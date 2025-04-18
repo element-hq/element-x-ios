@@ -129,14 +129,6 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
     }
 
-    func removeDeliveredInviteNotifications() async {
-        let notificationsIdentifiers = await notificationCenter
-            .deliveredNotifications()
-            .filter { $0.request.content.categoryIdentifier == NotificationConstants.Category.invite }
-            .map(\.request.identifier)
-        notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
-    }
-    
     private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) async -> Bool {
         do {
             let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,

@@ -46,6 +46,7 @@ final class ComposerDraftService: ComposerDraftServiceProtocol {
     func getReply(eventID: String) async -> Result<TimelineItemReply, ComposerDraftServiceError> {
         switch await roomProxy.timeline.getLoadedReplyDetails(eventID: eventID) {
         case .success(let replyDetails):
+            return .success(timelineItemfactory.buildTimelineItemReply(replyDetails))
             // let repliedToEvent = self.roomProxy.timeline.getTimelineItemByEventId(replyDetails.eventId())
             return .success(timelineItemfactory.buildReply(details: replyDetails, repliedToEvent: nil))
         case .failure(let error):

@@ -17,6 +17,8 @@ struct RoomEventStringBuilder {
     func buildAttributedString(for eventItemProxy: EventTimelineItemProxy, lastMessageSender: UserProfile?) -> AttributedString? {
         let sender = eventItemProxy.sender
         let isOutgoing = eventItemProxy.isOwn
+        let displayName = if shouldDisambiguateDisplayNames {
+            sender.disambiguatedDisplayName ?? sender.id
 //        let displayName = if isOutgoing {
 //            L10n.commonYou
 //        } else if shouldDisambiguateDisplayNames {
@@ -34,14 +36,14 @@ struct RoomEventStringBuilder {
         case .msgLike(let messageLikeContent):
             switch messageLikeContent.kind {
             case .message(let messageContent):
-                return messageEventStringBuilder.buildAttributedString(for: messageContent.msgType, senderDisplayName: displayName)
+                return messageEventStringBuilder.buildAttributedString(for: messageContent.msgType, senderDisplayName: displayName, isOutgoing: isOutgoing)
             case .sticker:
                 if messageEventStringBuilder.destination == .pinnedEvent {
                     var string = AttributedString(L10n.commonSticker)
                     string.bold()
                     return string
                 }
-                return prefix(L10n.commonSticker, with: displayName)
+                return prefix(L10n.commonSticker, with: displayName, isOutgoing: isOutgoing)
             case .poll(let question, _, _, _, _, _, _):
                 if messageEventStringBuilder.destination == .pinnedEvent {
                     let questionPlaceholder = "{question}"
@@ -51,9 +53,9 @@ struct RoomEventStringBuilder {
                     finalString.replace(questionPlaceholder, with: normalString)
                     return finalString
                 }
-                return prefix(L10n.commonPollSummary(question), with: displayName)
+                return prefix(L10n.commonPollSummary(question), with: displayName, isOutgoing: isOutgoing)
             case .redacted:
-                return prefix(L10n.commonMessageRemoved, with: displayName)
+                return prefix(L10n.commonMessageRemoved, with: displayName, isOutgoing: isOutgoing)
             case .unableToDecrypt(let encryptedMessage):
                 let errorMessage = switch encryptedMessage {
                 case .megolmV1AesSha2(_, .sentBeforeWeJoined): L10n.commonUnableToDecryptNoAccess
@@ -61,10 +63,10 @@ struct RoomEventStringBuilder {
                 case .megolmV1AesSha2(_, .unknownDevice), .megolmV1AesSha2(_, .unsignedDevice): L10n.commonUnableToDecryptInsecureDevice
                 default: L10n.commonWaitingForDecryptionKey
                 }
-                return prefix(errorMessage, with: displayName)
+                return prefix(errorMessage, with: displayName, isOutgoing: isOutgoing)
             }
         case .failedToParseMessageLike, .failedToParseState:
-            return prefix(L10n.commonUnsupportedEvent, with: displayName)
+            return prefix(L10n.commonUnsupportedEvent, with: displayName, isOutgoing: isOutgoing)
         case .state(_, let state):
             return stateEventStringBuilder
                 .buildString(for: state, sender: sender, isOutgoing: isOutgoing)
@@ -83,19 +85,19 @@ struct RoomEventStringBuilder {
                                           memberIsYou: isOutgoing)
                 .map(AttributedString.init)
         case .callInvite:
-            return prefix(L10n.commonUnsupportedCall, with: displayName)
+            return prefix(L10n.commonUnsupportedCall, with: displayName, isOutgoing: isOutgoing)
         case .callNotify:
-            return prefix(L10n.commonCallStarted, with: displayName)
+            return prefix(L10n.commonCallStarted, with: displayName, isOutgoing: isOutgoing)
         }
     }
     
-    private func prefix(_ eventSummary: String, with senderDisplayName: String) -> AttributedString {
+    private func prefix(_ eventSummary: String, with senderDisplayName: String, isOutgoing: Bool) -> AttributedString {
         guard shouldPrefixSenderName else {
             return AttributedString(eventSummary)
         }
         let attributedEventSummary = AttributedString(eventSummary.trimmingCharacters(in: .whitespacesAndNewlines))
         
-        var attributedSenderDisplayName = AttributedString(senderDisplayName)
+        var attributedSenderDisplayName = AttributedString(isOutgoing ? L10n.commonYou : senderDisplayName)
         attributedSenderDisplayName.bold()
         
         // Don't include the message body in the markdown otherwise it makes tappable links.
