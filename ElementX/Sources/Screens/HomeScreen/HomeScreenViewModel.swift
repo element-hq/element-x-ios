@@ -48,7 +48,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
-        super.init(initialViewState: .init(userID: userSession.clientProxy.userID),
+        super.init(initialViewState: .init(userID: userSession.clientProxy.userID, isNewBloomEnabled: appSettings.isNewBloomEnabled),
                    mediaProvider: userSession.mediaProvider)
         
         userSession.clientProxy.userAvatarURLPublisher

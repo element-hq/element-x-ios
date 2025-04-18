@@ -23,8 +23,8 @@ struct RoomMessageEventStringBuilder {
 
     let attributedStringBuilder: AttributedStringBuilderProtocol
     let destination: Destination
-
-    func buildAttributedString(for messageType: MessageType, senderDisplayName: String) -> AttributedString {
+    
+    func buildAttributedString(for messageType: MessageType, senderDisplayName: String, isOutgoing: Bool) -> AttributedString {
         let message: AttributedString
         switch messageType {
         case .emote(let content):
@@ -86,7 +86,7 @@ struct RoomMessageEventStringBuilder {
         }
 
         if destination == .roomList {
-            return prefix(message, with: senderDisplayName)
+            return prefix(message, with: isOutgoing ? L10n.commonYou : senderDisplayName)
         } else {
             return message
         }

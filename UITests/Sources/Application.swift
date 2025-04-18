@@ -5,7 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import SnapshotTesting
+import SnapshotUITesting
 import XCTest
 
 enum Application {
@@ -47,7 +47,7 @@ enum Application {
         guard deviceModel == requirediPhoneSimulator || deviceModel == requirediPadSimulator else {
             fatalError("Running on \(deviceModel) but we only support \(requirediPhoneSimulator) and \(requirediPadSimulator).")
         }
-        guard UIDevice.current.snapshotName == "iPhone-18.1" || UIDevice.current.snapshotName == "iPad-18.1" else {
+        guard UIDevice.current.snapshotName == "iPhone-18.4" || UIDevice.current.snapshotName == "iPad-18.4" else {
             fatalError("Running on a simulator that hasn't been renamed to match the expected snapshot filenames.")
         }
     }

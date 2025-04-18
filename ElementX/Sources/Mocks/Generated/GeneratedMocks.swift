@@ -13340,41 +13340,6 @@ class NotificationManagerMock: NotificationManagerProtocol, @unchecked Sendable 
         }
         await removeDeliveredMessageNotificationsForClosure?(roomID)
     }
-    //MARK: - removeDeliveredInviteNotifications
-
-    var removeDeliveredInviteNotificationsUnderlyingCallsCount = 0
-    var removeDeliveredInviteNotificationsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return removeDeliveredInviteNotificationsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = removeDeliveredInviteNotificationsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                removeDeliveredInviteNotificationsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    removeDeliveredInviteNotificationsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var removeDeliveredInviteNotificationsCalled: Bool {
-        return removeDeliveredInviteNotificationsCallsCount > 0
-    }
-    var removeDeliveredInviteNotificationsClosure: (() async -> Void)?
-
-    func removeDeliveredInviteNotifications() async {
-        removeDeliveredInviteNotificationsCallsCount += 1
-        await removeDeliveredInviteNotificationsClosure?()
-    }
 }
 class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol, @unchecked Sendable {
     var callbacks: PassthroughSubject<NotificationSettingsProxyCallback, Never> {

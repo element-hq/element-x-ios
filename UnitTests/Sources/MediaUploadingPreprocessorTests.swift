@@ -140,7 +140,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check resulting video info
         XCTAssertEqual(videoInfo.mimetype, "video/mp4")
-        XCTAssertEqual(videoInfo.blurhash, "KSB{UFO]MuwQS4oJvcaIt8")
+        XCTAssertEqual(videoInfo.blurhash, "KSB{R8O]MuwQS4oJvcaIt8")
         XCTAssertEqual(videoInfo.size ?? 0, 5_824_946, accuracy: 100)
         XCTAssertEqual(videoInfo.width, 1080)
         XCTAssertEqual(videoInfo.height, 1920)
@@ -148,7 +148,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         XCTAssertNotNil(videoInfo.thumbnailInfo)
         XCTAssertEqual(videoInfo.thumbnailInfo?.mimetype, "image/jpeg")
-        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 41444, accuracy: 100)
+        XCTAssertEqual(videoInfo.thumbnailInfo?.size ?? 0, 40976, accuracy: 100)
         XCTAssertEqual(videoInfo.thumbnailInfo?.width, 337)
         XCTAssertEqual(videoInfo.thumbnailInfo?.height, 600)
         
@@ -165,7 +165,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         
         // Check optimised video info
         XCTAssertEqual(optimizedVideoInfo.mimetype, "video/mp4")
-        XCTAssertEqual(optimizedVideoInfo.blurhash, "KSB{UFO]MuwQS4oJvcaIt8")
+        XCTAssertEqual(optimizedVideoInfo.blurhash, "KSC5.vO]MuwQS4oJvcaIt8")
         XCTAssertEqual(optimizedVideoInfo.size ?? 0, 12_169_117, accuracy: 100) // Note: This is slightly stupid because it is larger now 🤦‍♂️
         XCTAssertEqual(optimizedVideoInfo.width, 720)
         XCTAssertEqual(optimizedVideoInfo.height, 1280)

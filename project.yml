@@ -60,11 +60,11 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 25.04.14
+    exactVersion: 25.04.16
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: 0251fe8abe8f7baa8560febfc3f1b67e3bf7894c
+    revision: 81ba8bd8b3971beac252129c5466d7eac2f2ec31
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
@@ -131,7 +131,7 @@ packages:
     minorVersion: 8.35.1
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    minorVersion: 1.17.5
+    revision: b467f413c83e2ceba59ba798583a1c57db9700cb
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     minorVersion: 6.0.0

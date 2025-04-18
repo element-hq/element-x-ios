@@ -20353,6 +20353,82 @@ open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
         }
     }
 }
+open class ThreadSummarySDKMock: MatrixRustSDK.ThreadSummary, @unchecked Sendable {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - latestEvent
+
+    var latestEventUnderlyingCallsCount = 0
+    open var latestEventCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return latestEventUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = latestEventUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                latestEventUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    latestEventUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var latestEventCalled: Bool {
+        return latestEventCallsCount > 0
+    }
+
+    var latestEventUnderlyingReturnValue: ThreadSummaryLatestEventDetails!
+    open var latestEventReturnValue: ThreadSummaryLatestEventDetails! {
+        get {
+            if Thread.isMainThread {
+                return latestEventUnderlyingReturnValue
+            } else {
+                var returnValue: ThreadSummaryLatestEventDetails? = nil
+                DispatchQueue.main.sync {
+                    returnValue = latestEventUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                latestEventUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    latestEventUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var latestEventClosure: (() -> ThreadSummaryLatestEventDetails)?
+
+    open override func latestEvent() -> ThreadSummaryLatestEventDetails {
+        latestEventCallsCount += 1
+        if let latestEventClosure = latestEventClosure {
+            return latestEventClosure()
+        } else {
+            return latestEventReturnValue
+        }
+    }
+}
 open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())

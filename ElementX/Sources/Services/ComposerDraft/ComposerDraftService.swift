@@ -47,7 +47,7 @@ final class ComposerDraftService: ComposerDraftServiceProtocol {
         switch await roomProxy.timeline.getLoadedReplyDetails(eventID: eventID) {
         case .success(let replyDetails):
             // let repliedToEvent = self.roomProxy.timeline.getTimelineItemByEventId(replyDetails.eventId())
-            return .success(timelineItemfactory.buildReply(details: replyDetails, repliedToEvent: nil))
+            return .success(timelineItemfactory.buildTimelineItemReply(replyDetails, repliedToEvent: nil))
         case .failure(let error):
             MXLog.error("Could not load reply: \(error)")
             return .failure(.failedToLoadReply)
