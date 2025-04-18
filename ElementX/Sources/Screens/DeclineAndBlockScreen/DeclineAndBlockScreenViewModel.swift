@@ -50,7 +50,7 @@ class DeclineAndBlockScreenViewModel: DeclineAndBlockScreenViewModelType, Declin
         guard case let .invited(roomProxy) = await clientProxy.roomForIdentifier(roomID) else {
             MXLog.error("DeclineAndBlockScreenViewModel: Unable to find an invited room for identifier \(roomID)")
             hideLoadingIndicator()
-            showError()
+            showTryAgainAlert { [weak self] in Task { await self?.decline() } }
             return
         }
         
@@ -58,7 +58,7 @@ class DeclineAndBlockScreenViewModel: DeclineAndBlockScreenViewModelType, Declin
         case .success:
             var shouldShowFailure = false
             if state.bindings.shouldReport {
-                shouldShowFailure = await clientProxy.reportRoomForIdentifier(roomID, reason: state.bindings.reportReason.isBlank ? nil : state.bindings.reportReason).isFailure
+                shouldShowFailure = await clientProxy.reportRoomForIdentifier(roomID, reason: state.bindings.reportReason.isEmpty ? nil : state.bindings.reportReason).isFailure
             }
             
             if state.bindings.shouldBlockUser {
@@ -74,7 +74,7 @@ class DeclineAndBlockScreenViewModel: DeclineAndBlockScreenViewModelType, Declin
             actionsSubject.send(.dismiss(hasDeclined: true))
         case .failure:
             hideLoadingIndicator()
-            showError()
+            showTryAgainAlert { [weak self] in Task { await self?.decline() } }
         }
     }
     
@@ -95,6 +95,14 @@ class DeclineAndBlockScreenViewModel: DeclineAndBlockScreenViewModelType, Declin
     
     private func showError() {
         userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+    }
+    
+    private func showTryAgainAlert(retryAction: @escaping () -> Void) {
+        state.bindings.alert = .init(id: .declineFailed,
+                                     title: L10n.commonSomethingWentWrong,
+                                     message: L10n.commonSomethingWentWrongMessage,
+                                     primaryButton: .init(title: L10n.actionDismiss, role: .cancel, action: nil),
+                                     secondaryButton: .init(title: L10n.actionTryAgain, action: retryAction))
     }
     
     private func showSuccess() {

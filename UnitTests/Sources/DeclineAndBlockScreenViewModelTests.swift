@@ -37,6 +37,11 @@ class DeclineAndBlockScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.isDeclineDisabled)
         XCTAssertFalse(context.shouldReport)
         XCTAssertFalse(context.shouldBlockUser)
+        context.shouldReport = true
+        // Should report set to `true` always requires a non empty reason
+        XCTAssertTrue(context.viewState.isDeclineDisabled)
+        context.reportReason = "Test reason"
+        XCTAssertFalse(context.viewState.isDeclineDisabled)
     }
     
     func testDeclineBlockAndReport() async throws {
