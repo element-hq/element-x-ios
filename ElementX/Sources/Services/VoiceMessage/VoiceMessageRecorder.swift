@@ -159,17 +159,17 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         
         // Store the local reference to avoid capturing self in the Task
         let localTranscription = audioTranscription
-        audioTranscription = nil  // Clear this early to avoid any potential race conditions
+        audioTranscription = nil // Clear this early to avoid any potential race conditions
         
         if let localTranscription = localTranscription {
             do {
                 // Create a task to handle the potentially blocking stop operation
                 // This ensures we properly wait for the stop function to complete
                 // even though it has a delay to check all chunks have been processed
-                let transcriptWithTiming = try await Task { 
+                let transcriptWithTiming = try await Task {
                     // This executes on a background thread
                     let transcriptJson = try localTranscription.stop()
-                    return transcriptJson 
+                    return transcriptJson
                 }.value
                 
                 // Ensure all UI updates happen on the main thread
@@ -183,7 +183,6 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
                             if let transcriptObj = try JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
                                let plainTranscript = transcriptObj["text"] as? String,
                                let wordTimings = transcriptObj["words"] as? [[String: Any]] {
-                                
                                 MXLog.info("Final transcript (plain text): \(plainTranscript)")
                                 
                                 // Store the final transcript for later use (e.g., sending with the voice message)

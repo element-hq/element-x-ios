@@ -14,7 +14,7 @@ struct TranscriptPopupView: View {
     
     // ScrollView reader to control scroll position
     @State private var scrollViewProxy: ScrollViewProxy? = nil
-    @State private var lastTranscript: String = ""
+    @State private var lastTranscript = ""
     
     var body: some View {
         ScrollViewReader { proxy in
