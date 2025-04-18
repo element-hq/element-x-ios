@@ -86,6 +86,7 @@ class LoggingTests: XCTestCase {
                                       avatarURL: nil,
                                       heroes: [.init(userID: "", displayName: heroName)],
                                       lastMessage: AttributedString(lastMessage),
+                                      lastMessageDate: nil,
                                       lastMessageFormattedTimestamp: "Now",
                                       unreadMessagesCount: 0,
                                       unreadMentionsCount: 0,

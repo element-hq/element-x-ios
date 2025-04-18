@@ -128,6 +128,27 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
             .map(\.request.identifier)
         notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
     }
+    
+    func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary]) async {
+        let roomsToLastMessageDates = rooms
+            .filter { $0.hasUnreadMessages == false }
+            .reduce(into: [:]) { partialResult, roomSummary in
+                partialResult[roomSummary.id] = roomSummary.lastMessageDate
+            }
+        
+        let notificationsIdentifiers = await notificationCenter
+            .deliveredNotifications()
+            .filter {
+                if let roomID = $0.request.content.roomID, let date = roomsToLastMessageDates[roomID] {
+                    $0.date <= date
+                } else {
+                    false
+                }
+            }
+            .map(\.request.identifier)
+        
+        notificationCenter.removeDeliveredNotifications(withIdentifiers: notificationsIdentifiers)
+    }
 
     private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) async -> Bool {
         do {
