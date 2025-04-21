@@ -99,6 +99,7 @@
 "action_report" = "Bericht";
 "action_report_bug" = "Fehler melden";
 "action_report_content" = "Inhalt melden";
+"action_report_dm" = "Report conversation";
 "action_report_room" = "Chatroom melden";
 "action_reset" = "Zurücksetzen";
 "action_reset_identity" = "Identität zurücksetzen";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Geteilter Standort";
 "common_signing_out" = "Abmelden";
 "common_something_went_wrong" = "Es ist ein Fehler aufgetreten.";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "Chat wird gestartet...";
 "common_sticker" = "Sticker";
 "common_success" = "Erfolg";
