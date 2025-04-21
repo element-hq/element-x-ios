@@ -141,7 +141,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
                              shouldBoost: eventItemProxy.shouldBoost,
                              sender: eventItemProxy.sender,
-                             content: buildTextTimelineItemContent(textMessageContent),
+                             content: buildTextTimelineItemContent(textMessageContent, eventItemProxy.sender.id),
                              properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo, repliedToEvent: repliedToEvent),
                                                isThreaded: messageLikeContent.threadRoot != nil,
                                                threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
@@ -989,7 +989,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .notice(let content):
             .notice(buildNoticeTimelineItemContent(content))
         case .text(let content):
-            .text(buildTextTimelineItemContent(content))
+            .text(buildTextTimelineItemContent(content, senderID))
         case .video(let content):
             .video(buildVideoTimelineItemContent(content))
         case .location(let content):
