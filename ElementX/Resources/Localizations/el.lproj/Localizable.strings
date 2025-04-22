@@ -99,6 +99,7 @@
 "action_report" = "Report";
 "action_report_bug" = "Αναφορά σφάλματος";
 "action_report_content" = "Αναφορά περιεχομένου";
+"action_report_dm" = "Report conversation";
 "action_report_room" = "Report room";
 "action_reset" = "Επαναφορά";
 "action_reset_identity" = "Επαναφορά ταυτότητας";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Κοινόχρηστη τοποθεσία";
 "common_signing_out" = "Αποσύνδεση";
 "common_something_went_wrong" = "Κάτι πήγε στραβά";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "Έναρξη συνομιλίας...";
 "common_sticker" = "Αυτοκόλλητο";
 "common_success" = "Επιτυχία";
@@ -485,7 +487,7 @@
 "screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
 "screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
 "screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
-"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_reason_placeholder" = "Describe the reason to report…";
 "screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "Συνέβη ένα άγνωστο σφάλμα. Έλεγξε ότι ο κωδικός πρόσβασης του λογαριασμού σου είναι σωστός και δοκίμασε ξανά.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Ανάκληση επαλήθευσης και αποστολή";

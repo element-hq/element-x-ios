@@ -99,6 +99,7 @@
 "action_report" = "Nahlásiť";
 "action_report_bug" = "Nahlásiť chybu";
 "action_report_content" = "Nahlásiť obsah";
+"action_report_dm" = "Nahlásiť konverzáciu";
 "action_report_room" = "Nahlásiť miestnosť";
 "action_reset" = "Obnoviť";
 "action_reset_identity" = "Obnoviť identitu";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Zdieľaná poloha";
 "common_signing_out" = "Odhlasovanie";
 "common_something_went_wrong" = "Niečo sa pokazilo";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "Spustenie konverzácie...";
 "common_sticker" = "Nálepka";
 "common_success" = "Úspech";
@@ -429,7 +431,7 @@
 "screen_decline_and_block_block_user_option_description" = "Od tohto používateľa sa vám nezobrazia žiadne správy ani pozvánky do miestnosti";
 "screen_decline_and_block_block_user_option_title" = "Zablokovať používateľa";
 "screen_decline_and_block_report_user_option_description" = "Nahlásiť túto miestnosť poskytovateľovi účtu.";
-"screen_decline_and_block_report_user_reason_placeholder" = "Describe the reason to report…";
+"screen_decline_and_block_report_user_reason_placeholder" = "Opíšte dôvod nahlásenia…";
 "screen_decline_and_block_title" = "Odmietnuť a zablokovať";
 "screen_edit_room_address_room_address_section_footer" = "Budete potrebovať adresu miestnosti, aby bola viditeľná v adresári.";
 "screen_edit_room_address_title" = "Adresa miestnosti";

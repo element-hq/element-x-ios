@@ -54,7 +54,7 @@
 "action_delete_poll" = "Poista kysely";
 "action_disable" = "Poista käytöstä";
 "action_discard" = "Hylkää";
-"action_dismiss" = "Dismiss";
+"action_dismiss" = "Sulje";
 "action_done" = "Valmis";
 "action_edit" = "Muokkaa";
 "action_edit_caption" = "Muokkaa kuvatekstiä";
@@ -99,6 +99,7 @@
 "action_report" = "Ilmoita";
 "action_report_bug" = "Ilmoita virheestä";
 "action_report_content" = "Ilmoita sisällöstä";
+"action_report_dm" = "Ilmoita keskustelusta";
 "action_report_room" = "Ilmoita huoneesta";
 "action_reset" = "Nollaa";
 "action_reset_identity" = "Nollaa identiteetti";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Jaettu sijainti";
 "common_signing_out" = "Kirjaudutaan ulos";
 "common_something_went_wrong" = "Jokin meni pieleen";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "Aloitetaan keskustelua...";
 "common_sticker" = "Tarra";
 "common_success" = "Onnistui";
@@ -429,7 +431,7 @@
 "screen_decline_and_block_block_user_option_description" = "Et tule näkemään viestejä tai kutsuja tältä käyttäjältä";
 "screen_decline_and_block_block_user_option_title" = "Estä käyttäjä";
 "screen_decline_and_block_report_user_option_description" = "Ilmoita tästä huoneesta palveluntarjoajallesi.";
-"screen_decline_and_block_report_user_reason_placeholder" = "Describe the reason to report…";
+"screen_decline_and_block_report_user_reason_placeholder" = "Kerro syy ilmoittamiseen…";
 "screen_decline_and_block_title" = "Hylkää ja estä";
 "screen_edit_room_address_room_address_section_footer" = "Tarvitset huoneen osoitteen, jotta se näkyy hakemistossa.";
 "screen_edit_room_address_title" = "Huoneen osoite";
@@ -481,7 +483,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Median lähettäminen epäonnistui, yritä uudelleen.";
 "screen_pinned_timeline_empty_state_description" = "Paina viestiä ja valitse “%1$@” lisätäksesi sen tänne.";
 "screen_pinned_timeline_empty_state_headline" = "Kiinnitä tärkeät viestit, jotta ne löytyvät helposti.";
-"screen_push_history_title" = "Push history";
+"screen_push_history_title" = "Push-historia";
 "screen_report_room_leave_failed_alert_message" = "Ilmoituksesi lähetettiin onnistuneesti, mutta kohtasimme ongelman yrittäessämme poistua huoneesta. Yritä uudelleen.";
 "screen_report_room_leave_failed_alert_title" = "Huoneesta poistuminen epäonnistui";
 "screen_report_room_reason_footer" = "Ilmoita tästä huoneesta palvelimesi ylläpitäjälle. Jos viestit on salattu, ylläpitäjäsi ei voi lukea niitä.";
@@ -1126,7 +1128,7 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Sinulla ei ole oikeutta lukea tätä viestiä";
 "timeline_decryption_failure_unable_to_decrypt" = "Viestin salauksen purkaminen ei onnistu";
 "timeline_decryption_failure_withheld_unverified" = "Tämä viesti estettiin, koska laitettasi ei ole vahvistettu tai koska lähettäjän on vahvistettava identiteettisi.";
-"troubleshoot_notifications_entry_point_push_history_title" = "Push history";
+"troubleshoot_notifications_entry_point_push_history_title" = "Push-historia";
 "troubleshoot_notifications_entry_point_section" = "Vianmääritys";
 "troubleshoot_notifications_screen_action" = "Suorita testit";
 "troubleshoot_notifications_screen_action_again" = "Suorita testit uudelleen";

@@ -99,6 +99,7 @@
 "action_report" = "Rapporter";
 "action_report_bug" = "Rapporter feil";
 "action_report_content" = "Rapporter innhold";
+"action_report_dm" = "Rapporter samtale";
 "action_report_room" = "Rapporter rommet";
 "action_reset" = "Tilbakestill";
 "action_reset_identity" = "Tilbakestill identitet";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Delt posisjon";
 "common_signing_out" = "Logger av";
 "common_something_went_wrong" = "Noe gikk galt";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "Starter chat...";
 "common_sticker" = "Klistremerke";
 "common_success" = "Suksess";

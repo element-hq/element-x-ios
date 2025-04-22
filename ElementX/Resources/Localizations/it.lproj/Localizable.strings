@@ -99,6 +99,7 @@
 "action_report" = "Report";
 "action_report_bug" = "Segnala un problema";
 "action_report_content" = "Segnala contenuto";
+"action_report_dm" = "Report conversation";
 "action_report_room" = "Report room";
 "action_reset" = "Reimposta";
 "action_reset_identity" = "Reimposta identità";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Posizione condivisa";
 "common_signing_out" = "Disconnessione";
 "common_something_went_wrong" = "Qualcosa è andato storto";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "Avvio della conversazione...";
 "common_sticker" = "Adesivo";
 "common_success" = "Operazione riuscita";
@@ -485,7 +487,7 @@
 "screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
 "screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
 "screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
-"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_reason_placeholder" = "Describe the reason to report…";
 "screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "Si è verificato un errore sconosciuto. Controlla che la password del tuo account sia corretta e riprova.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Ritira la verifica e invia";

@@ -99,6 +99,7 @@
 "action_report" = "Anmäl";
 "action_report_bug" = "Rapportera bugg";
 "action_report_content" = "Rapportera innehåll";
+"action_report_dm" = "Anmäl konversation";
 "action_report_room" = "Anmäl rum";
 "action_reset" = "Återställ";
 "action_reset_identity" = "Återställ identitet";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Delade plats";
 "common_signing_out" = "Loggar ut";
 "common_something_went_wrong" = "Något gick fel";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "Startar chatt …";
 "common_sticker" = "Dekal";
 "common_success" = "Lyckades";
@@ -399,10 +401,10 @@
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Dölj avatarer i förfrågningar om rumsinbjudningar";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Dölj förhandsgranskningar av media i tidslinjen";
 "screen_advanced_settings_moderation_and_safety_section_title" = "Moderering och säkerhet";
-"screen_advanced_settings_show_media_timeline_always_hide" = "Always hide";
-"screen_advanced_settings_show_media_timeline_always_show" = "Always show";
-"screen_advanced_settings_show_media_timeline_private_rooms" = "In private rooms";
-"screen_advanced_settings_show_media_timeline_subtitle" = "A hidden media can always be shown by tapping on it";
+"screen_advanced_settings_show_media_timeline_always_hide" = "Göm alltid";
+"screen_advanced_settings_show_media_timeline_always_show" = "Visa alltid";
+"screen_advanced_settings_show_media_timeline_private_rooms" = "I privata rum";
+"screen_advanced_settings_show_media_timeline_subtitle" = "En dold media kan alltid visas genom att trycka på den";
 "screen_advanced_settings_show_media_timeline_title" = "Visa media i tidslinjen";
 "screen_bottom_sheet,manage_room_member_remove" = "Ta bort från rummet";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Skicka inbjudan";
@@ -429,7 +431,7 @@
 "screen_decline_and_block_block_user_option_description" = "Du kommer inte att se några meddelanden eller rumsinbjudningar från den här användaren";
 "screen_decline_and_block_block_user_option_title" = "Blockera användare";
 "screen_decline_and_block_report_user_option_description" = "Rapportera det här rummet till din kontoleverantör.";
-"screen_decline_and_block_report_user_reason_placeholder" = "Describe the reason to report…";
+"screen_decline_and_block_report_user_reason_placeholder" = "Beskriv skälet för anmälan …";
 "screen_decline_and_block_title" = "Avvisa och blockera";
 "screen_edit_room_address_room_address_section_footer" = "Du behöver en rumsadress för att göra den synlig i katalogen.";
 "screen_edit_room_address_title" = "Rumsadress";
@@ -481,7 +483,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Misslyckades att ladda upp media, vänligen pröva igen.";
 "screen_pinned_timeline_empty_state_description" = "Tryck på ett meddelande och välj ”%1$@” för att inkludera det här.";
 "screen_pinned_timeline_empty_state_headline" = "Fäst viktiga meddelanden så att de lätt kan upptäckas";
-"screen_push_history_title" = "Push history";
+"screen_push_history_title" = "Push-historik";
 "screen_report_room_leave_failed_alert_message" = "Din anmälan skickades in framgångsrikt, men vi stötte på ett problem när vi försökte lämna rummet. Vänligen försök igen.";
 "screen_report_room_leave_failed_alert_title" = "Kunde inte lämna rummet";
 "screen_report_room_reason_footer" = "Anmäl det här rummet till din administratör. Om meddelandena är krypterade kommer din administratör inte att kunna läsa dem.";
@@ -1126,7 +1128,7 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Du har inte tillgång till det här meddelandet";
 "timeline_decryption_failure_unable_to_decrypt" = "Det gick inte att dekryptera meddelandet";
 "timeline_decryption_failure_withheld_unverified" = "Det här meddelandet blockerades antingen för att du inte verifierade din enhet eller för att avsändaren måste verifiera din identitet.";
-"troubleshoot_notifications_entry_point_push_history_title" = "Push history";
+"troubleshoot_notifications_entry_point_push_history_title" = "Push-historik";
 "troubleshoot_notifications_entry_point_section" = "Felsök";
 "troubleshoot_notifications_screen_action" = "Kör tester";
 "troubleshoot_notifications_screen_action_again" = "Kör tester igen";

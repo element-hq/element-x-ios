@@ -99,6 +99,7 @@
 "action_report" = "Поскаржитися";
 "action_report_bug" = "Повідомити про помилку";
 "action_report_content" = "Повідомити про вміст";
+"action_report_dm" = "Поскаржитися на розмову";
 "action_report_room" = "Поскаржитися на кімнату";
 "action_reset" = "Скинути";
 "action_reset_identity" = "Скинути ідентичність";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Поширене розташування";
 "common_signing_out" = "Вихід";
 "common_something_went_wrong" = "Щось пішло не так";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "Початок бесіди...";
 "common_sticker" = "Наліпка";
 "common_success" = "Успіх";
