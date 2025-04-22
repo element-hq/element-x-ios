@@ -544,6 +544,8 @@ internal enum L10n {
   internal static var commonSigningOut: String { return L10n.tr("Localizable", "common_signing_out") }
   /// Something went wrong
   internal static var commonSomethingWentWrong: String { return L10n.tr("Localizable", "common_something_went_wrong") }
+  /// We encountered an issue. Please try again.
+  internal static var commonSomethingWentWrongMessage: String { return L10n.tr("Localizable", "common_something_went_wrong_message") }
   /// Starting chat…
   internal static var commonStartingChat: String { return L10n.tr("Localizable", "common_starting_chat") }
   /// Sticker
@@ -1884,7 +1886,7 @@ internal enum L10n {
   internal static var screenReportRoomLeaveFailedAlertTitle: String { return L10n.tr("Localizable", "screen_report_room_leave_failed_alert_title") }
   /// Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.
   internal static var screenReportRoomReasonFooter: String { return L10n.tr("Localizable", "screen_report_room_reason_footer") }
-  /// Describe the reason…
+  /// Describe the reason to report…
   internal static var screenReportRoomReasonPlaceholder: String { return L10n.tr("Localizable", "screen_report_room_reason_placeholder") }
   /// Report room
   internal static var screenReportRoomTitle: String { return L10n.tr("Localizable", "screen_report_room_title") }
