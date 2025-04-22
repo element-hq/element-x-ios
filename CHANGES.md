@@ -2,12 +2,7 @@
 
 ### What's Changed
 
-✨ Features
-* Setup the client media retention policy by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4001
-
 🙌 Improvements
-* Also show the room member management sheet when tapping on a profile in the timeline. by @Velin92 in https://github.com/element-hq/element-x-ios/pull/3995
-* Add an option to hiding timeline media only in public rooms by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4004
 * change: stricter private timeline media visibility by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4006
 * Adopt the new start chat button design. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4013
 * Stop showing the canonical alias for invites in the room list. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4020
@@ -19,7 +14,6 @@
 * Report room and decline & block screens tweaks by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4044
 
 🐛 Bugfixes
-* Manually enable the event cache  by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4005
 * Fix missing activity indicators in the authentication flow that are visible with a slow authentication server. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4010
 * Fix a bug where your own emotes showed as '* You emoted' in the room list. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4038
 
@@ -31,7 +25,6 @@
 * Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4047
 
 🧱 Build
-* Fix the post-release workflow. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3996
 * Xcode16.3 support by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4029
 
 📄 Documentation
@@ -44,9 +37,6 @@
 * Tweak the size of the new bloom to match Figma better. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4039
 
 Others
-* Update dependency fastlane to v2.227.1 by @renovate in https://github.com/element-hq/element-x-ios/pull/3999
-* Re-write integration test login for OIDC. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/3997
-* Only use the appGroupTemporaryDirectory to access a file from the share extension. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4002
 * Bump the SDK and adopt the new MsgLike timeline item types by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4000
 * External keyboard support for PIN input by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4007
 * Update to 25.04.14 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4021
@@ -54,7 +44,7 @@ Others
 * UI tests on xcode16.3 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4031
 
 
-**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.04.0...release/25.04.4
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.04.3...release/25.04.4
 
 ## Changes in 25.04.3 (2025-04-10)
 
