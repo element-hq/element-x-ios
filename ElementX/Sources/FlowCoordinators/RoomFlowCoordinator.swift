@@ -394,6 +394,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen):
                 return .roomDetails(isRoot: false)
                 
+            case (.roomDetails, .presentTranscriptionLanguagePicker):
+                return .transcriptionLanguagePicker
+            case (.transcriptionLanguagePicker, .dismissTranscriptionLanguagePicker):
+                return .roomDetails(isRoot: false)
+                
             case (.roomDetails, .presentRoomMemberDetails(let userID)):
                 return .roomMemberDetails(userID: userID, previousState: fromState)
             
@@ -547,6 +552,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentRolesAndPermissionsScreen()
             case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen, .roomDetails):
                 rolesAndPermissionsFlowCoordinator = nil
+                
+            case (.roomDetails, .presentTranscriptionLanguagePicker, .transcriptionLanguagePicker):
+                presentTranscriptionLanguagePicker(animated: animated)
+            case (.transcriptionLanguagePicker, .dismissTranscriptionLanguagePicker, .roomDetails):
+                break
                 
             case (.roomDetails, .presentRoomMemberDetails(let userID), .roomMemberDetails):
                 presentRoomMemberDetails(userID: userID)
@@ -794,6 +804,46 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         analytics.signpost.endRoomFlow()
     }
     
+    private func presentTranscriptionLanguagePicker(animated: Bool) {
+        // Get the current language from the RoomDetailsScreenViewModel
+        var currentLanguage = TranscriptionLanguage.defaultLanguage
+        
+        // Try to get the current language from UserDefaults using the room-specific key
+        let roomID = roomProxy.id
+        let key = "transcriptionLanguage-\(roomID)"
+        
+        if let userDefaults = UserDefaults(suiteName: "group.io.element.elementx") {
+            if let languageString = userDefaults.string(forKey: key),
+               let language = TranscriptionLanguage(rawValue: languageString) {
+                currentLanguage = language
+            }
+        }
+        
+        // Create a coordinator that will present the transcription language picker
+        let coordinator = TranscriptionLanguagePickerCoordinator(currentLanguage: currentLanguage) { [weak self] language in
+            // When a language is selected, dismiss the picker and update the language
+            self?.stateMachine.tryEvent(.dismissTranscriptionLanguagePicker)
+            
+            // Send the action to update the language back to the room details screen
+            NotificationCenter.default.post(name: Notification.Name("TranscriptionLanguageSelected"),
+                                            object: nil,
+                                            userInfo: ["language": language])
+            
+            // Also save the selected language to UserDefaults for persistence
+            if let userDefaults = UserDefaults(suiteName: "group.io.element.elementx") {
+                userDefaults.set(language.rawValue, forKey: "transcriptionLanguage")
+            }
+        }
+        
+        // Present the coordinator
+        navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
+            guard let self else { return }
+            if case .transcriptionLanguagePicker = stateMachine.state {
+                stateMachine.tryEvent(.dismissTranscriptionLanguagePicker)
+            }
+        }
+    }
+    
     private func presentRoomDetails(isRoot: Bool, animated: Bool) async {
         let params = RoomDetailsScreenCoordinatorParameters(roomProxy: roomProxy,
                                                             clientProxy: userSession.clientProxy,
@@ -826,6 +876,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .presentPinnedEventsTimeline:
                 stateMachine.tryEvent(.presentPinnedEventsTimeline)
+            case .presentTranscriptionLanguagePicker:
+                stateMachine.tryEvent(.presentTranscriptionLanguagePicker)
             }
         }
         .store(in: &cancellables)
@@ -1534,6 +1586,7 @@ private extension RoomFlowCoordinator {
         case pollsHistoryForm
         case rolesAndPermissions
         case pinnedEventsTimeline(previousState: PinnedEventsTimelineSource)
+        case transcriptionLanguagePicker
         case resolveSendFailure
         
         /// A child flow is in progress.
@@ -1607,6 +1660,9 @@ private extension RoomFlowCoordinator {
         case presentPinnedEventsTimeline
         case dismissPinnedEventsTimeline
         
+        case presentTranscriptionLanguagePicker
+        case dismissTranscriptionLanguagePicker
+        
         case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
         case dismissResolveSendFailure
         
@@ -1624,5 +1680,75 @@ private extension Result {
         case .failure:
             return true
         }
+    }
+}
+
+/// A coordinator that presents the transcription language picker view
+final class TranscriptionLanguagePickerCoordinator: CoordinatorProtocol {
+    private let onLanguageSelected: (TranscriptionLanguage) -> Void
+    private let viewModel: LanguagePickerViewModel
+    
+    init(currentLanguage: TranscriptionLanguage = .defaultLanguage, onLanguageSelected: @escaping (TranscriptionLanguage) -> Void) {
+        viewModel = LanguagePickerViewModel(currentLanguage: currentLanguage)
+        self.onLanguageSelected = onLanguageSelected
+    }
+    
+    func start() {
+        // Nothing to do here
+    }
+    
+    func stop() {
+        // Nothing to do here
+    }
+    
+    func toPresentable() -> AnyView {
+        AnyView(TranscriptionLanguagePickerView(onLanguageSelected: { language in
+            // When a language is selected, update the view model and call the callback
+            self.viewModel.selectedLanguage = language
+            self.onLanguageSelected(language)
+        }, viewModel: viewModel))
+    }
+    
+    // ViewModel for the language picker
+    class LanguagePickerViewModel: ObservableObject {
+        @Published var selectedLanguage: TranscriptionLanguage
+        
+        init(currentLanguage: TranscriptionLanguage) {
+            selectedLanguage = currentLanguage
+        }
+    }
+    
+    // Helper view for transcription language picker
+    private struct TranscriptionLanguagePickerView: View {
+        let languages = TranscriptionLanguage.allCases
+        let onLanguageSelected: (TranscriptionLanguage) -> Void
+        
+        // Use ObservedObject to get updates from the view model
+        @ObservedObject var viewModel: LanguagePickerViewModel
+        
+        var body: some View {
+            List(languages, id: \.self) { language in
+                Button(action: {
+                    onLanguageSelected(language)
+                }) {
+                    HStack {
+                        Text(language.displayName)
+                        Spacer()
+                        if language == viewModel.selectedLanguage {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.blue)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Transcription Language")
+        }
+    }
+}
+
+private extension AttributedString {
+    /// Returns a new string without attributes and in which newlines are replaced with spaces
+    func unattributedStringByReplacingNewlinesWithSpaces() -> AttributedString {
+        AttributedString(characters.map { $0.isNewline ? " " : $0 })
     }
 }

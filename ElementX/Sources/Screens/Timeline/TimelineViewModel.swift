@@ -63,7 +63,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         self.appMediator = appMediator
         self.emojiProvider = emojiProvider
         
-        let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
+        // Pass the roomProxy to the VoiceMessageRecorder so it can access the room ID for transcription language settings
+        let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(),
+                                                        mediaPlayerProvider: mediaPlayerProvider,
+                                                        roomProxy: roomProxy)
         
         timelineInteractionHandler = TimelineInteractionHandler(roomProxy: roomProxy,
                                                                 timelineController: timelineController,

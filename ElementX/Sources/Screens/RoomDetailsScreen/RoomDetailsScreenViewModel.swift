@@ -65,6 +65,23 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         let topic = attributedStringBuilder.fromPlain(roomProxy.infoPublisher.value.topic)
         
+        // Load the saved transcription language for this room
+        var transcriptionLanguage = TranscriptionLanguage.defaultLanguage
+        let roomID = roomProxy.id
+        let key = "transcriptionLanguage-\(roomID)"
+        
+        if let userDefaults = UserDefaults(suiteName: "group.io.element.elementx") {
+            // Save the current room ID for other components to use
+            userDefaults.set(roomID, forKey: "currentRoomID")
+            userDefaults.synchronize()
+            
+            // Load the saved transcription language
+            if let languageString = userDefaults.string(forKey: key),
+               let language = TranscriptionLanguage(rawValue: languageString) {
+                transcriptionLanguage = language
+            }
+        }
+        
         super.init(initialViewState: .init(details: roomProxy.details,
                                            isEncrypted: roomProxy.isEncrypted,
                                            isDirect: roomProxy.infoPublisher.value.isDirect,
@@ -72,6 +89,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                            topicSummary: topic?.unattributedStringByReplacingNewlinesWithSpaces(),
                                            joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
                                            notificationSettingsState: .loading,
+                                           transcriptionLanguage: transcriptionLanguage,
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
         
@@ -104,6 +122,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         setupNotificationSettingsSubscription()
         fetchNotificationSettings()
+        
+        // Setup notification observer for transcription language selection
+        NotificationCenter.default.addObserver(forName: Notification.Name("TranscriptionLanguageSelected"), object: nil, queue: .main) { [weak self] notification in
+            if let language = notification.userInfo?["language"] as? TranscriptionLanguage {
+                self?.updateTranscriptionLanguage(language)
+            }
+        }
     }
     
     // MARK: - Public
@@ -160,10 +185,29 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapPinnedEvents:
             analyticsService.trackInteraction(name: .PinnedMessageRoomInfoButton)
             actionsSubject.send(.displayPinnedEventsTimeline)
+        case .changeTranscriptionLanguage(let language):
+            updateTranscriptionLanguage(language)
+        case .showTranscriptionLanguagePicker:
+            actionsSubject.send(.requestTranscriptionLanguagePickerPresentation)
         }
     }
     
     // MARK: - Private
+    
+    private func updateTranscriptionLanguage(_ language: TranscriptionLanguage) {
+        // Update the state
+        state.transcriptionLanguage = language
+        
+        // Save the language selection per room
+        let roomID = roomProxy.id
+        let key = "transcriptionLanguage-\(roomID)"
+        
+        // Save to UserDefaults for persistence
+        if let userDefaults = UserDefaults(suiteName: "group.io.element.elementx") {
+            userDefaults.set(language.rawValue, forKey: key)
+            userDefaults.synchronize()
+        }
+    }
     
     private func setupRoomSubscription() {
         roomProxy.infoPublisher

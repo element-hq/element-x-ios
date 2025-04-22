@@ -149,63 +149,117 @@ struct RoomDetailsScreen: View {
         }
     }
 
+    @ViewBuilder
     private var aboutSection: some View {
         Section {
-            if context.viewState.dmRecipient == nil {
-                ListRow(label: .default(title: L10n.commonPeople,
-                                        icon: \.user),
-                        details: .title(String(context.viewState.joinedMembersCount)),
+            Group {
+                if context.viewState.dmRecipient == nil {
+                    ListRow(label: .default(title: L10n.commonPeople,
+                                            icon: \.user),
+                            details: .title(String(context.viewState.joinedMembersCount)),
+                            kind: .navigationLink {
+                                context.send(viewAction: .processTapPeople)
+                            })
+                            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
+                }
+                ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
+                                        icon: \.polls),
                         kind: .navigationLink {
-                            context.send(viewAction: .processTapPeople)
+                            context.send(viewAction: .processTapPolls)
                         })
-                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
+                        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
             }
-            ListRow(label: .default(title: L10n.screenPollsHistoryTitle,
-                                    icon: \.polls),
-                    kind: .navigationLink {
-                        context.send(viewAction: .processTapPolls)
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.pollsHistory)
+        } header: {
+            Text(L10n.commonAbout)
+                .compoundListSectionHeader()
         }
     }
     
+    @ViewBuilder
     private var configurationSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenRoomDetailsNotificationTitle,
-                                    icon: \.notifications),
-                    details: context.viewState.notificationSettingsState.isLoading ? .isWaiting(true)
-                        : context.viewState.notificationSettingsState.isError ? .systemIcon(.exclamationmarkCircle)
-                        : .title(context.viewState.notificationSettingsState.label),
-                    kind: .navigationLink {
-                        context.send(viewAction: .processTapNotifications)
-                    })
-                    .disabled(context.viewState.notificationSettingsState.isLoading)
-                    .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
-            
-            ListRow(label: .default(title: L10n.commonFavourite, icon: \.favourite),
-                    kind: .toggle($context.isFavourite))
-                .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.favourite)
-                .onChange(of: context.isFavourite) { _, newValue in
-                    context.send(viewAction: .toggleFavourite(isFavourite: newValue))
-                }
-            
-            ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
-                                    icon: \.pin),
-                    details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
-                    kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink(action: {
-                        context.send(viewAction: .processTapPinnedEvents)
-                    }))
-                    .disabled(context.viewState.pinnedEventsActionState.isLoading)
-            
-            if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
-                ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
-                                        icon: \.admin),
-                        kind: .navigationLink {
-                            context.send(viewAction: .processTapRolesAndPermissions)
-                        })
+            Group {
+                notificationsRow
+                favoriteRow
+                pinnedEventsRow
+                transcriptionLanguageRow
+                rolesAndPermissionsRow
             }
+        } header: {
+            Text("Settings")
+                .compoundListSectionHeader()
         }
-        .disabled(context.viewState.notificationSettingsState.isLoading)
+    }
+    
+    private var notificationsRow: some View {
+        ListRow(label: .default(title: L10n.screenRoomDetailsNotificationTitle,
+                                icon: \.notifications),
+                details: context.viewState.notificationSettingsState.isLoading ? .isWaiting(true)
+                    : context.viewState.notificationSettingsState.isError ? .systemIcon(.exclamationmarkCircle)
+                    : .title(context.viewState.notificationSettingsState.label),
+                kind: .navigationLink {
+                    context.send(viewAction: .processTapNotifications)
+                })
+                .disabled(context.viewState.notificationSettingsState.isLoading)
+                .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.notifications)
+    }
+    
+    private var favoriteRow: some View {
+        ListRow(label: .default(title: L10n.commonFavourite, icon: \.favourite),
+                kind: .toggle($context.isFavourite))
+            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.favourite)
+            .onChange(of: context.isFavourite) { _, newValue in
+                context.send(viewAction: .toggleFavourite(isFavourite: newValue))
+            }
+    }
+    
+    private var pinnedEventsRow: some View {
+        ListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle,
+                                icon: \.pin),
+                details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
+                kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink(action: {
+                    context.send(viewAction: .processTapPinnedEvents)
+                }))
+                .disabled(context.viewState.pinnedEventsActionState.isLoading)
+    }
+    
+    private var transcriptionLanguageRow: some View {
+        ListRow(label: .default(title: "Voice Transcription Language", icon: \.lock),
+                details: .title(context.viewState.transcriptionLanguage.displayName),
+                kind: .navigationLink {
+                    context.send(viewAction: .showTranscriptionLanguagePicker)
+                })
+    }
+    
+    private var transcriptionLanguageMenu: some View {
+        Menu {
+            ForEach(TranscriptionLanguage.allCases) { language in
+                Button(action: {
+                    context.send(viewAction: .changeTranscriptionLanguage(language))
+                }) {
+                    HStack {
+                        Text(language.displayName)
+                        if context.viewState.transcriptionLanguage == language {
+                            Image(systemName: "checkmark")
+                        }
+                    }
+                }
+            }
+        } label: {
+            Image(systemName: "chevron.up.chevron.down")
+                .foregroundColor(.compound.iconSecondary)
+        }
+    }
+    
+    @ViewBuilder
+    private var rolesAndPermissionsRow: some View {
+        if context.viewState.canEditRolesOrPermissions, context.viewState.dmRecipient == nil {
+            ListRow(label: .default(title: L10n.screenRoomDetailsRolesAndPermissions,
+                                    icon: \.admin),
+                    kind: .navigationLink {
+                        context.send(viewAction: .processTapRolesAndPermissions)
+                    })
+        }
     }
     
     private var toggleMuteButton: some View {

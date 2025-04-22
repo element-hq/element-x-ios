@@ -27,6 +27,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
     let audioRecorder: AudioRecorderProtocol
     private let voiceMessageCache: VoiceMessageCacheProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
+    private let roomProxy: JoinedRoomProxyProtocol?
     
     private let actionsSubject: PassthroughSubject<VoiceMessageRecorderAction, Never> = .init()
     var actions: AnyPublisher<VoiceMessageRecorderAction, Never> {
@@ -60,10 +61,12 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         
     init(audioRecorder: AudioRecorderProtocol = AudioRecorder(),
          mediaPlayerProvider: MediaPlayerProviderProtocol,
-         voiceMessageCache: VoiceMessageCacheProtocol = VoiceMessageCache()) {
+         voiceMessageCache: VoiceMessageCacheProtocol = VoiceMessageCache(),
+         roomProxy: JoinedRoomProxyProtocol? = nil) {
         self.audioRecorder = audioRecorder
         self.mediaPlayerProvider = mediaPlayerProvider
         self.voiceMessageCache = voiceMessageCache
+        self.roomProxy = roomProxy
         
         MXLog.debug("VoiceMessageRecorder initialized with audioRecorder: \(type(of: audioRecorder))")
         
@@ -83,9 +86,34 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
 
         // --- Live Transcription Setup ---
         let apiKey = ProcessInfo.processInfo.environment["TRANSCRIPTION_API_KEY"] ?? "72c5eb32007f5e45904c20a8176756c168f8f018"
-        let language = "en" // TODO: Get from user settings if needed
         
-        MXLog.debug("Starting voice recording with transcription, API key length: \(apiKey.count)")
+        // Get the transcription language from the settings
+        var language = "en" // Default to English
+        
+        // Dump all keys in shared UserDefaults for debugging
+        MXLog.debug("Checking for transcription language in UserDefaults")
+        if let userDefaults = UserDefaults(suiteName: "group.io.element.elementx") {
+            MXLog.debug("All keys in shared UserDefaults:")
+            for (key, value) in userDefaults.dictionaryRepresentation() {
+                if key.contains("transcription") {
+                    MXLog.debug("  \(key): \(value)")
+                }
+            }
+            
+            if let roomProxy = roomProxy {
+                // Fallback to roomProxy if available
+                let roomID = roomProxy.id
+                let key = "transcriptionLanguage-\(roomID)"
+                MXLog.debug("Looking for room-specific transcription language with key: \(key)")
+                
+                if let languageString = userDefaults.string(forKey: key) {
+                    language = languageString
+                    MXLog.debug("Using room-specific transcription language: \(language)")
+                }
+            }
+        }
+        
+        MXLog.debug("Starting voice recording with transcription, API key length: \(apiKey.count) and language: \(language)")
         MXLog.debug("Using audioRecorder instance: \(type(of: audioRecorder)), isRecording: \(audioRecorder.isRecording)")
         
         // Create a callback implementation that conforms to the TranscriptUpdateCallback protocol
