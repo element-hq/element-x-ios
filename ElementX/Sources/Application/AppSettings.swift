@@ -101,7 +101,6 @@ final class AppSettings {
                   copyrightURL: URL,
                   acceptableUseURL: URL,
                   privacyURL: URL,
-                  supportEmailAddress: String,
                   encryptionURL: URL,
                   chatBackupDetailsURL: URL,
                   identityPinningViolationDetailsURL: URL,
@@ -117,7 +116,6 @@ final class AppSettings {
         self.copyrightURL = copyrightURL
         self.acceptableUseURL = acceptableUseURL
         self.privacyURL = privacyURL
-        self.supportEmailAddress = supportEmailAddress
         self.encryptionURL = encryptionURL
         self.chatBackupDetailsURL = chatBackupDetailsURL
         self.identityPinningViolationDetailsURL = identityPinningViolationDetailsURL
@@ -167,8 +165,6 @@ final class AppSettings {
     private(set) var acceptableUseURL: URL = "https://element.io/acceptable-use-policy-terms"
     /// A URL that contains the app's Privacy Policy.
     private(set) var privacyURL: URL = "https://element.io/privacy"
-    /// An email address that should be used for support requests.
-    private(set) var supportEmailAddress = "support@element.io"
     /// A URL where users can go read more about encryption in general.
     private(set) var encryptionURL: URL = "https://element.io/help#encryption"
     /// A URL where users can go read more about the chat backup.
@@ -209,7 +205,6 @@ final class AppSettings {
                                                                      logoURI: logoURL,
                                                                      tosURI: acceptableUseURL,
                                                                      policyURI: privacyURL,
-                                                                     contacts: [supportEmailAddress],
                                                                      staticRegistrations: oidcStaticRegistrations.mapKeys { $0.absoluteString })
     
     /// Whether or not the Create Account button is shown on the start screen.
