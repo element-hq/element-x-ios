@@ -99,6 +99,7 @@
 "action_report" = "Teata";
 "action_report_bug" = "Teata veast";
 "action_report_content" = "Teata sisust haldurile";
+"action_report_dm" = "Teata vestlusest";
 "action_report_room" = "Teata jututoast";
 "action_reset" = "Lähtesta";
 "action_reset_identity" = "Lähtesta oma identiteet";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Jagatud asukoht";
 "common_signing_out" = "Logime välja";
 "common_something_went_wrong" = "Midagi läks valesti";
+"common_something_went_wrong_message" = "Tekkis viga. Palun proovi uuesti.";
 "common_starting_chat" = "Alustame vestlust…";
 "common_sticker" = "Kleeps";
 "common_success" = "Õnnestus";

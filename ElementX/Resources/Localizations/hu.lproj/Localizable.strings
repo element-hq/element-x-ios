@@ -99,6 +99,7 @@
 "action_report" = "Jelentés";
 "action_report_bug" = "Hiba jelentése";
 "action_report_content" = "Tartalom jelentése";
+"action_report_dm" = "Beszélgetés jelentése";
 "action_report_room" = "Szoba jelentése";
 "action_reset" = "Visszaállítás";
 "action_reset_identity" = "Személyazonosság visszaállítása";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Megosztott tartózkodási hely";
 "common_signing_out" = "Kijelentkezés";
 "common_something_went_wrong" = "Valamilyen hiba történt";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "Csevegés megkezdése…";
 "common_sticker" = "Matrica";
 "common_success" = "Sikeres";
@@ -429,7 +431,7 @@
 "screen_decline_and_block_block_user_option_description" = "Ettől a felhasználótól nem fog többé üzeneteket vagy meghívásokat látni.";
 "screen_decline_and_block_block_user_option_title" = "Felhasználó letiltása";
 "screen_decline_and_block_report_user_option_description" = "A szoba jelentése a fiókszolgáltatójának.";
-"screen_decline_and_block_report_user_reason_placeholder" = "Describe the reason to report…";
+"screen_decline_and_block_report_user_reason_placeholder" = "Írja le a jelentés okát...";
 "screen_decline_and_block_title" = "Elutasítás és blokkolás";
 "screen_edit_room_address_room_address_section_footer" = "Szüksége lesz egy szobacímre, hogy láthatóvá tegye a szobakatalógusban.";
 "screen_edit_room_address_title" = "A szoba címe";
@@ -481,7 +483,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Nem sikerült a média feltöltése, próbálja újra.";
 "screen_pinned_timeline_empty_state_description" = "Nyomjon hosszan az üzenetre, és válassza a „%1$@” lehetőséget, hogy itt szerepeljen.";
 "screen_pinned_timeline_empty_state_headline" = "Tűzze ki a fontos üzeneteket, hogy könnyen felfedezhetők legyenek";
-"screen_push_history_title" = "Push history";
+"screen_push_history_title" = "Leküldési értesítés előzmények";
 "screen_report_room_leave_failed_alert_message" = "A jelentése sikeresen el lett küldve, de hibát találtunk a szoba elhagyása során. Próbálja újra.";
 "screen_report_room_leave_failed_alert_title" = "Nem tudja elhagyni a szobát";
 "screen_report_room_reason_footer" = "A szoba jelentése a rendszergazdának. Ha az üzenetek titkosítva vannak, akkor a rendszergazda nem fogja tudni elolvasni őket.";
@@ -1126,7 +1128,7 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Nincs hozzáférése ehhez az üzenethez";
 "timeline_decryption_failure_unable_to_decrypt" = "Nem sikerült visszafejteni az üzenetet";
 "timeline_decryption_failure_withheld_unverified" = "Ez az üzenet azért lett blokkolva, mert vagy nem ellenőrizte az eszközt, vagy a feladónak ellenőriznie kell az Ön személyazonosságát.";
-"troubleshoot_notifications_entry_point_push_history_title" = "Push history";
+"troubleshoot_notifications_entry_point_push_history_title" = "Leküldéses értesítés előzmények";
 "troubleshoot_notifications_entry_point_section" = "Hibaelhárítás";
 "troubleshoot_notifications_screen_action" = "Tesztek futtatása";
 "troubleshoot_notifications_screen_action_again" = "Tesztek újbóli futtatása";

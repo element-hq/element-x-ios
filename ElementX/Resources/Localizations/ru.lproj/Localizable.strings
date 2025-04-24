@@ -99,6 +99,7 @@
 "action_report" = "Отчет";
 "action_report_bug" = "Сообщить об ошибке";
 "action_report_content" = "Пожаловаться на содержание";
+"action_report_dm" = "Report conversation";
 "action_report_room" = "Комната отчетов";
 "action_reset" = "Сбросить";
 "action_reset_identity" = "Сбросить идентификацию";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Поделился местоположением";
 "common_signing_out" = "Выход…";
 "common_something_went_wrong" = "Что-то пошло не так";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "Чат запускается…";
 "common_sticker" = "Стикер";
 "common_success" = "Успешно";

@@ -53,6 +53,7 @@ struct ReportRoomScreen: View {
             Button(L10n.actionReport) {
                 context.send(viewAction: .report)
             }
+            .disabled(!context.viewState.canReport)
         }
     }
 }

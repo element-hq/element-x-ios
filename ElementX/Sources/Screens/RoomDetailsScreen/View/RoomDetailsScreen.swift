@@ -279,26 +279,18 @@ struct RoomDetailsScreen: View {
         }
     }
     
-    private var leaveRoomTitle: String {
-        context.viewState.dmRecipientInfo == nil ? L10n.screenRoomDetailsLeaveRoomTitle : L10n.screenRoomDetailsLeaveConversationTitle
-    }
-    
-    private var reportRoomTitle: String {
-        context.viewState.dmRecipientInfo == nil ? L10n.actionReportRoom : L10n.actionReportDm
-    }
-
     private var leaveRoomSection: some View {
         Section {
             if context.viewState.reportRoomEnabled {
-                ZeroListRow(label: .action(title: reportRoomTitle,
+                ZeroListRow(label: .action(title: L10n.actionReportRoom,
                                        icon: \.chatProblem,
                                        role: .destructive),
                         kind: .button { context.send(viewAction: .processTapReport) })
             }
-            ZeroListRow(label: .action(title: leaveRoomTitle,
-                                       icon: \.leave,
-                                       role: .destructive),
-                        kind: .button { context.send(viewAction: .processTapLeave) })
+            ZeroListRow(label: .action(title: L10n.screenRoomDetailsLeaveRoomTitle,
+                                   icon: \.leave,
+                                   role: .destructive),
+                    kind: .button { context.send(viewAction: .processTapLeave) })
         }
     }
     

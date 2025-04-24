@@ -13,6 +13,10 @@ enum ReportRoomScreenViewModelAction: Equatable {
 
 struct ReportRoomScreenViewState: BindableState {
     var bindings = ReportRoomScreenViewStateBindings()
+    
+    var canReport: Bool {
+        !bindings.reason.isEmpty
+    }
 }
 
 struct ReportRoomScreenViewStateBindings {
@@ -27,5 +31,6 @@ enum ReportRoomScreenViewAction {
 }
 
 enum ReportRoomScreenAlertType {
+    case reportRoomFailed
     case leaveRoomFailed
 }

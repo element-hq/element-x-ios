@@ -99,6 +99,7 @@
 "action_report" = "Report";
 "action_report_bug" = "回報程式錯誤";
 "action_report_content" = "檢舉內容";
+"action_report_dm" = "Report conversation";
 "action_report_room" = "Report room";
 "action_reset" = "重設";
 "action_reset_identity" = "重設身份";
@@ -239,6 +240,7 @@
 "common_shared_location" = "位置分享";
 "common_signing_out" = "正在登出";
 "common_something_went_wrong" = "有錯誤發生";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "開始聊天...";
 "common_sticker" = "貼圖";
 "common_success" = "成功";
@@ -485,7 +487,7 @@
 "screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
 "screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
 "screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
-"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_reason_placeholder" = "Describe the reason to report…";
 "screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "發生了未知錯誤。請檢查您帳號的密碼是否正確，然後再試一次。";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "撤回驗證並傳送";
