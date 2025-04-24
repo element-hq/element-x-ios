@@ -14,7 +14,6 @@ struct OIDCConfigurationProxy {
     let logoURI: URL
     let tosURI: URL
     let policyURI: URL
-    let contacts: [String]
     let staticRegistrations: [String: String]
 }
 
@@ -29,7 +28,7 @@ extension OIDCConfigurationProxy {
                           logoUri: logoURI.absoluteString,
                           tosUri: tosURI.absoluteString,
                           policyUri: policyURI.absoluteString,
-                          contacts: contacts,
+                          contacts: nil,
                           staticRegistrations: staticRegistrations)
     }
 }

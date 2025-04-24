@@ -58,14 +58,6 @@ struct TimelineItemMenuActionProvider {
             actions.append(.forward(itemID: item.id))
         }
         
-//        if canCurrentUserPin, let eventID = item.id.eventID {
-//            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
-//        }
-//
-//        if item.isRemoteMessage {
-//            actions.append(.copyPermalink)
-//        }
-        
         if item.isEditable {
             if item.supportsMediaCaption {
 //                if item.hasMediaCaption {
@@ -85,9 +77,9 @@ struct TimelineItemMenuActionProvider {
 //            actions.append(.copyPermalink)
 //        }
         
-//        if canCurrentUserPin, let eventID = item.id.eventID {
-//            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
-//        }
+        if canCurrentUserPin, let eventID = item.id.eventID {
+            actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
+        }
 
         if item.isCopyable {
             actions.append(.copy)
@@ -117,9 +109,8 @@ struct TimelineItemMenuActionProvider {
         
         switch timelineKind {
         case .pinned:
-//            actions = actions.filter(\.canAppearInPinnedEventsTimeline)
-//            secondaryActions = secondaryActions.filter(\.canAppearInPinnedEventsTimeline)
-            break
+            actions = actions.filter(\.canAppearInPinnedEventsTimeline)
+            secondaryActions = secondaryActions.filter(\.canAppearInPinnedEventsTimeline)
         case .media:
             actions.append(.share)
             actions.append(.save)

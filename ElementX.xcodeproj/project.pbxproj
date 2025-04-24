@@ -1864,6 +1864,8 @@
 		795A0C892D78453B000928B7 /* ZeroAuthApiProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795A0C882D784534000928B7 /* ZeroAuthApiProxy.swift */; };
 		795A0C8A2D78453B000928B7 /* ZeroAuthApiProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795A0C882D784534000928B7 /* ZeroAuthApiProxy.swift */; };
 		795A854F63301DC6B46217B9 /* AccessibilityIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BB8DDE245ED86C489BA983 /* AccessibilityIdentifiers.swift */; };
+		795B2A862DB923C700FEA3DC /* MentionUsersCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795B2A852DB923BB00FEA3DC /* MentionUsersCache.swift */; };
+		795B2A872DB923C700FEA3DC /* MentionUsersCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795B2A852DB923BB00FEA3DC /* MentionUsersCache.swift */; };
 		795CF4462D834F5E0014B537 /* HomeMyPostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */; };
 		795CF4472D834F5E0014B537 /* HomeMyPostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */; };
 		795EAA0D2D4AD83D0015DAD8 /* TimelineMediaPreviewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18A454132A5A5247802821E /* TimelineMediaPreviewDataSource.swift */; };
@@ -3416,6 +3418,7 @@
 		795A0C822D77D4DC000928B7 /* CreateFeedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedProtocol.swift; sourceTree = "<group>"; };
 		795A0C852D77EB94000928B7 /* ZeroApiProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroApiProxy.swift; sourceTree = "<group>"; };
 		795A0C882D784534000928B7 /* ZeroAuthApiProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroAuthApiProxy.swift; sourceTree = "<group>"; };
+		795B2A852DB923BB00FEA3DC /* MentionUsersCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MentionUsersCache.swift; sourceTree = "<group>"; };
 		795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMyPostsContent.swift; sourceTree = "<group>"; };
 		7968A42B2D5409D900E9056A /* FeedDetailsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsScreenCoordinator.swift; sourceTree = "<group>"; };
 		7968A42E2D5409EA00E9056A /* FeedDetailsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedDetailsScreenViewModel.swift; sourceTree = "<group>"; };
@@ -4785,6 +4788,7 @@
 		1882EB982C91B9F6001DA2A9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				795B2A852DB923BB00FEA3DC /* MentionUsersCache.swift */,
 				7903937C2D50DA8E0022E293 /* DateUtil.swift */,
 				185454D62CFEFC79003CA957 /* ValidationUtil.swift */,
 				18D5D9C02CEBB70300107940 /* ZeroRewardFAQs.swift */,
@@ -10179,6 +10183,7 @@
 				18E9A71D2C9829970082DDA4 /* URLComponents.swift in Sources */,
 				18E9A71E2C9829970082DDA4 /* URLSession.swift in Sources */,
 				18E9A71F2C9829970082DDA4 /* UTType.swift in Sources */,
+				795B2A862DB923C700FEA3DC /* MentionUsersCache.swift in Sources */,
 				18659CC02CFB287E000EF0A6 /* ZCreateAccount.swift in Sources */,
 				18E9A7202C9829970082DDA4 /* UnitTestsAppCoordinator.swift in Sources */,
 				18E9A7212C9829970082DDA4 /* UnsupportedRoomTimelineItem.swift in Sources */,
@@ -11195,6 +11200,7 @@
 				798BF3072137833FBD3F4C96 /* TimelineDeliveryStatusView.swift in Sources */,
 				22BA593A5E19D8D3DE2FAA6F /* TimelineEventContent.swift in Sources */,
 				109AEB7D33C4497727AFB87F /* TimelineInteractionHandler.swift in Sources */,
+				795B2A872DB923C700FEA3DC /* MentionUsersCache.swift in Sources */,
 				E6FA87F773424B27614B23E9 /* TimelineItemAccessibilityModifier.swift in Sources */,
 				F6767F17D538578B370DD805 /* TimelineItemBubbleBackground.swift in Sources */,
 				79959F8E45C3749997482A7F /* TimelineItemBubbledStylerView.swift in Sources */,
@@ -11607,7 +11613,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.13.5;
+				MARKETING_VERSION = 0.13.6;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -11643,7 +11649,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.13.5;
+				MARKETING_VERSION = 0.13.6;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

@@ -99,6 +99,7 @@
 "action_report" = "Report";
 "action_report_bug" = "Zgłoś błąd";
 "action_report_content" = "Zgłoś treść";
+"action_report_dm" = "Report conversation";
 "action_report_room" = "Report room";
 "action_reset" = "Resetuj";
 "action_reset_identity" = "Zresetuj tożsamość";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Udostępniona lokalizacja";
 "common_signing_out" = "Wylogowywanie";
 "common_something_went_wrong" = "Coś poszło nie tak";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "Rozpoczynanie czatu…";
 "common_sticker" = "Naklejka";
 "common_success" = "Sukces";
@@ -485,7 +487,7 @@
 "screen_report_room_leave_failed_alert_message" = "Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.";
 "screen_report_room_leave_failed_alert_title" = "Unable to Leave Room";
 "screen_report_room_reason_footer" = "Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.";
-"screen_report_room_reason_placeholder" = "Describe the reason…";
+"screen_report_room_reason_placeholder" = "Describe the reason to report…";
 "screen_report_room_title" = "Report room";
 "screen_reset_encryption_password_error" = "Wystąpił nieznany błąd. Sprawdź, czy hasło jest poprawne i spróbuj ponownie.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Wycofaj weryfikację i wyślij";

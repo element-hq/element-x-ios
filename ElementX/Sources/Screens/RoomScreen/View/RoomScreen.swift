@@ -28,9 +28,9 @@ struct RoomScreen: View {
     var body: some View {
         timeline
             .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
-//            .overlay(alignment: .top) {
-//                pinnedItemsBanner
-//            }
+            .overlay(alignment: .top) {
+                pinnedItemsBanner
+            }
 //            // This can overlay on top of the pinnedItemsBanner
 //            .overlay(alignment: .top) {
 //                knockRequestsBanner

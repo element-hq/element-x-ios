@@ -140,13 +140,15 @@ struct RoomDetailsScreen: View {
 
     private var aboutSection: some View {
         Section {
-//            ZeroListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle, icon: \.pin),
-//                    details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
-//                    kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
-//                        context.send(viewAction: .processTapPinnedEvents)
-//                    })
-//                    .disabled(context.viewState.pinnedEventsActionState.isLoading)
-//            
+            if context.viewState.pinnedEventsActionState.hasPinnedEvents {
+                ZeroListRow(label: .default(title: L10n.screenRoomDetailsPinnedEventsRowTitle, icon: \.pin),
+                            details: context.viewState.pinnedEventsActionState.isLoading ? .isWaiting(true) : .title(context.viewState.pinnedEventsActionState.count),
+                            kind: context.viewState.pinnedEventsActionState.isLoading ? .label : .navigationLink {
+                    context.send(viewAction: .processTapPinnedEvents)
+                })
+                .disabled(context.viewState.pinnedEventsActionState.isLoading)
+            }
+            
 //            ZeroListRow(label: .default(title: L10n.screenPollsHistoryTitle, icon: \.polls),
 //                    kind: .navigationLink {
 //                        context.send(viewAction: .processTapPolls)
@@ -277,26 +279,18 @@ struct RoomDetailsScreen: View {
         }
     }
     
-    private var leaveRoomTitle: String {
-        context.viewState.dmRecipientInfo == nil ? L10n.screenRoomDetailsLeaveRoomTitle : L10n.screenRoomDetailsLeaveConversationTitle
-    }
-    
-    private var reportRoomTitle: String {
-        context.viewState.dmRecipientInfo == nil ? L10n.actionReportRoom : L10n.actionReportDm
-    }
-
     private var leaveRoomSection: some View {
         Section {
             if context.viewState.reportRoomEnabled {
-                ZeroListRow(label: .action(title: reportRoomTitle,
+                ZeroListRow(label: .action(title: L10n.actionReportRoom,
                                        icon: \.chatProblem,
                                        role: .destructive),
                         kind: .button { context.send(viewAction: .processTapReport) })
             }
-            ZeroListRow(label: .action(title: leaveRoomTitle,
-                                       icon: \.leave,
-                                       role: .destructive),
-                        kind: .button { context.send(viewAction: .processTapLeave) })
+            ZeroListRow(label: .action(title: L10n.screenRoomDetailsLeaveRoomTitle,
+                                   icon: \.leave,
+                                   role: .destructive),
+                    kind: .button { context.send(viewAction: .processTapLeave) })
         }
     }
     

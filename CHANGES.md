@@ -1,3 +1,51 @@
+## Changes in 25.04.4 (2025-04-22)
+
+### What's Changed
+
+🙌 Improvements
+* change: stricter private timeline media visibility by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4006
+* Adopt the new start chat button design. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4013
+* Stop showing the canonical alias for invites in the room list. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4020
+* Prefix the user's own messages with 'You' in the room list. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4022
+* Specific report copy for DMs by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4024
+* Add the new emoji from iOS 18.4 to the reaction picker. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4023
+* Show internet connection warning when uploading keys on log out. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4027
+* Refactor the NSE so that the original notification content is preserved between all the different processing steps by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4036
+* Report room and decline & block screens tweaks by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4044
+
+🐛 Bugfixes
+* Fix missing activity indicators in the authentication flow that are visible with a slow authentication server. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4010
+* Fix a bug where your own emotes showed as '* You emoted' in the room list. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4038
+
+⚠️ API Changes
+* Refactor SecureBackupControllerListener into SDKListener and use it everywhere. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4030
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4018
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4047
+
+🧱 Build
+* Xcode16.3 support by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4029
+
+📄 Documentation
+* Fix Matrix room in CONTRIBUTING.md by @manuroe in https://github.com/element-hq/element-x-ios/pull/4043
+
+🚧 In development 🚧
+* Decline and block design tweaks by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4009
+* Introduce a `TimelineItemThreadSummary` object by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4032
+* Add the new bloom style under a feature flag. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4033
+* Tweak the size of the new bloom to match Figma better. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4039
+
+Others
+* Bump the SDK and adopt the new MsgLike timeline item types by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4000
+* External keyboard support for PIN input by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4007
+* Update to 25.04.14 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4021
+* Update the 3rd-party acknowledgements. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4037
+* UI tests on xcode16.3 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4031
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.04.3...release/25.04.4
+
 ## Changes in 25.04.3 (2025-04-10)
 
 ### What's Changed

@@ -45,9 +45,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d member</string>
+			<string>%1$d narys</string>
+			<key>few</key>
+			<string>%1$d nariai</string>
 			<key>other</key>
-			<string>%1$d members</string>
+			<string>%1$d narių</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -77,9 +79,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d message</string>
+			<string>%1$@: %2$d žinutė</string>
+			<key>few</key>
+			<string>%1$@: %2$d žinutės</string>
 			<key>other</key>
-			<string>%1$@: %2$d messages</string>
+			<string>%1$@: %2$d žinučių</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -93,9 +97,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d notification</string>
+			<string>%d pranešimas</string>
+			<key>few</key>
+			<string>%d pranešimai</string>
 			<key>other</key>
-			<string>%d notifications</string>
+			<string>%d pranešimų</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -109,9 +115,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d invitation</string>
+			<string>%d kvietimas</string>
+			<key>few</key>
+			<string>%d kvietimai</string>
 			<key>other</key>
-			<string>%d invitations</string>
+			<string>%d kvietimų</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -125,9 +133,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d new message</string>
+			<string>%d nauja žinutė</string>
+			<key>few</key>
+			<string>%d naujos žinutės</string>
 			<key>other</key>
-			<string>%d new messages</string>
+			<string>%d naujų žinučių</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -141,9 +151,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d unread notified message</string>
+			<string>%d neperskaityta žinutė</string>
+			<key>few</key>
+			<string>%d neperskaitytos žinutės</string>
 			<key>other</key>
-			<string>%d unread notified messages</string>
+			<string>%d neperskaitytų žinučių</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -157,9 +169,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d room</string>
+			<string>%d kambaryje</string>
+			<key>few</key>
+			<string>%d kambariuose</string>
 			<key>other</key>
-			<string>%d rooms</string>
+			<string>%d kambarių</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -221,9 +235,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d person</string>
+			<string>%1$d asmuo</string>
+			<key>few</key>
+			<string>%1$d asmenys</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d asmenų</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -253,9 +269,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d room change</string>
+			<string>%1$d kambario pakeitimas</string>
+			<key>few</key>
+			<string>%1$d kambario pakeitimai</string>
 			<key>other</key>
-			<string>%1$d room changes</string>
+			<string>%1$d kambario pakeitimų</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>

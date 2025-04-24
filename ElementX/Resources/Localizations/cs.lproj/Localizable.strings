@@ -99,6 +99,7 @@
 "action_report" = "Nahlásit";
 "action_report_bug" = "Nahlásit chybu";
 "action_report_content" = "Nahlásit obsah";
+"action_report_dm" = "Report conversation";
 "action_report_room" = "Nahlásit místnost";
 "action_reset" = "Obnovit";
 "action_reset_identity" = "Obnovit identitu";
@@ -239,6 +240,7 @@
 "common_shared_location" = "Sdílená poloha";
 "common_signing_out" = "Odhlašování";
 "common_something_went_wrong" = "Něco se nepovedlo";
+"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
 "common_starting_chat" = "Zahajování chatu…";
 "common_sticker" = "Nálepka";
 "common_success" = "Úspěch";

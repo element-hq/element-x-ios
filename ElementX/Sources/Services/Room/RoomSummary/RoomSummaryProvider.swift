@@ -274,6 +274,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         default: nil
         }
         
+        cacheRoomUsers(roomInfo)
         let isDirectRoom = (roomInfo.joinedMembersCount <= 2) || (roomInfo.isDirect && roomInfo.joinedMembersCount <= 2)
         let displayName: String? = getDisplayNameFromRoomInfo(roomInfo, isDirectRoom: isDirectRoom)
         let roomAvatar: String? = getRoomAvatarFromRoomInfo(roomInfo, isDirectRoom: isDirectRoom)
@@ -305,6 +306,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     private func getRoomAvatarFromRoomInfo(_ roomInfo: RoomInfo, isDirectRoom: Bool) -> String? {
         return roomInfo.avatarUrl ?? (isDirectRoom ? roomInfo.heroes.first?.avatarUrl : nil)
+    }
+    
+    private func cacheRoomUsers(_ roomInfo: RoomInfo) {
+        roomInfo.heroes.forEach { user in
+            MentionUsersCache.shared.addMentionUser(id: user.userId, name: user.displayName ?? "")
+        }
     }
     
     private func fetchRoomNotificationMode(roomListItem: RoomListItem, roomInfo: RoomInfo) -> RoomNotificationModeProxy? {
