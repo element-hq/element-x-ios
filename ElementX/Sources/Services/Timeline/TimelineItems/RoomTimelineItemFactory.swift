@@ -537,34 +537,48 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     func convertTextToHTML(text: String, htmlBody: String?) -> String {
+        // Constants
         let baseUrl = "https://matrix.to/#/@"
         let domain = ":\(ZeroContants.appServer.matrixHomeServerPostfix)"
         
-        // Use a regular expression to find user mentions in the format @[Name](user:UUID)
-        let regexPattern = #"@\[(.+?)\]\(user:(.+?)\)"#
-        guard let regex = try? NSRegularExpression(pattern: regexPattern, options: []) else {
-            return text
-        }
-        
+        // Check if htmlBody is already properly formatted with mentions
         if let htmlBody = htmlBody, !htmlBody.isEmpty {
-            // check if mentions are there in actual text
             let actualMentionRegex = #"\[@([a-f0-9\-]+:[a-zA-Z0-9\.\-]+)\]\(https:\/\/matrix\.to\/#\/@\1\)"#
-            let mentionRegex = try? NSRegularExpression(pattern: actualMentionRegex, options: [])
-            let matchRange = NSRange(text.startIndex..<text.endIndex, in: text)
-            let matches = mentionRegex?.matches(in: text, options: [], range: matchRange) ?? []
-            // there are mentions and htmlBody is properly formatted
-            if !matches.isEmpty, htmlBody.contains("<a href=") {
+            if let mentionRegex = try? NSRegularExpression(pattern: actualMentionRegex, options: []),
+               let _ = mentionRegex.firstMatch(in: text, range: NSRange(text.startIndex..<text.endIndex, in: text)),
+               htmlBody.contains("<a href=") {
                 return htmlBody
             }
         }
         
-        // Replace matches with the appropriate HTML anchor tags
-        let modifiedText = regex.stringByReplacingMatches(in: text,
-                                                          options: [],
-                                                          range: NSRange(text.startIndex..<text.endIndex, in: text),
-                                                          withTemplate: "<a href=\"\(baseUrl)$2\(domain)\">@$2\(domain)</a>")
+        // Process mentions and cache them
+        let mentionPattern = #"@\[(.+?)\]\(user:(.+?)\)"#
+        guard let regex = try? NSRegularExpression(pattern: mentionPattern, options: []) else {
+            return "<p>\(text)</p>"
+        }
         
-        return "<p>\(modifiedText)</p>\n"
+        let nsRange = NSRange(text.startIndex..<text.endIndex, in: text)
+        let matches = regex.matches(in: text, options: [], range: nsRange)
+        
+        // Cache user mentions in one pass
+        for match in matches {
+            if let nameRange = Range(match.range(at: 1), in: text),
+               let idRange = Range(match.range(at: 2), in: text) {
+                let name = String(text[nameRange])
+                let id = String(text[idRange])
+                MentionUsersCache.shared.addMentionUser(id: "@\(id)\(domain)", name: name)
+            }
+        }
+        
+        // Replace mentions with HTML tags
+        let modifiedText = regex.stringByReplacingMatches(
+            in: text,
+            options: [],
+            range: nsRange,
+            withTemplate: "<a href=\"\(baseUrl)$2\(domain)\">@$2\(domain)</a>"
+        )
+        
+        return "<p>\(modifiedText)</p>"
     }
     
     private func buildAudioTimelineItemContent(_ messageContent: AudioMessageContent) -> AudioRoomTimelineItemContent {

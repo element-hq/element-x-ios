@@ -931,7 +931,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             if let profile = state.members[id] {
                 pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: PillUtilities.userPillDisplayText(username: profile.displayName, userID: id))
             } else {
-                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: id)
+                let fallbackDisplayText = MentionUsersCache.shared.getMentionUserDisplayName(id: id) ?? id
+                pillContext.viewState = .mention(isOwnMention: isOwnMention, displayText: fallbackDisplayText)
                 pillContext.cancellable = context.$viewState
                     .compactMap { $0.members[id] }
                     .sink { [weak pillContext] profile in
