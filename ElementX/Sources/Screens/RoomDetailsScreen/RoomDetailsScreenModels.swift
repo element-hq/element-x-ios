@@ -315,3 +315,14 @@ enum RoomDetailsScreenPinnedEventsActionState {
         }
     }
 }
+
+extension RoomDetailsScreenPinnedEventsActionState {
+    var hasPinnedEvents: Bool {
+        switch self {
+        case .loading:
+            return false
+        case .loaded(numberOfItems: let count):
+            return count > 0
+        }
+    }
+}
