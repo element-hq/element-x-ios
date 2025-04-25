@@ -22,7 +22,7 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: 'element-hq',
               repo: 'element-enterprise',
-              workflow_id: 'ios-pipeline.yml',
+              workflow_id: 'pipeline-ios.yml',
               ref: 'main',
               inputs: inputs
             });
