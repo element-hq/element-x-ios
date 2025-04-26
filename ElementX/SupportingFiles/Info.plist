@@ -72,6 +72,8 @@
 	<string>Grant location access so that $(APP_DISPLAY_NAME) can share your location.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>To record and send messages with audio, $(APP_DISPLAY_NAME) needs to access the microphone.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>To transcribe voice messages to text, $(APP_DISPLAY_NAME) needs to use speech recognition.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Allows saving photos and videos to your library.</string>
 	<key>NSUserActivityTypes</key>

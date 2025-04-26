@@ -363,6 +363,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
         ServiceLocator.shared.register(analytics: AnalyticsService(client: posthogAnalyticsClient,
                                                                    appSettings: appSettings))
+        // Register the transcription manager for voice message transcriptions
+        MXLog.debug("AppCoordinator: About to register TranscriptionManager")
+        ServiceLocator.shared.register(transcriptionManager: AppCoordinator.createTranscriptionManager())
+        MXLog.debug("AppCoordinator: TranscriptionManager registration completed")
     }
     
     /// Perform any required migrations for the app to function correctly.
@@ -861,6 +865,49 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         userSession?.clientProxy.stopSync()
         clientProxyObserver = nil
+    }
+
+    private static func sdkGitSha() -> String {
+        // Placeholder for the SDK git SHA
+        "unknown"
+    }
+    
+    /// Create a TranscriptionManager instance that conforms to TranscriptionManagerProtocol
+    private static func createTranscriptionManager() -> TranscriptionManagerProtocol {
+        MXLog.debug("AppCoordinator: Creating TranscriptionManager")
+        
+        // Simple implementation of TranscriptionManagerProtocol
+        class TranscriptionManager: TranscriptionManagerProtocol {
+            private var transcriptions = [String: TranscriptionData]()
+            private let transcriptionsSubject = CurrentValueSubject<[String: TranscriptionData], Never>([:])
+            
+            var transcriptionsPublisher: AnyPublisher<[String: TranscriptionData], Never> {
+                transcriptionsSubject.eraseToAnyPublisher()
+            }
+            
+            func addTranscription(_ transcription: TranscriptionData) {
+                MXLog.debug("TranscriptionManager: Adding transcription with eventId: \(transcription.eventId), referencedEventId: \(transcription.referencedEventId), transcript: \(transcription.transcript)")
+                
+                // Store the transcription with the referencedEventId as the key
+                transcriptions[transcription.referencedEventId] = transcription
+                
+                // Log the current state of the transcriptions dictionary
+                MXLog.debug("TranscriptionManager: Current transcriptions count: \(transcriptions.count)")
+                for (key, value) in transcriptions {
+                    MXLog.debug("TranscriptionManager: Stored transcription with key: \(key), eventId: \(value.eventId), referencedEventId: \(value.referencedEventId)")
+                }
+                
+                // Send the updated transcriptions to subscribers
+                transcriptionsSubject.send(transcriptions)
+                MXLog.debug("TranscriptionManager: Sent updated transcriptions to subscribers")
+            }
+            
+            func getTranscription(forAudioEventId eventId: String) -> TranscriptionData? {
+                transcriptions[eventId]
+            }
+        }
+        
+        return TranscriptionManager()
     }
 
     private func startSync() {

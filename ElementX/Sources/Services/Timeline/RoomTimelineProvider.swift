@@ -114,7 +114,32 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             guard let items = diff.append() else { fatalError() }
 
             for (index, item) in items.enumerated() {
+                // Add logging for append case
+                MXLog.debug("Append: Creating TimelineItemProxy for item type: \(type(of: item))")
+                
                 let itemProxy = TimelineItemProxy(item: item)
+                
+                // Check if it's an event timeline item
+                if case .event(let eventProxy) = itemProxy {
+                    if let messageContent = eventProxy.content as? MessageContent {
+                        // Log message type
+                        let msgTypeString: String
+                        switch messageContent.msgType {
+                        case .text: msgTypeString = "text"
+                        case .image: msgTypeString = "image"
+                        case .video: msgTypeString = "video"
+                        case .file: msgTypeString = "file"
+                        case .notice: msgTypeString = "notice"
+                        case .emote: msgTypeString = "emote"
+                        case .audio: msgTypeString = "audio"
+                        case .location: msgTypeString = "location"
+                        case .rawStt: msgTypeString = "rawStt"
+                        case .refinedStt: msgTypeString = "refinedStt"
+                        case .other: msgTypeString = "other"
+                        }
+                        MXLog.debug("Append: Message type enum case: \(msgTypeString)")
+                    }
+                }
                 
                 if itemProxy.isMembershipChange {
                     membershipChangeSubject.send(())
@@ -142,6 +167,47 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         case .pushBack:
             guard let item = diff.pushBack() else { fatalError() }
             
+            // Add logging to see what kind of timeline items we're getting from Rust SDK
+            MXLog.debug("PushBack: Creating TimelineItemProxy for item type: \(type(of: item))")
+            
+            // Create a TimelineItemProxy to examine its properties
+            let tempProxy = TimelineItemProxy(item: item)
+            
+            // Log the type of proxy created
+            MXLog.debug("PushBack: Created proxy type: \(type(of: tempProxy))")
+            
+            // Check if it's an event timeline item
+            if case .event(let eventProxy) = tempProxy {
+                MXLog.debug("PushBack: Event timeline item with content type: \(String(describing: type(of: eventProxy.content)))")
+                MXLog.debug("PushBack: Event timeline item content: \(String(describing: eventProxy.content))")
+                
+                // Check if it's a message content
+                if let messageContent = eventProxy.content as? MessageContent {
+                    MXLog.debug("PushBack: Message content msgType: \(messageContent.msgType)")
+                    
+                    // Log more details about the message type
+                    let msgTypeString: String
+                    switch messageContent.msgType {
+                    case .text: msgTypeString = "text"
+                    case .image: msgTypeString = "image"
+                    case .video: msgTypeString = "video"
+                    case .file: msgTypeString = "file"
+                    case .notice: msgTypeString = "notice"
+                    case .emote: msgTypeString = "emote"
+                    case .audio: msgTypeString = "audio"
+                    case .location: msgTypeString = "location"
+                    case .rawStt: msgTypeString = "rawStt"
+                    case .refinedStt: msgTypeString = "refinedStt"
+                    case .other: msgTypeString = "other"
+                    }
+                    MXLog.debug("PushBack: Message type enum case: \(msgTypeString)")
+                } else {
+                    MXLog.debug("PushBack: Content is not a MessageContent")
+                }
+            } else {
+                MXLog.debug("PushBack: Not an event timeline item, but \(tempProxy)")
+            }
+            
             let itemProxy = TimelineItemProxy(item: item)
             
             if itemProxy.isMembershipChange {
@@ -168,7 +234,47 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             }
 
             for (index, timelineItem) in items.enumerated() {
-                changes.append(.insert(offset: index, element: TimelineItemProxy(item: timelineItem), associatedWith: nil))
+                // Add logging for reset case
+                MXLog.debug("Reset: Creating TimelineItemProxy for item type: \(type(of: timelineItem))")
+                
+                // Create proxy to examine
+                let itemProxy = TimelineItemProxy(item: timelineItem)
+                
+                // Log the type of proxy created
+                MXLog.debug("Reset: Created proxy type: \(type(of: itemProxy))")
+                
+                // Check if it's an event timeline item
+                if case .event(let eventProxy) = itemProxy {
+                    MXLog.debug("Reset: Event timeline item with content type: \(String(describing: type(of: eventProxy.content)))")
+                    MXLog.debug("Reset: Event timeline item content: \(String(describing: eventProxy.content))")
+                    
+                    if let messageContent = eventProxy.content as? MessageContent {
+                        // Log message type
+                        MXLog.debug("Reset: Message content msgType: \(messageContent.msgType)")
+                        
+                        let msgTypeString: String
+                        switch messageContent.msgType {
+                        case .text: msgTypeString = "text"
+                        case .image: msgTypeString = "image"
+                        case .video: msgTypeString = "video"
+                        case .file: msgTypeString = "file"
+                        case .notice: msgTypeString = "notice"
+                        case .emote: msgTypeString = "emote"
+                        case .audio: msgTypeString = "audio"
+                        case .location: msgTypeString = "location"
+                        case .rawStt: msgTypeString = "rawStt"
+                        case .refinedStt: msgTypeString = "refinedStt"
+                        case .other: msgTypeString = "other"
+                        }
+                        MXLog.debug("Reset: Message type enum case: \(msgTypeString)")
+                    } else {
+                        MXLog.debug("Reset: Content is not a MessageContent")
+                    }
+                } else {
+                    MXLog.debug("Reset: Not an event timeline item, but \(itemProxy)")
+                }
+                
+                changes.append(.insert(offset: index, element: itemProxy, associatedWith: nil))
             }
         case .set:
             guard let update = diff.set() else { fatalError() }

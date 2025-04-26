@@ -14816,15 +14816,15 @@ class TimelineProxyMock: TimelineProxyProtocol {
     }
     //MARK: - sendTranscriptEvent
 
-    var sendTranscriptEventTranscriptRelatedEventIdUnderlyingCallsCount = 0
-    var sendTranscriptEventTranscriptRelatedEventIdCallsCount: Int {
+    var sendTranscriptEventTranscriptLanguageRelatedEventIdUnderlyingCallsCount = 0
+    var sendTranscriptEventTranscriptLanguageRelatedEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendTranscriptEventTranscriptRelatedEventIdUnderlyingCallsCount
+                return sendTranscriptEventTranscriptLanguageRelatedEventIdUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendTranscriptEventTranscriptRelatedEventIdUnderlyingCallsCount
+                    returnValue = sendTranscriptEventTranscriptLanguageRelatedEventIdUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14832,29 +14832,29 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendTranscriptEventTranscriptRelatedEventIdUnderlyingCallsCount = newValue
+                sendTranscriptEventTranscriptLanguageRelatedEventIdUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendTranscriptEventTranscriptRelatedEventIdUnderlyingCallsCount = newValue
+                    sendTranscriptEventTranscriptLanguageRelatedEventIdUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var sendTranscriptEventTranscriptRelatedEventIdCalled: Bool {
-        return sendTranscriptEventTranscriptRelatedEventIdCallsCount > 0
+    var sendTranscriptEventTranscriptLanguageRelatedEventIdCalled: Bool {
+        return sendTranscriptEventTranscriptLanguageRelatedEventIdCallsCount > 0
     }
-    var sendTranscriptEventTranscriptRelatedEventIdReceivedArguments: (transcript: String, relatedEventId: String?)?
-    var sendTranscriptEventTranscriptRelatedEventIdReceivedInvocations: [(transcript: String, relatedEventId: String?)] = []
+    var sendTranscriptEventTranscriptLanguageRelatedEventIdReceivedArguments: (transcript: String, language: String, relatedEventId: String?)?
+    var sendTranscriptEventTranscriptLanguageRelatedEventIdReceivedInvocations: [(transcript: String, language: String, relatedEventId: String?)] = []
 
-    var sendTranscriptEventTranscriptRelatedEventIdUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var sendTranscriptEventTranscriptRelatedEventIdReturnValue: Result<Void, TimelineProxyError>! {
+    var sendTranscriptEventTranscriptLanguageRelatedEventIdUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var sendTranscriptEventTranscriptLanguageRelatedEventIdReturnValue: Result<Void, TimelineProxyError>! {
         get {
             if Thread.isMainThread {
-                return sendTranscriptEventTranscriptRelatedEventIdUnderlyingReturnValue
+                return sendTranscriptEventTranscriptLanguageRelatedEventIdUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, TimelineProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendTranscriptEventTranscriptRelatedEventIdUnderlyingReturnValue
+                    returnValue = sendTranscriptEventTranscriptLanguageRelatedEventIdUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -14862,26 +14862,26 @@ class TimelineProxyMock: TimelineProxyProtocol {
         }
         set {
             if Thread.isMainThread {
-                sendTranscriptEventTranscriptRelatedEventIdUnderlyingReturnValue = newValue
+                sendTranscriptEventTranscriptLanguageRelatedEventIdUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendTranscriptEventTranscriptRelatedEventIdUnderlyingReturnValue = newValue
+                    sendTranscriptEventTranscriptLanguageRelatedEventIdUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var sendTranscriptEventTranscriptRelatedEventIdClosure: ((String, String?) async -> Result<Void, TimelineProxyError>)?
+    var sendTranscriptEventTranscriptLanguageRelatedEventIdClosure: ((String, String, String?) async -> Result<Void, TimelineProxyError>)?
 
-    func sendTranscriptEvent(transcript: String, relatedEventId: String?) async -> Result<Void, TimelineProxyError> {
-        sendTranscriptEventTranscriptRelatedEventIdCallsCount += 1
-        sendTranscriptEventTranscriptRelatedEventIdReceivedArguments = (transcript: transcript, relatedEventId: relatedEventId)
+    func sendTranscriptEvent(transcript: String, language: String, relatedEventId: String?) async -> Result<Void, TimelineProxyError> {
+        sendTranscriptEventTranscriptLanguageRelatedEventIdCallsCount += 1
+        sendTranscriptEventTranscriptLanguageRelatedEventIdReceivedArguments = (transcript: transcript, language: language, relatedEventId: relatedEventId)
         DispatchQueue.main.async {
-            self.sendTranscriptEventTranscriptRelatedEventIdReceivedInvocations.append((transcript: transcript, relatedEventId: relatedEventId))
+            self.sendTranscriptEventTranscriptLanguageRelatedEventIdReceivedInvocations.append((transcript: transcript, language: language, relatedEventId: relatedEventId))
         }
-        if let sendTranscriptEventTranscriptRelatedEventIdClosure = sendTranscriptEventTranscriptRelatedEventIdClosure {
-            return await sendTranscriptEventTranscriptRelatedEventIdClosure(transcript, relatedEventId)
+        if let sendTranscriptEventTranscriptLanguageRelatedEventIdClosure = sendTranscriptEventTranscriptLanguageRelatedEventIdClosure {
+            return await sendTranscriptEventTranscriptLanguageRelatedEventIdClosure(transcript, language, relatedEventId)
         } else {
-            return sendTranscriptEventTranscriptRelatedEventIdReturnValue
+            return sendTranscriptEventTranscriptLanguageRelatedEventIdReturnValue
         }
     }
     //MARK: - sendVoiceMessage

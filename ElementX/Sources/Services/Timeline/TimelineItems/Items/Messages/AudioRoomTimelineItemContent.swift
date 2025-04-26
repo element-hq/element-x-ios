@@ -18,4 +18,5 @@ struct AudioRoomTimelineItemContent: Hashable {
     let waveform: EstimatedWaveform?
     let source: MediaSourceProxy?
     let contentType: UTType?
+    var transcription: String?
 }

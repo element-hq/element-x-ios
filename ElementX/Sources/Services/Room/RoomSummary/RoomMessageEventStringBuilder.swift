@@ -64,6 +64,10 @@ struct RoomMessageEventStringBuilder {
             } else {
                 message = AttributedString(content.body)
             }
+        case .rawStt:
+            message = AttributedString(L10n.commonUnsupportedEvent)
+        case .refinedStt(let content):
+            message = AttributedString(L10n.commonUnsupportedEvent)
         case .other(_, let body):
             message = AttributedString(body)
         }

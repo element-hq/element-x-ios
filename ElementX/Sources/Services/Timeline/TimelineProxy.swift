@@ -355,9 +355,10 @@ final class TimelineProxy: TimelineProxyProtocol {
         return .success(())
     }
 
-    func sendTranscriptEvent(transcript: String, relatedEventId: String? = nil) async -> Result<Void, TimelineProxyError> {
-        // Create a custom message type
-        let messageType = MessageType.other(msgtype: "m.voyzme.raw_stt", body: transcript)
+    func sendTranscriptEvent(transcript: String, language: String = "en-US", relatedEventId: String? = nil) async -> Result<Void, TimelineProxyError> {
+        // Create a custom message type with the proper content object
+        let content = RawSttMessageContent(body: transcript, language: language, formatted: nil)
+        let messageType = MessageType.rawStt(content: content)
         
         do {
             // Use the Timeline API to create the message content

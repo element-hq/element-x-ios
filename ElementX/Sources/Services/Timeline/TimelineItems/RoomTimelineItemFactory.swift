@@ -5,6 +5,7 @@
 // Please see LICENSE in the repository root for full details.
 //
 
+import Foundation
 import MatrixRustSDK
 import UIKit
 import UniformTypeIdentifiers
@@ -26,7 +27,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     func buildTimelineItem(for eventItemProxy: EventTimelineItemProxy, isDM: Bool) -> RoomTimelineItemProtocol? {
         let isOutgoing = eventItemProxy.isOwn
-        
+                
         switch eventItemProxy.content {
         case .unableToDecrypt(let encryptedMessage):
             return buildEncryptedTimelineItem(eventItemProxy, encryptedMessage, isOutgoing)
@@ -74,6 +75,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     // MARK: - Message Events
     
     private func buildMessageTimelineItem(_ eventItemProxy: EventTimelineItemProxy, _ messageContent: MessageContent, _ isOutgoing: Bool) -> RoomTimelineItemProtocol? {
+        // Add more detailed logging to see the exact message type
+        MXLog.debug("Processing message type: \(messageContent.msgType)")
+        
         switch messageContent.msgType {
         case .text(content: let textMessageContent):
             return buildTextTimelineItem(for: eventItemProxy, messageContent, textMessageContent, isOutgoing)
@@ -95,9 +99,111 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             }
         case .location(let locationMessageContent):
             return buildLocationTimelineItem(for: eventItemProxy, messageContent, locationMessageContent, isOutgoing)
+        case .rawStt:
+            MXLog.debug("Processing .rawSTT message type")
+            // We don't display raw STT events in the timeline
+            return nil
+        case .refinedStt(let refinedSTTContent):
+            MXLog.debug("Processing .refinedSTT message type")
+            MXLog.debug("RefinedSTTContent type: \(type(of: refinedSTTContent))")
+            MXLog.debug("RefinedSTTContent value: \(refinedSTTContent)")
+            
+            // Log the event ID and sender
+            MXLog.debug("Event ID: \(eventItemProxy.id.eventID ?? "nil")")
+            
+            // Process the refined STT event and store the transcription
+            let success = processRefinedSttEvent(eventItemProxy, refinedSTTContent: refinedSTTContent)
+            MXLog.debug("Processed .refinedSTT event, success: \(success)")
+            return nil
         case .other:
             return nil
         }
+    }
+    
+    /// Process a refined STT event and store the transcription
+    /// - Parameters:
+    ///   - event: The event to process
+    ///   - refinedSTTContent: The content of the refined STT message type
+    /// - Returns: true if the event was processed successfully, false otherwise
+    private func processRefinedSttEvent(_ event: EventTimelineItemProxy, refinedSTTContent: Any) -> Bool {
+        // Log the input parameters
+        MXLog.debug("Processing refined STT event with ID: \(event.id.eventID ?? "nil")")
+        MXLog.debug("RefinedSTTContent type: \(type(of: refinedSTTContent))")
+        MXLog.debug("RefinedSTTContent value: \(refinedSTTContent)")
+        
+        // Extract the body and referenced event ID based on the content type
+        var body = ""
+        var referencedEventId = ""
+        
+        if let refinedContent = refinedSTTContent as? RefinedSttMessageContent {
+            // Handle RefinedSttMessageContent from the Rust SDK
+            MXLog.debug("Processing RefinedSttMessageContent from Rust SDK")
+            body = refinedContent.body
+            
+            // First try to get the relatedEvent from the RefinedSttMessageContent struct
+            // This is the field we added to the Rust struct
+            if let relatedEvent = refinedContent.relatedEvent {
+                referencedEventId = relatedEvent
+                MXLog.debug("Found referenced event ID from RefinedSttMessageContent.relatedEvent: \(referencedEventId)")
+            } else {
+                // Fallback: Extract the referenced event ID from the event content
+                MXLog.debug("No relatedEvent field found in RefinedSttMessageContent, trying event content")
+                if let eventContent = event.content as? [String: Any],
+                   let relatesTo = eventContent["m.relates_to"] as? [String: Any],
+                   let eventId = relatesTo["event_id"] as? String {
+                    referencedEventId = eventId
+                    MXLog.debug("Found referenced event ID from event content: \(referencedEventId)")
+                } else {
+                    MXLog.warning("No reference relation found in event content")
+                    return false
+                }
+            }
+        } else if let content = refinedSTTContent as? [String: Any] {
+            // Fallback for dictionary content (legacy or test cases)
+            MXLog.debug("Processing dictionary content: \(content)")
+            
+            // Extract the transcript and referenced event ID
+            guard let extractedBody = content["body"] as? String else {
+                MXLog.warning("Missing body in refined STT event")
+                return false
+            }
+            body = extractedBody
+            
+            guard let relatesTo = content["m.relates_to"] as? [String: Any] else {
+                MXLog.warning("Missing m.relates_to in refined STT event")
+                return false
+            }
+            
+            guard let extractedEventId = relatesTo["event_id"] as? String else {
+                MXLog.warning("Missing event_id in m.relates_to")
+                return false
+            }
+            referencedEventId = extractedEventId
+        } else {
+            MXLog.warning("Unsupported content type for refined STT event: \(type(of: refinedSTTContent))")
+            return false
+        }
+        
+        MXLog.debug("Successfully extracted body: \(body) and referencedEventId: \(referencedEventId)")
+        
+        // Get the current event ID
+        let currentEventId = event.id.eventID ?? ""
+        MXLog.debug("RoomTimelineItemFactory: Current event ID (refined STT event): \(currentEventId)")
+        
+        // Create transcription data
+        let transcription = TranscriptionData(eventId: currentEventId, // The ID of the refined STT event
+                                              referencedEventId: referencedEventId, // The ID of the audio message this transcription refers to
+                                              transcript: body,
+                                              timestamp: event.timestamp)
+        
+        MXLog.debug("RoomTimelineItemFactory: Created TranscriptionData with eventId: \(transcription.eventId), referencedEventId: \(transcription.referencedEventId), transcript: \(transcription.transcript)")
+        
+        // Add to transcription manager
+        ServiceLocator.shared.transcriptionManager.addTranscription(transcription)
+        MXLog.debug("RoomTimelineItemFactory: Added transcription to TranscriptionManager")
+        
+        MXLog.debug("Processed refined STT event: \(event.id) referencing: \(referencedEventId)")
+        return true
     }
     
     private func buildUnsupportedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
@@ -730,6 +836,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             replyContent = .video(buildVideoTimelineItemContent(content))
         case .location(let content):
             replyContent = .location(buildLocationTimelineItemContent(content))
+        case .rawStt:
+            replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
+        case .refinedStt:
+            replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
         case .other, .none:
             replyContent = .text(.init(body: L10n.commonUnsupportedEvent))
         }
