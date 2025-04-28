@@ -18,6 +18,8 @@ class RoomStateEventStringBuilderTests: XCTestCase {
         stringBuilder = RoomStateEventStringBuilder(userID: userID)
     }
     
+    // MARK: - User Profiles
+    
     func testDisplayNameChanges() {
         // Changes by you.
         validateDisplayNameChange(senderID: userID, oldName: "Alice", newName: "Bob",
@@ -81,6 +83,8 @@ class RoomStateEventStringBuilderTests: XCTestCase {
         XCTAssertEqual(string, expectedString)
     }
     
+    // MARK: - Room Info
+    
     func testTopicChanges() {
         let you = TimelineItemSender(id: userID, displayName: "Alice")
         let other = TimelineItemSender(id: "@bob:matrix.org", displayName: "Bob")
@@ -101,5 +105,79 @@ class RoomStateEventStringBuilderTests: XCTestCase {
         XCTAssertEqual(string, L10n.stateEventRoomTopicRemovedByYou)
         string = stringBuilder.buildString(for: .roomTopic(topic: nil), sender: other, isOutgoing: false)
         XCTAssertEqual(string, L10n.stateEventRoomTopicRemoved(other.displayName ?? ""))
+    }
+    
+    // MARK: - Room Membership
+    
+    func testKickMember() {
+        let you = TimelineItemSender(id: userID, displayName: "Alice")
+        let other = TimelineItemSender(id: "@bob:matrix.org", displayName: "Bob")
+        let banned = TimelineItemSender(id: "@spam:matrix.org", displayName: "I like spam")
+        
+        let reason = "Spam"
+        var string = stringBuilder.buildString(for: .kicked,
+                                               reason: reason,
+                                               memberUserID: banned.id,
+                                               memberDisplayName: banned.displayName,
+                                               sender: you,
+                                               isOutgoing: true)
+        XCTAssertEqual(string, L10n.stateEventRoomRemoveByYouWithReason(banned.displayName ?? banned.id, reason))
+        string = stringBuilder.buildString(for: .kicked,
+                                           reason: nil,
+                                           memberUserID: banned.id,
+                                           memberDisplayName: banned.displayName,
+                                           sender: you,
+                                           isOutgoing: true)
+        XCTAssertEqual(string, L10n.stateEventRoomRemoveByYou(banned.displayName ?? banned.id))
+        string = stringBuilder.buildString(for: .kicked,
+                                           reason: reason,
+                                           memberUserID: banned.id,
+                                           memberDisplayName: banned.displayName,
+                                           sender: other,
+                                           isOutgoing: false)
+        XCTAssertEqual(string, L10n.stateEventRoomRemoveWithReason(other.displayName ?? other.id, banned.displayName ?? banned.id, reason))
+        string = stringBuilder.buildString(for: .kicked,
+                                           reason: nil,
+                                           memberUserID: banned.id,
+                                           memberDisplayName: banned.displayName,
+                                           sender: other,
+                                           isOutgoing: false)
+        XCTAssertEqual(string, L10n.stateEventRoomRemove(other.displayName ?? other.id, banned.displayName ?? banned.id))
+    }
+    
+    func testBanMember() {
+        let you = TimelineItemSender(id: userID, displayName: "Alice")
+        let other = TimelineItemSender(id: "@bob:matrix.org", displayName: "Bob")
+        let banned = TimelineItemSender(id: "@spam:matrix.org", displayName: "I like spam")
+        
+        let reason = "Spam"
+        var string = stringBuilder.buildString(for: .banned,
+                                               reason: reason,
+                                               memberUserID: banned.id,
+                                               memberDisplayName: banned.displayName,
+                                               sender: you,
+                                               isOutgoing: true)
+        XCTAssertEqual(string, L10n.stateEventRoomBanByYouWithReason(banned.displayName ?? banned.id, reason))
+        string = stringBuilder.buildString(for: .banned,
+                                           reason: nil,
+                                           memberUserID: banned.id,
+                                           memberDisplayName: banned.displayName,
+                                           sender: you,
+                                           isOutgoing: true)
+        XCTAssertEqual(string, L10n.stateEventRoomBanByYou(banned.displayName ?? banned.id))
+        string = stringBuilder.buildString(for: .banned,
+                                           reason: reason,
+                                           memberUserID: banned.id,
+                                           memberDisplayName: banned.displayName,
+                                           sender: other,
+                                           isOutgoing: false)
+        XCTAssertEqual(string, L10n.stateEventRoomBanWithReason(other.displayName ?? other.id, banned.displayName ?? banned.id, reason))
+        string = stringBuilder.buildString(for: .banned,
+                                           reason: nil,
+                                           memberUserID: banned.id,
+                                           memberDisplayName: banned.displayName,
+                                           sender: other,
+                                           isOutgoing: false)
+        XCTAssertEqual(string, L10n.stateEventRoomBan(other.displayName ?? other.id, banned.displayName ?? banned.id))
     }
 }
