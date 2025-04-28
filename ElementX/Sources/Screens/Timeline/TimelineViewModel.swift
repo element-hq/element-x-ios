@@ -823,6 +823,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func fetchAndUpdatedLinkPreview(for item: RoomTimelineItemProtocol) {
+        guard state.linkPreviewsMap[item.id] == nil else { return }
         if let textContent = (item as? TextRoomTimelineItem)?.content,
            let firstAvailableLink = firstNonMatrixLink(from: textContent.body) {
             Task {

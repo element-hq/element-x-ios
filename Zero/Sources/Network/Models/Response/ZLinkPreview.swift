@@ -13,8 +13,8 @@ struct ZLinkPreview: Codable, Hashable {
     let title: String?
     let html: String?
     let description: String?
-    let providerName: String
-    let authorName: String
+    let providerName: String?
+    let authorName: String?
     let thumbnail: Thumbnail?
 }
 
