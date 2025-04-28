@@ -15,11 +15,12 @@ enum PollFormScreenViewModelAction: Equatable {
 
 struct PollFormScreenViewState: BindableState {
     let mode: PollFormMode
-    let maxNumberOfOptions = 20
+    let maxNumberOfOptions: Int
     var bindings: PollFormScreenViewStateBindings = .init()
     
-    init(mode: PollFormMode) {
+    init(mode: PollFormMode, maxNumberOfOptions: Int) {
         self.mode = mode
+        self.maxNumberOfOptions = maxNumberOfOptions
         
         switch mode {
         case .new:

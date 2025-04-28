@@ -156,38 +156,39 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 0) {
             HomeScreenInviteCell(room: .dmInvite,
-                                 context: viewModel().context, hideInviteAvatars: false)
+                                 context: makeViewModel().context, hideInviteAvatars: false)
             
             HomeScreenInviteCell(room: .dmInvite,
-                                 context: viewModel().context, hideInviteAvatars: false)
+                                 context: makeViewModel().context, hideInviteAvatars: false)
             
             HomeScreenInviteCell(room: .roomInvite(),
-                                 context: viewModel().context, hideInviteAvatars: false)
+                                 context: makeViewModel().context, hideInviteAvatars: false)
             
             HomeScreenInviteCell(room: .roomInvite(),
-                                 context: viewModel().context, hideInviteAvatars: false)
+                                 context: makeViewModel().context, hideInviteAvatars: false)
             
             HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org", avatarURL: .mockMXCAvatar),
-                                 context: viewModel().context, hideInviteAvatars: false)
+                                 context: makeViewModel().context, hideInviteAvatars: false)
             HomeScreenInviteCell(room: .roomInvite(alias: "#footest-hidden-avatars:somewhere.org", avatarURL: .mockMXCAvatar),
-                                 context: viewModel().context, hideInviteAvatars: true)
+                                 context: makeViewModel().context, hideInviteAvatars: true)
             HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org"),
-                                 context: viewModel().context, hideInviteAvatars: false)
+                                 context: makeViewModel().context, hideInviteAvatars: false)
                 .dynamicTypeSize(.accessibility1)
                 .previewDisplayName("Aliased room (AX1)")
         }
         .previewLayout(.sizeThatFits)
     }
     
-    static func viewModel() -> HomeScreenViewModel {
+    static func makeViewModel() -> HomeScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
         return HomeScreenViewModel(userSession: userSession,
-                                   analyticsService: ServiceLocator.shared.analytics,
-                                   appSettings: ServiceLocator.shared.settings,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   appSettings: ServiceLocator.shared.settings,
+                                   analyticsService: ServiceLocator.shared.analytics,
+                                   notificationManager: NotificationManagerMock(),
                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }
@@ -207,7 +208,7 @@ private extension HomeScreenRoom {
                                   avatarURL: nil,
                                   heroes: [.init(userID: "@someone:somewhere.com")],
                                   lastMessage: nil,
-                                  lastMessageFormattedTimestamp: nil,
+                                  lastMessageDate: nil,
                                   unreadMessagesCount: 0,
                                   unreadMentionsCount: 0,
                                   unreadNotificationsCount: 0,
@@ -235,7 +236,7 @@ private extension HomeScreenRoom {
                                   avatarURL: avatarURL,
                                   heroes: [.init(userID: "@someone:somewhere.com")],
                                   lastMessage: nil,
-                                  lastMessageFormattedTimestamp: nil,
+                                  lastMessageDate: nil,
                                   unreadMessagesCount: 0,
                                   unreadMentionsCount: 0,
                                   unreadNotificationsCount: 0,

@@ -157,7 +157,6 @@ struct ZeroLoginScreen_Previews: PreviewProvider, TestablePreview {
         Task { await authenticationService.configure(for: homeserverAddress, flow: .login) }
         
         let viewModel = LoginScreenViewModel(authenticationService: authenticationService,
-                                             slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                              userIndicatorController: UserIndicatorControllerMock(),
                                              analytics: ServiceLocator.shared.analytics)
         

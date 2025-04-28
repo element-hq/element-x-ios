@@ -252,11 +252,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         var attributedLastMessage: AttributedString?
-        var lastMessageFormattedTimestamp: String?
+        var lastMessageDate: Date?
         
         if let latestRoomMessage = roomDetails.latestEvent {
             let lastMessage = EventTimelineItemProxy(item: latestRoomMessage, uniqueID: .init("0"))
-            lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
+            lastMessageDate = lastMessage.timestamp
             attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage, lastMessageSender: roomDetails.lastMessageSenderProfile)
         }
         
@@ -288,7 +288,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            avatarURL: roomAvatar.flatMap(URL.init(string:)),
                            heroes: roomInfo.heroes.map(UserProfileProxy.init),
                            lastMessage: attributedLastMessage,
-                           lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
+                           lastMessageDate: lastMessageDate,
                            unreadMessagesCount: UInt(roomInfo.numUnreadMessages),
                            unreadMentionsCount: UInt(roomInfo.numUnreadMentions),
                            unreadNotificationsCount: UInt(roomInfo.numUnreadNotifications),

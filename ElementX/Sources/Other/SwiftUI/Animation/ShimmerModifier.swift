@@ -8,6 +8,13 @@
 import Combine
 import SwiftUI
 
+extension View {
+    /// Applies a shimmering effect to the view.
+    func shimmer() -> some View {
+        modifier(ShimmerModifier())
+    }
+}
+
 /// A view modifier that applies a shimmering effect to the view.
 struct ShimmerModifier: ViewModifier {
     /// A boolean which is toggled to trigger the animation.
@@ -59,18 +66,12 @@ struct ShimmerModifier: ViewModifier {
     }
 }
 
-extension View {
-    /// Applies a shimmering effect to the view.
-    func shimmer() -> some View {
-        modifier(ShimmerModifier())
-    }
-}
-
 struct ShimmerOverlay_Previews: PreviewProvider, TestablePreview {
     static let viewModel = HomeScreenViewModel(userSession: UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "")))),
-                                               analyticsService: ServiceLocator.shared.analytics,
-                                               appSettings: ServiceLocator.shared.settings,
                                                selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                               appSettings: ServiceLocator.shared.settings,
+                                               analyticsService: ServiceLocator.shared.analytics,
+                                               notificationManager: NotificationManagerMock(),
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController)
     
     static var previews: some View {

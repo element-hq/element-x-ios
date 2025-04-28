@@ -40,7 +40,7 @@ struct RoomSummary {
     let avatarURL: URL?
     let heroes: [UserProfileProxy]
     let lastMessage: AttributedString?
-    let lastMessageFormattedTimestamp: String?
+    let lastMessageDate: Date?
     let unreadMessagesCount: UInt
     let unreadMentionsCount: UInt
     let unreadNotificationsCount: UInt
@@ -95,7 +95,7 @@ extension RoomSummary {
         avatarURL = nil
         heroes = []
         lastMessage = AttributedString(string)
-        lastMessageFormattedTimestamp = "Now"
+        lastMessageDate = .mock
         unreadMessagesCount = hasUnreadMessages ? 1 : 0
         unreadMentionsCount = hasUnreadMentions ? 1 : 0
         unreadNotificationsCount = hasUnreadNotifications ? 1 : 0

@@ -20,6 +20,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private let userSession: UserSessionProtocol
     private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
+    private let notificationManager: NotificationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
@@ -37,13 +38,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private var roomNotificationUpdateMap: [String: RoomNotificationModeProxy] = [:]
     
     init(userSession: UserSessionProtocol,
-         analyticsService: AnalyticsService,
-         appSettings: AppSettings,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
+         appSettings: AppSettings,
+         analyticsService: AnalyticsService,
+         notificationManager: NotificationManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
         self.analyticsService = analyticsService
         self.appSettings = appSettings
+        self.notificationManager = notificationManager
         self.userIndicatorController = userIndicatorController
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
@@ -529,6 +532,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         if case .failure = result {
             displayError()
         } else {
+            await notificationManager.removeDeliveredMessageNotifications(for: roomID) // Normally handled by the room flow, but that's never presented in this case.
             appSettings.seenInvites.remove(roomID)
         }
     }

@@ -117,7 +117,6 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = ServerSelectionScreenCoordinator(parameters: .init(authenticationService: AuthenticationService.mock,
                                                                                  authenticationFlow: .login,
-                                                                                 slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -648,7 +647,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .createPoll:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = PollFormScreenCoordinator(parameters: .init(mode: .new))
+            let coordinator = PollFormScreenCoordinator(parameters: .init(mode: .new, maxNumberOfOptions: 10))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .encryptionSettings, .encryptionSettingsOutOfSync:

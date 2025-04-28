@@ -10,6 +10,8 @@ import SwiftUI
 
 struct PollFormScreenCoordinatorParameters {
     let mode: PollFormMode
+    /// The max number of allowed options, if no value provided the default value of the view model will be used.
+    var maxNumberOfOptions: Int?
 }
 
 enum PollFormScreenCoordinatorAction {
@@ -28,7 +30,7 @@ final class PollFormScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: PollFormScreenCoordinatorParameters) {
-        viewModel = PollFormScreenViewModel(mode: parameters.mode)
+        viewModel = PollFormScreenViewModel(mode: parameters.mode, maxNumberOfOptions: parameters.maxNumberOfOptions)
     }
     
     func start() {

@@ -31,7 +31,6 @@ class LoginScreenViewModelTests: XCTestCase {
         }
         
         viewModel = LoginScreenViewModel(authenticationService: service,
-                                         slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                          userIndicatorController: UserIndicatorControllerMock(),
                                          analytics: ServiceLocator.shared.analytics)
     }

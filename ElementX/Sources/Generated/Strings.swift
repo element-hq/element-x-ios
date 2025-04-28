@@ -1179,14 +1179,14 @@ internal enum L10n {
   internal static func screenChangeServerErrorInvalidWellKnown(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_invalid_well_known", String(describing: p1))
   }
-  /// This server currently doesn’t support sliding sync.
-  internal static var screenChangeServerErrorNoSlidingSyncMessage: String { return L10n.tr("Localizable", "screen_change_server_error_no_sliding_sync_message") }
+  /// The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.
+  internal static func screenChangeServerErrorNoSlidingSyncMessage(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_change_server_error_no_sliding_sync_message", String(describing: p1))
+  }
   /// Homeserver URL
   internal static var screenChangeServerFormHeader: String { return L10n.tr("Localizable", "screen_change_server_form_header") }
-  /// You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %1$@
-  internal static func screenChangeServerFormNotice(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_change_server_form_notice", String(describing: p1))
-  }
+  /// Enter a domain address.
+  internal static var screenChangeServerFormNotice: String { return L10n.tr("Localizable", "screen_change_server_form_notice") }
   /// What is the address of your server?
   internal static var screenChangeServerSubtitle: String { return L10n.tr("Localizable", "screen_change_server_subtitle") }
   /// Select your server
@@ -2670,6 +2670,14 @@ internal enum L10n {
   internal static func stateEventRoomBanByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_ban_by_you", String(describing: p1))
   }
+  /// You banned %1$@: %2$@
+  internal static func stateEventRoomBanByYouWithReason(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "state_event_room_ban_by_you_with_reason", String(describing: p1), String(describing: p2))
+  }
+  /// %1$@ banned %2$@: %3$@
+  internal static func stateEventRoomBanWithReason(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
+    return L10n.tr("Localizable", "state_event_room_ban_with_reason", String(describing: p1), String(describing: p2), String(describing: p3))
+  }
   /// %1$@ created the room
   internal static func stateEventRoomCreated(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_created", String(describing: p1))
@@ -2789,6 +2797,14 @@ internal enum L10n {
   /// You removed %1$@
   internal static func stateEventRoomRemoveByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_remove_by_you", String(describing: p1))
+  }
+  /// You removed %1$@: %2$@
+  internal static func stateEventRoomRemoveByYouWithReason(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "state_event_room_remove_by_you_with_reason", String(describing: p1), String(describing: p2))
+  }
+  /// %1$@ removed %2$@: %3$@
+  internal static func stateEventRoomRemoveWithReason(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
+    return L10n.tr("Localizable", "state_event_room_remove_with_reason", String(describing: p1), String(describing: p2), String(describing: p3))
   }
   /// %1$@ sent an invitation to %2$@ to join the room
   internal static func stateEventRoomThirdPartyInvite(_ p1: Any, _ p2: Any) -> String {

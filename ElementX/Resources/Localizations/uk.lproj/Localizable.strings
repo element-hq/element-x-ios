@@ -240,7 +240,7 @@
 "common_shared_location" = "Поширене розташування";
 "common_signing_out" = "Вихід";
 "common_something_went_wrong" = "Щось пішло не так";
-"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_something_went_wrong_message" = "Ми зіткнулися з проблемою. Будь ласка, повторіть спробу.";
 "common_starting_chat" = "Початок бесіди...";
 "common_sticker" = "Наліпка";
 "common_success" = "Успіх";
@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Змінити провайдера облікового запису";
 "screen_change_server_error_invalid_homeserver" = "Не вдалося під'єднатися до цього домашнього сервера. Перевірте правильність введеної URL-адреси домашнього сервера. Якщо URL-адреса правильна, зверніться по додаткову допомогу до адміністратора домашнього сервера.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync недоступний через проблему у файлі well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Наразі цей сервер не підтримує sliding sync.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "URL-адреса домашнього сервера";
-"screen_change_server_form_notice" = "Ви можете під'єднатися лише до наявного сервера, який підтримує sliding sync. Адміністратор вашого домашнього сервера повинен буде налаштувати його. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Яка адреса вашого сервера?";
 "screen_change_server_title" = "Виберіть свій сервер";
 "screen_chat_backup_key_backup_action_disable" = "Вимкнути резервне копіювання";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Ви видалили аватар кімнати";
 "state_event_room_ban" = "%1$@ блокує %2$@";
 "state_event_room_ban_by_you" = "Ви заблокували %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ створює кімнату";
 "state_event_room_created_by_you" = "Ви створили кімнату";
 "state_event_room_invite" = "%1$@ запрошує %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Ви відхилили запрошення";
 "state_event_room_remove" = "%1$@ вилучає %2$@";
 "state_event_room_remove_by_you" = "Ви видалили %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ запрошує %2$@ приєднатися до кімнати";
 "state_event_room_third_party_invite_by_you" = "Ви запросили %1$@ приєднатися до кімнати";
 "state_event_room_third_party_revoked_invite" = "%1$@ відкликає запрошення приєднатися до кімнати для %2$@";
