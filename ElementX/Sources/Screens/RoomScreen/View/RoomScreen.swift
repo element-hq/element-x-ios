@@ -42,7 +42,7 @@ struct RoomScreen: View {
                         roomContext.send(viewAction: .footerViewAction(action))
                     }
                     
-                    composerToolbar
+                    composer
                         .padding(.bottom, composerToolbarContext.composerFormattingEnabled ? 8 : 12)
                         .background {
                             if composerToolbarContext.composerFormattingEnabled {
@@ -189,6 +189,18 @@ struct RoomScreen: View {
     }
     
     @ViewBuilder
+    private var composer: some View {
+        if roomContext.viewState.canSendMessage {
+            composerToolbar
+        } else {
+            Text(L10n.screenRoomTimelineNoPermissionToPost)
+                .font(.compound.bodyLG)
+                .foregroundStyle(.compound.textDisabled)
+                .padding(.vertical, 10) // Matches the MessageComposerStyleModifier
+        }
+    }
+    
+    @ViewBuilder
     private var loadingIndicator: some View {
         if timelineContext.viewState.showLoading {
             ProgressView()
@@ -257,28 +269,49 @@ struct RoomScreen: View {
 // MARK: - Previews
 
 struct RoomScreen_Previews: PreviewProvider, TestablePreview {
-    static let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
-                                                         name: "Preview room",
-                                                         hasOngoingCall: true))
-    static let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
-    static let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
-                                                     timelineController: MockTimelineController(),
-                                                     mediaProvider: MediaProviderMock(configuration: .init()),
-                                                     mediaPlayerProvider: MediaPlayerProviderMock(),
-                                                     voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
-                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                     appMediator: AppMediatorMock.default,
-                                                     appSettings: ServiceLocator.shared.settings,
-                                                     analyticsService: ServiceLocator.shared.analytics,
-                                                     emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                                     timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                                     clientProxy: ClientProxyMock(.init()))
+    static let viewModels = makeViewModels()
+    static let readOnlyViewModels = makeViewModels(canSendMessage: false)
 
     static var previews: some View {
         NavigationStack {
-            RoomScreen(roomViewModel: roomViewModel,
-                       timelineViewModel: timelineViewModel,
+            RoomScreen(roomViewModel: viewModels.room,
+                       timelineViewModel: viewModels.timeline,
                        composerToolbar: ComposerToolbar.mock())
         }
+        .previewDisplayName("Normal")
+        
+        NavigationStack {
+            RoomScreen(roomViewModel: readOnlyViewModels.room,
+                       timelineViewModel: readOnlyViewModels.timeline,
+                       composerToolbar: ComposerToolbar.mock())
+        }
+        .previewDisplayName("Read-only")
+    }
+    
+    static func makeViewModels(canSendMessage: Bool = true) -> ViewModels {
+        let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
+                                                      name: "Preview room",
+                                                      hasOngoingCall: true,
+                                                      canUserSendMessage: canSendMessage))
+        let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
+        let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
+                                                  timelineController: MockTimelineController(),
+                                                  mediaProvider: MediaProviderMock(configuration: .init()),
+                                                  mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                  voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
+                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                  appMediator: AppMediatorMock.default,
+                                                  appSettings: ServiceLocator.shared.settings,
+                                                  analyticsService: ServiceLocator.shared.analytics,
+                                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                                  clientProxy: ClientProxyMock(.init()))
+        
+        return .init(room: roomViewModel, timeline: timelineViewModel)
+    }
+    
+    struct ViewModels {
+        let room: RoomScreenViewModelProtocol
+        let timeline: TimelineViewModelProtocol
     }
 }

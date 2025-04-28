@@ -340,6 +340,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         let ownUserID = roomProxy.ownUserID
+        state.canSendMessage = await (try? roomProxy.canUser(userID: ownUserID, sendMessage: .roomMessage).get()) == true
         state.canJoinCall = await (try? roomProxy.canUserJoinCall(userID: ownUserID).get()) == true
         state.canAcceptKnocks = await (try? roomProxy.canUserInvite(userID: ownUserID).get()) == true
         state.canDeclineKnocks = await (try? roomProxy.canUserKick(userID: ownUserID).get()) == true

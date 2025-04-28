@@ -40,6 +40,7 @@ struct RoomScreenViewState: BindableState {
         !pinnedEventsBannerState.isEmpty && lastScrollDirection != .top
     }
     
+    var canSendMessage = true
     var canJoinCall = false
     var hasOngoingCall: Bool
     var shouldShowCallButton = true
