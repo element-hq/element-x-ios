@@ -18,6 +18,7 @@ protocol ZeroApiProxyProtocol {
     var channelsApi: ZeroChannelsApiProtocol { get }
     var walletsApi: ZeroWalletsApiProtocol { get }
     var chatApi: ZeroChatApiProtocol { get }
+    var metaDataApi: ZeroMetaDataApiProtocol { get }
 }
 
 class ZeroApiProxy: ZeroApiProxyProtocol {
@@ -32,6 +33,7 @@ class ZeroApiProxy: ZeroApiProxyProtocol {
     let channelsApi: ZeroChannelsApiProtocol
     let walletsApi: ZeroWalletsApiProtocol
     let chatApi: ZeroChatApiProtocol
+    let metaDataApi: ZeroMetaDataApiProtocol
     
     init(client: ClientProtocol, appSettings: AppSettings) {
         /// Configure Zero Utlils, Services and APIs
@@ -47,5 +49,6 @@ class ZeroApiProxy: ZeroApiProxyProtocol {
         channelsApi = ZeroChannelsApi(appSettings: appSettings)
         walletsApi = ZeroWalletsApi(appSettings: appSettings)
         chatApi = ZeroChatApi(appSettings: appSettings)
+        metaDataApi = ZeroMetaDataApi(appSettings: appSettings)
     }
 }

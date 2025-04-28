@@ -76,6 +76,8 @@ enum TimelineViewAction {
     
     case hasScrolled(direction: ScrollDirection)
     case setOpenURLAction(OpenURLAction)
+    
+    case fetchLinkPreviewIfApplicable(item: RoomTimelineItemProtocol)
 }
 
 enum TimelineComposerAction {
@@ -130,6 +132,8 @@ struct TimelineViewState: BindableState {
     var mapTilerConfiguration: MapTilerConfiguration
     
     var bindings: TimelineViewStateBindings
+    
+    var linkPreviewsMap: [TimelineItemIdentifier: ZLinkPreview] = [:]
 }
 
 struct TimelineViewStateBindings {
