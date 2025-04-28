@@ -243,7 +243,7 @@ extension HomeScreenRoom {
                   isDirect: summary.isDirect,
                   isHighlighted: isHighlighted,
                   isFavourite: summary.isFavourite,
-                  timestamp: summary.lastMessageFormattedTimestamp,
+                  timestamp: summary.lastMessageDate?.formattedMinimal(),
                   lastMessage: summary.lastMessage,
                   avatar: summary.avatar,
                   canonicalAlias: summary.canonicalAlias)
