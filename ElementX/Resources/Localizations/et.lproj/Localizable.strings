@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Muuda teenusepakkujat";
 "screen_change_server_error_invalid_homeserver" = "Me ei suutnud luuaühendust selle koduserveriga. Palun kontrolli, kas koduserveri aadress on õige. Kui aadress on õige, siis täiendavat teavet oskab sulle anda koduserveri haldaja.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync režiim pole saadaval vea tõttu well-known failis:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "See koduserver hetkel ei toeta „Sliding sync“ režiimi";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Koduserveri url";
-"screen_change_server_form_notice" = "Sa saad luua ühendust vaid olemasoleva serveriga, mis toetab Sliding sync režiimi. Sinu koduserveri haldur peaks selle seadistama. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Mis on sinu koduserveri aadress?";
 "screen_change_server_title" = "Vali oma server";
 "screen_chat_backup_key_backup_action_disable" = "Lülita võtmete varundamine välja";

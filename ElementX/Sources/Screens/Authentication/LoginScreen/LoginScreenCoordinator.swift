@@ -11,7 +11,6 @@ import SwiftUI
 struct LoginScreenCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProtocol
-    let slidingSyncLearnMoreURL: URL
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
 }
@@ -43,7 +42,6 @@ final class LoginScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = LoginScreenViewModel(authenticationService: parameters.authenticationService,
-                                         slidingSyncLearnMoreURL: parameters.slidingSyncLearnMoreURL,
                                          userIndicatorController: parameters.userIndicatorController,
                                          analytics: parameters.analytics)
     }

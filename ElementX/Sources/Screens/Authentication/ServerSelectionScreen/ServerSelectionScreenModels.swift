@@ -16,7 +16,7 @@ enum ServerSelectionScreenViewModelAction {
 
 struct ServerSelectionScreenViewState: BindableState {
     /// The message to be shown in the text field footer when no error has occurred.
-    private let regularFooterMessage: AttributedString
+    private let regularFooterMessage = L10n.screenChangeServerFormNotice
     
     /// View state that can be bound to from SwiftUI.
     var bindings: ServerSelectionScreenBindings
@@ -24,8 +24,8 @@ struct ServerSelectionScreenViewState: BindableState {
     var footerErrorMessage: String?
     
     /// The message to show in the text field footer.
-    var footerMessage: AttributedString {
-        footerErrorMessage.map(AttributedString.init) ?? regularFooterMessage
+    var footerMessage: String {
+        footerErrorMessage ?? regularFooterMessage
     }
     
     /// The text field is showing an error.
@@ -36,18 +36,6 @@ struct ServerSelectionScreenViewState: BindableState {
     /// Whether it is possible to continue when tapping the confirmation button.
     var hasValidationError: Bool {
         bindings.homeserverAddress.isEmpty || isShowingFooterError
-    }
-    
-    init(slidingSyncLearnMoreURL: URL, bindings: ServerSelectionScreenBindings, footerErrorMessage: String? = nil) {
-        self.bindings = bindings
-        self.footerErrorMessage = footerErrorMessage
-        
-        let linkPlaceholder = "{link}"
-        var message = AttributedString(L10n.screenChangeServerFormNotice(linkPlaceholder))
-        message.replace(linkPlaceholder,
-                        with: L10n.actionLearnMore,
-                        asLinkTo: slidingSyncLearnMoreURL)
-        regularFooterMessage = message
     }
 }
 

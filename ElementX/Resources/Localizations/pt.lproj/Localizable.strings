@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Alterar operador de conta";
 "screen_change_server_error_invalid_homeserver" = "Não foi possível comunicar com este servidor. Por favor, verifica se introduziste o seu URL corretamente. Se sim, contacta o administrador para obteres mais ajuda.";
 "screen_change_server_error_invalid_well_known" = "A sincronização deslizante (sliding sync) não está disponível devido a um problema no ficheiro \"well-known\":\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Este servidor não suporta sincronização deslizante (sliding sync).";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "URL do servidor";
-"screen_change_server_form_notice" = "Só te podes ligar a um servidor existente que suporte a sincronização deslizante (sliding sync). O administrador do teu servidor terá de a configurar. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Qual é o endereço do teu servidor?";
 "screen_change_server_title" = "Seleciona o teu servidor";
 "screen_chat_backup_key_backup_action_disable" = "Desativar a cópia de segurança";

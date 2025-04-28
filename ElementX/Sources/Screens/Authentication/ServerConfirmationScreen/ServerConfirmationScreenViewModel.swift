@@ -13,7 +13,6 @@ typealias ServerConfirmationScreenViewModelType = StateStoreViewModel<ServerConf
 class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, ServerConfirmationScreenViewModelProtocol {
     let authenticationService: AuthenticationServiceProtocol
     let authenticationFlow: AuthenticationFlow
-    let slidingSyncLearnMoreURL: URL
     let userIndicatorController: UserIndicatorControllerProtocol
     
     private var actionsSubject: PassthroughSubject<ServerConfirmationScreenViewModelAction, Never> = .init()
@@ -24,11 +23,9 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
 
     init(authenticationService: AuthenticationServiceProtocol,
          authenticationFlow: AuthenticationFlow,
-         slidingSyncLearnMoreURL: URL,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.authenticationFlow = authenticationFlow
-        self.slidingSyncLearnMoreURL = slidingSyncLearnMoreURL
         self.userIndicatorController = userIndicatorController
         
         let homeserver = authenticationService.homeserver.value
@@ -136,12 +133,10 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
                                                  title: L10n.commonServerNotSupported,
                                                  message: L10n.screenChangeServerErrorInvalidWellKnown(error))
         case .slidingSync:
-            let openURL = { UIApplication.shared.open(self.slidingSyncLearnMoreURL) }
+            let nonBreakingAppName = InfoPlistReader.main.bundleDisplayName.replacingOccurrences(of: " ", with: "\u{00A0}")
             state.bindings.alertInfo = AlertInfo(id: .slidingSync,
                                                  title: L10n.commonServerNotSupported,
-                                                 message: L10n.screenChangeServerErrorNoSlidingSyncMessage,
-                                                 primaryButton: .init(title: L10n.actionLearnMore, role: .cancel, action: openURL),
-                                                 secondaryButton: .init(title: L10n.actionCancel, action: nil))
+                                                 message: L10n.screenChangeServerErrorNoSlidingSyncMessage(nonBreakingAppName))
         case .login:
             state.bindings.alertInfo = AlertInfo(id: .login,
                                                  title: L10n.commonServerNotSupported,

@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Αλλαγή παρόχου λογαριασμού";
 "screen_change_server_error_invalid_homeserver" = "Δεν μπορούσαμε να επικοινωνήσουμε με αυτόν τον οικιακό διακομιστή. Βεβαιώσου ότι έχεις εισαγάγει σωστά τη διεύθυνση URL του αρχικού διακομιστή. Εάν η διεύθυνση URL είναι σωστή, επικοινώνησε με τον διαχειριστή του κεντρικού διακομιστή για περαιτέρω βοήθεια.";
 "screen_change_server_error_invalid_well_known" = "Το Sliding sync δεν είναι διαθέσιμο εξαιτίας ενός ζητήματος σε ένα πολύ γνωστό αρχείο:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Αυτός ο διακομιστής προς το παρόν δεν υποστηρίζει Sliding sync.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "URL οικιακού διακομιστή";
-"screen_change_server_form_notice" = "Μπορείτε να συνδεθείς μόνο σε υπάρχοντα διακομιστή που υποστηρίζει Sliding sync. Ο διαχειριστής του οικιακού διακομιστή σου θα πρέπει να το ρυθμίσει. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Ποια είναι η διεύθυνση του διακομιστή σου;";
 "screen_change_server_title" = "Επέλεξε το διακομιστή σου";
 "screen_chat_backup_key_backup_action_disable" = "Απενεργοποίηση αντιγράφων ασφαλείας";

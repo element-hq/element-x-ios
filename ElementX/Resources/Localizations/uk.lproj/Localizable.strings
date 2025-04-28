@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Змінити провайдера облікового запису";
 "screen_change_server_error_invalid_homeserver" = "Не вдалося під'єднатися до цього домашнього сервера. Перевірте правильність введеної URL-адреси домашнього сервера. Якщо URL-адреса правильна, зверніться по додаткову допомогу до адміністратора домашнього сервера.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync недоступний через проблему у файлі well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Наразі цей сервер не підтримує sliding sync.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "URL-адреса домашнього сервера";
-"screen_change_server_form_notice" = "Ви можете під'єднатися лише до наявного сервера, який підтримує sliding sync. Адміністратор вашого домашнього сервера повинен буде налаштувати його. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Яка адреса вашого сервера?";
 "screen_change_server_title" = "Виберіть свій сервер";
 "screen_chat_backup_key_backup_action_disable" = "Вимкнути резервне копіювання";

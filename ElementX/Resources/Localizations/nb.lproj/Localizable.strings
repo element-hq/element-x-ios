@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Bytt kontotilbyder";
 "screen_change_server_error_invalid_homeserver" = "Vi kunne ikke nå denne hjemmeserveren. Kontroller at du har skrevet inn hjemmeserverens URL riktig. Hvis URL-en er riktig, kontakt administratoren for hjemmeserveren din for å få mer hjelp.";
 "screen_change_server_error_invalid_well_known" = "Glidende synkronisering er ikke tilgjengelig på grunn av et problem i den velkjente filen:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Denne serveren støtter for øyeblikket ikke sliding sync.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "URL til hjemmeserver";
-"screen_change_server_form_notice" = "Du kan bare koble til en eksisterende server som støtter sliding sync. Administrator for din hjemmeserver må konfigurere det. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Hva er adressen til serveren din?";
 "screen_change_server_title" = "Velg din server";
 "screen_chat_backup_key_backup_action_disable" = "Slett nøkkellagring";
