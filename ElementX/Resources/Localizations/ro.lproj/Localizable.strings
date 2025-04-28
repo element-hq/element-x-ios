@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Ați șters avatarul camerei";
 "state_event_room_ban" = "%1$@ a adăugat o interdicție pentru %2$@";
 "state_event_room_ban_by_you" = "Ați adăugat o interdicție pentru %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ a creat camera";
 "state_event_room_created_by_you" = "Ați creat camera";
 "state_event_room_invite" = "%1$@ l-a invitat pe %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Ați respins invitația";
 "state_event_room_remove" = "%1$@ l-a îndepărtat pe %2$@";
 "state_event_room_remove_by_you" = "L-ați îndepărtat pe %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ a trimis o invitație către %2$@ pentru a se alătura camerei";
 "state_event_room_third_party_invite_by_you" = "Ați trimis o invitație către %1$@ pentru a se alătura camerei";
 "state_event_room_third_party_revoked_invite" = "%1$@ a revocat invitația pentru %2$@ de a se alătura camerei";

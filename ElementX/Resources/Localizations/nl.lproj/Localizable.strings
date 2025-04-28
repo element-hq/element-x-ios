@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Je hebt de kamerafbeelding verwijderd";
 "state_event_room_ban" = "%1$@ heeft %2$@ verbannen";
 "state_event_room_ban_by_you" = "Je hebt %1$@ verbannen";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ heeft de kamer gemaakt";
 "state_event_room_created_by_you" = "Je hebt de kamer gemaakt";
 "state_event_room_invite" = "%1$@ heeft %2$@ uitgenodigd";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Je hebt de uitnodiging afgewezen";
 "state_event_room_remove" = "%1$@ heeft %2$@ verwijderd";
 "state_event_room_remove_by_you" = "Je hebt %1$@ verwijderd";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ heeft %2$@ in deze kamer uitgenodigd";
 "state_event_room_third_party_invite_by_you" = "Je hebt %1$@ in deze kamer uitgenodigd";
 "state_event_room_third_party_revoked_invite" = "%1$@ heeft de uitnodiging aan %2$@ om toe te treden tot de kamer ingetrokken";

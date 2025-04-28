@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Removeste o ícone da sala";
 "state_event_room_ban" = "%1$@ baniu %2$@";
 "state_event_room_ban_by_you" = "Baniste %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ criou a sala";
 "state_event_room_created_by_you" = "Criaste a sala";
 "state_event_room_invite" = "%1$@ convidou %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Rejeitaste o convite";
 "state_event_room_remove" = "%1$@ removeu %2$@";
 "state_event_room_remove_by_you" = "Removeste %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ enviou um convite a %2$@";
 "state_event_room_third_party_invite_by_you" = "Enviaste um convite a %1$@";
 "state_event_room_third_party_revoked_invite" = "%1$@ revogou o convite de %2$@";

@@ -240,7 +240,7 @@
 "common_shared_location" = "Megosztott tartózkodási hely";
 "common_signing_out" = "Kijelentkezés";
 "common_something_went_wrong" = "Valamilyen hiba történt";
-"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_something_went_wrong_message" = "Problémába ütköztünk. Próbálja újra.";
 "common_starting_chat" = "Csevegés megkezdése…";
 "common_sticker" = "Matrica";
 "common_success" = "Sikeres";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Eltávolította a szoba profilképét";
 "state_event_room_ban" = "%1$@ kitiltotta: %2$@";
 "state_event_room_ban_by_you" = "Kitiltotta: %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ létrehozta a szobát";
 "state_event_room_created_by_you" = "Létrehozta a szobát";
 "state_event_room_invite" = "%1$@ meghívta: %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Elutasította a meghívást";
 "state_event_room_remove" = "%1$@ eltávolította: %2$@";
 "state_event_room_remove_by_you" = "Eltávolította: %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ meghívót küldött %2$@ számára, hogy csatlakozzon a szobához";
 "state_event_room_third_party_invite_by_you" = "Meghívót küldött %1$@ számára, hogy csatlakozzon a szobához";
 "state_event_room_third_party_revoked_invite" = "%1$@ visszavonta %2$@ meghívását, hogy csatlakozzon a szobához";

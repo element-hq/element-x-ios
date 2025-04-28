@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Sina eemaldasid jututoa tunnuspildi";
 "state_event_room_ban" = "%1$@ keelas %2$@ ligipääsu";
 "state_event_room_ban_by_you" = "Sina keelasid %1$@ ligipääsu";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ lõi jututoa";
 "state_event_room_created_by_you" = "Sina lõid jututoa";
 "state_event_room_invite" = "%1$@ saatis kutse kasutajale %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Sina lükkasid kutse tagasi";
 "state_event_room_remove" = "%1$@ eemaldas jututoast kasutaja %2$@";
 "state_event_room_remove_by_you" = "Sina eemaldasid jututoast kasutaja %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ saatis jututoaga liitumiseks kutse kasutajale %2$@";
 "state_event_room_third_party_invite_by_you" = "Sina saatsid kasutajale %1$@ kutse jututoaga liitumiseks";
 "state_event_room_third_party_revoked_invite" = "%1$@ võttis tagasi jututoaga liitumise kutse kasutajalt %2$@";
