@@ -17,8 +17,8 @@ class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewMo
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(mode: PollFormMode) {
-        super.init(initialViewState: .init(mode: mode))
+    init(mode: PollFormMode, maxNumberOfOptions: Int) {
+        super.init(initialViewState: .init(mode: mode, maxNumberOfOptions: maxNumberOfOptions))
     }
     
     // MARK: - Public

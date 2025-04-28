@@ -647,7 +647,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .createPoll:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = PollFormScreenCoordinator(parameters: .init(mode: .new))
+            let coordinator = PollFormScreenCoordinator(parameters: .init(mode: .new, maxNumberOfOptions: 10))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .encryptionSettings, .encryptionSettingsOutOfSync:
