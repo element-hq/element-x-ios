@@ -164,36 +164,14 @@ private extension View {
 
 struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static let summaryProviderGeneric = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
-    static let viewModelGeneric = {
-        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe", roomSummaryProvider: summaryProviderGeneric))))
-        
-        return HomeScreenViewModel(userSession: userSession,
-                                   analyticsService: ServiceLocator.shared.analytics,
-                                   appSettings: ServiceLocator.shared.settings,
-                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
-    }()
+    static let viewModelGeneric = makeViewModel(roomSummaryProvider: summaryProviderGeneric)
+    static let genericRooms = summaryProviderGeneric.roomListPublisher.value.compactMap(mockRoom)
     
     static let summaryProviderForNotificationsState = RoomSummaryProviderMock(.init(state: .loaded(.mockRoomsWithNotificationsState)))
-    static let viewModelForNotificationsState = {
-        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe", roomSummaryProvider: summaryProviderForNotificationsState))))
-
-        return HomeScreenViewModel(userSession: userSession,
-                                   analyticsService: ServiceLocator.shared.analytics,
-                                   appSettings: ServiceLocator.shared.settings,
-                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
-    }()
-    
-    static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {
-        HomeScreenRoom(summary: summary, hideUnreadMessagesBadge: false)
-    }
+    static let viewModelForNotificationsState = makeViewModel(roomSummaryProvider: summaryProviderForNotificationsState)
+    static let notificationsStateRooms = summaryProviderForNotificationsState.roomListPublisher.value.compactMap(mockRoom)
     
     static var previews: some View {
-        let genericRooms: [HomeScreenRoom] = summaryProviderGeneric.roomListPublisher.value.compactMap(mockRoom)
-        
-        let notificationsStateRooms: [HomeScreenRoom] = summaryProviderForNotificationsState.roomListPublisher.value.compactMap(mockRoom)
-
         VStack(spacing: 0) {
             ForEach(genericRooms) { room in
                 HomeScreenRoomCell(room: room, context: viewModelGeneric.context, isSelected: false)
@@ -211,5 +189,20 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
         }
         .previewLayout(.sizeThatFits)
         .previewDisplayName("Notifications State")
+    }
+    
+    static func mockRoom(summary: RoomSummary) -> HomeScreenRoom? {
+        HomeScreenRoom(summary: summary, hideUnreadMessagesBadge: false)
+    }
+    
+    static func makeViewModel(roomSummaryProvider: RoomSummaryProviderProtocol) -> HomeScreenViewModel {
+        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "John Doe", roomSummaryProvider: roomSummaryProvider))))
+
+        return HomeScreenViewModel(userSession: userSession,
+                                   selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   appSettings: ServiceLocator.shared.settings,
+                                   analyticsService: ServiceLocator.shared.analytics,
+                                   notificationManager: NotificationManagerMock(),
+                                   userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

@@ -101,37 +101,38 @@ struct HomeScreenKnockedCell_Previews: PreviewProvider, TestablePreview {
         ScrollView {
             VStack(spacing: 0) {
                 HomeScreenKnockedCell(room: .dmInvite,
-                                      context: viewModel().context)
+                                      context: makeViewModel().context)
                 
                 HomeScreenKnockedCell(room: .dmInvite,
-                                      context: viewModel().context)
+                                      context: makeViewModel().context)
                 
                 HomeScreenKnockedCell(room: .roomKnocked(),
-                                      context: viewModel().context)
+                                      context: makeViewModel().context)
                 
                 HomeScreenKnockedCell(room: .roomKnocked(),
-                                      context: viewModel().context)
+                                      context: makeViewModel().context)
                 
                 HomeScreenKnockedCell(room: .roomKnocked(alias: "#footest:somewhere.org", avatarURL: .mockMXCAvatar),
-                                      context: viewModel().context)
+                                      context: makeViewModel().context)
                 
                 HomeScreenKnockedCell(room: .roomKnocked(alias: "#footest:somewhere.org"),
-                                      context: viewModel().context)
+                                      context: makeViewModel().context)
                     .dynamicTypeSize(.accessibility1)
                     .previewDisplayName("Aliased room (AX1)")
             }
         }
     }
     
-    static func viewModel() -> HomeScreenViewModel {
+    static func makeViewModel() -> HomeScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
         return HomeScreenViewModel(userSession: userSession,
-                                   analyticsService: ServiceLocator.shared.analytics,
-                                   appSettings: ServiceLocator.shared.settings,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   appSettings: ServiceLocator.shared.settings,
+                                   analyticsService: ServiceLocator.shared.analytics,
+                                   notificationManager: NotificationManagerMock(),
                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }
