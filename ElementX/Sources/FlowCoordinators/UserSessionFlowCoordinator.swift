@@ -494,7 +494,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func presentHomeScreen() {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
                                                          bugReportService: bugReportService,
-                                                         selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher())
+                                                         selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher(),
+                                                         appSettings: appSettings,
+                                                         analyticsService: analytics,
+                                                         notificationManager: notificationManager,
+                                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
         let coordinator = HomeScreenCoordinator(parameters: parameters)
         
         coordinator.actions

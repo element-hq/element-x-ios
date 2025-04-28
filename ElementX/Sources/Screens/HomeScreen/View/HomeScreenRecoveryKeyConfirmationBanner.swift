@@ -103,7 +103,7 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
 }
 
 struct HomeScreenRecoveryKeyConfirmationBanner_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = buildViewModel()
+    static let viewModel = makeViewModel()
     
     static var previews: some View {
         HomeScreenRecoveryKeyConfirmationBanner(state: .setUpRecovery,
@@ -114,16 +114,17 @@ struct HomeScreenRecoveryKeyConfirmationBanner_Previews: PreviewProvider, Testab
             .previewDisplayName("Out of sync")
     }
     
-    static func buildViewModel() -> HomeScreenViewModel {
+    static func makeViewModel() -> HomeScreenViewModel {
         let clientProxy = ClientProxyMock(.init(userID: "@alice:example.com",
                                                 roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loading))))
         
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
         
         return HomeScreenViewModel(userSession: userSession,
-                                   analyticsService: ServiceLocator.shared.analytics,
-                                   appSettings: ServiceLocator.shared.settings,
                                    selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                   appSettings: ServiceLocator.shared.settings,
+                                   analyticsService: ServiceLocator.shared.analytics,
+                                   notificationManager: NotificationManagerMock(),
                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }
