@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Ubah penyedia akun";
 "screen_change_server_error_invalid_homeserver" = "Kami tidak dapat menjangkau server ini. Periksa apakah Anda telah memasukkan URL homeserver dengan benar. Jika URL sudah benar, hubungi administrator homeserver Anda untuk bantuan lebih lanjut.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync tidak tersedia karena adanya masalah dalam berkas .well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Server ini saat ini tidak mendukung sinkronisasi geser.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "URL Homeserver";
-"screen_change_server_form_notice" = "Anda hanya dapat terhubung ke server yang ada yang mendukung sinkronisasi geser. Admin homeserver Anda perlu mengaturnya. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Apa alamat server Anda?";
 "screen_change_server_title" = "Pilih server Anda";
 "screen_chat_backup_key_backup_action_disable" = "Matikan pencadangan";

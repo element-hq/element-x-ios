@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Hesap sağlayıcısını değiştir";
 "screen_change_server_error_invalid_homeserver" = "Bu ana sunucuya ulaşamadık. Lütfen ana sunucu URL'sini doğru girip girmediğinizi kontrol edin. URL doğruysa, daha fazla yardım için ana sunucu yöneticinize başvurun.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync, iyi bilinen dosyadaki bir sorun nedeniyle kullanılamıyor:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Bu sunucu şu anda sliding sync desteklemiyor.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Ana sunucu URL'si";
-"screen_change_server_form_notice" = "Yalnızca sliding sync destekleyen mevcut bir sunucuya bağlanabilirsiniz. Ana sunucu yöneticinizin bunu yapılandırması gerekecektir. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Sunucunuzun adresi nedir?";
 "screen_change_server_title" = "Sunucunuzu seçin";
 "screen_chat_backup_key_backup_action_disable" = "Anahtar depolamasını sil";

@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Kontoanbieter wechseln";
 "screen_change_server_error_invalid_homeserver" = "Wir konnten diesen Homeserver nicht erreichen. Bitte überprüfe, ob du die Homeserver-URL korrekt eingegeben hast. Wenn die URL korrekt ist, wende dich an deinen Homeserver-Administrator, um weitere Hilfe zu erhalten.";
 "screen_change_server_error_invalid_well_known" = "Sliding Sync ist aufgrund eines Problems im \"well-known file\" nicht verfügbar:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Dieser Server unterstützt derzeit kein Sliding Sync.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Homeserver-URL";
-"screen_change_server_form_notice" = "Du kannst nur eine Verbindung zu einem vorhandenen Server herstellen, der Sliding Sync unterstützt. Dein Homeserver-Administrator muss das konfigurieren. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Wie lautet die Adresse deines Servers?";
 "screen_change_server_title" = "Wähle deinen Server aus";
 "screen_chat_backup_key_backup_action_disable" = "Backup deaktivieren";
