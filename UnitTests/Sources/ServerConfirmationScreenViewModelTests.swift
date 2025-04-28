@@ -195,7 +195,6 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         
         viewModel = ServerConfirmationScreenViewModel(authenticationService: service,
                                                       authenticationFlow: authenticationFlow,
-                                                      slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                                       userIndicatorController: UserIndicatorControllerMock())
         
         // Add a fake window in order for the OIDC flow to continue

@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Cambiar el proveedor de la cuenta";
 "screen_change_server_error_invalid_homeserver" = "No hemos podido acceder a este servidor. Comprueba que has introducido correctamente la dirección del servidor. Si la dirección es correcta, ponte en contacto con el administrador del servidor para obtener más ayuda.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync no está disponible debido a un problema en el archivo well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Este servidor no soporta sliding sync.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Dirección del homeserver";
-"screen_change_server_form_notice" = "Solo puedes conectarte a un servidor que soporte sliding sync. El administrador de tu servidor tendrá que configurarlo. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "¿Cuál es la dirección de tu servidor?";
 "screen_change_server_title" = "Selecciona tu servidor";
 "screen_chat_backup_key_backup_action_disable" = "Borrar almacén de claves";
@@ -1030,7 +1030,7 @@
 "screen_signed_out_reason_1" = "Has cambiado tu contraseña en otra sesión";
 "screen_signed_out_reason_2" = "Has eliminado la sesión desde otra sesión";
 "screen_signed_out_reason_3" = "El administrador de tu servidor ha invalidado su acceso";
-"screen_signed_out_subtitle" = "Es posible que haya cerrado sesión por uno de los motivos que se enumeran a continuación. Por favor inicia sesión nuevamente para continuar usando %@ .";
+"screen_signed_out_subtitle" = "Es posible que haya cerrado sesión por uno de los motivos que se enumeran a continuación. Por favor inicia sesión nuevamente para continuar usando %@.";
 "screen_signed_out_title" = "Has cerrado sesión";
 "screen_signout_confirmation_dialog_content" = "¿Estás seguro de que quieres cerrar sesión?";
 "screen_signout_in_progress_dialog_content" = "Cerrando sesión…";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Eliminaste el avatar de la sala";
 "state_event_room_ban" = "%1$@ expulsó permanentemente a %2$@";
 "state_event_room_ban_by_you" = "Expulsaste permanentemente a %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ creó la sala";
 "state_event_room_created_by_you" = "Tú creaste la sala";
 "state_event_room_invite" = "%1$@ invitó a %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Rechazaste la invitación";
 "state_event_room_remove" = "%1$@ echó a %2$@";
 "state_event_room_remove_by_you" = "Echaste a %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ envió una invitación a %2$@ para unirse a la sala";
 "state_event_room_third_party_invite_by_you" = "Enviaste una invitación a %1$@ para unirse a la sala";
 "state_event_room_third_party_revoked_invite" = "%1$@ revocó la invitación a %2$@ para unirse a la sala";

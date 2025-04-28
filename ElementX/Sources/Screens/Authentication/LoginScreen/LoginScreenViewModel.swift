@@ -13,7 +13,6 @@ typealias LoginScreenViewModelType = StateStoreViewModel<LoginScreenViewState, L
 
 class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtocol {
     private let authenticationService: AuthenticationServiceProtocol
-    private let slidingSyncLearnMoreURL: URL
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
     
@@ -23,11 +22,9 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
     }
 
     init(authenticationService: AuthenticationServiceProtocol,
-         slidingSyncLearnMoreURL: URL,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
         self.authenticationService = authenticationService
-        self.slidingSyncLearnMoreURL = slidingSyncLearnMoreURL
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
         
@@ -150,12 +147,10 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
                                                  title: L10n.commonServerNotSupported,
                                                  message: L10n.screenChangeServerErrorInvalidWellKnown(error))
         case .slidingSyncNotAvailable:
-            let openURL = { UIApplication.shared.open(self.slidingSyncLearnMoreURL) }
+            let nonBreakingAppName = InfoPlistReader.main.bundleDisplayName.replacingOccurrences(of: " ", with: "\u{00A0}")
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
                                                  title: L10n.commonServerNotSupported,
-                                                 message: L10n.screenChangeServerErrorNoSlidingSyncMessage,
-                                                 primaryButton: .init(title: L10n.actionLearnMore, role: .cancel, action: openURL),
-                                                 secondaryButton: .init(title: L10n.actionCancel, action: nil))
+                                                 message: L10n.screenChangeServerErrorNoSlidingSyncMessage(nonBreakingAppName))
             
             // Clear out the invalid username to avoid an attempted login to matrix.org
             state.bindings.username = ""

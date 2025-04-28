@@ -240,7 +240,7 @@
 "common_shared_location" = "Jaettu sijainti";
 "common_signing_out" = "Kirjaudutaan ulos";
 "common_something_went_wrong" = "Jokin meni pieleen";
-"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_something_went_wrong_message" = "Kohtasimme ongelman. Yritä uudelleen.";
 "common_starting_chat" = "Aloitetaan keskustelua...";
 "common_sticker" = "Tarra";
 "common_success" = "Onnistui";
@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Vaihda palveluntarjoajaa";
 "screen_change_server_error_invalid_homeserver" = "Kotipalvelimeen ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palvelimesi ylläpitäjään.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync ei ole saatavilla well-known tiedostossa olevan ongelman vuoksi:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Tämä palvelin ei tällä hetkellä tue sliding syncia.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Kotipalvelimen osoite";
-"screen_change_server_form_notice" = "Voit yhdistää vain olemassa olevaan palvelimeen, joka tukee sliding syncia. Kotipalvelimesi ylläpitäjän on otettava se käyttöön. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Mikä on palvelimesi osoite?";
 "screen_change_server_title" = "Valitse palvelimesi";
 "screen_chat_backup_key_backup_action_disable" = "Ota avainten säilytys pois käytöstä";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Poistit huoneen avatarin";
 "state_event_room_ban" = "%1$@ antoi porttikiellon käyttäjälle %2$@";
 "state_event_room_ban_by_you" = "Annoit porttikiellon käyttäjälle %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ loi huoneen";
 "state_event_room_created_by_you" = "Loit huoneen";
 "state_event_room_invite" = "%1$@ kutsui käyttäjän %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Hylkäsit kutsun";
 "state_event_room_remove" = "%1$@ poisti käyttäjän %2$@";
 "state_event_room_remove_by_you" = "Poistit käyttäjän %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ kutsui käyttäjän %2$@ huoneeseen";
 "state_event_room_third_party_invite_by_you" = "Kutsuit käyttäjän %1$@ huoneeseen";
 "state_event_room_third_party_revoked_invite" = "%1$@ peruutti käyttäjän %2$@ kutsun huoneeseen";

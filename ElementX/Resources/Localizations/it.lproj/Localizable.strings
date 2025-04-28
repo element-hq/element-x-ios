@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Cambia fornitore dell'account";
 "screen_change_server_error_invalid_homeserver" = "Non siamo riusciti a raggiungere questo homeserver. Verifica di aver inserito correttamente l'URL. Se l'URL è corretto, contatta l'amministratore del homeserver per ulteriore assistenza.";
 "screen_change_server_error_invalid_well_known" = "La sliding sync non è disponibile per un problema nel file well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Questo server attualmente non supporta la sliding sync.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "URL dell'homeserver";
-"screen_change_server_form_notice" = "Puoi connetterti solo a un server esistente che supporta la sliding sync. L'amministratore del tuo homeserver dovrà configurarla. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Qual è l'indirizzo del tuo server?";
 "screen_change_server_title" = "Seleziona il tuo server";
 "screen_chat_backup_key_backup_action_disable" = "Disattiva il backup";
@@ -788,7 +788,7 @@
 "screen_qr_code_login_error_expired_title" = "L'accesso non è stato completato in tempo";
 "screen_qr_code_login_error_linking_not_suported_subtitle" = "L'altro dispositivo non supporta l'accesso a %@ con un codice QR.\n\nProva ad accedere manualmente o scansiona il codice QR con un altro dispositivo.";
 "screen_qr_code_login_error_linking_not_suported_title" = "Codice QR non supportato";
-"screen_qr_code_login_error_sliding_sync_not_supported_subtitle" = "Il tuo fornitore di account non supporta %1$@ .";
+"screen_qr_code_login_error_sliding_sync_not_supported_subtitle" = "Il tuo fornitore di account non supporta %1$@.";
 "screen_qr_code_login_error_sliding_sync_not_supported_title" = "%1$@ non supportato";
 "screen_qr_code_login_initial_state_button_title" = "Pronto per la scansione";
 "screen_qr_code_login_initial_state_item_1" = "Apri %1$@ su un dispositivo desktop";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Hai rimosso l'avatar della stanza";
 "state_event_room_ban" = "%1$@ ha escluso %2$@";
 "state_event_room_ban_by_you" = "Hai escluso %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ ha creato la stanza";
 "state_event_room_created_by_you" = "Hai creato la stanza";
 "state_event_room_invite" = "%1$@ ha invitato %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Hai rifiutato l'invito";
 "state_event_room_remove" = "%1$@ ha rimosso %2$@";
 "state_event_room_remove_by_you" = "Hai rimosso %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ ha inviato un invito a %2$@ per unirsi alla stanza";
 "state_event_room_third_party_invite_by_you" = "Hai inviato un invito a %1$@ per unirsi alla stanza";
 "state_event_room_third_party_revoked_invite" = "%1$@ ha revocato l'invito di %2$@ ad unirsi alla stanza.";

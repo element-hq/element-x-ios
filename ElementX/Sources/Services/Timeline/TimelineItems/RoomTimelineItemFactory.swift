@@ -76,11 +76,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return nil
             }
             return buildStateTimelineItem(for: eventItemProxy, state: content, isOutgoing: isOutgoing)
-        case .roomMembership(userId: let userID, let displayName, change: let change, _):
+        case .roomMembership(userId: let userID, let displayName, change: let change, let reason):
             if isDM, change == .joined, userID == self.userID {
                 return nil
             }
-            return buildStateMembershipChangeTimelineItem(for: eventItemProxy, memberUserID: userID, memberDisplayName: displayName, membershipChange: change, isOutgoing: isOutgoing)
+            return buildStateMembershipChangeTimelineItem(for: eventItemProxy, memberUserID: userID, memberDisplayName: displayName, membershipChange: change, reason: reason, isOutgoing: isOutgoing)
         case .profileChange(let displayName, let prevDisplayName, let avatarUrl, let prevAvatarUrl):
             return buildStateProfileChangeTimelineItem(for: eventItemProxy,
                                                        displayName: displayName,
@@ -865,10 +865,17 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                         memberUserID: String,
                                                         memberDisplayName: String?,
                                                         membershipChange: MembershipChange?,
+                                                        reason: String?,
                                                         isOutgoing: Bool) -> RoomTimelineItemProtocol? {
-        guard let text = stateEventStringBuilder
-            .buildString(for: membershipChange, memberUserID: memberUserID, memberDisplayName: memberDisplayName, sender: eventItemProxy.sender, isOutgoing: isOutgoing)
-        else { return nil }
+        guard let text = stateEventStringBuilder.buildString(for: membershipChange,
+                                                             reason: reason,
+                                                             memberUserID: memberUserID,
+                                                             memberDisplayName: memberDisplayName,
+                                                             sender: eventItemProxy.sender,
+                                                             isOutgoing: isOutgoing) else {
+            return nil
+        }
+        
         return buildStateTimelineItem(for: eventItemProxy, text: text, isOutgoing: isOutgoing)
     }
     

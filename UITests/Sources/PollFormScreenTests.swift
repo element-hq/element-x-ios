@@ -42,7 +42,7 @@ class PollFormScreenUITests: XCTestCase {
         let createButton = app.buttons[A11yIdentifiers.pollFormScreen.submit]
         let addOption = app.buttons[A11yIdentifiers.pollFormScreen.addOption]
 
-        for _ in 1...18 {
+        for _ in 1...8 {
             // Use the frame as a fallback to fix the button being obscured by the home indicator.
             if !addOption.isHittable || addOption.frame.maxY > (app.frame.maxY - 20) {
                 app.swipeUp()

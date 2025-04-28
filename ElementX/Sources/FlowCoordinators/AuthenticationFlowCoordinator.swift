@@ -137,7 +137,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                     authenticationFlow: authenticationFlow,
-                                                                    slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
                                                                     userIndicatorController: userIndicatorController)
         let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
         
@@ -179,7 +178,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         let parameters = ServerConfirmationScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                        authenticationFlow: authenticationFlow,
-                                                                       slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
                                                                        userIndicatorController: userIndicatorController)
         let coordinator = ServerConfirmationScreenCoordinator(parameters: parameters)
         
@@ -246,7 +244,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func showLoginScreen() {
         let parameters = LoginScreenCoordinatorParameters(authenticationService: authenticationService,
-                                                          slidingSyncLearnMoreURL: appSettings.slidingSyncLearnMoreURL,
                                                           userIndicatorController: userIndicatorController,
                                                           analytics: analytics)
         let coordinator = LoginScreenCoordinator(parameters: parameters)

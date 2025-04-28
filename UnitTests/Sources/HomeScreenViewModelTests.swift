@@ -18,6 +18,7 @@ class HomeScreenViewModelTests: XCTestCase {
     var clientProxy: ClientProxyMock!
     var roomSummaryProvider: RoomSummaryProviderMock!
     var appSettings: AppSettings!
+    var notificationManager: NotificationManagerMock!
     
     var cancellables = Set<AnyCancellable>()
     
@@ -298,6 +299,7 @@ class HomeScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         XCTAssertEqual(appSettings.seenInvites, [invitedRoomIDs[1]])
+        XCTAssertFalse(notificationManager.removeDeliveredMessageNotificationsForCalled, "The notification will be dismissed when opening the room.")
     }
     
     func testDeclineInvite() async throws {
@@ -325,6 +327,8 @@ class HomeScreenViewModelTests: XCTestCase {
         await fulfillment(of: [rejectExpectation], timeout: 1.0)
         
         XCTAssertEqual(appSettings.seenInvites, [invitedRoomIDs[1]])
+        XCTAssertTrue(notificationManager.removeDeliveredMessageNotificationsForCalled)
+        XCTAssertEqual(notificationManager.removeDeliveredMessageNotificationsForReceivedInvocations, [invitedRoomIDs[0]])
     }
     
     // MARK: - Helpers
@@ -350,10 +354,13 @@ class HomeScreenViewModelTests: XCTestCase {
             userSession.sessionSecurityStatePublisher = securityStatePublisher
         }
         
+        notificationManager = NotificationManagerMock()
+        
         viewModel = HomeScreenViewModel(userSession: userSession,
-                                        analyticsService: ServiceLocator.shared.analytics,
-                                        appSettings: appSettings,
                                         selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
+                                        appSettings: appSettings,
+                                        analyticsService: ServiceLocator.shared.analytics,
+                                        notificationManager: notificationManager,
                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }

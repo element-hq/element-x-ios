@@ -86,8 +86,6 @@
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
-	<key>UILaunchScreen</key>
-	<dict/>
 	<key>UILaunchStoryboardName</key>
 	<string>ZeroLaunchScreen</string>
 	<key>UISupportedInterfaceOrientations</key>

@@ -6395,6 +6395,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return initializeThirdWebWalletForUserReturnValue
         }
     }
+    //MARK: - getLinkPreviewMetaData
+
+    var getLinkPreviewMetaDataUrlUnderlyingCallsCount = 0
+    var getLinkPreviewMetaDataUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getLinkPreviewMetaDataUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getLinkPreviewMetaDataUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getLinkPreviewMetaDataUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getLinkPreviewMetaDataUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getLinkPreviewMetaDataUrlCalled: Bool {
+        return getLinkPreviewMetaDataUrlCallsCount > 0
+    }
+    var getLinkPreviewMetaDataUrlReceivedUrl: String?
+    var getLinkPreviewMetaDataUrlReceivedInvocations: [String] = []
+
+    var getLinkPreviewMetaDataUrlUnderlyingReturnValue: Result<ZLinkPreview, ClientProxyError>!
+    var getLinkPreviewMetaDataUrlReturnValue: Result<ZLinkPreview, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getLinkPreviewMetaDataUrlUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZLinkPreview, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getLinkPreviewMetaDataUrlUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getLinkPreviewMetaDataUrlUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getLinkPreviewMetaDataUrlUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getLinkPreviewMetaDataUrlClosure: ((String) async -> Result<ZLinkPreview, ClientProxyError>)?
+
+    func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError> {
+        getLinkPreviewMetaDataUrlCallsCount += 1
+        getLinkPreviewMetaDataUrlReceivedUrl = url
+        DispatchQueue.main.async {
+            self.getLinkPreviewMetaDataUrlReceivedInvocations.append(url)
+        }
+        if let getLinkPreviewMetaDataUrlClosure = getLinkPreviewMetaDataUrlClosure {
+            return await getLinkPreviewMetaDataUrlClosure(url)
+        } else {
+            return getLinkPreviewMetaDataUrlReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?
@@ -13339,6 +13409,47 @@ class NotificationManagerMock: NotificationManagerProtocol, @unchecked Sendable 
             self.removeDeliveredMessageNotificationsForReceivedInvocations.append(roomID)
         }
         await removeDeliveredMessageNotificationsForClosure?(roomID)
+    }
+    //MARK: - removeDeliveredNotificationsForFullyReadRooms
+
+    var removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount = 0
+    var removeDeliveredNotificationsForFullyReadRoomsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeDeliveredNotificationsForFullyReadRoomsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var removeDeliveredNotificationsForFullyReadRoomsCalled: Bool {
+        return removeDeliveredNotificationsForFullyReadRoomsCallsCount > 0
+    }
+    var removeDeliveredNotificationsForFullyReadRoomsReceivedRooms: [RoomSummary]?
+    var removeDeliveredNotificationsForFullyReadRoomsReceivedInvocations: [[RoomSummary]] = []
+    var removeDeliveredNotificationsForFullyReadRoomsClosure: (([RoomSummary]) async -> Void)?
+
+    func removeDeliveredNotificationsForFullyReadRooms(_ rooms: [RoomSummary]) async {
+        removeDeliveredNotificationsForFullyReadRoomsCallsCount += 1
+        removeDeliveredNotificationsForFullyReadRoomsReceivedRooms = rooms
+        DispatchQueue.main.async {
+            self.removeDeliveredNotificationsForFullyReadRoomsReceivedInvocations.append(rooms)
+        }
+        await removeDeliveredNotificationsForFullyReadRoomsClosure?(rooms)
     }
 }
 class NotificationSettingsProxyMock: NotificationSettingsProxyProtocol, @unchecked Sendable {

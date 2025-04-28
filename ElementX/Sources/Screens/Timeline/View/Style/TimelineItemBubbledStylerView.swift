@@ -12,6 +12,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: TimelineViewModel.Context
     @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     @Environment(\.focussedEventID) private var focussedEventID
+    @Environment(\.openURL) private var openURL
     
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
@@ -159,6 +160,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 // is no longer an issue on iOS 18. Note: it's fine for this to be empty, we handle
                 // specific taps within the timeline views themselves.
             }
+            .task {
+                context.send(viewAction: .fetchLinkPreviewIfApplicable(item: timelineItem))
+            }
             .longPressWithFeedback {
                 context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
             }
@@ -203,6 +207,28 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 ThreadDecorator()
                     .padding(.leading, 4)
                     .layoutPriority(TimelineBubbleLayout.Priority.regularText)
+            }
+            
+            if let linkPreview = context.viewState.linkPreviewsMap[timelineItem.id] {
+                TimelineLinkPreviewView(preview: linkPreview)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(4.0)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.compound.bgCanvasDefault)
+                    .cornerRadius(8)
+                    .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
+                    .onTapGesture {
+                        if let url = linkPreview.linkURL {
+                            openURL(url)
+                        }
+                    }
+                
+                // Add a fixed width link preview bubble that is used for layout calculations but won't be rendered.
+                TimelineLinkPreviewView(preview: linkPreview)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(4.0)
+                    .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
+                    .hidden()
             }
             
             if let replyDetails = timelineItem.properties.replyDetails {

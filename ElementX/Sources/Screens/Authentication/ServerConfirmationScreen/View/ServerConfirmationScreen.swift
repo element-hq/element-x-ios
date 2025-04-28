@@ -88,7 +88,6 @@ struct ServerConfirmationScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(flow: AuthenticationFlow) -> ServerConfirmationScreenViewModel {
         ServerConfirmationScreenViewModel(authenticationService: AuthenticationService.mock,
                                           authenticationFlow: flow,
-                                          slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                           userIndicatorController: UserIndicatorControllerMock())
     }
 }

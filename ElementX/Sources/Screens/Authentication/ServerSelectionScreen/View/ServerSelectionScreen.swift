@@ -115,11 +115,8 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(for homeserverAddress: String) -> ServerSelectionScreenViewModel {
         let authenticationService = AuthenticationService.mock
         
-        let slidingSyncLearnMoreURL = ServiceLocator.shared.settings.slidingSyncLearnMoreURL
-        
         let viewModel = ServerSelectionScreenViewModel(authenticationService: authenticationService,
                                                        authenticationFlow: .login,
-                                                       slidingSyncLearnMoreURL: slidingSyncLearnMoreURL,
                                                        userIndicatorController: UserIndicatorControllerMock())
         viewModel.context.homeserverAddress = homeserverAddress
         if homeserverAddress == "thisisbad" {

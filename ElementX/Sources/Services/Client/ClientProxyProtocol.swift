@@ -276,4 +276,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     // MARK: - Zero Wallets
     
     func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError>
+    
+    // MARK: - Zero MetaData
+    
+    func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError>
 }

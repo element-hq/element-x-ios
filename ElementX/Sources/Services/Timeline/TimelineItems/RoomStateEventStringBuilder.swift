@@ -13,6 +13,7 @@ struct RoomStateEventStringBuilder {
     var shouldDisambiguateDisplayNames = true
     
     func buildString(for change: MembershipChange?,
+                     reason: String?,
                      memberUserID: String,
                      memberDisplayName: String?,
                      sender: TimelineItemSender,
@@ -37,11 +38,21 @@ struct RoomStateEventStringBuilder {
         case .left:
             return memberIsYou ? L10n.stateEventRoomLeaveByYou : L10n.stateEventRoomLeave(member)
         case .banned, .kickedAndBanned:
-            return senderIsYou ? L10n.stateEventRoomBanByYou(member) : L10n.stateEventRoomBan(senderDisplayName, member)
+            return switch (senderIsYou, reason) {
+            case (true, .some(let reason)): L10n.stateEventRoomBanByYouWithReason(member, reason)
+            case (true, .none): L10n.stateEventRoomBanByYou(member)
+            case (false, .some(let reason)): L10n.stateEventRoomBanWithReason(senderDisplayName, member, reason)
+            case (false, .none): L10n.stateEventRoomBan(senderDisplayName, member)
+            }
         case .unbanned:
             return senderIsYou ? L10n.stateEventRoomUnbanByYou(member) : L10n.stateEventRoomUnban(senderDisplayName, member)
         case .kicked:
-            return senderIsYou ? L10n.stateEventRoomRemoveByYou(member) : L10n.stateEventRoomRemove(senderDisplayName, member)
+            return switch (senderIsYou, reason) {
+            case (true, .some(let reason)): L10n.stateEventRoomRemoveByYouWithReason(member, reason)
+            case (true, .none): L10n.stateEventRoomRemoveByYou(member)
+            case (false, .some(let reason)): L10n.stateEventRoomRemoveWithReason(senderDisplayName, member, reason)
+            case (false, .none): L10n.stateEventRoomRemove(senderDisplayName, member)
+            }
         case .invited:
             if senderIsYou {
                 return L10n.stateEventRoomInviteByYou(member)

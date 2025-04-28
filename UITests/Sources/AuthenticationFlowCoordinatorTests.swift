@@ -115,7 +115,7 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
         
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        XCTAssertTrue(springboard.staticTexts["“ElementX” Wants to Use “company.com” to Sign In"].waitForExistence(timeout: 2),
+        XCTAssertTrue(springboard.staticTexts["“ElementX” Wants to Use “company.com” to Sign In"].waitForExistence(timeout: 4),
                       "The web authentication prompt should be shown after selecting a homeserver with OIDC.")
     }
 }

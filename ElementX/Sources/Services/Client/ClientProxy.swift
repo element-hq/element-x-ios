@@ -1144,6 +1144,21 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.metaDataApi.getLinkPreview(url: url)
+            switch result {
+            case .success(let linkPreview):
+                return .success(linkPreview)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to fetch link preview of url: \(url), with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
     // MARK: - Private
     
     private func cacheAccountURL() async {

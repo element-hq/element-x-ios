@@ -12,7 +12,6 @@ struct ServerSelectionScreenCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProtocol
     let authenticationFlow: AuthenticationFlow
-    let slidingSyncLearnMoreURL: URL
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -39,7 +38,6 @@ final class ServerSelectionScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         viewModel = ServerSelectionScreenViewModel(authenticationService: parameters.authenticationService,
                                                    authenticationFlow: parameters.authenticationFlow,
-                                                   slidingSyncLearnMoreURL: parameters.slidingSyncLearnMoreURL,
                                                    userIndicatorController: parameters.userIndicatorController)
         userIndicatorController = parameters.userIndicatorController
     }

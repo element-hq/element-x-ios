@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Промяна на доставчика на акаунт";
 "screen_change_server_error_invalid_homeserver" = "We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync isn't available due to an issue in the well-known file:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "This server currently doesn’t support sliding sync.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Homeserver URL";
-"screen_change_server_form_notice" = "You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Какъв е адресът на вашия сървър?";
 "screen_change_server_title" = "Select your server";
 "screen_chat_backup_key_backup_action_disable" = "Изключване на резервните копия";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Вие премахнахте снимката на стаята";
 "state_event_room_ban" = "%1$@ banned %2$@";
 "state_event_room_ban_by_you" = "You banned %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ създаде стаята";
 "state_event_room_created_by_you" = "Вие създадохте стаята";
 "state_event_room_invite" = "%1$@ покани %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Вие отхвърлихте поканата";
 "state_event_room_remove" = "%1$@ премахна %2$@";
 "state_event_room_remove_by_you" = "Вие премахнахте %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ изпрати покана на %2$@ за присъединяване към стаята";
 "state_event_room_third_party_invite_by_you" = "Вие изпратихте покана на %1$@ за присъединяване към стаята";
 "state_event_room_third_party_revoked_invite" = "%1$@ revoked the invitation for %2$@ to join the room";
