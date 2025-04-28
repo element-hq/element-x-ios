@@ -196,6 +196,7 @@ struct RoomScreen: View {
             Text(L10n.screenRoomTimelineNoPermissionToPost)
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textDisabled)
+                .multilineTextAlignment(.center)
                 .padding(.vertical, 10) // Matches the MessageComposerStyleModifier
         }
     }
@@ -286,6 +287,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                        composerToolbar: ComposerToolbar.mock())
         }
         .previewDisplayName("Read-only")
+        .snapshotPreferences(expect: readOnlyViewModels.room.context.$viewState.map { !$0.canSendMessage })
     }
     
     static func makeViewModels(canSendMessage: Bool = true) -> ViewModels {
