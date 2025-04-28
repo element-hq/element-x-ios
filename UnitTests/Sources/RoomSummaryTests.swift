@@ -63,7 +63,6 @@ class RoomSummaryTests: XCTestCase {
                     heroes: heroes,
                     lastMessage: nil,
                     lastMessageDate: nil,
-                    lastMessageFormattedTimestamp: nil,
                     unreadMessagesCount: 0,
                     unreadMentionsCount: 0,
                     unreadNotificationsCount: 0,
