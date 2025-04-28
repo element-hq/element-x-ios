@@ -240,7 +240,7 @@
 "common_shared_location" = "Delade plats";
 "common_signing_out" = "Loggar ut";
 "common_something_went_wrong" = "Något gick fel";
-"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_something_went_wrong_message" = "Vi stötte på ett problem. Vänligen försök igen.";
 "common_starting_chat" = "Startar chatt …";
 "common_sticker" = "Dekal";
 "common_success" = "Lyckades";
@@ -922,7 +922,7 @@
 "screen_room_notification_settings_allow_custom" = "Tillåt anpassad inställning";
 "screen_room_notification_settings_allow_custom_footnote" = "Om du aktiverar detta åsidosätts din standardinställning";
 "screen_room_notification_settings_custom_settings_title" = "Meddela mig i den här chatten för";
-"screen_room_notification_settings_default_setting_footnote" = "Du kan ändra det i dina %1$@ .";
+"screen_room_notification_settings_default_setting_footnote" = "Du kan ändra det i dina %1$@.";
 "screen_room_notification_settings_default_setting_footnote_content_link" = "globala inställningar";
 "screen_room_notification_settings_default_setting_title" = "Standardinställning";
 "screen_room_notification_settings_edit_remove_setting" = "Ta bort anpassad inställning";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Du tog bort rummets avatar";
 "state_event_room_ban" = "%1$@ bannade %2$@";
 "state_event_room_ban_by_you" = "Du bannade %1$@";
+"state_event_room_ban_by_you_with_reason" = "Du bannade %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ bannade %2$@: %3$@";
 "state_event_room_created" = "%1$@ skapade rummet";
 "state_event_room_created_by_you" = "Du skapade rummet";
 "state_event_room_invite" = "%1$@ bjöd in %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Du avvisade inbjudan";
 "state_event_room_remove" = "%1$@ tog bort %2$@";
 "state_event_room_remove_by_you" = "Du tog bort %1$@";
+"state_event_room_remove_by_you_with_reason" = "Du tog bort %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ tog bort %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ skickade en inbjudan till %2$@ att gå med i rummet";
 "state_event_room_third_party_invite_by_you" = "Du skickade en inbjudan till %1$@ att gå med i rummet";
 "state_event_room_third_party_revoked_invite" = "%1$@ återkallade inbjudan för %2$@ att gå med i rummet";

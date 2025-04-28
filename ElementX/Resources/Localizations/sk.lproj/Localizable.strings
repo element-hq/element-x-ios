@@ -240,7 +240,7 @@
 "common_shared_location" = "Zdieľaná poloha";
 "common_signing_out" = "Odhlasovanie";
 "common_something_went_wrong" = "Niečo sa pokazilo";
-"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_something_went_wrong_message" = "Vyskytol sa problém. Skúste to prosím znova.";
 "common_starting_chat" = "Spustenie konverzácie...";
 "common_sticker" = "Nálepka";
 "common_success" = "Úspech";
@@ -491,7 +491,7 @@
 "screen_report_room_title" = "Nahlásiť miestnosť";
 "screen_reset_encryption_password_error" = "Nastala neznáma chyba. Skontrolujte, či je heslo vášho účtu správne a skúste to znova.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Odvolať overenie a odoslať";
-"screen_resolve_send_failure_changed_identity_subtitle" = "Svoje overenie môžete odvolať a odoslať túto správu aj tak, alebo ju môžete zatiaľ zrušiť a po opätovnom overení to skúsiť znova %1$@ .";
+"screen_resolve_send_failure_changed_identity_subtitle" = "Svoje overenie môžete odvolať a odoslať túto správu aj tak, alebo ju môžete zatiaľ zrušiť a po opätovnom overení to skúsiť znova %1$@.";
 "screen_resolve_send_failure_changed_identity_title" = "Vaša správa nebola odoslaná, pretože sa zmenila overená totožnosť používateľa %1$@.";
 "screen_resolve_send_failure_unsigned_device_primary_button_title" = "Odoslať správu aj tak";
 "screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ používa jedno alebo viac neoverených zariadení. Správu môžete odoslať aj tak, alebo ju môžete zatiaľ zrušiť a skúsiť to znova neskôr po %2$@ overení všetkých zariadení.";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Odstránili ste obrázok miestnosti";
 "state_event_room_ban" = "%1$@ zakázal/a používateľa %2$@";
 "state_event_room_ban_by_you" = "Zakázali ste používateľa %1$@";
+"state_event_room_ban_by_you_with_reason" = "Zakázali ste %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ zakázal/a %2$@: %3$@";
 "state_event_room_created" = "%1$@ vytvoril/a miestnosť";
 "state_event_room_created_by_you" = "Vytvorili ste miestnosť";
 "state_event_room_invite" = "%1$@ pozval/a používateľa %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Odmietli ste pozvánku";
 "state_event_room_remove" = "%1$@ odstránil/a %2$@";
 "state_event_room_remove_by_you" = "Odstránili ste %1$@";
+"state_event_room_remove_by_you_with_reason" = "Odstránili ste %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ odstránil/a %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ poslal/a pozvánku používateľovi %2$@, aby sa pripojil k miestnosti";
 "state_event_room_third_party_invite_by_you" = "Poslali ste pozvánku používateľovi %1$@, aby sa pripojil do miestnosti";
 "state_event_room_third_party_revoked_invite" = "%1$@ zrušil/a pozvánku pre používateľa %2$@ na vstup do miestnosti";

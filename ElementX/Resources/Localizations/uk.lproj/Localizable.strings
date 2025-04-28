@@ -240,7 +240,7 @@
 "common_shared_location" = "Поширене розташування";
 "common_signing_out" = "Вихід";
 "common_something_went_wrong" = "Щось пішло не так";
-"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_something_went_wrong_message" = "Ми зіткнулися з проблемою. Будь ласка, повторіть спробу.";
 "common_starting_chat" = "Початок бесіди...";
 "common_sticker" = "Наліпка";
 "common_success" = "Успіх";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Ви видалили аватар кімнати";
 "state_event_room_ban" = "%1$@ блокує %2$@";
 "state_event_room_ban_by_you" = "Ви заблокували %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ створює кімнату";
 "state_event_room_created_by_you" = "Ви створили кімнату";
 "state_event_room_invite" = "%1$@ запрошує %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Ви відхилили запрошення";
 "state_event_room_remove" = "%1$@ вилучає %2$@";
 "state_event_room_remove_by_you" = "Ви видалили %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ запрошує %2$@ приєднатися до кімнати";
 "state_event_room_third_party_invite_by_you" = "Ви запросили %1$@ приєднатися до кімнати";
 "state_event_room_third_party_revoked_invite" = "%1$@ відкликає запрошення приєднатися до кімнати для %2$@";

@@ -696,7 +696,7 @@
 "screen_join_room_join_action" = "Rejoindre";
 "screen_join_room_join_restricted_message" = "Il est possible que vous deviez être invité ou être membre d'un Space pour pouvoir rejoindre le salon.";
 "screen_join_room_knock_action" = "Demander à joindre";
-"screen_join_room_space_not_supported_description" = "Les Spaces ne sont pas encore pris en charge par %1$@ . Vous pouvez voir les Spaces sur le Web.";
+"screen_join_room_space_not_supported_description" = "Les Spaces ne sont pas encore pris en charge par %1$@. Vous pouvez voir les Spaces sur le Web.";
 "screen_join_room_space_not_supported_title" = "Les Spaces ne sont pas encore pris en charge";
 "screen_join_room_subtitle_knock" = "Cliquez ci-dessous et un administrateur sera prévenu. Une fois votre demande approuvée, pour pourrez rejoindre la discussion.";
 "screen_join_room_subtitle_no_preview" = "Vous devez être un membre du salon pour pouvoir lire l'historique des messages.";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Vous avez supprimé l’avatar du salon";
 "state_event_room_ban" = "%1$@ a banni %2$@";
 "state_event_room_ban_by_you" = "Vous avez banni %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ a créé le salon";
 "state_event_room_created_by_you" = "Vous avez créé le salon";
 "state_event_room_invite" = "%1$@ a invité %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Vous avez refusé l’invitation";
 "state_event_room_remove" = "%1$@ a supprimé %2$@";
 "state_event_room_remove_by_you" = "Vous avez supprimé %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ a envoyé une invitation à %2$@ à rejoindre le salon";
 "state_event_room_third_party_invite_by_you" = "Vous avez envoyé une invitation à %1$@ pour rejoindre le salon";
 "state_event_room_third_party_revoked_invite" = "%1$@ a révoqué l’invitation de %2$@ à rejoindre le salon";

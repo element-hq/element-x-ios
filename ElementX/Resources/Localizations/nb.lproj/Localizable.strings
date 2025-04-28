@@ -240,7 +240,7 @@
 "common_shared_location" = "Delt posisjon";
 "common_signing_out" = "Logger av";
 "common_something_went_wrong" = "Noe gikk galt";
-"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_something_went_wrong_message" = "Vi har støtt på et problem. Vennligst prøv igjen.";
 "common_starting_chat" = "Starter chat...";
 "common_sticker" = "Klistremerke";
 "common_success" = "Suksess";
@@ -922,7 +922,7 @@
 "screen_room_notification_settings_allow_custom" = "Tillat egendefinert innstilling";
 "screen_room_notification_settings_allow_custom_footnote" = "Hvis du slår på dette, overstyrer du standardinnstillingen";
 "screen_room_notification_settings_custom_settings_title" = "Varsle meg i denne chatten om";
-"screen_room_notification_settings_default_setting_footnote" = "Du kan endre det i din %1$@ .";
+"screen_room_notification_settings_default_setting_footnote" = "Du kan endre det i din %1$@.";
 "screen_room_notification_settings_default_setting_footnote_content_link" = "globale innstillinger";
 "screen_room_notification_settings_default_setting_title" = "Standard innstilling";
 "screen_room_notification_settings_edit_remove_setting" = "Fjern egendefinert innstilling";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Du fjernet romavataren";
 "state_event_room_ban" = "%1$@ utestengte %2$@";
 "state_event_room_ban_by_you" = "Du utestengte %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ opprettet rommet";
 "state_event_room_created_by_you" = "Du opprettet rommet";
 "state_event_room_invite" = "%1$@ inviterte %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Du avviste invitasjonen";
 "state_event_room_remove" = "%1$@ fjernet %2$@";
 "state_event_room_remove_by_you" = "Du fjernet %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ sendte en invitasjon til %2$@ om å bli med i rommet";
 "state_event_room_third_party_invite_by_you" = "Du sendte en invitasjon til %1$@ om å bli med i rommet";
 "state_event_room_third_party_revoked_invite" = "%1$@ trakk tilbake invitasjonen til %2$@ om å delta i rommet";

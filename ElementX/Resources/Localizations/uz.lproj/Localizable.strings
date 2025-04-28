@@ -1030,7 +1030,7 @@
 "screen_signed_out_reason_1" = "Siz boshqa seansda parolingizni o'zgartirdingiz";
 "screen_signed_out_reason_2" = "Siz seansni boshqa seansdan o'chirib tashladingiz";
 "screen_signed_out_reason_3" = "Serveringiz administratori ruxsatingizni bekor qildi";
-"screen_signed_out_subtitle" = "Siz quyida sanab o‘tilgan sabablardan biri tufayli tizimdan chiqqan bo‘lishingiz mumkin. Foydalanishni davom ettirish uchun qayta kiring%@ .";
+"screen_signed_out_subtitle" = "Siz quyida sanab o‘tilgan sabablardan biri tufayli tizimdan chiqqan bo‘lishingiz mumkin. Foydalanishni davom ettirish uchun qayta kiring%@.";
 "screen_signed_out_title" = "Hisobingizdan chiqdingiz";
 "screen_signout_confirmation_dialog_content" = "Haqiqatan ham tizimdan chiqmoqchimisiz?";
 "screen_signout_in_progress_dialog_content" = "Chiqish…";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Siz xonani avatarini o'chirib tashladingiz";
 "state_event_room_ban" = "%1$@taqiqlangan%2$@";
 "state_event_room_ban_by_you" = "Siz taqiqlangansiz%1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@xonani yaratdi";
 "state_event_room_created_by_you" = "Siz xonani yaratdingiz";
 "state_event_room_invite" = "%1$@taklif qilingan%2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Siz taklifni rad etdingiz";
 "state_event_room_remove" = "%1$@ o'chirildi %2$@";
 "state_event_room_remove_by_you" = "Siz o'chirildingiz %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ taklifnoma yubordi %2$@ga xonaga qo'shilish uchun";
 "state_event_room_third_party_invite_by_you" = "Siz taklifnoma yubordingiz %1$@ ga xonaga qo'shilishi uchun";
 "state_event_room_third_party_revoked_invite" = "%1$@ taklifni %2$@ ga xonaga qo'shilish uchun bekor qildi";

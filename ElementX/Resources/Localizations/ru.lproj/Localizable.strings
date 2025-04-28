@@ -618,7 +618,7 @@
 "screen_change_server_title" = "Выберите свой сервер";
 "screen_chat_backup_key_backup_action_disable" = "Удалить хранилище ключей";
 "screen_chat_backup_key_backup_action_enable" = "Включить резервное копирование";
-"screen_chat_backup_key_backup_description" = "Сохраните вашу криптографическую идентификацию и ключи сообщений в безопасности на сервере. Это позволит вам просматривать историю сообщений на любых новых устройствах.%1$@ .";
+"screen_chat_backup_key_backup_description" = "Сохраните вашу криптографическую идентификацию и ключи сообщений в безопасности на сервере. Это позволит вам просматривать историю сообщений на любых новых устройствах.%1$@.";
 "screen_chat_backup_key_backup_title" = "Хранилище ключей";
 "screen_chat_backup_key_storage_disabled_error" = "Для настройки восстановления необходимо включить хранилище ключей.";
 "screen_chat_backup_key_storage_toggle_description" = "Загрузить ключи с этого устройства";
@@ -686,7 +686,7 @@
 "screen_invites_decline_direct_chat_title" = "Отклонить чат";
 "screen_invites_empty_list" = "Нет приглашений";
 "screen_invites_invited_you" = "%1$@ (%2$@) пригласил вас";
-"screen_join_room_ban_by_message" = "Вам был запрещен доступ в комнату %1$@ .";
+"screen_join_room_ban_by_message" = "Вам был запрещен доступ в комнату %1$@.";
 "screen_join_room_ban_message" = "Вам был запрещен доступ в эту комнату";
 "screen_join_room_ban_reason" = "Причина: %1$@.";
 "screen_join_room_fail_message" = "Не удалось присоединиться к комнате.";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Вы удалили изображение комнаты";
 "state_event_room_ban" = "%1$@ заблокировал %2$@";
 "state_event_room_ban_by_you" = "Вы заблокировали %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ создал комнату";
 "state_event_room_created_by_you" = "Вы создали комнату";
 "state_event_room_invite" = "%1$@ пригласил %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Вы отклонили приглашение";
 "state_event_room_remove" = "%1$@ удалил %2$@";
 "state_event_room_remove_by_you" = "Вы удалили %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ отправила приглашение %2$@ присоединиться к комнате";
 "state_event_room_third_party_invite_by_you" = "Вы отправили приглашение присоединиться к комнате %1$@";
 "state_event_room_third_party_revoked_invite" = "%1$@ отозвал приглашение %2$@ присоединиться к комнате";

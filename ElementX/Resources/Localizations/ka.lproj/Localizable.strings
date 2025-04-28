@@ -922,7 +922,7 @@
 "screen_room_notification_settings_allow_custom" = "მორგებული პარამეტრის დაშვება";
 "screen_room_notification_settings_allow_custom_footnote" = "ამის ჩართვა უგულებელყოფს თქვენს ნაგულისხმევ პარამეტრს";
 "screen_room_notification_settings_custom_settings_title" = "ამ ჩატში ჩემი შეტყობინება:";
-"screen_room_notification_settings_default_setting_footnote" = "თქვენ შეგიძლიათ შეცვალოთ იგი თქვენს %1$@ .";
+"screen_room_notification_settings_default_setting_footnote" = "თქვენ შეგიძლიათ შეცვალოთ იგი თქვენს %1$@.";
 "screen_room_notification_settings_default_setting_footnote_content_link" = "გლობალური პარამეტრები";
 "screen_room_notification_settings_default_setting_title" = "Სტანდარტული პარამეტრები";
 "screen_room_notification_settings_edit_remove_setting" = "მორგებული პარამეტრის წაშლა";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "თქვენ წაშალეთ ოთახის ფოტო";
 "state_event_room_ban" = "%1$@ დაბლოკა %2$@";
 "state_event_room_ban_by_you" = "თქვენ დაბლოკეთ %1$@";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@ შექმნა ოთახი";
 "state_event_room_created_by_you" = "თქვენ შექმენით ოთახი";
 "state_event_room_invite" = "%1$@ მოიწვია %2$@";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "თქვენ უარი თქვით მოწვევაზე";
 "state_event_room_remove" = "%1$@ გააგდო %2$@";
 "state_event_room_remove_by_you" = "თქვენ გააგდეთ %1$@";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@ მოიწვია %2$@ ოთახში";
 "state_event_room_third_party_invite_by_you" = "თქვენ მოიწვიეთ %1$@ ოთახში";
 "state_event_room_third_party_revoked_invite" = "%1$@ გააუქმო %2$@-ს ოთახში მოწვევა";

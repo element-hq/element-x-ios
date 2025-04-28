@@ -560,7 +560,7 @@
 "screen_advanced_settings_view_source_description" = "Gaitu aukera mezuaren iturria denbora-lerroan ikusteko.";
 "screen_analytics_prompt_data_usage" = "We won't record or profile any personal data";
 "screen_analytics_prompt_help_us_improve" = "Partekatu erabilerari buruzko datu anonimoak arazoak identifikatzen laguntzeko.";
-"screen_analytics_prompt_read_terms" = "Gure baldintza guztiak irakur ditzakezu %1$@ .";
+"screen_analytics_prompt_read_terms" = "Gure baldintza guztiak irakur ditzakezu %1$@.";
 "screen_analytics_prompt_read_terms_content_link" = "hemen";
 "screen_analytics_prompt_settings" = "Edozein unetan desaktibatu dezakezu";
 "screen_analytics_prompt_third_party_sharing" = "Ez ditugu zure datuak hirugarrenekin partekatuko";
@@ -1074,6 +1074,8 @@
 "state_event_room_avatar_removed_by_you" = "Gelaren abatarra kendu duzu";
 "state_event_room_ban" = "%1$@(e)k %2$@(r) debekua ezarri dio";
 "state_event_room_ban_by_you" = "%1$@(r) debekua ezarri diozu";
+"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
+"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
 "state_event_room_created" = "%1$@(e)k gela sortu du";
 "state_event_room_created_by_you" = "Gela sortu duzu";
 "state_event_room_invite" = "%1$@(e)k %2$@ gonbidatu du";
@@ -1110,6 +1112,8 @@
 "state_event_room_reject_by_you" = "Gonbidapena baztertu duzu";
 "state_event_room_remove" = "%1$@(e)k %2$@ kendu du";
 "state_event_room_remove_by_you" = "%1$@ kendu duzu";
+"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
+"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
 "state_event_room_third_party_invite" = "%1$@(e)k %2$@(r)i gonbidapena bidali dio gelara batu dadin";
 "state_event_room_third_party_invite_by_you" = "Gonbidapena bidali diozu %1$@(r)i gelara batu dadin";
 "state_event_room_third_party_revoked_invite" = "%1$@ revoked the invitation for %2$@ to join the room";
@@ -1198,7 +1202,7 @@
 "screen_account_provider_signin_subtitle" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";
 "screen_account_provider_signup_subtitle" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";
 "screen_analytics_settings_help_us_improve" = "Partekatu erabilerari buruzko datu anonimoak arazoak identifikatzen laguntzeko.";
-"screen_analytics_settings_read_terms" = "Gure baldintza guztiak irakur ditzakezu %1$@ .";
+"screen_analytics_settings_read_terms" = "Gure baldintza guztiak irakur ditzakezu %1$@.";
 "screen_analytics_settings_read_terms_content_link" = "hemen";
 "screen_blocked_users_unblock_alert_action" = "Desblokeatu";
 "screen_blocked_users_unblock_alert_description" = "Beraien mezu guztiak berriro ikusteko aukera izango duzu.";
