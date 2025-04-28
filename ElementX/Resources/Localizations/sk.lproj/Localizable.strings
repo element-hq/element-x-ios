@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Zmeniť poskytovateľa účtu";
 "screen_change_server_error_invalid_homeserver" = "Nemohli sme sa spojiť s týmto domovským serverom. Skontrolujte prosím, či ste zadali URL adresu domovského servera správne. Ak je adresa URL správna, kontaktujte svoj domovský server pre ďalšiu pomoc.";
 "screen_change_server_error_invalid_well_known" = "Posuvná synchronizácia nie je k dispozícii z dôvodu problému v známom súbore:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Tento server momentálne nepodporuje kĺzavú synchronizáciu.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Adresa URL domovského servera";
-"screen_change_server_form_notice" = "Môžete sa pripojiť iba k existujúcemu serveru, ktorý podporuje kĺzavú synchronizáciu. Správca domovského servera ju bude musieť nakonfigurovať. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Aká je adresa vášho servera?";
 "screen_change_server_title" = "Vyberte svoj server";
 "screen_chat_backup_key_backup_action_disable" = "Vypnúť zálohovanie";

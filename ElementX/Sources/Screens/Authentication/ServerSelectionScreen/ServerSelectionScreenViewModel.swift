@@ -13,7 +13,6 @@ typealias ServerSelectionScreenViewModelType = StateStoreViewModel<ServerSelecti
 class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, ServerSelectionScreenViewModelProtocol {
     private let authenticationService: AuthenticationServiceProtocol
     private let authenticationFlow: AuthenticationFlow
-    private let slidingSyncLearnMoreURL: URL
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var actionsSubject: PassthroughSubject<ServerSelectionScreenViewModelAction, Never> = .init()
@@ -24,15 +23,13 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
 
     init(authenticationService: AuthenticationServiceProtocol,
          authenticationFlow: AuthenticationFlow,
-         slidingSyncLearnMoreURL: URL,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.authenticationFlow = authenticationFlow
-        self.slidingSyncLearnMoreURL = slidingSyncLearnMoreURL
         self.userIndicatorController = userIndicatorController
         
         let bindings = ServerSelectionScreenBindings(homeserverAddress: authenticationService.homeserver.value.address)
-        super.init(initialViewState: ServerSelectionScreenViewState(slidingSyncLearnMoreURL: slidingSyncLearnMoreURL, bindings: bindings))
+        super.init(initialViewState: ServerSelectionScreenViewState(bindings: bindings))
     }
     
     override func process(viewAction: ServerSelectionScreenViewAction) {
@@ -87,12 +84,10 @@ class ServerSelectionScreenViewModel: ServerSelectionScreenViewModelType, Server
                                                  title: L10n.commonServerNotSupported,
                                                  message: L10n.screenChangeServerErrorInvalidWellKnown(error))
         case .slidingSyncNotAvailable:
-            let openURL = { UIApplication.shared.open(self.slidingSyncLearnMoreURL) }
+            let nonBreakingAppName = InfoPlistReader.main.bundleDisplayName.replacingOccurrences(of: " ", with: "\u{00A0}")
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
                                                  title: L10n.commonServerNotSupported,
-                                                 message: L10n.screenChangeServerErrorNoSlidingSyncMessage,
-                                                 primaryButton: .init(title: L10n.actionLearnMore, role: .cancel, action: openURL),
-                                                 secondaryButton: .init(title: L10n.actionCancel, action: nil))
+                                                 message: L10n.screenChangeServerErrorNoSlidingSyncMessage(nonBreakingAppName))
         case .loginNotSupported:
             state.bindings.alertInfo = AlertInfo(id: .loginAlert,
                                                  title: L10n.commonServerNotSupported,

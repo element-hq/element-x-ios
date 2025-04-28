@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Hisob provayderini o'zgartiring";
 "screen_change_server_error_invalid_homeserver" = "Bu uy serveriga kira olmadik. Iltimos, uy serverining URL manzilini to'ri kiritganingizni tekshiring. Agar URL toʻgʻri boʻlsa, qoʻshimcha yordam olish uchun uy serveri administratoriga murojaat qiling.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync isn't available due to an issue in the well-known file:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Hozirda bu server siljish sinxronlashni qo‘llab-quvvatlamaydi.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Uy serverining URL manzili";
-"screen_change_server_form_notice" = "Siz faqat siljish sinxronlashni qo'llab-quvvatlaydigan mavjud serverga ulanishingiz mumkin. Uy serveringiz administratori uni sozlashi kerak.%1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Serveringizning manzili nima?";
 "screen_change_server_title" = "Serveringizni tanlang";
 "screen_chat_backup_key_backup_action_disable" = "Zaxiralashni o'chirib qo'ying";

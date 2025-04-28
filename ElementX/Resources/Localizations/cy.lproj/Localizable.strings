@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Newid darparwr cyfrif";
 "screen_change_server_error_invalid_homeserver" = "Doedd dim modd i ni gyrraedd y gweinydd cartref hwn. Gwiriwch eich bod wedi rhoi URL y gweinydd cartref yn gywir. Os yw'r URL yn gywir, cysylltwch â gweinyddwr eich gweinydd cartref am ragor o help.";
 "screen_change_server_error_invalid_well_known" = "Nid yw cydweddu llithrig ar gael oherwydd problem yn y ffeil adnabyddus:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Nid yw'r gweinydd hwn yn cefnogi cydweddu llithrig ar hyn o bryd.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "URL y Gweinydd Cartref";
-"screen_change_server_form_notice" = "Dim ond i weinydd presennol sy'n cefnogi cydweddu llithrig y gallwch chi gysylltu. Bydd angen i weinyddwr eich gweinydd cartref ei ffurfweddu. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Beth yw cyfeiriad eich gweinydd?";
 "screen_change_server_title" = "Dewiswch eich gweinydd";
 "screen_chat_backup_key_backup_action_disable" = "Dileu storfa allweddi";

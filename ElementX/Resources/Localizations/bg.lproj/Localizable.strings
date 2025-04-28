@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Промяна на доставчика на акаунт";
 "screen_change_server_error_invalid_homeserver" = "We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync isn't available due to an issue in the well-known file:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "This server currently doesn’t support sliding sync.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Homeserver URL";
-"screen_change_server_form_notice" = "You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Какъв е адресът на вашия сървър?";
 "screen_change_server_title" = "Select your server";
 "screen_chat_backup_key_backup_action_disable" = "Изключване на резервните копия";

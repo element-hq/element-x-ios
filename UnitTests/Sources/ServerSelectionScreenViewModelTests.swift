@@ -131,7 +131,6 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         
         viewModel = ServerSelectionScreenViewModel(authenticationService: service,
                                                    authenticationFlow: authenticationFlow,
-                                                   slidingSyncLearnMoreURL: ServiceLocator.shared.settings.slidingSyncLearnMoreURL,
                                                    userIndicatorController: UserIndicatorControllerMock())
     }
 }

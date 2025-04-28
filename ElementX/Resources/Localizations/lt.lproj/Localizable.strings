@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Keisti paskyros teikėją";
 "screen_change_server_error_invalid_homeserver" = "Nepavyko pasiekti šio serverio. Patikrinkite, ar teisingai įvedėte serverio URL. Jei URL yra teisingas, susisiekite su serverio administracija dėl tolimesnės pagalbos.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync isn't available due to an issue in the well-known file:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Šiuo metu šis serveris nepalaiko slenkančios sinchronizacijos (sliding sync).";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Serverio URL";
-"screen_change_server_form_notice" = "Galite prisijungti tik prie serverio, palaikančio slenkančią sinchronizaciją (sliding sync). Jūsų serverio administracija turėtų ją sukonfigūruoti. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Koks yra Jūsų serverio adresas?";
 "screen_change_server_title" = "Select your server";
 "screen_chat_backup_key_backup_action_disable" = "Delete key storage";

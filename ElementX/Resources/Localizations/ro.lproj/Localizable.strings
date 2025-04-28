@@ -611,9 +611,9 @@
 "screen_change_account_provider_title" = "Schimbați furnizorul contului";
 "screen_change_server_error_invalid_homeserver" = "Nu am putut accesa acest homeserver. Te rugăm să verifici că ai introdus corect adresa URL a homeserver-ului. Dacă adresa URL este corectă, contactează administratorul homeserver-ului pentru ajutor suplimentar.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync nu este disponibil din cauza unei probleme în fișierul well-known:\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "Momentan acest server nu oferă suport pentru sliding sync.";
+"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Adresa URL a homeserver-ului";
-"screen_change_server_form_notice" = "Vă putețo conecta numai la un server existent care oferă suport pentru sliding sync. Administratorul homeserver-ului dumneavoastră va trebui să îl configureze. %1$@";
+"screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Care este adresa serverului dumneavoastră?";
 "screen_change_server_title" = "Selectați serverul dumneavoastra";
 "screen_chat_backup_key_backup_action_disable" = "Dezactivați backupul";
