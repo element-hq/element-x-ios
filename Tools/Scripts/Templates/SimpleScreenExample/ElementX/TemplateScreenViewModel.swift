@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias TemplateScreenViewModelType = StateStoreViewModel<TemplateScreenViewState, TemplateScreenViewAction>
+typealias TemplateScreenViewModelType = StateStoreViewModelV2<TemplateScreenViewState, TemplateScreenViewAction>
 
 class TemplateScreenViewModel: TemplateScreenViewModelType, TemplateScreenViewModelProtocol {
     private let actionsSubject: PassthroughSubject<TemplateScreenViewModelAction, Never> = .init()
@@ -32,6 +32,10 @@ class TemplateScreenViewModel: TemplateScreenViewModelType, TemplateScreenViewMo
             actionsSubject.send(.done)
         case .textChanged:
             MXLog.info("View model: composer text changed to: \(state.bindings.composerText)")
+        case .incrementCounter:
+            state.counter += 1
+        case .decrementCounter:
+            state.counter -= 1
         }
     }
 }

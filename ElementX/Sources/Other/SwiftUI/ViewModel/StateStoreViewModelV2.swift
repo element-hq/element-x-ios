@@ -7,16 +7,18 @@
 
 import Combine
 import Foundation
+import Observation
 
-/// A common ViewModel implementation for handling of `State` and `ViewAction`s. This original version
-/// is implemented using SwiftUI's original `ObservableObject` and `@Published` pattern.
+/// A common ViewModel implementation for handling of `State` and `ViewAction`s. Version 2 of this state
+/// store has been re-written to use Swift's new Observation framework.
+///
 ///
 /// Generic type State is constrained to the BindableState protocol in that it may contain (but doesn't have to)
 /// a specific portion of state that can be safely bound to.
 /// If we decide to add more features to our state management (like doing state processing off the main thread)
 /// we can do it in this centralised place.
 @MainActor
-class StateStoreViewModel<State: BindableState, ViewAction> {
+class StateStoreViewModelV2<State: BindableState, ViewAction> {
     /// For storing subscription references.
     ///
     /// Left as public for `ViewModel` implementations convenience.
@@ -42,7 +44,7 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
     }
 
     // MARK: - Context
-
+    
     /// A constrained and concise interface for interacting with the ViewModel.
     ///
     /// This class is closely bound to`StateStoreViewModel`. It provides the exact interface the view should need to interact
@@ -57,17 +59,17 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
     /// can't be made into the `ViewModel`.
     @dynamicMemberLookup
     @MainActor
-    final class Context: ObservableObject {
-        fileprivate weak var viewModel: StateStoreViewModel?
+    @Observable final class Context {
+        fileprivate weak var viewModel: StateStoreViewModelV2?
     
-        /// Get-able/Observable `Published` property for the `ViewState`
-        @Published fileprivate(set) var viewState: State
+        /// Get-able property for the `ViewState`
+        fileprivate(set) var viewState: State
     
         /// An optional image loading service so that views can manage themselves
         /// Intentionally non-generic so that it doesn't grow uncontrollably
         let mediaProvider: MediaProviderProtocol?
     
-        /// Set-able/Bindable access to the bindable state.
+        /// Set-able access to the bindable state.
         subscript<T>(dynamicMember keyPath: WritableKeyPath<State.BindStateType, T>) -> T {
             get { viewState.bindings[keyPath: keyPath] }
             set { viewState.bindings[keyPath: keyPath] = newValue }

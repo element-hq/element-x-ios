@@ -22,13 +22,23 @@ class TemplateScreenViewModelTests: XCTestCase {
     }
 
     func testInitialState() {
-        XCTAssertFalse(context.viewState.placeholder.isEmpty)
         XCTAssertFalse(context.composerText.isEmpty)
+        XCTAssertEqual(context.viewState.counter, 0)
     }
 
-    func testCounter() async throws {
+    func testTextField() async throws {
         context.composerText = "123"
         context.send(viewAction: .textChanged)
         XCTAssertEqual(context.composerText, "123")
+    }
+    
+    func testCounter() async throws {
+        context.send(viewAction: .incrementCounter)
+        context.send(viewAction: .incrementCounter)
+        context.send(viewAction: .incrementCounter)
+        XCTAssertEqual(context.viewState.counter, 3)
+        
+        context.send(viewAction: .decrementCounter)
+        XCTAssertEqual(context.viewState.counter, 2)
     }
 }

@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct TemplateScreen: View {
-    @ObservedObject var context: TemplateScreenViewModel.Context
+    @Bindable var context: TemplateScreenViewModel.Context
     
     var body: some View {
         Form {
@@ -18,8 +18,18 @@ struct TemplateScreen: View {
                         kind: .textField(text: $context.composerText))
                 
                 ListRow(label: .centeredAction(title: L10n.actionDone,
-                                               systemIcon: .doorLeftHandClosed),
+                                               icon: \.leave),
                         kind: .button { context.send(viewAction: .done) })
+            }
+            
+            Section {
+                ListRow(label: .default(title: "Counter", icon: \.chart),
+                        details: .counter(context.viewState.counter),
+                        kind: .label)
+                ListRow(label: .default(title: "Increment", icon: \.plus),
+                        kind: .button { context.send(viewAction: .incrementCounter) })
+                ListRow(label: .default(title: "Decrement", icon: \.minus),
+                        kind: .button { context.send(viewAction: .decrementCounter) })
             }
         }
         .compoundList()
