@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3738A14ED73FF6F328E4FDFA"
                BuildableName = "VoiceDrop.app"
-               BlueprintName = "ElementX"
+               BlueprintName = "VoiceDrop"
                ReferencedContainer = "container:VoiceDrop.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,7 +34,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3738A14ED73FF6F328E4FDFA"
             BuildableName = "VoiceDrop.app"
-            BlueprintName = "ElementX"
+            BlueprintName = "VoiceDrop"
             ReferencedContainer = "container:VoiceDrop.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -43,7 +43,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3738A14ED73FF6F328E4FDFA"
             BuildableName = "VoiceDrop.app"
-            BlueprintName = "ElementX"
+            BlueprintName = "VoiceDrop"
             ReferencedContainer = "container:VoiceDrop.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
@@ -70,7 +70,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3738A14ED73FF6F328E4FDFA"
             BuildableName = "VoiceDrop.app"
-            BlueprintName = "ElementX"
+            BlueprintName = "VoiceDrop"
             ReferencedContainer = "container:VoiceDrop.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -109,7 +109,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3738A14ED73FF6F328E4FDFA"
             BuildableName = "VoiceDrop.app"
-            BlueprintName = "ElementX"
+            BlueprintName = "VoiceDrop"
             ReferencedContainer = "container:VoiceDrop.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

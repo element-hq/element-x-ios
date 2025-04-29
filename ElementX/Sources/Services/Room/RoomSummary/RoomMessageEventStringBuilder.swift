@@ -64,10 +64,38 @@ struct RoomMessageEventStringBuilder {
             } else {
                 message = AttributedString(content.body)
             }
-        case .rawStt:
-            message = AttributedString(L10n.commonUnsupportedEvent)
+        case .rawStt(let content):
+            // Display the raw STT content instead of "Unsupported event"
+            if !content.body.isEmpty {
+                message = AttributedString(content.body)
+            } else {
+                message = AttributedString(L10n.commonVoiceMessage)
+            }
         case .refinedStt(let content):
-            message = AttributedString(L10n.commonUnsupportedEvent)
+            // Try to parse the JSON to extract the summary
+            if !content.body.isEmpty {
+                // First try to parse as JSON to get the summary
+                if let jsonData = content.body.data(using: .utf8) {
+                    do {
+                        // Use JSONSerialization to avoid creating a new decoder for each message
+                        if let json = try JSONSerialization.jsonObject(with: jsonData) as? [String: Any],
+                           let summary = json["summary"] as? String, !summary.isEmpty {
+                            message = AttributedString(summary)
+                        } else {
+                            // If no summary found, just use the raw body
+                            message = AttributedString(content.body)
+                        }
+                    } catch {
+                        // If JSON parsing fails, just use the raw body
+                        message = AttributedString(content.body)
+                    }
+                } else {
+                    // If can't convert to data, just use the raw body
+                    message = AttributedString(content.body)
+                }
+            } else {
+                message = AttributedString(L10n.commonVoiceMessage)
+            }
         case .other(_, let body):
             message = AttributedString(body)
         }

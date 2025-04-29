@@ -5774,9 +5774,9 @@
 			productReference = 0439A50199AD32074BA96604 /* UnitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		3738A14ED73FF6F328E4FDFA /* ElementX */ = {
+		3738A14ED73FF6F328E4FDFA /* VoiceDrop */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BB9359957D700604F5F15EBB /* Build configuration list for PBXNativeTarget "ElementX" */;
+			buildConfigurationList = BB9359957D700604F5F15EBB /* Build configuration list for PBXNativeTarget "VoiceDrop" */;
 			buildPhases = (
 				D6EAEA5CE0609EFC6B0C63C7 /* 🛠 SwiftGen */,
 				2462B51B7E57DBB7816E8EEF /* 🧙 Sourcery - Generate mocks */,
@@ -5794,7 +5794,7 @@
 				187C610E3CDD61A8B9371C87 /* PBXTargetDependency */,
 				EE69BA8F0E76B85500375EE8 /* PBXTargetDependency */,
 			);
-			name = ElementX;
+			name = VoiceDrop;
 			packageProductDependencies = (
 				0374C244367F4F9D1E7DE5DF /* MatrixRustSDK */,
 				5B708092270DD286F8459555 /* Compound */,
@@ -6035,7 +6035,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3738A14ED73FF6F328E4FDFA /* ElementX */,
+				3738A14ED73FF6F328E4FDFA /* VoiceDrop */,
 				578DDE24251C6F279B31885E /* IntegrationTests */,
 				DEE1B7D6137DB22E601CCF4B /* NSE */,
 				40B716DE24C76CBC36561E5F /* Periphery */,
@@ -7378,17 +7378,17 @@
 		};
 		875F6337F799D87C6C892071 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3738A14ED73FF6F328E4FDFA /* ElementX */;
+			target = 3738A14ED73FF6F328E4FDFA /* VoiceDrop */;
 			targetProxy = C60123E24C73451AC3403372 /* PBXContainerItemProxy */;
 		};
 		BD3ED00915741BB090CDEAEA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3738A14ED73FF6F328E4FDFA /* ElementX */;
+			target = 3738A14ED73FF6F328E4FDFA /* VoiceDrop */;
 			targetProxy = ACD7DEC91127CD268D4449FF /* PBXContainerItemProxy */;
 		};
 		C08107100434465C3BDEB58B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3738A14ED73FF6F328E4FDFA /* ElementX */;
+			target = 3738A14ED73FF6F328E4FDFA /* VoiceDrop */;
 			targetProxy = BD11B2A340325FC8D1BBBCE5 /* PBXContainerItemProxy */;
 		};
 		EE69BA8F0E76B85500375EE8 /* PBXTargetDependency */ = {
@@ -7398,7 +7398,7 @@
 		};
 		FB3A9E45CF2678400648ACD0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 3738A14ED73FF6F328E4FDFA /* ElementX */;
+			target = 3738A14ED73FF6F328E4FDFA /* VoiceDrop */;
 			targetProxy = 784F8F81A6D7E64B9F9583C9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -8054,7 +8054,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		BB9359957D700604F5F15EBB /* Build configuration list for PBXNativeTarget "ElementX" */ = {
+		BB9359957D700604F5F15EBB /* Build configuration list for PBXNativeTarget "VoiceDrop" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3E569FA731A5BA86B02A34D7 /* Debug */,
