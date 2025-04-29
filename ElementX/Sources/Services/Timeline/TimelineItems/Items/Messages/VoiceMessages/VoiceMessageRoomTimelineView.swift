@@ -22,6 +22,45 @@ struct RefinedTranscriptionData: Codable {
     }
 }
 
+// Helper class to handle async operations (since structs can't capture self in escaping closures)
+final class TranscriptionParser {
+    static let shared = TranscriptionParser()
+    
+    func parseTranscription(_ transcription: String, completion: @escaping (RefinedTranscriptionData?) -> Void) {
+        // Skip parsing if transcription is empty
+        guard !transcription.isEmpty else {
+            completion(nil)
+            return
+        }
+        
+        // Use a background thread for parsing to avoid UI lag
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                let decoder = JSONDecoder()
+                if let jsonData = transcription.data(using: .utf8) {
+                    let parsedResult = try decoder.decode(RefinedTranscriptionData.self, from: jsonData)
+                    
+                    // Return result on main thread
+                    DispatchQueue.main.async {
+                        completion(parsedResult)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        completion(nil)
+                    }
+                }
+            } catch {
+                #if DEBUG
+                print("Failed to parse transcription JSON")
+                #endif
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+            }
+        }
+    }
+}
+
 struct VoiceMessageRoomTimelineView: View {
     @EnvironmentObject private var context: TimelineViewModel.Context
     @ObservedObject private var timelineItem: VoiceMessageRoomTimelineItem
@@ -36,10 +75,6 @@ struct VoiceMessageRoomTimelineView: View {
     init(timelineItem: VoiceMessageRoomTimelineItem, playerState: AudioPlayerState) {
         self.timelineItem = timelineItem
         self.playerState = playerState
-        
-        // Log that the view is being initialized
-        MXLog.debug("VoiceMessageRoomTimelineView: Initialized with timelineItem ID: \(timelineItem.id), eventID: \(timelineItem.id.eventID ?? "nil")")
-        MXLog.debug("VoiceMessageRoomTimelineView: Content has transcription: \(timelineItem.content.transcription != nil)")
     }
     
     var body: some View {
@@ -53,65 +88,68 @@ struct VoiceMessageRoomTimelineView: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .frame(maxWidth: 400)
                     
-                    // Transcription toggle button
-                    Button(action: {
-                        withAnimation {
-                            showTranscription.toggle()
+                    // Only show buttons if we have parsed data
+                    if parsedData != nil {
+                        // Transcription toggle button
+                        Button(action: {
+                            withAnimation {
+                                showTranscription.toggle()
+                            }
+                        }) {
+                            Text("T")
+                                .font(.system(size: 16, weight: .bold, design: .default))
+                                .foregroundColor(showTranscription ? .white : .primary)
+                                .frame(width: 25, height: 25)
+                                .background(showTranscription ? Color.blue : Color.compound.bgSubtlePrimary)
+                                .cornerRadius(8)
                         }
-                    }) {
-                        Text("T")
-                            .font(.system(size: 16, weight: .bold, design: .default))
-                            .foregroundColor(showTranscription ? .white : .primary)
-                            .frame(width: 25, height: 25)
-                            .background(showTranscription ? Color.blue : Color.compound.bgSubtlePrimary)
-                            .cornerRadius(8)
-                    }
-                    
-                    // Summary/topics button
-                    Button(action: {
-                        showTopicsModal = true
-                    }) {
-                        Text("S")
-                            .font(.system(size: 16, weight: .bold, design: .default))
-                            .foregroundColor(.primary)
-                            .frame(width: 25, height: 25)
-                            .background(Color.compound.bgSubtlePrimary)
-                            .cornerRadius(8)
+                        
+                        // Summary/topics button
+                        Button(action: {
+                            showTopicsModal = true
+                        }) {
+                            Text("S")
+                                .font(.system(size: 16, weight: .bold, design: .default))
+                                .foregroundColor(.primary)
+                                .frame(width: 25, height: 25)
+                                .background(Color.compound.bgSubtlePrimary)
+                                .cornerRadius(8)
+                        }
                     }
                 }
                 
                 // Display transcription content if available
                 if let transcription = timelineItem.content.transcription, !transcription.isEmpty {
-                    if parsedData == nil { }
-                    
-                    if let parsedData = parsedData {
-                        Text(showTranscription ? parsedData.refined_transcription : parsedData.summary)
-                            .font(.compound.bodyMD)
-                            .foregroundColor(.compound.textPrimary)
-                            .padding(8)
-                            .background(Color.compound.bgSubtleSecondary)
-                            .cornerRadius(8)
-                            .onAppear {
-                                MXLog.debug("VoiceMessageRoomTimelineView: Displaying transcription content")
-                                if self.parsedData == nil {
-                                    parseTranscription(transcription)
+                    Group {
+                        if let parsedData = parsedData {
+                            Text(showTranscription ? parsedData.refined_transcription : parsedData.summary)
+                                .font(.compound.bodyMD)
+                                .foregroundColor(.compound.textPrimary)
+                                .lineLimit(5) // Limit lines to improve scrolling performance
+                                .padding(8)
+                                .background(Color.compound.bgSubtleSecondary)
+                                .cornerRadius(8)
+                                .transition(.opacity)
+                        } else {
+                            // Fallback to displaying raw transcription if parsing fails
+                            Text(transcription)
+                                .font(.compound.bodyMD)
+                                .foregroundColor(.compound.textPrimary)
+                                .lineLimit(3) // Limit lines to improve scrolling performance
+                                .padding(8)
+                                .background(Color.compound.bgSubtleSecondary)
+                                .cornerRadius(8)
+                                .onAppear {
+                                    // Trigger parsing if not already done
+                                    if parsedData == nil {
+                                        TranscriptionParser.shared.parseTranscription(transcription) { result in
+                                            if let result = result {
+                                                parsedData = result
+                                            }
+                                        }
+                                    }
                                 }
-                            }
-                            .transition(.opacity)
-                    } else {
-                        // Fallback to displaying raw transcription if parsing fails
-                        Text(transcription)
-                            .font(.compound.bodyMD)
-                            .foregroundColor(.compound.textPrimary)
-                            .padding(8)
-                            .background(Color.compound.bgSubtleSecondary)
-                            .cornerRadius(8)
-                            .onAppear {
-                                MXLog.debug("VoiceMessageRoomTimelineView: Displaying raw transcription: \(transcription)")
-                                if parsedData == nil {
-                                    parseTranscription(transcription)
-                                }
-                            }
+                        }
                     }
                 }
             }
@@ -120,19 +158,6 @@ struct VoiceMessageRoomTimelineView: View {
                     TopicsModalView(topics: parsedData.topics)
                 }
             }
-        }
-    }
-    
-    private func parseTranscription(_ transcription: String) {
-        do {
-            let decoder = JSONDecoder()
-            if let jsonData = transcription.data(using: .utf8) {
-                let data = try decoder.decode(RefinedTranscriptionData.self, from: jsonData)
-                parsedData = data
-                MXLog.debug("VoiceMessageRoomTimelineView: Successfully parsed transcription JSON")
-            }
-        } catch {
-            MXLog.error("VoiceMessageRoomTimelineView: Failed to parse transcription JSON: \(error)")
         }
     }
     
@@ -160,31 +185,45 @@ struct VoiceMessageRoomTimelineView: View {
 // Modal view for displaying topics and responses
 struct TopicsModalView: View {
     let topics: [RefinedTranscriptionData.Topic]
+    @State private var copiedResponse: String? = nil
     
     var body: some View {
         NavigationView {
             List {
                 ForEach(topics) { topic in
                     Section(header: Text(topic.topic).font(.headline)) {
-                        VStack(alignment: .leading, spacing: 8) {
-                            ForEach(topic.responses, id: \.self) { response in
-                                Button(action: {
-                                    // Copy response to clipboard
-                                    UIPasteboard.general.string = response
-                                }) {
-                                    Text(response)
-                                        .padding(8)
-                                        .background(Color.compound.bgSubtlePrimary)
-                                        .cornerRadius(8)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                        ForEach(topic.responses, id: \.self) { response in
+                            Button(action: {
+                                UIPasteboard.general.string = response
+                                copiedResponse = response
+                                // Clear the copied message after a delay
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    if copiedResponse == response {
+                                        copiedResponse = nil
+                                    }
                                 }
-                                .buttonStyle(PlainButtonStyle())
+                            }) {
+                                HStack {
+                                    Text(response)
+                                        .lineLimit(3)
+                                    
+                                    if copiedResponse == response {
+                                        Spacer()
+                                        Text("Copied!")
+                                            .foregroundColor(.green)
+                                            .font(.caption)
+                                    }
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(Color.compound.bgSubtlePrimary)
+                                .cornerRadius(8)
                             }
                         }
                     }
                 }
             }
-            .listStyle(InsetGroupedListStyle())
+            .listStyle(InsetGroupedListStyle()) // More efficient list style
             .navigationTitle("Topics & Responses")
             .navigationBarTitleDisplayMode(.inline)
         }
