@@ -39,7 +39,8 @@ final class NSEUserSession {
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks,
                          enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
-                         requestTimeout: 15000)
+                         requestTimeout: 15000,
+                         maxRequestRetryTime: 5000)
             .systemIsMemoryConstrained()
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
