@@ -111,6 +111,7 @@ targets:
     - path: ../../ElementX/Sources/Other/NetworkMonitor
     - path: ../../ElementX/Sources/Other/Pills/PillUtilities.swift
     - path: ../../ElementX/Sources/Other/Pills/PlainMentionBuilder.swift
+    - path: ../../ElementX/Sources/Other/SDKListener.swift
     - path: ../../ElementX/Sources/Other/SwiftUI/Views/PlaceholderAvatarImage.swift
     - path: ../../ElementX/Sources/Other/TestablePreview.swift
     - path: ../../ElementX/Sources/Other/UserAgentBuilder.swift

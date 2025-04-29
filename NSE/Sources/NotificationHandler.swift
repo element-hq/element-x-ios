@@ -170,18 +170,19 @@ class NotificationHandler {
         // Check to see if a call is still ongoing
         if let room = userSession.roomForIdentifier(roomID) { // Try to get call details from the room info
             if !room.hasActiveRoomCall() { // If I don't have an active call wait a bit and make sure
-                let runner = ExpiringTaskRunner {
+                let expiringTask = ExpiringTaskRunner {
                     await withCheckedContinuation { [weak self] continuation in
-                        self?.roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { _ in
+                        self?.roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: SDKListener { _ in
                             MXLog.info("Received room info update")
                             continuation.resume()
                         })
                     }
                 }
                 
-                try? await runner.run(timeout: .seconds(5)) // Wait 5 seconds or just use whatever is available
+                try? await expiringTask.run(timeout: .seconds(5)) // Wait 5 seconds or just use whatever is available
                 
                 guard room.hasActiveRoomCall() else {
+                    MXLog.info("The room no longer has an ongoing call, handling as push notification")
                     return .shouldDisplay
                 }
             }
@@ -212,17 +213,5 @@ class NotificationHandler {
         case shouldDisplay
         case processedShouldDiscard
         case unsupportedShouldDiscard
-    }
-}
-
-private final class RoomInfoUpdateListener: RoomInfoListener {
-    private let onUpdateClosure: (RoomInfo) -> Void
-    
-    init(_ onUpdateClosure: @escaping (RoomInfo) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func call(roomInfo: RoomInfo) {
-        onUpdateClosure(roomInfo)
     }
 }
