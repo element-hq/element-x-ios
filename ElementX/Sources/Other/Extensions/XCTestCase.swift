@@ -48,6 +48,61 @@ extension XCTestCase {
         }
     }
     
+    /// XCTest utility that assists in observing an `Observable`'s property and deferring the fulfilment and results until some condition has been met.
+    /// - Parameters:
+    ///   - observable: The object to observe.
+    ///   - property: The object's property to wait on.
+    ///   - timeout: A timeout after which we give up.
+    ///   - message: An optional custom expectation message
+    ///   - until: callback that evaluates outputs until some condition is reached
+    /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
+    func deferFulfillment<Object: Observable, Value>(_ observable: Object,
+                                                     property: KeyPath<Object, Value> & Sendable,
+                                                     timeout: TimeInterval = 10,
+                                                     message: String? = nil,
+                                                     until condition: @escaping (Value) -> Bool) -> DeferredFulfillment<Value> {
+        var result: Result<Value, Error>?
+        let expectation = expectation(description: message ?? "Awaiting observable")
+        var hasFulfilled = false
+        
+        let task = Task {
+            func completion(_ value: Value) {
+                result = .success(value)
+                expectation.fulfill()
+                hasFulfilled = true
+            }
+            
+            @discardableResult
+            func startObservation() -> Value {
+                withObservationTracking {
+                    observable[keyPath: property]
+                } onChange: {
+                    guard !Task.isCancelled else { return }
+                    
+                    DispatchQueue.main.async {
+                        let value = observable[keyPath: property]
+                        if condition(value), !hasFulfilled {
+                            completion(value)
+                        } else {
+                            startObservation()
+                        }
+                    }
+                }
+            }
+            
+            if condition(startObservation()), !hasFulfilled {
+                completion(observable[keyPath: property])
+            }
+        }
+        
+        return DeferredFulfillment<Value> {
+            await self.fulfillment(of: [expectation], timeout: timeout)
+            task.cancel()
+            let unwrappedResult = try XCTUnwrap(result, "Awaited observable did not produce any output")
+            return try unwrappedResult.get()
+        }
+    }
+    
     /// XCTest utility that assists in subscribing to a publisher and deferring the fulfilment and results until some other actions have been performed.
     /// - Parameters:
     ///   - publisher: The publisher to wait on.

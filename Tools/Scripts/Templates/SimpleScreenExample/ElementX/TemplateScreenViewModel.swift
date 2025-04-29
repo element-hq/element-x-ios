@@ -33,9 +33,15 @@ class TemplateScreenViewModel: TemplateScreenViewModelType, TemplateScreenViewMo
         case .textChanged:
             MXLog.info("View model: composer text changed to: \(state.bindings.composerText)")
         case .incrementCounter:
-            state.counter += 1
+            Task {
+                try await Task.sleep(for: .seconds(.random(in: 1.0...2.0)))
+                state.counter += 1
+            }
         case .decrementCounter:
-            state.counter -= 1
+            Task {
+                try await Task.sleep(for: .seconds(.random(in: 1.0...2.0)))
+                state.counter -= 1
+            }
         }
     }
 }

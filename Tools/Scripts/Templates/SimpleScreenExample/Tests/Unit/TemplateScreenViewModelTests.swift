@@ -33,12 +33,20 @@ class TemplateScreenViewModelTests: XCTestCase {
     }
     
     func testCounter() async throws {
+        var deferred = deferFulfillment(context, property: \.viewState.counter) { $0 == 1 }
+        context.send(viewAction: .incrementCounter)
+        try await deferred.fulfill()
+        XCTAssertEqual(context.viewState.counter, 1)
+        
+        deferred = deferFulfillment(context, property: \.viewState.counter) { $0 == 3 }
         context.send(viewAction: .incrementCounter)
         context.send(viewAction: .incrementCounter)
-        context.send(viewAction: .incrementCounter)
+        try await deferred.fulfill()
         XCTAssertEqual(context.viewState.counter, 3)
         
+        deferred = deferFulfillment(context, property: \.viewState.counter) { $0 == 2 }
         context.send(viewAction: .decrementCounter)
+        try await deferred.fulfill()
         XCTAssertEqual(context.viewState.counter, 2)
     }
 }
