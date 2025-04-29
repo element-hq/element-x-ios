@@ -73,17 +73,6 @@ struct DeveloperOptionsScreen: View {
             } footer: {
                 Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
             }
-            
-            Section("Reporting") {
-                Toggle(isOn: $context.reportRoomEnabled) {
-                    Text("Report rooms")
-                    Text("Report API might not work properly")
-                }
-                Toggle(isOn: $context.reportInviteEnabled) {
-                    Text("Report invites")
-                    Text("Report API might not work properly")
-                }
-            }
 
             Section {
                 TextField("Leave empty to use EC locally", text: $elementCallURLOverrideString)

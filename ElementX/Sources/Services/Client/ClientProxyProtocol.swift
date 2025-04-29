@@ -113,6 +113,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var sessionVerificationController: SessionVerificationControllerProxyProtocol? { get }
     
+    var isReportRoomSupported: Bool { get async }
+    
     func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError>
     
     func startSync()

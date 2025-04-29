@@ -233,7 +233,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Sending audio")
         
         do {
-            let handle = try timeline.sendAudio(params: .init(filename: url.path(percentEncoded: false),
+            let handle = try timeline.sendAudio(params: .init(source: .file(filename: url.path(percentEncoded: false)),
                                                               caption: caption,
                                                               formattedCaption: nil, // Rust will build this from the caption's markdown.
                                                               mentions: nil,
@@ -261,7 +261,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Sending file")
         
         do {
-            let handle = try timeline.sendFile(params: .init(filename: url.path(percentEncoded: false),
+            let handle = try timeline.sendFile(params: .init(source: .file(filename: url.path(percentEncoded: false)),
                                                              caption: caption,
                                                              formattedCaption: nil, // Rust will build this from the caption's markdown.
                                                              mentions: nil,
@@ -290,7 +290,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Sending image")
         
         do {
-            let handle = try timeline.sendImage(params: .init(filename: url.path(percentEncoded: false),
+            let handle = try timeline.sendImage(params: .init(source: .file(filename: url.path(percentEncoded: false)),
                                                               caption: caption,
                                                               formattedCaption: nil, // Rust will build this from the caption's markdown.
                                                               mentions: nil,
@@ -338,7 +338,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Sending video")
         
         do {
-            let handle = try timeline.sendVideo(params: .init(filename: url.path(percentEncoded: false),
+            let handle = try timeline.sendVideo(params: .init(source: .file(filename: url.path(percentEncoded: false)),
                                                               caption: caption,
                                                               formattedCaption: nil,
                                                               mentions: nil,
@@ -367,7 +367,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         MXLog.info("Sending voice message")
         
         do {
-            let handle = try timeline.sendVoiceMessage(params: .init(filename: url.path(percentEncoded: false),
+            let handle = try timeline.sendVoiceMessage(params: .init(source: .file(filename: url.path(percentEncoded: false)),
                                                                      caption: nil,
                                                                      formattedCaption: nil,
                                                                      mentions: nil,

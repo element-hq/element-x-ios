@@ -78,9 +78,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .weakAssign(to: \.state.knockingEnabled, on: self)
             .store(in: &cancellables)
         
-        appSettings.$reportRoomEnabled
-            .weakAssign(to: \.state.reportRoomEnabled, on: self)
-            .store(in: &cancellables)
+        Task {
+            state.reportRoomEnabled = await clientProxy.isReportRoomSupported
+        }
         
         appMediator.networkMonitor.reachabilityPublisher
             .filter { $0 == .reachable }

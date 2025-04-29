@@ -2303,6 +2303,23 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingSecureBackupController: SecureBackupControllerProtocol!
     var sessionVerificationController: SessionVerificationControllerProxyProtocol?
+    var isReportRoomSupportedCallsCount = 0
+    var isReportRoomSupportedCalled: Bool {
+        return isReportRoomSupportedCallsCount > 0
+    }
+
+    var isReportRoomSupported: Bool {
+        get async {
+            isReportRoomSupportedCallsCount += 1
+            if let isReportRoomSupportedClosure = isReportRoomSupportedClosure {
+                return await isReportRoomSupportedClosure()
+            } else {
+                return underlyingIsReportRoomSupported
+            }
+        }
+    }
+    var underlyingIsReportRoomSupported: Bool!
+    var isReportRoomSupportedClosure: (() async -> Bool)?
 
     //MARK: - isOnlyDeviceLeft
 

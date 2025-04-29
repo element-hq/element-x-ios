@@ -44,8 +44,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var enableOnlySignedDeviceIsolationMode: Bool { get set }
     var elementCallBaseURLOverride: URL? { get set }
     var knockingEnabled: Bool { get set }
-    var reportRoomEnabled: Bool { get set }
-    var reportInviteEnabled: Bool { get set }
     var threadsEnabled: Bool { get set }
     var isNewBloomEnabled: Bool { get set }
 }
