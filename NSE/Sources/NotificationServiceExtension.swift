@@ -63,11 +63,6 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         
         Target.nse.configure(logLevel: settings.logLevel, traceLogPacks: settings.traceLogPacks)
         
-        notificationHandler = NotificationHandler(settings: settings,
-                                                  contentHandler: contentHandler,
-                                                  notificationContent: mutableContent,
-                                                  tag: tag)
-        
         MXLog.info("\(tag) #########################################")
         
         ExtensionLogger.logMemory(with: tag)
@@ -82,12 +77,16 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                                                            appHooks: appHooks,
                                                            appSettings: settings)
                 
+                notificationHandler = NotificationHandler(userSession: userSession,
+                                                          settings: settings,
+                                                          contentHandler: contentHandler,
+                                                          notificationContent: mutableContent,
+                                                          tag: tag)
+                
                 ExtensionLogger.logMemory(with: tag)
                 MXLog.info("\(tag) Configured user session")
                 
-                await notificationHandler?.processEvent(eventID,
-                                                        roomID: roomID,
-                                                        userSession: userSession)
+                await notificationHandler?.processEvent(eventID, roomID: roomID)
             } catch {
                 MXLog.error("Failed creating user session with error: \(error)")
             }
