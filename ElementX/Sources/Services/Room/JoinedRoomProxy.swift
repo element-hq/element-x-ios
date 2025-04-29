@@ -157,7 +157,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return
         }
         
-        roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] roomInfo in
+        roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: SDKListener { [weak self] roomInfo in
             MXLog.info("Received room info update")
             self?.infoSubject.send(.init(roomInfo: roomInfo))
         })
@@ -807,18 +807,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         } catch {
             MXLog.error("Failed observing requests to join with error: \(error)")
         }
-    }
-}
-
-private final class RoomInfoUpdateListener: RoomInfoListener {
-    private let onUpdateClosure: (RoomInfo) -> Void
-    
-    init(_ onUpdateClosure: @escaping (RoomInfo) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func call(roomInfo: RoomInfo) {
-        onUpdateClosure(roomInfo)
     }
 }
 
