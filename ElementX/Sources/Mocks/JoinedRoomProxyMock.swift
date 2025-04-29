@@ -36,6 +36,7 @@ struct JoinedRoomProxyMockConfiguration {
     var ownUserID = RoomMemberProxyMock.mockMe.userID
     var inviter: RoomMemberProxyProtocol?
     
+    var canUserSendMessage = true
     var canUserInvite = true
     var canUserTriggerRoomNotification = false
     var canUserJoinCall = true
@@ -91,6 +92,7 @@ extension JoinedRoomProxyMock {
             return .success(member.role)
         }
         updatePowerLevelsForUsersReturnValue = .success(())
+        canUserUserIDSendMessageReturnValue = .success(configuration.canUserSendMessage)
         canUserUserIDSendStateEventClosure = { [weak self] userID, _ in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }

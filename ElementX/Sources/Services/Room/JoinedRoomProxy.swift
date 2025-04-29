@@ -559,6 +559,15 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    func canUser(userID: String, sendMessage messageType: MessageLikeEventType) async -> Result<Bool, RoomProxyError> {
+        do {
+            return try await .success(room.canUserSendMessage(userId: userID, message: messageType))
+        } catch {
+            MXLog.error("Failed checking if the user can send message with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func canUser(userID: String, sendStateEvent event: StateEventType) async -> Result<Bool, RoomProxyError> {
         do {
             return try await .success(room.canUserSendState(userId: userID, stateEvent: event))
