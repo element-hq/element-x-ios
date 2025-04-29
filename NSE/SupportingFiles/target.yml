@@ -88,6 +88,7 @@ targets:
     - path: ../../ElementX/Sources/Generated/Strings.swift
     - path: ../../ElementX/Sources/Other/Avatars.swift
     - path: ../../ElementX/Sources/Other/CurrentValuePublisher.swift
+    - path: ../../ElementX/Sources/Other/ExpiringTaskRunner.swift
     - path: ../../ElementX/Sources/Other/Extensions/AttributedString.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
     - path: ../../ElementX/Sources/Other/Extensions/ClientBuilder.swift

@@ -68,8 +68,17 @@ final class NSEUserSession {
                                          receiverID: userID,
                                          roomID: roomID)
         } catch {
-            MXLog.error("NSE: Could not get notification's content creating an empty notification instead, error: \(error)")
+            MXLog.error("Could not get notification's content creating an empty notification instead, error: \(error)")
             return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
+        }
+    }
+    
+    func roomForIdentifier(_ roomID: String) -> Room? {
+        do {
+            return try baseClient.getRoom(roomId: roomID)
+        } catch {
+            MXLog.error("Failed retrieving room with error: \(error)")
+            return nil
         }
     }
     
