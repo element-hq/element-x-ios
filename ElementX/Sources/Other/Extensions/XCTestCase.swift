@@ -48,50 +48,28 @@ extension XCTestCase {
         }
     }
     
-    /// XCTest utility that assists in observing an `Observable`'s property and deferring the fulfilment and results until some condition has been met.
+    /// XCTest utility that assists in observing an async stream, deferring the fulfilment and results until some condition has been met.
     /// - Parameters:
-    ///   - observable: The object to observe.
-    ///   - property: The object's property to wait on.
+    ///   - asyncStream: The stream to wait on.
     ///   - timeout: A timeout after which we give up.
     ///   - message: An optional custom expectation message
     ///   - until: callback that evaluates outputs until some condition is reached
     /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
-    func deferFulfillment<Object: Observable, Value>(_ observable: Object,
-                                                     property: KeyPath<Object, Value> & Sendable,
-                                                     timeout: TimeInterval = 10,
-                                                     message: String? = nil,
-                                                     until condition: @escaping (Value) -> Bool) -> DeferredFulfillment<Value> {
+    func deferFulfillment<Value>(_ asyncStream: AsyncStream<Value>,
+                                 timeout: TimeInterval = 10,
+                                 message: String? = nil,
+                                 until condition: @escaping (Value) -> Bool) -> DeferredFulfillment<Value> {
         var result: Result<Value, Error>?
         let expectation = expectation(description: message ?? "Awaiting observable")
         var hasFulfilled = false
         
         let task = Task {
-            func completion(_ value: Value) {
-                result = .success(value)
-                expectation.fulfill()
-                hasFulfilled = true
-            }
-            
-            @discardableResult
-            func startObservation() -> Value {
-                withObservationTracking {
-                    observable[keyPath: property]
-                } onChange: {
-                    guard !Task.isCancelled else { return }
-                    
-                    DispatchQueue.main.async {
-                        let value = observable[keyPath: property]
-                        if condition(value), !hasFulfilled {
-                            completion(value)
-                        } else {
-                            startObservation()
-                        }
-                    }
+            for await value in asyncStream {
+                if condition(value), !hasFulfilled {
+                    result = .success(value)
+                    expectation.fulfill()
+                    hasFulfilled = true
                 }
-            }
-            
-            if condition(startObservation()), !hasFulfilled {
-                completion(observable[keyPath: property])
             }
         }
         
