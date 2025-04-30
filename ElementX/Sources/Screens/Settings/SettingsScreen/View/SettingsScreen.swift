@@ -31,6 +31,10 @@ struct SettingsScreen: View {
             generalSection
             
             signOutSection
+            
+            if context.viewState.showDeveloperOptions {
+                developerOptionsSection
+            }
         }
         .compoundList()
         .navigationTitle(L10n.commonSettings)
@@ -164,15 +168,6 @@ struct SettingsScreen: View {
                         context.send(viewAction: .advancedSettings)
                     })
                     .accessibilityIdentifier(A11yIdentifiers.settingsScreen.advancedSettings)
-            
-            if context.viewState.showDeveloperOptions {
-                ListRow(label: .default(title: L10n.commonDeveloperOptions,
-                                        icon: \.code),
-                        kind: .navigationLink {
-                            context.send(viewAction: .developerOptions)
-                        })
-                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
-            }
         }
     }
     
@@ -195,20 +190,39 @@ struct SettingsScreen: View {
                         })
             }
         } footer: {
-            VStack(spacing: 0) {
-                versionText
-                    .frame(maxWidth: .infinity)
-                
-                if let deviceID = context.viewState.deviceID {
-                    Text(deviceID)
-                }
+            if !context.viewState.showDeveloperOptions {
+                versionSection
             }
-            .compoundListSectionFooter()
-            .textSelection(.enabled)
-            .padding(.top, 24)
-            .onTapGesture(count: 7) {
-                context.send(viewAction: .enableDeveloperOptions)
+        }
+    }
+    
+    private var developerOptionsSection: some View {
+        Section {
+            ListRow(label: .default(title: L10n.commonDeveloperOptions,
+                                    icon: \.code),
+                    kind: .navigationLink {
+                        context.send(viewAction: .developerOptions)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
+        } footer: {
+            versionSection
+        }
+    }
+    
+    private var versionSection: some View {
+        VStack(spacing: 0) {
+            versionText
+                .frame(maxWidth: .infinity)
+            
+            if let deviceID = context.viewState.deviceID {
+                Text(deviceID)
             }
+        }
+        .compoundListSectionFooter()
+        .textSelection(.enabled)
+        .padding(.top, 24)
+        .onTapGesture(count: 7) {
+            context.send(viewAction: .enableDeveloperOptions)
         }
     }
     
