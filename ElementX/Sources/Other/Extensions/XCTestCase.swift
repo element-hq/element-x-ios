@@ -60,7 +60,7 @@ extension XCTestCase {
                                  message: String? = nil,
                                  until condition: @escaping (Value) -> Bool) -> DeferredFulfillment<Value> {
         var result: Result<Value, Error>?
-        let expectation = expectation(description: message ?? "Awaiting observable")
+        let expectation = expectation(description: message ?? "Awaiting stream")
         var hasFulfilled = false
         
         let task = Task {
@@ -76,7 +76,7 @@ extension XCTestCase {
         return DeferredFulfillment<Value> {
             await self.fulfillment(of: [expectation], timeout: timeout)
             task.cancel()
-            let unwrappedResult = try XCTUnwrap(result, "Awaited observable did not produce any output")
+            let unwrappedResult = try XCTUnwrap(result, "Awaited stream did not produce any output")
             return try unwrappedResult.get()
         }
     }

@@ -8,7 +8,9 @@
 import Foundation
 
 extension Observable {
-    /// Creates an async stream for the specified property on this object.
+    /// Creates an async stream for the specified property on this object. We probably won't need this once SE-0475 is available:
+    /// https://github.com/swiftlang/swift-evolution/blob/main/proposals/0475-observed.md
+    ///
     /// - Parameter property: The key path to the property you would like to observe.
     func observe<Value>(_ property: KeyPath<Self, Value>) -> AsyncStream<Value> {
         AsyncStream { continuation in
