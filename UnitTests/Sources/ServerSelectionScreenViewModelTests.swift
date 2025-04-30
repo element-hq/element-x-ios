@@ -43,7 +43,7 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         
         // When selecting a server that doesn't support login.
         context.homeserverAddress = "server.net"
-        let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
+        let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
         context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
@@ -78,7 +78,7 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         
         // When selecting a server that doesn't support registration.
         context.homeserverAddress = "example.com"
-        let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
+        let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
         context.send(viewAction: .confirm)
         try await deferred.fulfill()
         
@@ -96,7 +96,7 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
                        "The standard footer message should be shown.")
         
         // When attempting to discover an invalid server
-        var deferred = deferFulfillment(context.$viewState) { $0.isShowingFooterError }
+        var deferred = deferFulfillment(context.observe(\.viewState.isShowingFooterError)) { $0 }
         context.homeserverAddress = "idontexist"
         context.send(viewAction: .confirm)
         try await deferred.fulfill()
@@ -108,7 +108,7 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
                           "The error message should be shown.")
         
         // And when clearing the error.
-        deferred = deferFulfillment(context.$viewState) { !$0.isShowingFooterError }
+        deferred = deferFulfillment(context.observe(\.viewState.isShowingFooterError)) { !$0 }
         context.homeserverAddress = ""
         context.send(viewAction: .clearFooterError)
         try await deferred.fulfill()
