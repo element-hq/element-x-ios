@@ -24,20 +24,25 @@ struct SnapshotPerceptualPrecisionPreferenceKey: PreferenceKey {
     }
 }
 
-struct FulfillmentPublisherEquatableWrapper: Equatable {
-    let publisher: AnyPublisher<Bool, Never>?
-    
-    // Publisher equatability complicates things but, luckily, we're only interesting in them changing from nil
-    static func == (lhs: FulfillmentPublisherEquatableWrapper, rhs: FulfillmentPublisherEquatableWrapper) -> Bool {
-        lhs.publisher != nil && rhs.publisher != nil
-    }
-}
+struct SnapshotFulfillmentPreferenceKey: PreferenceKey {
+    static var defaultValue: Wrapper?
 
-struct SnapshotFulfillmentPublisherPreferenceKey: PreferenceKey {
-    static var defaultValue: FulfillmentPublisherEquatableWrapper?
-
-    static func reduce(value: inout FulfillmentPublisherEquatableWrapper?, nextValue: () -> FulfillmentPublisherEquatableWrapper?) {
+    static func reduce(value: inout Wrapper?, nextValue: () -> Wrapper?) {
         value = nextValue()
+    }
+    
+    enum Source {
+        case publisher(AnyPublisher<Bool, Never>)
+        case stream(AsyncStream<Bool>)
+    }
+    
+    struct Wrapper: Equatable {
+        let id = UUID()
+        let source: Source
+        
+        static func == (lhs: Wrapper, rhs: Wrapper) -> Bool {
+            lhs.id == rhs.id // Not ideal, but it's good enough for snapshots.
+        }
     }
 }
 
@@ -47,7 +52,7 @@ extension SwiftUI.View {
     /// These preferences can then be retrieved and used elsewhere in your view hierarchy.
     ///
     /// - Parameters:
-    ///   - delay: The delay time in seconds that you want to set as a preference to the View.
+    ///   - expect: A publisher that indicates when the preview is ready for snapshotting.
     ///   - precision: The percentage of pixels that must match.
     ///   - perceptualPrecision: The percentage a pixel must match the source pixel to be considered a match. 98-99% mimics the precision of the human eye.
     func snapshotPreferences(expect fulfillmentPublisher: (any Publisher<Bool, Never>)? = nil,
@@ -55,6 +60,22 @@ extension SwiftUI.View {
                              perceptualPrecision: Float = 0.98) -> some SwiftUI.View {
         preference(key: SnapshotPrecisionPreferenceKey.self, value: precision)
             .preference(key: SnapshotPerceptualPrecisionPreferenceKey.self, value: perceptualPrecision)
-            .preference(key: SnapshotFulfillmentPublisherPreferenceKey.self, value: FulfillmentPublisherEquatableWrapper(publisher: fulfillmentPublisher?.eraseToAnyPublisher()))
+            .preference(key: SnapshotFulfillmentPreferenceKey.self, value: fulfillmentPublisher.map { SnapshotFulfillmentPreferenceKey.Wrapper(source: .publisher($0.eraseToAnyPublisher())) })
+    }
+    
+    /// Use this modifier when you want to apply snapshot-specific preferences,
+    /// like delay and precision, to the view.
+    /// These preferences can then be retrieved and used elsewhere in your view hierarchy.
+    ///
+    /// - Parameters:
+    ///   - expect: A stream that indicates when the preview is ready for snapshotting.
+    ///   - precision: The percentage of pixels that must match.
+    ///   - perceptualPrecision: The percentage a pixel must match the source pixel to be considered a match. 98-99% mimics the precision of the human eye.
+    func snapshotPreferences(expect fulfillmentStream: AsyncStream<Bool>? = nil,
+                             precision: Float = 1.0,
+                             perceptualPrecision: Float = 0.98) -> some SwiftUI.View {
+        preference(key: SnapshotPrecisionPreferenceKey.self, value: precision)
+            .preference(key: SnapshotPerceptualPrecisionPreferenceKey.self, value: perceptualPrecision)
+            .preference(key: SnapshotFulfillmentPreferenceKey.self, value: fulfillmentStream.map { SnapshotFulfillmentPreferenceKey.Wrapper(source: .stream($0)) })
     }
 }
