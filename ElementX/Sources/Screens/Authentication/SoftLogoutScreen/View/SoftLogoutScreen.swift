@@ -13,7 +13,7 @@ struct SoftLogoutScreen: View {
     /// The focus state of the password text field.
     @FocusState private var isPasswordFocused: Bool
 
-    @ObservedObject var context: SoftLogoutScreenViewModel.Context
+    @Bindable var context: SoftLogoutScreenViewModel.Context
     
     var body: some View {
         ScrollView {
