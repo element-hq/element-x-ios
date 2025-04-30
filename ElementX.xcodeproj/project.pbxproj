@@ -16,6 +16,8 @@
 			dependencies = (
 			);
 			name = Periphery;
+			packageProductDependencies = (
+			);
 			productName = Periphery;
 		};
 /* End PBXAggregateTarget section */
@@ -6411,6 +6413,7 @@
 				"zh-Hant-TW",
 			);
 			mainGroup = 405B00F139AEE3994601B36A;
+			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				E025F19D013D9BA6C58B37F4 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				AC3475112CA40C2C6E78D1EB /* XCRemoteSwiftPackageReference "matrix-analytics-events" */,
@@ -6437,6 +6440,7 @@
 				EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */,
 				EE40B0E16A55BD23ECBFFD22 /* XCRemoteSwiftPackageReference "matrix-rich-text-editor-swift" */,
 			);
+			preferredProjectObjectVersion = 54;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -8659,7 +8663,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 25.04.29;
+				version = 25.04.30;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
