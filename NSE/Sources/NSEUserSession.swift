@@ -76,7 +76,7 @@ final class NSEUserSession {
     
     func roomForIdentifier(_ roomID: String) -> Room? {
         do {
-            return try baseClient.getRoom(roomId: roomID)
+            return try notificationClient.getRoom(roomId: roomID)
         } catch {
             MXLog.error("Failed retrieving room with error: \(error)")
             return nil
