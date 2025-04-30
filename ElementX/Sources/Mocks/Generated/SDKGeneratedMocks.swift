@@ -2173,6 +2173,75 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - isReportRoomApiSupported
+
+    open var isReportRoomApiSupportedThrowableError: Error?
+    var isReportRoomApiSupportedUnderlyingCallsCount = 0
+    open var isReportRoomApiSupportedCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return isReportRoomApiSupportedUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isReportRoomApiSupportedUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isReportRoomApiSupportedUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isReportRoomApiSupportedUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var isReportRoomApiSupportedCalled: Bool {
+        return isReportRoomApiSupportedCallsCount > 0
+    }
+
+    var isReportRoomApiSupportedUnderlyingReturnValue: Bool!
+    open var isReportRoomApiSupportedReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return isReportRoomApiSupportedUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = isReportRoomApiSupportedUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                isReportRoomApiSupportedUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    isReportRoomApiSupportedUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var isReportRoomApiSupportedClosure: (() async throws -> Bool)?
+
+    open override func isReportRoomApiSupported() async throws -> Bool {
+        if let error = isReportRoomApiSupportedThrowableError {
+            throw error
+        }
+        isReportRoomApiSupportedCallsCount += 1
+        if let isReportRoomApiSupportedClosure = isReportRoomApiSupportedClosure {
+            return try await isReportRoomApiSupportedClosure()
+        } else {
+            return isReportRoomApiSupportedReturnValue
+        }
+    }
+
     //MARK: - isRoomAliasAvailable
 
     open var isRoomAliasAvailableAliasThrowableError: Error?
@@ -9192,6 +9261,81 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
             return try await getNotificationRoomIdEventIdClosure(roomId, eventId)
         } else {
             return getNotificationRoomIdEventIdReturnValue
+        }
+    }
+
+    //MARK: - getRoom
+
+    open var getRoomRoomIdThrowableError: Error?
+    var getRoomRoomIdUnderlyingCallsCount = 0
+    open var getRoomRoomIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getRoomRoomIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRoomRoomIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRoomRoomIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRoomRoomIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var getRoomRoomIdCalled: Bool {
+        return getRoomRoomIdCallsCount > 0
+    }
+    open var getRoomRoomIdReceivedRoomId: String?
+    open var getRoomRoomIdReceivedInvocations: [String] = []
+
+    var getRoomRoomIdUnderlyingReturnValue: Room?
+    open var getRoomRoomIdReturnValue: Room? {
+        get {
+            if Thread.isMainThread {
+                return getRoomRoomIdUnderlyingReturnValue
+            } else {
+                var returnValue: Room?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRoomRoomIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRoomRoomIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRoomRoomIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var getRoomRoomIdClosure: ((String) throws -> Room?)?
+
+    open override func getRoom(roomId: String) throws -> Room? {
+        if let error = getRoomRoomIdThrowableError {
+            throw error
+        }
+        getRoomRoomIdCallsCount += 1
+        getRoomRoomIdReceivedRoomId = roomId
+        DispatchQueue.main.async {
+            self.getRoomRoomIdReceivedInvocations.append(roomId)
+        }
+        if let getRoomRoomIdClosure = getRoomRoomIdClosure {
+            return try getRoomRoomIdClosure(roomId)
+        } else {
+            return getRoomRoomIdReturnValue
         }
     }
 }
