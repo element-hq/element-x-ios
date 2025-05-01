@@ -10,7 +10,7 @@ import SFSafeSymbols
 import SwiftUI
 
 struct SettingsScreen: View {
-    @ObservedObject var context: SettingsScreenViewModel.Context
+    let context: SettingsScreenViewModel.Context
     
     private var shouldHideManageAccountSection: Bool {
         context.viewState.accountProfileURL == nil &&
@@ -241,17 +241,13 @@ struct SettingsScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             SettingsScreen(context: viewModel.context)
         }
-        .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
-            state.accountSessionsListURL != nil
-        })
+        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil }.eraseToStream())
         .previewDisplayName("Default")
         
         NavigationStack {
             SettingsScreen(context: bugReportDisabledViewModel.context)
         }
-        .snapshotPreferences(expect: bugReportDisabledViewModel.context.$viewState.map { state in
-            state.accountSessionsListURL != nil
-        })
+        .snapshotPreferences(expect: bugReportDisabledViewModel.context.observe(\.viewState.accountSessionsListURL).map { $0 != nil }.eraseToStream())
         .previewDisplayName("Bug report disabled")
     }
     

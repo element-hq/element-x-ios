@@ -26,47 +26,20 @@ class SettingsScreenViewModelTests: XCTestCase {
     }
 
     @MainActor func testLogout() async throws {
-        var correctResult = false
-        
-        viewModel.actions
-            .sink { action in
-                switch action {
-                case .logout:
-                    correctResult = true
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
-
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .logout }
         context.send(viewAction: .logout)
-        await Task.yield()
-        XCTAssert(correctResult)
+        try await deferred.fulfill()
     }
 
     func testReportBug() async throws {
-        var correctResult = false
-        viewModel.actions
-            .sink { action in
-                correctResult = action == .reportBug
-            }
-            .store(in: &cancellables)
-        
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .reportBug }
         context.send(viewAction: .reportBug)
-        await Task.yield()
-        XCTAssert(correctResult)
+        try await deferred.fulfill()
     }
     
     func testAnalytics() async throws {
-        var correctResult = false
-        viewModel.actions
-            .sink { action in
-                correctResult = action == .analytics
-            }
-            .store(in: &cancellables)
-        
+        let deferred = deferFulfillment(viewModel.actions) { $0 == .analytics }
         context.send(viewAction: .analytics)
-        await Task.yield()
-        XCTAssert(correctResult)
+        try await deferred.fulfill()
     }
 }
