@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias AuthenticationStartScreenViewModelType = StateStoreViewModel<AuthenticationStartScreenViewState, AuthenticationStartScreenViewAction>
+typealias AuthenticationStartScreenViewModelType = StateStoreViewModelV2<AuthenticationStartScreenViewState, AuthenticationStartScreenViewAction>
 
 class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType, AuthenticationStartScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<AuthenticationStartScreenViewModelAction, Never> = .init()

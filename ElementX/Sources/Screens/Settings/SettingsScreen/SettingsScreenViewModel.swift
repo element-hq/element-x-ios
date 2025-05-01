@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias SettingsScreenViewModelType = StateStoreViewModel<SettingsScreenViewState, SettingsScreenViewAction>
+typealias SettingsScreenViewModelType = StateStoreViewModelV2<SettingsScreenViewState, SettingsScreenViewAction>
 
 class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<SettingsScreenViewModelAction, Never> = .init()

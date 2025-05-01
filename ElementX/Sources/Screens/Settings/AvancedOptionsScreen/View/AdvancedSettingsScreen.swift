@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct AdvancedSettingsScreen: View {
-    @ObservedObject var context: AdvancedSettingsScreenViewModel.Context
+    @Bindable var context: AdvancedSettingsScreenViewModel.Context
     
     var body: some View {
         Form {

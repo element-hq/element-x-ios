@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct DeveloperOptionsScreen: View {
-    @ObservedObject var context: DeveloperOptionsScreenViewModel.Context
+    @Bindable var context: DeveloperOptionsScreenViewModel.Context
+    
     @State private var showConfetti = false
     @State private var elementCallURLOverrideString: String
     
