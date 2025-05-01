@@ -8,29 +8,32 @@
 import XCTest
 
 extension XCUIApplication {
+    private var doesNotExistPredicate: NSPredicate { NSPredicate(format: "exists == 0") }
+    
     func login(currentTestCase: XCTestCase) {
         let getStartedButton = buttons[A11yIdentifiers.authenticationStartScreen.signIn]
         
         XCTAssertTrue(getStartedButton.waitForExistence(timeout: 10.0))
         getStartedButton.tap(.center)
         
-        let changeHomeserverButton = buttons[A11yIdentifiers.serverConfirmationScreen.changeServer]
-        XCTAssertTrue(changeHomeserverButton.waitForExistence(timeout: 10.0))
-        changeHomeserverButton.tap(.center)
-        
-        let homeserverTextField = textFields[A11yIdentifiers.changeServerScreen.server]
-        XCTAssertTrue(homeserverTextField.waitForExistence(timeout: 10.0))
-        
-        homeserverTextField.clearAndTypeText(homeserver, app: self)
-        
-        let confirmButton = buttons[A11yIdentifiers.changeServerScreen.continue]
-        XCTAssertTrue(confirmButton.waitForExistence(timeout: 10.0))
-        confirmButton.tap(.center)
-        
-        // Wait for server confirmation to finish
-        let doesNotExistPredicate = NSPredicate(format: "exists == 0")
-        currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: confirmButton)
-        currentTestCase.waitForExpectations(timeout: 300.0)
+        if let homeserver {
+            let changeHomeserverButton = buttons[A11yIdentifiers.serverConfirmationScreen.changeServer]
+            XCTAssertTrue(changeHomeserverButton.waitForExistence(timeout: 10.0))
+            changeHomeserverButton.tap(.center)
+            
+            let homeserverTextField = textFields[A11yIdentifiers.changeServerScreen.server]
+            XCTAssertTrue(homeserverTextField.waitForExistence(timeout: 10.0))
+            
+            homeserverTextField.clearAndTypeText(homeserver, app: self)
+            
+            let confirmButton = buttons[A11yIdentifiers.changeServerScreen.continue]
+            XCTAssertTrue(confirmButton.waitForExistence(timeout: 10.0))
+            confirmButton.tap(.center)
+            
+            // Wait for server confirmation to finish
+            currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: confirmButton)
+            currentTestCase.waitForExpectations(timeout: 300.0)
+        }
         
         let continueButton = buttons[A11yIdentifiers.serverConfirmationScreen.continue]
         XCTAssertTrue(continueButton.waitForExistence(timeout: 30.0))
