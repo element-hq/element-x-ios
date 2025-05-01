@@ -12,11 +12,11 @@ extension XCUIApplication {
         let getStartedButton = buttons[A11yIdentifiers.authenticationStartScreen.signIn]
         
         XCTAssertTrue(getStartedButton.waitForExistence(timeout: 10.0))
-        getStartedButton.tapCenter()
+        getStartedButton.tap(.center)
         
         let changeHomeserverButton = buttons[A11yIdentifiers.serverConfirmationScreen.changeServer]
         XCTAssertTrue(changeHomeserverButton.waitForExistence(timeout: 10.0))
-        changeHomeserverButton.tapCenter()
+        changeHomeserverButton.tap(.center)
         
         let homeserverTextField = textFields[A11yIdentifiers.changeServerScreen.server]
         XCTAssertTrue(homeserverTextField.waitForExistence(timeout: 10.0))
@@ -25,7 +25,7 @@ extension XCUIApplication {
         
         let confirmButton = buttons[A11yIdentifiers.changeServerScreen.continue]
         XCTAssertTrue(confirmButton.waitForExistence(timeout: 10.0))
-        confirmButton.tapCenter()
+        confirmButton.tap(.center)
         
         // Wait for server confirmation to finish
         let doesNotExistPredicate = NSPredicate(format: "exists == 0")
@@ -34,16 +34,16 @@ extension XCUIApplication {
         
         let continueButton = buttons[A11yIdentifiers.serverConfirmationScreen.continue]
         XCTAssertTrue(continueButton.waitForExistence(timeout: 30.0))
-        continueButton.tapCenter()
+        continueButton.tap(.center)
         
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let webAuthenticationSessionAlertContinueButton = springboard.buttons["Continue"].firstMatch
         XCTAssertTrue(webAuthenticationSessionAlertContinueButton.waitForExistence(timeout: 30.0))
-        webAuthenticationSessionAlertContinueButton.tapCenter()
+        webAuthenticationSessionAlertContinueButton.tap(.center)
         
         let webAuthenticationView = webViews.firstMatch
         XCTAssertTrue(webAuthenticationView.waitForExistence(timeout: 10.0))
-        webAuthenticationView.tap() // Tap the web view to properly focus the app again.
+        webAuthenticationView.tap(.top) // Tap the web view to properly focus the app again.
         
         let webUsernameTextField = textFields["Username or Email"]
         XCTAssertTrue(webUsernameTextField.waitForExistence(timeout: 10.0))
@@ -55,7 +55,7 @@ extension XCUIApplication {
         
         let webLoginButton = webAuthenticationView.buttons["Continue"]
         XCTAssertTrue(webLoginButton.waitForExistence(timeout: 10.0))
-        webLoginButton.tapCenter()
+        webLoginButton.tap(.center)
         
         // Handle the password saving dialog
         let savePasswordButton = buttons["Save Password"]
@@ -63,12 +63,12 @@ extension XCUIApplication {
             // Tapping the sheet button while animating upwards fails. Wait for it to settle
             sleep(1)
             
-            savePasswordButton.tapCenter()
+            buttons["Not Now"].tap(.center)
         }
         
         let webConsentButton = webAuthenticationView.buttons["Continue"]
         XCTAssertTrue(webConsentButton.waitForExistence(timeout: 10.0))
-        webConsentButton.tapCenter()
+        webConsentButton.tap(.center)
         
         // Wait for login to finish
         currentTestCase.expectation(for: doesNotExistPredicate, evaluatedWith: webUsernameTextField)
@@ -88,7 +88,7 @@ extension XCUIApplication {
         let profileButton = buttons[A11yIdentifiers.homeScreen.userAvatar]
                 
         // `Failed to scroll to visible (by AX action) Button` https://stackoverflow.com/a/33534187/730924
-        profileButton.tapCenter()
+        profileButton.tap(.center)
         
         // Make the logout button visible
         swipeUp()
@@ -96,12 +96,12 @@ extension XCUIApplication {
         // Logout
         let logoutButton = buttons[A11yIdentifiers.settingsScreen.logout]
         XCTAssertTrue(logoutButton.waitForExistence(timeout: 10.0))
-        logoutButton.tapCenter()
+        logoutButton.tap(.center)
         
         // Confirm logout
         let alertLogoutButton = alerts.firstMatch.buttons["Sign out"]
         XCTAssertTrue(alertLogoutButton.waitForExistence(timeout: 10.0))
-        alertLogoutButton.tapCenter()
+        alertLogoutButton.tap(.center)
         
         // Check that we're back on the login screen
         let getStartedButton = buttons[A11yIdentifiers.authenticationStartScreen.signIn]
