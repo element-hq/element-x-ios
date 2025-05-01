@@ -64,4 +64,3 @@ targets:
     - path: ../../ElementX/Sources/Other/Extensions/XCUIElement.swift
     - path: ../../ElementX/Sources/UITests/UITestsScreenIdentifier.swift
     - path: ../../ElementX/Sources/UITests/UITestsSignalling.swift
-    - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/UI
