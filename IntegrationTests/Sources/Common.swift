@@ -35,13 +35,32 @@ extension XCUIApplication {
             currentTestCase.waitForExpectations(timeout: 300.0)
         }
         
-        let continueButton = buttons[A11yIdentifiers.serverConfirmationScreen.continue]
-        XCTAssertTrue(continueButton.waitForExistence(timeout: 30.0))
-        continueButton.tap(.center)
-        
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let webAuthenticationSessionAlertContinueButton = springboard.buttons["Continue"].firstMatch
-        XCTAssertTrue(webAuthenticationSessionAlertContinueButton.waitForExistence(timeout: 30.0))
+        
+        // On a fresh simulator the webcredentials association is sometimes slow to be resolved.
+        // This results in an error alert being shown instead of the Web Authentication Session alert.
+        // Keep looping on the Continue button for ~5 minutes until the Authentication Session is happy.
+        var remainingAttempts = 10
+        while !webAuthenticationSessionAlertContinueButton.exists {
+            let continueButton = buttons[A11yIdentifiers.serverConfirmationScreen.continue]
+            XCTAssertTrue(continueButton.waitForExistence(timeout: 30.0))
+            continueButton.tap(.center)
+            
+            if webAuthenticationSessionAlertContinueButton.waitForExistence(timeout: 30.0) {
+                break
+            }
+            
+            remainingAttempts -= 1
+            if remainingAttempts <= 0 {
+                XCTFail("Failed to present the web authentication session.")
+            }
+            
+            if alerts.count > 0 {
+                alerts.firstMatch.buttons["OK"].tap()
+            }
+        }
+        
         webAuthenticationSessionAlertContinueButton.tap(.center)
         
         let webAuthenticationView = webViews.firstMatch
