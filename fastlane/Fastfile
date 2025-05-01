@@ -127,9 +127,9 @@ lane :ui_tests do |options|
 
   run_tests(
     scheme: "UITests",
-    devices: ["iPhone-18.4", "iPad-18.4"],
+    device: "iPhone-18.4",
     ensure_devices_found: true,
-    prelaunch_simulator: true,
+    prelaunch_simulator: false,
     result_bundle: true,
     only_testing: test_to_run,
     number_of_retries: 3,
