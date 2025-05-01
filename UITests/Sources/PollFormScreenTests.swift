@@ -17,15 +17,15 @@ class PollFormScreenUITests: XCTestCase {
     func testFilledPoll() async throws {
         let app = Application.launch(.createPoll)
         let questionTextField = app.textFields[A11yIdentifiers.pollFormScreen.question]
-        questionTextField.tapCenter()
+        questionTextField.tap(.center)
         questionTextField.typeText("Do you like polls?")
 
         let option1TextField = app.textFields[A11yIdentifiers.pollFormScreen.optionID(0)]
-        option1TextField.tapCenter()
+        option1TextField.tap(.center)
         option1TextField.typeText("Yes")
 
         let option2TextField = app.textFields[A11yIdentifiers.pollFormScreen.optionID(1)]
-        option2TextField.tapCenter()
+        option2TextField.tap(.center)
         option2TextField.typeText("No")
         
         // Dismiss the keyboard
