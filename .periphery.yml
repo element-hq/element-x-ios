@@ -1,19 +1,19 @@
 project: ElementX.xcodeproj
 schemes:
 - ElementX
-- IntegrationTests
-- UITests
 - UnitTests
 - PreviewTests
+- UITests
+- IntegrationTests
 targets:
 - ElementX
-- IntegrationTests
 - NSE
+- ShareExtension
+- UnitTests
 - PreviewTests
 - UITests
-- UnitTests
+- IntegrationTests
 report_exclude:
   - ElementX/Sources/Mocks/Generated/GeneratedMocks.swift
   - ElementX/Sources/Mocks/Generated/SDKGeneratedMocks.swift
-verbose: true
 retain_swift_ui_previews: true
