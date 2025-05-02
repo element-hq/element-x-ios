@@ -42,6 +42,9 @@ class NotificationHandler {
     func processEvent(_ eventID: String, roomID: String) async {
         MXLog.info("\(tag) Processing event: \(eventID) in room: \(roomID)")
         
+        // Copy over the unread information to the notification badge
+        notificationContent.badge = NSNumber(value: notificationContent.unreadCount)
+        
         guard let notificationItemProxy = await userSession.notificationItemProxy(roomID: roomID, eventID: eventID) else {
             MXLog.error("\(tag) Failed retrieving notification item")
             discardNotification()
