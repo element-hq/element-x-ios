@@ -105,6 +105,9 @@ lane :unit_tests do |options|
 end
 
 lane :ui_tests do |options|
+  # We used to run these simultaneously on iPhone and iPad but it is *really* slow on GitHub runners.
+  # Presumably because launching 2 simulators uses more memory than the runner has available.
+  
   if options[:device] == "iPhone"
     device = "iPhone-18.4"
     
@@ -132,10 +135,6 @@ lane :ui_tests do |options|
   end
 
   reset_simulator = ENV.key?('CI')
-
-  # We used to run these simultaneously on iPhone and iPad but it is *really* slow on GitHub runners.
-  # Presumably because launching 2 simulators uses more memory than the runner has available.
-  
   
   run_tests(
     scheme: "UITests",
