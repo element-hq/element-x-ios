@@ -78,6 +78,8 @@ internal enum L10n {
   internal static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
   /// User menu
   internal static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
+  /// View details
+  internal static var a11yViewDetails: String { return L10n.tr("Localizable", "a11y_view_details") }
   /// Voice message, duration: %1$@
   internal static func a11yVoiceMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_voice_message", String(describing: p1))
@@ -334,6 +336,8 @@ internal enum L10n {
   internal static var commonCallStarted: String { return L10n.tr("Localizable", "common_call_started") }
   /// Chat backup
   internal static var commonChatBackup: String { return L10n.tr("Localizable", "common_chat_backup") }
+  /// Copied to clipboard
+  internal static var commonCopiedToClipboard: String { return L10n.tr("Localizable", "common_copied_to_clipboard") }
   /// Copyright
   internal static var commonCopyright: String { return L10n.tr("Localizable", "common_copyright") }
   /// Creating room…
@@ -360,6 +364,8 @@ internal enum L10n {
   internal static var commonDeviceId: String { return L10n.tr("Localizable", "common_device_id") }
   /// Direct chat
   internal static var commonDirectChat: String { return L10n.tr("Localizable", "common_direct_chat") }
+  /// Do not show this again
+  internal static var commonDoNotShowThisAgain: String { return L10n.tr("Localizable", "common_do_not_show_this_again") }
   /// Download failed
   internal static var commonDownloadFailed: String { return L10n.tr("Localizable", "common_download_failed") }
   /// Downloading
@@ -374,6 +380,8 @@ internal enum L10n {
   internal static func commonEmote(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "common_emote", String(describing: p1), String(describing: p2))
   }
+  /// Empty file
+  internal static var commonEmptyFile: String { return L10n.tr("Localizable", "common_empty_file") }
   /// Encryption
   internal static var commonEncryption: String { return L10n.tr("Localizable", "common_encryption") }
   /// Encryption enabled
@@ -416,6 +424,8 @@ internal enum L10n {
   internal static var commonLeavingRoom: String { return L10n.tr("Localizable", "common_leaving_room") }
   /// Light
   internal static var commonLight: String { return L10n.tr("Localizable", "common_light") }
+  /// Line copied to clipboard
+  internal static var commonLineCopiedToClipboard: String { return L10n.tr("Localizable", "common_line_copied_to_clipboard") }
   /// Link copied to clipboard
   internal static var commonLinkCopiedToClipboard: String { return L10n.tr("Localizable", "common_link_copied_to_clipboard") }
   /// Loading…
@@ -450,6 +460,8 @@ internal enum L10n {
   internal static var commonNotEncrypted: String { return L10n.tr("Localizable", "common_not_encrypted") }
   /// Offline
   internal static var commonOffline: String { return L10n.tr("Localizable", "common_offline") }
+  /// Open source licenses
+  internal static var commonOpenSourceLicenses: String { return L10n.tr("Localizable", "common_open_source_licenses") }
   /// Optic ID
   internal static var commonOpticIdIos: String { return L10n.tr("Localizable", "common_optic_id_ios") }
   /// or
@@ -462,6 +474,8 @@ internal enum L10n {
   internal static var commonPermalink: String { return L10n.tr("Localizable", "common_permalink") }
   /// Permission
   internal static var commonPermission: String { return L10n.tr("Localizable", "common_permission") }
+  /// Pinned
+  internal static var commonPinned: String { return L10n.tr("Localizable", "common_pinned") }
   /// Please check your internet connection
   internal static var commonPleaseCheckInternetConnection: String { return L10n.tr("Localizable", "common_please_check_internet_connection") }
   /// Please wait…
@@ -526,6 +540,8 @@ internal enum L10n {
   internal static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
   /// Seen by
   internal static var commonSeenBy: String { return L10n.tr("Localizable", "common_seen_by") }
+  /// Send to
+  internal static var commonSendTo: String { return L10n.tr("Localizable", "common_send_to") }
   /// Sending…
   internal static var commonSending: String { return L10n.tr("Localizable", "common_sending") }
   /// Sending failed
@@ -1098,8 +1114,6 @@ internal enum L10n {
   internal static var screenBlockedUsersUnblockAlertTitle: String { return L10n.tr("Localizable", "screen_blocked_users_unblock_alert_title") }
   /// Unblocking…
   internal static var screenBlockedUsersUnblocking: String { return L10n.tr("Localizable", "screen_blocked_users_unblocking") }
-  /// Remove from room
-  internal static var screenBottomSheetManageRoomMemberRemove: String { return L10n.tr("Localizable", "screen_bottom_sheet,manage_room_member_remove") }
   /// Send invite
   internal static var screenBottomSheetCreateDmConfirmationButtonTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_confirmation_button_title") }
   /// Would you like to start a chat with %1$@?
@@ -1128,6 +1142,8 @@ internal enum L10n {
   internal static var screenBottomSheetManageRoomMemberKickMemberConfirmationTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title") }
   /// View profile
   internal static var screenBottomSheetManageRoomMemberMemberUserInfo: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_member_user_info") }
+  /// Remove from room
+  internal static var screenBottomSheetManageRoomMemberRemove: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_remove") }
   /// Remove member and ban from joining in the future?
   internal static var screenBottomSheetManageRoomMemberRemoveConfirmationTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_remove_confirmation_title") }
   /// Removing %1$@…
@@ -2970,28 +2986,6 @@ internal enum L10n {
   }
   /// Check UnifiedPush
   internal static var troubleshootNotificationsTestUnifiedPushTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_title") }
-
-  internal enum A11y {
-    /// View details
-    internal static var viewDetails: String { return L10n.tr("Localizable", "a11y.view_details") }
-  }
-
-  internal enum Common {
-    /// Copied to clipboard
-    internal static var copiedToClipboard: String { return L10n.tr("Localizable", "common.copied_to_clipboard") }
-    /// Do not show this again
-    internal static var doNotShowThisAgain: String { return L10n.tr("Localizable", "common.do_not_show_this_again") }
-    /// Empty file
-    internal static var emptyFile: String { return L10n.tr("Localizable", "common.empty_file") }
-    /// Line copied to clipboard
-    internal static var lineCopiedToClipboard: String { return L10n.tr("Localizable", "common.line_copied_to_clipboard") }
-    /// Open source licenses
-    internal static var openSourceLicenses: String { return L10n.tr("Localizable", "common.open_source_licenses") }
-    /// Pinned
-    internal static var pinned: String { return L10n.tr("Localizable", "common.pinned") }
-    /// Send to
-    internal static var sendTo: String { return L10n.tr("Localizable", "common.send_to") }
-  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces
