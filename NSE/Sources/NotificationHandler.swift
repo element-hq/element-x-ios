@@ -43,9 +43,7 @@ class NotificationHandler {
         MXLog.info("\(tag) Processing event: \(eventID) in room: \(roomID)")
         
         // Copy over the unread information to the notification badge
-        if let unreadCount = notificationContent.unreadCount {
-            notificationContent.badge = NSNumber(value: unreadCount)
-        }
+        notificationContent.badge = notificationContent.unreadCount as NSNumber?
         
         guard let notificationItemProxy = await userSession.notificationItemProxy(roomID: roomID, eventID: eventID) else {
             MXLog.error("\(tag) Failed retrieving notification item")
@@ -83,10 +81,7 @@ class NotificationHandler {
         MXLog.info("\(tag) Discarding notification")
         
         let content = UNMutableNotificationContent()
-        
-        if let unreadCount = notificationContent.unreadCount {
-            content.badge = NSNumber(value: unreadCount)
-        }
+        content.badge = notificationContent.unreadCount as NSNumber?
         
         contentHandler(content)
     }
