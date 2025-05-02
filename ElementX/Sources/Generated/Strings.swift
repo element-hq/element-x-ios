@@ -1174,7 +1174,7 @@ internal enum L10n {
   internal static var screenChangeAccountProviderTitle: String { return L10n.tr("Localizable", "screen_change_account_provider_title") }
   /// We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.
   internal static var screenChangeServerErrorInvalidHomeserver: String { return L10n.tr("Localizable", "screen_change_server_error_invalid_homeserver") }
-  /// Sliding sync isn't available due to an issue in the well-known file:
+  /// Server isn't available due to an issue in the well-known file:
   /// %1$@
   internal static func screenChangeServerErrorInvalidWellKnown(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_invalid_well_known", String(describing: p1))
