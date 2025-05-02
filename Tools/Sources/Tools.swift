@@ -11,5 +11,6 @@ struct Tools: AsyncParsableCommand {
                                                                   Locheck.self,
                                                                   GenerateSDKMocks.self,
                                                                   GenerateSAS.self,
-                                                                  AppIconBanner.self])
+                                                                  AppIconBanner.self,
+                                                                  UnusedStrings.self])
 }
