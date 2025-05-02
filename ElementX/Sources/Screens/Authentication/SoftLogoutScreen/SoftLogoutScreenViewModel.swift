@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias SoftLogoutScreenViewModelType = StateStoreViewModel<SoftLogoutScreenViewState, SoftLogoutScreenViewAction>
+typealias SoftLogoutScreenViewModelType = StateStoreViewModelV2<SoftLogoutScreenViewState, SoftLogoutScreenViewAction>
 
 class SoftLogoutScreenViewModel: SoftLogoutScreenViewModelType, SoftLogoutScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<SoftLogoutScreenViewModelAction, Never> = .init()

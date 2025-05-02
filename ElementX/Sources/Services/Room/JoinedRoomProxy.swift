@@ -178,7 +178,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
         let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: room.id())
         
-        roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: RoomInfoUpdateListener { [weak self] roomInfo in
+        roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: SDKListener { [weak self] roomInfo in
             MXLog.info("Received room info update")
             self?.infoSubject.send(.init(roomInfo: roomInfo, roomAvatarCached: cachedRoomAvatar))
         })
@@ -606,6 +606,15 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    func canUser(userID: String, sendMessage messageType: MessageLikeEventType) async -> Result<Bool, RoomProxyError> {
+        do {
+            return try await .success(room.canUserSendMessage(userId: userID, message: messageType))
+        } catch {
+            MXLog.error("Failed checking if the user can send message with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func canUser(userID: String, sendStateEvent event: StateEventType) async -> Result<Bool, RoomProxyError> {
         do {
             return try await .success(room.canUserSendState(userId: userID, stateEvent: event))
@@ -845,18 +854,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         } catch {
             MXLog.error("Failed observing requests to join with error: \(error)")
         }
-    }
-}
-
-private final class RoomInfoUpdateListener: RoomInfoListener {
-    private let onUpdateClosure: (RoomInfo) -> Void
-    
-    init(_ onUpdateClosure: @escaping (RoomInfo) -> Void) {
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func call(roomInfo: RoomInfo) {
-        onUpdateClosure(roomInfo)
     }
 }
 

@@ -83,7 +83,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
         case .dismiss:
             actionsSubject.send(.dismiss)
         case .declineInviteAndBlock(let userID):
-            showDeclineAndBlockConfirmationAlert(userID: userID)
+            Task { await showDeclineAndBlockConfirmationAlert(userID: userID) }
         }
     }
     
@@ -322,8 +322,8 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                          secondaryButton: .init(title: L10n.screenJoinRoomCancelKnockAlertConfirmation, role: .destructive) { Task { await self.cancelKnock() } })
     }
     
-    private func showDeclineAndBlockConfirmationAlert(userID: String) {
-        if appSettings.reportInviteEnabled {
+    private func showDeclineAndBlockConfirmationAlert(userID: String) async {
+        if await clientProxy.isReportRoomSupported {
             actionsSubject.send(.presentDeclineAndBlock(userID: userID))
         } else {
             state.bindings.alertInfo = .init(id: .declineInviteAndBlock,

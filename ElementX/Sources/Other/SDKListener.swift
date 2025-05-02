@@ -74,6 +74,12 @@ extension SDKListener: RoomListLoadingStateListener where T == RoomListLoadingSt
     func onUpdate(state: RoomListLoadingState) { onUpdateClosure(state) }
 }
 
+// MARK: Room
+
+extension SDKListener: RoomInfoListener where T == RoomInfo {
+    func call(roomInfo: RoomInfo) { onUpdateClosure(roomInfo) }
+}
+
 // MARK: TimelineProxy
 
 extension SDKListener: PaginationStatusListener where T == RoomPaginationStatus {

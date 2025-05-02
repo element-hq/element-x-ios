@@ -12,7 +12,7 @@ import SwiftUI
 struct AuthenticationStartScreen: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
-    @ObservedObject var context: AuthenticationStartScreenViewModel.Context
+    let context: AuthenticationStartScreenViewModel.Context
     
     var body: some View {
         GeometryReader { geometry in

@@ -28,7 +28,6 @@ extension OIDCConfigurationProxy {
                           logoUri: logoURI.absoluteString,
                           tosUri: tosURI.absoluteString,
                           policyUri: policyURI.absoluteString,
-                          contacts: nil,
                           staticRegistrations: staticRegistrations)
     }
 }

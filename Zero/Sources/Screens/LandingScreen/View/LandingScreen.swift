@@ -18,7 +18,7 @@ import Compound
 import SwiftUI
 
 struct LandingScreen: View {
-    @ObservedObject var context: AuthenticationStartScreenViewModel.Context
+    @Bindable var context: AuthenticationStartScreenViewModel.Context
     
     @State private var keyboardHeight: CGFloat = 0
     

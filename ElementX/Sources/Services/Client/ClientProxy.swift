@@ -205,7 +205,7 @@ class ClientProxy: ClientProxyProtocol {
         syncServiceStateUpdateTaskHandle = createSyncServiceStateObserver(syncService)
         roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
         roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
-
+                
         delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
             self?.actionsSubject.send(.receivedAuthError(isSoftLogout: isSoftLogout))
@@ -306,6 +306,17 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error("Failed retrieving userID server name with error: \(error)")
             return nil
+        }
+    }
+    
+    var isReportRoomSupported: Bool {
+        get async {
+            do {
+                return try await client.isReportRoomApiSupported()
+            } catch {
+                MXLog.error("Failed checking report room support with error: \(error)")
+                return false
+            }
         }
     }
 

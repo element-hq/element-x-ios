@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ServerSelectionScreen: View {
-    @ObservedObject var context: ServerSelectionScreenViewModel.Context
+    @Bindable var context: ServerSelectionScreenViewModel.Context
     
     var body: some View {
         ScrollView {
@@ -107,9 +107,7 @@ struct ServerSelection_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             ServerSelectionScreen(context: invalidViewModel.context)
         }
-        .snapshotPreferences(expect: invalidViewModel.context.$viewState.map { state in
-            state.hasValidationError == true
-        })
+        .snapshotPreferences(expect: invalidViewModel.context.observe(\.viewState.hasValidationError))
     }
     
     static func makeViewModel(for homeserverAddress: String) -> ServerSelectionScreenViewModel {

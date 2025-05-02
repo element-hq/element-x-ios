@@ -5,11 +5,12 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import SwiftUI
 import XCTest
 
 extension XCUIElement {
     func clearAndTypeText(_ text: String, app: XCUIApplication) {
-        tapCenter()
+        tap(.center)
         
         app.showKeyboardIfNeeded()
         
@@ -26,8 +27,8 @@ extension XCUIElement {
         }
     }
     
-    func tapCenter() {
-        let coordinate: XCUICoordinate = coordinate(withNormalizedOffset: .init(dx: 0.5, dy: 0.5))
+    func tap(_ point: UnitPoint) {
+        let coordinate = coordinate(withNormalizedOffset: .init(dx: point.x, dy: point.y))
         coordinate.tap()
     }
 }

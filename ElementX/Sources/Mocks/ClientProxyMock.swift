@@ -92,5 +92,7 @@ extension ClientProxyMock {
         }
         
         userIdentityForReturnValue = .success(UserIdentityProxyMock(configuration: .init()))
+        
+        underlyingIsReportRoomSupported = true
     }
 }
