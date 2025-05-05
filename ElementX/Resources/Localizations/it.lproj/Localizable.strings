@@ -22,10 +22,10 @@
 "a11y_show_password" = "Mostra password";
 "a11y_start_call" = "Avvia una chiamata";
 "a11y_user_menu" = "Menu utente";
+"a11y_view_details" = "Visualizza dettagli";
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Registra un messaggio vocale.";
 "a11y_voice_message_stop_recording" = "Ferma la registrazione";
-"a11y.view_details" = "Visualizza dettagli";
 "action_accept" = "Accetta";
 "action_add_caption" = "Aggiungi didascalia";
 "action_add_to_timeline" = "Aggiungi alla conversazione";
@@ -146,6 +146,7 @@
 "common_bubbles" = "Fumetti";
 "common_call_started" = "Chiamata avviata";
 "common_chat_backup" = "Backup della chat";
+"common_copied_to_clipboard" = "Copiato negli appunti";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Creazione stanza…";
 "common_current_user_canceled_knock" = "Richiesta annullata";
@@ -158,12 +159,14 @@
 "common_developer_options" = "Opzioni sviluppatore";
 "common_device_id" = "ID dispositivo";
 "common_direct_chat" = "Conversazione diretta";
+"common_do_not_show_this_again" = "Non mostrarlo più";
 "common_download_failed" = "Download non riuscito";
 "common_downloading" = "Scaricamento";
 "common_edited_suffix" = "(modificato)";
 "common_editing" = "Modifica in corso";
 "common_editing_caption" = "Modifica didascalia";
 "common_emote" = "* %1$@ %2$@";
+"common_empty_file" = "File vuoto";
 "common_encryption" = "Crittografia";
 "common_encryption_enabled" = "Crittografia abilitata";
 "common_enter_your_pin" = "Inserisci il PIN";
@@ -184,6 +187,7 @@
 "common_invite_unknown_profile" = "Questo ID Matrix non può essere trovato, quindi l'invito potrebbe non essere ricevuto.";
 "common_leaving_room" = "Lascio la stanza";
 "common_light" = "Chiaro";
+"common_line_copied_to_clipboard" = "Riga copiata negli appunti";
 "common_link_copied_to_clipboard" = "Collegamento copiato negli appunti";
 "common_loading" = "Caricamento…";
 "common_loading_more" = "Caricamento in corso...";
@@ -198,12 +202,14 @@
 "common_no_room_name" = "Nessun nome della stanza";
 "common_not_encrypted" = "Non cifrata";
 "common_offline" = "Non in linea";
+"common_open_source_licenses" = "Licenze open source";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "o";
 "common_password" = "Password";
 "common_people" = "Persone";
 "common_permalink" = "Collegamento permanente";
 "common_permission" = "Autorizzazione";
+"common_pinned" = "Fissato";
 "common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Attendere prego...";
 "common_poll_end_confirmation" = "Vuoi davvero terminare questo sondaggio?";
@@ -231,6 +237,7 @@
 "common_search_results" = "Risultati di ricerca";
 "common_security" = "Sicurezza";
 "common_seen_by" = "Visto da";
+"common_send_to" = "Invia a";
 "common_sending" = "Invio in corso…";
 "common_sending_failed" = "Invio fallito";
 "common_sent" = "Inviato";
@@ -274,13 +281,6 @@
 "common_waiting" = "In attesa…";
 "common_waiting_for_decryption_key" = "In attesa del messaggio";
 "common_you" = "Tu";
-"common.copied_to_clipboard" = "Copiato negli appunti";
-"common.do_not_show_this_again" = "Non mostrarlo più";
-"common.empty_file" = "File vuoto";
-"common.line_copied_to_clipboard" = "Riga copiata negli appunti";
-"common.open_source_licenses" = "Licenze open source";
-"common.pinned" = "Fissato";
-"common.send_to" = "Invia a";
 "common_unable_to_decrypt_insecure_device" = "Inviato da un dispositivo non sicuro";
 "common_unable_to_decrypt_verification_violation" = "L'identità verificata del mittente è stata reimpostata";
 "confirm_recovery_key_banner_message" = "Conferma la chiave di recupero per mantenere l'accesso all'archiviazione delle chiavi e alla cronologia dei messaggi.";
@@ -406,7 +406,6 @@
 "screen_advanced_settings_show_media_timeline_private_rooms" = "In private rooms";
 "screen_advanced_settings_show_media_timeline_subtitle" = "A hidden media can always be shown by tapping on it";
 "screen_advanced_settings_show_media_timeline_title" = "Show media in timeline";
-"screen_bottom_sheet,manage_room_member_remove" = "Rimuovi dalla stanza";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Invia invito";
 "screen_bottom_sheet_create_dm_message" = "Vuoi iniziare una conversazione con%1$@?";
 "screen_bottom_sheet_create_dm_title" = "Inviare invito?";
@@ -419,6 +418,7 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Visualizza profilo";
+"screen_bottom_sheet_manage_room_member_remove" = "Rimuovi dalla stanza";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Rimuovere e vietare l'accesso in futuro?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Rimozione di %1$@...";
 "screen_create_room_room_access_section_anyone_option_description" = "Chiunque può entrare in questa stanza";

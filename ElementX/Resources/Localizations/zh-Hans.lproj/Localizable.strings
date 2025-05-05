@@ -22,10 +22,10 @@
 "a11y_show_password" = "显示密码";
 "a11y_start_call" = "开始通话";
 "a11y_user_menu" = "用户菜单";
+"a11y_view_details" = "查看详情";
 "a11y_voice_message" = "语音消息，时长：%1$@";
 "a11y_voice_message_record" = "录制语音消息";
 "a11y_voice_message_stop_recording" = "停止录制";
-"a11y.view_details" = "查看详情";
 "action_accept" = "接受";
 "action_add_caption" = "添加标题";
 "action_add_to_timeline" = "添加到时间线";
@@ -146,6 +146,7 @@
 "common_bubbles" = "气泡";
 "common_call_started" = "通话已开始";
 "common_chat_backup" = "聊天记录备份";
+"common_copied_to_clipboard" = "已复制到剪贴板";
 "common_copyright" = "版权";
 "common_creating_room" = "正在创建聊天室...";
 "common_current_user_canceled_knock" = "请求已取消";
@@ -158,12 +159,14 @@
 "common_developer_options" = "开发者选项";
 "common_device_id" = "设备 ID";
 "common_direct_chat" = "私聊";
+"common_do_not_show_this_again" = "不再显示此内容";
 "common_download_failed" = "下载失败";
 "common_downloading" = "正在下载";
 "common_edited_suffix" = "（已编辑）";
 "common_editing" = "编辑中";
 "common_editing_caption" = "编辑标题";
 "common_emote" = "* %1$@ %2$@";
+"common_empty_file" = "空文件";
 "common_encryption" = "加密";
 "common_encryption_enabled" = "已启用加密";
 "common_enter_your_pin" = "输入 PIN 码";
@@ -184,6 +187,7 @@
 "common_invite_unknown_profile" = "找不到此 Matrix ID，因此可能无法收到邀请。";
 "common_leaving_room" = "正在离开聊天室";
 "common_light" = "浅色";
+"common_line_copied_to_clipboard" = "链接已复制到剪贴板";
 "common_link_copied_to_clipboard" = "链接已复制到剪贴板";
 "common_loading" = "正在加载...";
 "common_loading_more" = "正在加载更多……";
@@ -198,12 +202,14 @@
 "common_no_room_name" = "无聊天室名";
 "common_not_encrypted" = "未加密";
 "common_offline" = "离线";
+"common_open_source_licenses" = "开源许可证";
 "common_optic_id_ios" = "视控 ID";
 "common_or" = "或";
 "common_password" = "密码";
 "common_people" = "用户";
 "common_permalink" = "固定链接";
 "common_permission" = "权限";
+"common_pinned" = "已置顶";
 "common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "请稍候……";
 "common_poll_end_confirmation" = "确定要结束这个投票吗？";
@@ -231,6 +237,7 @@
 "common_search_results" = "搜索结果";
 "common_security" = "安全";
 "common_seen_by" = "已读";
+"common_send_to" = "发送至";
 "common_sending" = "正在发送…";
 "common_sending_failed" = "发送失败";
 "common_sent" = "已发送";
@@ -274,13 +281,6 @@
 "common_waiting" = "等待...";
 "common_waiting_for_decryption_key" = "正在等待解密密钥";
 "common_you" = "您";
-"common.copied_to_clipboard" = "已复制到剪贴板";
-"common.do_not_show_this_again" = "不再显示此内容";
-"common.empty_file" = "空文件";
-"common.line_copied_to_clipboard" = "链接已复制到剪贴板";
-"common.open_source_licenses" = "开源许可证";
-"common.pinned" = "已置顶";
-"common.send_to" = "发送至";
 "common_unable_to_decrypt_insecure_device" = "从不安全的设备发送";
 "common_unable_to_decrypt_verification_violation" = "发送者的已验证身份已改变";
 "confirm_recovery_key_banner_message" = "确认恢复密钥，以保持对密钥存储和消息历史的访问。";
@@ -406,7 +406,6 @@
 "screen_advanced_settings_show_media_timeline_private_rooms" = "In private rooms";
 "screen_advanced_settings_show_media_timeline_subtitle" = "A hidden media can always be shown by tapping on it";
 "screen_advanced_settings_show_media_timeline_title" = "Show media in timeline";
-"screen_bottom_sheet,manage_room_member_remove" = "从聊天室移除";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";
@@ -419,6 +418,7 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "如果受到邀请，他们可以重新加入聊天室。";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "您确定要移除此成员吗？";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "查看个人资料";
+"screen_bottom_sheet_manage_room_member_remove" = "从聊天室移除";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "删除成员并禁止重新加入？";
 "screen_bottom_sheet_manage_room_member_removing_user" = "正在移除 %1$@……";
 "screen_create_room_room_access_section_anyone_option_description" = "任何人都可以加入此房间";
