@@ -136,9 +136,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .weakAssign(to: \.state.hideInviteAvatars, on: self)
             .store(in: &cancellables)
         
-        appSettings.$reportRoomEnabled
-            .weakAssign(to: \.state.reportRoomEnabled, on: self)
-            .store(in: &cancellables)
+        Task {
+            state.reportRoomEnabled = await userSession.clientProxy.isReportRoomSupported
+        }
         
         let isSearchFieldFocused = context.$viewState.map(\.bindings.isSearchFieldFocused)
         let searchQuery = context.$viewState.map(\.bindings.searchQuery)
@@ -240,7 +240,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 await acceptInvite(roomID: roomIdentifier)
             }
         case .declineInvite(let roomIdentifier):
-            showDeclineInviteConfirmationAlert(roomID: roomIdentifier)
+            Task { await showDeclineInviteConfirmationAlert(roomID: roomIdentifier) }
         case .loadRewards:
             loadUserRewards()
             checkAndUpdateRoomNotificationMode()
@@ -378,6 +378,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             rooms.append(room)
         }
         
+        // In case the list is updated through filters and there is `.room` filter applied, we need to filter out channels
+        let activeFilters = state.bindings.filtersState.activeFilters
+        if activeFilters.contains(.rooms) {
+            rooms = rooms.filter { !$0.isAChannel }
+        }
+        
         state.rooms = rooms
     }
     
@@ -484,7 +490,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
-    private func showDeclineInviteConfirmationAlert(roomID: String) {
+    private func showDeclineInviteConfirmationAlert(roomID: String) async {
         guard let room = state.rooms.first(where: { $0.id == roomID }) else {
             displayError()
             return
@@ -494,7 +500,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         let title = room.isDirect ? L10n.screenInvitesDeclineDirectChatTitle : L10n.screenInvitesDeclineChatTitle
         let message = room.isDirect ? L10n.screenInvitesDeclineDirectChatMessage(roomPlaceholder) : L10n.screenInvitesDeclineChatMessage(roomPlaceholder)
         
-        if appSettings.reportInviteEnabled, let userID = room.inviter?.id {
+        if await userSession.clientProxy.isReportRoomSupported, let userID = room.inviter?.id {
             state.bindings.alertInfo = .init(id: UUID(),
                                              title: title,
                                              message: message,

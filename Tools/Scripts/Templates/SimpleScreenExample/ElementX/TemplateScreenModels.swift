@@ -16,6 +16,8 @@ enum TemplateScreenViewModelAction {
 struct TemplateScreenViewState: BindableState {
     var title: String
     var placeholder: String
+    var counter = 0
+    
     var bindings: TemplateScreenViewStateBindings
 }
 
@@ -26,6 +28,9 @@ struct TemplateScreenViewStateBindings {
 enum TemplateScreenViewAction {
     case done
     case textChanged
+    
+    case incrementCounter
+    case decrementCounter
     
     // Consider adding CustomStringConvertible conformance if the actions contain PII
 }

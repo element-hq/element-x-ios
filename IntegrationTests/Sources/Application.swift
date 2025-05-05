@@ -23,10 +23,10 @@ enum Application {
 }
 
 extension XCUIApplication {
-    var homeserver: String {
+    var homeserver: String? {
         guard let homeserver = ProcessInfo.processInfo.environment["INTEGRATION_TESTS_HOST"],
               homeserver.count > 0 else {
-            return "default"
+            return nil
         }
         
         return homeserver

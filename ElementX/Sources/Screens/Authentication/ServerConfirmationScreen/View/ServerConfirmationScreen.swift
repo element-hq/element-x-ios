@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct ServerConfirmationScreen: View {
-    @ObservedObject var context: ServerConfirmationScreenViewModel.Context
+    @Bindable var context: ServerConfirmationScreenViewModel.Context
     
     var body: some View {
         FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar) {

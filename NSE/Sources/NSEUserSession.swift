@@ -38,7 +38,9 @@ final class NSEUserSession {
                          slidingSync: .restored,
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks,
-                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode)
+                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
+                         requestTimeout: 15000,
+                         maxRequestRetryTime: 5000)
             .systemIsMemoryConstrained()
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
@@ -72,7 +74,7 @@ final class NSEUserSession {
                                          roomID: roomID,
                                          notificationSenderDisplayInfo: senderDisplayInfo)
         } catch {
-            MXLog.error("NSE: Could not get notification's content creating an empty notification instead, error: \(error)")
+            MXLog.error("Could not get notification's content creating an empty notification instead, error: \(error)")
             return EmptyNotificationItemProxy(eventID: eventID, roomID: roomID, receiverID: userID)
         }
     }
@@ -89,6 +91,15 @@ final class NSEUserSession {
         let senderDisplayInfo = NotificationSenderDisplayInfo(name: notification.senderInfo.displayName ?? senderID,
                                                               avatarUrl: notification.senderInfo.avatarUrl)
         return senderDisplayInfo
+    }
+    
+    func roomForIdentifier(_ roomID: String) -> Room? {
+        do {
+            return try notificationClient.getRoom(roomId: roomID)
+        } catch {
+            MXLog.error("Failed retrieving room with error: \(error)")
+            return nil
+        }
     }
     
     deinit {

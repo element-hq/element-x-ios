@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias ServerConfirmationScreenViewModelType = StateStoreViewModel<ServerConfirmationScreenViewState, ServerConfirmationScreenViewAction>
+typealias ServerConfirmationScreenViewModelType = StateStoreViewModelV2<ServerConfirmationScreenViewState, ServerConfirmationScreenViewAction>
 
 class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, ServerConfirmationScreenViewModelProtocol {
     let authenticationService: AuthenticationServiceProtocol

@@ -88,6 +88,7 @@ targets:
     - path: ../../ElementX/Sources/Generated/Strings.swift
     - path: ../../ElementX/Sources/Other/Avatars.swift
     - path: ../../ElementX/Sources/Other/CurrentValuePublisher.swift
+    - path: ../../ElementX/Sources/Other/ExpiringTaskRunner.swift
     - path: ../../ElementX/Sources/Other/Extensions/AttributedString.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
     - path: ../../ElementX/Sources/Other/Extensions/ClientBuilder.swift
@@ -110,6 +111,7 @@ targets:
     - path: ../../ElementX/Sources/Other/NetworkMonitor
     - path: ../../ElementX/Sources/Other/Pills/PillUtilities.swift
     - path: ../../ElementX/Sources/Other/Pills/PlainMentionBuilder.swift
+    - path: ../../ElementX/Sources/Other/SDKListener.swift
     - path: ../../ElementX/Sources/Other/SwiftUI/Views/PlaceholderAvatarImage.swift
     - path: ../../ElementX/Sources/Other/TestablePreview.swift
     - path: ../../ElementX/Sources/Other/UserAgentBuilder.swift

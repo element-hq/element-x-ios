@@ -2303,6 +2303,23 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingSecureBackupController: SecureBackupControllerProtocol!
     var sessionVerificationController: SessionVerificationControllerProxyProtocol?
+    var isReportRoomSupportedCallsCount = 0
+    var isReportRoomSupportedCalled: Bool {
+        return isReportRoomSupportedCallsCount > 0
+    }
+
+    var isReportRoomSupported: Bool {
+        get async {
+            isReportRoomSupportedCallsCount += 1
+            if let isReportRoomSupportedClosure = isReportRoomSupportedClosure {
+                return await isReportRoomSupportedClosure()
+            } else {
+                return underlyingIsReportRoomSupported
+            }
+        }
+    }
+    var underlyingIsReportRoomSupported: Bool!
+    var isReportRoomSupportedClosure: (() async -> Bool)?
     var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> {
         get { return underlyingUserRewardsPublisher }
         set(value) { underlyingUserRewardsPublisher = value }
@@ -9973,6 +9990,76 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return await updatePowerLevelsForUsersClosure(updates)
         } else {
             return updatePowerLevelsForUsersReturnValue
+        }
+    }
+    //MARK: - canUser
+
+    var canUserUserIDSendMessageUnderlyingCallsCount = 0
+    var canUserUserIDSendMessageCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return canUserUserIDSendMessageUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canUserUserIDSendMessageUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canUserUserIDSendMessageUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canUserUserIDSendMessageUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var canUserUserIDSendMessageCalled: Bool {
+        return canUserUserIDSendMessageCallsCount > 0
+    }
+    var canUserUserIDSendMessageReceivedArguments: (userID: String, messageType: MessageLikeEventType)?
+    var canUserUserIDSendMessageReceivedInvocations: [(userID: String, messageType: MessageLikeEventType)] = []
+
+    var canUserUserIDSendMessageUnderlyingReturnValue: Result<Bool, RoomProxyError>!
+    var canUserUserIDSendMessageReturnValue: Result<Bool, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return canUserUserIDSendMessageUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Bool, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canUserUserIDSendMessageUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canUserUserIDSendMessageUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canUserUserIDSendMessageUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var canUserUserIDSendMessageClosure: ((String, MessageLikeEventType) async -> Result<Bool, RoomProxyError>)?
+
+    func canUser(userID: String, sendMessage messageType: MessageLikeEventType) async -> Result<Bool, RoomProxyError> {
+        canUserUserIDSendMessageCallsCount += 1
+        canUserUserIDSendMessageReceivedArguments = (userID: userID, messageType: messageType)
+        DispatchQueue.main.async {
+            self.canUserUserIDSendMessageReceivedInvocations.append((userID: userID, messageType: messageType))
+        }
+        if let canUserUserIDSendMessageClosure = canUserUserIDSendMessageClosure {
+            return await canUserUserIDSendMessageClosure(userID, messageType)
+        } else {
+            return canUserUserIDSendMessageReturnValue
         }
     }
     //MARK: - canUser

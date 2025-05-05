@@ -98,7 +98,13 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         try await app.assertScreenshot()
     }
     
-    func testSelectingOIDCServer() {
+    // Disabled for now as the looping isn't 100% fool-proof and we have OIDC on the integration tests
+    // so this mock version doesn't really add anything to the tests as a whole.
+    func disabled_testSelectingOIDCServer() {
+        // Allow this test to run for longer to help with the loop whilst waiting to resolve the
+        // webcredentials for the Web Authentication Session (see below).
+        executionTimeAllowance = 300
+        
         // Given the authentication flow.
         let app = Application.launch(.authenticationFlow)
         
@@ -111,11 +117,31 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Server Selection: Clear the default, enter OIDC server and continue.
         app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("company.com\n", app: app)
         
-        // Server Confirmation: Tap continue button
-        app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
-        
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
-        XCTAssertTrue(springboard.staticTexts["“ElementX” Wants to Use “company.com” to Sign In"].waitForExistence(timeout: 4),
-                      "The web authentication prompt should be shown after selecting a homeserver with OIDC.")
+        let wasAlertText = springboard.staticTexts["“ElementX” Wants to Use “company.com” to Sign In"]
+        
+        // On a fresh simulator the webcredentials association is sometimes slow to be resolved.
+        // This results in an error alert being shown instead of the Web Authentication Session alert.
+        // Keep looping on the Continue button for ~5 minutes until the Authentication Session is happy.
+        var remainingAttempts = 30
+        while !wasAlertText.exists {
+            // Server Confirmation: Tap continue button
+            app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
+            
+            if wasAlertText.waitForExistence(timeout: 10) {
+                break
+            }
+            
+            remainingAttempts -= 1
+            if remainingAttempts <= 0 {
+                XCTFail("Failed to present the web authentication session.")
+            }
+            
+            if app.alerts.count > 0 {
+                app.alerts.firstMatch.buttons["OK"].tap()
+            }
+        }
+        
+        XCTAssertTrue(wasAlertText.exists, "The web authentication prompt should be shown after selecting a homeserver with OIDC.")
     }
 }

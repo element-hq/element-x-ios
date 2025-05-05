@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct DeveloperOptionsScreen: View {
-    @ObservedObject var context: DeveloperOptionsScreenViewModel.Context
+    @Bindable var context: DeveloperOptionsScreenViewModel.Context
+    
     @State private var showConfetti = false
     @State private var elementCallURLOverrideString: String
     
@@ -72,17 +73,6 @@ struct DeveloperOptionsScreen: View {
 //                Text("Trust and Decoration")
 //            } footer: {
 //                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
-//            }
-//            
-//            Section("Reporting") {
-//                Toggle(isOn: $context.reportRoomEnabled) {
-//                    Text("Report rooms")
-//                    Text("Report API might not work properly")
-//                }
-//                Toggle(isOn: $context.reportInviteEnabled) {
-//                    Text("Report invites")
-//                    Text("Report API might not work properly")
-//                }
 //            }
 
             Section {

@@ -12,4 +12,4 @@ enum ElementCallServiceNotificationKey: String {
     case roomDisplayName
 }
 
-let ElementCallServiceNotificationDiscardDelta = 10.0
+let ElementCallServiceNotificationDiscardDelta = 15.0

@@ -57,9 +57,8 @@ final class AppSettings {
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
         case knockingEnabled
-        case reportRoomEnabled
-        case reportInviteEnabled
         case threadsEnabled
+        case developerOptionsEnabled
         case zeroAccessToken
         case zeroRewardsCredit
         case zeroLoggedInUser
@@ -331,13 +330,11 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
     
-    @UserPreference(key: UserDefaultsKeys.reportRoomEnabled, defaultValue: false, storageType: .userDefaults(store)) var reportRoomEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.reportInviteEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var reportInviteEnabled
-    
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var threadsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    var developerOptionsEnabled
     
     #endif
     

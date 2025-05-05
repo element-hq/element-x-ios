@@ -8,16 +8,19 @@ on:
         required: false
 
   schedule:
-    - cron:  '0 0,12 * * 1-5'
+    - cron:  '0 2 * * 1-5'
 
 jobs:
   tests:
     name: Tests
     runs-on: macos-15
+    strategy:
+      matrix:
+        device: [iPhone, iPad]
 
     concurrency:
       # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
-      group: ${{ format('ui-tests-{0}', github.ref) }}
+      group: ${{ format('ui-tests-{0}-{1}', github.ref, matrix.device) }}
       cancel-in-progress: true
 
     steps:
@@ -40,9 +43,9 @@ jobs:
       - name: Run tests
         run: |
           if [[ -z "${{ github.event.inputs.test_name }}" ]]; then
-            bundle exec fastlane ui_tests
+            bundle exec fastlane ui_tests device:${{ matrix.device }} 
           else
-            bundle exec fastlane ui_tests test_name:${{ github.event.inputs.test_name }}
+            bundle exec fastlane ui_tests device:${{ matrix.device }} test_name:${{ github.event.inputs.test_name }}
           fi
 
       - name: Zip results # for faster upload
@@ -54,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: Results
+          name: ${{ matrix.device }}
           path: fastlane/test_output/UITests.xcresult.zip
           retention-days: 7
           if-no-files-found: ignore

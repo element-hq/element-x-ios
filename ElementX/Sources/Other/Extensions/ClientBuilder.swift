@@ -15,13 +15,18 @@ extension ClientBuilder {
                             slidingSync: ClientBuilderSlidingSync,
                             sessionDelegate: ClientSessionDelegate,
                             appHooks: AppHooks,
-                            enableOnlySignedDeviceIsolationMode: Bool) -> ClientBuilder {
+                            enableOnlySignedDeviceIsolationMode: Bool,
+                            requestTimeout: UInt64? = 25000,
+                            maxRequestRetryTime: UInt64? = nil) -> ClientBuilder {
         var builder = ClientBuilder()
             .crossProcessStoreLocksHolderName(holderName: InfoPlistReader.main.bundleIdentifier)
             .enableOidcRefreshLock()
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
-            .requestConfig(config: .init(retryLimit: 0, timeout: 25000, maxConcurrentRequests: nil, maxRetryTime: nil))
+            .requestConfig(config: .init(retryLimit: 0,
+                                         timeout: requestTimeout,
+                                         maxConcurrentRequests: nil,
+                                         maxRetryTime: maxRequestRetryTime))
             .useEventCachePersistentStorage(value: true)
         
         builder = switch slidingSync {

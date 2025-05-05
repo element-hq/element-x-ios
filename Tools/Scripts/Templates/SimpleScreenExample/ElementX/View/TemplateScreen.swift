@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct TemplateScreen: View {
-    @ObservedObject var context: TemplateScreenViewModel.Context
+    @Bindable var context: TemplateScreenViewModel.Context
     
     var body: some View {
         Form {
@@ -18,8 +18,18 @@ struct TemplateScreen: View {
                             kind: .textField(text: $context.composerText))
                 
                 ZeroListRow(label: .centeredAction(title: L10n.actionDone,
-                                                   systemIcon: .doorLeftHandClosed),
-                            kind: .button { context.send(viewAction: .done) })
+                                               icon: \.leave),
+                        kind: .button { context.send(viewAction: .done) })
+            }
+            
+            Section {
+                ZeroListRow(label: .default(title: "Counter", icon: \.chart),
+                        details: .counter(context.viewState.counter),
+                        kind: .label)
+                ZeroListRow(label: .default(title: "Increment", icon: \.plus),
+                        kind: .button { context.send(viewAction: .incrementCounter) })
+                ZeroListRow(label: .default(title: "Decrement", icon: \.minus),
+                        kind: .button { context.send(viewAction: .decrementCounter) })
             }
         }
         .zeroList()
@@ -33,10 +43,29 @@ struct TemplateScreen: View {
 // MARK: - Previews
 
 struct TemplateScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = TemplateScreenViewModel()
+    static let viewModel = makeViewModel()
+    static let incrementedViewModel = makeViewModel(counterValue: 1)
+    
     static var previews: some View {
         NavigationStack {
             TemplateScreen(context: viewModel.context)
         }
+        .previewDisplayName("Initial")
+        
+        NavigationStack {
+            TemplateScreen(context: incrementedViewModel.context)
+        }
+        .previewDisplayName("Incremented")
+        .snapshotPreferences(expect: incrementedViewModel.context.observe(\.viewState.counter).map { $0 == 1 }.eraseToStream())
+    }
+    
+    static func makeViewModel(counterValue: Int = 0) -> TemplateScreenViewModel {
+        let viewModel = TemplateScreenViewModel()
+        
+        for _ in 0..<counterValue {
+            viewModel.context.send(viewAction: .incrementCounter)
+        }
+        
+        return viewModel
     }
 }

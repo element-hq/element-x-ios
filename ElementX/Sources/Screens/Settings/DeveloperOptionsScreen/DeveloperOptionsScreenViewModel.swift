@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias DeveloperOptionsScreenViewModelType = StateStoreViewModel<DeveloperOptionsScreenViewState, DeveloperOptionsScreenViewAction>
+typealias DeveloperOptionsScreenViewModelType = StateStoreViewModelV2<DeveloperOptionsScreenViewState, DeveloperOptionsScreenViewAction>
 
 class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, DeveloperOptionsScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<DeveloperOptionsScreenViewModelAction, Never> = .init()

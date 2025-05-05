@@ -10,6 +10,7 @@ import MatrixRustSDK
 import UserNotifications
 
 class NotificationHandler {
+    private let userSession: NSEUserSession
     private let settings: CommonSettingsProtocol
     private let contentHandler: (UNNotificationContent) -> Void
     private var notificationContent: UNMutableNotificationContent
@@ -17,10 +18,15 @@ class NotificationHandler {
     
     private let notificationContentBuilder: NotificationContentBuilder
     
-    init(settings: CommonSettingsProtocol,
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var roomInfoObservationToken: TaskHandle?
+    
+    init(userSession: NSEUserSession,
+         settings: CommonSettingsProtocol,
          contentHandler: @escaping (UNNotificationContent) -> Void,
          notificationContent: UNMutableNotificationContent,
          tag: String) {
+        self.userSession = userSession
         self.settings = settings
         self.contentHandler = contentHandler
         self.notificationContent = notificationContent
@@ -33,10 +39,11 @@ class NotificationHandler {
                                                                 settings: settings)
     }
     
-    func processEvent(_ eventID: String,
-                      roomID: String,
-                      userSession: NSEUserSession) async {
+    func processEvent(_ eventID: String, roomID: String) async {
         MXLog.info("\(tag) Processing event: \(eventID) in room: \(roomID)")
+        
+        // Copy over the unread information to the notification badge
+        notificationContent.badge = notificationContent.unreadCount as NSNumber?
         
         guard let notificationItemProxy = await userSession.notificationItemProxy(roomID: roomID, eventID: eventID) else {
             MXLog.error("\(tag) Failed retrieving notification item")
@@ -74,10 +81,7 @@ class NotificationHandler {
         MXLog.info("\(tag) Discarding notification")
         
         let content = UNMutableNotificationContent()
-        
-        if let unreadCount = notificationContent.unreadCount {
-            content.badge = NSNumber(value: unreadCount)
-        }
+        content.badge = notificationContent.unreadCount as NSNumber?
         
         contentHandler(content)
     }
@@ -163,10 +167,32 @@ class NotificationHandler {
             return .shouldDisplay
         }
         
-        let timestamp = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
-        guard abs(timestamp.timeIntervalSinceNow) < ElementCallServiceNotificationDiscardDelta else {
-            MXLog.info("Call notification is too old, handling as push notification")
-            return .shouldDisplay
+        // Check to see if a call is still ongoing
+        if let room = userSession.roomForIdentifier(roomID) { // Try to get call details from the room info
+            if !room.hasActiveRoomCall() { // If I don't have an active call wait a bit and make sure
+                let expiringTask = ExpiringTaskRunner {
+                    await withCheckedContinuation { [weak self] continuation in
+                        self?.roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: SDKListener { _ in
+                            MXLog.info("Received room info update")
+                            continuation.resume()
+                        })
+                    }
+                }
+                
+                try? await expiringTask.run(timeout: .seconds(5)) // Wait 5 seconds or just use whatever is available
+                
+                guard room.hasActiveRoomCall() else {
+                    MXLog.info("The room no longer has an ongoing call, handling as push notification")
+                    return .shouldDisplay
+                }
+            }
+        } else { // Otherwise fallback to the old timeout mechanism
+            let timestamp = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+            
+            guard abs(timestamp.timeIntervalSinceNow) < ElementCallServiceNotificationDiscardDelta else {
+                MXLog.info("Call notification is too old, handling as push notification")
+                return .shouldDisplay
+            }
         }
         
         let payload = [ElementCallServiceNotificationKey.roomID.rawValue: roomID,

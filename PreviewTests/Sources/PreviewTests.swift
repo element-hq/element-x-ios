@@ -57,15 +57,21 @@ class PreviewTests: XCTestCase {
         let preferenceReadingView = preview.content
             .onPreferenceChange(SnapshotPrecisionPreferenceKey.self) { preferences.precision = $0 }
             .onPreferenceChange(SnapshotPerceptualPrecisionPreferenceKey.self) { preferences.perceptualPrecision = $0 }
-            .onPreferenceChange(SnapshotFulfillmentPublisherPreferenceKey.self) { preferences.fulfillmentPublisher = $0?.publisher }
+            .onPreferenceChange(SnapshotFulfillmentPreferenceKey.self) { preferences.fulfillmentSource = $0?.source }
         
         // Render an image of the view in order to trigger the preference updates to occur.
         let imageRenderer = ImageRenderer(content: preferenceReadingView)
         _ = imageRenderer.uiImage
         
-        if let fulfillmentPublisher = preferences.fulfillmentPublisher {
-            let deferred = deferFulfillment(fulfillmentPublisher) { $0 == true }
+        switch preferences.fulfillmentSource {
+        case .publisher(let publisher):
+            let deferred = deferFulfillment(publisher) { $0 == true }
             try await deferred.fulfill()
+        case .stream(let stream):
+            let deferred = deferFulfillment(stream) { $0 == true }
+            try await deferred.fulfill()
+        case .none:
+            break
         }
         
         var sanitizedSuiteName = String(testName.suffix(testName.count - "test".count).dropLast(2))
@@ -152,7 +158,7 @@ class PreviewTests: XCTestCase {
 private class SnapshotPreferences: @unchecked Sendable {
     var precision: Float = 1
     var perceptualPrecision: Float = 1
-    var fulfillmentPublisher: AnyPublisher<Bool, Never>?
+    var fulfillmentSource: SnapshotFulfillmentPreferenceKey.Source?
 }
 
 // MARK: - SnapshotTesting + Extensions

@@ -111,8 +111,9 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
     }
     
-    func testDeclineAndBlockInviteInteraction() async throws {
+    func testDeclineAndBlockInviteLegacyInteraction() async throws {
         setupViewModel(mode: .invited)
+        clientProxy.underlyingIsReportRoomSupported = false
         let expectation = expectation(description: "Wait for the user to be ignored")
         clientProxy.ignoreUserClosure = { userID in
             defer { expectation.fulfill() }
@@ -124,15 +125,23 @@ class JoinRoomScreenViewModelTests: XCTestCase {
         
         context.send(viewAction: .declineInviteAndBlock(userID: "@test:matrix.org"))
         
+        try await deferFulfillment(viewModel.context.$viewState) { $0.bindings.alertInfo != nil }.fulfill()
         XCTAssertEqual(viewModel.context.alertInfo?.id, .declineInviteAndBlock)
         
         let deferred = deferFulfillment(viewModel.actionsPublisher) { action in
             action == .dismiss
         }
         context.alertInfo?.secondaryButton?.action?()
-        try await deferred.fulfill()
-        
         await fulfillment(of: [expectation], timeout: 10)
+        try await deferred.fulfill()
+    }
+    
+    func testDeclineAndBlockInviteInteraction() async throws {
+        setupViewModel(mode: .invited)
+        try await deferFulfillment(viewModel.context.$viewState) { $0.roomDetails != nil }.fulfill()
+        let deferredAction = deferFulfillment(viewModel.actionsPublisher) { $0 == .presentDeclineAndBlock(userID: "@test:matrix.org") }
+        context.send(viewAction: .declineInviteAndBlock(userID: "@test:matrix.org"))
+        try await deferredAction.fulfill()
     }
     
     func testForgetRoom() async throws {

@@ -10,7 +10,7 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class SoftLogoutViewModelTests: XCTestCase {
+class SoftLogoutScreenViewModelTests: XCTestCase {
     let credentials = SoftLogoutScreenCredentials(userID: "mock_user_id",
                                                   homeserverName: "https://example.com",
                                                   userDisplayName: "mock_username",

@@ -132,11 +132,6 @@ class MockScreen: Identifiable {
             flowCoordinator.start()
             retainedState.append(flowCoordinator)
             return nil
-        case .templateScreen:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = TemplateScreenCoordinator(parameters: .init())
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
         case .appLockFlow, .appLockFlowDisabled:
             // The tested coordinator is setup below in the alternate window.
             // Here we just return a blank screen to snapshot as the unlocked app.
