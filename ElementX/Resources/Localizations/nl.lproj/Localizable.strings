@@ -22,10 +22,10 @@
 "a11y_show_password" = "Wachtwoord weergeven";
 "a11y_start_call" = "Begin een oproep";
 "a11y_user_menu" = "Gebruikersmenu";
+"a11y_view_details" = "Details bekijken";
 "a11y_voice_message" = "Spraakbericht, duur: %1$@";
 "a11y_voice_message_record" = "Spraakbericht opnemen.";
 "a11y_voice_message_stop_recording" = "Opnemen stoppen";
-"a11y.view_details" = "Details bekijken";
 "action_accept" = "Accepteren";
 "action_add_caption" = "Beschrijving toevoegen";
 "action_add_to_timeline" = "Toevoegen aan tijdlijn";
@@ -146,6 +146,7 @@
 "common_bubbles" = "Bubbels";
 "common_call_started" = "Oproep gestart";
 "common_chat_backup" = "Chat back-up";
+"common_copied_to_clipboard" = "Gekopieerd naar klembord";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Kamer maken...";
 "common_current_user_canceled_knock" = "Request canceled";
@@ -158,12 +159,14 @@
 "common_developer_options" = "Ontwikkelaarsopties";
 "common_device_id" = "Apparaat-ID";
 "common_direct_chat" = "Directe chat";
+"common_do_not_show_this_again" = "Dit niet meer weergeven";
 "common_download_failed" = "Download failed";
 "common_downloading" = "Downloading";
 "common_edited_suffix" = "(bewerkt)";
 "common_editing" = "Bewerken";
 "common_editing_caption" = "Editing caption";
 "common_emote" = "* %1$@ %2$@";
+"common_empty_file" = "Empty file";
 "common_encryption" = "Encryption";
 "common_encryption_enabled" = "Encryptie ingeschakeld";
 "common_enter_your_pin" = "Voer je pincode in";
@@ -184,6 +187,7 @@
 "common_invite_unknown_profile" = "Deze Matrix-ID kan niet worden gevonden, dus de uitnodiging is mogelijk niet ontvangen.";
 "common_leaving_room" = "De kamer verlaten";
 "common_light" = "Licht";
+"common_line_copied_to_clipboard" = "Line copied to clipboard";
 "common_link_copied_to_clipboard" = "Link gekopieerd naar klembord";
 "common_loading" = "Laden...";
 "common_loading_more" = "Loading more…";
@@ -198,12 +202,14 @@
 "common_no_room_name" = "Geen kamernaam";
 "common_not_encrypted" = "Not encrypted";
 "common_offline" = "Offline";
+"common_open_source_licenses" = "Open-sourcelicenties";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "of";
 "common_password" = "Wachtwoord";
 "common_people" = "Personen";
 "common_permalink" = "Permalink";
 "common_permission" = "Toestemming";
+"common_pinned" = "Vastgezet";
 "common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Even geduld...";
 "common_poll_end_confirmation" = "Weet je zeker dat je deze peiling wilt beëindigen?";
@@ -231,6 +237,7 @@
 "common_search_results" = "Zoekresultaten";
 "common_security" = "Beveiliging";
 "common_seen_by" = "Gezien door";
+"common_send_to" = "Sturen naar";
 "common_sending" = "Verzenden…";
 "common_sending_failed" = "Verzenden mislukt";
 "common_sent" = "Verzonden";
@@ -274,13 +281,6 @@
 "common_waiting" = "Wachten…";
 "common_waiting_for_decryption_key" = "Wachten op dit bericht";
 "common_you" = "Jij";
-"common.copied_to_clipboard" = "Gekopieerd naar klembord";
-"common.do_not_show_this_again" = "Dit niet meer weergeven";
-"common.empty_file" = "Empty file";
-"common.line_copied_to_clipboard" = "Line copied to clipboard";
-"common.open_source_licenses" = "Open-sourcelicenties";
-"common.pinned" = "Vastgezet";
-"common.send_to" = "Sturen naar";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Bevestig je herstelsleutel om toegang te houden tot je sleutelopslag en berichtengeschiedenis.";
@@ -406,7 +406,6 @@
 "screen_advanced_settings_show_media_timeline_private_rooms" = "In private rooms";
 "screen_advanced_settings_show_media_timeline_subtitle" = "A hidden media can always be shown by tapping on it";
 "screen_advanced_settings_show_media_timeline_title" = "Show media in timeline";
-"screen_bottom_sheet,manage_room_member_remove" = "Verwijderen uit kamer";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";
@@ -419,6 +418,7 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Profiel bekijken";
+"screen_bottom_sheet_manage_room_member_remove" = "Verwijderen uit kamer";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Lid verwijderen en toekomstige deelname verbieden?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "%1$@ wordt verwijderd...";
 "screen_create_room_room_access_section_anyone_option_description" = "Iedereen kan toetreden tot deze kamer";

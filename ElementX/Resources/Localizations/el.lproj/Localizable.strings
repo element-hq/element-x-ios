@@ -22,10 +22,10 @@
 "a11y_show_password" = "Εμφάνιση κωδικού πρόσβασης";
 "a11y_start_call" = "Ξεκίνησε μια κλήση";
 "a11y_user_menu" = "Μενού χρήστη";
+"a11y_view_details" = "Προβολή λεπτομερειών";
 "a11y_voice_message" = "Φωνητικό μήνυμα, διάρκεια: %1$@";
 "a11y_voice_message_record" = "Εγγραφή φωνητικού μηνύματος.";
 "a11y_voice_message_stop_recording" = "Διακοπή καταγραφής";
-"a11y.view_details" = "Προβολή λεπτομερειών";
 "action_accept" = "Αποδοχή";
 "action_add_caption" = "Προσθήκη λεζάντας";
 "action_add_to_timeline" = "Προσθήκη στο χρονοδιάγραμμα";
@@ -146,6 +146,7 @@
 "common_bubbles" = "Φυσαλίδες";
 "common_call_started" = "Η κλήση ξεκίνησε";
 "common_chat_backup" = "Αντίγραφο ασφαλείας συνομιλίας";
+"common_copied_to_clipboard" = "Αντιγράφηκε στο πρόχειρο";
 "common_copyright" = "Πνευματικά δικαιώματα";
 "common_creating_room" = "Δημιουργία δωματίου...";
 "common_current_user_canceled_knock" = "Το αίτημα ακυρώθηκε";
@@ -158,12 +159,14 @@
 "common_developer_options" = "Επιλογές προγραμματιστή";
 "common_device_id" = "ID συσκευής";
 "common_direct_chat" = "Άμεση συνομιλία";
+"common_do_not_show_this_again" = "Να μην εμφανιστεί ξανά";
 "common_download_failed" = "Η λήψη απέτυχε";
 "common_downloading" = "Γίνεται λήψη";
 "common_edited_suffix" = "(επεξεργάστηκε)";
 "common_editing" = "Επεξεργάζεται";
 "common_editing_caption" = "Η λεζάντα επεξεργάζεται";
 "common_emote" = "* %1$@ %2$@";
+"common_empty_file" = "Κενό αρχείο";
 "common_encryption" = "Κρυπτογράφηση";
 "common_encryption_enabled" = "Η κρυπτογράφηση ενεργοποιήθηκε";
 "common_enter_your_pin" = "Εισήγαγε το PIN σου";
@@ -184,6 +187,7 @@
 "common_invite_unknown_profile" = "Αυτό το Matrix ID δεν μπορεί να βρεθεί, επομένως η πρόσκληση ενδέχεται να μην ληφθεί.";
 "common_leaving_room" = "Αποχώρηση από το δωμάτιο";
 "common_light" = "Φωτεινό";
+"common_line_copied_to_clipboard" = "Η γραμμή αντιγράφηκε στο πρόχειρο";
 "common_link_copied_to_clipboard" = "Ο σύνδεσμος αντιγράφηκε στο πρόχειρο";
 "common_loading" = "Φόρτωση...";
 "common_loading_more" = "Φόρτωση περισσότερων...";
@@ -198,12 +202,14 @@
 "common_no_room_name" = "Χωρίς όνομα δωματίου";
 "common_not_encrypted" = "Χωρίς κρυπτογράφηση";
 "common_offline" = "Εκτός σύνδεσης";
+"common_open_source_licenses" = "Άδειες ανοιχτού κώδικα";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "ή";
 "common_password" = "Κωδικός πρόσβασης";
 "common_people" = "Άτομα";
 "common_permalink" = "Μόνιμος σύνδεσμος";
 "common_permission" = "Αδεια";
+"common_pinned" = "Καρφιτσωμένο";
 "common_please_check_internet_connection" = "Παρακαλώ ελέγξτε τη σύνδεσή σας στο διαδίκτυο";
 "common_please_wait" = "Παρακαλώ περίμενε...";
 "common_poll_end_confirmation" = "Θες σίγουρα να τερματίσεις αυτή τη δημοσκόπηση;";
@@ -231,6 +237,7 @@
 "common_search_results" = "Αποτελέσματα αναζήτησης";
 "common_security" = "Ασφάλεια";
 "common_seen_by" = "Προβλήθηκε από";
+"common_send_to" = "Αποστολή σε";
 "common_sending" = "Αποστολή...";
 "common_sending_failed" = "Αποτυχία αποστολής";
 "common_sent" = "Εστάλη";
@@ -274,13 +281,6 @@
 "common_waiting" = "Αναμονή…";
 "common_waiting_for_decryption_key" = "Αναμονή για αυτό το μήνυμα";
 "common_you" = "Εσύ";
-"common.copied_to_clipboard" = "Αντιγράφηκε στο πρόχειρο";
-"common.do_not_show_this_again" = "Να μην εμφανιστεί ξανά";
-"common.empty_file" = "Κενό αρχείο";
-"common.line_copied_to_clipboard" = "Η γραμμή αντιγράφηκε στο πρόχειρο";
-"common.open_source_licenses" = "Άδειες ανοιχτού κώδικα";
-"common.pinned" = "Καρφιτσωμένο";
-"common.send_to" = "Αποστολή σε";
 "common_unable_to_decrypt_insecure_device" = "Στάλθηκε από μια μη ασφαλής συσκευή";
 "common_unable_to_decrypt_verification_violation" = "Η επαληθευμένη ταυτότητα του αποστολέα έχει επαναφερθεί";
 "confirm_recovery_key_banner_message" = "Επιβεβαίωσε το κλειδί ανάκτησης για να διατηρήσεις την πρόσβαση στο χώρο αποθήκευσης κλειδιών και στο ιστορικό μηνυμάτων.";
@@ -406,7 +406,6 @@
 "screen_advanced_settings_show_media_timeline_private_rooms" = "Σε ιδιωτικά δωμάτια";
 "screen_advanced_settings_show_media_timeline_subtitle" = "Ένα κρυφό πολυμέσο μπορεί πάντα να εμφανιστεί πατώντας το";
 "screen_advanced_settings_show_media_timeline_title" = "Εμφάνιση πολυμέσων στο timeline";
-"screen_bottom_sheet,manage_room_member_remove" = "Αφαίρεση από το δωμάτιο";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Αποστολή πρόσκλησης";
 "screen_bottom_sheet_create_dm_message" = "Θα θέλατε να ξεκινήσετε μια συνομιλία με τον χρήστη %1$@;";
 "screen_bottom_sheet_create_dm_title" = "Αποστολή πρόσκλησης;";
@@ -419,6 +418,7 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Θα μπορούν να συμμετάσχουν ξανά σε αυτό το δωμάτιο εάν προσκληθούν.";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Είστε βέβαιοι ότι θέλετε να αφαιρέσετε αυτό το μέλος;";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Προβολή προφίλ";
+"screen_bottom_sheet_manage_room_member_remove" = "Αφαίρεση από το δωμάτιο";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Αφαίρεση μέλους και απαγόρευση συμμετοχής στο μέλλον;";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Αφαίρεση %1$@...";
 "screen_create_room_room_access_section_anyone_option_description" = "Οποιοσδήποτε μπορεί να συμμετάσχει σε αυτό το δωμάτιο";

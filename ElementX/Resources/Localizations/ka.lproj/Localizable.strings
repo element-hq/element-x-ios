@@ -22,10 +22,10 @@
 "a11y_show_password" = "პაროლის ჩვენება";
 "a11y_start_call" = "დარეკვა";
 "a11y_user_menu" = "მომხმარებლის მენიუ";
+"a11y_view_details" = "დეტალების ნახვა";
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "ხმოვანი შეტყობინების ჩაწერა.";
 "a11y_voice_message_stop_recording" = "ჩაწერის შეწყვეტა";
-"a11y.view_details" = "დეტალების ნახვა";
 "action_accept" = "მიღება";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "დამატება ქრონოლოგიაში";
@@ -146,6 +146,7 @@
 "common_bubbles" = "ბუშტები";
 "common_call_started" = "Call started";
 "common_chat_backup" = "ჩატის სარეზერვო ასლი";
+"common_copied_to_clipboard" = "Copied to clipboard";
 "common_copyright" = "საავტორო უფლება";
 "common_creating_room" = "ოთახის შექმნა...";
 "common_current_user_canceled_knock" = "Request canceled";
@@ -158,12 +159,14 @@
 "common_developer_options" = "დეველოპერის პარამეტრები";
 "common_device_id" = "Device ID";
 "common_direct_chat" = "პირდაპირი ჩატი";
+"common_do_not_show_this_again" = "Do not show this again";
 "common_download_failed" = "Download failed";
 "common_downloading" = "Downloading";
 "common_edited_suffix" = "(რედაქტირებულია)";
 "common_editing" = "რედაქტირება";
 "common_editing_caption" = "Editing caption";
 "common_emote" = "* %1$@ %2$@";
+"common_empty_file" = "Empty file";
 "common_encryption" = "Encryption";
 "common_encryption_enabled" = "დაშიფვრა ჩართულია";
 "common_enter_your_pin" = "შეიყვანეთ თქვენი PIN";
@@ -184,6 +187,7 @@
 "common_invite_unknown_profile" = "ეს Matrix ID ვერ მოიძებნა, ამიტომ მოწვევა შეიძლება არ იყოს მიღებული.";
 "common_leaving_room" = "ოთახის დატოვება";
 "common_light" = "ღია";
+"common_line_copied_to_clipboard" = "Line copied to clipboard";
 "common_link_copied_to_clipboard" = "ბმული კოპირებულია გაცვლის ბუფერში";
 "common_loading" = "იტვირთება…";
 "common_loading_more" = "Loading more…";
@@ -198,12 +202,14 @@
 "common_no_room_name" = "No room name";
 "common_not_encrypted" = "Not encrypted";
 "common_offline" = "ხაზგარეშე";
+"common_open_source_licenses" = "Open source licenses";
 "common_optic_id_ios" = "ოპტიკური ID";
 "common_or" = "ან";
 "common_password" = "პაროლი";
 "common_people" = "ხალხი";
 "common_permalink" = "მუდმივი ბმული";
 "common_permission" = "ნებართვა";
+"common_pinned" = "Pinned";
 "common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Please wait…";
 "common_poll_end_confirmation" = "დარწმუნებული ხართ, რომ გსურთ ამ გამოკითხვის დასრულება?";
@@ -231,6 +237,7 @@
 "common_search_results" = "ძიების შედეგები";
 "common_security" = "უსაფრთხოება";
 "common_seen_by" = "Ნანახი";
+"common_send_to" = "Send to";
 "common_sending" = "იგზავნება...";
 "common_sending_failed" = "გაგზავნა ვერ მოხერხდა";
 "common_sent" = "გაგზავნილი";
@@ -274,13 +281,6 @@
 "common_waiting" = "მოცდა...";
 "common_waiting_for_decryption_key" = "ლოდინი ამ შეტყობინებისათვის";
 "common_you" = "You";
-"common.copied_to_clipboard" = "Copied to clipboard";
-"common.do_not_show_this_again" = "Do not show this again";
-"common.empty_file" = "Empty file";
-"common.line_copied_to_clipboard" = "Line copied to clipboard";
-"common.open_source_licenses" = "Open source licenses";
-"common.pinned" = "Pinned";
-"common.send_to" = "Send to";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "დაადასტურეთ თქვენი აღდგენის გასაღები რათა გქონდეთ წვდომა გასაღებების დამგროვებელთან და შეტყობინებების ისტორიასთან.";
@@ -406,7 +406,6 @@
 "screen_advanced_settings_show_media_timeline_private_rooms" = "In private rooms";
 "screen_advanced_settings_show_media_timeline_subtitle" = "A hidden media can always be shown by tapping on it";
 "screen_advanced_settings_show_media_timeline_title" = "Show media in timeline";
-"screen_bottom_sheet,manage_room_member_remove" = "ოთახიდან გაგდება";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";
@@ -419,6 +418,7 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "პროფილის ნახვა";
+"screen_bottom_sheet_manage_room_member_remove" = "ოთახიდან გაგდება";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "გსურთ წევრის გაგდება და მომავალში გაწევრიანების აკრძალვა?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "%1$@-ს გაგდება...";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";

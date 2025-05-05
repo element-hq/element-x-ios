@@ -22,10 +22,10 @@
 "a11y_show_password" = "Erakutsi pasahitza";
 "a11y_start_call" = "Hasi dei bat";
 "a11y_user_menu" = "Erabiltzailea-menua";
+"a11y_view_details" = "Ikusi xehetasunak";
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Grabatu ahots-mezua.";
 "a11y_voice_message_stop_recording" = "Utzi grabatzeari";
-"a11y.view_details" = "Ikusi xehetasunak";
 "action_accept" = "Onartu";
 "action_add_caption" = "Gehitu testua";
 "action_add_to_timeline" = "Gehitu denbora-lerrora";
@@ -146,6 +146,7 @@
 "common_bubbles" = "Bunbuiloak";
 "common_call_started" = "Deia hasi da";
 "common_chat_backup" = "Txataren babeskopia";
+"common_copied_to_clipboard" = "Arbelean kopiatu da";
 "common_copyright" = "Copyrighta";
 "common_creating_room" = "Gela sortzen…";
 "common_current_user_canceled_knock" = "Eskaera bertan behera utzi da";
@@ -158,12 +159,14 @@
 "common_developer_options" = "Garapen aukerak";
 "common_device_id" = "Gailuaren IDa";
 "common_direct_chat" = "Txata zuzena";
+"common_do_not_show_this_again" = "Ez erakutsi berriro";
 "common_download_failed" = "Deskargak huts egin du";
 "common_downloading" = "Deskargatzen";
 "common_edited_suffix" = "(Editatua)";
 "common_editing" = "Editatzen";
 "common_editing_caption" = "Testua editatzen";
 "common_emote" = "* %1$@ %2$@";
+"common_empty_file" = "Fitxategia hutsik dago";
 "common_encryption" = "Zifratzea";
 "common_encryption_enabled" = "Zifratzea gaituta";
 "common_enter_your_pin" = "Sartu zure PINa";
@@ -184,6 +187,7 @@
 "common_invite_unknown_profile" = "Matrix IDa ezin da topatu eta, beraz, litekeena da gonbidapena ez jasotzea.";
 "common_leaving_room" = "Gelatik ateratzen";
 "common_light" = "Argia";
+"common_line_copied_to_clipboard" = "Lerroa arbelean kopiatu da";
 "common_link_copied_to_clipboard" = "Esteka arbelean kopiatu da";
 "common_loading" = "Kargatzen…";
 "common_loading_more" = "Gehiago kargatzen…";
@@ -198,12 +202,14 @@
 "common_no_room_name" = "Gelak ez du izenik";
 "common_not_encrypted" = "Zifratu gabe";
 "common_offline" = "Deskonektatuta";
+"common_open_source_licenses" = "Kode irekiko lizentziak";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "edo";
 "common_password" = "Pasahitza";
 "common_people" = "Jendea";
 "common_permalink" = "Esteka iraunkorra";
 "common_permission" = "Baimena";
+"common_pinned" = "Finkatuta";
 "common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Itxaron…";
 "common_poll_end_confirmation" = "Ziur inkesta hau amaitu nahi duzula?";
@@ -231,6 +237,7 @@
 "common_search_results" = "Bilaketaren emaitzak";
 "common_security" = "Segurtasuna";
 "common_seen_by" = "Ikusi du";
+"common_send_to" = "Bidali";
 "common_sending" = "Bidaltzen…";
 "common_sending_failed" = "Bidalketak huts egin du";
 "common_sent" = "Bidalita";
@@ -274,13 +281,6 @@
 "common_waiting" = "Zain…";
 "common_waiting_for_decryption_key" = "Mezu honen zain";
 "common_you" = "Zeu";
-"common.copied_to_clipboard" = "Arbelean kopiatu da";
-"common.do_not_show_this_again" = "Ez erakutsi berriro";
-"common.empty_file" = "Fitxategia hutsik dago";
-"common.line_copied_to_clipboard" = "Lerroa arbelean kopiatu da";
-"common.open_source_licenses" = "Kode irekiko lizentziak";
-"common.pinned" = "Finkatuta";
-"common.send_to" = "Bidali";
 "common_unable_to_decrypt_insecure_device" = "Egiaztatu gabeko gailu batetik bidalia";
 "common_unable_to_decrypt_verification_violation" = "Igorlearen egiaztatutako identitatea berrezarri da";
 "confirm_recovery_key_banner_message" = "Confirm your recovery key to maintain access to your key storage and message history.";
@@ -406,7 +406,6 @@
 "screen_advanced_settings_show_media_timeline_private_rooms" = "In private rooms";
 "screen_advanced_settings_show_media_timeline_subtitle" = "A hidden media can always be shown by tapping on it";
 "screen_advanced_settings_show_media_timeline_title" = "Show media in timeline";
-"screen_bottom_sheet,manage_room_member_remove" = "Kendu gelatik";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Bidali gonbidapena";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Gonbidapena bidali?";
@@ -419,6 +418,7 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Ikusi profila";
+"screen_bottom_sheet_manage_room_member_remove" = "Kendu gelatik";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Kidea kendu eta etorkizunean sartzea debekatu?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "%1$@ kentzen…";
 "screen_create_room_room_access_section_anyone_option_description" = "Edonor sar daiteke gela honetara";
@@ -610,7 +610,7 @@
 "screen_change_account_provider_subtitle" = "Erabili beste kontu-hornitzaile bat, hala nola zure zerbitzari pribatua edo laneko kontu bat.";
 "screen_change_account_provider_title" = "Aldatu kontu-hornitzailea";
 "screen_change_server_error_invalid_homeserver" = "We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.";
-"screen_change_server_error_invalid_well_known" = "Sliding sync isn't available due to an issue in the well-known file:\n%1$@";
+"screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Zerbitzariaren URLa";
 "screen_change_server_form_notice" = "Enter a domain address.";
