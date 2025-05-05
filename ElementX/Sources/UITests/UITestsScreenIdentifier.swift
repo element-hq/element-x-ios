@@ -42,7 +42,6 @@ enum UITestsScreenIdentifier: String {
     case sessionVerification
     case startChat
     case startChatWithSearchResults
-    case templateScreen
     case userSessionScreen
     case userSessionScreenReply
     case autoUpdatingTimeline

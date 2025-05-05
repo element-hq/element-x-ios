@@ -42,6 +42,10 @@ struct SettingsScreen: View {
 //            }
             
             signOutSection
+            
+//            if context.viewState.showDeveloperOptions {
+//                developerOptionsSection
+//            }
         }
         .zeroList()
         // .navigationTitle(L10n.commonSettings)
@@ -237,20 +241,11 @@ struct SettingsScreen: View {
             }
             
             ZeroListRow(label: .default(title: L10n.commonAdvancedSettings,
-                                        icon: \.settings),
-                        kind: .navigationLink {
-                            context.send(viewAction: .advancedSettings)
-                        })
-                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.advancedSettings)
-            
-            if context.viewState.showDeveloperOptions {
-                ZeroListRow(label: .default(title: L10n.commonDeveloperOptions,
-                                            icon: \.code),
-                            kind: .navigationLink {
-                                context.send(viewAction: .developerOptions)
-                            })
-                            .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
-            }
+                                    icon: \.settings),
+                    kind: .navigationLink {
+                        context.send(viewAction: .advancedSettings)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.advancedSettings)
         }
     }
     
@@ -273,21 +268,41 @@ struct SettingsScreen: View {
 //                        })
 //            }
         } footer: {
-            VStack(spacing: 0) {
-                versionText
-                    .frame(maxWidth: .infinity)
-                
-//                if let deviceID = context.viewState.deviceID {
-//                    Text(deviceID)
-//                }
-            }
-            .compoundListSectionFooter()
-            .textSelection(.enabled)
-            .padding(.top, 24)
-            .onTapGesture(count: 7) {
-                context.send(viewAction: .enableDeveloperOptions)
-            }
+//            if !context.viewState.showDeveloperOptions {
+//                versionSection
+//            }
+            versionSection
         }
+    }
+    
+    private var developerOptionsSection: some View {
+        Section {
+            ListRow(label: .default(title: L10n.commonDeveloperOptions,
+                                    icon: \.code),
+                    kind: .navigationLink {
+                        context.send(viewAction: .developerOptions)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
+        } footer: {
+            versionSection
+        }
+    }
+    
+    private var versionSection: some View {
+        VStack(spacing: 0) {
+            versionText
+                .frame(maxWidth: .infinity)
+            
+//            if let deviceID = context.viewState.deviceID {
+//                Text(deviceID)
+//            }
+        }
+        .compoundListSectionFooter()
+        .textSelection(.enabled)
+        .padding(.top, 24)
+//        .onTapGesture(count: 7) {
+//            context.send(viewAction: .enableDeveloperOptions)
+//        }
     }
     
     private var versionText: Text {

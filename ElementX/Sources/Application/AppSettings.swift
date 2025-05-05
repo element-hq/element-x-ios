@@ -58,6 +58,7 @@ final class AppSettings {
         case enableOnlySignedDeviceIsolationMode
         case knockingEnabled
         case threadsEnabled
+        case developerOptionsEnabled
         case zeroAccessToken
         case zeroRewardsCredit
         case zeroLoggedInUser
@@ -331,6 +332,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var threadsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    var developerOptionsEnabled
     
     #endif
     

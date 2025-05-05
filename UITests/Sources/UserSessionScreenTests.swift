@@ -23,7 +23,7 @@ class UserSessionScreenTests: XCTestCase {
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: 2)
 
-        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].tapCenter()
+        app.buttons[A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions].tap(.center)
         try await app.assertScreenshot(step: 3)
     }
 
