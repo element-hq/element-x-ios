@@ -378,6 +378,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             rooms.append(room)
         }
         
+        // In case the list is updated through filters and there is `.room` filter applied, we need to filter out channels
+        let activeFilters = state.bindings.filtersState.activeFilters
+        if activeFilters.contains(.rooms) {
+            rooms = rooms.filter { !$0.isAChannel }
+        }
+        
         state.rooms = rooms
     }
     

@@ -16,9 +16,10 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         rawValue
     }
     
-    case unreads
-    case people
+//    case unreads
+//    case people
     case rooms
+    case channels
     case favourites
     case invites
     
@@ -28,12 +29,14 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     
     var localizedName: String {
         switch self {
-        case .people:
-            return L10n.screenRoomlistFilterPeople
+//        case .people:
+//            return L10n.screenRoomlistFilterPeople
         case .rooms:
             return L10n.screenRoomlistFilterRooms
-        case .unreads:
-            return L10n.screenRoomlistFilterUnreads
+        case .channels:
+            return "Channels"
+//        case .unreads:
+//            return L10n.screenRoomlistFilterUnreads
         case .favourites:
             return L10n.screenRoomlistFilterFavourites
         case .invites:
@@ -43,28 +46,34 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     
     var incompatibleFilters: [RoomListFilter] {
         switch self {
-        case .people:
-            return [.rooms, .invites]
+//        case .people:
+//            return [.rooms, .invites]
         case .rooms:
-            return [.people, .invites]
-        case .unreads:
-            return [.invites]
+            return [.channels, .invites]
+        case .channels:
+            return [.rooms, .invites, .favourites]
+//        case .unreads:
+//            return [.invites]
         case .favourites:
             // When we will have Low Priority we may need to return it here
-            return [.invites]
+            return [.channels, .invites]
         case .invites:
-            return [.rooms, .people, .unreads, .favourites]
+//            return [.rooms, .people, .unreads, .favourites]
+            return [.rooms, .channels, .favourites]
         }
     }
     
     var rustFilter: RoomListEntriesDynamicFilterKind {
         switch self {
-        case .people:
-            return .all(filters: [.category(expect: .people), .joined])
+//        case .people:
+//            return .all(filters: [.category(expect: .people), .joined])
         case .rooms:
-            return .all(filters: [.category(expect: .group), .joined])
-        case .unreads:
+//            return .all(filters: [.category(expect: .group), .joined])
             return .all(filters: [.unread, .joined])
+        case .channels:
+            return .all(filters: [.normalizedMatchRoomName(pattern: ZeroContants.ZERO_CHANNEL_PREFIX), .joined])
+//        case .unreads:
+//            return .all(filters: [.unread, .joined])
         case .favourites:
             return .all(filters: [.favourite, .joined])
         case .invites:

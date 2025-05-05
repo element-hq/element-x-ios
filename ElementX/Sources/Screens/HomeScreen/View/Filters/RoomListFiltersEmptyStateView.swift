@@ -13,12 +13,14 @@ struct RoomListFiltersEmptyStateView: View {
     private var emptyStateTitle: String {
         if state.activeFilters.count == 1 {
             switch state.activeFilters[0] {
-            case .unreads:
-                return L10n.screenRoomlistFilterUnreadsEmptyStateTitle
-            case .people:
-                return L10n.screenRoomlistFilterPeopleEmptyStateTitle
+//            case .unreads:
+//                return L10n.screenRoomlistFilterUnreadsEmptyStateTitle
+//            case .people:
+//                return L10n.screenRoomlistFilterPeopleEmptyStateTitle
             case .rooms:
                 return L10n.screenRoomlistFilterRoomsEmptyStateTitle
+            case .channels:
+                return "You are not in any channel yet"
             case .favourites:
                 return L10n.screenRoomlistFilterFavouritesEmptyStateTitle
             case .invites:
@@ -57,7 +59,8 @@ struct RoomListFiltersEmptyStateView_Previews: PreviewProvider, TestablePreview 
             ForEach(RoomListFilter.allCases) { filter in
                 RoomListFiltersEmptyStateView(state: .init(activeFilters: [filter]))
             }
-            RoomListFiltersEmptyStateView(state: .init(activeFilters: [.people, .favourites]))
+//            RoomListFiltersEmptyStateView(state: .init(activeFilters: [.people, .favourites]))
+            RoomListFiltersEmptyStateView(state: .init(activeFilters: [.rooms, .favourites]))
         }
         .padding(.bottom)
         .previewLayout(.sizeThatFits)

@@ -56,7 +56,8 @@ extension RoomSummaryProviderMock {
                     // for testing purpose chaining more than one filter will always return an empty state
                     rooms = []
                 } else if let filter = filters.first {
-                    rooms = rooms.filter { filter == .people ? $0.isDirect : !$0.isDirect }
+//                    rooms = rooms.filter { filter == .people ? $0.isDirect : !$0.isDirect }
+                    rooms = rooms.filter { filter == .rooms ? $0.isDirect : !$0.isDirect }
                 }
                 
                 roomListSubject.send(rooms)

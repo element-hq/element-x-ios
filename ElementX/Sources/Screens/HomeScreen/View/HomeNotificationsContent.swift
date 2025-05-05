@@ -44,12 +44,16 @@ struct HomeNotificationsContent: View {
                                 return $0.badges.isDotShown
                             }
                         }
-                        if roomsWithNotifications.isEmpty {
-                            HomeNotificationsEmptyView()
-                        } else {
-                            ForEach(roomsWithNotifications) { room in
-                                HomeScreenNotificationCell(room: room, context: context)
+                        Section {
+                            if roomsWithNotifications.isEmpty {
+                                HomeNotificationsEmptyView()
+                            } else {
+                                ForEach(roomsWithNotifications) { room in
+                                    HomeScreenNotificationCell(room: room, context: context)
+                                }
                             }
+                        } header: {
+                            topSection
                         }
                     }
                 }
@@ -98,6 +102,18 @@ struct HomeNotificationsContent: View {
             .scrollBounceBehavior(context.viewState.roomListMode == .empty ? .basedOnSize : .automatic)
             .animation(.elementDefault, value: context.viewState.roomListMode)
             .animation(.none, value: context.viewState.visibleRooms)
+        }
+    }
+    
+    @ViewBuilder
+    private var topSection: some View {
+        if context.viewState.shouldShowFilters {
+            VStack(spacing: 0) {
+                if context.viewState.shouldShowFilters {
+                    RoomListFiltersView(state: $context.filtersState)
+                }
+            }
+            .background(Color.zero.bgCanvasDefault)
         }
     }
     
