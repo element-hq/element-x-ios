@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct HomeScreenPostCell: View {
     let post: HomeScreenPost
     let mediaProvider: MediaProviderProtocol?
+    let postMediaUrl: String?
+    let availableLinkPreview: ZLinkPreview?
     let showThreadLine: Bool
     let onPostTapped: () -> Void
     let onOpenArweaveLink: () -> Void
@@ -70,6 +73,54 @@ struct HomeScreenPostCell: View {
                         .font(.zero.bodyMD)
                         .foregroundStyle(.compound.textPrimary)
                         .padding(.vertical, 8)
+                }
+                
+                if let linkPreview = availableLinkPreview {
+                    VStack(spacing: 0) {
+                        if let thumbnail = linkPreview.thumbnail,
+                           let thumbnailURL = linkPreview.thumbnailURL {
+                            KFAnimatedImage(thumbnailURL)
+                                .placeholder {
+                                    Image(systemName: "link")
+                                }
+                                .aspectRatio(thumbnail.aspectRatio, contentMode: .fit)
+                                .cornerRadius(4, corners: .allCorners)
+                        }
+                        
+                        HStack(alignment: .center) {
+                            if linkPreview.thumbnail == nil {
+                                Image(systemName: "link")
+                                    .resizable()
+                                    .frame(width: 24, height: 24)
+                                    .aspectRatio(contentMode: .fit)
+                                    .cornerRadius(4, corners: .allCorners)
+                            }
+                            VStack(alignment: .leading) {
+                                if let title = linkPreview.title {
+                                    Text(title)
+                                        .font(.zero.bodyMDSemibold)
+                                        .foregroundColor(.compound.textPrimary)
+                                        .lineLimit(1)
+                                }
+                                
+                                Text(linkPreview.url)
+                                    .font(.zero.bodyMD)
+                                    .foregroundColor(.compound.textSecondary)
+                                    .lineLimit(1)
+                            }
+                            .padding(.horizontal, 4)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+                
+                if post.mediaInfo != nil {
+                    KFAnimatedImage(URL(string: postMediaUrl ?? ""))
+                        .placeholder {
+                            ProgressView()
+                        }
+                        .aspectRatio(post.mediaInfo!.aspectRatio, contentMode: .fit)
+                        .cornerRadius(4, corners: .allCorners)
                 }
                 
                 HStack {

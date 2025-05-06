@@ -7,6 +7,7 @@
 
 import Compound
 import SwiftUI
+import Kingfisher
 
 struct FeedDetailsContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
@@ -140,7 +141,11 @@ struct PostRepliesList: View {
             let showThreadLine = nextPost?.senderInfo.userID == post.senderInfo.userID
 
             VStack(alignment: .leading) {
-                HomeScreenPostCell(post: post, mediaProvider: context.mediaProvider, showThreadLine: showThreadLine,
+                HomeScreenPostCell(post: post,
+                                   mediaProvider: context.mediaProvider,
+                                   postMediaUrl: context.viewState.postRepliesMediaInfoMap[post.id]?.url,
+                                   availableLinkPreview: nil,
+                                   showThreadLine: showThreadLine,
                                    onPostTapped: {
                     context.send(viewAction: .replyTapped(post))
                 },
@@ -203,6 +208,15 @@ struct FeedDetailsSection: View {
                     .font(.zero.bodyLG)
                     .foregroundStyle(.compound.textPrimary)
                     .padding(.vertical, 12)
+            }
+            
+            if post.mediaInfo != nil {
+                KFAnimatedImage(URL(string: post.mediaInfo?.url ?? ""))
+                    .placeholder {
+                        ProgressView()
+                    }
+                    .aspectRatio(post.mediaInfo!.aspectRatio, contentMode: .fit)
+                    .cornerRadius(4, corners: .allCorners)
             }
             
             Text(post.postDateTime)

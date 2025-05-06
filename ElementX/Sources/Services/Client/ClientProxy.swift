@@ -1170,6 +1170,21 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func getPostMediaInfo(mediaId: String) async -> Result<ZPostMedia, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.metaDataApi.getPostMediaInfo(mediaId: mediaId)
+            switch result {
+            case .success(let media):
+                return .success(media)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to fetch post media with id: \(mediaId), with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
     // MARK: - Private
     
     private func cacheAccountURL() async {

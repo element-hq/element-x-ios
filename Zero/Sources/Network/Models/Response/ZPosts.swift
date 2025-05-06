@@ -52,9 +52,11 @@ struct ZPost: Codable, Identifiable {
     let meows: [Meow]?
     let replies: [Reply]?
     let replyToPost: ReplyToPost?
+    let mediaId: String?
+    let media: ZPostMediaInfo?
     
     enum CodingKeys: String, CodingKey {
-        case id, userId, zid, createdAt, updatedAt, signedMessage, unsignedMessage, text, walletAddress, worldZid, imageUrl, arweaveId, replyTo, conversationId, user, postsMeowsSummary, meows, replies, replyToPost
+        case id, userId, zid, createdAt, updatedAt, signedMessage, unsignedMessage, text, walletAddress, worldZid, imageUrl, arweaveId, replyTo, conversationId, user, postsMeowsSummary, meows, replies, replyToPost, mediaId, media
     }
 }
 

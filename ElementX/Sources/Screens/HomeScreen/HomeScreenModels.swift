@@ -234,6 +234,9 @@ struct HomeScreenViewState: BindableState {
     var shouldShowFilters: Bool {
         !bindings.isSearchFieldFocused && roomListMode == .rooms
     }
+    
+    var postLinkPreviewsMap: [String: ZLinkPreview] = [:]
+    var postMediaInfoMap: [String: HomeScreenPostMediaInfo] = [:]
 }
 
 struct HomeScreenViewStateBindings {
@@ -346,6 +349,8 @@ struct HomeScreenPost: Identifiable, Equatable {
     let postDateTime: String
     let isMyPost: Bool
     
+    var mediaInfo: HomeScreenPostMediaInfo?
+    
     static func placeholder() -> HomeScreenPost {
         HomeScreenPost(id: UUID().uuidString,
                        senderInfo: UserProfileProxy(userID: UUID().uuidString),
@@ -364,8 +369,19 @@ struct HomeScreenPost: Identifiable, Equatable {
                        arweaveId: "",
                        isMeowedByMe: false,
                        postDateTime: "",
-                       isMyPost: false)
+                       isMyPost: false,
+                       mediaInfo: nil)
     }
+}
+
+struct HomeScreenPostMediaInfo: Identifiable, Equatable {
+    let id: String
+    let mimeType: String?
+    let aspectRatio: CGFloat
+    let width: CGFloat
+    let height: CGFloat
+    
+    var url: String?
 }
 
 struct HomeScreenChannel: Identifiable, Equatable {
@@ -439,6 +455,12 @@ extension HomeScreenPost {
         let postDateTime = formatter.string(from: postUpdatedAt)
         
         let isMyPost = loggedInUserId.matrixIdToCleanHex() == post.userId.matrixIdToCleanHex()
+        let mediaInfo: HomeScreenPostMediaInfo? = (post.media == nil) ? nil : .init(id: post.media!.id,
+                                                                                    mimeType: post.media!.mimeType,
+                                                                                    aspectRatio: post.media!.width / post.media!.height,
+                                                                                    width: post.media!.width,
+                                                                                    height: post.media!.height,
+                                                                                    url: nil)
         
         self.init(
             id: post.id.rawValue,
@@ -460,8 +482,21 @@ extension HomeScreenPost {
             arweaveId: post.arweaveId,
             isMeowedByMe: (post.meows?.isEmpty == false),
             postDateTime: postDateTime,
-            isMyPost: isMyPost
+            isMyPost: isMyPost,
+            mediaInfo: mediaInfo
         )
+    }
+    
+    func withUpdatedMediaInfo(mediaInfo: HomeScreenPostMediaInfo?) -> Self {
+        var updatedSelf = self
+        updatedSelf.mediaInfo = mediaInfo
+        return updatedSelf
+    }
+    
+    func withUpdatedMediaInfoUrl(url: String?) -> Self {
+        var updatedSelf = self
+        updatedSelf.mediaInfo?.url = url
+        return updatedSelf
     }
     
     func getArweaveLink() -> URL? {
@@ -538,5 +573,17 @@ extension HomeScreenChannel {
             channelFullName: channelZId,
             displayName: channelDisplayName
         )
+    }
+}
+
+extension HomeScreenPostMediaInfo {
+    init (media: ZPostMedia) {
+        let mediaInfo = media.media
+        self.init(id: mediaInfo.id,
+                  mimeType: mediaInfo.mimeType,
+                  aspectRatio: mediaInfo.width / mediaInfo.height,
+                  width: mediaInfo.width,
+                  height: mediaInfo.height,
+                  url: media.signedUrl)
     }
 }

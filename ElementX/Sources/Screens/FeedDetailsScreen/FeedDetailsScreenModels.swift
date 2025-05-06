@@ -34,6 +34,8 @@ struct FeedDetailsScreenViewState: BindableState {
     }
     
     var userRewards = ZeroRewards.empty()
+    
+    var postRepliesMediaInfoMap: [String: HomeScreenPostMediaInfo] = [:]
 }
 
 struct FeedDetailsScreenViewStateBindings {

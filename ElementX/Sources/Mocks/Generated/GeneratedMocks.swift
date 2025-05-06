@@ -6482,6 +6482,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return getLinkPreviewMetaDataUrlReturnValue
         }
     }
+    //MARK: - getPostMediaInfo
+
+    var getPostMediaInfoMediaIdUnderlyingCallsCount = 0
+    var getPostMediaInfoMediaIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getPostMediaInfoMediaIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getPostMediaInfoMediaIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getPostMediaInfoMediaIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getPostMediaInfoMediaIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getPostMediaInfoMediaIdCalled: Bool {
+        return getPostMediaInfoMediaIdCallsCount > 0
+    }
+    var getPostMediaInfoMediaIdReceivedMediaId: String?
+    var getPostMediaInfoMediaIdReceivedInvocations: [String] = []
+
+    var getPostMediaInfoMediaIdUnderlyingReturnValue: Result<ZPostMedia, ClientProxyError>!
+    var getPostMediaInfoMediaIdReturnValue: Result<ZPostMedia, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getPostMediaInfoMediaIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZPostMedia, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getPostMediaInfoMediaIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getPostMediaInfoMediaIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getPostMediaInfoMediaIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getPostMediaInfoMediaIdClosure: ((String) async -> Result<ZPostMedia, ClientProxyError>)?
+
+    func getPostMediaInfo(mediaId: String) async -> Result<ZPostMedia, ClientProxyError> {
+        getPostMediaInfoMediaIdCallsCount += 1
+        getPostMediaInfoMediaIdReceivedMediaId = mediaId
+        DispatchQueue.main.async {
+            self.getPostMediaInfoMediaIdReceivedInvocations.append(mediaId)
+        }
+        if let getPostMediaInfoMediaIdClosure = getPostMediaInfoMediaIdClosure {
+            return await getPostMediaInfoMediaIdClosure(mediaId)
+        } else {
+            return getPostMediaInfoMediaIdReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?

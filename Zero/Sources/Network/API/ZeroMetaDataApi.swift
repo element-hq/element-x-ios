@@ -10,6 +10,8 @@ import Foundation
 
 protocol ZeroMetaDataApiProtocol {
     func getLinkPreview(url: String) async throws -> Result<ZLinkPreview, Error>
+    
+    func getPostMediaInfo(mediaId: String) async throws -> Result<ZPostMedia, Error>
 }
 
 class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
@@ -45,11 +47,27 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
         }
     }
     
+    func getPostMediaInfo(mediaId: String) async throws -> Result<ZPostMedia, any Error> {
+        let url = MetaDataEndPoints.feedMediaInfoEndPoint.replacingOccurrences(of: MetaDataConstants.feed_media_path_param, with: mediaId)
+        let result: Result<ZPostMedia, Error> = try await APIManager.shared.authorisedRequest(url, method: .get, appSettings: appSettings)
+        switch result {
+        case .success(let mediaInfo):
+            return .success(mediaInfo)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum MetaDataEndPoints {
         private static let hostURL = ZeroContants.appServer.zeroRootUrl
         
         static let linkPreviewEndPoint = "\(hostURL)linkPreviews"
+        static let feedMediaInfoEndPoint = "\(hostURL)api/media/\(MetaDataConstants.feed_media_path_param)"
+    }
+    
+    private enum MetaDataConstants {
+        static let feed_media_path_param = "{media_id}"
     }
 }

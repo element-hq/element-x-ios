@@ -282,4 +282,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     // MARK: - Zero MetaData
     
     func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError>
+    
+    func getPostMediaInfo(mediaId: String) async -> Result<ZPostMedia, ClientProxyError>
 }
