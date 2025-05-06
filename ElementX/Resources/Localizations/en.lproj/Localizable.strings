@@ -22,10 +22,10 @@
 "a11y_show_password" = "Show password";
 "a11y_start_call" = "Start a call";
 "a11y_user_menu" = "User menu";
+"a11y_view_details" = "View details";
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Record voice message.";
 "a11y_voice_message_stop_recording" = "Stop recording";
-"a11y.view_details" = "View details";
 "action_accept" = "Accept";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Add to timeline";
@@ -146,6 +146,7 @@
 "common_bubbles" = "Bubbles";
 "common_call_started" = "Call started";
 "common_chat_backup" = "Chat backup";
+"common_copied_to_clipboard" = "Copied to clipboard";
 "common_copyright" = "Copyright";
 "common_creating_room" = "Creating room…";
 "common_current_user_canceled_knock" = "Request canceled";
@@ -158,12 +159,14 @@
 "common_developer_options" = "Developer options";
 "common_device_id" = "Device ID";
 "common_direct_chat" = "Direct chat";
+"common_do_not_show_this_again" = "Do not show this again";
 "common_download_failed" = "Download failed";
 "common_downloading" = "Downloading";
 "common_edited_suffix" = "(edited)";
 "common_editing" = "Editing";
 "common_editing_caption" = "Editing caption";
 "common_emote" = "* %1$@ %2$@";
+"common_empty_file" = "Empty file";
 "common_encryption" = "Encryption";
 "common_encryption_enabled" = "Encryption enabled";
 "common_enter_your_pin" = "Enter your PIN";
@@ -184,6 +187,7 @@
 "common_invite_unknown_profile" = "This Matrix ID can't be found, so the invite might not be received.";
 "common_leaving_room" = "Leaving room";
 "common_light" = "Light";
+"common_line_copied_to_clipboard" = "Line copied to clipboard";
 "common_link_copied_to_clipboard" = "Link copied to clipboard";
 "common_loading" = "Loading…";
 "common_loading_more" = "Loading more…";
@@ -198,12 +202,14 @@
 "common_no_room_name" = "No room name";
 "common_not_encrypted" = "Not encrypted";
 "common_offline" = "Offline";
+"common_open_source_licenses" = "Open source licenses";
 "common_optic_id_ios" = "Optic ID";
 "common_or" = "or";
 "common_password" = "Password";
 "common_people" = "People";
 "common_permalink" = "Permalink";
 "common_permission" = "Permission";
+"common_pinned" = "Pinned";
 "common_please_check_internet_connection" = "Please check your internet connection";
 "common_please_wait" = "Please wait…";
 "common_poll_end_confirmation" = "Are you sure you want to end this poll?";
@@ -231,6 +237,7 @@
 "common_search_results" = "Search results";
 "common_security" = "Security";
 "common_seen_by" = "Seen by";
+"common_send_to" = "Send to";
 "common_sending" = "Sending…";
 "common_sending_failed" = "Sending failed";
 "common_sent" = "Sent";
@@ -274,13 +281,6 @@
 "common_waiting" = "Waiting…";
 "common_waiting_for_decryption_key" = "Waiting for this message";
 "common_you" = "You";
-"common.copied_to_clipboard" = "Copied to clipboard";
-"common.do_not_show_this_again" = "Do not show this again";
-"common.empty_file" = "Empty file";
-"common.line_copied_to_clipboard" = "Line copied to clipboard";
-"common.open_source_licenses" = "Open source licenses";
-"common.pinned" = "Pinned";
-"common.send_to" = "Send to";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Confirm your recovery key to maintain access to your key storage and message history.";
@@ -406,7 +406,6 @@
 "screen_advanced_settings_show_media_timeline_private_rooms" = "In private rooms";
 "screen_advanced_settings_show_media_timeline_subtitle" = "A hidden media can always be shown by tapping on it";
 "screen_advanced_settings_show_media_timeline_title" = "Show media in timeline";
-"screen_bottom_sheet,manage_room_member_remove" = "Remove from room";
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";
@@ -419,6 +418,7 @@
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "View profile";
+"screen_bottom_sheet_manage_room_member_remove" = "Remove from room";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Remove member and ban from joining in the future?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Removing %1$@…";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
@@ -610,7 +610,7 @@
 "screen_change_account_provider_subtitle" = "Use a different account provider, such as your own private server or a work account.";
 "screen_change_account_provider_title" = "Change account provider";
 "screen_change_server_error_invalid_homeserver" = "We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.";
-"screen_change_server_error_invalid_well_known" = "Sliding sync isn't available due to an issue in the well-known file:\n%1$@";
+"screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_form_header" = "Homeserver URL";
 "screen_change_server_form_notice" = "Enter a domain address.";
