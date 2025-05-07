@@ -104,6 +104,7 @@ final class AppSettings {
                   acceptableUseURL: URL,
                   privacyURL: URL,
                   encryptionURL: URL,
+                  deviceVerificationURL: URL,
                   chatBackupDetailsURL: URL,
                   identityPinningViolationDetailsURL: URL,
                   elementWebHosts: [String],
@@ -119,6 +120,7 @@ final class AppSettings {
         self.acceptableUseURL = acceptableUseURL
         self.privacyURL = privacyURL
         self.encryptionURL = encryptionURL
+        self.deviceVerificationURL = deviceVerificationURL
         self.chatBackupDetailsURL = chatBackupDetailsURL
         self.identityPinningViolationDetailsURL = identityPinningViolationDetailsURL
         self.elementWebHosts = elementWebHosts
@@ -169,6 +171,8 @@ final class AppSettings {
     private(set) var privacyURL: URL = "https://element.io/privacy"
     /// A URL where users can go read more about encryption in general.
     private(set) var encryptionURL: URL = "https://element.io/help#encryption"
+    /// A URL where users can go read more about device verification..
+    private(set) var deviceVerificationURL: URL = "https://element.io/help#encryption-device-verification"
     /// A URL where users can go read more about the chat backup.
     private(set) var chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
     /// A URL where users can go read more about identity pinning violations
