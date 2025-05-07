@@ -586,4 +586,8 @@ extension HomeScreenPostMediaInfo {
                   height: mediaInfo.height,
                   url: media.signedUrl)
     }
+    
+    var isVideo: Bool {
+        return mimeType?.hasPrefix("video/") == true
+    }
 }

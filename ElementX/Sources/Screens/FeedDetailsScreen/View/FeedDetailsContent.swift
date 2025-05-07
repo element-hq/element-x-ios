@@ -210,13 +210,20 @@ struct FeedDetailsSection: View {
                     .padding(.vertical, 12)
             }
             
-            if post.mediaInfo != nil {
-                KFAnimatedImage(URL(string: post.mediaInfo?.url ?? ""))
-                    .placeholder {
-                        ProgressView()
-                    }
-                    .aspectRatio(post.mediaInfo!.aspectRatio, contentMode: .fit)
-                    .cornerRadius(4, corners: .allCorners)
+            if let mediaInfo = post.mediaInfo,
+               let url = URL(string: mediaInfo.url ?? "") {
+                if mediaInfo.isVideo {
+                    VideoPlayerView(videoURL: url)
+                        .frame(height: 300)
+                        .cornerRadius(4)
+                } else {
+                    KFAnimatedImage(url)
+                        .placeholder {
+                            ProgressView()
+                        }
+                        .aspectRatio(mediaInfo.aspectRatio, contentMode: .fit)
+                        .cornerRadius(4, corners: .allCorners)
+                }
             }
             
             Text(post.postDateTime)
