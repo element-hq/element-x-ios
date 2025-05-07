@@ -1,3 +1,16 @@
+## Changes in 25.05.1 (2025-05-07)
+
+### What's Changed
+
+🙌 Improvements
+* Updated the learn more link for the identity confirmation screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4096
+
+🐛 Bugfixes
+* Fix a bug where fetching room history could fail. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4100
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.05.0...release/25.05.1
+
 ## Changes in 25.05.0 (2025-05-06)
 
 ### What's Changed
