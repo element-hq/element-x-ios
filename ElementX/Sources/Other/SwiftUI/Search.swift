@@ -28,12 +28,14 @@ extension View {
                           placeholder: String? = nil,
                           hidesNavigationBar: Bool = false,
                           showsCancelButton: Bool = true,
-                          disablesInteractiveDismiss: Bool = false) -> some View {
+                          disablesInteractiveDismiss: Bool = false,
+                          accessibilityFocusOnStart: Bool = false) -> some View {
         modifier(SearchControllerModifier(searchQuery: query,
                                           placeholder: placeholder,
                                           hidesNavigationBar: hidesNavigationBar,
                                           showsCancelButton: showsCancelButton,
-                                          disablesInteractiveDismiss: disablesInteractiveDismiss))
+                                          disablesInteractiveDismiss: disablesInteractiveDismiss,
+                                          accessibilityFocusOnStart: accessibilityFocusOnStart))
     }
 }
 
@@ -44,6 +46,7 @@ private struct SearchControllerModifier: ViewModifier {
     let hidesNavigationBar: Bool
     let showsCancelButton: Bool
     let disablesInteractiveDismiss: Bool
+    let accessibilityFocusOnStart: Bool
     
     /// Whether or not the user is currently searching. When ``automaticallyShowsCancelButton``
     /// is `false`, checking if this value is `false` is pretty much meaningless.
@@ -58,6 +61,7 @@ private struct SearchControllerModifier: ViewModifier {
                                  hidesNavigationBar: hidesNavigationBar,
                                  showsCancelButton: showsCancelButton,
                                  hidesSearchBarWhenScrolling: false,
+                                 accessibilityFocusOnStart: accessibilityFocusOnStart,
                                  isSearching: $isSearching)
             }
             .onDisappear {
@@ -76,12 +80,19 @@ private struct SearchController: UIViewControllerRepresentable {
     let hidesNavigationBar: Bool
     let showsCancelButton: Bool
     let hidesSearchBarWhenScrolling: Bool
+    let accessibilityFocusOnStart: Bool
     
     @Binding var isSearching: Bool
     
     func makeUIViewController(context: Context) -> SearchInjectionViewController {
-        SearchInjectionViewController(searchController: context.coordinator.searchController,
-                                      hidesSearchBarWhenScrolling: hidesSearchBarWhenScrolling)
+        let controller = SearchInjectionViewController(searchController: context.coordinator.searchController,
+                                                       hidesSearchBarWhenScrolling: hidesSearchBarWhenScrolling)
+        if accessibilityFocusOnStart {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                UIAccessibility.post(notification: .screenChanged, argument: controller.searchController.searchBar)
+            }
+        }
+        return controller
     }
     
     func updateUIViewController(_ viewController: SearchInjectionViewController, context: Context) {
