@@ -10,15 +10,15 @@ import SwiftUI
 // MARK: - Coordinator
 
 enum AuthenticationStartScreenCoordinatorAction {
-    case loginManually
     case loginWithQR
+    case loginManually
     case register
     case reportProblem
 }
 
 enum AuthenticationStartScreenViewModelAction {
-    case loginManually
     case loginWithQR
+    case loginManually
     case register
     case reportProblem
 }
@@ -30,8 +30,8 @@ struct AuthenticationStartScreenViewState: BindableState {
 }
 
 enum AuthenticationStartScreenViewAction {
-    case loginManually
     case loginWithQR
+    case loginManually
     case register
     case reportProblem
 }

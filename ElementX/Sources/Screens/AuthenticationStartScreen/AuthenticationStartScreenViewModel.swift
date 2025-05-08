@@ -25,10 +25,10 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
 
     override func process(viewAction: AuthenticationStartScreenViewAction) {
         switch viewAction {
-        case .loginManually:
-            actionsSubject.send(.loginManually)
         case .loginWithQR:
             actionsSubject.send(.loginWithQR)
+        case .loginManually:
+            actionsSubject.send(.loginManually)
         case .register:
             actionsSubject.send(.register)
         case .reportProblem:

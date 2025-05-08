@@ -66,7 +66,7 @@ enum OIDCError: Error {
     case unknown
 }
 
-struct OIDCAuthorizationDataProxy: Equatable {
+struct OIDCAuthorizationDataProxy: Hashable {
     let underlyingData: OAuthAuthorizationData
     
     var url: URL {
@@ -77,8 +77,12 @@ struct OIDCAuthorizationDataProxy: Equatable {
     }
 }
 
-extension OAuthAuthorizationData: @retroactive Equatable {
+extension OAuthAuthorizationData: @retroactive Hashable {
     public static func == (lhs: MatrixRustSDK.OAuthAuthorizationData, rhs: MatrixRustSDK.OAuthAuthorizationData) -> Bool {
         lhs.loginUrl() == rhs.loginUrl()
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(loginUrl())
     }
 }

@@ -27,9 +27,6 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     
-    // periphery:ignore - retaining purpose
-    private var encryptionResetFlowCoordinator: EncryptionResetFlowCoordinator?
-    
     enum State: StateType {
         /// The state machine hasn't started.
         case initial

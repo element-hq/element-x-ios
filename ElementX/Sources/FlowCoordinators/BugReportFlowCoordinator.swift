@@ -8,6 +8,11 @@
 import Combine
 import Foundation
 
+enum BugReportFlowCoordinatorAction: Equatable {
+    /// The flow is complete.
+    case complete
+}
+
 struct BugReportFlowCoordinatorParameters {
     enum PresentationMode {
         case sheet(NavigationStackCoordinator)
@@ -23,6 +28,11 @@ struct BugReportFlowCoordinatorParameters {
 class BugReportFlowCoordinator: FlowCoordinatorProtocol {
     private let parameters: BugReportFlowCoordinatorParameters
     private var cancellables = Set<AnyCancellable>()
+    
+    private let actionsSubject: PassthroughSubject<BugReportFlowCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<BugReportFlowCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     private var internalNavigationStackCoordinator: NavigationStackCoordinator?
     
@@ -79,11 +89,15 @@ class BugReportFlowCoordinator: FlowCoordinatorProtocol {
         case .sheet(let navigationStackCoordinator):
             let internalNavigationStackCoordinator = NavigationStackCoordinator()
             internalNavigationStackCoordinator.setRootCoordinator(coordinator)
-            navigationStackCoordinator.setSheetCoordinator(internalNavigationStackCoordinator)
+            navigationStackCoordinator.setSheetCoordinator(internalNavigationStackCoordinator) { [weak self] in
+                self?.actionsSubject.send(.complete)
+            }
             self.internalNavigationStackCoordinator = internalNavigationStackCoordinator
         case .push(let navigationStackCoordinator):
             internalNavigationStackCoordinator = navigationStackCoordinator
-            navigationStackCoordinator.push(coordinator)
+            navigationStackCoordinator.push(coordinator) { [weak self] in
+                self?.actionsSubject.send(.complete)
+            }
         }
     }
     
