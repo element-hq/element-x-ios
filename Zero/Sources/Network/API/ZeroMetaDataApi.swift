@@ -12,6 +12,8 @@ protocol ZeroMetaDataApiProtocol {
     func getLinkPreview(url: String) async throws -> Result<ZLinkPreview, Error>
     
     func getPostMediaInfo(mediaId: String) async throws -> Result<ZPostMedia, Error>
+    
+    func uploadMedia(media: URL) async throws -> Result<String, Error>
 }
 
 class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
@@ -48,11 +50,24 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     }
     
     func getPostMediaInfo(mediaId: String) async throws -> Result<ZPostMedia, any Error> {
-        let url = MetaDataEndPoints.feedMediaInfoEndPoint.replacingOccurrences(of: MetaDataConstants.feed_media_path_param, with: mediaId)
+        let url = MetaDataEndPoints.feedMediaEndPoint.appending("/\(mediaId)")
         let result: Result<ZPostMedia, Error> = try await APIManager.shared.authorisedRequest(url, method: .get, appSettings: appSettings)
         switch result {
         case .success(let mediaInfo):
             return .success(mediaInfo)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func uploadMedia(media: URL) async throws -> Result<String, any Error> {
+        let result: Result<ZPostMediaUploadedInfo, Error> = try await APIManager.shared
+            .authorisedMultipartRequest(MetaDataEndPoints.feedMediaEndPoint,
+                                        mediaFile: media,
+                                        appSettings: appSettings)
+        switch result {
+        case .success(let mediaInfo):
+            return .success(mediaInfo.id)
         case .failure(let error):
             return .failure(error)
         }
@@ -64,10 +79,6 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
         private static let hostURL = ZeroContants.appServer.zeroRootUrl
         
         static let linkPreviewEndPoint = "\(hostURL)linkPreviews"
-        static let feedMediaInfoEndPoint = "\(hostURL)api/media/\(MetaDataConstants.feed_media_path_param)"
-    }
-    
-    private enum MetaDataConstants {
-        static let feed_media_path_param = "{media_id}"
+        static let feedMediaEndPoint = "\(hostURL)api/media"
     }
 }

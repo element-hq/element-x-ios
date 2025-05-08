@@ -23,3 +23,8 @@ struct ZPostMediaInfo: Codable {
     let fileSize: String?
     let createdAt: String?
 }
+
+struct ZPostMediaUploadedInfo: Codable {
+    let id: String
+    let centralizedStorageKey: String
+}

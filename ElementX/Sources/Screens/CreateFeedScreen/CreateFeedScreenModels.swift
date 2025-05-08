@@ -18,14 +18,18 @@ struct CreateFeedScreenViewState: BindableState {
 struct CreateFeedScreenViewStateBindings {
     var feedText: String = ""
     var alertInfo: AlertInfo<UUID>?
+    var selectedFeedMediaUrl: URL?
 }
 
 enum CreateFeedScreenViewModelAction {
     case newFeedPosted
     case dismissPost
+    case attachMedia(FeedMediaSelectedProtocol)
 }
 
 enum CreateFeedScreenViewAction {
     case createPost
     case dismissPost
+    case attachMedia
+    case deleteMedia
 }

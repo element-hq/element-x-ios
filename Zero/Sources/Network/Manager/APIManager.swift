@@ -96,6 +96,7 @@ class APIManager {
     
     func authorisedMultipartRequest<T: Decodable>(
         _ url: String,
+        mediaFile: URL?,
         appSettings: AppSettings,
         parameters: [String: String]? = nil,
         headers: HTTPHeaders? = nil
@@ -113,6 +114,11 @@ class APIManager {
                     if let data = value.data(using: .utf8) {
                         formData.append(data, withName: key)
                     }
+                }
+                
+                if let mediaUrl = mediaFile {
+                    // Append mediaFile URL as multipart
+                    formData.append(mediaUrl, withName: "file", fileName: mediaUrl.lastPathComponent, mimeType: mediaUrl.mimeType())
                 }
             }, to: url, method: .post, headers: authHeaders)
             .validate()

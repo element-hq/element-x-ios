@@ -1092,11 +1092,22 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func postNewFeed(channelZId: String, content: String, replyToPost: String?) async -> Result<Void, ClientProxyError> {
+    func postNewFeed(channelZId: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ClientProxyError> {
         do {
+            var mediaId: String? = nil
+            if let mediaFile = mediaFile {
+                let uploadMediaResult = try await zeroApiProxy.metaDataApi.uploadMedia(media: mediaFile)
+                switch uploadMediaResult {
+                case .success(let uploadedMediaId):
+                    mediaId = uploadedMediaId
+                case .failure(let error):
+                    return .failure(.zeroError(error))
+                }
+            }
             let postFeedResult = try await zeroApiProxy.postsApi.createNewPost(channelZId: channelZId,
                                                                                content: content,
-                                                                               replyToPost: replyToPost)
+                                                                               replyToPost: replyToPost,
+                                                                               mediaId: mediaId)
             switch postFeedResult {
             case .success:
                 return .success(())

@@ -1834,6 +1834,8 @@
 		791DEF872D9381000057E6C5 /* EmbeddedElementCall in Frameworks */ = {isa = PBXBuildFile; productRef = 791DEF862D9381000057E6C5 /* EmbeddedElementCall */; };
 		791DEF882D93959C0057E6C5 /* ZCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1828CE432D010108002FF640 /* ZCurrentUser.swift */; };
 		791DEF892D93959C0057E6C5 /* ZCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1828CE432D010108002FF640 /* ZCurrentUser.swift */; };
+		7924416F2DCC9B8700CD45B9 /* FeedMediaSelectedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */; };
+		792441702DCC9B8700CD45B9 /* FeedMediaSelectedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */; };
 		792A87AA2DAD8F51009C3E4F /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADECBBB672497BCD4822468 /* Result.swift */; };
 		7937A5922DB287E9001A60CB /* TimelineItemThreadSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C6A082F2B2A15E1B9BE280 /* TimelineItemThreadSummary.swift */; };
 		7937A5932DB28819001A60CB /* TimelineEventContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F926D08EB3D622A480BCA71 /* TimelineEventContent.swift */; };
@@ -3423,6 +3425,7 @@
 		7905F9A62D67620300C3A203 /* ZeroChannelsApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroChannelsApi.swift; sourceTree = "<group>"; };
 		7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeChannelsContent.swift; sourceTree = "<group>"; };
 		7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenChannelCell.swift; sourceTree = "<group>"; };
+		7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaSelectedProtocol.swift; sourceTree = "<group>"; };
 		793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostCell.swift; sourceTree = "<group>"; };
 		7944A75E2D589F2700B75DAC /* CreateFeedScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenCoordinator.swift; sourceTree = "<group>"; };
 		7944A7612D589F3200B75DAC /* CreateFeedScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenModels.swift; sourceTree = "<group>"; };
@@ -6513,6 +6516,7 @@
 				7944A7642D589F3F00B75DAC /* CreateFeedScreenViewModel.swift */,
 				7944A7672D589F4D00B75DAC /* CreateFeedScreenViewModelProtocol.swift */,
 				795A0C822D77D4DC000928B7 /* CreateFeedProtocol.swift */,
+				7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */,
 				7944A76A2D589F5D00B75DAC /* View */,
 			);
 			path = CreateFeedScreen;
@@ -10080,6 +10084,7 @@
 				18E9A6AF2C9829970082DDA4 /* ServerSelectionScreen.swift in Sources */,
 				184025642D369AC5006EC169 /* Tracing.swift in Sources */,
 				18D467A62D109B9300861AA6 /* FileMediaEventsTimelineView.swift in Sources */,
+				792441702DCC9B8700CD45B9 /* FeedMediaSelectedProtocol.swift in Sources */,
 				182258E42CCC3D5B00BBEDC0 /* BigIcon.swift in Sources */,
 				18E9A6B02C9829970082DDA4 /* ServerSelectionScreenCoordinator.swift in Sources */,
 				18E9A6B12C9829970082DDA4 /* ServerSelectionScreenModels.swift in Sources */,
@@ -11058,6 +11063,7 @@
 				F103924DED414ADFE398CE99 /* RoomPollsHistoryScreenViewModelProtocol.swift in Sources */,
 				0847D85F823B55A3E95D16CC /* RoomPreviewProxy.swift in Sources */,
 				D2466C6BC8CAD8FADD7BF89B /* RoomPreviewProxyMock.swift in Sources */,
+				7924416F2DCC9B8700CD45B9 /* FeedMediaSelectedProtocol.swift in Sources */,
 				F2E580C0FBFBEFFE9D69893B /* RoomPreviewProxyProtocol.swift in Sources */,
 				FA9C427FFB11B1AA2DCC5602 /* RoomProxyProtocol.swift in Sources */,
 				18AF61542CF85A8200921644 /* ZeroListRow.swift in Sources */,

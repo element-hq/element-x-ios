@@ -90,40 +90,84 @@ struct FeedDetailsContent: View {
     }
     
     private var addPostReplyView: some View {
-        HStack {
-            LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                                name: nil,
-                                contentID: context.viewState.userID,
-                                avatarSize: .user(on: .home),
-                                mediaProvider: context.mediaProvider)
-            
-            TextField("Post your reply", text: $context.myPostReply,  axis: .vertical)
-                .lineLimit(1...5)
-                .focused($isPostTextFieldFocused)
-                .textFieldStyle(.element())
-                .disableAutocorrection(true)
-                .autocapitalization(.none)
-                .onSubmit {
-                    context.myPostReply.append("\n")
-                    isPostTextFieldFocused = true
-                }
-            
-            Button {
-                isPostTextFieldFocused = false
-                context.send(viewAction: .postReply)
-            } label: {
-                CompoundIcon(\.sendSolid)
-                    .scaledPadding(6, relativeTo: .title)
-                    .foregroundColor(context.myPostReply.isEmpty ? .compound.iconDisabled : .zero.iconAccentTertiary)
-                    .background {
-                        Circle()
-                            .foregroundColor(context.myPostReply.isEmpty ? .clear : Asset.Colors.zeroDarkGrey.swiftUIColor)
+        VStack(alignment: .leading) {
+            if let mediaUrl = context.feedMedia {
+                ZStack(alignment: .topTrailing) {
+                    KFImage(mediaUrl)
+                        .placeholder {
+                            CompoundIcon(\.playSolid)
+                        }
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 50, height: 50)
+                        .background(.black)
+                        .cornerRadius(6, corners: .allCorners)
+                        .padding(.vertical, 2)
+                    
+                    Button {
+                        context.send(viewAction: .deleteMedia)
+                    } label: {
+                        CompoundIcon(\.close)
+                            .padding(2)
+                            .background(.Grey22)
+                            .foregroundStyle(.white)
+                            .clipShape(Circle())
+                            .frame(width: 6, height: 6)
                     }
-                    .scaledPadding(4, relativeTo: .compound.headingLG)
+                }
+                .padding(.vertical, 6)
             }
-            .disabled(context.myPostReply.isEmpty)
+            
+            HStack {
+                LoadableAvatarImage(url: context.viewState.userAvatarURL,
+                                    name: nil,
+                                    contentID: context.viewState.userID,
+                                    avatarSize: .user(on: .home),
+                                    mediaProvider: context.mediaProvider)
+                
+                TextField("Post your reply", text: $context.myPostReply,  axis: .vertical)
+                    .lineLimit(1...5)
+                    .focused($isPostTextFieldFocused)
+                    .textFieldStyle(.element())
+                    .disableAutocorrection(true)
+                    .autocapitalization(.none)
+                    .onSubmit {
+                        context.myPostReply.append("\n")
+                        isPostTextFieldFocused = true
+                    }
+                
+                Button {
+                    isPostTextFieldFocused = false
+                    context.send(viewAction: .attachMedia)
+                } label: {
+                    CompoundIcon(\.attachment)
+                        .scaledPadding(6, relativeTo: .title)
+                        .foregroundColor(.zero.iconAccentTertiary)
+                        .background {
+                            Circle()
+                                .foregroundColor(Asset.Colors.zeroDarkGrey.swiftUIColor)
+                        }
+                        .scaledPadding(4, relativeTo: .compound.headingLG)
+                }
+                
+                Button {
+                    isPostTextFieldFocused = false
+                    context.send(viewAction: .postReply)
+                } label: {
+                    CompoundIcon(\.sendSolid)
+                        .scaledPadding(6, relativeTo: .title)
+                        .foregroundColor(context.myPostReply.isEmpty ? .compound.iconDisabled : .zero.iconAccentTertiary)
+                        .background {
+                            Circle()
+                                .foregroundColor(context.myPostReply.isEmpty ? .clear : Asset.Colors.zeroDarkGrey.swiftUIColor)
+                        }
+                        .scaledPadding(4, relativeTo: .compound.headingLG)
+                }
+                .disabled(context.myPostReply.isEmpty)
+            }
         }
         .padding()
+            
     }
 }
 

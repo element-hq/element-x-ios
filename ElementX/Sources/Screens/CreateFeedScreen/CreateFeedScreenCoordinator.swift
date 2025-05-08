@@ -16,6 +16,7 @@ struct CreateFeedScreenCoordinatorParameters {
 enum CreateFeedScreenCoordinatorAction {
     case newPostCreated
     case dismissPost
+    case attachMedia(FeedMediaSelectedProtocol)
 }
 
 final class CreateFeedScreenCoordinator: CoordinatorProtocol {
@@ -41,6 +42,8 @@ final class CreateFeedScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.newPostCreated)
                 case .dismissPost:
                     actionsSubject.send(.dismissPost)
+                case .attachMedia(let attachMediaProtocol):
+                    actionsSubject.send(.attachMedia(attachMediaProtocol))
                 }
             }
             .store(in: &cancellables)

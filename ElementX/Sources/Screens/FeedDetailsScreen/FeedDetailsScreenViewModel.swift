@@ -10,7 +10,7 @@ import SwiftUI
 
 typealias FeedDetailsScreenViewModelType = StateStoreViewModel<FeedDetailsScreenViewState, FeedDetailsScreenViewAction>
 
-class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScreenViewModelProtocol {
+class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScreenViewModelProtocol, FeedMediaSelectedProtocol {
     
     private let clientProxy: ClientProxyProtocol
     private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol
@@ -74,6 +74,10 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             addMeowToPost(postId, amount, isPostAReply: isPostAReply)
         case .postReply:
             postFeedReply()
+        case .attachMedia:
+            actionsSubject.send(.attachMedia(self))
+        case .deleteMedia:
+            state.bindings.feedMedia = nil
         }
     }
     
@@ -196,7 +200,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             
             let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
                                                                content: state.bindings.myPostReply,
-                                                               replyToPost: state.bindings.feed.id)
+                                                               replyToPost: state.bindings.feed.id,
+                                                               mediaFile: state.bindings.feedMedia)
             switch postFeedResult {
             case .success(_):
                 state.bindings.myPostReply = ""
@@ -223,5 +228,9 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 }
             }
         }
+    }
+    
+    func onMediaSelected(media: URL) {
+        state.bindings.feedMedia = media
     }
 }

@@ -7,6 +7,7 @@
 
 import Compound
 import SwiftUI
+import Kingfisher
 
 struct CreateFeedScreen: View {
     @ObservedObject var context: CreateFeedScreenViewModel.Context
@@ -29,11 +30,18 @@ struct CreateFeedScreen: View {
                 }
             }
         }
-        ToolbarItem(placement: .cancellationAction) {
-            Button(L10n.actionCancel){
-                context.send(viewAction: .dismissPost)
+        ToolbarItem(placement: .primaryAction) {
+            Button {
+                context.send(viewAction: .attachMedia)
+            } label: {
+                CompoundIcon(\.attachment)
             }
         }
+//        ToolbarItem(placement: .cancellationAction) {
+//            Button(L10n.actionCancel){
+//                context.send(viewAction: .dismissPost)
+//            }
+//        }
     }
 }
 
@@ -72,6 +80,36 @@ private struct CreateFeedContent: View {
                 }
             }
             .padding()
+            
+            Spacer()
+            
+            if let mediaUrl = context.selectedFeedMediaUrl {
+                ZStack(alignment: .topTrailing) {
+                    KFImage(mediaUrl)
+                        .placeholder {
+                            CompoundIcon(\.playSolid)
+                        }
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 50, height: 50)
+                        .background(.black)
+                        .cornerRadius(6, corners: .allCorners)
+                        .padding(.vertical, 2)
+                        .padding(.horizontal, 8)
+                    Button {
+                        context.send(viewAction: .deleteMedia)
+                    } label: {
+                        CompoundIcon(\.close)
+                            .padding(2)
+                            .background(.Grey22)
+                            .foregroundStyle(.white)
+                            .clipShape(Circle())
+                            .frame(width: 6, height: 6)
+                    }
+                }
+                .padding(.vertical, 6)
+                .padding(.horizontal, 16)
+            }
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // Small delay for smooth focus
