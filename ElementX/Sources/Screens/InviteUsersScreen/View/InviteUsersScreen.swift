@@ -11,6 +11,8 @@ import SwiftUI
 struct InviteUsersScreen: View {
     @ObservedObject var context: InviteUsersScreenViewModel.Context
     
+    @State private var formWidth = CGFloat.zero
+    
     var showTopSection: Bool {
         !context.viewState.selectedUsers.isEmpty || context.viewState.isSearching
     }
@@ -25,7 +27,8 @@ struct InviteUsersScreen: View {
             .searchController(query: $context.searchQuery,
                               placeholder: L10n.commonSearchForSomeone,
                               showsCancelButton: false,
-                              disablesInteractiveDismiss: true)
+                              disablesInteractiveDismiss: true,
+                              accessibilityFocusOnStart: true)
             .compoundSearchField()
             .alert(item: $context.alertInfo)
     }
@@ -33,34 +36,33 @@ struct InviteUsersScreen: View {
     // MARK: - Private
     
     private var mainContent: some View {
-        GeometryReader { proxy in
-            Form {
-                if showTopSection {
-                    // this is a fix for having the carousel not clipped, and inside the form, so when the search is dismissed, it wont break the design
-                    Section {
-                        EmptyView()
-                    } header: {
-                        VStack(spacing: 16) {
-                            selectedUsersSection
-                                .textCase(.none)
-                                .frame(width: proxy.size.width)
-                            
-                            if context.viewState.isSearching {
-                                ProgressView()
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    .listRowBackground(Color.clear)
-                            }
+        Form {
+            if showTopSection {
+                // this is a fix for having the carousel not clipped, and inside the form, so when the search is dismissed, it wont break the design
+                Section {
+                    EmptyView()
+                } header: {
+                    VStack(spacing: 16) {
+                        selectedUsersSection
+                            .textCase(.none)
+                            .frame(width: formWidth)
+                        
+                        if context.viewState.isSearching {
+                            ProgressView()
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .listRowBackground(Color.clear)
                         }
                     }
                 }
-                
-                if context.viewState.hasEmptySearchResults {
-                    noResultsContent
-                } else {
-                    usersSection
-                }
+            }
+            
+            if context.viewState.hasEmptySearchResults {
+                noResultsContent
+            } else {
+                usersSection
             }
         }
+        .readWidth($formWidth)
     }
     
     private var noResultsContent: some View {
