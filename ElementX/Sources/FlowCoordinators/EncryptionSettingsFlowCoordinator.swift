@@ -77,6 +77,8 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         switch appRoute {
+        case .authentication:
+            break // We always ignore this flow when logged in.
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
              .roomDetails, .roomMemberDetails, .userProfile,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,

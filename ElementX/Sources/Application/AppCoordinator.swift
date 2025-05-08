@@ -55,7 +55,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
 
     private let appRouteURLParser: AppRouteURLParser
     
-    @Consumable private var storedAppRoute: AppRoute?
+    private var storedAppRoute: AppRoute?
     @Consumable private var storedInlineReply: (roomID: String, message: String)?
     @Consumable private var storedRoomsToAwait: Set<String>?
 
@@ -219,6 +219,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         if let route = appRouteURLParser.route(from: url) {
             switch route {
+            case .authentication:
+                handleAppRoute(route)
             case .genericCallLink(let url):
                 if let userSessionFlowCoordinator {
                     userSessionFlowCoordinator.handleAppRoute(route, animated: true)
@@ -508,17 +510,23 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                     appSettings: appSettings,
                                                     appHooks: appHooks)
         
-        authenticationFlowCoordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
-                                                                      qrCodeLoginService: qrCodeLoginService,
-                                                                      bugReportService: ServiceLocator.shared.bugReportService,
-                                                                      navigationRootCoordinator: navigationRootCoordinator,
-                                                                      appMediator: appMediator,
-                                                                      appSettings: appSettings,
-                                                                      analytics: ServiceLocator.shared.analytics,
-                                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController)
-        authenticationFlowCoordinator?.delegate = self
+        let coordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
+                                                        qrCodeLoginService: qrCodeLoginService,
+                                                        bugReportService: ServiceLocator.shared.bugReportService,
+                                                        navigationRootCoordinator: navigationRootCoordinator,
+                                                        appMediator: appMediator,
+                                                        appSettings: appSettings,
+                                                        analytics: ServiceLocator.shared.analytics,
+                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        coordinator.delegate = self
         
-        authenticationFlowCoordinator?.start()
+        authenticationFlowCoordinator = coordinator
+        coordinator.start()
+        
+        if storedAppRoute?.isAuthenticationRoute == true,
+           let storedAppRoute = storedAppRoute.take() {
+            coordinator.handleAppRoute(storedAppRoute, animated: false)
+        }
     }
     
     private func runPostSessionSetupTasks() async {
@@ -530,7 +538,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             userSession.clientProxy.roomsToAwait = storedRoomsToAwait
         }
         
-        if let storedAppRoute {
+        if storedAppRoute?.isAuthenticationRoute == false,
+           let storedAppRoute = storedAppRoute.take() {
             userSessionFlowCoordinator.handleAppRoute(storedAppRoute, animated: false)
         }
         
@@ -796,9 +805,22 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     private func handleAppRoute(_ appRoute: AppRoute) {
-        if let userSessionFlowCoordinator {
-            userSessionFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
-        } else {
+        var handled = false
+        
+        switch appRoute {
+        case .authentication:
+            if let authenticationFlowCoordinator {
+                authenticationFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
+                handled = true
+            }
+        default:
+            if let userSessionFlowCoordinator {
+                userSessionFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
+                handled = true
+            }
+        }
+        
+        if !handled {
             storedAppRoute = appRoute
         }
     }

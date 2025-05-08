@@ -128,7 +128,15 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
-        fatalError()
+        switch appRoute {
+        case .authentication(let serverName, let loginHint):
+            if stateMachine.state != .startScreen {
+                clearRoute(animated: animated)
+            }
+            // DO STUFF HERE!
+        default:
+            fatalError()
+        }
     }
     
     func clearRoute(animated: Bool) {
