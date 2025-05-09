@@ -27,15 +27,15 @@ import UserNotifications
 // called on the same instance of `NotificationService` as a previous
 // notification.
 
-private let settings: CommonSettingsProtocol = AppSettings()
-
-private let keychainController = KeychainController(service: .sessions,
-                                                    accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-
 class NotificationServiceExtension: UNNotificationServiceExtension {
     private var notificationHandler: NotificationHandler?
     
     private let appHooks = AppHooks()
+    
+    private let settings: CommonSettingsProtocol = AppSettings()
+
+    private let keychainController = KeychainController(service: .sessions,
+                                                        accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
     
     deinit {
         ExtensionLogger.logMemory(with: tag)

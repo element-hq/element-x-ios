@@ -13,7 +13,7 @@ enum Target: String {
     case shareExtension = "shareextension"
     case tests
     
-    private static var isConfigured = false
+    private nonisolated(unsafe) static var isConfigured = false
     
     func configure(logLevel: LogLevel, traceLogPacks: Set<TraceLogPack>) {
         guard !Self.isConfigured else {
