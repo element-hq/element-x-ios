@@ -22,9 +22,8 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(member: RoomMemberDetails,
-         canKick: Bool,
-         canBan: Bool,
+    init(details: ManageRoomMemberDetails,
+         permissions: ManageRoomMemberPermissions,
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analyticsService: AnalyticsService,
@@ -32,7 +31,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         self.userIndicatorController = userIndicatorController
         self.roomProxy = roomProxy
         self.analyticsService = analyticsService
-        super.init(initialViewState: .init(member: member, canKick: canKick, canBan: canBan), mediaProvider: mediaProvider)
+        super.init(initialViewState: .init(details: details, permissions: permissions), mediaProvider: mediaProvider)
     }
     
     override func process(viewAction: ManageRoomMemberSheetViewAction) {
@@ -43,11 +42,15 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
             displayAlert(.ban)
         case .displayDetails:
             actionsSubject.send(.dismiss(shouldShowDetails: true))
+        case .unban:
+            displayAlert(.unban)
         }
     }
     
     private func displayAlert(_ alertType: ManageRoomMemberSheetViewAlertType) {
-        let member = state.member
+        guard case let .memberDetails(member) = state.details else {
+            return
+        }
         var reason: String?
         let binding: Binding<String> = .init(get: { reason ?? "" },
                                              set: { reason = $0.isBlank ? nil : $0 })
@@ -72,6 +75,12 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
                                                                 text: binding,
                                                                 autoCapitalization: .sentences,
                                                                 autoCorrectionDisabled: false)])
+        case .unban:
+            state.bindings.alertInfo = .init(id: alertType,
+                                             title: L10n.screenBottomSheetManageRoomMemberUnbanMemberConfirmationTitle,
+                                             message: L10n.screenBottomSheetManageRoomMemberUnbanMemberConfirmationDescription,
+                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },
+                                             secondaryButton: .init(title: L10n.screenBottomSheetManageRoomMemberUnbanMemberConfirmationAction) { [weak self] in Task { await self?.unbanMember(member) } })
         }
     }
     
@@ -103,6 +112,20 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         }
     }
     
+    private func unbanMember(_ member: RoomMemberDetails) async {
+        let indicatorTitle = L10n.screenBottomSheetManageRoomMemberUnbanningUser(member.name ?? member.id)
+        showManageMemberIndicator(title: indicatorTitle)
+        
+        switch await roomProxy.unbanUser(member.id) {
+        case .success:
+            hideManageMemberIndicator(title: indicatorTitle)
+            analyticsService.trackRoomModeration(action: .UnbanMember, role: nil)
+            actionsSubject.send(.dismiss(shouldShowDetails: false))
+        case .failure:
+            showManageMemberFailure(title: indicatorTitle)
+        }
+    }
+    
     private func showManageMemberIndicator(title: String) {
         userIndicatorController.submitIndicator(UserIndicator(id: title,
                                                               type: .toast(progress: .indeterminate),
@@ -121,5 +144,12 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
 }
 
 extension ManageRoomMemberSheetViewModel: Identifiable {
-    var id: String { state.member.id }
+    var id: String {
+        switch state.details {
+        case .memberDetails(let member):
+            member.id
+        case .senderDetails(let sender):
+            sender.id
+        }
+    }
 }

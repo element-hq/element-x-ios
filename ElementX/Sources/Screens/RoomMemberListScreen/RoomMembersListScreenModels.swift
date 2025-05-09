@@ -89,7 +89,6 @@ struct RoomMembersListScreenViewStateBindings {
 
 enum RoomMembersListScreenViewAction {
     case selectMember(RoomMemberDetails)
-    case unbanMember(RoomMemberDetails)
     case invite
 }
 

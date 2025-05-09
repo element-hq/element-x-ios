@@ -10,9 +10,35 @@ enum ManageRoomMemberSheetViewModelAction: Equatable {
 }
 
 struct ManageRoomMemberSheetViewState: BindableState {
-    let member: RoomMemberDetails
-    let canKick: Bool
-    let canBan: Bool
+    let details: ManageRoomMemberDetails
+    let permissions: ManageRoomMemberPermissions
+    
+    var isBanUnbanDisabled: Bool {
+        // This is a best effort check, if we haven't fetched the member yet we assume we can peform the action
+        guard case let .memberDetails(member) = details else {
+            return false
+        }
+        
+        return permissions.ownPowerLevel <= member.powerLevel
+    }
+    
+    var isKickDisabled: Bool {
+        // This is a best effort check, if we haven't fetched the member yet we assume we can peform the action
+        guard case let .memberDetails(member) = details else {
+            return false
+        }
+        
+        return !member.isActive || permissions.ownPowerLevel <= member.powerLevel
+    }
+    
+    var isMemberBanned: Bool {
+        // This is a best effort check, if we haven't fetched the member yet we assume we can peform the action
+        guard case let .memberDetails(member) = details else {
+            return false
+        }
+        
+        return member.isBanned
+    }
     
     var bindings = ManageRoomMemberSheetViewStateBindings()
 }
@@ -24,10 +50,32 @@ struct ManageRoomMemberSheetViewStateBindings {
 enum ManageRoomMemberSheetViewAlertType {
     case kick
     case ban
+    case unban
 }
 
 enum ManageRoomMemberSheetViewAction {
     case kick
     case ban
+    case unban
     case displayDetails
+}
+
+enum ManageRoomMemberDetails {
+    case memberDetails(roomMember: RoomMemberDetails)
+    case senderDetails(sender: TimelineItemSender)
+    
+    var id: String {
+        switch self {
+        case let .memberDetails(roomMember):
+            return roomMember.id
+        case let .senderDetails(sender):
+            return sender.id
+        }
+    }
+}
+
+struct ManageRoomMemberPermissions {
+    let canKick: Bool
+    let canBan: Bool
+    let ownPowerLevel: Int
 }

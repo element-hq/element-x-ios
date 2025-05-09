@@ -377,12 +377,14 @@ class TimelineViewModelTests: XCTestCase {
             value.bindings.manageMemberViewModel != nil
         }
         
-        viewModel.context.send(viewAction: .tappedOnSenderDetails(userID: RoomMemberProxyMock.mockAlice.userID))
+        viewModel.context.send(viewAction: .tappedOnSenderDetails(sender: .init(with: RoomMemberProxyMock.mockAlice)))
         try await deferred.fulfill()
         
-        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.member.id, RoomMemberProxyMock.mockAlice.userID)
-        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.canBan, true)
-        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.canKick, true)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.details.id, RoomMemberProxyMock.mockAlice.userID)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.permissions.canBan, true)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.permissions.canKick, true)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isKickDisabled, false)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isBanUnbanDisabled, false)
     }
     
     func testShowDetailsForAnAdmin() async throws {
@@ -402,25 +404,24 @@ class TimelineViewModelTests: XCTestCase {
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                           clientProxy: ClientProxyMock(.init()))
         
-        let deferredState = deferFulfillment(viewModel.context.$viewState) { value in
+        var deferredState = deferFulfillment(viewModel.context.$viewState) { value in
             !value.canCurrentUserKick && !value.canCurrentUserBan
         }
         
         try await deferredState.fulfill()
         
-        let deferredAction = deferFulfillment(viewModel.actions) { action in
-            switch action {
-            case .displaySenderDetails(let userID):
-                return userID == RoomMemberProxyMock.mockAdmin.userID
-            default:
-                return false
-            }
+        deferredState = deferFulfillment(viewModel.context.$viewState) { value in
+            value.bindings.manageMemberViewModel != nil
         }
         
-        viewModel.context.send(viewAction: .tappedOnSenderDetails(userID: RoomMemberProxyMock.mockAdmin.userID))
-        try await deferredAction.fulfill()
+        viewModel.context.send(viewAction: .tappedOnSenderDetails(sender: .init(with: RoomMemberProxyMock.mockAdmin)))
+        try await deferredState.fulfill()
         
-        XCTAssertNil(viewModel.context.manageMemberViewModel)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.permissions.canBan, false)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.permissions.canKick, false)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isKickDisabled, true)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isBanUnbanDisabled, true)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.details.id, RoomMemberProxyMock.mockAdmin.userID)
     }
     
     func testShowDetailsForABannedUser() async throws {
@@ -440,25 +441,25 @@ class TimelineViewModelTests: XCTestCase {
                                           timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                           clientProxy: ClientProxyMock(.init()))
         
-        let deferredState = deferFulfillment(viewModel.context.$viewState) { value in
+        var deferredState = deferFulfillment(viewModel.context.$viewState) { value in
             value.canCurrentUserKick && value.canCurrentUserBan
         }
         
         try await deferredState.fulfill()
         
-        let deferredAction = deferFulfillment(viewModel.actions) { action in
-            switch action {
-            case .displaySenderDetails(let userID):
-                return userID == RoomMemberProxyMock.mockBanned[0].userID
-            default:
-                return false
-            }
+        deferredState = deferFulfillment(viewModel.context.$viewState) { value in
+            value.bindings.manageMemberViewModel != nil
         }
         
-        viewModel.context.send(viewAction: .tappedOnSenderDetails(userID: RoomMemberProxyMock.mockBanned[0].userID))
-        try await deferredAction.fulfill()
+        viewModel.context.send(viewAction: .tappedOnSenderDetails(sender: .init(with: RoomMemberProxyMock.mockBanned[0])))
+        try await deferredState.fulfill()
         
-        XCTAssertNil(viewModel.context.manageMemberViewModel)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.permissions.canBan, true)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.permissions.canKick, true)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isKickDisabled, true)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isBanUnbanDisabled, false)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isMemberBanned, true)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.details.id, RoomMemberProxyMock.mockBanned[0].userID)
     }
     
     // MARK: - Pins
@@ -574,5 +575,14 @@ private extension TextRoomTimelineItem {
                   canBeRepliedTo: true,
                   sender: .init(id: ""),
                   content: .init(body: "Hello, World!"))
+    }
+}
+
+private extension TimelineItemSender {
+    init(with proxy: RoomMemberProxyMock) {
+        self.init(id: proxy.userID,
+                  displayName: proxy.displayName ?? "",
+                  isDisplayNameAmbiguous: false,
+                  avatarURL: proxy.avatarURL)
     }
 }

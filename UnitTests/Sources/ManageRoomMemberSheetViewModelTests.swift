@@ -27,9 +27,8 @@ class ManageRoomMemberSheetViewModelTests: XCTestCase {
             return .success(())
         }
         
-        viewModel = ManageRoomMemberSheetViewModel(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),
-                                                   canKick: true,
-                                                   canBan: true,
+        viewModel = ManageRoomMemberSheetViewModel(details: .memberDetails(roomMember: .init(withProxy: RoomMemberProxyMock.mockAlice)),
+                                                   permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    analyticsService: ServiceLocator.shared.analytics,
@@ -59,9 +58,8 @@ class ManageRoomMemberSheetViewModelTests: XCTestCase {
             return .success(())
         }
         
-        viewModel = ManageRoomMemberSheetViewModel(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),
-                                                   canKick: true,
-                                                   canBan: true,
+        viewModel = ManageRoomMemberSheetViewModel(details: .memberDetails(roomMember: .init(withProxy: RoomMemberProxyMock.mockAlice)),
+                                                   permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    analyticsService: ServiceLocator.shared.analytics,
@@ -82,9 +80,8 @@ class ManageRoomMemberSheetViewModelTests: XCTestCase {
     
     func testDisplayDetails() async throws {
         let roomProxy = JoinedRoomProxyMock(.init(members: [RoomMemberProxyMock.mockAdmin, RoomMemberProxyMock.mockAlice]))
-        viewModel = ManageRoomMemberSheetViewModel(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),
-                                                   canKick: true,
-                                                   canBan: true,
+        viewModel = ManageRoomMemberSheetViewModel(details: .memberDetails(roomMember: .init(withProxy: RoomMemberProxyMock.mockAlice)),
+                                                   permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    analyticsService: ServiceLocator.shared.analytics,
