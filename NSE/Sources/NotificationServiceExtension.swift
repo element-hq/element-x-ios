@@ -27,15 +27,15 @@ import UserNotifications
 // called on the same instance of `NotificationService` as a previous
 // notification.
 
-private let settings: CommonSettingsProtocol = AppSettings()
-
-private let keychainController = KeychainController(service: .sessions,
-                                                    accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
-
 class NotificationServiceExtension: UNNotificationServiceExtension {
     private var notificationHandler: NotificationHandler?
     
     private let appHooks = AppHooks()
+    
+    private let settings: CommonSettingsProtocol = AppSettings()
+
+    private let keychainController = KeychainController(service: .sessions,
+                                                        accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
     
     deinit {
         ExtensionLogger.logMemory(with: tag)
@@ -61,15 +61,15 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             return contentHandler(request.content)
         }
         
-        Target.nse.configure(logLevel: settings.logLevel, traceLogPacks: settings.traceLogPacks)
-        
-        MXLog.info("\(tag) #########################################")
-        
-        ExtensionLogger.logMemory(with: tag)
-        
-        MXLog.info("\(tag) Received payload: \(request.content.userInfo)")
-        
         Task {
+            await Target.nse.configure(logLevel: settings.logLevel, traceLogPacks: settings.traceLogPacks)
+            
+            MXLog.info("\(tag) #########################################")
+            
+            ExtensionLogger.logMemory(with: tag)
+            
+            MXLog.info("\(tag) Received payload: \(request.content.userInfo)")
+            
             do {
                 let userSession = try await NSEUserSession(credentials: credentials,
                                                            roomID: roomID,

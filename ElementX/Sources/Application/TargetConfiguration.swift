@@ -7,6 +7,7 @@
 
 import MatrixRustSDK
 
+@MainActor
 enum Target: String {
     case mainApp = "elementx"
     case nse
