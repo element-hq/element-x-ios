@@ -13,13 +13,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
-### build_alpha
-
-```sh
-[bundle exec] fastlane build_alpha
-```
-
-
 
 ### unit_tests
 
@@ -89,14 +82,6 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ```sh
 [bundle exec] fastlane tag_nightly
-```
-
-
-
-### config_alpha
-
-```sh
-[bundle exec] fastlane config_alpha
 ```
 
 
