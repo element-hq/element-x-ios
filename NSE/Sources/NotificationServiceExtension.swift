@@ -61,15 +61,15 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             return contentHandler(request.content)
         }
         
-        Target.nse.configure(logLevel: settings.logLevel, traceLogPacks: settings.traceLogPacks)
-        
-        MXLog.info("\(tag) #########################################")
-        
-        ExtensionLogger.logMemory(with: tag)
-        
-        MXLog.info("\(tag) Received payload: \(request.content.userInfo)")
-        
         Task {
+            await Target.nse.configure(logLevel: settings.logLevel, traceLogPacks: settings.traceLogPacks)
+            
+            MXLog.info("\(tag) #########################################")
+            
+            ExtensionLogger.logMemory(with: tag)
+            
+            MXLog.info("\(tag) Received payload: \(request.content.userInfo)")
+            
             do {
                 let userSession = try await NSEUserSession(credentials: credentials,
                                                            roomID: roomID,

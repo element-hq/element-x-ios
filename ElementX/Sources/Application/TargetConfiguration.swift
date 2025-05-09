@@ -7,13 +7,14 @@
 
 import MatrixRustSDK
 
+@MainActor
 enum Target: String {
     case mainApp = "elementx"
     case nse
     case shareExtension = "shareextension"
     case tests
     
-    private nonisolated(unsafe) static var isConfigured = false
+    private static var isConfigured = false
     
     func configure(logLevel: LogLevel, traceLogPacks: Set<TraceLogPack>) {
         guard !Self.isConfigured else {
