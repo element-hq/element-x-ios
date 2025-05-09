@@ -45,6 +45,7 @@ struct AuthenticationStartScreen: View {
                             .padding(.bottom)
                     }
                     .frame(width: geometry.size.width)
+                    .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.reportAProblem)
                 }
             }
         }
