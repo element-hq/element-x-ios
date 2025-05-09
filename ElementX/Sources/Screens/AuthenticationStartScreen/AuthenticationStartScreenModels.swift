@@ -19,7 +19,7 @@ enum AuthenticationStartScreenCoordinatorAction {
     case loginDirectlyWithPassword
 }
 
-enum AuthenticationStartScreenViewModelAction {
+enum AuthenticationStartScreenViewModelAction: Equatable {
     case loginWithQR
     case login
     case register
