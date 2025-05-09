@@ -1,5 +1,7 @@
 require 'yaml'
 
+skip_docs
+
 enterprise = '../Enterprise/Pipeline/Scripts/iOS/Fastfile'
 if File.exist?(enterprise)
   import enterprise
