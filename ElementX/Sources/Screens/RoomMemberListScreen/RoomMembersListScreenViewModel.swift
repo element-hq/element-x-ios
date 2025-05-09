@@ -162,9 +162,9 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         }
         
         if state.canKickUsers || state.canBanUsers {
-            let manageMemeberViewModel = ManageRoomMemberSheetViewModel(member: member,
-                                                                        canKick: state.canKickUsers,
-                                                                        canBan: state.canBanUsers,
+            let manageMemeberViewModel = ManageRoomMemberSheetViewModel(details: .memberDetails(roomMember: member,
+                                                                                                canKick: state.canKickUsers,
+                                                                                                canBanAndUnban: state.canBanUsers),
                                                                         roomProxy: roomProxy,
                                                                         userIndicatorController: userIndicatorController,
                                                                         analyticsService: analytics,

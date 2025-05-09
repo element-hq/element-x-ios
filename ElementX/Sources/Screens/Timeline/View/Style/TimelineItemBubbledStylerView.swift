@@ -95,7 +95,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             // sender info are read inside the `TimelineAccessibilityModifier`
             .accessibilityHidden(true)
             .onTapGesture {
-                context.send(viewAction: .tappedOnSenderDetails(userID: timelineItem.sender.id))
+                context.send(viewAction: .tappedOnSenderDetails(sender: timelineItem.sender))
             }
             .padding(.top, 8)
         }

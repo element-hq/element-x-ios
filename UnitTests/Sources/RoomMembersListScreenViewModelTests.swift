@@ -163,9 +163,9 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then member management should be shown for that user.
-        XCTAssertEqual(context.manageMemeberViewModel?.state.member, user)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.details.id, user.id)
         XCTAssertEqual(context.manageMemeberViewModel?.state.canKick, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.canBan, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.canBanAndUnban, true)
     }
     
     func testSelectModeratorAsAdmin() async throws {
@@ -185,9 +185,9 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then member management should be shown for the moderator.
-        XCTAssertEqual(context.manageMemeberViewModel?.state.member, moderator)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.details.id, moderator.id)
         XCTAssertEqual(context.manageMemeberViewModel?.state.canKick, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.canBan, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.canBanAndUnban, true)
     }
     
     func testSelectAdminAsAdmin() async throws {
