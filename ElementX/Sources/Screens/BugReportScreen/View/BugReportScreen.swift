@@ -122,6 +122,7 @@ struct BugReportScreen: View {
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
                 }
+                .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.cancel)
             }
         }
         

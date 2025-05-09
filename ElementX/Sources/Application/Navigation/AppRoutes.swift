@@ -8,7 +8,10 @@
 import Foundation
 import MatrixRustSDK
 
-enum AppRoute: Equatable, Hashable {
+enum AppRoute: Hashable {
+    /// The authentication flow, provisioned with specific parameters.
+    case authentication(ProvisioningParameters)
+    
     /// The app's home screen.
     case roomList
     /// A room, shown as the root of the stack (popping any child rooms).
@@ -43,6 +46,14 @@ enum AppRoute: Equatable, Hashable {
     case chatBackupSettings
     /// An external share request e.g. from the ShareExtension
     case share(ShareExtensionPayload)
+    
+    /// Whether or not the route should be handled by the authentication flow.
+    var isAuthenticationRoute: Bool {
+        switch self {
+        case .authentication: true
+        default: false
+        }
+    }
 }
 
 struct AppRouteURLParser {
@@ -53,6 +64,7 @@ struct AppRouteURLParser {
             AppGroupURLParser(),
             MatrixPermalinkParser(),
             ElementWebURLParser(domains: appSettings.elementWebHosts),
+            // ProvisioningURLParser(domain: "mobile.element.io"), // FIXME: Use the app settings when we have a final format.
             ElementCallURLParser()
         ]
     }
@@ -76,6 +88,7 @@ protocol URLParser {
     func route(from url: URL) -> AppRoute?
 }
 
+/// The parser for routes that come from app extensions such as the Share Extension.
 struct AppGroupURLParser: URLParser {
     func route(from url: URL) -> AppRoute? {
         guard let scheme = url.scheme,
@@ -185,5 +198,23 @@ struct ElementWebURLParser: URLParser {
         }
         
         return url
+    }
+}
+
+/// The parser for user provisioning links.
+struct ProvisioningURLParser: URLParser {
+    let domain: String
+    
+    func route(from url: URL) -> AppRoute? {
+        guard url.host() == domain else { return nil }
+        
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let serverName = components.queryItems?.first(where: { $0.name == "server_name" })?.value else {
+            return nil
+        }
+        
+        let loginHint = components.queryItems?.first { $0.name == "login_hint" }?.value
+        
+        return .authentication(.init(serverName: serverName, loginHint: loginHint))
     }
 }

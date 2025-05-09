@@ -16,6 +16,12 @@ enum AuthenticationFlow {
     case register
 }
 
+/// The parameters parsed out of a provisioning link that can be applied to the authentication flow for a streamlined onboarding experience.
+struct ProvisioningParameters: Hashable {
+    let serverName: String
+    let loginHint: String?
+}
+
 enum AuthenticationServiceError: Error, Equatable {
     /// An error occurred during OIDC authentication.
     case oidcError(OIDCError)
@@ -41,7 +47,7 @@ protocol AuthenticationServiceProtocol {
     /// Sets up the service for login on the specified homeserver address.
     func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError>
     /// Performs login using OIDC for the current homeserver.
-    func urlForOIDCLogin() async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError>
+    func urlForOIDCLogin(loginHint: String?) async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError>
     /// Asks the SDK to abort an ongoing OIDC login if we didn't get a callback to complete the request with.
     func abortOIDCLogin(data: OIDCAuthorizationDataProxy) async
     /// Completes an OIDC login that was started using ``urlForOIDCLogin``.

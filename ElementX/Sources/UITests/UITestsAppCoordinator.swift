@@ -120,7 +120,7 @@ class MockScreen: Identifiable {
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .authenticationFlow:
+        case .authenticationFlow, .provisionedAuthenticationFlow:
             let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: AuthenticationService.mock,
                                                                 qrCodeLoginService: QRCodeLoginServiceMock(),
                                                                 bugReportService: BugReportServiceMock(.init()),
@@ -131,6 +131,11 @@ class MockScreen: Identifiable {
                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController)
             flowCoordinator.start()
             retainedState.append(flowCoordinator)
+            
+            if id == .provisionedAuthenticationFlow {
+                flowCoordinator.handleAppRoute(.authentication(.init(serverName: "example.com", loginHint: nil)), animated: false)
+            }
+            
             return nil
         case .appLockFlow, .appLockFlowDisabled:
             // The tested coordinator is setup below in the alternate window.

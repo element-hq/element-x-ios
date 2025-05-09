@@ -214,6 +214,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.processEvent(.showShareExtensionRoomList(sharePayload: payload), userInfo: .init(animated: animated))
             }
+        case .authentication:
+            break // We always ignore this flow when logged in.
         }
     }
     

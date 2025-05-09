@@ -41,7 +41,7 @@ extension ClientSDKMock {
         slidingSyncVersionReturnValue = configuration.slidingSyncVersion
         userIdServerNameThrowableError = MockError.generic
         serverReturnValue = "https://\(configuration.serverAddress)"
-        urlForOidcOidcConfigurationPromptReturnValue = OAuthAuthorizationDataSDKMock(configuration: configuration)
+        urlForOidcOidcConfigurationPromptLoginHintReturnValue = OAuthAuthorizationDataSDKMock(configuration: configuration)
         loginUsernamePasswordInitialDeviceNameDeviceIdClosure = { username, password, _, _ in
             guard username == configuration.validCredentials.username,
                   password == configuration.validCredentials.password else {

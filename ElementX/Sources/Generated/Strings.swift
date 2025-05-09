@@ -1698,6 +1698,10 @@ internal enum L10n {
   internal static var screenNotificationSettingsTitle: String { return L10n.tr("Localizable", "screen_notification_settings_title") }
   /// Sign in manually
   internal static var screenOnboardingSignInManually: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_manually") }
+  /// Sign in to %1$@
+  internal static func screenOnboardingSignInTo(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_onboarding_sign_in_to", String(describing: p1))
+  }
   /// Sign in with QR code
   internal static var screenOnboardingSignInWithQrCode: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_with_qr_code") }
   /// Create account

@@ -15,6 +15,8 @@ class OIDCAuthenticationPresenter: NSObject {
     private let presentationAnchor: UIWindow
     private let userIndicatorController: UserIndicatorControllerProtocol
     
+    private var activeSession: ASWebAuthenticationSession?
+    
     init(authenticationService: AuthenticationServiceProtocol,
          oidcRedirectURL: URL,
          presentationAnchor: UIWindow,
@@ -36,8 +38,11 @@ class OIDCAuthenticationPresenter: NSObject {
             session.prefersEphemeralWebBrowserSession = false
             session.presentationContextProvider = self
             
+            activeSession = session
             session.start()
         }
+        
+        activeSession = nil
         
         guard let url else {
             // Check for user cancellation to avoid showing an alert in that instance.
@@ -74,6 +79,10 @@ class OIDCAuthenticationPresenter: NSObject {
             userIndicatorController.alertInfo = AlertInfo(id: UUID())
             return .failure(error)
         }
+    }
+    
+    func cancel() {
+        activeSession?.cancel()
     }
     
     private static let loadingIndicatorID = "\(OIDCAuthenticationPresenter.self)-Loading"

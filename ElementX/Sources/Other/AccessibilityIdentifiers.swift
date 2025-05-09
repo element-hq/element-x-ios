@@ -78,6 +78,7 @@ enum A11yIdentifiers {
         let screenshot = "bug_report-screenshot"
         let removeScreenshot = "bug_report-remove_screenshot"
         let attachScreenshot = "bug-report-attach_screenshot"
+        let cancel = "bug_report-cancel"
     }
     
     struct ChangeServer {
@@ -121,6 +122,7 @@ enum A11yIdentifiers {
     struct AuthenticationStartScreen {
         let signIn = "authentication_start-sign_in"
         let signInWithQr = "authentication_start-sign_in_with_qr"
+        let reportAProblem = "authentication_start-report_a_problem"
         let hidden = "authentication_start-hidden"
     }
     
