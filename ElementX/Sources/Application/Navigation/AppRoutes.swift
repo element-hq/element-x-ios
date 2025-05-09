@@ -8,9 +8,9 @@
 import Foundation
 import MatrixRustSDK
 
-enum AppRoute: Equatable, Hashable {
-    /// The authentication flow, provisioned with a specific configuration.
-    case authentication(serverName: String, loginHint: String?)
+enum AppRoute: Hashable {
+    /// The authentication flow, provisioned with specific parameters.
+    case authentication(ProvisioningParameters)
     
     /// The app's home screen.
     case roomList
@@ -215,6 +215,6 @@ struct ProvisioningURLParser: URLParser {
         
         let loginHint = components.queryItems?.first { $0.name == "login_hint" }?.value
         
-        return .authentication(serverName: serverName, loginHint: loginHint)
+        return .authentication(.init(serverName: serverName, loginHint: loginHint))
     }
 }

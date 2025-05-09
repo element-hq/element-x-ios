@@ -759,6 +759,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "System notifications turned off";
 "screen_notification_settings_title" = "Notifications";
 "screen_onboarding_sign_in_manually" = "Sign in manually";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Sign in with QR code";
 "screen_onboarding_sign_up" = "Create account";
 "screen_onboarding_welcome_message" = "Welcome to the fastest %1$@ ever. Supercharged for speed and simplicity.";
