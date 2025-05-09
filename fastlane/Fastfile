@@ -13,71 +13,6 @@ before_all do
   ENV["SENTRY_LOG_LEVEL"] = "DEBUG"
 end
 
-lane :build_alpha do
-  app_store_connect_api_key(
-    key_id: ENV["APPSTORECONNECT_KEY_ID"],
-    issuer_id: ENV["APPSTORECONNECT_KEY_ISSUER_ID"],
-    key_content: ENV["APPSTORECONNECT_KEY_CONTENT"]
-  )
-
-  config_alpha()
-
-  code_signing_identity = "Apple Distribution: Vector Creations Limited (7J4U792NQT)"
-  
-  app_provisioning_profile_name = "ElementX PR Ad Hoc"
-  app_bundle_identifier = "io.element.elementx.pr"
-
-  nse_provisioning_profile_name = "ElementX NSE PR Ad Hoc"
-  nse_bundle_identifier = "io.element.elementx.pr.nse"
-
-  update_code_signing_settings(
-    targets: ["ElementX"],
-    use_automatic_signing: false,
-    bundle_identifier: app_bundle_identifier,
-    profile_name: app_provisioning_profile_name,
-    code_sign_identity: code_signing_identity
-  )
-
-  get_provisioning_profile(
-    app_identifier: app_bundle_identifier,
-    provisioning_name: app_provisioning_profile_name,
-    ignore_profiles_with_different_name: true,
-    adhoc: true 
-  )
-
-  update_code_signing_settings(
-    targets: ["NSE"],
-    use_automatic_signing: false,
-    bundle_identifier: nse_bundle_identifier,
-    profile_name: nse_provisioning_profile_name,
-    code_sign_identity: code_signing_identity
-  )
-
-  get_provisioning_profile(
-    app_identifier: nse_bundle_identifier,
-    provisioning_name: nse_provisioning_profile_name,
-    ignore_profiles_with_different_name: true,
-    adhoc: true 
-  )
-
-  build_ios_app(
-    scheme: "ElementX",
-    clean: true,
-    export_method: "ad-hoc",
-    output_directory: "build",
-    export_options: {
-      provisioningProfiles: { 
-        app_bundle_identifier => app_provisioning_profile_name,
-        nse_bundle_identifier => nse_provisioning_profile_name
-      }
-    }
-  )
-
-  upload_to_diawi()
-
-  upload_to_browserstack()
-end
-
 lane :unit_tests do |options|
   reset_simulator = ENV.key?('CI')
   
@@ -350,67 +285,6 @@ private_lane :git_push do |options|
   end
     
   sh("git push https://#{api_token}@#{repo_url}")
-end
-
-lane :config_alpha do
-  target_file_path = "../project.yml"
-  data = YAML.load_file target_file_path
-  
-  # Check if the "path" already exists in the "include" array
-  if !data["include"].any? { |item| item["path"] == "Variants/Alpha/alpha.yml" }
-    data["include"].append({ "path" => "Variants/Alpha/alpha.yml" })
-  end
-  
-  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
-
-  xcodegen(spec: "project.yml")
-
-  version = ENV["GITHUB_PR_NUMBER"]
-
-  Dir.chdir ".." do
-    sh("swift run tools app-icon-banner Variants/Alpha/Resources/Alpha.xcassets/AlphaAppIcon.appiconset/AppIcon.png --banner-text 'PR #{version}'")
-  end
-
-  bump_build_number()
-end
-
-private_lane :upload_to_diawi do
-  api_token = ENV["DIAWI_API_TOKEN"]
-  UI.user_error!("Invalid Diawi API token.") unless !api_token.to_s.empty?
-
-  # Upload to Diawi
-  diawi(
-    token: api_token,
-    wall_of_apps: false,
-    file: lane_context[SharedValues::IPA_OUTPUT_PATH]
-  )
-
-  # Get the Diawi link from Diawi action shared value
-  diawi_link = lane_context[SharedValues::UPLOADED_FILE_LINK_TO_DIAWI]
-  UI.command_output("Diawi link: " + diawi_link.to_s)
-
-  # Generate the Diawi QR code file link
-  diawi_app_id = URI(diawi_link).path.split('/').last
-  diawi_qr_code_link = "https://www.diawi.com/qrcode/link/#{diawi_app_id}"
-
-  # Set "DIAWI_FILE_LINK" to GitHub environment variables for Github actions
-  sh("echo DIAWI_FILE_LINK=#{diawi_link} >> $GITHUB_ENV")
-  sh("echo DIAWI_QR_CODE_LINK=#{diawi_qr_code_link} >> $GITHUB_ENV")
-end
-
-private_lane :upload_to_browserstack do
-  browserstack_username = ENV["BROWSERSTACK_USERNAME"]
-  UI.user_error!("Invalid BrowserStack username.") unless !browserstack_username.to_s.empty?
-
-  browserstack_access_key = ENV["BROWSERSTACK_ACCESS_KEY"]
-  UI.user_error!("Invalid BrowserStack access key.") unless !browserstack_access_key.to_s.empty?
-
-  upload_to_browserstack_app_automate(
-    browserstack_username: browserstack_username,
-    browserstack_access_key: browserstack_access_key,
-    file_path: lane_context[SharedValues::IPA_OUTPUT_PATH],
-    custom_id: "element-x-ios-pr"
-  )
 end
 
 private_lane :bump_build_number do
