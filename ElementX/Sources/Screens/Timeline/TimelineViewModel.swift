@@ -183,8 +183,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
             timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
-        case .tappedOnSenderDetails(let userID):
-            handleTappedOnSenderDetails(userID: userID)
+        case .tappedOnSenderDetails(let sender):
+            handleTappedOnSenderDetails(sender: sender)
         case .displayEmojiPicker(let itemID):
             timelineInteractionHandler.displayEmojiPicker(for: itemID)
         case .displayReactionSummary(let itemID, let key):
@@ -271,39 +271,40 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     // MARK: - Private
     
-    private func handleTappedOnSenderDetails(userID: String) {
+    private func handleTappedOnSenderDetails(sender: TimelineItemSender) {
         // We also need to make sure the user is in the joined state, otherwise we just show the details.
-        guard let memberProxy = roomProxy.membersPublisher.value.first(where: { $0.userID == userID && $0.membership == .join }),
-              let currentUserProxy,
-              currentUserProxy.powerLevel > memberProxy.powerLevel else {
-            actionsSubject.send(.displaySenderDetails(userID: userID))
-            return
+        let viewModel: ManageRoomMemberSheetViewModel
+        if let memberProxy = roomProxy.membersPublisher.value.first(where: { $0.userID == sender.id }) {
+            let canTakeActions = currentUserProxy?.powerLevel ?? 0 > memberProxy.powerLevel
+            let isActive = memberProxy.membership == .invite || memberProxy.membership == .join
+            let canBeBannedOrUnbanned = isActive || memberProxy.membership == .ban
+            viewModel = ManageRoomMemberSheetViewModel(details: .memberDetails(roomMember: .init(withProxy: memberProxy),
+                                                                               canKick: state.canCurrentUserKick && isActive && canTakeActions,
+                                                                               canBanAndUnban: state.canCurrentUserBan && canBeBannedOrUnbanned && canTakeActions),
+                                                       roomProxy: roomProxy,
+                                                       userIndicatorController: userIndicatorController,
+                                                       analyticsService: analyticsService,
+                                                       mediaProvider: mediaProvider)
+        } else {
+            viewModel = ManageRoomMemberSheetViewModel(details: .senderDetails(sender: sender),
+                                                       roomProxy: roomProxy,
+                                                       userIndicatorController: userIndicatorController,
+                                                       analyticsService: analyticsService,
+                                                       mediaProvider: mediaProvider)
         }
         
-        if state.canCurrentUserBan || state.canCurrentUserKick {
-            let member = RoomMemberDetails(withProxy: memberProxy)
-            let manageMemeberViewModel = ManageRoomMemberSheetViewModel(member: member,
-                                                                        canKick: state.canCurrentUserKick,
-                                                                        canBan: state.canCurrentUserBan,
-                                                                        roomProxy: roomProxy,
-                                                                        userIndicatorController: userIndicatorController,
-                                                                        analyticsService: analyticsService,
-                                                                        mediaProvider: mediaProvider)
-            manageMemeberViewModel.actions.sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .dismiss(let shouldShowDetails):
-                    state.bindings.manageMemberViewModel = nil
-                    if shouldShowDetails {
-                        actionsSubject.send(.displaySenderDetails(userID: userID))
-                    }
+        viewModel.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss(let shouldShowDetails):
+                state.bindings.manageMemberViewModel = nil
+                if shouldShowDetails {
+                    actionsSubject.send(.displaySenderDetails(userID: sender.id))
                 }
             }
-            .store(in: &cancellables)
-            state.bindings.manageMemberViewModel = manageMemeberViewModel
-        } else {
-            actionsSubject.send(.displaySenderDetails(userID: userID))
         }
+        .store(in: &cancellables)
+        state.bindings.manageMemberViewModel = viewModel
     }
     
     private func focusLive() {

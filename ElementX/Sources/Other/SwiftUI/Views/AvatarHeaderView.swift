@@ -110,6 +110,21 @@ struct AvatarHeaderView<Footer: View>: View {
         badges = isVerified ? [.verified] : []
     }
     
+    init(sender: TimelineItemSender,
+         avatarSize: Avatars.Size,
+         mediaProvider: MediaProviderProtocol? = nil,
+         onAvatarTap: ((URL) -> Void)? = nil,
+         @ViewBuilder footer: @escaping () -> Footer) {
+        let profile = UserProfileProxy(sender: sender)
+        
+        self.init(user: profile,
+                  isVerified: false,
+                  avatarSize: avatarSize,
+                  mediaProvider: mediaProvider,
+                  onAvatarTap: onAvatarTap,
+                  footer: footer)
+    }
+    
     private var badgesStack: some View {
         HStack(spacing: 8) {
             ForEach(badges, id: \.self) { badge in

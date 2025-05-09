@@ -25,6 +25,12 @@ struct UserProfileProxy: Equatable, Hashable {
         avatarURL = member.isBanned ? nil : member.avatarURL
     }
     
+    init(sender: TimelineItemSender) {
+        userID = sender.id
+        displayName = sender.displayName
+        avatarURL = sender.avatarURL
+    }
+    
     init(sdkUserProfile: MatrixRustSDK.UserProfile) {
         userID = sdkUserProfile.userId
         displayName = sdkUserProfile.displayName

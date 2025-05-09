@@ -10,9 +10,29 @@ enum ManageRoomMemberSheetViewModelAction: Equatable {
 }
 
 struct ManageRoomMemberSheetViewState: BindableState {
-    let member: RoomMemberDetails
-    let canKick: Bool
-    let canBan: Bool
+    let details: ManageRoomMemberDetails
+    
+    var canKick: Bool {
+        guard case let .memberDetails(_, canKick, _) = details else {
+            return false
+        }
+        return canKick
+    }
+    
+    var canBanAndUnban: Bool {
+        guard case let .memberDetails(_, _, canBan) = details else {
+            return false
+        }
+        return canBan
+    }
+    
+    var isMemberBanned: Bool {
+        guard case let .memberDetails(member, _, _) = details else {
+            return false
+        }
+        
+        return member.isBanned
+    }
     
     var bindings = ManageRoomMemberSheetViewStateBindings()
 }
@@ -24,10 +44,26 @@ struct ManageRoomMemberSheetViewStateBindings {
 enum ManageRoomMemberSheetViewAlertType {
     case kick
     case ban
+    case unban
 }
 
 enum ManageRoomMemberSheetViewAction {
     case kick
     case ban
+    case unban
     case displayDetails
+}
+
+enum ManageRoomMemberDetails {
+    case memberDetails(roomMember: RoomMemberDetails, canKick: Bool, canBanAndUnban: Bool)
+    case senderDetails(sender: TimelineItemSender)
+    
+    var id: String {
+        switch self {
+        case let .memberDetails(roomMember, _, _):
+            return roomMember.id
+        case let .senderDetails(sender):
+            return sender.id
+        }
+    }
 }
