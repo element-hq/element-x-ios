@@ -280,7 +280,7 @@
 "common_voice_message" = "Sprachnachricht";
 "common_waiting" = "Warten…";
 "common_waiting_for_decryption_key" = "Warte auf diese Nachricht";
-"common_you" = "Sie";
+"common_you" = "Du";
 "common_unable_to_decrypt_insecure_device" = "Von einem ungesicherten Gerät gesendet";
 "common_unable_to_decrypt_verification_violation" = "Die verifizierte Identität des Senders hat sich geändert";
 "confirm_recovery_key_banner_message" = "Bestätigen Sie die Validität Ihres Wiederherstellungsschlüssels, um weiterhin auf Ihren Schlüsselspeicher und den Nachrichtenverlauf zugreifen zu können.";
