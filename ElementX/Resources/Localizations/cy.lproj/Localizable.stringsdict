@@ -50,6 +50,30 @@
 			<string>Wedi'i ddarllen gan %1$@ a %2$d arall</string>
 		</dict>
 	</dict>
+	<key>common_many_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>%d arall</string>
+			<key>one</key>
+			<string>%d arall</string>
+			<key>two</key>
+			<string>%d arall</string>
+			<key>few</key>
+			<string>%d arall</string>
+			<key>many</key>
+			<string>%d arall</string>
+			<key>other</key>
+			<string>%d arall</string>
+		</dict>
+	</dict>
 	<key>common_member_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -408,30 +432,6 @@
 			<string>%1$@, %2$@ a %3$d arall</string>
 			<key>other</key>
 			<string>%1$@, %2$@ a %3$d arall</string>
-		</dict>
-	</dict>
-	<key>screen_room_typing_many_members_second_component_ios</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>zero</key>
-			<string>%d arall</string>
-			<key>one</key>
-			<string>%d arall</string>
-			<key>two</key>
-			<string>%d arall</string>
-			<key>few</key>
-			<string>%d arall</string>
-			<key>many</key>
-			<string>%d arall</string>
-			<key>other</key>
-			<string>%d arall</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>

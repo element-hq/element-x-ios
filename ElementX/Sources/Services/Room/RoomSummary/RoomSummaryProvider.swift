@@ -270,6 +270,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            isDirect: roomInfo.isDirect,
                            avatarURL: roomInfo.avatarUrl.flatMap(URL.init(string:)),
                            heroes: roomInfo.heroes.map(UserProfileProxy.init),
+                           activeMembersCount: UInt(roomInfo.activeMembersCount),
                            lastMessage: attributedLastMessage,
                            lastMessageDate: lastMessageDate,
                            unreadMessagesCount: UInt(roomInfo.numUnreadMessages),

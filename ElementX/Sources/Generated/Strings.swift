@@ -433,6 +433,10 @@ internal enum L10n {
   /// Loading more…
   internal static var commonLoadingMore: String { return L10n.tr("Localizable", "common_loading_more") }
   /// Plural format key: "%#@COUNT@"
+  internal static func commonManyMembers(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "common_many_members", p1)
+  }
+  /// Plural format key: "%#@COUNT@"
   internal static func commonMemberCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_member_count", p1)
   }
@@ -2309,10 +2313,6 @@ internal enum L10n {
   /// %1$@, %2$@ and 
   internal static func screenRoomTypingManyMembersFirstComponentIos(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_room_typing_many_members_first_component_ios", String(describing: p1), String(describing: p2))
-  }
-  /// Plural format key: "%#@COUNT@"
-  internal static func screenRoomTypingManyMembersSecondComponentIos(_ p1: Int) -> String {
-    return L10n.tr("Localizable", "screen_room_typing_many_members_second_component_ios", p1)
   }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomTypingNotification(_ p1: Int) -> String {
