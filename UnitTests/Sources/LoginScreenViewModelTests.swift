@@ -17,24 +17,6 @@ class LoginScreenViewModelTests: XCTestCase {
     var clientBuilderFactory: AuthenticationClientBuilderFactoryMock!
     var service: AuthenticationServiceProtocol!
     
-    private func setupViewModel(homeserverAddress: String = "example.com") async {
-        clientBuilderFactory = AuthenticationClientBuilderFactoryMock(configuration: .init())
-        service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
-                                        encryptionKeyProvider: EncryptionKeyProvider(),
-                                        clientBuilderFactory: clientBuilderFactory,
-                                        appSettings: ServiceLocator.shared.settings,
-                                        appHooks: AppHooks())
-        
-        guard case .success = await service.configure(for: homeserverAddress, flow: .login) else {
-            XCTFail("A valid server should be configured for the test.")
-            return
-        }
-        
-        viewModel = LoginScreenViewModel(authenticationService: service,
-                                         userIndicatorController: UserIndicatorControllerMock(),
-                                         analytics: ServiceLocator.shared.analytics)
-    }
-    
     func testBasicServer() async {
         // Given the view model configured for a basic server example.com that only supports password authentication.
         await setupViewModel()
@@ -159,5 +141,37 @@ class LoginScreenViewModelTests: XCTestCase {
 
         // Then the view state should be updated to show an alert.
         XCTAssertEqual(context.alertInfo?.id, .unknown, "An alert should be shown to the user.")
+    }
+    
+    func testLoginHint() async throws {
+        await setupViewModel(loginHint: "")
+        XCTAssertEqual(context.username, "")
+        
+        await setupViewModel(loginHint: "alice")
+        XCTAssertEqual(context.username, "alice")
+        
+        await setupViewModel(loginHint: "mxid:@alice:example.com")
+        XCTAssertEqual(context.username, "@alice:example.com")
+    }
+    
+    // MARK: - Helpers
+    
+    private func setupViewModel(homeserverAddress: String = "example.com", loginHint: String? = nil) async {
+        clientBuilderFactory = AuthenticationClientBuilderFactoryMock(configuration: .init())
+        service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
+                                        encryptionKeyProvider: EncryptionKeyProvider(),
+                                        clientBuilderFactory: clientBuilderFactory,
+                                        appSettings: ServiceLocator.shared.settings,
+                                        appHooks: AppHooks())
+        
+        guard case .success = await service.configure(for: homeserverAddress, flow: .login) else {
+            XCTFail("A valid server should be configured for the test.")
+            return
+        }
+        
+        viewModel = LoginScreenViewModel(authenticationService: service,
+                                         loginHint: loginHint,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         analytics: ServiceLocator.shared.analytics)
     }
 }

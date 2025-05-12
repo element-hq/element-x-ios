@@ -9,8 +9,11 @@ import Combine
 import SwiftUI
 
 struct AuthenticationStartScreenParameters {
-    let showCreateAccountButton: Bool
+    let authenticationService: AuthenticationServiceProtocol
+    let provisioningParameters: AccountProvisioningParameters?
     let isBugReportServiceEnabled: Bool
+    let appSettings: AppSettings
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
@@ -23,8 +26,11 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: AuthenticationStartScreenParameters) {
-        viewModel = AuthenticationStartScreenViewModel(showCreateAccountButton: parameters.showCreateAccountButton,
-                                                       isBugReportServiceEnabled: parameters.isBugReportServiceEnabled)
+        viewModel = AuthenticationStartScreenViewModel(authenticationService: parameters.authenticationService,
+                                                       provisioningParameters: parameters.provisioningParameters,
+                                                       isBugReportServiceEnabled: parameters.isBugReportServiceEnabled,
+                                                       appSettings: parameters.appSettings,
+                                                       userIndicatorController: parameters.userIndicatorController)
     }
     
     // MARK: - Public
@@ -35,14 +41,19 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .loginManually:
-                    actionsSubject.send(.loginManually)
                 case .loginWithQR:
                     actionsSubject.send(.loginWithQR)
+                case .login:
+                    actionsSubject.send(.login)
                 case .register:
                     actionsSubject.send(.register)
                 case .reportProblem:
                     actionsSubject.send(.reportProblem)
+                
+                case .loginDirectlyWithOIDC(let data, let window):
+                    actionsSubject.send(.loginDirectlyWithOIDC(data: data, window: window))
+                case .loginDirectlyWithPassword(let loginHint):
+                    actionsSubject.send(.loginDirectlyWithPassword(loginHint: loginHint))
                 }
             }
             .store(in: &cancellables)

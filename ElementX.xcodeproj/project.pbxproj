@@ -608,6 +608,7 @@
 		7691233E3572A9173FD96CB3 /* SecureBackupKeyBackupScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E88534A39781D76487D59DF /* SecureBackupKeyBackupScreenViewModelTests.swift */; };
 		76C874243A8C440D6CF7B344 /* ProcessInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077B01C13BBA2996272C5FB5 /* ProcessInfo.swift */; };
 		7708976CEE6AFB5CFAEFBA68 /* PillTextAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CF1EE0AA78470C674554262 /* PillTextAttachment.swift */; };
+		7756C4E90CABE6F14F7920A0 /* BugReportUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6FEA87EA3752203065ECE27 /* BugReportUITests.swift */; };
 		77574A519A4E484880053EAD /* IdentityConfirmationScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FDF541AE914059942B575B4 /* IdentityConfirmationScreenModels.swift */; };
 		77693820498ABF3508814D49 /* AppLockServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD97F9661ABF08CE002054A2 /* AppLockServiceTests.swift */; };
 		77920AFA8091AC6B9F190C90 /* Signposter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752A0EB49BF5BCEA37EDF7A3 /* Signposter.swift */; };
@@ -819,7 +820,6 @@
 		9E838A62918E47BC72D6640D /* UserIndicatorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB54B4F94686CCF0289B72F /* UserIndicatorPresenter.swift */; };
 		9EBDC79CAC9B63A0D626E333 /* LegalInformationScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB2CAA266B921D128C35710 /* LegalInformationScreenCoordinator.swift */; };
 		9EE71509E6E7519A2B2388B3 /* KnockRequestsListScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD9C9A31D9AB3B6D8128E69 /* KnockRequestsListScreenModels.swift */; };
-		9EF72884B74BC39B01640098 /* BugReportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27DF257F5D968E5DD719583C /* BugReportTests.swift */; };
 		9F11B9F347F9E2D236799FB3 /* ElementCallServiceConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406C90AF8C3E98DF5D4E5430 /* ElementCallServiceConstants.swift */; };
 		9F11E743EA01482E78A438B0 /* GlobalSearchScreenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DB19219E6CC4D002E15D48 /* GlobalSearchScreenCell.swift */; };
 		9FB41B0E8B2AA9B404E52C8B /* AppLockSetupBiometricsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCC6C31102E1D8B9106DEDE /* AppLockSetupBiometricsScreenViewModelProtocol.swift */; };
@@ -1577,7 +1577,6 @@
 		27A1AD6389A4659AF0CEAE62 /* NotificationServiceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceExtension.swift; sourceTree = "<group>"; };
 		27A9E3FBE8A66B5A17AD7F74 /* AppRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRoutes.swift; sourceTree = "<group>"; };
 		27D0EA07BD545CC9F234DB8D /* UserDetailsEditScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsEditScreenModels.swift; sourceTree = "<group>"; };
-		27DF257F5D968E5DD719583C /* BugReportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportTests.swift; sourceTree = "<group>"; };
 		28146817C61423CACCF942F5 /* CallScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallScreenModels.swift; sourceTree = "<group>"; };
 		283974987DA7EC61D2AB57D9 /* VoiceMessageCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMessageCacheTests.swift; sourceTree = "<group>"; };
 		284FEEB0789B8894E52A7F34 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -2343,6 +2342,7 @@
 		C618CA2B6C8758B06C88013C /* CreateRoomCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRoomCoordinator.swift; sourceTree = "<group>"; };
 		C687844F60BFF532D49A994C /* AnalyticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsTests.swift; sourceTree = "<group>"; };
 		C6A9F49B3EE59147AF2F70BB /* SeparatorRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorRoomTimelineItem.swift; sourceTree = "<group>"; };
+		C6FEA87EA3752203065ECE27 /* BugReportUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportUITests.swift; sourceTree = "<group>"; };
 		C705E605EF57C19DBE86FFA1 /* PlaceholderAvatarImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceholderAvatarImage.swift; sourceTree = "<group>"; };
 		C715CFE00686DACA59D836EA /* fa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fa; path = fa.lproj/SAS.strings; sourceTree = "<group>"; };
 		C729D95CB4588D4D9AAC3DFA /* RoomChangePermissionsScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomChangePermissionsScreenModels.swift; sourceTree = "<group>"; };
@@ -4919,7 +4919,7 @@
 				19DD166C3625EE426203FA29 /* AppLockSetupTests.swift */,
 				E8495F37D6245AD0CFA1F60B /* AppLockTests.swift */,
 				37F46CC4FD89ECF4CF26391A /* AuthenticationFlowCoordinatorTests.swift */,
-				27DF257F5D968E5DD719583C /* BugReportTests.swift */,
+				C6FEA87EA3752203065ECE27 /* BugReportUITests.swift */,
 				2214C32EA81FA9168D923D4C /* CreateRoomScreenTests.swift */,
 				89BB11A792EF6F70B95B467E /* EncryptionResetTests.swift */,
 				57AD14D3ADADE8F6A10F9E88 /* EncryptionSettingsTests.swift */,
@@ -7836,7 +7836,7 @@
 				05E797C4E0048BB487E5C4D6 /* AppLockTests.swift in Sources */,
 				7405B4824D45BA7C3D943E76 /* Application.swift in Sources */,
 				CB07184D37D5D65327A5A693 /* AuthenticationFlowCoordinatorTests.swift in Sources */,
-				9EF72884B74BC39B01640098 /* BugReportTests.swift in Sources */,
+				7756C4E90CABE6F14F7920A0 /* BugReportUITests.swift in Sources */,
 				94D0F36A87E596A93C0C178A /* Bundle.swift in Sources */,
 				28AB1614E749D1147A2AC6C2 /* CreateRoomScreenTests.swift in Sources */,
 				8D24671992A1C1753B211221 /* EncryptionResetTests.swift in Sources */,
@@ -8657,7 +8657,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 25.05.07;
+				version = 25.05.09;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
