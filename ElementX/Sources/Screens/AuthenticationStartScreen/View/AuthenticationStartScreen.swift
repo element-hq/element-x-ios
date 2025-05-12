@@ -137,7 +137,7 @@ struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel(isBugReportServiceEnabled: Bool = true, provisionedServerName: String? = nil) -> AuthenticationStartScreenViewModel {
         AuthenticationStartScreenViewModel(authenticationService: AuthenticationService.mock,
-                                           provisioningParameters: provisionedServerName.map { .init(serverName: $0, loginHint: nil) },
+                                           provisioningParameters: provisionedServerName.map { .init(accountProvider: $0, loginHint: nil) },
                                            isBugReportServiceEnabled: isBugReportServiceEnabled,
                                            appSettings: ServiceLocator.shared.settings,
                                            userIndicatorController: UserIndicatorControllerMock())

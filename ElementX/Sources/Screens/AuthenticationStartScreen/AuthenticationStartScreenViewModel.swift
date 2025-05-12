@@ -12,7 +12,7 @@ typealias AuthenticationStartScreenViewModelType = StateStoreViewModelV2<Authent
 
 class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType, AuthenticationStartScreenViewModelProtocol {
     private let authenticationService: AuthenticationServiceProtocol
-    private let provisioningParameters: ProvisioningParameters?
+    private let provisioningParameters: AccountProvisioningParameters?
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -23,7 +23,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     }
 
     init(authenticationService: AuthenticationServiceProtocol,
-         provisioningParameters: ProvisioningParameters?,
+         provisioningParameters: AccountProvisioningParameters?,
          isBugReportServiceEnabled: Bool,
          appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol) {
@@ -36,7 +36,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         let showCreateAccountButton = appSettings.showCreateAccountButton && provisioningParameters == nil
         let showQRCodeLoginButton = !ProcessInfo.processInfo.isiOSAppOnMac && provisioningParameters == nil
         
-        super.init(initialViewState: AuthenticationStartScreenViewState(serverName: provisioningParameters?.serverName,
+        super.init(initialViewState: AuthenticationStartScreenViewState(serverName: provisioningParameters?.accountProvider,
                                                                         showCreateAccountButton: showCreateAccountButton,
                                                                         showQRCodeLoginButton: showQRCodeLoginButton,
                                                                         showReportProblemButton: isBugReportServiceEnabled))
@@ -68,11 +68,11 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         }
     }
     
-    private func configureProvisionedServer(with provisioningParameters: ProvisioningParameters) async {
+    private func configureProvisionedServer(with provisioningParameters: AccountProvisioningParameters) async {
         startLoading()
         defer { stopLoading() }
         
-        guard case .success = await authenticationService.configure(for: provisioningParameters.serverName, flow: .login) else {
+        guard case .success = await authenticationService.configure(for: provisioningParameters.accountProvider, flow: .login) else {
             // As the server was provisioned, we don't worry about the specifics and show a generic error to the user.
             displayError()
             return

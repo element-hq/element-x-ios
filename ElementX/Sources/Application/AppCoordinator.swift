@@ -219,7 +219,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         if let route = appRouteURLParser.route(from: url) {
             switch route {
-            case .authentication:
+            case .accountProvisioningLink:
                 handleAppRoute(route)
             case .genericCallLink(let url):
                 if let userSessionFlowCoordinator {
@@ -808,7 +808,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         var handled = false
         
         switch appRoute {
-        case .authentication:
+        case .accountProvisioningLink:
             if let authenticationFlowCoordinator {
                 authenticationFlowCoordinator.handleAppRoute(appRoute, animated: appMediator.appState == .active)
                 handled = true

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct AuthenticationStartScreenParameters {
     let authenticationService: AuthenticationServiceProtocol
-    let provisioningParameters: ProvisioningParameters?
+    let provisioningParameters: AccountProvisioningParameters?
     let isBugReportServiceEnabled: Bool
     let appSettings: AppSettings
     let userIndicatorController: UserIndicatorControllerProtocol

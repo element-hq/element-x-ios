@@ -82,7 +82,7 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
     
     // MARK: - Helpers
     
-    private func setupViewModel(provisioningParameters: ProvisioningParameters? = nil, supportsOIDC: Bool = true) {
+    private func setupViewModel(provisioningParameters: AccountProvisioningParameters? = nil, supportsOIDC: Bool = true) {
         // Manually create a configuration as the default homeserver address setting is immutable.
         client = ClientSDKMock(configuration: .init(oidcLoginURL: supportsOIDC ? "https://account.company.com/authorize" : nil,
                                                     supportsOIDCCreatePrompt: false,

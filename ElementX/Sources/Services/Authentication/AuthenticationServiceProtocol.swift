@@ -16,12 +16,6 @@ enum AuthenticationFlow {
     case register
 }
 
-/// The parameters parsed out of a provisioning link that can be applied to the authentication flow for a streamlined onboarding experience.
-struct ProvisioningParameters: Hashable {
-    let serverName: String
-    let loginHint: String?
-}
-
 enum AuthenticationServiceError: Error, Equatable {
     /// An error occurred during OIDC authentication.
     case oidcError(OIDCError)

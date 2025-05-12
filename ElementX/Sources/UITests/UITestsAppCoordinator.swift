@@ -133,7 +133,7 @@ class MockScreen: Identifiable {
             retainedState.append(flowCoordinator)
             
             if id == .provisionedAuthenticationFlow {
-                flowCoordinator.handleAppRoute(.authentication(.init(serverName: "example.com", loginHint: nil)), animated: false)
+                flowCoordinator.handleAppRoute(.accountProvisioningLink(.init(accountProvider: "example.com", loginHint: nil)), animated: false)
             }
             
             return nil

@@ -132,7 +132,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         switch appRoute {
-        case .authentication(let provisioningParameters):
+        case .accountProvisioningLink(let provisioningParameters):
             if stateMachine.state != .startScreen {
                 clearRoute(animated: animated)
             }
@@ -176,8 +176,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine.addRoutes(event: .applyProvisioningParameters, transitions: [.initial => .provisionedStartScreen,
                                                                                   .startScreen => .provisionedStartScreen]) { [weak self] context in
-            guard let configuration = context.userInfo as? ProvisioningParameters else { fatalError("The authentication configuration is missing.") }
-            self?.showStartScreen(fromState: context.fromState, applying: configuration)
+            guard let provisioningParameters = context.userInfo as? AccountProvisioningParameters else { fatalError("The authentication configuration is missing.") }
+            self?.showStartScreen(fromState: context.fromState, applying: provisioningParameters)
         }
         
         // QR Code
@@ -252,7 +252,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func showStartScreen(fromState: State, applying provisioningParameters: ProvisioningParameters? = nil) {
+    private func showStartScreen(fromState: State, applying provisioningParameters: AccountProvisioningParameters? = nil) {
         let parameters = AuthenticationStartScreenParameters(authenticationService: authenticationService,
                                                              provisioningParameters: provisioningParameters,
                                                              isBugReportServiceEnabled: bugReportService.isEnabled,
