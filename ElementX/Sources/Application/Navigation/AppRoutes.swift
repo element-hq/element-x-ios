@@ -77,7 +77,7 @@ struct AppRouteURLParser {
             AppGroupURLParser(),
             MatrixPermalinkParser(),
             ElementWebURLParser(domains: appSettings.elementWebHosts),
-            // ProvisioningURLParser(domain: "mobile.element.io"), // FIXME: Use the app settings when we have a final format.
+            AccountProvisioningURLParser(domain: appSettings.accountProvisioningHost),
             ElementCallURLParser()
         ]
     }

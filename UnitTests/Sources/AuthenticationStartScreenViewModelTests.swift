@@ -46,7 +46,7 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
     
     func testProvisionedOIDCState() async throws {
         // Given a view model that has been provisioned with a server that supports OIDC.
-        setupViewModel(provisioningParameters: .init(serverName: "company.com", loginHint: "user@company.com"))
+        setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: "user@company.com"))
         XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
         XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintCallsCount, 0)
         
@@ -65,7 +65,7 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
     
     func testProvisionedPasswordState() async throws {
         // Given a view model that has been provisioned with a server that does not support OIDC.
-        setupViewModel(provisioningParameters: .init(serverName: "company.com", loginHint: "user@company.com"), supportsOIDC: false)
+        setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: "user@company.com"), supportsOIDC: false)
         XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
         XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintCallsCount, 0)
         
