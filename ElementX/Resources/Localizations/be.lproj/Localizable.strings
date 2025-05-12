@@ -1,8 +1,8 @@
 "Notification" = "Апавяшчэнне";
-"a11y_avatar" = "Avatar";
+"a11y_avatar" = "Аватар";
 "a11y_delete" = "Выдаліць";
 "a11y_hide_password" = "Схаваць пароль";
-"a11y_join_call" = "Join call";
+"a11y_join_call" = "Далучыцца да выкліку";
 "a11y_jump_to_bottom" = "Перайсці ўніз";
 "a11y_notifications_mentions_only" = "Толькі згадкі";
 "a11y_notifications_muted" = "Гук адключаны";
@@ -22,7 +22,7 @@
 "a11y_show_password" = "Паказаць пароль";
 "a11y_start_call" = "Пазваніць";
 "a11y_user_menu" = "Меню карыстальніка";
-"a11y_view_details" = "View details";
+"a11y_view_details" = "Паглядзець падрабязнасці";
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Запісаць галасавое паведамленне.";
 "a11y_voice_message_stop_recording" = "Спыніць запіс";
@@ -54,7 +54,7 @@
 "action_delete_poll" = "Выдаліць апытанне";
 "action_disable" = "Адключыць";
 "action_discard" = "Адмяніць";
-"action_dismiss" = "Dismiss";
+"action_dismiss" = "Aдхіліць";
 "action_done" = "Гатова";
 "action_edit" = "Рэдагаваць";
 "action_edit_caption" = "Edit caption";
@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Выдаліць удзельніка з пакоя";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Выдаліць удзельніка і забараніць далучацца ў будучыні?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Выдаленне %1$@...";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Хто заўгодна";
 "screen_create_room_room_access_section_header" = "Доступ у пакой";
@@ -612,6 +617,7 @@
 "screen_change_server_error_invalid_homeserver" = "Нам не ўдалося звязацца з гэтым хатнім серверам. Упэўніцеся, што вы правільна ўвялі URL-адрас хатняга сервера. Калі URL-адрас пазначаны правільна, звярніцеся да адміністратара хатняга сервера за дадатковай дапамогай.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync недаступны з-за праблемы ў вядомым файле:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "URL хатняга сервера";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Які адрас вашага сервера?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Сістэмныя апавяшчэнні выключаны";
 "screen_notification_settings_title" = "Апавяшчэнні";
 "screen_onboarding_sign_in_manually" = "Увайсці ўручную";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Увайсці з QR-кодам";
 "screen_onboarding_sign_up" = "Стварыць уліковы запіс";
 "screen_onboarding_welcome_message" = "Сардэчна запрашаем у самы хуткі %1$@. Перавага ў хуткасці і прастаце.";

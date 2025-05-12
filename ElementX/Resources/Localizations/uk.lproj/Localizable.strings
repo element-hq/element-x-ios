@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Вилучити з кімнати";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Вилучити учасника та заборонити приєднання в майбутньому?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Вилучення %1$@…";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Будь-хто може приєднатися до цієї кімнати";
 "screen_create_room_room_access_section_anyone_option_title" = "Кожний";
 "screen_create_room_room_access_section_header" = "Доступ до кімнати";
@@ -612,6 +617,7 @@
 "screen_change_server_error_invalid_homeserver" = "Не вдалося під'єднатися до цього домашнього сервера. Перевірте правильність введеної URL-адреси домашнього сервера. Якщо URL-адреса правильна, зверніться по додаткову допомогу до адміністратора домашнього сервера.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync недоступний через проблему у файлі well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "URL-адреса домашнього сервера";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Яка адреса вашого сервера?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Системні сповіщення вимкнені";
 "screen_notification_settings_title" = "Сповіщення";
 "screen_onboarding_sign_in_manually" = "Увійти вручну";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Увійти за допомогою QR-коду";
 "screen_onboarding_sign_up" = "Створити обліковий запис";
 "screen_onboarding_welcome_message" = "Ласкаво просимо до найшвидшого %1$@. Заряджений для швидкості та простоти.";

@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Poista huoneesta";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Poistetaanko jäsen huoneesta ja kielletäänkö heitä liittymästä tulevaisuudessa?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Poistetaan käyttäjää %1$@ huoneesta...";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Kuka tahansa voi liittyä tähän huoneeseen";
 "screen_create_room_room_access_section_anyone_option_title" = "Kuka tahansa";
 "screen_create_room_room_access_section_header" = "Huoneeseen Pääsy";
@@ -612,6 +617,7 @@
 "screen_change_server_error_invalid_homeserver" = "Kotipalvelimeen ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palvelimesi ylläpitäjään.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync ei ole saatavilla well-known tiedostossa olevan ongelman vuoksi:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Valitsemasi palveluntarjoaja ei tue sliding syncia. Palvelimen päivitys tarvitaan %1$@ -sovelluksen käyttämiseen.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "Kotipalvelimen osoite";
 "screen_change_server_form_notice" = "Anna verkkotunnuksen osoite.";
 "screen_change_server_subtitle" = "Mikä on palvelimesi osoite?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Järjestelmän ilmoitukset on poissa päältä";
 "screen_notification_settings_title" = "Ilmoitukset";
 "screen_onboarding_sign_in_manually" = "Kirjaudu sisään manuaalisesti";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Kirjaudu sisään QR-koodilla";
 "screen_onboarding_sign_up" = "Luo tili";
 "screen_onboarding_welcome_message" = "Tervetuloa kaikkien aikojen nopeimpaan %1$@ -sovellukseen. Ahdettu nopeudella ja yksinkertaisuudella.";
