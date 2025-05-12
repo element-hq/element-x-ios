@@ -79,7 +79,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         }
         
         guard authenticationService.homeserver.value.loginMode.supportsOIDCFlow else {
-            actionsSubject.send(.loginDirectlyWithPassword)
+            actionsSubject.send(.loginDirectlyWithPassword(loginHint: provisioningParameters.loginHint))
             return
         }
         

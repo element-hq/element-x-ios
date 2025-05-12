@@ -52,8 +52,8 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
                 
                 case .loginDirectlyWithOIDC(let data, let window):
                     actionsSubject.send(.loginDirectlyWithOIDC(data: data, window: window))
-                case .loginDirectlyWithPassword:
-                    actionsSubject.send(.loginDirectlyWithPassword)
+                case .loginDirectlyWithPassword(let loginHint):
+                    actionsSubject.send(.loginDirectlyWithPassword(loginHint: loginHint))
                 }
             }
             .store(in: &cancellables)

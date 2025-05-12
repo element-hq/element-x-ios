@@ -81,7 +81,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         case continueWithOIDC
         /// The web authentication session was aborted.
         case cancelledOIDCAuthentication(previousState: State)
-        /// Show the screen to login with password.
+        /// Show the screen to login with password (with the optional login hint in the `userInfo`).
         case continueWithPassword
         /// The password login was aborted.
         case cancelledPasswordLogin(previousState: State)
@@ -217,7 +217,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine.addRoutes(event: .continueWithPassword, transitions: [.serverConfirmationScreen => .loginScreen,
                                                                            .provisionedStartScreen => .loginScreen]) { [weak self] context in
-            self?.showLoginScreen(fromState: context.fromState)
+            let loginHint = context.userInfo as? String
+            self?.showLoginScreen(loginHint: loginHint, fromState: context.fromState)
         }
         stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .serverConfirmationScreen), transitions: [.loginScreen => .serverConfirmationScreen])
         stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .provisionedStartScreen), transitions: [.loginScreen => .provisionedStartScreen])
@@ -276,8 +277,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                     
                 case .loginDirectlyWithOIDC(let oidcData, let window):
                     stateMachine.tryEvent(.continueWithOIDC, userInfo: (oidcData, window))
-                case .loginDirectlyWithPassword:
-                    stateMachine.tryEvent(.continueWithPassword)
+                case .loginDirectlyWithPassword(let loginHint):
+                    stateMachine.tryEvent(.continueWithPassword, userInfo: loginHint)
                 }
             }
             .store(in: &cancellables)
@@ -397,8 +398,9 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func showLoginScreen(fromState: State) {
+    private func showLoginScreen(loginHint: String?, fromState: State) {
         let parameters = LoginScreenCoordinatorParameters(authenticationService: authenticationService,
+                                                          loginHint: loginHint,
                                                           userIndicatorController: userIndicatorController,
                                                           analytics: analytics)
         let coordinator = LoginScreenCoordinator(parameters: parameters)
