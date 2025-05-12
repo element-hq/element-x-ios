@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Remove from room";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Remove member and ban from joining in the future?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Removing %1$@…";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_room_access_section_header" = "Room Access";
@@ -610,8 +615,9 @@
 "screen_change_account_provider_subtitle" = "Naudokite skirtingą paskyros teikėją, pavyzdžiui, savo privatų serverį arba darbo paskyrą.";
 "screen_change_account_provider_title" = "Keisti paskyros teikėją";
 "screen_change_server_error_invalid_homeserver" = "Nepavyko pasiekti šio serverio. Patikrinkite, ar teisingai įvedėte serverio URL. Jei URL yra teisingas, susisiekite su serverio administracija dėl tolimesnės pagalbos.";
-"screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the well-known file:\n%1$@";
+"screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the .well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "Serverio URL";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Koks yra Jūsų serverio adresas?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "System notifications turned off";
 "screen_notification_settings_title" = "Notifications";
 "screen_onboarding_sign_in_manually" = "Prisijunkite rankiniu būdu";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Prisijunkite naudodami QR kodą";
 "screen_onboarding_sign_up" = "Sukurti paskyrą";
 "screen_onboarding_welcome_message" = "Welcome to the fastest %1$@ ever. Supercharged for speed and simplicity.";

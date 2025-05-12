@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Odebrat z místnosti";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Odebrat člena a zakázat mu připojení v budoucnu?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Odstraňování %1$@...";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Do této místnosti může vstoupit kdokoli";
 "screen_create_room_room_access_section_anyone_option_title" = "Kdokoliv";
 "screen_create_room_room_access_section_header" = "Přístup do místnosti";
@@ -610,8 +615,9 @@
 "screen_change_account_provider_subtitle" = "Použijte jiného poskytovatele účtu, například vlastní soukromý server nebo pracovní účet.";
 "screen_change_account_provider_title" = "Změnit poskytovatele účtu";
 "screen_change_server_error_invalid_homeserver" = "Nepodařilo se nám připojit k tomuto domovskému serveru. Zkontrolujte prosím, zda jste správně zadali adresu URL domovského serveru. Pokud je adresa URL správná, obraťte se na správce domovského serveru, který vám poskytne další pomoc.";
-"screen_change_server_error_invalid_well_known" = "Klouzavá synchronizace není k dispozici kvůli problému se souborem well-known:\n%1$@";
+"screen_change_server_error_invalid_well_known" = "Server není k dispozici kvůli problému se souborem well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Vybraný poskytovatel účtu nepodporuje klouzavou synchronizaci. Pro použití %1$@ je nutná aktualizace serveru.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "Adresa URL domovského serveru";
 "screen_change_server_form_notice" = "Zadejte adresu domény.";
 "screen_change_server_subtitle" = "Jaká je adresa vašeho serveru?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Systémová oznámení byla vypnuta";
 "screen_notification_settings_title" = "Oznámení";
 "screen_onboarding_sign_in_manually" = "Ruční přihlášení";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Přihlásit se pomocí QR kódu";
 "screen_onboarding_sign_up" = "Vytvořit účet";
 "screen_onboarding_welcome_message" = "Vítejte v dosud nejrychlejším %1$@u. Vylepšený pro rychlost a jednoduchost.";

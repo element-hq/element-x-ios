@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Verwijderen uit kamer";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Lid verwijderen en toekomstige deelname verbieden?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "%1$@ wordt verwijderd...";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Iedereen kan toetreden tot deze kamer";
 "screen_create_room_room_access_section_anyone_option_title" = "Iedereen";
 "screen_create_room_room_access_section_header" = "Toegang tot de kamer";
@@ -612,6 +617,7 @@
 "screen_change_server_error_invalid_homeserver" = "We konden deze homeserver niet bereiken. Controleer of je de homeserver-URL juist hebt ingevoerd. Als de URL juist is, neem dan contact op met de beheerder van je homeserver voor verdere hulp.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync is niet beschikbaar vanwege een probleem in het well-known bestand:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "Homeserver-URL";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Wat is het adres van je server?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Systeemmeldingen uitgeschakeld";
 "screen_notification_settings_title" = "Meldingen";
 "screen_onboarding_sign_in_manually" = "Handmatig inloggen";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Inloggen met QR-code";
 "screen_onboarding_sign_up" = "Account aanmaken";
 "screen_onboarding_welcome_message" = "Welkom bij de snelste %1$@ ooit. Supercharged, voor snelheid en eenvoud.";

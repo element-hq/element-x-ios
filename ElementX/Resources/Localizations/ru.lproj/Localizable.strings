@@ -99,7 +99,7 @@
 "action_report" = "Отчет";
 "action_report_bug" = "Сообщить об ошибке";
 "action_report_content" = "Пожаловаться на содержание";
-"action_report_dm" = "Report conversation";
+"action_report_dm" = "Пожаловаться на беседу";
 "action_report_room" = "Комната отчетов";
 "action_reset" = "Сбросить";
 "action_reset_identity" = "Сбросить идентификацию";
@@ -247,7 +247,7 @@
 "common_shared_location" = "Поделился местоположением";
 "common_signing_out" = "Выход…";
 "common_something_went_wrong" = "Что-то пошло не так";
-"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_something_went_wrong_message" = "Мы столкнулись с проблемой. Пожалуйста, попробуйте еще раз.";
 "common_starting_chat" = "Чат запускается…";
 "common_sticker" = "Стикер";
 "common_success" = "Успешно";
@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Удалить участника из комнаты";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Удалить участника и запретить присоединяться в будущем?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Удаление %1$@…";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Любой желающий может присоединиться к этой комнате";
 "screen_create_room_room_access_section_anyone_option_title" = "Любой";
 "screen_create_room_room_access_section_header" = "Доступ в комнату";
@@ -612,8 +617,9 @@
 "screen_change_server_error_invalid_homeserver" = "Нам не удалось связаться с этим домашним сервером. Убедитесь, что вы правильно ввели URL-адрес домашнего сервера. Если URL-адрес указан правильно, обратитесь к администратору домашнего сервера за дополнительной помощью.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync недоступен из-за проблемы в известном файле:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "URL-адрес домашнего сервера";
-"screen_change_server_form_notice" = "Enter a domain address.";
+"screen_change_server_form_notice" = "Введите адрес домена.";
 "screen_change_server_subtitle" = "Какой адрес у вашего сервера?";
 "screen_change_server_title" = "Выберите свой сервер";
 "screen_chat_backup_key_backup_action_disable" = "Удалить хранилище ключей";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Системные уведомления выключены";
 "screen_notification_settings_title" = "Уведомления";
 "screen_onboarding_sign_in_manually" = "Войти вручную";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Войти QR-кодом";
 "screen_onboarding_sign_up" = "Создать учетную запись";
 "screen_onboarding_welcome_message" = "Добро пожаловать в самый быстрый клиент %1$@. Ориентирован на скорость и простоту.";

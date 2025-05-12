@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Αφαίρεση από το δωμάτιο";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Αφαίρεση μέλους και απαγόρευση συμμετοχής στο μέλλον;";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Αφαίρεση %1$@...";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Οποιοσδήποτε μπορεί να συμμετάσχει σε αυτό το δωμάτιο";
 "screen_create_room_room_access_section_anyone_option_title" = "Οποιοσδήποτε";
 "screen_create_room_room_access_section_header" = "Πρόσβαση Δωματίου";
@@ -610,8 +615,9 @@
 "screen_change_account_provider_subtitle" = "Χρησιμοποίησε διαφορετικό πάροχο λογαριασμού, όπως τον δικό σου ιδιωτικό διακομιστή ή έναν εργασιακό λογαριασμό.";
 "screen_change_account_provider_title" = "Αλλαγή παρόχου λογαριασμού";
 "screen_change_server_error_invalid_homeserver" = "Δεν μπορούσαμε να επικοινωνήσουμε με αυτόν τον οικιακό διακομιστή. Βεβαιώσου ότι έχεις εισαγάγει σωστά τη διεύθυνση URL του αρχικού διακομιστή. Εάν η διεύθυνση URL είναι σωστή, επικοινώνησε με τον διαχειριστή του κεντρικού διακομιστή για περαιτέρω βοήθεια.";
-"screen_change_server_error_invalid_well_known" = "Το Sliding sync δεν είναι διαθέσιμο εξαιτίας ενός ζητήματος σε ένα πολύ γνωστό αρχείο:\n%1$@";
+"screen_change_server_error_invalid_well_known" = "Ο διακομιστής δεν είναι διαθέσιμος λόγω προβλήματος στο αρχείο .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "URL οικιακού διακομιστή";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Ποια είναι η διεύθυνση του διακομιστή σου;";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Ειδοποιήσεις συστήματος ανενεργές";
 "screen_notification_settings_title" = "Ειδοποιήσεις";
 "screen_onboarding_sign_in_manually" = "Σύνδεση χειροκίνητα";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Συνδέσου με κωδικό QR";
 "screen_onboarding_sign_up" = "Δημιουργία λογαριασμού";
 "screen_onboarding_welcome_message" = "Καλώς ήλθατε στο γρηγορότερο %1$@ όλων των εποχών. Υπερτροφοδοτούμενο με ταχύτητα και απλότητα.";

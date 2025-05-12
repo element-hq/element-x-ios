@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Înlăturați membrul";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Înlăturați membrul și interziceți-i să se alăture în viitor?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Se elimină %1$@";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Oricine se poate alătura acestei camere";
 "screen_create_room_room_access_section_anyone_option_title" = "Oricine";
 "screen_create_room_room_access_section_header" = "Acces la cameră";
@@ -612,6 +617,7 @@
 "screen_change_server_error_invalid_homeserver" = "Nu am putut accesa acest homeserver. Te rugăm să verifici că ai introdus corect adresa URL a homeserver-ului. Dacă adresa URL este corectă, contactează administratorul homeserver-ului pentru ajutor suplimentar.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync nu este disponibil din cauza unei probleme în fișierul well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "Adresa URL a homeserver-ului";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Care este adresa serverului dumneavoastră?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Notificările de sistem sunt dezactivate";
 "screen_notification_settings_title" = "Notificări";
 "screen_onboarding_sign_in_manually" = "Conectați-vă manual";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Conectați-vă cu un cod QR";
 "screen_onboarding_sign_up" = "Creați un cont";
 "screen_onboarding_welcome_message" = "Bine ați venit la cel mai rapid %1$@ din toate timpurile. Supraalimentat pentru viteză și simplitate.";

@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Rimuovi dalla stanza";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Rimuovere e vietare l'accesso in futuro?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Rimozione di %1$@...";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Chiunque può entrare in questa stanza";
 "screen_create_room_room_access_section_anyone_option_title" = "Chiunque";
 "screen_create_room_room_access_section_header" = "Accesso alla stanza";
@@ -612,6 +617,7 @@
 "screen_change_server_error_invalid_homeserver" = "Non siamo riusciti a raggiungere questo homeserver. Verifica di aver inserito correttamente l'URL. Se l'URL è corretto, contatta l'amministratore del homeserver per ulteriore assistenza.";
 "screen_change_server_error_invalid_well_known" = "La sliding sync non è disponibile per un problema nel file well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "URL dell'homeserver";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Qual è l'indirizzo del tuo server?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Notifiche di sistema disattivate";
 "screen_notification_settings_title" = "Notifiche";
 "screen_onboarding_sign_in_manually" = "Accedi manualmente";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Accedi con codice QR";
 "screen_onboarding_sign_up" = "Crea account";
 "screen_onboarding_welcome_message" = "Benvenuti nell'%1$@ più veloce di sempre. Potenziato per velocità e semplicità.";
