@@ -37,6 +37,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     private let keychainController = KeychainController(service: .sessions,
                                                         accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
     
+    // We can make the whole NSE a MainActor after https://github.com/swiftlang/swift-evolution/blob/main/proposals/0371-isolated-synchronous-deinit.md
+    // otherwise we wouldn't be able to log the tag in the deinit.
     deinit {
         ExtensionLogger.logMemory(with: tag)
         MXLog.info("\(tag) deinit")
