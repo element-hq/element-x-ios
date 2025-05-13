@@ -20,8 +20,8 @@ struct ZLinkPreview: Codable, Hashable {
 
 struct Thumbnail: Codable, Hashable {
     let url: String
-    let width: Int
-    let height: Int
+    let width: CGFloat
+    let height: CGFloat
 }
 
 extension ZLinkPreview {
@@ -34,5 +34,11 @@ extension ZLinkPreview {
     
     var linkURL: URL? {
         return URL(string: url)
+    }
+}
+
+extension Thumbnail {
+    var aspectRatio: CGFloat {
+        width / height
     }
 }

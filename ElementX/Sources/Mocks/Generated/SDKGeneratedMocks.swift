@@ -4273,16 +4273,16 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - urlForOidc
 
-    open var urlForOidcOidcConfigurationPromptThrowableError: Error?
-    var urlForOidcOidcConfigurationPromptUnderlyingCallsCount = 0
-    open var urlForOidcOidcConfigurationPromptCallsCount: Int {
+    open var urlForOidcOidcConfigurationPromptLoginHintThrowableError: Error?
+    var urlForOidcOidcConfigurationPromptLoginHintUnderlyingCallsCount = 0
+    open var urlForOidcOidcConfigurationPromptLoginHintCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return urlForOidcOidcConfigurationPromptUnderlyingCallsCount
+                return urlForOidcOidcConfigurationPromptLoginHintUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = urlForOidcOidcConfigurationPromptUnderlyingCallsCount
+                    returnValue = urlForOidcOidcConfigurationPromptLoginHintUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4290,29 +4290,29 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                urlForOidcOidcConfigurationPromptUnderlyingCallsCount = newValue
+                urlForOidcOidcConfigurationPromptLoginHintUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    urlForOidcOidcConfigurationPromptUnderlyingCallsCount = newValue
+                    urlForOidcOidcConfigurationPromptLoginHintUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var urlForOidcOidcConfigurationPromptCalled: Bool {
-        return urlForOidcOidcConfigurationPromptCallsCount > 0
+    open var urlForOidcOidcConfigurationPromptLoginHintCalled: Bool {
+        return urlForOidcOidcConfigurationPromptLoginHintCallsCount > 0
     }
-    open var urlForOidcOidcConfigurationPromptReceivedArguments: (oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?)?
-    open var urlForOidcOidcConfigurationPromptReceivedInvocations: [(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?)] = []
+    open var urlForOidcOidcConfigurationPromptLoginHintReceivedArguments: (oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?)?
+    open var urlForOidcOidcConfigurationPromptLoginHintReceivedInvocations: [(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?)] = []
 
-    var urlForOidcOidcConfigurationPromptUnderlyingReturnValue: OAuthAuthorizationData!
-    open var urlForOidcOidcConfigurationPromptReturnValue: OAuthAuthorizationData! {
+    var urlForOidcOidcConfigurationPromptLoginHintUnderlyingReturnValue: OAuthAuthorizationData!
+    open var urlForOidcOidcConfigurationPromptLoginHintReturnValue: OAuthAuthorizationData! {
         get {
             if Thread.isMainThread {
-                return urlForOidcOidcConfigurationPromptUnderlyingReturnValue
+                return urlForOidcOidcConfigurationPromptLoginHintUnderlyingReturnValue
             } else {
                 var returnValue: OAuthAuthorizationData? = nil
                 DispatchQueue.main.sync {
-                    returnValue = urlForOidcOidcConfigurationPromptUnderlyingReturnValue
+                    returnValue = urlForOidcOidcConfigurationPromptLoginHintUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -4320,29 +4320,29 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                urlForOidcOidcConfigurationPromptUnderlyingReturnValue = newValue
+                urlForOidcOidcConfigurationPromptLoginHintUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    urlForOidcOidcConfigurationPromptUnderlyingReturnValue = newValue
+                    urlForOidcOidcConfigurationPromptLoginHintUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var urlForOidcOidcConfigurationPromptClosure: ((OidcConfiguration, OidcPrompt?) async throws -> OAuthAuthorizationData)?
+    open var urlForOidcOidcConfigurationPromptLoginHintClosure: ((OidcConfiguration, OidcPrompt?, String?) async throws -> OAuthAuthorizationData)?
 
-    open override func urlForOidc(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?) async throws -> OAuthAuthorizationData {
-        if let error = urlForOidcOidcConfigurationPromptThrowableError {
+    open override func urlForOidc(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?) async throws -> OAuthAuthorizationData {
+        if let error = urlForOidcOidcConfigurationPromptLoginHintThrowableError {
             throw error
         }
-        urlForOidcOidcConfigurationPromptCallsCount += 1
-        urlForOidcOidcConfigurationPromptReceivedArguments = (oidcConfiguration: oidcConfiguration, prompt: prompt)
+        urlForOidcOidcConfigurationPromptLoginHintCallsCount += 1
+        urlForOidcOidcConfigurationPromptLoginHintReceivedArguments = (oidcConfiguration: oidcConfiguration, prompt: prompt, loginHint: loginHint)
         DispatchQueue.main.async {
-            self.urlForOidcOidcConfigurationPromptReceivedInvocations.append((oidcConfiguration: oidcConfiguration, prompt: prompt))
+            self.urlForOidcOidcConfigurationPromptLoginHintReceivedInvocations.append((oidcConfiguration: oidcConfiguration, prompt: prompt, loginHint: loginHint))
         }
-        if let urlForOidcOidcConfigurationPromptClosure = urlForOidcOidcConfigurationPromptClosure {
-            return try await urlForOidcOidcConfigurationPromptClosure(oidcConfiguration, prompt)
+        if let urlForOidcOidcConfigurationPromptLoginHintClosure = urlForOidcOidcConfigurationPromptLoginHintClosure {
+            return try await urlForOidcOidcConfigurationPromptLoginHintClosure(oidcConfiguration, prompt, loginHint)
         } else {
-            return urlForOidcOidcConfigurationPromptReturnValue
+            return urlForOidcOidcConfigurationPromptLoginHintReturnValue
         }
     }
 
@@ -10657,6 +10657,71 @@ open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
     fileprivate var pointer: UnsafeMutableRawPointer!
     static func reset()
     {
+    }
+
+    //MARK: - serverName
+
+    var serverNameUnderlyingCallsCount = 0
+    open var serverNameCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return serverNameUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = serverNameUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                serverNameUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    serverNameUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var serverNameCalled: Bool {
+        return serverNameCallsCount > 0
+    }
+
+    var serverNameUnderlyingReturnValue: String?
+    open var serverNameReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return serverNameUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = serverNameUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                serverNameUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    serverNameUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var serverNameClosure: (() -> String?)?
+
+    open override func serverName() -> String? {
+        serverNameCallsCount += 1
+        if let serverNameClosure = serverNameClosure {
+            return serverNameClosure()
+        } else {
+            return serverNameReturnValue
+        }
     }
 }
 open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {

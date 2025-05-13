@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 
 extension URL: @retroactive ExpressibleByStringLiteral {
     public init(stringLiteral value: StaticString) {
@@ -150,5 +151,14 @@ extension ConfirmURLParameters {
         }
         displayString = externalURLString
         self.internalURL = internalURL
+    }
+}
+
+extension URL {
+    func mimeType() -> String {
+        guard let type = UTType(filenameExtension: self.pathExtension) else {
+            return "application/octet-stream" // default
+        }
+        return type.preferredMIMEType ?? "application/octet-stream"
     }
 }

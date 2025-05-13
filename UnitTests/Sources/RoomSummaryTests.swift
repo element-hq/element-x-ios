@@ -61,6 +61,7 @@ class RoomSummaryTests: XCTestCase {
                     isDirect: isDirect,
                     avatarURL: hasRoomAvatar ? roomDetails.avatarURL : nil,
                     heroes: heroes,
+                    activeMembersCount: 0,
                     lastMessage: nil,
                     lastMessageDate: nil,
                     unreadMessagesCount: 0,

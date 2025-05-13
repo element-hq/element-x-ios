@@ -10,30 +10,49 @@ import SwiftUI
 // MARK: - Coordinator
 
 enum AuthenticationStartScreenCoordinatorAction {
-    case loginManually
     case loginWithQR
+    case login
     case register
     case reportProblem
+    
+    case loginDirectlyWithOIDC(data: OIDCAuthorizationDataProxy, window: UIWindow)
+    case loginDirectlyWithPassword(loginHint: String?)
     case verifyInviteCode(inviteCode: String)
 }
 
-enum AuthenticationStartScreenViewModelAction {
-    case loginManually
+enum AuthenticationStartScreenViewModelAction: Equatable {
     case loginWithQR
+    case login
     case register
     case reportProblem
+    
+    case loginDirectlyWithOIDC(data: OIDCAuthorizationDataProxy, window: UIWindow)
+    case loginDirectlyWithPassword(loginHint: String?)
     case verifyInviteCode(inviteCode: String)
 }
 
 struct AuthenticationStartScreenViewState: BindableState {
+    /// The presentation anchor used for OIDC authentication.
+    var window: UIWindow?
+    
+    let serverName: String?
     let VALID_INVITE_CODE_LENGTH = 6
     
     let showCreateAccountButton: Bool
-    let isQRCodeLoginEnabled: Bool
-    let isBugReportServiceEnabled: Bool
+    let showQRCodeLoginButton: Bool
+    let showReportProblemButton: Bool
     
-    var bindings = AuthenticationStartScreenBindings()
+    var bindings = AuthenticationStartScreenViewStateBindings()
     
+    var loginButtonTitle: String {
+        if let serverName {
+            L10n.screenOnboardingSignInTo(serverName)
+        } else if showQRCodeLoginButton {
+            L10n.screenOnboardingSignInManually
+        } else {
+            L10n.actionContinue
+        }
+    }
     var sendButtonDisabled: Bool {
         !isInviteCodeValid
     }
@@ -43,13 +62,21 @@ struct AuthenticationStartScreenViewState: BindableState {
     }
 }
 
-struct AuthenticationStartScreenBindings {
+struct AuthenticationStartScreenViewStateBindings {
     var inviteCode = ""
+    var alertInfo: AlertInfo<AuthenticationStartScreenAlertType>?
+}
+
+enum AuthenticationStartScreenAlertType {
+    case genericError
 }
 
 enum AuthenticationStartScreenViewAction {
-    case loginManually
+    /// Updates the window used as the OIDC presentation anchor.
+    case updateWindow(UIWindow)
+    
     case loginWithQR
+    case login
     case register
     case reportProblem
     case verifyInviteCode(inviteCode: String)

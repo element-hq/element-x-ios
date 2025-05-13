@@ -825,7 +825,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func fetchAndUpdatedLinkPreview(for item: RoomTimelineItemProtocol) {
         guard state.linkPreviewsMap[item.id] == nil else { return }
         if let textContent = (item as? TextRoomTimelineItem)?.content,
-           let firstAvailableLink = firstNonMatrixLink(from: textContent.body) {
+           let firstAvailableLink = LinkPreviewUtil.shared.firstNonMatrixLink(from: textContent.body) {
             Task {
                 let linkPreviewResult = await clientProxy.getLinkPreviewMetaData(url: firstAvailableLink)
                 switch linkPreviewResult {
@@ -836,22 +836,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 }
             }
         }
-    }
-    
-    private func firstNonMatrixLink(from text: String) -> String? {
-        let matrixMentionRegex = #"https:\/\/matrix\.to\/#\/@[^\/\s]+"#
-        guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) else {
-            return nil
-        }
-        let matches = detector.matches(in: text, options: [], range: NSRange(text.startIndex..., in: text))
-        for match in matches {
-            guard let range = Range(match.range, in: text) else { continue }
-            let urlString = String(text[range])
-            if urlString.range(of: matrixMentionRegex, options: .regularExpression) == nil {
-                return urlString
-            }
-        }
-        return nil
     }
 
     private func updateViewState(item: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) -> RoomTimelineItemViewState {

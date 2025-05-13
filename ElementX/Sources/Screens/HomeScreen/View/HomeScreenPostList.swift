@@ -18,7 +18,11 @@ struct HomeScreenPostList: View {
     private var content: some View {
         ForEach(context.viewState.visiblePosts, id: \.id) { post in
             VStack(alignment: .leading) {
-                HomeScreenPostCell(post: post, mediaProvider: context.mediaProvider, showThreadLine: false,
+                HomeScreenPostCell(post: post,
+                                   mediaProvider: context.mediaProvider,
+                                   postMediaUrl: context.viewState.postMediaInfoMap[post.id]?.url,
+                                   availableLinkPreview: nil,
+                                   showThreadLine: false,
                                    onPostTapped: {
                     context.send(viewAction: .postTapped(post))
                 },
@@ -28,9 +32,9 @@ struct HomeScreenPostList: View {
                                    onMeowTapped: { count in
                     context.send(viewAction: .addMeowToPost(postId: post.id, amount: count))
                 })
-                    .padding(.horizontal, 16)
-                    .padding(.top, 12)
-                    .padding(.bottom, 6)
+                .padding(.horizontal, 16)
+                .padding(.top, 12)
+                .padding(.bottom, 6)
                 Divider()
             }
             .onTapGesture {

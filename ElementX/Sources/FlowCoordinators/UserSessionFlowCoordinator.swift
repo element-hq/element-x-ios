@@ -215,6 +215,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.processEvent(.showShareExtensionRoomList(sharePayload: payload), userInfo: .init(animated: animated))
             }
+        case .accountProvisioningLink:
+            break // We always ignore this flow when logged in.
         }
     }
     
@@ -1176,6 +1178,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .replyTapped(let reply):
                     presentFeedDetailsScreen(reply, feedUpdatedProtocol: feedUpdatedProtocol, showSheetCoodinator: true)
+                case .attachMedia(let attachMediaProtocol):
+                    presentMediaUploadPickerWithSource(attachMediaProtocol)
                 }
             }
             .store(in: &cancellables)
@@ -1187,20 +1191,40 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentCreateFeedScreen(_ createFeedProtocol: CreateFeedProtocol) {
-        let createFeedNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = CreateFeedScreenCoordinator(parameters: .init(userSession: userSession, createFeedProtocol: createFeedProtocol))
         coordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
                 case .newPostCreated, .dismissPost:
-                    self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                    self.navigationSplitCoordinator.setDetailCoordinator(nil)
+                case .attachMedia(let attachMediaProtocol):
+                    presentMediaUploadPickerWithSource(attachMediaProtocol)
                 }
             }
             .store(in: &cancellables)
         
-        createFeedNavigationStackCoordinator.setRootCoordinator(coordinator)
-        
-        navigationSplitCoordinator.setSheetCoordinator(createFeedNavigationStackCoordinator)
+        navigationSplitCoordinator.setDetailCoordinator(coordinator)
+    }
+    
+    private func presentMediaUploadPickerWithSource(_ attachMediaProtocol: FeedMediaSelectedProtocol) {
+        let stackCoordinator = NavigationStackCoordinator()
+
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                  source: .photoLibrary,
+                                                                  orientationManager: appMediator.windowManager) { [weak self] action in
+            guard let self else {
+                return
+            }
+            switch action {
+            case .cancel:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            case .selectMediaAtURL(let url):
+                attachMediaProtocol.onMediaSelected(media: url)
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator)
     }
 }

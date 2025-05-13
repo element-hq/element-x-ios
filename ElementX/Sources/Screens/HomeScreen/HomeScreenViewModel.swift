@@ -263,7 +263,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 }
             }
         case .postTapped(let post):
-            actionsSubject.send(.postTapped(post, feedUpdatedProtocol: self))
+            let mediaUrl = state.postMediaInfoMap[post.id]?.url
+            actionsSubject.send(.postTapped(post.withUpdatedMediaInfoUrl(url: mediaUrl), feedUpdatedProtocol: self))
         case .openArweaveLink(let post):
             openArweaveLink(post)
         case .addMeowToPost(let postId, let amount):
@@ -603,6 +604,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 }
                 state.posts = homePosts.uniqued(on: \.id)
                 state.postListMode = .posts
+                
+                loadPostsMediaInfo(for: state.posts)
+                loadPostLinkPreviews(for: state.posts)
             }
         case .failure(let error):
             MXLog.error("Failed to fetch zero posts: \(error)")
@@ -647,6 +651,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 }
                 state.myPosts = homePosts.uniqued(on: \.id)
                 state.myPostListMode = .posts
+                
+                loadPostsMediaInfo(for: state.myPosts)
+                loadPostLinkPreviews(for: state.myPosts)
             }
         case .failure(let error):
             MXLog.error("Failed to fetch zero posts: \(error)")
@@ -812,5 +819,38 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             }
         }
         roomNotificationUpdateMap.removeAll()
+    }
+    
+    private func loadPostsMediaInfo(for posts: [HomeScreenPost]) {
+        Task {
+            let postsToFetchMedia = posts.filter({ $0.mediaInfo != nil && state.postMediaInfoMap[$0.id] == nil })
+            let results = await postsToFetchMedia.asyncMap { post in
+                let result = await userSession.clientProxy.getPostMediaInfo(mediaId: post.mediaInfo!.id)
+                return (post.id, result)
+            }
+            for result in results {
+                if case let .success(media) = result.1 {
+                    state.postMediaInfoMap[result.0] = HomeScreenPostMediaInfo(media: media)
+                }
+            }
+        }
+    }
+    
+    private func loadPostLinkPreviews(for posts: [HomeScreenPost]) {
+        Task {
+            let postsToFetchLinkPreviews = posts.filter({
+                LinkPreviewUtil.shared.firstNonMatrixLink(from: $0.postText) != nil && state.postLinkPreviewsMap[$0.id] == nil
+            })
+            let results = await postsToFetchLinkPreviews.asyncMap { post in
+                let url = LinkPreviewUtil.shared.firstNonMatrixLink(from: post.postText)!
+                let result = await userSession.clientProxy.getLinkPreviewMetaData(url: url)
+                return (post.id, result)
+            }
+            for result in results {
+                if case let .success(linkPreview) = result.1 {
+                    state.postLinkPreviewsMap[result.0] = linkPreview
+                }
+            }
+        }
     }
 }

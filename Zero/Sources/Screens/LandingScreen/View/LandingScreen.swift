@@ -62,7 +62,7 @@ struct LandingScreen: View {
     
     var actionButton: some View {
         Button(action: {
-            context.send(viewAction: .loginManually)
+            context.send(viewAction: .login)
         }, label: {
             Image(asset: Asset.Images.conversationsListHeader)
                 .frame(width: 358, height: 65)
@@ -114,10 +114,4 @@ struct LandingScreen: View {
         }
         .padding(.bottom, 32)
     }
-}
-
-#Preview {
-    let viewModel = AuthenticationStartScreenViewModel(showCreateAccountButton: false, isBugReportServiceEnabled: false)
-    
-    LandingScreen(context: viewModel.context)
 }

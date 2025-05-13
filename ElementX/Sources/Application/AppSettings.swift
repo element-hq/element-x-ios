@@ -104,9 +104,11 @@ final class AppSettings {
                   acceptableUseURL: URL,
                   privacyURL: URL,
                   encryptionURL: URL,
+                  deviceVerificationURL: URL,
                   chatBackupDetailsURL: URL,
                   identityPinningViolationDetailsURL: URL,
                   elementWebHosts: [String],
+                  accountProvisioningHost: String,
                   bugReportApplicationID: String,
                   analyticsTermsURL: URL?,
                   mapTilerConfiguration: MapTilerConfiguration) {
@@ -119,9 +121,11 @@ final class AppSettings {
         self.acceptableUseURL = acceptableUseURL
         self.privacyURL = privacyURL
         self.encryptionURL = encryptionURL
+        self.deviceVerificationURL = deviceVerificationURL
         self.chatBackupDetailsURL = chatBackupDetailsURL
         self.identityPinningViolationDetailsURL = identityPinningViolationDetailsURL
         self.elementWebHosts = elementWebHosts
+        self.accountProvisioningHost = accountProvisioningHost
         self.bugReportApplicationID = bugReportApplicationID
         self.analyticsTermsURL = analyticsTermsURL
         self.mapTilerConfiguration = mapTilerConfiguration
@@ -169,12 +173,16 @@ final class AppSettings {
     private(set) var privacyURL: URL = "https://element.io/privacy"
     /// A URL where users can go read more about encryption in general.
     private(set) var encryptionURL: URL = "https://element.io/help#encryption"
+    /// A URL where users can go read more about device verification..
+    private(set) var deviceVerificationURL: URL = "https://element.io/help#encryption-device-verification"
     /// A URL where users can go read more about the chat backup.
     private(set) var chatBackupDetailsURL: URL = "https://element.io/help#encryption5"
     /// A URL where users can go read more about identity pinning violations
     private(set) var identityPinningViolationDetailsURL: URL = "https://element.io/help#encryption18"
     /// Any domains that Element web may be hosted on - used for handling links.
     private(set) var elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
+    /// The domain that account provisioning links will be hosted on - used for handling the links.
+    private(set) var accountProvisioningHost = "mobile.element.io"
     
     @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))
     var appAppearance: AppAppearance

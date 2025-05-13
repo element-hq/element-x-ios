@@ -35,7 +35,7 @@ struct AuthenticationStartScreen: View {
             }
             .frame(maxHeight: .infinity)
             .safeAreaInset(edge: .bottom) {
-                if context.viewState.isBugReportServiceEnabled {
+                if context.viewState.showReportProblemButton {
                     Button {
                         context.send(viewAction: .reportProblem)
                     } label: {
@@ -45,12 +45,16 @@ struct AuthenticationStartScreen: View {
                             .padding(.bottom)
                     }
                     .frame(width: geometry.size.width)
+                    .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.reportAProblem)
                 }
             }
         }
         .navigationBarHidden(true)
         .background {
             AuthenticationStartScreenBackgroundImage()
+        }
+        .introspect(.window, on: .supportedVersions) { window in
+            context.send(viewAction: .updateWindow(window))
         }
     }
     
@@ -89,7 +93,7 @@ struct AuthenticationStartScreen: View {
     /// The main action buttons.
     var buttons: some View {
         VStack(spacing: 16) {
-            if context.viewState.isQRCodeLoginEnabled {
+            if context.viewState.showQRCodeLoginButton {
                 Button { context.send(viewAction: .loginWithQR) } label: {
                     Label(L10n.screenOnboardingSignInWithQrCode, icon: \.qrCode)
                 }
@@ -97,8 +101,8 @@ struct AuthenticationStartScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.signInWithQr)
             }
             
-            Button { context.send(viewAction: .loginManually) } label: {
-                Text(context.viewState.isQRCodeLoginEnabled ? L10n.screenOnboardingSignInManually : L10n.actionContinue)
+            Button { context.send(viewAction: .login) } label: {
+                Text(context.viewState.loginButtonTitle)
             }
             .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.signIn)
@@ -120,16 +124,22 @@ struct AuthenticationStartScreen: View {
 struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
     static let bugReportDisabledViewModel = makeViewModel(isBugReportServiceEnabled: false)
+    static let provisionedViewModel = makeViewModel(provisionedServerName: "example.com")
     
     static var previews: some View {
         AuthenticationStartScreen(context: viewModel.context)
             .previewDisplayName("Default")
         AuthenticationStartScreen(context: bugReportDisabledViewModel.context)
             .previewDisplayName("Bug report disabled")
+        AuthenticationStartScreen(context: provisionedViewModel.context)
+            .previewDisplayName("Provisioned")
     }
     
-    static func makeViewModel(isBugReportServiceEnabled: Bool = true) -> AuthenticationStartScreenViewModel {
-        AuthenticationStartScreenViewModel(showCreateAccountButton: true,
-                                           isBugReportServiceEnabled: isBugReportServiceEnabled)
+    static func makeViewModel(isBugReportServiceEnabled: Bool = true, provisionedServerName: String? = nil) -> AuthenticationStartScreenViewModel {
+        AuthenticationStartScreenViewModel(authenticationService: AuthenticationService.mock,
+                                           provisioningParameters: provisionedServerName.map { .init(accountProvider: $0, loginHint: nil) },
+                                           isBugReportServiceEnabled: isBugReportServiceEnabled,
+                                           appSettings: ServiceLocator.shared.settings,
+                                           userIndicatorController: UserIndicatorControllerMock())
     }
 }

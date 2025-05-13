@@ -10,7 +10,7 @@ import SwiftUI
 
 typealias CreateFeedScreenViewModelType = StateStoreViewModel<CreateFeedScreenViewState, CreateFeedScreenViewAction>
 
-class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreenViewModelProtocol {
+class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreenViewModelProtocol, FeedMediaSelectedProtocol {
     
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -54,6 +54,10 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
             createNewPost()
         case .dismissPost:
             actionsSubject.send(.dismissPost)
+        case .attachMedia:
+            actionsSubject.send(.attachMedia(self))
+        case .deleteMedia:
+            state.bindings.selectedFeedMediaUrl = nil
         }
     }
     
@@ -83,7 +87,8 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
             
             let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
                                                                content: state.bindings.feedText,
-                                                               replyToPost: nil)
+                                                               replyToPost: nil,
+                                                               mediaFile: state.bindings.selectedFeedMediaUrl)
             switch postFeedResult {
             case .success:
                 createFeedProtocol.onNewFeedPosted()
@@ -94,5 +99,9 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
                                                  message: L10n.errorUnknown)
             }
         }
+    }
+    
+    func onMediaSelected(media: URL) {
+        state.bindings.selectedFeedMediaUrl = media
     }
 }

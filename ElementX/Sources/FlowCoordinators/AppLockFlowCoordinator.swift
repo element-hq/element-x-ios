@@ -154,13 +154,13 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
                 guard appLockService.computeNeedsUnlock(didBecomeActiveAt: .now) else { return .unlocked }
                 return isBiometricUnlockAvailable ? .attemptingBiometricUnlock : .attemptingPINUnlock
             case (.attemptingBiometricUnlock, .didFinishBiometricUnlock(let result)):
-                return .dismissingBiometricUnlock(result) // Transitional state until the app becomes active again.
-            case (.dismissingBiometricUnlock(let result), .didBecomeActive):
-                return switch result {
-                case .unlocked: .unlocked
-                case .failed: .attemptingPINUnlock
-                case .interrupted: .attemptingBiometricUnlock
+                if ProcessInfo.processInfo.isiOSAppOnMac { // On the Mac the app is already active at this point
+                    return result.toStateMachineState()
+                } else { // On iOS on the other hand it, biometrics keep it non-active
+                    return .dismissingBiometricUnlock(result) // Transitional state until the app becomes active again.
                 }
+            case (.dismissingBiometricUnlock(let result), .didBecomeActive):
+                return result.toStateMachineState()
             case (.attemptingPINUnlock, .didUnlockWithPIN):
                 return .unlocked
             case (.attemptingPINUnlock, .forceLogout):
@@ -244,5 +244,15 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
         
         navigationCoordinator.setRootCoordinator(coordinator, animated: false)
         actionsSubject.send(.lockApp)
+    }
+}
+
+private extension AppLockServiceBiometricResult {
+    func toStateMachineState() -> AppLockFlowCoordinator.State {
+        switch self {
+        case .unlocked: .unlocked
+        case .failed: .attemptingPINUnlock
+        case .interrupted: .attemptingBiometricUnlock
+        }
     }
 }

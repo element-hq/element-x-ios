@@ -16,6 +16,7 @@ enum UITestsScreenIdentifier: String {
     case appLockSetupFlowMandatory
     case appLockSetupFlowUnlock
     case authenticationFlow
+    case provisionedAuthenticationFlow
     case bugReport
     case createPoll
     case createRoom

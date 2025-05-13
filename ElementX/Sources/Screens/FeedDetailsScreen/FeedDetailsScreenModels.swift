@@ -34,10 +34,13 @@ struct FeedDetailsScreenViewState: BindableState {
     }
     
     var userRewards = ZeroRewards.empty()
+    
+    var postRepliesMediaInfoMap: [String: HomeScreenPostMediaInfo] = [:]
 }
 
 struct FeedDetailsScreenViewStateBindings {
     var myPostReply: String = ""
+    var feedMedia: URL? = nil
     
     var feed: HomeScreenPost = HomeScreenPost.placeholder()
     var alertInfo: AlertInfo<UUID>?
@@ -45,6 +48,7 @@ struct FeedDetailsScreenViewStateBindings {
 
 enum FeedDetailsScreenViewModelAction {
     case replyTapped(_ reply: HomeScreenPost)
+    case attachMedia(FeedMediaSelectedProtocol)
 }
 
 enum FeedDetailsScreenViewAction {
@@ -54,6 +58,8 @@ enum FeedDetailsScreenViewAction {
     case forceRefreshFeed
     case meowTapped(_ postId: String, amount: Int, isPostAReply: Bool)
     case postReply
+    case attachMedia
+    case deleteMedia
 }
 
 enum FeedRepliesListMode: CustomStringConvertible {

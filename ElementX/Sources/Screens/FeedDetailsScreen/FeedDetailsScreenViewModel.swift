@@ -10,7 +10,7 @@ import SwiftUI
 
 typealias FeedDetailsScreenViewModelType = StateStoreViewModel<FeedDetailsScreenViewState, FeedDetailsScreenViewAction>
 
-class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScreenViewModelProtocol {
+class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScreenViewModelProtocol, FeedMediaSelectedProtocol {
     
     private let clientProxy: ClientProxyProtocol
     private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol
@@ -62,7 +62,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     override func process(viewAction: FeedDetailsScreenViewAction) {
         switch viewAction {
         case .replyTapped(let reply):
-            actionsSubject.send(.replyTapped(reply))
+            let mediaUrl = state.postRepliesMediaInfoMap[reply.id]?.url
+            actionsSubject.send(.replyTapped(reply.withUpdatedMediaInfoUrl(url: mediaUrl)))
         case .openArweaveLink(let post):
             openArweaveLink(post)
         case .loadMoreRepliesIfNeeded:
@@ -73,6 +74,10 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             addMeowToPost(postId, amount, isPostAReply: isPostAReply)
         case .postReply:
             postFeedReply()
+        case .attachMedia:
+            actionsSubject.send(.attachMedia(self))
+        case .deleteMedia:
+            state.bindings.feedMedia = nil
         }
     }
     
@@ -81,7 +86,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             let feedResult = await clientProxy.fetchFeedDetails(feedId: feedId)
             switch feedResult {
             case .success(let feed):
-                state.bindings.feed = HomeScreenPost.init(loggedInUserId: clientProxy.userID, post: feed)
+                let homePost = HomeScreenPost.init(loggedInUserId: clientProxy.userID, post: feed)
+                state.bindings.feed = homePost.withUpdatedMediaInfo(mediaInfo: state.bindings.feed.mediaInfo)
             case .failure(let error):
                 MXLog.error("Failed to fetch feed details: \(error)")
             }
@@ -113,8 +119,9 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                                                        rewardsDecimalPlaces: state.userRewards.decimals)
                         feedReplies.append(feedReply)
                     }
-                    state.feedReplies = feedReplies
+                    state.feedReplies = feedReplies.uniqued(on: \.id)
                     state.repliesListMode = .replies
+                    loadPostRepliesMediaInfo(for: state.feedReplies)
                 }
             case .failure(let error):
                 MXLog.error("Failed to fetch zero post replies: \(error)")
@@ -190,13 +197,14 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                                   title: "Posting...",
                                                                   persistent: true))
-            
             let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
                                                                content: state.bindings.myPostReply,
-                                                               replyToPost: state.bindings.feed.id)
+                                                               replyToPost: state.bindings.feed.id,
+                                                               mediaFile: state.bindings.feedMedia)
             switch postFeedResult {
             case .success(_):
                 state.bindings.myPostReply = ""
+                state.bindings.feedMedia = nil
                 forceRefreshFeed()
                 feedUpdatedProtocol.onFeedUpdated(state.bindings.feed.id)
             case .failure(_):
@@ -205,5 +213,24 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                                                  message: L10n.errorUnknown)
             }
         }
+    }
+    
+    private func loadPostRepliesMediaInfo(for posts: [HomeScreenPost]) {
+        Task {
+            let postsToFetchMedia = posts.filter({ $0.mediaInfo != nil && state.postRepliesMediaInfoMap[$0.id] == nil })
+            let results = await postsToFetchMedia.asyncMap { post in
+                await clientProxy.getPostMediaInfo(mediaId: post.mediaInfo!.id)
+            }
+            for result in results {
+                if case let .success(media) = result,
+                   let postId = postsToFetchMedia.first(where: { $0.mediaInfo!.id == media.media.id })?.id {
+                    state.postRepliesMediaInfoMap[postId] = HomeScreenPostMediaInfo(media: media)
+                }
+            }
+        }
+    }
+    
+    func onMediaSelected(media: URL) {
+        state.bindings.feedMedia = media
     }
 }

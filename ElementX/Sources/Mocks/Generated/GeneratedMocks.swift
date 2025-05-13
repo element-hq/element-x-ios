@@ -6146,15 +6146,15 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     //MARK: - postNewFeed
 
-    var postNewFeedChannelZIdContentReplyToPostUnderlyingCallsCount = 0
-    var postNewFeedChannelZIdContentReplyToPostCallsCount: Int {
+    var postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingCallsCount = 0
+    var postNewFeedChannelZIdContentReplyToPostMediaFileCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return postNewFeedChannelZIdContentReplyToPostUnderlyingCallsCount
+                return postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = postNewFeedChannelZIdContentReplyToPostUnderlyingCallsCount
+                    returnValue = postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -6162,29 +6162,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                postNewFeedChannelZIdContentReplyToPostUnderlyingCallsCount = newValue
+                postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    postNewFeedChannelZIdContentReplyToPostUnderlyingCallsCount = newValue
+                    postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var postNewFeedChannelZIdContentReplyToPostCalled: Bool {
-        return postNewFeedChannelZIdContentReplyToPostCallsCount > 0
+    var postNewFeedChannelZIdContentReplyToPostMediaFileCalled: Bool {
+        return postNewFeedChannelZIdContentReplyToPostMediaFileCallsCount > 0
     }
-    var postNewFeedChannelZIdContentReplyToPostReceivedArguments: (channelZId: String, content: String, replyToPost: String?)?
-    var postNewFeedChannelZIdContentReplyToPostReceivedInvocations: [(channelZId: String, content: String, replyToPost: String?)] = []
+    var postNewFeedChannelZIdContentReplyToPostMediaFileReceivedArguments: (channelZId: String, content: String, replyToPost: String?, mediaFile: URL?)?
+    var postNewFeedChannelZIdContentReplyToPostMediaFileReceivedInvocations: [(channelZId: String, content: String, replyToPost: String?, mediaFile: URL?)] = []
 
-    var postNewFeedChannelZIdContentReplyToPostUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var postNewFeedChannelZIdContentReplyToPostReturnValue: Result<Void, ClientProxyError>! {
+    var postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var postNewFeedChannelZIdContentReplyToPostMediaFileReturnValue: Result<Void, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return postNewFeedChannelZIdContentReplyToPostUnderlyingReturnValue
+                return postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = postNewFeedChannelZIdContentReplyToPostUnderlyingReturnValue
+                    returnValue = postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -6192,26 +6192,26 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                postNewFeedChannelZIdContentReplyToPostUnderlyingReturnValue = newValue
+                postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    postNewFeedChannelZIdContentReplyToPostUnderlyingReturnValue = newValue
+                    postNewFeedChannelZIdContentReplyToPostMediaFileUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var postNewFeedChannelZIdContentReplyToPostClosure: ((String, String, String?) async -> Result<Void, ClientProxyError>)?
+    var postNewFeedChannelZIdContentReplyToPostMediaFileClosure: ((String, String, String?, URL?) async -> Result<Void, ClientProxyError>)?
 
-    func postNewFeed(channelZId: String, content: String, replyToPost: String?) async -> Result<Void, ClientProxyError> {
-        postNewFeedChannelZIdContentReplyToPostCallsCount += 1
-        postNewFeedChannelZIdContentReplyToPostReceivedArguments = (channelZId: channelZId, content: content, replyToPost: replyToPost)
+    func postNewFeed(channelZId: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ClientProxyError> {
+        postNewFeedChannelZIdContentReplyToPostMediaFileCallsCount += 1
+        postNewFeedChannelZIdContentReplyToPostMediaFileReceivedArguments = (channelZId: channelZId, content: content, replyToPost: replyToPost, mediaFile: mediaFile)
         DispatchQueue.main.async {
-            self.postNewFeedChannelZIdContentReplyToPostReceivedInvocations.append((channelZId: channelZId, content: content, replyToPost: replyToPost))
+            self.postNewFeedChannelZIdContentReplyToPostMediaFileReceivedInvocations.append((channelZId: channelZId, content: content, replyToPost: replyToPost, mediaFile: mediaFile))
         }
-        if let postNewFeedChannelZIdContentReplyToPostClosure = postNewFeedChannelZIdContentReplyToPostClosure {
-            return await postNewFeedChannelZIdContentReplyToPostClosure(channelZId, content, replyToPost)
+        if let postNewFeedChannelZIdContentReplyToPostMediaFileClosure = postNewFeedChannelZIdContentReplyToPostMediaFileClosure {
+            return await postNewFeedChannelZIdContentReplyToPostMediaFileClosure(channelZId, content, replyToPost, mediaFile)
         } else {
-            return postNewFeedChannelZIdContentReplyToPostReturnValue
+            return postNewFeedChannelZIdContentReplyToPostMediaFileReturnValue
         }
     }
     //MARK: - fetchUserZIds
@@ -6480,6 +6480,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return await getLinkPreviewMetaDataUrlClosure(url)
         } else {
             return getLinkPreviewMetaDataUrlReturnValue
+        }
+    }
+    //MARK: - getPostMediaInfo
+
+    var getPostMediaInfoMediaIdUnderlyingCallsCount = 0
+    var getPostMediaInfoMediaIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getPostMediaInfoMediaIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getPostMediaInfoMediaIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getPostMediaInfoMediaIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getPostMediaInfoMediaIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getPostMediaInfoMediaIdCalled: Bool {
+        return getPostMediaInfoMediaIdCallsCount > 0
+    }
+    var getPostMediaInfoMediaIdReceivedMediaId: String?
+    var getPostMediaInfoMediaIdReceivedInvocations: [String] = []
+
+    var getPostMediaInfoMediaIdUnderlyingReturnValue: Result<ZPostMedia, ClientProxyError>!
+    var getPostMediaInfoMediaIdReturnValue: Result<ZPostMedia, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getPostMediaInfoMediaIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZPostMedia, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getPostMediaInfoMediaIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getPostMediaInfoMediaIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getPostMediaInfoMediaIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getPostMediaInfoMediaIdClosure: ((String) async -> Result<ZPostMedia, ClientProxyError>)?
+
+    func getPostMediaInfo(mediaId: String) async -> Result<ZPostMedia, ClientProxyError> {
+        getPostMediaInfoMediaIdCallsCount += 1
+        getPostMediaInfoMediaIdReceivedMediaId = mediaId
+        DispatchQueue.main.async {
+            self.getPostMediaInfoMediaIdReceivedInvocations.append(mediaId)
+        }
+        if let getPostMediaInfoMediaIdClosure = getPostMediaInfoMediaIdClosure {
+            return await getPostMediaInfoMediaIdClosure(mediaId)
+        } else {
+            return getPostMediaInfoMediaIdReturnValue
         }
     }
     //MARK: - loadMediaContentForSource

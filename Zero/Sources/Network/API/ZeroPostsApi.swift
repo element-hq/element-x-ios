@@ -14,7 +14,7 @@ protocol ZeroPostsApiProtocol {
     func fetchPostReplies(postId: String, limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
     func addMeowsToPst(amount: Int, postId: String) async throws -> Result<ZPost, Error>
     
-    func createNewPost(channelZId: String, content: String, replyToPost: String?) async throws -> Result<Void, Error>
+    func createNewPost(channelZId: String, content: String, replyToPost: String?, mediaId: String?) async throws -> Result<Void, Error>
 }
 
 class ZeroPostsApi: ZeroPostsApiProtocol {
@@ -118,10 +118,13 @@ class ZeroPostsApi: ZeroPostsApiProtocol {
         }
     }
     
-    func createNewPost(channelZId: String, content: String, replyToPost: String?) async throws -> Result<Void, any Error> {
+    func createNewPost(channelZId: String, content: String, replyToPost: String?, mediaId: String?) async throws -> Result<Void, any Error> {
         var parameters: [String: String] = ["text": content]
         if let replyToPostId = replyToPost {
             parameters["replyTo"] = replyToPostId
+        }
+        if let mediaId = mediaId {
+            parameters["mediaId"] = mediaId
         }
         
         let requestChannelZId = channelZId.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "")

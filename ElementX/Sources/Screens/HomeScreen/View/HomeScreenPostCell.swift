@@ -6,10 +6,14 @@
 //
 
 import SwiftUI
+import Kingfisher
+import AVKit
 
 struct HomeScreenPostCell: View {
     let post: HomeScreenPost
     let mediaProvider: MediaProviderProtocol?
+    let postMediaUrl: String?
+    let availableLinkPreview: ZLinkPreview?
     let showThreadLine: Bool
     let onPostTapped: () -> Void
     let onOpenArweaveLink: () -> Void
@@ -72,6 +76,61 @@ struct HomeScreenPostCell: View {
                         .padding(.vertical, 8)
                 }
                 
+//                if let linkPreview = availableLinkPreview {
+//                    VStack(spacing: 0) {
+//                        if let thumbnail = linkPreview.thumbnail,
+//                           let thumbnailURL = linkPreview.thumbnailURL {
+//                            KFAnimatedImage(thumbnailURL)
+//                                .placeholder {
+//                                    Image(systemName: "link")
+//                                }
+//                                .aspectRatio(thumbnail.aspectRatio, contentMode: .fit)
+//                                .cornerRadius(4, corners: .allCorners)
+//                        }
+//                        
+//                        HStack(alignment: .center) {
+//                            if linkPreview.thumbnail == nil {
+//                                Image(systemName: "link")
+//                                    .resizable()
+//                                    .frame(width: 24, height: 24)
+//                                    .aspectRatio(contentMode: .fit)
+//                                    .cornerRadius(4, corners: .allCorners)
+//                            }
+//                            VStack(alignment: .leading) {
+//                                if let title = linkPreview.title {
+//                                    Text(title)
+//                                        .font(.zero.bodyMDSemibold)
+//                                        .foregroundColor(.compound.textPrimary)
+//                                        .lineLimit(1)
+//                                }
+//                                
+//                                Text(linkPreview.url)
+//                                    .font(.zero.bodyMD)
+//                                    .foregroundColor(.compound.textSecondary)
+//                                    .lineLimit(1)
+//                            }
+//                            .padding(.horizontal, 4)
+//                        }
+//                    }
+//                    .padding(.vertical, 4)
+//                }
+                
+                if let mediaInfo = post.mediaInfo,
+                   let url = URL(string: postMediaUrl ?? "") {
+                    if mediaInfo.isVideo {
+                        VideoPlayerView(videoURL: url)
+                            .frame(height: 300)
+                            .cornerRadius(4)
+                    } else {
+                        KFAnimatedImage(url)
+                            .placeholder {
+                                ProgressView()
+                            }
+                            .aspectRatio(mediaInfo.aspectRatio, contentMode: .fit)
+                            .cornerRadius(4, corners: .allCorners)
+                    }
+                }
+                
                 HStack {
                     HomeScreenPostFooterItem(icon: Asset.Images.postCommentIcon,
                                              count: post.repliesCount,
@@ -99,5 +158,17 @@ struct HomeScreenPostCell: View {
                 }
             }.padding(.leading, 8)
         }
+    }
+}
+
+struct VideoPlayerView: View {
+    let videoURL: URL
+    
+    var body: some View {
+        VideoPlayer(player: AVPlayer(url: videoURL))
+//            .aspectRatio(16/9, contentMode: .fit)
+            .onAppear {
+                AVPlayer(url: videoURL).play()
+            }
     }
 }

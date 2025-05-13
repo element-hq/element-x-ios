@@ -44,7 +44,7 @@ protocol AuthenticationServiceProtocol {
     /// Sets up the service for login on the specified homeserver address.
     func configure(for homeserverAddress: String, flow: AuthenticationFlow) async -> Result<Void, AuthenticationServiceError>
     /// Performs login using OIDC for the current homeserver.
-    func urlForOIDCLogin() async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError>
+    func urlForOIDCLogin(loginHint: String?) async -> Result<OIDCAuthorizationDataProxy, AuthenticationServiceError>
     /// Asks the SDK to abort an ongoing OIDC login if we didn't get a callback to complete the request with.
     func abortOIDCLogin(data: OIDCAuthorizationDataProxy) async
     /// Completes an OIDC login that was started using ``urlForOIDCLogin``.
@@ -76,7 +76,7 @@ enum OIDCError: Error {
     case unknown
 }
 
-struct OIDCAuthorizationDataProxy: Equatable {
+struct OIDCAuthorizationDataProxy: Hashable {
     let underlyingData: OAuthAuthorizationData
     
     var url: URL {
@@ -87,8 +87,12 @@ struct OIDCAuthorizationDataProxy: Equatable {
     }
 }
 
-extension OAuthAuthorizationData: @retroactive Equatable {
+extension OAuthAuthorizationData: @retroactive Hashable {
     public static func == (lhs: MatrixRustSDK.OAuthAuthorizationData, rhs: MatrixRustSDK.OAuthAuthorizationData) -> Bool {
         lhs.loginUrl() == rhs.loginUrl()
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(loginUrl())
     }
 }

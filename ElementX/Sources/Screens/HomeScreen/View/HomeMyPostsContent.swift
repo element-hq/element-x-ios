@@ -27,6 +27,8 @@ struct HomeMyPostsContent: View {
                             VStack {
                                 HomeScreenPostCell(post: post,
                                                    mediaProvider: context.mediaProvider,
+                                                   postMediaUrl: nil,
+                                                   availableLinkPreview: nil,
                                                    showThreadLine: false,
                                                    onPostTapped: {},
                                                    onOpenArweaveLink: {},
@@ -45,7 +47,11 @@ struct HomeMyPostsContent: View {
                     LazyVStack(spacing: 0) {
                         ForEach(context.viewState.visibleMyPosts, id: \.id) { post in
                             VStack(alignment: .leading) {
-                                HomeScreenPostCell(post: post, mediaProvider: context.mediaProvider, showThreadLine: false,
+                                HomeScreenPostCell(post: post,
+                                                   mediaProvider: context.mediaProvider,
+                                                   postMediaUrl: context.viewState.postMediaInfoMap[post.id]?.url,
+                                                   availableLinkPreview: nil,
+                                                   showThreadLine: false,
                                                    onPostTapped: {
                                     context.send(viewAction: .postTapped(post))
                                 },

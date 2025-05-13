@@ -216,7 +216,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
         case .roomAlias, .childRoomAlias, .eventOnRoomAlias, .childEventOnRoomAlias:
             break // These are converted to a room ID route one level above.
-        case .roomList, .userProfile, .call, .genericCallLink, .settings, .chatBackupSettings:
+        case .accountProvisioningLink, .roomList, .userProfile, .call, .genericCallLink, .settings, .chatBackupSettings:
             break // These routes can't be handled.
         }
     }

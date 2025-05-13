@@ -10,6 +10,10 @@ import Foundation
 
 protocol ZeroMetaDataApiProtocol {
     func getLinkPreview(url: String) async throws -> Result<ZLinkPreview, Error>
+    
+    func getPostMediaInfo(mediaId: String) async throws -> Result<ZPostMedia, Error>
+    
+    func uploadMedia(media: URL) async throws -> Result<String, Error>
 }
 
 class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
@@ -45,11 +49,36 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
         }
     }
     
+    func getPostMediaInfo(mediaId: String) async throws -> Result<ZPostMedia, any Error> {
+        let url = MetaDataEndPoints.feedMediaEndPoint.appending("/\(mediaId)")
+        let result: Result<ZPostMedia, Error> = try await APIManager.shared.authorisedRequest(url, method: .get, appSettings: appSettings)
+        switch result {
+        case .success(let mediaInfo):
+            return .success(mediaInfo)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func uploadMedia(media: URL) async throws -> Result<String, any Error> {
+        let result: Result<ZPostMediaUploadedInfo, Error> = try await APIManager.shared
+            .authorisedMultipartRequest(MetaDataEndPoints.feedMediaEndPoint,
+                                        mediaFile: media,
+                                        appSettings: appSettings)
+        switch result {
+        case .success(let mediaInfo):
+            return .success(mediaInfo.id)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum MetaDataEndPoints {
         private static let hostURL = ZeroContants.appServer.zeroRootUrl
         
         static let linkPreviewEndPoint = "\(hostURL)linkPreviews"
+        static let feedMediaEndPoint = "\(hostURL)api/media"
     }
 }

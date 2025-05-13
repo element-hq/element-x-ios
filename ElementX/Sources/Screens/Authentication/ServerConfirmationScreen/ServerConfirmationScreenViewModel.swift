@@ -101,7 +101,7 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
         startLoading() // Uses the same ID, so no need to worry if the indicator already exists
         defer { stopLoading() }
         
-        switch await authenticationService.urlForOIDCLogin() {
+        switch await authenticationService.urlForOIDCLogin(loginHint: nil) {
         case .success(let oidcData):
             actionsSubject.send(.continueWithOIDC(data: oidcData, window: window))
         case .failure:
