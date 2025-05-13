@@ -22,7 +22,7 @@ class LoggingTests: XCTestCase {
         let target = "tests"
         XCTAssertTrue(Tracing.logFiles.isEmpty)
         
-        Target.tests.configure(logLevel: .info, traceLogPacks: [])
+        await Target.tests.configure(logLevel: .info, traceLogPacks: [])
         
         // There is something weird with Rust logging where the file writing handle doesn't
         // notice that the file it is writing to was deleted, so we can't run these checks
@@ -34,7 +34,7 @@ class LoggingTests: XCTestCase {
         try validateTargetName(target)
         
         try validateRoomSummaryContentIsRedacted()
-        try validateTimelineContentIsRedacted()
+        try await validateTimelineContentIsRedacted()
         try validateRustMessageContentIsRedacted()
     }
     
@@ -114,7 +114,7 @@ class LoggingTests: XCTestCase {
         XCTAssertFalse(content.contains(heroName))
     }
         
-    func validateTimelineContentIsRedacted() throws {
+    func validateTimelineContentIsRedacted() async throws {
         // Given timeline items that contain text
         let textAttributedString = "TextAttributed"
         let textMessage = TextRoomTimelineItem(id: .randomEvent,
@@ -174,7 +174,7 @@ class LoggingTests: XCTestCase {
                                                               contentType: nil))
         
         // When logging that value
-        Target.tests.configure(logLevel: .info, traceLogPacks: [])
+        await Target.tests.configure(logLevel: .info, traceLogPacks: [])
         
         MXLog.info(textMessage)
         MXLog.info(noticeMessage)

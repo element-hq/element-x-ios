@@ -11,7 +11,7 @@ enum ExpiringTaskRunnerError: Error {
     case timeout
 }
 
-actor ExpiringTaskRunner<T> {
+actor ExpiringTaskRunner<T: Sendable> {
     private var continuation: CheckedContinuation<T, Error>?
     
     private var task: () async throws -> T

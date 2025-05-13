@@ -7,8 +7,9 @@
 
 import Combine
 import Foundation
-import MatrixRustSDK
 import UIKit
+
+@preconcurrency import MatrixRustSDK
 
 private final class MediaRequest {
     var continuations: [CheckedContinuation<Data, Error>] = []
