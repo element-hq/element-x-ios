@@ -48,7 +48,7 @@ struct TypingIndicatorView: View {
             let lastMember = typingMembers.members[1]
             
             Text(L10n.tr("Localizable", "screen_room_typing_many_members_first_component_ios", firstMember, lastMember)).bold() +
-                Text(L10n.tr("Localizable", "screen_room_typing_many_members_second_component_ios", typingMembers.members.count - 2)).bold() +
+                Text(L10n.tr("Localizable", "common_many_members", typingMembers.members.count - 2)).bold() +
                 Text(L10n.screenRoomTypingNotificationPluralIos)
         default:
             if didShowTextOnce {

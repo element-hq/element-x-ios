@@ -34,6 +34,22 @@
 			<string>Lest av %1$@ og %2$d andre</string>
 		</dict>
 	</dict>
+	<key>common_many_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d andre</string>
+			<key>other</key>
+			<string>%d andre</string>
+		</dict>
+	</dict>
 	<key>common_member_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -272,22 +288,6 @@
 			<string>%1$@, %2$@ og %3$d annet</string>
 			<key>other</key>
 			<string>%1$@, %2$@ og %3$d andre</string>
-		</dict>
-	</dict>
-	<key>screen_room_typing_many_members_second_component_ios</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%d andre</string>
-			<key>other</key>
-			<string>%d andre</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>

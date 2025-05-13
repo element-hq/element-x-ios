@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Fjern fra rommet";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Fjerne medlem og utestenge fra å bli med i fremtiden?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Fjerner %1$@...";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Alle kan bli med i dette rommet";
 "screen_create_room_room_access_section_anyone_option_title" = "Alle";
 "screen_create_room_room_access_section_header" = "Tilgang til rom";
@@ -612,6 +617,7 @@
 "screen_change_server_error_invalid_homeserver" = "Vi kunne ikke nå denne hjemmeserveren. Kontroller at du har skrevet inn hjemmeserverens URL riktig. Hvis URL-en er riktig, kontakt administratoren for hjemmeserveren din for å få mer hjelp.";
 "screen_change_server_error_invalid_well_known" = "Serveren er ikke tilgjengelig på grunn av et problem i den velkjente filen:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Den valgte kontoleverandøren støtter ikke sliding sync. En oppgradering av serveren er nødvendig for å bruke %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "URL til hjemmeserver";
 "screen_change_server_form_notice" = "Skriv inn en domeneadresse.";
 "screen_change_server_subtitle" = "Hva er adressen til serveren din?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Systemvarsler er slått av";
 "screen_notification_settings_title" = "Varslinger";
 "screen_onboarding_sign_in_manually" = "Logg på manuelt";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Logg inn med QR-kode";
 "screen_onboarding_sign_up" = "Opprett konto";
 "screen_onboarding_welcome_message" = "Velkommen til den raskeste %1$@ noensinne. Superladet for hastighet og enkelhet.";

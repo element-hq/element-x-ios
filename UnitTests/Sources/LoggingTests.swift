@@ -85,6 +85,7 @@ class LoggingTests: XCTestCase {
                                       isDirect: true,
                                       avatarURL: nil,
                                       heroes: [.init(userID: "", displayName: heroName)],
+                                      activeMembersCount: 0,
                                       lastMessage: AttributedString(lastMessage),
                                       lastMessageDate: .mock,
                                       unreadMessagesCount: 0,

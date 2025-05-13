@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Mitglied entfernen";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Mitglied entfernen und den erneuten Beitritt sperren?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "%1$@ wird entfernt.";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Jeder kann diesem Chatroom beitreten";
 "screen_create_room_room_access_section_anyone_option_title" = "Jemand";
 "screen_create_room_room_access_section_header" = "Chatroom Zugang";
@@ -612,6 +617,7 @@
 "screen_change_server_error_invalid_homeserver" = "Wir konnten diesen Homeserver nicht erreichen. Bitte überprüfe, ob du die Homeserver-URL korrekt eingegeben hast. Wenn die URL korrekt ist, wende dich an deinen Homeserver-Administrator, um weitere Hilfe zu erhalten.";
 "screen_change_server_error_invalid_well_known" = "Der Server ist aufgrund eines Problems im \"well-known file\" nicht verfügbar:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Der gewählte Kontoanbieter unterstützt Sliding Sync nicht. Für die Verwendung von %1$@ ist ein Upgrade des Servers erforderlich.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@darf keine Verbindung herstellen zu%2$@.";
 "screen_change_server_form_header" = "Homeserver-URL";
 "screen_change_server_form_notice" = "Geben Sie eine Domainadresse ein.";
 "screen_change_server_subtitle" = "Wie lautet die Adresse deines Servers?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Systembenachrichtigungen deaktiviert";
 "screen_notification_settings_title" = "Benachrichtigungen";
 "screen_onboarding_sign_in_manually" = "Manuell anmelden";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Mit QR-Code anmelden";
 "screen_onboarding_sign_up" = "Konto erstellen";
 "screen_onboarding_welcome_message" = "Willkommen beim schnellsten %1$@ aller Zeiten. Optimiert für Geschwindigkeit und Einfachheit.";

@@ -22,13 +22,21 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
     }
 
     init(authenticationService: AuthenticationServiceProtocol,
+         loginHint: String?,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
         self.authenticationService = authenticationService
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
         
-        let viewState = LoginScreenViewState(homeserver: authenticationService.homeserver.value)
+        let username = switch loginHint {
+        case .some(let hint) where hint.hasPrefix("mxid:"): String(hint.dropFirst(5)) // MSC4198
+        case .some(let hint): hint
+        case .none: ""
+        }
+        
+        let viewState = LoginScreenViewState(homeserver: authenticationService.homeserver.value,
+                                             bindings: LoginScreenBindings(username: username))
         
         super.init(initialViewState: viewState)
         

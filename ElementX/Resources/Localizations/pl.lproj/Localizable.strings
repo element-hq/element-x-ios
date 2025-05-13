@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Usuń z pokoju";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Usunąć członka i zablokować możliwość dołączenia w przyszłości?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Usuwanie %1$@...";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Każdy może dołączyć do tego pokoju";
 "screen_create_room_room_access_section_anyone_option_title" = "Wszyscy";
 "screen_create_room_room_access_section_header" = "Dostęp do pokoju";
@@ -610,8 +615,9 @@
 "screen_change_account_provider_subtitle" = "Użyj innego dostawcy konta, takiego jak własny serwer lub konta służbowego.";
 "screen_change_account_provider_title" = "Zmień dostawcę konta";
 "screen_change_server_error_invalid_homeserver" = "Nie mogliśmy połączyć się z tym serwerem domowym. Sprawdź, czy adres URL serwera został wprowadzony poprawnie. Jeśli adres URL jest poprawny, skontaktuj się z administratorem serwera w celu uzyskania dalszej pomocy.";
-"screen_change_server_error_invalid_well_known" = "Sliding sync nie jest dostępny z powodu problemu w znanym pliku:\n%1$@";
+"screen_change_server_error_invalid_well_known" = "Serwer nie jest dostępny z powodu problemu pliku .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Wybrany dostawca konta nie wspiera synchronizacji przesuwnej. Wymagana jest aktualizacja serwera %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ nie posiada zezwolenia na dołączenie do %2$@.";
 "screen_change_server_form_header" = "URL serwera domowego";
 "screen_change_server_form_notice" = "Wprowadź adres domeny.";
 "screen_change_server_subtitle" = "Jaki jest adres Twojego serwera?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Powiadomienia systemowe wyłączone";
 "screen_notification_settings_title" = "Powiadomienia";
 "screen_onboarding_sign_in_manually" = "Zaloguj się ręcznie";
+"screen_onboarding_sign_in_to" = "Zaloguj się do %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Zaloguj się za pomocą kodu QR";
 "screen_onboarding_sign_up" = "Utwórz konto";
 "screen_onboarding_welcome_message" = "Witamy w %1$@. Szybszy i prostszy niż kiedykolwiek.";

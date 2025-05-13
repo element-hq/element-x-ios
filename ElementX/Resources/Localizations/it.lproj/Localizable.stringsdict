@@ -34,6 +34,22 @@
 			<string>Visualizzato da %1$@ e altri %2$d</string>
 		</dict>
 	</dict>
+	<key>common_many_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d altro</string>
+			<key>other</key>
+			<string>altri %d</string>
+		</dict>
+	</dict>
 	<key>common_member_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -272,22 +288,6 @@
 			<string>%1$@, %2$@ e %3$d altro</string>
 			<key>other</key>
 			<string>%1$@, %2$@ e altri %3$d</string>
-		</dict>
-	</dict>
-	<key>screen_room_typing_many_members_second_component_ios</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>%d altro</string>
-			<key>other</key>
-			<string>altri %d</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>

@@ -31,4 +31,15 @@ extension View {
             height.wrappedValue = newValue
         }
     }
+    
+    /// Reads the width of the view and stores it in the `width` binding.
+    /// - Parameters:
+    ///   - width: a `CGFloat` binding
+    func readWidth(_ width: Binding<CGFloat>) -> some View {
+        onGeometryChange(for: CGFloat.self) { geometry in
+            geometry.size.width
+        } action: { newValue in
+            width.wrappedValue = newValue
+        }
+    }
 }

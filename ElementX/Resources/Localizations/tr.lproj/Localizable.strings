@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Odadan çıkar";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Üyeyi çıkarın ve gelecekte katılmasını yasaklayın?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Kaldırılıyor %1$@…";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Bu odaya herkes katılabilir";
 "screen_create_room_room_access_section_anyone_option_title" = "Herkes";
 "screen_create_room_room_access_section_header" = "Oda Erişimi";
@@ -612,6 +617,7 @@
 "screen_change_server_error_invalid_homeserver" = "Bu ana sunucuya ulaşamadık. Lütfen ana sunucu URL'sini doğru girip girmediğinizi kontrol edin. URL doğruysa, daha fazla yardım için ana sunucu yöneticinize başvurun.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync, iyi bilinen dosyadaki bir sorun nedeniyle kullanılamıyor:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "Ana sunucu URL'si";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Sunucunuzun adresi nedir?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Sistem bildirimleri kapalı";
 "screen_notification_settings_title" = "Bildirimler";
 "screen_onboarding_sign_in_manually" = "Manuel olarak oturum aç";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "QR kodu ile giriş yap";
 "screen_onboarding_sign_up" = "Hesap oluştur";
 "screen_onboarding_welcome_message" = "Şimdiye kadarki en hızlı %1$@ hoş geldiniz. Hız ve basitlik için güçlendirildi.";
