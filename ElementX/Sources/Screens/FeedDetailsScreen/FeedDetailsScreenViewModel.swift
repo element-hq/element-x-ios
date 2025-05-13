@@ -197,7 +197,6 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                                   title: "Posting...",
                                                                   persistent: true))
-            
             let postFeedResult = await clientProxy.postNewFeed(channelZId: defaultChannelZId,
                                                                content: state.bindings.myPostReply,
                                                                replyToPost: state.bindings.feed.id,
@@ -205,6 +204,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             switch postFeedResult {
             case .success(_):
                 state.bindings.myPostReply = ""
+                state.bindings.feedMedia = nil
                 forceRefreshFeed()
                 feedUpdatedProtocol.onFeedUpdated(state.bindings.feed.id)
             case .failure(_):

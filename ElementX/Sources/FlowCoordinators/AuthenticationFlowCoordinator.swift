@@ -216,12 +216,14 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .provisionedStartScreen), transitions: [.oidcAuthentication => .provisionedStartScreen])
         
         stateMachine.addRoutes(event: .continueWithPassword, transitions: [.serverConfirmationScreen => .loginScreen,
-                                                                           .provisionedStartScreen => .loginScreen]) { [weak self] context in
+                                                                           .provisionedStartScreen => .loginScreen,
+                                                                           .startScreen => .loginScreen]) { [weak self] context in
             let loginHint = context.userInfo as? String
             self?.showLoginScreen(loginHint: loginHint, fromState: context.fromState)
         }
         stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .serverConfirmationScreen), transitions: [.loginScreen => .serverConfirmationScreen])
         stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .provisionedStartScreen), transitions: [.loginScreen => .provisionedStartScreen])
+        stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .startScreen), transitions: [.loginScreen => .startScreen])
         
         // Bug Report
         
@@ -278,6 +280,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                 case .loginDirectlyWithOIDC(let oidcData, let window):
                     stateMachine.tryEvent(.continueWithOIDC, userInfo: (oidcData, window))
                 case .loginDirectlyWithPassword(let loginHint):
+                    startAuthentication(flow: .login, loginHint: loginHint)
                 case .verifyInviteCode(let inviteCode):
                     verifyInviteCode(inviteCode: inviteCode)
                 }
@@ -350,13 +353,13 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setSheetCoordinator(navigationCoordinator)
     }
     
-    private func startAuthentication(flow: AuthenticationFlow) {
+    private func startAuthentication(flow: AuthenticationFlow, loginHint: String?) {
         Task {
             startLoading()
             switch await authenticationService.configure(for: appSettings.defaultHomeserverAddress, flow: .login) {
             case .success:
                 stopLoading()
-                showLoginScreen()
+                stateMachine.tryEvent(.continueWithPassword, userInfo: loginHint)
             case .failure:
                 stopLoading()
                 showServerSelectionScreen(authenticationFlow: flow)
@@ -390,33 +393,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.cancelledServerConfirmation)
-        }
-    }
-    
-    private func showServerSelectionScreen(authenticationFlow: AuthenticationFlow) {
-        let navigationCoordinator = NavigationStackCoordinator()
-        
-        let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
-                                                                    authenticationFlow: authenticationFlow,
-                                                                    userIndicatorController: userIndicatorController)
-        let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .updated:
-                    navigationStackCoordinator.setSheetCoordinator(nil)
-                case .dismiss:
-                    navigationStackCoordinator.setSheetCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(navigationCoordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissedServerSelection)
         }
     }
     
@@ -552,7 +528,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                     userHasSignedIn(userSession: userSession)
                 case .openLoginScreen:
                     navigationStackCoordinator.pop(animated: false)
-                    showLoginScreen()
+                    stateMachine.tryEvent(.continueWithPassword, userInfo: nil)
                 }
             }
             .store(in: &cancellables)

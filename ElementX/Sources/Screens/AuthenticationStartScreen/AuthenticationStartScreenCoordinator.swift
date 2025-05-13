@@ -44,7 +44,7 @@ final class AuthenticationStartScreenCoordinator: CoordinatorProtocol {
                 case .loginWithQR:
                     actionsSubject.send(.loginWithQR)
                 case .login:
-                    actionsSubject.send(.login)
+                    actionsSubject.send(.loginDirectlyWithPassword(loginHint: nil))
                 case .register:
                     actionsSubject.send(.register)
                 case .reportProblem:

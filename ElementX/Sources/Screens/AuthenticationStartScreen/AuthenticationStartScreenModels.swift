@@ -63,15 +63,12 @@ struct AuthenticationStartScreenViewState: BindableState {
 }
 
 struct AuthenticationStartScreenViewStateBindings {
+    var inviteCode = ""
     var alertInfo: AlertInfo<AuthenticationStartScreenAlertType>?
 }
 
 enum AuthenticationStartScreenAlertType {
     case genericError
-}
-
-struct AuthenticationStartScreenBindings {
-    var inviteCode = ""
 }
 
 enum AuthenticationStartScreenViewAction {
