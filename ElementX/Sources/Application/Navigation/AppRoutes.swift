@@ -8,7 +8,12 @@
 import Foundation
 import MatrixRustSDK
 
-enum AppRoute: Equatable, Hashable {
+// MARK: - Routes
+
+enum AppRoute: Hashable {
+    /// An account provisioning link generated externally.
+    case accountProvisioningLink(AccountProvisioningParameters)
+    
     /// The app's home screen.
     case roomList
     /// A room, shown as the root of the stack (popping any child rooms).
@@ -43,6 +48,25 @@ enum AppRoute: Equatable, Hashable {
     case chatBackupSettings
     /// An external share request e.g. from the ShareExtension
     case share(ShareExtensionPayload)
+    
+    /// Whether or not the route should be handled by the authentication flow.
+    var isAuthenticationRoute: Bool {
+        switch self {
+        case .accountProvisioningLink: true
+        default: false
+        }
+    }
+}
+
+/// The parameters parsed out of a provisioning link that can be applied to the authentication flow for a streamlined onboarding experience.
+struct AccountProvisioningParameters: Hashable {
+    let accountProvider: String
+    let loginHint: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case accountProvider = "account_provider"
+        case loginHint = "login_hint"
+    }
 }
 
 struct AppRouteURLParser {
@@ -53,6 +77,7 @@ struct AppRouteURLParser {
             AppGroupURLParser(),
             MatrixPermalinkParser(),
             ElementWebURLParser(domains: appSettings.elementWebHosts),
+            AccountProvisioningURLParser(domain: appSettings.accountProvisioningHost),
             ElementCallURLParser()
         ]
     }
@@ -68,6 +93,8 @@ struct AppRouteURLParser {
     }
 }
 
+// MARK: - URL Parsers
+
 /// Represents a type that can parse a `URL` into an `AppRoute`.
 ///
 /// The following Universal Links are missing parsers.
@@ -76,7 +103,8 @@ protocol URLParser {
     func route(from url: URL) -> AppRoute?
 }
 
-struct AppGroupURLParser: URLParser {
+/// The parser for routes that come from app extensions such as the Share Extension.
+private struct AppGroupURLParser: URLParser {
     func route(from url: URL) -> AppRoute? {
         guard let scheme = url.scheme,
               scheme == InfoPlistReader.app.appScheme,
@@ -101,7 +129,7 @@ struct AppGroupURLParser: URLParser {
 }
 
 /// The parser for Element Call links. This always returns a `.genericCallLink`.
-struct ElementCallURLParser: URLParser {
+private struct ElementCallURLParser: URLParser {
     private let knownHosts = ["call.element.io"]
     private let customSchemeURLQueryParameterName = "url"
     
@@ -139,7 +167,7 @@ struct ElementCallURLParser: URLParser {
     }
 }
 
-struct MatrixPermalinkParser: URLParser {
+private struct MatrixPermalinkParser: URLParser {
     func route(from url: URL) -> AppRoute? {
         guard let entity = parseMatrixEntityFrom(uri: url.absoluteString) else { return nil }
         
@@ -158,7 +186,7 @@ struct MatrixPermalinkParser: URLParser {
     }
 }
 
-struct ElementWebURLParser: URLParser {
+private struct ElementWebURLParser: URLParser {
     let domains: [String]
     let paths = ["room", "user"]
     
@@ -185,5 +213,23 @@ struct ElementWebURLParser: URLParser {
         }
         
         return url
+    }
+}
+
+/// The parser for user provisioning links.
+private struct AccountProvisioningURLParser: URLParser {
+    let domain: String
+    
+    func route(from url: URL) -> AppRoute? {
+        guard url.host() == domain else { return nil }
+        
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+              let serverName = components.queryItems?.first(where: { $0.name == AccountProvisioningParameters.CodingKeys.accountProvider.rawValue })?.value else {
+            return nil
+        }
+        
+        let loginHint = components.queryItems?.first { $0.name == AccountProvisioningParameters.CodingKeys.loginHint.rawValue }?.value
+        
+        return .accountProvisioningLink(.init(accountProvider: serverName, loginHint: loginHint))
     }
 }

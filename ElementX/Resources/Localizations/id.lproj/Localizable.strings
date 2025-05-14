@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Keluarkan dari ruangan";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Keluarkan pengguna dan cekal pengguna bergabung lagi di masa mendatang?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Mengeluarkan %1$@…";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Siapa pun dapat bergabung dengan ruangan ini";
 "screen_create_room_room_access_section_anyone_option_title" = "Siapa pun";
 "screen_create_room_room_access_section_header" = "Akses Ruangan";
@@ -612,6 +617,7 @@
 "screen_change_server_error_invalid_homeserver" = "Kami tidak dapat menjangkau server ini. Periksa apakah Anda telah memasukkan URL homeserver dengan benar. Jika URL sudah benar, hubungi administrator homeserver Anda untuk bantuan lebih lanjut.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync tidak tersedia karena adanya masalah dalam berkas .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "URL Homeserver";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Apa alamat server Anda?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Pemberitahuan sistem dimatikan";
 "screen_notification_settings_title" = "Notifikasi";
 "screen_onboarding_sign_in_manually" = "Masuk secara manual";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Masuk dengan kode QR";
 "screen_onboarding_sign_up" = "Buat akun";
 "screen_onboarding_welcome_message" = "Selamat datang di %1$@ tercepat yang pernah ada. Berdaya besar untuk kecepatan dan kesederhanaan.";

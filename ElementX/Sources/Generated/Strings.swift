@@ -433,6 +433,10 @@ internal enum L10n {
   /// Loading more…
   internal static var commonLoadingMore: String { return L10n.tr("Localizable", "common_loading_more") }
   /// Plural format key: "%#@COUNT@"
+  internal static func commonManyMembers(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "common_many_members", p1)
+  }
+  /// Plural format key: "%#@COUNT@"
   internal static func commonMemberCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_member_count", p1)
   }
@@ -1150,6 +1154,18 @@ internal enum L10n {
   internal static func screenBottomSheetManageRoomMemberRemovingUser(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_removing_user", String(describing: p1))
   }
+  /// Unban from room
+  internal static var screenBottomSheetManageRoomMemberUnban: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unban") }
+  /// Unban
+  internal static var screenBottomSheetManageRoomMemberUnbanMemberConfirmationAction: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action") }
+  /// They would be able to join the room again if invited
+  internal static var screenBottomSheetManageRoomMemberUnbanMemberConfirmationDescription: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description") }
+  /// Are you sure you want to unban this member?
+  internal static var screenBottomSheetManageRoomMemberUnbanMemberConfirmationTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title") }
+  /// Unbanning $1%@
+  internal static func screenBottomSheetManageRoomMemberUnbanningUser(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unbanning_user", String(describing: p1))
+  }
   /// Attach screenshot
   internal static var screenBugReportAttachScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_attach_screenshot") }
   /// You may contact me if you have any follow up questions.
@@ -1190,7 +1206,7 @@ internal enum L10n {
   internal static var screenChangeAccountProviderTitle: String { return L10n.tr("Localizable", "screen_change_account_provider_title") }
   /// We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.
   internal static var screenChangeServerErrorInvalidHomeserver: String { return L10n.tr("Localizable", "screen_change_server_error_invalid_homeserver") }
-  /// Server isn't available due to an issue in the well-known file:
+  /// Server isn't available due to an issue in the .well-known file:
   /// %1$@
   internal static func screenChangeServerErrorInvalidWellKnown(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_invalid_well_known", String(describing: p1))
@@ -1198,6 +1214,10 @@ internal enum L10n {
   /// The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.
   internal static func screenChangeServerErrorNoSlidingSyncMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_no_sliding_sync_message", String(describing: p1))
+  }
+  /// %1$@ is not allowed to connect to %2$@.
+  internal static func screenChangeServerErrorUnauthorizedHomeserver(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "screen_change_server_error_unauthorized_homeserver", String(describing: p1), String(describing: p2))
   }
   /// Homeserver URL
   internal static var screenChangeServerFormHeader: String { return L10n.tr("Localizable", "screen_change_server_form_header") }
@@ -1698,6 +1718,10 @@ internal enum L10n {
   internal static var screenNotificationSettingsTitle: String { return L10n.tr("Localizable", "screen_notification_settings_title") }
   /// Sign in manually
   internal static var screenOnboardingSignInManually: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_manually") }
+  /// Sign in to %1$@
+  internal static func screenOnboardingSignInTo(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_onboarding_sign_in_to", String(describing: p1))
+  }
   /// Sign in with QR code
   internal static var screenOnboardingSignInWithQrCode: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_with_qr_code") }
   /// Create account
@@ -2289,10 +2313,6 @@ internal enum L10n {
   /// %1$@, %2$@ and 
   internal static func screenRoomTypingManyMembersFirstComponentIos(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_room_typing_many_members_first_component_ios", String(describing: p1), String(describing: p2))
-  }
-  /// Plural format key: "%#@COUNT@"
-  internal static func screenRoomTypingManyMembersSecondComponentIos(_ p1: Int) -> String {
-    return L10n.tr("Localizable", "screen_room_typing_many_members_second_component_ios", p1)
   }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomTypingNotification(_ p1: Int) -> String {

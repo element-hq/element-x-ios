@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "从聊天室移除";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "删除成员并禁止重新加入？";
 "screen_bottom_sheet_manage_room_member_removing_user" = "正在移除 %1$@……";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "任何人都可以加入此房间";
 "screen_create_room_room_access_section_anyone_option_title" = "任何人";
 "screen_create_room_room_access_section_header" = "房间访问权限";
@@ -612,6 +617,7 @@
 "screen_change_server_error_invalid_homeserver" = "我们无法访问此服务器。请检查您输入的服务器网址是否正确。如果 URL 正确，请联系您的服务器管理员寻求进一步帮助。";
 "screen_change_server_error_invalid_well_known" = "由于 Well Known 文件中的问题，Sliding Sync 不可用：\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "服务器网址";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "您的服务器地址是什么？";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "系统通知已关闭";
 "screen_notification_settings_title" = "通知";
 "screen_onboarding_sign_in_manually" = "手动登录";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "使用二维码登录";
 "screen_onboarding_sign_up" = "创建账户";
 "screen_onboarding_welcome_message" = "欢迎使用 %1$@，快而简约的消息应用。";

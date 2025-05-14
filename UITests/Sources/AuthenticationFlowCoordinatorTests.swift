@@ -13,6 +13,9 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Given the authentication flow.
         let app = Application.launch(.authenticationFlow)
         
+        // Check the bug report flow works.
+        try await verifyReportBugButton(app)
+        
         // Splash Screen: Tap get started button
         app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
         
@@ -143,5 +146,39 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         }
         
         XCTAssertTrue(wasAlertText.exists, "The web authentication prompt should be shown after selecting a homeserver with OIDC.")
+    }
+    
+    func testProvisionedLoginWithPassword() async throws {
+        // Given a provisioned authentication flow.
+        let app = Application.launch(.provisionedAuthenticationFlow)
+        
+        // Then the start screen should be configured appropriately.
+        try await app.assertScreenshot()
+        
+        // Check the bug report flow works.
+        try await verifyReportBugButton(app)
+        
+        // Splash Screen: Tap get started button
+        app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
+        
+        // Login Screen: Wait for continue button to appear
+        let continueButton = app.buttons[A11yIdentifiers.loginScreen.continue]
+        XCTAssertTrue(continueButton.waitForExistence(timeout: 2.0))
+        
+        // Login Screen: Enter valid credentials
+        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice\n", app: app)
+        app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678", app: app)
+        
+        // Login Screen: Tap next
+        app.buttons[A11yIdentifiers.loginScreen.continue].tap()
+    }
+    
+    func verifyReportBugButton(_ app: XCUIApplication) async throws {
+        // Splash Screen: Report a problem button.
+        app.buttons[A11yIdentifiers.authenticationStartScreen.reportAProblem].tap()
+        
+        // Bug report: Make sure it exists then cancel.
+        XCTAssert(app.textFields[A11yIdentifiers.bugReportScreen.report].exists)
+        app.buttons[A11yIdentifiers.bugReportScreen.cancel].tap()
     }
 }

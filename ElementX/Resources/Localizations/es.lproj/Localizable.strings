@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Sacar de la sala";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "¿Sacar al miembro y prohibirle unirse en el futuro?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Eliminando %1$@...";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Cualquiera puede unirse a esta sala";
 "screen_create_room_room_access_section_anyone_option_title" = "Cualquiera";
 "screen_create_room_room_access_section_header" = "Acceso a la sala";
@@ -612,6 +617,7 @@
 "screen_change_server_error_invalid_homeserver" = "No hemos podido acceder a este servidor. Comprueba que has introducido correctamente la dirección del servidor. Si la dirección es correcta, ponte en contacto con el administrador del servidor para obtener más ayuda.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync no está disponible debido a un problema en el archivo well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "Dirección del homeserver";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "¿Cuál es la dirección de tu servidor?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Notificaciones del sistema desactivadas";
 "screen_notification_settings_title" = "Notificaciones";
 "screen_onboarding_sign_in_manually" = "Iniciar sesión manualmente";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Iniciar sesión con un código QR";
 "screen_onboarding_sign_up" = "Crear cuenta";
 "screen_onboarding_welcome_message" = "Bienvenido al %1$@ más rápido de todos los tiempos. Diseñado para la velocidad y la simplicidad.";

@@ -421,6 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Kendu gelatik";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Kidea kendu eta etorkizunean sartzea debekatu?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "%1$@ kentzen…";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
 "screen_create_room_room_access_section_anyone_option_description" = "Edonor sar daiteke gela honetara";
 "screen_create_room_room_access_section_anyone_option_title" = "Edonork";
 "screen_create_room_room_access_section_header" = "Gelarako sarbidea";
@@ -610,8 +615,9 @@
 "screen_change_account_provider_subtitle" = "Erabili beste kontu-hornitzaile bat, hala nola zure zerbitzari pribatua edo laneko kontu bat.";
 "screen_change_account_provider_title" = "Aldatu kontu-hornitzailea";
 "screen_change_server_error_invalid_homeserver" = "We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.";
-"screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the well-known file:\n%1$@";
+"screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the .well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_form_header" = "Zerbitzariaren URLa";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Zein da zure zerbitzariaren helbidea?";
@@ -759,6 +765,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Sistemaren jakinarazpenak desaktibatuta daude";
 "screen_notification_settings_title" = "Jakinarazpenak";
 "screen_onboarding_sign_in_manually" = "Hasi saioa eskuz";
+"screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Hasi saioa QR kodearekin";
 "screen_onboarding_sign_up" = "Sortu kontua";
 "screen_onboarding_welcome_message" = "Ongi etorri inoizko %1$@ azkarrenera. Abiaduraz eta sinpletasunaz gainkargatua.";

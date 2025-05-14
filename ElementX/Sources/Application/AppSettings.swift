@@ -105,6 +105,7 @@ final class AppSettings {
                   chatBackupDetailsURL: URL,
                   identityPinningViolationDetailsURL: URL,
                   elementWebHosts: [String],
+                  accountProvisioningHost: String,
                   bugReportApplicationID: String,
                   analyticsTermsURL: URL?,
                   mapTilerConfiguration: MapTilerConfiguration) {
@@ -121,6 +122,7 @@ final class AppSettings {
         self.chatBackupDetailsURL = chatBackupDetailsURL
         self.identityPinningViolationDetailsURL = identityPinningViolationDetailsURL
         self.elementWebHosts = elementWebHosts
+        self.accountProvisioningHost = accountProvisioningHost
         self.bugReportApplicationID = bugReportApplicationID
         self.analyticsTermsURL = analyticsTermsURL
         self.mapTilerConfiguration = mapTilerConfiguration
@@ -176,6 +178,8 @@ final class AppSettings {
     private(set) var identityPinningViolationDetailsURL: URL = "https://element.io/help#encryption18"
     /// Any domains that Element web may be hosted on - used for handling links.
     private(set) var elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
+    /// The domain that account provisioning links will be hosted on - used for handling the links.
+    private(set) var accountProvisioningHost = "mobile.element.io"
     
     @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))
     var appAppearance: AppAppearance
