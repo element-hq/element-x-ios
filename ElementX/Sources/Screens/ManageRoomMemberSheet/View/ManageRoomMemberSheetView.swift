@@ -13,10 +13,19 @@ struct ManageRoomMemberSheetView: View {
     
     var body: some View {
         Form {
-            AvatarHeaderView(member: context.viewState.member,
-                             avatarSize: .user(on: .memberDetails),
-                             mediaProvider: context.mediaProvider) {
-                EmptyView()
+            switch context.viewState.details {
+            case .memberDetails(let member, _, _):
+                AvatarHeaderView(member: member,
+                                 avatarSize: .user(on: .memberDetails),
+                                 mediaProvider: context.mediaProvider) {
+                    EmptyView()
+                }
+            case .senderDetails(let sender):
+                AvatarHeaderView(sender: sender,
+                                 avatarSize: .user(on: .memberDetails),
+                                 mediaProvider: context.mediaProvider) {
+                    EmptyView()
+                }
             }
             
             Section {
@@ -37,13 +46,22 @@ struct ManageRoomMemberSheetView: View {
                             })
                 }
                 
-                if context.viewState.canBan {
-                    ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberBan,
-                                            icon: \.block,
-                                            role: .destructive),
-                            kind: .button {
-                                context.send(viewAction: .ban)
-                            })
+                if context.viewState.canBanAndUnban {
+                    if context.viewState.isMemberBanned {
+                        ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberUnban,
+                                                icon: \.block,
+                                                role: .destructive),
+                                kind: .button {
+                                    context.send(viewAction: .unban)
+                                })
+                    } else {
+                        ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberBan,
+                                                icon: \.block,
+                                                role: .destructive),
+                                kind: .button {
+                                    context.send(viewAction: .ban)
+                                })
+                    }
                 }
             }
         }
@@ -76,9 +94,9 @@ private extension ManageRoomMemberSheetViewModel {
     static func mock(canKick: Bool = true,
                      canBan: Bool = true) -> ManageRoomMemberSheetViewModel {
         let member = RoomMemberDetails(withProxy: RoomMemberProxyMock.mockDan)
-        return ManageRoomMemberSheetViewModel(member: member,
-                                              canKick: canKick,
-                                              canBan: canBan,
+        return ManageRoomMemberSheetViewModel(details: .memberDetails(roomMember: member,
+                                                                      canKick: canKick,
+                                                                      canBanAndUnban: canBan),
                                               roomProxy: JoinedRoomProxyMock(.init()),
                                               userIndicatorController: UserIndicatorControllerMock(),
                                               analyticsService: ServiceLocator.shared.analytics,
