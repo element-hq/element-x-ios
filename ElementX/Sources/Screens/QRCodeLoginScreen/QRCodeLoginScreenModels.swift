@@ -81,9 +81,11 @@ enum QRCodeLoginState: Equatable {
         /// the qr code was scanned, but an error occurred.
         case scanFailed(Error)
         
-        enum Error {
+        enum Error: Equatable {
             /// the qr code has been processed and is invalid
             case invalid
+            /// the qr code has been processed but it is for an account provide that isn't allowed.
+            case notAllowed(scannedProvider: String, allowedProviders: [String])
             /// the qr code has been processed but it belongs to a device not signed in,
             case deviceNotSignedIn
             
@@ -91,6 +93,8 @@ enum QRCodeLoginState: Equatable {
                 switch self {
                 case .invalid:
                     L10n.screenQrCodeLoginInvalidScanStateSubtitle
+                case .notAllowed(let scannedProvider, _):
+                    L10n.screenChangeServerErrorUnauthorizedHomeserverTitle(scannedProvider)
                 case .deviceNotSignedIn:
                     L10n.screenQrCodeLoginDeviceNotSignedInScanStateSubtitle
                 }
@@ -100,6 +104,8 @@ enum QRCodeLoginState: Equatable {
                 switch self {
                 case .invalid:
                     L10n.screenQrCodeLoginInvalidScanStateDescription
+                case .notAllowed(_, let allowedProviders):
+                    L10n.screenChangeServerErrorUnauthorizedHomeserverContent(allowedProviders.formatted(.list(type: .and)))
                 case .deviceNotSignedIn:
                     L10n.screenQrCodeLoginDeviceNotSignedInScanStateDescription
                 }
