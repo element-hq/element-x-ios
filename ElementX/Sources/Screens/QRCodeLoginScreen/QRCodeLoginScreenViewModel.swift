@@ -119,9 +119,9 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
         MXLog.error("Failed to scan the QR code: \(error)")
         switch error {
         case .invalidQRCode:
-            state.state = .scan(.invalid)
+            state.state = .scan(.scanFailed(.invalid))
         case .deviceNotSignedIn:
-            state.state = .scan(.deviceNotSignedIn)
+            state.state = .scan(.scanFailed(.deviceNotSignedIn))
         case .cancelled:
             state.state = .error(.cancelled)
         case .connectionInsecure:
