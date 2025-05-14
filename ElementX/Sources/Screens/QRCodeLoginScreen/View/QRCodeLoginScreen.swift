@@ -169,7 +169,7 @@ struct QRCodeLoginScreen: View {
                 Button("") { }
                     .buttonStyle(.compound(.primary))
                     .hidden()
-            case .invalid:
+            case .scanFailed(let error):
                 VStack(spacing: 16) {
                     Button(L10n.screenQrCodeLoginInvalidScanStateRetryButton) {
                         context.send(viewAction: .startScan)
@@ -177,7 +177,7 @@ struct QRCodeLoginScreen: View {
                     .buttonStyle(.compound(.primary))
                     
                     VStack(spacing: 4) {
-                        Label(L10n.screenQrCodeLoginInvalidScanStateSubtitle,
+                        Label(error.title,
                               icon: \.errorSolid,
                               iconSize: .medium,
                               relativeTo: .compound.bodyMDSemibold)
@@ -185,29 +185,7 @@ struct QRCodeLoginScreen: View {
                             .font(.compound.bodyMDSemibold)
                             .foregroundColor(.compound.textCriticalPrimary)
                         
-                        Text(L10n.screenQrCodeLoginInvalidScanStateDescription)
-                            .foregroundColor(.compound.textSecondary)
-                            .font(.compound.bodySM)
-                            .multilineTextAlignment(.center)
-                    }
-                }
-            case .deviceNotSignedIn:
-                VStack(spacing: 16) {
-                    Button(L10n.screenQrCodeLoginInvalidScanStateRetryButton) {
-                        context.send(viewAction: .startScan)
-                    }
-                    .buttonStyle(.compound(.primary))
-                    
-                    VStack(spacing: 4) {
-                        Label(L10n.screenQrCodeLoginDeviceNotSignedInScanStateSubtitle,
-                              icon: \.errorSolid,
-                              iconSize: .medium,
-                              relativeTo: .compound.bodyMDSemibold)
-                            .labelStyle(.custom(spacing: 10))
-                            .font(.compound.bodyMDSemibold)
-                            .foregroundColor(.compound.textCriticalPrimary)
-                        
-                        Text(L10n.screenQrCodeLoginDeviceNotSignedInScanStateDescription)
+                        Text(error.description)
                             .foregroundColor(.compound.textSecondary)
                             .font(.compound.bodySM)
                             .multilineTextAlignment(.center)
@@ -425,9 +403,9 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     
     static let connectingStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.connecting))
     
-    static let invalidStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.invalid))
+    static let invalidStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanFailed(.invalid)))
     
-    static let deviceNotSignedInStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.deviceNotSignedIn))
+    static let deviceNotSignedInStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanFailed(.deviceNotSignedIn)))
     
     // Display Code
     static let deviceCodeStateViewModel = QRCodeLoginScreenViewModel.mock(state: .displayCode(.deviceCode("12")))
