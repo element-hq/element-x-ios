@@ -190,6 +190,7 @@ struct QRCodeLoginScreen: View {
                             .font(.compound.bodySM)
                             .multilineTextAlignment(.center)
                     }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
             }
         }
@@ -405,6 +406,10 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     
     static let invalidStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanFailed(.invalid)))
     
+    static let notAllowedStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanFailed(.notAllowed(scannedProvider: "evil.com",
+                                                                                                               allowedProviders: ["example.com",
+                                                                                                                                  "server.net"]))))
+    
     static let deviceNotSignedInStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanFailed(.deviceNotSignedIn)))
     
     // Display Code
@@ -441,6 +446,9 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
         
         QRCodeLoginScreen(context: invalidStateViewModel.context)
             .previewDisplayName("Invalid")
+        
+        QRCodeLoginScreen(context: notAllowedStateViewModel.context)
+            .previewDisplayName("Not allowed")
         
         QRCodeLoginScreen(context: deviceNotSignedInStateViewModel.context)
             .previewDisplayName("Device not signed in")
