@@ -9,34 +9,34 @@ import Foundation
 
 enum BlockquoteAttribute: AttributedStringKey {
     typealias Value = Bool
-    static var name = "MXBlockquoteAttribute"
+    static let name = "MXBlockquoteAttribute"
 }
 
 enum UserIDAttribute: AttributedStringKey {
     typealias Value = String
-    static var name = "MXUserIDAttribute"
+    static let name = "MXUserIDAttribute"
 }
 
 /// This attribute is used to help the composer convert a mention into to a markdown link before sending
 /// the message. It doesn't interact mention pills, as these fetch display names live from the room.
 enum UserDisplayNameAttribute: AttributedStringKey {
     typealias Value = String
-    static var name = "MXUserDisplayNameAttribute"
+    static let name = "MXUserDisplayNameAttribute"
 }
 
 enum RoomDisplayNameAttribute: AttributedStringKey {
     typealias Value = String
-    static var name = "MXRoomDisplayNameAttribute"
+    static let name = "MXRoomDisplayNameAttribute"
 }
 
 enum RoomIDAttribute: AttributedStringKey {
     typealias Value = String
-    static var name = "MXRoomIDAttribute"
+    static let name = "MXRoomIDAttribute"
 }
 
 enum RoomAliasAttribute: AttributedStringKey {
     typealias Value = String
-    static var name = "MXRoomAliasAttribute"
+    static let name = "MXRoomAliasAttribute"
 }
 
 enum EventOnRoomIDAttribute: AttributedStringKey {
@@ -45,7 +45,7 @@ enum EventOnRoomIDAttribute: AttributedStringKey {
         let eventID: String
     }
     
-    static var name = "MXEventOnRoomIDAttribute"
+    static let name = "MXEventOnRoomIDAttribute"
 }
 
 enum EventOnRoomAliasAttribute: AttributedStringKey {
@@ -54,12 +54,12 @@ enum EventOnRoomAliasAttribute: AttributedStringKey {
         let eventID: String
     }
     
-    static var name = "MXEventOnRoomAliasAttribute"
+    static let name = "MXEventOnRoomAliasAttribute"
 }
 
 enum AllUsersMentionAttribute: AttributedStringKey {
     typealias Value = Bool
-    static var name = "MXAllUsersMentionAttribute"
+    static let name = "MXAllUsersMentionAttribute"
 }
 
 // periphery: ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
