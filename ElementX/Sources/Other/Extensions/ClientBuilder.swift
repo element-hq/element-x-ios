@@ -27,7 +27,6 @@ extension ClientBuilder {
                                          timeout: requestTimeout,
                                          maxConcurrentRequests: nil,
                                          maxRetryTime: maxRequestRetryTime))
-            .useEventCachePersistentStorage(value: true)
         
         builder = switch slidingSync {
         case .restored: builder

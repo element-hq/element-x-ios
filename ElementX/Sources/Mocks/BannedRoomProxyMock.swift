@@ -38,7 +38,7 @@ extension RoomInfo {
                   isDirect: false,
                   isPublic: false,
                   isSpace: false,
-                  isTombstoned: false,
+                  tombstone: nil,
                   isFavourite: false,
                   canonicalAlias: nil,
                   alternativeAliases: [],
