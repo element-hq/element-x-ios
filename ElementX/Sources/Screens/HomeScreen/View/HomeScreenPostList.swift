@@ -21,7 +21,7 @@ struct HomeScreenPostList: View {
                 HomeScreenPostCell(post: post,
                                    mediaProvider: context.mediaProvider,
                                    postMediaUrl: context.viewState.postMediaInfoMap[post.id]?.url,
-                                   availableLinkPreview: nil,
+                                   availableLinkPreview: context.viewState.postLinkPreviewsMap[post.id],
                                    showThreadLine: false,
                                    onPostTapped: {
                     context.send(viewAction: .postTapped(post))
@@ -31,6 +31,9 @@ struct HomeScreenPostList: View {
                 },
                                    onMeowTapped: { count in
                     context.send(viewAction: .addMeowToPost(postId: post.id, amount: count))
+                },
+                                   onOpenYoutubeLink: { url in
+                    context.send(viewAction: .openYoutubeLink(url))
                 })
                 .padding(.horizontal, 16)
                 .padding(.top, 12)

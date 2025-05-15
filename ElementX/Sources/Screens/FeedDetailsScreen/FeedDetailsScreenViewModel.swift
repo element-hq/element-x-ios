@@ -63,9 +63,11 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         switch viewAction {
         case .replyTapped(let reply):
             let mediaUrl = state.postRepliesMediaInfoMap[reply.id]?.url
-            actionsSubject.send(.replyTapped(reply.withUpdatedMediaInfoUrl(url: mediaUrl)))
+            actionsSubject.send(.replyTapped(reply.withUpdatedData(url: mediaUrl, urlLinkPreview: nil)))
         case .openArweaveLink(let post):
             openArweaveLink(post)
+        case .openYoutubeLink(let url):
+            openYoutubeLink(url)
         case .loadMoreRepliesIfNeeded:
             fetchFeedReplies(state.bindings.feed.id)
         case .forceRefreshFeed:
@@ -87,7 +89,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             switch feedResult {
             case .success(let feed):
                 let homePost = HomeScreenPost.init(loggedInUserId: clientProxy.userID, post: feed)
-                state.bindings.feed = homePost.withUpdatedMediaInfo(mediaInfo: state.bindings.feed.mediaInfo)
+                state.bindings.feed = homePost.withUpdatedData(mediaInfo: state.bindings.feed.mediaInfo,
+                                                               urlLinkPreview: state.bindings.feed.urlLinkPreview)
             case .failure(let error):
                 MXLog.error("Failed to fetch feed details: \(error)")
             }
@@ -122,6 +125,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                     state.feedReplies = feedReplies.uniqued(on: \.id)
                     state.repliesListMode = .replies
                     loadPostRepliesMediaInfo(for: state.feedReplies)
+                    loadPostRepliesLinkPreviews(for: state.feedReplies)
                 }
             case .failure(let error):
                 MXLog.error("Failed to fetch zero post replies: \(error)")
@@ -145,6 +149,11 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     private func openArweaveLink(_ post: HomeScreenPost) {
         guard let arweaveUrl = post.getArweaveLink() else { return }
         UIApplication.shared.open(arweaveUrl)
+    }
+    
+    private func openYoutubeLink(_ url: String) {
+        guard let youtubeUrl = URL(string: url) else { return }
+        UIApplication.shared.open(youtubeUrl)
     }
     
     private func forceRefreshFeed() {
@@ -225,6 +234,24 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 if case let .success(media) = result,
                    let postId = postsToFetchMedia.first(where: { $0.mediaInfo!.id == media.media.id })?.id {
                     state.postRepliesMediaInfoMap[postId] = HomeScreenPostMediaInfo(media: media)
+                }
+            }
+        }
+    }
+    
+    private func loadPostRepliesLinkPreviews(for posts: [HomeScreenPost]) {
+        Task {
+            let postsToFetchLinkPreviews = posts.filter({
+                LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: $0.postText) != nil && state.postRepliesLinkPreviewsMap[$0.id] == nil
+            })
+            let results = await postsToFetchLinkPreviews.asyncMap { post in
+                let url = LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: post.postText)!
+                let result = await clientProxy.fetchYoutubeLinkMetaData(youtubrUrl: url)
+                return (post.id, result)
+            }
+            for result in results {
+                if case let .success(linkPreview) = result.1 {
+                    state.postRepliesLinkPreviewsMap[result.0] = linkPreview
                 }
             }
         }

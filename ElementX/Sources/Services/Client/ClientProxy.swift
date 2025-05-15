@@ -1196,6 +1196,21 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func fetchYoutubeLinkMetaData(youtubrUrl: String) async -> Result<ZLinkPreview, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.metaDataApi.fetchYoutubeLinkMetaData(youtubeUrl: youtubrUrl)
+            switch result {
+            case .success(let metaData):
+                return .success(metaData)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to youtube url(\(youtubrUrl)) meta data, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
     // MARK: - Private
     
     private func cacheAccountURL() async {

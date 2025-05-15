@@ -60,6 +60,7 @@ enum HomeScreenViewAction {
     
     case postTapped(_ post: HomeScreenPost)
     case openArweaveLink(_ post: HomeScreenPost)
+    case openYoutubeLink(_ url: String)
     
     case forceRefreshChannels
     case channelTapped(_ channel: HomeScreenChannel)
@@ -350,6 +351,7 @@ struct HomeScreenPost: Identifiable, Equatable {
     let isMyPost: Bool
     
     var mediaInfo: HomeScreenPostMediaInfo?
+    var urlLinkPreview: ZLinkPreview?
     
     static func placeholder() -> HomeScreenPost {
         HomeScreenPost(id: UUID().uuidString,
@@ -370,7 +372,8 @@ struct HomeScreenPost: Identifiable, Equatable {
                        isMeowedByMe: false,
                        postDateTime: "",
                        isMyPost: false,
-                       mediaInfo: nil)
+                       mediaInfo: nil,
+                       urlLinkPreview: nil)
     }
 }
 
@@ -487,15 +490,17 @@ extension HomeScreenPost {
         )
     }
     
-    func withUpdatedMediaInfo(mediaInfo: HomeScreenPostMediaInfo?) -> Self {
+    func withUpdatedData(mediaInfo: HomeScreenPostMediaInfo?, urlLinkPreview: ZLinkPreview?) -> Self {
         var updatedSelf = self
         updatedSelf.mediaInfo = mediaInfo
+        updatedSelf.urlLinkPreview = urlLinkPreview
         return updatedSelf
     }
     
-    func withUpdatedMediaInfoUrl(url: String?) -> Self {
+    func withUpdatedData(url: String?, urlLinkPreview: ZLinkPreview?) -> Self {
         var updatedSelf = self
         updatedSelf.mediaInfo?.url = url
+        updatedSelf.urlLinkPreview = urlLinkPreview
         return updatedSelf
     }
     

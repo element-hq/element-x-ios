@@ -18,6 +18,7 @@ struct HomeScreenPostCell: View {
     let onPostTapped: () -> Void
     let onOpenArweaveLink: () -> Void
     let onMeowTapped: (Int) -> Void
+    let onOpenYoutubeLink: (String) -> Void
     
     var body: some View {
         HStack(alignment: .top) {
@@ -76,44 +77,13 @@ struct HomeScreenPostCell: View {
                         .padding(.vertical, 8)
                 }
                 
-//                if let linkPreview = availableLinkPreview {
-//                    VStack(spacing: 0) {
-//                        if let thumbnail = linkPreview.thumbnail,
-//                           let thumbnailURL = linkPreview.thumbnailURL {
-//                            KFAnimatedImage(thumbnailURL)
-//                                .placeholder {
-//                                    Image(systemName: "link")
-//                                }
-//                                .aspectRatio(thumbnail.aspectRatio, contentMode: .fit)
-//                                .cornerRadius(4, corners: .allCorners)
-//                        }
-//                        
-//                        HStack(alignment: .center) {
-//                            if linkPreview.thumbnail == nil {
-//                                Image(systemName: "link")
-//                                    .resizable()
-//                                    .frame(width: 24, height: 24)
-//                                    .aspectRatio(contentMode: .fit)
-//                                    .cornerRadius(4, corners: .allCorners)
-//                            }
-//                            VStack(alignment: .leading) {
-//                                if let title = linkPreview.title {
-//                                    Text(title)
-//                                        .font(.zero.bodyMDSemibold)
-//                                        .foregroundColor(.compound.textPrimary)
-//                                        .lineLimit(1)
-//                                }
-//                                
-//                                Text(linkPreview.url)
-//                                    .font(.zero.bodyMD)
-//                                    .foregroundColor(.compound.textSecondary)
-//                                    .lineLimit(1)
-//                            }
-//                            .padding(.horizontal, 4)
-//                        }
-//                    }
-//                    .padding(.vertical, 4)
-//                }
+                if let linkPreview = availableLinkPreview {
+                    HomePostCellLinkPreview(linkPreview: linkPreview)
+                        .padding(.vertical, 4)
+                        .onTapGesture {
+                            onOpenYoutubeLink(linkPreview.url)
+                        }
+                }
                 
                 if let mediaInfo = post.mediaInfo,
                    let url = URL(string: postMediaUrl ?? "") {
@@ -161,12 +131,66 @@ struct HomeScreenPostCell: View {
     }
 }
 
+struct HomePostCellLinkPreview: View {
+    let linkPreview: ZLinkPreview
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            if let thumbnail = linkPreview.thumbnail,
+               let thumbnailURL = linkPreview.thumbnailURL {
+                ZStack {
+                    KFAnimatedImage(thumbnailURL)
+                        .placeholder {
+                            Image(systemName: "link")
+                        }
+                        .aspectRatio(thumbnail.aspectRatio, contentMode: .fit)
+                        .cornerRadius(4, corners: .allCorners)
+                    
+                    if linkPreview.isAYoutubeVideo {
+                        Image(systemName: "play")
+                            .resizable()
+                            .frame(width: 24, height: 24)
+                            .padding()
+                            .background(.black)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .aspectRatio(contentMode: .fit)
+                    }
+                }
+            }
+            
+            HStack(alignment: .center) {
+                if linkPreview.thumbnail == nil {
+                    Image(systemName: "link")
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                        .aspectRatio(contentMode: .fit)
+                        .cornerRadius(4, corners: .allCorners)
+                }
+                VStack(alignment: .leading) {
+                    if let title = linkPreview.title {
+                        Text(title)
+                            .font(.zero.bodyMDSemibold)
+                            .foregroundColor(.compound.textPrimary)
+                            .lineLimit(1)
+                    }
+                    
+                    let description = linkPreview.isAYoutubeVideo ? linkPreview.youtubeVideoDescription : linkPreview.url
+                    Text(description)
+                        .font(.zero.bodyMD)
+                        .foregroundColor(.compound.textSecondary)
+                        .lineLimit(1)
+                }
+            }
+        }
+    }
+}
+
 struct VideoPlayerView: View {
     let videoURL: URL
     
     var body: some View {
         VideoPlayer(player: AVPlayer(url: videoURL))
-//            .aspectRatio(16/9, contentMode: .fit)
+        //            .aspectRatio(16/9, contentMode: .fit)
             .onAppear {
                 AVPlayer(url: videoURL).play()
             }

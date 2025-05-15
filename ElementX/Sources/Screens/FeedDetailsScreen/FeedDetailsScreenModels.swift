@@ -36,6 +36,7 @@ struct FeedDetailsScreenViewState: BindableState {
     var userRewards = ZeroRewards.empty()
     
     var postRepliesMediaInfoMap: [String: HomeScreenPostMediaInfo] = [:]
+    var postRepliesLinkPreviewsMap: [String: ZLinkPreview] = [:]
 }
 
 struct FeedDetailsScreenViewStateBindings {
@@ -54,6 +55,7 @@ enum FeedDetailsScreenViewModelAction {
 enum FeedDetailsScreenViewAction {
     case replyTapped(_ reply: HomeScreenPost)
     case openArweaveLink(_ post: HomeScreenPost)
+    case openYoutubeLink(_ url: String)
     case loadMoreRepliesIfNeeded
     case forceRefreshFeed
     case meowTapped(_ postId: String, amount: Int, isPostAReply: Bool)

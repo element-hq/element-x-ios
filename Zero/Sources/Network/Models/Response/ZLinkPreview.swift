@@ -35,6 +35,14 @@ extension ZLinkPreview {
     var linkURL: URL? {
         return URL(string: url)
     }
+    
+    var isAYoutubeVideo: Bool {
+        providerName?.lowercased() == "Youtube".lowercased()
+    }
+    
+    var youtubeVideoDescription: String {
+        authorName?.appending(" ").appending(description ?? "") ?? ""
+    }
 }
 
 extension Thumbnail {
