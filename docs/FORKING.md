@@ -1,15 +1,27 @@
 # Forking
 
-### Update the bundle identifier / app display name
+### Project Configuration
 
-To change the bundle identifier and the app display name for your app, open the `project.yml` file in the project root folder and change these settings:
+To create a fork, the first step is to update some of the project's configuration options such as the bundle identifier and the app's display name. To do this, open the `app.yml` file in the project root folder and at a minimum change these settings:
 
 ```
-BASE_BUNDLE_IDENTIFIER: io.element.elementx
 APP_DISPLAY_NAME: Element X
+APP_GROUP_IDENTIFIER: group.io.element
+BASE_BUNDLE_IDENTIFIER: io.element.elementx
+DEVELOPMENT_TEAM: 7J4U792NQT
 ```
 
-After the changes run `xcodegen` to propagate them.
+After making the changes, run `xcodegen` to regenerate the project.
+
+### Runtime Configuration
+
+Once your project is configured and compiles, you'll likely want to tweak how the app works. [AppSettings.swift](../ElementX/Sources/Application/AppSettings.swift) contains all of the settings used by the app at runtime.
+
+### Authentication
+
+Element X's primary authentication method is to use OIDC against [Matrix Authentication Service](https://github.com/element-hq/matrix-authentication-service) (MAS). Unlike the older password-based authentication flows, this requires a small amount of configuration within the app. You need to make sure that all of the values passed to the SDK in the [OIDCConfiguration](https://github.com/element-hq/element-x-ios/blob/b2a37ec9d39622586754f58a98dcda35e0e8cf7e/ElementX/Sources/Application/AppSettings.swift#L206-L212) are hosted on the same domain otherwise dynamic client registration will fail. As we're using an [HTTPS callback](https://developer.apple.com/documentation/authenticationservices/aswebauthenticationsession/callback/https(host:path:)) for the web authentication, Apple validates ownership of the domain with the app. There are 2 steps to make sure this validation works:
+- Add an [apple-app-site-association](https://developer.apple.com/documentation/xcode/supporting-associated-domains) file on your website with your app included in the `webcredentials` section.
+- Update the [webcredentials](https://github.com/element-hq/element-x-ios/blob/b2a37ec9d39622586754f58a98dcda35e0e8cf7e/ElementX/SupportingFiles/target.yml#L122) associated domain entitlement in the app to match your domain and re-run `xcodegen`.
 
 ### Setup the location sharing
 

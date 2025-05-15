@@ -264,7 +264,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             }
         case .postTapped(let post):
             let mediaUrl = state.postMediaInfoMap[post.id]?.url
-            actionsSubject.send(.postTapped(post.withUpdatedMediaInfoUrl(url: mediaUrl), feedUpdatedProtocol: self))
+            let urlLinkPreview = state.postLinkPreviewsMap[post.id]
+            actionsSubject.send(.postTapped(post.withUpdatedData(url: mediaUrl, urlLinkPreview: urlLinkPreview), feedUpdatedProtocol: self))
         case .openArweaveLink(let post):
             openArweaveLink(post)
         case .addMeowToPost(let postId, let amount):
@@ -273,6 +274,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             Task { await fetchChannels(isForceRefresh: true) }
         case .channelTapped(let channel):
             joinZeroChannel(channel)
+        case .openYoutubeLink(let url):
+            openYoutubeLink(url)
         }
     }
     
@@ -676,6 +679,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         UIApplication.shared.open(arweaveUrl)
     }
     
+    private func openYoutubeLink(_ url: String) {
+        guard let youtubeUrl = URL(string: url) else { return }
+        UIApplication.shared.open(youtubeUrl)
+    }
+    
     private func addMeowToPost(_ postId: String, _ amount: Int) {
         Task {
             let addMeowResult = await userSession.clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
@@ -839,11 +847,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private func loadPostLinkPreviews(for posts: [HomeScreenPost]) {
         Task {
             let postsToFetchLinkPreviews = posts.filter({
-                LinkPreviewUtil.shared.firstNonMatrixLink(from: $0.postText) != nil && state.postLinkPreviewsMap[$0.id] == nil
+                LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: $0.postText) != nil && state.postLinkPreviewsMap[$0.id] == nil
             })
             let results = await postsToFetchLinkPreviews.asyncMap { post in
-                let url = LinkPreviewUtil.shared.firstNonMatrixLink(from: post.postText)!
-                let result = await userSession.clientProxy.getLinkPreviewMetaData(url: url)
+                let url = LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: post.postText)!
+                let result = await userSession.clientProxy.fetchYoutubeLinkMetaData(youtubrUrl: url)
                 return (post.id, result)
             }
             for result in results {

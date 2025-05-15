@@ -284,4 +284,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError>
     
     func getPostMediaInfo(mediaId: String) async -> Result<ZPostMedia, ClientProxyError>
+    
+    func fetchYoutubeLinkMetaData(youtubrUrl: String) async -> Result<ZLinkPreview, ClientProxyError>
 }

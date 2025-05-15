@@ -14,6 +14,8 @@ protocol ZeroMetaDataApiProtocol {
     func getPostMediaInfo(mediaId: String) async throws -> Result<ZPostMedia, Error>
     
     func uploadMedia(media: URL) async throws -> Result<String, Error>
+    
+    func fetchYoutubeLinkMetaData(youtubeUrl: String) async throws -> Result<ZLinkPreview, Error>
 }
 
 class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
@@ -73,6 +75,26 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
         }
     }
     
+    func fetchYoutubeLinkMetaData(youtubeUrl: String) async throws -> Result<ZLinkPreview, any Error> {
+        let parameters: Parameters = [
+            "url": youtubeUrl,
+            "format": "json"
+        ]
+        let result: Result<YoutubeLinkMetaData, Error> =
+        try await APIManager
+            .shared
+            .request(MetaDataEndPoints.youtubeLinkMetaDataEndPoint,
+                               method: .get,
+                               parameters: parameters,
+                               encoding: URLEncoding.queryString)
+        switch result {
+        case .success(let metaData):
+            return .success(metaData.toLinkPreview(youtubeUrl))
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum MetaDataEndPoints {
@@ -80,5 +102,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
         
         static let linkPreviewEndPoint = "\(hostURL)linkPreviews"
         static let feedMediaEndPoint = "\(hostURL)api/media"
+        
+        static let youtubeLinkMetaDataEndPoint = "https://www.youtube.com/oembed"
     }
 }

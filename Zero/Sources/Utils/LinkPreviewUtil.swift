@@ -30,4 +30,18 @@ class LinkPreviewUtil {
         }
         return nil
     }
+    
+    func firstAvailableYoutubeLink(from text: String?) -> String? {
+        guard let text = text else { return nil }
+        let pattern = #"https://(?:www\.)?(?:youtube\.com/watch\?v=|youtu\.be/)[^&\s]+"#
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
+            return nil
+        }
+        let range = NSRange(text.startIndex..., in: text)
+        if let match = regex.firstMatch(in: text, options: [], range: range),
+           let matchRange = Range(match.range, in: text) {
+            return String(text[matchRange])
+        }
+        return nil
+    }
 }

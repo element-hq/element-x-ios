@@ -32,8 +32,9 @@ struct HomePostsContent: View {
                                                    showThreadLine: false,
                                                    onPostTapped: {},
                                                    onOpenArweaveLink: {},
-                                                   onMeowTapped: { _ in })
-                                    .padding(.all, 16)
+                                                   onMeowTapped: { _ in },
+                                                   onOpenYoutubeLink: { _ in })
+                                .padding(.all, 16)
                                 Divider()
                             }
                             .redacted(reason: .placeholder)

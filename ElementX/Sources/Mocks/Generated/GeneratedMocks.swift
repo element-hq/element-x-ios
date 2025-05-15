@@ -6552,6 +6552,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return getPostMediaInfoMediaIdReturnValue
         }
     }
+    //MARK: - fetchYoutubeLinkMetaData
+
+    var fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount = 0
+    var fetchYoutubeLinkMetaDataYoutubrUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchYoutubeLinkMetaDataYoutubrUrlCalled: Bool {
+        return fetchYoutubeLinkMetaDataYoutubrUrlCallsCount > 0
+    }
+    var fetchYoutubeLinkMetaDataYoutubrUrlReceivedYoutubrUrl: String?
+    var fetchYoutubeLinkMetaDataYoutubrUrlReceivedInvocations: [String] = []
+
+    var fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue: Result<ZLinkPreview, ClientProxyError>!
+    var fetchYoutubeLinkMetaDataYoutubrUrlReturnValue: Result<ZLinkPreview, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZLinkPreview, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchYoutubeLinkMetaDataYoutubrUrlUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchYoutubeLinkMetaDataYoutubrUrlClosure: ((String) async -> Result<ZLinkPreview, ClientProxyError>)?
+
+    func fetchYoutubeLinkMetaData(youtubrUrl: String) async -> Result<ZLinkPreview, ClientProxyError> {
+        fetchYoutubeLinkMetaDataYoutubrUrlCallsCount += 1
+        fetchYoutubeLinkMetaDataYoutubrUrlReceivedYoutubrUrl = youtubrUrl
+        DispatchQueue.main.async {
+            self.fetchYoutubeLinkMetaDataYoutubrUrlReceivedInvocations.append(youtubrUrl)
+        }
+        if let fetchYoutubeLinkMetaDataYoutubrUrlClosure = fetchYoutubeLinkMetaDataYoutubrUrlClosure {
+            return await fetchYoutubeLinkMetaDataYoutubrUrlClosure(youtubrUrl)
+        } else {
+            return fetchYoutubeLinkMetaDataYoutubrUrlReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?

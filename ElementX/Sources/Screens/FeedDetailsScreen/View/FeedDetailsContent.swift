@@ -188,7 +188,7 @@ struct PostRepliesList: View {
                 HomeScreenPostCell(post: post,
                                    mediaProvider: context.mediaProvider,
                                    postMediaUrl: context.viewState.postRepliesMediaInfoMap[post.id]?.url,
-                                   availableLinkPreview: nil,
+                                   availableLinkPreview: context.viewState.postRepliesLinkPreviewsMap[post.id],
                                    showThreadLine: showThreadLine,
                                    onPostTapped: {
                     context.send(viewAction: .replyTapped(post))
@@ -198,6 +198,9 @@ struct PostRepliesList: View {
                 },
                                    onMeowTapped: { count in
                     context.send(viewAction: .meowTapped(post.id, amount: count, isPostAReply: true))
+                },
+                                   onOpenYoutubeLink: { url in
+                    context.send(viewAction: .openYoutubeLink(url))
                 })
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
@@ -252,6 +255,14 @@ struct FeedDetailsSection: View {
                     .font(.zero.bodyLG)
                     .foregroundStyle(.compound.textPrimary)
                     .padding(.vertical, 12)
+            }
+            
+            if let linkPreview = post.urlLinkPreview {
+                HomePostCellLinkPreview(linkPreview: linkPreview)
+                    .padding(.vertical, 4)
+                    .onTapGesture {
+                        context.send(viewAction: .openYoutubeLink(linkPreview.url))
+                    }
             }
             
             if let mediaInfo = post.mediaInfo,

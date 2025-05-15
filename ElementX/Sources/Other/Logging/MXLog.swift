@@ -9,13 +9,11 @@
 import Foundation
 import MatrixRustSDK
 
-/**
- Logging utility that provies multiple logging levels as well as file output and rolling.
- Its purpose is to provide a common entry for customizing logging and should be used throughout the code.
- */
+/// Logging utility that provies multiple logging levels as well as file output and rolling.
+/// Its purpose is to provide a common entry for customizing logging and should be used throughout the code.
 enum MXLog {
-    private static var rootSpan: Span!
-    private static var currentTarget: String!
+    private nonisolated(unsafe) static var rootSpan: Span!
+    private nonisolated(unsafe) static var currentTarget: String!
     
     static func configure(currentTarget: String) {
         self.currentTarget = currentTarget
