@@ -425,7 +425,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
-"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_room_access_section_header" = "Room Access";
