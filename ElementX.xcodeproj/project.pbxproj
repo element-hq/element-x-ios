@@ -3143,6 +3143,7 @@
 		3C368CAB3063EF275357ECD4 /* LoginScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenViewModel.swift; sourceTree = "<group>"; };
 		3C3ADF21BE301D0DA48F2A7E /* ShareExtensionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareExtensionView.swift; sourceTree = "<group>"; };
 		3C3E67E09FE5A35D73818C39 /* AppLockScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockScreenModels.swift; sourceTree = "<group>"; };
+		3C8A63F1458D97D832C127DD /* app.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = app.yml; sourceTree = "<group>"; };
 		3CCE3636E3D01477C8B2E9D0 /* ReportContentScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportContentScreenModels.swift; sourceTree = "<group>"; };
 		3CFD5EB0B0EEA4549FB49784 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		3D1D4A6D451F43A03CACD01D /* PINTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PINTextField.swift; sourceTree = "<group>"; };
@@ -5551,18 +5552,19 @@
 		405B00F139AEE3994601B36A = {
 			isa = PBXGroup;
 			children = (
+				3C8A63F1458D97D832C127DD /* app.yml */,
 				184D6FBF2C7D8036006266D8 /* Zero */,
 				5D26A086A8278D39B5756D6F /* project.yml */,
 				99B9B46F2D621380428E68F7 /* ElementX */,
+				B04B538A859CD012755DC19C /* NSE */,
+				D0111119CDF3E28E6D7768E8 /* ShareExtension */,
 				A4852B57D55D71EEBFCD931D /* UnitTests */,
+				1803CD2B96BF06009334BB61 /* PreviewTests */,
 				C0FAC17D4DD7D3A502822550 /* UITests */,
 				8A9C09B6A392465E03B8D1B1 /* IntegrationTests */,
-				823ED0EC3F1B6CF47D284011 /* Tools */,
 				A8002CB4F20B6282850A614C /* DevelopmentAssets */,
-				B04B538A859CD012755DC19C /* NSE */,
-				1803CD2B96BF06009334BB61 /* PreviewTests */,
 				2197234282B4BC0CE79AAC74 /* Secrets */,
-				D0111119CDF3E28E6D7768E8 /* ShareExtension */,
+				823ED0EC3F1B6CF47D284011 /* Tools */,
 				681566846AF307E9BA4C72C6 /* Products */,
 				1882EB872C8F8A8E001DA2A9 /* Frameworks */,
 			);
