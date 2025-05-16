@@ -52,8 +52,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
         }
         
-        super.init(initialViewState: CallScreenViewState(messageHandler: Self.eventHandlerName,
-                                                         script: Self.eventHandlerInjectionScript,
+        super.init(initialViewState: CallScreenViewState(script: CallScreenEventJSHandler.fullScript,
                                                          certificateValidator: appHooks.certificateValidatorHook))
         
         state.bindings.javaScriptMessageHandler = { [weak self] message in
@@ -107,6 +106,13 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
+        NotificationCenter.default
+            .publisher(for: AVAudioSession.routeChangeNotification)
+            .sink { [weak self] _ in
+                Task { await self?.setAvailableOutputDevices() }
+            }
+            .store(in: &cancellables)
+        
         setupCall()
     }
     
@@ -123,6 +129,10 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             actionsSubject.send(.pictureInPictureStopped)
         case .endCall:
             actionsSubject.send(.dismiss)
+        case .ready:
+            Task { await setAvailableOutputDevices() }
+        case .outputDeviceSelected(deviceID: let deviceID):
+            handleOutputDeviceSelected(deviceID: deviceID)
         }
     }
     
@@ -132,9 +142,18 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
         
         elementCallService.tearDownCallSession()
+        UIDevice.current.isProximityMonitoringEnabled = false
     }
     
     // MARK: - Private
+    
+    private static let earpieceID = "earpiece-id"
+    
+    private func handleOutputDeviceSelected(deviceID: String) {
+        let isEarpiece = deviceID == Self.earpieceID
+        MXLog.info("[handleOutputDeviceSelected] is earpiece: \(isEarpiece)")
+        UIDevice.current.isProximityMonitoringEnabled = isEarpiece
+    }
     
     private func setupCall() {
         switch configuration.kind {
@@ -242,23 +261,24 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
     }
     
-    private static let eventHandlerName = "elementx"
-    
-    private static var eventHandlerInjectionScript: String {
-        """
-        window.addEventListener(
-            "message",
-            (event) => {
-                let message = {data: event.data, origin: event.origin}
-                if (message.data.response && message.data.api == "toWidget"
-                || !message.data.response && message.data.api == "fromWidget") {
-                  window.webkit.messageHandlers.\(eventHandlerName).postMessage(JSON.stringify(message.data));
-                }else{
-                  console.log("-- skipped event handling by the client because it is send from the client itself.");
-                }
-            },
-            false,
-          );
-        """
+    private func setAvailableOutputDevices() async {
+        guard let currentOutput = AVAudioSession.sharedInstance().currentRoute.outputs.first else {
+            return
+        }
+        
+        let deviceList = if currentOutput.portType == .builtInSpeaker {
+            "{id: '\(currentOutput.uid)', name: '\(currentOutput.portName)', forEarpiece: true}"
+        } else {
+            // Doesn't matter because the switch is handled through the OS
+            "{id: 'dummy', name: 'dummy'}"
+        }
+        
+        let javaScript = "window.controls.setAvailableOutputDevices([\(deviceList)])"
+        do {
+            let result = try await state.bindings.javaScriptEvaluator?(javaScript)
+            MXLog.debug("Evaluated  with result: \(String(describing: result))")
+        } catch {
+            MXLog.error("Received javascript evaluation error: \(error)")
+        }
     }
 }
