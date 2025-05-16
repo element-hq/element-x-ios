@@ -209,28 +209,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .layoutPriority(TimelineBubbleLayout.Priority.regularText)
             }
             
-            if let linkPreview = context.viewState.linkPreviewsMap[timelineItem.id] {
-                TimelineLinkPreviewView(preview: linkPreview)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(4.0)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.compound.bgCanvasDefault)
-                    .cornerRadius(8)
-                    .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
-                    .onTapGesture {
-                        if let url = linkPreview.linkURL {
-                            openURL(url)
-                        }
-                    }
-                
-                // Add a fixed width link preview bubble that is used for layout calculations but won't be rendered.
-                TimelineLinkPreviewView(preview: linkPreview)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(4.0)
-                    .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
-                    .hidden()
-            }
-            
             if let replyDetails = timelineItem.properties.replyDetails {
                 // The rendered reply bubble with a greedy width. The custom layout prevents
                 // the infinite width from increasing the overall width of the view.
@@ -239,7 +217,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(4.0)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.compound.bgCanvasDefault)
+                    .background(Color.black)
                     .cornerRadius(8)
                     .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                     .onTapGesture {
@@ -264,6 +242,28 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .onTapGesture {
                         context.send(viewAction: .tappedOnSenderDetails(userID: timelineItem.sender.id))
                     }
+            }
+            
+            if let linkPreview = context.viewState.linkPreviewsMap[timelineItem.id] {
+                TimelineLinkPreviewView(preview: linkPreview)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(4.0)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.black)
+                    .cornerRadius(8)
+                    .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
+                    .onTapGesture {
+                        if let url = linkPreview.linkURL {
+                            openURL(url)
+                        }
+                    }
+                
+                // Add a fixed width link preview bubble that is used for layout calculations but won't be rendered.
+                TimelineLinkPreviewView(preview: linkPreview)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(4.0)
+                    .layoutPriority(TimelineBubbleLayout.Priority.hiddenQuote)
+                    .hidden()
             }
             
             content()
