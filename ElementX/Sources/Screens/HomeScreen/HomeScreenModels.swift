@@ -54,8 +54,10 @@ enum HomeScreenViewAction {
     case loadRewards
     case rewardsIntimated
     
-    case loadMorePostsIfNeeded(_ forMyPostsTab: Bool)
-    case forceRefreshPosts(_ forMyPostsTab: Bool)
+    case loadMoreAllPosts(followingPostsOnly: Bool)
+    case loadMoreMyPosts
+    case forceRefreshAllPosts(followingPostsOnly: Bool)
+    case forceRefreshMyPosts
     case addMeowToPost(postId: String, amount: Int)
     
     case postTapped(_ post: HomeScreenPost)

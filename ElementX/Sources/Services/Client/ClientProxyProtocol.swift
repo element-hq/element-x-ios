@@ -259,7 +259,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     // MARK: - Zero Feed
     
-    func fetchZeroFeeds(channelZId: String?, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
+    func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
     
     func fetchFeedDetails(feedId: String) async -> Result<ZPost, ClientProxyError>
     

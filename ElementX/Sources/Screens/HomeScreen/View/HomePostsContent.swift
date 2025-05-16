@@ -13,8 +13,18 @@ struct HomePostsContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
+    @State private var selectedTab: HomePostsTab = .following
+    
     var body: some View {
-        postList
+        VStack(spacing: 0) {
+            HomePostsTabView(
+                onTabSelected: { tab in
+                    selectedTab = tab
+                    context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: tab == .following))
+                }
+            )
+            postList
+        }
     }
     
     private var postList: some View {
@@ -52,7 +62,7 @@ struct HomePostsContent: View {
                             ProgressView()
                                 .padding()
                                 .onAppear {
-                                    context.send(viewAction: .loadMorePostsIfNeeded(false))
+                                    context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
                                 }
                         }
                     }
@@ -68,7 +78,7 @@ struct HomePostsContent: View {
             .animation(.elementDefault, value: context.viewState.postListMode)
             .animation(.none, value: context.viewState.visiblePosts)
             .refreshable {
-                context.send(viewAction: .forceRefreshPosts(false))
+                context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: selectedTab == .following))
             }
         }
     }

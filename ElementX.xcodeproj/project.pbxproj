@@ -1941,6 +1941,8 @@
 		79C6BB282D47B74300FC3CBF /* RoomMembershipDetailsProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B09A94C519227264A41208 /* RoomMembershipDetailsProxy.swift */; };
 		79C6BB292D47B76900FC3CBF /* RoomPreviewProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6695C64F066628411EAD21E9 /* RoomPreviewProxyMock.swift */; };
 		79D57E9AE03A2DC689D14EA2 /* UserSessionStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB9BA2F30EB8C33226D8FF1 /* UserSessionStoreMock.swift */; };
+		79DE0ECA2DD7476E00466716 /* HomePostsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DE0EC92DD7476400466716 /* HomePostsTabView.swift */; };
+		79DE0ECB2DD7476E00466716 /* HomePostsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DE0EC92DD7476400466716 /* HomePostsTabView.swift */; };
 		79FC2A462DCA8F7C00D14182 /* ZPostMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC2A452DCA8F7700D14182 /* ZPostMedia.swift */; };
 		79FC2A472DCA8F7C00D14182 /* ZPostMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC2A452DCA8F7700D14182 /* ZPostMedia.swift */; };
 		79FC2A492DCAA7AE00D14182 /* LinkPreviewUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC2A482DCAA79F00D14182 /* LinkPreviewUtil.swift */; };
@@ -3461,6 +3463,7 @@
 		79A106D76741914F82664959 /* StateStoreViewModelV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateStoreViewModelV2.swift; sourceTree = "<group>"; };
 		79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNotificationsContent.swift; sourceTree = "<group>"; };
 		79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenNotificationCell.swift; sourceTree = "<group>"; };
+		79DE0EC92DD7476400466716 /* HomePostsTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostsTabView.swift; sourceTree = "<group>"; };
 		79FC2A452DCA8F7700D14182 /* ZPostMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPostMedia.swift; sourceTree = "<group>"; };
 		79FC2A482DCAA79F00D14182 /* LinkPreviewUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkPreviewUtil.swift; sourceTree = "<group>"; };
 		7A03E073077D92AA19C43DCF /* IdentityConfirmationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConfirmationScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -5865,6 +5868,7 @@
 				ED044D00F2176681CC02CD54 /* HomeScreenRoomCell.swift */,
 				793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */,
 				790393792D4D62B40022E293 /* HomePostsContent.swift */,
+				79DE0EC92DD7476400466716 /* HomePostsTabView.swift */,
 				795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */,
 				79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */,
 				79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */,
@@ -9890,6 +9894,7 @@
 				18E9A61D2C9829970082DDA4 /* RoomChangeRolesScreenCoordinator.swift in Sources */,
 				18E9A61E2C9829970082DDA4 /* RoomChangeRolesScreenModels.swift in Sources */,
 				18E9A61F2C9829970082DDA4 /* RoomChangeRolesScreenRow.swift in Sources */,
+				79DE0ECA2DD7476E00466716 /* HomePostsTabView.swift in Sources */,
 				18E9A6202C9829970082DDA4 /* RoomChangeRolesScreenSection.swift in Sources */,
 				18E9A6212C9829970082DDA4 /* RoomChangeRolesScreenSelectedItem.swift in Sources */,
 				18E9A6222C9829970082DDA4 /* RoomChangeRolesScreenViewModel.swift in Sources */,
@@ -11306,6 +11311,7 @@
 				126CBCF5B0145FA1377C1316 /* Tracing.swift in Sources */,
 				1828CE442D01010C002FF640 /* ZCurrentUser.swift in Sources */,
 				298F9EC30E918F12AB7F1EE8 /* TypingIndicatorView.swift in Sources */,
+				79DE0ECB2DD7476E00466716 /* HomePostsTabView.swift in Sources */,
 				36AC963F2F04069B7FF1AA0C /* UIConstants.swift in Sources */,
 				A37EED79941AD3B7140B3822 /* UIDevice.swift in Sources */,
 				0EE5EBA18BA1FE10254BB489 /* UIFont+AttributedStringBuilder.m in Sources */,
@@ -11667,7 +11673,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.14.0;
+				MARKETING_VERSION = 0.14.1;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -11703,7 +11709,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.14.0;
+				MARKETING_VERSION = 0.14.1;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
