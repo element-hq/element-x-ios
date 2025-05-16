@@ -75,6 +75,7 @@ private struct CallView: UIViewRepresentable {
         private var webView: WKWebView!
         private var pictureInPictureController: AVPictureInPictureController?
         private let pictureInPictureViewController: AVPictureInPictureVideoCallViewController
+        private var routePickerView: AVRoutePickerView!
         
         /// The view to be shown in the app. This will contain the web view when picture in picture isn't running.
         let webViewWrapper = WebViewWrapper(frame: .zero)
@@ -97,7 +98,9 @@ private struct CallView: UIViewRepresentable {
             let configuration = WKWebViewConfiguration()
             
             let userContentController = WKUserContentController()
-            userContentController.add(WKScriptMessageHandlerWrapper(self), name: viewModelContext.viewState.messageHandler)
+            CallScreenEventJSHandler.allCases.forEach {
+                userContentController.add(WKScriptMessageHandlerWrapper(self), name: $0.rawValue)
+            }
             
             // Required to allow a webview that uses file URL to load its own assets
             configuration.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
@@ -122,6 +125,11 @@ private struct CallView: UIViewRepresentable {
             webView.isOpaque = false
             webView.backgroundColor = .compound.bgCanvasDefault
             webView.scrollView.backgroundColor = .compound.bgCanvasDefault
+            
+            routePickerView = AVRoutePickerView(frame: .zero)
+            routePickerView.isHidden = true
+            routePickerView.isUserInteractionEnabled = false
+            webView.addSubview(routePickerView)
             
             webViewWrapper.addMatchedSubview(webView)
             
@@ -161,12 +169,35 @@ private struct CallView: UIViewRepresentable {
         }
         
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-            viewModelContext?.javaScriptMessageHandler?(message.body)
+            guard let handlerID = CallScreenEventJSHandler(rawValue: message.name) else {
+                return
+            }
+            
+            switch handlerID {
+            case .widgetAction:
+                viewModelContext?.javaScriptMessageHandler?(message.body)
+            case .showNativeOutputDevicePicker:
+                DispatchQueue.main.async {
+                    self.tapRoutePickerView()
+                }
+            case .onOutputDeviceSelect:
+                guard let deviceID = message.body as? String else {
+                    return
+                }
+                viewModelContext?.send(viewAction: .outputDeviceSelected(deviceID: deviceID))
+            }
+        }
+        
+        private func tapRoutePickerView() {
+            if let button = routePickerView.subviews.first(where: { $0 is UIButton }) as? UIButton {
+                button.sendActions(for: .touchUpInside)
+            }
         }
         
         // MARK: - WKUIDelegate
         
         func webView(_ webView: WKWebView, decideMediaCapturePermissionsFor origin: WKSecurityOrigin, initiatedBy frame: WKFrameInfo, type: WKMediaCaptureType) async -> WKPermissionDecision {
+            viewModelContext?.send(viewAction: .ready)
             // Allow if the origin is local, otherwise don't allow permissions for domains different than what the call was started on
             guard origin.protocol == "file" || origin.host == url.host else {
                 return .deny

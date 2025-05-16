@@ -16,7 +16,6 @@ enum CallScreenViewModelAction {
 }
 
 struct CallScreenViewState: BindableState {
-    let messageHandler: String
     let script: String?
     var url: URL?
     
@@ -39,8 +38,59 @@ enum CallScreenViewAction {
     case navigateBack
     case pictureInPictureWillStop
     case endCall
+    case ready
+    case outputDeviceSelected(deviceID: String)
 }
 
 enum CallScreenError: Error {
     case pictureInPictureNotAvailable
+}
+
+/// Identifies each event handler used by the CallScreen webview
+///
+/// The names of the enum need to always match the name of the handlers on the webview.
+enum CallScreenEventJSHandler: String, CaseIterable {
+    /// Widget actions's handler.
+    case widgetAction
+    /// Used to show the native AVRoutePickerView.
+    case showNativeOutputDevicePicker
+    /// Used to determine if the webview has selected the earpiece or not.
+    case onOutputDeviceSelect
+    
+    private var script: String {
+        switch self {
+        case .widgetAction:
+            """
+            window.addEventListener(
+                "message",
+                (event) => {
+                    let message = {data: event.data, origin: event.origin};
+                    if (message.data.response && message.data.api == "toWidget"
+                    || !message.data.response && message.data.api == "fromWidget") {
+                        window.webkit.messageHandlers.\(rawValue).postMessage(JSON.stringify(message.data));
+                    } else {
+                        console.log("-- skipped event handling by the client because it is send from the client itself.");
+                    }
+                },
+                false,
+            );
+            """
+        case .showNativeOutputDevicePicker:
+            """
+            window.controls.\(rawValue) = () => {
+                window.webkit.messageHandlers.\(rawValue).postMessage("");
+            };
+            """
+        case .onOutputDeviceSelect:
+            """
+            window.controls.\(rawValue) = (id) => {
+                window.webkit.messageHandlers.\(rawValue).postMessage(id);
+            };
+            """
+        }
+    }
+    
+    static var fullScript: String {
+        allCases.map(\.script).joined(separator: "\n")
+    }
 }
