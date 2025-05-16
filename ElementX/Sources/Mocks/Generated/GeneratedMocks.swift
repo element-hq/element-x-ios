@@ -6438,6 +6438,76 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return timelineFocusedOnEventEventIDNumberOfEventsReturnValue
         }
     }
+    //MARK: - threadTimeline
+
+    var threadTimelineEventIDUnderlyingCallsCount = 0
+    var threadTimelineEventIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return threadTimelineEventIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = threadTimelineEventIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                threadTimelineEventIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    threadTimelineEventIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var threadTimelineEventIDCalled: Bool {
+        return threadTimelineEventIDCallsCount > 0
+    }
+    var threadTimelineEventIDReceivedEventID: String?
+    var threadTimelineEventIDReceivedInvocations: [String] = []
+
+    var threadTimelineEventIDUnderlyingReturnValue: Result<TimelineProxyProtocol, RoomProxyError>!
+    var threadTimelineEventIDReturnValue: Result<TimelineProxyProtocol, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return threadTimelineEventIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<TimelineProxyProtocol, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = threadTimelineEventIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                threadTimelineEventIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    threadTimelineEventIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var threadTimelineEventIDClosure: ((String) async -> Result<TimelineProxyProtocol, RoomProxyError>)?
+
+    func threadTimeline(eventID: String) async -> Result<TimelineProxyProtocol, RoomProxyError> {
+        threadTimelineEventIDCallsCount += 1
+        threadTimelineEventIDReceivedEventID = eventID
+        DispatchQueue.main.async {
+            self.threadTimelineEventIDReceivedInvocations.append(eventID)
+        }
+        if let threadTimelineEventIDClosure = threadTimelineEventIDClosure {
+            return await threadTimelineEventIDClosure(eventID)
+        } else {
+            return threadTimelineEventIDReturnValue
+        }
+    }
     //MARK: - messageFilteredTimeline
 
     var messageFilteredTimelineFocusAllowedMessageTypesPresentationUnderlyingCallsCount = 0
@@ -14967,6 +15037,76 @@ class TimelineControllerFactoryMock: TimelineControllerFactoryProtocol, @uncheck
             return buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderClosure(roomProxy, initialFocussedEventID, timelineItemFactory, mediaProvider)
         } else {
             return buildTimelineControllerRoomProxyInitialFocussedEventIDTimelineItemFactoryMediaProviderReturnValue
+        }
+    }
+    //MARK: - buildThreadTimelineController
+
+    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = 0
+    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderCalled: Bool {
+        return buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderCallsCount > 0
+    }
+    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderReceivedArguments: (eventID: String, roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)?
+    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations: [(eventID: String, roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)] = []
+
+    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue: Result<TimelineControllerProtocol, TimelineFactoryControllerError>!
+    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderReturnValue: Result<TimelineControllerProtocol, TimelineFactoryControllerError>! {
+        get {
+            if Thread.isMainThread {
+                return buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
+            } else {
+                var returnValue: Result<TimelineControllerProtocol, TimelineFactoryControllerError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderClosure: ((String, JoinedRoomProxyProtocol, RoomTimelineItemFactoryProtocol, MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError>)?
+
+    func buildThreadTimelineController(eventID: String, roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError> {
+        buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderCallsCount += 1
+        buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderReceivedArguments = (eventID: eventID, roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider)
+        DispatchQueue.main.async {
+            self.buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations.append((eventID: eventID, roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider))
+        }
+        if let buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderClosure = buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderClosure {
+            return await buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderClosure(eventID, roomProxy, timelineItemFactory, mediaProvider)
+        } else {
+            return buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderReturnValue
         }
     }
     //MARK: - buildPinnedEventsTimelineController

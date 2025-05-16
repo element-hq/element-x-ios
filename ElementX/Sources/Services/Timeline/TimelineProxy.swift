@@ -97,7 +97,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         switch kind {
         case .live:
             return await paginateBackwardsOnLive(requestSize: requestSize)
-        case .detached, .media:
+        case .detached, .media, .thread:
             return await focussedPaginate(.backwards, requestSize: requestSize)
         case .pinned:
             return .success(())
@@ -596,7 +596,7 @@ final class TimelineProxy: TimelineProxyProtocol {
                 MXLog.error("Failed to subscribe to back pagination status with error: \(error)")
             }
             forwardPaginationStatusSubject.send(.timelineEndReached)
-        case .detached:
+        case .detached, .thread:
             // Detached timelines don't support observation, set the initial state ourself.
             backPaginationStatusSubject.send(.idle)
             forwardPaginationStatusSubject.send(.idle)
