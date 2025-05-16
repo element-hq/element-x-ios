@@ -268,6 +268,31 @@ class RoomFlowCoordinatorTests: XCTestCase {
         XCTAssertNil(navigationStackCoordinator.sheetCoordinator, "The media upload sheet shouldn't be shown when sharing text.")
     }
     
+    func testLeavingRoom() async throws {
+        await setupRoomFlowCoordinator()
+        
+        var configuration = JoinedRoomProxyMockConfiguration()
+        let roomProxy = JoinedRoomProxyMock(configuration)
+        
+        let roomInfoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: .init(configuration)))
+        roomProxy.infoPublisher = roomInfoSubject.asCurrentValuePublisher()
+        
+        clientProxy.roomForIdentifierClosure = { _ in
+            .joined(roomProxy)
+        }
+        
+        try await process(route: .room(roomID: "1", via: []))
+        
+        let fulfillment = deferFulfillment(roomFlowCoordinator.actions) { action in
+            action == .finished
+        }
+        
+        configuration.membership = .left
+        roomInfoSubject.send(.init(roomInfo: .init(configuration)))
+        
+        try await fulfillment.fulfill()
+    }
+    
     // MARK: - Private
     
     private func process(route: AppRoute) async throws {

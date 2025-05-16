@@ -246,21 +246,21 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             checkAndUpdateRoomNotificationMode()
         case .rewardsIntimated:
             dismissNewRewardsIntimation()
-        case .loadMorePostsIfNeeded(let forMyPosts):
+        case .loadMoreAllPosts(let following):
             Task {
-                if forMyPosts {
-                    await fetchMyPosts()
-                } else {
-                    await fetchPosts()
-                }
+                await fetchPosts(followingOnly: following)
             }
-        case .forceRefreshPosts(let forMyPosts):
+        case .loadMoreMyPosts:
             Task {
-                if forMyPosts {
-                    await fetchMyPosts(isForceRefresh: true)
-                } else {
-                    await fetchPosts(isForceRefresh: true)
-                }
+                await fetchMyPosts()
+            }
+        case .forceRefreshAllPosts(let followingOnly):
+            Task {
+                await fetchPosts(isForceRefresh: true, followingOnly: followingOnly)
+            }
+        case .forceRefreshMyPosts:
+            Task {
+                await fetchMyPosts(isForceRefresh: true)
             }
         case .postTapped(let post):
             let mediaUrl = state.postMediaInfoMap[post.id]?.url
@@ -580,15 +580,20 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         await userSession.clientProxy.checkAndLinkZeroUser()
     }
     
-    private func fetchPosts(isForceRefresh: Bool = false) async {
+    private func fetchPosts(isForceRefresh: Bool = false, followingOnly: Bool = true) async {
         guard !isFetchPostsInProgress else { return }
         isFetchPostsInProgress = true
         
         defer { isFetchPostsInProgress = false } // Ensure flag is reset when the task completes
         
+        if isForceRefresh {
+            state.canLoadMorePosts = true
+        }
+        
         state.postListMode = state.posts.isEmpty ? .skeletons : .posts
         let skipItems = isForceRefresh ? 0 : state.posts.count
         let postsResult = await userSession.clientProxy.fetchZeroFeeds(channelZId: nil,
+                                                                       following: followingOnly,
                                                                        limit: HOME_SCREEN_POST_PAGE_COUNT,
                                                                        skip: skipItems)
         switch postsResult {
@@ -633,9 +638,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         defer { isFetchMyPostsInProgress = false } // Ensure flag is reset when the task completes
         
+        if isForceRefresh {
+            state.canLoadMoreMyPosts = true
+        }
+        
         state.myPostListMode = state.myPosts.isEmpty ? .skeletons : .posts
         let skipItems = isForceRefresh ? 0 : state.myPosts.count
         let postsResult = await userSession.clientProxy.fetchZeroFeeds(channelZId: primaryZeroId,
+                                                                       following: false,
                                                                        limit: HOME_SCREEN_POST_PAGE_COUNT,
                                                                        skip: skipItems)
         switch postsResult {

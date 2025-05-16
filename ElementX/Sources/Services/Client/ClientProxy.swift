@@ -1032,9 +1032,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func fetchZeroFeeds(channelZId: String?, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+    func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
-            let zeroPostsResult = try await zeroApiProxy.postsApi.fetchPosts(channelZId: channelZId, limit: limit, skip: skip)
+            let zeroPostsResult = try await zeroApiProxy.postsApi.fetchPosts(channelZId: channelZId, following: following, limit: limit, skip: skip)
             switch zeroPostsResult {
             case .success(let posts):
                 return .success(posts)
