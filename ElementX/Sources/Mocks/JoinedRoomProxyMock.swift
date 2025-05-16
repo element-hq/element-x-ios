@@ -43,7 +43,10 @@ struct JoinedRoomProxyMockConfiguration {
     var canUserPin = true
     
     var shouldUseAutoUpdatingTimeline = false
+    
     var joinRule: JoinRule?
+    var membership: Membership = .joined
+    
     var isVisibleInPublicDirectory = false
 }
 
@@ -151,7 +154,7 @@ extension RoomInfo {
                   isFavourite: false,
                   canonicalAlias: configuration.canonicalAlias,
                   alternativeAliases: configuration.alternativeAliases,
-                  membership: .joined,
+                  membership: configuration.membership,
                   inviter: configuration.inviter.map { RoomMember(userId: $0.userID,
                                                                   displayName: $0.displayName,
                                                                   avatarUrl: $0.avatarURL?.absoluteString,
