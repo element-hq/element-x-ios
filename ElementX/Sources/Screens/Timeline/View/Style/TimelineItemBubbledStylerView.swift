@@ -45,7 +45,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         .zIndex(1)
                 }
 
-                VStack(alignment: alignment, spacing: 0) {
+                VStack(alignment: alignment, spacing: -4) {
+                    // -4 spacing to compensate for the Spacer we have to add to stop
+                    // animation oversteer - see below.
+
                     HStack(spacing: 0) {
                         if timelineItem.isOutgoing {
                             Spacer()
@@ -64,6 +67,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                             .padding(.top, 8)
                             .padding(.bottom, 3)
                     }
+
+                    // we need a Spacer here to top-align the bubble within the VStack, so that
+                    // when the the animation doesn't drift around and overshoot when the SR is hidden
+                    // see https://github.com/element-hq/element-x-ios/issues/4127
+                    Spacer()
                 }
                 .padding(.horizontal, bubbleHorizontalPadding)
                 .padding(.leading, bubbleAvatarPadding)
