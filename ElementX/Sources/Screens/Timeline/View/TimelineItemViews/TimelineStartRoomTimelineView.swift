@@ -29,7 +29,7 @@ struct TimelineStartRoomTimelineView: View {
 
 struct TimelineStartRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        let item = TimelineStartRoomTimelineItem(name: "Alice and Bob")
+        let item = TimelineStartRoomTimelineItem(id: .virtual(uniqueID: .init("Start")), name: "Alice and Bob")
         TimelineStartRoomTimelineView(timelineItem: item)
     }
 }

@@ -479,7 +479,7 @@ class TimelineController: TimelineControllerProtocol {
             case .readMarker:
                 return ReadMarkerRoomTimelineItem(id: .virtual(uniqueID: uniqueID))
             case .timelineStart:
-                return isDM ? nil : TimelineStartRoomTimelineItem(name: roomDisplayName)
+                return isDM ? nil : TimelineStartRoomTimelineItem(id: .virtual(uniqueID: uniqueID), name: roomDisplayName)
             }
         case .unknown:
             return nil
