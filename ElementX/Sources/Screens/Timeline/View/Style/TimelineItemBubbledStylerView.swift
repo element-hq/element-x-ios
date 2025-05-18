@@ -48,6 +48,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 VStack(alignment: alignment, spacing: -4) {
                     // -4 spacing to compensate for the Spacer we have to add to stop
                     // animation oversteer - see below.
+                    // XXX: does this squidge the bubble & the SR too close together now?
+                    // it looks like it should, but in practice it doesn't seem to.
 
                     HStack(spacing: 0) {
                         if timelineItem.isOutgoing {
@@ -62,22 +64,36 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         if !timelineItem.isOutgoing {
                             Spacer()
                         }
-                        TimelineItemStatusView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus)
+                        TimelineItemStatusView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
                             .environmentObject(context)
                             .padding(.top, 8)
                             .padding(.bottom, 3)
                     }
+                    // .background(Color.purple)
 
                     // we need a Spacer here to top-align the bubble within the VStack, so that
                     // when the the animation doesn't drift around and overshoot when the SR is hidden
                     // see https://github.com/element-hq/element-x-ios/issues/4127
                     Spacer()
+                    //    .background { Color.yellow.frame(minWidth: 10) }
                 }
                 .padding(.horizontal, bubbleHorizontalPadding)
                 .padding(.leading, bubbleAvatarPadding)
             }
         }
+        // .background {
+        //    Int(timelineItem.id.uniqueID.value).unsafelyUnwrapped % 4 == 0 ? Color.green :
+        //    Int(timelineItem.id.uniqueID.value).unsafelyUnwrapped % 4 == 1 ? Color.cyan :
+        //    Int(timelineItem.id.uniqueID.value).unsafelyUnwrapped % 4 == 2 ? Color.brown :
+        //    Color.indigo
+        // }
         .padding(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8))
+        // hoist the unanimated messageBubbleTopPadding to the topmost view, as otherwise the
+        // UITableView row pops when this View changes layout seemingly.
+        // N.B. we can't combine two paddings together without triggering popping.
+        .padding(.top, messageBubbleTopPadding)
+        // don't reanimate bubble layouts if we're just changing the messageBubbleTopPadding
+        .animation(nil, value: messageBubbleTopPadding)
         .highlightedTimelineItem(isFocussed)
     }
     
@@ -171,7 +187,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
             }
             .pinnedIndicator(isPinned: isPinned, isOutgoing: timelineItem.isOutgoing)
-            .padding(.top, messageBubbleTopPadding)
     }
     
     var messageBubble: some View {
