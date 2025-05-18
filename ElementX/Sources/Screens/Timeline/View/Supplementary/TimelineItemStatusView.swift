@@ -12,13 +12,35 @@ struct TimelineItemStatusView: View {
     let timelineItem: EventBasedTimelineItemProtocol
     let adjustedDeliveryStatus: TimelineItemDeliveryStatus?
     @EnvironmentObject private var context: TimelineViewModel.Context
+    @State private var isSendReceiptVisible: Bool
 
     private var isLastOutgoingMessage: Bool {
         timelineItem.isOutgoing && context.viewState.timelineState.uniqueIDs.last == timelineItem.id.uniqueID
     }
 
+    init(timelineItem: EventBasedTimelineItemProtocol, adjustedDeliveryStatus: TimelineItemDeliveryStatus?, context: TimelineViewModel.Context, isSendReceiptVisible: Bool = false) {
+        self.timelineItem = timelineItem
+        self.adjustedDeliveryStatus = adjustedDeliveryStatus
+        // Ugly - we can't call isLastOutgoingMessage here as the real `context` hasn't loaded yet
+        // so instead we manually pass in context to init() and duplicate isLastOutgoingMessage here.
+        self.isSendReceiptVisible = timelineItem.isOutgoing && context.viewState.timelineState.uniqueIDs.last == timelineItem.id.uniqueID
+    }
+
     var body: some View {
         mainContent
+            .onChange(of: context.viewState.timelineState.uniqueIDs.last) { _, _ in
+                if isLastOutgoingMessage {
+                    isSendReceiptVisible = true
+                } else if isSendReceiptVisible {
+                    // we were the last msg in the timeline, but not any more
+                    // so remove the SR after a short delay to avoid racing with the new msg animation
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                        withAnimation {
+                            isSendReceiptVisible = false
+                        }
+                    }
+                }
+            }
     }
 
     @ViewBuilder
@@ -39,7 +61,7 @@ struct TimelineItemStatusView: View {
         case .sending:
             TimelineDeliveryStatusView(deliveryStatus: .sending)
         case .sent, .none:
-            if isLastOutgoingMessage {
+            if isSendReceiptVisible {
                 // We only display the sent icon for the latest outgoing message
                 TimelineDeliveryStatusView(deliveryStatus: .sent)
             }
