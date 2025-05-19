@@ -50,12 +50,14 @@ struct FeedDetailsScreenViewStateBindings {
 enum FeedDetailsScreenViewModelAction {
     case replyTapped(_ reply: HomeScreenPost)
     case attachMedia(FeedMediaSelectedProtocol)
+    case openPostUserProfile(_ profile: ZPostUserProfile)
 }
 
 enum FeedDetailsScreenViewAction {
     case replyTapped(_ reply: HomeScreenPost)
     case openArweaveLink(_ post: HomeScreenPost)
     case openYoutubeLink(_ url: String)
+    case openPostUserProfile(_ profile: ZPostUserProfile)
     case loadMoreRepliesIfNeeded
     case forceRefreshFeed
     case meowTapped(_ postId: String, amount: Int, isPostAReply: Bool)

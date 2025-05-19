@@ -40,8 +40,11 @@ struct FeedDetailsContent: View {
                 // Feed Details view
                 FeedDetailsSection(post: context.viewState.bindings.feed,
                                    context: context,
-                                   shouldNavigateToDetails: false)
-                    .padding(.all, 16)
+                                   shouldNavigateToDetails: false,
+                                   onOpenUserProfile: { profile in
+                    context.send(viewAction: .openPostUserProfile(profile))
+                })
+                .padding(.all, 16)
                 
                 Divider()
                     .foregroundStyle(.compound.textSecondary)
@@ -52,7 +55,10 @@ struct FeedDetailsContent: View {
                     LazyVStack(spacing: 0) {
                         ForEach(context.viewState.visibleReplies) { reply in
                             VStack {
-                                FeedDetailsSection(post: reply, context: context, shouldNavigateToDetails: false)
+                                FeedDetailsSection(post: reply,
+                                                   context: context,
+                                                   shouldNavigateToDetails: false,
+                                                   onOpenUserProfile: { _ in })
                                     .padding(.all, 16)
                                 Divider()
                             }
@@ -201,6 +207,9 @@ struct PostRepliesList: View {
                 },
                                    onOpenYoutubeLink: { url in
                     context.send(viewAction: .openYoutubeLink(url))
+                },
+                                   onOpenUserProfile: { profile in
+                    context.send(viewAction: .openPostUserProfile(profile))
                 })
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
@@ -218,6 +227,8 @@ struct FeedDetailsSection: View {
     let context: FeedDetailsScreenViewModel.Context
     let shouldNavigateToDetails: Bool
     
+    let onOpenUserProfile: (ZPostUserProfile) -> Void
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .top) {
@@ -226,12 +237,22 @@ struct FeedDetailsSection: View {
                                     name: nil,
                                     contentID: post.senderInfo.userID,
                                     avatarSize: .user(on: .home),
-                                    mediaProvider: context.mediaProvider)
+                                    mediaProvider: context.mediaProvider,
+                                    onTap: { _ in
+                    if let postSenderProfile = post.senderProfile {
+                        onOpenUserProfile(postSenderProfile)
+                    }
+                })
                 VStack(alignment: .leading) {
                     HStack(alignment: .center) {
                         Text(post.senderInfo.displayName ?? "")
                             .font(.compound.bodySMSemibold)
                             .lineLimit(1)
+                            .onTapGesture {
+                                if let postSenderProfile = post.senderProfile {
+                                    onOpenUserProfile(postSenderProfile)
+                                }
+                            }
                         
                         if post.worldPrimaryZId != nil && !post.isPostInOwnFeed {
                             Spacer()

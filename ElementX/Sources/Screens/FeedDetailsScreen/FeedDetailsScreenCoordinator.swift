@@ -18,6 +18,7 @@ struct FeedDetailsScreenCoordinatorParameters {
 enum FeedDetailsScreenCoordinatorAction {
     case replyTapped(_ reply: HomeScreenPost)
     case attachMedia(FeedMediaSelectedProtocol)
+    case openPostUserProfile(_ profile: ZPostUserProfile)
 }
 
 final class FeedDetailsScreenCoordinator: CoordinatorProtocol {
@@ -46,6 +47,8 @@ final class FeedDetailsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.replyTapped(reply))
                 case .attachMedia(let attachMediaProtocol):
                     actionsSubject.send(.attachMedia(attachMediaProtocol))
+                case .openPostUserProfile(let profile):
+                    actionsSubject.send(.openPostUserProfile(profile))
                 }
             }
             .store(in: &cancellables)

@@ -27,6 +27,7 @@ enum HomeScreenViewModelAction {
     case logoutWithoutConfirmation
     case logout
     case postTapped(_ post: HomeScreenPost, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
+    case openPostUserProfile(_ profile: ZPostUserProfile, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
 }
 
 enum HomeScreenViewAction {
@@ -63,6 +64,7 @@ enum HomeScreenViewAction {
     case postTapped(_ post: HomeScreenPost)
     case openArweaveLink(_ post: HomeScreenPost)
     case openYoutubeLink(_ url: String)
+    case openPostUserProfile(_ profile: ZPostUserProfile)
     
     case forceRefreshChannels
     case channelTapped(_ channel: HomeScreenChannel)
@@ -352,6 +354,8 @@ struct HomeScreenPost: Identifiable, Equatable {
     let postDateTime: String
     let isMyPost: Bool
     
+    let senderProfile: ZPostUserProfile?
+    
     var mediaInfo: HomeScreenPostMediaInfo?
     var urlLinkPreview: ZLinkPreview?
     
@@ -374,6 +378,7 @@ struct HomeScreenPost: Identifiable, Equatable {
                        isMeowedByMe: false,
                        postDateTime: "",
                        isMyPost: false,
+                       senderProfile: nil,
                        mediaInfo: nil,
                        urlLinkPreview: nil)
     }
@@ -488,6 +493,7 @@ extension HomeScreenPost {
             isMeowedByMe: (post.meows?.isEmpty == false),
             postDateTime: postDateTime,
             isMyPost: isMyPost,
+            senderProfile: post.userProfileView,
             mediaInfo: mediaInfo
         )
     }

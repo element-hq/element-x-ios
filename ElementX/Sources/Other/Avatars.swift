@@ -39,7 +39,7 @@ enum Avatars {
     
     @MainActor
     static func generatePlaceholderAvatarImageData(name: String, id: String, size: CGSize) -> Data? {
-        let image = PlaceholderAvatarImage(name: name, contentID: id)
+        let image = PlaceholderAvatarImage(name: name, contentID: id, onTap: {})
             .clipShape(Circle())
             .frame(width: size.width, height: size.height)
         

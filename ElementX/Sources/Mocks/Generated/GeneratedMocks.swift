@@ -6214,6 +6214,356 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return postNewFeedChannelZIdContentReplyToPostMediaFileReturnValue
         }
     }
+    //MARK: - fetchFeedUserProfile
+
+    var fetchFeedUserProfileUserZIdUnderlyingCallsCount = 0
+    var fetchFeedUserProfileUserZIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedUserProfileUserZIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedUserProfileUserZIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedUserProfileUserZIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedUserProfileUserZIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedUserProfileUserZIdCalled: Bool {
+        return fetchFeedUserProfileUserZIdCallsCount > 0
+    }
+    var fetchFeedUserProfileUserZIdReceivedUserZId: String?
+    var fetchFeedUserProfileUserZIdReceivedInvocations: [String] = []
+
+    var fetchFeedUserProfileUserZIdUnderlyingReturnValue: Result<ZPostUserProfile, ClientProxyError>!
+    var fetchFeedUserProfileUserZIdReturnValue: Result<ZPostUserProfile, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedUserProfileUserZIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZPostUserProfile, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedUserProfileUserZIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedUserProfileUserZIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedUserProfileUserZIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedUserProfileUserZIdClosure: ((String) async -> Result<ZPostUserProfile, ClientProxyError>)?
+
+    func fetchFeedUserProfile(userZId: String) async -> Result<ZPostUserProfile, ClientProxyError> {
+        fetchFeedUserProfileUserZIdCallsCount += 1
+        fetchFeedUserProfileUserZIdReceivedUserZId = userZId
+        DispatchQueue.main.async {
+            self.fetchFeedUserProfileUserZIdReceivedInvocations.append(userZId)
+        }
+        if let fetchFeedUserProfileUserZIdClosure = fetchFeedUserProfileUserZIdClosure {
+            return await fetchFeedUserProfileUserZIdClosure(userZId)
+        } else {
+            return fetchFeedUserProfileUserZIdReturnValue
+        }
+    }
+    //MARK: - fetchUserFeeds
+
+    var fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount = 0
+    var fetchUserFeedsUserIdLimitSkipCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserFeedsUserIdLimitSkipUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchUserFeedsUserIdLimitSkipCalled: Bool {
+        return fetchUserFeedsUserIdLimitSkipCallsCount > 0
+    }
+    var fetchUserFeedsUserIdLimitSkipReceivedArguments: (userId: String, limit: Int, skip: Int)?
+    var fetchUserFeedsUserIdLimitSkipReceivedInvocations: [(userId: String, limit: Int, skip: Int)] = []
+
+    var fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue: Result<[ZPost], ClientProxyError>!
+    var fetchUserFeedsUserIdLimitSkipReturnValue: Result<[ZPost], ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[ZPost], ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserFeedsUserIdLimitSkipUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchUserFeedsUserIdLimitSkipClosure: ((String, Int, Int) async -> Result<[ZPost], ClientProxyError>)?
+
+    func fetchUserFeeds(userId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+        fetchUserFeedsUserIdLimitSkipCallsCount += 1
+        fetchUserFeedsUserIdLimitSkipReceivedArguments = (userId: userId, limit: limit, skip: skip)
+        DispatchQueue.main.async {
+            self.fetchUserFeedsUserIdLimitSkipReceivedInvocations.append((userId: userId, limit: limit, skip: skip))
+        }
+        if let fetchUserFeedsUserIdLimitSkipClosure = fetchUserFeedsUserIdLimitSkipClosure {
+            return await fetchUserFeedsUserIdLimitSkipClosure(userId, limit, skip)
+        } else {
+            return fetchUserFeedsUserIdLimitSkipReturnValue
+        }
+    }
+    //MARK: - fetchFeedUserFollowingStatus
+
+    var fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount = 0
+    var fetchFeedUserFollowingStatusUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedUserFollowingStatusUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedUserFollowingStatusUserIdCalled: Bool {
+        return fetchFeedUserFollowingStatusUserIdCallsCount > 0
+    }
+    var fetchFeedUserFollowingStatusUserIdReceivedUserId: String?
+    var fetchFeedUserFollowingStatusUserIdReceivedInvocations: [String] = []
+
+    var fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue: Result<ZPostUserFollowingStatus, ClientProxyError>!
+    var fetchFeedUserFollowingStatusUserIdReturnValue: Result<ZPostUserFollowingStatus, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZPostUserFollowingStatus, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchFeedUserFollowingStatusUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchFeedUserFollowingStatusUserIdClosure: ((String) async -> Result<ZPostUserFollowingStatus, ClientProxyError>)?
+
+    func fetchFeedUserFollowingStatus(userId: String) async -> Result<ZPostUserFollowingStatus, ClientProxyError> {
+        fetchFeedUserFollowingStatusUserIdCallsCount += 1
+        fetchFeedUserFollowingStatusUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.fetchFeedUserFollowingStatusUserIdReceivedInvocations.append(userId)
+        }
+        if let fetchFeedUserFollowingStatusUserIdClosure = fetchFeedUserFollowingStatusUserIdClosure {
+            return await fetchFeedUserFollowingStatusUserIdClosure(userId)
+        } else {
+            return fetchFeedUserFollowingStatusUserIdReturnValue
+        }
+    }
+    //MARK: - followFeedUser
+
+    var followFeedUserUserIdUnderlyingCallsCount = 0
+    var followFeedUserUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return followFeedUserUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = followFeedUserUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                followFeedUserUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    followFeedUserUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var followFeedUserUserIdCalled: Bool {
+        return followFeedUserUserIdCallsCount > 0
+    }
+    var followFeedUserUserIdReceivedUserId: String?
+    var followFeedUserUserIdReceivedInvocations: [String] = []
+
+    var followFeedUserUserIdUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var followFeedUserUserIdReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return followFeedUserUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = followFeedUserUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                followFeedUserUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    followFeedUserUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var followFeedUserUserIdClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func followFeedUser(userId: String) async -> Result<Void, ClientProxyError> {
+        followFeedUserUserIdCallsCount += 1
+        followFeedUserUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.followFeedUserUserIdReceivedInvocations.append(userId)
+        }
+        if let followFeedUserUserIdClosure = followFeedUserUserIdClosure {
+            return await followFeedUserUserIdClosure(userId)
+        } else {
+            return followFeedUserUserIdReturnValue
+        }
+    }
+    //MARK: - unFollowFeedUser
+
+    var unFollowFeedUserUserIdUnderlyingCallsCount = 0
+    var unFollowFeedUserUserIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return unFollowFeedUserUserIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unFollowFeedUserUserIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unFollowFeedUserUserIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unFollowFeedUserUserIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var unFollowFeedUserUserIdCalled: Bool {
+        return unFollowFeedUserUserIdCallsCount > 0
+    }
+    var unFollowFeedUserUserIdReceivedUserId: String?
+    var unFollowFeedUserUserIdReceivedInvocations: [String] = []
+
+    var unFollowFeedUserUserIdUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var unFollowFeedUserUserIdReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return unFollowFeedUserUserIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unFollowFeedUserUserIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unFollowFeedUserUserIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unFollowFeedUserUserIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var unFollowFeedUserUserIdClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func unFollowFeedUser(userId: String) async -> Result<Void, ClientProxyError> {
+        unFollowFeedUserUserIdCallsCount += 1
+        unFollowFeedUserUserIdReceivedUserId = userId
+        DispatchQueue.main.async {
+            self.unFollowFeedUserUserIdReceivedInvocations.append(userId)
+        }
+        if let unFollowFeedUserUserIdClosure = unFollowFeedUserUserIdClosure {
+            return await unFollowFeedUserUserIdClosure(userId)
+        } else {
+            return unFollowFeedUserUserIdReturnValue
+        }
+    }
     //MARK: - fetchUserZIds
 
     var fetchUserZIdsUnderlyingCallsCount = 0

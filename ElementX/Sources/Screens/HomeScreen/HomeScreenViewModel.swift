@@ -276,6 +276,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             joinZeroChannel(channel)
         case .openYoutubeLink(let url):
             openYoutubeLink(url)
+        case .openPostUserProfile(let profile):
+            actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: self))
         }
     }
     
