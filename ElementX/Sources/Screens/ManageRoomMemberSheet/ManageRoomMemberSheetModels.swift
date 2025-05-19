@@ -73,12 +73,12 @@ enum ManageRoomMemberDetails {
         }
     }
     
-    var managedMember: ManagedRoomMember {
+    var name: String? {
         switch self {
         case let .memberDetails(roomMember):
-            ManagedRoomMember(id: roomMember.id, name: roomMember.name)
+            roomMember.name
         case let .loadingMemberDetails(sender):
-            ManagedRoomMember(id: sender.id, name: sender.displayName)
+            sender.displayName
         }
     }
 }
@@ -87,9 +87,4 @@ struct ManageRoomMemberPermissions {
     let canKick: Bool
     let canBan: Bool
     let ownPowerLevel: Int
-}
-
-struct ManagedRoomMember {
-    let id: String
-    let name: String?
 }
