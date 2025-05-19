@@ -15,6 +15,9 @@ enum QRCodeLoginScreenViewModelAction {
 
 struct QRCodeLoginScreenViewState: BindableState {
     var state: QRCodeLoginState = .initial
+    /// Whether or not it is possible for the screen to start the manual sign in flow. This was added to avoid
+    /// having to handle server configuration when ``AppSettings.allowOtherAccountProviders`` is false.
+    let canSignInManually: Bool
     
     private static let initialStateListItem3AttributedText = {
         let boldPlaceholder = "{bold}"

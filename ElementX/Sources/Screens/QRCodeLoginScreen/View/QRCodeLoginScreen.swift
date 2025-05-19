@@ -354,10 +354,12 @@ struct QRCodeLoginScreen: View {
             .buttonStyle(.compound(.primary))
         case .linkingNotSupported:
             VStack(spacing: 16) {
-                Button(L10n.screenOnboardingSignInManually) {
-                    context.send(viewAction: .signInManually)
+                if context.viewState.canSignInManually {
+                    Button(L10n.screenOnboardingSignInManually) {
+                        context.send(viewAction: .signInManually)
+                    }
+                    .buttonStyle(.compound(.primary))
                 }
-                .buttonStyle(.compound(.primary))
                 
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
@@ -423,6 +425,7 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     static let connectionNotSecureStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.connectionNotSecure))
     
     static let linkingUnsupportedStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.linkingNotSupported))
+    static let linkingUnsupportedRestrictedFlowViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.linkingNotSupported), canSignInManually: false)
     
     static let cancelledStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.cancelled))
     
@@ -467,6 +470,8 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
         
         QRCodeLoginScreen(context: linkingUnsupportedStateViewModel.context)
             .previewDisplayName("Linking unsupported")
+        QRCodeLoginScreen(context: linkingUnsupportedRestrictedFlowViewModel.context)
+            .previewDisplayName("Linking unsupported restricted flow")
         
         QRCodeLoginScreen(context: cancelledStateViewModel.context)
             .previewDisplayName("Cancelled")

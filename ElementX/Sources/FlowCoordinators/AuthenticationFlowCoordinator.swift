@@ -304,6 +304,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func showQRCodeLoginScreen(fromState: State) {
         let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(qrCodeLoginService: qrCodeLoginService,
+                                                                         canSignInManually: fromState != .restrictedStartScreen,
                                                                          orientationManager: appMediator.windowManager,
                                                                          appMediator: appMediator))
         coordinator.actionsPublisher.sink { [weak self] action in

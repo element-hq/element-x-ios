@@ -22,10 +22,11 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     private var scanTask: Task<Void, Never>?
 
     init(qrCodeLoginService: QRCodeLoginServiceProtocol,
+         canSignInManually: Bool,
          appMediator: AppMediatorProtocol) {
         self.qrCodeLoginService = qrCodeLoginService
         self.appMediator = appMediator
-        super.init(initialViewState: QRCodeLoginScreenViewState())
+        super.init(initialViewState: QRCodeLoginScreenViewState(canSignInManually: canSignInManually))
         setupSubscriptions()
     }
     
@@ -142,15 +143,15 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
     }
         
     /// Only for mocking initial states
-    fileprivate init(state: QRCodeLoginState) {
+    fileprivate init(state: QRCodeLoginState, canSignInManually: Bool) {
         qrCodeLoginService = QRCodeLoginServiceMock()
         appMediator = AppMediatorMock.default
-        super.init(initialViewState: .init(state: state))
+        super.init(initialViewState: .init(state: state, canSignInManually: canSignInManually))
     }
 }
 
 extension QRCodeLoginScreenViewModel {
-    static func mock(state: QRCodeLoginState) -> QRCodeLoginScreenViewModel {
-        QRCodeLoginScreenViewModel(state: state)
+    static func mock(state: QRCodeLoginState, canSignInManually: Bool = true) -> QRCodeLoginScreenViewModel {
+        QRCodeLoginScreenViewModel(state: state, canSignInManually: canSignInManually)
     }
 }
