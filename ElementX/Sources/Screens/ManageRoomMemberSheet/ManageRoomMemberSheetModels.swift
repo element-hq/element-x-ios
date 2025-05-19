@@ -67,9 +67,9 @@ enum ManageRoomMemberDetails {
     var id: String {
         switch self {
         case let .memberDetails(roomMember):
-            return roomMember.id
+           roomMember.id
         case let .senderDetails(sender):
-            return sender.id
+           sender.id
         }
     }
 }
