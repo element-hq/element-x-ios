@@ -48,23 +48,17 @@ struct ManageRoomMemberSheetView: View {
                 }
                 
                 if context.viewState.permissions.canBan {
-                    if context.viewState.isMemberBanned {
-                        ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberUnban,
-                                                icon: \.restart,
-                                                role: .destructive),
-                                kind: .button {
-                                    context.send(viewAction: .unban)
-                                })
+                    let title = context.viewState.isMemberBanned ? L10n.screenBottomSheetManageRoomMemberUnban : L10n.screenBottomSheetManageRoomMemberBan
+                    let icon: KeyPath = context.viewState.isMemberBanned ? \.restart : \.block
+                    let action: ViewAction = context.viewState.isMemberBanned ? .unban : .ban
+                    
+                    ListRow(label: .default(title: title,
+                                            icon: icon,
+                                            role: .destructive),
+                            kind: .button {
+                                context.send(viewAction: action)
+                            })
                                 .disabled(context.viewState.isBanUnbanDisabled)
-                    } else {
-                        ListRow(label: .default(title: L10n.screenBottomSheetManageRoomMemberBan,
-                                                icon: \.block,
-                                                role: .destructive),
-                                kind: .button {
-                                    context.send(viewAction: .ban)
-                                })
-                                .disabled(context.viewState.isBanUnbanDisabled)
-                    }
                 }
             }
         }
