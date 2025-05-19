@@ -10,12 +10,12 @@ enum ManageRoomMemberSheetViewModelAction: Equatable {
 }
 
 struct ManageRoomMemberSheetViewState: BindableState {
-    let details: ManageRoomMemberDetails
+    let memberDetails: ManageRoomMemberDetails
     let permissions: ManageRoomMemberPermissions
     
     var isBanUnbanDisabled: Bool {
         // This is a best effort check, if we haven't fetched the member yet we assume we can peform the action
-        guard case let .memberDetails(member) = details else {
+        guard case let .memberDetails(member) = memberDetails else {
             return false
         }
         
@@ -24,7 +24,7 @@ struct ManageRoomMemberSheetViewState: BindableState {
     
     var isKickDisabled: Bool {
         // This is a best effort check, if we haven't fetched the member yet we assume we can peform the action
-        guard case let .memberDetails(member) = details else {
+        guard case let .memberDetails(member) = memberDetails else {
             return false
         }
         
@@ -33,7 +33,7 @@ struct ManageRoomMemberSheetViewState: BindableState {
     
     var isMemberBanned: Bool {
         // This is a best effort check, if we haven't fetched the member yet we assume the member is not banned
-        guard case let .memberDetails(member) = details else {
+        guard case let .memberDetails(member) = memberDetails else {
             return false
         }
         
@@ -62,14 +62,23 @@ enum ManageRoomMemberSheetViewAction {
 
 enum ManageRoomMemberDetails {
     case memberDetails(roomMember: RoomMemberDetails)
-    case senderDetails(sender: TimelineItemSender)
+    case loadingMemberDetails(sender: TimelineItemSender)
     
     var id: String {
         switch self {
         case let .memberDetails(roomMember):
-           roomMember.id
-        case let .senderDetails(sender):
-           sender.id
+            roomMember.id
+        case let .loadingMemberDetails(sender):
+            sender.id
+        }
+    }
+    
+    var managedMember: ManagedMember {
+        switch self {
+        case let .memberDetails(roomMember):
+            roomMember
+        case let .loadingMemberDetails(sender):
+            sender
         }
     }
 }
@@ -78,4 +87,16 @@ struct ManageRoomMemberPermissions {
     let canKick: Bool
     let canBan: Bool
     let ownPowerLevel: Int
+}
+
+protocol ManagedMember {
+    var id: String { get }
+    var name: String? { get }
+}
+
+extension RoomMemberDetails: ManagedMember { }
+extension TimelineItemSender: ManagedMember {
+    var name: String? {
+        displayName
+    }
 }

@@ -22,7 +22,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(details: ManageRoomMemberDetails,
+    init(memberDetails: ManageRoomMemberDetails,
          permissions: ManageRoomMemberPermissions,
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
@@ -31,7 +31,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         self.userIndicatorController = userIndicatorController
         self.roomProxy = roomProxy
         self.analyticsService = analyticsService
-        super.init(initialViewState: .init(details: details, permissions: permissions), mediaProvider: mediaProvider)
+        super.init(initialViewState: .init(memberDetails: memberDetails, permissions: permissions), mediaProvider: mediaProvider)
     }
     
     override func process(viewAction: ManageRoomMemberSheetViewAction) {
@@ -48,9 +48,8 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
     }
     
     private func displayAlert(_ alertType: ManageRoomMemberSheetViewAlertType) {
-        guard case let .memberDetails(member) = state.details else {
-            return
-        }
+        let member = state.memberDetails.managedMember
+        
         var reason: String?
         let binding: Binding<String> = .init(get: { reason ?? "" },
                                              set: { reason = $0.isBlank ? nil : $0 })
@@ -84,7 +83,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         }
     }
     
-    private func kickMember(_ member: RoomMemberDetails, reason: String?) async {
+    private func kickMember(_ member: ManagedMember, reason: String?) async {
         let indicatorTitle = L10n.screenBottomSheetManageRoomMemberRemovingUser(member.name ?? member.id)
         showManageMemberIndicator(title: indicatorTitle)
         
@@ -98,7 +97,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         }
     }
     
-    private func banMember(_ member: RoomMemberDetails, reason: String?) async {
+    private func banMember(_ member: ManagedMember, reason: String?) async {
         let indicatorTitle = L10n.screenBottomSheetManageRoomMemberBanningUser(member.name ?? member.id)
         showManageMemberIndicator(title: indicatorTitle)
         
@@ -112,7 +111,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         }
     }
     
-    private func unbanMember(_ member: RoomMemberDetails) async {
+    private func unbanMember(_ member: ManagedMember) async {
         let indicatorTitle = L10n.screenBottomSheetManageRoomMemberUnbanningUser(member.name ?? member.id)
         showManageMemberIndicator(title: indicatorTitle)
         
@@ -145,11 +144,6 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
 
 extension ManageRoomMemberSheetViewModel: Identifiable {
     var id: String {
-        switch state.details {
-        case .memberDetails(let member):
-            member.id
-        case .senderDetails(let sender):
-            sender.id
-        }
+        state.memberDetails.id
     }
 }

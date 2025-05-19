@@ -272,18 +272,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     // MARK: - Private
     
     private func handleTappedOnSenderDetails(sender: TimelineItemSender) {
-        let viewModel: ManageRoomMemberSheetViewModel
-        if let memberProxy = roomProxy.membersPublisher.value.first(where: { $0.userID == sender.id }) {
-            viewModel = ManageRoomMemberSheetViewModel(details: .memberDetails(roomMember: .init(withProxy: memberProxy)),
-                                                       permissions: .init(canKick: state.canCurrentUserKick,
-                                                                          canBan: state.canCurrentUserBan,
-                                                                          ownPowerLevel: currentUserProxy?.powerLevel ?? 0),
-                                                       roomProxy: roomProxy,
-                                                       userIndicatorController: userIndicatorController,
-                                                       analyticsService: analyticsService,
-                                                       mediaProvider: mediaProvider)
+        let memberDetails: ManageRoomMemberDetails = if let memberProxy = roomProxy.membersPublisher.value.first(where: { $0.userID == sender.id }) {
+            .memberDetails(roomMember: .init(withProxy: memberProxy))
         } else {
-            viewModel = ManageRoomMemberSheetViewModel(details: .senderDetails(sender: sender),
+            .loadingMemberDetails(sender: sender)
+        }
+        
+        let viewModel = ManageRoomMemberSheetViewModel(memberDetails: memberDetails,
                                                        permissions: .init(canKick: state.canCurrentUserKick,
                                                                           canBan: state.canCurrentUserBan,
                                                                           ownPowerLevel: currentUserProxy?.powerLevel ?? 0),
@@ -291,7 +286,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        userIndicatorController: userIndicatorController,
                                                        analyticsService: analyticsService,
                                                        mediaProvider: mediaProvider)
-        }
         
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }

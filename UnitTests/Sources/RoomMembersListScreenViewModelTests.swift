@@ -149,7 +149,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         // Then the member's details should be shown.
         try await deferred.fulfill()
         XCTAssertNotNil(context.manageMemeberViewModel)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.details.id, user.id)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, user.id)
         XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, false)
         XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, false)
     }
@@ -171,7 +171,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then member management should be shown for that user.
-        XCTAssertEqual(context.manageMemeberViewModel?.state.details.id, user.id)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, user.id)
         XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, true)
         XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, true)
         XCTAssertEqual(context.manageMemeberViewModel?.state.isKickDisabled, false)
@@ -196,7 +196,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then member management should be shown for the moderator.
-        XCTAssertEqual(context.manageMemeberViewModel?.state.details.id, moderator.id)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, moderator.id)
         XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, true)
         XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, true)
         XCTAssertEqual(context.manageMemeberViewModel?.state.isMemberBanned, false)
@@ -220,7 +220,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         
         // Then the administrator's details should be shown.
         try await deferred.fulfill()
-        XCTAssertEqual(context.manageMemeberViewModel?.state.details.id, admin.id)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, admin.id)
         XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, true)
         XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, true)
         XCTAssertEqual(context.manageMemeberViewModel?.state.isKickDisabled, true)
@@ -264,7 +264,7 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         
         // Then an alert should be shown to unban the user.
         try await deferred.fulfill()
-        XCTAssertEqual(context.manageMemeberViewModel?.state.details.id, bannedMember.id)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, bannedMember.id)
         XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, true)
         XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, true)
         XCTAssertEqual(context.manageMemeberViewModel?.state.isKickDisabled, true)

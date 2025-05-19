@@ -20,7 +20,7 @@ struct ManageRoomMemberSheetView: View {
                                  mediaProvider: context.mediaProvider) {
                     EmptyView()
                 }
-            case .senderDetails(let sender):
+            case .loadingMemberDetails(let sender):
                 AvatarHeaderView(sender: sender,
                                  avatarSize: .user(on: .memberDetails),
                                  mediaProvider: context.mediaProvider) {
@@ -111,7 +111,7 @@ private extension ManageRoomMemberSheetViewModel {
         } else {
             RoomMemberDetails(withProxy: RoomMemberProxyMock.mockDan)
         }
-        return ManageRoomMemberSheetViewModel(details: .memberDetails(roomMember: member),
+        return ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: member),
                                               permissions: .init(canKick: canKick,
                                                                  canBan: canBan,
                                                                  ownPowerLevel: powerLevel),
