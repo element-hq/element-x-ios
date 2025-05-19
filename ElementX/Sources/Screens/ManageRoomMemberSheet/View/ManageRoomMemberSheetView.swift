@@ -13,7 +13,7 @@ struct ManageRoomMemberSheetView: View {
     
     var body: some View {
         Form {
-            switch context.viewState.details {
+            switch context.viewState.memberDetails {
             case .memberDetails(let member):
                 AvatarHeaderView(member: member,
                                  avatarSize: .user(on: .memberDetails),
@@ -49,8 +49,8 @@ struct ManageRoomMemberSheetView: View {
                 
                 if context.viewState.permissions.canBan {
                     let title = context.viewState.isMemberBanned ? L10n.screenBottomSheetManageRoomMemberUnban : L10n.screenBottomSheetManageRoomMemberBan
-                    let icon: KeyPath = context.viewState.isMemberBanned ? \.restart : \.block
-                    let action: ViewAction = context.viewState.isMemberBanned ? .unban : .ban
+                    let icon: KeyPath<CompoundIcons, Image> = context.viewState.isMemberBanned ? \.restart : \.block
+                    let action: ManageRoomMemberSheetViewAction = context.viewState.isMemberBanned ? .unban : .ban
                     
                     ListRow(label: .default(title: title,
                                             icon: icon,
@@ -58,7 +58,7 @@ struct ManageRoomMemberSheetView: View {
                             kind: .button {
                                 context.send(viewAction: action)
                             })
-                                .disabled(context.viewState.isBanUnbanDisabled)
+                            .disabled(context.viewState.isBanUnbanDisabled)
                 }
             }
         }

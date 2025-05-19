@@ -27,7 +27,7 @@ class ManageRoomMemberSheetViewModelTests: XCTestCase {
             return .success(())
         }
         
-        viewModel = ManageRoomMemberSheetViewModel(details: .memberDetails(roomMember: .init(withProxy: RoomMemberProxyMock.mockAlice)),
+        viewModel = ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: .init(withProxy: RoomMemberProxyMock.mockAlice)),
                                                    permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
@@ -58,7 +58,7 @@ class ManageRoomMemberSheetViewModelTests: XCTestCase {
             return .success(())
         }
         
-        viewModel = ManageRoomMemberSheetViewModel(details: .memberDetails(roomMember: .init(withProxy: RoomMemberProxyMock.mockAlice)),
+        viewModel = ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: .init(withProxy: RoomMemberProxyMock.mockAlice)),
                                                    permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
@@ -80,7 +80,7 @@ class ManageRoomMemberSheetViewModelTests: XCTestCase {
     
     func testDisplayDetails() async throws {
         let roomProxy = JoinedRoomProxyMock(.init(members: [RoomMemberProxyMock.mockAdmin, RoomMemberProxyMock.mockAlice]))
-        viewModel = ManageRoomMemberSheetViewModel(details: .memberDetails(roomMember: .init(withProxy: RoomMemberProxyMock.mockAlice)),
+        viewModel = ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: .init(withProxy: RoomMemberProxyMock.mockAlice)),
                                                    permissions: .init(canKick: true, canBan: true, ownPowerLevel: RoomMemberProxyMock.mockAdmin.powerLevel),
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),

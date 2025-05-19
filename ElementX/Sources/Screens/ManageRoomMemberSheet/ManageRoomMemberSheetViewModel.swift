@@ -83,7 +83,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         }
     }
     
-    private func kickMember(_ member: ManagedMember, reason: String?) async {
+    private func kickMember(_ member: ManagedRoomMember, reason: String?) async {
         let indicatorTitle = L10n.screenBottomSheetManageRoomMemberRemovingUser(member.name ?? member.id)
         showManageMemberIndicator(title: indicatorTitle)
         
@@ -97,7 +97,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         }
     }
     
-    private func banMember(_ member: ManagedMember, reason: String?) async {
+    private func banMember(_ member: ManagedRoomMember, reason: String?) async {
         let indicatorTitle = L10n.screenBottomSheetManageRoomMemberBanningUser(member.name ?? member.id)
         showManageMemberIndicator(title: indicatorTitle)
         
@@ -111,7 +111,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         }
     }
     
-    private func unbanMember(_ member: ManagedMember) async {
+    private func unbanMember(_ member: ManagedRoomMember) async {
         let indicatorTitle = L10n.screenBottomSheetManageRoomMemberUnbanningUser(member.name ?? member.id)
         showManageMemberIndicator(title: indicatorTitle)
         

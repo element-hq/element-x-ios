@@ -380,7 +380,7 @@ class TimelineViewModelTests: XCTestCase {
         viewModel.context.send(viewAction: .tappedOnSenderDetails(sender: .init(with: RoomMemberProxyMock.mockAlice)))
         try await deferred.fulfill()
         
-        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.details.id, RoomMemberProxyMock.mockAlice.userID)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.id, RoomMemberProxyMock.mockAlice.userID)
         XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.permissions.canBan, true)
         XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.permissions.canKick, true)
         XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isKickDisabled, false)
@@ -421,7 +421,7 @@ class TimelineViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.permissions.canKick, false)
         XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isKickDisabled, true)
         XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isBanUnbanDisabled, true)
-        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.details.id, RoomMemberProxyMock.mockAdmin.userID)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.id, RoomMemberProxyMock.mockAdmin.userID)
     }
     
     func testShowDetailsForABannedUser() async throws {
@@ -459,7 +459,7 @@ class TimelineViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isKickDisabled, true)
         XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isBanUnbanDisabled, false)
         XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.isMemberBanned, true)
-        XCTAssertEqual(viewModel.context.manageMemberViewModel?.state.details.id, RoomMemberProxyMock.mockBanned[0].userID)
+        XCTAssertEqual(viewModel.context.manageMemberViewModel?.id, RoomMemberProxyMock.mockBanned[0].userID)
     }
     
     // MARK: - Pins

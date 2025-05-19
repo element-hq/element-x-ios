@@ -73,7 +73,7 @@ enum ManageRoomMemberDetails {
         }
     }
     
-    var managedMember: ManagedMember {
+    var managedMember: ManagedRoomMember {
         switch self {
         case let .memberDetails(roomMember):
             roomMember
@@ -89,13 +89,13 @@ struct ManageRoomMemberPermissions {
     let ownPowerLevel: Int
 }
 
-protocol ManagedMember {
+protocol ManagedRoomMember {
     var id: String { get }
     var name: String? { get }
 }
 
-extension RoomMemberDetails: ManagedMember { }
-extension TimelineItemSender: ManagedMember {
+extension RoomMemberDetails: ManagedRoomMember { }
+extension TimelineItemSender: ManagedRoomMember {
     var name: String? {
         displayName
     }

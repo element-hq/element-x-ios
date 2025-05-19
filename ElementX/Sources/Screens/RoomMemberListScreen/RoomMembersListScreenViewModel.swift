@@ -147,7 +147,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             return
         }
         
-        let manageMemeberViewModel = ManageRoomMemberSheetViewModel(details: .memberDetails(roomMember: member),
+        let manageMemeberViewModel = ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: member),
                                                                     permissions: .init(canKick: state.canKickUsers,
                                                                                        canBan: state.canBanUsers,
                                                                                        ownPowerLevel: currentUserProxy?.powerLevel ?? 0),
