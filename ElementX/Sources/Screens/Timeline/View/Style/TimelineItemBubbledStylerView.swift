@@ -93,7 +93,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         // N.B. we can't combine two paddings together without triggering popping.
         .padding(.top, messageBubbleTopPadding)
         // don't reanimate bubble layouts if we're just changing the messageBubbleTopPadding
-        // .animation(nil, value: messageBubbleTopPadding)
+        .animation(nil, value: messageBubbleTopPadding)
         .highlightedTimelineItem(isFocussed)
     }
     

@@ -34,7 +34,7 @@ struct TimelineItemStatusView: View {
                 } else if isSendReceiptVisible {
                     // we were the last msg in the timeline, but not any more
                     // so remove the SR after a short delay to avoid racing with the new msg animation
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                         withAnimation {
                             isSendReceiptVisible = false
                         }
@@ -64,6 +64,7 @@ struct TimelineItemStatusView: View {
             if isSendReceiptVisible {
                 // We only display the sent icon for the latest outgoing message
                 TimelineDeliveryStatusView(deliveryStatus: .sent)
+                // .transition(.identity) // makes the SR disappear rapidly to avoid ugly z-index flickering
             }
         case .sendingFailed:
             // Bubbles handle the case internally
