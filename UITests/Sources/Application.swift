@@ -5,7 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import SnapshotUITesting
+import SnapshotTesting
 import XCTest
 
 enum Application {

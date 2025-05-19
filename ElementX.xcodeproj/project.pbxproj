@@ -1212,7 +1212,7 @@
 		F08F7BC07CA9AEF5CD157918 /* Snapshotting.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF17EA323AD0205A6AB621AA /* Snapshotting.swift */; };
 		F0A26CD502C3A5868353B0FA /* ServerConfirmationScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DEE0682C95F897B6C7CB0D /* ServerConfirmationScreenViewModel.swift */; };
 		F0DACC95F24128A54CD537E4 /* GlobalSearchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B8177BD2AF45A286F5DA31 /* GlobalSearchScreen.swift */; };
-		F0F82C3C848C865C3098AA52 /* SnapshotUITesting in Frameworks */ = {isa = PBXBuildFile; productRef = 4D8A8AC5F38942DAD76E02A3 /* SnapshotUITesting */; };
+		F0F82C3C848C865C3098AA52 /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 21C83087604B154AA30E9A8F /* SnapshotTesting */; };
 		F103924DED414ADFE398CE99 /* RoomPollsHistoryScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A130A2251A15A7AACC84FD37 /* RoomPollsHistoryScreenViewModelProtocol.swift */; };
 		F118DD449066E594F63C697D /* RoomMemberProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B5E17028C02DFA7DDA3931 /* RoomMemberProxyProtocol.swift */; };
 		F12F6BED7B6D7EE4BEE55039 /* PlainMentionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE78FA0011E07920AE83135 /* PlainMentionBuilder.swift */; };
@@ -2675,7 +2675,7 @@
 				29EE1791E0AFA1ABB7F23D2F /* SwiftState in Frameworks */,
 				33CAC1226DFB8B5D8447D286 /* GZIP in Frameworks */,
 				492274DA6691EE985C2FCCAA /* Sentry in Frameworks */,
-				F0F82C3C848C865C3098AA52 /* SnapshotUITesting in Frameworks */,
+				F0F82C3C848C865C3098AA52 /* SnapshotTesting in Frameworks */,
 				3A64A93A651A3CB8774ADE8E /* Collections in Frameworks */,
 				3F327A62D233933F54F0F33A /* SwiftOGG in Frameworks */,
 			);
@@ -6145,7 +6145,7 @@
 				3853B78FB8531B83936C5DA6 /* SwiftState */,
 				1BCD21310B997A6837B854D6 /* GZIP */,
 				67E7A6F388D3BF85767609D9 /* Sentry */,
-				4D8A8AC5F38942DAD76E02A3 /* SnapshotUITesting */,
+				21C83087604B154AA30E9A8F /* SnapshotTesting */,
 				BA93CD75CCE486660C9040BD /* Collections */,
 				3FE40E79C36E7903121E6E3B /* SwiftOGG */,
 			);
@@ -8387,6 +8387,9 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				OTHER_SWIFT_FLAGS = (
+					"-DDEBUG",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "${BASE_BUNDLE_IDENTIFIER}.ui.tests";
 				PRODUCT_NAME = UITests;
 				SDKROOT = iphoneos;
@@ -8404,6 +8407,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
+				);
+				OTHER_SWIFT_FLAGS = (
+					"-DRELEASE",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "${BASE_BUNDLE_IDENTIFIER}.ui.tests";
 				PRODUCT_NAME = UITests;
@@ -8762,8 +8768,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
 			requirement = {
-				kind = revision;
-				revision = b467f413c83e2ceba59ba798583a1c57db9700cb;
+				kind = upToNextMinorVersion;
+				minimumVersion = 1.18.3;
 			};
 		};
 		EC6D0C817B1C21D9D096505A /* XCRemoteSwiftPackageReference "Version" */ = {
@@ -8835,6 +8841,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */;
 			productName = GZIP;
+		};
+		21C83087604B154AA30E9A8F /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E9C4F3A12AA1F65C13A8C8EB /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
 		};
 		290FDEDA4D764B9F7EBE55A9 /* Algorithms */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -8910,11 +8921,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */;
 			productName = PostHog;
-		};
-		4D8A8AC5F38942DAD76E02A3 /* SnapshotUITesting */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E9C4F3A12AA1F65C13A8C8EB /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
-			productName = SnapshotUITesting;
 		};
 		50009897F60FAE7D63EF5E5B /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -39,8 +39,6 @@ targets:
     - package: GZIP
     - package: Sentry
     - package: SnapshotTesting
-      products:
-        - SnapshotUITesting
     - package: Collections
     - package: SwiftOGG
 
@@ -51,8 +49,13 @@ targets:
       base:
         PRODUCT_NAME: UITests
         PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.ui.tests
-      debug:
-      release:
+      configs:
+      # This is required to remove the $(inherited) flags
+      # which would prevent SnapshotTesting to be imported in UI Tests
+        debug:
+          OTHER_SWIFT_FLAGS: ["-DDEBUG"]
+        release:
+          OTHER_SWIFT_FLAGS: ["-DRELEASE"]
 
     sources:
     - path: ../Sources
