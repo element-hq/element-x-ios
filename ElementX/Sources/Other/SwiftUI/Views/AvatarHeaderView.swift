@@ -110,6 +110,8 @@ struct AvatarHeaderView<Footer: View>: View {
         badges = isVerified ? [.verified] : []
     }
     
+    /// Initialises the view by using the sender,
+    /// only to be used when a room member has not been loaded yet.
     init(sender: TimelineItemSender,
          avatarSize: Avatars.Size,
          mediaProvider: MediaProviderProtocol? = nil,
