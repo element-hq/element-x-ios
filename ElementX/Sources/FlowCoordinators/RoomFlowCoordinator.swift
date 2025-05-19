@@ -273,6 +273,19 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         // early return above could result in trying to access the room's timeline provider
         // before it has been set which triggers a fatal error.
         self.roomProxy = roomProxy
+        
+        // Subscribe to room info updates in order to detect rooms being left on other devices
+        // and react accordingly by dismissing this flow coordinator.
+        self.roomProxy.infoPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] info in
+                guard let self else { return }
+                
+                if info.membership == .left || info.membership == .banned, stateMachine.state != .complete {
+                    stateMachine.tryEvent(.dismissFlow)
+                }
+            }
+            .store(in: &cancellables)
     }
     
     // swiftlint:disable:next function_body_length

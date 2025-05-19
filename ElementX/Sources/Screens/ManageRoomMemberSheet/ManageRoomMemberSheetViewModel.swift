@@ -22,9 +22,8 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(member: RoomMemberDetails,
-         canKick: Bool,
-         canBan: Bool,
+    init(memberDetails: ManageRoomMemberDetails,
+         permissions: ManageRoomMemberPermissions,
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analyticsService: AnalyticsService,
@@ -32,7 +31,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         self.userIndicatorController = userIndicatorController
         self.roomProxy = roomProxy
         self.analyticsService = analyticsService
-        super.init(initialViewState: .init(member: member, canKick: canKick, canBan: canBan), mediaProvider: mediaProvider)
+        super.init(initialViewState: .init(memberDetails: memberDetails, permissions: permissions), mediaProvider: mediaProvider)
     }
     
     override func process(viewAction: ManageRoomMemberSheetViewAction) {
@@ -43,11 +42,15 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
             displayAlert(.ban)
         case .displayDetails:
             actionsSubject.send(.dismiss(shouldShowDetails: true))
+        case .unban:
+            displayAlert(.unban)
         }
     }
     
     private func displayAlert(_ alertType: ManageRoomMemberSheetViewAlertType) {
-        let member = state.member
+        let memberID = state.memberDetails.id
+        let memberName = state.memberDetails.name
+        
         var reason: String?
         let binding: Binding<String> = .init(get: { reason ?? "" },
                                              set: { reason = $0.isBlank ? nil : $0 })
@@ -57,7 +60,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
                                              title: L10n.screenBottomSheetManageRoomMemberKickMemberConfirmationTitle,
                                              message: L10n.screenBottomSheetManageRoomMemberKickMemberConfirmationDescription,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },
-                                             secondaryButton: .init(title: L10n.screenBottomSheetManageRoomMemberKickMemberConfirmationAction) { [weak self] in Task { await self?.kickMember(member, reason: reason) } },
+                                             secondaryButton: .init(title: L10n.screenBottomSheetManageRoomMemberKickMemberConfirmationAction) { [weak self] in Task { await self?.kickMember(id: memberID, name: memberName, reason: reason) } },
                                              textFields: [.init(placeholder: L10n.commonReason,
                                                                 text: binding,
                                                                 autoCapitalization: .sentences,
@@ -67,19 +70,25 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
                                              title: L10n.screenBottomSheetManageRoomMemberBanMemberConfirmationTitle,
                                              message: L10n.screenBottomSheetManageRoomMemberBanMemberConfirmationDescription,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },
-                                             secondaryButton: .init(title: L10n.screenBottomSheetManageRoomMemberBanMemberConfirmationAction) { [weak self] in Task { await self?.banMember(member, reason: reason) } },
+                                             secondaryButton: .init(title: L10n.screenBottomSheetManageRoomMemberBanMemberConfirmationAction) { [weak self] in Task { await self?.banMember(id: memberID, name: memberName, reason: reason) } },
                                              textFields: [.init(placeholder: L10n.commonReason,
                                                                 text: binding,
                                                                 autoCapitalization: .sentences,
                                                                 autoCorrectionDisabled: false)])
+        case .unban:
+            state.bindings.alertInfo = .init(id: alertType,
+                                             title: L10n.screenBottomSheetManageRoomMemberUnbanMemberConfirmationTitle,
+                                             message: L10n.screenBottomSheetManageRoomMemberUnbanMemberConfirmationDescription,
+                                             primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },
+                                             secondaryButton: .init(title: L10n.screenBottomSheetManageRoomMemberUnbanMemberConfirmationAction) { [weak self] in Task { await self?.unbanMember(id: memberID, name: memberName) } })
         }
     }
     
-    private func kickMember(_ member: RoomMemberDetails, reason: String?) async {
-        let indicatorTitle = L10n.screenBottomSheetManageRoomMemberRemovingUser(member.name ?? member.id)
+    private func kickMember(id: String, name: String?, reason: String?) async {
+        let indicatorTitle = L10n.screenBottomSheetManageRoomMemberRemovingUser(name ?? id)
         showManageMemberIndicator(title: indicatorTitle)
         
-        switch await roomProxy.kickUser(member.id, reason: reason) {
+        switch await roomProxy.kickUser(id, reason: reason) {
         case .success:
             hideManageMemberIndicator(title: indicatorTitle)
             analyticsService.trackRoomModeration(action: .KickMember, role: nil)
@@ -89,14 +98,28 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         }
     }
     
-    private func banMember(_ member: RoomMemberDetails, reason: String?) async {
-        let indicatorTitle = L10n.screenBottomSheetManageRoomMemberBanningUser(member.name ?? member.id)
+    private func banMember(id: String, name: String?, reason: String?) async {
+        let indicatorTitle = L10n.screenBottomSheetManageRoomMemberBanningUser(name ?? id)
         showManageMemberIndicator(title: indicatorTitle)
         
-        switch await roomProxy.banUser(member.id, reason: reason) {
+        switch await roomProxy.banUser(id, reason: reason) {
         case .success:
             hideManageMemberIndicator(title: indicatorTitle)
             analyticsService.trackRoomModeration(action: .BanMember, role: nil)
+            actionsSubject.send(.dismiss(shouldShowDetails: false))
+        case .failure:
+            showManageMemberFailure(title: indicatorTitle)
+        }
+    }
+    
+    private func unbanMember(id: String, name: String?) async {
+        let indicatorTitle = L10n.screenBottomSheetManageRoomMemberUnbanningUser(name ?? id)
+        showManageMemberIndicator(title: indicatorTitle)
+        
+        switch await roomProxy.unbanUser(id) {
+        case .success:
+            hideManageMemberIndicator(title: indicatorTitle)
+            analyticsService.trackRoomModeration(action: .UnbanMember, role: nil)
             actionsSubject.send(.dismiss(shouldShowDetails: false))
         case .failure:
             showManageMemberFailure(title: indicatorTitle)
@@ -121,5 +144,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
 }
 
 extension ManageRoomMemberSheetViewModel: Identifiable {
-    var id: String { state.member.id }
+    var id: String {
+        state.memberDetails.id
+    }
 }

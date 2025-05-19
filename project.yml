@@ -5,6 +5,7 @@ attributes:
 
 fileGroups:
 - project.yml
+- app.yml
 
 options:
   groupSortPosition: bottom
@@ -15,9 +16,14 @@ options:
   groupOrdering:
   - order:
     - ElementX
+    - NSE
+    - ShareExtension
     - UnitTests
+    - PreviewTests
     - UITests
     - IntegrationTests
+    - DevelopmentAssets
+    - Secrets
     - Tools
   - pattern: ElementX
     order:
@@ -59,7 +65,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 25.05.09
+    exactVersion: 25.05.19
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
@@ -69,6 +75,9 @@ packages:
     url: https://github.com/matrix-org/matrix-analytics-events
     minorVersion: 0.28.0
     # path: ../matrix-analytics-events
+  EmbeddedElementCall:
+    url: https://github.com/element-hq/element-call-swift
+    exactVersion: 0.9.0
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     minorVersion: 1.4.1
@@ -81,9 +90,6 @@ packages:
     url: https://github.com/element-hq/matrix-rich-text-editor-swift
     exactVersion: 2.37.12
     # path: ../matrix-rich-text-editor/platforms/ios/lib/WysiwygComposer
-  EmbeddedElementCall:
-    url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.9.0
   
   # External dependencies
   Algorithms:
@@ -130,7 +136,7 @@ packages:
     minorVersion: 8.35.1
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    revision: b467f413c83e2ceba59ba798583a1c57db9700cb
+    minorVersion: 1.18.3
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     minorVersion: 6.0.0

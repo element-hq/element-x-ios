@@ -2795,6 +2795,152 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - observeAccountDataEvent
+
+    var observeAccountDataEventEventTypeListenerUnderlyingCallsCount = 0
+    open var observeAccountDataEventEventTypeListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return observeAccountDataEventEventTypeListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = observeAccountDataEventEventTypeListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                observeAccountDataEventEventTypeListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    observeAccountDataEventEventTypeListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var observeAccountDataEventEventTypeListenerCalled: Bool {
+        return observeAccountDataEventEventTypeListenerCallsCount > 0
+    }
+    open var observeAccountDataEventEventTypeListenerReceivedArguments: (eventType: AccountDataEventType, listener: AccountDataListener)?
+    open var observeAccountDataEventEventTypeListenerReceivedInvocations: [(eventType: AccountDataEventType, listener: AccountDataListener)] = []
+
+    var observeAccountDataEventEventTypeListenerUnderlyingReturnValue: TaskHandle!
+    open var observeAccountDataEventEventTypeListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return observeAccountDataEventEventTypeListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = observeAccountDataEventEventTypeListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                observeAccountDataEventEventTypeListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    observeAccountDataEventEventTypeListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var observeAccountDataEventEventTypeListenerClosure: ((AccountDataEventType, AccountDataListener) -> TaskHandle)?
+
+    open override func observeAccountDataEvent(eventType: AccountDataEventType, listener: AccountDataListener) -> TaskHandle {
+        observeAccountDataEventEventTypeListenerCallsCount += 1
+        observeAccountDataEventEventTypeListenerReceivedArguments = (eventType: eventType, listener: listener)
+        DispatchQueue.main.async {
+            self.observeAccountDataEventEventTypeListenerReceivedInvocations.append((eventType: eventType, listener: listener))
+        }
+        if let observeAccountDataEventEventTypeListenerClosure = observeAccountDataEventEventTypeListenerClosure {
+            return observeAccountDataEventEventTypeListenerClosure(eventType, listener)
+        } else {
+            return observeAccountDataEventEventTypeListenerReturnValue
+        }
+    }
+
+    //MARK: - observeRoomAccountDataEvent
+
+    open var observeRoomAccountDataEventRoomIdEventTypeListenerThrowableError: Error?
+    var observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingCallsCount = 0
+    open var observeRoomAccountDataEventRoomIdEventTypeListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var observeRoomAccountDataEventRoomIdEventTypeListenerCalled: Bool {
+        return observeRoomAccountDataEventRoomIdEventTypeListenerCallsCount > 0
+    }
+    open var observeRoomAccountDataEventRoomIdEventTypeListenerReceivedArguments: (roomId: String, eventType: RoomAccountDataEventType, listener: RoomAccountDataListener)?
+    open var observeRoomAccountDataEventRoomIdEventTypeListenerReceivedInvocations: [(roomId: String, eventType: RoomAccountDataEventType, listener: RoomAccountDataListener)] = []
+
+    var observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingReturnValue: TaskHandle!
+    open var observeRoomAccountDataEventRoomIdEventTypeListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    observeRoomAccountDataEventRoomIdEventTypeListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var observeRoomAccountDataEventRoomIdEventTypeListenerClosure: ((String, RoomAccountDataEventType, RoomAccountDataListener) throws -> TaskHandle)?
+
+    open override func observeRoomAccountDataEvent(roomId: String, eventType: RoomAccountDataEventType, listener: RoomAccountDataListener) throws -> TaskHandle {
+        if let error = observeRoomAccountDataEventRoomIdEventTypeListenerThrowableError {
+            throw error
+        }
+        observeRoomAccountDataEventRoomIdEventTypeListenerCallsCount += 1
+        observeRoomAccountDataEventRoomIdEventTypeListenerReceivedArguments = (roomId: roomId, eventType: eventType, listener: listener)
+        DispatchQueue.main.async {
+            self.observeRoomAccountDataEventRoomIdEventTypeListenerReceivedInvocations.append((roomId: roomId, eventType: eventType, listener: listener))
+        }
+        if let observeRoomAccountDataEventRoomIdEventTypeListenerClosure = observeRoomAccountDataEventRoomIdEventTypeListenerClosure {
+            return try observeRoomAccountDataEventRoomIdEventTypeListenerClosure(roomId, eventType, listener)
+        } else {
+            return observeRoomAccountDataEventRoomIdEventTypeListenerReturnValue
+        }
+    }
+
     //MARK: - removeAvatar
 
     open var removeAvatarThrowableError: Error?
@@ -6313,77 +6459,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 
-    //MARK: - useEventCachePersistentStorage
-
-    var useEventCachePersistentStorageValueUnderlyingCallsCount = 0
-    open var useEventCachePersistentStorageValueCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return useEventCachePersistentStorageValueUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = useEventCachePersistentStorageValueUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                useEventCachePersistentStorageValueUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    useEventCachePersistentStorageValueUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var useEventCachePersistentStorageValueCalled: Bool {
-        return useEventCachePersistentStorageValueCallsCount > 0
-    }
-    open var useEventCachePersistentStorageValueReceivedValue: Bool?
-    open var useEventCachePersistentStorageValueReceivedInvocations: [Bool] = []
-
-    var useEventCachePersistentStorageValueUnderlyingReturnValue: ClientBuilder!
-    open var useEventCachePersistentStorageValueReturnValue: ClientBuilder! {
-        get {
-            if Thread.isMainThread {
-                return useEventCachePersistentStorageValueUnderlyingReturnValue
-            } else {
-                var returnValue: ClientBuilder? = nil
-                DispatchQueue.main.sync {
-                    returnValue = useEventCachePersistentStorageValueUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                useEventCachePersistentStorageValueUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    useEventCachePersistentStorageValueUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var useEventCachePersistentStorageValueClosure: ((Bool) -> ClientBuilder)?
-
-    open override func useEventCachePersistentStorage(value: Bool) -> ClientBuilder {
-        useEventCachePersistentStorageValueCallsCount += 1
-        useEventCachePersistentStorageValueReceivedValue = value
-        DispatchQueue.main.async {
-            self.useEventCachePersistentStorageValueReceivedInvocations.append(value)
-        }
-        if let useEventCachePersistentStorageValueClosure = useEventCachePersistentStorageValueClosure {
-            return useEventCachePersistentStorageValueClosure(value)
-        } else {
-            return useEventCachePersistentStorageValueReturnValue
-        }
-    }
-
     //MARK: - userAgent
 
     var userAgentUserAgentUnderlyingCallsCount = 0
@@ -9261,6 +9336,81 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
             return try await getNotificationRoomIdEventIdClosure(roomId, eventId)
         } else {
             return getNotificationRoomIdEventIdReturnValue
+        }
+    }
+
+    //MARK: - getNotifications
+
+    open var getNotificationsRequestsThrowableError: Error?
+    var getNotificationsRequestsUnderlyingCallsCount = 0
+    open var getNotificationsRequestsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getNotificationsRequestsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getNotificationsRequestsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getNotificationsRequestsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getNotificationsRequestsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var getNotificationsRequestsCalled: Bool {
+        return getNotificationsRequestsCallsCount > 0
+    }
+    open var getNotificationsRequestsReceivedRequests: [NotificationItemsRequest]?
+    open var getNotificationsRequestsReceivedInvocations: [[NotificationItemsRequest]] = []
+
+    var getNotificationsRequestsUnderlyingReturnValue: [String: NotificationItem]!
+    open var getNotificationsRequestsReturnValue: [String: NotificationItem]! {
+        get {
+            if Thread.isMainThread {
+                return getNotificationsRequestsUnderlyingReturnValue
+            } else {
+                var returnValue: [String: NotificationItem]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getNotificationsRequestsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getNotificationsRequestsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getNotificationsRequestsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var getNotificationsRequestsClosure: (([NotificationItemsRequest]) async throws -> [String: NotificationItem])?
+
+    open override func getNotifications(requests: [NotificationItemsRequest]) async throws -> [String: NotificationItem] {
+        if let error = getNotificationsRequestsThrowableError {
+            throw error
+        }
+        getNotificationsRequestsCallsCount += 1
+        getNotificationsRequestsReceivedRequests = requests
+        DispatchQueue.main.async {
+            self.getNotificationsRequestsReceivedInvocations.append(requests)
+        }
+        if let getNotificationsRequestsClosure = getNotificationsRequestsClosure {
+            return try await getNotificationsRequestsClosure(requests)
+        } else {
+            return getNotificationsRequestsReturnValue
         }
     }
 
