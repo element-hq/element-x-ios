@@ -55,7 +55,7 @@ enum TimelineViewAction {
     case displayTimelineItemMenu(itemID: TimelineItemIdentifier)
     case handleTimelineItemMenuAction(itemID: TimelineItemIdentifier, action: TimelineItemMenuAction)
     
-    case tappedOnSenderDetails(userID: String)
+    case tappedOnSenderDetails(sender: TimelineItemSender)
     case displayReactionSummary(itemID: TimelineItemIdentifier, key: String)
     case displayEmojiPicker(itemID: TimelineItemIdentifier)
     case displayReadReceipts(itemID: TimelineItemIdentifier)
