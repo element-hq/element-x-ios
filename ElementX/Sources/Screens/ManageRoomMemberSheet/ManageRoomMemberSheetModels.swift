@@ -32,7 +32,7 @@ struct ManageRoomMemberSheetViewState: BindableState {
     }
     
     var isMemberBanned: Bool {
-        // This is a best effort check, if we haven't fetched the member yet we assume we can peform the action
+        // This is a best effort check, if we haven't fetched the member yet we assume the member is not banned
         guard case let .memberDetails(member) = details else {
             return false
         }
