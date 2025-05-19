@@ -40,7 +40,6 @@ class OIDCAuthenticationPresenter: NSObject {
             session.additionalHeaderFields = [
                 "X-Element-User-Agent": UserAgentBuilder.makeASCIIUserAgent()
             ]
-
             
             activeSession = session
             session.start()
