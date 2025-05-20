@@ -840,8 +840,9 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             return false
         }
         
-        //  can be improved by adding a date threshold
-        return eventTimelineItem.properties.reactions.isEmpty && eventTimelineItem.sender == otherEventTimelineItem.sender
+        return eventTimelineItem.sender == otherEventTimelineItem.sender
+            && eventTimelineItem.properties.reactions.isEmpty // Reactions break the grouping.
+            && otherEventTimelineItem.timestamp.timeIntervalSince(eventTimelineItem.timestamp) < 5 * 60 // As does the passage of time.
     }
 
     // MARK: - Direct chats logics
