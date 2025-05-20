@@ -77,19 +77,19 @@ enum QRCodeLoginState: Equatable {
     }
     
     enum QRCodeLoginScanningState: Equatable {
-        /// the qr code is scanning
+        /// the QR code is scanning
         case scanning
-        /// the qr code has been detected and is being processed
+        /// the QR code has been detected and is being processed
         case connecting
-        /// the qr code was scanned, but an error occurred.
+        /// the QR code was scanned, but an error occurred.
         case scanFailed(Error)
         
         enum Error: Equatable {
-            /// the qr code has been processed and is invalid
+            /// the QR code has been processed and is invalid
             case invalid
-            /// the qr code has been processed but it is for an account provide that isn't allowed.
+            /// the QR code has been processed but it is for an account provider that isn't allowed.
             case notAllowed(scannedProvider: String, allowedProviders: [String])
-            /// the qr code has been processed but it belongs to a device not signed in,
+            /// the QR code has been processed but it belongs to a device not signed in
             case deviceNotSignedIn
             
             var title: String {
