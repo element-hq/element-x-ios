@@ -421,11 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Eemalda kasutaja jututoast";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Kas eemaldama kasutaja ja seame talle tulevikuks suhtluskeelu?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Eemaldame kasutajat %1$@…";
-"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
-"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
+"screen_bottom_sheet_manage_room_member_unban" = "Eemalda suhtluskeeld jututoas";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Eemalda suhtluskeeld";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "Ta võib kutse saamisel liituda jututoaga uuesti";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Kas oled kindel, et soovid selle liikme suhtluskeelu eemaldada?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Eemaldame suhtluskeelu kasutajalt %1$@";
 "screen_create_room_room_access_section_anyone_option_description" = "Kõik võivad selle jututoaga liituda";
 "screen_create_room_room_access_section_anyone_option_title" = "Kõik";
 "screen_create_room_room_access_section_header" = "Ligipääs jututoale";
@@ -618,6 +618,8 @@
 "screen_change_server_error_invalid_well_known" = "Server pole saadaval vea tõttu well-known failis:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Valitud teenusepakkuja ei toeta „sliding sync“ režiimi. Rakenduse %1$@ kasutamiseks on vaja serverit uuendada.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ ei saa kasutada %2$@ koduserverit.";
+"screen_change_server_error_unauthorized_homeserver_content" = "See rakendus on seadistatud järgneva koduserveri kasutamiseks: %1$@.";
+"screen_change_server_error_unauthorized_homeserver_title" = "%1$@ teenusepakkuja pole lubatud.";
 "screen_change_server_form_header" = "Koduserveri url";
 "screen_change_server_form_notice" = "Sisesta domeeni aadress.";
 "screen_change_server_subtitle" = "Mis on sinu koduserveri aadress?";
@@ -765,7 +767,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Süsteemi teavitused on välja lülitatud";
 "screen_notification_settings_title" = "Teavitused";
 "screen_onboarding_sign_in_manually" = "Logi sisse käsitsi";
-"screen_onboarding_sign_in_to" = "Sign in to %1$@";
+"screen_onboarding_sign_in_to" = "Logi sisse teenusesse %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Logi sisse QR-koodi alusel";
 "screen_onboarding_sign_up" = "Loo kasutajakonto";
 "screen_onboarding_welcome_message" = "Läbi aegade kiireim ja mugavaim %1$@.";

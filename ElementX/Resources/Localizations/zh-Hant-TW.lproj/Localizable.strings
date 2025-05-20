@@ -99,7 +99,7 @@
 "action_report" = "回報";
 "action_report_bug" = "回報程式錯誤";
 "action_report_content" = "檢舉內容";
-"action_report_dm" = "Report conversation";
+"action_report_dm" = "回報對話";
 "action_report_room" = "回報聊天室";
 "action_reset" = "重設";
 "action_reset_identity" = "重設身份";
@@ -247,7 +247,7 @@
 "common_shared_location" = "位置分享";
 "common_signing_out" = "正在登出";
 "common_something_went_wrong" = "有錯誤發生";
-"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_something_went_wrong_message" = "我們了遇到了問題。請再試一次。";
 "common_starting_chat" = "開始聊天...";
 "common_sticker" = "貼圖";
 "common_success" = "成功";
@@ -425,7 +425,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
-"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
 "screen_create_room_room_access_section_anyone_option_description" = "任何人都可以加入此聊天室";
 "screen_create_room_room_access_section_anyone_option_title" = "任何人";
 "screen_create_room_room_access_section_header" = "聊天室存取權";
@@ -436,7 +436,7 @@
 "screen_decline_and_block_block_user_option_description" = "您將不會看到來自此使用者的任何訊息或聊天室邀請";
 "screen_decline_and_block_block_user_option_title" = "封鎖使用者";
 "screen_decline_and_block_report_user_option_description" = "向您的帳號提供者回報此聊天室。";
-"screen_decline_and_block_report_user_reason_placeholder" = "Describe the reason to report…";
+"screen_decline_and_block_report_user_reason_placeholder" = "說明回報的原因……";
 "screen_decline_and_block_title" = "拒絕並封鎖";
 "screen_edit_room_address_room_address_section_footer" = "您需要聊天室地址才能在目錄中顯示它。";
 "screen_edit_room_address_title" = "聊天室地址";
@@ -488,11 +488,11 @@
 "screen_media_upload_preview_error_failed_sending" = "無法上傳媒體檔案，請稍後再試。";
 "screen_pinned_timeline_empty_state_description" = "按一下訊息，然後選擇「%1$@」以加入至此。";
 "screen_pinned_timeline_empty_state_headline" = "釘選重要訊息，如此才能輕鬆發現";
-"screen_push_history_title" = "Push history";
+"screen_push_history_title" = "推播通知歷史紀錄";
 "screen_report_room_leave_failed_alert_message" = "您的回報已成功遞交，但我們嘗試離開聊天室時遇到了問題。請再試一次。";
 "screen_report_room_leave_failed_alert_title" = "無法離開聊天室";
 "screen_report_room_reason_footer" = "將此聊天室回報給您的管理員。若訊息已加密，您的管理員將無法讀取它們。";
-"screen_report_room_reason_placeholder" = "Describe the reason to report…";
+"screen_report_room_reason_placeholder" = "說明回報的原因……";
 "screen_report_room_title" = "回報聊天室";
 "screen_reset_encryption_password_error" = "發生了未知錯誤。請檢查您帳號的密碼是否正確，然後再試一次。";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "撤回驗證並傳送";
@@ -615,11 +615,13 @@
 "screen_change_account_provider_subtitle" = "使用不同的帳戶提供者，例如您自己的伺服器或工作帳號。";
 "screen_change_account_provider_title" = "更改帳號提供者";
 "screen_change_server_error_invalid_homeserver" = "我們無法連線至此家伺服器。請檢查您是否已正確輸入家伺服器 URL。若 URL 正確，請聯絡您家伺服器的管理員以取得進一步協助。";
-"screen_change_server_error_invalid_well_known" = "因為 well-known 檔案的問題，無法使用 sliding sync：\n%1$@";
-"screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
+"screen_change_server_error_invalid_well_known" = "因為 well-known 檔案的問題，伺服器不可用：\n%1$@";
+"screen_change_server_error_no_sliding_sync_message" = "選定的帳號提供者不支援 sliding sync。必須升級伺服器才能使用 %1$@。";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
+"screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
+"screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
 "screen_change_server_form_header" = "家伺服器 URL";
-"screen_change_server_form_notice" = "Enter a domain address.";
+"screen_change_server_form_notice" = "輸入網域位址。";
 "screen_change_server_subtitle" = "您的伺服器地址？";
 "screen_change_server_title" = "選擇您的伺服器";
 "screen_chat_backup_key_backup_action_disable" = "關閉備份功能";
@@ -1081,8 +1083,8 @@
 "state_event_room_avatar_removed_by_you" = "您移除了聊天室大頭照";
 "state_event_room_ban" = "%1$@ 將 %2$@ 加入黑名單";
 "state_event_room_ban_by_you" = "您將 %1$@ 加入黑名單";
-"state_event_room_ban_by_you_with_reason" = "You banned %1$@: %2$@";
-"state_event_room_ban_with_reason" = "%1$@ banned %2$@: %3$@";
+"state_event_room_ban_by_you_with_reason" = "您封鎖了 %1$@：%2$@";
+"state_event_room_ban_with_reason" = "%1$@ 封鎖了 %2$@：%3$@";
 "state_event_room_created" = "%1$@ 建立此聊天室";
 "state_event_room_created_by_you" = "您建立此聊天室";
 "state_event_room_invite" = "%1$@ 已邀請 %2$@";
@@ -1119,8 +1121,8 @@
 "state_event_room_reject_by_you" = "您拒絕了邀請";
 "state_event_room_remove" = "%2$@ 已被 %1$@ 移除";
 "state_event_room_remove_by_you" = "%1$@ 已被您移除";
-"state_event_room_remove_by_you_with_reason" = "You removed %1$@: %2$@";
-"state_event_room_remove_with_reason" = "%1$@ removed %2$@: %3$@";
+"state_event_room_remove_by_you_with_reason" = "您移除了 %1$@：%2$@";
+"state_event_room_remove_with_reason" = "%1$@ 移除了 %2$@：%3$@";
 "state_event_room_third_party_invite" = "%1$@ 已邀請 %2$@ 加入聊天室";
 "state_event_room_third_party_invite_by_you" = "您已邀請 %1$@ 加入聊天室";
 "state_event_room_third_party_revoked_invite" = "%1$@ 撤銷了對 %2$@ 的聊天室邀請";
@@ -1139,7 +1141,7 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "您無權檢視此訊息";
 "timeline_decryption_failure_unable_to_decrypt" = "無法解密訊息";
 "timeline_decryption_failure_withheld_unverified" = "此訊息被封鎖是因為您沒有驗證您的裝置，或是因為傳送者需要驗證您的身份而被封鎖。";
-"troubleshoot_notifications_entry_point_push_history_title" = "Push history";
+"troubleshoot_notifications_entry_point_push_history_title" = "推播通知歷史紀錄";
 "troubleshoot_notifications_entry_point_section" = "疑難排解";
 "troubleshoot_notifications_screen_action" = "執行測試";
 "troubleshoot_notifications_screen_action_again" = "再次執行測試";
