@@ -341,6 +341,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         let parameters = ServerConfirmationScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                        authenticationFlow: authenticationFlow,
+                                                                       appSettings: appSettings,
                                                                        userIndicatorController: userIndicatorController)
         let coordinator = ServerConfirmationScreenCoordinator(parameters: parameters)
         

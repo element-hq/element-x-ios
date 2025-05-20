@@ -2458,6 +2458,8 @@ internal enum L10n {
   internal static func screenServerConfirmationTitleLogin(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_server_confirmation_title_login", String(describing: p1))
   }
+  /// Choose account provider
+  internal static var screenServerConfirmationTitlePickerMode: String { return L10n.tr("Localizable", "screen_server_confirmation_title_picker_mode") }
   /// You’re about to create an account on %1$@
   internal static func screenServerConfirmationTitleRegister(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_server_confirmation_title_register", String(describing: p1))
