@@ -2,13 +2,13 @@
 "a11y_avatar" = "Avatar";
 "a11y_delete" = "Eliminar";
 "a11y_hide_password" = "Ocultar senha";
-"a11y_join_call" = "Join call";
+"a11y_join_call" = "Juntar-se à chamada";
 "a11y_jump_to_bottom" = "Saltar para o fundo";
 "a11y_notifications_mentions_only" = "Apenas menções";
 "a11y_notifications_muted" = "Silenciado";
 "a11y_page_n" = "Página %1$d";
 "a11y_pause" = "Pausar";
-"a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
+"a11y_paused_voice_message" = "Mensagem de voz, duração: %1$@, posição atual: %2$@";
 "a11y_pin_field" = "Campo para PIN";
 "a11y_play" = "Reproduzir";
 "a11y_poll_end" = "Sondagem concluída";
@@ -23,7 +23,7 @@
 "a11y_start_call" = "Iniciar chamada";
 "a11y_user_menu" = "Menu de utilizador";
 "a11y_view_details" = "Ver detalhes";
-"a11y_voice_message" = "Voice message, duration: %1$@";
+"a11y_voice_message" = "Mensagem de voz, duração: %1$@";
 "a11y_voice_message_record" = "Gravar mensagem de voz.";
 "a11y_voice_message_stop_recording" = "Parar gravação";
 "action_accept" = "Aceitar";
@@ -50,11 +50,11 @@
 "action_deactivate" = "Desativar";
 "action_deactivate_account" = "Desativar conta";
 "action_decline" = "Rejeitar";
-"action_decline_and_block" = "Decline and block";
+"action_decline_and_block" = "Recusar e bloquear";
 "action_delete_poll" = "Eliminar sondagem";
 "action_disable" = "Desativar";
 "action_discard" = "Descartar";
-"action_dismiss" = "Dismiss";
+"action_dismiss" = "Dispensar";
 "action_done" = "Feito";
 "action_edit" = "Editar";
 "action_edit_caption" = "Editar legenda";
@@ -96,7 +96,7 @@
 "action_remove_message" = "Remover mensagem";
 "action_reply" = "Responder";
 "action_reply_in_thread" = "Responder ao tópico";
-"action_report" = "Report";
+"action_report" = "Reportar";
 "action_report_bug" = "Comunicar problema";
 "action_report_content" = "Denunciar conteúdo";
 "action_report_dm" = "Report conversation";
@@ -200,7 +200,7 @@
 "common_name_and_id" = "%1$@ (%2$@)";
 "common_no_results" = "Sem resultados";
 "common_no_room_name" = "Sala sem nome";
-"common_not_encrypted" = "Not encrypted";
+"common_not_encrypted" = "Não encriptado";
 "common_offline" = "Desligado";
 "common_open_source_licenses" = "Licenças de código aberto";
 "common_optic_id_ios" = "Optic ID";
@@ -219,7 +219,7 @@
 "common_privacy_policy" = "Política de privacidade";
 "common_reaction" = "Reação";
 "common_reactions" = "Reações";
-"common_reason" = "Reason";
+"common_reason" = "Motivo";
 "common_recovery_key" = "Chave de recuperação";
 "common_refreshing" = "A atualizar…";
 "common_replying_to" = "Em resposta a %1$@";
@@ -414,7 +414,7 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Não poderão voltar a entrar nesta sala, mesmo se forem convidados.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Tens a certeza que queres banir este participante?";
 "screen_bottom_sheet_manage_room_member_banning_user" = "A banir %1$@";
-"screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Remove";
+"screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Remover";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Poderão entrar na sala novamente se convidados.";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Ver perfil";
@@ -425,7 +425,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
-"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
 "screen_create_room_room_access_section_anyone_option_description" = "Qualquer pessoa pode entrar nesta sala";
 "screen_create_room_room_access_section_anyone_option_title" = "Qualquer pessoa";
 "screen_create_room_room_access_section_header" = "Acesso à sala";
@@ -618,6 +618,8 @@
 "screen_change_server_error_invalid_well_known" = "A sincronização deslizante (sliding sync) não está disponível devido a um problema no ficheiro \"well-known\":\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
+"screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
+"screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
 "screen_change_server_form_header" = "URL do servidor";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "Qual é o endereço do teu servidor?";

@@ -421,11 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Eltávolítás a szobából";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Eltávolítja a tagot, és megtiltja a jövőbeni csatlakozást?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "%1$@ eltávolítása…";
-"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
-"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
+"screen_bottom_sheet_manage_room_member_unban" = "Visszaengedés a szobába";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Kitiltás visszavonása";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "Újra beléphetnek a szobába, ha meghívják őket.";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Biztos, hogy feloldja a felhasználó kitiltását?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "%1$@ kitiltásának feloldása";
 "screen_create_room_room_access_section_anyone_option_description" = "Bárki csatlakozhat ehhez a szobához";
 "screen_create_room_room_access_section_anyone_option_title" = "Bárki";
 "screen_create_room_room_access_section_header" = "Szobahozzáférés";
@@ -617,7 +617,9 @@
 "screen_change_server_error_invalid_homeserver" = "Nem sikerült elérni ezt a Matrix-kiszolgálót. Ellenőrizze, hogy helyesen adta-e meg a Matrix-kiszolgáló webcímét. Ha a webcím helyes, akkor további segítségért lépjen kapcsolatba a Matrix-kiszolgáló adminisztrátorával.";
 "screen_change_server_error_invalid_well_known" = "A kiszolgáló a well-known fájl problémája miatt nem érhető el:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "A kiválasztott fiókszolgáltató nem támogatja a csúszóablakos szinkronizálást. Az %1$@ használatához kiszolgálófrissítés szükséges.";
-"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ nem csatlakozhat ide: %2$@.";
+"screen_change_server_error_unauthorized_homeserver_content" = "Ezt az alkalmazást úgy konfigurálták, hogy engedélyezi ezt: %1$@.";
+"screen_change_server_error_unauthorized_homeserver_title" = "A(z) %1$@ fiókszolgáltató nem engedélyezett.";
 "screen_change_server_form_header" = "Matrix-kiszolgáló webcíme";
 "screen_change_server_form_notice" = "Adjon meg egy domaincímet.";
 "screen_change_server_subtitle" = "Mi a kiszolgálója címe?";
@@ -765,7 +767,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "A rendszerértesítések ki vannak kapcsolva";
 "screen_notification_settings_title" = "Értesítések";
 "screen_onboarding_sign_in_manually" = "Kézi bejelentkezés";
-"screen_onboarding_sign_in_to" = "Sign in to %1$@";
+"screen_onboarding_sign_in_to" = "Bejelentkezés ide: %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Bejelentkezés QR-kóddal";
 "screen_onboarding_sign_up" = "Fiók létrehozása";
 "screen_onboarding_welcome_message" = "Üdvözöljük a valaha volt leggyorsabb %1$@ben. Felturbózva, a sebesség és az egyszerűség érdekében.";
