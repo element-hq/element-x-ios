@@ -12,25 +12,29 @@ import XCTest
 @MainActor
 class ServerConfirmationScreenViewStateTests: XCTestCase {
     func testLoginMessageString() {
-        let matrixDotOrgLogin = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockMatrixDotOrg.address,
+        let matrixDotOrgLogin = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockMatrixDotOrg.address),
                                                                   authenticationFlow: .login)
         XCTAssertEqual(matrixDotOrgLogin.message, L10n.screenServerConfirmationMessageLoginMatrixDotOrg, "matrix.org should have a custom message.")
         
-        let elementDotIoLogin = ServerConfirmationScreenViewState(homeserverAddress: "element.io",
+        let elementDotIoLogin = ServerConfirmationScreenViewState(mode: .confirmation("element.io"),
                                                                   authenticationFlow: .login)
         XCTAssertEqual(elementDotIoLogin.message, L10n.screenServerConfirmationMessageLoginElementDotIo, "element.io should have a custom message.")
         
-        let otherLogin = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockOIDC.address,
+        let otherLogin = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockOIDC.address),
                                                            authenticationFlow: .login)
-        XCTAssertTrue(otherLogin.message.isEmpty, "Other servers should not show a message.")
+        XCTAssertEqual(otherLogin.message, "", "Other servers should not show a message.")
+        
+        let pickerLogin = ServerConfirmationScreenViewState(mode: .picker(["element.io", "matrix.org"]),
+                                                            authenticationFlow: .login)
+        XCTAssertNil(pickerLogin.message, "The picker mode should not show a message.")
     }
     
     func testRegisterMessageString() {
-        let matrixDotOrgRegister = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockMatrixDotOrg.address,
+        let matrixDotOrgRegister = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockMatrixDotOrg.address),
                                                                      authenticationFlow: .register)
         XCTAssertEqual(matrixDotOrgRegister.message, L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
         
-        let oidcRegister = ServerConfirmationScreenViewState(homeserverAddress: LoginHomeserver.mockOIDC.address,
+        let oidcRegister = ServerConfirmationScreenViewState(mode: .confirmation(LoginHomeserver.mockOIDC.address),
                                                              authenticationFlow: .register)
         XCTAssertEqual(oidcRegister.message, L10n.screenServerConfirmationMessageRegister, "The registration message should always be the same.")
     }

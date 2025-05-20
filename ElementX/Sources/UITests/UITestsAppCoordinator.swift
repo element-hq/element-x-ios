@@ -120,11 +120,12 @@ class MockScreen: Identifiable {
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .authenticationFlow, .provisionedAuthenticationFlow, .singleProviderAuthenticationFlow:
+        case .authenticationFlow, .provisionedAuthenticationFlow, .singleProviderAuthenticationFlow, .multipleProvidersAuthenticationFlow:
             let appSettings: AppSettings! = ServiceLocator.shared.settings
             
-            if id == .singleProviderAuthenticationFlow {
-                appSettings.override(accountProviders: ["example.com"],
+            if id == .singleProviderAuthenticationFlow || id == .multipleProvidersAuthenticationFlow {
+                let accountProviders = id == .singleProviderAuthenticationFlow ? ["example.com"] : ["guest.example.com", "example.com"]
+                appSettings.override(accountProviders: accountProviders,
                                      allowOtherAccountProviders: false,
                                      pushGatewayBaseURL: appSettings.pushGatewayBaseURL,
                                      oidcRedirectURL: appSettings.oidcRedirectURL,
