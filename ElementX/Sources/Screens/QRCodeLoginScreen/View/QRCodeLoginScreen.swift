@@ -169,7 +169,7 @@ struct QRCodeLoginScreen: View {
                 Button("") { }
                     .buttonStyle(.compound(.primary))
                     .hidden()
-            case .invalid:
+            case .scanFailed(let error):
                 VStack(spacing: 16) {
                     Button(L10n.screenQrCodeLoginInvalidScanStateRetryButton) {
                         context.send(viewAction: .startScan)
@@ -177,7 +177,7 @@ struct QRCodeLoginScreen: View {
                     .buttonStyle(.compound(.primary))
                     
                     VStack(spacing: 4) {
-                        Label(L10n.screenQrCodeLoginInvalidScanStateSubtitle,
+                        Label(error.title,
                               icon: \.errorSolid,
                               iconSize: .medium,
                               relativeTo: .compound.bodyMDSemibold)
@@ -185,33 +185,12 @@ struct QRCodeLoginScreen: View {
                             .font(.compound.bodyMDSemibold)
                             .foregroundColor(.compound.textCriticalPrimary)
                         
-                        Text(L10n.screenQrCodeLoginInvalidScanStateDescription)
+                        Text(error.description)
                             .foregroundColor(.compound.textSecondary)
                             .font(.compound.bodySM)
                             .multilineTextAlignment(.center)
                     }
-                }
-            case .deviceNotSignedIn:
-                VStack(spacing: 16) {
-                    Button(L10n.screenQrCodeLoginInvalidScanStateRetryButton) {
-                        context.send(viewAction: .startScan)
-                    }
-                    .buttonStyle(.compound(.primary))
-                    
-                    VStack(spacing: 4) {
-                        Label(L10n.screenQrCodeLoginDeviceNotSignedInScanStateSubtitle,
-                              icon: \.errorSolid,
-                              iconSize: .medium,
-                              relativeTo: .compound.bodyMDSemibold)
-                            .labelStyle(.custom(spacing: 10))
-                            .font(.compound.bodyMDSemibold)
-                            .foregroundColor(.compound.textCriticalPrimary)
-                        
-                        Text(L10n.screenQrCodeLoginDeviceNotSignedInScanStateDescription)
-                            .foregroundColor(.compound.textSecondary)
-                            .font(.compound.bodySM)
-                            .multilineTextAlignment(.center)
-                    }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
             }
         }
@@ -375,10 +354,12 @@ struct QRCodeLoginScreen: View {
             .buttonStyle(.compound(.primary))
         case .linkingNotSupported:
             VStack(spacing: 16) {
-                Button(L10n.screenOnboardingSignInManually) {
-                    context.send(viewAction: .signInManually)
+                if context.viewState.canSignInManually {
+                    Button(L10n.screenOnboardingSignInManually) {
+                        context.send(viewAction: .signInManually)
+                    }
+                    .buttonStyle(.compound(.primary))
                 }
-                .buttonStyle(.compound(.primary))
                 
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
@@ -425,9 +406,13 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     
     static let connectingStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.connecting))
     
-    static let invalidStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.invalid))
+    static let invalidStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanFailed(.invalid)))
     
-    static let deviceNotSignedInStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.deviceNotSignedIn))
+    static let notAllowedStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanFailed(.notAllowed(scannedProvider: "evil.com",
+                                                                                                               allowedProviders: ["example.com",
+                                                                                                                                  "server.net"]))))
+    
+    static let deviceNotSignedInStateViewModel = QRCodeLoginScreenViewModel.mock(state: .scan(.scanFailed(.deviceNotSignedIn)))
     
     // Display Code
     static let deviceCodeStateViewModel = QRCodeLoginScreenViewModel.mock(state: .displayCode(.deviceCode("12")))
@@ -440,6 +425,7 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
     static let connectionNotSecureStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.connectionNotSecure))
     
     static let linkingUnsupportedStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.linkingNotSupported))
+    static let linkingUnsupportedRestrictedFlowViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.linkingNotSupported), canSignInManually: false)
     
     static let cancelledStateViewModel = QRCodeLoginScreenViewModel.mock(state: .error(.cancelled))
     
@@ -464,6 +450,9 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
         QRCodeLoginScreen(context: invalidStateViewModel.context)
             .previewDisplayName("Invalid")
         
+        QRCodeLoginScreen(context: notAllowedStateViewModel.context)
+            .previewDisplayName("Not allowed")
+        
         QRCodeLoginScreen(context: deviceNotSignedInStateViewModel.context)
             .previewDisplayName("Device not signed in")
         
@@ -481,6 +470,8 @@ struct QRCodeLoginScreen_Previews: PreviewProvider, TestablePreview {
         
         QRCodeLoginScreen(context: linkingUnsupportedStateViewModel.context)
             .previewDisplayName("Linking unsupported")
+        QRCodeLoginScreen(context: linkingUnsupportedRestrictedFlowViewModel.context)
+            .previewDisplayName("Linking unsupported restricted flow")
         
         QRCodeLoginScreen(context: cancelledStateViewModel.context)
             .previewDisplayName("Cancelled")

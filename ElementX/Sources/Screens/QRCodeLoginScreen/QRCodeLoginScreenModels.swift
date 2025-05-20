@@ -15,6 +15,9 @@ enum QRCodeLoginScreenViewModelAction {
 
 struct QRCodeLoginScreenViewState: BindableState {
     var state: QRCodeLoginState = .initial
+    /// Whether or not it is possible for the screen to start the manual sign in flow. This was added to avoid
+    /// having to handle server configuration when ``AppSettings.allowOtherAccountProviders`` is false.
+    let canSignInManually: Bool
     
     private static let initialStateListItem3AttributedText = {
         let boldPlaceholder = "{bold}"
@@ -74,14 +77,43 @@ enum QRCodeLoginState: Equatable {
     }
     
     enum QRCodeLoginScanningState: Equatable {
-        /// the qr code is scanning
+        /// the QR code is scanning
         case scanning
-        /// the qr code has been detected and is being processed
+        /// the QR code has been detected and is being processed
         case connecting
-        /// the qr code has been processed and is invalid
-        case invalid
-        /// the qr code has been processed but it belongs to a device not signed in,
-        case deviceNotSignedIn
+        /// the QR code was scanned, but an error occurred.
+        case scanFailed(Error)
+        
+        enum Error: Equatable {
+            /// the QR code has been processed and is invalid
+            case invalid
+            /// the QR code has been processed but it is for an account provider that isn't allowed.
+            case notAllowed(scannedProvider: String, allowedProviders: [String])
+            /// the QR code has been processed but it belongs to a device not signed in
+            case deviceNotSignedIn
+            
+            var title: String {
+                switch self {
+                case .invalid:
+                    L10n.screenQrCodeLoginInvalidScanStateSubtitle
+                case .notAllowed(let scannedProvider, _):
+                    L10n.screenChangeServerErrorUnauthorizedHomeserverTitle(scannedProvider)
+                case .deviceNotSignedIn:
+                    L10n.screenQrCodeLoginDeviceNotSignedInScanStateSubtitle
+                }
+            }
+            
+            var description: String {
+                switch self {
+                case .invalid:
+                    L10n.screenQrCodeLoginInvalidScanStateDescription
+                case .notAllowed(_, let allowedProviders):
+                    L10n.screenChangeServerErrorUnauthorizedHomeserverContent(allowedProviders.formatted(.list(type: .and)))
+                case .deviceNotSignedIn:
+                    L10n.screenQrCodeLoginDeviceNotSignedInScanStateDescription
+                }
+            }
+        }
     }
     
     enum QRCodeLoginDisplayCodeState: Equatable {
@@ -100,39 +132,22 @@ enum QRCodeLoginState: Equatable {
     
     var isScanning: Bool {
         switch self {
-        case .scan(let state):
-            return state == .scanning
-        default:
-            return false
+        case .scan(.scanning): true
+        default: false
         }
     }
     
     var isError: Bool {
         switch self {
-        case .error:
-            return true
-        case let .scan(state):
-            switch state {
-            case .invalid, .deviceNotSignedIn:
-                return true
-            default:
-                return false
-            }
-        default:
-            return false
+        case .error, .scan(.scanFailed): true
+        default: false
         }
     }
     
     var shouldDisplayCancelButton: Bool {
         switch self {
-        case .initial:
-            return true
-        case .scan:
-            return true
-        case .error(let error):
-            return error == .noCameraPermission
-        default:
-            return false
+        case .initial, .scan, .error(.noCameraPermission): true
+        default: false
         }
     }
 }

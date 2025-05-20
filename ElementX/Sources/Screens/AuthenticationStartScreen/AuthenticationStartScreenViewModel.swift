@@ -32,14 +32,30 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         
-        // We only show the "Sign in to …" button when using a provisioning link.
-        let showCreateAccountButton = appSettings.showCreateAccountButton && provisioningParameters == nil
-        let showQRCodeLoginButton = !ProcessInfo.processInfo.isiOSAppOnMac && provisioningParameters == nil
+        let isQRCodeScanningSupported = !ProcessInfo.processInfo.isiOSAppOnMac
         
-        super.init(initialViewState: AuthenticationStartScreenViewState(serverName: provisioningParameters?.accountProvider,
-                                                                        showCreateAccountButton: showCreateAccountButton,
-                                                                        showQRCodeLoginButton: showQRCodeLoginButton,
-                                                                        showReportProblemButton: isBugReportServiceEnabled))
+        let initialViewState = if !appSettings.allowOtherAccountProviders {
+            // We don't show the create account button when custom providers are disallowed.
+            // The assumption here being that if you're running a custom app, your users will already be created.
+            AuthenticationStartScreenViewState(serverName: appSettings.accountProviders.count == 1 ? appSettings.accountProviders[0] : nil,
+                                               showCreateAccountButton: false,
+                                               showQRCodeLoginButton: isQRCodeScanningSupported,
+                                               showReportProblemButton: isBugReportServiceEnabled)
+        } else if let provisioningParameters {
+            // We only show the "Sign in to …" button when using a provisioning link.
+            AuthenticationStartScreenViewState(serverName: provisioningParameters.accountProvider,
+                                               showCreateAccountButton: false,
+                                               showQRCodeLoginButton: false,
+                                               showReportProblemButton: isBugReportServiceEnabled)
+        } else {
+            // The default configuration.
+            AuthenticationStartScreenViewState(serverName: nil,
+                                               showCreateAccountButton: appSettings.showCreateAccountButton,
+                                               showQRCodeLoginButton: isQRCodeScanningSupported,
+                                               showReportProblemButton: isBugReportServiceEnabled)
+        }
+        
+        super.init(initialViewState: initialViewState)
     }
 
     override func process(viewAction: AuthenticationStartScreenViewAction) {
@@ -61,25 +77,31 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     // MARK: - Private
     
     private func login() async {
-        if let provisioningParameters {
-            await configureProvisionedServer(with: provisioningParameters)
+        if !appSettings.allowOtherAccountProviders {
+            if appSettings.accountProviders.count == 1 {
+                await configureAccountProvider(appSettings.accountProviders[0])
+            } else {
+                fatalError("WIP: Account provider picker not implemented.")
+            }
+        } else if let provisioningParameters {
+            await configureAccountProvider(provisioningParameters.accountProvider, loginHint: provisioningParameters.loginHint)
         } else {
             actionsSubject.send(.login) // No need to configure anything here, continue the flow.
         }
     }
     
-    private func configureProvisionedServer(with provisioningParameters: AccountProvisioningParameters) async {
+    private func configureAccountProvider(_ accountProvider: String, loginHint: String? = nil) async {
         startLoading()
         defer { stopLoading() }
         
-        guard case .success = await authenticationService.configure(for: provisioningParameters.accountProvider, flow: .login) else {
+        guard case .success = await authenticationService.configure(for: accountProvider, flow: .login) else {
             // As the server was provisioned, we don't worry about the specifics and show a generic error to the user.
             displayError()
             return
         }
         
         guard authenticationService.homeserver.value.loginMode.supportsOIDCFlow else {
-            actionsSubject.send(.loginDirectlyWithPassword(loginHint: provisioningParameters.loginHint))
+            actionsSubject.send(.loginDirectlyWithPassword(loginHint: loginHint))
             return
         }
         
@@ -88,7 +110,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             return
         }
         
-        switch await authenticationService.urlForOIDCLogin(loginHint: provisioningParameters.loginHint) {
+        switch await authenticationService.urlForOIDCLogin(loginHint: loginHint) {
         case .success(let oidcData):
             actionsSubject.send(.loginDirectlyWithOIDC(data: oidcData, window: window))
         case .failure:

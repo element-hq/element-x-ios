@@ -29,6 +29,7 @@ final class QRCodeLoginScreenViewModelTests: XCTestCase {
         qrServiceMock.underlyingQrLoginProgressPublisher = qrProgressSubject.eraseToAnyPublisher()
         appMediatorMock = AppMediatorMock.default
         viewModel = QRCodeLoginScreenViewModel(qrCodeLoginService: qrServiceMock,
+                                               canSignInManually: true,
                                                appMediator: appMediatorMock)
     }
     
