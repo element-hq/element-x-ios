@@ -214,6 +214,7 @@ enum A11yIdentifiers {
     struct ServerConfirmationScreen {
         let `continue` = "server_confirmation-continue"
         let changeServer = "server_confirmation-change_server"
+        let serverPicker = "server_confirmation-server_picker"
     }
     
     struct SessionVerificationScreen {

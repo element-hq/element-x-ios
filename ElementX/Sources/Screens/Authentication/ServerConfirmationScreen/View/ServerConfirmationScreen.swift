@@ -77,6 +77,7 @@ struct ServerConfirmationScreen: View {
             FakeInlinePicker(items: accountProviders,
                              icon: \.host,
                              selection: $context.pickerSelection)
+                .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.serverPicker)
         }
     }
     
