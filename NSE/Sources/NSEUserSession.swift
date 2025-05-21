@@ -18,6 +18,28 @@ final class NSEUserSession {
                                                                                imageCache: .onlyOnDisk,
                                                                                networkMonitor: nil)
     private let delegateHandle: TaskHandle?
+    
+    var mediaPreviewVisibility: MediaPreviews {
+        get async {
+            do {
+                return try await baseClient.getMediaPreviewDisplayPolicy() ?? .on
+            } catch {
+                MXLog.error("Failed to get media preview visibility, defaulting to on. Error: \(error)")
+                return .on
+            }
+        }
+    }
+    
+    var inviteAvatarsVisibility: InviteAvatars {
+        get async {
+            do {
+                return try await baseClient.getInviteAvatarsDisplayPolicy() ?? .on
+            } catch {
+                MXLog.error("Failed to get invite avatars visibility, defaulting to on. Error: \(error)")
+                return .on
+            }
+        }
+    }
 
     init(credentials: KeychainCredentials,
          roomID: String,

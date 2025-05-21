@@ -36,7 +36,7 @@ class NotificationHandler {
                                                                destination: .notification)
         
         notificationContentBuilder = NotificationContentBuilder(messageEventStringBuilder: eventStringBuilder,
-                                                                settings: settings)
+                                                                userSession: userSession)
     }
     
     func processEvent(_ eventID: String, roomID: String) async {

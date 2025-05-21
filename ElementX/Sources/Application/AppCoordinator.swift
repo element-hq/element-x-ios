@@ -30,11 +30,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private var userSession: UserSessionProtocol? {
         didSet {
             userSessionObserver?.cancel()
-            if userSession != nil {
+            if let userSession {
                 configureElementCallService()
                 configureNotificationManager()
                 observeUserSessionChanges()
                 startSync()
+                performSettingsToAccountDataMigration(userSession: userSession)
             }
         }
     }
@@ -399,17 +400,49 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             Tracing.deleteLogFiles()
             MXLog.info("Migrating to v1.6.7, log files have been wiped")
         }
+    }
+    
+    private func performSettingsToAccountDataMigration(userSession: UserSessionProtocol) {
+        guard let userDefaults = UserDefaults(suiteName: InfoPlistReader.main.appGroupIdentifier) else {
+            return
+        }
         
-        if oldVersion < Version(25, 4, 2) {
-            MXLog.info("Migrating to v25.04.2, checking if hideTimelineMedia flag can be migrated to timelineMediaVisibility")
-            // Migration for the old `hideTimelineMedia` flag.
-            if let userDefaults = UserDefaults(suiteName: InfoPlistReader.main.appGroupIdentifier),
-               let hideTimelineMedia = userDefaults.value(forKey: "hideTimelineMedia") as? Bool {
-                appSettings.timelineMediaVisibility = hideTimelineMedia ? .never : .always
+        let hideInviteAvatars = userDefaults.value(forKey: "hideInviteAvatars") as? Bool
+        let timelineMediaVisibility = userDefaults.value(forKey: "timelineMediaVisibility") as? TimelineMediaVisibility
+        let hideTimelineMedia = userDefaults.value(forKey: "hideTimelineMedia") as? Bool
+        
+        guard hideInviteAvatars != nil || timelineMediaVisibility != nil || hideTimelineMedia != nil else {
+            // No migration needed, no local settings found.
+            return
+        }
+        
+        Task {
+            switch await userSession.clientProxy.fetchMediaPreviewConfig() {
+            case let .success(config):
+                guard config == nil else {
+                    // Found a server configuration, no need to migrate.
+                    userDefaults.removeObject(forKey: "hideInviteAvatars")
+                    userDefaults.removeObject(forKey: "timelineMediaVisibility")
+                    userDefaults.removeObject(forKey: "hideTimelineMedia")
+                    return
+                }
+                
+                if let hideInviteAvatars, case .success = await userSession.clientProxy.setHideInviteAvatars(hideInviteAvatars) {
+                    userDefaults.removeObject(forKey: "hideInviteAvatars")
+                }
+                
+                if let timelineMediaVisibility, case .success = await userSession.clientProxy.setTimelineMediaVisibility(timelineMediaVisibility) {
+                    userDefaults.removeObject(forKey: "timelineMediaVisibility")
+                } else if let hideTimelineMedia, case .success = await userSession.clientProxy.setTimelineMediaVisibility(hideTimelineMedia ? .never : .always) {
+                    userDefaults.removeObject(forKey: "hideTimelineMedia")
+                }
+            case let .failure(error):
+                MXLog.error("Could not perform migration, failed to fetch media preview config: \(error)")
+                return
             }
         }
     }
-    
+        
     /// Clears the keychain, app support directory etc ready for a fresh use.
     /// - Parameter includingSettings: Whether to additionally wipe the user's app settings too.
     private func wipeUserData(includingSettings: Bool = false) {

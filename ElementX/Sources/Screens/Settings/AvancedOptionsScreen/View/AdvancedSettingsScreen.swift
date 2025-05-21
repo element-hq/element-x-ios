@@ -42,21 +42,39 @@ struct AdvancedSettingsScreen: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
+    @ViewBuilder
     private var moderationAndSafetySection: some View {
+        let binding = Binding(get: {
+            context.viewState.hideInviteAvatars
+        }, set: { newValue in
+            context.send(viewAction: .updateHideInviteAvatars(newValue))
+        })
+        
         Section {
             ListRow(label: .plain(title: L10n.screenAdvancedSettingsHideInviteAvatarsToggleTitle),
-                    kind: .toggle($context.hideInviteAvatars))
+                    details: .isWaiting(context.viewState.isWaitingHideInviteAvatars),
+                    kind: .toggle(binding))
+                .disabled(context.viewState.isWaitingHideInviteAvatars)
         } header: {
             Text(L10n.screenAdvancedSettingsModerationAndSafetySectionTitle)
                 .compoundListSectionHeader()
         }
     }
     
+    @ViewBuilder
     private var timelineMediaSection: some View {
+        let binding = Binding(get: {
+            context.viewState.timelineMediaVisibility
+        }, set: { newValue in
+            context.send(viewAction: .updateTimelineMediaVisibility(newValue))
+        })
+        
         Section {
             ListRow(label: .plain(title: L10n.screenAdvancedSettingsShowMediaTimelineTitle),
-                    kind: .inlinePicker(selection: $context.timelineMediaVisibility,
+                    details: .isWaiting(context.viewState.isWaitingTimelineMediaVisibility),
+                    kind: .inlinePicker(selection: binding,
                                         items: TimelineMediaVisibility.items))
+                .disabled(context.viewState.isWaitingTimelineMediaVisibility)
         } header: {
             Text(L10n.screenAdvancedSettingsShowMediaTimelineTitle)
                 .compoundListSectionHeader()
@@ -84,7 +102,9 @@ private extension AppAppearance {
 
 struct AdvancedSettingsScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = AdvancedSettingsScreenViewModel(advancedSettings: ServiceLocator.shared.settings,
-                                                           analytics: ServiceLocator.shared.analytics)
+                                                           analytics: ServiceLocator.shared.analytics,
+                                                           clientProxy: ClientProxyMock(.init()),
+                                                           userIndicatorController: UserIndicatorControllerMock())
     static var previews: some View {
         NavigationStack {
             AdvancedSettingsScreen(context: viewModel.context)

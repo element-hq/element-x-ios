@@ -17,8 +17,6 @@ protocol CommonSettingsProtocol {
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
     var enableOnlySignedDeviceIsolationMode: Bool { get }
-    var hideInviteAvatars: Bool { get }
-    var timelineMediaVisibility: TimelineMediaVisibility { get }
     var hideQuietNotificationAlerts: Bool { get }
 }
 
@@ -46,8 +44,7 @@ final class AppSettings {
         case optimizeMediaUploads
         case appAppearance
         case sharePresence
-        case hideInviteAvatars
-        case timelineMediaVisibility
+        case hideUnreadMessagesBadge
         case isNewBloomEnabled
         
         case elementCallBaseURLOverride
@@ -61,7 +58,6 @@ final class AppSettings {
         case developerOptionsEnabled
         
         // Doug's tweaks 🔧
-        case hideUnreadMessagesBadge
         case hideQuietNotificationAlerts
     }
     
@@ -368,20 +364,8 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.enableOnlySignedDeviceIsolationMode, defaultValue: false, storageType: .userDefaults(store))
     var enableOnlySignedDeviceIsolationMode
     
-    @UserPreference(key: UserDefaultsKeys.hideInviteAvatars, defaultValue: false, storageType: .userDefaults(store))
-    var hideInviteAvatars
-    
-    @UserPreference(key: UserDefaultsKeys.timelineMediaVisibility, defaultValue: TimelineMediaVisibility.always, storageType: .userDefaults(store))
-    var timelineMediaVisibility
-    
     @UserPreference(key: UserDefaultsKeys.hideQuietNotificationAlerts, defaultValue: false, storageType: .userDefaults(store))
     var hideQuietNotificationAlerts
 }
 
 extension AppSettings: CommonSettingsProtocol { }
-
-enum TimelineMediaVisibility: Codable {
-    case always
-    case privateOnly
-    case never
-}
