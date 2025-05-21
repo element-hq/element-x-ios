@@ -226,15 +226,13 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .restrictedStartScreen), transitions: [.oidcAuthentication => .restrictedStartScreen])
         
         stateMachine.addRoutes(event: .continueWithPassword, transitions: [.serverConfirmationScreen => .loginScreen,
-                                                                           .restrictedStartScreen => .loginScreen]) { [weak self] context in
-                                                                           .provisionedStartScreen => .loginScreen,
+                                                                           .restrictedStartScreen => .loginScreen,
                                                                            .startScreen => .loginScreen]) { [weak self] context in
             let loginHint = context.userInfo as? String
             self?.showLoginScreen(loginHint: loginHint, fromState: context.fromState)
         }
         stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .serverConfirmationScreen), transitions: [.loginScreen => .serverConfirmationScreen])
         stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .restrictedStartScreen), transitions: [.loginScreen => .restrictedStartScreen])
-        stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .provisionedStartScreen), transitions: [.loginScreen => .provisionedStartScreen])
         stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .startScreen), transitions: [.loginScreen => .startScreen])
         
         // Bug Report
@@ -369,7 +367,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private func startAuthentication(flow: AuthenticationFlow, loginHint: String?) {
         Task {
             startLoading()
-            switch await authenticationService.configure(for: appSettings.defaultHomeserverAddress, flow: .login) {
+            switch await authenticationService.configure(for: appSettings.accountProviders[0], flow: .login) {
             case .success:
                 stopLoading()
                 stateMachine.tryEvent(.continueWithPassword, userInfo: loginHint)

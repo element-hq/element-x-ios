@@ -811,7 +811,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userSession.clientProxy.userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID), zeroAttachmentService: zeroAttachmentService)
         
         guard let eventID = itemID.eventID else {
             fatalError("Invalid thread event ID")

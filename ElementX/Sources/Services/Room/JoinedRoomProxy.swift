@@ -223,7 +223,11 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             dateDividerMode: .daily,
                                                                                             trackReadReceipts: true))
             
-            let timeline = TimelineProxy(timeline: sdkTimeline, kind: .thread)
+            let timeline = TimelineProxy(timeline: sdkTimeline,
+                                         roomId: room.id(),
+                                         kind: .thread,
+                                         isRoomChannel: room.isAChannel(),
+                                         zeroChatApi: zeroChatApi)
             await timeline.subscribeForUpdates()
             
             return .success(timeline)

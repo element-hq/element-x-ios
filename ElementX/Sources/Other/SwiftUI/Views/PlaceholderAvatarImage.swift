@@ -13,7 +13,7 @@ struct PlaceholderAvatarImage: View {
 
     private let textForImage: String
     private let contentID: String?
-    private let onTap: () -> Void?
+    private let onTap: (() -> Void)?
     
     var body: some View {
         GeometryReader { _ in
@@ -40,13 +40,13 @@ struct PlaceholderAvatarImage: View {
                     .padding(4)
             }
             .onTapGesture {
-                onTap()
+                onTap?()
             }
         }
         .aspectRatio(1, contentMode: .fill)
     }
 
-    init(name: String?, contentID: String?, onTap: @escaping () -> Void?) {
+    init(name: String?, contentID: String?, onTap: (() -> Void)? = nil) {
         let baseName = name ?? contentID?.trimmingCharacters(in: .punctuationCharacters)
         textForImage = baseName?.first?.uppercased() ?? ""
         self.contentID = contentID

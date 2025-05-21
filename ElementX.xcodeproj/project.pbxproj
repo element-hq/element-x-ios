@@ -1962,6 +1962,11 @@
 		79D57E9AE03A2DC689D14EA2 /* UserSessionStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB9BA2F30EB8C33226D8FF1 /* UserSessionStoreMock.swift */; };
 		79DE0ECA2DD7476E00466716 /* HomePostsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DE0EC92DD7476400466716 /* HomePostsTabView.swift */; };
 		79DE0ECB2DD7476E00466716 /* HomePostsTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DE0EC92DD7476400466716 /* HomePostsTabView.swift */; };
+		79EC88BC2DDDBEFF006629EE /* ThreadTimelineScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73FEE625AB52042049DB9268 /* ThreadTimelineScreenCoordinator.swift */; };
+		79EC88BD2DDDBF03006629EE /* ThreadTimelineScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69AEA8755382DB34892FB7B /* ThreadTimelineScreenModels.swift */; };
+		79EC88BE2DDDBF07006629EE /* ThreadTimelineScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9ACDD96F36510C1FC0836B /* ThreadTimelineScreenViewModel.swift */; };
+		79EC88BF2DDDBF0B006629EE /* ThreadTimelineScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C1C19A4BE46EDE1411ECCE /* ThreadTimelineScreenViewModelProtocol.swift */; };
+		79EC88C02DDDBF10006629EE /* ThreadTimelineScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2E7CEE6E9314FD69FE0ED9 /* ThreadTimelineScreen.swift */; };
 		79FC2A462DCA8F7C00D14182 /* ZPostMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC2A452DCA8F7700D14182 /* ZPostMedia.swift */; };
 		79FC2A472DCA8F7C00D14182 /* ZPostMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC2A452DCA8F7700D14182 /* ZPostMedia.swift */; };
 		79FC2A492DCAA7AE00D14182 /* LinkPreviewUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC2A482DCAA79F00D14182 /* LinkPreviewUtil.swift */; };
@@ -9344,6 +9349,7 @@
 				18E9A43F2C9829970082DDA4 /* AppLockFlowCoordinator.swift in Sources */,
 				18E9A4402C9829970082DDA4 /* AppLockScreen.swift in Sources */,
 				184EC9962CA5AEDD000F405E /* ProcessInfo.swift in Sources */,
+				79EC88BD2DDDBF03006629EE /* ThreadTimelineScreenModels.swift in Sources */,
 				798C78842D79394E00C1272F /* ElementTextFieldStyle.swift in Sources */,
 				18E9A4412C9829970082DDA4 /* AppLockScreenCoordinator.swift in Sources */,
 				18D5D9BB2CEB762800107940 /* UserRewardsSettingsScreenCoordinator.swift in Sources */,
@@ -9615,6 +9621,7 @@
 				18E9A5082C9829970082DDA4 /* FileRoomTimelineItem.swift in Sources */,
 				79621A4F2DA78E120006C391 /* ManageRoomMemberSheetView.swift in Sources */,
 				18D5D9BE2CEB768600107940 /* UserRewardsSettingsScreen.swift in Sources */,
+				79EC88BE2DDDBF07006629EE /* ThreadTimelineScreenViewModel.swift in Sources */,
 				1828CE482D0114A2002FF640 /* CreateAccountHelper.swift in Sources */,
 				7995C3B92D89649B00E4D98E /* PhishingDetector.swift in Sources */,
 				18E9A5092C9829970082DDA4 /* FileRoomTimelineItemContent.swift in Sources */,
@@ -10071,6 +10078,7 @@
 				18E9A6612C9829970082DDA4 /* RoomPollsHistoryScreenModels.swift in Sources */,
 				18E9A6622C9829970082DDA4 /* RoomPollsHistoryScreenViewModel.swift in Sources */,
 				79B716492DA843F200A68055 /* EventTimelineItem.swift in Sources */,
+				79EC88BC2DDDBEFF006629EE /* ThreadTimelineScreenCoordinator.swift in Sources */,
 				18E9A6632C9829970082DDA4 /* RoomPollsHistoryScreenViewModelProtocol.swift in Sources */,
 				790393852D53A1250022E293 /* TimelineControllerFactory.swift in Sources */,
 				7903938A2D53A1D60022E293 /* TimelineProvider.swift in Sources */,
@@ -10176,6 +10184,7 @@
 				18E9A6AB2C9829970082DDA4 /* ServerConfirmationScreenCoordinator.swift in Sources */,
 				18E9A6AC2C9829970082DDA4 /* ServerConfirmationScreenModels.swift in Sources */,
 				18A042182C9AB5FE00727739 /* DeactivateAccountScreenViewModelProtocol.swift in Sources */,
+				79EC88C02DDDBF10006629EE /* ThreadTimelineScreen.swift in Sources */,
 				18E9A6AD2C9829970082DDA4 /* ServerConfirmationScreenViewModel.swift in Sources */,
 				18E9A6AE2C9829970082DDA4 /* ServerConfirmationScreenViewModelProtocol.swift in Sources */,
 				18E9A6AF2C9829970082DDA4 /* ServerSelectionScreen.swift in Sources */,
@@ -10372,6 +10381,7 @@
 				18FFCED42CEC8F66002F2647 /* RoomSelectionScreenModels.swift in Sources */,
 				18E9A7482C9829970082DDA4 /* VideoRoomTimelineView.swift in Sources */,
 				18E9A7492C9829970082DDA4 /* ViewFrameReader.swift in Sources */,
+				79EC88BF2DDDBF0B006629EE /* ThreadTimelineScreenViewModelProtocol.swift in Sources */,
 				18E9A74A2C9829970082DDA4 /* VoiceMessageButton.swift in Sources */,
 				18C454072CF09A4200F25539 /* KnockRequestsListScreenModels.swift in Sources */,
 				18E9A74B2C9829970082DDA4 /* VoiceMessageCache.swift in Sources */,
@@ -12145,9 +12155,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				OTHER_SWIFT_FLAGS = (
-					"-DDEBUG",
-				);
+				OTHER_SWIFT_FLAGS = "-DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "${BASE_BUNDLE_IDENTIFIER}.ui.tests";
 				PRODUCT_NAME = UITests;
 				SDKROOT = iphoneos;
@@ -12166,9 +12174,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				OTHER_SWIFT_FLAGS = (
-					"-DRELEASE",
-				);
+				OTHER_SWIFT_FLAGS = "-DRELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "${BASE_BUNDLE_IDENTIFIER}.ui.tests";
 				PRODUCT_NAME = UITests;
 				SDKROOT = iphoneos;

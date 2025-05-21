@@ -240,7 +240,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .foregroundColor(.compound.decorativeColor(for: timelineItem.sender.id).text)
                     .accessibilityHidden(true)
                     .onTapGesture {
-                        context.send(viewAction: .tappedOnSenderDetails(userID: timelineItem.sender.id))
+                        context.send(viewAction: .tappedOnSenderDetails(sender: timelineItem.sender))
                     }
             }
             

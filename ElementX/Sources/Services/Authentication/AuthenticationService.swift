@@ -295,7 +295,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     private func ensureHomeServerIsConfigured() async {
         if client == nil {
-            _ = await configure(for: appSettings.defaultHomeserverAddress, flow: .login)
+            _ = await configure(for: appSettings.accountProviders[0], flow: .login)
         }
     }
     
