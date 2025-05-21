@@ -39,7 +39,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                                         filter: .all,
                                                                                                         internalIdPrefix: nil,
                                                                                                         dateDividerMode: .daily,
-                                                                                                        trackReadReceipts: false))
+                                                                                                        trackReadReceipts: false,
+                                                                                                        reportUtds: true))
                         
                         let timeline = TimelineProxy(timeline: sdkTimeline, kind: .pinned)
                         
@@ -108,7 +109,14 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         self.room = room
         
         infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo()))
-        timeline = try await TimelineProxy(timeline: room.timeline(), kind: .live)
+        
+        timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live,
+                                                                                                         filter: .eventTypeFilter(filter: eventFilters),
+                                                                                                         internalIdPrefix: nil,
+                                                                                                         dateDividerMode: .daily,
+                                                                                                         trackReadReceipts: true,
+                                                                                                         reportUtds: true)),
+                                           kind: .live)
         
         Task {
             await updateMembers()
@@ -122,6 +130,24 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             }
         }
     }
+    
+    private let eventFilters: TimelineEventTypeFilter = {
+        var stateEventFilters: [StateEventType] = [.roomAliases,
+                                                   .roomCanonicalAlias,
+                                                   .roomGuestAccess,
+                                                   .roomHistoryVisibility,
+                                                   .roomJoinRules,
+                                                   .roomPinnedEvents,
+                                                   .roomPowerLevels,
+                                                   .roomServerAcl,
+                                                   .roomTombstone,
+                                                   .spaceChild,
+                                                   .spaceParent,
+                                                   .policyRuleRoom,
+                                                   .policyRuleServer,
+                                                   .policyRuleUser]
+        return .exclude(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
+    }()
     
     func subscribeForUpdates() async {
         guard !subscribedForUpdates else {
@@ -169,7 +195,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             filter: .all,
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily,
-                                                                                            trackReadReceipts: false))
+                                                                                            trackReadReceipts: false,
+                                                                                            reportUtds: true))
             
             return .success(TimelineProxy(timeline: sdkTimeline, kind: .detached))
         } catch let error as FocusEventError {
@@ -196,7 +223,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             filter: .all,
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily,
-                                                                                            trackReadReceipts: true))
+                                                                                            trackReadReceipts: true,
+                                                                                            reportUtds: true))
             
             let timeline = TimelineProxy(timeline: sdkTimeline, kind: .thread)
             await timeline.subscribeForUpdates()
@@ -232,7 +260,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             filter: .onlyMessage(types: rustMessageTypes),
                                                                                             internalIdPrefix: nil,
                                                                                             dateDividerMode: .monthly,
-                                                                                            trackReadReceipts: false))
+                                                                                            trackReadReceipts: false,
+                                                                                            reportUtds: true))
             
             let timeline = TimelineProxy(timeline: sdkTimeline, kind: .media(presentation))
             await timeline.subscribeForUpdates()
