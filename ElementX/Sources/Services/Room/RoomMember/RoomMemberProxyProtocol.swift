@@ -33,7 +33,7 @@ protocol RoomMemberProxyProtocol: AnyObject {
 extension RoomMemberProxyProtocol {
     /// The member is active in the room (joined or invited).
     var isActive: Bool {
-        membership == .join || membership == .invite
+        membership == .join || membership == .invite || membership == .knock
     }
     
     var permalink: URL? {

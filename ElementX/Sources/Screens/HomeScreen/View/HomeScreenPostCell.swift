@@ -19,6 +19,7 @@ struct HomeScreenPostCell: View {
     let onOpenArweaveLink: () -> Void
     let onMeowTapped: (Int) -> Void
     let onOpenYoutubeLink: (String) -> Void
+    let onOpenUserProfile: (ZPostUserProfile) -> Void
     
     var body: some View {
         HStack(alignment: .top) {
@@ -29,7 +30,12 @@ struct HomeScreenPostCell: View {
                                         name: nil,
                                         contentID: post.senderInfo.userID,
                                         avatarSize: .user(on: .home),
-                                        mediaProvider: mediaProvider)
+                                        mediaProvider: mediaProvider,
+                                        onTap: { _ in
+                        if let postSenderProfile = post.senderProfile {
+                            onOpenUserProfile(postSenderProfile)
+                        }
+                    })
                     
                     if showThreadLine {
                         // Dynamic vertical line
@@ -48,12 +54,22 @@ struct HomeScreenPostCell: View {
                                     name: nil,
                                     contentID: post.senderInfo.userID,
                                     avatarSize: .user(on: .home),
-                                    mediaProvider: mediaProvider)
+                                    mediaProvider: mediaProvider,
+                                    onTap: { _ in
+                    if let postSenderProfile = post.senderProfile {
+                        onOpenUserProfile(postSenderProfile)
+                    }
+                })
             }
             VStack(alignment: .leading) {
                 HStack(alignment: .center) {
                     Text(post.attributedSenderHeaderText)
                         .lineLimit(1)
+                        .onTapGesture {
+                            if let postSenderProfile = post.senderProfile {
+                                onOpenUserProfile(postSenderProfile)
+                            }
+                        }
                     
                     if post.worldPrimaryZId != nil && !post.isPostInOwnFeed {
                         Spacer()

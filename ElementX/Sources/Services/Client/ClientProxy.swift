@@ -1120,6 +1120,82 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func fetchFeedUserProfile(userZId: String) async -> Result<ZPostUserProfile, ClientProxyError> {
+        do {
+            let cleanedUserZId = userZId.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "")
+            let result = try await zeroApiProxy.postUserApi.fetchUserProfile(userZId: cleanedUserZId)
+            switch result {
+            case .success(let profile):
+                return .success(profile)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func fetchUserFeeds(userId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.postsApi.fetchUserPosts(userId: userId, limit: limit, skip: skip)
+            switch result {
+            case .success(let feeds):
+                return .success(feeds)
+            case .failure(let error):
+                return .failure(checkPostFetchError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func fetchFeedUserFollowingStatus(userId: String) async -> Result<ZPostUserFollowingStatus, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.postUserApi.fetchUserFollowingStatus(userId: userId)
+            switch result {
+            case .success(let following):
+                return .success(following)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func followFeedUser(userId: String) async -> Result<Void, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.postUserApi.followPostUser(userId: userId)
+            switch result {
+            case .success(_):
+                return .success(())
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func unFollowFeedUser(userId: String) async -> Result<Void, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.postUserApi.unFollowPostUser(userId: userId)
+            switch result {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error(error)
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func fetchUserZIds() async -> Result<[String], ClientProxyError> {
         do {
             let zIdsResult = try await zeroApiProxy.channelsApi.fetchZeroIds()

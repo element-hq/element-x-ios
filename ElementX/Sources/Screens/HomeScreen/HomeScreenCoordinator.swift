@@ -35,6 +35,7 @@ enum HomeScreenCoordinatorAction {
     case logoutWithoutConfirmation
     case logout
     case postTapped(_ post: HomeScreenPost, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
+    case openPostUserProfile(_ profile: ZPostUserProfile, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
 }
 
 final class HomeScreenCoordinator: CoordinatorProtocol {
@@ -95,6 +96,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentDeclineAndBlock(userID: userID, roomID: roomID))
                 case .postTapped(let post, let feedUpdatedProtocol):
                     actionsSubject.send(.postTapped(post, feedUpdatedProtocol: feedUpdatedProtocol))
+                case .openPostUserProfile(let profile, let feedUpdatedProtocol):
+                    actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: feedUpdatedProtocol))
                 }
             }
             .store(in: &cancellables)

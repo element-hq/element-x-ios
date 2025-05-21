@@ -119,7 +119,7 @@ class ZeroAuthApi: ZeroAuthApiProtocol {
     // MARK: - Private
     
     private func fetchMatrixSession(ssoToken: String) async throws -> (Result<ZMatrixSession, Error>) {
-        let homeAddress = appSettings.defaultHomeserverAddress
+        let homeAddress = ZeroContants.appServer.matrixHomeServerUrl
         let url = "\(homeAddress)/\(AuthEndPoints.matrixSessionEndPoint)"
         var host = ""
         if let range = homeAddress.range(of: "https://") {

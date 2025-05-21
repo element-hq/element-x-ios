@@ -53,6 +53,8 @@ struct LoadableAvatarImage: View {
             .environment(\.shouldAutomaticallyLoadImages, true) // We always load avatars.
     }
     
+    var dummyUrl: URL { URL(string: "https://example.com/dummy")! }
+    
     @ViewBuilder
     private var avatar: some View {
         if let url {
@@ -63,10 +65,14 @@ struct LoadableAvatarImage: View {
                 image
                     .scaledToFill()
             } placeholder: {
-                PlaceholderAvatarImage(name: name, contentID: contentID)
+                PlaceholderAvatarImage(name: name, contentID: contentID, onTap: {
+                    onTap?(url)
+                })
             }
         } else {
-            PlaceholderAvatarImage(name: name, contentID: contentID)
+            PlaceholderAvatarImage(name: name, contentID: contentID, onTap: {
+                onTap?(dummyUrl)
+            })
         }
     }
 }

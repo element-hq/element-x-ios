@@ -269,6 +269,18 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func postNewFeed(channelZId: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ClientProxyError>
     
+    // MARK: - Zero Feed User
+    
+    func fetchFeedUserProfile(userZId: String) async -> Result<ZPostUserProfile, ClientProxyError>
+    
+    func fetchUserFeeds(userId: String, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
+    
+    func fetchFeedUserFollowingStatus(userId: String) async -> Result<ZPostUserFollowingStatus, ClientProxyError>
+    
+    func followFeedUser(userId: String) async -> Result<Void, ClientProxyError>
+    
+    func unFollowFeedUser(userId: String) async -> Result<Void, ClientProxyError>
+    
     // MARK: - Zero Channels
     
     func fetchUserZIds() async -> Result<[String], ClientProxyError>

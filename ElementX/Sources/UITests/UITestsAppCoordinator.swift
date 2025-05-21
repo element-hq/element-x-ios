@@ -120,13 +120,36 @@ class MockScreen: Identifiable {
                                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .authenticationFlow, .provisionedAuthenticationFlow:
+        case .authenticationFlow, .provisionedAuthenticationFlow, .singleProviderAuthenticationFlow:
+            let appSettings: AppSettings! = ServiceLocator.shared.settings
+            
+            if id == .singleProviderAuthenticationFlow {
+                appSettings.override(accountProviders: ["example.com"],
+                                     allowOtherAccountProviders: false,
+                                     pushGatewayBaseURL: appSettings.pushGatewayBaseURL,
+                                     oidcRedirectURL: appSettings.oidcRedirectURL,
+                                     websiteURL: appSettings.websiteURL,
+                                     logoURL: appSettings.logoURL,
+                                     copyrightURL: appSettings.copyrightURL,
+                                     acceptableUseURL: appSettings.acceptableUseURL,
+                                     privacyURL: appSettings.privacyURL,
+                                     encryptionURL: appSettings.encryptionURL,
+                                     deviceVerificationURL: appSettings.deviceVerificationURL,
+                                     chatBackupDetailsURL: appSettings.chatBackupDetailsURL,
+                                     identityPinningViolationDetailsURL: appSettings.identityPinningViolationDetailsURL,
+                                     elementWebHosts: appSettings.elementWebHosts,
+                                     accountProvisioningHost: appSettings.accountProvisioningHost,
+                                     bugReportApplicationID: appSettings.bugReportApplicationID,
+                                     analyticsTermsURL: appSettings.analyticsTermsURL,
+                                     mapTilerConfiguration: appSettings.mapTilerConfiguration)
+            }
+            
             let flowCoordinator = AuthenticationFlowCoordinator(authenticationService: AuthenticationService.mock,
                                                                 qrCodeLoginService: QRCodeLoginServiceMock(),
                                                                 bugReportService: BugReportServiceMock(.init()),
                                                                 navigationRootCoordinator: navigationRootCoordinator,
                                                                 appMediator: AppMediatorMock.default,
-                                                                appSettings: ServiceLocator.shared.settings,
+                                                                appSettings: appSettings,
                                                                 analytics: ServiceLocator.shared.analytics,
                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController)
             flowCoordinator.start()

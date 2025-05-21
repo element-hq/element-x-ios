@@ -13,6 +13,7 @@ struct PlaceholderAvatarImage: View {
 
     private let textForImage: String
     private let contentID: String?
+    private let onTap: (() -> Void)?
     
     var body: some View {
         GeometryReader { _ in
@@ -38,14 +39,18 @@ struct PlaceholderAvatarImage: View {
                     .scaledToFit()
                     .padding(4)
             }
+            .onTapGesture {
+                onTap?()
+            }
         }
         .aspectRatio(1, contentMode: .fill)
     }
 
-    init(name: String?, contentID: String?) {
+    init(name: String?, contentID: String?, onTap: (() -> Void)? = nil) {
         let baseName = name ?? contentID?.trimmingCharacters(in: .punctuationCharacters)
         textForImage = baseName?.first?.uppercased() ?? ""
         self.contentID = contentID
+        self.onTap = onTap
     }
 
     private var backgroundColor: Color {
@@ -69,19 +74,19 @@ struct PlaceholderAvatarImage: View {
 struct PlaceholderAvatarImage_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 75) {
-            PlaceholderAvatarImage(name: "Xavier", contentID: "@userid1:matrix.org")
+            PlaceholderAvatarImage(name: "Xavier", contentID: "@userid1:matrix.org", onTap: {})
                 .clipShape(Circle())
                 .frame(width: 150, height: 100)
             
-            PlaceholderAvatarImage(name: "@*~AmazingName~*@", contentID: "@userid2:matrix.org")
+            PlaceholderAvatarImage(name: "@*~AmazingName~*@", contentID: "@userid2:matrix.org", onTap: {})
                 .clipShape(Circle())
                 .frame(width: 150, height: 100)
             
-            PlaceholderAvatarImage(name: nil, contentID: "@userid3:matrix.org")
+            PlaceholderAvatarImage(name: nil, contentID: "@userid3:matrix.org", onTap: {})
                 .clipShape(Circle())
                 .frame(width: 150, height: 100)
             
-            PlaceholderAvatarImage(name: nil, contentID: "@fooserid:matrix.org")
+            PlaceholderAvatarImage(name: nil, contentID: "@fooserid:matrix.org", onTap: {})
                 .clipShape(Circle())
                 .frame(width: 30, height: 30)
         }

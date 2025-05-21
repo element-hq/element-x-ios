@@ -34,6 +34,9 @@ struct HomeScreenPostList: View {
                 },
                                    onOpenYoutubeLink: { url in
                     context.send(viewAction: .openYoutubeLink(url))
+                },
+                                   onOpenUserProfile: { profile in
+                    context.send(viewAction: .openPostUserProfile(profile))
                 })
                 .padding(.horizontal, 16)
                 .padding(.top, 12)

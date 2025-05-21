@@ -106,6 +106,23 @@ struct AvatarHeaderView<Footer: View>: View {
         badges = isVerified ? [.verified] : []
     }
     
+    /// Initialises the view by using the sender,
+    /// only to be used when a room member has not been loaded yet.
+    init(sender: TimelineItemSender,
+         avatarSize: Avatars.Size,
+         mediaProvider: MediaProviderProtocol? = nil,
+         onAvatarTap: ((URL) -> Void)? = nil,
+         @ViewBuilder footer: @escaping () -> Footer) {
+        let profile = UserProfileProxy(sender: sender)
+        
+        self.init(user: profile,
+                  isVerified: false,
+                  avatarSize: avatarSize,
+                  mediaProvider: mediaProvider,
+                  onAvatarTap: onAvatarTap,
+                  footer: footer)
+    }
+    
     private var badgesStack: some View {
         HStack(spacing: 8) {
             ForEach(badges, id: \.self) { badge in

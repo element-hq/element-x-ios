@@ -15,6 +15,8 @@ protocol ZeroPostsApiProtocol {
     func addMeowsToPst(amount: Int, postId: String) async throws -> Result<ZPost, Error>
     
     func createNewPost(channelZId: String, content: String, replyToPost: String?, mediaId: String?) async throws -> Result<Void, Error>
+    
+    func fetchUserPosts(userId: String, limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
 }
 
 class ZeroPostsApi: ZeroPostsApiProtocol {
@@ -138,6 +140,29 @@ class ZeroPostsApi: ZeroPostsApiProtocol {
         switch result {
         case .success:
             return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func fetchUserPosts(userId: String, limit: Int = 10, skip: Int = 0) async throws -> Result<[ZPost], Error> {
+        var parameters: [String: Any] = [
+            "user_id": userId,
+            "limit": limit,
+            "skip": skip,
+            "include_replies": "true",
+            "include_meows": "true"
+        ]
+        let result: Result<ZPosts, Error> = try await APIManager
+            .shared
+            .authorisedRequest(FeedEndPoints.postsEndPoint,
+                               method: .get,
+                               appSettings: appSettings,
+                               parameters: parameters,
+                               encoding: URLEncoding.queryString)
+        switch result {
+        case .success(let posts):
+            return .success(posts.posts)
         case .failure(let error):
             return .failure(error)
         }

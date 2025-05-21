@@ -33,7 +33,8 @@ struct HomeMyPostsContent: View {
                                                    onPostTapped: {},
                                                    onOpenArweaveLink: {},
                                                    onMeowTapped: { _ in },
-                                                   onOpenYoutubeLink: { _ in })
+                                                   onOpenYoutubeLink: { _ in },
+                                                   onOpenUserProfile: { _ in })
                                 .padding(.all, 16)
                                 Divider()
                             }
@@ -62,7 +63,10 @@ struct HomeMyPostsContent: View {
                                                    onMeowTapped: { _ in
                                 },
                                                    onOpenYoutubeLink: { url in
-                                    
+                                    context.send(viewAction: .openYoutubeLink(url))
+                                },
+                                                   onOpenUserProfile: { profile in
+                                    context.send(viewAction: .openPostUserProfile(profile))
                                 })
                                 .padding(.horizontal, 16)
                                 .padding(.top, 12)

@@ -567,6 +567,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.presentDeclineAndBlockScreen(userID: userID, roomID: roomID))
                 case .postTapped(let post, let feedUpdatedProtocol):
                     presentFeedDetailsScreen(post, feedUpdatedProtocol: feedUpdatedProtocol)
+                case .openPostUserProfile(let profile, let feedUpdatedProtocol):
+                    presentFeedUserProfileScreen(profile, feedUpdatedProtocol: feedUpdatedProtocol)
                 }
             }
             .store(in: &cancellables)
@@ -1180,6 +1182,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     presentFeedDetailsScreen(reply, feedUpdatedProtocol: feedUpdatedProtocol, showSheetCoodinator: true)
                 case .attachMedia(let attachMediaProtocol):
                     presentMediaUploadPickerWithSource(attachMediaProtocol)
+                case .openPostUserProfile(let profile):
+                    presentFeedUserProfileScreen(profile, feedUpdatedProtocol: feedUpdatedProtocol)
                 }
             }
             .store(in: &cancellables)
@@ -1225,6 +1229,26 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
         }
         stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator)
+    }
+    
+    private func presentFeedUserProfileScreen(_ profile: ZPostUserProfile, feedUpdatedProtocol: FeedDetailsUpdatedProtocol) {
+        let stackCoordinator = NavigationStackCoordinator()
+
+        let profileCoordinator = FeedUserProfileScreenCoordinator(parameters: .init(userSession: userSession,
+                                                                                    feedUpdatedProtocol: feedUpdatedProtocol,
+                                                                                    userProfile: profile))
+        profileCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .feedTapped(let feed):
+                    presentFeedDetailsScreen(feed, feedUpdatedProtocol: feedUpdatedProtocol)
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        stackCoordinator.setRootCoordinator(profileCoordinator)
         navigationSplitCoordinator.setSheetCoordinator(stackCoordinator)
     }
 }

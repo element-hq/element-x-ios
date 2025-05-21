@@ -63,7 +63,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         switch viewAction {
         case .replyTapped(let reply):
             let mediaUrl = state.postRepliesMediaInfoMap[reply.id]?.url
-            actionsSubject.send(.replyTapped(reply.withUpdatedData(url: mediaUrl, urlLinkPreview: nil)))
+            let urlLinkPreview = state.postRepliesLinkPreviewsMap[reply.id]
+            actionsSubject.send(.replyTapped(reply.withUpdatedData(url: mediaUrl, urlLinkPreview: urlLinkPreview)))
         case .openArweaveLink(let post):
             openArweaveLink(post)
         case .openYoutubeLink(let url):
@@ -80,6 +81,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             actionsSubject.send(.attachMedia(self))
         case .deleteMedia:
             state.bindings.feedMedia = nil
+        case .openPostUserProfile(let profile):
+            actionsSubject.send(.openPostUserProfile(profile))
         }
     }
     

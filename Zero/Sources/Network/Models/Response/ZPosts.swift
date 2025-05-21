@@ -54,9 +54,10 @@ struct ZPost: Codable, Identifiable {
     let replyToPost: ReplyToPost?
     let mediaId: String?
     let media: ZPostMediaInfo?
+    let userProfileView: ZPostUserProfile?
     
     enum CodingKeys: String, CodingKey {
-        case id, userId, zid, createdAt, updatedAt, signedMessage, unsignedMessage, text, walletAddress, worldZid, imageUrl, arweaveId, replyTo, conversationId, user, postsMeowsSummary, meows, replies, replyToPost, mediaId, media
+        case id, userId, zid, createdAt, updatedAt, signedMessage, unsignedMessage, text, walletAddress, worldZid, imageUrl, arweaveId, replyTo, conversationId, user, postsMeowsSummary, meows, replies, replyToPost, mediaId, media, userProfileView
     }
 }
 

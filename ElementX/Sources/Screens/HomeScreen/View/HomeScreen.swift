@@ -55,22 +55,22 @@ struct HomeScreen: View {
                 )
             }
         }
-            .alert(item: $context.alertInfo)
-            .alert(item: $context.leaveRoomAlertItem,
-                   actions: leaveRoomAlertActions,
-                   message: leaveRoomAlertMessage)
-//            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-            .toolbar { toolbar }
-            .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
-            .track(screen: .Home)
-//            .bloom(context: context,
-//                   scrollViewAdapter: scrollViewAdapter,
-//                   isNewBloomEnabled: context.viewState.isNewBloomEnabled)
-            .sentryTrace("\(Self.self)")
+        .alert(item: $context.alertInfo)
+        .alert(item: $context.leaveRoomAlertItem,
+               actions: leaveRoomAlertActions,
+               message: leaveRoomAlertMessage)
+        //            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
+        .toolbar { toolbar }
+        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
+        .track(screen: .Home)
+        //            .bloom(context: context,
+        //                   scrollViewAdapter: scrollViewAdapter,
+        //                   isNewBloomEnabled: context.viewState.isNewBloomEnabled)
+        .sentryTrace("\(Self.self)")
     }
     
     // MARK: - Private
-        
+    
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
@@ -82,26 +82,29 @@ struct HomeScreen: View {
                                         name: context.viewState.userDisplayName,
                                         contentID: context.viewState.userID,
                                         avatarSize: .user(on: .home),
-                                        mediaProvider: context.mediaProvider)
-                        .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
-                        .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
-                        .compositingGroup()
-                        .overlay {
-                            if context.viewState.showNewUserRewardsIntimation {
-                                ZStack(alignment: .center) {
-                                    Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 1)
-                                        .frame(width: 38, height: 38)
-                                    Circle().stroke(Color.zero.bgAccentRest, lineWidth: 1)
-                                        .frame(width: 35, height: 35)
-                                }
-                                .task {
-                                    context.send(viewAction: .rewardsIntimated)
-                                }
-                                
-                                userRewardsToolTip
-                                    .offset(x: 85, y: 45)
+                                        mediaProvider: context.mediaProvider,
+                                        onTap: { _ in
+                        context.send(viewAction: .showSettings)
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
+                    .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
+                    .compositingGroup()
+                    .overlay {
+                        if context.viewState.showNewUserRewardsIntimation {
+                            ZStack(alignment: .center) {
+                                Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 1)
+                                    .frame(width: 38, height: 38)
+                                Circle().stroke(Color.zero.bgAccentRest, lineWidth: 1)
+                                    .frame(width: 35, height: 35)
                             }
+                            .task {
+                                context.send(viewAction: .rewardsIntimated)
+                            }
+                            
+                            userRewardsToolTip
+                                .offset(x: 85, y: 45)
                         }
+                    }
                     
                     VStack(alignment: .leading, spacing: 2) {
                         Text(context.viewState.userDisplayName ?? "")
@@ -253,11 +256,11 @@ struct HomeScreen_Previews: PreviewProvider, TestablePreview {
         
         let roomSummaryProviderState: RoomSummaryProviderMockConfigurationState = switch mode {
         case .skeletons:
-            .loading
+                .loading
         case .empty:
-            .loaded([])
+                .loaded([])
         case .rooms:
-            .loaded(.mockRooms)
+                .loaded(.mockRooms)
         }
         
         let clientProxy = ClientProxyMock(.init(userID: userID,

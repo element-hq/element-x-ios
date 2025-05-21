@@ -43,7 +43,8 @@ struct HomePostsContent: View {
                                                    onPostTapped: {},
                                                    onOpenArweaveLink: {},
                                                    onMeowTapped: { _ in },
-                                                   onOpenYoutubeLink: { _ in })
+                                                   onOpenYoutubeLink: { _ in },
+                                                   onOpenUserProfile: { _ in })
                                 .padding(.all, 16)
                                 Divider()
                             }

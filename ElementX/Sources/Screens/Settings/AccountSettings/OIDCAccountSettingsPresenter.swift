@@ -31,6 +31,9 @@ class OIDCAccountSettingsPresenter: NSObject {
         let session = ASWebAuthenticationSession(url: accountURL, callback: .oidcRedirectURL(oidcRedirectURL)) { _, _ in }
         session.prefersEphemeralWebBrowserSession = false
         session.presentationContextProvider = self
+        session.additionalHeaderFields = [
+            "X-Element-User-Agent": UserAgentBuilder.makeASCIIUserAgent()
+        ]
         session.start()
     }
 }
