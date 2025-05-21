@@ -245,7 +245,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         // Logging
         
         stateMachine.addAnyHandler(.any => .any) { context in
-            MXLog.dev("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(String(describing: context.event))`.")
+            MXLog.info("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(String(describing: context.event))`.")
         }
         
         // Unhandled
