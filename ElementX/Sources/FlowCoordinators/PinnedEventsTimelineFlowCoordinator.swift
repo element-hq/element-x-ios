@@ -67,10 +67,10 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
-                
-        guard let timelineController = await timelineControllerFactory.buildPinnedEventsTimelineController(roomProxy: roomProxy,
-                                                                                                           timelineItemFactory: timelineItemFactory,
-                                                                                                           mediaProvider: userSession.mediaProvider) else {
+        
+        guard case let .success(timelineController) = await timelineControllerFactory.buildPinnedEventsTimelineController(roomProxy: roomProxy,
+                                                                                                                          timelineItemFactory: timelineItemFactory,
+                                                                                                                          mediaProvider: userSession.mediaProvider) else {
             fatalError("This can never fail because we allow this view to be presented only when the timeline is fully loaded and not nil")
         }
         
