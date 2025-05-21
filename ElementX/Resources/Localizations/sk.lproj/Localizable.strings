@@ -421,11 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Odstrániť z miestnosti";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Odstrániť člena a zakázať vstup v budúcnosti?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Odstraňuje sa %1$@…";
-"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
-"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
+"screen_bottom_sheet_manage_room_member_unban" = "Zrušiť zákaz prístupu do miestnosti";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Zrušiť zákaz";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "V prípade pozvania by sa mohli opäť pripojiť k miestnosti";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Naozaj chcete zrušiť zablokovanie tohto člena?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Zrušenie zákazu pre %1$@";
 "screen_create_room_room_access_section_anyone_option_description" = "Do tejto miestnosti sa môže pripojiť ktokoľvek";
 "screen_create_room_room_access_section_anyone_option_title" = "Ktokoľvek";
 "screen_create_room_room_access_section_header" = "Prístup do miestnosti";
@@ -618,6 +618,8 @@
 "screen_change_server_error_invalid_well_known" = "Server nie je k dispozícii kvôli problému v známom súbore:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Vybraný poskytovateľ účtu nepodporuje kĺzavú synchronizáciu. Na používanie aplikácie %1$@ je potrebná aktualizácia servera,";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ nemá dovolené pripojiť sa k %2$@.";
+"screen_change_server_error_unauthorized_homeserver_content" = "Táto aplikácia bola nastavená tak, aby povoľovala: %1$@.";
+"screen_change_server_error_unauthorized_homeserver_title" = "Poskytovateľ účtu %1$@ nie je povolený.";
 "screen_change_server_form_header" = "Adresa URL domovského servera";
 "screen_change_server_form_notice" = "Zadajte adresu domény.";
 "screen_change_server_subtitle" = "Aká je adresa vášho servera?";
@@ -765,7 +767,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Systémové oznámenia sú vypnuté";
 "screen_notification_settings_title" = "Oznámenia";
 "screen_onboarding_sign_in_manually" = "Prihlásiť sa manuálne";
-"screen_onboarding_sign_in_to" = "Sign in to %1$@";
+"screen_onboarding_sign_in_to" = "Prihlásiť sa do %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Prihlásiť sa pomocou QR kódu";
 "screen_onboarding_sign_up" = "Vytvoriť účet";
 "screen_onboarding_welcome_message" = "Vitajte v najrýchlejšom %1$@ vôbec. Nadupaný pre rýchlosť a jednoduchosť.";

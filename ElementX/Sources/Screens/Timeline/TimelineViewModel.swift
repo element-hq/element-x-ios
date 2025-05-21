@@ -183,16 +183,16 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             timelineInteractionHandler.displayTimelineItemActionMenu(for: itemID)
         case .handleTimelineItemMenuAction(let itemID, let action):
             timelineInteractionHandler.handleTimelineItemMenuAction(action, itemID: itemID)
-        case .tappedOnSenderDetails(let userID):
-            handleTappedOnSenderDetails(userID: userID)
+        case .tappedOnSenderDetails(let sender):
+            handleTappedOnSenderDetails(sender: sender)
         case .displayEmojiPicker(let itemID):
             timelineInteractionHandler.displayEmojiPicker(for: itemID)
         case .displayReactionSummary(let itemID, let key):
             displayReactionSummary(for: itemID, selectedKey: key)
         case .displayReadReceipts(let itemID):
             displayReadReceipts(for: itemID)
-        case .displayThread:
-            break
+        case .displayThread(let itemID):
+            actionsSubject.send(.displayThread(itemID: itemID))
         case .handlePasteOrDrop(let provider):
             timelineInteractionHandler.handlePasteOrDrop(provider)
         case .handlePollAction(let pollAction):
@@ -273,39 +273,34 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     // MARK: - Private
     
-    private func handleTappedOnSenderDetails(userID: String) {
-        // We also need to make sure the user is in the joined state, otherwise we just show the details.
-        guard let memberProxy = roomProxy.membersPublisher.value.first(where: { $0.userID == userID && $0.membership == .join }),
-              let currentUserProxy,
-              currentUserProxy.powerLevel > memberProxy.powerLevel else {
-            actionsSubject.send(.displaySenderDetails(userID: userID))
-            return
+    private func handleTappedOnSenderDetails(sender: TimelineItemSender) {
+        let memberDetails: ManageRoomMemberDetails = if let memberProxy = roomProxy.membersPublisher.value.first(where: { $0.userID == sender.id }) {
+            .memberDetails(roomMember: .init(withProxy: memberProxy))
+        } else {
+            .loadingMemberDetails(sender: sender)
         }
         
-        if state.canCurrentUserBan || state.canCurrentUserKick {
-            let member = RoomMemberDetails(withProxy: memberProxy)
-            let manageMemeberViewModel = ManageRoomMemberSheetViewModel(member: member,
-                                                                        canKick: state.canCurrentUserKick,
-                                                                        canBan: state.canCurrentUserBan,
-                                                                        roomProxy: roomProxy,
-                                                                        userIndicatorController: userIndicatorController,
-                                                                        analyticsService: analyticsService,
-                                                                        mediaProvider: mediaProvider)
-            manageMemeberViewModel.actions.sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .dismiss(let shouldShowDetails):
-                    state.bindings.manageMemberViewModel = nil
-                    if shouldShowDetails {
-                        actionsSubject.send(.displaySenderDetails(userID: userID))
-                    }
+        let viewModel = ManageRoomMemberSheetViewModel(memberDetails: memberDetails,
+                                                       permissions: .init(canKick: state.canCurrentUserKick,
+                                                                          canBan: state.canCurrentUserBan,
+                                                                          ownPowerLevel: currentUserProxy?.powerLevel ?? 0),
+                                                       roomProxy: roomProxy,
+                                                       userIndicatorController: userIndicatorController,
+                                                       analyticsService: analyticsService,
+                                                       mediaProvider: mediaProvider)
+        
+        viewModel.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss(let shouldShowDetails):
+                state.bindings.manageMemberViewModel = nil
+                if shouldShowDetails {
+                    actionsSubject.send(.displaySenderDetails(userID: sender.id))
                 }
             }
-            .store(in: &cancellables)
-            state.bindings.manageMemberViewModel = manageMemeberViewModel
-        } else {
-            actionsSubject.send(.displaySenderDetails(userID: userID))
         }
+        .store(in: &cancellables)
+        state.bindings.manageMemberViewModel = viewModel
     }
     
     private func focusLive() {

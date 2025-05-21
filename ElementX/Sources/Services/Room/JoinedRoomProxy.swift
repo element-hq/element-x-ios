@@ -215,6 +215,24 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    func threadTimeline(eventID: String) async -> Result<TimelineProxyProtocol, RoomProxyError> {
+        do {
+            let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .thread(rootEventId: eventID, numEvents: 20),
+                                                                                            filter: .all,
+                                                                                            internalIdPrefix: UUID().uuidString,
+                                                                                            dateDividerMode: .daily,
+                                                                                            trackReadReceipts: true))
+            
+            let timeline = TimelineProxy(timeline: sdkTimeline, kind: .thread)
+            await timeline.subscribeForUpdates()
+            
+            return .success(timeline)
+        } catch {
+            MXLog.error("Unexpected error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func messageFilteredTimeline(focus: TimelineFocus,
                                  allowedMessageTypes: [TimelineAllowedMessageType],
                                  presentation: TimelineKind.MediaPresentation) async -> Result<any TimelineProxyProtocol, RoomProxyError> {
@@ -222,6 +240,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             let rustFocus: MatrixRustSDK.TimelineFocus = switch focus {
             case .live: .live
             case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100)
+            case .thread(let eventID): .thread(rootEventId: eventID, numEvents: 20)
             case .pinned: .pinnedEvents(maxEventsToLoad: 100, maxConcurrentRequests: 10)
             }
             

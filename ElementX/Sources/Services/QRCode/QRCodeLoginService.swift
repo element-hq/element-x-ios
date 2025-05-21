@@ -43,6 +43,16 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
             return .failure(.invalidQRCode)
         }
         
+        guard let scannedServerName = qrData.serverName() else {
+            MXLog.error("The QR code is from a device that is not yet signed in.")
+            return .failure(.deviceNotSignedIn)
+        }
+        
+        if !appSettings.allowOtherAccountProviders, !appSettings.accountProviders.contains(scannedServerName) {
+            MXLog.error("The scanned device's server is not allowed: \(scannedServerName)")
+            return .failure(.providerNotAllowed(scannedProvider: scannedServerName, allowedProviders: appSettings.accountProviders))
+        }
+        
         let listener = SDKListener { [weak self] progress in
             self?.qrLoginProgressSubject.send(progress)
         }

@@ -96,7 +96,8 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
                                                                           posthogApiKey: analyticsConfiguration?.posthogAPIKey,
                                                                           rageshakeSubmitUrl: rageshakeURL,
                                                                           sentryDsn: analyticsConfiguration?.sentryDSN,
-                                                                          sentryEnvironment: nil))
+                                                                          sentryEnvironment: nil,
+                                                                          controlledMediaDevices: !ProcessInfo.processInfo.isiOSAppOnMac))
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)

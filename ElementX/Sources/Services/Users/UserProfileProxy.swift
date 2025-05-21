@@ -28,6 +28,12 @@ struct UserProfileProxy: Equatable, Hashable {
         primaryZeroId = member.primaryZeroId
     }
     
+    init(sender: TimelineItemSender) {
+        userID = sender.id
+        displayName = sender.displayName
+        avatarURL = sender.avatarURL
+    }
+    
     init(sdkUserProfile: MatrixRustSDK.UserProfile) {
         userID = sdkUserProfile.userId
         displayName = sdkUserProfile.displayName

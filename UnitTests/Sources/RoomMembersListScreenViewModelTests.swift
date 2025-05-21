@@ -18,6 +18,11 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
+    override func tearDown() {
+        viewModel = nil
+        roomProxy = nil
+    }
+    
     func testJoinedMembers() async throws {
         setup(with: [.mockAlice, .mockBob])
         
@@ -130,11 +135,11 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     func testSelectUserAsUser() async throws {
         // Given the room list viewed as a regular user.
         setup(with: .allMembers)
-        let deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
+        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
         try await deferred.fulfill()
         
         // When tapping on another user in the list.
-        let memberDetailsAction = deferFulfillment(viewModel.actions) { $0.isSelectMember }
+        deferred = deferFulfillment(context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
         guard let user = viewModel.state.visibleJoinedMembers.first(where: { $0.member.role == .user && $0.member.id != RoomMemberProxyMock.mockMe.userID })?.member else {
             XCTFail("Expected to find a regular user.")
             return
@@ -142,8 +147,11 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         context.send(viewAction: .selectMember(user))
         
         // Then the member's details should be shown.
-        try await memberDetailsAction.fulfill()
-        XCTAssertNil(context.manageMemeberViewModel)
+        try await deferred.fulfill()
+        XCTAssertNotNil(context.manageMemeberViewModel)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, user.id)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, false)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, false)
     }
     
     func testSelectUserAsAdmin() async throws {
@@ -163,9 +171,12 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then member management should be shown for that user.
-        XCTAssertEqual(context.manageMemeberViewModel?.state.member, user)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.canKick, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.canBan, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, user.id)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.isKickDisabled, false)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.isBanUnbanDisabled, false)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.isMemberBanned, false)
     }
     
     func testSelectModeratorAsAdmin() async throws {
@@ -185,19 +196,22 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then member management should be shown for the moderator.
-        XCTAssertEqual(context.manageMemeberViewModel?.state.member, moderator)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.canKick, true)
-        XCTAssertEqual(context.manageMemeberViewModel?.state.canBan, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, moderator.id)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.isMemberBanned, false)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.isKickDisabled, false)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.isBanUnbanDisabled, false)
     }
     
     func testSelectAdminAsAdmin() async throws {
         // Given the room list viewed as an admin.
         setup(with: .allMembersAsAdmin)
-        let deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
+        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
         try await deferred.fulfill()
         
         // When tapping on another administrator in the list.
-        let memberDetailsAction = deferFulfillment(viewModel.actions) { $0.isSelectMember }
+        deferred = deferFulfillment(context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
         guard let admin = viewModel.state.visibleJoinedMembers.first(where: { $0.member.role == .administrator && $0.member.id != RoomMemberProxyMock.mockMe.userID })?.member else {
             XCTFail("Expected to find another admin.")
             return
@@ -205,8 +219,13 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         context.send(viewAction: .selectMember(admin))
         
         // Then the administrator's details should be shown.
-        try await memberDetailsAction.fulfill()
-        XCTAssertNil(context.manageMemeberViewModel)
+        try await deferred.fulfill()
+        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, admin.id)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.isKickDisabled, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.isBanUnbanDisabled, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.isMemberBanned, false)
     }
     
     func testSelectOwnMemberAsAdmin() async throws {
@@ -231,12 +250,12 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
     func testSelectBannedMember() async throws {
         // Given the room list viewed as an admin.
         setup(with: .allMembersAsAdmin + RoomMemberProxyMock.mockBanned)
-        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty }
+        var deferred = deferFulfillment(context.$viewState) { !$0.visibleInvitedMembers.isEmpty && $0.canKickUsers && $0.canBanUsers }
         try await deferred.fulfill()
         XCTAssertNil(context.alertInfo)
         
         // When tapping on a banned member in the list.
-        deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
+        deferred = deferFulfillment(context.$viewState) { $0.bindings.manageMemeberViewModel != nil }
         guard let bannedMember = viewModel.state.visibleBannedMembers.first?.member else {
             XCTFail("Expected to find a banned user.")
             return
@@ -245,21 +264,12 @@ class RoomMembersListScreenViewModelTests: XCTestCase {
         
         // Then an alert should be shown to unban the user.
         try await deferred.fulfill()
-        XCTAssertNil(context.manageMemeberViewModel)
-        XCTAssertNotNil(context.alertInfo)
-    }
-    
-    func testUnbanMember() async throws {
-        setup(with: .allMembersAsAdmin)
-        let deferred = deferFulfillment(context.$viewState) { !$0.visibleJoinedMembers.isEmpty }
-        try await deferred.fulfill()
-        
-        context.send(viewAction: .unbanMember(viewModel.state.visibleJoinedMembers[0].member))
-        
-        // Calling the mock won't actually change any view state, so sleep instead.
-        try await Task.sleep(for: .milliseconds(100))
-        
-        XCTAssert(roomProxy.unbanUserCalled)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.memberDetails.id, bannedMember.id)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canKick, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.permissions.canBan, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.isKickDisabled, true)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.isBanUnbanDisabled, false)
+        XCTAssertEqual(context.manageMemeberViewModel?.state.isMemberBanned, true)
     }
     
     private func setup(with members: [RoomMemberProxyMock]) {

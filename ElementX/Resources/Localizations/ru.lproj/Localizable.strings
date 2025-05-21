@@ -425,7 +425,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
-"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
 "screen_create_room_room_access_section_anyone_option_description" = "Любой желающий может присоединиться к этой комнате";
 "screen_create_room_room_access_section_anyone_option_title" = "Любой";
 "screen_create_room_room_access_section_header" = "Доступ в комнату";
@@ -618,6 +618,8 @@
 "screen_change_server_error_invalid_well_known" = "Sliding sync недоступен из-за проблемы в известном файле:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
+"screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
+"screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
 "screen_change_server_form_header" = "URL-адрес домашнего сервера";
 "screen_change_server_form_notice" = "Введите адрес домена.";
 "screen_change_server_subtitle" = "Какой адрес у вашего сервера?";

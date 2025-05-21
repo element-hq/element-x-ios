@@ -95,7 +95,8 @@ final class AppSettings {
     // MARK: - Hooks
     
     // swiftlint:disable:next function_parameter_count
-    func override(defaultHomeserverAddress: String,
+    func override(accountProviders: [String],
+                  allowOtherAccountProviders: Bool,
                   pushGatewayBaseURL: URL,
                   oidcRedirectURL: URL,
                   websiteURL: URL,
@@ -112,7 +113,8 @@ final class AppSettings {
                   bugReportApplicationID: String,
                   analyticsTermsURL: URL?,
                   mapTilerConfiguration: MapTilerConfiguration) {
-        self.defaultHomeserverAddress = defaultHomeserverAddress
+        self.accountProviders = accountProviders
+        self.allowOtherAccountProviders = allowOtherAccountProviders
         self.pushGatewayBaseURL = pushGatewayBaseURL
         self.oidcRedirectURL = oidcRedirectURL
         self.websiteURL = websiteURL
@@ -154,9 +156,13 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.seenInvites, defaultValue: [], storageType: .userDefaults(store))
     var seenInvites: Set<String>
     
-    /// The default homeserver address used. This is intentionally a string without a scheme
-    /// so that it can be passed to Rust as a ServerName for well-known discovery.
-    private(set) var defaultHomeserverAddress = ZeroContants.appServer.matrixHomeServerUrl
+    /// The initial set of account providers shown to the user in the authentication flow.
+    ///
+    /// Account provider is the friendly term for the server name. It should not contain an `https` prefix and should
+    /// match the last part of the user ID. For example `example.com` and not `https://matrix.example.com`.
+    private(set) var accountProviders = ["matrix.org"]
+    /// Whether or not the user is allowed to manually enter their own account provider or must select from one of `defaultAccountProviders`.
+    private(set) var allowOtherAccountProviders = true
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"

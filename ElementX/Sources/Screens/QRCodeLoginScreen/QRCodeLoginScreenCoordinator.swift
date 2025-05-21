@@ -10,6 +10,7 @@ import SwiftUI
 
 struct QRCodeLoginScreenCoordinatorParameters {
     let qrCodeLoginService: QRCodeLoginServiceProtocol
+    let canSignInManually: Bool
     let orientationManager: OrientationManagerProtocol
     let appMediator: AppMediatorProtocol
 }
@@ -33,6 +34,7 @@ final class QRCodeLoginScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: QRCodeLoginScreenCoordinatorParameters) {
         viewModel = QRCodeLoginScreenViewModel(qrCodeLoginService: parameters.qrCodeLoginService,
+                                               canSignInManually: parameters.canSignInManually,
                                                appMediator: parameters.appMediator)
         orientationManager = parameters.orientationManager
     }

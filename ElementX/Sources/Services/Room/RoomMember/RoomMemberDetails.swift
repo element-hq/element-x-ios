@@ -18,7 +18,8 @@ struct RoomMemberDetails: Identifiable, Hashable {
     var isInvited: Bool
     var isIgnored: Bool
     var isBanned: Bool
-    
+    var isActive: Bool
+        
     enum Role { case administrator, moderator, user }
     let role: Role
     let powerLevel: Int
@@ -37,6 +38,7 @@ extension RoomMemberDetails {
         permalink = proxy.permalink
         primaryZeroId = proxy.primaryZeroId
         
+        isActive = proxy.isActive
         isInvited = proxy.membership == .invite
         isIgnored = proxy.isIgnored
         isBanned = proxy.membership == .ban
