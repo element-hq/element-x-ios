@@ -40,17 +40,18 @@ struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
     
     func buildPinnedEventsTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                              timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                             mediaProvider: MediaProviderProtocol) async -> TimelineControllerProtocol? {
-        guard let pinnedEventsTimeline = await roomProxy.pinnedEventsTimeline else {
-            return nil
+                                             mediaProvider: MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError> {
+        switch await roomProxy.pinnedEventsTimeline() {
+        case .success(let timelineProxy):
+            return .success(TimelineController(roomProxy: roomProxy,
+                                               timelineProxy: timelineProxy,
+                                               initialFocussedEventID: nil,
+                                               timelineItemFactory: timelineItemFactory,
+                                               mediaProvider: mediaProvider,
+                                               appSettings: ServiceLocator.shared.settings))
+        case .failure(let error):
+            return .failure(.roomProxyError(error))
         }
-        
-        return TimelineController(roomProxy: roomProxy,
-                                  timelineProxy: pinnedEventsTimeline,
-                                  initialFocussedEventID: nil,
-                                  timelineItemFactory: timelineItemFactory,
-                                  mediaProvider: mediaProvider,
-                                  appSettings: ServiceLocator.shared.settings)
     }
     
     func buildMessageFilteredTimelineController(focus: TimelineFocus,

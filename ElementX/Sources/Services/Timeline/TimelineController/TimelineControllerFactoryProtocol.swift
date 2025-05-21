@@ -26,7 +26,7 @@ protocol TimelineControllerFactoryProtocol {
     
     func buildPinnedEventsTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                              timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                             mediaProvider: MediaProviderProtocol) async -> TimelineControllerProtocol?
+                                             mediaProvider: MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError>
     
     func buildMessageFilteredTimelineController(focus: TimelineFocus,
                                                 allowedMessageTypes: [TimelineAllowedMessageType],

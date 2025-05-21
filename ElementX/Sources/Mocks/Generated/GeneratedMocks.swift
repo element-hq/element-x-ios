@@ -6270,23 +6270,6 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         set(value) { underlyingTimeline = value }
     }
     var underlyingTimeline: TimelineProxyProtocol!
-    var pinnedEventsTimelineCallsCount = 0
-    var pinnedEventsTimelineCalled: Bool {
-        return pinnedEventsTimelineCallsCount > 0
-    }
-
-    var pinnedEventsTimeline: TimelineProxyProtocol? {
-        get async {
-            pinnedEventsTimelineCallsCount += 1
-            if let pinnedEventsTimelineClosure = pinnedEventsTimelineClosure {
-                return await pinnedEventsTimelineClosure()
-            } else {
-                return underlyingPinnedEventsTimeline
-            }
-        }
-    }
-    var underlyingPinnedEventsTimeline: TimelineProxyProtocol?
-    var pinnedEventsTimelineClosure: (() async -> TimelineProxyProtocol?)?
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }
@@ -6576,6 +6559,70 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return await messageFilteredTimelineFocusAllowedMessageTypesPresentationClosure(focus, allowedMessageTypes, presentation)
         } else {
             return messageFilteredTimelineFocusAllowedMessageTypesPresentationReturnValue
+        }
+    }
+    //MARK: - pinnedEventsTimeline
+
+    var pinnedEventsTimelineUnderlyingCallsCount = 0
+    var pinnedEventsTimelineCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return pinnedEventsTimelineUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pinnedEventsTimelineUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pinnedEventsTimelineUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pinnedEventsTimelineUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var pinnedEventsTimelineCalled: Bool {
+        return pinnedEventsTimelineCallsCount > 0
+    }
+
+    var pinnedEventsTimelineUnderlyingReturnValue: Result<TimelineProxyProtocol, RoomProxyError>!
+    var pinnedEventsTimelineReturnValue: Result<TimelineProxyProtocol, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return pinnedEventsTimelineUnderlyingReturnValue
+            } else {
+                var returnValue: Result<TimelineProxyProtocol, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = pinnedEventsTimelineUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                pinnedEventsTimelineUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    pinnedEventsTimelineUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var pinnedEventsTimelineClosure: (() async -> Result<TimelineProxyProtocol, RoomProxyError>)?
+
+    func pinnedEventsTimeline() async -> Result<TimelineProxyProtocol, RoomProxyError> {
+        pinnedEventsTimelineCallsCount += 1
+        if let pinnedEventsTimelineClosure = pinnedEventsTimelineClosure {
+            return await pinnedEventsTimelineClosure()
+        } else {
+            return pinnedEventsTimelineReturnValue
         }
     }
     //MARK: - enableEncryption
@@ -15141,13 +15188,13 @@ class TimelineControllerFactoryMock: TimelineControllerFactoryProtocol, @uncheck
     var buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryMediaProviderReceivedArguments: (roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)?
     var buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations: [(roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)] = []
 
-    var buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue: TimelineControllerProtocol?
-    var buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryMediaProviderReturnValue: TimelineControllerProtocol? {
+    var buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue: Result<TimelineControllerProtocol, TimelineFactoryControllerError>!
+    var buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryMediaProviderReturnValue: Result<TimelineControllerProtocol, TimelineFactoryControllerError>! {
         get {
             if Thread.isMainThread {
                 return buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
             } else {
-                var returnValue: TimelineControllerProtocol?? = nil
+                var returnValue: Result<TimelineControllerProtocol, TimelineFactoryControllerError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
                 }
@@ -15165,9 +15212,9 @@ class TimelineControllerFactoryMock: TimelineControllerFactoryProtocol, @uncheck
             }
         }
     }
-    var buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryMediaProviderClosure: ((JoinedRoomProxyProtocol, RoomTimelineItemFactoryProtocol, MediaProviderProtocol) async -> TimelineControllerProtocol?)?
+    var buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryMediaProviderClosure: ((JoinedRoomProxyProtocol, RoomTimelineItemFactoryProtocol, MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError>)?
 
-    func buildPinnedEventsTimelineController(roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol) async -> TimelineControllerProtocol? {
+    func buildPinnedEventsTimelineController(roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError> {
         buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryMediaProviderCallsCount += 1
         buildPinnedEventsTimelineControllerRoomProxyTimelineItemFactoryMediaProviderReceivedArguments = (roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider)
         DispatchQueue.main.async {
