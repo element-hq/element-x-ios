@@ -13,6 +13,7 @@ import MatrixRustSDK
 enum QRCodeLoginServiceError: Error {
     case failedLoggingIn
     case invalidQRCode
+    case providerNotAllowed(scannedProvider: String, allowedProviders: [String])
     case cancelled
     case connectionInsecure
     case declined

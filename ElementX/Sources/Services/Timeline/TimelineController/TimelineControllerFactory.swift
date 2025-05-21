@@ -21,6 +21,23 @@ struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
                            appSettings: ServiceLocator.shared.settings)
     }
     
+    func buildThreadTimelineController(eventID: String,
+                                       roomProxy: JoinedRoomProxyProtocol,
+                                       timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                       mediaProvider: MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError> {
+        switch await roomProxy.threadTimeline(eventID: eventID) {
+        case .success(let timelineProxy):
+            return .success(TimelineController(roomProxy: roomProxy,
+                                               timelineProxy: timelineProxy,
+                                               initialFocussedEventID: nil,
+                                               timelineItemFactory: timelineItemFactory,
+                                               mediaProvider: mediaProvider,
+                                               appSettings: ServiceLocator.shared.settings))
+        case .failure(let error):
+            return .failure(.roomProxyError(error))
+        }
+    }
+    
     func buildPinnedEventsTimelineController(roomProxy: JoinedRoomProxyProtocol,
                                              timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                              mediaProvider: MediaProviderProtocol) async -> TimelineControllerProtocol? {

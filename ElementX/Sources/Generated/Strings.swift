@@ -1162,7 +1162,7 @@ internal enum L10n {
   internal static var screenBottomSheetManageRoomMemberUnbanMemberConfirmationDescription: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description") }
   /// Are you sure you want to unban this member?
   internal static var screenBottomSheetManageRoomMemberUnbanMemberConfirmationTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title") }
-  /// Unbanning $1%@
+  /// Unbanning %1$@
   internal static func screenBottomSheetManageRoomMemberUnbanningUser(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unbanning_user", String(describing: p1))
   }
@@ -1218,6 +1218,14 @@ internal enum L10n {
   /// %1$@ is not allowed to connect to %2$@.
   internal static func screenChangeServerErrorUnauthorizedHomeserver(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_unauthorized_homeserver", String(describing: p1), String(describing: p2))
+  }
+  /// This app has been configured to allow: %1$@.
+  internal static func screenChangeServerErrorUnauthorizedHomeserverContent(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_change_server_error_unauthorized_homeserver_content", String(describing: p1))
+  }
+  /// Account provider %1$@ not allowed.
+  internal static func screenChangeServerErrorUnauthorizedHomeserverTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_change_server_error_unauthorized_homeserver_title", String(describing: p1))
   }
   /// Homeserver URL
   internal static var screenChangeServerFormHeader: String { return L10n.tr("Localizable", "screen_change_server_form_header") }
@@ -2450,6 +2458,8 @@ internal enum L10n {
   internal static func screenServerConfirmationTitleLogin(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_server_confirmation_title_login", String(describing: p1))
   }
+  /// Choose account provider
+  internal static var screenServerConfirmationTitlePickerMode: String { return L10n.tr("Localizable", "screen_server_confirmation_title_picker_mode") }
   /// You’re about to create an account on %1$@
   internal static func screenServerConfirmationTitleRegister(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_server_confirmation_title_register", String(describing: p1))

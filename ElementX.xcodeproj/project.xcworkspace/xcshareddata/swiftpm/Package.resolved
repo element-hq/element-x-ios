@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "e84fa0642d90ed123520fd458d920945becf6ba8",
-        "version" : "25.5.15"
+        "revision" : "a290a27931a75db67b93f27329b09f5110553415",
+        "version" : "25.5.19"
       }
     },
     {
@@ -257,7 +257,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
-        "revision" : "b467f413c83e2ceba59ba798583a1c57db9700cb"
+        "revision" : "1be8144023c367c5de701a6313ed29a3a10bf59b",
+        "version" : "1.18.3"
       }
     },
     {
@@ -301,8 +302,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
       "state" : {
-        "branch" : "test-traits",
-        "revision" : "ccc75ae935e2fee1b2c7d8040c21538def4310d8"
+        "revision" : "39de59b2d47f7ef3ca88a039dff3084688fe27f4",
+        "version" : "1.5.2"
       }
     }
   ],

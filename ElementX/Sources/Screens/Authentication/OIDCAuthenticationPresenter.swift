@@ -37,6 +37,9 @@ class OIDCAuthenticationPresenter: NSObject {
             
             session.prefersEphemeralWebBrowserSession = false
             session.presentationContextProvider = self
+            session.additionalHeaderFields = [
+                "X-Element-User-Agent": UserAgentBuilder.makeASCIIUserAgent()
+            ]
             
             activeSession = session
             session.start()

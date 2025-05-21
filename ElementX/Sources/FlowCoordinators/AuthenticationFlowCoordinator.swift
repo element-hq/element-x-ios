@@ -31,8 +31,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         /// The initial screen shown when you first launch the app.
         case startScreen
-        /// The initial screen with a provisioning link applied.
-        case provisionedStartScreen
         
         /// The screen used for the whole QR Code flow.
         case qrCodeLoginScreen
@@ -87,7 +85,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         case cancelledPasswordLogin(previousState: State)
         
         /// The user has finished reporting a problem (or viewing the logs).
-        case bugReportFlowComplete(previousState: State)
+        case bugReportFlowComplete
         
         /// The user has successfully signed in. The new session can be found in the `userInfo`.
         case signedIn
@@ -133,6 +131,11 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         switch appRoute {
         case .accountProvisioningLink(let provisioningParameters):
+            guard appSettings.allowOtherAccountProviders else {
+                MXLog.error("Provisioning links not allowed, ignoring.")
+                return
+            }
+            
             if stateMachine.state != .startScreen {
                 clearRoute(animated: animated)
             }
@@ -145,7 +148,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     func clearRoute(animated: Bool) {
         switch stateMachine.state {
-        case .initial, .startScreen, .provisionedStartScreen:
+        case .initial, .startScreen:
             break
         case .qrCodeLoginScreen:
             navigationStackCoordinator.setSheetCoordinator(nil)
@@ -174,8 +177,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
             self?.showStartScreen(fromState: .initial)
         }
         
-        stateMachine.addRoutes(event: .applyProvisioningParameters, transitions: [.initial => .provisionedStartScreen,
-                                                                                  .startScreen => .provisionedStartScreen]) { [weak self] context in
+        stateMachine.addRoutes(event: .applyProvisioningParameters, transitions: [.initial => .startScreen,
+                                                                                  .startScreen => .startScreen]) { [weak self] context in
             guard let provisioningParameters = context.userInfo as? AccountProvisioningParameters else { fatalError("The authentication configuration is missing.") }
             self?.showStartScreen(fromState: context.fromState, applying: provisioningParameters)
         }
@@ -206,31 +209,29 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .dismissedServerSelection, transitions: [.serverSelectionScreen => .serverConfirmationScreen])
         
         stateMachine.addRoutes(event: .continueWithOIDC, transitions: [.serverConfirmationScreen => .oidcAuthentication,
-                                                                       .provisionedStartScreen => .oidcAuthentication]) { [weak self] context in
+                                                                       .startScreen => .oidcAuthentication]) { [weak self] context in
             guard let (oidcData, window) = context.userInfo as? (OIDCAuthorizationDataProxy, UIWindow) else {
                 fatalError("Missing the OIDC data and presentation anchor.")
             }
             self?.showOIDCAuthentication(oidcData: oidcData, presentationAnchor: window, fromState: context.fromState)
         }
         stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .serverConfirmationScreen), transitions: [.oidcAuthentication => .serverConfirmationScreen])
-        stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .provisionedStartScreen), transitions: [.oidcAuthentication => .provisionedStartScreen])
+        stateMachine.addRoutes(event: .cancelledOIDCAuthentication(previousState: .startScreen), transitions: [.oidcAuthentication => .startScreen])
         
         stateMachine.addRoutes(event: .continueWithPassword, transitions: [.serverConfirmationScreen => .loginScreen,
-                                                                           .provisionedStartScreen => .loginScreen]) { [weak self] context in
+                                                                           .startScreen => .loginScreen]) { [weak self] context in
             let loginHint = context.userInfo as? String
             self?.showLoginScreen(loginHint: loginHint, fromState: context.fromState)
         }
         stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .serverConfirmationScreen), transitions: [.loginScreen => .serverConfirmationScreen])
-        stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .provisionedStartScreen), transitions: [.loginScreen => .provisionedStartScreen])
+        stateMachine.addRoutes(event: .cancelledPasswordLogin(previousState: .startScreen), transitions: [.loginScreen => .startScreen])
         
         // Bug Report
         
-        stateMachine.addRoutes(event: .reportProblem, transitions: [.startScreen => .bugReportFlow,
-                                                                    .provisionedStartScreen => .bugReportFlow]) { [weak self] context in
-            self?.startBugReportFlow(fromState: context.fromState)
+        stateMachine.addRoutes(event: .reportProblem, transitions: [.startScreen => .bugReportFlow]) { [weak self] _ in
+            self?.startBugReportFlow()
         }
-        stateMachine.addRoutes(event: .bugReportFlowComplete(previousState: .startScreen), transitions: [.bugReportFlow => .startScreen])
-        stateMachine.addRoutes(event: .bugReportFlowComplete(previousState: .provisionedStartScreen), transitions: [.bugReportFlow => .provisionedStartScreen])
+        stateMachine.addRoutes(event: .bugReportFlowComplete, transitions: [.bugReportFlow => .startScreen])
         
         // Completion
         
@@ -239,6 +240,12 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
                                                                .loginScreen => .complete]) { [weak self] context in
             guard let userSession = context.userInfo as? UserSessionProtocol else { fatalError("The user session wasn't included in the context") }
             self?.userHasSignedIn(userSession: userSession)
+        }
+        
+        // Logging
+        
+        stateMachine.addAnyHandler(.any => .any) { context in
+            MXLog.info("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(String(describing: context.event))`.")
         }
         
         // Unhandled
@@ -294,6 +301,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     private func showQRCodeLoginScreen() {
         let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(qrCodeLoginService: qrCodeLoginService,
+                                                                         canSignInManually: appSettings.allowOtherAccountProviders, // No need to worry about provisioning links as we hide QR login.
                                                                          orientationManager: appMediator.windowManager,
                                                                          appMediator: appMediator))
         coordinator.actionsPublisher.sink { [weak self] action in
@@ -330,6 +338,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         let parameters = ServerConfirmationScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                        authenticationFlow: authenticationFlow,
+                                                                       appSettings: appSettings,
                                                                        userIndicatorController: userIndicatorController)
         let coordinator = ServerConfirmationScreenCoordinator(parameters: parameters)
         
@@ -426,7 +435,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Bug Report
     
-    private func startBugReportFlow(fromState: State) {
+    private func startBugReportFlow() {
         let coordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(navigationStackCoordinator),
                                                                      userIndicatorController: userIndicatorController,
                                                                      bugReportService: bugReportService,
@@ -434,7 +443,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action {
             case .complete:
-                self?.stateMachine.tryEvent(.bugReportFlowComplete(previousState: fromState))
+                self?.stateMachine.tryEvent(.bugReportFlowComplete)
             }
         }
         .store(in: &cancellables)

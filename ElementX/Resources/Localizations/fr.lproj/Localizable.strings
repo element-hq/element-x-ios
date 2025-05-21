@@ -421,11 +421,11 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Retirer le membre du salon";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Retirer le membre et interdire l'adhésion à l'avenir ?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Enlever %1$@…";
-"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
-"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
+"screen_bottom_sheet_manage_room_member_unban" = "Débannir du salon";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Débannir";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "L'utilisateur pourra à nouveau rejoindre le salon s'il est invité.";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Êtes-vous sûr de vouloir débannir cet utilisateur?";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Débannissement de %1$@";
 "screen_create_room_room_access_section_anyone_option_description" = "Tout le monde peut rejoindre ce salon";
 "screen_create_room_room_access_section_anyone_option_title" = "Tout le monde";
 "screen_create_room_room_access_section_header" = "Accès au salon";
@@ -617,7 +617,9 @@
 "screen_change_server_error_invalid_homeserver" = "Nous n’avons pas pu atteindre ce serveur d’accueil. Vérifiez que vous avez correctement saisi l’URL du serveur d’accueil. Si l’URL est correcte, contactez l’administrateur de votre serveur d’accueil pour obtenir de l’aide.";
 "screen_change_server_error_invalid_well_known" = "Ce fournisseur de compte n'est pas disponible en raison d'un problème dans le fichier .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Le fournisseur de compte sélectionné ne prend pas en charge le sliding sync. Une mise à jour du serveur est nécessaire pour pouvoir utiliser %1$@.";
-"screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
+"screen_change_server_error_unauthorized_homeserver" = "%1$@ n'est pas autorisé à se connecter à %2$@.";
+"screen_change_server_error_unauthorized_homeserver_content" = "Cette application a été configurée pour autoriser: %1$@.";
+"screen_change_server_error_unauthorized_homeserver_title" = "Le fournisseur de compte %1$@ n'est pas autorisé.";
 "screen_change_server_form_header" = "URL du serveur d’accueil";
 "screen_change_server_form_notice" = "Saisissez une adresse de domaine.";
 "screen_change_server_subtitle" = "Quelle est l’adresse de votre serveur ?";
@@ -765,7 +767,7 @@
 "screen_notification_settings_system_notifications_turned_off" = "Les notifications du système sont désactivées";
 "screen_notification_settings_title" = "Notifications";
 "screen_onboarding_sign_in_manually" = "Se connecter manuellement";
-"screen_onboarding_sign_in_to" = "Sign in to %1$@";
+"screen_onboarding_sign_in_to" = "Se connecter à %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Se connecter avec un QR code";
 "screen_onboarding_sign_up" = "Créer un compte";
 "screen_onboarding_welcome_message" = "Bienvenue dans l’application %1$@ la plus rapide de tous les temps. Boosté pour plus de rapidité et de simplicité.";

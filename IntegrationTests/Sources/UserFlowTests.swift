@@ -193,6 +193,11 @@ class UserFlowTests: XCTestCase {
         XCTAssertTrue(firstRoomMember.waitForExistence(timeout: 1000.0))
         firstRoomMember.tap(.center)
         
+        // Open the profile from the bottom sheet
+        let viewProfileButton = app.buttons[A11yIdentifiers.manageRoomMemberSheet.viewProfile]
+        XCTAssertTrue(viewProfileButton.waitForExistence(timeout: 10.0))
+        tapOnButton(A11yIdentifiers.manageRoomMemberSheet.viewProfile, waitForDisappearance: true)
+        
         // Go back to the room member details
         tapOnBackButton("People")
         

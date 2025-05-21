@@ -95,7 +95,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             // sender info are read inside the `TimelineAccessibilityModifier`
             .accessibilityHidden(true)
             .onTapGesture {
-                context.send(viewAction: .tappedOnSenderDetails(userID: timelineItem.sender.id))
+                context.send(viewAction: .tappedOnSenderDetails(sender: timelineItem.sender))
             }
             .padding(.top, 8)
         }
@@ -120,7 +120,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .onTapGesture { }
             }
             
-            if let threadSummary = timelineItem.properties.threadSummary {
+            if context.viewState.timelineKind != .thread, let threadSummary = timelineItem.properties.threadSummary {
                 TimelineThreadSummaryView(threadSummary: threadSummary) {
                     context.send(viewAction: .displayThread(itemID: timelineItem.id))
                 }
@@ -177,13 +177,13 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder
     var contentWithReply: some View {
         TimelineBubbleLayout(spacing: 8) {
-            if timelineItem.properties.isThreaded {
+            if context.viewState.timelineKind != .thread, timelineItem.properties.isThreaded {
                 ThreadDecorator()
                     .padding(.leading, 4)
                     .layoutPriority(TimelineBubbleLayout.Priority.regularText)
             }
             
-            if let replyDetails = timelineItem.properties.replyDetails {
+            if shouldShowReplyDetails, let replyDetails = timelineItem.properties.replyDetails {
                 // The rendered reply bubble with a greedy width. The custom layout prevents
                 // the infinite width from increasing the overall width of the view.
                 
@@ -210,6 +210,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .layoutPriority(TimelineBubbleLayout.Priority.regularText)
                 .cornerRadius(timelineItem.contentCornerRadius)
         }
+    }
+    
+    private var shouldShowReplyDetails: Bool {
+        !timelineItem.properties.isThreaded || (timelineItem.properties.isThreaded && context.viewState.timelineKind != .thread)
     }
     
     private var messageBubbleTopPadding: CGFloat {

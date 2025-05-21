@@ -161,6 +161,61 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
         // Splash Screen: Tap get started button
         app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
         
+        // No server selection should be shown here
+        
+        // Login Screen: Wait for continue button to appear
+        let continueButton = app.buttons[A11yIdentifiers.loginScreen.continue]
+        XCTAssertTrue(continueButton.waitForExistence(timeout: 2.0))
+        
+        // Login Screen: Enter valid credentials
+        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice\n", app: app)
+        app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678", app: app)
+        
+        // Login Screen: Tap next
+        app.buttons[A11yIdentifiers.loginScreen.continue].tap()
+    }
+    
+    func testSingleProviderLoginWithPassword() async throws {
+        // Given the authentication flow with a single supported server.
+        let app = Application.launch(.singleProviderAuthenticationFlow)
+        
+        // Then the start screen should be configured appropriately.
+        try await app.assertScreenshot()
+        
+        // Check the bug report flow works.
+        try await verifyReportBugButton(app)
+        
+        // Splash Screen: Tap get started button
+        app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
+        
+        // No server selection should be shown here
+        
+        // Login Screen: Wait for continue button to appear
+        let continueButton = app.buttons[A11yIdentifiers.loginScreen.continue]
+        XCTAssertTrue(continueButton.waitForExistence(timeout: 2.0))
+        
+        // Login Screen: Enter valid credentials
+        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice\n", app: app)
+        app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678", app: app)
+        
+        // Login Screen: Tap next
+        app.buttons[A11yIdentifiers.loginScreen.continue].tap()
+    }
+    
+    func testMultipleProvidersLoginWithPassword() async throws {
+        // Given the authentication flow with only 2 allowed servers.
+        let app = Application.launch(.multipleProvidersAuthenticationFlow)
+        
+        // Then the start screen should be configured appropriately.
+        try await app.assertScreenshot()
+        
+        // Splash Screen: Tap get started button
+        app.buttons[A11yIdentifiers.authenticationStartScreen.signIn].tap()
+        
+        // Server Confirmation: Tap the picker and confirm
+        app.switches.matching(identifier: A11yIdentifiers.serverConfirmationScreen.serverPicker).element(boundBy: 1).tap()
+        app.buttons[A11yIdentifiers.serverConfirmationScreen.continue].tap()
+        
         // Login Screen: Wait for continue button to appear
         let continueButton = app.buttons[A11yIdentifiers.loginScreen.continue]
         XCTAssertTrue(continueButton.waitForExistence(timeout: 2.0))

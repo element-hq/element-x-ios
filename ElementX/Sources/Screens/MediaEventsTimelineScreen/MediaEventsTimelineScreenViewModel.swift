@@ -81,7 +81,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
                  .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen,
                  .displaySenderDetails, .displayMessageForwarding, .displayLocation, .displayResolveSendFailure,
-                 .composer, .hasScrolled, .viewInRoomTimeline:
+                 .displayThread, .composer, .hasScrolled, .viewInRoomTimeline:
                 break
             }
         }
@@ -103,7 +103,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
                  .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen,
                  .displaySenderDetails, .displayMessageForwarding, .displayLocation, .displayResolveSendFailure,
-                 .composer, .hasScrolled, .viewInRoomTimeline:
+                 .displayThread, .composer, .hasScrolled, .viewInRoomTimeline:
                 break
             }
         }

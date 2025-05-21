@@ -425,7 +425,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
-"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning $1%@";
+"screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_room_access_section_header" = "Room Access";
@@ -618,6 +618,8 @@
 "screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the .well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
+"screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
+"screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
 "screen_change_server_form_header" = "Homeserver URL";
 "screen_change_server_form_notice" = "Enter a domain address.";
 "screen_change_server_subtitle" = "What is the address of your server?";
@@ -991,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix is an open network for secure, decentralised communication.";
 "screen_server_confirmation_message_register" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";
 "screen_server_confirmation_title_login" = "You’re about to sign in to %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "You’re about to create an account on %1$@";
 "screen_session_verification_cancelled_subtitle" = "Something doesn’t seem right. Either the request timed out or the request was denied.";
 "screen_session_verification_compare_emojis_subtitle" = "Confirm that the emojis below match those shown on your other session.";
