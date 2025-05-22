@@ -8,8 +8,51 @@
 import SwiftUI
 import WysiwygComposer
 
+struct TimelineView: View {
+    @ObservedObject var timelineContext: TimelineViewModel.Context
+    
+    var body: some View {
+        TimelineViewRepresentable()
+            .id(timelineContext.viewState.roomID)
+            .environment(\.focussedEventID, timelineContext.viewState.timelineState.focussedEvent?.eventID)
+            .alert(item: $timelineContext.alertInfo)
+            .sheet(item: $timelineContext.manageMemberViewModel) {
+                ManageRoomMemberSheetView(context: $0.context)
+            }
+            .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }
+            .sheet(item: $timelineContext.actionMenuInfo) { info in
+                let actions = TimelineItemMenuActionProvider(timelineItem: info.item,
+                                                             canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
+                                                             canCurrentUserRedactOthers: timelineContext.viewState.canCurrentUserRedactOthers,
+                                                             canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,
+                                                             pinnedEventIDs: timelineContext.viewState.pinnedEventIDs,
+                                                             isDM: timelineContext.viewState.isDirectOneToOneRoom,
+                                                             isViewSourceEnabled: timelineContext.viewState.isViewSourceEnabled,
+                                                             timelineKind: timelineContext.viewState.timelineKind,
+                                                             emojiProvider: timelineContext.viewState.emojiProvider)
+                    .makeActions()
+                if let actions {
+                    TimelineItemMenu(item: info.item, actions: actions)
+                }
+            }
+            .sheet(item: $timelineContext.reactionSummaryInfo) {
+                ReactionsSummaryView(reactions: $0.reactions,
+                                     members: timelineContext.viewState.members,
+                                     mediaProvider: timelineContext.mediaProvider,
+                                     selectedReactionKey: $0.selectedKey)
+                    .edgesIgnoringSafeArea([.bottom])
+            }
+            .sheet(item: $timelineContext.readReceiptsSummaryInfo) {
+                ReadReceiptsSummaryView(orderedReadReceipts: $0.orderedReceipts)
+            }
+            // Ensure these are available in the sheets as well. The order is important.
+            .environmentObject(timelineContext)
+            .environment(\.timelineContext, timelineContext)
+    }
+}
+
 /// A table view wrapper that displays the timeline of a room.
-struct TimelineView: UIViewControllerRepresentable {
+struct TimelineViewRepresentable: UIViewControllerRepresentable {
     @EnvironmentObject private var viewModelContext: TimelineViewModel.Context
     @Environment(\.openURL) var openURL
 
