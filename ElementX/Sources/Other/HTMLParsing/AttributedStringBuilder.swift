@@ -43,7 +43,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         let mutableAttributedString = NSMutableAttributedString(string: string)
         removeDefaultForegroundColors(mutableAttributedString)
         addLinksAndMentions(mutableAttributedString)
-        detectPermalinks(mutableAttributedString)
+        detectPermalinks(mutableAttributedString, isClickable: true)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
         Self.cacheValue(result, forKey: string, cacheKey: cacheKey)
@@ -104,7 +104,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         addLinksAndMentions(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
-        detectPermalinks(mutableAttributedString)
+        detectPermalinks(mutableAttributedString, isClickable: true)
         removeDTCoreTextArtifacts(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
@@ -282,14 +282,14 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
-    func detectPermalinks(_ attributedString: NSMutableAttributedString) {
+    func detectPermalinks(_ attributedString: NSMutableAttributedString, isClickable: Bool) {
         attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if value != nil {
                 if let url = value as? URL,
                    let matrixEntity = parseMatrixEntityFrom(uri: url.absoluteString) {
                     switch matrixEntity.id {
                     case .user(let userID):
-                        mentionBuilder.handleUserMention(for: attributedString, in: range, url: url, userID: userID, userDisplayName: nil)
+                        mentionBuilder.handleUserMention(for: attributedString, in: range, url: url, userID: userID, userDisplayName: nil, isClickable: isClickable)
                     case .room(let roomID):
                         mentionBuilder.handleRoomIDMention(for: attributedString, in: range, url: url, roomID: roomID)
                     case .roomAlias(let alias):
@@ -407,7 +407,7 @@ extension NSAttributedString.Key {
 }
 
 protocol MentionBuilderProtocol {
-    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String, userDisplayName: String?)
+    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String, userDisplayName: String?, isClickable: Bool)
     func handleRoomIDMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, roomID: String)
     func handleRoomAliasMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, roomAlias: String, roomDisplayName: String?)
     func handleEventOnRoomAliasMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, eventID: String, roomAlias: String)

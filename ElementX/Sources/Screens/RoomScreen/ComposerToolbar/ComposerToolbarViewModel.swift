@@ -479,7 +479,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 attributedString = NSMutableAttributedString(string: string, attributes: [.link: URL(string: urlString) as Any])
             }
             
-            attributedStringBuilder.detectPermalinks(attributedString)
+            attributedStringBuilder.detectPermalinks(attributedString, isClickable: false)
             
             // In RTE mentions don't need to be handled as links
             attributedString.removeAttribute(.link, range: NSRange(location: 0, length: attributedString.length))
@@ -500,7 +500,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             } else {
                 mentionedUsersMap[suggestion.id] = suggestion.displayName
                 let attributedString = NSMutableAttributedString(attributedString: state.bindings.plainComposerText)
-                mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: user.id, userDisplayName: user.displayName)
+                mentionBuilder.handleUserMention(for: attributedString, in: suggestion.range, url: url, userID: user.id, userDisplayName: user.displayName, isClickable: false)
                 /// Appending space after each mention to maintain text formatting
                 attributedString.appendString(" ")
                 state.bindings.plainComposerText = attributedString
@@ -602,7 +602,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 attributedString.addAttribute(.MatrixAllUsersMention, value: true, range: match.range)
             }
             
-            attributedStringBuilder.detectPermalinks(attributedString)
+            attributedStringBuilder.detectPermalinks(attributedString, isClickable: false)
             
             state.bindings.plainComposerText = attributedString
         }

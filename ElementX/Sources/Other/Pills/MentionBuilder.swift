@@ -19,7 +19,8 @@ struct MentionBuilder: MentionBuilderProtocol {
                            in range: NSRange,
                            url: URL,
                            userID: String,
-                           userDisplayName: String?) {
+                           userDisplayName: String?,
+                           isClickable: Bool) {
         let attributesToRestore = getAttributesToRestore(for: attributedString, in: range)
         
         let attachmentData = PillTextAttachmentData(type: .user(userID: userID), font: attributesToRestore.font)
@@ -33,7 +34,7 @@ struct MentionBuilder: MentionBuilderProtocol {
             return
         }
         
-        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: url,
+        var attachmentAttributes: [NSAttributedString.Key: Any] = [.link: isClickable ? url : "",
                                                                    .MatrixUserID: userID,
                                                                    .font: attributesToRestore.font,
                                                                    .foregroundColor: attributesToRestore.foregroundColor]

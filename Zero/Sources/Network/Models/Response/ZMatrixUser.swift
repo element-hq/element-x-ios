@@ -4,7 +4,6 @@ import Tagged
 public struct ZMatrixUser: Codable, Identifiable {
     public let id: Tagged<Self, String>
     public let profileId: String
-    public let handle: String
     public let lastActiveAt: Date?
     public let isOnline: Bool?
     public let isPending: Bool
@@ -25,7 +24,7 @@ public struct ZMatrixUser: Codable, Identifiable {
             }
         }
         
-        return handle
+        return ""
     }
 }
 
