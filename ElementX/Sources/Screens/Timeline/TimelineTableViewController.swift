@@ -45,7 +45,7 @@ class TypingMembersObservableObject: ObservableObject {
 /// extra keyboard handling magic that wasn't playing well with SwiftUI (as of iOS 16.1).
 /// Also this TableViewController uses a **flipped tableview**
 class TimelineTableViewController: UIViewController {
-    private let coordinator: TimelineView.Coordinator
+    private let coordinator: TimelineViewRepresentable.Coordinator
     private let tableView = UITableView(frame: .zero, style: .plain)
     
     var timelineItemsDictionary = OrderedDictionary<TimelineItemIdentifier.UniqueID, RoomTimelineItemViewState>() {
@@ -168,7 +168,7 @@ class TimelineTableViewController: UIViewController {
     /// Whether or not the view has been shown on screen yet.
     private var hasAppearedOnce = false
     
-    init(coordinator: TimelineView.Coordinator,
+    init(coordinator: TimelineViewRepresentable.Coordinator,
          isScrolledToBottom: Binding<Bool>,
          scrollToBottomPublisher: PassthroughSubject<Void, Never>) {
         self.coordinator = coordinator
