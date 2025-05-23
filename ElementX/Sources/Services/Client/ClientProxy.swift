@@ -908,9 +908,12 @@ class ClientProxy: ClientProxyProtocol {
             
             switch roomListItem.membership() {
             case .invited:
-                return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
-                                                           roomPreview: roomListItem.previewRoom(via: []),
-                                                           ownUserID: userID))
+                guard let room = try client.getRoom(roomId: roomID) else {
+                    MXLog.error("Could not find room with ID: \(roomID)")
+                    return nil
+                }
+                
+                return try await .invited(InvitedRoomProxy(room: room))
             case .knocked:
                 if appSettings.knockingEnabled {
                     return try await .knocked(KnockedRoomProxy(roomListItem: roomListItem,
