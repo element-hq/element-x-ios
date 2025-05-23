@@ -13,7 +13,7 @@ typealias FeedUserProfileScreenViewModelType = StateStoreViewModel<FeedUserProfi
 class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUserProfileScreenViewModelProtocol {
     
     private let clientProxy: ClientProxyProtocol
-    private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol
+    private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol?
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let FEEDS_PAGE_COUNT = 10
@@ -26,7 +26,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     
     init(clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
-         feedUpdatedProtocol: FeedDetailsUpdatedProtocol,
+         feedUpdatedProtocol: FeedDetailsUpdatedProtocol?,
          userIndicatorController: UserIndicatorControllerProtocol,
          userProfile: ZPostUserProfile) {
         self.clientProxy = clientProxy
@@ -169,7 +169,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 if let index = state.userFeeds.firstIndex(where: { $0.id == homePost.id }) {
                     state.userFeeds[index] = homePost
                 }
-                feedUpdatedProtocol.onFeedUpdated(postId)
+                feedUpdatedProtocol?.onFeedUpdated(postId)
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
                 displayError()

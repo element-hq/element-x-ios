@@ -99,3 +99,11 @@ extension SearchUsersResultsProxy {
 extension UserProfileProxy: Identifiable {
     var id: String { userID }
 }
+
+extension UserProfileProxy {
+    func toZeroFeedProfile(primaryZid: String) -> ZPostUserProfile {
+        .init(userId: userID.matrixIdToCleanHex(), createdAt: nil, primaryZid: primaryZid,
+              firstName: displayName ?? "", profileImage: avatarURL?.absoluteString,
+              publicAddress: nil, followersCount: nil, followingCount: nil)
+    }
+}

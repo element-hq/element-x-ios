@@ -100,6 +100,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - used to avoid deallocation
     private var mediaEventsTimelineFlowCoordinator: MediaEventsTimelineFlowCoordinator?
     // periphery:ignore - used to avoid deallocation
+    private var userFeedProfileFlowCoordinator: UserFeedProfileFlowCoordinator?
+    // periphery:ignore - used to avoid deallocation
     private var childRoomFlowCoordinator: RoomFlowCoordinator?
     
     private let stateMachine: StateMachine<State, Event> = .init(state: .initial)
@@ -1325,32 +1327,33 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentRoomMemberDetails(userID: String) {
-        let params = RoomMemberDetailsScreenCoordinatorParameters(userID: userID,
-                                                                  roomProxy: roomProxy,
-                                                                  clientProxy: userSession.clientProxy,
-                                                                  mediaProvider: userSession.mediaProvider,
-                                                                  userIndicatorController: userIndicatorController,
-                                                                  analytics: analytics)
-        let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
-        
-        coordinator.actions.sink { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .openUserProfile:
-                stateMachine.tryEvent(.presentUserProfile(userID: userID))
-            case .openDirectChat(let roomID):
-                stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
-            case .startCall(let roomID):
-                Task { await self.presentCallScreen(roomID: roomID) }
-            case .verifyUser(let userID):
-                actionsSubject.send(.verifyUser(userID: userID))
-            }
-        }
-        .store(in: &cancellables)
-
-        navigationStackCoordinator.push(coordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissRoomMemberDetails)
-        }
+//        let params = RoomMemberDetailsScreenCoordinatorParameters(userID: userID,
+//                                                                  roomProxy: roomProxy,
+//                                                                  clientProxy: userSession.clientProxy,
+//                                                                  mediaProvider: userSession.mediaProvider,
+//                                                                  userIndicatorController: userIndicatorController,
+//                                                                  analytics: analytics)
+//        let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
+//        
+//        coordinator.actions.sink { [weak self] action in
+//            guard let self else { return }
+//            switch action {
+//            case .openUserProfile:
+//                stateMachine.tryEvent(.presentUserProfile(userID: userID))
+//            case .openDirectChat(let roomID):
+//                stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
+//            case .startCall(let roomID):
+//                Task { await self.presentCallScreen(roomID: roomID) }
+//            case .verifyUser(let userID):
+//                actionsSubject.send(.verifyUser(userID: userID))
+//            }
+//        }
+//        .store(in: &cancellables)
+//
+//        navigationStackCoordinator.push(coordinator) { [weak self] in
+//            self?.stateMachine.tryEvent(.dismissRoomMemberDetails)
+//        }
+        startUserProfileWithFeedFlow(userId: userID)
     }
     
     private func replaceRoomMemberDetailsWithUserProfile(userID: String) {
@@ -1782,6 +1785,64 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         mediaEventsTimelineFlowCoordinator = flowCoordinator
         
         flowCoordinator.start()
+    }
+    
+    private func startUserProfileWithFeedFlow(userId: String) {
+        let flowCoordinator = UserFeedProfileFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
+                                                             userSession: userSession,
+                                                             userIndicatorController: userIndicatorController,
+                                                             appMediator: appMediator,
+                                                             fromHomeFlow: false,
+                                                             userId: userId,
+                                                             userFeedProfile: nil,
+                                                             feedUpdatedProtocol: nil)
+        flowCoordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .finished:
+                self.stateMachine.tryEvent(.dismissRoomMemberDetails)
+            case .presentMatrixProfile:
+                presentMatrixProfileScreen(userID: userId)
+            case .presentFeedDetails(_):
+                break
+            case .dmUser(let userId):
+                break
+            }
+        }
+        .store(in: &cancellables)
+        
+        userFeedProfileFlowCoordinator = flowCoordinator
+        flowCoordinator.start()
+    }
+    
+    private func presentMatrixProfileScreen(userID: String) {
+        let params = RoomMemberDetailsScreenCoordinatorParameters(userID: userID,
+                                                                  roomProxy: roomProxy,
+                                                                  clientProxy: userSession.clientProxy,
+                                                                  mediaProvider: userSession.mediaProvider,
+                                                                  userIndicatorController: userIndicatorController,
+                                                                  analytics: analytics)
+        let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
+
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .openUserProfile:
+                stateMachine.tryEvent(.presentUserProfile(userID: userID))
+            case .openDirectChat(let roomID):
+                stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
+            case .startCall(let roomID):
+                Task { await self.presentCallScreen(roomID: roomID) }
+            case .verifyUser(let userID):
+                actionsSubject.send(.verifyUser(userID: userID))
+            }
+        }
+        .store(in: &cancellables)
+
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissRoomMemberDetails)
+        }
     }
     
     private static let loadingIndicatorID = "\(RoomFlowCoordinator.self)-Loading"

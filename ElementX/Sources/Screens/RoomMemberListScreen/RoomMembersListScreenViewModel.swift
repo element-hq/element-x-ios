@@ -142,31 +142,32 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     }
     
     private func selectMember(_ member: RoomMemberDetails) {
-        guard currentUserProxy?.userID != member.id else {
-            showMemberDetails(member)
-            return
-        }
-        
-        let manageMemeberViewModel = ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: member),
-                                                                    permissions: .init(canKick: state.canKickUsers,
-                                                                                       canBan: state.canBanUsers,
-                                                                                       ownPowerLevel: currentUserProxy?.powerLevel ?? 0),
-                                                                    roomProxy: roomProxy,
-                                                                    userIndicatorController: userIndicatorController,
-                                                                    analyticsService: analytics,
-                                                                    mediaProvider: mediaProvider)
-        manageMemeberViewModel.actions.sink { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .dismiss(let shouldShowDetails):
-                state.bindings.manageMemeberViewModel = nil
-                if shouldShowDetails {
-                    showMemberDetails(member)
-                }
-            }
-        }
-        .store(in: &cancellables)
-        state.bindings.manageMemeberViewModel = manageMemeberViewModel
+//        guard currentUserProxy?.userID != member.id else {
+//            showMemberDetails(member)
+//            return
+//        }
+//        
+//        let manageMemeberViewModel = ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: member),
+//                                                                    permissions: .init(canKick: state.canKickUsers,
+//                                                                                       canBan: state.canBanUsers,
+//                                                                                       ownPowerLevel: currentUserProxy?.powerLevel ?? 0),
+//                                                                    roomProxy: roomProxy,
+//                                                                    userIndicatorController: userIndicatorController,
+//                                                                    analyticsService: analytics,
+//                                                                    mediaProvider: mediaProvider)
+//        manageMemeberViewModel.actions.sink { [weak self] action in
+//            guard let self else { return }
+//            switch action {
+//            case .dismiss(let shouldShowDetails):
+//                state.bindings.manageMemeberViewModel = nil
+//                if shouldShowDetails {
+//                    showMemberDetails(member)
+//                }
+//            }
+//        }
+//        .store(in: &cancellables)
+//        state.bindings.manageMemeberViewModel = manageMemeberViewModel
+        showMemberDetails(member)
     }
     
     private func showMemberDetails(_ member: RoomMemberDetails) {

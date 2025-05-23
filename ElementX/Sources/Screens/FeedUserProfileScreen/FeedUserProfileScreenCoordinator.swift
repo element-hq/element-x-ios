@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FeedUserProfileScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let feedUpdatedProtocol: FeedDetailsUpdatedProtocol
+    let feedUpdatedProtocol: FeedDetailsUpdatedProtocol?
     let userProfile: ZPostUserProfile
 }
 
