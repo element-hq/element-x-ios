@@ -24,12 +24,12 @@ extension TimelineProxyMock {
         sendReadReceiptForTypeReturnValue = .success(())
         
         if configuration.isAutoUpdating {
-            underlyingTimelineProvider = AutoUpdatingTimelineProviderMock()
+            underlyingTimelineItemProvider = AutoUpdatingTimelineItemProviderMock()
         } else {
-            let timelineProvider = TimelineProviderMock()
-            timelineProvider.paginationState = .init(backward: configuration.timelineStartReached ? .timelineEndReached : .idle, forward: .timelineEndReached)
-            timelineProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
-            underlyingTimelineProvider = timelineProvider
+            let timelineItemProvider = TimelineItemProviderMock()
+            timelineItemProvider.paginationState = .init(backward: configuration.timelineStartReached ? .timelineEndReached : .idle, forward: .timelineEndReached)
+            timelineItemProvider.underlyingMembershipChangePublisher = PassthroughSubject().eraseToAnyPublisher()
+            underlyingTimelineItemProvider = timelineItemProvider
         }
     }
 }

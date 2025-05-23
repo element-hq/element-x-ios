@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-class TimelineProvider: TimelineProviderProtocol {
+class TimelineItemProvider: TimelineItemProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
     private let serialDispatchQueue: DispatchQueue
     
@@ -46,7 +46,7 @@ class TimelineProvider: TimelineProviderProtocol {
     }
 
     init(timeline: Timeline, kind: TimelineKind, paginationStatePublisher: AnyPublisher<PaginationState, Never>) {
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.timelineprovider", qos: .utility)
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.timeline_item_provider", qos: .utility)
         itemProxiesSubject = CurrentValueSubject<[TimelineItemProxy], Never>([])
         self.kind = kind
         

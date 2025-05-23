@@ -15297,7 +15297,7 @@ class TimelineControllerFactoryMock: TimelineControllerFactoryProtocol, @uncheck
         }
     }
 }
-class TimelineProviderMock: TimelineProviderProtocol, @unchecked Sendable {
+class TimelineItemProviderMock: TimelineItemProviderProtocol, @unchecked Sendable {
     var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> {
         get { return underlyingUpdatePublisher }
         set(value) { underlyingUpdatePublisher = value }
@@ -15322,11 +15322,11 @@ class TimelineProviderMock: TimelineProviderProtocol, @unchecked Sendable {
 
 }
 class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
-    var timelineProvider: TimelineProviderProtocol {
-        get { return underlyingTimelineProvider }
-        set(value) { underlyingTimelineProvider = value }
+    var timelineItemProvider: TimelineItemProviderProtocol {
+        get { return underlyingTimelineItemProvider }
+        set(value) { underlyingTimelineItemProvider = value }
     }
-    var underlyingTimelineProvider: TimelineProviderProtocol!
+    var underlyingTimelineItemProvider: TimelineItemProviderProtocol!
 
     //MARK: - subscribeForUpdates
 
