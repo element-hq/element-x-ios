@@ -20,15 +20,15 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     private let appSettings: AppSettings
 
-    private var pinnedEventsTimelineProvider: TimelineProviderProtocol? {
+    private var pinnedEventsTimelineItemProvider: TimelineItemProviderProtocol? {
         didSet {
-            guard let pinnedEventsTimelineProvider else {
+            guard let pinnedEventsTimelineItemProvider else {
                 return
             }
             
-            state.pinnedEventsActionState = .loaded(numberOfItems: pinnedEventsTimelineProvider.itemProxies.filter(\.isEvent).count)
+            state.pinnedEventsActionState = .loaded(numberOfItems: pinnedEventsTimelineItemProvider.itemProxies.filter(\.isEvent).count)
             
-            pinnedEventsTimelineProvider.updatePublisher
+            pinnedEventsTimelineItemProvider.updatePublisher
                 // When pinning or unpinning an item, the timeline might return empty for a short while, so we need to debounce it to prevent weird UI behaviours like the banner disappearing
                 .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
                 .sink { [weak self] updatedItems, _ in
@@ -86,7 +86,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .filter { $0 == .reachable }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.setupPinnedEventsTimelineProviderIfNeeded()
+                self?.setupPinnedEventsTimelineItemProviderIfNeeded()
             }
             .store(in: &cancellables)
         
@@ -439,8 +439,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         }
     }
     
-    private func setupPinnedEventsTimelineProviderIfNeeded() {
-        guard pinnedEventsTimelineProvider == nil else {
+    private func setupPinnedEventsTimelineItemProviderIfNeeded() {
+        guard pinnedEventsTimelineItemProvider == nil else {
             return
         }
         
@@ -449,8 +449,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 return
             }
             
-            if pinnedEventsTimelineProvider == nil {
-                pinnedEventsTimelineProvider = pinnedEventsTimeline.timelineProvider
+            if pinnedEventsTimelineItemProvider == nil {
+                pinnedEventsTimelineItemProvider = pinnedEventsTimeline.timelineItemProvider
             }
         }
     }

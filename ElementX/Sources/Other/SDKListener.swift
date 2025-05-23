@@ -94,7 +94,7 @@ extension SDKListener: ProgressWatcher where T == Double {
     }
 }
 
-// MARK: TimelineProvider
+// MARK: TimelineItemProvider
 
 extension SDKListener: TimelineListener where T == [TimelineDiff] {
     func onUpdate(diff: [TimelineDiff]) { onUpdateClosure(diff) }

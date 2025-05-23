@@ -24,9 +24,9 @@ final class TimelineProxy: TimelineProxyProtocol {
     
     private let kind: TimelineKind
    
-    private var innerTimelineProvider: TimelineProviderProtocol!
-    var timelineProvider: TimelineProviderProtocol {
-        innerTimelineProvider
+    private var innerTimelineItemProvider: TimelineItemProviderProtocol!
+    var timelineItemProvider: TimelineItemProviderProtocol {
+        innerTimelineItemProvider
     }
     
     deinit {
@@ -39,7 +39,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func subscribeForUpdates() async {
-        guard innerTimelineProvider == nil else {
+        guard innerTimelineItemProvider == nil else {
             MXLog.warning("Timeline already subscribed for updates")
             return
         }
@@ -51,12 +51,12 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         await subscribeToPagination()
         
-        let provider = await TimelineProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher)
+        let provider = await TimelineItemProvider(timeline: timeline, kind: kind, paginationStatePublisher: paginationStatePublisher)
         // Make sure the existing items are built so that we have content in the timeline before
         // determining whether or not the timeline should paginate to load more items.
         await provider.waitForInitialItems()
         
-        innerTimelineProvider = provider
+        innerTimelineItemProvider = provider
         
         Task {
             await timeline.fetchMembers()
@@ -76,7 +76,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     }
     
     func messageEventContent(for timelineItemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
-        guard let content = await timelineProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.content,
+        guard let content = await timelineItemProvider.itemProxies.firstEventTimelineItemUsingStableID(timelineItemID)?.content,
               case let .msgLike(messageLikeContent) = content,
               case let .message(messageContent) = messageLikeContent.kind else {
             return nil
