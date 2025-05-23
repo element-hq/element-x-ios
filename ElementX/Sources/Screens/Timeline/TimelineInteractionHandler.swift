@@ -26,6 +26,8 @@ enum TimelineInteractionHandlerAction {
     case viewInRoomTimeline(eventID: String)
 }
 
+/// The interaction handler groups logic for dealing with various actions the user can take on a timeline's
+/// view that would've normally been part of the ``TimelineViewModel``
 @MainActor
 class TimelineInteractionHandler {
     private let roomProxy: JoinedRoomProxyProtocol
