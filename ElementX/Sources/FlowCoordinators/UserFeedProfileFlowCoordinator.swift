@@ -12,7 +12,7 @@ enum UserFeedProfileFlowCoordinatorAction {
     case finished
     case presentMatrixProfile
     case presentFeedDetails(feed: HomeScreenPost)
-    case dmUser(userID: String)
+    case openDirectChat(_ roomId: String)
 }
 
 class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
@@ -107,6 +107,9 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
                     } else {
                         presentFeedDetailsScreen(feed, feedUpdatedProtocol: feedUpdatedProtocol)
                     }
+                case .openDirectChat(let roomId):
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                    actionsSubject.send(.openDirectChat(roomId))
                 }
             }
             .store(in: &cancellables)

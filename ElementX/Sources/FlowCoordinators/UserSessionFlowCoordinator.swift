@@ -1231,8 +1231,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 presentMatrixProfileScreen(userID: userId, animated: true)
             case .presentFeedDetails(let feed):
                 presentFeedDetailsScreen(feed, feedUpdatedProtocol: feedUpdatedProtocol)
-            case .dmUser(let userId):
-                break
+            case .openDirectChat(let roomId):
+                stateMachine.processEvent(.selectRoom(roomID: roomId, via: [], entryPoint: .room))
             }
         }
         .store(in: &cancellables)

@@ -1806,8 +1806,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentMatrixProfileScreen(userID: userId)
             case .presentFeedDetails(_):
                 break
-            case .dmUser(let userId):
-                break
+            case .openDirectChat(let roomId):
+                stateMachine.tryEvent(.startChildFlow(roomID: roomId, via: [], entryPoint: .room))
             }
         }
         .store(in: &cancellables)

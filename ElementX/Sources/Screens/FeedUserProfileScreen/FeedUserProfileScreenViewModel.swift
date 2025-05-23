@@ -65,6 +65,8 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             addMeowToPost(postId, amount)
         case .toggleFollowUser:
             toggleFollowUser()
+        case .openDirectChat:
+            openDirectChat()
         }
     }
     
@@ -231,6 +233,39 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 fetchUserProfileData()
             case .failure(let error):
                 MXLog.error("Failed to toggle user following state: \(state.userID), with error: \(error)")
+                displayError()
+            }
+        }
+    }
+    
+    private func openDirectChat() {
+        guard let userId = state.userID.toMatrixUserIdFormat(ZeroContants.appServer.matrixHomeServerPostfix) else {
+            return
+        }
+        Task {
+            let userIndicatorID = UUID().uuidString
+            defer {
+                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+            }
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                                  title: "",
+                                                                  persistent: true))
+            switch clientProxy.directRoomForUserID(userId) {
+            case .success(let roomID):
+                if let roomID {
+                    actionsSubject.send(.openDirectChat(roomID))
+                } else {
+                    switch await clientProxy.createDirectRoom(with: userId, expectedRoomName: state.userProfile.firstName) {
+                    case .success(let roomID):
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            self.actionsSubject.send(.openDirectChat(roomID))
+                        }
+                    case .failure:
+                        displayError()
+                    }
+                }
+            case .failure:
                 displayError()
             }
         }

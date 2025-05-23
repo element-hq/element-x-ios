@@ -124,7 +124,18 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             } else {
-                state.bindings.inviteConfirmationUser = userProfile
+                //state.bindings.inviteConfirmationUser = userProfile
+                Task {
+                    switch await clientProxy.createDirectRoom(with: userProfile.userID, expectedRoomName: userProfile.displayName) {
+                    case .success(let roomID):
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            self.analytics.trackCreatedRoom(isDM: true)
+                            self.actionsSubject.send(.openDirectChat(roomID: roomID))
+                        }
+                    case .failure:
+                        state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)
+                    }
+                }
             }
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)
