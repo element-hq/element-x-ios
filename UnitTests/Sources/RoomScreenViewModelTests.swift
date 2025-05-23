@@ -30,7 +30,11 @@ class RoomScreenViewModelTests: XCTestCase {
         let roomProxyMock = JoinedRoomProxyMock(configuration)
         // setup a way to inject the mock of the pinned events timeline
         roomProxyMock.pinnedEventsTimelineClosure = {
-            await timelineSubject.values.first()
+            guard let timeline = await timelineSubject.values.first() else {
+                fatalError()
+            }
+            
+            return .success(timeline)
         }
         // setup the room proxy actions publisher
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
@@ -113,7 +117,7 @@ class RoomScreenViewModelTests: XCTestCase {
         pinnedTimelineProviderMock.itemProxies = [.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: .init("1"))),
                                                   .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: .init("2"))),
                                                   .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test3")), uniqueID: .init("3")))]
-        roomProxyMock.underlyingPinnedEventsTimeline = pinnedTimelineMock
+        roomProxyMock.pinnedEventsTimelineReturnValue = .success(pinnedTimelineMock)
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: "test1",

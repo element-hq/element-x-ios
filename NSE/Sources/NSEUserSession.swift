@@ -49,7 +49,7 @@ final class NSEUserSession {
             .sessionPassphrase(passphrase: credentials.restorationToken.passphrase)
         
         baseClient = try await clientBuilder.build()
-        delegateHandle = baseClient.setDelegate(delegate: ClientDelegateWrapper())
+        delegateHandle = try baseClient.setDelegate(delegate: ClientDelegateWrapper())
         
         try await baseClient.restoreSessionWith(session: credentials.restorationToken.session,
                                                 roomLoadSettings: .one(roomId: roomID))

@@ -41,6 +41,7 @@ enum A11yIdentifiers {
     static let notificationSettingsEditScreen = NotificationSettingsEditScreen()
     static let pollFormScreen = PollFormScreen()
     static let roomPollsHistoryScreen = RoomPollsHistoryScreen()
+    static let manageRoomMemberSheet = ManageRoomMemberSheet()
     
     struct AlertInfo {
         let primaryButton = "alert_info-primary_button"
@@ -214,6 +215,7 @@ enum A11yIdentifiers {
     struct ServerConfirmationScreen {
         let `continue` = "server_confirmation-continue"
         let changeServer = "server_confirmation-change_server"
+        let serverPicker = "server_confirmation-server_picker"
     }
     
     struct SessionVerificationScreen {
@@ -290,5 +292,9 @@ enum A11yIdentifiers {
     
     struct RoomPollsHistoryScreen {
         let loadMore = "room_polls_history_screen-load_more"
+    }
+    
+    struct ManageRoomMemberSheet {
+        let viewProfile = "manage_room_member_sheet-view_profile"
     }
 }

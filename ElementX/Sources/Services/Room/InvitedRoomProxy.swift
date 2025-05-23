@@ -12,13 +12,15 @@ import UIKit
 class InvitedRoomProxy: InvitedRoomProxyProtocol {
     private let roomListItem: RoomListItemProtocol
     private let roomPreview: RoomPreviewProtocol
-    let info: BaseRoomInfoProxyProtocol
-    let ownUserID: String
-    let inviter: RoomMemberProxyProtocol?
     
     // A room identifier is constant and lazy stops it from being fetched
     // multiple times over FFI
     lazy var id: String = info.id
+    
+    let ownUserID: String
+    
+    let info: BaseRoomInfoProxyProtocol
+    let inviter: RoomMemberProxyProtocol?
         
     init(roomListItem: RoomListItemProtocol,
          roomPreview: RoomPreviewProtocol,

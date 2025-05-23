@@ -34,6 +34,7 @@ struct ManageRoomMemberSheetView: View {
                         kind: .navigationLink {
                             context.send(viewAction: .displayDetails)
                         })
+                        .accessibilityIdentifier(A11yIdentifiers.manageRoomMemberSheet.viewProfile)
             }
             
             Section {

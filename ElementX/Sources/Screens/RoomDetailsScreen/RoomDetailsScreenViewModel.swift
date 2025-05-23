@@ -467,12 +467,12 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         }
         
         Task {
-            guard let timelineProvider = await roomProxy.pinnedEventsTimeline?.timelineProvider else {
+            guard case let .success(pinnedEventsTimeline) = await roomProxy.pinnedEventsTimeline() else {
                 return
             }
             
             if pinnedEventsTimelineProvider == nil {
-                pinnedEventsTimelineProvider = timelineProvider
+                pinnedEventsTimelineProvider = pinnedEventsTimeline.timelineProvider
             }
         }
     }

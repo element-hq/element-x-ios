@@ -59,6 +59,8 @@ extension JoinedRoomProxyMock {
 
         timeline = TimelineProxyMock(.init(isAutoUpdating: configuration.shouldUseAutoUpdatingTimeline,
                                            timelineStartReached: configuration.timelineStartReached))
+        
+        pinnedEventsTimelineReturnValue = .failure(.failedCreatingPinnedTimeline)
 
         ownUserID = configuration.ownUserID
         
