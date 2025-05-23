@@ -27,8 +27,10 @@ struct PaginationState: Equatable {
     let forward: PaginationStatus
 }
 
+/// Entities implementing this protocol are responsible for processings diffs coming from the rust timeline
+/// and converting them into an array of Element X specific ``TimelineItemProxy``s that will be
+/// published as an array together with the pagination state through the ``updatePublisher``.
 @MainActor
-// sourcery: AutoMockable
 protocol TimelineItemProviderProtocol {
     /// A publisher that signals when ``itemProxies`` or ``paginationState`` are changed.
     var updatePublisher: AnyPublisher<([TimelineItemProxy], PaginationState), Never> { get }
@@ -43,3 +45,6 @@ protocol TimelineItemProviderProtocol {
     /// This is temporary and will be replace by a subscription on the room itself.
     var membershipChangePublisher: AnyPublisher<Void, Never> { get }
 }
+
+// sourcery: AutoMockable
+extension TimelineItemProviderProtocol { }
