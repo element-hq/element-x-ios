@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.6 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.7 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -13283,6 +13283,75 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             return invitedMembersCountClosure()
         } else {
             return invitedMembersCountReturnValue
+        }
+    }
+
+    //MARK: - inviter
+
+    open var inviterThrowableError: Error?
+    var inviterUnderlyingCallsCount = 0
+    open var inviterCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return inviterUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = inviterUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                inviterUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    inviterUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var inviterCalled: Bool {
+        return inviterCallsCount > 0
+    }
+
+    var inviterUnderlyingReturnValue: RoomMember?
+    open var inviterReturnValue: RoomMember? {
+        get {
+            if Thread.isMainThread {
+                return inviterUnderlyingReturnValue
+            } else {
+                var returnValue: RoomMember?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = inviterUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                inviterUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    inviterUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var inviterClosure: (() async throws -> RoomMember?)?
+
+    open override func inviter() async throws -> RoomMember? {
+        if let error = inviterThrowableError {
+            throw error
+        }
+        inviterCallsCount += 1
+        if let inviterClosure = inviterClosure {
+            return try await inviterClosure()
+        } else {
+            return inviterReturnValue
         }
     }
 
