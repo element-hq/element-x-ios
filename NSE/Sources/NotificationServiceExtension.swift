@@ -64,7 +64,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         }
         
         Task {
-            await Target.nse.configure(logLevel: settings.logLevel, traceLogPacks: settings.traceLogPacks)
+            await Target.nse.configure(logLevel: settings.logLevel,
+                                       traceLogPacks: settings.traceLogPacks,
+                                       sentryURL: nil)
             
             MXLog.info("\(tag) #########################################")
             
