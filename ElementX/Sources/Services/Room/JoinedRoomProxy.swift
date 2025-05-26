@@ -12,7 +12,6 @@ import UIKit
 
 class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let roomListService: RoomListServiceProtocol
-    private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     
     // periphery:ignore - required for instance retention in the rust codebase
@@ -63,10 +62,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     init(roomListService: RoomListServiceProtocol,
-         roomListItem: RoomListItemProtocol,
          room: RoomProtocol) async throws {
         self.roomListService = roomListService
-        self.roomListItem = roomListItem
         self.room = room
         
         infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo()))

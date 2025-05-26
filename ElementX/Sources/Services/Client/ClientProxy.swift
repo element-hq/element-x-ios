@@ -932,7 +932,6 @@ class ClientProxy: ClientProxyProtocol {
                 }
                 
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
-                                                          roomListItem: roomListItem,
                                                           room: room)
                 
                 return .joined(roomProxy)
