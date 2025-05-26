@@ -46,6 +46,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var knockingEnabled: Bool { get set }
     var threadsEnabled: Bool { get set }
     var isNewBloomEnabled: Bool { get set }
+    var hideQuietNotificationAlerts: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
