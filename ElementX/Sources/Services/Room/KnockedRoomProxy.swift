@@ -9,31 +9,24 @@ import Foundation
 import MatrixRustSDK
 
 class KnockedRoomProxy: KnockedRoomProxyProtocol {
-    private let roomListItem: RoomListItemProtocol
-    private let roomPreview: RoomPreviewProtocol
+    private let room: Room
     
-    // A room identifier is constant and lazy stops it from being fetched
-    // multiple times over FFI
-    lazy var id = info.id
-    
-    let ownUserID: String
+    lazy var id: String = room.id()
+    lazy var ownUserID: String = room.ownUserId()
     
     let info: BaseRoomInfoProxyProtocol
         
-    init(roomListItem: RoomListItemProtocol,
-         roomPreview: RoomPreviewProtocol,
-         ownUserID: String) throws {
-        self.roomListItem = roomListItem
-        self.roomPreview = roomPreview
-        self.ownUserID = ownUserID
-        info = try RoomPreviewInfoProxy(roomPreviewInfo: roomPreview.info())
+    init(room: Room) async throws {
+        self.room = room
+        
+        info = try await RoomInfoProxy(roomInfo: room.roomInfo())
     }
     
     func cancelKnock() async -> Result<Void, RoomProxyError> {
         do {
-            return try await .success(roomPreview.leave())
+            return try await .success(room.leave())
         } catch {
-            MXLog.error("Failed cancelling the knock with error: \(error)")
+            MXLog.error("Failed rejecting invitiation with error: \(error)")
             return .failure(.sdkError(error))
         }
     }

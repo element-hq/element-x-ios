@@ -915,12 +915,16 @@ class ClientProxy: ClientProxyProtocol {
                 
                 return try await .invited(InvitedRoomProxy(room: room))
             case .knocked:
-                if appSettings.knockingEnabled {
-                    return try await .knocked(KnockedRoomProxy(roomListItem: roomListItem,
-                                                               roomPreview: roomListItem.previewRoom(via: []),
-                                                               ownUserID: userID))
+                guard appSettings.knockingEnabled else {
+                    return nil
                 }
-                return nil
+                
+                guard let room = try client.getRoom(roomId: roomID) else {
+                    MXLog.error("Could not find room with ID: \(roomID)")
+                    return nil
+                }
+                
+                return try await .knocked(KnockedRoomProxy(room: room))
             case .joined:
                 guard let room = try client.getRoom(roomId: roomID) else {
                     MXLog.error("Could not find room with ID: \(roomID)")
