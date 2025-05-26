@@ -54,7 +54,7 @@ class RoomSummaryTests: XCTestCase {
     // MARK: - Helpers
     
     func makeSummary(isDirect: Bool, hasRoomAvatar: Bool) -> RoomSummary {
-        RoomSummary(roomListItem: .init(noPointer: .init()),
+        RoomSummary(room: .init(noPointer: .init()),
                     id: roomDetails.id,
                     joinRequestType: nil,
                     name: roomDetails.name,
