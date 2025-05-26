@@ -78,7 +78,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             }
             .store(in: &cancellables)
         
-        roomProxy.timeline.timelineProvider.membershipChangePublisher.sink { [roomProxy] _ in
+        roomProxy.timeline.timelineItemProvider.membershipChangePublisher.sink { [roomProxy] _ in
             Task { await roomProxy.updateMembers() }
         }
         .store(in: &cancellables)

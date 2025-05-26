@@ -33,6 +33,11 @@ enum TimelineControllerError: Error {
     case eventNotFound
 }
 
+/// This protocol is a high level abstraction on top of the ``TimelineProxyProtocol``
+/// and its ``TimelineItemProviderProtocol`` that offers an UI layer oriented interface for dealing
+/// with Room timelines.
+/// It, for example, permits switching from a live timeline to an event focused one, building view specific
+/// timeline items, grouping together state events, donating intents to the larger system etc.
 @MainActor
 protocol TimelineControllerProtocol {
     var roomID: String { get }

@@ -68,7 +68,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          zeroUsersService: ZeroMatrixUsersService,
          onJoinRoomExplicitly: @escaping (String) async -> Void = { _ in }) {
         self.roomListService = roomListService
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .default)
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.room_summary_provider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
         self.name = name
         self.shouldUpdateVisibleRange = shouldUpdateVisibleRange
