@@ -78,7 +78,7 @@ class LoggingTests: XCTestCase {
         let roomName = "Private Conversation"
         let lastMessage = "Secret information"
         let heroName = "Pseudonym"
-        let roomSummary = RoomSummary(roomListItem: .init(noPointer: .init()),
+        let roomSummary = RoomSummary(room: .init(noPointer: .init()),
                                       id: "myroomid",
                                       joinRequestType: nil,
                                       name: roomName,

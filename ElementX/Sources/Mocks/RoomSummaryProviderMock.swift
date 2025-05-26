@@ -71,7 +71,7 @@ extension RoomSummary {
     static func mock(id: String,
                      name: String,
                      canonicalAlias: String? = nil) -> RoomSummary {
-        RoomSummary(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(room: RoomSDKMock(),
                     id: id,
                     joinRequestType: nil,
                     name: name,
@@ -95,7 +95,7 @@ extension RoomSummary {
 
 extension Array where Element == RoomSummary {
     static let mockRooms: [Element] = [
-        RoomSummary(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(room: RoomSDKMock(),
                     id: "1",
                     joinRequestType: nil,
                     name: "Foundation 🔭🪐🌌",
@@ -114,7 +114,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false),
-        RoomSummary(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(room: RoomSDKMock(),
                     id: "2",
                     joinRequestType: nil,
                     name: "Foundation and Empire",
@@ -133,7 +133,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false),
-        RoomSummary(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(room: RoomSDKMock(),
                     id: "3",
                     joinRequestType: nil,
                     name: "Second Foundation",
@@ -152,7 +152,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false),
-        RoomSummary(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(room: RoomSDKMock(),
                     id: "4",
                     joinRequestType: nil,
                     name: "Foundation's Edge",
@@ -171,7 +171,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false),
-        RoomSummary(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(room: RoomSDKMock(),
                     id: "5",
                     joinRequestType: nil,
                     name: "Foundation and Earth",
@@ -190,7 +190,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: true,
                     isMarkedUnread: false,
                     isFavourite: false),
-        RoomSummary(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(room: RoomSDKMock(),
                     id: "6",
                     joinRequestType: nil,
                     name: "Prelude to Foundation",
@@ -209,7 +209,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: true,
                     isMarkedUnread: false,
                     isFavourite: false),
-        RoomSummary(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(room: RoomSDKMock(),
                     id: "0",
                     joinRequestType: nil,
                     name: "Unknown",
@@ -244,7 +244,7 @@ extension Array where Element == RoomSummary {
                         // Incrementing id value for each combination
                         let id = result.count + 1
                         
-                        let room = RoomSummary(roomListItem: RoomListItemSDKMock(),
+                        let room = RoomSummary(room: RoomSDKMock(),
                                                id: "\(id)",
                                                settingsMode: mode,
                                                hasUnreadMessages: hasUnreadMessages,
@@ -261,7 +261,7 @@ extension Array where Element == RoomSummary {
     }()
     
     static let mockInvites: [Element] = [
-        RoomSummary(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(room: RoomSDKMock(),
                     id: "someAwesomeRoomId1",
                     joinRequestType: .invite(inviter: RoomMemberProxyMock.mockCharlie),
                     name: "First room",
@@ -280,7 +280,7 @@ extension Array where Element == RoomSummary {
                     hasOngoingCall: false,
                     isMarkedUnread: false,
                     isFavourite: false),
-        RoomSummary(roomListItem: RoomListItemSDKMock(),
+        RoomSummary(room: RoomSDKMock(),
                     id: "someAwesomeRoomId2",
                     joinRequestType: .invite(inviter: RoomMemberProxyMock.mockCharlie),
                     name: "Second room",

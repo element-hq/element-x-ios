@@ -144,7 +144,7 @@ private extension HomeScreenRoom {
         inviter.displayName = "Jack"
         inviter.userID = "@jack:somewhere.com"
         
-        let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
+        let summary = RoomSummary(room: RoomSDKMock(),
                                   id: "@someone:somewhere.com",
                                   joinRequestType: .invite(inviter: inviter),
                                   name: "Some Guy",
@@ -173,7 +173,7 @@ private extension HomeScreenRoom {
         inviter.userID = "@jack:somewhi.nl"
         inviter.avatarURL = avatarURL
         
-        let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
+        let summary = RoomSummary(room: RoomSDKMock(),
                                   id: "@someone:somewhere.com",
                                   joinRequestType: .invite(inviter: inviter),
                                   name: "Awesome Room",
