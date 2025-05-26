@@ -92,6 +92,13 @@ struct DeveloperOptionsScreen: View {
                 Text("Element Call remote URL override")
             }
             
+            Section("Notifications") {
+                Toggle(isOn: $context.hideQuietNotificationAlerts) {
+                    Text("Hide quiet alerts")
+                    Text("The badge count will still be updated")
+                }
+            }
+            
             Section {
                 Button {
                     showConfetti = true

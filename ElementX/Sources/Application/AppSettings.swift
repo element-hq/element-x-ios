@@ -19,6 +19,7 @@ protocol CommonSettingsProtocol {
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var hideInviteAvatars: Bool { get }
     var timelineMediaVisibility: TimelineMediaVisibility { get }
+    var hideQuietNotificationAlerts: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -45,7 +46,6 @@ final class AppSettings {
         case optimizeMediaUploads
         case appAppearance
         case sharePresence
-        case hideUnreadMessagesBadge
         case hideInviteAvatars
         case timelineMediaVisibility
         case isNewBloomEnabled
@@ -59,6 +59,10 @@ final class AppSettings {
         case knockingEnabled
         case threadsEnabled
         case developerOptionsEnabled
+        
+        // Doug's tweaks 🔧
+        case hideUnreadMessagesBadge
+        case hideQuietNotificationAlerts
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -346,6 +350,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
     
+    @UserPreference(key: UserDefaultsKeys.isNewBloomEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var isNewBloomEnabled
+    
     #endif
     
     // MARK: - Shared
@@ -366,8 +373,8 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.timelineMediaVisibility, defaultValue: TimelineMediaVisibility.always, storageType: .userDefaults(store))
     var timelineMediaVisibility
     
-    @UserPreference(key: UserDefaultsKeys.isNewBloomEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var isNewBloomEnabled
+    @UserPreference(key: UserDefaultsKeys.hideQuietNotificationAlerts, defaultValue: false, storageType: .userDefaults(store))
+    var hideQuietNotificationAlerts
 }
 
 extension AppSettings: CommonSettingsProtocol { }
