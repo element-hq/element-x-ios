@@ -904,33 +904,20 @@ class ClientProxy: ClientProxyProtocol {
     
     private func buildRoomForIdentifier(_ roomID: String) async -> RoomProxyType? {
         do {
-            let roomListItem = try roomListService.room(roomId: roomID)
+            guard let room = try client.getRoom(roomId: roomID) else {
+                return nil
+            }
             
-            switch roomListItem.membership() {
+            switch room.membership() {
             case .invited:
-                guard let room = try client.getRoom(roomId: roomID) else {
-                    MXLog.error("Could not find room with ID: \(roomID)")
-                    return nil
-                }
-                
                 return try await .invited(InvitedRoomProxy(room: room))
             case .knocked:
                 guard appSettings.knockingEnabled else {
                     return nil
                 }
                 
-                guard let room = try client.getRoom(roomId: roomID) else {
-                    MXLog.error("Could not find room with ID: \(roomID)")
-                    return nil
-                }
-                
                 return try await .knocked(KnockedRoomProxy(room: room))
             case .joined:
-                guard let room = try client.getRoom(roomId: roomID) else {
-                    MXLog.error("Could not find room with ID: \(roomID)")
-                    return nil
-                }
-                
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           room: room)
                 
