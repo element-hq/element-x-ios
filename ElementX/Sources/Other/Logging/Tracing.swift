@@ -45,7 +45,8 @@ enum Tracing {
                      writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
                                          filePrefix: fileName,
                                          fileSuffix: fileExtension,
-                                         maxFiles: maxFiles))
+                                         maxFiles: maxFiles),
+                     sentryDsn: nil)
     }
     
     /// A list of all log file URLs, sorted chronologically. This is only public for testing purposes, within
