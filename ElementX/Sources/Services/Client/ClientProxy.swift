@@ -938,9 +938,7 @@ class ClientProxy: ClientProxyProtocol {
             case .left:
                 return .left
             case .banned:
-                return try await .banned(BannedRoomProxy(roomListItem: roomListItem,
-                                                         roomPreview: roomListItem.previewRoom(via: []),
-                                                         ownUserID: userID))
+                return try await .banned(BannedRoomProxy(room: room))
             }
         } catch {
             MXLog.error("Failed retrieving room: \(roomID), with error: \(error)")
