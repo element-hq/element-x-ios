@@ -107,7 +107,7 @@ lane :integration_tests do
 end
 
 lane :config_production do
-  config_secrets()
+  update_foss_secrets()
   xcodegen(spec: "project.yml")
 end
 
@@ -123,7 +123,7 @@ lane :config_nightly do |options|
     data["include"].append({ "path" => "Variants/Nightly/nightly.yml" })
   end
 
-  config_secrets()
+  update_foss_secrets()
   
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
@@ -311,11 +311,5 @@ private_lane :create_simulator_if_necessary do |options|
     UI.success "Simulator already exists"
   rescue
     sh("xcrun simctl create '#{simulator_name}' #{simulator_type} #{simulator_runtime}")
-  end
-end
-
-lane :config_secrets do
-  Dir.chdir "../Secrets" do
-    sh("pkl eval --cache-dir vendor -o Secrets.swift Secrets.pkl")
   end
 end

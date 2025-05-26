@@ -74,7 +74,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         Target.mainApp.configure(logLevel: appSettings.logLevel,
                                  traceLogPacks: appSettings.traceLogPacks,
-                                 sentryURL: appSettings.bugReportSDKSentryURL)
+                                 sentryURL: appSettings.bugReportSentryRustURL)
         
         let appName = InfoPlistReader.main.bundleDisplayName
         let appVersion = InfoPlistReader.main.bundleShortVersionString
