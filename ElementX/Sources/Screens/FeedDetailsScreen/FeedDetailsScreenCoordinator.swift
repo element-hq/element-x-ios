@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FeedDetailsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let feedUpdatedProtocol: FeedDetailsUpdatedProtocol
+    let feedUpdatedProtocol: FeedDetailsUpdatedProtocol?
     let feedItem: HomeScreenPost
     let isFeedDetailsRefreshable: Bool
 }

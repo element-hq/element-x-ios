@@ -13,7 +13,7 @@ typealias FeedDetailsScreenViewModelType = StateStoreViewModel<FeedDetailsScreen
 class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScreenViewModelProtocol, FeedMediaSelectedProtocol {
     
     private let clientProxy: ClientProxyProtocol
-    private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol
+    private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol?
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let POST_REPLIES_PAGE_COUNT = 10
@@ -28,7 +28,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     }
     
     init(userSession: UserSessionProtocol,
-         feedUpdatedProtocol: FeedDetailsUpdatedProtocol,
+         feedUpdatedProtocol: FeedDetailsUpdatedProtocol?,
          userIndicatorController: UserIndicatorControllerProtocol,
          feedItem: HomeScreenPost) {
         self.clientProxy = userSession.clientProxy
@@ -178,7 +178,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 } else {
                     state.bindings.feed = homePost
                 }
-                feedUpdatedProtocol.onFeedUpdated(postId)
+                feedUpdatedProtocol?.onFeedUpdated(postId)
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
                 displayError()
@@ -218,7 +218,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 state.bindings.myPostReply = ""
                 state.bindings.feedMedia = nil
                 forceRefreshFeed()
-                feedUpdatedProtocol.onFeedUpdated(state.bindings.feed.id)
+                feedUpdatedProtocol?.onFeedUpdated(state.bindings.feed.id)
             case .failure(_):
                 state.bindings.alertInfo = .init(id: UUID(),
                                                  title: L10n.commonError,

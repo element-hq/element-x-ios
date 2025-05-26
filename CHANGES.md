@@ -1,3 +1,51 @@
+## Changes in 25.05.2 (2025-05-21)
+
+### What's Changed
+
+✨ Features
+* Add support for Account Provisioning links. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4108
+
+🙌 Improvements
+* Remove support for building Alpha/PR (adhoc) builds by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4107
+* Fix room list heroes label format by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4114
+* Always open manage member sheet  by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4110
+* Send full user agent header to server during OIDC authentication and when viewing Account and Device management screens by @hughns in https://github.com/element-hq/element-x-ios/pull/4106
+
+🐛 Bugfixes
+* Correctly interpret application state transitions for the screen lock when running on the Mac by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4101
+* Fix a bug where accepting a DM invite would be accepted as a regular room. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4123
+* Observe room info updates and automatically dismiss the room if meanwhile left or banned by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4122
+
+⚠️ API Changes
+* Allow the app to be configured to bypass the server selection screen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4131
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4113
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4134
+
+🧱 Build
+* Using 1.18.3 snapshot testing and allow UI tests to use the module properly by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4132
+* updated the SDK to 25.05.19 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4133
+* Integration tests: support for the bottom sheet by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4135
+
+📄 Documentation
+* Project tweaks (layout & docs) by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4121
+
+🚧 In development 🚧
+* Add mechanism for opening up a threaded timeline. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4125
+
+Others
+* Add a state machine to the AuthenticationFlowCoordinator. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4103
+* Voice over focuses the search bar automatically on the invite users screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4105
+* Fix various small errors when running in the Swift 6 language mode by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4109
+* Update dependency jpsim/Yams to from: "5.4.0" by @renovate in https://github.com/element-hq/element-x-ios/pull/4118
+* Update dependency jpsim/Yams to v6 by @renovate in https://github.com/element-hq/element-x-ios/pull/4124
+* Show an account provider picker on the server confirmation screen when required. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4137
+* Don't group timeline items if more than 5 minutes has passed. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4138
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.05.1...release/25.05.2
+
 ## Changes in 25.05.1 (2025-05-07)
 
 ### What's Changed

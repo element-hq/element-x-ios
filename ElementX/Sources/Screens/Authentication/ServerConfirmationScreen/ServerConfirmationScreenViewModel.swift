@@ -22,21 +22,29 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
     }
 
     init(authenticationService: AuthenticationServiceProtocol,
+         mode: ServerConfirmationScreenMode,
          authenticationFlow: AuthenticationFlow,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.authenticationService = authenticationService
         self.authenticationFlow = authenticationFlow
         self.userIndicatorController = userIndicatorController
         
-        let homeserver = authenticationService.homeserver.value
-        super.init(initialViewState: ServerConfirmationScreenViewState(homeserverAddress: homeserver.address,
-                                                                       authenticationFlow: authenticationFlow))
+        let pickerSelection: String? = switch mode {
+        case .picker(let providers): providers[0]
+        case .confirmation: nil
+        }
         
-        authenticationService.homeserver
-            .receive(on: DispatchQueue.main)
-            .map(\.address)
-            .weakAssign(to: \.state.homeserverAddress, on: self)
-            .store(in: &cancellables)
+        super.init(initialViewState: ServerConfirmationScreenViewState(mode: mode,
+                                                                       authenticationFlow: authenticationFlow,
+                                                                       bindings: .init(pickerSelection: pickerSelection)))
+        
+        if case .confirmation = mode {
+            authenticationService.homeserver
+                .receive(on: DispatchQueue.main)
+                .map { .confirmation($0.address) }
+                .weakAssign(to: \.state.mode, on: self)
+                .store(in: &cancellables)
+        }
     }
     
     override func process(viewAction: ServerConfirmationScreenViewAction) {
@@ -45,7 +53,10 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
             guard state.window != window else { return }
             Task { state.window = window }
         case .confirm:
-            Task { await confirmHomeserver() }
+            switch state.mode {
+            case .confirmation: Task { await confirmServer() }
+            case .picker: Task { await pickServer() }
+            }
         case .changeServer:
             actionsSubject.send(.changeServer)
         }
@@ -53,16 +64,18 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
     
     // MARK: - Private
     
-    private func confirmHomeserver() async {
+    private func confirmServer() async {
         let homeserver = authenticationService.homeserver.value
         
-        // If the login mode is unknown, the service hasn't be configured and we need to do it now.
+        // If the login mode is unknown, the service hasn't been configured and we need to do it now.
         // Otherwise we can continue the flow as server selection has been performed and succeeded.
         guard homeserver.loginMode == .unknown || authenticationService.flow != authenticationFlow else {
             await fetchLoginURLIfNeededAndContinue()
             return
         }
         
+        // Note: We don't show the spinner until now as it isn't needed if the service is already
+        // configured and we're about to use password based login
         startLoading()
         defer { stopLoading() }
         
@@ -84,6 +97,32 @@ class ServerConfirmationScreenViewModel: ServerConfirmationScreenViewModelType, 
             default:
                 displayError(.unknownError)
             }
+        }
+    }
+    
+    private func pickServer() async {
+        guard let accountProvider = state.bindings.pickerSelection else {
+            fatalError("It shouldn't be possible to confirm without a selection.")
+        }
+        
+        // Don't bother reconfiguring the service if it has already been done for the selected server.
+        let homeserver = authenticationService.homeserver.value
+        guard homeserver.loginMode == .unknown || homeserver.address != accountProvider else {
+            await fetchLoginURLIfNeededAndContinue()
+            return
+        }
+        
+        // Note: We don't show the spinner until now as it isn't needed if the service is already
+        // configured and we're about to use password based login
+        startLoading()
+        defer { stopLoading() }
+        
+        switch await authenticationService.configure(for: accountProvider, flow: authenticationFlow) {
+        case .success:
+            await fetchLoginURLIfNeededAndContinue()
+        case .failure:
+            // When the servers are hard-coded they should have a valid configuration, so show a generic error.
+            displayError(.unknownError)
         }
     }
     

@@ -32,14 +32,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var pinnedEventsTimelineProvider: TimelineProviderProtocol? {
+    private var pinnedEventsTimelineItemProvider: TimelineItemProviderProtocol? {
         didSet {
-            guard let pinnedEventsTimelineProvider else {
+            guard let pinnedEventsTimelineItemProvider else {
                 return
             }
             
-            buildPinnedEventContents(timelineItems: pinnedEventsTimelineProvider.itemProxies)
-            pinnedEventsTimelineProvider.updatePublisher
+            buildPinnedEventContents(timelineItems: pinnedEventsTimelineItemProvider.itemProxies)
+            pinnedEventsTimelineItemProvider.updatePublisher
                 // When pinning or unpinning an item, the timeline might return empty for a short while, so we need to debounce it to prevent weird UI behaviours like the banner disappearing
                 .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
                 .sink { [weak self] updatedItems, _ in
@@ -195,7 +195,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .filter { $0 == .reachable }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.setupPinnedEventsTimelineProviderIfNeeded()
+                self?.setupPinnedEventsTimelineItemProviderIfNeeded()
             }
             .store(in: &cancellables)
         
@@ -349,18 +349,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.canBan = await (try? roomProxy.canUserBan(userID: ownUserID).get()) == true
     }
     
-    private func setupPinnedEventsTimelineProviderIfNeeded() {
-        guard pinnedEventsTimelineProvider == nil else {
+    private func setupPinnedEventsTimelineItemProviderIfNeeded() {
+        guard pinnedEventsTimelineItemProvider == nil else {
             return
         }
         
         Task {
-            guard let timelineProvider = await roomProxy.pinnedEventsTimeline?.timelineProvider else {
+            guard case let .success(pinnedEventsTimeline) = await roomProxy.pinnedEventsTimeline() else {
                 return
             }
             
-            if pinnedEventsTimelineProvider == nil {
-                pinnedEventsTimelineProvider = timelineProvider
+            if pinnedEventsTimelineItemProvider == nil {
+                pinnedEventsTimelineItemProvider = pinnedEventsTimeline.timelineItemProvider
             }
         }
     }

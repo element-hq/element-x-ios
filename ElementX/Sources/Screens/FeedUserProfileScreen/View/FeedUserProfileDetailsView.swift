@@ -82,16 +82,30 @@ struct UserProfileDetailsSection: View {
             ZStack(alignment: .bottomLeading) {
                 zeroBannerImage
                 
-                LoadableAvatarImage(url: URL(string: context.viewState.userProfile.profileImage ?? ""),
-                                    name: context.viewState.userProfile.firstName,
-                                    contentID: context.viewState.userProfile.userId,
-                                    avatarSize: .user(on: .dmDetails),
-                                    mediaProvider: context.mediaProvider,
-                                    onTap: { _ in })
+                HStack {
+                    LoadableAvatarImage(url: URL(string: context.viewState.userProfile.profileImage ?? ""),
+                                        name: context.viewState.userProfile.firstName,
+                                        contentID: context.viewState.userProfile.userId,
+                                        avatarSize: .user(on: .dmDetails),
+                                        mediaProvider: context.mediaProvider,
+                                        onTap: { _ in })
+                    
+                    Spacer()
+                    
+                    Button {
+                        context.send(viewAction: .openDirectChat)
+                    } label: {
+                        CompoundIcon(\.chat)
+                            .tint(.zero.bgAccentRest)
+                    }
+                    .frame(width: 48, height: 48)
+                    .background(Asset.Colors.zeroContentBackgroundColor.swiftUIColor)
+                    .clipShape(Circle())
+                }
                 .padding(.horizontal, 16)
-                .offset(y: 30)
+                .offset(y: 35)
             }
-            .padding(.bottom, 30)
+            .padding(.bottom, 35)
             
             HStack(spacing: 0) {
                 VStack(alignment: .leading) {

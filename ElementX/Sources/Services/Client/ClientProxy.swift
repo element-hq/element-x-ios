@@ -206,10 +206,12 @@ class ClientProxy: ClientProxyProtocol {
         roomListStateUpdateTaskHandle = createRoomListServiceObserver(roomListService)
         roomListStateLoadingStateUpdateTaskHandle = createRoomListLoadingStateUpdateObserver(roomListService)
                 
-        delegateHandle = client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
+        delegateHandle = try client.setDelegate(delegate: ClientDelegateWrapper { [weak self] isSoftLogout in
             self?.hasEncounteredAuthError = true
             self?.actionsSubject.send(.receivedAuthError(isSoftLogout: isSoftLogout))
         })
+        
+        try await client.setUtdDelegate(utdDelegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
         
         networkMonitor.reachabilityPublisher
             .removeDuplicates()
@@ -1391,24 +1393,6 @@ class ClientProxy: ClientProxyProtocol {
         })
     }
     
-    private let eventFilters: TimelineEventTypeFilter = {
-        var stateEventFilters: [StateEventType] = [.roomAliases,
-                                                   .roomCanonicalAlias,
-                                                   .roomGuestAccess,
-                                                   .roomHistoryVisibility,
-                                                   .roomJoinRules,
-                                                   .roomPinnedEvents,
-                                                   .roomPowerLevels,
-                                                   .roomServerAcl,
-                                                   .roomTombstone,
-                                                   .spaceChild,
-                                                   .spaceParent,
-                                                   .policyRuleRoom,
-                                                   .policyRuleServer,
-                                                   .policyRuleUser]
-        return .exclude(eventTypes: stateEventFilters.map { FilterTimelineEventType.state(eventType: $0) })
-    }()
-    
     private func buildRoomForIdentifier(_ roomID: String) async -> RoomProxyType? {
         do {
             let roomListItem = try roomListService.room(roomId: roomID)
@@ -1428,12 +1412,14 @@ class ClientProxy: ClientProxyProtocol {
                 }
                 return nil
             case .joined:
-                if roomListItem.isTimelineInitialized() == false {
-                    try await roomListItem.initTimeline(eventTypeFilter: eventFilters, internalIdPrefix: nil)
-                }                
+                guard let room = try client.getRoom(roomId: roomID) else {
+                    MXLog.error("Could not find room with ID: \(roomID)")
+                    return nil
+                }
+                
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           roomListItem: roomListItem,
-                                                          room: roomListItem.fullRoom(),
+                                                          room: room,
                                                           zeroChatApi: zeroApiProxy.chatApi,
                                                           zeroUsersService: zeroApiProxy.matrixUsersService)
                 
@@ -1664,7 +1650,6 @@ private struct ClientProxyServices {
         let syncService = try await client
             .syncService()
             .withCrossProcessLock()
-            .withUtdHook(delegate: ClientDecryptionErrorDelegate(actionsSubject: actionsSubject))
             .finish()
         
         let roomListService = syncService.roomListService()

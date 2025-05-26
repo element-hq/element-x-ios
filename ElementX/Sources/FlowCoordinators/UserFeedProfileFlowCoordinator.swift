@@ -1,0 +1,187 @@
+//
+// Copyright 2025 New Vector Ltd.
+//
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+// Please see LICENSE files in the repository root for full details.
+//
+
+import Combine
+import Foundation
+
+enum UserFeedProfileFlowCoordinatorAction {
+    case finished
+    case presentMatrixProfile
+    case presentFeedDetails(feed: HomeScreenPost)
+    case openDirectChat(_ roomId: String)
+}
+
+class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
+    private let navigationStackCoordinator: NavigationStackCoordinator
+    private let userSession: UserSessionProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    private let fromHomeFlow: Bool
+    private let appMediator: AppMediatorProtocol
+    
+    private let userId: String
+    private var userFeedProfile: ZPostUserProfile?
+    private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol?
+    
+    private let actionsSubject: PassthroughSubject<UserFeedProfileFlowCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<UserFeedProfileFlowCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
+    
+    private var cancellables = Set<AnyCancellable>()
+    
+    init(navigationStackCoordinator: NavigationStackCoordinator,
+         userSession: UserSessionProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appMediator: AppMediatorProtocol,
+         fromHomeFlow: Bool,
+         userId: String,
+         userFeedProfile: ZPostUserProfile?,
+         feedUpdatedProtocol: FeedDetailsUpdatedProtocol?) {
+        self.navigationStackCoordinator = navigationStackCoordinator
+        self.userSession = userSession
+        self.userIndicatorController = userIndicatorController
+        self.appMediator = appMediator
+        self.fromHomeFlow = fromHomeFlow
+
+        self.userId = userId
+        self.userFeedProfile = userFeedProfile
+        self.feedUpdatedProtocol = feedUpdatedProtocol
+    }
+    
+    func start() {
+        Task { await presentUserFeedProfileScreen() }
+    }
+    
+    func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        fatalError()
+    }
+    
+    func clearRoute(animated: Bool) {
+        fatalError()
+    }
+    
+    private func presentUserFeedProfileScreen() async {
+        var userFeedProfile = self.userFeedProfile
+        // Load user profile if empty
+        if userFeedProfile == nil {
+            showLoadingIndicator()
+            let profile = await userSession.clientProxy.profile(for: userId)
+            switch profile {
+            case .success(let userProfile):
+                hideLoadingIndicator()
+                if let userPrimaryZId = userProfile.primaryZeroId {
+                    userFeedProfile = userProfile.toZeroFeedProfile(primaryZid: userPrimaryZId)
+                    self.userFeedProfile = userFeedProfile
+                } else {
+                    MXLog.error("Failed to load user profile for user \(userId), with error: User PrimaryZeroId is nil")
+                    actionsSubject.send(.presentMatrixProfile)
+                    return
+                }
+            case .failure(let error):
+                hideLoadingIndicator()
+                MXLog.error("Failed to fetch user profile for user \(userId), with error: \(error)")
+                actionsSubject.send(.presentMatrixProfile)
+                return
+            }
+        }
+        guard let userFeedProfile else {
+            actionsSubject.send(.presentMatrixProfile)
+            return
+        }
+        
+        let profileCoordinator = FeedUserProfileScreenCoordinator(parameters: .init(userSession: userSession,
+                                                                                    feedUpdatedProtocol: feedUpdatedProtocol,
+                                                                                    userProfile: userFeedProfile))
+        profileCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .feedTapped(let feed):
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                    if fromHomeFlow {
+                        actionsSubject.send(.presentFeedDetails(feed: feed))
+                    } else {
+                        presentFeedDetailsScreen(feed, feedUpdatedProtocol: feedUpdatedProtocol)
+                    }
+                case .openDirectChat(let roomId):
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                    actionsSubject.send(.openDirectChat(roomId))
+                }
+            }
+            .store(in: &cancellables)
+        navigationStackCoordinator.setSheetCoordinator(profileCoordinator) { [weak self] in
+            self?.actionsSubject.send(.finished)
+        }
+    }
+    
+    private func presentFeedDetailsScreen(_ post: HomeScreenPost,
+                                          feedUpdatedProtocol: FeedDetailsUpdatedProtocol?,
+                                          isChildFeed: Bool = false) {
+        
+        let parameters = FeedDetailsScreenCoordinatorParameters(userSession: userSession,
+                                                                feedUpdatedProtocol: feedUpdatedProtocol,
+                                                                feedItem: post,
+                                                                isFeedDetailsRefreshable: true)
+        let coordinator = FeedDetailsScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .replyTapped(let reply):
+                    presentFeedDetailsScreen(reply, feedUpdatedProtocol: feedUpdatedProtocol, isChildFeed: true)
+                case .attachMedia(let attachMediaProtocol):
+                    presentMediaUploadPickerWithSource(attachMediaProtocol)
+                case .openPostUserProfile( _):
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            if !isChildFeed {
+                Task {
+                    await self?.presentUserFeedProfileScreen()
+                }
+            }
+        }
+    }
+    
+    private func presentMediaUploadPickerWithSource(_ attachMediaProtocol: FeedMediaSelectedProtocol) {
+        let stackCoordinator = NavigationStackCoordinator()
+
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                  source: .photoLibrary,
+                                                                  orientationManager: appMediator.windowManager) { [weak self] action in
+            guard let self else {
+                return
+            }
+            switch action {
+            case .cancel:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            case .selectMediaAtURL(let url):
+                attachMediaProtocol.onMediaSelected(media: url)
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator)
+    }
+    
+    private static let loadingIndicatorID = "\(UserFeedProfileFlowCoordinator.self)-Loading"
+    
+    private func showLoadingIndicator(delay: Duration? = nil) {
+        userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorID,
+                                                      type: .modal(progress: .indeterminate,
+                                                                   interactiveDismissDisabled: false,
+                                                                   allowsInteraction: false),
+                                                      title: L10n.commonLoading, persistent: true),
+                                                delay: delay)
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
+    }
+}

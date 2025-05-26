@@ -16,9 +16,16 @@ enum ServerConfirmationScreenViewModelAction {
     case changeServer
 }
 
+enum ServerConfirmationScreenMode: Equatable {
+    /// The user is confirming the displayed account provider (or can enter their own).
+    case confirmation(String)
+    /// The user is only allowed to pick from a list of account providers.
+    case picker([String])
+}
+
 struct ServerConfirmationScreenViewState: BindableState {
-    /// The homeserver address input by the user.
-    var homeserverAddress: String
+    /// Whether the screen is configured to confirm a single account provider or pick one from a list of many.
+    var mode: ServerConfirmationScreenMode
     /// The flow being attempted on the selected homeserver.
     let authenticationFlow: AuthenticationFlow
     /// The presentation anchor used for OIDC authentication.
@@ -28,17 +35,24 @@ struct ServerConfirmationScreenViewState: BindableState {
     
     /// The screen's title.
     var title: String {
-        switch authenticationFlow {
-        case .login:
-            return L10n.screenServerConfirmationTitleLogin(homeserverAddress)
-        case .register:
-            return L10n.screenServerConfirmationTitleRegister(homeserverAddress)
+        switch mode {
+        case .confirmation(let accountProvider):
+            switch authenticationFlow {
+            case .login:
+                L10n.screenServerConfirmationTitleLogin(accountProvider)
+            case .register:
+                L10n.screenServerConfirmationTitleRegister(accountProvider)
+            }
+        case .picker:
+            L10n.screenServerConfirmationTitlePickerMode
         }
     }
     
     /// The message shown beneath the title.
-    var message: String {
-        switch authenticationFlow {
+    var message: String? {
+        guard case let .confirmation(homeserverAddress) = mode else { return nil }
+
+        return switch authenticationFlow {
         case .login:
             if homeserverAddress == "matrix.org" {
                 L10n.screenServerConfirmationMessageLoginMatrixDotOrg
@@ -54,6 +68,8 @@ struct ServerConfirmationScreenViewState: BindableState {
 }
 
 struct ServerConfirmationScreenBindings {
+    /// The chosen server when in `.picker` mode, otherwise `nil`.
+    var pickerSelection: String?
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<ServerConfirmationScreenAlert>?
 }

@@ -208,7 +208,18 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
             } else {
-                state.bindings.inviteConfirmationUser = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
+//                state.bindings.inviteConfirmationUser = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
+                Task {
+                    switch await clientProxy.createDirectRoom(with: roomMemberProxy.userID, expectedRoomName: roomMemberProxy.displayName) {
+                    case .success(let roomID):
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            self.analytics.trackCreatedRoom(isDM: true)
+                            self.actionsSubject.send(.openDirectChat(roomID: roomID))
+                        }
+                    case .failure:
+                        state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)
+                    }
+                }
             }
         case .failure:
             state.bindings.alertInfo = .init(id: .failedOpeningDirectChat)

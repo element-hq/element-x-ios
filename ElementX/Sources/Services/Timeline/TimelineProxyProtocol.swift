@@ -37,9 +37,11 @@ enum TimelineProxyError: Error {
     case failedPaginatingEndReached
 }
 
-// sourcery: AutoMockable
+/// Element X proxies generally wrap the counterpart RustSDK objects while providing platform specific
+/// interfaces. In this case it composes methods for interacting with a room's timeline and should be used alongside
+/// the ``TimelineItemProviderProtocol`` which offers a reactive interface to timeline changes.
 protocol TimelineProxyProtocol {
-    var timelineProvider: TimelineProviderProtocol { get }
+    var timelineItemProvider: TimelineItemProviderProtocol { get }
     
     func subscribeForUpdates() async
     
@@ -127,3 +129,6 @@ protocol TimelineProxyProtocol {
     
     func getTimelineItemByEventId(_ eventId: String) -> EventTimelineItemProxy?
 }
+
+// sourcery: AutoMockable
+extension TimelineProxyProtocol { }

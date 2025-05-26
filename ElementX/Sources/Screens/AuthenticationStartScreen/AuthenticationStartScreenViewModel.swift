@@ -79,14 +79,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     // MARK: - Private
     
     private func login() async {
-        if !appSettings.allowOtherAccountProviders {
-            if appSettings.accountProviders.count == 1 {
-                await configureAccountProvider(appSettings.accountProviders[0])
-            } else {
-                fatalError("WIP: Account provider picker not implemented.")
-            }
-        } else if let provisioningParameters {
-            await configureAccountProvider(provisioningParameters.accountProvider, loginHint: provisioningParameters.loginHint)
+        if let serverName = state.serverName {
+            await configureAccountProvider(serverName, loginHint: provisioningParameters?.loginHint)
         } else {
             actionsSubject.send(.login) // No need to configure anything here, continue the flow.
         }

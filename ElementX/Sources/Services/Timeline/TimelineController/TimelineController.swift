@@ -13,19 +13,17 @@ import UIKit
 
 class TimelineController: TimelineControllerProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
-    private let liveTimelineProvider: TimelineProviderProtocol
+    private let liveTimelineItemProvider: TimelineItemProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
     private let appSettings: AppSettings
     
-    private let serialDispatchQueue: DispatchQueue
-    
     let callbacks = PassthroughSubject<TimelineControllerCallback, Never>()
     
     private var activeTimeline: TimelineProxyProtocol
-    private var activeTimelineProvider: TimelineProviderProtocol {
+    private var activeTimelineItemProvider: TimelineItemProviderProtocol {
         didSet {
-            configureActiveTimelineProvider()
+            configureActiveTimelineItemProvider()
         }
     }
     
@@ -42,7 +40,7 @@ class TimelineController: TimelineControllerProtocol {
     }
     
     var timelineKind: TimelineKind {
-        activeTimelineProvider.kind
+        activeTimelineItemProvider.kind
     }
     
     init(roomProxy: JoinedRoomProxyProtocol,
@@ -52,18 +50,16 @@ class TimelineController: TimelineControllerProtocol {
          mediaProvider: MediaProviderProtocol,
          appSettings: AppSettings) {
         self.roomProxy = roomProxy
-        liveTimelineProvider = timelineProxy.timelineProvider
+        liveTimelineItemProvider = timelineProxy.timelineItemProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
         self.appSettings = appSettings
         
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.timelineprovider", qos: .utility)
-        
         activeTimeline = timelineProxy
-        activeTimelineProvider = liveTimelineProvider
+        activeTimelineItemProvider = liveTimelineItemProvider
         
         guard let initialFocussedEventID else {
-            configureActiveTimelineProvider()
+            configureActiveTimelineItemProvider()
             return
         }
         
@@ -75,7 +71,7 @@ class TimelineController: TimelineControllerProtocol {
                 break
             case .failure:
                 // Setup the live timeline as a fallback.
-                configureActiveTimelineProvider()
+                configureActiveTimelineItemProvider()
             }
         }
     }
@@ -85,7 +81,7 @@ class TimelineController: TimelineControllerProtocol {
         case .success(let timeline):
             await timeline.subscribeForUpdates()
             activeTimeline = timeline
-            activeTimelineProvider = timeline.timelineProvider
+            activeTimelineItemProvider = timeline.timelineItemProvider
             return .success(())
         case .failure(let error):
             if case .eventNotFound = error {
@@ -98,7 +94,7 @@ class TimelineController: TimelineControllerProtocol {
     
     func focusLive() {
         activeTimeline = roomProxy.timeline
-        activeTimelineProvider = liveTimelineProvider
+        activeTimelineItemProvider = liveTimelineItemProvider
     }
     
     func paginateBackwards(requestSize: UInt16) async -> Result<Void, TimelineControllerError> {
@@ -328,7 +324,7 @@ class TimelineController: TimelineControllerProtocol {
     // Handle this parallel to the timeline items so we're not forced
     // to bundle the Rust side objects within them
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo {
-        for timelineItemProxy in activeTimelineProvider.itemProxies {
+        for timelineItemProxy in activeTimelineItemProvider.itemProxies {
             switch timelineItemProxy {
             case .event(let item):
                 if item.id == itemID {
@@ -343,7 +339,7 @@ class TimelineController: TimelineControllerProtocol {
     }
     
     func sendHandle(for itemID: TimelineItemIdentifier) -> SendHandleProxy? {
-        for timelineItemProxy in activeTimelineProvider.itemProxies {
+        for timelineItemProxy in activeTimelineItemProvider.itemProxies {
             switch timelineItemProxy {
             case .event(let item):
                 if item.id == itemID {
@@ -361,24 +357,24 @@ class TimelineController: TimelineControllerProtocol {
     
     /// The cancellable used to update the timeline items.
     private var updateTimelineItemsCancellable: AnyCancellable?
-    /// The controller is switching the `activeTimelineProvider`.
+    /// The controller is switching the `activeTimelineItemProvider`.
     private var isSwitchingTimelines = false
     
     /// Configures the controller to listen to `activeTimeline` for events.
     /// - Parameter clearExistingItems: Whether or not to clear any existing items before loading the timeline's contents.
-    private func configureActiveTimelineProvider() {
+    private func configureActiveTimelineItemProvider() {
         updateTimelineItemsCancellable = nil
         
         isSwitchingTimelines = true
         
         // Inform the world that the initial items are loading from the store
         paginationState = PaginationState(backward: .paginating, forward: .paginating)
-        callbacks.send(.isLive(activeTimelineProvider.kind == .live))
+        callbacks.send(.isLive(activeTimelineItemProvider.kind == .live))
         
-        updateTimelineItemsCancellable = Task { [weak self, activeTimelineProvider] in
+        updateTimelineItemsCancellable = Task { [weak self, activeTimelineItemProvider] in
             let contentSizeChangePublisher = NotificationCenter.default.publisher(for: UIContentSizeCategory.didChangeNotification)
-            let timelineUpdates = activeTimelineProvider.updatePublisher.merge(with: contentSizeChangePublisher.map { _ in
-                (activeTimelineProvider.itemProxies, activeTimelineProvider.paginationState)
+            let timelineUpdates = activeTimelineItemProvider.updatePublisher.merge(with: contentSizeChangePublisher.map { _ in
+                (activeTimelineItemProvider.itemProxies, activeTimelineItemProvider.paginationState)
             })
             
             for await (items, paginationState) in timelineUpdates.values {
@@ -512,7 +508,7 @@ class TimelineController: TimelineControllerProtocol {
     }
     
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date? {
-        for itemProxy in activeTimelineProvider.itemProxies {
+        for itemProxy in activeTimelineItemProvider.itemProxies {
             switch itemProxy {
             case .event(let eventTimelineItemProxy):
                 if eventTimelineItemProxy.id == itemID {
