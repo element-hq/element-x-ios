@@ -27,25 +27,25 @@ enum Target: String {
                                                                   traceLogPacks: traceLogPacks,
                                                                   currentTarget: rawValue,
                                                                   filePrefix: nil)
-            initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: false)
+            try? initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: false)
         case .nse:
             let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
                                                                   traceLogPacks: traceLogPacks,
                                                                   currentTarget: rawValue,
                                                                   filePrefix: rawValue)
-            initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: true)
+            try? initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: true)
         case .shareExtension:
             let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
                                                                   traceLogPacks: traceLogPacks,
                                                                   currentTarget: rawValue,
                                                                   filePrefix: rawValue)
-            initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: true)
+            try? initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: true)
         case .tests:
             let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
                                                                   traceLogPacks: traceLogPacks,
                                                                   currentTarget: rawValue,
                                                                   filePrefix: rawValue)
-            initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: false)
+            try? initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: false)
         }
         
         MXLog.configure(currentTarget: rawValue)
