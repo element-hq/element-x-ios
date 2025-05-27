@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "میٹرکس محفوظ، غیر مرکزی مواصلت کے لئے ایک کھلا شبکہ ہے۔";
 "screen_server_confirmation_message_register" = "یہ وہ جگہ ہے جہاں آپ کی گفتگوئیں زندہ رہیں گی — بالکل اسی طرح جیسے آپ اپنی برقی خطوط رکھنے کے لیے برقی ڈاک فراہم کنندہ کا استعمال کرتے ہوں گے۔";
 "screen_server_confirmation_title_login" = "آپ %1$@ میں داخل ہونے والے ہیں";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "آپ %1$@ پر ایک کھاتہ بنانے والے ہیں";
 "screen_session_verification_cancelled_subtitle" = "کچھ ٹھیک نہیں لگتا۔ یا تو درخواست کا وقت ختم ہو گیا یا درخواست مسترد کر دی گئی۔";
 "screen_session_verification_compare_emojis_subtitle" = "تصدیق کریں کہ نیچے ایموجی آپ کے دوسرے جلسے میں دکھائے گئے ایموجیوں سے مماثل ہیں۔";

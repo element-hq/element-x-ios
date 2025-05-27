@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată.";
 "screen_server_confirmation_message_register" = "Aici vor trăi conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile.";
 "screen_server_confirmation_title_login" = "Sunteți pe cale să vă conectați la %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "Sunteți pe cale să creați un cont pe %1$@";
 "screen_session_verification_cancelled_subtitle" = "Ceva nu este în regulă. Fie cererea a expirat, fie a fost respinsă.";
 "screen_session_verification_compare_emojis_subtitle" = "Confirmați că emoticoanele de mai jos se potrivesc cu cele afișate în cealaltă sesiune.";

@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix, güvenli, merkezi olmayan iletişim için açık bir ağdır.";
 "screen_server_confirmation_message_register" = "Konuşmalarınızın saklanacağı yer burasıdır - tıpkı e-postalarınızı saklamak için bir e-posta sağlayıcısı kullandığınız gibi.";
 "screen_server_confirmation_title_login" = "%1$@ sunucusunda oturum açmak üzeresiniz";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "%1$@ sunucusunda bir hesap oluşturmak üzeresiniz";
 "screen_session_verification_cancelled_subtitle" = "Bir şeyler doğru görünmüyor. İstek zaman aşımına uğradı veya istek reddedildi.";
 "screen_session_verification_compare_emojis_subtitle" = "Aşağıdaki emojilerin diğer oturumunuzda gösterilenlerle eşleştiğini onaylayın.";

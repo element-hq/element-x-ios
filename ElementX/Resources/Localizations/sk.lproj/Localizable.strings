@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu.";
 "screen_server_confirmation_message_register" = "Tu budú žiť vaše konverzácie - podobne ako používate poskytovateľa e-mailových služieb na uchovávanie e-mailov.";
 "screen_server_confirmation_title_login" = "Chystáte sa prihlásiť do %1$@";
+"screen_server_confirmation_title_picker_mode" = "Vyberte poskytovateľa účtu";
 "screen_server_confirmation_title_register" = "Chystáte sa vytvoriť účet na %1$@";
 "screen_session_verification_cancelled_subtitle" = "Zdá sa, že niečo nie je v poriadku. Časový limit žiadosti vypršal alebo bola žiadosť zamietnutá.";
 "screen_session_verification_compare_emojis_subtitle" = "Skontrolujte, či sa emotikony uvedené nižšie zhodujú s emotikonmi zobrazenými vo vašej druhej relácii.";
