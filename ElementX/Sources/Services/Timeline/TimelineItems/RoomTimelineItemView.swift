@@ -56,7 +56,7 @@ struct RoomTimelineItemView: View {
         case .timelineStart(let item):
             TimelineStartRoomTimelineView(timelineItem: item)
         case .state(let item):
-            StateRoomTimelineView(timelineItem: item)
+            StateRoomTimelineView(timelineItem: item, roomMembers: context?.viewState.members)
         case .group(let item):
             CollapsibleRoomTimelineView(timelineItem: item)
         case .location(let item):

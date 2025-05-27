@@ -894,7 +894,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                    .roomHistoryVisibility,
                                                    .roomJoinRules,
                                                    .roomPinnedEvents,
-                                                   .roomPowerLevels,
+//                                                   .roomPowerLevels,
                                                    .roomServerAcl,
                                                    .roomTombstone,
                                                    .spaceChild,
