@@ -35,7 +35,8 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         
         super.init(initialViewState: .init(userID: userProfile.userId,
                                            userProfile: userProfile,
-                                           shouldShowFollowButton: clientProxy.userID.matrixIdToCleanHex() != userProfile.userId,
+                                           shouldShowFollowButton: (clientProxy.userID.matrixIdToCleanHex() != userProfile.userId)
+                                           && !userProfile.primaryZid.isEmpty,
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
         
@@ -81,13 +82,15 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     }
     
     private func fetchUserProfile() async {
-        let result = await clientProxy.fetchFeedUserProfile(userZId: state.userProfile.primaryZid)
-        switch result {
-        case .success(let userProfile):
-            state.userProfile = userProfile
-        case .failure(let error):
-            MXLog.error("Failed to fetch user profile for user: \(state.userID), with error: \(error)")
-            displayError()
+        if !state.userProfile.primaryZid.isEmpty {
+            let result = await clientProxy.fetchFeedUserProfile(userZId: state.userProfile.primaryZid)
+            switch result {
+            case .success(let userProfile):
+                state.userProfile = userProfile
+            case .failure(let error):
+                MXLog.error("Failed to fetch user profile for user: \(state.userID), with error: \(error)")
+                displayError()
+            }
         }
     }
     
@@ -109,7 +112,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         Task {
             defer { isFetchFeedsInProgress = false } // Ensure flag is reset when the task completes
             
-            state.userFeedsListMode = state.userFeeds.isEmpty ? .skeletons : .feeds
+            state.userFeedsListMode = state.userFeeds.isEmpty ? .empty : .feeds
             let skipItems = isForceRefresh ? 0 : state.userFeeds.count
             let feedsResult = await clientProxy.fetchUserFeeds(userId: userId,
                                                                  limit: FEEDS_PAGE_COUNT,

@@ -73,23 +73,16 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
             switch profile {
             case .success(let userProfile):
                 hideLoadingIndicator()
-                if let userPrimaryZId = userProfile.primaryZeroId {
-                    userFeedProfile = userProfile.toZeroFeedProfile(primaryZid: userPrimaryZId)
-                    self.userFeedProfile = userFeedProfile
-                } else {
-                    MXLog.error("Failed to load user profile for user \(userId), with error: User PrimaryZeroId is nil")
-                    actionsSubject.send(.presentMatrixProfile)
-                    return
-                }
+                userFeedProfile = userProfile.toZeroFeedProfile()
+                self.userFeedProfile = userFeedProfile
             case .failure(let error):
                 hideLoadingIndicator()
                 MXLog.error("Failed to fetch user profile for user \(userId), with error: \(error)")
-                actionsSubject.send(.presentMatrixProfile)
-                return
+//                actionsSubject.send(.presentMatrixProfile)
             }
         }
         guard let userFeedProfile else {
-            actionsSubject.send(.presentMatrixProfile)
+//            actionsSubject.send(.presentMatrixProfile)
             return
         }
         

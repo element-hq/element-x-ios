@@ -101,8 +101,8 @@ extension UserProfileProxy: Identifiable {
 }
 
 extension UserProfileProxy {
-    func toZeroFeedProfile(primaryZid: String) -> ZPostUserProfile {
-        .init(userId: userID.matrixIdToCleanHex(), createdAt: nil, primaryZid: primaryZid,
+    func toZeroFeedProfile() -> ZPostUserProfile {
+        .init(userId: userID.matrixIdToCleanHex(), createdAt: nil, primaryZid: primaryZeroId ?? "",
               firstName: displayName ?? "", profileImage: avatarURL?.absoluteString,
               publicAddress: nil, followersCount: nil, followingCount: nil)
     }
