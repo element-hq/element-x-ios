@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix არის ღია ქსელი უსაფრთხო, დეცენტრალიზებული კომუნიკაციისთვის.";
 "screen_server_confirmation_message_register" = "აქ იქნება თქვენი საუბრები - ისევე, როგორც თქვენ ელ. ფოსტაში ინახება თქვენი ელ.წერილები.";
 "screen_server_confirmation_title_login" = "თქვენ აპირებთ შესვლას %1$@-ში";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "თქვენ აპირებთ ანგარიშის შექმნას %1$@-ში";
 "screen_session_verification_cancelled_subtitle" = "რაღაცა არასწორადაა. ან მოთხოვნის ვადაა ამოწურული, ან მოთხოვნა უარყოფილი იყო.";
 "screen_session_verification_compare_emojis_subtitle" = "დაადასტურეთ, რომ ქვემოთ მოყვანილი ემოჯიები შეესაბამება თქვენს სხვა სესიაზე ნაჩვენებს.";

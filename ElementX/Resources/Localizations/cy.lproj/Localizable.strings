@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Mae Matrix yn rhwydwaith agored ar gyfer cyfathrebu diogel, datganoledig.";
 "screen_server_confirmation_message_register" = "Dyma lle bydd eich sgyrsiau'n byw - yn union fel y byddech chi'n defnyddio darparwr e-bost i gadw'ch e-byst.";
 "screen_server_confirmation_title_login" = "Rydych ar fin mewngofnodi i %1$@";
+"screen_server_confirmation_title_picker_mode" = "Dewiswch ddarparwr cyfrif";
 "screen_server_confirmation_title_register" = "Rydych chi ar fin creu cyfrif ar %1$@";
 "screen_session_verification_cancelled_subtitle" = "Mae rhywbeth i weld o'i le. Naill ai daeth y cais i ben neu cafodd y cais ei wrthod.";
 "screen_session_verification_compare_emojis_subtitle" = "Cadarnhewch fod yr emojis isod yn cyd-fynd â'r rhai sy'n cael eu dangos ar eich sesiwn arall.";

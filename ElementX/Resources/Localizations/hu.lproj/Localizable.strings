@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "A Matrix egy nyitott hálózat a biztonságos, decentralizált kommunikációhoz.";
 "screen_server_confirmation_message_register" = "Itt lesznek a beszélgetései – ahogyan egy e-mail-szolgáltatást is használna a levelei kezeléséhez.";
 "screen_server_confirmation_title_login" = "Hamarosan bejelentkezik ebbe: %1$@";
+"screen_server_confirmation_title_picker_mode" = "Válassza ki a fiókszolgáltatót";
 "screen_server_confirmation_title_register" = "Hamarosan létrehoz egy fiókot ezen: %1$@";
 "screen_session_verification_cancelled_subtitle" = "Valami hibásnak tűnik. A kérés vagy időtúllépésre futott, vagy elutasították.";
 "screen_session_verification_compare_emojis_subtitle" = "Erősítse meg, hogy a lenti emodzsik egyeznek-e a másik munkamenetben megjelenítettekkel.";

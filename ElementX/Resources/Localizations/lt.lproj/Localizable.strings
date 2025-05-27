@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix yra atviras tinklas, skirtas saugiam, decentralizuotam bendravimui.";
 "screen_server_confirmation_message_register" = "Čia bus saugomi Jūsų pokalbiai - panašiai kaip el. pašto paslaugų teikėjas saugo Jūsų el. laiškus.";
 "screen_server_confirmation_title_login" = "Jūs ruošiatės prisijungti prie %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "Jūs ruošiatės susikurti paskyrą %1$@";
 "screen_session_verification_cancelled_subtitle" = "Kažkas atrodo ne taip. Baigėsi užklausos skirtasis laikas arba užklausa buvo atmesta.";
 "screen_session_verification_compare_emojis_subtitle" = "Patvirtinkite, kad žemiau esantys jaustukai atitinka tuos, kurie rodomi kitoje sesijoje.";
