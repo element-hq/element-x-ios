@@ -346,24 +346,24 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.inviteUsersScreen, .dismissInviteUsersScreen, .roomMembersList):
                 break
                 
-            case (.room, .presentReportContent, .reportContent(let itemID, let senderID)):
+            case (.room, .presentReportContent, .reportContent(let itemID, let senderID, _)):
                 presentReportContent(for: itemID, from: senderID)
             case (.reportContent, .dismissReportContent, .room):
                 break
                 
-            case (.room, .presentMediaUploadPicker, .mediaUploadPicker(let source)):
+            case (.room, .presentMediaUploadPicker, .mediaUploadPicker(let source, _)):
                 presentMediaUploadPickerWithSource(source)
             case (.mediaUploadPicker, .dismissMediaUploadPicker, .room):
                 break
                 
-            case (.mediaUploadPicker, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL)):
+            case (.mediaUploadPicker, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL, _)):
                 presentMediaUploadPreviewScreen(for: fileURL, animated: animated)
-            case (.room, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL)):
+            case (.room, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL, _)):
                 presentMediaUploadPreviewScreen(for: fileURL, animated: animated)
             case (.mediaUploadPreview, .dismissMediaUploadPreview, .room):
                 break
                 
-            case (_, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji)):
+            case (_, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji, _)):
                 presentEmojiPicker(for: itemID, selectedEmoji: selectedEmoji)
             case (.emojiPicker, .dismissEmojiPicker, _):
                 break
