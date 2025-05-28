@@ -63,6 +63,13 @@ enum SessionVerificationState {
     case unverified
 }
 
+// The `Decodable` conformance is just for the purpose of migration
+enum TimelineMediaVisibility: Decodable {
+    case always
+    case privateOnly
+    case never
+}
+
 // sourcery: AutoMockable
 protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> { get }
@@ -92,6 +99,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     /// We delay fetching this until after the first sync. Nil until then
     var ignoredUsersPublisher: CurrentValuePublisher<[String]?, Never> { get }
+    
+    var timelineMediaVisibilityPublisher: CurrentValuePublisher<TimelineMediaVisibility, Never> { get }
+    
+    var hideInviteAvatarsPublisher: CurrentValuePublisher<Bool, Never> { get }
     
     var pusherNotificationClientIdentifier: String? { get }
     
@@ -185,6 +196,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func isAliasAvailable(_ alias: String) async -> Result<Bool, ClientProxyError>
     
     @discardableResult func clearCaches() async -> Result<Void, ClientProxyError>
+    
+    func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError>
 
     // MARK: - Ignored users
     
@@ -210,4 +223,9 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func resetIdentity() async -> Result<IdentityResetHandle?, ClientProxyError>
     
     func userIdentity(for userID: String) async -> Result<UserIdentityProxyProtocol?, ClientProxyError>
+    
+    // MARK: - Moderation & Safety
+    
+    func setTimelineMediaVisibility(_ value: TimelineMediaVisibility) async -> Result<Void, ClientProxyError>
+    func setHideInviteAvatars(_ value: Bool) async -> Result<Void, ClientProxyError>
 }

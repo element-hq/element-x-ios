@@ -158,7 +158,8 @@ struct SecurityAndPrivacyScreen: View {
         
         Section {
             ListRow(label: .plain(title: L10n.screenSecurityAndPrivacyRoomDirectoryVisibilityToggleTitle),
-                    details: .isWaiting(context.desiredSettings.isVisibileInRoomDirectory == nil),
+                    details:
+                    context.desiredSettings.isVisibileInRoomDirectory == nil ? .isWaiting(true) : nil,
                     kind: context.desiredSettings.isVisibileInRoomDirectory == nil ? .label : .toggle(binding))
         } footer: {
             Text(L10n.screenSecurityAndPrivacyRoomDirectoryVisibilitySectionFooter(context.viewState.serverName))

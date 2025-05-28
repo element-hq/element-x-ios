@@ -226,7 +226,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentAdvancedSettings() {
         let coordinator = AdvancedSettingsScreenCoordinator(parameters: .init(appSettings: parameters.appSettings,
-                                                                              analytics: parameters.analytics))
+                                                                              analytics: parameters.analytics,
+                                                                              clientProxy: parameters.userSession.clientProxy,
+                                                                              userIndicatorController: parameters.userIndicatorController))
         navigationStackCoordinator.push(coordinator)
     }
     
