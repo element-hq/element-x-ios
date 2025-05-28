@@ -363,9 +363,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.mediaUploadPreview, .dismissMediaUploadPreview, .room):
                 break
                 
-            case (.room, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji)):
+            case (_, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji)):
                 presentEmojiPicker(for: itemID, selectedEmoji: selectedEmoji)
-            case (.emojiPicker, .dismissEmojiPicker, .room):
+            case (.emojiPicker, .dismissEmojiPicker, _):
                 break
                 
             case (.room, .presentMessageForwarding(let forwardingItem), .messageForwarding):
