@@ -52,7 +52,7 @@ struct AdvancedSettingsScreen: View {
         
         Section {
             ListRow(label: .plain(title: L10n.screenAdvancedSettingsHideInviteAvatarsToggleTitle),
-                    details: .isWaiting(context.viewState.isWaitingHideInviteAvatars),
+                    details: context.viewState.isWaitingHideInviteAvatars ? .isWaiting(true) : nil,
                     kind: .toggle(binding))
                 .disabled(context.viewState.isWaitingHideInviteAvatars)
         } header: {
