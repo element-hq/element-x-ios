@@ -10,12 +10,25 @@ import Foundation
 struct ZPostUserProfile: Codable, Hashable {
     let userId: String
     let createdAt: String?
-    let primaryZid: String
+    let primaryZid: String?
     let firstName: String
     let profileImage: String?
     let publicAddress: String?
     let followersCount: String?
     let followingCount: String?
+}
+
+extension ZPostUserProfile {
+    var zIdOrPublicAddressDisplayText: String? {
+        if let id = primaryZid ?? publicAddress {
+            if id.hasPrefix(ZeroContants.ZERO_WALLET_ADDRESS_PREFIX) {
+                return displayFormattedAddress(id)
+            } else {
+                return id
+            }
+        }
+        return nil
+    }
 }
 
 struct ZPostUserFollowingStatus: Codable {

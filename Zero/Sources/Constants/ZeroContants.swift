@@ -5,6 +5,8 @@ enum ZeroContants {
     static let appServer: AppServer = ProdServer()
     
     static let ZERO_CHANNEL_PREFIX = "0://"
+    static let ZERO_WALLET_ADDRESS_PREFIX = "0x"
+    
     static let accountProvider: String = ZeroContants.appServer.matrixHomeServerUrl.replacingOccurrences(of: "https://", with: "")
 }
 

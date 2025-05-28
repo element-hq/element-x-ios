@@ -12,6 +12,7 @@ public struct ZMatrixUser: Codable, Identifiable {
     public let profileSummary: ZMatrixUserProfile?
     public let primaryZID: String?
     public let primaryWalletAddress: String?
+    public let wallets: [ZWallet]?
     
     public var profileImageURL: URL? {
         URL(string: profileSummary?.profileImage ?? "")
@@ -42,15 +43,23 @@ extension ZMatrixUser: Hashable {
 
 extension ZMatrixUser {
     public var primaryZIdOrWalletAddress: String? {
-        primaryZID ?? formatted(address: primaryWalletAddress)
+        primaryZID ?? (primaryWalletAddress ?? thirdWebWalletAddress)
     }
     
-    private func formatted(address: String?) -> String? {
-        if let walletAddress = address {
-            let firstSix = String(walletAddress.prefix(6))
-            let lastFour = String(walletAddress.suffix(4))
-            return "\(firstSix)...\(lastFour)"
-        }
-        return nil
+    public var zIdOrPublicAddressDisplayText: String? {
+        primaryZID ?? displayFormattedAddress(primaryWalletAddress ?? thirdWebWalletAddress)
     }
+    
+    var thirdWebWalletAddress: String? {
+        wallets?.first(where: { $0.isThirdWeb })?.publicAddress
+    }
+}
+
+func displayFormattedAddress(_ address: String?) -> String? {
+    if let walletAddress = address {
+        let firstSix = String(walletAddress.prefix(6))
+        let lastFour = String(walletAddress.suffix(4))
+        return "\(firstSix)...\(lastFour)"
+    }
+    return nil
 }

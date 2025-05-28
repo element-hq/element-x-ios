@@ -435,7 +435,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     guard let self else { return }
                     guard (directMember?.matrixId == otherMemberId) else { return }
                     
-                    state.roomSubtitle = directMember?.primaryZIdOrWalletAddress
+                    state.roomSubtitle = directMember?.zIdOrPublicAddressDisplayText
                 }
                 .store(in: &cancellables)
             

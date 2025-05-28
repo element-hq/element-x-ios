@@ -114,10 +114,12 @@ struct UserProfileDetailsSection: View {
                         .foregroundStyle(.compound.textPrimary)
                         .lineLimit(1)
                     
-                    Text(context.viewState.userProfile.primaryZid)
-                        .font(.zero.bodyLG)
-                        .foregroundStyle(.compound.textSecondary)
-                        .lineLimit(1)
+                    if let zid = context.viewState.userProfile.zIdOrPublicAddressDisplayText {
+                        Text(zid)
+                            .font(.zero.bodyLG)
+                            .foregroundStyle(.compound.textSecondary)
+                            .lineLimit(1)
+                    }
                 }
                 
                 Spacer()

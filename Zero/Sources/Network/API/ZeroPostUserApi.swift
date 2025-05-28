@@ -28,8 +28,12 @@ class ZeroPostUserApi : ZeroPostUserApiProtocol {
     // MARK: - Public
     
     func fetchUserProfile(userZId: String) async throws -> Result<ZPostUserProfile, any Error> {
-        let url = PostUserEndPoints.userProfileEndPoint
-            .replacingOccurrences(of: PostUserConstants.user_zid_path_param, with: userZId)
+        var url = PostUserEndPoints.userProfileEndPoint
+        if isUserZIdAnAddress(userZId) {
+            url.append("address/\(userZId)")
+        } else {
+            url.append("zid/\(userZId)")
+        }
         let result: Result<ZPostUserProfile, Error> = try await APIManager
             .shared
             .authorisedRequest(url,
@@ -42,6 +46,10 @@ class ZeroPostUserApi : ZeroPostUserApiProtocol {
         case .failure(let error):
             return .failure(error)
         }
+    }
+    
+    private func isUserZIdAnAddress(_ userZId: String) -> Bool {
+        return userZId.hasPrefix(ZeroContants.ZERO_WALLET_ADDRESS_PREFIX)
     }
     
     func fetchUserFollowingStatus(userId: String) async throws -> Result<ZPostUserFollowingStatus, any Error> {
@@ -101,12 +109,11 @@ class ZeroPostUserApi : ZeroPostUserApiProtocol {
     private enum PostUserEndPoints {
         private static let hostURL = ZeroContants.appServer.zeroRootUrl
         
-        static let userProfileEndPoint = "\(hostURL)api/v2/users/profile/zid/\(PostUserConstants.user_zid_path_param)"
+        static let userProfileEndPoint = "\(hostURL)api/v2/users/profile/"
         static let userFollowsEndPoint = "\(hostURL)api/v2/user-follows/\(PostUserConstants.user_id_path_param)"
     }
     
     private enum PostUserConstants {
-        static let user_zid_path_param = "{user_zid}"
         static let user_id_path_param = "{user_id}"
         
         static let user_follows_status_url_path = "/status"

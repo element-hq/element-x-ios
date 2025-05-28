@@ -35,8 +35,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         
         super.init(initialViewState: .init(userID: userProfile.userId,
                                            userProfile: userProfile,
-                                           shouldShowFollowButton: (clientProxy.userID.matrixIdToCleanHex() != userProfile.userId)
-                                           && !userProfile.primaryZid.isEmpty,
+                                           shouldShowFollowButton: (clientProxy.userID.matrixIdToCleanHex() != userProfile.userId),
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
         
@@ -82,8 +81,8 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     }
     
     private func fetchUserProfile() async {
-        if !state.userProfile.primaryZid.isEmpty {
-            let result = await clientProxy.fetchFeedUserProfile(userZId: state.userProfile.primaryZid)
+        if let zid = state.userProfile.primaryZid {
+            let result = await clientProxy.fetchFeedUserProfile(userZId: zid)
             switch result {
             case .success(let userProfile):
                 state.userProfile = userProfile

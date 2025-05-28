@@ -96,7 +96,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .sink { [weak self] directMember in
                 guard let self else { return }
                 
-                state.roomSubtitle = directMember?.primaryZIdOrWalletAddress
+                state.roomSubtitle = directMember?.zIdOrPublicAddressDisplayText
             }
             .store(in: &cancellables)
         

@@ -52,21 +52,21 @@ struct UserProfileProxy: Equatable, Hashable {
         userID = zeroSearchedUser.matrixId
         displayName = zeroSearchedUser.name
         avatarURL = avatarUrl.flatMap(URL.init(string:))
-        primaryZeroId = zeroSearchedUser.primaryZID
+        primaryZeroId = zeroSearchedUser.zIdOrPublicAddressDisplayText
     }
     
     init(sdkUserProfile: MatrixRustSDK.UserProfile, zeroUserProfile: ZMatrixSearchedUser?) {
         userID = sdkUserProfile.userId
         displayName = sdkUserProfile.displayName
         avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
-        primaryZeroId = zeroUserProfile?.primaryZID
+        primaryZeroId = zeroUserProfile?.zIdOrPublicAddressDisplayText
     }
     
     init(zeroUserProfile: ZMatrixUser?, sdkUserProfile: MatrixRustSDK.UserProfile) {
         userID = sdkUserProfile.userId
         displayName = sdkUserProfile.displayName
         avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
-        primaryZeroId = zeroUserProfile?.primaryZID
+        primaryZeroId = zeroUserProfile?.primaryZIdOrWalletAddress ?? ""
     }
     
     /// A user is meant to be "verified" when the GET profile returns back either the display name or the avatar

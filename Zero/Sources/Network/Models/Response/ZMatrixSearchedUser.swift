@@ -10,14 +10,18 @@ public struct ZMatrixSearchedUser: Codable, Identifiable, Hashable {
     public let primaryWalletAddress: String?
 }
 
+extension ZMatrixSearchedUser {
+    public var primaryZIdOrWalletAddress: String? {
+        primaryZID ?? primaryWalletAddress
+    }
+    
+    public var zIdOrPublicAddressDisplayText: String? {
+        primaryZID ?? displayFormattedAddress(primaryWalletAddress)
+    }
+}
+
 extension ZMatrixSearchedUser: Equatable {
     public static func == (lhs: ZMatrixSearchedUser, rhs: ZMatrixSearchedUser) -> Bool {
         lhs.id == rhs.id
     }
 }
-
-// extension ZMatrixSearchedUser {
-//    public var primaryZIdOrWalletAddress: String? {
-//        return primaryZID ?? Helper.formattedPrimaryWalletAddress(address: primaryWalletAddress)
-//    }
-// }
