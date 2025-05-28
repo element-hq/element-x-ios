@@ -14,6 +14,10 @@ struct TimelineView: View {
     var body: some View {
         TimelineViewRepresentable()
             .id(timelineContext.viewState.roomID)
+            // It is tempting to inject these environment values last to avoid also injecting them into the sheets,
+            // and that approach works great on iOS. But it doesn't work on macOS (as of 15.5) where the app goes 💥
+            .environmentObject(timelineContext)
+            .environment(\.timelineContext, timelineContext)
             .environment(\.focussedEventID, timelineContext.viewState.timelineState.focussedEvent?.eventID)
             .alert(item: $timelineContext.alertInfo)
             .sheet(item: $timelineContext.manageMemberViewModel) {
@@ -33,6 +37,7 @@ struct TimelineView: View {
                     .makeActions()
                 if let actions {
                     TimelineItemMenu(item: info.item, actions: actions)
+                        .environmentObject(timelineContext)
                 }
             }
             .sheet(item: $timelineContext.reactionSummaryInfo) {
@@ -44,10 +49,8 @@ struct TimelineView: View {
             }
             .sheet(item: $timelineContext.readReceiptsSummaryInfo) {
                 ReadReceiptsSummaryView(orderedReadReceipts: $0.orderedReceipts)
+                    .environmentObject(timelineContext)
             }
-            // Ensure these are available in the sheets as well. The order is important.
-            .environmentObject(timelineContext)
-            .environment(\.timelineContext, timelineContext)
     }
 }
 
