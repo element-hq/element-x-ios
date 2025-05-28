@@ -15,7 +15,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "acbe59727c8352c6768f8444acc6deb07e4b7563"
+        "revision" : "139d4f3d1ed19cc513686e5e39750ecef54c8403"
       }
     },
     {
