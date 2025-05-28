@@ -175,62 +175,11 @@ extension RoomFlowCoordinator {
     func addRouteMapping(stateMachine: StateMachine<State, Event>) {
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (fromState, event) {
-            case (_, .presentJoinRoomScreen):
-                return .joinRoomScreen
-            case (_, .dismissJoinRoomScreen):
-                return .complete
-                
+            // Room
             case (_, .presentRoom):
                 return .room
             case (_, .dismissFlow):
                 return .complete
-                
-            case (_, .presentThread(let itemID)):
-                return .thread(itemID: itemID)
-            case (_, .dismissThread):
-                return .room
-                
-            case (.initial, .presentRoomDetails):
-                return .roomDetails(isRoot: true)
-            case (.room, .presentRoomDetails):
-                return .roomDetails(isRoot: false)
-            case (.roomDetails, .dismissRoomDetails):
-                return .room
-                
-            case (.roomDetails, .presentRoomDetailsEditScreen):
-                return .roomDetailsEditScreen
-            case (.roomDetailsEditScreen, .dismissRoomDetailsEditScreen):
-                return .roomDetails(isRoot: false)
-                
-            case (.roomDetails, .presentNotificationSettingsScreen):
-                return .notificationSettings
-            case (.notificationSettings, .dismissNotificationSettingsScreen):
-                return .roomDetails(isRoot: false)
-                
-            case (.notificationSettings, .presentGlobalNotificationSettingsScreen):
-                return .globalNotificationSettings
-            case (.globalNotificationSettings, .dismissGlobalNotificationSettingsScreen):
-                return .notificationSettings
-                
-            case (.roomDetails, .presentRoomMembersList):
-                return .roomMembersList
-            case (.roomMembersList, .dismissRoomMembersList):
-                return .roomDetails(isRoot: false)
-
-            case (_, .presentRoomMemberDetails(userID: let userID)):
-                return .roomMemberDetails(userID: userID, previousState: fromState)
-            case (.roomMemberDetails(_, let previousState), .dismissRoomMemberDetails):
-                return previousState
-            
-            case (.roomMemberDetails(_, let previousState), .presentUserProfile(let userID)):
-                return .userProfile(userID: userID, previousState: previousState)
-            case (.userProfile(_, let previousState), .dismissUserProfile):
-                return previousState
-                
-            case (_, .presentInviteUsersScreen):
-                return .inviteUsersScreen(previousState: fromState)
-            case (.inviteUsersScreen(let previousState), .dismissInviteUsersScreen):
-                return previousState
                 
             case (.room, .presentReportContent(let itemID, let senderID)):
                 return .reportContent(itemID: itemID, senderID: senderID)
@@ -276,35 +225,50 @@ extension RoomFlowCoordinator {
             case (.pinnedEventsTimeline(let previousState), .dismissPinnedEventsTimeline):
                 return previousState
                 
-            case (.roomDetails, .presentPollsHistory):
-                return .pollsHistory
-            case (.pollsHistory, .dismissPollsHistory):
-                return .roomDetails(isRoot: false)
-            
-            case (.pollsHistory, .presentPollForm):
-                return .pollsHistoryForm
-            case (.pollsHistoryForm, .dismissPollForm):
-                return .pollsHistory
-            
-            case (.roomDetails, .presentRolesAndPermissionsScreen):
-                return .rolesAndPermissions
-            case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen):
-                return .roomDetails(isRoot: false)
-            
             case (.room, .presentResolveSendFailure):
                 return .resolveSendFailure
             case (.resolveSendFailure, .dismissResolveSendFailure):
                 return .room
-            
-            case (_, .startChildFlow(let roomID, _, _)):
-                return .presentingChild(childRoomID: roomID, previousState: fromState)
-            case (.presentingChild(_, let previousState), .dismissChildFlow):
-                return previousState
                 
-            case (_, .presentKnockRequestsListScreen):
-                return .knockRequestsList(previousState: fromState)
-            case (.knockRequestsList(let previousState), .dismissKnockRequestsListScreen):
-                return previousState
+            // Thread
+            case (_, .presentThread(let itemID)):
+                return .thread(itemID: itemID)
+            case (_, .dismissThread):
+                return .room
+                
+            // Room Details
+                
+            case (.initial, .presentRoomDetails):
+                return .roomDetails(isRoot: true)
+            case (.room, .presentRoomDetails):
+                return .roomDetails(isRoot: false)
+            case (.roomDetails, .dismissRoomDetails):
+                return .room
+                
+            case (.roomDetails, .presentRoomDetailsEditScreen):
+                return .roomDetailsEditScreen
+            case (.roomDetailsEditScreen, .dismissRoomDetailsEditScreen):
+                return .roomDetails(isRoot: false)
+                
+            case (.roomDetails, .presentRoomMembersList):
+                return .roomMembersList
+            case (.roomMembersList, .dismissRoomMembersList):
+                return .roomDetails(isRoot: false)
+                
+            case (.roomDetails, .presentNotificationSettingsScreen):
+                return .notificationSettings
+            case (.notificationSettings, .dismissNotificationSettingsScreen):
+                return .roomDetails(isRoot: false)
+                
+            case (.roomDetails, .presentPollsHistory):
+                return .pollsHistory
+            case (.pollsHistory, .dismissPollsHistory):
+                return .roomDetails(isRoot: false)
+                
+            case (.roomDetails, .presentRolesAndPermissionsScreen):
+                return .rolesAndPermissions
+            case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen):
+                return .roomDetails(isRoot: false)
                 
             case (.roomDetails, .presentMediaEventsTimeline):
                 return .mediaEventsTimeline(previousState: fromState)
@@ -321,10 +285,54 @@ extension RoomFlowCoordinator {
             case (.reportRoom(let previousState), .dismissReportRoomScreen):
                 return previousState
                 
+            // Join room
+                
+            case (_, .presentJoinRoomScreen):
+                return .joinRoomScreen
+            case (_, .dismissJoinRoomScreen):
+                return .complete
+                
             case (.joinRoomScreen, .presentDeclineAndBlockScreen):
                 return .declineAndBlockScreen
             case (.declineAndBlockScreen, .dismissDeclineAndBlockScreen):
                 return .joinRoomScreen
+                
+            // Other
+        
+            case (_, .presentInviteUsersScreen):
+                return .inviteUsersScreen(previousState: fromState)
+            case (.inviteUsersScreen(let previousState), .dismissInviteUsersScreen):
+                return previousState
+                
+            case (_, .startChildFlow(let roomID, _, _)):
+                return .presentingChild(childRoomID: roomID, previousState: fromState)
+            case (.presentingChild(_, let previousState), .dismissChildFlow):
+                return previousState
+                    
+            case (_, .presentRoomMemberDetails(userID: let userID)):
+                return .roomMemberDetails(userID: userID, previousState: fromState)
+            case (.roomMemberDetails(_, let previousState), .dismissRoomMemberDetails):
+                return previousState
+                
+            case (_, .presentKnockRequestsListScreen):
+                return .knockRequestsList(previousState: fromState)
+            case (.knockRequestsList(let previousState), .dismissKnockRequestsListScreen):
+                return previousState
+                
+            case (.notificationSettings, .presentGlobalNotificationSettingsScreen):
+                return .globalNotificationSettings
+            case (.globalNotificationSettings, .dismissGlobalNotificationSettingsScreen):
+                return .notificationSettings
+            
+            case (.roomMemberDetails(_, let previousState), .presentUserProfile(let userID)):
+                return .userProfile(userID: userID, previousState: previousState)
+            case (.userProfile(_, let previousState), .dismissUserProfile):
+                return previousState
+                
+            case (.pollsHistory, .presentPollForm):
+                return .pollsHistoryForm
+            case (.pollsHistoryForm, .dismissPollForm):
+                return .pollsHistory
             
             default:
                 return nil
