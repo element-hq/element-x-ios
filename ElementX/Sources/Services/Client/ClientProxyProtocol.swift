@@ -63,8 +63,8 @@ enum SessionVerificationState {
     case unverified
 }
 
-// The `Codable` conformance is just for the purpose of migration
-enum TimelineMediaVisibility: Codable {
+// The `Decodable` conformance is just for the purpose of migration
+enum TimelineMediaVisibility: Decodable {
     case always
     case privateOnly
     case never
@@ -197,7 +197,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     @discardableResult func clearCaches() async -> Result<Void, ClientProxyError>
     
-    func fetchMediaPreviewConfig() async -> Result<MediaPreviewConfig?, ClientProxyError>
+    func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError>
 
     // MARK: - Ignored users
     

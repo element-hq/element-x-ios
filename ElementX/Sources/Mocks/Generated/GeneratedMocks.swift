@@ -4373,17 +4373,17 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return clearCachesReturnValue
         }
     }
-    //MARK: - fetchMediaPreviewConfig
+    //MARK: - fetchMediaPreviewConfiguration
 
-    var fetchMediaPreviewConfigUnderlyingCallsCount = 0
-    var fetchMediaPreviewConfigCallsCount: Int {
+    var fetchMediaPreviewConfigurationUnderlyingCallsCount = 0
+    var fetchMediaPreviewConfigurationCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return fetchMediaPreviewConfigUnderlyingCallsCount
+                return fetchMediaPreviewConfigurationUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = fetchMediaPreviewConfigUnderlyingCallsCount
+                    returnValue = fetchMediaPreviewConfigurationUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -4391,27 +4391,27 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                fetchMediaPreviewConfigUnderlyingCallsCount = newValue
+                fetchMediaPreviewConfigurationUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    fetchMediaPreviewConfigUnderlyingCallsCount = newValue
+                    fetchMediaPreviewConfigurationUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var fetchMediaPreviewConfigCalled: Bool {
-        return fetchMediaPreviewConfigCallsCount > 0
+    var fetchMediaPreviewConfigurationCalled: Bool {
+        return fetchMediaPreviewConfigurationCallsCount > 0
     }
 
-    var fetchMediaPreviewConfigUnderlyingReturnValue: Result<MediaPreviewConfig?, ClientProxyError>!
-    var fetchMediaPreviewConfigReturnValue: Result<MediaPreviewConfig?, ClientProxyError>! {
+    var fetchMediaPreviewConfigurationUnderlyingReturnValue: Result<MediaPreviewConfig?, ClientProxyError>!
+    var fetchMediaPreviewConfigurationReturnValue: Result<MediaPreviewConfig?, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return fetchMediaPreviewConfigUnderlyingReturnValue
+                return fetchMediaPreviewConfigurationUnderlyingReturnValue
             } else {
                 var returnValue: Result<MediaPreviewConfig?, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = fetchMediaPreviewConfigUnderlyingReturnValue
+                    returnValue = fetchMediaPreviewConfigurationUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -4419,22 +4419,22 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                fetchMediaPreviewConfigUnderlyingReturnValue = newValue
+                fetchMediaPreviewConfigurationUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    fetchMediaPreviewConfigUnderlyingReturnValue = newValue
+                    fetchMediaPreviewConfigurationUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var fetchMediaPreviewConfigClosure: (() async -> Result<MediaPreviewConfig?, ClientProxyError>)?
+    var fetchMediaPreviewConfigurationClosure: (() async -> Result<MediaPreviewConfig?, ClientProxyError>)?
 
-    func fetchMediaPreviewConfig() async -> Result<MediaPreviewConfig?, ClientProxyError> {
-        fetchMediaPreviewConfigCallsCount += 1
-        if let fetchMediaPreviewConfigClosure = fetchMediaPreviewConfigClosure {
-            return await fetchMediaPreviewConfigClosure()
+    func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError> {
+        fetchMediaPreviewConfigurationCallsCount += 1
+        if let fetchMediaPreviewConfigurationClosure = fetchMediaPreviewConfigurationClosure {
+            return await fetchMediaPreviewConfigurationClosure()
         } else {
-            return fetchMediaPreviewConfigReturnValue
+            return fetchMediaPreviewConfigurationReturnValue
         }
     }
     //MARK: - ignoreUser

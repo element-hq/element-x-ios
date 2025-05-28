@@ -742,7 +742,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func fetchMediaPreviewConfig() async -> Result<MediaPreviewConfig?, ClientProxyError> {
+    func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError> {
         do {
             let config = try await client.fetchMediaPreviewConfig()
             return .success(config)

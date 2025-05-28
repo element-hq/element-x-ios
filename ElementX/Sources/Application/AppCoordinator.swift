@@ -402,13 +402,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
+    // This could be removed once the adotpion of 25.06.x is widespread.
     private func performSettingsToAccountDataMigration(userSession: UserSessionProtocol) {
         guard let userDefaults = UserDefaults(suiteName: InfoPlistReader.main.appGroupIdentifier) else {
             return
         }
         
         let hideInviteAvatars = userDefaults.value(forKey: "hideInviteAvatars") as? Bool
-        let timelineMediaVisibility = userDefaults.value(forKey: "timelineMediaVisibility") as? TimelineMediaVisibility
+        let timelineMediaVisibility = userDefaults
+            .data(forKey: "timelineMediaVisibility")
+            .flatMap {
+                try? JSONDecoder().decode(TimelineMediaVisibility.self, from: $0)
+            }
         let hideTimelineMedia = userDefaults.value(forKey: "hideTimelineMedia") as? Bool
         
         guard hideInviteAvatars != nil || timelineMediaVisibility != nil || hideTimelineMedia != nil else {
@@ -417,7 +422,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         Task {
-            switch await userSession.clientProxy.fetchMediaPreviewConfig() {
+            switch await userSession.clientProxy.fetchMediaPreviewConfiguration() {
             case let .success(config):
                 guard config == nil else {
                     // Found a server configuration, no need to migrate.

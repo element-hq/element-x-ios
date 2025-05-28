@@ -44,7 +44,6 @@ final class AppSettings {
         case optimizeMediaUploads
         case appAppearance
         case sharePresence
-        case hideUnreadMessagesBadge
         case isNewBloomEnabled
         
         case elementCallBaseURLOverride
@@ -58,6 +57,7 @@ final class AppSettings {
         case developerOptionsEnabled
         
         // Doug's tweaks 🔧
+        case hideUnreadMessagesBadge
         case hideQuietNotificationAlerts
     }
     
