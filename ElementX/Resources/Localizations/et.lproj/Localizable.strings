@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix on avatud võrk turvalise ja hajutatud suhtluse jaoks.";
 "screen_server_confirmation_message_register" = "See on koht, kus sinu vestlused elavad – just nagu kasutaksid oma e-kirjade säilitamiseks e-postiteenuse pakkujat.";
 "screen_server_confirmation_title_login" = "Sa oled sisselogimas koduserverisse %1$@";
+"screen_server_confirmation_title_picker_mode" = "Vali teenusepakkuja";
 "screen_server_confirmation_title_register" = "Sa oled loomas kasutajakontot koduserveris %1$@";
 "screen_session_verification_cancelled_subtitle" = "Olukord pole päris õige. Päring kas aegus või teine osapool keeldus päringule vastamast.";
 "screen_session_verification_compare_emojis_subtitle" = "Kinnita, et kõik järgnevalt kuvatud emojid on täpselt samad, mida sa näed oma teises sessioonis.";

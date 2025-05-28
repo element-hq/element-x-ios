@@ -615,7 +615,7 @@
 "screen_change_account_provider_subtitle" = "Använd en annan kontoleverantör, till exempel din egen privata server eller ett jobbkonto.";
 "screen_change_account_provider_title" = "Byt kontoleverantör";
 "screen_change_server_error_invalid_homeserver" = "Vi kunde inte nå den här hemservern. Kontrollera att du har angett hemserverns URL korrekt. Om URL:en är korrekt kontaktar du administratören för hemservern för ytterligare hjälp.";
-"screen_change_server_error_invalid_well_known" = "Sliding Sync är inte tillgängligt på grund av ett problem i well-known-filen:\n%1$@";
+"screen_change_server_error_invalid_well_known" = "Sliding Sync är inte tillgängligt på grund av ett problem i .well-known-filen:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ is not allowed to connect to %2$@.";
 "screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix är ett öppet nätverk för säker, decentraliserad kommunikation.";
 "screen_server_confirmation_message_register" = "Det är här dina konversationer kommer att sparas - precis som du skulle använda en e-postleverantör för att spara dina e-brev.";
 "screen_server_confirmation_title_login" = "Du är på väg att logga in på %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "Du är på väg att skapa ett konto på %1$@";
 "screen_session_verification_cancelled_subtitle" = "Något verkar inte stämma. Antingen gick tidsgränsen för begäran ut eller så avvisades begäran.";
 "screen_session_verification_compare_emojis_subtitle" = "Bekräfta att emojierna nedan matchar de som visas på din andra session.";

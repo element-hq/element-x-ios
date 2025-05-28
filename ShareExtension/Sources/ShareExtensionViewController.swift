@@ -15,7 +15,9 @@ class ShareExtensionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Target.shareExtension.configure(logLevel: appSettings.logLevel, traceLogPacks: appSettings.traceLogPacks)
+        Target.shareExtension.configure(logLevel: appSettings.logLevel,
+                                        traceLogPacks: appSettings.traceLogPacks,
+                                        sentryURL: nil)
         
         addChild(hostingController)
         view.addMatchedSubview(hostingController.view)

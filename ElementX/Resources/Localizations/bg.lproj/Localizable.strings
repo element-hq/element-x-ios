@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix е отворена мрежа за сигурна, децентрализирана комуникация.";
 "screen_server_confirmation_message_register" = "Това е мястото, където ще живеят вашите разговори — точно както бихте използвали имейл доставчик, за да съхранявате вашите имейли.";
 "screen_server_confirmation_title_login" = "На път сте да влезете в %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "На път сте да създадете акаунт в %1$@";
 "screen_session_verification_cancelled_subtitle" = "Нещо не изглежда наред. Или времето за изчакване на заявката е изтекло, или заявката е отхвърлена.";
 "screen_session_verification_compare_emojis_subtitle" = "Потвърдете, че емоджитата по-долу съвпадат с показаните в другата ви сесия.";

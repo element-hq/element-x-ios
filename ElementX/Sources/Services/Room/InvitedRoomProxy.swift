@@ -10,33 +10,26 @@ import MatrixRustSDK
 import UIKit
 
 class InvitedRoomProxy: InvitedRoomProxyProtocol {
-    private let roomListItem: RoomListItemProtocol
-    private let roomPreview: RoomPreviewProtocol
+    private let room: Room
     
-    // A room identifier is constant and lazy stops it from being fetched
-    // multiple times over FFI
-    lazy var id: String = info.id
-    
-    let ownUserID: String
+    lazy var id: String = room.id()
+    lazy var ownUserID: String = room.ownUserId()
     
     let info: BaseRoomInfoProxyProtocol
     let inviter: RoomMemberProxyProtocol?
-        
-    init(roomListItem: RoomListItemProtocol,
-         roomPreview: RoomPreviewProtocol,
-         ownUserID: String,
+            
+    init(room: Room,
          zeroUsersService: ZeroMatrixUsersService) async throws {
-        self.roomListItem = roomListItem
-        self.roomPreview = roomPreview
-        self.ownUserID = ownUserID
-        let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: roomListItem.id())
-        info = try RoomPreviewInfoProxy(roomPreviewInfo: roomPreview.info(), roomAvatarCached: cachedRoomAvatar)
-        inviter = await roomPreview.inviter().map(RoomMemberProxy.init)
+        self.room = room
+        
+        let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: room.id())
+        info = try await RoomInfoProxy(roomInfo: room.roomInfo(), roomAvatarCached: cachedRoomAvatar)
+        inviter = try? await room.inviter().map(RoomMemberProxy.init)
     }
     
     func rejectInvitation() async -> Result<Void, RoomProxyError> {
         do {
-            return try await .success(roomPreview.leave())
+            return try await .success(room.leave())
         } catch {
             MXLog.error("Failed rejecting invitiation with error: \(error)")
             return .failure(.sdkError(error))

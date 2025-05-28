@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix is een open netwerk voor veilige, gedecentraliseerde communicatie.";
 "screen_server_confirmation_message_register" = "Dit is waar je gesprekken zullen worden bewaard — net zoals je een e-mailprovider zou gebruiken om je e-mails te bewaren.";
 "screen_server_confirmation_title_login" = "Je staat op het punt je aan te melden bij %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "Je staat op het punt een account aan te maken op %1$@";
 "screen_session_verification_cancelled_subtitle" = "Er lijkt iets niet goed te gaan. Of er is een time-out opgetreden of het verzoek is geweigerd.";
 "screen_session_verification_compare_emojis_subtitle" = "Bevestig dat de emoji's hieronder overeenkomen met de emoji's in je andere sessie.";

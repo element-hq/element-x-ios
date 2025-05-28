@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix 是一个用于安全、去中心化通信的开放网络。";
 "screen_server_confirmation_message_register" = "这是您的对话将存在的地方，就像您使用电子邮件提供方来保存电子邮件一样。";
 "screen_server_confirmation_title_login" = "即将登录 %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "即将在 %1$@ 上创建一个账户";
 "screen_session_verification_cancelled_subtitle" = "发生了一些错误。网络请求超时，或者被服务器拒绝。";
 "screen_session_verification_compare_emojis_subtitle" = "确认下方的表情符号与另一设备上显示的相同。";

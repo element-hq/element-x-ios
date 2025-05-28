@@ -8,7 +8,7 @@
 "a11y_notifications_muted" = "Mutututa";
 "a11y_page_n" = "%1$d. orria";
 "a11y_pause" = "Eten";
-"a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
+"a11y_paused_voice_message" = "Ahots-mezua, iraupena: %1$@, uneko posizioa: %2$@";
 "a11y_pin_field" = "PINaren eremua";
 "a11y_play" = "Erreproduzitu";
 "a11y_poll_end" = "Amaitutako inkesta";
@@ -23,7 +23,7 @@
 "a11y_start_call" = "Hasi dei bat";
 "a11y_user_menu" = "Erabiltzailea-menua";
 "a11y_view_details" = "Ikusi xehetasunak";
-"a11y_voice_message" = "Voice message, duration: %1$@";
+"a11y_voice_message" = "Ahots-mezua, iraupena: %1$@";
 "a11y_voice_message_record" = "Grabatu ahots-mezua.";
 "a11y_voice_message_stop_recording" = "Utzi grabatzeari";
 "action_accept" = "Onartu";
@@ -99,7 +99,7 @@
 "action_report" = "Salatu";
 "action_report_bug" = "Eman errore baten berri";
 "action_report_content" = "Salatu edukia";
-"action_report_dm" = "Report conversation";
+"action_report_dm" = "Salatu elkarrizketa";
 "action_report_room" = "Salatu gela";
 "action_reset" = "Berrezarri";
 "action_reset_identity" = "Berrezarri identitatea";
@@ -129,8 +129,8 @@
 "action_yes" = "Bai";
 "action_yes_try_again" = "Bai, saiatu berriro";
 "banner_migrate_to_native_sliding_sync_action" = "Amaitu saioa eta bertsio-berritu";
-"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
-"banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
+"banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@(e)k ez da bateragarria lehengo protokoloarekin. Amaitu saioa eta hasi berriro aplikazioa erabiltzen jarraitzeko.";
+"banner_migrate_to_native_sliding_sync_description" = "Orain zure zerbitzaria protokolo berri eta azkarrago batekin da bateragarria. Amaitu saioa eta hasi berriro protokolo berria erabiltzeko. Orain eginez gero, etorkizunean protokolo zaharra kentzen denean ez zaizu behartutako saioa ixtera.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Zure zerbitzaria ez da bateragarria protokolo zaharrarekin. Amaitu saioa eta hasi berriro aplikazioa erabiltzen jarraitzeko.";
 "banner_migrate_to_native_sliding_sync_title" = "Bertsio-berritzea eskuragarri";
 "banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
@@ -203,14 +203,14 @@
 "common_not_encrypted" = "Zifratu gabe";
 "common_offline" = "Deskonektatuta";
 "common_open_source_licenses" = "Kode irekiko lizentziak";
-"common_optic_id_ios" = "Optic ID";
+"common_optic_id_ios" = "ID optikoa";
 "common_or" = "edo";
 "common_password" = "Pasahitza";
 "common_people" = "Jendea";
 "common_permalink" = "Esteka iraunkorra";
 "common_permission" = "Baimena";
 "common_pinned" = "Finkatuta";
-"common_please_check_internet_connection" = "Please check your internet connection";
+"common_please_check_internet_connection" = "Egiaztatu Interneteko konexioa";
 "common_please_wait" = "Itxaron…";
 "common_poll_end_confirmation" = "Ziur inkesta hau amaitu nahi duzula?";
 "common_poll_summary" = "Inkesta:%1$@";
@@ -295,11 +295,11 @@
 "crypto_identity_change_verification_violation_new" = "%1$@(r)en %2$@ identitatea berrezarri da. %3$@";
 "crypto_identity_change_withdraw_verification_action" = "Withdraw verification";
 "dialog_confirm_link_message" = "The link %1$@ is taking you to another site %2$@\n\nAre you sure you want to continue?";
-"dialog_confirm_link_title" = "Double-check this link";
+"dialog_confirm_link_title" = "Egiaztatu honako esteka";
 "dialog_permission_camera" = "Aplikazioak kamera erabiltzeko, eman baimena sistemaren ezarpenetan.";
 "dialog_permission_generic" = "Eman baimena sistemaren ezarpenetan.";
 "dialog_permission_location_description_ios" = "Eman sarbidea Ezarpenak -> Kokapena atalean.";
-"dialog_permission_location_title_ios" = "%1$@ does not have access to your location.";
+"dialog_permission_location_title_ios" = "%1$@(e)k ez du zure kokalekurako sarbiderik.";
 "dialog_permission_microphone" = "Aplikazioak mikrofonoa erabiltzeko, eman baimena sistemaren ezarpenetan.";
 "dialog_permission_microphone_description_ios" = "Grant access so you can record and send messages with audio.";
 "dialog_permission_microphone_title_ios" = "%1$@ needs permission to access your microphone.";
@@ -555,7 +555,7 @@
 "screen_account_provider_signup_title" = "%@(e)n kontua sortzear zaude";
 "screen_advanced_settings_developer_mode" = "Garatzaile modua";
 "screen_advanced_settings_developer_mode_description" = "Gaitu garatzaileentzako ezaugarrietarako eta funtzionalitateetarako sarbidea izateko.";
-"screen_advanced_settings_media_compression_description" = "Upload photos and videos faster and reduce data usage";
+"screen_advanced_settings_media_compression_description" = "Igo argazkiak eta bideoak azkarrago eta murriztu datuen erabilera";
 "screen_advanced_settings_media_compression_title" = "Optimise media quality";
 "screen_advanced_settings_rich_text_editor_description" = "Desgaitu testu aberatseko editorea Markdown eskuz idazteko.";
 "screen_advanced_settings_send_read_receipts" = "Irakurketa-agiriak";
@@ -578,7 +578,7 @@
 "screen_app_lock_settings_change_pin" = "Aldatu PIN kodea";
 "screen_app_lock_settings_enable_biometric_unlock" = "Baimendu desblokeo biometrikoa";
 "screen_app_lock_settings_enable_face_id_ios" = "Baimendu Face IDa";
-"screen_app_lock_settings_enable_optic_id_ios" = "Allow Optic ID";
+"screen_app_lock_settings_enable_optic_id_ios" = "Baimendu ID optikoa";
 "screen_app_lock_settings_enable_touch_id_ios" = "Baimendu Touch IDa";
 "screen_app_lock_settings_remove_pin" = "Kendu PIN kodea";
 "screen_app_lock_settings_remove_pin_alert_message" = "Ziur PINa kendu nahi duzula?";
@@ -621,7 +621,7 @@
 "screen_change_server_error_unauthorized_homeserver_content" = "This app has been configured to allow: %1$@.";
 "screen_change_server_error_unauthorized_homeserver_title" = "Account provider %1$@ not allowed.";
 "screen_change_server_form_header" = "Zerbitzariaren URLa";
-"screen_change_server_form_notice" = "Enter a domain address.";
+"screen_change_server_form_notice" = "Sartu domeinu-helbide bat.";
 "screen_change_server_subtitle" = "Zein da zure zerbitzariaren helbidea?";
 "screen_change_server_title" = "Hautatu zure zerbitzaria";
 "screen_chat_backup_key_backup_action_disable" = "Ezabatu gakoen biltegia";
@@ -697,7 +697,7 @@
 "screen_join_room_ban_by_message" = "You were banned from this room by %1$@.";
 "screen_join_room_ban_message" = "You were banned from this room";
 "screen_join_room_ban_reason" = "Arrazoia: %1$@.";
-"screen_join_room_fail_message" = "Joining the room failed.";
+"screen_join_room_fail_message" = "Gelara sartzeak huts egin du.";
 "screen_join_room_fail_reason" = "This room is either invite-only or there might be restrictions to access at space level.";
 "screen_join_room_forget_action" = "Ahaztu gela hau";
 "screen_join_room_invite_required_message" = "You need an invite in order to join this room";
@@ -727,7 +727,7 @@
 "screen_login_title_with_homeserver" = "Hasi saioa %1$@(e)n";
 "screen_media_browser_delete_confirmation_subtitle" = "Fitxategia gelatik kenduko da eta kideek ezingo dute atzitu.";
 "screen_media_browser_delete_confirmation_title" = "Fitxategia ezabatu?";
-"screen_media_browser_download_error_message" = "Check your internet connection and try again.";
+"screen_media_browser_download_error_message" = "Egiaztatu Interneteko konexioa eta saiatu berriro.";
 "screen_media_browser_files_empty_state_subtitle" = "Gela honetara igotako dokumentuak, audio-fitxategiak, eta ahots-mezuak hemen erakutsiko dira.";
 "screen_media_browser_files_empty_state_title" = "Oraindik ez da fitxategirik igo";
 "screen_media_browser_list_loading_files" = "Fitxategiak kargatzen…";
@@ -781,7 +781,7 @@
 "screen_qr_code_login_connecting_subtitle" = "Konexio segurua ezartzen";
 "screen_qr_code_login_connection_note_secure_state_description" = "Ezin izan da konexio segururik ezarri gailu berriarekin. Lehendik dauden gailuak seguru daude oraindik ere eta ez duzu haietaz kezkatu beharrik.";
 "screen_qr_code_login_connection_note_secure_state_list_header" = "Orain zer?";
-"screen_qr_code_login_connection_note_secure_state_list_item_1" = "Try signing in again with a QR code in case this was a network problem";
+"screen_qr_code_login_connection_note_secure_state_list_item_1" = "Saiatu berriro QR kodearekin saioa hasten sare-arazo bat izan bada";
 "screen_qr_code_login_connection_note_secure_state_list_item_2" = "If you encounter the same problem, try a different wifi network or use your mobile data instead of wifi";
 "screen_qr_code_login_connection_note_secure_state_list_item_3" = "Horrek ez badu funtzionatzen, hasi saioa eskuz";
 "screen_qr_code_login_connection_note_secure_state_title" = "Konexioa ez da segurua";
@@ -791,7 +791,7 @@
 "screen_qr_code_login_device_not_signed_in_scan_state_subtitle" = "Other device not signed in";
 "screen_qr_code_login_error_cancelled_subtitle" = "Saioa hasteko eskaera bertan behera utzi da beste gailuan";
 "screen_qr_code_login_error_cancelled_title" = "Saioa hasteko eskaera bertan behera utzi da";
-"screen_qr_code_login_error_declined_subtitle" = "The sign in was declined on the other device.";
+"screen_qr_code_login_error_declined_subtitle" = "Saioa hasteari uko egin zaio beste dispositiboan.";
 "screen_qr_code_login_error_declined_title" = "Saio-hasiera ukatu da";
 "screen_qr_code_login_error_expired_subtitle" = "Saio-hasiera iraungi da. Saiatu berriro.";
 "screen_qr_code_login_error_expired_title" = "Saio-hasiera ez da garaiz gauzatu.";
@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix komunikazio seguru eta deszentralizaturako sare irekia da.";
 "screen_server_confirmation_message_register" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";
 "screen_server_confirmation_title_login" = "%1$@(e)n saioa hastear zaude";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "%1$@(e)n kontua sortzear zaude";
 "screen_session_verification_cancelled_subtitle" = "Something doesn’t seem right. Either the request timed out or the request was denied.";
 "screen_session_verification_compare_emojis_subtitle" = "Egiaztatu ondorengo emojiak bat datozela beste saioan erakusten direnekin.";

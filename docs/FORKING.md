@@ -29,14 +29,12 @@ The location sharing feature on Element X is currently integrated with [MapLibre
 
 The MapLibre SDK requires an API key to work, so you need to get one for yourself. 
 
-After you get an API key, you need to configure the project by exporting it and regenerating the `Secrets.swift` file:
+After you get an API key, you need to configure the project by updating the `Secrets.swift`.
 
-```
-export MAPLIBRE_API_KEY=your_map_libre_key
-bundle exec fastlane config_secrets
-```
+It’s not recommended to push your API key in your repository since other people may get it so the mechanism for updating this file is left up to the reader. 
 
-It’s not recommended to push your API key in your repository since other people may get it. 
+An option would be to export it to your environment and use the existing `Secrets.pkl` file to update them like so:
+`pkl eval -o Secrets.swift Secrets.pkl`
 
 One way to avoid pushing the API key by mistake is running on your machine the command: 
 ```

@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix on avoin verkko turvallista, hajautettua viestintää varten.";
 "screen_server_confirmation_message_register" = "Keskustelusi asuvat täällä — aivan kuten aivan kuten käyttäisit sähköpostipalveluntarjoajaa sähköpostiesi säilyttämiseen.";
 "screen_server_confirmation_title_login" = "Olet kirjautumassa sisään %1$@-palvelimelle";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "Olet luomassa tiliä %1$@-palvelimelle";
 "screen_session_verification_cancelled_subtitle" = "Jokin ei vaikuta oikealta. Joko pyyntö aikakatkaistiin tai hylättiin.";
 "screen_session_verification_compare_emojis_subtitle" = "Vahvista, että alla olevat emojit vastaavat toisella laitteella näkyviä emojeja.";

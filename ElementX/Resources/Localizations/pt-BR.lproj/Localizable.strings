@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "A Matrix é uma rede aberta para comunicação segura e descentralizada.";
 "screen_server_confirmation_message_register" = "Aqui é onde suas conversas vão ficar — assim como você usa um provedor de e-mails para manter seus e-mails.";
 "screen_server_confirmation_title_login" = "Você está prestes a fazer login em %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "Você está prestes a criar uma conta em %1$@";
 "screen_session_verification_cancelled_subtitle" = "Algo não parece certo. Ou a solicitação atingiu o tempo limite ou a solicitação foi negada.";
 "screen_session_verification_compare_emojis_subtitle" = "Confirme se os emojis abaixo correspondem aos mostrados em sua outra sessão.";
