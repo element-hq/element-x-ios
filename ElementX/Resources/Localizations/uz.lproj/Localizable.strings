@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix xavfsiz, markazlashmagan aloqa uchun ochiq tarmoqdir.";
 "screen_server_confirmation_message_register" = "Bu sizning suhbatlaringiz yashaydigan joy - xuddi siz elektron pochta xabarlaringizni saqlash uchun elektron pochta provayderidan foydalanganingiz kabi.";
 "screen_server_confirmation_title_login" = "Siz tizimga kirmoqchisiz%1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "Hisob yaratmoqchisiz%1$@";
 "screen_session_verification_cancelled_subtitle" = "Nimadir noto‘g‘ri ko‘rinadi. Yoki so‘rov muddati tugadi yoki so‘rov rad etildi.";
 "screen_session_verification_compare_emojis_subtitle" = "Quyidagi kulgichlar boshqa seansda ko‘rsatilganlarga mos kelishini tasdiqlang.";

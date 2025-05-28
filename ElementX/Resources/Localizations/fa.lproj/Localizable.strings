@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "ماتریکس شبکه‌ای بار برای ارتباطات نامتمرکز و امن است.";
 "screen_server_confirmation_message_register" = "جایی که گفت‌وگوهایتان خواهند زیست — درست مثل استفاده‌تان از فراهم کنندهٔ رایانامه‌ای برای نگه داشتن رایانامه‌هایتان.";
 "screen_server_confirmation_title_login" = "دارید به %1$@ وارد می‌شوید";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "دارید روی %1$@ حساب می‌سازید";
 "screen_session_verification_cancelled_subtitle" = "Something doesn’t seem right. Either the request timed out or the request was denied.";
 "screen_session_verification_compare_emojis_subtitle" = "Confirm that the emojis below match those shown on your other session.";

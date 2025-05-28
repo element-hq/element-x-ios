@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix er et åpent nettverk for sikker, desentralisert kommunikasjon.";
 "screen_server_confirmation_message_register" = "Det er her samtalene dine vil ligge - akkurat som du ville brukt en e-postleverandør til å oppbevare e-postene dine.";
 "screen_server_confirmation_title_login" = "Du er i ferd med å logge inn på %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "Du er i ferd med å opprette en konto på %1$@";
 "screen_session_verification_cancelled_subtitle" = "Noe virker ikke riktig. Enten ble forespørselen tidsavbrutt eller forespørselen ble avslått.";
 "screen_session_verification_compare_emojis_subtitle" = "Bekreft at emojiene nedenfor samsvarer med de som vises på den andre sesjonen din.";

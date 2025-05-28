@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix to otwarta sieć do bezpiecznej i zdecentralizowanej komunikacji.";
 "screen_server_confirmation_message_register" = "Tutaj będą przechowywane Twoje konwersacje - w podobnej formie jak wiadomości widnieją na skrzynce e-mail.";
 "screen_server_confirmation_title_login" = "Zamierzasz się zalogować do %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "Zamierzasz utworzyć konto na %1$@";
 "screen_session_verification_cancelled_subtitle" = "Coś tu nie gra. Albo upłynął limit czasu, albo żądanie zostało odrzucone.";
 "screen_session_verification_compare_emojis_subtitle" = "Upewnij się, że emoji poniżej pasują do tych pokazanych na innej sesji.";

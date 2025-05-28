@@ -22,7 +22,7 @@ class LoggingTests: XCTestCase {
         let target = "tests"
         XCTAssertTrue(Tracing.logFiles.isEmpty)
         
-        await Target.tests.configure(logLevel: .info, traceLogPacks: [])
+        await Target.tests.configure(logLevel: .info, traceLogPacks: [], sentryURL: nil)
         
         // There is something weird with Rust logging where the file writing handle doesn't
         // notice that the file it is writing to was deleted, so we can't run these checks
@@ -78,7 +78,7 @@ class LoggingTests: XCTestCase {
         let roomName = "Private Conversation"
         let lastMessage = "Secret information"
         let heroName = "Pseudonym"
-        let roomSummary = RoomSummary(roomListItem: .init(noPointer: .init()),
+        let roomSummary = RoomSummary(room: .init(noPointer: .init()),
                                       id: "myroomid",
                                       joinRequestType: nil,
                                       name: roomName,
@@ -174,7 +174,7 @@ class LoggingTests: XCTestCase {
                                                               contentType: nil))
         
         // When logging that value
-        await Target.tests.configure(logLevel: .info, traceLogPacks: [])
+        await Target.tests.configure(logLevel: .info, traceLogPacks: [], sentryURL: nil)
         
         MXLog.info(textMessage)
         MXLog.info(noticeMessage)

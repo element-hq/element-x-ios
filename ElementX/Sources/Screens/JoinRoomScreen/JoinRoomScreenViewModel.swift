@@ -149,7 +149,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                 .roomListPublisher
                 .compactMap { summaries -> Void? in
                     guard let roomSummary = summaries.first(where: { $0.id == roomInfo?.id }),
-                          roomSummary.roomListItem.membership() != .knocked else {
+                          roomSummary.room.membership() != .knocked else {
                         return nil
                     }
                     return ()

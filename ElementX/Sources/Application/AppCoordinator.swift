@@ -72,7 +72,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         let appSettings = appHooks.appSettingsHook.configure(AppSettings())
         
-        Target.mainApp.configure(logLevel: appSettings.logLevel, traceLogPacks: appSettings.traceLogPacks)
+        Target.mainApp.configure(logLevel: appSettings.logLevel,
+                                 traceLogPacks: appSettings.traceLogPacks,
+                                 sentryURL: appSettings.bugReportSentryRustURL)
         
         let appName = InfoPlistReader.main.bundleDisplayName
         let appVersion = InfoPlistReader.main.bundleShortVersionString
@@ -908,6 +910,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         SentrySDK.start(options: options)
+        
+        enableSentryLogging(enabled: appSettings.analyticsConsentState == .optedIn)
         
         MXLog.info("SentrySDK started")
     }

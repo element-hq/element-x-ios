@@ -19,6 +19,7 @@ protocol CommonSettingsProtocol {
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var hideInviteAvatars: Bool { get }
     var timelineMediaVisibility: TimelineMediaVisibility { get }
+    var hideQuietNotificationAlerts: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -45,7 +46,6 @@ final class AppSettings {
         case optimizeMediaUploads
         case appAppearance
         case sharePresence
-        case hideUnreadMessagesBadge
         case hideInviteAvatars
         case timelineMediaVisibility
         case isNewBloomEnabled
@@ -62,6 +62,10 @@ final class AppSettings {
         case zeroAccessToken
         case zeroRewardsCredit
         case zeroLoggedInUser
+        
+        // Doug's tweaks 🔧
+        case hideUnreadMessagesBadge
+        case hideQuietNotificationAlerts
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -253,6 +257,7 @@ final class AppSettings {
 
     let bugReportServiceBaseURL: URL? = Secrets.rageshakeServerURL.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     let bugReportSentryURL: URL? = Secrets.sentryDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
+    let bugReportSentryRustURL: URL? = Secrets.sentryRustDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     /// The name allocated by the bug report server
     private(set) var bugReportApplicationID = "element-x-ios"
     /// The maximum size of the upload request. Default value is just below CloudFlare's max request size.
@@ -350,6 +355,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
     
+    @UserPreference(key: UserDefaultsKeys.isNewBloomEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var isNewBloomEnabled
+    
     #endif
     
     // MARK: - Shared
@@ -370,8 +378,8 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.timelineMediaVisibility, defaultValue: TimelineMediaVisibility.always, storageType: .userDefaults(store))
     var timelineMediaVisibility
     
-    @UserPreference(key: UserDefaultsKeys.isNewBloomEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var isNewBloomEnabled
+    @UserPreference(key: UserDefaultsKeys.hideQuietNotificationAlerts, defaultValue: false, storageType: .userDefaults(store))
+    var hideQuietNotificationAlerts
     
     // MARK: - ZERO Access Token
     

@@ -1395,42 +1395,28 @@ class ClientProxy: ClientProxyProtocol {
     
     private func buildRoomForIdentifier(_ roomID: String) async -> RoomProxyType? {
         do {
-            let roomListItem = try roomListService.room(roomId: roomID)
-            
-            switch roomListItem.membership() {
-            case .invited:
-                return try await .invited(InvitedRoomProxy(roomListItem: roomListItem,
-                                                           roomPreview: roomListItem.previewRoom(via: []),
-                                                           ownUserID: userID,
-                                                           zeroUsersService: zeroApiProxy.matrixUsersService))
-            case .knocked:
-                if appSettings.knockingEnabled {
-                    return try await .knocked(KnockedRoomProxy(roomListItem: roomListItem,
-                                                               roomPreview: roomListItem.previewRoom(via: []),
-                                                               ownUserID: userID,
-                                                               zeroUsersService: zeroApiProxy.matrixUsersService))
-                }
+            guard let room = try client.getRoom(roomId: roomID) else {
                 return nil
-            case .joined:
-                guard let room = try client.getRoom(roomId: roomID) else {
-                    MXLog.error("Could not find room with ID: \(roomID)")
+            }
+            
+            switch room.membership() {
+            case .invited:
+                return try await .invited(InvitedRoomProxy(room: room))
+            case .knocked:
+                guard appSettings.knockingEnabled else {
                     return nil
                 }
                 
+                return try await .knocked(KnockedRoomProxy(room: room))
+            case .joined:
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
-                                                          roomListItem: roomListItem,
-                                                          room: room,
-                                                          zeroChatApi: zeroApiProxy.chatApi,
-                                                          zeroUsersService: zeroApiProxy.matrixUsersService)
+                                                          room: room)
                 
                 return .joined(roomProxy)
             case .left:
                 return .left
             case .banned:
-                return try await .banned(BannedRoomProxy(roomListItem: roomListItem,
-                                                         roomPreview: roomListItem.previewRoom(via: []),
-                                                         ownUserID: userID,
-                                                         zeroUsersService: zeroApiProxy.matrixUsersService))
+                return try await .banned(BannedRoomProxy(room: room))
             }
         } catch {
             MXLog.error("Failed retrieving room: \(roomID), with error: \(error)")

@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Το Matrix είναι ένα ανοιχτό δίκτυο για ασφαλή, αποκεντρωμένη επικοινωνία.";
 "screen_server_confirmation_message_register" = "Εδώ θα ζουν οι συνομιλίες σου - όπως θα χρησιμοποιούσες έναν πάροχο email για να διατηρήσεις τα email σου.";
 "screen_server_confirmation_title_login" = "Πρόκειται να συνδεθείς στο %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "Πρόκειται να δημιουργήσεις έναν λογαριασμό στο %1$@";
 "screen_session_verification_cancelled_subtitle" = "Κάτι δεν πάει καλά. Είτε το αίτημα έληξε είτε απορρίφθηκε.";
 "screen_session_verification_compare_emojis_subtitle" = "Επιβεβαίωσε ότι τα παρακάτω emoji ταιριάζουν με αυτά που εμφανίζονται στην άλλη συνεδρία σου.";

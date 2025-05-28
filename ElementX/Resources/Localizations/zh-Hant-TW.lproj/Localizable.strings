@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix 是一個開放網路，為了安全且去中心化的通訊而生。";
 "screen_server_confirmation_message_register" = "您的所有對話將保存於此，就如同您的電子郵件供應商會保存您的電子郵件一樣。";
 "screen_server_confirmation_title_login" = "您即將登入 %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "您即將在 %1$@ 建立帳號";
 "screen_session_verification_cancelled_subtitle" = "似乎出了一點問題。有可能是因為等候逾時，或是請求被拒絕。";
 "screen_session_verification_compare_emojis_subtitle" = "確認顯示在其他工作階段上的表情符號是否和下方的相同。";

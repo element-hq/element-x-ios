@@ -17,7 +17,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     private let roomListService: RoomListServiceProtocol
-    private let roomListItem: RoomListItemProtocol
     private let room: RoomProtocol
     private let zeroChatApi: ZeroChatApiProtocol
     private let zeroUsersService: ZeroMatrixUsersService
@@ -70,12 +69,10 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     init(roomListService: RoomListServiceProtocol,
-         roomListItem: RoomListItemProtocol,
-         room: RoomProtocol,
+         room: RoomProtocol) async throws {
          zeroChatApi: ZeroChatApiProtocol,
          zeroUsersService: ZeroMatrixUsersService) async throws {
         self.roomListService = roomListService
-        self.roomListItem = roomListItem
         self.room = room
         self.zeroChatApi = zeroChatApi
         self.zeroUsersService = zeroUsersService

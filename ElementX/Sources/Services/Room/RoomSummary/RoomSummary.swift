@@ -29,7 +29,7 @@ struct RoomSummary {
         }
     }
 
-    let roomListItem: RoomListItem
+    let room: Room
     
     let id: String
     
@@ -100,8 +100,8 @@ extension RoomSummary: CustomStringConvertible {
 }
 
 extension RoomSummary {
-    init(roomListItem: RoomListItem, id: String, settingsMode: RoomNotificationModeProxy, hasUnreadMessages: Bool, hasUnreadMentions: Bool, hasUnreadNotifications: Bool) {
-        self.roomListItem = roomListItem
+    init(room: Room, id: String, settingsMode: RoomNotificationModeProxy, hasUnreadMessages: Bool, hasUnreadMentions: Bool, hasUnreadNotifications: Bool) {
+        self.room = room
         self.id = id
         let string = "\(settingsMode) - messages: \(hasUnreadMessages) - mentions: \(hasUnreadMentions) - notifications: \(hasUnreadNotifications)"
         name = string

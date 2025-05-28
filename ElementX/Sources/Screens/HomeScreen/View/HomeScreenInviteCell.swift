@@ -200,7 +200,7 @@ private extension HomeScreenRoom {
         inviter.displayName = "Some Guy"
         inviter.userID = "@someone:somewhere.com"
         
-        let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
+        let summary = RoomSummary(room: RoomSDKMock(),
                                   id: "@someone:somewhere.com",
                                   joinRequestType: .invite(inviter: inviter),
                                   name: "Some Guy",
@@ -229,7 +229,7 @@ private extension HomeScreenRoom {
         inviter.userID = "@jack:somewhi.nl"
         inviter.avatarURL = avatarURL.map { _ in .mockMXCUserAvatar }
         
-        let summary = RoomSummary(roomListItem: RoomListItemSDKMock(),
+        let summary = RoomSummary(room: RoomSDKMock(),
                                   id: "@someone:somewhere.com",
                                   joinRequestType: .invite(inviter: inviter),
                                   name: "Awesome Room",

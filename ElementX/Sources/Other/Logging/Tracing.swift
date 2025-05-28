@@ -23,7 +23,10 @@ enum Tracing {
     
     static let fileExtension = "log"
     
-    static func buildConfiguration(logLevel: LogLevel, traceLogPacks: Set<TraceLogPack>, currentTarget: String, filePrefix: String?) -> TracingConfiguration {
+    static func buildConfiguration(logLevel: LogLevel, traceLogPacks: Set<TraceLogPack>,
+                                   currentTarget: String,
+                                   filePrefix: String?,
+                                   sentryURL: URL?) -> TracingConfiguration {
         let fileName = if let filePrefix {
             "\(Tracing.filePrefix)-\(filePrefix)"
         } else {
@@ -45,7 +48,8 @@ enum Tracing {
                      writeToFiles: .init(path: logsDirectory.path(percentEncoded: false),
                                          filePrefix: fileName,
                                          fileSuffix: fileExtension,
-                                         maxFiles: maxFiles))
+                                         maxFiles: maxFiles),
+                     sentryDsn: sentryURL?.absoluteString)
     }
     
     /// A list of all log file URLs, sorted chronologically. This is only public for testing purposes, within

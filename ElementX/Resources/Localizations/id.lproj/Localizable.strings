@@ -993,6 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi.";
 "screen_server_confirmation_message_register" = "Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda.";
 "screen_server_confirmation_title_login" = "Anda akan masuk ke %1$@";
+"screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "Anda akan membuat akun di %1$@";
 "screen_session_verification_cancelled_subtitle" = "Sepertinya ada yang tidak beres. Entah permintaan sudah habis masa berlakunya atau permintaan ditolak.";
 "screen_session_verification_compare_emojis_subtitle" = "Konfirmasikan bahwa emoji di bawah ini sesuai dengan yang ditampilkan pada sesi Anda yang lain.";
