@@ -830,6 +830,34 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                             emojiProvider: emojiProvider,
                                                                             timelineControllerFactory: timelineControllerFactory,
                                                                             clientProxy: userSession.clientProxy))
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .presentReportContent(let itemID, let senderID):
+                stateMachine.tryEvent(.presentReportContent(itemID: itemID, senderID: senderID))
+            case .presentMediaUploadPicker(let source):
+                stateMachine.tryEvent(.presentMediaUploadPicker(source: source))
+            case .presentMediaUploadPreviewScreen(let url):
+                stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url))
+            case .presentLocationPicker:
+                stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
+            case .presentPollForm(let mode):
+                stateMachine.tryEvent(.presentPollForm(mode: mode))
+            case .presentLocationViewer(_, let geoURI, let description):
+                stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)))
+            case .presentEmojiPicker(let itemID, let selectedEmojis):
+                stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+            case .presentRoomMemberDetails(let userID):
+                stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
+            case .presentMessageForwarding(let forwardingItem):
+                stateMachine.tryEvent(.presentMessageForwarding(forwardingItem: forwardingItem))
+            case .presentResolveSendFailure(let failure, let sendHandle):
+                stateMachine.tryEvent(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
+            }
+        }
+        .store(in: &cancellables)
                 
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissThread)
