@@ -275,10 +275,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             let animated = (context.userInfo as? EventUserInfo)?.animated ?? true
             
             switch (context.fromState, context.event, context.toState) {
-            case (_, .presentJoinRoomScreen(let via), .joinRoomScreen):
-                presentJoinRoomScreen(via: via, animated: true)
-            case (_, .dismissJoinRoomScreen, .complete):
-                dismissFlow(animated: animated)
+            // Room
                 
             case (_, .presentRoom(let presentationAction), .room):
                 Task {
@@ -288,41 +285,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
             case (_, .dismissFlow, .complete):
                 dismissFlow(animated: animated)
-                
-            case (.room, .presentThread(let itemID), .thread):
-                Task { await self.presentThread(itemID: itemID) }
-            
-            case (.initial, .presentRoomDetails, .roomDetails(let isRoot)),
-                 (.room, .presentRoomDetails, .roomDetails(let isRoot)),
-                 (.roomDetails, .presentRoomDetails, .roomDetails(let isRoot)):
-                Task { await self.presentRoomDetails(isRoot: isRoot, animated: animated) }
-                
-            case (.roomDetails, .presentRoomDetailsEditScreen, .roomDetailsEditScreen):
-                presentRoomDetailsEditScreen()
-                
-            case (.roomDetails, .presentNotificationSettingsScreen, .notificationSettings):
-                presentNotificationSettingsScreen()
-                
-            case (.notificationSettings, .presentGlobalNotificationSettingsScreen, .globalNotificationSettings):
-                presentGlobalNotificationSettingsScreen()
-                
-            case (.roomDetails, .presentRoomMembersList, .roomMembersList):
-                presentRoomMembersList()
-                
+                    
             case (.room, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
                 presentRoomMemberDetails(userID: userID)
                 
-            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
-                presentRoomMemberDetails(userID: userID)
-            
-            case (.roomMemberDetails, .presentUserProfile(let userID), .userProfile):
-                replaceRoomMemberDetailsWithUserProfile(userID: userID)
-                
-            case (.roomDetails, .presentInviteUsersScreen, .inviteUsersScreen):
-                presentInviteUsersScreen()
-                
-            case (.roomMembersList, .presentInviteUsersScreen, .inviteUsersScreen):
-                presentInviteUsersScreen()
+            case (.room, .presentKnockRequestsListScreen, .knockRequestsList):
+                presentKnockRequestsList()
                 
             case (.room, .presentReportContent, .reportContent(let itemID, let senderID, _)):
                 presentReportContent(for: itemID, from: senderID)
@@ -349,16 +317,49 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (.room, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
                 startPinnedEventsTimelineFlow()
-
+                
+            case (.room, .presentResolveSendFailure(let failure, let sendHandle), .resolveSendFailure):
+                presentResolveSendFailure(failure: failure, sendHandle: sendHandle)
+                
+            // Thread
+                
+            case (.room, .presentThread(let itemID), .thread):
+                Task { await self.presentThread(itemID: itemID) }
+                
+            // Room Details
+            
+            case (.initial, .presentRoomDetails, .roomDetails(let isRoot)),
+                 (.room, .presentRoomDetails, .roomDetails(let isRoot)),
+                 (.roomDetails, .presentRoomDetails, .roomDetails(let isRoot)):
+                Task { await self.presentRoomDetails(isRoot: isRoot, animated: animated) }
+                
+            case (.roomDetails, .presentRoomDetailsEditScreen, .roomDetailsEditScreen):
+                presentRoomDetailsEditScreen()
+                
+            case (.roomDetails, .presentNotificationSettingsScreen, .notificationSettings):
+                presentNotificationSettingsScreen()
+                
+            case (.roomDetails, .presentRoomMembersList, .roomMembersList):
+                presentRoomMembersList()
+                
+            case (.roomDetails, .presentInviteUsersScreen, .inviteUsersScreen):
+                presentInviteUsersScreen()
+                
+            case (.notificationSettings, .presentGlobalNotificationSettingsScreen, .globalNotificationSettings):
+                presentGlobalNotificationSettingsScreen()
+                    
+            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
+                presentRoomMemberDetails(userID: userID)
+            
+            case (.roomMemberDetails, .presentUserProfile(let userID), .userProfile):
+                replaceRoomMemberDetailsWithUserProfile(userID: userID)
+                
             case (.roomDetails, .presentPollsHistory, .pollsHistory):
                 presentPollsHistory()
                 
             case (.roomDetails, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
                 startPinnedEventsTimelineFlow()
-        
-            case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
-                presentPollForm(mode: mode)
-            
+                
             case (.roomDetails, .presentRolesAndPermissionsScreen, .rolesAndPermissions):
                 presentRolesAndPermissionsScreen()
             case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen, .roomDetails):
@@ -366,13 +367,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (.roomDetails, .presentRoomMemberDetails(let userID), .roomMemberDetails):
                 presentRoomMemberDetails(userID: userID)
-                            
-            case (.room, .presentResolveSendFailure(let failure, let sendHandle), .resolveSendFailure):
-                presentResolveSendFailure(failure: failure, sendHandle: sendHandle)
                 
             case (.roomDetails, .presentKnockRequestsListScreen, .knockRequestsList):
-                presentKnockRequestsList()
-            case (.room, .presentKnockRequestsListScreen, .knockRequestsList):
                 presentKnockRequestsList()
             
             case (.roomDetails, .presentMediaEventsTimeline, .mediaEventsTimeline):
@@ -384,15 +380,27 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .presentReportRoomScreen, .reportRoom):
                 presentReportRoom()
                 
-            case (.joinRoomScreen, .presentDeclineAndBlockScreen(let userID), .declineAndBlockScreen):
-                presentDeclineAndBlockScreen(userID: userID)
+            // Other
                 
-            // Child flow
             case (_, .startChildFlow(let roomID, let via, let entryPoint), .presentingChild):
                 Task { await self.startChildFlow(for: roomID, via: via, entryPoint: entryPoint) }
             case (.presentingChild, .dismissChildFlow, _):
                 childRoomFlowCoordinator = nil
-            
+                
+            case (.roomMembersList, .presentInviteUsersScreen, .inviteUsersScreen):
+                presentInviteUsersScreen()
+                
+            case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
+                presentPollForm(mode: mode)
+                
+            case (_, .presentJoinRoomScreen(let via), .joinRoomScreen):
+                presentJoinRoomScreen(via: via, animated: true)
+            case (_, .dismissJoinRoomScreen, .complete):
+                dismissFlow(animated: animated)
+                
+            case (.joinRoomScreen, .presentDeclineAndBlockScreen(let userID), .declineAndBlockScreen):
+                presentDeclineAndBlockScreen(userID: userID)
+                
             default:
                 break
             }
