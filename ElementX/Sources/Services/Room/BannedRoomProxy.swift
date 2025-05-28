@@ -16,14 +16,12 @@ class BannedRoomProxy: BannedRoomProxyProtocol {
     
     let info: BaseRoomInfoProxyProtocol
         
-    init(room: Room) async throws {
-         ownUserID: String,
-         zeroUsersService: ZeroMatrixUsersService) throws {
+    init(room: Room,
+         zeroUsersService: ZeroMatrixUsersService) async throws {
         self.room = room
         
-        self.ownUserID = ownUserID
-        let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: roomListItem.id())
-        info = try await RoomInfoProxy(roomInfo: room.roomInfo())
+        let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: room.id())
+        info = try await RoomInfoProxy(roomInfo: room.roomInfo(), roomAvatarCached: cachedRoomAvatar)
     }
     
     func forgetRoom() async -> Result<Void, RoomProxyError> {

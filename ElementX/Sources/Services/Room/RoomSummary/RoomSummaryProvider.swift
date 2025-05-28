@@ -225,7 +225,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         var lastMessageSenderProfile: UserProfile?
     }
 
-    private func fetchRoomDetails(from room: Room) -> (roomInfo: RoomInfo?, latestEvent: EventTimelineItem?) {
+    private func fetchRoomDetails(from room: Room) -> RoomDetails {
         class FetchResult {
             var roomInfo: RoomInfo?
             var latestEvent: EventTimelineItem?
@@ -236,8 +236,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         Task {
             do {
-                result.latestEvent = await room.latestEvent()
-                result.roomInfo = try await room.roomInfo()
+                roomDetails.latestEvent = await room.latestEvent()
+                roomDetails.roomInfo = try await room.roomInfo()
             } catch {
                 MXLog.error("Failed fetching room info with error: \(error)")
             }
@@ -270,7 +270,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         // let notificationMode = roomInfo.cachedUserDefinedNotificationMode.flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
-        let notificationMode = fetchRoomNotificationMode(roomListItem: roomListItem, roomInfo: roomInfo)
+        let notificationMode = fetchRoomNotificationMode(room)
         
         let joinRequestType: RoomSummary.JoinRequestType? = switch roomInfo.membership {
         case .invited: .invite(inviter: inviterProxy)
@@ -319,18 +319,18 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    private func fetchRoomNotificationMode(roomListItem: RoomListItem, roomInfo: RoomInfo) -> RoomNotificationModeProxy? {
+    private func fetchRoomNotificationMode(_ room: Room) -> RoomNotificationModeProxy? {
         var notificationModeProxy: RoomNotificationModeProxy?
         let semaphore = DispatchSemaphore(value: 0)
         Task {
             do {
-                let isRoomEncrypted = await roomListItem.isEncrypted()
-                let notificationMode = try await notificationSettings.getNotificationSettings(roomId: roomInfo.id,
-                                                                                                   isEncrypted: isRoomEncrypted,
-                                                                                                   isOneToOne: roomInfo.activeMembersCount == 2)
+                let isRoomEncrypted = await room.isEncrypted()
+                let notificationMode = try await notificationSettings.getNotificationSettings(roomId: room.id(),
+                                                                                              isEncrypted: isRoomEncrypted,
+                                                                                              isOneToOne: room.activeMembersCount() == 2)
                 notificationModeProxy = notificationMode.mode
             } catch {
-                notificationModeProxy = roomInfo.cachedUserDefinedNotificationMode
+                notificationModeProxy = try await room.roomInfo().cachedUserDefinedNotificationMode
                     .flatMap { RoomNotificationModeProxy.from(roomNotificationMode: $0) }
             }
             semaphore.signal()
@@ -339,10 +339,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         return notificationModeProxy
     }
     
-    private func joinRoomIfRequired(_ roomListItem: RoomListItem) async {
-        switch roomListItem.membership() {
+    private func joinRoomIfRequired(_ room: Room) async {
+        switch room.membership() {
         case .invited:
-            await onJoinRoomExplicitly(roomListItem.id())
+            await onJoinRoomExplicitly(room.id())
         default:
             break
         }

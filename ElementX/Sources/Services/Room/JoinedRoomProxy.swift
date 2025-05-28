@@ -69,7 +69,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     init(roomListService: RoomListServiceProtocol,
-         room: RoomProtocol) async throws {
+         room: RoomProtocol,
          zeroChatApi: ZeroChatApiProtocol,
          zeroUsersService: ZeroMatrixUsersService) async throws {
         self.roomListService = roomListService

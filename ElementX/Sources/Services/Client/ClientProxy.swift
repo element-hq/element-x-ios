@@ -1401,22 +1401,24 @@ class ClientProxy: ClientProxyProtocol {
             
             switch room.membership() {
             case .invited:
-                return try await .invited(InvitedRoomProxy(room: room))
+                return try await .invited(InvitedRoomProxy(room: room, zeroUsersService: zeroApiProxy.matrixUsersService))
             case .knocked:
                 guard appSettings.knockingEnabled else {
                     return nil
                 }
                 
-                return try await .knocked(KnockedRoomProxy(room: room))
+                return try await .knocked(KnockedRoomProxy(room: room, zeroUsersService: zeroApiProxy.matrixUsersService))
             case .joined:
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
-                                                          room: room)
+                                                          room: room,
+                                                          zeroChatApi: zeroApiProxy.chatApi,
+                                                          zeroUsersService: zeroApiProxy.matrixUsersService)
                 
                 return .joined(roomProxy)
             case .left:
                 return .left
             case .banned:
-                return try await .banned(BannedRoomProxy(room: room))
+                return try await .banned(BannedRoomProxy(room: room, zeroUsersService: zeroApiProxy.matrixUsersService))
             }
         } catch {
             MXLog.error("Failed retrieving room: \(roomID), with error: \(error)")
