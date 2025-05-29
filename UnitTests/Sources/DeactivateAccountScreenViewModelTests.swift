@@ -61,7 +61,7 @@ class DeactivateAccountScreenViewModelTests: XCTestCase {
         
         XCTAssertNil(context.alertInfo)
         
-        let deferredState = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
+        let deferredState = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
         context.send(viewAction: .deactivate)
         try await deferredState.fulfill()
         
