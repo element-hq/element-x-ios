@@ -265,7 +265,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
     }
     
-    // swiftlint:disable:next function_body_length
     private func setupStateMachine() {
         addRouteMapping(stateMachine: stateMachine)
         
@@ -286,45 +285,36 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (_, .dismissFlow, .complete):
                 dismissFlow(animated: animated)
                     
-            case (.room, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
-                presentRoomMemberDetails(userID: userID)
-                
-            case (.room, .presentKnockRequestsListScreen, .knockRequestsList):
-                presentKnockRequestsList()
-                
-            case (.room, .presentReportContent, .reportContent(let itemID, let senderID, _)):
-                presentReportContent(for: itemID, from: senderID)
-                
-            case (.room, .presentMediaUploadPicker, .mediaUploadPicker(let source, _)):
-                presentMediaUploadPickerWithSource(source)
-                
-            case (.mediaUploadPicker, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL, _)):
-                presentMediaUploadPreviewScreen(for: fileURL, animated: animated)
-            case (.room, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL, _)):
-                presentMediaUploadPreviewScreen(for: fileURL, animated: animated)
-                
-            case (_, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji, _)):
-                presentEmojiPicker(for: itemID, selectedEmoji: selectedEmoji)
-                
-            case (.room, .presentMessageForwarding(let forwardingItem), .messageForwarding):
-                presentMessageForwarding(with: forwardingItem)
-
-            case (.room, .presentMapNavigator(let mode), .mapNavigator):
-                presentMapNavigator(interactionMode: mode)
-
-            case (.room, .presentPollForm(let mode), .pollForm):
-                presentPollForm(mode: mode)
-                
             case (.room, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
                 startPinnedEventsTimelineFlow()
-                
-            case (.room, .presentResolveSendFailure(let failure, let sendHandle), .resolveSendFailure):
-                presentResolveSendFailure(failure: failure, sendHandle: sendHandle)
                 
             // Thread
                 
             case (.room, .presentThread(let itemID), .thread):
                 Task { await self.presentThread(itemID: itemID) }
+                
+            // Thread + Room
+                
+            case (_, .presentReportContent, .reportContent(let itemID, let senderID, _)):
+                presentReportContent(for: itemID, from: senderID)
+                
+            case (_, .presentMediaUploadPicker, .mediaUploadPicker(let source, _)):
+                presentMediaUploadPickerWithSource(source)
+                
+            case (_, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji, _)):
+                presentEmojiPicker(for: itemID, selectedEmoji: selectedEmoji)
+                
+            case (_, .presentMessageForwarding(let forwardingItem), .messageForwarding):
+                presentMessageForwarding(with: forwardingItem)
+
+            case (_, .presentMapNavigator(let mode), .mapNavigator):
+                presentMapNavigator(interactionMode: mode)
+
+            case (_, .presentPollForm(let mode), .pollForm):
+                presentPollForm(mode: mode)
+                
+            case (_, .presentResolveSendFailure(let failure, let sendHandle), .resolveSendFailure):
+                presentResolveSendFailure(failure: failure, sendHandle: sendHandle)
                 
             // Room Details
             
@@ -342,18 +332,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .presentRoomMembersList, .roomMembersList):
                 presentRoomMembersList()
                 
-            case (.roomDetails, .presentInviteUsersScreen, .inviteUsersScreen):
-                presentInviteUsersScreen()
-                
-            case (.notificationSettings, .presentGlobalNotificationSettingsScreen, .globalNotificationSettings):
-                presentGlobalNotificationSettingsScreen()
-                    
-            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
-                presentRoomMemberDetails(userID: userID)
-            
-            case (.roomMemberDetails, .presentUserProfile(let userID), .userProfile):
-                replaceRoomMemberDetailsWithUserProfile(userID: userID)
-                
             case (.roomDetails, .presentPollsHistory, .pollsHistory):
                 presentPollsHistory()
                 
@@ -364,13 +342,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentRolesAndPermissionsScreen()
             case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen, .roomDetails):
                 rolesAndPermissionsFlowCoordinator = nil
-                
-            case (.roomDetails, .presentRoomMemberDetails(let userID), .roomMemberDetails):
-                presentRoomMemberDetails(userID: userID)
-                
-            case (.roomDetails, .presentKnockRequestsListScreen, .knockRequestsList):
-                presentKnockRequestsList()
-            
+                                            
             case (.roomDetails, .presentMediaEventsTimeline, .mediaEventsTimeline):
                 Task { await self.startMediaEventsTimelineFlow() }
                 
@@ -380,18 +352,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomDetails, .presentReportRoomScreen, .reportRoom):
                 presentReportRoom()
                 
-            // Other
-                
-            case (_, .startChildFlow(let roomID, let via, let entryPoint), .presentingChild):
-                Task { await self.startChildFlow(for: roomID, via: via, entryPoint: entryPoint) }
-            case (.presentingChild, .dismissChildFlow, _):
-                childRoomFlowCoordinator = nil
-                
-            case (.roomMembersList, .presentInviteUsersScreen, .inviteUsersScreen):
-                presentInviteUsersScreen()
-                
-            case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
-                presentPollForm(mode: mode)
+            // Join room
                 
             case (_, .presentJoinRoomScreen(let via), .joinRoomScreen):
                 presentJoinRoomScreen(via: via, animated: true)
@@ -401,6 +362,34 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.joinRoomScreen, .presentDeclineAndBlockScreen(let userID), .declineAndBlockScreen):
                 presentDeclineAndBlockScreen(userID: userID)
                 
+            // Other
+                                    
+            case (_, .startChildFlow(let roomID, let via, let entryPoint), .presentingChild):
+                Task { await self.startChildFlow(for: roomID, via: via, entryPoint: entryPoint) }
+            case (.presentingChild, .dismissChildFlow, _):
+                childRoomFlowCoordinator = nil
+                
+            case (_, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
+                presentRoomMemberDetails(userID: userID)
+                
+            case (_, .presentKnockRequestsListScreen, .knockRequestsList):
+                presentKnockRequestsList()
+                
+            case (.notificationSettings, .presentGlobalNotificationSettingsScreen, .globalNotificationSettings):
+                presentGlobalNotificationSettingsScreen()
+                
+            case (.roomMemberDetails, .presentUserProfile(let userID), .userProfile):
+                replaceRoomMemberDetailsWithUserProfile(userID: userID)
+                    
+            case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
+                presentPollForm(mode: mode)
+                
+            case (_, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL, _)):
+                presentMediaUploadPreviewScreen(for: fileURL, animated: animated)
+                
+            case (_, .presentInviteUsersScreen, .inviteUsersScreen):
+                presentInviteUsersScreen()
+                    
             default:
                 break
             }
