@@ -13,4 +13,6 @@ protocol ThreadTimelineScreenViewModelProtocol {
     var context: ThreadTimelineScreenViewModelType.Context { get }
     
     func stop()
+    
+    func displayMediaPreview(_ mediaPreviewViewModel: TimelineMediaPreviewViewModel)
 }

@@ -81,7 +81,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                 case .displayDocumentPicker:
                     actionsSubject.send(.presentMediaUploadPicker(.documents))
                 case .displayMediaPreview(let mediaPreviewViewModel):
-                    break
+                    viewModel.displayMediaPreview(mediaPreviewViewModel)
                 case .displayLocationPicker:
                     actionsSubject.send(.presentLocationPicker)
                 case .displayPollForm(let mode):
@@ -96,11 +96,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
                 case .displayResolveSendFailure(let failure, let sendHandle):
                     actionsSubject.send(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
-                case .displayThread(let itemID):
-                    break
-                case .composer(let action):
-                    break
-                case .hasScrolled(direction: let direction):
+                case .displayThread, .composer, .hasScrolled:
                     break
                 case .viewInRoomTimeline:
                     fatalError("The action: \(action) should not be sent to this coordinator")
