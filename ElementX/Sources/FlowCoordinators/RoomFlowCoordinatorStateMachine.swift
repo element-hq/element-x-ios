@@ -187,8 +187,6 @@ extension RoomFlowCoordinator {
             case (.room, .presentMediaUploadPicker(let source)):
                 return .mediaUploadPicker(source: source, previousState: fromState)
             
-            case (.mediaUploadPicker, .presentMediaUploadPreview(let fileURL)):
-                return .mediaUploadPreview(fileURL: fileURL, previousState: fromState)
             case (.room, .presentMediaUploadPreview(let fileURL)):
                 return .mediaUploadPreview(fileURL: fileURL, previousState: fromState)
                 
@@ -204,15 +202,15 @@ extension RoomFlowCoordinator {
             case (.room, .presentPollForm):
                 return .pollForm(previousState: fromState)
                 
+            case (.room, .presentResolveSendFailure):
+                return .resolveSendFailure(previousState: fromState)
+                
             case (.room, .presentPinnedEventsTimeline):
                 return .pinnedEventsTimeline(previousState: fromState)
             case (.roomDetails, .presentPinnedEventsTimeline):
                 return .pinnedEventsTimeline(previousState: fromState)
             case (.pinnedEventsTimeline(let previousState), .dismissPinnedEventsTimeline):
                 return previousState
-                
-            case (.room, .presentResolveSendFailure):
-                return .resolveSendFailure(previousState: fromState)
                 
             // Thread
             case (.room, .presentThread(let itemID)):
@@ -329,12 +327,7 @@ extension RoomFlowCoordinator {
                 return .joinRoomScreen
                 
             // Other
-        
-            case (_, .presentInviteUsersScreen):
-                return .inviteUsersScreen(previousState: fromState)
-            case (.inviteUsersScreen(let previousState), .dismissInviteUsersScreen):
-                return previousState
-                
+            
             case (_, .startChildFlow(let roomID, _, _)):
                 return .presentingChild(childRoomID: roomID, previousState: fromState)
             case (.presentingChild(_, let previousState), .dismissChildFlow):
@@ -367,6 +360,14 @@ extension RoomFlowCoordinator {
                 return .pollsHistoryForm
             case (.pollsHistoryForm, .dismissPollForm):
                 return .pollsHistory
+                
+            case (.mediaUploadPicker, .presentMediaUploadPreview(let fileURL)):
+                return .mediaUploadPreview(fileURL: fileURL, previousState: fromState)
+                
+            case (_, .presentInviteUsersScreen):
+                return .inviteUsersScreen(previousState: fromState)
+            case (.inviteUsersScreen(let previousState), .dismissInviteUsersScreen):
+                return previousState
             
             default:
                 return nil
