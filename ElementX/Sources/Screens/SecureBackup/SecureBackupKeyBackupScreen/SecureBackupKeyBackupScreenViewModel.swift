@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias SecureBackupKeyBackupScreenViewModelType = StateStoreViewModel<SecureBackupKeyBackupScreenViewState, SecureBackupKeyBackupScreenViewAction>
+typealias SecureBackupKeyBackupScreenViewModelType = StateStoreViewModelV2<SecureBackupKeyBackupScreenViewState, SecureBackupKeyBackupScreenViewAction>
 
 class SecureBackupKeyBackupScreenViewModel: SecureBackupKeyBackupScreenViewModelType, SecureBackupKeyBackupScreenViewModelProtocol {
     private let secureBackupController: SecureBackupControllerProtocol
