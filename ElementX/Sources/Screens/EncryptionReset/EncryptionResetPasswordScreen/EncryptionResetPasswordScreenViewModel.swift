@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias EncryptionResetPasswordScreenViewModelType = StateStoreViewModel<EncryptionResetPasswordScreenViewState, EncryptionResetPasswordScreenViewAction>
+typealias EncryptionResetPasswordScreenViewModelType = StateStoreViewModelV2<EncryptionResetPasswordScreenViewState, EncryptionResetPasswordScreenViewAction>
 
 class EncryptionResetPasswordScreenViewModel: EncryptionResetPasswordScreenViewModelType, EncryptionResetPasswordScreenViewModelProtocol {
     private let passwordPublisher: PassthroughSubject<String, Never>
