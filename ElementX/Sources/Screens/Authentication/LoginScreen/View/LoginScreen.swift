@@ -13,7 +13,7 @@ struct LoginScreen: View {
     /// The focus state of the password text field.
     @FocusState private var isPasswordFocused: Bool
     
-    @ObservedObject var context: LoginScreenViewModel.Context
+    @Bindable var context: LoginScreenViewModel.Context
     
     var body: some View {
         ScrollView {
@@ -136,17 +136,13 @@ struct LoginScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             LoginScreen(context: viewModel.context)
         }
-        .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
-            state.homeserver.loginMode == .password
-        })
+        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.homeserver.loginMode).map { $0 == .password }.eraseToStream())
         .previewDisplayName("Initial State")
         
         NavigationStack {
             LoginScreen(context: credentialsViewModel.context)
         }
-        .snapshotPreferences(expect: credentialsViewModel.context.$viewState.map { state in
-            state.homeserver.loginMode == .password
-        })
+        .snapshotPreferences(expect: credentialsViewModel.context.observe(\.viewState.homeserver.loginMode).map { $0 == .password }.eraseToStream())
         .previewDisplayName("Credentials Entered")
         
         NavigationStack {
