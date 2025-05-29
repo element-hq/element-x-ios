@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias UserDetailsEditScreenViewModelType = StateStoreViewModel<UserDetailsEditScreenViewState, UserDetailsEditScreenViewAction>
+typealias UserDetailsEditScreenViewModelType = StateStoreViewModelV2<UserDetailsEditScreenViewState, UserDetailsEditScreenViewAction>
 
 class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDetailsEditScreenViewModelProtocol {
     private let actionsSubject: PassthroughSubject<UserDetailsEditScreenViewModelAction, Never> = .init()
