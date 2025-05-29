@@ -54,7 +54,7 @@ extension XCTestCase {
     ///   - timeout: A timeout after which we give up.
     ///   - message: An optional custom expectation message
     ///   - until: callback that evaluates outputs until some condition is reached
-    /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the publisher.
+    /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the stream.
     func deferFulfillment<Value>(_ asyncStream: AsyncStream<Value>,
                                  timeout: TimeInterval = 10,
                                  message: String? = nil,
@@ -98,6 +98,29 @@ extension XCTestCase {
         let deferred = deferFulfillment<P>(publisher, timeout: timeout, message: message) { value in
             let receivedValue = value[keyPath: keyPath]
             if let index = expectedOrder.firstIndex(where: { $0 == receivedValue }), index == 0 {
+                expectedOrder.remove(at: index)
+            }
+            
+            return expectedOrder.isEmpty
+        }
+        
+        return deferred
+    }
+    
+    /// XCTest utility that assists in subscribing to an async stream and deferring the fulfilment and results until some other actions have been performed.
+    /// - Parameters:
+    ///   - asyncStream: The stream to wait on.
+    ///   - transitionValues: the values through which the stream needs to transition through
+    ///   - timeout: A timeout after which we give up.
+    ///   - message: An optional custom expectation message
+    /// - Returns: The deferred fulfilment to be executed after some actions and that returns the result of the stream.
+    func deferFulfillment<Value: Equatable>(_ asyncStream: AsyncStream<Value>,
+                                            transitionValues: [Value],
+                                            timeout: TimeInterval = 10,
+                                            message: String? = nil) -> DeferredFulfillment<Value> {
+        var expectedOrder = transitionValues
+        let deferred = deferFulfillment(asyncStream, timeout: timeout, message: message) { value in
+            if let index = expectedOrder.firstIndex(where: { $0 == value }), index == 0 {
                 expectedOrder.remove(at: index)
             }
             
