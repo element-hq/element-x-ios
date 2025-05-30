@@ -152,7 +152,7 @@ extension RoomInfo {
                   isDirect: configuration.isDirect,
                   isPublic: configuration.isPublic,
                   isSpace: configuration.isSpace,
-                  tombstone: nil,
+                  successorRoom: nil,
                   isFavourite: false,
                   canonicalAlias: configuration.canonicalAlias,
                   alternativeAliases: configuration.alternativeAliases,
