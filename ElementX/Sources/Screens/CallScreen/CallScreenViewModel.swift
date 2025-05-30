@@ -273,9 +273,15 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             "{id: 'dummy', name: 'dummy'}"
         }
         
+        let disableAudio = "window.controls.setAudioEnabled(false)"
+        let enableAudio = "window.controls.setAudioEnabled(true)"
         let javaScript = "window.controls.setAvailableOutputDevices([\(deviceList)])"
         do {
-            let result = try await state.bindings.javaScriptEvaluator?(javaScript)
+            var result = try await state.bindings.javaScriptEvaluator?(disableAudio)
+            MXLog.debug("Evaluated  with result: \(String(describing: result))")
+            result = try await state.bindings.javaScriptEvaluator?(javaScript)
+            MXLog.debug("Evaluated  with result: \(String(describing: result))")
+            result = try await state.bindings.javaScriptEvaluator?(enableAudio)
             MXLog.debug("Evaluated  with result: \(String(describing: result))")
         } catch {
             MXLog.error("Received javascript evaluation error: \(error)")
