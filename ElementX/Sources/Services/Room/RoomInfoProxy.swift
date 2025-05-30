@@ -61,7 +61,7 @@ struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
     }
     
     var isSpace: Bool { roomInfo.isSpace }
-    var tombstoneInfo: RoomTombstoneInfo? { roomInfo.tombstone }
+    var tombstoneInfo: SuccessorRoom? { roomInfo.successorRoom }
     var isFavourite: Bool { roomInfo.isFavourite }
     var canonicalAlias: String? { roomInfo.canonicalAlias }
     var alternativeAliases: [String] { roomInfo.alternativeAliases }
