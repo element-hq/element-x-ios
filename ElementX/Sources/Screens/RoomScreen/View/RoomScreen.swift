@@ -10,17 +10,17 @@ import SwiftUI
 import WysiwygComposer
 
 struct RoomScreen: View {
-    @ObservedObject var roomContext: RoomScreenViewModel.Context
-    @ObservedObject var timelineContext: TimelineViewModel.Context
-    @ObservedObject private var composerToolbarContext: ComposerToolbarViewModel.Context
+    @ObservedObject private var roomContext: RoomScreenViewModelType.Context
+    @ObservedObject private var timelineContext: TimelineViewModelType.Context
+    @ObservedObject private var composerToolbarContext: ComposerToolbarViewModelType.Context
     @State private var dragOver = false
     let composerToolbar: ComposerToolbar
 
-    init(roomViewModel: RoomScreenViewModelProtocol,
-         timelineViewModel: TimelineViewModelProtocol,
+    init(roomContext: RoomScreenViewModelType.Context,
+         timelineContext: TimelineViewModelType.Context,
          composerToolbar: ComposerToolbar) {
-        roomContext = roomViewModel.context
-        timelineContext = timelineViewModel.context
+        self.roomContext = roomContext
+        self.timelineContext = timelineContext
         self.composerToolbar = composerToolbar
         composerToolbarContext = composerToolbar.context
     }
@@ -261,15 +261,15 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
 
     static var previews: some View {
         NavigationStack {
-            RoomScreen(roomViewModel: viewModels.room,
-                       timelineViewModel: viewModels.timeline,
+            RoomScreen(roomContext: viewModels.room.context,
+                       timelineContext: viewModels.timeline.context,
                        composerToolbar: ComposerToolbar.mock())
         }
         .previewDisplayName("Normal")
         
         NavigationStack {
-            RoomScreen(roomViewModel: readOnlyViewModels.room,
-                       timelineViewModel: readOnlyViewModels.timeline,
+            RoomScreen(roomContext: readOnlyViewModels.room.context,
+                       timelineContext: readOnlyViewModels.timeline.context,
                        composerToolbar: ComposerToolbar.mock())
         }
         .previewDisplayName("Read-only")

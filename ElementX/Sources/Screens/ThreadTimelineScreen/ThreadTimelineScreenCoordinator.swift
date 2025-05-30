@@ -6,18 +6,23 @@
 //
 
 import Combine
+import HTMLParser
 import SwiftUI
+import WysiwygComposer
 
 struct ThreadTimelineScreenCoordinatorParameters {
+    let clientProxy: ClientProxyProtocol
     let roomProxy: JoinedRoomProxyProtocol
     let timelineController: TimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
-    let appMediator: AppMediatorProtocol
     let emojiProvider: EmojiProviderProtocol
+    let completionSuggestionService: CompletionSuggestionServiceProtocol
+    let appMediator: AppMediatorProtocol
+    let appSettings: AppSettings
+    let composerDraftService: ComposerDraftServiceProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
-    let clientProxy: ClientProxyProtocol
 }
 
 enum ThreadTimelineScreenCoordinatorAction {
@@ -37,6 +42,8 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     private let parameters: ThreadTimelineScreenCoordinatorParameters
     private let viewModel: ThreadTimelineScreenViewModelProtocol
     private let timelineViewModel: TimelineViewModelProtocol
+    private var composerViewModel: ComposerToolbarViewModelProtocol
+    private var wysiwygViewModel: WysiwygComposerViewModel
     
     private var cancellables = Set<AnyCancellable>()
  
@@ -57,11 +64,28 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                                               voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                               appMediator: parameters.appMediator,
-                                              appSettings: ServiceLocator.shared.settings,
+                                              appSettings: parameters.appSettings,
                                               analyticsService: ServiceLocator.shared.analytics,
                                               emojiProvider: parameters.emojiProvider,
                                               timelineControllerFactory: parameters.timelineControllerFactory,
                                               clientProxy: parameters.clientProxy)
+        
+        wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
+                                                    maxCompressedHeight: ComposerConstant.maxHeight,
+                                                    maxExpandedHeight: ComposerConstant.maxHeight,
+                                                    parserStyle: .elementX)
+        
+        #warning("Drafts are not handled and they can't be without rust side changes")
+        
+        composerViewModel = ComposerToolbarViewModel(initialText: nil,
+                                                     roomProxy: parameters.roomProxy,
+                                                     wysiwygViewModel: wysiwygViewModel,
+                                                     completionSuggestionService: parameters.completionSuggestionService,
+                                                     mediaProvider: parameters.mediaProvider,
+                                                     mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
+                                                     appSettings: parameters.appSettings,
+                                                     analyticsService: ServiceLocator.shared.analytics,
+                                                     composerDraftService: parameters.composerDraftService)
     }
     
     func start() {
@@ -103,6 +127,14 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
+        
+        composerViewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+
+                timelineViewModel.process(composerAction: action)
+            }
+            .store(in: &cancellables)
     }
     
     func stop() {
@@ -110,6 +142,12 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(ThreadTimelineScreen(context: viewModel.context, timelineContext: timelineViewModel.context))
+        let composerToolbar = ComposerToolbar(context: composerViewModel.context,
+                                              wysiwygViewModel: wysiwygViewModel,
+                                              keyCommands: composerViewModel.keyCommands)
+        
+        return AnyView(ThreadTimelineScreen(context: viewModel.context,
+                                            timelineContext: timelineViewModel.context,
+                                            composerToolbar: composerToolbar))
     }
 }
