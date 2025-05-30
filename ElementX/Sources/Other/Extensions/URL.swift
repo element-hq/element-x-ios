@@ -16,6 +16,10 @@ extension URL: @retroactive ExpressibleByStringLiteral {
 
         self = url
     }
+    
+    static var dummayURL: URL {
+        URL(string: "dummy://example.com")!
+    }
 
     /// The URL of the primary app group container.
     static var appGroupContainerDirectory: URL {
@@ -160,5 +164,9 @@ extension URL {
             return "application/octet-stream" // default
         }
         return type.preferredMIMEType ?? "application/octet-stream"
+    }
+    
+    func isDummyURL() -> Bool {
+        return self.absoluteString.hasPrefix("dummy://")
     }
 }

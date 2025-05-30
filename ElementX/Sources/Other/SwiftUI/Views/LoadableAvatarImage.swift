@@ -52,9 +52,7 @@ struct LoadableAvatarImage: View {
             .clipShape(Circle())
             .environment(\.shouldAutomaticallyLoadImages, true) // We always load avatars.
     }
-    
-    var dummyUrl: URL { URL(string: "https://example.com/dummy")! }
-    
+        
     @ViewBuilder
     private var avatar: some View {
         if let url {
@@ -71,7 +69,7 @@ struct LoadableAvatarImage: View {
             }
         } else {
             PlaceholderAvatarImage(name: name, contentID: contentID, onTap: {
-                onTap?(dummyUrl)
+                onTap?(URL.dummayURL)
             })
         }
     }

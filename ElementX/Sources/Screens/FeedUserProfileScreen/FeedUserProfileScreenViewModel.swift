@@ -15,6 +15,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     private let clientProxy: ClientProxyProtocol
     private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol?
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let mediaProvider: MediaProviderProtocol
     
     private let FEEDS_PAGE_COUNT = 10
     private var isFetchFeedsInProgress = false
@@ -32,6 +33,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         self.clientProxy = clientProxy
         self.feedUpdatedProtocol = feedUpdatedProtocol
         self.userIndicatorController = userIndicatorController
+        self.mediaProvider = mediaProvider
         
         super.init(initialViewState: .init(userID: userProfile.userId,
                                            userProfile: userProfile,
@@ -67,6 +69,8 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             toggleFollowUser()
         case .openDirectChat:
             openDirectChat()
+        case .displayAvatar(let url):
+            displayFullScreenAvatar(url)
         }
     }
     
@@ -81,7 +85,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     }
     
     private func fetchUserProfile() async {
-        if let zid = state.userProfile.primaryZid {
+        if let zid = state.userProfile.primaryZid, !zid.isEmpty {
             let result = await clientProxy.fetchFeedUserProfile(userZId: zid)
             switch result {
             case .success(let userProfile):
@@ -90,6 +94,8 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 MXLog.error("Failed to fetch user profile for user: \(state.userID), with error: \(error)")
                 displayError()
             }
+        } else {
+            state.shouldShowFollowButton = false
         }
     }
     
@@ -269,6 +275,25 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 }
             case .failure:
                 displayError()
+            }
+        }
+    }
+    
+    private func displayFullScreenAvatar(_ url: URL) {
+        if !url.isDummyURL() {
+            let loadingIndicatorIdentifier = "roomAvatarLoadingIndicator"
+            userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+            
+            Task {
+                defer {
+                    userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+                }
+                
+                // We don't actually know the mime type here, assume it's an image.
+                if let mediaSource = try? MediaSourceProxy(url: url, mimeType: "image/jpeg"),
+                   case let .success(file) = await mediaProvider.loadFileFromSource(mediaSource) {
+                    state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: state.userProfile.firstName)
+                }
             }
         }
     }

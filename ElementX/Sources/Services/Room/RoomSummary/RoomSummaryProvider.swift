@@ -279,7 +279,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         cacheRoomUsers(roomInfo)
-        let isDirectRoom = (roomInfo.joinedMembersCount <= 2) || (roomInfo.isDirect && roomInfo.joinedMembersCount <= 2)
+        let isDirectRoom = (roomInfo.activeMembersCount <= 2) || (roomInfo.isDirect && roomInfo.activeMembersCount <= 2)
         let displayName: String? = getDisplayNameFromRoomInfo(roomInfo, isDirectRoom: isDirectRoom)
         let roomAvatar: String? = getRoomAvatarFromRoomInfo(roomInfo, isDirectRoom: isDirectRoom)
         zeroUsersService.setRoomAvatarInCache(roomId: roomInfo.id, avatarUrl: roomAvatar)

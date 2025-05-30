@@ -38,7 +38,7 @@ struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
 
     /// The room's avatar info for use in a ``RoomAvatarImage``.
     var avatar: RoomAvatar {
-        if isDirect, avatarURL == nil, heroes.count == 1 {
+        if isDirect, heroes.count == 1 {
             return .heroes(heroes.map(UserProfileProxy.init))
         }
         

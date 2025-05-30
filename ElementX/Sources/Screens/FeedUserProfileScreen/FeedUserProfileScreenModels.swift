@@ -43,6 +43,9 @@ struct FeedUserProfileScreenViewState: BindableState {
 
 struct FeedUserProfileScreenViewStateBindings {
     var alertInfo: AlertInfo<UUID>?
+    
+    /// A media item that will be previewed with QuickLook.
+    var mediaPreviewItem: MediaPreviewItem?
 }
 
 enum FeedUserProfileScreenViewModelAction {
@@ -58,6 +61,7 @@ enum FeedUserProfileScreenViewAction {
     case addMeowToPost(postId: String, amount: Int)
     case toggleFollowUser
     case openDirectChat
+    case displayAvatar(_ url: URL)
 }
 
 enum UserFeedsListMode: CustomStringConvertible {
