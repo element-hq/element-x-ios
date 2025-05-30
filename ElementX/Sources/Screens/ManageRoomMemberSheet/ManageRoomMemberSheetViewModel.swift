@@ -37,7 +37,8 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
     override func process(viewAction: ManageRoomMemberSheetViewAction) {
         switch viewAction {
         case .kick:
-            displayAlert(.kick)
+            //displayAlert(.kick)
+            Task { await kickMember(id: state.memberDetails.id, name: state.memberDetails.name, reason: nil) }
         case .ban:
             displayAlert(.ban)
         case .displayDetails:

@@ -30,6 +30,10 @@ extension SDKListener: QrLoginProgressListener where T == QrLoginProgress {
 
 // MARK: ClientProxy
 
+extension SDKListener: MediaPreviewConfigListener where T == MediaPreviewConfig? {
+    func onChange(mediaPreviewConfig: MediaPreviewConfig?) { onUpdateClosure(mediaPreviewConfig) }
+}
+
 extension SDKListener: SyncServiceStateObserver where T == SyncServiceState {
     func onUpdate(state: SyncServiceState) { onUpdateClosure(state) }
 }

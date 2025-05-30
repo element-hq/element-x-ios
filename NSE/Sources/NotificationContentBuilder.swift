@@ -15,7 +15,7 @@ import Version
 
 struct NotificationContentBuilder {
     let messageEventStringBuilder: RoomMessageEventStringBuilder
-    let settings: CommonSettingsProtocol
+    let userSession: NSEUserSession
     
     /// Process the given notification item proxy
     /// - Parameters:
@@ -104,7 +104,7 @@ struct NotificationContentBuilder {
                             senderID: notificationItem.senderID,
                             senderName: notificationItem.senderDisplayName ?? notificationItem.roomDisplayName,
                             icon: icon(for: notificationItem),
-                            forcePlaceholder: settings.hideInviteAvatars,
+                            forcePlaceholder: userSession.inviteAvatarsVisibility == .off,
                             mediaProvider: mediaProvider)
     }
     
@@ -146,8 +146,9 @@ struct NotificationContentBuilder {
         let displayName = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
         notificationContent.body = String(messageEventStringBuilder.buildAttributedString(for: messageType, senderDisplayName: displayName, isOutgoing: false).characters)
         
-        guard settings.timelineMediaVisibility == .always ||
-            (settings.timelineMediaVisibility == .privateOnly && notificationItem.isRoomPrivate)
+        let timelineMediaVisibility = await userSession.mediaPreviewVisibility
+        guard timelineMediaVisibility == .on ||
+            (timelineMediaVisibility == .private && notificationItem.isRoomPrivate)
         else {
             return
         }

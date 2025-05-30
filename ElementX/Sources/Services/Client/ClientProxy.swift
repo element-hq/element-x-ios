@@ -39,6 +39,9 @@ class ClientProxy: ClientProxyProtocol {
     // periphery:ignore - required for instance retention in the rust codebase
     private var sendQueueListenerTaskHandle: TaskHandle?
     
+    // periphery:ignore - required for instance retention in the rust codebase
+    private var mediaPreviewConfigListenerTaskHandle: TaskHandle?
+    
     private var delegateHandle: TaskHandle?
     
     // These following summary providers both operate on the same allRooms() list but
@@ -150,6 +153,16 @@ class ClientProxy: ClientProxyProtocol {
     private let verificationStateSubject = CurrentValueSubject<SessionVerificationState, Never>(.unknown)
     var verificationStatePublisher: CurrentValuePublisher<SessionVerificationState, Never> {
         verificationStateSubject.asCurrentValuePublisher()
+    }
+    
+    private let timelineMediaVisibilitySubject = CurrentValueSubject<TimelineMediaVisibility, Never>(.always)
+    var timelineMediaVisibilityPublisher: CurrentValuePublisher<TimelineMediaVisibility, Never> {
+        timelineMediaVisibilitySubject.asCurrentValuePublisher()
+    }
+    
+    private let hideInviteAvatarsSubject = CurrentValueSubject<Bool, Never>(false)
+    var hideInviteAvatarsPublisher: CurrentValuePublisher<Bool, Never> {
+        hideInviteAvatarsSubject.asCurrentValuePublisher()
     }
     
     private let directMemberZeroProfileSubject = CurrentValueSubject<ZMatrixUser?, Never>(nil)
@@ -266,6 +279,10 @@ class ClientProxy: ClientProxyProtocol {
             } catch {
                 MXLog.error("Failed setting media retention policy with error: \(error)")
             }
+        }
+        
+        Task {
+            mediaPreviewConfigListenerTaskHandle = await createMediaPreviewConfigObserver()
         }
         
         _ = await loadZeroMessengerInvite()
@@ -821,6 +838,16 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError> {
+        do {
+            let config = try await client.fetchMediaPreviewConfig()
+            return .success(config)
+        } catch {
+            MXLog.error("Failed fetching media preview config with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
         
     // MARK: Ignored users
     
@@ -893,6 +920,28 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         return users.elements
+    }
+    
+    // MARK: Moderation & Safety
+    
+    func setTimelineMediaVisibility(_ value: TimelineMediaVisibility) async -> Result<Void, ClientProxyError> {
+        do {
+            try await client.setMediaPreviewDisplayPolicy(policy: value.rustValue)
+            return .success(())
+        } catch {
+            MXLog.error("Failed to set timeline media visibility: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
+    func setHideInviteAvatars(_ value: Bool) async -> Result<Void, ClientProxyError> {
+        do {
+            try await client.setInviteAvatarsDisplayPolicy(policy: value ? .off : .on)
+            return .success(())
+        } catch {
+            MXLog.error("Failed to set hide invite avatars: \(error)")
+            return .failure(.sdkError(error))
+        }
     }
     
     func getUserRewards(shouldCheckRewardsIntiamtion: Bool = false) async -> Result<Void, ClientProxyError> {
@@ -1358,6 +1407,26 @@ class ClientProxy: ClientProxyProtocol {
             }
         })
     }
+    
+    private func createMediaPreviewConfigObserver() async -> TaskHandle? {
+        do {
+            return try await client.subscribeToMediaPreviewConfig(listener: SDKListener { [weak self] config in
+                guard let self else { return }
+                
+                if let config {
+                    timelineMediaVisibilitySubject.send(config.mediaPreviewVisibility)
+                    hideInviteAvatarsSubject.send(config.hideInviteAvatars)
+                } else {
+                    // return default values
+                    timelineMediaVisibilitySubject.send(.always)
+                    hideInviteAvatarsSubject.send(false)
+                }
+            })
+        } catch {
+            MXLog.error("Failed creating media preview config observer: \(error)")
+            return nil
+        }
+    }
 
     private func createRoomListServiceObserver(_ roomListService: RoomListService) -> TaskHandle {
         roomListService.state(listener: SDKListener { [weak self] state in
@@ -1677,5 +1746,40 @@ private struct ClientProxyServices {
         
         self.syncService = syncService
         self.roomListService = roomListService
+    }
+}
+
+private extension MediaPreviewConfig {
+    var mediaPreviewVisibility: TimelineMediaVisibility {
+        switch mediaPreviews {
+        case .on:
+            .always
+        case .private:
+            .privateOnly
+        case .off:
+            .never
+        }
+    }
+    
+    var hideInviteAvatars: Bool {
+        switch inviteAvatars {
+        case .off:
+            true
+        case .on:
+            false
+        }
+    }
+}
+
+private extension TimelineMediaVisibility {
+    var rustValue: MediaPreviews {
+        switch self {
+        case .always:
+            .on
+        case .never:
+            .off
+        case .privateOnly:
+            .private
+        }
     }
 }

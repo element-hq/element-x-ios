@@ -88,7 +88,9 @@ struct UserProfileDetailsSection: View {
                                         contentID: context.viewState.userProfile.userId,
                                         avatarSize: .user(on: .dmDetails),
                                         mediaProvider: context.mediaProvider,
-                                        onTap: { _ in })
+                                        onTap: { url in
+                        context.send(viewAction: .displayAvatar(url))
+                    })
                     
                     Spacer()
                     

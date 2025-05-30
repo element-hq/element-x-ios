@@ -95,6 +95,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .receive(on: DispatchQueue.main)
             .sink { [weak self] directMember in
                 guard let self else { return }
+                guard roomProxy.isDirectOneToOneRoom else { return }
                 
                 state.roomSubtitle = directMember?.zIdOrPublicAddressDisplayText
             }
@@ -165,7 +166,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processToggleMuteNotifications:
             Task { await toggleMuteNotifications() }
         case .displayAvatar(let url):
-            displayFullScreenAvatar(url)
+            processAvatarTap(url)
         case .processTapPolls:
             actionsSubject.send(.requestPollsHistoryPresentation)
         case .toggleFavourite(let isFavourite):
@@ -194,6 +195,18 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
     
     // MARK: - Private
+    
+    private func processAvatarTap(_ url: URL) {
+        if roomProxy.isDirectRoom || roomProxy.hasOnlyOneMember  {
+            if let user = roomProxy.membersPublisher.value.first(where: {
+                $0.userID != clientProxy.userID && ($0.membership == .join || $0.membership == .invite)
+            }) {
+                actionsSubject.send(.requestRecipientDetailsPresentation(userID: user.userID))
+            }
+        } else {
+            displayFullScreenAvatar(url)
+        }
+    }
     
     private func setupRoomSubscription() {
         roomProxy.infoPublisher
@@ -445,18 +458,20 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
     
     private func displayFullScreenAvatar(_ url: URL) {
-        let loadingIndicatorIdentifier = "roomAvatarLoadingIndicator"
-        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
-        
-        Task {
-            defer {
-                userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
-            }
+        if !url.isDummyURL() {
+            let loadingIndicatorIdentifier = "roomAvatarLoadingIndicator"
+            userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
             
-            // We don't actually know the mime type here, assume it's an image.
-            if let mediaSource = try? MediaSourceProxy(url: url, mimeType: "image/jpeg"),
-               case let .success(file) = await mediaProvider.loadFileFromSource(mediaSource) {
-                state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomProxy.infoPublisher.value.displayName)
+            Task {
+                defer {
+                    userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+                }
+                
+                // We don't actually know the mime type here, assume it's an image.
+                if let mediaSource = try? MediaSourceProxy(url: url, mimeType: "image/jpeg"),
+                   case let .success(file) = await mediaProvider.loadFileFromSource(mediaSource) {
+                    state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomProxy.infoPublisher.value.displayName)
+                }
             }
         }
     }

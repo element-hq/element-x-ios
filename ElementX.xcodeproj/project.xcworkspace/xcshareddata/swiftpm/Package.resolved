@@ -33,7 +33,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "81ba8bd8b3971beac252129c5466d7eac2f2ec31"
+        "revision" : "139d4f3d1ed19cc513686e5e39750ecef54c8403"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "07a4f35ac39fba83e462492efb36249807a20125",
-        "version" : "0.9.0"
+        "revision" : "cb167bbb8c4c88c0bdf9ca3a4f839d8069c2ef0b",
+        "version" : "0.12.0"
       }
     },
     {
@@ -266,8 +266,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "0e1a296df619339f5f1a7349b4cfe31fb221a031",
-        "version" : "8.35.1"
+        "revision" : "e0fa062817b277fd9ab597b54b8e2f92dc65b009",
+        "version" : "8.46.0"
       }
     },
     {
@@ -275,8 +275,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols",
       "state" : {
-        "revision" : "e2e28f4e56e1769c2ec3c61c9355fc64eb7a535a",
-        "version" : "5.3.0"
+        "revision" : "3dd282d3269b061853a3b3bcd23a509d2aa166ce",
+        "version" : "6.2.0"
       }
     },
     {

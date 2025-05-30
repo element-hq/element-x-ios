@@ -364,9 +364,8 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(mode: JoinRoomScreenMode, hideInviteAvatars: Bool = false) -> JoinRoomScreenViewModel {
         let appSettings = AppSettings()
         appSettings.knockingEnabled = true
-        appSettings.hideInviteAvatars = hideInviteAvatars
         
-        let clientProxy = ClientProxyMock(.init())
+        let clientProxy = ClientProxyMock(.init(hideInviteAvatars: hideInviteAvatars))
         
         switch mode {
         case .unknown:
