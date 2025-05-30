@@ -9,7 +9,7 @@ import Combine
 import MatrixRustSDK
 import SwiftUI
 
-typealias EncryptionResetScreenViewModelType = StateStoreViewModel<EncryptionResetScreenViewState, EncryptionResetScreenViewAction>
+typealias EncryptionResetScreenViewModelType = StateStoreViewModelV2<EncryptionResetScreenViewState, EncryptionResetScreenViewAction>
 
 class EncryptionResetScreenViewModel: EncryptionResetScreenViewModelType, EncryptionResetScreenViewModelProtocol {
     private let clientProxy: ClientProxyProtocol

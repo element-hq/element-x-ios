@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias AnalyticsSettingsScreenViewModelType = StateStoreViewModel<AnalyticsSettingsScreenViewState, AnalyticsSettingsScreenViewAction>
+typealias AnalyticsSettingsScreenViewModelType = StateStoreViewModelV2<AnalyticsSettingsScreenViewState, AnalyticsSettingsScreenViewAction>
 
 class AnalyticsSettingsScreenViewModel: AnalyticsSettingsScreenViewModelType, AnalyticsSettingsScreenViewModelProtocol {
     private let analytics: AnalyticsService

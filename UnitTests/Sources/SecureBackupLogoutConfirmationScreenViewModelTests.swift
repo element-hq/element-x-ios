@@ -48,12 +48,12 @@ class SecureBackupLogoutConfirmationScreenViewModelTests: XCTestCase {
             return .success(())
         }
         
-        let deferredWaiting = deferFulfillment(context.$viewState) { $0.mode == .waitingToStart(hasStalled: false) }
+        let deferredWaiting = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .waitingToStart(hasStalled: false) }
         context.send(viewAction: .logout)
         try await deferredWaiting.fulfill()
         
         // Wait for the 2-second timeout.
-        let deferredHasStalled = deferFulfillment(context.$viewState) { $0.mode == .waitingToStart(hasStalled: true) }
+        let deferredHasStalled = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .waitingToStart(hasStalled: true) }
         try await deferredHasStalled.fulfill()
         
         // Wait for the progress to be reported.
@@ -64,7 +64,7 @@ class SecureBackupLogoutConfirmationScreenViewModelTests: XCTestCase {
     func testOfflineState() async throws {
         try await testOngoingState()
         
-        let deferred = deferFulfillment(context.$viewState) { $0.mode == .offline }
+        let deferred = deferFulfillment(context.observe(\.viewState.mode)) { $0 == .offline }
         reachabilitySubject.send(.unreachable)
         try await deferred.fulfill()
     }

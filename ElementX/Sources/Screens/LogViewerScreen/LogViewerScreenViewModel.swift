@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias LogViewerScreenViewModelType = StateStoreViewModel<LogViewerScreenViewState, LogViewerScreenViewAction>
+typealias LogViewerScreenViewModelType = StateStoreViewModelV2<LogViewerScreenViewState, LogViewerScreenViewAction>
 
 class LogViewerScreenViewModel: LogViewerScreenViewModelType, LogViewerScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<LogViewerScreenViewModelAction, Never> = .init()

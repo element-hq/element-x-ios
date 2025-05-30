@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias LegalInformationScreenViewModelType = StateStoreViewModel<LegalInformationScreenViewState, LegalInformationScreenViewAction>
+typealias LegalInformationScreenViewModelType = StateStoreViewModelV2<LegalInformationScreenViewState, LegalInformationScreenViewAction>
 
 class LegalInformationScreenViewModel: LegalInformationScreenViewModelType, LegalInformationScreenViewModelProtocol {
     init(appSettings: AppSettings) {

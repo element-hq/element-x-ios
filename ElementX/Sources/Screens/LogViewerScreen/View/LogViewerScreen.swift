@@ -10,7 +10,7 @@ import QuickLook
 import SwiftUI
 
 struct LogViewerScreen: View {
-    @ObservedObject var context: LogViewerScreenViewModel.Context
+    let context: LogViewerScreenViewModel.Context
     
     var body: some View {
         PreviewView(urls: context.viewState.urls)

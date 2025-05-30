@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias LoginScreenViewModelType = StateStoreViewModel<LoginScreenViewState, LoginScreenViewAction>
+typealias LoginScreenViewModelType = StateStoreViewModelV2<LoginScreenViewState, LoginScreenViewAction>
 
 class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtocol {
     private let authenticationService: AuthenticationServiceProtocol

@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct LegalInformationScreen: View {
-    @ObservedObject var context: LegalInformationScreenViewModel.Context
+    let context: LegalInformationScreenViewModel.Context
     @Environment(\.openURL) private var openURL
     
     var body: some View {

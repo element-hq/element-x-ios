@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias NotificationSettingsEditScreenViewModelType = StateStoreViewModel<NotificationSettingsEditScreenViewState, NotificationSettingsEditScreenViewAction>
+typealias NotificationSettingsEditScreenViewModelType = StateStoreViewModelV2<NotificationSettingsEditScreenViewState, NotificationSettingsEditScreenViewAction>
 
 class NotificationSettingsEditScreenViewModel: NotificationSettingsEditScreenViewModelType, NotificationSettingsEditScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<NotificationSettingsEditScreenViewModelAction, Never> = .init()
