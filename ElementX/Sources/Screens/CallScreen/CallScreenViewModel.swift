@@ -142,7 +142,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             state.url = url
             // We need widget messaging to work before enabling CallKit, otherwise mute, hangup etc do nothing.
             
-        case .roomCall(let roomProxy, _, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme, let notifyOtherParticipants):
+        case .roomCall(let roomProxy, _, let clientID, let elementCallBaseURL, let elementCallBaseURLOverride, let colorScheme):
             Task { [weak self] in
                 guard let self else { return }
                 
@@ -175,10 +175,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 
                 await elementCallService.setupCallSession(roomID: roomProxy.id,
                                                           roomDisplayName: roomProxy.infoPublisher.value.displayName ?? roomProxy.id)
-                
-                if notifyOtherParticipants {
-                    _ = await roomProxy.sendCallNotificationIfNeeded()
-                }
             }
         }
     }
