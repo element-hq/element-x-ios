@@ -88,7 +88,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 timelineControllerFactory: timelineControllerFactory,
                                                                 clientProxy: clientProxy)
         
-        let hideTimelineMedia = switch appSettings.timelineMediaVisibility {
+        let hideTimelineMedia = switch clientProxy.timelineMediaVisibilityPublisher.value {
         case .always:
             false
         case .privateOnly:
@@ -528,7 +528,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .weakAssign(to: \.state.isViewSourceEnabled, on: self)
             .store(in: &cancellables)
         
-        appSettings.$timelineMediaVisibility
+        clientProxy.timelineMediaVisibilityPublisher
             .removeDuplicates()
             .flatMap { [weak self] timelineMediaVisibility -> AnyPublisher<Bool, Never> in
                 switch timelineMediaVisibility {
@@ -541,10 +541,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     return roomProxy.infoPublisher
                         .map { !$0.isPrivate }
                         .removeDuplicates()
-                        .receive(on: DispatchQueue.main)
                         .eraseToAnyPublisher()
                 }
             }
+            .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.hideTimelineMedia, on: self)
             .store(in: &cancellables)
     }

@@ -70,7 +70,7 @@ packages:
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: 81ba8bd8b3971beac252129c5466d7eac2f2ec31
+    revision: 139d4f3d1ed19cc513686e5e39750ecef54c8403
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
@@ -78,7 +78,7 @@ packages:
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
-    exactVersion: 0.9.0
+    exactVersion: 0.12.0
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
     minorVersion: 1.4.1
@@ -134,7 +134,7 @@ packages:
     minorVersion: 3.2.5
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    minorVersion: 8.35.1
+    minorVersion: 8.46.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     minorVersion: 1.18.3

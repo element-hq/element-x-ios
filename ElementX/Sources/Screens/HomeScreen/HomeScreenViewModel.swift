@@ -132,7 +132,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             }
             .store(in: &cancellables)
         
-        appSettings.$hideInviteAvatars
+        userSession.clientProxy.hideInviteAvatarsPublisher
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.hideInviteAvatars, on: self)
             .store(in: &cancellables)
         

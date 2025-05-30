@@ -2271,6 +2271,16 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingIgnoredUsersPublisher = value }
     }
     var underlyingIgnoredUsersPublisher: CurrentValuePublisher<[String]?, Never>!
+    var timelineMediaVisibilityPublisher: CurrentValuePublisher<TimelineMediaVisibility, Never> {
+        get { return underlyingTimelineMediaVisibilityPublisher }
+        set(value) { underlyingTimelineMediaVisibilityPublisher = value }
+    }
+    var underlyingTimelineMediaVisibilityPublisher: CurrentValuePublisher<TimelineMediaVisibility, Never>!
+    var hideInviteAvatarsPublisher: CurrentValuePublisher<Bool, Never> {
+        get { return underlyingHideInviteAvatarsPublisher }
+        set(value) { underlyingHideInviteAvatarsPublisher = value }
+    }
+    var underlyingHideInviteAvatarsPublisher: CurrentValuePublisher<Bool, Never>!
     var pusherNotificationClientIdentifier: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol {
         get { return underlyingRoomSummaryProvider }
@@ -4528,6 +4538,70 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return clearCachesReturnValue
         }
     }
+    //MARK: - fetchMediaPreviewConfiguration
+
+    var fetchMediaPreviewConfigurationUnderlyingCallsCount = 0
+    var fetchMediaPreviewConfigurationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchMediaPreviewConfigurationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchMediaPreviewConfigurationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchMediaPreviewConfigurationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchMediaPreviewConfigurationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchMediaPreviewConfigurationCalled: Bool {
+        return fetchMediaPreviewConfigurationCallsCount > 0
+    }
+
+    var fetchMediaPreviewConfigurationUnderlyingReturnValue: Result<MediaPreviewConfig?, ClientProxyError>!
+    var fetchMediaPreviewConfigurationReturnValue: Result<MediaPreviewConfig?, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchMediaPreviewConfigurationUnderlyingReturnValue
+            } else {
+                var returnValue: Result<MediaPreviewConfig?, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchMediaPreviewConfigurationUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchMediaPreviewConfigurationUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchMediaPreviewConfigurationUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchMediaPreviewConfigurationClosure: (() async -> Result<MediaPreviewConfig?, ClientProxyError>)?
+
+    func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError> {
+        fetchMediaPreviewConfigurationCallsCount += 1
+        if let fetchMediaPreviewConfigurationClosure = fetchMediaPreviewConfigurationClosure {
+            return await fetchMediaPreviewConfigurationClosure()
+        } else {
+            return fetchMediaPreviewConfigurationReturnValue
+        }
+    }
     //MARK: - ignoreUser
 
     var ignoreUserUnderlyingCallsCount = 0
@@ -5266,6 +5340,146 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return await userIdentityForClosure(userID)
         } else {
             return userIdentityForReturnValue
+        }
+    }
+    //MARK: - setTimelineMediaVisibility
+
+    var setTimelineMediaVisibilityUnderlyingCallsCount = 0
+    var setTimelineMediaVisibilityCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setTimelineMediaVisibilityUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setTimelineMediaVisibilityUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setTimelineMediaVisibilityUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setTimelineMediaVisibilityUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setTimelineMediaVisibilityCalled: Bool {
+        return setTimelineMediaVisibilityCallsCount > 0
+    }
+    var setTimelineMediaVisibilityReceivedValue: TimelineMediaVisibility?
+    var setTimelineMediaVisibilityReceivedInvocations: [TimelineMediaVisibility] = []
+
+    var setTimelineMediaVisibilityUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var setTimelineMediaVisibilityReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return setTimelineMediaVisibilityUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setTimelineMediaVisibilityUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setTimelineMediaVisibilityUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setTimelineMediaVisibilityUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var setTimelineMediaVisibilityClosure: ((TimelineMediaVisibility) async -> Result<Void, ClientProxyError>)?
+
+    func setTimelineMediaVisibility(_ value: TimelineMediaVisibility) async -> Result<Void, ClientProxyError> {
+        setTimelineMediaVisibilityCallsCount += 1
+        setTimelineMediaVisibilityReceivedValue = value
+        DispatchQueue.main.async {
+            self.setTimelineMediaVisibilityReceivedInvocations.append(value)
+        }
+        if let setTimelineMediaVisibilityClosure = setTimelineMediaVisibilityClosure {
+            return await setTimelineMediaVisibilityClosure(value)
+        } else {
+            return setTimelineMediaVisibilityReturnValue
+        }
+    }
+    //MARK: - setHideInviteAvatars
+
+    var setHideInviteAvatarsUnderlyingCallsCount = 0
+    var setHideInviteAvatarsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setHideInviteAvatarsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setHideInviteAvatarsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setHideInviteAvatarsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setHideInviteAvatarsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setHideInviteAvatarsCalled: Bool {
+        return setHideInviteAvatarsCallsCount > 0
+    }
+    var setHideInviteAvatarsReceivedValue: Bool?
+    var setHideInviteAvatarsReceivedInvocations: [Bool] = []
+
+    var setHideInviteAvatarsUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var setHideInviteAvatarsReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return setHideInviteAvatarsUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setHideInviteAvatarsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setHideInviteAvatarsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setHideInviteAvatarsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var setHideInviteAvatarsClosure: ((Bool) async -> Result<Void, ClientProxyError>)?
+
+    func setHideInviteAvatars(_ value: Bool) async -> Result<Void, ClientProxyError> {
+        setHideInviteAvatarsCallsCount += 1
+        setHideInviteAvatarsReceivedValue = value
+        DispatchQueue.main.async {
+            self.setHideInviteAvatarsReceivedInvocations.append(value)
+        }
+        if let setHideInviteAvatarsClosure = setHideInviteAvatarsClosure {
+            return await setHideInviteAvatarsClosure(value)
+        } else {
+            return setHideInviteAvatarsReturnValue
         }
     }
     //MARK: - verifyUserPassword

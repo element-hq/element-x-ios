@@ -17,6 +17,9 @@ struct ClientProxyMockConfiguration {
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
     
     var recoveryState: SecureBackupRecoveryState = .enabled
+    
+    var timelineMediaVisibility = TimelineMediaVisibility.always
+    var hideInviteAvatars = false
 }
 
 enum ClientProxyMockError: Error {
@@ -94,5 +97,8 @@ extension ClientProxyMock {
         userIdentityForReturnValue = .success(UserIdentityProxyMock(configuration: .init()))
         
         underlyingIsReportRoomSupported = true
+        
+        underlyingTimelineMediaVisibilityPublisher = CurrentValueSubject<TimelineMediaVisibility, Never>(configuration.timelineMediaVisibility).asCurrentValuePublisher()
+        underlyingHideInviteAvatarsPublisher = CurrentValueSubject<Bool, Never>(configuration.hideInviteAvatars).asCurrentValuePublisher()
     }
 }
