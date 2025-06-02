@@ -189,9 +189,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Du hast %1$d Versuch zu entsperren</string>
+			<string>Sie haben %1$d Entsperrversuch</string>
 			<key>other</key>
-			<string>Du hast %1$d Versuche zum Entsperren</string>
+			<string>Sie haben %1$d Entsperrversuche</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -205,9 +205,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Falsche PIN. Du hast %1$d weiteren Versuch</string>
+			<string>Falsche PIN. Sie haben %1$d weiteren Versuch</string>
 			<key>other</key>
-			<string>Falsche PIN. Du hast %1$d weitere Versuche</string>
+			<string>Falsche PIN. Sie haben %1$d weitere Versuche</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>

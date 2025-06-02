@@ -338,8 +338,8 @@
 "event_shield_reason_unknown_device" = "Criptografada por um dispositivo desconhecido ou apagado.";
 "event_shield_reason_unsigned_device" = "Criptografado por um dispositivo que não foi verificado pelo seu dono.";
 "event_shield_reason_unverified_identity" = "Criptografado por um usuário não verificado.";
-"full_screen_intent_banner_message" = "Para​•​garantir​•​que​•​você​•​nunca​•​perca​•​uma​•​chamada​•​importante,​•​altere​•​suas​•​configurações​•​para​•​permitir​•​notificações​•​em​•​tela​•​cheia​•​quando​•​o​•​telefone​•​estiver​•​bloqueado.";
-"full_screen_intent_banner_title" = "Aprimore​•​sua​•​experiência​•​de​•​chamada";
+"full_screen_intent_banner_message" = "Para garantir que você nunca perca uma chamada importante, por favor altere as suas configurações para permitir notificações em tela cheia enquanto o seu celular estiver bloqueado.";
+"full_screen_intent_banner_title" = "Melhore a sua experiência de chamadas";
 "invite_friends_rich_title" = "🔐️ Junte-se a mim no %1$@";
 "invite_friends_text" = "Ei, fale comigo em %1$@: %2$@";
 "leave_conversation_alert_subtitle" = "Tem certeza de que deseja sair dessa conversa? Essa conversa não é pública e você não poderá entrar novamente sem um convite.";

@@ -12,10 +12,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%1$d nodau wedi eu cynnig</string>
 			<key>one</key>
-			<string>%1$d digit entered</string>
+			<string>%1$d nod wedi ei gynnig</string>
+			<key>two</key>
+			<string>%1$d nod wedi eu cynnig</string>
+			<key>few</key>
+			<string>%1$d nod wedi eu cynnig</string>
+			<key>many</key>
+			<string>%1$d nod wedi eu cynnig</string>
 			<key>other</key>
-			<string>%1$d digits entered</string>
+			<string>%1$d nod wedi eu cynnig</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -28,10 +36,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>Wedi'i ddarllen gan %1$@ a %2$d arall</string>
 			<key>one</key>
-			<string>Read by %1$@ and %2$d other</string>
+			<string>Wedi'i ddarllen gan %1$@ a %2$d arall</string>
+			<key>two</key>
+			<string>Wedi'i ddarllen gan %1$@ a %2$d arall</string>
+			<key>few</key>
+			<string>Wedi'i ddarllen gan %1$@ a %2$d arall</string>
+			<key>many</key>
+			<string>Wedi'i ddarllen gan %1$@ a %2$d arall</string>
 			<key>other</key>
-			<string>Read by %1$@ and %2$d others</string>
+			<string>Wedi'i ddarllen gan %1$@ a %2$d arall</string>
 		</dict>
 	</dict>
 	<key>common_many_members</key>
@@ -44,10 +60,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%d arall</string>
 			<key>one</key>
-			<string>%d other</string>
+			<string>%d arall</string>
+			<key>two</key>
+			<string>%d arall</string>
+			<key>few</key>
+			<string>%d arall</string>
+			<key>many</key>
+			<string>%d arall</string>
 			<key>other</key>
-			<string>%d others</string>
+			<string>%d arall</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -60,10 +84,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%1$d aelodau</string>
 			<key>one</key>
-			<string>%1$d member</string>
+			<string>%1$d aelod</string>
+			<key>two</key>
+			<string>%1$d aelod</string>
+			<key>few</key>
+			<string>%1$d aelod</string>
+			<key>many</key>
+			<string>%1$d aelod</string>
 			<key>other</key>
-			<string>%1$d members</string>
+			<string>%1$d aelod</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -76,10 +108,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%d pleidleisiau</string>
 			<key>one</key>
-			<string>%d vote</string>
+			<string>%d pleidlais</string>
+			<key>two</key>
+			<string>%d pleidlais</string>
+			<key>few</key>
+			<string>%d pleidlais</string>
+			<key>many</key>
+			<string>%d pleidlais</string>
 			<key>other</key>
-			<string>%d votes</string>
+			<string>%d pleidlais</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -92,10 +132,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%1$@: %2$d negeseuon</string>
 			<key>one</key>
-			<string>%1$@: %2$d message</string>
+			<string>%1$@: %2$d neges</string>
+			<key>two</key>
+			<string>%1$@: %2$d neges</string>
+			<key>few</key>
+			<string>%1$@: %2$d neges</string>
+			<key>many</key>
+			<string>%1$@: %2$d neges</string>
 			<key>other</key>
-			<string>%1$@: %2$d messages</string>
+			<string>%1$@: %2$d neges</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -108,10 +156,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%d hysbysiadau</string>
 			<key>one</key>
-			<string>%d notification</string>
+			<string>%d hysbysiad</string>
+			<key>two</key>
+			<string>%d hysbysiad</string>
+			<key>few</key>
+			<string>%d hysbysiad</string>
+			<key>many</key>
+			<string>%d hysbysiad</string>
 			<key>other</key>
-			<string>%d notifications</string>
+			<string>%d hysbysiad</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -124,10 +180,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%d gwahoddiadau</string>
 			<key>one</key>
-			<string>%d invitation</string>
+			<string>%d gwahoddiadau</string>
+			<key>two</key>
+			<string>%d gwahoddiadau</string>
+			<key>few</key>
+			<string>%d gwahoddiadau</string>
+			<key>many</key>
+			<string>%d gwahoddiadau</string>
 			<key>other</key>
-			<string>%d invitations</string>
+			<string>%d gwahoddiadau</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -140,10 +204,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%d negeseuon newydd</string>
 			<key>one</key>
-			<string>%d new message</string>
+			<string>%d neges newydd</string>
+			<key>two</key>
+			<string>%d neges newydd</string>
+			<key>few</key>
+			<string>%d neges newydd</string>
+			<key>many</key>
+			<string>%d neges newydd</string>
 			<key>other</key>
-			<string>%d new messages</string>
+			<string>%d neges newydd</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -156,10 +228,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%d negeseuon hysbyswyd heb eu darllen</string>
 			<key>one</key>
-			<string>%d unread notified message</string>
+			<string>%d neges hysbyswyd heb ei ddarllen</string>
+			<key>two</key>
+			<string>%d neges hysbyswyd heb eu darllen</string>
+			<key>few</key>
+			<string>%d neges hysbyswyd heb eu darllen</string>
+			<key>many</key>
+			<string>%d neges hysbyswyd heb eu darllen</string>
 			<key>other</key>
-			<string>%d unread notified messages</string>
+			<string>%d neges hysbyswyd heb eu darllen</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -172,10 +252,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%d ystafelloedd</string>
 			<key>one</key>
-			<string>%d room</string>
+			<string>%d ystafell</string>
+			<key>two</key>
+			<string>%d ystafell</string>
+			<key>few</key>
+			<string>%d ystafell</string>
+			<key>many</key>
+			<string>%d ystafell</string>
 			<key>other</key>
-			<string>%d rooms</string>
+			<string>%d ystafell</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -188,10 +276,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>Does gennych %1$d ceisiadau i ddatgloi</string>
 			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
+			<string>Mae gennych %1$d cais i ddatgloi</string>
+			<key>two</key>
+			<string>Mae gennych %1$d gais i ddatgloi</string>
+			<key>few</key>
+			<string>Mae gennych %1$d chais i ddatgloi</string>
+			<key>many</key>
+			<string>Mae gennych %1$d chais i ddatgloi</string>
 			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>Mae gennych %1$d cais i ddatgloi</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -204,10 +300,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>PIN anghywir. Does gennych %1$d cais arall</string>
 			<key>one</key>
-			<string>Wrong PIN. You have %1$d more chance</string>
+			<string>PIN anghywir. Mae gennych %1$d cais arall</string>
+			<key>two</key>
+			<string>PIN anghywir. Mae gennych %1$d gais arall</string>
+			<key>few</key>
+			<string>PIN anghywir. Mae gennych %1$d chais arall</string>
+			<key>many</key>
+			<string>PIN anghywir. Mae gennych %1$d chais arall</string>
 			<key>other</key>
-			<string>Wrong PIN. You have %1$d more chances</string>
+			<string>PIN anghywir. Mae gennych %1$d cais arall</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -220,10 +324,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%1$d Negeseuon wedi'u pinio</string>
 			<key>one</key>
-			<string>%1$d Pinned message</string>
+			<string>%1$d Neges wedi'i phinio</string>
+			<key>two</key>
+			<string>%1$d Neges wedi'i phinio</string>
+			<key>few</key>
+			<string>%1$d Neges wedi'i phinio</string>
+			<key>many</key>
+			<string>%1$d Neges wedi'i phinio</string>
 			<key>other</key>
-			<string>%1$d Pinned messages</string>
+			<string>%1$d Neges wedi'i phinio</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -236,10 +348,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%1$d personau</string>
 			<key>one</key>
 			<string>%1$d person</string>
+			<key>two</key>
+			<string>%1$d berson</string>
+			<key>few</key>
+			<string>%1$d person</string>
+			<key>many</key>
+			<string>%1$d pherson</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d person</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -252,10 +372,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>Dyw %1$@ na +%2$d arall eisiau ymuno â'r ystafell hon</string>
 			<key>one</key>
-			<string>%1$@ +%2$d other want to join this room</string>
+			<string>Mae %1$@ +%2$d arall eisiau ymuno â'r ystafell hon</string>
+			<key>two</key>
+			<string>Mae %1$@ +%2$d arall eisiau ymuno â'r ystafell hon</string>
+			<key>few</key>
+			<string>Mae %1$@ +%2$d arall eisiau ymuno â'r ystafell hon</string>
+			<key>many</key>
+			<string>Mae %1$@ +%2$d arall eisiau ymuno â'r ystafell hon</string>
 			<key>other</key>
-			<string>%1$@ +%2$d others want to join this room</string>
+			<string>Mae %1$@ +%2$d arall eisiau ymuno â'r ystafell hon</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
@@ -268,10 +396,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%1$d newid ystafelloedd</string>
 			<key>one</key>
-			<string>%1$d room change</string>
+			<string>%1$d newid ystafell</string>
+			<key>two</key>
+			<string>%1$d newid ystafell</string>
+			<key>few</key>
+			<string>%1$d newid ystafell</string>
+			<key>many</key>
+			<string>%1$d newid ystafell</string>
 			<key>other</key>
-			<string>%1$d room changes</string>
+			<string>%1$d newid ystafell</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>
@@ -284,10 +420,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%1$@, %2$@ a %3$d arall</string>
 			<key>one</key>
-			<string>%1$@, %2$@ and %3$d other</string>
+			<string>%1$@, %2$@ a %3$d arall</string>
+			<key>two</key>
+			<string>%1$@, %2$@ a %3$d arall</string>
+			<key>few</key>
+			<string>%1$@, %2$@ a %3$d arall</string>
+			<key>many</key>
+			<string>%1$@, %2$@ a %3$d arall</string>
 			<key>other</key>
-			<string>%1$@, %2$@ and %3$d others</string>
+			<string>%1$@, %2$@ a %3$d arall</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -300,10 +444,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>Mae %1$@ yn teipio</string>
 			<key>one</key>
-			<string>%1$@ is typing</string>
+			<string>Mae %1$@ yn teipio</string>
+			<key>two</key>
+			<string>Mae %1$@ yn teipio</string>
+			<key>few</key>
+			<string>Mae %1$@ yn teipio</string>
+			<key>many</key>
+			<string>Mae %1$@ yn teipio</string>
 			<key>other</key>
-			<string>%1$@ are typing</string>
+			<string>Mae %1$@ yn teipio</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
@@ -316,10 +468,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>Wedi canfod %1$d darparwyr gwthio: %2$@</string>
 			<key>one</key>
-			<string>Found %1$d push provider: %2$@</string>
+			<string>Wedi canfod %1$d darparwr gwthio: %2$@</string>
+			<key>two</key>
+			<string>Wedi canfod %1$d darparwr gwthio: %2$@</string>
+			<key>few</key>
+			<string>Wedi canfod %1$d darparwr gwthio: %2$@</string>
+			<key>many</key>
+			<string>Wedi canfod %1$d darparwr gwthio: %2$@</string>
 			<key>other</key>
-			<string>Found %1$d push providers: %2$@</string>
+			<string>Wedi canfod %1$d darparwr gwthio: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
@@ -332,10 +492,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>Wedi canfod %1$d dosbarthwyr: %2$@</string>
 			<key>one</key>
-			<string>%1$d distributor found: %2$@.</string>
+			<string>Wedi canfod %1$d dosbarthwr: %2$@</string>
+			<key>two</key>
+			<string>Wedi canfod %1$d dosbarthwr: %2$@</string>
+			<key>few</key>
+			<string>Wedi canfod %1$d dosbarthwr: %2$@</string>
+			<key>many</key>
+			<string>Wedi canfod %1$d dosbarthwr: %2$@</string>
 			<key>other</key>
-			<string>%1$d distributors found: %2$@.</string>
+			<string>Wedi canfod %1$d dosbarthwr: %2$@</string>
 		</dict>
 	</dict>
 </dict>

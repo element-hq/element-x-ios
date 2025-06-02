@@ -1138,7 +1138,7 @@
 "test_language_identifier" = "cy";
 "test_untranslated_default_language_identifier" = "cy";
 "timeline_decryption_failure_historical_event_no_key_backup" = "Nid yw negeseuon hanesyddol ar gael ar y ddyfais hon";
-"timeline_decryption_failure_historical_event_unverified_device" = "Mae angen i chi wirio'r ddyfais hon ar gyfer mynediad i negeseuon hanesyddol";
+"timeline_decryption_failure_historical_event_unverified_device" = "Mae angen i chi wirio'r ddyfais hon i gael mynediad at negeseuon hanesyddol";
 "timeline_decryption_failure_historical_event_user_not_joined" = "Does gennych chi ddim mynediad i'r neges hon";
 "timeline_decryption_failure_unable_to_decrypt" = "Methu dadgryptio'r neges";
 "timeline_decryption_failure_withheld_unverified" = "Cafodd y neges hon ei rhwystro naill ai oherwydd nad ydych wedi ddilysu'ch dyfais neu oherwydd bod angen i'r anfonwr ddilysu'ch hunaniaeth chi.";
