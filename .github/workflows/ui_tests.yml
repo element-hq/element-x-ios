@@ -15,6 +15,7 @@ jobs:
     name: Tests
     runs-on: macos-15
     strategy:
+      fail-fast: false
       matrix:
         device: [iPhone, iPad]
 
