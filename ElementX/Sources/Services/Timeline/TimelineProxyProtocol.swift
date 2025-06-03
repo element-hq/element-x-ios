@@ -13,10 +13,23 @@ enum TimelineKind: Equatable {
     case live
     case detached
     case pinned
-    case thread
+    case thread(rootEventID: String)
     
     enum MediaPresentation { case roomScreenLive, roomScreenDetached, pinnedEventsScreen, mediaFilesScreen }
     case media(MediaPresentation)
+    
+    var isThread: Bool {
+        threadRootEventID != nil
+    }
+    
+    var threadRootEventID: String? {
+        switch self {
+        case .thread(let rootEventID):
+            rootEventID
+        default:
+            nil
+        }
+    }
 }
 
 enum TimelineFocus {
@@ -105,6 +118,7 @@ protocol TimelineProxyProtocol {
     
     func sendMessage(_ message: String,
                      html: String?,
+                     threadRootEventID: String?,
                      inReplyToEventID: String?,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
     

@@ -125,7 +125,7 @@ struct TimelineItemMenuActionProvider {
             secondaryActions = secondaryActions.filter(\.canAppearInRedacted)
         }
         
-        let isReactable = timelineKind == .live || timelineKind == .detached || timelineKind == .thread ? item.isReactable : false
+        let isReactable = timelineKind == .live || timelineKind == .detached || timelineKind.isThread ? item.isReactable : false
 
         return .init(isReactable: isReactable, actions: actions, secondaryActions: secondaryActions, emojiProvider: emojiProvider)
     }
