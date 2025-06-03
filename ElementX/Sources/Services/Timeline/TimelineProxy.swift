@@ -389,8 +389,15 @@ final class TimelineProxy: TimelineProxyProtocol {
         return .success(())
     }
     
+    /// Send a message within a room. If `inReplyToEventID` is specified then it will be sent as a reply
+    /// to that particular message. If the `threadRootEventID` is also specified then it will be sent
+    /// as a reply to the given `inReplyToEventID` within the thread rooted in `threadRootEventID`
+    ///
+    /// Internally `enforceThread` is set to true whenever `threadRootEventID` is specified
+    /// and `replyWithinThread` when `inReplyToEventID` is.
     func sendMessage(_ message: String,
                      html: String?,
+                     threadRootEventID: String?,
                      inReplyToEventID: String? = nil,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
         if let inReplyToEventID {
@@ -405,14 +412,18 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         do {
             if let inReplyToEventID {
-                // `enforceThread` will force send the message a thread with `inReplyToEventID` while
-                // `replyWithinThread` will create an in-reply-to associated field *within* that same thread
                 try await timeline.sendReply(msg: messageContent, replyParams: .init(eventId: inReplyToEventID,
-                                                                                     enforceThread: false,
-                                                                                     replyWithinThread: false))
+                                                                                     enforceThread: threadRootEventID != nil,
+                                                                                     replyWithinThread: threadRootEventID != nil))
                 MXLog.info("Finished sending reply to eventID: \(inReplyToEventID)")
             } else {
-                _ = try await timeline.send(msg: messageContent)
+                if let threadRootEventID {
+                    try await timeline.sendReply(msg: messageContent, replyParams: .init(eventId: threadRootEventID,
+                                                                                         enforceThread: true,
+                                                                                         replyWithinThread: false))
+                } else {
+                    _ = try await timeline.send(msg: messageContent)
+                }
                 MXLog.info("Finished sending message")
             }
         } catch {

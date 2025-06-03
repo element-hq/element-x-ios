@@ -120,9 +120,11 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
                 case .displayResolveSendFailure(let failure, let sendHandle):
                     actionsSubject.send(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
-                case .displayThread, .composer, .hasScrolled, .displayRoom:
+                case .hasScrolled, .displayRoom:
                     break
-                case .viewInRoomTimeline:
+                case .composer(let action):
+                    composerViewModel.process(timelineAction: action)
+                case .viewInRoomTimeline, .displayThread:
                     fatalError("The action: \(action) should not be sent to this coordinator")
                 }
             }
