@@ -2,7 +2,7 @@ import ArgumentParser
 import CommandLineTools
 import Foundation
 
-struct GenerateSDKMocks: ParsableCommand {
+struct GenerateSDKMocks: AsyncParsableCommand {
     enum GenerateSDKMocksError: Error {
         case invalidFileUrl
     }
@@ -14,14 +14,13 @@ struct GenerateSDKMocks: ParsableCommand {
 
     private var fileURLFormat = "https://raw.githubusercontent.com/element-hq/matrix-rust-components-swift/%@/Sources/MatrixRustSDK/matrix_sdk_ffi.swift"
 
-    func run() throws {
+    func run() async throws {
         if version == "local" {
             try generateSDKMocks(ffiPath: "\(URL.sdkDirectory.path)/bindings/apple/generated/swift")
         } else {
-            try downloadSDK(version: version) { path in
-                try generateSDKMocks(ffiPath: path)
-                try FileManager.default.removeItem(atPath: path)
-            }
+            let path = try await downloadSDK(version: version)
+            try generateSDKMocks(ffiPath: path)
+            try FileManager.default.removeItem(atPath: path)
         }
     }
 
@@ -31,37 +30,15 @@ struct GenerateSDKMocks: ParsableCommand {
     }
 
     /// Downloads the specified version of the `matrix_sdk_ffi.swift` file and returns the path to the downloaded file.
-    func downloadSDK(version: String, completionHandler: @escaping @Sendable (String) throws -> Void) throws {
+    func downloadSDK(version: String) async throws -> String {
         let fileURLString = String(format: fileURLFormat, version)
         guard let fileURL = URL(string: fileURLString) else {
             throw GenerateSDKMocksError.invalidFileUrl
         }
-
-        let semaphore = DispatchSemaphore(value: 0)
-
-        let task = URLSession.shared.downloadTask(with: fileURL) { tempURL, _, error in
-            guard let tempURL = tempURL else {
-                if let error = error {
-                    print("Error downloading SDK file: \(error)")
-                } else {
-                    print("Unknown error occurred while downloading SDK file.")
-                }
-                return
-            }
-
-            do {
-                let sdkFilePath = NSTemporaryDirectory().appending("matrix_sdk_ffi.swift")
-                try FileManager.default.moveItem(at: tempURL, to: URL(fileURLWithPath: sdkFilePath))
-                try completionHandler(sdkFilePath)
-                semaphore.signal()
-            } catch {
-                print("Error setting up SDK: \(error)")
-                semaphore.signal()
-            }
-        }
-
-        task.resume()
-
-        _ = semaphore.wait(timeout: .distantFuture)
+        
+        let (tempURL, _) = try await URLSession.shared.download(from: fileURL)
+        let sdkFilePath = NSTemporaryDirectory().appending("matrix_sdk_ffi.swift")
+        try FileManager.default.moveItem(at: tempURL, to: URL(fileURLWithPath: sdkFilePath))
+        return sdkFilePath
     }
 }
