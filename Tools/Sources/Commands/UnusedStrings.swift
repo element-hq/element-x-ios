@@ -3,7 +3,7 @@ import CommandLineTools
 import Foundation
 
 struct UnusedStrings: ParsableCommand {
-    static var configuration = CommandConfiguration(abstract: "Generates a report showing which strings aren't used in the project.")
+    static let configuration = CommandConfiguration(abstract: "Generates a report showing which strings aren't used in the project.")
     
     @Flag(help: "Save the results to disk instead of printing them.")
     var saveToFile = false

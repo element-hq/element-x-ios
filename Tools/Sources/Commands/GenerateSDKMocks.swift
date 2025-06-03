@@ -7,7 +7,7 @@ struct GenerateSDKMocks: ParsableCommand {
         case invalidFileUrl
     }
 
-    static var configuration = CommandConfiguration(abstract: "A tool to setup the mocks for the Matrix Rust SDK")
+    static let configuration = CommandConfiguration(abstract: "A tool to setup the mocks for the Matrix Rust SDK")
 
     @Argument(help: "The argument to specify a branch of the SDK. Use `local` to use your local version")
     var version: String
@@ -31,8 +31,7 @@ struct GenerateSDKMocks: ParsableCommand {
     }
 
     /// Downloads the specified version of the `matrix_sdk_ffi.swift` file and returns the path to the downloaded file.
-    func downloadSDK(version: String, completionHandler: @escaping (String) throws -> Void) throws {
-        var sdkFilePath = ""
+    func downloadSDK(version: String, completionHandler: @escaping @Sendable (String) throws -> Void) throws {
         let fileURLString = String(format: fileURLFormat, version)
         guard let fileURL = URL(string: fileURLString) else {
             throw GenerateSDKMocksError.invalidFileUrl
@@ -51,7 +50,7 @@ struct GenerateSDKMocks: ParsableCommand {
             }
 
             do {
-                sdkFilePath = NSTemporaryDirectory().appending("matrix_sdk_ffi.swift")
+                let sdkFilePath = NSTemporaryDirectory().appending("matrix_sdk_ffi.swift")
                 try FileManager.default.moveItem(at: tempURL, to: URL(fileURLWithPath: sdkFilePath))
                 try completionHandler(sdkFilePath)
                 semaphore.signal()

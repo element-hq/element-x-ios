@@ -3,7 +3,7 @@ import CommandLineTools
 import Foundation
 
 struct DownloadStrings: ParsableCommand {
-    static var configuration = CommandConfiguration(abstract: "A tool to download localizable strings from localazy")
+    static let configuration = CommandConfiguration(abstract: "A tool to download localizable strings from localazy")
 
     @Flag(help: "Use to download translation keys for all languages")
     var allLanguages = false

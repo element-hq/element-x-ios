@@ -2,9 +2,7 @@ import ArgumentParser
 import SwiftUI
 
 struct AppIconBanner: AsyncParsableCommand {
-    static var configuration = CommandConfiguration(
-        abstract: "A Swift command-line tool to add a banner to an app icons."
-    )
+    static let configuration = CommandConfiguration(abstract: "A Swift command-line tool to add a banner to an app icons.")
     
     @Argument(help: "Path to the input image.")
     var path: String
