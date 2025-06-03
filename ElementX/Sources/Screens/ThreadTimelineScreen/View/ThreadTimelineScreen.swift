@@ -64,16 +64,15 @@ struct ThreadTimelineScreen: View {
     
     @ViewBuilder
     private var composer: some View {
-        #warning("Check permissions here too")
-//        if roomContext.viewState.canSendMessage {
-        composerToolbar
-//        } else {
-//            Text(L10n.screenRoomTimelineNoPermissionToPost)
-//                .font(.compound.bodyLG)
-//                .foregroundStyle(.compound.textDisabled)
-//                .multilineTextAlignment(.center)
-//                .padding(.vertical, 10) // Matches the MessageComposerStyleModifier
-//        }
+        if context.viewState.canSendMessage {
+            composerToolbar
+        } else {
+            Text(L10n.screenRoomTimelineNoPermissionToPost)
+                .font(.compound.bodyLG)
+                .foregroundStyle(.compound.textDisabled)
+                .multilineTextAlignment(.center)
+                .padding(.vertical, 10) // Matches the MessageComposerStyleModifier
+        }
     }
     
     private var scrollToBottomButton: some View {
