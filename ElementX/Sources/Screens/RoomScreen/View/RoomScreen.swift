@@ -151,7 +151,9 @@ struct RoomScreen: View {
     
     @ViewBuilder
     private var composer: some View {
-        if roomContext.viewState.canSendMessage {
+        if roomContext.viewState.hasSuccessor {
+            tombstonedDialogue
+        } else if roomContext.viewState.canSendMessage {
             composerToolbar
         } else {
             Text(L10n.screenRoomTimelineNoPermissionToPost)
@@ -160,6 +162,28 @@ struct RoomScreen: View {
                 .multilineTextAlignment(.center)
                 .padding(.vertical, 10) // Matches the MessageComposerStyleModifier
         }
+    }
+    
+    private var tombstonedDialogue: some View {
+        VStack(spacing: 16) {
+            Text(L10n.screenRoomTimelineTombstonedRoomMessage)
+                .font(.compound.bodyMD)
+                .foregroundStyle(.compound.textPrimary)
+            
+            Button {
+                roomContext.send(viewAction: .displaySuccessorRoom)
+            } label: {
+                Text(L10n.screenRoomTimelineTombstonedRoomAction)
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.compound(.primary, size: .medium))
+        }
+        .padding(.top, 16)
+        .padding(.horizontal, 16)
+        .padding(.bottom, 8)
+        .highlight(borderColor: .compound.borderInfoSubtle,
+                   primaryColor: .compound.bgInfoSubtle,
+                   secondaryColor: .compound.bgCanvasDefault)
     }
     
     @ViewBuilder
@@ -233,6 +257,7 @@ struct RoomScreen: View {
 struct RoomScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModels = makeViewModels()
     static let readOnlyViewModels = makeViewModels(canSendMessage: false)
+    static let tombstonedViewModels = makeViewModels(hasSuccessor: true)
 
     static var previews: some View {
         NavigationStack {
@@ -249,13 +274,22 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         }
         .previewDisplayName("Read-only")
         .snapshotPreferences(expect: readOnlyViewModels.room.context.$viewState.map { !$0.canSendMessage })
+        
+        NavigationStack {
+            RoomScreen(roomViewModel: tombstonedViewModels.room,
+                       timelineViewModel: tombstonedViewModels.timeline,
+                       composerToolbar: ComposerToolbar.mock())
+        }
+        .previewDisplayName("Tombstoned")
+        .snapshotPreferences(expect: tombstonedViewModels.room.context.$viewState.map(\.hasSuccessor))
     }
     
-    static func makeViewModels(canSendMessage: Bool = true) -> ViewModels {
+    static func makeViewModels(canSendMessage: Bool = true, hasSuccessor: Bool = false) -> ViewModels {
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
                                                       name: "Preview room",
                                                       hasOngoingCall: true,
-                                                      canUserSendMessage: canSendMessage))
+                                                      canUserSendMessage: canSendMessage,
+                                                      successor: hasSuccessor ? .init(roomId: UUID().uuidString, reason: nil) : nil))
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
         let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                   timelineController: MockTimelineController(),

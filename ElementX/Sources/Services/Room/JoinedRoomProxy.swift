@@ -34,6 +34,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     var ownUserID: String { room.ownUserId() }
     
+    lazy var predecessorRoom: PredecessorRoom? = room.predecessorRoom()
+    
     let timeline: TimelineProxyProtocol
     
     private let infoSubject: CurrentValueSubject<RoomInfoProxy, Never>

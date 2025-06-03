@@ -12,32 +12,44 @@ struct RoomScreenFooterView: View {
     let mediaProvider: MediaProviderProtocol?
     let callback: (RoomScreenFooterViewAction) -> Void
     
+    private var borderColor: Color {
+        switch details {
+        case .pinViolation:
+            .compound.borderInfoSubtle
+        case .verificationViolation:
+            .compound.borderCriticalSubtle
+        case .none:
+            Color.compound.bgCanvasDefault
+        }
+    }
+    
+    private var gradientColor: Color {
+        switch details {
+        case .pinViolation:
+            .compound.bgInfoSubtle
+        case .verificationViolation:
+            .compound.bgCriticalSubtle
+        case .none:
+            Color.compound.bgCanvasDefault
+        }
+    }
+    
     var body: some View {
         if let details {
-            ZStack(alignment: .top) {
-                switch details {
-                case .pinViolation(let member, let learnMoreURL):
-                    VStack(spacing: 0) {
-                        Color.compound.borderInfoSubtle
-                            .frame(height: 1)
-                        LinearGradient(colors: [.compound.bgInfoSubtle, .compound.bgCanvasDefault],
-                                       startPoint: .top,
-                                       endPoint: .bottom)
-                    }
-                    pinViolation(member: member, learnMoreURL: learnMoreURL)
-                case .verificationViolation(member: let member, learnMoreURL: let learnMoreURL):
-                    VStack(spacing: 0) {
-                        Color.compound.borderCriticalSubtle
-                            .frame(height: 1)
-                        LinearGradient(colors: [.compound.bgCriticalSubtle, .compound.bgCanvasDefault],
-                                       startPoint: .top,
-                                       endPoint: .bottom)
-                    }
-                    verificationViolation(member: member, learnMoreURL: learnMoreURL)
-                }
-            }
-            .padding(.top, 8)
-            .fixedSize(horizontal: false, vertical: true)
+            detailsView(details)
+                .highlight(borderColor: borderColor, primaryColor: gradientColor, secondaryColor: .compound.bgCanvasDefault)
+                .padding(.top, 8)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+    
+    @ViewBuilder
+    private func detailsView(_ details: RoomScreenFooterViewDetails) -> some View {
+        switch details {
+        case .pinViolation(let member, let learnMoreURL):
+            pinViolation(member: member, learnMoreURL: learnMoreURL)
+        case .verificationViolation(member: let member, learnMoreURL: let learnMoreURL):
+            verificationViolation(member: member, learnMoreURL: learnMoreURL)
         }
     }
     

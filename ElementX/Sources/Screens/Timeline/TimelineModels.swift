@@ -28,6 +28,7 @@ enum TimelineViewModelAction {
     case composer(action: TimelineComposerAction)
     case hasScrolled(direction: ScrollDirection)
     case viewInRoomTimeline(eventID: String)
+    case displayRoom(roomID: String)
 }
 
 enum TimelineViewPollAction {
@@ -77,6 +78,8 @@ enum TimelineViewAction {
     
     case hasScrolled(direction: ScrollDirection)
     case setOpenURLAction(OpenURLAction)
+    
+    case seePredecessorTapped
 }
 
 enum TimelineComposerAction {
@@ -106,6 +109,8 @@ struct TimelineViewState: BindableState {
     var isViewSourceEnabled: Bool
     var areThreadsEnabled: Bool
     var hideTimelineMedia: Bool
+    
+    let hasPredecessor: Bool
         
     // The `pinnedEventIDs` are used only to determine if an item is already pinned or not.
     // It's updated from the room info, so it's faster than using the timeline

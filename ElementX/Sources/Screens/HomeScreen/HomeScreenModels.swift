@@ -197,6 +197,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
         
     let canonicalAlias: String?
     
+    let isTombstoned: Bool
+    
     static func placeholder() -> HomeScreenRoom {
         HomeScreenRoom(id: UUID().uuidString,
                        roomID: nil,
@@ -209,7 +211,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        timestamp: "Now",
                        lastMessage: placeholderLastMessage,
                        avatar: .room(id: "", name: "", avatarURL: nil),
-                       canonicalAlias: nil)
+                       canonicalAlias: nil,
+                       isTombstoned: false)
     }
 }
 
@@ -246,6 +249,7 @@ extension HomeScreenRoom {
                   timestamp: summary.lastMessageDate?.formattedMinimal(),
                   lastMessage: summary.lastMessage,
                   avatar: summary.avatar,
-                  canonicalAlias: summary.canonicalAlias)
+                  canonicalAlias: summary.canonicalAlias,
+                  isTombstoned: summary.isTombstoned)
     }
 }

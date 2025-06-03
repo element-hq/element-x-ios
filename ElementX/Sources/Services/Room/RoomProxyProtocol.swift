@@ -76,6 +76,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     var timeline: TimelineProxyProtocol { get }
     
+    var predecessorRoom: PredecessorRoom? { get }
+    
     func subscribeForUpdates() async
     
     func subscribeToRoomInfoUpdates()
