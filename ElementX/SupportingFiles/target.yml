@@ -119,6 +119,7 @@ targets:
         - applinks:call.element.io
         - applinks:call.element.dev
         - applinks:matrix.to
+        # - applinks:localhost?mode=developer # developer mode only works with https (but self-signed is fine).
         - webcredentials:*.element.io
         com.apple.developer.usernotifications.communication: true
         com.apple.security.app-sandbox: true
