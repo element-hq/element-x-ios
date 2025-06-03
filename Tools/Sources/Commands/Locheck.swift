@@ -17,7 +17,7 @@ struct Locheck: ParsableCommand {
         }
     }
 
-    static var configuration = CommandConfiguration(abstract: "A tool that verifies bad strings contained in localization files")
+    static let configuration = CommandConfiguration(abstract: "A tool that verifies bad strings contained in localization files")
 
     private var stringsDirectoryURL: URL {
         .projectDirectory.appendingPathComponent("ElementX/Resources/Localizations")

@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 6.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "Element Swift",
     platforms: [
-        .macOS(.v13)
+        .macOS(.v14)
     ],
     products: [
         .executable(name: "tools", targets: ["Tools"])

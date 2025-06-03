@@ -2,7 +2,7 @@ import ArgumentParser
 import Foundation
 
 struct GenerateSAS: ParsableCommand {
-    static var configuration = CommandConfiguration(abstract: "A tool to download and generate SAS localization strings")
+    static let configuration = CommandConfiguration(abstract: "A tool to download and generate SAS localization strings")
     private static let defaultLanguage = "en"
     
     @Flag(name: .shortAndLong, help: "Increase output verbosity.")

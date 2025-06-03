@@ -17,7 +17,7 @@ enum Target: String, ExpressibleByArgument, CaseIterable {
 }
 
 struct BuildSDK: ParsableCommand {
-    static var configuration = CommandConfiguration(abstract: "A tool to checkout and build MatrixRustSDK locally for development.")
+    static let configuration = CommandConfiguration(abstract: "A tool to checkout and build MatrixRustSDK locally for development.")
     
     @Argument(help: "An optional argument to specify a branch of the SDK.")
     var branch: String?
