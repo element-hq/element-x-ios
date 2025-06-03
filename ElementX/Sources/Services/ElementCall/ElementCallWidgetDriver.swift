@@ -97,7 +97,8 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
                                                                           rageshakeSubmitUrl: rageshakeURL,
                                                                           sentryDsn: analyticsConfiguration?.sentryDSN,
                                                                           sentryEnvironment: nil,
-                                                                          controlledMediaDevices: !ProcessInfo.processInfo.isiOSAppOnMac))
+                                                                          // Set this to false until we have the full implementation otherwise should be false only on macOS
+                                                                          controlledMediaDevices: false))
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)
