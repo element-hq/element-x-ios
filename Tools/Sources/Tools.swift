@@ -12,5 +12,6 @@ struct Tools: AsyncParsableCommand {
                                                                   GenerateSDKMocks.self,
                                                                   GenerateSAS.self,
                                                                   AppIconBanner.self,
-                                                                  UnusedStrings.self])
+                                                                  UnusedStrings.self,
+                                                                  BumpCalendarVersion.self])
 }
