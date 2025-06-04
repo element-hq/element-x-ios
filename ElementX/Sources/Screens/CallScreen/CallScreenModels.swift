@@ -38,7 +38,7 @@ enum CallScreenViewAction {
     case navigateBack
     case pictureInPictureWillStop
     case endCall
-    case ready
+    case mediaCapturePermissionGranted
     case outputDeviceSelected(deviceID: String)
 }
 
@@ -49,7 +49,7 @@ enum CallScreenError: Error {
 /// Identifies each event handler used by the CallScreen webview
 ///
 /// The names of the enum need to always match the name of the handlers on the webview.
-enum CallScreenEventJSHandler: String, CaseIterable {
+enum CallScreenJavascriptMessageName: String, CaseIterable {
     /// Widget actions's handler.
     case widgetAction
     /// Used to show the native AVRoutePickerView.
@@ -57,7 +57,7 @@ enum CallScreenEventJSHandler: String, CaseIterable {
     /// Used to determine if the webview has selected the earpiece or not.
     case onOutputDeviceSelect
     
-    private var script: String {
+    private var postMessageScript: String {
         switch self {
         case .widgetAction:
             """
@@ -90,7 +90,7 @@ enum CallScreenEventJSHandler: String, CaseIterable {
         }
     }
     
-    static var fullScript: String {
-        allCases.map(\.script).joined(separator: "\n")
+    static func makeFullInjectionScript() -> String {
+        allCases.map(\.postMessageScript).joined(separator: "\n")
     }
 }

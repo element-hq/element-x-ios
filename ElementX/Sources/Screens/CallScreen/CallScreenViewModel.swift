@@ -52,7 +52,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
         }
         
-        super.init(initialViewState: CallScreenViewState(script: CallScreenEventJSHandler.fullScript,
+        super.init(initialViewState: CallScreenViewState(script: CallScreenJavascriptMessageName.makeFullInjectionScript(),
                                                          certificateValidator: appHooks.certificateValidatorHook))
         
         state.bindings.javaScriptMessageHandler = { [weak self] message in
@@ -109,7 +109,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         NotificationCenter.default
             .publisher(for: AVAudioSession.routeChangeNotification)
             .sink { [weak self] _ in
-                Task { await self?.setAvailableOutputDevices() }
+                Task { await self?.updateOutputsListOnWeb() }
             }
             .store(in: &cancellables)
         
@@ -129,8 +129,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             actionsSubject.send(.pictureInPictureStopped)
         case .endCall:
             actionsSubject.send(.dismiss)
-        case .ready:
-            Task { await setAvailableOutputDevices() }
+        case .mediaCapturePermissionGranted:
+            Task { await updateOutputsListOnWeb() }
         case .outputDeviceSelected(deviceID: let deviceID):
             handleOutputDeviceSelected(deviceID: deviceID)
         }
@@ -147,6 +147,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     
     // MARK: - Private
     
+    // This should always match the web app value
     private static let earpieceID = "earpiece-id"
     
     private func handleOutputDeviceSelected(deviceID: String) {
@@ -261,7 +262,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
     }
     
-    private func setAvailableOutputDevices() async {
+    private func updateOutputsListOnWeb() async {
         guard let currentOutput = AVAudioSession.sharedInstance().currentRoute.outputs.first else {
             return
         }

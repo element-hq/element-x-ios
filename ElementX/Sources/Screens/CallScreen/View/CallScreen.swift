@@ -98,7 +98,7 @@ private struct CallView: UIViewRepresentable {
             let configuration = WKWebViewConfiguration()
             
             let userContentController = WKUserContentController()
-            CallScreenEventJSHandler.allCases.forEach {
+            CallScreenJavascriptMessageName.allCases.forEach {
                 userContentController.add(WKScriptMessageHandlerWrapper(self), name: $0.rawValue)
             }
             
@@ -126,6 +126,7 @@ private struct CallView: UIViewRepresentable {
             webView.backgroundColor = .compound.bgCanvasDefault
             webView.scrollView.backgroundColor = .compound.bgCanvasDefault
             
+            // This button is always hidden and is only used to be programmaticaly tapped
             routePickerView = AVRoutePickerView(frame: .zero)
             routePickerView.isHidden = true
             routePickerView.isUserInteractionEnabled = false
@@ -169,7 +170,7 @@ private struct CallView: UIViewRepresentable {
         }
         
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-            guard let handlerID = CallScreenEventJSHandler(rawValue: message.name) else {
+            guard let handlerID = CallScreenJavascriptMessageName(rawValue: message.name) else {
                 return
             }
             
@@ -188,6 +189,8 @@ private struct CallView: UIViewRepresentable {
             }
         }
         
+        // This function is called by the webview output routing button
+        // it allows to open the OS output selector using the hidden button.
         private func tapRoutePickerView() {
             if let button = routePickerView.subviews.first(where: { $0 is UIButton }) as? UIButton {
                 button.sendActions(for: .touchUpInside)
@@ -197,12 +200,12 @@ private struct CallView: UIViewRepresentable {
         // MARK: - WKUIDelegate
         
         func webView(_ webView: WKWebView, decideMediaCapturePermissionsFor origin: WKSecurityOrigin, initiatedBy frame: WKFrameInfo, type: WKMediaCaptureType) async -> WKPermissionDecision {
-            viewModelContext?.send(viewAction: .ready)
             // Allow if the origin is local, otherwise don't allow permissions for domains different than what the call was started on
             guard origin.protocol == "file" || origin.host == url.host else {
                 return .deny
             }
             
+            viewModelContext?.send(viewAction: .mediaCapturePermissionGranted)
             return .grant
         }
         
