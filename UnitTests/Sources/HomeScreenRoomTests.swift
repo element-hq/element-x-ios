@@ -38,7 +38,8 @@ class HomeScreenRoomTests: XCTestCase {
                                   alternativeAliases: [],
                                   hasOngoingCall: hasOngoingCall,
                                   isMarkedUnread: isMarkedUnread,
-                                  isFavourite: false)
+                                  isFavourite: false,
+                                  isTombstoned: false)
     }
     
     func testNoBadge() {
