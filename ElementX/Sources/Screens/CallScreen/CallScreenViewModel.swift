@@ -52,13 +52,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
         }
         
-        super.init(initialViewState: CallScreenViewState(script: CallScreenJavascriptMessageName.makeFullInjectionScript(),
+        super.init(initialViewState: CallScreenViewState(script: CallScreenJavaScriptMessageName.allCasesInjectionScript,
                                                          certificateValidator: appHooks.certificateValidatorHook))
-        
-        state.bindings.javaScriptMessageHandler = { [weak self] message in
-            guard let self, let message = message as? String else { return }
-            Task { await self.widgetDriver.handleMessage(message) }
-        }
         
         elementCallService.actions
             .receive(on: DispatchQueue.main)
@@ -133,6 +128,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             Task { await updateOutputsListOnWeb() }
         case .outputDeviceSelected(deviceID: let deviceID):
             handleOutputDeviceSelected(deviceID: deviceID)
+        case .widgetAction(let message):
+            Task { await widgetDriver.handleMessage(message) }
         }
     }
     
@@ -146,15 +143,6 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     }
     
     // MARK: - Private
-    
-    // This should always match the web app value
-    private static let earpieceID = "earpiece-id"
-    
-    private func handleOutputDeviceSelected(deviceID: String) {
-        let isEarpiece = deviceID == Self.earpieceID
-        MXLog.info("[handleOutputDeviceSelected] is earpiece: \(isEarpiece)")
-        UIDevice.current.isProximityMonitoringEnabled = isEarpiece
-    }
     
     private func setupCall() {
         switch configuration.kind {
@@ -201,6 +189,15 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 }
             }
         }
+    }
+    
+    // This should always match the web app value
+    private static let earpieceID = "earpiece-id"
+    
+    private func handleOutputDeviceSelected(deviceID: String) {
+        let isEarpiece = deviceID == Self.earpieceID
+        MXLog.info("[handleOutputDeviceSelected] is earpiece: \(isEarpiece)")
+        UIDevice.current.isProximityMonitoringEnabled = isEarpiece
     }
     
     private func handleBackwardsNavigation() async {
@@ -262,12 +259,17 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
     }
     
+    /// This function updates the list of available audio outputs on the web side
+    /// however since we actually handle switching the audio output through the OS,
+    /// this is only used to inform the webview when the speaker is selected,
+    /// so that the option to use the earpiece can be displayed.
     private func updateOutputsListOnWeb() async {
         guard let currentOutput = AVAudioSession.sharedInstance().currentRoute.outputs.first else {
             return
         }
         
         let deviceList = if currentOutput.portType == .builtInSpeaker {
+            // This allows the webview to display the earpiece option
             "{id: '\(currentOutput.uid)', name: '\(currentOutput.portName)', forEarpiece: true}"
         } else {
             // Doesn't matter because the switch is handled through the OS

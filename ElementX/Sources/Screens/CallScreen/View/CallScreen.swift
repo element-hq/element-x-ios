@@ -98,7 +98,7 @@ private struct CallView: UIViewRepresentable {
             let configuration = WKWebViewConfiguration()
             
             let userContentController = WKUserContentController()
-            CallScreenJavascriptMessageName.allCases.forEach {
+            CallScreenJavaScriptMessageName.allCases.forEach {
                 userContentController.add(WKScriptMessageHandlerWrapper(self), name: $0.rawValue)
             }
             
@@ -170,21 +170,20 @@ private struct CallView: UIViewRepresentable {
         }
         
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-            guard let handlerID = CallScreenJavascriptMessageName(rawValue: message.name) else {
+            guard let handlerID = CallScreenJavaScriptMessageName(rawValue: message.name) else {
                 return
             }
             
             switch handlerID {
             case .widgetAction:
-                viewModelContext?.javaScriptMessageHandler?(message.body)
+                guard let message = message.body as? String else { return }
+                viewModelContext?.send(viewAction: .widgetAction(message: message))
             case .showNativeOutputDevicePicker:
                 DispatchQueue.main.async {
                     self.tapRoutePickerView()
                 }
             case .onOutputDeviceSelect:
-                guard let deviceID = message.body as? String else {
-                    return
-                }
+                guard let deviceID = message.body as? String else { return }
                 viewModelContext?.send(viewAction: .outputDeviceSelected(deviceID: deviceID))
             }
         }
@@ -192,9 +191,11 @@ private struct CallView: UIViewRepresentable {
         // This function is called by the webview output routing button
         // it allows to open the OS output selector using the hidden button.
         private func tapRoutePickerView() {
-            if let button = routePickerView.subviews.first(where: { $0 is UIButton }) as? UIButton {
-                button.sendActions(for: .touchUpInside)
+            guard let button = routePickerView.subviews.first(where: { $0 is UIButton }) as? UIButton else {
+                return
             }
+            
+            button.sendActions(for: .touchUpInside)
         }
         
         // MARK: - WKUIDelegate

@@ -25,7 +25,6 @@ struct CallScreenViewState: BindableState {
 }
 
 struct Bindings {
-    var javaScriptMessageHandler: ((Any) -> Void)?
     var javaScriptEvaluator: ((String) async throws -> Any)?
     var requestPictureInPictureHandler: (() async -> Result<Void, CallScreenError>)?
     
@@ -40,6 +39,7 @@ enum CallScreenViewAction {
     case endCall
     case mediaCapturePermissionGranted
     case outputDeviceSelected(deviceID: String)
+    case widgetAction(message: String)
 }
 
 enum CallScreenError: Error {
@@ -49,7 +49,7 @@ enum CallScreenError: Error {
 /// Identifies each event handler used by the CallScreen webview
 ///
 /// The names of the enum need to always match the name of the handlers on the webview.
-enum CallScreenJavascriptMessageName: String, CaseIterable {
+enum CallScreenJavaScriptMessageName: String, CaseIterable {
     /// Widget actions's handler.
     case widgetAction
     /// Used to show the native AVRoutePickerView.
@@ -90,7 +90,7 @@ enum CallScreenJavascriptMessageName: String, CaseIterable {
         }
     }
     
-    static func makeFullInjectionScript() -> String {
+    static var allCasesInjectionScript: String {
         allCases.map(\.postMessageScript).joined(separator: "\n")
     }
 }
