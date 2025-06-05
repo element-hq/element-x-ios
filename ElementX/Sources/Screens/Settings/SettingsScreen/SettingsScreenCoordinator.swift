@@ -31,6 +31,7 @@ enum SettingsScreenCoordinatorAction {
     case deactivateAccount
     case rewards
     case inviteFriend
+    case referAFriend
 }
 
 final class SettingsScreenCoordinator: CoordinatorProtocol {
@@ -87,6 +88,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.rewards)
                 case .inviteFriend:
                     actionsSubject.send(.inviteFriend)
+                case .referAFriend:
+                    actionsSubject.send(.referAFriend)
                 }
             }
             .store(in: &cancellables)

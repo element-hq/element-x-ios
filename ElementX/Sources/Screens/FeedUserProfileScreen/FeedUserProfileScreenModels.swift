@@ -13,6 +13,7 @@ struct FeedUserProfileScreenViewState: BindableState {
     var userProfile: ZPostUserProfile
     var userFollowStatus: ZPostUserFollowingStatus? = nil
     var shouldShowFollowButton: Bool = true
+    var shouldShowDirectChatButton: Bool = true
     
     var bindings: FeedUserProfileScreenViewStateBindings
     

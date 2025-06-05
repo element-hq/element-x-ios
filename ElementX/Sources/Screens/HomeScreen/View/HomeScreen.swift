@@ -17,18 +17,6 @@ struct HomeScreen: View {
     
     @State private var selectedTab: HomeTab = .chat
     
-    init(context: HomeScreenViewModel.Context) {
-        self.context = context
-        
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithTransparentBackground()
-        appearance.backgroundEffect = UIBlurEffect(style: .regular)
-        appearance.backgroundColor = UIColor.black.withAlphaComponent(0.15)
-        
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-    }
-    
     var body: some View {
         Group {
             if selectedTab == .chat, context.manualSearchTriggered {
@@ -62,6 +50,7 @@ struct HomeScreen: View {
         //            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
         .toolbar { toolbar }
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
+        .navigationBarTitleDisplayMode(.inline)
         .track(screen: .Home)
         //            .bloom(context: context,
         //                   scrollViewAdapter: scrollViewAdapter,
@@ -105,65 +94,30 @@ struct HomeScreen: View {
                                 .offset(x: 85, y: 45)
                         }
                     }
-                    
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(context.viewState.userDisplayName ?? "")
-                            .font(.zero.bodyMD)
-                            .foregroundColor(.compound.textPrimary)
-                        if context.viewState.primaryZeroId != nil {
-                            Text(context.viewState.primaryZeroId!)
-                                .font(.zero.bodyXS)
-                                .foregroundColor(.compound.textSecondary)
-                        }
-                    }
                 }
             }
             .accessibilityLabel(L10n.commonSettings)
         }
         
+        ToolbarItem(placement: .principal) {
+            Image(asset: Asset.Images.zeroWordmark)
+        }
+        
         ToolbarItem(placement: .primaryAction) {
-            switch selectedTab {
-            case .chat:
-                newRoomButton
-            case .feed, .myFeed:
-                newFeedButton
-            default:
-                EmptyView()
-            }
+            userProfileButton
         }
     }
     
     @ViewBuilder
-    private var newRoomButton: some View {
-        switch context.viewState.roomListMode {
-        case .empty, .rooms:
-            Button {
-                context.send(viewAction: .startChat)
-            } label: {
-                CompoundIcon(\.plus)
-            }
-            //.buttonStyle(.compound(.super, size: .toolbarIcon))
-            .accessibilityLabel(L10n.actionStartChat)
-            .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)
-        default:
-            EmptyView()
+    private var userProfileButton: some View {
+        Button {
+            context.send(viewAction: .openUserProfile)
+        } label: {
+            Image(asset: Asset.Images.homeTabProfileIcon)
+                .tint(.compound.iconSecondary)
         }
-    }
-    
-    @ViewBuilder
-    private var newFeedButton: some View {
-        switch context.viewState.postListMode {
-        case .empty, .posts:
-            Button {
-                context.send(viewAction: .newFeed)
-            } label: {
-                CompoundIcon(\.plus)
-            }
-            .accessibilityLabel(L10n.actionStartChat)
-            .accessibilityIdentifier(A11yIdentifiers.homeScreen.startChat)
-        default:
-            EmptyView()
-        }
+        .accessibilityLabel("action_user_profile")
+        .accessibilityIdentifier("action_user_profile")
     }
     
     @ViewBuilder

@@ -16,7 +16,7 @@ struct HomeScreenPostFooterItem: View {
     
     var body: some View {
         Button(action: action) {
-            HStack {
+            HStack(spacing: 2) {
                 Image(asset: icon)
                     .foregroundStyle(highlightColor ? .zero.bgAccentRest : .compound.textSecondary)
                 if !count.isEmpty {

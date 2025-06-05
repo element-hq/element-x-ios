@@ -47,7 +47,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         userSession.clientProxy.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
-                self?.state.primaryZeroId = currentUser.primaryZID
+                self?.state.primaryZeroId = currentUser.zIdOrPublicAddressDisplayText
             }
             .store(in: &cancellables)
         
@@ -141,6 +141,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.rewards)
         case .inviteFriend:
             actionsSubject.send(.inviteFriend)
+        case .referAFriend:
+            actionsSubject.send(.referAFriend)
         }
     }
     

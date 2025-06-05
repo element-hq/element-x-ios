@@ -20,7 +20,8 @@ public struct ZeroColors {
     public let textSuccessPrimary = Asset.Colors.blue11.swiftUIColor // CompoundCoreColorTokens.green900
     public let textActionAccent = Asset.Colors.blue11.swiftUIColor // CompoundCoreColorTokens.green900
     
-    public let bgCanvasDefault = Asset.Colors.zeroNewBackground.swiftUIColor
+//    public let bgCanvasDefault = Asset.Colors.zeroNewBackground.swiftUIColor
+    public let bgCanvasDefault = Color.black
     
     public let _badgeTextSuccess = Asset.Colors.blue11.swiftUIColor // coreTokens.green1100
     public let _textOwnPill = Asset.Colors.blue11.swiftUIColor // coreTokens.green1100

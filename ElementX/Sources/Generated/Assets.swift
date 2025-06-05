@@ -71,14 +71,17 @@ internal enum Asset {
     internal static let homeTabFeedIcon = ImageAsset(name: "images/home-tab-feed-icon")
     internal static let homeTabNotificationsIcon = ImageAsset(name: "images/home-tab-notifications-icon")
     internal static let homeTabProfileIcon = ImageAsset(name: "images/home-tab-profile-icon")
+    internal static let iconCopy = ImageAsset(name: "images/icon-copy")
     internal static let inviteImage = ImageAsset(name: "images/invite-image")
     internal static let landingBackground = ImageAsset(name: "images/landing-background")
     internal static let postArweaveIcon = ImageAsset(name: "images/post-arweave-icon")
     internal static let postCommentIcon = ImageAsset(name: "images/post-comment-icon")
     internal static let postMeowIcon = ImageAsset(name: "images/post-meow-icon")
+    internal static let referAFriendImage = ImageAsset(name: "images/refer-a-friend-image")
     internal static let rewardsVector = ImageAsset(name: "images/rewards-vector")
     internal static let zeroBackupHeader = ImageAsset(name: "images/zero-backup-header")
     internal static let zeroLogoMark = ImageAsset(name: "images/zero-logo-mark")
+    internal static let zeroWordmark = ImageAsset(name: "images/zero-wordmark")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name

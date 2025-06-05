@@ -6,6 +6,12 @@ public extension View {
             .scrollContentBackground(.hidden)
             .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
     }
+    
+    func zeroList(backgroundColor: Color) -> some View {
+        environment(\.defaultMinListRowHeight, 48)
+            .scrollContentBackground(.hidden)
+            .background(backgroundColor.ignoresSafeArea())
+    }
 }
 
 extension TextField {

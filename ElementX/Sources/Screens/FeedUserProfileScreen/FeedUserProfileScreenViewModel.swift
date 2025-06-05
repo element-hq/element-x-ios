@@ -35,9 +35,12 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         self.userIndicatorController = userIndicatorController
         self.mediaProvider = mediaProvider
         
+        let isUserMe = clientProxy.userID.matrixIdToCleanHex() == userProfile.userId
+        
         super.init(initialViewState: .init(userID: userProfile.userId,
                                            userProfile: userProfile,
-                                           shouldShowFollowButton: (clientProxy.userID.matrixIdToCleanHex() != userProfile.userId),
+                                           shouldShowFollowButton: !isUserMe,
+                                           shouldShowDirectChatButton: !isUserMe,
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
         

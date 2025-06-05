@@ -22,34 +22,32 @@ struct SettingsScreen: View {
         Form {
             userSection
             
-            userRewardsSection
+            zeroMenuSection
             
-            manageMyAppSection
+            //            manageMyAppSection
             
-//            if !shouldHideManageAccountSection {
-//                manageAccountSection
-//            }
-//
-//            generalSection
-//
-//            Section {
-//                ZeroListRow(label: .default(title: "Advanced Settings",
-//                                        icon: \.code),
-//                        kind: .navigationLink {
-//                            context.send(viewAction: .developerOptions)
-//                        })
-//                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
-//            }
+            //            if !shouldHideManageAccountSection {
+            //                manageAccountSection
+            //            }
+            //
+            //            generalSection
+            //
+            //            Section {
+            //                ZeroListRow(label: .default(title: "Advanced Settings",
+            //                                        icon: \.code),
+            //                        kind: .navigationLink {
+            //                            context.send(viewAction: .developerOptions)
+            //                        })
+            //                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
+            //            }
             
-            signOutSection
+            //            signOutSection
             
-//            if context.viewState.showDeveloperOptions {
-//                developerOptionsSection
-//            }
+            //            if context.viewState.showDeveloperOptions {
+            //                developerOptionsSection
+            //            }
         }
         .zeroList()
-        // .navigationTitle(L10n.commonSettings)
-        // .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
     }
     
@@ -59,7 +57,7 @@ struct SettingsScreen: View {
                 Button {
                     context.send(viewAction: .userDetails)
                 } label: {
-                    HStack(spacing: 12) {
+                    VStack(alignment: .center, spacing: 12) {
                         LoadableAvatarImage(url: context.viewState.userAvatarURL,
                                             name: context.viewState.userDisplayName,
                                             contentID: context.viewState.userID,
@@ -68,79 +66,134 @@ struct SettingsScreen: View {
                                             onTap: { _ in
                             context.send(viewAction: .userDetails)
                         })
-                            .accessibilityHidden(true)
+                        .accessibilityHidden(true)
                         
-                        VStack(alignment: .leading, spacing: 2) {
+                        VStack {
                             Text(context.viewState.userDisplayName ?? "")
-                                .font(.zero.headingMD)
+                                .font(.zero.headingSMSemibold)
                                 .foregroundColor(.compound.textPrimary)
+                            
                             if context.viewState.primaryZeroId != nil {
                                 Text(context.viewState.primaryZeroId!)
-                                    .font(.zero.bodySM)
+                                    .font(.zero.bodyMD)
                                     .foregroundColor(.compound.textSecondary)
                             }
                         }
-                        
-//                        Spacer()
-//
-//                        ZeroListRowAccessory.navigationLink
                     }
-                    .padding(.horizontal, ZeroListRowPadding.horizontal)
-                    .padding(.vertical, 8)
+                    .frame(maxWidth: .infinity)
                 }
             })
         }
     }
     
-    private var userRewardsSection: some View {
+    private var zeroMenuSection: some View {
         Section {
+            ZeroListRow(kind: .custom({
+                HorizontalDivider()
+            }))
+            
+            /// User Rewards
             ZeroListRow(kind: .custom {
                 Button {
                     context.send(viewAction: .rewards)
                 } label: {
-                    HStack {
-                        Spacer()
-                        
-                        VStack(alignment: .center) {
-                            Text("$\(context.viewState.userRewards.getRefPriceFormatted())")
-                                .font(.robotoMonoRegular(size: 24))
-                                .foregroundColor(.compound.textPrimary)
-                                .overlay(alignment: .topTrailing) {
-                                    if context.viewState.showNewUserRewardsIntimation {
-                                        ZStack(alignment: .center) {
-                                            Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 2)
-                                                .frame(width: 16, height: 16)
-                                            Circle().stroke(Color.zero.bgAccentRest, lineWidth: 2)
-                                                .frame(width: 12, height: 12)
-                                                .padding(4)
-                                            Circle()
-                                                .fill(Color.zero.bgAccentRest)
-                                                .frame(width: 8, height: 8)
-                                                .padding(4)
-                                        }
-                                        .transition(.opacity)
-                                        .offset(x: 24, y: -8)
-                                    }
-                                }
-                            
-                            Text("\(context.viewState.userRewards.getZeroCreditsFormatted()) MEOW")
-                                .font(.robotoMonoRegular(size: 14))
-                                .foregroundColor(.compound.textSecondary)
-                                .padding(.top, 1)
-                        }
-                        .padding(.vertical, 12)
-                        
-                        Spacer()
-                    }
-                    .background {
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(.clear)
-                            .stroke(.zero.bgAccentRest, lineWidth: 1)
-                    }
-                    .padding(.horizontal, 32)
+                    userRewardsView
                 }
             })
+            
+            ZeroListRow(kind: .custom({
+                HorizontalDivider()
+            }))
+            
+            /// Refer A Friend
+            ZeroListRow(label: .plain(title: "Refer a Friend"),
+                        kind: .navigationLink {
+                context.send(viewAction: .referAFriend)
+            })
+            .accessibilityIdentifier("settings-refer-friend")
+            
+            /// Notifications
+            ZeroListRow(label: .plain(title: L10n.screenNotificationSettingsTitle),
+                        kind: .navigationLink {
+                context.send(viewAction: .notifications)
+            })
+            .accessibilityIdentifier(A11yIdentifiers.settingsScreen.notifications)
+            
+            /// Backup Key
+            switch context.viewState.securitySectionMode {
+            case .secureBackup:
+                ZeroListRow(label: .plain(title: L10n.commonEncryption),
+                            details: context.viewState.showSecuritySectionBadge ? .icon(securitySectionBadge) : nil,
+                            kind: .navigationLink { context.send(viewAction: .secureBackup) })
+                .accessibilityIdentifier(A11yIdentifiers.settingsScreen.secureBackup)
+            default:
+                EmptyView()
+            }
+            
+            /// Advanced Settings
+            ZeroListRow(label: .plain(title: "Advanced Settings"),
+                        kind: .navigationLink {
+                context.send(viewAction: .developerOptions)
+            })
+            .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
+            
+            /// Logout
+            ZeroListRow(label: .plain(title: L10n.screenSignoutPreferenceItem,
+                                      role: .destructive),
+                        kind: .button {
+                context.send(viewAction: .logout)
+            })
+            .accessibilityIdentifier(A11yIdentifiers.settingsScreen.logout)
+            
+            ZeroListRow(kind: .custom({
+                HorizontalDivider()
+            }))
+        } footer: {
+            versionSection
         }
+    }
+    
+    private var userRewardsView: some View {
+        HStack(alignment: .top) {
+            VStack(alignment: .leading) {
+                Text("Rewards")
+                    .font(.zero.bodyMD)
+                    .foregroundStyle(.compound.textPrimary)
+                    .padding(.vertical, 2)
+                
+                Text("$\(context.viewState.userRewards.getRefPriceFormatted())")
+                    .font(.robotoMonoRegular(size: 24))
+                    .foregroundColor(.compound.textPrimary)
+                    .overlay(alignment: .topTrailing) {
+                        if context.viewState.showNewUserRewardsIntimation {
+                            ZStack(alignment: .center) {
+                                Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 2)
+                                    .frame(width: 16, height: 16)
+                                Circle().stroke(Color.zero.bgAccentRest, lineWidth: 2)
+                                    .frame(width: 12, height: 12)
+                                    .padding(4)
+                                Circle()
+                                    .fill(Color.zero.bgAccentRest)
+                                    .frame(width: 8, height: 8)
+                                    .padding(4)
+                            }
+                            .transition(.opacity)
+                            .offset(x: 24, y: -8)
+                        }
+                    }
+                
+                Text("\(context.viewState.userRewards.getZeroCreditsFormatted()) MEOW")
+                    .font(.robotoMonoRegular(size: 14))
+                    .foregroundColor(.compound.textSecondary)
+            }
+            
+            Spacer()
+            
+            CompoundIcon(\.chevronRight)
+                .foregroundColor(.compound.iconTertiaryAlpha)
+                .flipsForRightToLeftLayoutDirection(true)
+        }
+        .padding(.horizontal, 16)
     }
     
     private var manageMyAppSection: some View {
@@ -293,6 +346,9 @@ struct SettingsScreen: View {
     
     private var versionSection: some View {
         VStack(spacing: 0) {
+            Image(asset: Asset.Images.zeroLogoMark)
+                .padding(.vertical, 8)
+            
             versionText
                 .frame(maxWidth: .infinity)
             
@@ -302,7 +358,6 @@ struct SettingsScreen: View {
         }
         .compoundListSectionFooter()
         .textSelection(.enabled)
-        .padding(.top, 24)
 //        .onTapGesture(count: 7) {
 //            context.send(viewAction: .enableDeveloperOptions)
 //        }
@@ -314,8 +369,12 @@ struct SettingsScreen: View {
     
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
-            Button(L10n.actionDone) { context.send(viewAction: .close) }
-                .accessibilityIdentifier(A11yIdentifiers.settingsScreen.done)
+            Button {
+                context.send(viewAction: .close)
+            } label: {
+                CompoundIcon(\.close)
+            }
+            .accessibilityIdentifier(A11yIdentifiers.settingsScreen.done)
         }
     }
     

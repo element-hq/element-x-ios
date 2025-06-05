@@ -46,7 +46,8 @@ public struct ZeroListRow<Icon: View, DetailsIcon: View, CustomContent: View, Se
             .buttonStyle(ZeroListRowButtonStyle())
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.zero.bgCanvasDefault)
-            .listRowSeparatorTint(.compound._borderInteractiveSecondaryAlpha)
+//            .listRowSeparatorTint(.compound._borderInteractiveSecondaryAlpha)
+            .listRowSeparator(.hidden)
     }
     
     @ViewBuilder

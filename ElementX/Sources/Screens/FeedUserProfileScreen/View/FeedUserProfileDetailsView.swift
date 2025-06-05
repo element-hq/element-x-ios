@@ -94,15 +94,17 @@ struct UserProfileDetailsSection: View {
                     
                     Spacer()
                     
-                    Button {
-                        context.send(viewAction: .openDirectChat)
-                    } label: {
-                        CompoundIcon(\.chat)
-                            .tint(.zero.bgAccentRest)
+                    if context.viewState.shouldShowDirectChatButton {
+                        Button {
+                            context.send(viewAction: .openDirectChat)
+                        } label: {
+                            CompoundIcon(\.chat)
+                                .tint(.zero.bgAccentRest)
+                        }
+                        .frame(width: 48, height: 48)
+                        .background(Asset.Colors.zeroContentBackgroundColor.swiftUIColor)
+                        .clipShape(Circle())
                     }
-                    .frame(width: 48, height: 48)
-                    .background(Asset.Colors.zeroContentBackgroundColor.swiftUIColor)
-                    .clipShape(Circle())
                 }
                 .padding(.horizontal, 16)
                 .offset(y: 35)

@@ -317,13 +317,14 @@ struct FeedDetailsSection: View {
                     }
                 })
                 
+                Spacer()
+                
                 HomeScreenPostMeowButton(count: post.meowCount,
                                          highlightColor: post.isMeowedByMe,
                                          isEnabled: post.isPostInOwnFeed,
                                          onMeowTouchEnded: { count in
                     context.send(viewAction: .meowTapped(post.id, amount: count, isPostAReply: false))
                 })
-                .padding(.horizontal, 32)
                 
                 Spacer()
                 

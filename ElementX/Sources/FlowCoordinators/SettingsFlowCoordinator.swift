@@ -137,6 +137,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentUserRewards()
                 case .inviteFriend:
                     presentInviteFriend()
+                case .referAFriend:
+                    presentReferAFriend()
                 }
             }
             .store(in: &cancellables)
@@ -282,14 +284,23 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentUserRewards() {
-        let userRewardsParameters = UserRewardsSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
-        let coordinator = UserRewardsSettingsScreenCoordinator(parameters: userRewardsParameters)
+        let parameters = UserRewardsSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
+        let coordinator = UserRewardsSettingsScreenCoordinator(parameters: parameters)
         navigationStackCoordinator.push(coordinator)
     }
     
     private func presentInviteFriend() {
-        let inviteFriendParameters = InviteFriendSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
-        let coordinator = InviteFriendSettingsScreenCoordinator(parameters: inviteFriendParameters)
+        let parameters = InviteFriendSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
+        let coordinator = InviteFriendSettingsScreenCoordinator(parameters: parameters)
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentReferAFriend() {
+//        let parameters = ReferAFriendSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
+//        let coordinator = ReferAFriendSettingsScreenCoordinator(parameters: parameters)
+//        navigationStackCoordinator.push(coordinator)
+        let parameters = InviteFriendSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
+        let coordinator = InviteFriendSettingsScreenCoordinator(parameters: parameters)
         navigationStackCoordinator.push(coordinator)
     }
 

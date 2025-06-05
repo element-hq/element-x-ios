@@ -10,18 +10,24 @@ struct UserRewardsSettingsScreen: View {
     @Environment(\.openURL) private var openURL
 
     var body: some View {
-        Form {
-            ZeroListRow(kind: .custom {
-                ZStack {
-                    if showRewardsFAQ {
-                        rewardsFaqView
-                    } else {
-                        rewardsView
-                    }
+        VStack(spacing: 0) {
+            if !showRewardsFAQ {
+                ZStack(alignment: .center) {
+                    Image(asset: Asset.Images.rewardsVector)
+                    Image(asset: Asset.Images.zeroLogoMark)
                 }
-            })
+                .frame(maxWidth: .infinity)
+            }
+            ZStack {
+                if showRewardsFAQ {
+                    rewardsFaqView
+                } else {
+                    rewardsView
+                }
+            }
         }
-        .zeroList()
+        .zeroList(backgroundColor: Asset.Colors.zeroNewBackground.swiftUIColor)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationTitle(showRewardsFAQ ? "ZBI FAQ" : "ZBI")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(showRewardsFAQ)
@@ -43,13 +49,8 @@ struct UserRewardsSettingsScreen: View {
     }
 
     var rewardsView: some View {
-        VStack {
-            VStack(alignment: .center) {
-                ZStack(alignment: .center) {
-                    Image(asset: Asset.Images.rewardsVector)
-                    Image(asset: Asset.Images.zeroLogoMark)
-                }
-
+        VStack(spacing: 0) {
+            VStack(alignment: .center, spacing: 0) {
                 Text(
                     "$\(context.viewState.bindings.userRewards.getRefPriceFormatted())"
                 )
@@ -65,7 +66,7 @@ struct UserRewardsSettingsScreen: View {
 
             Spacer()
 
-            VStack {
+            VStack(spacing: 0) {
                 Text(
                     "Earn by messaging, inviting friends, and when those you invited mint a Domain or invite their friends. "
                 )
@@ -75,8 +76,7 @@ struct UserRewardsSettingsScreen: View {
                 .font(.zero.bodyMD)
                 .foregroundColor(Color.zero.bgAccentRest)
             }
-            .padding(.horizontal, 24)
-            .padding(.top, 200)
+            .padding(32)
             .onTapGesture {
                 withAnimation {
                     showRewardsFAQ = true

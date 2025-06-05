@@ -65,6 +65,7 @@ enum HomeScreenViewAction {
     case openArweaveLink(_ post: HomeScreenPost)
     case openYoutubeLink(_ url: String)
     case openPostUserProfile(_ profile: ZPostUserProfile)
+    case openUserProfile
     
     case forceRefreshChannels
     case channelTapped(_ channel: HomeScreenChannel)

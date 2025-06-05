@@ -16,14 +16,19 @@ struct HomePostsContent: View {
     @State private var selectedTab: HomePostsTab = .following
     
     var body: some View {
-        VStack(spacing: 0) {
-            HomePostsTabView(
-                onTabSelected: { tab in
-                    selectedTab = tab
-                    context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: tab == .following))
-                }
-            )
+        ZStack {
             postList
+            
+            switch context.viewState.postListMode {
+            case .empty, .posts:
+                FloatingActionButton(onTap: {
+                    context.send(viewAction: .newFeed)
+                })
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                .padding(.bottom, 60)
+            default:
+                EmptyView()
+            }
         }
     }
     
@@ -57,6 +62,13 @@ struct HomePostsContent: View {
                     HomePostsEmptyView()
                 case .posts:
                     LazyVStack(spacing: 0) {
+                        HomePostsTabView(
+                            onTabSelected: { tab in
+                                selectedTab = tab
+                                context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: tab == .following))
+                            }
+                        )
+                        
                         HomeScreenPostList(context: context)
                         
                         if context.viewState.canLoadMorePosts {

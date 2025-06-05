@@ -13,6 +13,7 @@ final class InviteFriendSettingsScreenCoordinator: CoordinatorProtocol {
     }
             
     func toPresentable() -> AnyView {
-        AnyView(InviteFriendSettingsScreen(context: viewModel.context))
+//        AnyView(InviteFriendSettingsScreen(context: viewModel.context))
+        AnyView(ReferAFriendSettingsScreen(context: viewModel.context))
     }
 }

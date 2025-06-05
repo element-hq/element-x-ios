@@ -125,13 +125,14 @@ struct HomeScreenPostCell: View {
                         onPostTapped()
                     })
                     
+                    Spacer()
+                    
                     HomeScreenPostMeowButton(count: post.meowCount,
                                              highlightColor: post.isMeowedByMe,
                                              isEnabled: !post.isMyPost,
                                              onMeowTouchEnded: { count in
                         onMeowTapped(count)
                     })
-                    .padding(.horizontal, 32)
                     
                     Spacer()
                     

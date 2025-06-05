@@ -18,22 +18,8 @@ struct HomePostsTabView: View {
     
     private let tabs = [
         (title: "Following", tab: HomePostsTab.following),
-        (title: "All", tab: HomePostsTab.all)
+        (title: "Everything", tab: HomePostsTab.all)
     ]
-    
-//    init(@ViewBuilder tabContent: @escaping (HomePostsTab) -> Content,
-//         onTabSelected: @escaping (HomePostsTab) -> Void) {
-//        self.tabContent = tabContent
-//        self.onTabSelected = onTabSelected
-//        
-//        let appearance = UITabBarAppearance()
-//        appearance.configureWithTransparentBackground()
-//        appearance.backgroundEffect = UIBlurEffect(style: .regular)
-//        appearance.backgroundColor = UIColor.black.withAlphaComponent(0.15) // Tint color
-//        
-//        UITabBar.appearance().standardAppearance = appearance
-//        UITabBar.appearance().scrollEdgeAppearance = appearance
-//    }
     
     var body: some View {
         HStack {
@@ -41,13 +27,23 @@ struct HomePostsTabView: View {
                 Button(action: {
                     selectedTab = tabInfo.tab
                 }) {
-                    Text(tabInfo.title)
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 16)
-                        .foregroundStyle(tabInfo.tab == selectedTab ? .zero.bgAccentRest : .compound.iconSecondary)
+                    VStack(spacing: 0) {
+                        Text(tabInfo.title)
+                            .foregroundStyle(tabInfo.tab == selectedTab ? .zero.bgAccentRest : .compound.iconSecondary)
+                        
+                        Rectangle()
+                            .fill(tabInfo.tab == selectedTab ? Color.zero.bgAccentRest : .clear)
+                            .frame(width: 90, height: 2)
+                            .cornerRadius(1.5)
+                            .padding(.top, 8)
+                    }
+                    .padding(.all, 8)
                 }
             }
+            
+            Spacer()
         }
+        .frame(maxWidth: .infinity)
         .onChange(of: selectedTab) { _, newTab in
             onTabSelected(newTab)
         }

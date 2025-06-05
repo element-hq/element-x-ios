@@ -1845,6 +1845,20 @@
 		7937A5932DB28819001A60CB /* TimelineEventContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F926D08EB3D622A480BCA71 /* TimelineEventContent.swift */; };
 		7937A5942DB289A0001A60CB /* TimelineThreadSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2E6ADAE685F4109B1FE795 /* TimelineThreadSummaryView.swift */; };
 		7937A5952DB28A0F001A60CB /* BloomModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D152423EE6CF0ECCC84091A /* BloomModifier.swift */; };
+		793899C32DEF990100980991 /* ReferAFriendSettingsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899C22DEF98F000980991 /* ReferAFriendSettingsScreenCoordinator.swift */; };
+		793899C42DEF990100980991 /* ReferAFriendSettingsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899C22DEF98F000980991 /* ReferAFriendSettingsScreenCoordinator.swift */; };
+		793899C62DEF991700980991 /* ReferAFriendSettingsScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899C52DEF990800980991 /* ReferAFriendSettingsScreenModel.swift */; };
+		793899C72DEF991700980991 /* ReferAFriendSettingsScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899C52DEF990800980991 /* ReferAFriendSettingsScreenModel.swift */; };
+		793899C92DEF992D00980991 /* ReferAFriendSettingsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899C82DEF991F00980991 /* ReferAFriendSettingsScreenViewModel.swift */; };
+		793899CA2DEF992D00980991 /* ReferAFriendSettingsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899C82DEF991F00980991 /* ReferAFriendSettingsScreenViewModel.swift */; };
+		793899CC2DEF994200980991 /* ReferAFriendSettingsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899CB2DEF993A00980991 /* ReferAFriendSettingsScreenViewModelProtocol.swift */; };
+		793899CD2DEF994200980991 /* ReferAFriendSettingsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899CB2DEF993A00980991 /* ReferAFriendSettingsScreenViewModelProtocol.swift */; };
+		793899D02DEF995E00980991 /* ReferAFriendSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899CF2DEF995700980991 /* ReferAFriendSettingsScreen.swift */; };
+		793899D12DEF995E00980991 /* ReferAFriendSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899CF2DEF995700980991 /* ReferAFriendSettingsScreen.swift */; };
+		793899D32DF0ECB600980991 /* HorizontalDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899D22DF0ECAB00980991 /* HorizontalDivider.swift */; };
+		793899D42DF0ECB600980991 /* HorizontalDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899D22DF0ECAB00980991 /* HorizontalDivider.swift */; };
+		793899D62DF0F2AA00980991 /* FloatingActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899D52DF0F2A400980991 /* FloatingActionButton.swift */; };
+		793899D72DF0F2AA00980991 /* FloatingActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899D52DF0F2A400980991 /* FloatingActionButton.swift */; };
 		793FA5B72D5B33E700893AC4 /* HomeScreenPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */; };
 		793FA5B82D5B33E700893AC4 /* HomeScreenPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */; };
 		7944A75F2D589F3000B75DAC /* CreateFeedScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A75E2D589F2700B75DAC /* CreateFeedScreenCoordinator.swift */; };
@@ -3460,6 +3474,13 @@
 		7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeChannelsContent.swift; sourceTree = "<group>"; };
 		7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenChannelCell.swift; sourceTree = "<group>"; };
 		7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaSelectedProtocol.swift; sourceTree = "<group>"; };
+		793899C22DEF98F000980991 /* ReferAFriendSettingsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenCoordinator.swift; sourceTree = "<group>"; };
+		793899C52DEF990800980991 /* ReferAFriendSettingsScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenModel.swift; sourceTree = "<group>"; };
+		793899C82DEF991F00980991 /* ReferAFriendSettingsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenViewModel.swift; sourceTree = "<group>"; };
+		793899CB2DEF993A00980991 /* ReferAFriendSettingsScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenViewModelProtocol.swift; sourceTree = "<group>"; };
+		793899CF2DEF995700980991 /* ReferAFriendSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreen.swift; sourceTree = "<group>"; };
+		793899D22DF0ECAB00980991 /* HorizontalDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalDivider.swift; sourceTree = "<group>"; };
+		793899D52DF0F2A400980991 /* FloatingActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingActionButton.swift; sourceTree = "<group>"; };
 		793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostCell.swift; sourceTree = "<group>"; };
 		7944A75E2D589F2700B75DAC /* CreateFeedScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenCoordinator.swift; sourceTree = "<group>"; };
 		7944A7612D589F3200B75DAC /* CreateFeedScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenModels.swift; sourceTree = "<group>"; };
@@ -4784,6 +4805,7 @@
 		185454D22CFEF7D4003CA957 /* Button */ = {
 			isa = PBXGroup;
 			children = (
+				793899D52DF0F2A400980991 /* FloatingActionButton.swift */,
 				185454D32CFEF7DD003CA957 /* ZeroStyledButton.swift */,
 			);
 			path = Button;
@@ -4891,6 +4913,7 @@
 		18AF61512CF85A6B00921644 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				793899D22DF0ECAB00980991 /* HorizontalDivider.swift */,
 				185454EE2D0042DE003CA957 /* SecureInputField */,
 				185454D22CFEF7D4003CA957 /* Button */,
 				18AF61552CF85ADE00921644 /* ListRow */,
@@ -6280,17 +6303,18 @@
 		70B74A432C241E56A7ACE610 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				18525CF12CF5E7470055C5E8 /* InviteFriend */,
-				18D5D9AF2CEB72A900107940 /* UserRewards */,
 				EB5B1119B5AD79297F1D49EB /* AccountSettings */,
 				09C599CB430ABF160C1EE55C /* AnalyticsSettingsScreen */,
 				7563BA5BBB57C5520C067859 /* AvancedOptionsScreen */,
 				1CA6CD0DE6F0445156361B6D /* DeveloperOptionsScreen */,
+				18525CF12CF5E7470055C5E8 /* InviteFriend */,
 				38A1C74493B816B8753F5BC2 /* LegalInformationScreen */,
 				441115752CA2408F26A72D11 /* NotificationSettingsEditScreen */,
 				7B91CB64534AD870924CCFEF /* NotificationSettingsScreen */,
+				793899C12DEF969A00980991 /* ReferAFriend */,
 				B364E08924AD15820350CDD9 /* SettingsScreen */,
 				4775A7D6FBB210BF21318AD9 /* UserDetailsEditScreen */,
+				18D5D9AF2CEB72A900107940 /* UserRewards */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -6564,6 +6588,26 @@
 				4137900E28201C314C835C11 /* RoomScreenFooterView.swift */,
 				4552D3466B1453F287223ADA /* SwipeRightAction.swift */,
 				464C6BFAA853DC755B9C1F60 /* PinnedItemsBanner */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		793899C12DEF969A00980991 /* ReferAFriend */ = {
+			isa = PBXGroup;
+			children = (
+				793899C22DEF98F000980991 /* ReferAFriendSettingsScreenCoordinator.swift */,
+				793899C52DEF990800980991 /* ReferAFriendSettingsScreenModel.swift */,
+				793899C82DEF991F00980991 /* ReferAFriendSettingsScreenViewModel.swift */,
+				793899CB2DEF993A00980991 /* ReferAFriendSettingsScreenViewModelProtocol.swift */,
+				793899CE2DEF994D00980991 /* View */,
+			);
+			path = ReferAFriend;
+			sourceTree = "<group>";
+		};
+		793899CE2DEF994D00980991 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				793899CF2DEF995700980991 /* ReferAFriendSettingsScreen.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -9463,6 +9507,7 @@
 				18E9A48F2C9829970082DDA4 /* BugReportHook.swift in Sources */,
 				18E9A4902C9829970082DDA4 /* BugReportScreen.swift in Sources */,
 				18E9A4912C9829970082DDA4 /* BugReportScreenCoordinator.swift in Sources */,
+				793899CA2DEF992D00980991 /* ReferAFriendSettingsScreenViewModel.swift in Sources */,
 				18E9A4922C9829970082DDA4 /* BugReportScreenModels.swift in Sources */,
 				18E9A4932C9829970082DDA4 /* BugReportScreenViewModel.swift in Sources */,
 				18E9A4942C9829970082DDA4 /* BugReportScreenViewModelProtocol.swift in Sources */,
@@ -9672,6 +9717,7 @@
 				18E9A5212C9829970082DDA4 /* HomeScreenModels.swift in Sources */,
 				18E9A5232C9829970082DDA4 /* String+Extensions.swift in Sources */,
 				18D467A02D109B5400861AA6 /* TimelineMediaPreviewModels.swift in Sources */,
+				793899CD2DEF994200980991 /* ReferAFriendSettingsScreenViewModelProtocol.swift in Sources */,
 				18E9A5242C9829970082DDA4 /* HomeScreenRecoveryKeyConfirmationBanner.swift in Sources */,
 				18E9A5252C9829970082DDA4 /* HomeScreenRoomCell.swift in Sources */,
 				18E9A5262C9829970082DDA4 /* HomeScreenRoomList.swift in Sources */,
@@ -9702,6 +9748,7 @@
 				18E9A53C2C9829970082DDA4 /* InviteUsersScreenCoordinator.swift in Sources */,
 				18E9A53D2C9829970082DDA4 /* InviteUsersScreenModels.swift in Sources */,
 				18E9A53E2C9829970082DDA4 /* InviteUsersScreenSelectedItem.swift in Sources */,
+				793899C72DEF991700980991 /* ReferAFriendSettingsScreenModel.swift in Sources */,
 				18E9A53F2C9829970082DDA4 /* InviteUsersScreenViewModel.swift in Sources */,
 				18C454062CF09A1500F25539 /* KnockRequestsListScreenCoordinator.swift in Sources */,
 				18E9A5402C9829970082DDA4 /* InviteUsersScreenViewModelProtocol.swift in Sources */,
@@ -9819,6 +9866,7 @@
 				18E9A5972C9829970082DDA4 /* (null) in Sources */,
 				18E9A5982C9829970082DDA4 /* (null) in Sources */,
 				18E9A5992C9829970082DDA4 /* (null) in Sources */,
+				793899D32DF0ECB600980991 /* HorizontalDivider.swift in Sources */,
 				18E9A59A2C9829970082DDA4 /* (null) in Sources */,
 				18E9A59B2C9829970082DDA4 /* MockSoftLogoutScreenState.swift in Sources */,
 				7994E5652DD52B46005F7039 /* YoutubeLinkMetaData.swift in Sources */,
@@ -10264,6 +10312,7 @@
 				1827256F2C9994A000B513B5 /* (null) in Sources */,
 				185454D42CFEF7E9003CA957 /* ZeroStyledButton.swift in Sources */,
 				18E9A6E12C9829970082DDA4 /* SwipeRightAction.swift in Sources */,
+				793899D12DEF995E00980991 /* ReferAFriendSettingsScreen.swift in Sources */,
 				18D4679E2D109B4A00861AA6 /* (null) in Sources */,
 				18E9A6E22C9829970082DDA4 /* SwipeToReplyView.swift in Sources */,
 				18E9A6E32C9829970082DDA4 /* Task.swift in Sources */,
@@ -10317,6 +10366,7 @@
 				18E9A70A2C9829970082DDA4 /* TimelineStartRoomTimelineView.swift in Sources */,
 				18E9A70B2C9829970082DDA4 /* TimelineStyle.swift in Sources */,
 				18E9A70C2C9829970082DDA4 /* TimelineStyler.swift in Sources */,
+				793899C42DEF990100980991 /* ReferAFriendSettingsScreenCoordinator.swift in Sources */,
 				18E9A70D2C9829970082DDA4 /* TimelineTableViewController.swift in Sources */,
 				18E9A70E2C9829970082DDA4 /* TimelineView.swift in Sources */,
 				18E9A70F2C9829970082DDA4 /* TimelineViewModel.swift in Sources */,
@@ -10363,6 +10413,7 @@
 				18E9A72D2C9829970082DDA4 /* UserIndicator.swift in Sources */,
 				18E9A72E2C9829970082DDA4 /* UserIndicatorController.swift in Sources */,
 				18E9A72F2C9829970082DDA4 /* UserIndicatorControllerMock.swift in Sources */,
+				793899D62DF0F2AA00980991 /* FloatingActionButton.swift in Sources */,
 				1896C50D2CC7DB0200142C49 /* KnockedRoomProxyMock.swift in Sources */,
 				18E9A7302C9829970082DDA4 /* UserIndicatorControllerProtocol.swift in Sources */,
 				18E9A7312C9829970082DDA4 /* UserIndicatorModalView.swift in Sources */,
@@ -10751,6 +10802,7 @@
 				A0868BDE84D2140A885BE3C9 /* EncryptionResetScreenViewModelProtocol.swift in Sources */,
 				4D2B54233C7B2C04B4ABE55A /* EncryptionSettingsFlowCoordinator.swift in Sources */,
 				50539366B408780B232C1910 /* EstimatedWaveformView.swift in Sources */,
+				793899C62DEF991700980991 /* ReferAFriendSettingsScreenModel.swift in Sources */,
 				F78BAD28482A467287A9A5A3 /* EventBasedMessageTimelineItemProtocol.swift in Sources */,
 				184D6FD42C7D8F45006266D8 /* ZSessionDataResponse.swift in Sources */,
 				02D8DF8EB7537EB4E9019DDB /* EventBasedTimelineItemProtocol.swift in Sources */,
@@ -10767,6 +10819,7 @@
 				18E3786918486D4C9726BC84 /* FormButtonStyles.swift in Sources */,
 				CCFDEC922C811B8F00C17FC3 /* VerifyBackupKeyScreen.swift in Sources */,
 				4D0F4385B7DDB68C66C78857 /* FormattedBodyText.swift in Sources */,
+				793899D72DF0F2AA00980991 /* FloatingActionButton.swift in Sources */,
 				7807B1DEE32617896886A8E5 /* FormattingToolbar.swift in Sources */,
 				46BA7F4B4D3A7164DED44B88 /* FullscreenDialog.swift in Sources */,
 				F18CA61A58C77C84F551B8E7 /* GeneratedMocks.swift in Sources */,
@@ -10863,6 +10916,7 @@
 				D5681C80D8281560AACE0035 /* Label.swift in Sources */,
 				EEAE954289DE813A61656AE0 /* LayoutDirection.swift in Sources */,
 				42B084FDE621FBEE433AF444 /* LegalInformationScreen.swift in Sources */,
+				793899D02DEF995E00980991 /* ReferAFriendSettingsScreen.swift in Sources */,
 				9EBDC79CAC9B63A0D626E333 /* LegalInformationScreenCoordinator.swift in Sources */,
 				799E1D192DBBA85B00E3D512 /* ZeroMetaDataApi.swift in Sources */,
 				F40B097470D3110DFDB1FAAA /* LegalInformationScreenModels.swift in Sources */,
@@ -11299,6 +11353,7 @@
 				79B04C432DE07F6500A98D3E /* UserFeedProfileFlowCoordinator.swift in Sources */,
 				AE1A73B24D63DA3D63DC4EE3 /* SessionVerificationControllerProxyMock.swift in Sources */,
 				94A65DD8A353DF112EBEF67A /* SessionVerificationControllerProxyProtocol.swift in Sources */,
+				793899C92DEF992D00980991 /* ReferAFriendSettingsScreenViewModel.swift in Sources */,
 				91D1A46A733EC24C081DD353 /* SessionVerificationRequestDetailsView.swift in Sources */,
 				707E49BE07E8EB8A13C0EB1E /* SessionVerificationScreen.swift in Sources */,
 				D02DEB36D32A72A1B365E452 /* SessionVerificationScreenCoordinator.swift in Sources */,
@@ -11368,6 +11423,7 @@
 				BB784A02BADB03C820617A46 /* TextRoomTimelineItem.swift in Sources */,
 				53F1196F9C69512306A2693F /* TextRoomTimelineItemContent.swift in Sources */,
 				D8CFA0EE46376F9FF04EEE45 /* TextRoomTimelineView.swift in Sources */,
+				793899D42DF0ECB600980991 /* HorizontalDivider.swift in Sources */,
 				71643093F87153F633A1B025 /* ThreadDecorator.swift in Sources */,
 				5EB116B58533C9A0EBA22717 /* ThreadTimelineScreen.swift in Sources */,
 				09693596AA3CA4E598C0D2F1 /* ThreadTimelineScreenCoordinator.swift in Sources */,
@@ -11429,6 +11485,7 @@
 				67EFF46180B939CBF389AECD /* TimelineView.swift in Sources */,
 				1868A8C52CA33BBE00DC382D /* EmptyResponse.swift in Sources */,
 				98EE4259A4A49BC757BA442C /* TimelineViewModel.swift in Sources */,
+				793899C32DEF990100980991 /* ReferAFriendSettingsScreenCoordinator.swift in Sources */,
 				F8B2F5CBCF2A0E0798E8D646 /* TimelineViewModelProtocol.swift in Sources */,
 				6E44638FDF7D4B0F80EFA7EA /* TraceLogPack.swift in Sources */,
 				7944A75F2D589F3000B75DAC /* CreateFeedScreenCoordinator.swift in Sources */,
@@ -11471,6 +11528,7 @@
 				3467FEE8210D301FF1B77001 /* UserIndicatorControllerMock.swift in Sources */,
 				E3E1E255DC8CB34BD8573E0D /* UserIndicatorControllerProtocol.swift in Sources */,
 				A14A9419105A1CD42F0511C4 /* UserIndicatorModalView.swift in Sources */,
+				793899CC2DEF994200980991 /* ReferAFriendSettingsScreenViewModelProtocol.swift in Sources */,
 				9E838A62918E47BC72D6640D /* UserIndicatorPresenter.swift in Sources */,
 				F7BC744FFA7FE248FAE7F570 /* UserIndicatorToastView.swift in Sources */,
 				E3291AD16D7A5CB14781819C /* UserNotificationCenterProtocol.swift in Sources */,
@@ -11800,7 +11858,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.14.8;
+				MARKETING_VERSION = 0.14.9;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -11836,7 +11894,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.14.8;
+				MARKETING_VERSION = 0.14.9;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

@@ -95,7 +95,7 @@ enum UserAvatarSizeOnScreen {
         case .blockedUsers:
             return 32
         case .settings:
-            return 52
+            return 96
         case .roomDetails:
             return 44
         case .startChat:

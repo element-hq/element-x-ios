@@ -280,6 +280,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             openYoutubeLink(url)
         case .openPostUserProfile(let profile):
             actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: self))
+        case .openUserProfile:
+            let profile = ZPostUserProfile(userId: state.userID.matrixIdToCleanHex(),
+                                           profileImage: state.userAvatarURL?.absoluteString,
+                                           firstName: state.userDisplayName ?? "",
+                                           primaryZId: state.primaryZeroId,
+                                           publicAddress: state.primaryZeroId)
+            actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: self))
         }
     }
     
