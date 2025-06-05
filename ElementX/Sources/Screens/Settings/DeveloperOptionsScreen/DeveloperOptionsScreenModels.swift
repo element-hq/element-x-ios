@@ -42,6 +42,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var hideUnreadMessagesBadge: Bool { get set }
     var fuzzyRoomListSearchEnabled: Bool { get set }
     var enableOnlySignedDeviceIsolationMode: Bool { get set }
+    var enableKeyShareOnInvite: Bool { get set }
     var elementCallBaseURLOverride: URL? { get set }
     var knockingEnabled: Bool { get set }
     var threadsEnabled: Bool { get set }
