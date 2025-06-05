@@ -1013,6 +1013,12 @@ extension PreviewTests {
         }
     }
 
+    func testTombstonedAvatarImage() async throws {
+        for (index, preview) in TombstonedAvatarImage_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testTypingIndicatorView() async throws {
         for (index, preview) in TypingIndicatorView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

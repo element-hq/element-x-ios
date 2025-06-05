@@ -6485,6 +6485,7 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
     }
     var underlyingTimeline: TimelineProxyProtocol!
     var predecessorRoom: PredecessorRoom?
+    var successorRoom: SuccessorRoom?
     var id: String {
         get { return underlyingId }
         set(value) { underlyingId = value }
