@@ -12,7 +12,6 @@ struct PlaceholderAvatarImage: View {
     @Environment(\.redactionReasons) private var redactionReasons
 
     private let textForImage: String
-    /// When `nil` the tombstoned colors will be used
     private let contentID: String?
     
     var body: some View {
@@ -23,9 +22,7 @@ struct PlaceholderAvatarImage: View {
                 // This text's frame doesn't look right when redacted
                 if redactionReasons != .placeholder {
                     Text(textForImage)
-                        .foregroundColor(avatarColor?.text ??
-                            // tombstoned room foreground
-                            .compound.iconTertiary)
+                        .foregroundColor(avatarColor?.text ?? .white)
                         .font(.system(size: geometry.size.width * 0.5625, weight: .semibold))
                         .minimumScaleFactor(0.001)
                         .frame(alignment: .center)
@@ -46,9 +43,7 @@ struct PlaceholderAvatarImage: View {
             return Color(.systemGray4) // matches the default text redaction
         }
 
-        return avatarColor?.background ??
-            // tombstoned room background
-            .compound.bgSubtlePrimary
+        return avatarColor?.background ?? .compound.iconPrimary
     }
     
     private var avatarColor: DecorativeColor? {
@@ -74,10 +69,6 @@ struct PlaceholderAvatarImage_Previews: PreviewProvider, TestablePreview {
             PlaceholderAvatarImage(name: nil, contentID: "@userid3:matrix.org")
                 .clipShape(Circle())
                 .frame(width: 150, height: 100)
-            
-            PlaceholderAvatarImage(name: "!", contentID: nil)
-                .clipShape(Circle())
-                .frame(width: 100, height: 100)
             
             PlaceholderAvatarImage(name: nil, contentID: "@fooserid:matrix.org")
                 .clipShape(Circle())

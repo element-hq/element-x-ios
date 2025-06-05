@@ -96,11 +96,7 @@ struct RoomAvatarImage: View {
                                     onTap: onAvatarTap)
             }
         case .tombstoned:
-            LoadableAvatarImage(url: nil,
-                                name: "!",
-                                contentID: nil, avatarSize: avatarSize,
-                                mediaProvider: mediaProvider,
-                                onTap: onAvatarTap)
+            TombstonedAvatarImage(avatarSize: avatarSize)
         }
     }
 }
