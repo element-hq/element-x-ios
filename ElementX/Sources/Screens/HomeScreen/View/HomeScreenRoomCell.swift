@@ -135,12 +135,8 @@ struct HomeScreenRoomCell: View {
     
     @ViewBuilder
     private var lastMessage: some View {
-        // If the room is tombstoned, show a specific message, regardless of any last message.
-        if room.isTombstoned {
-            Text(L10n.screenRoomlistTombstonedRoomDescription)
-                .lastMessageFormatting()
-        } else if let lastMessage = room.lastMessage {
-            Text(lastMessage)
+        if let displayedLastMessage = room.displayedLastMessage {
+            Text(displayedLastMessage)
                 .lastMessageFormatting()
         }
     }

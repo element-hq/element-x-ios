@@ -8,6 +8,7 @@
 import Foundation
 
 struct TimelineStartRoomTimelineItem: DecorationTimelineItemProtocol, Equatable {
+    // Using a static identifier makes the animations consistent in SwiftUI
     let id: TimelineItemIdentifier = .virtual(uniqueID: .init("TimelineStart"))
     let name: String?
 }

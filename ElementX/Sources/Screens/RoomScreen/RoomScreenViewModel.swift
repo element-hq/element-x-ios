@@ -331,6 +331,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func handleRoomInfoUpdate(_ roomInfo: RoomInfoProxy) async {
         state.hasSuccessor = roomInfo.successor != nil
+        
         let pinnedEventIDs = roomInfo.pinnedEventIDs
         // Only update the loading state of the banner
         if state.pinnedEventsBannerState.isLoading {

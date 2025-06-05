@@ -55,7 +55,6 @@ struct RoomSummary {
     
     let isMarkedUnread: Bool
     let isFavourite: Bool
-    
     let isTombstoned: Bool
     
     var hasUnreadMessages: Bool { unreadMessagesCount > 0 }

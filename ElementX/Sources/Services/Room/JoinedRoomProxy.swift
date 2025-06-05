@@ -34,7 +34,14 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     var ownUserID: String { room.ownUserId() }
     
-    lazy var predecessorRoom: PredecessorRoom? = room.predecessorRoom()
+    // The predecessor is set on room creation and never changes, so we lazily store it.
+    lazy var predecessorRoom = room.predecessorRoom()
+    
+    // The successor may change over time, so we access it dynamically.
+    // It's suggested to observe it through the `infoPublisher`
+    var successorRoom: SuccessorRoom? {
+        room.successorRoom()
+    }
     
     let timeline: TimelineProxyProtocol
     
