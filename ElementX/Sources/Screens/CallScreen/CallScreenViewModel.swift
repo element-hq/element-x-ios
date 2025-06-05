@@ -52,14 +52,8 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             widgetDriver = roomProxy.elementCallWidgetDriver(deviceID: deviceID)
         }
         
-        super.init(initialViewState: CallScreenViewState(messageHandler: Self.eventHandlerName,
-                                                         script: Self.eventHandlerInjectionScript,
+        super.init(initialViewState: CallScreenViewState(script: CallScreenJavaScriptMessageName.allCasesInjectionScript,
                                                          certificateValidator: appHooks.certificateValidatorHook))
-        
-        state.bindings.javaScriptMessageHandler = { [weak self] message in
-            guard let self, let message = message as? String else { return }
-            Task { await self.widgetDriver.handleMessage(message) }
-        }
         
         elementCallService.actions
             .receive(on: DispatchQueue.main)
@@ -107,6 +101,13 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
+        NotificationCenter.default
+            .publisher(for: AVAudioSession.routeChangeNotification)
+            .sink { [weak self] _ in
+                Task { await self?.updateOutputsListOnWeb() }
+            }
+            .store(in: &cancellables)
+        
         setupCall()
     }
     
@@ -123,6 +124,12 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             actionsSubject.send(.pictureInPictureStopped)
         case .endCall:
             actionsSubject.send(.dismiss)
+        case .mediaCapturePermissionGranted:
+            Task { await updateOutputsListOnWeb() }
+        case .outputDeviceSelected(deviceID: let deviceID):
+            handleOutputDeviceSelected(deviceID: deviceID)
+        case .widgetAction(let message):
+            Task { await widgetDriver.handleMessage(message) }
         }
     }
     
@@ -132,6 +139,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
         
         elementCallService.tearDownCallSession()
+        UIDevice.current.isProximityMonitoringEnabled = false
     }
     
     // MARK: - Private
@@ -181,6 +189,15 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 }
             }
         }
+    }
+    
+    // This should always match the web app value
+    private static let earpieceID = "earpiece-id"
+    
+    private func handleOutputDeviceSelected(deviceID: String) {
+        let isEarpiece = deviceID == Self.earpieceID
+        MXLog.info("[handleOutputDeviceSelected] is earpiece: \(isEarpiece)")
+        UIDevice.current.isProximityMonitoringEnabled = isEarpiece
     }
     
     private func handleBackwardsNavigation() async {
@@ -242,23 +259,29 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         }
     }
     
-    private static let eventHandlerName = "elementx"
-    
-    private static var eventHandlerInjectionScript: String {
-        """
-        window.addEventListener(
-            "message",
-            (event) => {
-                let message = {data: event.data, origin: event.origin}
-                if (message.data.response && message.data.api == "toWidget"
-                || !message.data.response && message.data.api == "fromWidget") {
-                  window.webkit.messageHandlers.\(eventHandlerName).postMessage(JSON.stringify(message.data));
-                }else{
-                  console.log("-- skipped event handling by the client because it is send from the client itself.");
-                }
-            },
-            false,
-          );
-        """
+    /// This function updates the list of available audio outputs on the web side
+    /// however since we actually handle switching the audio output through the OS,
+    /// this is only used to inform the webview when the speaker is selected,
+    /// so that the option to use the earpiece can be displayed.
+    private func updateOutputsListOnWeb() async {
+        guard let currentOutput = AVAudioSession.sharedInstance().currentRoute.outputs.first else {
+            return
+        }
+        
+        let deviceList = if currentOutput.portType == .builtInSpeaker {
+            // This allows the webview to display the earpiece option
+            "{id: '\(currentOutput.uid)', name: '\(currentOutput.portName)', forEarpiece: true}"
+        } else {
+            // Doesn't matter because the switch is handled through the OS
+            "{id: 'dummy', name: 'dummy'}"
+        }
+        
+        let javaScript = "window.controls.setAvailableOutputDevices([\(deviceList)])"
+        do {
+            let result = try await state.bindings.javaScriptEvaluator?(javaScript)
+            MXLog.debug("Evaluated  with result: \(String(describing: result))")
+        } catch {
+            MXLog.error("Received javascript evaluation error: \(error)")
+        }
     }
 }
