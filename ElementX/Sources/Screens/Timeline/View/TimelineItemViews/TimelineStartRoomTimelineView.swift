@@ -15,8 +15,9 @@ struct TimelineStartRoomTimelineView: View {
     var body: some View {
         VStack(spacing: 14) {
             if context?.viewState.hasPredecessor == true {
-                upgrade
+                upgradeDialogue
             }
+            // We don't display the title for tombstoned DMs
             if context?.viewState.isDirectOneToOneRoom != true {
                 Text(title)
                     .font(.compound.bodySM)
@@ -28,13 +29,13 @@ struct TimelineStartRoomTimelineView: View {
         }
     }
     
-    private var upgrade: some View {
+    private var upgradeDialogue: some View {
         VStack(spacing: 16) {
             Text(L10n.screenRoomTimelineUpgradedRoomMessage)
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textPrimary)
             Button {
-                context?.send(viewAction: .seePredecessorTapped)
+                context?.send(viewAction: .displayPredecessorRoom)
             } label: {
                 Text(L10n.screenRoomTimelineUpgradedRoomAction)
                     .frame(maxWidth: .infinity)

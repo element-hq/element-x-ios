@@ -79,7 +79,7 @@ enum TimelineViewAction {
     case hasScrolled(direction: ScrollDirection)
     case setOpenURLAction(OpenURLAction)
     
-    case seePredecessorTapped
+    case displayPredecessorRoom
 }
 
 enum TimelineComposerAction {

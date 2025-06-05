@@ -8,7 +8,7 @@
 import Compound
 import SwiftUI
 
-struct Highlight: ViewModifier {
+struct HorizontalHighlightGradient: ViewModifier {
     let borderColor: Color
     let primaryColor: Color
     let secondaryColor: Color
@@ -30,6 +30,6 @@ struct Highlight: ViewModifier {
 
 extension View {
     func highlight(borderColor: Color, primaryColor: Color, secondaryColor: Color) -> some View {
-        modifier(Highlight(borderColor: borderColor, primaryColor: primaryColor, secondaryColor: secondaryColor))
+        modifier(HorizontalHighlightGradient(borderColor: borderColor, primaryColor: primaryColor, secondaryColor: secondaryColor))
     }
 }

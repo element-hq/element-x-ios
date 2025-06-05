@@ -78,6 +78,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     var predecessorRoom: PredecessorRoom? { get }
     
+    var successorRoom: SuccessorRoom? { get }
+    
     func subscribeForUpdates() async
     
     func subscribeToRoomInfoUpdates()

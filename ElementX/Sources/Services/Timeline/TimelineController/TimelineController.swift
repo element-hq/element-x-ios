@@ -480,11 +480,12 @@ class TimelineController: TimelineControllerProtocol {
             case .readMarker:
                 return ReadMarkerRoomTimelineItem(id: .virtual(uniqueID: uniqueID))
             case .timelineStart:
-                if hasPredecessor {
+                // We always display the timeline start item, if there is a predecessor room.
+                guard !hasPredecessor else {
                     return TimelineStartRoomTimelineItem(name: roomDisplayName)
-                } else {
-                    return isDM ? nil : TimelineStartRoomTimelineItem(name: roomDisplayName)
                 }
+                // If not we only display the timeline start item if this is not a DM.
+                return isDM ? nil : TimelineStartRoomTimelineItem(name: roomDisplayName)
             }
         case .unknown:
             return nil

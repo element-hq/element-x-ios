@@ -212,8 +212,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             actionsSubject.send(.hasScrolled(direction: direction))
         case .setOpenURLAction(let action):
             state.openURL = action
-        case .seePredecessorTapped:
-            guard let predecessorID = roomProxy.predecessorRoom?.roomId else { return }
+        case .displayPredecessorRoom:
+            guard let predecessorID = roomProxy.predecessorRoom?.roomId else {
+                fatalError("Predecessor room should exist if this action is triggered.")
+            }
             actionsSubject.send(.displayRoom(roomID: predecessorID))
         }
     }
