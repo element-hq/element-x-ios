@@ -158,6 +158,7 @@ class TimelineController: TimelineControllerProtocol {
         
         switch await activeTimeline.sendMessage(message,
                                                 html: html,
+                                                threadRootEventID: timelineKind.threadRootEventID,
                                                 inReplyToEventID: inReplyToEventID,
                                                 intentionalMentions: intentionalMentions) {
         case .success:

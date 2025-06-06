@@ -10,6 +10,8 @@ import Foundation
 enum ThreadTimelineScreenViewModelAction { }
 
 struct ThreadTimelineScreenViewState: BindableState {
+    var canSendMessage = true
+    
     var bindings = ThreadTimelineScreenViewStateBindings()
 }
 

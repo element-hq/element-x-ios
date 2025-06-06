@@ -578,15 +578,22 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
-        let coordinator = ThreadTimelineScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+        let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy,
+                                                                      roomListPublisher: userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
+        let composerDraftService = ComposerDraftService(roomProxy: roomProxy, timelineItemfactory: timelineItemFactory)
+        
+        let coordinator = ThreadTimelineScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
+                                                                            roomProxy: roomProxy,
                                                                             timelineController: timelineController,
                                                                             mediaProvider: userSession.mediaProvider,
                                                                             mediaPlayerProvider: MediaPlayerProvider(),
                                                                             voiceMessageMediaManager: userSession.voiceMessageMediaManager,
-                                                                            appMediator: appMediator,
                                                                             emojiProvider: emojiProvider,
-                                                                            timelineControllerFactory: timelineControllerFactory,
-                                                                            clientProxy: userSession.clientProxy))
+                                                                            completionSuggestionService: completionSuggestionService,
+                                                                            appMediator: appMediator,
+                                                                            appSettings: appSettings,
+                                                                            composerDraftService: composerDraftService,
+                                                                            timelineControllerFactory: timelineControllerFactory))
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }

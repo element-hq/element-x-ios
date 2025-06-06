@@ -67,7 +67,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     }
 
     func testHandleKeyCommand() {
-        XCTAssertTrue(viewModel.keyCommands.count == 1)
+        XCTAssertTrue(viewModel.context.viewState.keyCommands.count == 1)
     }
 
     func testComposerFocusAfterEnablingRTE() {

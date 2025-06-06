@@ -8,7 +8,7 @@
 import XCTest
 
 @MainActor
-class BugReportUITests: XCTestCase {
+class BugReportTests: XCTestCase {
     func testInitialStateComponents() async throws {
         let app = Application.launch(.bugReport)
         

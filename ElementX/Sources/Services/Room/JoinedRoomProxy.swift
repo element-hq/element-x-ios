@@ -175,7 +175,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                                                                             trackReadReceipts: true,
                                                                                             reportUtds: true))
             
-            let timeline = TimelineProxy(timeline: sdkTimeline, kind: .thread)
+            let timeline = TimelineProxy(timeline: sdkTimeline, kind: .thread(rootEventID: eventID))
             await timeline.subscribeForUpdates()
             
             return .success(timeline)

@@ -65,6 +65,8 @@ enum ComposerAttachmentType {
 }
 
 struct ComposerToolbarViewState: BindableState {
+    let wysiwygViewModel: WysiwygComposerViewModel
+    
     var composerMode: ComposerMode = .default
     var composerEmpty = true
     /// Could be false if sending is disabled in the room
@@ -75,6 +77,8 @@ struct ComposerToolbarViewState: BindableState {
     
     var isRoomEncrypted: Bool
     var isLocationSharingEnabled: Bool
+    
+    var keyCommands: [WysiwygKeyCommand] = []
     
     var bindings: ComposerToolbarViewStateBindings
 

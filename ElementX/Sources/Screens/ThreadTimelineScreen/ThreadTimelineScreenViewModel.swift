@@ -11,13 +11,32 @@ import SwiftUI
 typealias ThreadTimelineScreenViewModelType = StateStoreViewModel<ThreadTimelineScreenViewState, ThreadTimelineScreenViewAction>
 
 class ThreadTimelineScreenViewModel: ThreadTimelineScreenViewModelType, ThreadTimelineScreenViewModelProtocol {
+    private let roomProxy: JoinedRoomProxyProtocol
+    
     private let actionsSubject: PassthroughSubject<ThreadTimelineScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<ThreadTimelineScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
-    init() {
+    
+    init(roomProxy: JoinedRoomProxyProtocol) {
+        self.roomProxy = roomProxy
+        
         super.init(initialViewState: ThreadTimelineScreenViewState())
+        
+        Task { [weak self] in
+            for await roomInfo in roomProxy.infoPublisher.receive(on: DispatchQueue.main).values {
+                guard !Task.isCancelled else {
+                    return
+                }
+                
+                await self?.handleRoomInfoUpdate(roomInfo)
+            }
+        }
+        .store(in: &cancellables)
+        
+        Task {
+            await handleRoomInfoUpdate(roomProxy.infoPublisher.value)
+        }
     }
     
     // MARK: - Public
@@ -41,5 +60,11 @@ class ThreadTimelineScreenViewModel: ThreadTimelineScreenViewModelType, ThreadTi
         .store(in: &cancellables)
         
         state.bindings.mediaPreviewViewModel = mediaPreviewViewModel
+    }
+    
+    // MARK: - Private
+    
+    private func handleRoomInfoUpdate(_ roomInfo: RoomInfoProxy) async {
+        state.canSendMessage = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
     }
 }
