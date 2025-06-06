@@ -62,6 +62,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
+    private let appHooks: AppHooks
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -99,6 +100,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
          ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
+         appHooks: AppHooks,
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol) async {
         self.roomID = roomID
@@ -110,6 +112,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         self.ongoingCallRoomIDPublisher = ongoingCallRoomIDPublisher
         self.appMediator = appMediator
         self.appSettings = appSettings
+        self.appHooks = appHooks
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
@@ -510,6 +513,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                          ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher,
                                                          appMediator: appMediator,
                                                          appSettings: appSettings,
+                                                         appHooks: appHooks,
                                                          composerDraftService: composerDraftService,
                                                          timelineControllerFactory: timelineControllerFactory)
         
@@ -1444,6 +1448,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                     ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher,
                                                     appMediator: appMediator,
                                                     appSettings: appSettings,
+                                                    appHooks: appHooks,
                                                     analytics: analytics,
                                                     userIndicatorController: userIndicatorController)
         coordinator.actions.sink { [weak self] action in
