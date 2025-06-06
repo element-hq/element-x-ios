@@ -32,7 +32,9 @@ struct ThreadTimelineScreen: View {
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .overlay(alignment: .bottomTrailing) {
-                scrollToBottomButton
+                TimelineScrollToBottomButton(isVisible: isAtBottomAndLive) {
+                    timelineContext.send(viewAction: .scrollToBottom)
+                }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composer
@@ -73,28 +75,6 @@ struct ThreadTimelineScreen: View {
                 .multilineTextAlignment(.center)
                 .padding(.vertical, 10) // Matches the MessageComposerStyleModifier
         }
-    }
-    
-    private var scrollToBottomButton: some View {
-        Button { timelineContext.send(viewAction: .scrollToBottom) } label: {
-            Image(systemName: "chevron.down")
-                .font(.compound.bodyLG)
-                .fontWeight(.semibold)
-                .foregroundColor(.compound.iconSecondary)
-                .padding(13)
-                .offset(y: 1)
-                .background {
-                    Circle()
-                        .fill(Color.compound.iconOnSolidPrimary)
-                        // Intentionally using system primary colour to get white/black.
-                        .shadow(color: .primary.opacity(0.33), radius: 2.0)
-                }
-                .padding()
-        }
-        .opacity(isAtBottomAndLive ? 0.0 : 1.0)
-        .accessibilityHidden(isAtBottomAndLive)
-        .animation(.elementDefault, value: isAtBottomAndLive)
-        .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
     }
     
     private var isAtBottomAndLive: Bool {
