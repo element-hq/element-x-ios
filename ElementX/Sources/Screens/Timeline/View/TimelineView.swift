@@ -142,7 +142,7 @@ struct TimelineView_Previews: PreviewProvider, TestablePreview {
 
     static var previews: some View {
         NavigationStack {
-            RoomScreen(roomContext: roomViewModel.context,
+            RoomScreen(context: roomViewModel.context,
                        timelineContext: timelineViewModel.context,
                        composerToolbar: ComposerToolbar.mock())
         }
