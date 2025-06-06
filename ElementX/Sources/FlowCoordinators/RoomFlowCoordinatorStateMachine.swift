@@ -361,8 +361,8 @@ extension RoomFlowCoordinator {
             case (.pollsHistoryForm, .dismissPollForm):
                 return .pollsHistory
                 
-            case (.mediaUploadPicker, .presentMediaUploadPreview(let fileURL)):
-                return .mediaUploadPreview(fileURL: fileURL, previousState: fromState)
+            case (.mediaUploadPicker(_, let previousMediaUploadPickerState), .presentMediaUploadPreview(let fileURL)):
+                return .mediaUploadPreview(fileURL: fileURL, previousState: previousMediaUploadPickerState)
                 
             case (_, .presentInviteUsersScreen):
                 return .inviteUsersScreen(previousState: fromState)
