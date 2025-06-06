@@ -28,7 +28,10 @@ struct RoomScreen: View {
     var body: some View {
         TimelineView(timelineContext: timelineContext)
             .overlay(alignment: .bottomTrailing) {
-                scrollToBottomButton
+                TimelineScrollToBottomButton(isVisible: isAtBottomAndLive) {
+                    timelineContext.send(viewAction: .scrollToBottom)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
             }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .overlay(alignment: .top) {
@@ -121,28 +124,6 @@ struct RoomScreen: View {
     
     private func onViewAllKnockRequests() {
         context.send(viewAction: .viewKnockRequests)
-    }
-    
-    private var scrollToBottomButton: some View {
-        Button { timelineContext.send(viewAction: .scrollToBottom) } label: {
-            Image(systemName: "chevron.down")
-                .font(.compound.bodyLG)
-                .fontWeight(.semibold)
-                .foregroundColor(.compound.iconSecondary)
-                .padding(13)
-                .offset(y: 1)
-                .background {
-                    Circle()
-                        .fill(Color.compound.iconOnSolidPrimary)
-                        // Intentionally using system primary colour to get white/black.
-                        .shadow(color: .primary.opacity(0.33), radius: 2.0)
-                }
-                .padding()
-        }
-        .opacity(isAtBottomAndLive ? 0.0 : 1.0)
-        .accessibilityHidden(isAtBottomAndLive)
-        .animation(.elementDefault, value: isAtBottomAndLive)
-        .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
     }
     
     private var isAtBottomAndLive: Bool {

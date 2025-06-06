@@ -1286,6 +1286,7 @@
 		FCD3F2B82CAB29A07887A127 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 2B43F2AF7456567FE37270A7 /* KeychainAccess */; };
 		FCF95603F1D056B1B106A415 /* AdvancedSettingsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E2B20431F890ED64255CA1 /* AdvancedSettingsScreenViewModelProtocol.swift */; };
 		FD29471C72872F8B7580E3E1 /* KeychainControllerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C0D861FC397AC34BCF089E /* KeychainControllerMock.swift */; };
+		FD439E183A48BE871AEEFAEA /* TimelineScrollToBottomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10765FBC83B34A3BC4ADB23 /* TimelineScrollToBottomButton.swift */; };
 		FD4C21F8DA1E273DE94FCD1A /* NotificationItemProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B927CF5EF7FCCDA5EDC474B /* NotificationItemProxyProtocol.swift */; };
 		FD573B5D665824EB79EABF06 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327E3B3C58BEB0E65F4CF98 /* Observable.swift */; };
 		FD762761C5D0C30E6255C3D8 /* ServerConfirmationScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA4CF2F5B4F68D02E412004 /* ServerConfirmationScreenViewModelProtocol.swift */; };
@@ -2480,6 +2481,7 @@
 		E06AAD6D9D3F5833E7A5A2F9 /* RoomListFilterModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListFilterModels.swift; sourceTree = "<group>"; };
 		E0FCA0957FAA0E15A9F5579D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Untranslated.stringsdict; sourceTree = "<group>"; };
 		E0FF9CB3EFA753277291F609 /* EncryptionResetScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptionResetScreenCoordinator.swift; sourceTree = "<group>"; };
+		E10765FBC83B34A3BC4ADB23 /* TimelineScrollToBottomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineScrollToBottomButton.swift; sourceTree = "<group>"; };
 		E10DA51DBC8C7E1460DBCCBD /* UserProfileListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileListRow.swift; sourceTree = "<group>"; };
 		E157152B11E347F735C3FD6E /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tr; path = tr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		E1573D28C8A9FB6399D0EEFB /* SecureBackupLogoutConfirmationScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureBackupLogoutConfirmationScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -3354,6 +3356,7 @@
 				839E2C35DF3F9C7B54C3CE49 /* RoundedCornerShape.swift */,
 				AEB5FF7A09B79B0C6B528F7C /* SFNumberedListView.swift */,
 				A8558D41DD4B553A752C868A /* StackedAvatarsView.swift */,
+				E10765FBC83B34A3BC4ADB23 /* TimelineScrollToBottomButton.swift */,
 				16D353E10A64172D863769BF /* TombstonedAvatarImage.swift */,
 				E10DA51DBC8C7E1460DBCCBD /* UserProfileListRow.swift */,
 				AD529C89924EE32CE307F36F /* VisualListItem.swift */,
@@ -7786,6 +7789,7 @@
 				8446C2A7ECEFDA79F622725F /* TimelineReactionsView.swift in Sources */,
 				4DAEE2468669848B6C9F55B4 /* TimelineReadReceiptsView.swift in Sources */,
 				6EB46C92ECFEAE71959D91D2 /* TimelineReplyView.swift in Sources */,
+				FD439E183A48BE871AEEFAEA /* TimelineScrollToBottomButton.swift in Sources */,
 				9FBE1FB20171012260A32492 /* TimelineSenderAvatarView.swift in Sources */,
 				C4FE0E11A907C8999F92D5A8 /* TimelineStartRoomTimelineItem.swift in Sources */,
 				785613C0C092B532198EB3BB /* TimelineStartRoomTimelineView.swift in Sources */,
