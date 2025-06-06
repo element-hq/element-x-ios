@@ -219,7 +219,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                               wysiwygViewModel: wysiwygViewModel,
                                               keyCommands: composerViewModel.keyCommands)
 
-        return AnyView(RoomScreen(roomContext: roomViewModel.context,
+        return AnyView(RoomScreen(context: roomViewModel.context,
                                   timelineContext: timelineViewModel.context,
                                   composerToolbar: composerToolbar)
                 .onDisappear { [weak self] in
