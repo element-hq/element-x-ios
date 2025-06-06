@@ -36,6 +36,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 observeUserSessionChanges()
                 startSync()
                 performSettingsToAccountDataMigration(userSession: userSession)
+                Task { await appHooks.configure(with: userSession) }
             }
         }
     }
