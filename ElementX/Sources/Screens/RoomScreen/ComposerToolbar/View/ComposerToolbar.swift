@@ -13,12 +13,6 @@ import WysiwygComposer
 
 struct ComposerToolbar: View {
     @ObservedObject var context: ComposerToolbarViewModel.Context
-    
-    // Needs to be observable or the placeholder and the dictation state are not managed correctly.
-    @ObservedObject var wysiwygViewModel: WysiwygComposerViewModel
-    
-    let keyCommands: [WysiwygKeyCommand]
-    
     @FocusState private var composerFocused: Bool
     @State private var frame: CGRect = .zero
     @Environment(\.verticalSizeClass) private var verticalSizeClass
@@ -249,9 +243,9 @@ struct ComposerToolbar: View {
     private var composerView: WysiwygComposerView {
         WysiwygComposerView(placeholder: placeholder,
                             placeholderColor: .compound.textSecondary,
-                            viewModel: wysiwygViewModel,
+                            viewModel: context.viewState.wysiwygViewModel,
                             itemProviderHelper: ItemProviderHelper(),
-                            keyCommands: keyCommands) { provider in
+                            keyCommands: context.viewState.keyCommands) { provider in
             context.send(viewAction: .handlePasteOrDrop(provider: provider))
         }
     }
@@ -343,9 +337,7 @@ struct ComposerToolbar_Previews: PreviewProvider, TestablePreview {
         // Putting them is VStack allows the completion suggestion preview to work properly in tests
         VStack(spacing: 8) {
             // The mock functon can't be used in this context because it does not hold a reference to the view model, losing the combine subscriptions
-            ComposerToolbar(context: composerViewModel.context,
-                            wysiwygViewModel: wysiwygViewModel,
-                            keyCommands: [])
+            ComposerToolbar(context: composerViewModel.context)
         }
         .previewDisplayName("With Suggestions")
         
@@ -386,9 +378,7 @@ extension ComposerToolbar {
             model.state.composerEmpty = focused
             return model
         }
-        return ComposerToolbar(context: composerViewModel.context,
-                               wysiwygViewModel: wysiwygViewModel,
-                               keyCommands: [])
+        return ComposerToolbar(context: composerViewModel.context)
     }
     
     static func textWithVoiceMessage(focused: Bool = true) -> ComposerToolbar {
@@ -405,9 +395,7 @@ extension ComposerToolbar {
             model.state.composerEmpty = focused
             return model
         }
-        return ComposerToolbar(context: composerViewModel.context,
-                               wysiwygViewModel: wysiwygViewModel,
-                               keyCommands: [])
+        return ComposerToolbar(context: composerViewModel.context)
     }
     
     static func voiceMessageRecordingMock() -> ComposerToolbar {
@@ -424,9 +412,7 @@ extension ComposerToolbar {
             model.state.composerMode = .recordVoiceMessage(state: AudioRecorderState())
             return model
         }
-        return ComposerToolbar(context: composerViewModel.context,
-                               wysiwygViewModel: wysiwygViewModel,
-                               keyCommands: [])
+        return ComposerToolbar(context: composerViewModel.context)
     }
     
     static func voiceMessagePreviewMock(uploading: Bool) -> ComposerToolbar {
@@ -448,9 +434,7 @@ extension ComposerToolbar {
                                                             isUploading: uploading)
             return model
         }
-        return ComposerToolbar(context: composerViewModel.context,
-                               wysiwygViewModel: wysiwygViewModel,
-                               keyCommands: [])
+        return ComposerToolbar(context: composerViewModel.context)
     }
     
     static func replyLoadingPreviewMock(isLoading: Bool) -> ComposerToolbar {
@@ -473,9 +457,7 @@ extension ComposerToolbar {
                                              eventID: "", eventContent: .message(.text(.init(body: "Hello World!")))), isThread: false)
             return model
         }
-        return ComposerToolbar(context: composerViewModel.context,
-                               wysiwygViewModel: wysiwygViewModel,
-                               keyCommands: [])
+        return ComposerToolbar(context: composerViewModel.context)
     }
     
     static func disabledPreviewMock() -> ComposerToolbar {
@@ -492,8 +474,6 @@ extension ComposerToolbar {
             model.state.canSend = false
             return model
         }
-        return ComposerToolbar(context: composerViewModel.context,
-                               wysiwygViewModel: wysiwygViewModel,
-                               keyCommands: [])
+        return ComposerToolbar(context: composerViewModel.context)
     }
 }

@@ -52,7 +52,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     private var roomViewModel: RoomScreenViewModelProtocol
     private var timelineViewModel: TimelineViewModelProtocol
     private var composerViewModel: ComposerToolbarViewModelProtocol
-    private var wysiwygViewModel: WysiwygComposerViewModel
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -90,11 +89,11 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                               emojiProvider: parameters.emojiProvider,
                                               timelineControllerFactory: parameters.timelineControllerFactory,
                                               clientProxy: parameters.clientProxy)
-
-        wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
-                                                    maxCompressedHeight: ComposerConstant.maxHeight,
-                                                    maxExpandedHeight: ComposerConstant.maxHeight,
-                                                    parserStyle: .elementX)
+        
+        let wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
+                                                        maxCompressedHeight: ComposerConstant.maxHeight,
+                                                        maxExpandedHeight: ComposerConstant.maxHeight,
+                                                        parserStyle: .elementX)
         let composerViewModel = ComposerToolbarViewModel(initialText: parameters.sharedText,
                                                          roomProxy: parameters.roomProxy,
                                                          wysiwygViewModel: wysiwygViewModel,
@@ -215,9 +214,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        let composerToolbar = ComposerToolbar(context: composerViewModel.context,
-                                              wysiwygViewModel: wysiwygViewModel,
-                                              keyCommands: composerViewModel.keyCommands)
+        let composerToolbar = ComposerToolbar(context: composerViewModel.context)
 
         return AnyView(RoomScreen(context: roomViewModel.context,
                                   timelineContext: timelineViewModel.context,
