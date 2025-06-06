@@ -43,7 +43,6 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     private let viewModel: ThreadTimelineScreenViewModelProtocol
     private let timelineViewModel: TimelineViewModelProtocol
     private var composerViewModel: ComposerToolbarViewModelProtocol
-    private var wysiwygViewModel: WysiwygComposerViewModel
     
     private var cancellables = Set<AnyCancellable>()
  
@@ -70,10 +69,10 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                                               timelineControllerFactory: parameters.timelineControllerFactory,
                                               clientProxy: parameters.clientProxy)
         
-        wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
-                                                    maxCompressedHeight: ComposerConstant.maxHeight,
-                                                    maxExpandedHeight: ComposerConstant.maxHeight,
-                                                    parserStyle: .elementX)
+        let wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
+                                                        maxCompressedHeight: ComposerConstant.maxHeight,
+                                                        maxExpandedHeight: ComposerConstant.maxHeight,
+                                                        parserStyle: .elementX)
         
         #warning("Drafts are not handled and they can't be without rust side changes")
         
@@ -144,9 +143,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        let composerToolbar = ComposerToolbar(context: composerViewModel.context,
-                                              wysiwygViewModel: wysiwygViewModel,
-                                              keyCommands: composerViewModel.keyCommands)
+        let composerToolbar = ComposerToolbar(context: composerViewModel.context)
         
         return AnyView(ThreadTimelineScreen(context: viewModel.context,
                                             timelineContext: timelineViewModel.context,
