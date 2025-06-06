@@ -220,6 +220,7 @@
 		27FEF0F40750465195C9D6D6 /* RoomSelectionScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9D191A81FFB0C72CE73E77 /* RoomSelectionScreenModels.swift */; };
 		281BED345D59A9A6A99E9D98 /* UNNotificationContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE148A4FFEE853C5A281500C /* UNNotificationContent.swift */; };
 		2835FD52F3F618D07F799B3D /* Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7310D8DFE01AF45F0689C3AA /* Publisher.swift */; };
+		288408E6151D7BD3EBAA073A /* RoomScreenHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = B343C5255FB408DDE853CFDF /* RoomScreenHook.swift */; };
 		28AB1614E749D1147A2AC6C2 /* CreateRoomScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2214C32EA81FA9168D923D4C /* CreateRoomScreenTests.swift */; };
 		292827744227DF61C930BDDB /* CreateRoomScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB0D6CB491777E7FC6B5BA12 /* CreateRoomScreen.swift */; };
 		29491EE7AE37E239E839C5A3 /* LocationSharingScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEBF0E59F25E842EDB6FD11 /* LocationSharingScreenModels.swift */; };
@@ -2261,6 +2262,7 @@
 		B2E7C987AE5DC9087BB19F7D /* MediaUploadPreviewScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaUploadPreviewScreenModels.swift; sourceTree = "<group>"; };
 		B2EAFFD44F81F86012D6EC27 /* AudioRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRoomTimelineView.swift; sourceTree = "<group>"; };
 		B3005886F00029F058DB62BE /* StartChatScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartChatScreenCoordinator.swift; sourceTree = "<group>"; };
+		B343C5255FB408DDE853CFDF /* RoomScreenHook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScreenHook.swift; sourceTree = "<group>"; };
 		B383DCD3DCB19E00FD478A5F /* ConfirmationDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationDialog.swift; sourceTree = "<group>"; };
 		B4005D82E9D27BAF006A8FE1 /* AppLockScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockScreenViewModel.swift; sourceTree = "<group>"; };
 		B40233F2989AD49906BB310D /* RoomPollsHistoryScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPollsHistoryScreenViewModelTests.swift; sourceTree = "<group>"; };
@@ -3227,6 +3229,7 @@
 				3865AD7B7249C939D7C69C33 /* CertificateValidatorHook.swift */,
 				7AC0CD1CAFD3F8B057F9AEA5 /* ClientBuilderHook.swift */,
 				8B89D6C760E8CAE29CA28FB1 /* CompoundHook.swift */,
+				B343C5255FB408DDE853CFDF /* RoomScreenHook.swift */,
 			);
 			path = Hooks;
 			sourceTree = "<group>";
@@ -7596,6 +7599,7 @@
 				C55A44C99F64A479ABA85B46 /* RoomScreen.swift in Sources */,
 				A851635B3255C6DC07034A12 /* RoomScreenCoordinator.swift in Sources */,
 				E8C65C19F7C40EE545172DD6 /* RoomScreenFooterView.swift in Sources */,
+				288408E6151D7BD3EBAA073A /* RoomScreenHook.swift in Sources */,
 				352C439BE0F75E101EF11FB1 /* RoomScreenModels.swift in Sources */,
 				7BB31E67648CF32D2AB5E502 /* RoomScreenViewModel.swift in Sources */,
 				617624A97BDBB75ED3DD8156 /* RoomScreenViewModelProtocol.swift in Sources */,

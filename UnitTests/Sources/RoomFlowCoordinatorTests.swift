@@ -367,6 +367,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
                                                         ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                         appMediator: AppMediatorMock.default,
                                                         appSettings: ServiceLocator.shared.settings,
+                                                        appHooks: AppHooks(),
                                                         analytics: ServiceLocator.shared.analytics,
                                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }

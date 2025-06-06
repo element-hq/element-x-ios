@@ -57,6 +57,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
+         appHooks: AppHooks,
          analyticsService: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
@@ -69,16 +70,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.initialSelectedPinnedEventID = initialSelectedPinnedEventID
         pinnedEventStringBuilder = .pinnedEventStringBuilder(userID: roomProxy.ownUserID)
 
-        super.init(initialViewState: .init(roomTitle: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
-                                           roomAvatar: roomProxy.infoPublisher.value.avatar,
-                                           hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
-                                           hasSuccessor: roomProxy.infoPublisher.value.successor != nil,
-                                           bindings: .init()),
+        let viewState = RoomScreenViewState(roomTitle: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
+                                            roomAvatar: roomProxy.infoPublisher.value.avatar,
+                                            hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
+                                            hasSuccessor: roomProxy.infoPublisher.value.successor != nil)
+        super.init(initialViewState: appHooks.roomScreenHook.update(viewState),
                    mediaProvider: mediaProvider)
         
         Task {
             await handleRoomInfoUpdate(roomProxy.infoPublisher.value)
-            
             await updateVerificationBadge()
         }
         
@@ -205,7 +205,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .receive(on: DispatchQueue.main)
             .sink { [weak self] ongoingCallRoomID in
                 guard let self else { return }
-                state.shouldShowCallButton = ongoingCallRoomID != roomProxy.id
+                state.isParticipatingInOngoingCall = ongoingCallRoomID == roomProxy.id
             }
             .store(in: &cancellables)
         
@@ -430,6 +430,7 @@ extension RoomScreenViewModel {
                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                             appMediator: AppMediatorMock.default,
                             appSettings: ServiceLocator.shared.settings,
+                            appHooks: AppHooks(),
                             analyticsService: ServiceLocator.shared.analytics,
                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }

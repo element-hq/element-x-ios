@@ -271,6 +271,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -291,6 +292,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -311,6 +313,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -331,6 +334,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -354,6 +358,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -377,6 +382,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -400,6 +406,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -424,6 +431,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -447,6 +455,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -469,6 +478,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -505,6 +515,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -528,6 +539,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
@@ -551,6 +563,7 @@ class MockScreen: Identifiable {
                                                              ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
+                                                             appHooks: AppHooks(),
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
                                                              timelineControllerFactory: TimelineControllerFactoryMock(.init()))
             let coordinator = RoomScreenCoordinator(parameters: parameters)
