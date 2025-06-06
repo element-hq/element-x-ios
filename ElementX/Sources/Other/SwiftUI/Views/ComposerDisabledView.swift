@@ -15,5 +15,6 @@ struct ComposerDisabledView: View {
             .foregroundStyle(.compound.textDisabled)
             .multilineTextAlignment(.center)
             .padding(.vertical, 10) // Matches the MessageComposerStyleModifier
+            .padding(.bottom, 12)
     }
 }
