@@ -12,7 +12,6 @@ struct ThreadTimelineScreen: View {
     @ObservedObject private var context: ThreadTimelineScreenViewModelType.Context
     @ObservedObject private var timelineContext: TimelineViewModelType.Context
     @ObservedObject private var composerToolbarContext: ComposerToolbarViewModelType.Context
-    @State private var dragOver = false
     private let composerToolbar: ComposerToolbar
     
     init(context: ThreadTimelineScreenViewModelType.Context,
@@ -52,15 +51,6 @@ struct ThreadTimelineScreen: View {
                     .environment(\.timelineContext, timelineContext)
                     // Make sure the reply header honours the hideTimelineMedia setting too.
                     .environment(\.shouldAutomaticallyLoadImages, !timelineContext.viewState.hideTimelineMedia)
-            }
-            .onDrop(of: ["public.item", "public.file-url"], isTargeted: $dragOver) { providers -> Bool in
-                guard let provider = providers.first,
-                      provider.isSupportedForPasteOrDrop else {
-                    return false
-                }
-                
-                timelineContext.send(viewAction: .handlePasteOrDrop(provider: provider))
-                return true
             }
     }
     

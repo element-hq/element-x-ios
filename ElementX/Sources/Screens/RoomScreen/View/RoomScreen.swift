@@ -13,7 +13,6 @@ struct RoomScreen: View {
     @ObservedObject private var context: RoomScreenViewModelType.Context
     @ObservedObject private var timelineContext: TimelineViewModelType.Context
     @ObservedObject private var composerToolbarContext: ComposerToolbarViewModelType.Context
-    @State private var dragOver = false
     let composerToolbar: ComposerToolbar
 
     init(context: RoomScreenViewModelType.Context,
@@ -73,15 +72,6 @@ struct RoomScreen: View {
             .overlay { loadingIndicator }
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .track(screen: .Room)
-            .onDrop(of: ["public.item", "public.file-url"], isTargeted: $dragOver) { providers -> Bool in
-                guard let provider = providers.first,
-                      provider.isSupportedForPasteOrDrop else {
-                    return false
-                }
-                
-                timelineContext.send(viewAction: .handlePasteOrDrop(provider: provider))
-                return true
-            }
             .sentryTrace("\(Self.self)")
     }
     
