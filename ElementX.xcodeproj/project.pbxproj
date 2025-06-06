@@ -1295,6 +1295,7 @@
 		FDD5B4B616D9FF4DE3E9A418 /* QRCodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DB574F954CC2B40F7BE892 /* QRCodeScannerView.swift */; };
 		FDE47D4686BA0F86BB584633 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = CAA3B9DF998B397C9EE64E8B /* Collections */; };
 		FE4593FC2A02AAF92E089565 /* ElementAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1593DD87F974F8509BB619 /* ElementAnimations.swift */; };
+		FE578B12750E5E602D62B365 /* ComposerDisabledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEC4B431B0117BDEE697DB4A /* ComposerDisabledView.swift */; };
 		FEC03105D1BDE0F49BD7F243 /* PinnedEventsTimelineScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6572E6EF5D5F4B0C338A40 /* PinnedEventsTimelineScreenModels.swift */; };
 		FEFD5290B31FCBA6999912C8 /* RoomChangePermissionsScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2721D7B051F0159AA919DA05 /* RoomChangePermissionsScreenViewModelProtocol.swift */; };
 		FF34BF2AF731340AF9414A18 /* SwipeRightAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4552D3466B1453F287223ADA /* SwipeRightAction.swift */; };
@@ -2619,6 +2620,7 @@
 		FE1E6FAA3719E9B7A2D5510B /* FormattingToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattingToolbar.swift; sourceTree = "<group>"; };
 		FE3AB4D399D39FBD78119011 /* AuthenticationStartScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationStartScreenModels.swift; sourceTree = "<group>"; };
 		FE5CD2993048222B64C45006 /* SDKListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKListener.swift; sourceTree = "<group>"; };
+		FEC4B431B0117BDEE697DB4A /* ComposerDisabledView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerDisabledView.swift; sourceTree = "<group>"; };
 		FF720BA68256297680980481 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		FFECCE59967018204876D0A5 /* LocationMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMarkerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -3342,6 +3344,7 @@
 				D01FD1171FF40E34D707FD00 /* BigIcon.swift */,
 				07934EF08BB39353E4A94272 /* BlurEffectView.swift */,
 				8CC23C63849452BC86EA2852 /* ButtonStyle.swift */,
+				FEC4B431B0117BDEE697DB4A /* ComposerDisabledView.swift */,
 				E2776E63E02719B20758EB78 /* EditRoomAddressListRow.swift */,
 				8F4F0AB250EFA7B71FB2BDB2 /* HorizontalHighlightGradient.swift */,
 				B590BD4507D4F0A377FDE01A /* LoadableAvatarImage.swift */,
@@ -7124,6 +7127,7 @@
 				19DF5600A7F547B22DD7872A /* CompletionSuggestionService.swift in Sources */,
 				EAB3C1F0BC7F671ED8BDF82D /* CompletionSuggestionServiceProtocol.swift in Sources */,
 				16E4F1B8B9BFE1367F96DDA7 /* CompletionSuggestionView.swift in Sources */,
+				FE578B12750E5E602D62B365 /* ComposerDisabledView.swift in Sources */,
 				3AA9E878FDCFF85664AC071F /* ComposerDraftService.swift in Sources */,
 				7856DE3EA4580AE0329986EB /* ComposerDraftServiceMock.swift in Sources */,
 				CB6956565D858C523E3E3B16 /* ComposerDraftServiceProtocol.swift in Sources */,
