@@ -1,3 +1,13 @@
+## Changes in 25.06.2 (2025-06-06)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix subsequent media upload dialogue presentations  by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4176
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.06.1...release/25.06.2
+
 ## Changes in 25.06.1 (2025-06-06)
 
 ### What's Changed
