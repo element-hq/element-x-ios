@@ -1,3 +1,23 @@
+## Changes in 25.06.1 (2025-06-06)
+
+### What's Changed
+
+✨ Features
+* EC: Native switch for audio outputs/inputs and earpiece by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4136
+* Tombstoned and upgraded rooms implementation by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4169
+
+🙌 Improvements
+* Allow multiple room info updates when receiving a call before deciding the room doesn't have an active call anymore by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4171
+
+🧱 Build
+* Automatically open a PR to bump the calver by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4167
+
+Others
+* updated EC to 0.12.2 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4174
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.06.0...release/25.06.1
+
 ## Changes in 25.06.0 (2025-06-03)
 
 ### What's Changed
