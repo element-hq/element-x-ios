@@ -12,7 +12,6 @@ import WysiwygComposer
 struct RoomScreen: View {
     @ObservedObject private var context: RoomScreenViewModelType.Context
     @ObservedObject private var timelineContext: TimelineViewModelType.Context
-    @ObservedObject private var composerToolbarContext: ComposerToolbarViewModelType.Context
     let composerToolbar: ComposerToolbar
 
     init(context: RoomScreenViewModelType.Context,
@@ -21,7 +20,6 @@ struct RoomScreen: View {
         self.context = context
         self.timelineContext = timelineContext
         self.composerToolbar = composerToolbar
-        composerToolbarContext = composerToolbar.context
     }
 
     var body: some View {
@@ -48,14 +46,6 @@ struct RoomScreen: View {
                     }
                     
                     composer
-                        .padding(.bottom, composerToolbarContext.composerFormattingEnabled ? 8 : 12)
-                        .background {
-                            if composerToolbarContext.composerFormattingEnabled {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
-                                    .ignoresSafeArea()
-                            }
-                        }
                         .padding(.top, 8)
                         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
                         .environmentObject(timelineContext)
@@ -66,7 +56,6 @@ struct RoomScreen: View {
             }
             .navigationTitle(L10n.screenRoomTitle) // Hidden but used for back button text.
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarHidden(isNavigationBarHidden)
             .toolbar { toolbar }
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
@@ -147,7 +136,7 @@ struct RoomScreen: View {
         }
         .padding(.top, 16)
         .padding(.horizontal, 16)
-        .padding(.bottom, 8)
+        .padding(.bottom, 12)
         .highlight(borderColor: .compound.borderInfoSubtle,
                    primaryColor: .compound.bgInfoSubtle,
                    secondaryColor: .compound.bgCanvasDefault)
@@ -212,10 +201,6 @@ struct RoomScreen: View {
             .accessibilityLabel(L10n.a11yStartCall)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         }
-    }
-    
-    private var isNavigationBarHidden: Bool {
-        composerToolbarContext.composerFormattingEnabled && composerToolbarContext.composerExpanded && UIDevice.current.userInterfaceIdiom == .pad
     }
 }
 

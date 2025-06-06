@@ -11,7 +11,6 @@ import SwiftUI
 struct ThreadTimelineScreen: View {
     @ObservedObject private var context: ThreadTimelineScreenViewModelType.Context
     @ObservedObject private var timelineContext: TimelineViewModelType.Context
-    @ObservedObject private var composerToolbarContext: ComposerToolbarViewModelType.Context
     private let composerToolbar: ComposerToolbar
     
     init(context: ThreadTimelineScreenViewModelType.Context,
@@ -20,7 +19,6 @@ struct ThreadTimelineScreen: View {
         self.context = context
         self.timelineContext = timelineContext
         self.composerToolbar = composerToolbar
-        composerToolbarContext = composerToolbar.context
     }
         
     var body: some View {
@@ -37,14 +35,6 @@ struct ThreadTimelineScreen: View {
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composer
-                    .padding(.bottom, composerToolbarContext.composerFormattingEnabled ? 8 : 12)
-                    .background {
-                        if composerToolbarContext.composerFormattingEnabled {
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
-                                .ignoresSafeArea()
-                        }
-                    }
                     .padding(.top, 8)
                     .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
                     .environmentObject(timelineContext)
