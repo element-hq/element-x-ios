@@ -76,6 +76,16 @@ struct DeveloperOptionsScreen: View {
             }
 
             Section {
+                Toggle(isOn: $context.enableKeyShareOnInvite) {
+                    Text("Share encrypted history with new members")
+                    Text("Requires app reboot")
+                }
+            } footer: {
+                Text("When inviting a user to an encrypted room that has history visibility set to \"shared\", share encrypted history with that user, and accept encrypted history when you are invited to such a room.")
+                Text("WARNING: this feature is EXPERIMENTAL and not all security precautions are implemented. Do not enable on production accounts.")
+            }
+
+            Section {
                 TextField("Leave empty to use EC locally", text: $elementCallURLOverrideString)
                     .autocorrectionDisabled(true)
                     .autocapitalization(.none)

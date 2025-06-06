@@ -48,7 +48,8 @@ struct AuthenticationClientBuilder: AuthenticationClientBuilderProtocol {
                          slidingSync: .discover,
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks,
-                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode)
+                         enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
+                         enableKeyShareOnInvite: appSettings.enableKeyShareOnInvite)
             .sessionPaths(dataPath: sessionDirectories.dataPath,
                           cachePath: sessionDirectories.cachePath)
             .sessionPassphrase(passphrase: passphrase)

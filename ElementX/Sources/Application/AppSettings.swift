@@ -17,6 +17,7 @@ protocol CommonSettingsProtocol {
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
     var enableOnlySignedDeviceIsolationMode: Bool { get }
+    var enableKeyShareOnInvite: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
 }
 
@@ -52,6 +53,7 @@ final class AppSettings {
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
         case enableOnlySignedDeviceIsolationMode
+        case enableKeyShareOnInvite
         case knockingEnabled
         case threadsEnabled
         case developerOptionsEnabled
@@ -363,7 +365,11 @@ final class AppSettings {
     /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
     @UserPreference(key: UserDefaultsKeys.enableOnlySignedDeviceIsolationMode, defaultValue: false, storageType: .userDefaults(store))
     var enableOnlySignedDeviceIsolationMode
-    
+
+    /// Configuration to enable encrypted history sharing on invite, and accepting keys from inviters.
+    @UserPreference(key: UserDefaultsKeys.enableKeyShareOnInvite, defaultValue: false, storageType: .userDefaults(store))
+    var enableKeyShareOnInvite
+
     @UserPreference(key: UserDefaultsKeys.hideQuietNotificationAlerts, defaultValue: false, storageType: .userDefaults(store))
     var hideQuietNotificationAlerts
 }
