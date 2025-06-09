@@ -243,6 +243,17 @@ struct HomeScreenViewState: BindableState {
     
     var postLinkPreviewsMap: [String: ZLinkPreview] = [:]
     var postMediaInfoMap: [String: HomeScreenPostMediaInfo] = [:]
+    
+    var notificationsContent: [HomeScreenRoom] {
+        visibleRooms.filter {
+            switch $0.type {
+            case .placeholder, .knock:
+                return false
+            default:
+                return $0.badges.isDotShown
+            }
+        }
+    }
 }
 
 struct HomeScreenViewStateBindings {

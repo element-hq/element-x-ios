@@ -82,7 +82,7 @@ public struct ZeroListRow<Icon: View, DetailsIcon: View, CustomContent: View, Se
             LabeledContent {
                 // Note: VoiceOver label already provided.
                 Toggle("", isOn: binding)
-                    .toggleStyle(.compound)
+                    .toggleStyle(.zero)
                     .labelsHidden()
                     .padding(.vertical, -10)
             } label: {
@@ -108,7 +108,7 @@ public struct ZeroListRow<Icon: View, DetailsIcon: View, CustomContent: View, Se
                 Text(label.title ?? "")
                     .compoundTextFieldPlaceholder()
             }
-            .tint(.compound.iconAccentTertiary)
+            .tint(.zero.bgAccentRest)
             .foregroundStyle(isEnabled ? .compound.textPrimary : .compound.textDisabled)
             .listRowInsets(ZeroListRowPadding.textFieldInsets)
         case .secureField(let text):
@@ -116,13 +116,20 @@ public struct ZeroListRow<Icon: View, DetailsIcon: View, CustomContent: View, Se
                 Text(label.title ?? "")
                     .compoundTextFieldPlaceholder()
             }
-            .tint(.compound.iconAccentTertiary)
+            .tint(.zero.bgAccentRest)
             .foregroundStyle(isEnabled ? .compound.textPrimary : .compound.textDisabled)
             .listRowInsets(ZeroListRowPadding.textFieldInsets)
         
         case .custom(let content):
             content()
         }
+    }
+}
+
+public extension ToggleStyle where Self == ZeroToggleStyle {
+    /// A toggle style that applies Zero design tokens to display a Switch row within a `Form`.
+    static var zero: ZeroToggleStyle {
+        ZeroToggleStyle()
     }
 }
 

@@ -25,7 +25,7 @@ struct HomePostsContent: View {
                     context.send(viewAction: .newFeed)
                 })
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                .padding(.bottom, 60)
+                .padding(.bottom, 70)
             default:
                 EmptyView()
             }

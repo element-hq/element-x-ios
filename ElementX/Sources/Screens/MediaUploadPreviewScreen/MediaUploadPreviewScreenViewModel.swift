@@ -42,7 +42,8 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         
         super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url,
                                                                        title: title,
-                                                                       shouldShowCaptionWarning: shouldShowCaptionWarning,
+//                                                                       shouldShowCaptionWarning: shouldShowCaptionWarning,
+                                                                       shouldShowCaptionWarning: false,
                                                                        isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted))
     }
     

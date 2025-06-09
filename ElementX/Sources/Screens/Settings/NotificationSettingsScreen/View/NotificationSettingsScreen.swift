@@ -29,9 +29,9 @@ struct NotificationSettingsScreen: View {
 //                        mentionsSection
 //                    }
                     
-                    if context.viewState.showCallsSettings, context.viewState.settings?.callsEnabled != nil {
-                        callsSection
-                    }
+//                    if context.viewState.showCallsSettings, context.viewState.settings?.callsEnabled != nil {
+//                        callsSection
+//                    }
                     
                     if context.viewState.settings?.invitationsEnabled != nil {
                         additionalSettingsSection

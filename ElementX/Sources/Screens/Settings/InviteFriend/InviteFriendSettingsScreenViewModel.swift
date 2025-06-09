@@ -31,6 +31,7 @@ class InviteFriendSettingsScreenViewModel:
     }
     
     private func onInviteCopied() {
+        UIPasteboard.general.string = state.inviteSlug
         state.bindings.inviteCopied = true
         Task {
             try await Task.sleep(for: .seconds(2))

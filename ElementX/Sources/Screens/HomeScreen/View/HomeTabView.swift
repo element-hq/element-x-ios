@@ -20,6 +20,7 @@ struct HomeTabView<Content: View>: View {
     
     let tabContent: (HomeTab) -> Content
     let onTabSelected: (HomeTab) -> Void
+    let hasNewNotifications: Bool
     
     private let tabs = [
         (title: "Chat", icon: Asset.Images.homeTabChatIcon, tab: HomeTab.chat),
@@ -30,9 +31,11 @@ struct HomeTabView<Content: View>: View {
     ]
     
     init(@ViewBuilder tabContent: @escaping (HomeTab) -> Content,
-         onTabSelected: @escaping (HomeTab) -> Void) {
+         onTabSelected: @escaping (HomeTab) -> Void,
+         hasNewNotifications: Bool) {
         self.tabContent = tabContent
         self.onTabSelected = onTabSelected
+        self.hasNewNotifications = hasNewNotifications
         
 //        let appearance = UITabBarAppearance()
 //        appearance.configureWithTransparentBackground()
@@ -72,35 +75,53 @@ struct HomeTabView<Content: View>: View {
     }
     
     var customTabView: some View {
-        HStack {
-            ForEach(tabs, id: \.tab) { tabInfo in
-                Button {
-                    selectedTab = tabInfo.tab
-                    onTabSelected(tabInfo.tab)
-                } label: {
-                    Image(asset: tabInfo.icon)
-                        .resizable()
-                        .renderingMode(.template)
-                        .frame(width: 24, height: 24)
-                        .foregroundStyle(
-                            selectedTab == tabInfo.tab
-                            ? .zero.bgAccentRest
-                            : .compound.iconSecondary
-                        )
-                    .frame(maxWidth: .infinity)
+        ZStack {
+            HStack {
+                ForEach(tabs, id: \.tab) { tabInfo in
+                    Button {
+                        selectedTab = tabInfo.tab
+                        onTabSelected(tabInfo.tab)
+                    } label: {
+                        ZStack(alignment: .topTrailing) {
+                            Image(asset: tabInfo.icon)
+                                .resizable()
+                                .renderingMode(.template)
+                                .frame(width: 24, height: 24)
+                                .foregroundStyle(
+                                    selectedTab == tabInfo.tab
+                                    ? .zero.bgAccentRest
+                                    : .compound.iconSecondary
+                                )
+                            
+                            if hasNewNotifications, tabInfo.tab == HomeTab.notifications {
+                                Circle()
+                                    .fill(.red)
+                                    .frame(width: 8, height: 8)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
                 }
             }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 24)
+                    .fill(.thinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+                    )
+                    .padding(.horizontal)
+                    .shadow(radius: 5)
+            )
+            .padding(.bottom, 16)
         }
-        .padding()
         .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.thinMaterial)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 24)
-                        .stroke(Color.gray.opacity(0.2), lineWidth: 1)
-                )
-                .padding(.horizontal)
-                .shadow(radius: 5)
+            LinearGradient(
+                colors: [.clear, .clear, .black],
+                startPoint: .top,
+                endPoint: .bottom
+            )
         )
     }
 }

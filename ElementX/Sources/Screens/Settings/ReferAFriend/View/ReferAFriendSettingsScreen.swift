@@ -15,7 +15,7 @@ struct ReferAFriendSettingsScreen: View {
         Form {
             ZeroListRow(kind: .custom {
                 ZStack {
-                    VStack(alignment: .center) {
+                    VStack(alignment: .center, spacing: 0) {
                         Image(asset: Asset.Images.referAFriendImage)
                         
                         VStack {
@@ -56,7 +56,6 @@ struct ReferAFriendSettingsScreen: View {
                                     .padding(.vertical, 8)
                             }
                         }
-                        .offset(y: -40)
                     }
                     .frame(maxWidth: .infinity)
                     
@@ -66,6 +65,7 @@ struct ReferAFriendSettingsScreen: View {
                 }
             })
         }
+        .ignoresSafeArea()
         .zeroList()
     }
     
@@ -118,6 +118,7 @@ struct ReferAFriendSettingsScreen: View {
                         .fill(.zero.bgAccentRest)
                 )
         }
+        .padding(.bottom, 24)
     }
     
     var referralCodeCopiedView: some View {
@@ -163,7 +164,8 @@ private struct ReferAFriendBenefitRow: View {
                 .frame(width: 20, height: 20)
         }
         .frame(maxWidth: .infinity)
-        .padding(12)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
         .background(.compound.bgCanvasDisabled)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .padding(.vertical, 2)
@@ -175,7 +177,7 @@ private struct BottomInfoBox: View {
     let description: String
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             Text(title)
                 .font(.zero.bodySM)
                 .foregroundColor(.compound.textSecondary)
@@ -185,7 +187,7 @@ private struct BottomInfoBox: View {
                 .foregroundColor(.zero.bgAccentRest)
         }
         .frame(maxWidth: .infinity)
-        .padding()
+        .padding(.vertical, 10)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay {
             RoundedRectangle(cornerRadius: 12)

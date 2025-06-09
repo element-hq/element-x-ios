@@ -29,7 +29,7 @@ struct HomeScreenContent: View {
                     context.send(viewAction: .startChat)
                 })
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                .padding(.bottom, 60)
+                .padding(.bottom, 70)
             default:
                 EmptyView()
             }

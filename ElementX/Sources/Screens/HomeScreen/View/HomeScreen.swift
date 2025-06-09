@@ -39,7 +39,8 @@ struct HomeScreen: View {
                     },
                     onTabSelected: { tab in
                         selectedTab = tab
-                    }
+                    },
+                    hasNewNotifications: !context.viewState.notificationsContent.isEmpty
                 )
             }
         }

@@ -19,36 +19,52 @@ struct SettingsScreen: View {
     }
     
     var body: some View {
-        Form {
-            userSection
+        VStack(alignment: .trailing, spacing: 0) {
+            Button {
+                context.send(viewAction: .close)
+            } label: {
+                CompoundIcon(\.close)
+            }
+            .padding()
+            .accessibilityIdentifier(A11yIdentifiers.settingsScreen.done)
             
-            zeroMenuSection
-            
-            //            manageMyAppSection
-            
-            //            if !shouldHideManageAccountSection {
-            //                manageAccountSection
-            //            }
-            //
-            //            generalSection
-            //
-            //            Section {
-            //                ZeroListRow(label: .default(title: "Advanced Settings",
-            //                                        icon: \.code),
-            //                        kind: .navigationLink {
-            //                            context.send(viewAction: .developerOptions)
-            //                        })
-            //                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
-            //            }
-            
-            //            signOutSection
-            
-            //            if context.viewState.showDeveloperOptions {
-            //                developerOptionsSection
-            //            }
+            Form {
+                userSection
+                
+                zeroMenuSection
+            }
         }
         .zeroList()
-        .toolbar { toolbar }
+//        Form {
+//            userSection
+//            
+//            zeroMenuSection
+//            
+//            //            manageMyAppSection
+//            
+//            //            if !shouldHideManageAccountSection {
+//            //                manageAccountSection
+//            //            }
+//            //
+//            //            generalSection
+//            //
+//            //            Section {
+//            //                ZeroListRow(label: .default(title: "Advanced Settings",
+//            //                                        icon: \.code),
+//            //                        kind: .navigationLink {
+//            //                            context.send(viewAction: .developerOptions)
+//            //                        })
+//            //                        .accessibilityIdentifier(A11yIdentifiers.settingsScreen.developerOptions)
+//            //            }
+//            
+//            //            signOutSection
+//            
+//            //            if context.viewState.showDeveloperOptions {
+//            //                developerOptionsSection
+//            //            }
+//        }
+//        .zeroList()
+//        .toolbar { toolbar }
     }
     
     private var userSection: some View {
@@ -88,22 +104,22 @@ struct SettingsScreen: View {
     
     private var zeroMenuSection: some View {
         Section {
-            ZeroListRow(kind: .custom({
-                HorizontalDivider()
-            }))
-            
             /// User Rewards
             ZeroListRow(kind: .custom {
-                Button {
-                    context.send(viewAction: .rewards)
-                } label: {
-                    userRewardsView
+                VStack {
+                    HorizontalDivider()
+                        .padding(.vertical, 8)
+                    
+                    Button {
+                        context.send(viewAction: .rewards)
+                    } label: {
+                        userRewardsView
+                    }
+                    
+                    HorizontalDivider()
+                        .padding(.vertical, 8)
                 }
             })
-            
-            ZeroListRow(kind: .custom({
-                HorizontalDivider()
-            }))
             
             /// Refer A Friend
             ZeroListRow(label: .plain(title: "Refer a Friend"),
@@ -144,10 +160,6 @@ struct SettingsScreen: View {
                 context.send(viewAction: .logout)
             })
             .accessibilityIdentifier(A11yIdentifiers.settingsScreen.logout)
-            
-            ZeroListRow(kind: .custom({
-                HorizontalDivider()
-            }))
         } footer: {
             versionSection
         }
@@ -346,8 +358,10 @@ struct SettingsScreen: View {
     
     private var versionSection: some View {
         VStack(spacing: 0) {
+            HorizontalDivider()
+            
             Image(asset: Asset.Images.zeroLogoMark)
-                .padding(.vertical, 8)
+                .padding(.vertical, 10)
             
             versionText
                 .frame(maxWidth: .infinity)

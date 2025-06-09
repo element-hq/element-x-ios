@@ -36,14 +36,7 @@ struct HomeNotificationsContent: View {
                     HomeNotificationsEmptyView()
                 case .rooms:
                     LazyVStack(spacing: 0) {
-                        let roomsWithNotifications = context.viewState.visibleRooms.filter {
-                            switch $0.type {
-                            case .placeholder, .knock:
-                                return false
-                            default:
-                                return $0.badges.isDotShown
-                            }
-                        }
+                        let roomsWithNotifications = context.viewState.notificationsContent
                         Section {
                             if roomsWithNotifications.isEmpty {
                                 HomeNotificationsEmptyView()

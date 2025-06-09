@@ -1157,7 +1157,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 case .replyTapped(let reply):
                     presentFeedDetailsScreen(reply, feedUpdatedProtocol: feedUpdatedProtocol, showSheetCoodinator: true)
                 case .attachMedia(let attachMediaProtocol):
-                    presentMediaUploadPickerWithSource(attachMediaProtocol)
+                    presentMediaUploadPickerWithSource(attachMediaProtocol,
+                                                       stackCoordinator: NavigationStackCoordinator(),
+                                                       fromFeedDetails: true)
                 case .openPostUserProfile(let profile):
                     startUserProfileWithFeedFlow(userID: nil, profile: profile, feedUpdatedProtocol: feedUpdatedProtocol)
                 }
@@ -1172,24 +1174,28 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentCreateFeedScreen(_ createFeedProtocol: CreateFeedProtocol) {
+        let stackCoordinator = NavigationStackCoordinator()
         let coordinator = CreateFeedScreenCoordinator(parameters: .init(userSession: userSession, createFeedProtocol: createFeedProtocol))
         coordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
                 case .newPostCreated, .dismissPost:
-                    self.navigationSplitCoordinator.setDetailCoordinator(nil)
+                    self.navigationSplitCoordinator.setSheetCoordinator(nil)
                 case .attachMedia(let attachMediaProtocol):
-                    presentMediaUploadPickerWithSource(attachMediaProtocol)
+                    presentMediaUploadPickerWithSource(attachMediaProtocol, stackCoordinator: stackCoordinator, fromFeedDetails: false)
                 }
             }
             .store(in: &cancellables)
         
-        navigationSplitCoordinator.setDetailCoordinator(coordinator)
+        stackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator)
     }
     
-    private func presentMediaUploadPickerWithSource(_ attachMediaProtocol: FeedMediaSelectedProtocol) {
-        let stackCoordinator = NavigationStackCoordinator()
+    private func presentMediaUploadPickerWithSource(_ attachMediaProtocol: FeedMediaSelectedProtocol,
+                                                    stackCoordinator: NavigationStackCoordinator,
+                                                    fromFeedDetails: Bool) {
 
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                   source: .photoLibrary,
@@ -1199,14 +1205,27 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             switch action {
             case .cancel:
-                navigationSplitCoordinator.setSheetCoordinator(nil)
+                if fromFeedDetails {
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                } else {
+                    stackCoordinator.pop()
+                }
+                stackCoordinator.pop()
             case .selectMediaAtURL(let url):
                 attachMediaProtocol.onMediaSelected(media: url)
-                navigationSplitCoordinator.setSheetCoordinator(nil)
+                if fromFeedDetails {
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                } else {
+                    stackCoordinator.pop()
+                }
             }
         }
-        stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
-        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator)
+        if fromFeedDetails {
+            stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
+            navigationSplitCoordinator.setSheetCoordinator(stackCoordinator)
+        } else {
+            stackCoordinator.push(mediaPickerCoordinator)
+        }
     }
     
     private func startUserProfileWithFeedFlow(userID: String?, profile: ZPostUserProfile?, feedUpdatedProtocol: FeedDetailsUpdatedProtocol?) {
