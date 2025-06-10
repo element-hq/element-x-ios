@@ -263,6 +263,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks(),
                                             analyticsService: ServiceLocator.shared.analytics,
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
         self.viewModel = viewModel
