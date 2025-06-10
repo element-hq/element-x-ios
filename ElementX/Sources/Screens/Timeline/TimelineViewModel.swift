@@ -517,6 +517,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     state.bindings.debugInfo = debugInfo
                 case .viewInRoomTimeline(let eventID):
                     actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
+                case .displayThread(let itemID):
+                    actionsSubject.send(.displayThread(itemID: itemID))
                 }
             }
             .store(in: &cancellables)
@@ -529,6 +531,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         appSettings.$viewSourceEnabled
             .weakAssign(to: \.state.isViewSourceEnabled, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$threadsEnabled
+            .weakAssign(to: \.state.areThreadsEnabled, on: self)
             .store(in: &cancellables)
         
         clientProxy.timelineMediaVisibilityPublisher
