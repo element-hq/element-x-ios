@@ -64,12 +64,19 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         mentionBuilder = MentionBuilder()
         attributedStringBuilder = AttributedStringBuilder(cacheKey: "Composer", mentionBuilder: mentionBuilder)
         
-        super.init(initialViewState: ComposerToolbarViewState(audioPlayerState: .init(id: .recorderPreview, title: L10n.commonVoiceMessage, duration: 0),
+        super.init(initialViewState: ComposerToolbarViewState(wysiwygViewModel: wysiwygViewModel,
+                                                              audioPlayerState: .init(id: .recorderPreview, title: L10n.commonVoiceMessage, duration: 0),
                                                               audioRecorderState: .init(),
                                                               isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                                               isLocationSharingEnabled: appSettings.mapTilerConfiguration.isEnabled,
                                                               bindings: .init()),
                    mediaProvider: mediaProvider)
+        
+        state.keyCommands = [
+            .enter { [weak self] in
+                self?.process(viewAction: .sendMessage)
+            }
+        ]
         
         roomProxy.infoPublisher
             .map(\.isEncrypted)
@@ -98,6 +105,13 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             .sink { [weak self] isEmpty in
                 self?.state.composerEmpty = isEmpty
                 self?.actionsSubject.send(.contentChanged(isEmpty: isEmpty))
+            }
+            .store(in: &cancellables)
+        
+        // Needs to be observable or the placeholder and the dictation state will not be managed correctly.
+        wysiwygViewModel.objectWillChange
+            .sink { [weak self] _ in
+                self?.context.objectWillChange.send()
             }
             .store(in: &cancellables)
         
@@ -270,14 +284,6 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         handleSaveDraft(isVolatile: false)
     }
     
-    var keyCommands: [WysiwygKeyCommand] {
-        [
-            .enter { [weak self] in
-                self?.process(viewAction: .sendMessage)
-            }
-        ]
-    }
-
     // MARK: - Private
     
     private func handleLoadDraft(_ draft: ComposerDraftProxy) {

@@ -25,6 +25,7 @@ struct RoomScreenCoordinatorParameters {
     let ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
+    let appHooks: AppHooks
     let composerDraftService: ComposerDraftServiceProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
 }
@@ -52,7 +53,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     private var roomViewModel: RoomScreenViewModelProtocol
     private var timelineViewModel: TimelineViewModelProtocol
     private var composerViewModel: ComposerToolbarViewModelProtocol
-    private var wysiwygViewModel: WysiwygComposerViewModel
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -74,6 +74,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                             ongoingCallRoomIDPublisher: parameters.ongoingCallRoomIDPublisher,
                                             appMediator: parameters.appMediator,
                                             appSettings: parameters.appSettings,
+                                            appHooks: parameters.appHooks,
                                             analyticsService: ServiceLocator.shared.analytics,
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
@@ -90,11 +91,11 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                               emojiProvider: parameters.emojiProvider,
                                               timelineControllerFactory: parameters.timelineControllerFactory,
                                               clientProxy: parameters.clientProxy)
-
-        wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
-                                                    maxCompressedHeight: ComposerConstant.maxHeight,
-                                                    maxExpandedHeight: ComposerConstant.maxHeight,
-                                                    parserStyle: .elementX)
+        
+        let wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
+                                                        maxCompressedHeight: ComposerConstant.maxHeight,
+                                                        maxExpandedHeight: ComposerConstant.maxHeight,
+                                                        parserStyle: .elementX)
         let composerViewModel = ComposerToolbarViewModel(initialText: parameters.sharedText,
                                                          roomProxy: parameters.roomProxy,
                                                          wysiwygViewModel: wysiwygViewModel,
@@ -215,12 +216,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        let composerToolbar = ComposerToolbar(context: composerViewModel.context,
-                                              wysiwygViewModel: wysiwygViewModel,
-                                              keyCommands: composerViewModel.keyCommands)
+        let composerToolbar = ComposerToolbar(context: composerViewModel.context)
 
-        return AnyView(RoomScreen(roomViewModel: roomViewModel,
-                                  timelineViewModel: timelineViewModel,
+        return AnyView(RoomScreen(context: roomViewModel.context,
+                                  timelineContext: timelineViewModel.context,
                                   composerToolbar: composerToolbar)
                 .onDisappear { [weak self] in
                     self?.composerViewModel.saveDraft()
@@ -233,21 +232,4 @@ enum ComposerConstant {
     static let maxHeight: CGFloat = 250
     static let allowedHeightRange = minHeight...maxHeight
     static let translationThreshold: CGFloat = 60
-}
-
-private extension HTMLParserStyle {
-    static let elementX = HTMLParserStyle(textColor: UIColor.label,
-                                          linkColor: UIColor.link,
-                                          codeBlockStyle: BlockStyle(backgroundColor: UIColor.compound._bgCodeBlock,
-                                                                     borderColor: UIColor.compound.borderInteractiveSecondary,
-                                                                     borderWidth: 1.0,
-                                                                     cornerRadius: 2.0,
-                                                                     padding: BlockStyle.Padding(horizontal: 10, vertical: 12),
-                                                                     type: .background),
-                                          quoteBlockStyle: BlockStyle(backgroundColor: UIColor.compound.iconTertiary,
-                                                                      borderColor: UIColor.compound.borderInteractiveSecondary,
-                                                                      borderWidth: 0.0,
-                                                                      cornerRadius: 0.0,
-                                                                      padding: BlockStyle.Padding(horizontal: 25, vertical: 12),
-                                                                      type: .side(offset: 5, width: 4)))
 }

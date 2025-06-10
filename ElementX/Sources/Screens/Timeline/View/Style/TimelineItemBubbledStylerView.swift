@@ -143,7 +143,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .onTapGesture { }
             }
             
-            if context.viewState.timelineKind != .thread, let threadSummary = timelineItem.properties.threadSummary {
+            if !context.viewState.timelineKind.isThread, let threadSummary = timelineItem.properties.threadSummary {
                 TimelineThreadSummaryView(threadSummary: threadSummary) {
                     context.send(viewAction: .displayThread(itemID: timelineItem.id))
                 }
@@ -203,7 +203,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder
     var contentWithReply: some View {
         TimelineBubbleLayout(spacing: 8) {
-            if context.viewState.timelineKind != .thread, timelineItem.properties.isThreaded {
+            if !context.viewState.timelineKind.isThread, timelineItem.properties.isThreaded {
                 ThreadDecorator()
                     .padding(.leading, 4)
                     .layoutPriority(TimelineBubbleLayout.Priority.regularText)
@@ -273,7 +273,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
     
     private var shouldShowReplyDetails: Bool {
-        !timelineItem.properties.isThreaded || (timelineItem.properties.isThreaded && context.viewState.timelineKind != .thread)
+        !timelineItem.properties.isThreaded || (timelineItem.properties.isThreaded && !context.viewState.timelineKind.isThread)
     }
     
     private var messageBubbleTopPadding: CGFloat {

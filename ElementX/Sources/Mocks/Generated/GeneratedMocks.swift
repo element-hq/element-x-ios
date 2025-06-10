@@ -18558,15 +18558,15 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
     }
     //MARK: - sendMessage
 
-    var sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingCallsCount = 0
-    var sendMessageHtmlInReplyToEventIDIntentionalMentionsCallsCount: Int {
+    var sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsUnderlyingCallsCount = 0
+    var sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingCallsCount
+                return sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingCallsCount
+                    returnValue = sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -18574,29 +18574,29 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingCallsCount = newValue
+                sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingCallsCount = newValue
+                    sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var sendMessageHtmlInReplyToEventIDIntentionalMentionsCalled: Bool {
-        return sendMessageHtmlInReplyToEventIDIntentionalMentionsCallsCount > 0
+    var sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsCalled: Bool {
+        return sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsCallsCount > 0
     }
-    var sendMessageHtmlInReplyToEventIDIntentionalMentionsReceivedArguments: (message: String, html: String?, inReplyToEventID: String?, intentionalMentions: IntentionalMentions)?
-    var sendMessageHtmlInReplyToEventIDIntentionalMentionsReceivedInvocations: [(message: String, html: String?, inReplyToEventID: String?, intentionalMentions: IntentionalMentions)] = []
+    var sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsReceivedArguments: (message: String, html: String?, threadRootEventID: String?, inReplyToEventID: String?, intentionalMentions: IntentionalMentions)?
+    var sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsReceivedInvocations: [(message: String, html: String?, threadRootEventID: String?, inReplyToEventID: String?, intentionalMentions: IntentionalMentions)] = []
 
-    var sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var sendMessageHtmlInReplyToEventIDIntentionalMentionsReturnValue: Result<Void, TimelineProxyError>! {
+    var sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsReturnValue: Result<Void, TimelineProxyError>! {
         get {
             if Thread.isMainThread {
-                return sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingReturnValue
+                return sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, TimelineProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingReturnValue
+                    returnValue = sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -18604,26 +18604,26 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingReturnValue = newValue
+                sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendMessageHtmlInReplyToEventIDIntentionalMentionsUnderlyingReturnValue = newValue
+                    sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var sendMessageHtmlInReplyToEventIDIntentionalMentionsClosure: ((String, String?, String?, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
+    var sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsClosure: ((String, String?, String?, String?, IntentionalMentions) async -> Result<Void, TimelineProxyError>)?
 
-    func sendMessage(_ message: String, html: String?, inReplyToEventID: String?, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
-        sendMessageHtmlInReplyToEventIDIntentionalMentionsCallsCount += 1
-        sendMessageHtmlInReplyToEventIDIntentionalMentionsReceivedArguments = (message: message, html: html, inReplyToEventID: inReplyToEventID, intentionalMentions: intentionalMentions)
+    func sendMessage(_ message: String, html: String?, threadRootEventID: String?, inReplyToEventID: String?, intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError> {
+        sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsCallsCount += 1
+        sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsReceivedArguments = (message: message, html: html, threadRootEventID: threadRootEventID, inReplyToEventID: inReplyToEventID, intentionalMentions: intentionalMentions)
         DispatchQueue.main.async {
-            self.sendMessageHtmlInReplyToEventIDIntentionalMentionsReceivedInvocations.append((message: message, html: html, inReplyToEventID: inReplyToEventID, intentionalMentions: intentionalMentions))
+            self.sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsReceivedInvocations.append((message: message, html: html, threadRootEventID: threadRootEventID, inReplyToEventID: inReplyToEventID, intentionalMentions: intentionalMentions))
         }
-        if let sendMessageHtmlInReplyToEventIDIntentionalMentionsClosure = sendMessageHtmlInReplyToEventIDIntentionalMentionsClosure {
-            return await sendMessageHtmlInReplyToEventIDIntentionalMentionsClosure(message, html, inReplyToEventID, intentionalMentions)
+        if let sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsClosure = sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsClosure {
+            return await sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsClosure(message, html, threadRootEventID, inReplyToEventID, intentionalMentions)
         } else {
-            return sendMessageHtmlInReplyToEventIDIntentionalMentionsReturnValue
+            return sendMessageHtmlThreadRootEventIDInReplyToEventIDIntentionalMentionsReturnValue
         }
     }
     //MARK: - toggleReaction

@@ -696,6 +696,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher,
                                                     appMediator: appMediator,
                                                     appSettings: appSettings,
+                                                    appHooks: appHooks,
                                                     analytics: analytics,
                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
         

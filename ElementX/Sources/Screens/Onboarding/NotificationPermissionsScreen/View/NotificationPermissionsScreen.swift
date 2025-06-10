@@ -40,7 +40,11 @@ struct NotificationPermissionsScreen: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.compound.textSecondary)
             
-            Asset.Images.notificationsPromptGraphic.swiftUIImage.resizable().aspectRatio(contentMode: .fit)
+            Asset.Images.notificationsPromptGraphic
+                .swiftUIImage
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .accessibilityHidden(true)
         }
     }
 

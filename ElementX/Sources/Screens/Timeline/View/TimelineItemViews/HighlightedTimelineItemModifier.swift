@@ -103,8 +103,8 @@ struct HighlightedTimelineItemTimeline_Previews: PreviewProvider {
 
     static var previews: some View {
         NavigationStack {
-            RoomScreen(roomViewModel: roomViewModel,
-                       timelineViewModel: timelineViewModel,
+            RoomScreen(context: roomViewModel.context,
+                       timelineContext: timelineViewModel.context,
                        composerToolbar: ComposerToolbar.mock())
         }
         .previewDisplayName("Timeline")

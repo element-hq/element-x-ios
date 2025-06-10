@@ -36,6 +36,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 observeUserSessionChanges()
                 startSync()
                 performSettingsToAccountDataMigration(userSession: userSession)
+                Task { await appHooks.configure(with: userSession) }
             }
         }
     }
@@ -970,6 +971,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         switch await roomProxy.timeline.sendMessage(replyText,
                                                     html: nil,
+                                                    threadRootEventID: nil,
                                                     inReplyToEventID: nil,
                                                     intentionalMentions: .empty) {
         case .success:
