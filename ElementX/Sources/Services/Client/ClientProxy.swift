@@ -988,7 +988,8 @@ class ClientProxy: ClientProxyProtocol {
                 return try await .knocked(KnockedRoomProxy(room: room))
             case .joined:
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
-                                                          room: room)
+                                                          room: room,
+                                                          appSettings: appSettings)
                 
                 return .joined(roomProxy)
             case .left:

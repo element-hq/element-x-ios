@@ -13,6 +13,7 @@ import UIKit
 class JoinedRoomProxy: JoinedRoomProxyProtocol {
     private let roomListService: RoomListServiceProtocol
     private let room: RoomProtocol
+    private let appSettings: AppSettings
     
     // periphery:ignore - required for instance retention in the rust codebase
     private var roomInfoObservationToken: TaskHandle?
@@ -71,13 +72,15 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     init(roomListService: RoomListServiceProtocol,
-         room: RoomProtocol) async throws {
+         room: RoomProtocol,
+         appSettings: AppSettings) async throws {
         self.roomListService = roomListService
         self.room = room
+        self.appSettings = appSettings
         
         infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo()))
         
-        timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live,
+        timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live(hideThreadedEvents: appSettings.threadsEnabled),
                                                                                                          filter: .eventTypeFilter(filter: excludedEventsFilter),
                                                                                                          internalIdPrefix: nil,
                                                                                                          dateDividerMode: .daily,
@@ -140,7 +143,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
         do {
-            let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .event(eventId: eventID, numContextEvents: numberOfEvents),
+            let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .event(eventId: eventID,
+                                                                                                          numContextEvents: numberOfEvents,
+                                                                                                          hideThreadedEvents: appSettings.threadsEnabled),
                                                                                             filter: .all,
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily,
@@ -190,8 +195,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                  presentation: TimelineKind.MediaPresentation) async -> Result<any TimelineProxyProtocol, RoomProxyError> {
         do {
             let rustFocus: MatrixRustSDK.TimelineFocus = switch focus {
-            case .live: .live
-            case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100)
+            case .live: .live(hideThreadedEvents: appSettings.threadsEnabled)
+            case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100, hideThreadedEvents: appSettings.threadsEnabled)
             case .thread(let eventID): .thread(rootEventId: eventID, numEvents: 20)
             case .pinned: .pinnedEvents(maxEventsToLoad: 100, maxConcurrentRequests: 10)
             }
