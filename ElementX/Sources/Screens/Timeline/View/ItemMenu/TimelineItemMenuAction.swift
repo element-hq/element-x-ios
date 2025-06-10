@@ -65,6 +65,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case copyPermalink
     case redact
     case reply(isThread: Bool)
+    case replyInThread
     case forward(itemID: TimelineItemIdentifier)
     case viewSource
     case report
@@ -159,6 +160,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionCopyLinkToMessage, icon: \.link)
         case .reply(let isThread):
             Label(isThread ? L10n.actionReplyInThread : L10n.actionReply, icon: \.reply)
+        case .replyInThread:
+            Label(L10n.actionReplyInThread, icon: \.threads)
         case .forward:
             Label(L10n.actionForward, icon: \.forward)
         case .redact:
