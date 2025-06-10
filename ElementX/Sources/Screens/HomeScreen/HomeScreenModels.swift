@@ -69,6 +69,7 @@ enum HomeScreenViewAction {
     
     case forceRefreshChannels
     case channelTapped(_ channel: HomeScreenChannel)
+    case setNotificationFilter(_ tab: HomeNotificationsTab)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -244,8 +245,9 @@ struct HomeScreenViewState: BindableState {
     var postLinkPreviewsMap: [String: ZLinkPreview] = [:]
     var postMediaInfoMap: [String: HomeScreenPostMediaInfo] = [:]
     
-    var notificationsContent: [HomeScreenRoom] {
-        visibleRooms.filter {
+    var notificationsContent: [HomeScreenRoom] = []
+    var hasNewNotificatios: Bool {
+        let allNotificationContent = visibleRooms.filter {
             switch $0.type {
             case .placeholder, .knock:
                 return false
@@ -253,6 +255,7 @@ struct HomeScreenViewState: BindableState {
                 return $0.badges.isDotShown
             }
         }
+        return !allNotificationContent.isEmpty
     }
 }
 

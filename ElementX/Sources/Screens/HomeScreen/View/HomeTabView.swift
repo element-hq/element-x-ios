@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 enum HomeTab: CaseIterable {
@@ -95,7 +96,7 @@ struct HomeTabView<Content: View>: View {
                             
                             if hasNewNotifications, tabInfo.tab == HomeTab.notifications {
                                 Circle()
-                                    .fill(.red)
+                                    .fill(.zero.bgAccentRest)
                                     .frame(width: 8, height: 8)
                             }
                         }

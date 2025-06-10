@@ -100,14 +100,17 @@ struct HomeNotificationsContent: View {
     
     @ViewBuilder
     private var topSection: some View {
-        if context.viewState.shouldShowFilters {
-            VStack(spacing: 0) {
-                if context.viewState.shouldShowFilters {
-                    RoomListFiltersView(state: $context.filtersState)
-                }
-            }
-            .background(Color.zero.bgCanvasDefault)
-        }
+//        if context.viewState.shouldShowFilters {
+//            VStack(spacing: 0) {
+//                if context.viewState.shouldShowFilters {
+//                    RoomListFiltersView(state: $context.filtersState)
+//                }
+//            }
+//            .background(Color.zero.bgCanvasDefault)
+//        }
+        HomeNotificationsTabView(onTabSelected: { tab in
+            context.send(viewAction: .setNotificationFilter(tab))
+        })
     }
     
     /// Often times the scroll view's content size isn't correct yet when this method is called e.g. when cancelling a search

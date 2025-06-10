@@ -8,18 +8,20 @@
 import Compound
 import SwiftUI
 
-enum HomePostsTab: CaseIterable {
-    case following
+enum HomeNotificationsTab: CaseIterable {
     case all
+    case highlighted
+    case muted
 }
 
-struct HomePostsTabView: View {
-    @State private var selectedTab: HomePostsTab = .following
-    let onTabSelected: (HomePostsTab) -> Void
+struct HomeNotificationsTabView: View {
+    @State private var selectedTab: HomeNotificationsTab = .all
+    let onTabSelected: (HomeNotificationsTab) -> Void
     
     private let tabs = [
-        (title: "Following", tab: HomePostsTab.following),
-        (title: "Everything", tab: HomePostsTab.all)
+        (title: "All", tab: HomeNotificationsTab.all),
+        (title: "Highlights", tab: HomeNotificationsTab.highlighted),
+        (title: "Muted", tab: HomeNotificationsTab.muted)
     ]
     
     var body: some View {

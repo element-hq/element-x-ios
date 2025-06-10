@@ -19,22 +19,11 @@ struct SettingsScreen: View {
     }
     
     var body: some View {
-        VStack(alignment: .trailing, spacing: 0) {
-            Button {
-                context.send(viewAction: .close)
-            } label: {
-                CompoundIcon(\.close)
-            }
-            .padding()
-            .accessibilityIdentifier(A11yIdentifiers.settingsScreen.done)
+        Form {
+            userSection
             
-            Form {
-                userSection
-                
-                zeroMenuSection
-            }
+            zeroMenuSection
         }
-        .zeroList()
 //        Form {
 //            userSection
 //            
@@ -63,8 +52,8 @@ struct SettingsScreen: View {
 //            //                developerOptionsSection
 //            //            }
 //        }
-//        .zeroList()
-//        .toolbar { toolbar }
+        .zeroList()
+        .toolbar { toolbar }
     }
     
     private var userSection: some View {

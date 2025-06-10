@@ -287,6 +287,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                            primaryZId: state.primaryZeroId,
                                            publicAddress: state.primaryZeroId)
             actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: self))
+        case .setNotificationFilter(let tab):
+            applyCustomFilterToNotificationsList(tab)
         }
     }
     
@@ -400,6 +402,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
         
         state.rooms = rooms
+        applyCustomFilterToNotificationsList(.all)
     }
     
     /// Check whether we can inform the user about potential migrations
@@ -881,5 +884,24 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 }
             }
         }
+    }
+    
+    private func applyCustomFilterToNotificationsList(_ tab: HomeNotificationsTab) {
+        let filteredNotificationContent = state.visibleRooms.filter {
+            switch $0.type {
+            case .placeholder, .knock:
+                return false
+            default:
+                switch tab {
+                case .all:
+                    return $0.badges.isDotShown
+                case .highlighted:
+                    return $0.badges.isDotShown && $0.isHighlighted
+                case .muted:
+                    return $0.badges.isDotShown && $0.badges.isMuteShown
+                }
+            }
+        }
+        state.notificationsContent = filteredNotificationContent
     }
 }
