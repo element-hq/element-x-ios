@@ -96,6 +96,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             }
         case .location(let locationMessageContent):
             return buildLocationTimelineItem(for: eventItemProxy, messageLikeContent, messageContent, locationMessageContent, isOutgoing)
+        case .gallery(let galleryMessageContent):
+            return buildGalleryTimelineItem(for: eventItemProxy, messageLikeContent, messageContent, galleryMessageContent, isOutgoing)
         case .other:
             return nil
         }
@@ -302,6 +304,29 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                    deliveryStatus: eventItemProxy.deliveryStatus,
                                                    orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                    encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+    }
+    
+    private func buildGalleryTimelineItem(for eventItemProxy: EventTimelineItemProxy,
+                                          _ messageLikeContent: MsgLikeContent,
+                                          _ messageContent: MessageContent,
+                                          _ galleryMessageContent: GalleryMessageContent,
+                                          _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+        TextRoomTimelineItem(id: eventItemProxy.id,
+                             timestamp: eventItemProxy.timestamp,
+                             isOutgoing: isOutgoing,
+                             isEditable: eventItemProxy.isEditable,
+                             canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                             shouldBoost: eventItemProxy.shouldBoost,
+                             sender: eventItemProxy.sender,
+                             content: .init(body: galleryMessageContent.body),
+                             properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
+                                               isThreaded: messageLikeContent.threadRoot != nil,
+                                               threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
+                                               isEdited: messageContent.isEdited,
+                                               reactions: buildAggregatedReactions(messageLikeContent.reactions),
+                                               deliveryStatus: eventItemProxy.deliveryStatus,
+                                               orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
+                                               encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
     }
     
     private func buildStickerTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
@@ -649,7 +674,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return .notLoaded
         case .pending:
             return .loading
-        case .ready(let senderID, let senderProfile, let content):
+        case .ready(let content, let senderID, let senderProfile):
             let sender = buildTimelineItemSender(senderID: senderID, senderProfile: senderProfile)
             
             let latestEventContent: TimelineEventContent = switch content {
@@ -858,13 +883,17 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             .video(buildVideoTimelineItemContent(content))
         case .location(let content):
             .location(buildLocationTimelineItemContent(content))
-        case .other, .none:
+        case .gallery(let content):
+            .text(.init(body: content.body))
+        case .other(_, let body):
+            .text(.init(body: body))
+        case .none:
             .text(.init(body: L10n.commonUnsupportedEvent))
         }
     }
 }
 
-private extension RepliedToEventDetails {
+private extension EmbeddedEventDetails {
     var isThreaded: Bool {
         switch self {
         case .ready(let content, _, _):

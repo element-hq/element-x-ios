@@ -723,7 +723,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func sendCallNotificationIfNeeded() async -> Result<Void, RoomProxyError> {
         do {
-            try await room.sendCallNotificationIfNeeded()
+            _ = try await room.sendCallNotificationIfNeeded()
             return .success(())
         } catch {
             MXLog.error("Failed room call notification with error: \(error)")

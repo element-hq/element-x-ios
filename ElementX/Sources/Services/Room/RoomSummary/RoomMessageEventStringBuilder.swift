@@ -64,6 +64,8 @@ struct RoomMessageEventStringBuilder {
             } else {
                 message = AttributedString(content.body)
             }
+        case .gallery(let content):
+            message = AttributedString(content.body)
         case .other(_, let body):
             message = AttributedString(body)
         }
