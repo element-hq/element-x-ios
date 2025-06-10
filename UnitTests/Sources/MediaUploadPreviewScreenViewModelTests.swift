@@ -106,16 +106,16 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
     
     private func setUpViewModel(url: URL, expectedCaption: String?) {
         timelineProxy = TimelineProxyMock(.init())
-        timelineProxy.sendAudioUrlAudioInfoCaptionRequestHandleClosure = { [weak self] _, _, caption, _ in
+        timelineProxy.sendAudioUrlAudioInfoCaptionThreadRootEventIDRequestHandleClosure = { [weak self] _, _, caption, _, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendFileUrlFileInfoCaptionRequestHandleClosure = { [weak self] _, _, caption, _ in
+        timelineProxy.sendFileUrlFileInfoCaptionThreadRootEventIDRequestHandleClosure = { [weak self] _, _, caption, _, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure = { [weak self] _, _, _, caption, _ in
+        timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionThreadRootEventIDRequestHandleClosure = { [weak self] _, _, _, caption, _, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure = { [weak self] _, _, _, caption, _ in
+        timelineProxy.sendVideoUrlThumbnailURLVideoInfoCaptionThreadRootEventIDRequestHandleClosure = { [weak self] _, _, _, caption, _, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
         
@@ -126,6 +126,7 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                                       title: "Some File",
                                                       url: url,
+                                                      threadRootEventID: nil,
                                                       shouldShowCaptionWarning: true)
     }
     

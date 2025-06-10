@@ -144,7 +144,9 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         return .success(waveformData)
     }
     
-    func sendVoiceMessage(inRoom roomProxy: JoinedRoomProxyProtocol, audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError> {
+    func sendVoiceMessage(inRoom roomProxy: JoinedRoomProxyProtocol,
+                          audioConverter: AudioConverterProtocol,
+                          threadRootEventID: String?) async -> Result<Void, VoiceMessageRecorderError> {
         guard let url = audioRecorder.audioFileURL else {
             return .failure(VoiceMessageRecorderError.missingRecordingFile)
         }
@@ -178,7 +180,8 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         
         let result = await roomProxy.timeline.sendVoiceMessage(url: oggFile,
                                                                audioInfo: audioInfo,
-                                                               waveform: waveform) { _ in }
+                                                               waveform: waveform,
+                                                               threadRootEventID: threadRootEventID) { _ in }
         
         if case .failure(let error) = result {
             MXLog.error("Failed to send the voice message. \(error)")
