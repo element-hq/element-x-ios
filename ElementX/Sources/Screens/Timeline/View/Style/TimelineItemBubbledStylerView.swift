@@ -183,7 +183,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .layoutPriority(TimelineBubbleLayout.Priority.regularText)
             }
             
-            if shouldShowReplyDetails, let replyDetails = timelineItem.properties.replyDetails {
+            if let replyDetails = timelineItem.properties.replyDetails {
                 // The rendered reply bubble with a greedy width. The custom layout prevents
                 // the infinite width from increasing the overall width of the view.
                 
@@ -210,10 +210,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .layoutPriority(TimelineBubbleLayout.Priority.regularText)
                 .cornerRadius(timelineItem.contentCornerRadius)
         }
-    }
-    
-    private var shouldShowReplyDetails: Bool {
-        !timelineItem.properties.isThreaded || (timelineItem.properties.isThreaded && !context.viewState.timelineKind.isThread)
     }
     
     private var messageBubbleTopPadding: CGFloat {
