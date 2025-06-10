@@ -21,11 +21,16 @@ struct ThreadTimelineScreenCoordinatorParameters {
 }
 
 enum ThreadTimelineScreenCoordinatorAction {
-    case dismiss
-    case displayUser(userID: String)
-    case presentLocationViewer(geoURI: GeoURI, description: String?)
-    case displayMessageForwarding(forwardingItem: MessageForwardingItem)
-    case displayRoomScreenWithFocussedPin(eventID: String)
+    case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
+    case presentMediaUploadPicker(MediaPickerScreenSource)
+    case presentMediaUploadPreviewScreen(URL)
+    case presentLocationPicker
+    case presentPollForm(mode: PollFormMode)
+    case presentLocationViewer(body: String, geoURI: GeoURI, description: String?)
+    case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
+    case presentRoomMemberDetails(userID: String)
+    case presentMessageForwarding(forwardingItem: MessageForwardingItem)
+    case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
 }
 
 final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
@@ -44,6 +49,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = ThreadTimelineScreenViewModel()
+        
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               timelineController: parameters.timelineController,
                                               mediaProvider: parameters.mediaProvider,
@@ -59,28 +65,44 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        timelineViewModel.actions.sink { [weak self] action in
-            MXLog.info("Coordinator: received timeline view model action: \(action)")
-            guard let self else { return }
-            
-            switch action {
-            case .displaySenderDetails(let userID):
-                actionsSubject.send(.displayUser(userID: userID))
-            case .displayMessageForwarding(let forwardingItem):
-                actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
-            case .displayLocation(_, let geoURI, let description):
-                actionsSubject.send(.presentLocationViewer(geoURI: geoURI, description: description))
-            case .viewInRoomTimeline(let eventID):
-                actionsSubject.send(.displayRoomScreenWithFocussedPin(eventID: eventID))
-            // These other actions will not be handled in this view
-            case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
-                 .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaPreview,
-                 .displayMediaUploadPreviewScreen, .displayResolveSendFailure, .displayThread, .composer, .hasScrolled:
-                // These actions are not handled in this coordinator
-                break
+        timelineViewModel.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+
+                switch action {
+                case .displayEmojiPicker(let itemID, let selectedEmojis):
+                    actionsSubject.send(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+                case .displayReportContent(let itemID, let senderID):
+                    actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
+                case .displayCameraPicker:
+                    actionsSubject.send(.presentMediaUploadPicker(.camera))
+                case .displayMediaPicker:
+                    actionsSubject.send(.presentMediaUploadPicker(.photoLibrary))
+                case .displayDocumentPicker:
+                    actionsSubject.send(.presentMediaUploadPicker(.documents))
+                case .displayMediaPreview(let mediaPreviewViewModel):
+                    viewModel.displayMediaPreview(mediaPreviewViewModel)
+                case .displayLocationPicker:
+                    actionsSubject.send(.presentLocationPicker)
+                case .displayPollForm(let mode):
+                    actionsSubject.send(.presentPollForm(mode: mode))
+                case .displayMediaUploadPreviewScreen(let url):
+                    actionsSubject.send(.presentMediaUploadPreviewScreen(url))
+                case .displaySenderDetails(userID: let userID):
+                    actionsSubject.send(.presentRoomMemberDetails(userID: userID))
+                case .displayMessageForwarding(let forwardingItem):
+                    actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
+                case .displayLocation(let body, let geoURI, let description):
+                    actionsSubject.send(.presentLocationViewer(body: body, geoURI: geoURI, description: description))
+                case .displayResolveSendFailure(let failure, let sendHandle):
+                    actionsSubject.send(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
+                case .displayThread, .composer, .hasScrolled, .displayRoom:
+                    break
+                case .viewInRoomTimeline:
+                    fatalError("The action: \(action) should not be sent to this coordinator")
+                }
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
     }
     
     func stop() {

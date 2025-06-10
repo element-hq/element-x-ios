@@ -185,11 +185,13 @@ class TimelineController: TimelineControllerProtocol {
                                                     sender: nil,
                                                     attachments: nil)
         
-        let avatarURL = switch roomProxy.details.avatar {
+        let avatarURL: URL? = switch roomProxy.details.avatar {
         case .room(_, _, let avatarURL):
             avatarURL
         case .heroes(let userProfiles):
             userProfiles.first?.avatarURL
+        case .tombstoned:
+            nil
         }
         
         func addPlacehoder() {
@@ -389,6 +391,7 @@ class TimelineController: TimelineControllerProtocol {
         
         let isDM = roomProxy.isDirectOneToOneRoom
         let displayName = roomProxy.infoPublisher.value.displayName
+        let hasPredecessor = roomProxy.predecessorRoom != nil
         
         var newTimelineItems = await Task.detached { [timelineItemFactory, activeTimeline] in
             var newTimelineItems = [RoomTimelineItemProtocol]()
@@ -401,6 +404,7 @@ class TimelineController: TimelineControllerProtocol {
                 let items = collapsibleChunk.compactMap { itemProxy in
                     let timelineItem = self.buildTimelineItem(for: itemProxy,
                                                               isDM: isDM,
+                                                              hasPredecessor: hasPredecessor,
                                                               roomDisplayName: displayName,
                                                               timelineItemFactory: timelineItemFactory,
                                                               activeTimeline: activeTimeline)
@@ -451,6 +455,7 @@ class TimelineController: TimelineControllerProtocol {
     
     private nonisolated func buildTimelineItem(for itemProxy: TimelineItemProxy,
                                                isDM: Bool,
+                                               hasPredecessor: Bool,
                                                roomDisplayName: String?,
                                                timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                                activeTimeline: TimelineProxyProtocol) -> RoomTimelineItemProtocol? {
@@ -481,6 +486,11 @@ class TimelineController: TimelineControllerProtocol {
             case .readMarker:
                 return ReadMarkerRoomTimelineItem(id: .virtual(uniqueID: uniqueID))
             case .timelineStart:
+                // We always display the timeline start item, if there is a predecessor room.
+                guard !hasPredecessor else {
+                    return TimelineStartRoomTimelineItem(name: roomDisplayName)
+                }
+                // If not we only display the timeline start item if this is not a DM.
                 return isDM ? nil : TimelineStartRoomTimelineItem(name: roomDisplayName)
             }
         case .unknown:

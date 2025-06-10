@@ -90,7 +90,8 @@ extension RoomSummary {
                     alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
-                    isFavourite: false)
+                    isFavourite: false,
+                    isTombstoned: false)
     }
 }
 
@@ -114,7 +115,8 @@ extension Array where Element == RoomSummary {
                     alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
-                    isFavourite: false),
+                    isFavourite: false,
+                    isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "2",
                     joinRequestType: nil,
@@ -133,7 +135,8 @@ extension Array where Element == RoomSummary {
                     alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
-                    isFavourite: false),
+                    isFavourite: false,
+                    isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "3",
                     joinRequestType: nil,
@@ -152,7 +155,8 @@ extension Array where Element == RoomSummary {
                     alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
-                    isFavourite: false),
+                    isFavourite: false,
+                    isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "4",
                     joinRequestType: nil,
@@ -171,7 +175,8 @@ extension Array where Element == RoomSummary {
                     alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
-                    isFavourite: false),
+                    isFavourite: false,
+                    isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "5",
                     joinRequestType: nil,
@@ -190,7 +195,8 @@ extension Array where Element == RoomSummary {
                     alternativeAliases: [],
                     hasOngoingCall: true,
                     isMarkedUnread: false,
-                    isFavourite: false),
+                    isFavourite: false,
+                    isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "6",
                     joinRequestType: nil,
@@ -209,7 +215,28 @@ extension Array where Element == RoomSummary {
                     alternativeAliases: [],
                     hasOngoingCall: true,
                     isMarkedUnread: false,
-                    isFavourite: false),
+                    isFavourite: false,
+                    isTombstoned: false),
+        RoomSummary(room: RoomSDKMock(),
+                    id: "7",
+                    joinRequestType: nil,
+                    name: "Tombstoned",
+                    isDirect: false,
+                    avatarURL: nil,
+                    heroes: [],
+                    activeMembersCount: 0,
+                    lastMessage: nil,
+                    lastMessageDate: .mock,
+                    unreadMessagesCount: 1,
+                    unreadMentionsCount: 0,
+                    unreadNotificationsCount: 1,
+                    notificationMode: .allMessages,
+                    canonicalAlias: nil,
+                    alternativeAliases: [],
+                    hasOngoingCall: false,
+                    isMarkedUnread: false,
+                    isFavourite: false,
+                    isTombstoned: true),
         RoomSummary(room: RoomSDKMock(),
                     id: "0",
                     joinRequestType: nil,
@@ -228,7 +255,8 @@ extension Array where Element == RoomSummary {
                     alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
-                    isFavourite: false)
+                    isFavourite: false,
+                    isTombstoned: false)
     ]
     
     static let mockRoomsWithNotificationsState: [Element] = {
@@ -280,7 +308,8 @@ extension Array where Element == RoomSummary {
                     alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
-                    isFavourite: false),
+                    isFavourite: false,
+                    isTombstoned: false),
         RoomSummary(room: RoomSDKMock(),
                     id: "someAwesomeRoomId2",
                     joinRequestType: .invite(inviter: RoomMemberProxyMock.mockCharlie),
@@ -299,6 +328,7 @@ extension Array where Element == RoomSummary {
                     alternativeAliases: [],
                     hasOngoingCall: false,
                     isMarkedUnread: false,
-                    isFavourite: false)
+                    isFavourite: false,
+                    isTombstoned: false)
     ]
 }

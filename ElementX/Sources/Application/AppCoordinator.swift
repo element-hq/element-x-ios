@@ -947,11 +947,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             ServiceLocator.shared.bugReportService.lastCrashEventID = event.eventId.sentryIdString
         }
         
-        SentrySDK.start(options: options)
+        SentrySDK.start(options: options) // Swift
+        enableSentryLogging(enabled: options.enabled) // Rust
         
-        enableSentryLogging(enabled: appSettings.analyticsConsentState == .optedIn)
-        
-        MXLog.info("SentrySDK started")
+        MXLog.info("Sentry configured (enabled: \(options.enabled))")
     }
     
     private func teardownSentry() {

@@ -13,13 +13,17 @@ enum RoomAvatar: Equatable {
     case room(id: String, name: String?, avatarURL: URL?)
     /// An avatar generated from the room's heroes.
     case heroes([UserProfileProxy])
+    /// A static avatar for a tombstoned room.
+    case tombstoned
     
     var removingAvatar: RoomAvatar {
         switch self {
         case let .room(id, name, _):
-            return .room(id: id, name: name, avatarURL: nil)
+            .room(id: id, name: name, avatarURL: nil)
         case let .heroes(users):
-            return .heroes(users.map { .init(userID: $0.userID, displayName: $0.displayName, avatarURL: nil) })
+            .heroes(users.map { .init(userID: $0.userID, displayName: $0.displayName, avatarURL: nil) })
+        case .tombstoned:
+            .tombstoned
         }
     }
 }
@@ -93,6 +97,8 @@ struct RoomAvatarImage: View {
                                     mediaProvider: mediaProvider,
                                     onTap: onAvatarTap)
             }
+        case .tombstoned:
+            TombstonedAvatarImage(avatarSize: avatarSize)
         }
     }
 }
@@ -128,6 +134,8 @@ struct RoomAvatarImage_Previews: PreviewProvider, TestablePreview {
                                              .init(userID: "@bob:server.net", displayName: "Bob", avatarURL: nil)]),
                             avatarSize: .room(on: .home),
                             mediaProvider: MediaProviderMock(configuration: .init()))
+            
+            RoomAvatarImage(avatar: .tombstoned, avatarSize: .room(on: .home), mediaProvider: MediaProviderMock(configuration: .init()))
         }
     }
 }

@@ -16,7 +16,6 @@ enum CallScreenViewModelAction {
 }
 
 struct CallScreenViewState: BindableState {
-    let messageHandler: String
     let script: String?
     var url: URL?
     
@@ -26,7 +25,6 @@ struct CallScreenViewState: BindableState {
 }
 
 struct Bindings {
-    var javaScriptMessageHandler: ((Any) -> Void)?
     var javaScriptEvaluator: ((String) async throws -> Any)?
     var requestPictureInPictureHandler: (() async -> Result<Void, CallScreenError>)?
     
@@ -39,8 +37,60 @@ enum CallScreenViewAction {
     case navigateBack
     case pictureInPictureWillStop
     case endCall
+    case mediaCapturePermissionGranted
+    case outputDeviceSelected(deviceID: String)
+    case widgetAction(message: String)
 }
 
 enum CallScreenError: Error {
     case pictureInPictureNotAvailable
+}
+
+/// Identifies each event handler used by the CallScreen webview
+///
+/// The names of the enum need to always match the name of the handlers on the webview.
+enum CallScreenJavaScriptMessageName: String, CaseIterable {
+    /// Widget actions's handler.
+    case widgetAction
+    /// Used to show the native AVRoutePickerView.
+    case showNativeOutputDevicePicker
+    /// Used to determine if the webview has selected the earpiece or not.
+    case onOutputDeviceSelect
+    
+    private var postMessageScript: String {
+        switch self {
+        case .widgetAction:
+            """
+            window.addEventListener(
+                "message",
+                (event) => {
+                    let message = {data: event.data, origin: event.origin};
+                    if (message.data.response && message.data.api == "toWidget"
+                    || !message.data.response && message.data.api == "fromWidget") {
+                        window.webkit.messageHandlers.\(rawValue).postMessage(JSON.stringify(message.data));
+                    } else {
+                        console.log("-- skipped event handling by the client because it is send from the client itself.");
+                    }
+                },
+                false,
+            );
+            """
+        case .showNativeOutputDevicePicker:
+            """
+            window.controls.\(rawValue) = () => {
+                window.webkit.messageHandlers.\(rawValue).postMessage("");
+            };
+            """
+        case .onOutputDeviceSelect:
+            """
+            window.controls.\(rawValue) = (id) => {
+                window.webkit.messageHandlers.\(rawValue).postMessage(id);
+            };
+            """
+        }
+    }
+    
+    static var allCasesInjectionScript: String {
+        allCases.map(\.postMessageScript).joined(separator: "\n")
+    }
 }

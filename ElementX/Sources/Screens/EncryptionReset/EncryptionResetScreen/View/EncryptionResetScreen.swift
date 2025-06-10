@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct EncryptionResetScreen: View {
-    @ObservedObject var context: EncryptionResetScreenViewModel.Context
+    @Bindable var context: EncryptionResetScreenViewModel.Context
     
     var body: some View {
         FullscreenDialog {

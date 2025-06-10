@@ -1,3 +1,80 @@
+## Changes in 25.06.2 (2025-06-06)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix subsequent media upload dialogue presentations  by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4176
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.06.1...release/25.06.2
+
+## Changes in 25.06.1 (2025-06-06)
+
+### What's Changed
+
+✨ Features
+* EC: Native switch for audio outputs/inputs and earpiece by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4136
+* Tombstoned and upgraded rooms implementation by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4169
+
+🙌 Improvements
+* Allow multiple room info updates when receiving a call before deciding the room doesn't have an active call anymore by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4171
+
+🧱 Build
+* Automatically open a PR to bump the calver by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4167
+
+Others
+* updated EC to 0.12.2 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4174
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.06.0...release/25.06.1
+
+## Changes in 25.06.0 (2025-06-03)
+
+### What's Changed
+
+✨ Features
+* Setup the new RustSDK sentry integration by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4145
+* Handle media previews and invite avatars through the account data by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4142
+* Adopt the new deduplicate room versions room list filter. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4160
+* Support for experimental MSC4286 to not render external payment details by @hughns in https://github.com/element-hq/element-x-ios/pull/4099
+
+🙌 Improvements
+* Fetching room tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4146
+
+🐛 Bugfixes
+* Fix a couple of crashes on macOS from a missing environment object. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4153
+
+⚠️ API Changes
+* Adopt StateStoreViewModelV2 in the remaining settings screens. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4158
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4150
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4162
+
+🧱 Build
+* Make sure UI tests are run to completion on the remaining device, even if the other one fails. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4164
+* Bump the version to 25.06 for the next release. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4165
+
+🚧 In development 🚧
+* Setup threaded timeline actions by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4157
+
+Others
+* Adopt latest timeline API changes by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4140
+* Update codecov/test-results-action action to v1.1.1 by @renovate in https://github.com/element-hq/element-x-ios/pull/4143
+* Various timeline code improvements by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4144
+* Add a developer option that hides notification alerts when a sound wouldn't be played. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4147
+* Bump the SDK to v25.05.26-2 and update the breaking changes following the RoomListItem removal by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4148
+* Update SDK to 25.05.27 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4151
+* Update the enterprise submodule by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4152
+* Updated EC and Sentry by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4154
+* Update dependency apple/swift-argument-parser to from: "1.5.1" by @renovate in https://github.com/element-hq/element-x-ios/pull/4156
+* Run the 'Prevent blocked' check whenever a PR branch is updated by @robintown in https://github.com/element-hq/element-x-ios/pull/4155
+* Update the enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4161
+* Add a placeholder association for localhost in developer mode. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4163
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.05.2...release/25.06.0
+
 ## Changes in 25.05.2 (2025-05-21)
 
 ### What's Changed

@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct NotificationSettingsScreen: View {
-    @ObservedObject var context: NotificationSettingsScreenViewModel.Context
+    @Bindable var context: NotificationSettingsScreenViewModel.Context
     
     var body: some View {
         Form {
@@ -254,14 +254,10 @@ struct NotificationSettingsScreen_Previews: PreviewProvider, TestablePreview {
 
     static var previews: some View {
         NotificationSettingsScreen(context: viewModel.context)
-            .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
-                state.settings != nil
-            })
+            .snapshotPreferences(expect: viewModel.context.observe(\.viewState.settings).map { $0 != nil }.eraseToStream())
         
         NotificationSettingsScreen(context: viewModelConfigurationMismatch.context)
-            .snapshotPreferences(expect: viewModelConfigurationMismatch.context.$viewState.map { state in
-                state.settings != nil
-            })
+            .snapshotPreferences(expect: viewModelConfigurationMismatch.context.observe(\.viewState.settings).map { $0 != nil }.eraseToStream())
             .previewDisplayName("Configuration mismatch")
     }
 }

@@ -218,7 +218,8 @@ private extension HomeScreenRoom {
                                   alternativeAliases: [],
                                   hasOngoingCall: false,
                                   isMarkedUnread: false,
-                                  isFavourite: false)
+                                  isFavourite: false,
+                                  isTombstoned: false)
         
         return .init(summary: summary, hideUnreadMessagesBadge: false)
     }
@@ -247,7 +248,8 @@ private extension HomeScreenRoom {
                                   alternativeAliases: [],
                                   hasOngoingCall: false,
                                   isMarkedUnread: false,
-                                  isFavourite: false)
+                                  isFavourite: false,
+                                  isTombstoned: false)
         
         return .init(summary: summary, hideUnreadMessagesBadge: false)
     }

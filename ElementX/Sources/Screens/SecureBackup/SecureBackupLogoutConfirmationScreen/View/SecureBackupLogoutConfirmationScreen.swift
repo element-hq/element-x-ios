@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 struct SecureBackupLogoutConfirmationScreen: View {
-    @ObservedObject var context: SecureBackupLogoutConfirmationScreenViewModel.Context
+    @Bindable var context: SecureBackupLogoutConfirmationScreenViewModel.Context
     
     var body: some View {
         FullscreenDialog {
@@ -126,26 +126,26 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
             SecureBackupLogoutConfirmationScreen(context: waitingViewModel.context)
         }
         .previewDisplayName("Waiting")
-        .snapshotPreferences(expect: waitingViewModel.context.$viewState.map { $0.mode == .waitingToStart(hasStalled: false) })
+        .snapshotPreferences(expect: waitingViewModel.context.observe(\.viewState.mode).map { $0 == .waitingToStart(hasStalled: false) }.eraseToStream())
         
         NavigationStack {
             SecureBackupLogoutConfirmationScreen(context: ongoingViewModel.context)
         }
         .previewDisplayName("Ongoing")
-        .snapshotPreferences(expect: ongoingViewModel.context.$viewState.map { $0.mode == .backupOngoing(progress: 0.5) })
+        .snapshotPreferences(expect: ongoingViewModel.context.observe(\.viewState.mode).map { $0 == .backupOngoing(progress: 0.5) }.eraseToStream())
         
         // Uses the same view model as Waiting but with a different expectation.
         NavigationStack {
             SecureBackupLogoutConfirmationScreen(context: waitingViewModel.context)
         }
         .previewDisplayName("Stalled")
-        .snapshotPreferences(expect: waitingViewModel.context.$viewState.map { $0.mode == .waitingToStart(hasStalled: true) })
+        .snapshotPreferences(expect: waitingViewModel.context.observe(\.viewState.mode).map { $0 == .waitingToStart(hasStalled: true) }.eraseToStream())
         
         NavigationStack {
             SecureBackupLogoutConfirmationScreen(context: offlineViewModel.context)
         }
         .previewDisplayName("Offline")
-        .snapshotPreferences(expect: offlineViewModel.context.$viewState.map { $0.mode == .offline })
+        .snapshotPreferences(expect: offlineViewModel.context.observe(\.viewState.mode).map { $0 == .offline }.eraseToStream())
     }
     
     static func makeViewModel(mode: SecureBackupLogoutConfirmationScreenViewMode) -> SecureBackupLogoutConfirmationScreenViewModel {

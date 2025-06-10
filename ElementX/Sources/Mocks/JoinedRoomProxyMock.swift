@@ -48,6 +48,8 @@ struct JoinedRoomProxyMockConfiguration {
     var membership: Membership = .joined
     
     var isVisibleInPublicDirectory = false
+    var predecessor: PredecessorRoom?
+    var successor: SuccessorRoom?
 }
 
 extension JoinedRoomProxyMock {
@@ -137,6 +139,8 @@ extension JoinedRoomProxyMock {
         clearDraftReturnValue = .success(())
         sendTypingNotificationIsTypingReturnValue = .success(())
         isVisibleInRoomDirectoryReturnValue = .success(configuration.isVisibleInPublicDirectory)
+        
+        predecessorRoom = configuration.predecessor
     }
 }
 
@@ -152,7 +156,7 @@ extension RoomInfo {
                   isDirect: configuration.isDirect,
                   isPublic: configuration.isPublic,
                   isSpace: configuration.isSpace,
-                  tombstone: nil,
+                  successorRoom: configuration.successor,
                   isFavourite: false,
                   canonicalAlias: configuration.canonicalAlias,
                   alternativeAliases: configuration.alternativeAliases,

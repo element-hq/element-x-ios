@@ -38,6 +38,10 @@ struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
 
     /// The room's avatar info for use in a ``RoomAvatarImage``.
     var avatar: RoomAvatar {
+        //guard successor == nil else {
+        //    return .tombstoned
+        //}
+        
         if isDirect, heroes.count == 1 {
             return .heroes(heroes.map(UserProfileProxy.init))
         }
@@ -67,7 +71,7 @@ struct RoomInfoProxy: BaseRoomInfoProxyProtocol {
     }
     
     var isSpace: Bool { roomInfo.isSpace }
-    var tombstoneInfo: RoomTombstoneInfo? { roomInfo.tombstone }
+    var successor: SuccessorRoom? { roomInfo.successorRoom }
     var isFavourite: Bool { roomInfo.isFavourite }
     var canonicalAlias: String? { roomInfo.canonicalAlias }
     var alternativeAliases: [String] { roomInfo.alternativeAliases }

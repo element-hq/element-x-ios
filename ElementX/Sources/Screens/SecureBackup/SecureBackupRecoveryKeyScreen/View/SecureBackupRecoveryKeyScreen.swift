@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 struct SecureBackupRecoveryKeyScreen: View {
-    @ObservedObject var context: SecureBackupRecoveryKeyScreenViewModel.Context
+    @Bindable var context: SecureBackupRecoveryKeyScreenViewModel.Context
     @FocusState private var focused
     private let textFieldIdentifier = "textFieldIdentifier"
     
@@ -260,9 +260,7 @@ struct SecureBackupRecoveryKeyScreen_Previews: PreviewProvider, TestablePreview 
         NavigationStack {
             SecureBackupRecoveryKeyScreen(context: setupViewModel.context)
         }
-        .snapshotPreferences(expect: setupViewModel.context.$viewState.map { state in
-            state.recoveryKey != nil
-        })
+        .snapshotPreferences(expect: setupViewModel.context.observe(\.viewState.recoveryKey).map { $0 != nil }.eraseToStream())
         .previewDisplayName("Set up")
         
         NavigationStack {

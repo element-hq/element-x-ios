@@ -72,6 +72,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         super.init(initialViewState: .init(roomTitle: roomProxy.infoPublisher.value.displayName ?? roomProxy.id,
                                            roomAvatar: roomProxy.infoPublisher.value.avatar,
                                            hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
+                                           hasSuccessor: roomProxy.infoPublisher.value.successor != nil,
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
         
@@ -116,6 +117,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task { await markAllKnocksAsSeen() }
         case .viewKnockRequests:
             actionsSubject.send(.displayKnockRequests)
+        case .displaySuccessorRoom:
+            guard let successorID = roomProxy.infoPublisher.value.successor?.roomId else { return }
+            actionsSubject.send(.displayRoom(roomID: successorID))
         }
     }
     
@@ -328,6 +332,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func handleRoomInfoUpdate(_ roomInfo: RoomInfoProxy) async {
+        state.hasSuccessor = roomInfo.successor != nil
+        
         let pinnedEventIDs = roomInfo.pinnedEventIDs
         // Only update the loading state of the banner
         if state.pinnedEventsBannerState.isLoading {

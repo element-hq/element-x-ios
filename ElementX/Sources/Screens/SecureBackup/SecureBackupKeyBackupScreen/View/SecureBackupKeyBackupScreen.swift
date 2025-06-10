@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 struct SecureBackupKeyBackupScreen: View {
-    @ObservedObject var context: SecureBackupKeyBackupScreenViewModel.Context
+    @Bindable var context: SecureBackupKeyBackupScreenViewModel.Context
     
     var body: some View {
         FullscreenDialog {

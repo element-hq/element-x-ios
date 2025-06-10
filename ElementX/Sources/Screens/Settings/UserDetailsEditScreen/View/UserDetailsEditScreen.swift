@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct UserDetailsEditScreen: View {
-    @ObservedObject var context: UserDetailsEditScreenViewModel.Context
+    @Bindable var context: UserDetailsEditScreenViewModel.Context
     @FocusState private var focus: Bool
         
     var body: some View {

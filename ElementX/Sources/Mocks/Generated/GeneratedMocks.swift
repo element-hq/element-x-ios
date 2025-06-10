@@ -8353,6 +8353,8 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         set(value) { underlyingTimeline = value }
     }
     var underlyingTimeline: TimelineProxyProtocol!
+    var predecessorRoom: PredecessorRoom?
+    var successorRoom: SuccessorRoom?
     var roomMemberPublisher: CurrentValuePublisher<RoomMemberProxyProtocol?, Never> {
         get { return underlyingRoomMemberPublisher }
         set(value) { underlyingRoomMemberPublisher = value }

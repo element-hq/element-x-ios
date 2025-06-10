@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias BugReportScreenViewModelType = StateStoreViewModel<BugReportScreenViewState, BugReportScreenViewAction>
+typealias BugReportScreenViewModelType = StateStoreViewModelV2<BugReportScreenViewState, BugReportScreenViewAction>
 
 class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenViewModelProtocol {
     private let bugReportService: BugReportServiceProtocol

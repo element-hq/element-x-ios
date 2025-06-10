@@ -104,6 +104,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
                                                        areThreadsEnabled: appSettings.threadsEnabled,
                                                        hideTimelineMedia: hideTimelineMedia,
+                                                       hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
                                                        mapTilerConfiguration: appSettings.mapTilerConfiguration,
@@ -211,6 +212,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             actionsSubject.send(.hasScrolled(direction: direction))
         case .setOpenURLAction(let action):
             state.openURL = action
+        case .displayPredecessorRoom:
+            guard let predecessorID = roomProxy.predecessorRoom?.roomId else {
+                fatalError("Predecessor room should exist if this action is triggered.")
+            }
+            actionsSubject.send(.displayRoom(roomID: predecessorID))
         case .fetchLinkPreviewIfApplicable(let item):
             fetchAndUpdatedLinkPreview(for: item)
         }
@@ -1038,11 +1044,12 @@ private extension RoomInfoProxy {
 extension TimelineViewModel {
     static let mock = mock(timelineKind: .live)
     
-    static func mock(timelineKind: TimelineKind = .live, timelineController: MockTimelineController? = nil) -> TimelineViewModel {
+    static func mock(timelineKind: TimelineKind = .live, timelineController: MockTimelineController? = nil, hasPredecessor: Bool = false) -> TimelineViewModel {
         let clientProxyMock = ClientProxyMock(.init())
         clientProxyMock.roomSummaryForAliasReturnValue = .mock(id: "!room:matrix.org", name: "Room")
         clientProxyMock.roomSummaryForIdentifierReturnValue = .mock(id: "!room:matrix.org", name: "Room", canonicalAlias: "#room:matrix.org")
-        return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
+        let roomProxy = JoinedRoomProxyMock(.init(name: "Preview room", predecessor: hasPredecessor ? .init(roomId: UUID().uuidString, lastEventId: UUID().uuidString) : nil))
+        return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
                                  timelineController: timelineController ?? MockTimelineController(timelineKind: timelineKind),
                                  mediaProvider: MediaProviderMock(configuration: .init()),

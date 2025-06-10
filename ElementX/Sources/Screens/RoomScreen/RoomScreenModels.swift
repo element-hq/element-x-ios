@@ -15,6 +15,7 @@ enum RoomScreenViewModelAction: Equatable {
     case displayCall
     case removeComposerFocus
     case displayKnockRequests
+    case displayRoom(roomID: String)
 }
 
 enum RoomScreenViewAction {
@@ -26,6 +27,7 @@ enum RoomScreenViewAction {
     case acceptKnock(eventID: String)
     case dismissKnockRequests
     case viewKnockRequests
+    case displaySuccessorRoom
 }
 
 struct RoomScreenViewState: BindableState {
@@ -53,6 +55,8 @@ struct RoomScreenViewState: BindableState {
     var canBan = false
     var unseenKnockRequests: [KnockRequestInfo] = []
     var handledEventIDs: Set<String> = []
+    
+    var hasSuccessor: Bool
     
     var displayedKnockRequests: [KnockRequestInfo] {
         unseenKnockRequests.filter { !handledEventIDs.contains($0.eventID) }

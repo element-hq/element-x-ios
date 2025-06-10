@@ -615,7 +615,7 @@
 "screen_change_account_provider_subtitle" = "Käytä toista palveluntarjoajaa, kuten omaa yksityistä palvelintasi tai työpaikkaasi.";
 "screen_change_account_provider_title" = "Vaihda palveluntarjoajaa";
 "screen_change_server_error_invalid_homeserver" = "Kotipalvelimeen ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palvelimesi ylläpitäjään.";
-"screen_change_server_error_invalid_well_known" = "Sliding sync ei ole saatavilla well-known tiedostossa olevan ongelman vuoksi:\n%1$@";
+"screen_change_server_error_invalid_well_known" = "Palvelin ei ole saatavilla .well-known tiedostossa olevan ongelman vuoksi:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Valitsemasi palveluntarjoaja ei tue sliding syncia. Palvelimen päivitys tarvitaan %1$@ -sovelluksen käyttämiseen.";
 "screen_change_server_error_unauthorized_homeserver" = "%1$@ ei saa yhdistää %2$@ -palvelimeen.";
 "screen_change_server_error_unauthorized_homeserver_content" = "Tämä sovellus on määritetty sallimaan: %1$@.";
@@ -993,7 +993,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix on avoin verkko turvallista, hajautettua viestintää varten.";
 "screen_server_confirmation_message_register" = "Keskustelusi asuvat täällä — aivan kuten aivan kuten käyttäisit sähköpostipalveluntarjoajaa sähköpostiesi säilyttämiseen.";
 "screen_server_confirmation_title_login" = "Olet kirjautumassa sisään %1$@-palvelimelle";
-"screen_server_confirmation_title_picker_mode" = "Choose account provider";
+"screen_server_confirmation_title_picker_mode" = "Valitse palveluntarjoaja";
 "screen_server_confirmation_title_register" = "Olet luomassa tiliä %1$@-palvelimelle";
 "screen_session_verification_cancelled_subtitle" = "Jokin ei vaikuta oikealta. Joko pyyntö aikakatkaistiin tai hylättiin.";
 "screen_session_verification_compare_emojis_subtitle" = "Vahvista, että alla olevat emojit vastaavat toisella laitteella näkyviä emojeja.";

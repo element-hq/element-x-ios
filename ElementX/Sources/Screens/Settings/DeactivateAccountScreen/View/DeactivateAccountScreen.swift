@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct DeactivateAccountScreen: View {
-    @ObservedObject var context: DeactivateAccountScreenViewModel.Context
+    @Bindable var context: DeactivateAccountScreenViewModel.Context
     
     var body: some View {
         Form {

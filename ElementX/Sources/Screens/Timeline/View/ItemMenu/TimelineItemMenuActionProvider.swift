@@ -130,7 +130,7 @@ struct TimelineItemMenuActionProvider {
             secondaryActions = secondaryActions.filter(\.canAppearInRedacted)
         }
         
-        let isReactable = timelineKind == .live || timelineKind == .detached ? item.isReactable : false
+        let isReactable = timelineKind == .live || timelineKind == .detached || timelineKind == .thread ? item.isReactable : false
 
 //        return .init(isReactable: isPinnedEventsTimeline ? false : item.isReactable,
 //                     actions: actions,

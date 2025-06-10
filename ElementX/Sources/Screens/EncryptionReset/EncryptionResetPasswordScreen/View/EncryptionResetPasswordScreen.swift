@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 struct EncryptionResetPasswordScreen: View {
-    @ObservedObject var context: EncryptionResetPasswordScreenViewModel.Context
+    @Bindable var context: EncryptionResetPasswordScreenViewModel.Context
     @FocusState private var textFieldFocus
     
     var body: some View {

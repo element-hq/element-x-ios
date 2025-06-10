@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias DeactivateAccountScreenViewModelType = StateStoreViewModel<DeactivateAccountScreenViewState, DeactivateAccountScreenViewAction>
+typealias DeactivateAccountScreenViewModelType = StateStoreViewModelV2<DeactivateAccountScreenViewState, DeactivateAccountScreenViewAction>
 
 class DeactivateAccountScreenViewModel: DeactivateAccountScreenViewModelType, DeactivateAccountScreenViewModelProtocol {
     private let clientProxy: ClientProxyProtocol

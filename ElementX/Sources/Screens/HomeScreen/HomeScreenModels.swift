@@ -316,6 +316,16 @@ struct HomeScreenRoom: Identifiable, Equatable {
         
     let canonicalAlias: String?
     
+    let isTombstoned: Bool
+    
+    var displayedLastMessage: AttributedString? {
+        // If the room is tombstoned, show a specific message, regardless of any last message.
+        guard !isTombstoned else {
+            return AttributedString(L10n.screenRoomlistTombstonedRoomDescription)
+        }
+        return lastMessage
+    }
+    
     let unreadNotificationsCount: UInt
     
     var isAChannel: Bool {
@@ -335,6 +345,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        lastMessage: placeholderLastMessage,
                        avatar: .room(id: "", name: "", avatarURL: nil),
                        canonicalAlias: nil,
+                       isTombstoned: false,
                        unreadNotificationsCount: 0)
     }
 }
@@ -454,6 +465,7 @@ extension HomeScreenRoom {
                   lastMessage: summary.lastMessage,
                   avatar: summary.avatar,
                   canonicalAlias: summary.canonicalAlias,
+                  isTombstoned: summary.isTombstoned,
                   unreadNotificationsCount: summary.unreadMessagesCount // settings to unread messages count to show new messages count only
         )
     }

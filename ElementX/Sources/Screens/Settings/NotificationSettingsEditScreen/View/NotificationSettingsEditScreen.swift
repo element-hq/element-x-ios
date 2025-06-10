@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct NotificationSettingsEditScreen: View {
-    @ObservedObject var context: NotificationSettingsEditScreenViewModel.Context
+    @Bindable var context: NotificationSettingsEditScreenViewModel.Context
     
     var body: some View {
         Form {

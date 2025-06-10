@@ -86,7 +86,7 @@ class LoginScreenViewModelTests: XCTestCase {
         XCTAssertFalse(context.viewState.canSubmit, "The form should not be submittable.")
         
         // When updating the view model whilst loading a homeserver.
-        let deferred = deferFulfillment(context.$viewState, keyPath: \.isLoading, transitionValues: [true, false])
+        let deferred = deferFulfillment(context.observe(\.viewState.isLoading), transitionValues: [true, false])
         context.send(viewAction: .parseUsername)
         
         // Then the view state should represent the loading but never allow submitting to occur.
@@ -105,7 +105,7 @@ class LoginScreenViewModelTests: XCTestCase {
         XCTAssertTrue(context.viewState.canSubmit, "The form should be ready to submit.")
         
         // When updating the view model whilst loading a homeserver.
-        let deferred = deferFulfillment(context.$viewState, keyPath: \.canSubmit, transitionValues: [false, true])
+        let deferred = deferFulfillment(context.observe(\.viewState.canSubmit), transitionValues: [false, true])
         context.send(viewAction: .parseUsername)
         
         // Then the view should be blocked from submitting while loading and then become unblocked again.
@@ -134,7 +134,7 @@ class LoginScreenViewModelTests: XCTestCase {
         XCTAssertNil(context.alertInfo, "There shouldn't be an alert when the screen loads.")
         
         // When entering a username for an unsupported homeserver.
-        let deferred = deferFulfillment(context.$viewState) { $0.bindings.alertInfo != nil }
+        let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
         context.username = "@bob:server.net"
         context.send(viewAction: .parseUsername)
         try await deferred.fulfill()

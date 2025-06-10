@@ -12,7 +12,7 @@ import SwiftUI
 struct BugReportScreen: View {
     @State private var selectedScreenshot: PhotosPickerItem?
     
-    @ObservedObject var context: BugReportScreenViewModel.Context
+    @Bindable var context: BugReportScreenViewModel.Context
     
     var photosPickerTitle: String { context.viewState.screenshot == nil ? L10n.screenBugReportAttachScreenshot : L10n.screenBugReportEditScreenshot }
     

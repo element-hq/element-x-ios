@@ -146,8 +146,8 @@ struct HomeScreenRoomCell: View {
     
     @ViewBuilder
     private var lastMessage: some View {
-        if let lastMessage = room.lastMessage {
-            Text(lastMessage)
+        if let displayedLastMessage = room.displayedLastMessage {
+            Text(displayedLastMessage)
                 .lastMessageFormatting()
         }
     }

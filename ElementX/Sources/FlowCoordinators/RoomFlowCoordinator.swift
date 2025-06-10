@@ -51,29 +51,6 @@ struct FocusEvent: Hashable {
     let shouldSetPin: Bool
 }
 
-private enum PresentationAction: Hashable {
-    case eventFocus(FocusEvent)
-    case share(ShareExtensionPayload)
-    
-    var focusedEvent: FocusEvent? {
-        switch self {
-        case .eventFocus(let focusEvent):
-            focusEvent
-        default:
-            nil
-        }
-    }
-    
-    var sharedText: String? {
-        switch self {
-        case .share(.text(_, let text)):
-            text
-        default:
-            nil
-        }
-    }
-}
-
 // swiftlint:disable:next type_body_length
 class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let roomID: String
@@ -293,165 +270,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         zeroAttachmentService.setRoomEncrypted(roomProxy.infoPublisher.value.isEncrypted)
     }
     
-    // swiftlint:disable:next function_body_length
     private func setupStateMachine() {
-        stateMachine.addRouteMapping { event, fromState, _ in
-            switch (fromState, event) {
-            case (_, .presentJoinRoomScreen):
-                return .joinRoomScreen
-            case (_, .dismissJoinRoomScreen):
-                return .complete
-                
-            case (_, .presentRoom):
-                return .room
-            case (_, .dismissFlow):
-                return .complete
-                
-            case (_, .presentThread(let itemID)):
-                return .thread(itemID: itemID)
-            case (_, .dismissThread):
-                return .room
-                
-            case (.initial, .presentRoomDetails):
-                return .roomDetails(isRoot: true)
-            case (.room, .presentRoomDetails):
-                return .roomDetails(isRoot: false)
-            case (.roomDetails, .dismissRoomDetails):
-                return .room
-                
-            case (.roomDetails, .presentRoomDetailsEditScreen):
-                return .roomDetailsEditScreen
-            case (.roomDetailsEditScreen, .dismissRoomDetailsEditScreen):
-                return .roomDetails(isRoot: false)
-                
-            case (.roomDetails, .presentNotificationSettingsScreen):
-                return .notificationSettings
-            case (.notificationSettings, .dismissNotificationSettingsScreen):
-                return .roomDetails(isRoot: false)
-                
-            case (.notificationSettings, .presentGlobalNotificationSettingsScreen):
-                return .globalNotificationSettings
-            case (.globalNotificationSettings, .dismissGlobalNotificationSettingsScreen):
-                return .notificationSettings
-                
-            case (.roomDetails, .presentRoomMembersList):
-                return .roomMembersList
-            case (.roomMembersList, .dismissRoomMembersList):
-                return .roomDetails(isRoot: false)
-
-            case (_, .presentRoomMemberDetails(userID: let userID)):
-                return .roomMemberDetails(userID: userID, previousState: fromState)
-            case (.roomMemberDetails(_, let previousState), .dismissRoomMemberDetails):
-                return previousState
-            
-            case (.roomMemberDetails(_, let previousState), .presentUserProfile(let userID)):
-                return .userProfile(userID: userID, previousState: previousState)
-            case (.userProfile(_, let previousState), .dismissUserProfile):
-                return previousState
-                
-            case (_, .presentInviteUsersScreen):
-                return .inviteUsersScreen(previousState: fromState)
-            case (.inviteUsersScreen(let previousState), .dismissInviteUsersScreen):
-                return previousState
-                
-            case (.room, .presentReportContent(let itemID, let senderID)):
-                return .reportContent(itemID: itemID, senderID: senderID)
-            case (.reportContent, .dismissReportContent):
-                return .room
-                
-            case (.room, .presentMediaUploadPicker(let source)):
-                return .mediaUploadPicker(source: source)
-            case (.mediaUploadPicker, .dismissMediaUploadPicker):
-                return .room
-                
-            case (.mediaUploadPicker, .presentMediaUploadPreview(let fileURL)):
-                return .mediaUploadPreview(fileURL: fileURL)
-            case (.room, .presentMediaUploadPreview(let fileURL)):
-                return .mediaUploadPreview(fileURL: fileURL)
-            case (.mediaUploadPreview, .dismissMediaUploadPreview):
-                return .room
-                
-            case (.room, .presentEmojiPicker(let itemID, let selectedEmoji)):
-                return .emojiPicker(itemID: itemID, selectedEmojis: selectedEmoji)
-            case (.emojiPicker, .dismissEmojiPicker):
-                return .room
-
-            case (.room, .presentMessageForwarding(let forwardingItem)):
-                return .messageForwarding(forwardingItem: forwardingItem)
-            case (.messageForwarding, .dismissMessageForwarding):
-                return .room
-
-            case (.room, .presentMapNavigator):
-                return .mapNavigator
-            case (.mapNavigator, .dismissMapNavigator):
-                return .room
-            
-            case (.room, .presentPollForm):
-                return .pollForm
-            case (.pollForm, .dismissPollForm):
-                return .room
-                
-            case (.room, .presentPinnedEventsTimeline):
-                return .pinnedEventsTimeline(previousState: fromState)
-            case (.roomDetails, .presentPinnedEventsTimeline):
-                return .pinnedEventsTimeline(previousState: fromState)
-            case (.pinnedEventsTimeline(let previousState), .dismissPinnedEventsTimeline):
-                return previousState
-                
-            case (.roomDetails, .presentPollsHistory):
-                return .pollsHistory
-            case (.pollsHistory, .dismissPollsHistory):
-                return .roomDetails(isRoot: false)
-            
-            case (.pollsHistory, .presentPollForm):
-                return .pollsHistoryForm
-            case (.pollsHistoryForm, .dismissPollForm):
-                return .pollsHistory
-            
-            case (.roomDetails, .presentRolesAndPermissionsScreen):
-                return .rolesAndPermissions
-            case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen):
-                return .roomDetails(isRoot: false)
-            
-            case (.room, .presentResolveSendFailure):
-                return .resolveSendFailure
-            case (.resolveSendFailure, .dismissResolveSendFailure):
-                return .room
-            
-            case (_, .startChildFlow(let roomID, _, _)):
-                return .presentingChild(childRoomID: roomID, previousState: fromState)
-            case (.presentingChild(_, let previousState), .dismissChildFlow):
-                return previousState
-                
-            case (_, .presentKnockRequestsListScreen):
-                return .knockRequestsList(previousState: fromState)
-            case (.knockRequestsList(let previousState), .dismissKnockRequestsListScreen):
-                return previousState
-                
-            case (.roomDetails, .presentMediaEventsTimeline):
-                return .mediaEventsTimeline(previousState: fromState)
-            case (.mediaEventsTimeline(let previousState), .dismissMediaEventsTimeline):
-                return previousState
-                
-            case (.roomDetails, .presentSecurityAndPrivacyScreen):
-                return .securityAndPrivacy(previousState: fromState)
-            case (.securityAndPrivacy(let previousState), .dismissSecurityAndPrivacyScreen):
-                return previousState
-                
-            case (.roomDetails, .presentReportRoomScreen):
-                return .reportRoom(previousState: fromState)
-            case (.reportRoom(let previousState), .dismissReportRoomScreen):
-                return previousState
-                
-            case (.joinRoomScreen, .presentDeclineAndBlockScreen):
-                return .declineAndBlockScreen
-            case (.declineAndBlockScreen, .dismissDeclineAndBlockScreen):
-                return .joinRoomScreen
-            
-            default:
-                return nil
-            }
-        }
+        addRouteMapping(stateMachine: stateMachine)
         
         stateMachine.addAnyHandler(.any => .any) { [weak self] context in
             guard let self else { return }
@@ -459,10 +279,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             let animated = (context.userInfo as? EventUserInfo)?.animated ?? true
             
             switch (context.fromState, context.event, context.toState) {
-            case (_, .presentJoinRoomScreen(let via), .joinRoomScreen):
-                presentJoinRoomScreen(via: via, animated: true)
-            case (_, .dismissJoinRoomScreen, .complete):
-                dismissFlow(animated: animated)
+            // Room
                 
             case (_, .presentRoom(let presentationAction), .room):
                 Task {
@@ -472,176 +289,114 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
             case (_, .dismissFlow, .complete):
                 dismissFlow(animated: animated)
+                    
+            case (.room, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
+                startPinnedEventsTimelineFlow()
+                
+            // Thread
                 
             case (.room, .presentThread(let itemID), .thread):
                 Task { await self.presentThread(itemID: itemID) }
-            case (.thread, .dismissThread, .room):
-                break
+                
+            // Thread + Room
+                
+            case (_, .presentReportContent, .reportContent(let itemID, let senderID, _)):
+                presentReportContent(for: itemID, from: senderID)
+                
+            case (_, .presentMediaUploadPicker, .mediaUploadPicker(let source, _)):
+                presentMediaUploadPickerWithSource(source)
+                
+            case (_, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji, _)):
+                presentEmojiPicker(for: itemID, selectedEmoji: selectedEmoji)
+                
+            case (_, .presentMessageForwarding(let forwardingItem), .messageForwarding):
+                presentMessageForwarding(with: forwardingItem)
+
+            case (_, .presentMapNavigator(let mode), .mapNavigator):
+                presentMapNavigator(interactionMode: mode)
+
+            case (_, .presentPollForm(let mode), .pollForm):
+                presentPollForm(mode: mode)
+                
+            case (_, .presentResolveSendFailure(let failure, let sendHandle), .resolveSendFailure):
+                presentResolveSendFailure(failure: failure, sendHandle: sendHandle)
+                
+            // Room Details
             
             case (.initial, .presentRoomDetails, .roomDetails(let isRoot)),
                  (.room, .presentRoomDetails, .roomDetails(let isRoot)),
                  (.roomDetails, .presentRoomDetails, .roomDetails(let isRoot)):
                 Task { await self.presentRoomDetails(isRoot: isRoot, animated: animated) }
-            case (.roomDetails, .dismissRoomDetails, .room):
-                break
                 
             case (.roomDetails, .presentRoomDetailsEditScreen, .roomDetailsEditScreen):
                 presentRoomDetailsEditScreen()
-            case (.roomDetailsEditScreen, .dismissRoomDetailsEditScreen, .roomDetails):
-                break
                 
             case (.roomDetails, .presentNotificationSettingsScreen, .notificationSettings):
                 presentNotificationSettingsScreen()
-            case (.notificationSettings, .dismissNotificationSettingsScreen, .roomDetails):
-                break
-                
-            case (.notificationSettings, .presentGlobalNotificationSettingsScreen, .globalNotificationSettings):
-                presentGlobalNotificationSettingsScreen()
-            case (.globalNotificationSettings, .dismissGlobalNotificationSettingsScreen, .notificationSettings):
-                break
                 
             case (.roomDetails, .presentRoomMembersList, .roomMembersList):
                 presentRoomMembersList()
-            case (.roomMembersList, .dismissRoomMembersList, .roomDetails):
-                break
                 
-            case (.room, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
-                presentRoomMemberDetails(userID: userID)
-            case (.roomMemberDetails, .dismissRoomMemberDetails, .room):
-                break
-                
-            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
-                presentRoomMemberDetails(userID: userID)
-            case (.roomMemberDetails, .dismissRoomMemberDetails, .roomMembersList):
-                break
-            
-            case (.roomMemberDetails, .presentUserProfile(let userID), .userProfile):
-                replaceRoomMemberDetailsWithUserProfile(userID: userID)
-            case (.userProfile, .dismissUserProfile, .room):
-                break
-                
-            case (.roomDetails, .presentInviteUsersScreen, .inviteUsersScreen):
-                presentInviteUsersScreen()
-            case (.inviteUsersScreen, .dismissInviteUsersScreen, .roomDetails):
-                break
-                
-            case (.roomMembersList, .presentInviteUsersScreen, .inviteUsersScreen):
-                presentInviteUsersScreen()
-            case (.inviteUsersScreen, .dismissInviteUsersScreen, .roomMembersList):
-                break
-                
-            case (.room, .presentReportContent, .reportContent(let itemID, let senderID)):
-                presentReportContent(for: itemID, from: senderID)
-            case (.reportContent, .dismissReportContent, .room):
-                break
-                
-            case (.room, .presentMediaUploadPicker, .mediaUploadPicker(let source)):
-                presentMediaUploadPickerWithSource(source)
-            case (.mediaUploadPicker, .dismissMediaUploadPicker, .room):
-                break
-                
-            case (.mediaUploadPicker, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL)):
-                presentMediaUploadPreviewScreen(for: fileURL, animated: animated)
-            case (.room, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL)):
-                presentMediaUploadPreviewScreen(for: fileURL, animated: animated)
-            case (.mediaUploadPreview, .dismissMediaUploadPreview, .room):
-                break
-                
-            case (.room, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji)):
-                presentEmojiPicker(for: itemID, selectedEmoji: selectedEmoji)
-            case (.emojiPicker, .dismissEmojiPicker, .room):
-                break
-                
-            case (.room, .presentMessageForwarding(let forwardingItem), .messageForwarding):
-                presentMessageForwarding(with: forwardingItem)
-            case (.messageForwarding, .dismissMessageForwarding, .room):
-                break
-
-            case (.room, .presentMapNavigator(let mode), .mapNavigator):
-                presentMapNavigator(interactionMode: mode)
-            case (.mapNavigator, .dismissMapNavigator, .room):
-                break
-
-            case (.room, .presentPollForm(let mode), .pollForm):
-                presentPollForm(mode: mode)
-            case (.pollForm, .dismissPollForm, .room):
-                break
-                
-            case (.room, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
-                startPinnedEventsTimelineFlow()
-            case (.pinnedEventsTimeline, .dismissPinnedEventsTimeline, .room):
-                break
-
             case (.roomDetails, .presentPollsHistory, .pollsHistory):
                 presentPollsHistory()
-            case (.pollsHistory, .dismissPollsHistory, .roomDetails):
-                break
                 
             case (.roomDetails, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
                 startPinnedEventsTimelineFlow()
-            case (.pinnedEventsTimeline, .dismissPinnedEventsTimeline, .roomDetails):
-                break
-        
-            case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
-                presentPollForm(mode: mode)
-            case (.pollsHistoryForm, .dismissPollForm, .pollsHistory):
-                break
-            
+                
             case (.roomDetails, .presentRolesAndPermissionsScreen, .rolesAndPermissions):
                 presentRolesAndPermissionsScreen()
             case (.rolesAndPermissions, .dismissRolesAndPermissionsScreen, .roomDetails):
                 rolesAndPermissionsFlowCoordinator = nil
-                
-            case (.roomDetails, .presentRoomMemberDetails(let userID), .roomMemberDetails):
-                presentRoomMemberDetails(userID: userID)
-            case (.roomMemberDetails, .dismissRoomMemberDetails, .roomDetails):
-                break
-                
-            case (.roomMemberDetails, .dismissUserProfile, .roomDetails):
-                break
-            
-            case (.room, .presentResolveSendFailure(let failure, let sendHandle), .resolveSendFailure):
-                presentResolveSendFailure(failure: failure, sendHandle: sendHandle)
-            case (.resolveSendFailure, .dismissResolveSendFailure, .room):
-                break
-                
-            case (.roomDetails, .presentKnockRequestsListScreen, .knockRequestsList):
-                presentKnockRequestsList()
-            case (.knockRequestsList, .dismissKnockRequestsListScreen, .roomDetails):
-                break
-            case (.room, .presentKnockRequestsListScreen, .knockRequestsList):
-                presentKnockRequestsList()
-            case (.knockRequestsList, .dismissKnockRequestsListScreen, .room):
-                break
-            
+                                            
             case (.roomDetails, .presentMediaEventsTimeline, .mediaEventsTimeline):
                 Task { await self.startMediaEventsTimelineFlow() }
-            case (.mediaEventsTimeline, .dismissMediaEventsTimeline, .roomDetails):
-                break
                 
             case (.roomDetails, .presentSecurityAndPrivacyScreen, .securityAndPrivacy):
                 presentSecurityAndPrivacyScreen()
-            case (.securityAndPrivacy, .dismissSecurityAndPrivacyScreen, .roomDetails):
-                break
                 
             case (.roomDetails, .presentReportRoomScreen, .reportRoom):
                 presentReportRoom()
-            case (.reportRoom, .dismissReportRoomScreen, .roomDetails):
-                break
+                
+            // Join room
+                
+            case (_, .presentJoinRoomScreen(let via), .joinRoomScreen):
+                presentJoinRoomScreen(via: via, animated: true)
+            case (_, .dismissJoinRoomScreen, .complete):
+                dismissFlow(animated: animated)
                 
             case (.joinRoomScreen, .presentDeclineAndBlockScreen(let userID), .declineAndBlockScreen):
                 presentDeclineAndBlockScreen(userID: userID)
-            case (.declineAndBlockScreen, .dismissDeclineAndBlockScreen, .joinRoomScreen):
-                break
                 
-            // Child flow
+            // Other
+                                    
             case (_, .startChildFlow(let roomID, let via, let entryPoint), .presentingChild):
                 Task { await self.startChildFlow(for: roomID, via: via, entryPoint: entryPoint) }
             case (.presentingChild, .dismissChildFlow, _):
                 childRoomFlowCoordinator = nil
-            
+                
+            case (_, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
+                presentRoomMemberDetails(userID: userID)
+                
+            case (_, .presentKnockRequestsListScreen, .knockRequestsList):
+                presentKnockRequestsList()
+                
+            case (.notificationSettings, .presentGlobalNotificationSettingsScreen, .globalNotificationSettings):
+                presentGlobalNotificationSettingsScreen()
+                
+            case (.roomMemberDetails, .presentUserProfile(let userID), .userProfile):
+                replaceRoomMemberDetailsWithUserProfile(userID: userID)
+                    
+            case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
+                presentPollForm(mode: mode)
+                
+            case (_, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL, _)):
+                presentMediaUploadPreviewScreen(for: fileURL, animated: animated)
+                
+            case (_, .presentInviteUsersScreen, .inviteUsersScreen):
+                presentInviteUsersScreen()
+                    
             default:
-                fatalError("Unknown transition: \(context)")
+                break
             }
         }
         
@@ -800,6 +555,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentKnockRequestsListScreen)
                 case .presentThread(let itemID):
                     stateMachine.tryEvent(.presentThread(itemID: itemID))
+                case .presentRoom(roomID: let roomID):
+                    stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
                 }
             }
             .store(in: &cancellables)
@@ -836,6 +593,34 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                             emojiProvider: emojiProvider,
                                                                             timelineControllerFactory: timelineControllerFactory,
                                                                             clientProxy: userSession.clientProxy))
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .presentReportContent(let itemID, let senderID):
+                stateMachine.tryEvent(.presentReportContent(itemID: itemID, senderID: senderID))
+            case .presentMediaUploadPicker(let source):
+                stateMachine.tryEvent(.presentMediaUploadPicker(source: source))
+            case .presentMediaUploadPreviewScreen(let url):
+                stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url))
+            case .presentLocationPicker:
+                stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
+            case .presentPollForm(let mode):
+                stateMachine.tryEvent(.presentPollForm(mode: mode))
+            case .presentLocationViewer(_, let geoURI, let description):
+                stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)))
+            case .presentEmojiPicker(let itemID, let selectedEmojis):
+                stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+            case .presentRoomMemberDetails(let userID):
+                stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
+            case .presentMessageForwarding(let forwardingItem):
+                stateMachine.tryEvent(.presentMessageForwarding(forwardingItem: forwardingItem))
+            case .presentResolveSendFailure(let failure, let sendHandle):
+                stateMachine.tryEvent(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
+            }
+        }
+        .store(in: &cancellables)
                 
         navigationStackCoordinator.push(coordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissThread)
@@ -1858,146 +1643,5 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
-    }
-}
-
-private extension RoomFlowCoordinator {
-    struct HashableRoomMemberWrapper: Hashable {
-        let value: RoomMemberProxyProtocol
-
-        static func == (lhs: HashableRoomMemberWrapper, rhs: HashableRoomMemberWrapper) -> Bool {
-            lhs.value.userID == rhs.value.userID
-        }
-
-        func hash(into hasher: inout Hasher) {
-            hasher.combine(value.userID)
-        }
-    }
-
-    indirect enum State: StateType {
-        case initial
-        case joinRoomScreen
-        case room
-        case thread(itemID: TimelineItemIdentifier)
-        case roomDetails(isRoot: Bool)
-        case roomDetailsEditScreen
-        case notificationSettings
-        case globalNotificationSettings
-        case roomMembersList
-        case roomMemberDetails(userID: String, previousState: State)
-        case userProfile(userID: String, previousState: State)
-        case inviteUsersScreen(previousState: State)
-        case mediaUploadPicker(source: MediaPickerScreenSource)
-        case mediaUploadPreview(fileURL: URL)
-        case emojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
-        case mapNavigator
-        case messageForwarding(forwardingItem: MessageForwardingItem)
-        case reportContent(itemID: TimelineItemIdentifier, senderID: String)
-        case pollForm
-        case pollsHistory
-        case pollsHistoryForm
-        case rolesAndPermissions
-        case pinnedEventsTimeline(previousState: State)
-        case resolveSendFailure
-        case knockRequestsList(previousState: State)
-        case mediaEventsTimeline(previousState: State)
-        case securityAndPrivacy(previousState: State)
-        case reportRoom(previousState: State)
-        case declineAndBlockScreen
-        
-        /// A child flow is in progress.
-        case presentingChild(childRoomID: String, previousState: State)
-        /// The flow is complete and is handing control of the stack back to its parent.
-        case complete
-    }
-    
-    struct EventUserInfo {
-        let animated: Bool
-    }
-
-    enum Event: EventType {
-        case presentJoinRoomScreen(via: [String])
-        case dismissJoinRoomScreen
-        
-        case presentRoom(presentationAction: PresentationAction?)
-        case dismissFlow
-        
-        case presentThread(itemID: TimelineItemIdentifier)
-        case dismissThread
-        
-        case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
-        case dismissReportContent
-        
-        case presentRoomDetails
-        case dismissRoomDetails
-        
-        case presentRoomDetailsEditScreen
-        case dismissRoomDetailsEditScreen
-        
-        case presentNotificationSettingsScreen
-        case dismissNotificationSettingsScreen
-        
-        case presentGlobalNotificationSettingsScreen
-        case dismissGlobalNotificationSettingsScreen
-        
-        case presentRoomMembersList
-        case dismissRoomMembersList
-        
-        case presentRoomMemberDetails(userID: String)
-        case dismissRoomMemberDetails
-        
-        case presentUserProfile(userID: String)
-        case dismissUserProfile
-        
-        case presentInviteUsersScreen
-        case dismissInviteUsersScreen
-                
-        case presentMediaUploadPicker(source: MediaPickerScreenSource)
-        case dismissMediaUploadPicker
-        
-        case presentMediaUploadPreview(fileURL: URL)
-        case dismissMediaUploadPreview
-        
-        case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
-        case dismissEmojiPicker
-
-        case presentMapNavigator(interactionMode: StaticLocationInteractionMode)
-        case dismissMapNavigator
-        
-        case presentMessageForwarding(forwardingItem: MessageForwardingItem)
-        case dismissMessageForwarding
-
-        case presentPollForm(mode: PollFormMode)
-        case dismissPollForm
-        
-        case presentPollsHistory
-        case dismissPollsHistory
-        
-        case presentRolesAndPermissionsScreen
-        case dismissRolesAndPermissionsScreen
-        
-        case presentPinnedEventsTimeline
-        case dismissPinnedEventsTimeline
-        
-        case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
-        case dismissResolveSendFailure
-        
-        case startChildFlow(roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint)
-        case dismissChildFlow
-        
-        case presentKnockRequestsListScreen
-        case dismissKnockRequestsListScreen
-        
-        case presentMediaEventsTimeline
-        case dismissMediaEventsTimeline
-        
-        case presentSecurityAndPrivacyScreen
-        case dismissSecurityAndPrivacyScreen
-        
-        case presentReportRoomScreen
-        case dismissReportRoomScreen
-        
-        case presentDeclineAndBlockScreen(userID: String)
-        case dismissDeclineAndBlockScreen
     }
 }
