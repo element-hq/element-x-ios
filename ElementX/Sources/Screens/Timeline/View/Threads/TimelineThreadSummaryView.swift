@@ -121,6 +121,7 @@ struct TimelineThreadSummaryView: View {
                     .accessibilityLabel(L10n.commonInReplyTo(sender?.disambiguatedDisplayName ?? senderID))
                 
                 Text(context.viewState.buildMessagePreview(formattedBody: formattedBody, plainBody: plainBody))
+                    .multilineTextAlignment(.leading)
                     .font(.compound.bodyXS)
                     .foregroundColor(.compound.textSecondary)
                     .tint(.compound.textLinkExternal)

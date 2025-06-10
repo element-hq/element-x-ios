@@ -121,7 +121,7 @@ enum UserAvatarSizeOnScreen {
         case .sessionVerification:
             return 52
         case .threadSummary:
-            return 28
+            return 24
         }
     }
 }
