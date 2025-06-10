@@ -195,8 +195,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                  presentation: TimelineKind.MediaPresentation) async -> Result<any TimelineProxyProtocol, RoomProxyError> {
         do {
             let rustFocus: MatrixRustSDK.TimelineFocus = switch focus {
-            case .live: .live(hideThreadedEvents: appSettings.threadsEnabled)
-            case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100, hideThreadedEvents: appSettings.threadsEnabled)
+            case .live: .live(hideThreadedEvents: false)
+            case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100, hideThreadedEvents: false)
             case .thread(let eventID): .thread(rootEventId: eventID, numEvents: 20)
             case .pinned: .pinnedEvents(maxEventsToLoad: 100, maxConcurrentRequests: 10)
             }
