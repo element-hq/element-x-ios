@@ -18,7 +18,7 @@ import Combine
 import SwiftUI
 
 struct VerifyBackupKeyScreen: View {
-    @ObservedObject var context: SecureBackupRecoveryKeyScreenViewModel.Context
+    @Bindable var context: SecureBackupRecoveryKeyScreenViewModel.Context
     
     @FocusState var isFocused: Bool
         

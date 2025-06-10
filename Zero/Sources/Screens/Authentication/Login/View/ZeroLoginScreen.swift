@@ -24,7 +24,7 @@ struct ZeroLoginScreen: View {
     
     @State private var selectedSegment: ZeroAuthenticationMethod = .email
     
-    @ObservedObject var context: LoginScreenViewModel.Context
+    @Bindable var context: LoginScreenViewModel.Context
     
     var body: some View {
         VStack {
@@ -77,7 +77,9 @@ struct ZeroLoginScreen: View {
             .keyboardType(.emailAddress)
             .autocapitalization(.none)
             .submitLabel(.next)
-            .onChange(of: isUsernameFocused, perform: usernameFocusChanged)
+            .onChange(of: isUsernameFocused, { _, focused in
+                usernameFocusChanged(isFocussed: focused)
+            })
             .onSubmit { isPasswordFocused = true }
             .padding(.bottom, 20)
             
@@ -132,17 +134,13 @@ struct ZeroLoginScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             ZeroLoginScreen(context: viewModel.context)
         }
-        .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
-            state.homeserver.loginMode == .password
-        })
-        .previewDisplayName("matrix.org")
+        .snapshotPreferences(expect: viewModel.context.observe(\.viewState.homeserver.loginMode).map { $0 == .password }.eraseToStream())
+        .previewDisplayName("Initial State")
         
         NavigationStack {
             ZeroLoginScreen(context: credentialsViewModel.context)
         }
-        .snapshotPreferences(expect: credentialsViewModel.context.$viewState.map { state in
-            state.homeserver.loginMode == .password
-        })
+        .snapshotPreferences(expect: credentialsViewModel.context.observe(\.viewState.homeserver.loginMode).map { $0 == .password }.eraseToStream())
         .previewDisplayName("Credentials Entered")
         
         NavigationStack {
