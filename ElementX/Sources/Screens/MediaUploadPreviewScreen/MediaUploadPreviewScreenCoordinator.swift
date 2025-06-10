@@ -14,6 +14,7 @@ struct MediaUploadPreviewScreenCoordinatorParameters {
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let title: String?
     let url: URL
+    let threadRootEventID: String?
     let shouldShowCaptionWarning: Bool
 }
 
@@ -36,6 +37,7 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
                                                       mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
                                                       title: parameters.title,
                                                       url: parameters.url,
+                                                      threadRootEventID: parameters.threadRootEventID,
                                                       shouldShowCaptionWarning: parameters.shouldShowCaptionWarning)
     }
     

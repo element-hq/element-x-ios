@@ -232,6 +232,7 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                                              title: "App Icon.png",
                                                              url: snapshotURL,
+                                                             threadRootEventID: nil,
                                                              shouldShowCaptionWarning: true)
     static var previews: some View {
         NavigationStack {

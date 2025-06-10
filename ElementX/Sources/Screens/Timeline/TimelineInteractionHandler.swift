@@ -362,7 +362,9 @@ class TimelineInteractionHandler {
 
         actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: true))))
         await voiceMessageRecorder.stopPlayback()
-        switch await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: AudioConverter()) {
+        switch await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy,
+                                                           audioConverter: AudioConverter(),
+                                                           threadRootEventID: timelineController.timelineKind.threadRootEventID) {
         case .success:
             await deleteCurrentVoiceMessage()
         case .failure(let error):

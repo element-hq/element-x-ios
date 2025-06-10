@@ -16,6 +16,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     private let roomProxy: JoinedRoomProxyProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let url: URL
+    private let threadRootEventID: String?
     
     private var processingTask: Task<Result<MediaInfo, MediaUploadingPreprocessorError>, Never>
     private var requestHandle: SendAttachmentJoinHandleProtocol?
@@ -31,11 +32,13 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          title: String?,
          url: URL,
+         threadRootEventID: String?,
          shouldShowCaptionWarning: Bool) {
         self.userIndicatorController = userIndicatorController
         self.roomProxy = roomProxy
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.url = url
+        self.threadRootEventID = threadRootEventID
         
         // Start processing the media whilst the user is reviewing it/adding a caption.
         processingTask = Task { await mediaUploadingPreprocessor.processMedia(at: url) }
@@ -57,7 +60,9 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
             Task {
                 switch await processingTask.value {
                 case .success(let mediaInfo):
-                    switch await sendAttachment(mediaInfo: mediaInfo, caption: caption) {
+                    switch await sendAttachment(mediaInfo: mediaInfo,
+                                                caption: caption,
+                                                threadRootEventID: threadRootEventID) {
                     case .success:
                         actionsSubject.send(.dismiss)
                     case .failure(let error):
@@ -85,7 +90,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     // MARK: - Private
     
-    private func sendAttachment(mediaInfo: MediaInfo, caption: String?) async -> Result<Void, TimelineProxyError> {
+    private func sendAttachment(mediaInfo: MediaInfo, caption: String?, threadRootEventID: String?) async -> Result<Void, TimelineProxyError> {
         let requestHandle: ((SendAttachmentJoinHandleProtocol) -> Void) = { [weak self] handle in
             self?.requestHandle = handle
         }
@@ -96,22 +101,26 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
                                                       thumbnailURL: thumbnailURL,
                                                       imageInfo: imageInfo,
                                                       caption: caption,
+                                                      threadRootEventID: threadRootEventID,
                                                       requestHandle: requestHandle)
         case let .video(videoURL, thumbnailURL, videoInfo):
             return await roomProxy.timeline.sendVideo(url: videoURL,
                                                       thumbnailURL: thumbnailURL,
                                                       videoInfo: videoInfo,
                                                       caption: caption,
+                                                      threadRootEventID: threadRootEventID,
                                                       requestHandle: requestHandle)
         case let .audio(audioURL, audioInfo):
             return await roomProxy.timeline.sendAudio(url: audioURL,
                                                       audioInfo: audioInfo,
                                                       caption: caption,
+                                                      threadRootEventID: threadRootEventID,
                                                       requestHandle: requestHandle)
         case let .file(fileURL, fileInfo):
             return await roomProxy.timeline.sendFile(url: fileURL,
                                                      fileInfo: fileInfo,
                                                      caption: caption,
+                                                     threadRootEventID: threadRootEventID,
                                                      requestHandle: requestHandle)
         }
     }
