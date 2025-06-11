@@ -210,6 +210,9 @@ struct PostRepliesList: View {
                 },
                                    onOpenUserProfile: { profile in
                     context.send(viewAction: .openPostUserProfile(profile))
+                },
+                                   onMediaTapped: { url in
+                    context.send(viewAction: .openMediaPreview(url))
                 })
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
@@ -292,6 +295,9 @@ struct FeedDetailsSection: View {
                     VideoPlayerView(videoURL: url)
                         .frame(height: 300)
                         .cornerRadius(4)
+                        .onLongPressGesture {
+                            context.send(viewAction: .openMediaPreview(url))
+                        }
                 } else {
                     KFAnimatedImage(url)
                         .placeholder {
@@ -299,6 +305,9 @@ struct FeedDetailsSection: View {
                         }
                         .aspectRatio(mediaInfo.aspectRatio, contentMode: .fit)
                         .cornerRadius(4, corners: .allCorners)
+                        .onTapGesture {
+                            context.send(viewAction: .openMediaPreview(url))
+                        }
                 }
             }
             

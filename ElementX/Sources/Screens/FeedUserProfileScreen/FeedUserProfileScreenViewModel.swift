@@ -74,6 +74,8 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             openDirectChat()
         case .displayAvatar(let url):
             displayFullScreenAvatar(url)
+        case .openMediaPreview(let url):
+            displayFullScreenMedia(url)
         }
     }
     
@@ -297,6 +299,25 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                    case let .success(file) = await mediaProvider.loadFileFromSource(mediaSource) {
                     state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: state.userProfile.firstName)
                 }
+            }
+        }
+    }
+    
+    private func displayFullScreenMedia(_ url: URL) {
+        let loadingIndicatorIdentifier = "roomAvatarLoadingIndicator"
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+        
+        Task {
+            defer {
+                userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+            }
+            
+            do {
+                if case let .success(localUrl) = try await clientProxy.loadFileFromUrl(url) {
+                    state.bindings.feedMediaPreviewItem = localUrl
+                }
+            } catch {
+                MXLog.error("Failed to preview feed media: \(error)")
             }
         }
     }

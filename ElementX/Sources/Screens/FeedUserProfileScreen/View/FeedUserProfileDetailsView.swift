@@ -36,7 +36,8 @@ struct FeedUserProfileDetailsView: View {
                                                    onOpenArweaveLink: {},
                                                    onMeowTapped: { _ in },
                                                    onOpenYoutubeLink: { _ in },
-                                                   onOpenUserProfile: { _ in })
+                                                   onOpenUserProfile: { _ in },
+                                                   onMediaTapped: { _ in })
                                 .padding(.all, 16)
                                 Divider()
                             }
@@ -220,7 +221,10 @@ struct UserFeedsList: View {
                                    onOpenYoutubeLink: { url in
                     context.send(viewAction: .openYoutubeLink(url))
                 },
-                                   onOpenUserProfile: { _ in }
+                                   onOpenUserProfile: { _ in },
+                                   onMediaTapped: { url in
+                    context.send(viewAction: .openMediaPreview(url))
+                }
                 )
                 .padding(.horizontal, 16)
                 .padding(.top, 12)

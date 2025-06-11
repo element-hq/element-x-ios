@@ -83,6 +83,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             state.bindings.feedMedia = nil
         case .openPostUserProfile(let profile):
             actionsSubject.send(.openPostUserProfile(profile))
+        case .openMediaPreview(let url):
+            displayFullScreenMedia(url)
         }
     }
     
@@ -262,5 +264,24 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     
     func onMediaSelected(media: URL) {
         state.bindings.feedMedia = media
+    }
+    
+    private func displayFullScreenMedia(_ url: URL) {
+        let loadingIndicatorIdentifier = "roomAvatarLoadingIndicator"
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+        
+        Task {
+            defer {
+                userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+            }
+            
+            do {
+                if case let .success(localUrl) = try await clientProxy.loadFileFromUrl(url) {
+                    state.bindings.mediaPreviewItem = localUrl
+                }
+            } catch {
+                MXLog.error("Failed to preview feed media: \(error)")
+            }
+        }
     }
 }

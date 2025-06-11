@@ -37,6 +37,9 @@ struct HomeScreenPostList: View {
                 },
                                    onOpenUserProfile: { profile in
                     context.send(viewAction: .openPostUserProfile(profile))
+                },
+                                   onMediaTapped: { url in
+                    context.send(viewAction: .openMediaPreview(url))
                 })
                 .padding(.horizontal, 16)
                 .padding(.top, 12)

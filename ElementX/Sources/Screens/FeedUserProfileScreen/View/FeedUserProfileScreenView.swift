@@ -18,5 +18,6 @@ struct FeedUserProfileScreenView: View {
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .sentryTrace("\(Self.self)")
         .interactiveQuickLook(item: $context.mediaPreviewItem, allowEditing: false)
+        .quickLookPreview($context.feedMediaPreviewItem)
     }
 }

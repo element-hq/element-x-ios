@@ -7186,6 +7186,80 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return fetchYoutubeLinkMetaDataYoutubrUrlReturnValue
         }
     }
+    //MARK: - loadFileFromUrl
+
+    var loadFileFromUrlThrowableError: Error?
+    var loadFileFromUrlUnderlyingCallsCount = 0
+    var loadFileFromUrlCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadFileFromUrlUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadFileFromUrlUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadFileFromUrlUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadFileFromUrlUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadFileFromUrlCalled: Bool {
+        return loadFileFromUrlCallsCount > 0
+    }
+    var loadFileFromUrlReceivedRemoteUrl: URL?
+    var loadFileFromUrlReceivedInvocations: [URL] = []
+
+    var loadFileFromUrlUnderlyingReturnValue: Result<URL, ClientProxyError>!
+    var loadFileFromUrlReturnValue: Result<URL, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return loadFileFromUrlUnderlyingReturnValue
+            } else {
+                var returnValue: Result<URL, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadFileFromUrlUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadFileFromUrlUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadFileFromUrlUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadFileFromUrlClosure: ((URL) async throws -> Result<URL, ClientProxyError>)?
+
+    func loadFileFromUrl(_ remoteUrl: URL) async throws -> Result<URL, ClientProxyError> {
+        if let error = loadFileFromUrlThrowableError {
+            throw error
+        }
+        loadFileFromUrlCallsCount += 1
+        loadFileFromUrlReceivedRemoteUrl = remoteUrl
+        DispatchQueue.main.async {
+            self.loadFileFromUrlReceivedInvocations.append(remoteUrl)
+        }
+        if let loadFileFromUrlClosure = loadFileFromUrlClosure {
+            return try await loadFileFromUrlClosure(remoteUrl)
+        } else {
+            return loadFileFromUrlReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?

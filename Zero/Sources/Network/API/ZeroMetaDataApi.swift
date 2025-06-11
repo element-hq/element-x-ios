@@ -16,6 +16,8 @@ protocol ZeroMetaDataApiProtocol {
     func uploadMedia(media: URL) async throws -> Result<String, Error>
     
     func fetchYoutubeLinkMetaData(youtubeUrl: String) async throws -> Result<ZLinkPreview, Error>
+    
+    func loadFileFromUrl(_ remoteUrl: URL) async throws -> Result<URL, Error>
 }
 
 class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
@@ -98,6 +100,20 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
         case .failure(let error):
             return .failure(error)
         }
+    }
+    
+    func loadFileFromUrl(_ remoteUrl: URL) async throws -> Result<URL, any Error> {
+        let fileName = remoteUrl.lastPathComponent
+        let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        
+        if FileManager.default.fileExists(atPath: destinationURL.path) {
+            return .success(destinationURL)
+        }
+        
+        let data = try await AF.download(remoteUrl).serializingData().value
+        
+        try data.write(to: destinationURL)
+        return .success(destinationURL)
     }
     
     // MARK: - Constants

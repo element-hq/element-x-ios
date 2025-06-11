@@ -47,6 +47,9 @@ struct FeedUserProfileScreenViewStateBindings {
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?
+    
+    /// A media item that will be previewed with QuickLook.
+    var feedMediaPreviewItem: URL?
 }
 
 enum FeedUserProfileScreenViewModelAction {
@@ -63,6 +66,7 @@ enum FeedUserProfileScreenViewAction {
     case toggleFollowUser
     case openDirectChat
     case displayAvatar(_ url: URL)
+    case openMediaPreview(_ url: URL)
 }
 
 enum UserFeedsListMode: CustomStringConvertible {

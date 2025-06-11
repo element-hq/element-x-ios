@@ -20,6 +20,7 @@ struct HomeScreenPostCell: View {
     let onMeowTapped: (Int) -> Void
     let onOpenYoutubeLink: (String) -> Void
     let onOpenUserProfile: (ZPostUserProfile) -> Void
+    let onMediaTapped: (URL) -> Void
     
     var body: some View {
         HStack(alignment: .top) {
@@ -107,6 +108,9 @@ struct HomeScreenPostCell: View {
                         VideoPlayerView(videoURL: url)
                             .frame(height: 300)
                             .cornerRadius(4)
+                            .onLongPressGesture {
+                                onMediaTapped(url)
+                            }
                     } else {
                         KFAnimatedImage(url)
                             .placeholder {
@@ -114,6 +118,9 @@ struct HomeScreenPostCell: View {
                             }
                             .aspectRatio(mediaInfo.aspectRatio, contentMode: .fit)
                             .cornerRadius(4, corners: .allCorners)
+                            .onTapGesture {
+                                onMediaTapped(url)
+                            }
                     }
                 }
                 

@@ -269,7 +269,7 @@ struct HomeScreenViewStateBindings {
     var leaveRoomAlertItem: LeaveRoomAlertItem?
     
     /// A media item that will be previewed with QuickLook.
-    var mediaPreviewItem: MediaPreviewItem?
+    var mediaPreviewItem: URL?
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {

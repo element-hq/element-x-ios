@@ -45,6 +45,9 @@ struct FeedDetailsScreenViewStateBindings {
     
     var feed: HomeScreenPost = HomeScreenPost.placeholder()
     var alertInfo: AlertInfo<UUID>?
+    
+    /// A media item that will be previewed with QuickLook.
+    var mediaPreviewItem: URL?
 }
 
 enum FeedDetailsScreenViewModelAction {
@@ -64,6 +67,7 @@ enum FeedDetailsScreenViewAction {
     case postReply
     case attachMedia
     case deleteMedia
+    case openMediaPreview(_ url: URL)
 }
 
 enum FeedRepliesListMode: CustomStringConvertible {

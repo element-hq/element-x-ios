@@ -1338,6 +1338,16 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func loadFileFromUrl(_ remoteUrl: URL) async throws -> Result<URL, ClientProxyError> {
+        let result = try await zeroApiProxy.metaDataApi.loadFileFromUrl(remoteUrl)
+        switch result {
+        case .success(let localURL):
+            return .success(localURL)
+        case .failure(let error):
+            return .failure(.zeroError(error))
+        }
+    }
+    
     // MARK: - Private
     
     private func cacheAccountURL() async {

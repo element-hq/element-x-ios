@@ -918,10 +918,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
             }
             
-            // We don't actually know the mime type here, assume it's an image.
             do {
-                if case let .success(file) = try await mediaProvider.loadFileFromSource(MediaSourceProxy.init(url: url, mimeType: "image/jpeg")) {
-                    state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: file.url?.lastPathComponent)
+                if case let .success(localUrl) = try await userSession.clientProxy.loadFileFromUrl(url) {
+                    state.bindings.mediaPreviewItem = localUrl
                 }
             } catch {
                 MXLog.error("Failed to preview feed media: \(error)")

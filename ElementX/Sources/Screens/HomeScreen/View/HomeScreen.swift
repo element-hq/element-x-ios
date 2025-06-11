@@ -17,6 +17,18 @@ struct HomeScreen: View {
     
     @State private var selectedTab: HomeTab = .chat
     
+    //    init(context: HomeScreenViewModel.Context) {
+    //        self.context = context
+    //
+    //        let appearance = UINavigationBarAppearance()
+    //        appearance.configureWithTransparentBackground()
+    //        appearance.backgroundEffect = UIBlurEffect(style: .regular)
+    //        appearance.backgroundColor = UIColor.black.withAlphaComponent(0.15)
+    //
+    //        UINavigationBar.appearance().standardAppearance = appearance
+    //        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+    //    }
+    
     var body: some View {
         HomeTabView(
             tabContent: { tab in
@@ -52,7 +64,7 @@ struct HomeScreen: View {
         //                   scrollViewAdapter: scrollViewAdapter,
         //                   isNewBloomEnabled: context.viewState.isNewBloomEnabled)
         .sentryTrace("\(Self.self)")
-        .interactiveQuickLook(item: $context.mediaPreviewItem, allowEditing: false)
+        .quickLookPreview($context.mediaPreviewItem)
     }
     
     // MARK: - Private

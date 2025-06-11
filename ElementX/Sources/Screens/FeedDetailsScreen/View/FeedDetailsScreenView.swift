@@ -22,5 +22,6 @@ struct FeedDetailsScreen: View {
         .navigationTitle("Post")
         .navigationBarTitleDisplayMode(.inline)
         .sentryTrace("\(Self.self)")
+        .quickLookPreview($context.mediaPreviewItem)
     }
 }
