@@ -52,8 +52,13 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     }
     
     func getPostMediaInfo(mediaId: String) async throws -> Result<ZPostMedia, any Error> {
+        let parameters: Parameters = ["is_preview": "true"]
         let url = MetaDataEndPoints.feedMediaEndPoint.appending("/\(mediaId)")
-        let result: Result<ZPostMedia, Error> = try await APIManager.shared.authorisedRequest(url, method: .get, appSettings: appSettings)
+        let result: Result<ZPostMedia, Error> = try await APIManager.shared.authorisedRequest(url,
+                                                                                              method: .get,
+                                                                                              appSettings: appSettings,
+                                                                                              parameters: parameters,
+                                                                                              encoding: URLEncoding.queryString)
         switch result {
         case .success(let mediaInfo):
             return .success(mediaInfo)

@@ -22,7 +22,8 @@ struct HomeTabView<Content: View>: View {
     let tabContent: (HomeTab) -> Content
     let onTabSelected: (HomeTab) -> Void
     let hasNewNotifications: Bool
-    
+    let isTabViewVisible: Bool
+        
     private let tabs = [
         (title: "Chat", icon: Asset.Images.homeTabChatIcon, tab: HomeTab.chat),
         (title: "Channels", icon: Asset.Images.homeTabExplorerIcon, tab: HomeTab.channels),
@@ -33,10 +34,12 @@ struct HomeTabView<Content: View>: View {
     
     init(@ViewBuilder tabContent: @escaping (HomeTab) -> Content,
          onTabSelected: @escaping (HomeTab) -> Void,
-         hasNewNotifications: Bool) {
+         hasNewNotifications: Bool,
+         isTabViewVisible: Bool) {
         self.tabContent = tabContent
         self.onTabSelected = onTabSelected
         self.hasNewNotifications = hasNewNotifications
+        self.isTabViewVisible = isTabViewVisible
         
 //        let appearance = UITabBarAppearance()
 //        appearance.configureWithTransparentBackground()
@@ -53,7 +56,9 @@ struct HomeTabView<Content: View>: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.zero.bgCanvasDefault)
             
-            customTabView
+            if isTabViewVisible {
+                customTabView
+            }
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
         

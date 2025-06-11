@@ -66,6 +66,7 @@ enum HomeScreenViewAction {
     case openYoutubeLink(_ url: String)
     case openPostUserProfile(_ profile: ZPostUserProfile)
     case openUserProfile
+    case openMediaPreview(_ url: URL)
     
     case forceRefreshChannels
     case channelTapped(_ channel: HomeScreenChannel)
@@ -263,11 +264,12 @@ struct HomeScreenViewStateBindings {
     var filtersState = RoomListFiltersState()
     var searchQuery = ""
     var isSearchFieldFocused = false
-    
-    var manualSearchTriggered = false
-    
+        
     var alertInfo: AlertInfo<UUID>?
     var leaveRoomAlertItem: LeaveRoomAlertItem?
+    
+    /// A media item that will be previewed with QuickLook.
+    var mediaPreviewItem: MediaPreviewItem?
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {

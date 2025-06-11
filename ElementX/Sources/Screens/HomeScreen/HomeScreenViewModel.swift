@@ -22,6 +22,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private let appSettings: AppSettings
     private let notificationManager: NotificationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let mediaProvider: MediaProviderProtocol
     
     private let roomSummaryProvider: RoomSummaryProviderProtocol?
     
@@ -48,6 +49,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         self.appSettings = appSettings
         self.notificationManager = notificationManager
         self.userIndicatorController = userIndicatorController
+        self.mediaProvider = userSession.mediaProvider
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
@@ -289,6 +291,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: self))
         case .setNotificationFilter(let tab):
             applyCustomFilterToNotificationsList(tab)
+        case .openMediaPreview(let url):
+            displayFullScreenMedia(url)
         }
     }
     
@@ -903,5 +907,25 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             }
         }
         state.notificationsContent = filteredNotificationContent
+    }
+    
+    private func displayFullScreenMedia(_ url: URL) {
+        let loadingIndicatorIdentifier = "roomAvatarLoadingIndicator"
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
+        
+        Task {
+            defer {
+                userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+            }
+            
+            // We don't actually know the mime type here, assume it's an image.
+            do {
+                if case let .success(file) = try await mediaProvider.loadFileFromSource(MediaSourceProxy.init(url: url, mimeType: "image/jpeg")) {
+                    state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: file.url?.lastPathComponent)
+                }
+            } catch {
+                MXLog.error("Failed to preview feed media: \(error)")
+            }
+        }
     }
 }

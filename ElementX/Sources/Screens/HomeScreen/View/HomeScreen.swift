@@ -18,32 +18,27 @@ struct HomeScreen: View {
     @State private var selectedTab: HomeTab = .chat
     
     var body: some View {
-        Group {
-            if selectedTab == .chat, context.manualSearchTriggered {
-                HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
-            } else {
-                HomeTabView(
-                    tabContent: { tab in
-                        switch tab {
-                        case .chat:
-                            HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                        case .channels:
-                            HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                        case .feed:
-                            HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                        case .notifications:
-                            HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                        case .myFeed:
-                            HomeMyPostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                        }
-                    },
-                    onTabSelected: { tab in
-                        selectedTab = tab
-                    },
-                    hasNewNotifications: context.viewState.hasNewNotificatios
-                )
-            }
-        }
+        HomeTabView(
+            tabContent: { tab in
+                switch tab {
+                case .chat:
+                    HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                case .channels:
+                    HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                case .feed:
+                    HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                case .notifications:
+                    HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                case .myFeed:
+                    HomeMyPostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                }
+            },
+            onTabSelected: { tab in
+                selectedTab = tab
+            },
+            hasNewNotifications: context.viewState.hasNewNotificatios,
+            isTabViewVisible: !context.isSearchFieldFocused
+        )
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
@@ -57,6 +52,7 @@ struct HomeScreen: View {
         //                   scrollViewAdapter: scrollViewAdapter,
         //                   isNewBloomEnabled: context.viewState.isNewBloomEnabled)
         .sentryTrace("\(Self.self)")
+        .interactiveQuickLook(item: $context.mediaPreviewItem, allowEditing: false)
     }
     
     // MARK: - Private

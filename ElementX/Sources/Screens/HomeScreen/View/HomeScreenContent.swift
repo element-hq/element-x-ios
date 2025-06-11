@@ -25,11 +25,13 @@ struct HomeScreenContent: View {
             
             switch context.viewState.roomListMode {
             case .empty, .rooms:
-                FloatingActionButton(onTap: {
-                    context.send(viewAction: .startChat)
-                })
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                .padding(.bottom, 70)
+                if !context.isSearchFieldFocused {
+                    FloatingActionButton(onTap: {
+                        context.send(viewAction: .startChat)
+                    })
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                    .padding(.bottom, 70)
+                }
             default:
                 EmptyView()
             }
@@ -57,43 +59,6 @@ struct HomeScreenContent: View {
                             .layoutPriority(1)
                     }
                 case .rooms:
-//                    LazyVStack(spacing: 0) {
-//                        if !context.manualSearchTriggered, !context.viewState.visibleRooms.isEmpty {
-//                            HStack {
-//                                CompoundIcon(\.search)
-//                                    .frame(width: 8, height: 8)
-//                                    .foregroundStyle(Color.white.opacity(0.275))
-//                                
-//                                TextField("Search", text: $context.searchQuery)
-//                                    .disabled(true)
-//                                    .padding(.leading, 6)
-//                                    .onTapGesture {
-//                                        context.manualSearchTriggered = true
-//                                    }
-//                            }
-//                            .contentShape(Rectangle())
-//                            .padding(.horizontal, 24)
-//                            .padding(.vertical, 6)
-//                            .background {
-//                                RoundedRectangle(cornerRadius: 10)
-//                                    .stroke(Color.white.opacity(0.275), lineWidth: 1)
-//                            }
-//                            .disabled(true)
-//                            .padding(.horizontal, 16)
-//                            .padding(.vertical, 12)
-//                            .onTapGesture {
-//                                context.manualSearchTriggered = true
-//                            }
-//                        }
-//                        
-//                        Section {
-//                            if !context.viewState.shouldShowEmptyFilterState {
-//                                HomeScreenRoomList(context: context)
-//                            }
-//                        } header: {
-//                            // topSection
-//                        }
-//                    }
                     if !context.viewState.shouldShowEmptyFilterState {
                         HomeScreenRoomList(context: context)
                             .isSearching($context.isSearchFieldFocused)
