@@ -80,6 +80,8 @@ struct ComposerToolbarViewState: BindableState {
     
     var keyCommands: [WysiwygKeyCommand] = []
     
+    var isInThread: Bool
+    
     var bindings: ComposerToolbarViewStateBindings
 
     var isUploading: Bool {

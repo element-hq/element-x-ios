@@ -1490,6 +1490,7 @@ class ClientProxy: ClientProxyProtocol {
             case .joined:
                 let roomProxy = try await JoinedRoomProxy(roomListService: roomListService,
                                                           room: room,
+                                                          appSettings: appSettings,
                                                           zeroChatApi: zeroApiProxy.chatApi,
                                                           zeroUsersService: zeroApiProxy.matrixUsersService)
                 

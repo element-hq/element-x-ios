@@ -47,6 +47,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
 
     init(initialText: String? = nil,
          roomProxy: JoinedRoomProxyProtocol,
+         isInThread: Bool = false,
          wysiwygViewModel: WysiwygComposerViewModel,
          completionSuggestionService: CompletionSuggestionServiceProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -69,6 +70,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                                                               audioRecorderState: .init(),
                                                               isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                                               isLocationSharingEnabled: appSettings.mapTilerConfiguration.isEnabled,
+                                                              isInThread: isInThread,
                                                               bindings: .init()),
                    mediaProvider: mediaProvider)
         

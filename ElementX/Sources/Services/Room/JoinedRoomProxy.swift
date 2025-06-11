@@ -18,6 +18,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     private let roomListService: RoomListServiceProtocol
     private let room: RoomProtocol
+    private let appSettings: AppSettings
     private let zeroChatApi: ZeroChatApiProtocol
     private let zeroUsersService: ZeroMatrixUsersService
     
@@ -79,17 +80,19 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     init(roomListService: RoomListServiceProtocol,
          room: RoomProtocol,
+         appSettings: AppSettings,
          zeroChatApi: ZeroChatApiProtocol,
          zeroUsersService: ZeroMatrixUsersService) async throws {
         self.roomListService = roomListService
         self.room = room
+        self.appSettings = appSettings
         self.zeroChatApi = zeroChatApi
         self.zeroUsersService = zeroUsersService
         
         let cachedRoomAvatar = zeroUsersService.getRoomAvatarFromCache(roomId: room.id())
         infoSubject = try await .init(RoomInfoProxy(roomInfo: room.roomInfo(), roomAvatarCached: cachedRoomAvatar))
         
-        timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live,
+        timeline = try await TimelineProxy(timeline: room.timelineWithConfiguration(configuration: .init(focus: .live(hideThreadedEvents: appSettings.threadsEnabled),
                                                                                                          filter: .eventTypeFilter(filter: excludedEventsFilter),
                                                                                                          internalIdPrefix: nil,
                                                                                                          dateDividerMode: .daily,
@@ -156,7 +159,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func timelineFocusedOnEvent(eventID: String, numberOfEvents: UInt16) async -> Result<TimelineProxyProtocol, RoomProxyError> {
         do {
-            let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .event(eventId: eventID, numContextEvents: numberOfEvents),
+            let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .event(eventId: eventID,
+                                                                                                          numContextEvents: numberOfEvents,
+                                                                                                          hideThreadedEvents: appSettings.threadsEnabled),
                                                                                             filter: .all,
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily,
@@ -210,8 +215,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                                  presentation: TimelineKind.MediaPresentation) async -> Result<any TimelineProxyProtocol, RoomProxyError> {
         do {
             let rustFocus: MatrixRustSDK.TimelineFocus = switch focus {
-            case .live: .live
-            case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100)
+            case .live: .live(hideThreadedEvents: false)
+            case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100, hideThreadedEvents: false)
             case .thread(let eventID): .thread(rootEventId: eventID, numEvents: 20)
             case .pinned: .pinnedEvents(maxEventsToLoad: 100, maxConcurrentRequests: 10)
             }
@@ -769,7 +774,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func sendCallNotificationIfNeeded() async -> Result<Void, RoomProxyError> {
         do {
-            try await room.sendCallNotificationIfNeeded()
+            _ = try await room.sendCallNotificationIfNeeded()
             return .success(())
         } catch {
             MXLog.error("Failed room call notification with error: \(error)")

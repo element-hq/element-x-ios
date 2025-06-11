@@ -306,8 +306,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (_, .presentReportContent, .reportContent(let itemID, let senderID, _)):
                 presentReportContent(for: itemID, from: senderID)
                 
-            case (_, .presentMediaUploadPicker, .mediaUploadPicker(let source, _)):
-                presentMediaUploadPickerWithSource(source)
+            case (_, .presentMediaUploadPicker, .mediaUploadPicker(let source, let threadRootEventID, _)):
+                presentMediaUploadPickerWithSource(source, threadRootEventID: threadRootEventID)
                 
             case (_, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji, _)):
                 presentEmojiPicker(for: itemID, selectedEmoji: selectedEmoji)
@@ -392,8 +392,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
                 presentPollForm(mode: mode)
                 
-            case (_, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL, _)):
-                presentMediaUploadPreviewScreen(for: fileURL, animated: animated)
+            case (_, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL, let threadRootEventID, _)):
+                presentMediaUploadPreviewScreen(for: fileURL, threadRootEventID: threadRootEventID, animated: animated)
                 
             case (_, .presentInviteUsersScreen, .inviteUsersScreen):
                 presentInviteUsersScreen()
@@ -446,7 +446,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .eventFocus(let focusedEvent):
                     roomScreenCoordinator?.focusOnEvent(focusedEvent)
                 case .share(.mediaFile(_, let mediaFile)):
-                    stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url), userInfo: EventUserInfo(animated: animated))
+                    stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url, threadRootEventID: nil),
+                                          userInfo: EventUserInfo(animated: animated))
                 case .share(.text(_, let text)):
                     roomScreenCoordinator?.shareText(text)
                 case .none:
@@ -482,7 +483,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             
         switch presentationAction {
         case .share(.mediaFile(_, let mediaFile)):
-            stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url), userInfo: EventUserInfo(animated: animated))
+            stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url, threadRootEventID: nil),
+                                  userInfo: EventUserInfo(animated: animated))
         case .share(.text), .eventFocus:
             break // These are both handled in the coordinator's init.
         case .none:
@@ -534,9 +536,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentReportContent(let itemID, let senderID):
                     stateMachine.tryEvent(.presentReportContent(itemID: itemID, senderID: senderID))
                 case .presentMediaUploadPicker(let source):
-                    stateMachine.tryEvent(.presentMediaUploadPicker(source: source))
+                    stateMachine.tryEvent(.presentMediaUploadPicker(source: source, threadRootEventID: nil))
                 case .presentMediaUploadPreviewScreen(let url):
-                    stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url))
+                    stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url, threadRootEventID: nil))
                 case .presentEmojiPicker(let itemID, let selectedEmojis):
                     stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
                 case .presentLocationPicker:
@@ -611,10 +613,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .presentReportContent(let itemID, let senderID):
                 stateMachine.tryEvent(.presentReportContent(itemID: itemID, senderID: senderID))
-            case .presentMediaUploadPicker(let source):
-                stateMachine.tryEvent(.presentMediaUploadPicker(source: source))
-            case .presentMediaUploadPreviewScreen(let url):
-                stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url))
+            case .presentMediaUploadPicker(let source, let threadRootEventID):
+                stateMachine.tryEvent(.presentMediaUploadPicker(source: source,
+                                                                threadRootEventID: threadRootEventID))
+            case .presentMediaUploadPreviewScreen(let url, let threadRootEventID):
+                stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url,
+                                                                 threadRootEventID: threadRootEventID))
             case .presentLocationPicker:
                 stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
             case .presentPollForm(let mode):
@@ -873,7 +877,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentMediaUploadPickerWithSource(_ source: MediaPickerScreenSource) {
+    private func presentMediaUploadPickerWithSource(_ source: MediaPickerScreenSource,
+                                                    threadRootEventID: String?) {
         let stackCoordinator = NavigationStackCoordinator()
 
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: userIndicatorController,
@@ -886,7 +891,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .cancel:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .selectMediaAtURL(let url):
-                stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url))
+                stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url, threadRootEventID: threadRootEventID))
             }
         }
 
@@ -899,7 +904,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    private func presentMediaUploadPreviewScreen(for url: URL, animated: Bool) {
+    private func presentMediaUploadPreviewScreen(for url: URL,
+                                                 threadRootEventID: String?,
+                                                 animated: Bool) {
         let stackCoordinator = NavigationStackCoordinator()
 
         let parameters = MediaUploadPreviewScreenCoordinatorParameters(userIndicatorController: userIndicatorController,
@@ -907,6 +914,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                        mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                                        title: url.lastPathComponent,
                                                                        url: url,
+                                                                       threadRootEventID: threadRootEventID,
                                                                        shouldShowCaptionWarning: appSettings.shouldShowMediaCaptionWarning)
 
         let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters)
@@ -972,11 +980,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .selectedLocation(let geoURI, let isUserLocation):
                 Task {
+                    #warning("Allow sending locations within threads when the SDK allows it")
                     _ = await self.roomProxy.timeline.sendLocation(body: geoURI.bodyMessage,
                                                                    geoURI: geoURI,
                                                                    description: nil,
                                                                    zoomLevel: 15,
-                                                                   assetType: isUserLocation ? .sender : .pin)
+                                                                   assetType: isUserLocation ? .sender : .pin,
+                                                                   threadRootEventID: nil)
                     self.navigationStackCoordinator.setSheetCoordinator(nil)
                 }
                 
@@ -1034,7 +1044,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func createPoll(question: String, options: [String], pollKind: Poll.Kind) {
         Task {
-            let result = await roomProxy.timeline.createPoll(question: question, answers: options, pollKind: pollKind)
+            #warning("Allow sending polls within threads when the SDK allows it")
+            let result = await roomProxy.timeline.createPoll(question: question, answers: options, pollKind: pollKind, threadRootEventID: nil)
 
             self.analytics.trackComposer(inThread: false,
                                          isEditing: false,

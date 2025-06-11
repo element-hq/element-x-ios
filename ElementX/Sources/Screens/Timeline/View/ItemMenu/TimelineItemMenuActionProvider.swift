@@ -16,6 +16,7 @@ struct TimelineItemMenuActionProvider {
     let pinnedEventIDs: Set<String>
     let isDM: Bool
     let isViewSourceEnabled: Bool
+    let areThreadsEnabled: Bool
     let timelineKind: TimelineKind
     let emojiProvider: EmojiProviderProtocol
     
@@ -51,6 +52,10 @@ struct TimelineItemMenuActionProvider {
                 actions.append(.reply(isThread: messageItem.properties.isThreaded))
             } else {
                 actions.append(.reply(isThread: false))
+            }
+            
+            if areThreadsEnabled, !timelineKind.isThread {
+                actions.append(.replyInThread)
             }
         }
         

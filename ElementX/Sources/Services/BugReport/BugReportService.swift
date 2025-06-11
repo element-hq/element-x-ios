@@ -107,7 +107,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         }
         body.appendString(string: "--\(boundary)--\r\n")
 
-        var request = URLRequest(url: baseURL.appendingPathComponent("submit"))
+        var request = URLRequest(url: baseURL)
         request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
         request.httpMethod = "POST"

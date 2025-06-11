@@ -24,6 +24,7 @@ enum TimelineInteractionHandlerAction {
     case displayErrorToast(String)
     
     case viewInRoomTimeline(eventID: String)
+    case displayThread(itemID: TimelineItemIdentifier)
 }
 
 /// The interaction handler groups logic for dealing with various actions the user can take on a timeline's
@@ -167,6 +168,8 @@ class TimelineInteractionHandler {
             let replyDetails = TimelineItemReplyDetails.loaded(sender: eventTimelineItem.sender, eventID: eventID, eventContent: replyInfo.type)
             
             actionsSubject.send(.composer(action: .setMode(mode: .reply(eventID: eventID, replyDetails: replyDetails, isThread: replyInfo.isThread))))
+        case .replyInThread:
+            actionsSubject.send(.displayThread(itemID: eventTimelineItem.id))
         case .forward(let itemID):
             actionsSubject.send(.displayMessageForwarding(itemID: itemID))
         case .viewSource:
@@ -364,7 +367,9 @@ class TimelineInteractionHandler {
 
         actionsSubject.send(.composer(action: .setMode(mode: .previewVoiceMessage(state: audioPlayerState, waveform: .url(recordingURL), isUploading: true))))
         await voiceMessageRecorder.stopPlayback()
-        switch await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy, audioConverter: AudioConverter()) {
+        switch await voiceMessageRecorder.sendVoiceMessage(inRoom: roomProxy,
+                                                           audioConverter: AudioConverter(),
+                                                           threadRootEventID: timelineController.timelineKind.threadRootEventID) {
         case .success:
             await deleteCurrentVoiceMessage()
         case .failure(let error):

@@ -182,6 +182,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                                               pinnedEventIDs: context.viewState.pinnedEventIDs,
                                                               isDM: context.viewState.isDirectOneToOneRoom,
                                                               isViewSourceEnabled: context.viewState.isViewSourceEnabled,
+                                                              areThreadsEnabled: context.viewState.areThreadsEnabled,
                                                               timelineKind: context.viewState.timelineKind,
                                                               emojiProvider: context.viewState.emojiProvider)
                 TimelineItemMacContextMenu(item: timelineItem, actionProvider: provider) { action in
@@ -209,7 +210,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .layoutPriority(TimelineBubbleLayout.Priority.regularText)
             }
             
-            if shouldShowReplyDetails, let replyDetails = timelineItem.properties.replyDetails {
+            if let replyDetails = timelineItem.properties.replyDetails {
                 // The rendered reply bubble with a greedy width. The custom layout prevents
                 // the infinite width from increasing the overall width of the view.
                 
@@ -270,10 +271,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .layoutPriority(TimelineBubbleLayout.Priority.regularText)
                 .cornerRadius(timelineItem.contentCornerRadius)
         }
-    }
-    
-    private var shouldShowReplyDetails: Bool {
-        !timelineItem.properties.isThreaded || (timelineItem.properties.isThreaded && !context.viewState.timelineKind.isThread)
     }
     
     private var messageBubbleTopPadding: CGFloat {
@@ -482,7 +479,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
         ScrollView {
             let threadSummary = TimelineItemThreadSummary.loaded(senderID: "@alice:matrix.org",
                                                                  sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
-                                                                 latestEventContent: .message(.text(.init(body: "This is a threaded message"))))
+                                                                 latestEventContent: .message(.text(.init(body: "This is a very long, multi-lined, threaded message"))))
             
             MockTimelineContent(threadSummary: threadSummary)
         }

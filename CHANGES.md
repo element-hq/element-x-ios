@@ -1,3 +1,30 @@
+## Changes in 25.06.3 (2025-06-11)
+
+### What's Changed
+
+✨ Features
+* Add a developer option for history sharing on invite by @richvdh in https://github.com/element-hq/element-x-ios/pull/4172
+
+🐛 Bugfixes
+* Send .`fullyRead` marker when navigating out of the room by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4177
+* Correct the bug report service submission URL after updating how secrets are configured by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4186
+
+🚧 In development 🚧
+* Threaded timeline composer by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4168
+* Support for sending media in threads by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4183
+
+Others
+* Update dependency fastlane to v2.228.0 by @renovate in https://github.com/element-hq/element-x-ios/pull/4181
+* Add a RoomScreenHook. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4175
+* Hide accesibility for decorative onboarding image by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4178
+* Various thread tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4182
+* update SDK to 25.06.11 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4187
+
+### New Contributors
+* @richvdh made their first contribution in https://github.com/element-hq/element-x-ios/pull/4172
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.06.2...release/25.06.3
+
 ## Changes in 25.06.2 (2025-06-06)
 
 ### What's Changed

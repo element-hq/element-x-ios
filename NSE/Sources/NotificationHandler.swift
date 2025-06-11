@@ -104,7 +104,7 @@ class NotificationHandler {
                 return .shouldDisplay
             case .roomMessage(let messageType, _):
                 switch messageType {
-                case .emote, .image, .audio, .video, .file, .notice, .text, .location:
+                case .emote, .image, .audio, .video, .file, .notice, .text, .location, .gallery:
                     return .shouldDisplay
                 case .other:
                     return .unsupportedShouldDiscard
