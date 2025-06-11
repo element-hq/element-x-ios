@@ -35,49 +35,51 @@ struct HomePostsContent: View {
     private var postList: some View {
         GeometryReader { geometry in
             ScrollView {
-                switch context.viewState.postListMode {
-                case .skeletons:
-                    LazyVStack(spacing: 0) {
-                        ForEach(context.viewState.visiblePosts) { post in
-                            VStack {
-                                HomeScreenPostCell(post: post,
-                                                   mediaProvider: context.mediaProvider,
-                                                   postMediaUrl: nil,
-                                                   availableLinkPreview: nil,
-                                                   showThreadLine: false,
-                                                   onPostTapped: {},
-                                                   onOpenArweaveLink: {},
-                                                   onMeowTapped: { _ in },
-                                                   onOpenYoutubeLink: { _ in },
-                                                   onOpenUserProfile: { _ in },
-                                                   onMediaTapped: { _ in })
-                                .padding(.all, 16)
-                                Divider()
-                            }
-                            .redacted(reason: .placeholder)
-                            .shimmer()
+                LazyVStack(spacing: 0) {
+                    HomePostsTabView(
+                        onTabSelected: { tab in
+                            selectedTab = tab
+                            context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: tab == .following))
                         }
-                    }
-                    .disabled(true)
-                case .empty:
-                    HomePostsEmptyView()
-                case .posts:
-                    LazyVStack(spacing: 0) {
-                        HomePostsTabView(
-                            onTabSelected: { tab in
-                                selectedTab = tab
-                                context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: tab == .following))
-                            }
-                        )
-                        
-                        HomeScreenPostList(context: context)
-                        
-                        if context.viewState.canLoadMorePosts {
-                            ProgressView()
-                                .padding()
-                                .onAppear {
-                                    context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
+                    )
+                    
+                    switch context.viewState.postListMode {
+                    case .skeletons:
+                        LazyVStack(spacing: 0) {
+                            ForEach(context.viewState.visiblePosts) { post in
+                                VStack {
+                                    HomeScreenPostCell(post: post,
+                                                       mediaProvider: context.mediaProvider,
+                                                       postMediaUrl: nil,
+                                                       availableLinkPreview: nil,
+                                                       showThreadLine: false,
+                                                       onPostTapped: {},
+                                                       onOpenArweaveLink: {},
+                                                       onMeowTapped: { _ in },
+                                                       onOpenYoutubeLink: { _ in },
+                                                       onOpenUserProfile: { _ in },
+                                                       onMediaTapped: { _ in })
+                                    .padding(.all, 16)
+                                    Divider()
                                 }
+                                .redacted(reason: .placeholder)
+                                .shimmer()
+                            }
+                        }
+                        .disabled(true)
+                    case .empty:
+                        HomePostsEmptyView()
+                    case .posts:
+                        LazyVStack(spacing: 0) {
+                            HomeScreenPostList(context: context)
+                            
+                            if context.viewState.canLoadMorePosts {
+                                ProgressView()
+                                    .padding()
+                                    .onAppear {
+                                        context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
+                                    }
+                            }
                         }
                     }
                 }

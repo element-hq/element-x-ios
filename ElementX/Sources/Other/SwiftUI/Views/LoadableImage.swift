@@ -151,7 +151,8 @@ private struct LoadableImageContent<TransformerView: View, PlaceholderView: View
                 }
             }
         }
-        .animation(mediaType == .avatar ? .noAnimation : .elementDefault, value: contentLoader.content)
+//        .animation(mediaType == .avatar ? .noAnimation : .elementDefault, value: contentLoader.content)
+        .animation(.elementDefault, value: contentLoader.content)
         .animation(.elementDefault, value: loadManually)
         .task(id: mediaSource.url.absoluteString + "\(shouldRender)") {
             guard shouldRender, contentLoader.content == nil else {

@@ -22,32 +22,34 @@ struct HomeNotificationsContent: View {
     private var notificationsList: some View {
         GeometryReader { geometry in
             ScrollView {
-                switch context.viewState.roomListMode {
-                case .skeletons:
-                    LazyVStack(spacing: 0) {
-                        ForEach(context.viewState.visibleRooms) { room in
-                            HomeScreenNotificationCell(room: room, context: context)
-                                .redacted(reason: .placeholder)
-                                .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
-                        }
-                    }
-                    .disabled(true)
-                case .empty:
-                    HomeNotificationsEmptyView()
-                case .rooms:
-                    LazyVStack(spacing: 0) {
-                        let roomsWithNotifications = context.viewState.notificationsContent
-                        Section {
-                            if roomsWithNotifications.isEmpty {
-                                HomeNotificationsEmptyView()
-                            } else {
-                                ForEach(roomsWithNotifications) { room in
+                LazyVStack(spacing: 0) {
+                    Section {
+                        switch context.viewState.roomListMode {
+                        case .skeletons:
+                            LazyVStack(spacing: 0) {
+                                ForEach(context.viewState.visibleRooms) { room in
                                     HomeScreenNotificationCell(room: room, context: context)
+                                        .redacted(reason: .placeholder)
+                                        .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
                                 }
                             }
-                        } header: {
-                            topSection
+                            .disabled(true)
+                        case .empty:
+                            HomeNotificationsEmptyView()
+                        case .rooms:
+                            LazyVStack(spacing: 0) {
+                                let roomsWithNotifications = context.viewState.notificationsContent
+                                if roomsWithNotifications.isEmpty {
+                                    HomeNotificationsEmptyView()
+                                } else {
+                                    ForEach(roomsWithNotifications) { room in
+                                        HomeScreenNotificationCell(room: room, context: context)
+                                    }
+                                }
+                            }
                         }
+                    } header : {
+                        topSection
                     }
                 }
             }

@@ -116,6 +116,7 @@ struct HomeScreenPostCell: View {
                             .placeholder {
                                 ProgressView()
                             }
+                            .fade(duration: 0.3)
                             .aspectRatio(mediaInfo.aspectRatio, contentMode: .fit)
                             .cornerRadius(4, corners: .allCorners)
                             .onTapGesture {
