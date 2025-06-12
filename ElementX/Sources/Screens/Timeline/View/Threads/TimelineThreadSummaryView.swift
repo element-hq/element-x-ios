@@ -23,7 +23,7 @@ struct TimelineThreadSummaryView: View {
     @ViewBuilder
     private var content: some View {
         switch threadSummary {
-        case .loaded(let senderID, let sender, let latestEventContent):
+        case .loaded(let senderID, let sender, let latestEventContent, let numberOfReplies):
             switch latestEventContent {
             case .message(let content):
                 switch content {
@@ -31,58 +31,69 @@ struct TimelineThreadSummaryView: View {
                     ThreadView(senderID: senderID,
                                sender: sender,
                                plainBody: content.caption ?? content.filename,
-                               formattedBody: content.formattedCaption)
+                               formattedBody: content.formattedCaption,
+                               numberOfReplies: numberOfReplies)
                 case .emote(let content):
                     ThreadView(senderID: senderID,
                                sender: sender,
                                plainBody: content.body,
-                               formattedBody: content.formattedBody)
+                               formattedBody: content.formattedBody,
+                               numberOfReplies: numberOfReplies)
                 case .file(let content):
                     ThreadView(senderID: senderID,
                                sender: sender,
                                plainBody: content.caption ?? content.filename,
-                               formattedBody: content.formattedCaption)
+                               formattedBody: content.formattedCaption,
+                               numberOfReplies: numberOfReplies)
                 case .image(let content):
                     ThreadView(senderID: senderID,
                                sender: sender,
                                plainBody: content.caption ?? content.filename,
-                               formattedBody: content.formattedCaption)
+                               formattedBody: content.formattedCaption,
+                               numberOfReplies: numberOfReplies)
                 case .notice(let content):
                     ThreadView(senderID: senderID,
                                sender: sender,
                                plainBody: content.body,
-                               formattedBody: content.formattedBody)
+                               formattedBody: content.formattedBody,
+                               numberOfReplies: numberOfReplies)
                 case .text(let content):
                     ThreadView(senderID: senderID,
                                sender: sender,
                                plainBody: content.body,
-                               formattedBody: content.formattedBody)
+                               formattedBody: content.formattedBody,
+                               numberOfReplies: numberOfReplies)
                 case .video(let content):
                     ThreadView(senderID: senderID,
                                sender: sender,
                                plainBody: content.caption ?? content.filename,
-                               formattedBody: content.formattedCaption)
+                               formattedBody: content.formattedCaption,
+                               numberOfReplies: numberOfReplies)
                 case .voice:
                     ThreadView(senderID: senderID,
                                sender: sender,
                                plainBody: L10n.commonVoiceMessage,
-                               formattedBody: nil)
+                               formattedBody: nil,
+                               numberOfReplies: numberOfReplies)
                 case .location:
                     ThreadView(senderID: senderID,
                                sender: sender,
                                plainBody: L10n.commonSharedLocation,
-                               formattedBody: nil)
+                               formattedBody: nil,
+                               numberOfReplies: numberOfReplies)
                 }
             case .poll(let question):
                 ThreadView(senderID: senderID,
                            sender: sender,
                            plainBody: question,
-                           formattedBody: nil)
+                           formattedBody: nil,
+                           numberOfReplies: numberOfReplies)
             case .redacted:
                 ThreadView(senderID: senderID,
                            sender: sender,
                            plainBody: L10n.commonMessageRemoved,
-                           formattedBody: nil)
+                           formattedBody: nil,
+                           numberOfReplies: numberOfReplies)
             }
         default:
             LoadingThreadView()
@@ -91,7 +102,11 @@ struct TimelineThreadSummaryView: View {
     
     private struct LoadingThreadView: View {
         var body: some View {
-            ThreadView(senderID: "@alice:matrix.org", sender: nil, plainBody: "Hello world", formattedBody: nil)
+            ThreadView(senderID: "@alice:matrix.org",
+                       sender: nil,
+                       plainBody: "Hello world",
+                       formattedBody: nil,
+                       numberOfReplies: 42)
                 .redacted(reason: .placeholder)
         }
     }
@@ -103,11 +118,16 @@ struct TimelineThreadSummaryView: View {
         let sender: TimelineItemSender?
         let plainBody: String
         let formattedBody: AttributedString?
+        let numberOfReplies: Int
         
         var body: some View {
-            HStack(spacing: 8) {
+            HStack(spacing: 4) {
                 CompoundIcon(\.threads, size: .xSmall, relativeTo: .compound.bodyXS)
                     .foregroundColor(.compound.iconSecondary)
+                
+                Text(L10n.commonReplies(numberOfReplies))
+                    .font(.compound.bodyXSSemibold)
+                    .foregroundColor(.compound.textPrimary)
                 
                 LoadableAvatarImage(url: sender?.avatarURL,
                                     name: sender?.displayName,
@@ -121,13 +141,11 @@ struct TimelineThreadSummaryView: View {
                     .accessibilityLabel(L10n.commonInReplyTo(sender?.disambiguatedDisplayName ?? senderID))
                 
                 Text(context.viewState.buildMessagePreview(formattedBody: formattedBody, plainBody: plainBody))
-                    .multilineTextAlignment(.leading)
                     .font(.compound.bodyXS)
                     .foregroundColor(.compound.textSecondary)
-                    .tint(.compound.textLinkExternal)
-                    .lineLimit(2)
             }
-            .padding(.vertical, 4.0)
+            .lineLimit(1)
+            .padding(.vertical, 7.0)
             .padding(.horizontal, 8.0)
             .background(Color.compound.bgSubtlePrimary)
             .cornerRadius(8)
@@ -183,12 +201,14 @@ struct TimelineThreadSummaryView_Previews: PreviewProvider, TestablePreview {
             TimelineThreadSummaryView(threadSummary: .error(message: "Error")),
             
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
-                                                             sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
-                                                             latestEventContent: .message(.text(.init(body: "This is a threaded message"))))),
+                                                             sender: .init(id: "@alice:matrix.org", displayName: "Alice McAliceFace"),
+                                                             latestEventContent: .message(.text(.init(body: "This is a very long, multi-lined, threaded message"))),
+                                                             numberOfReplies: 42)),
             
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
-                                                             latestEventContent: .message(.notice(.init(body: "Hello world"))))),
+                                                             latestEventContent: .message(.notice(.init(body: "Hello world"))),
+                                                             numberOfReplies: 42)),
             
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
@@ -198,7 +218,8 @@ struct TimelineThreadSummaryView_Previews: PreviewProvider, TestablePreview {
                                                                                                        waveform: nil,
                                                                                                        source: nil,
                                                                                                        fileSize: nil,
-                                                                                                       contentType: nil))))),
+                                                                                                       contentType: nil))),
+                                                             numberOfReplies: 42)),
             
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
@@ -207,24 +228,28 @@ struct TimelineThreadSummaryView_Previews: PreviewProvider, TestablePreview {
                                                                                                       source: nil,
                                                                                                       fileSize: nil,
                                                                                                       thumbnailSource: nil,
-                                                                                                      contentType: nil))))),
+                                                                                                      contentType: nil))),
+                                                             numberOfReplies: 42)),
             
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
                                                              latestEventContent: .message(.image(.init(filename: "image.jpg",
                                                                                                        caption: "Some image",
                                                                                                        imageInfo: .mockImage,
-                                                                                                       thumbnailInfo: .mockThumbnail))))),
+                                                                                                       thumbnailInfo: .mockThumbnail))),
+                                                             numberOfReplies: 42)),
             
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
                                                              latestEventContent: .message(.video(.init(filename: "video.mp4",
                                                                                                        caption: "Some video",
                                                                                                        videoInfo: .mockVideo,
-                                                                                                       thumbnailInfo: .mockVideoThumbnail))))),
+                                                                                                       thumbnailInfo: .mockVideoThumbnail))),
+                                                             numberOfReplies: 42)),
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
-                                                             latestEventContent: .message(.location(.init(body: ""))))),
+                                                             latestEventContent: .message(.location(.init(body: ""))),
+                                                             numberOfReplies: 42)),
             
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
@@ -234,34 +259,43 @@ struct TimelineThreadSummaryView_Previews: PreviewProvider, TestablePreview {
                                                                                                        waveform: nil,
                                                                                                        source: nil,
                                                                                                        fileSize: nil,
-                                                                                                       contentType: nil))))),
+                                                                                                       contentType: nil))),
+                                                             numberOfReplies: 42)),
             
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
-                                                             latestEventContent: .poll(question: "Do you like polls?"))),
+                                                             latestEventContent: .poll(question: "Do you like polls?"),
+                                                             numberOfReplies: 42)),
             
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
-                                                             latestEventContent: .redacted)),
+                                                             latestEventContent: .redacted,
+                                                             numberOfReplies: 42)),
             
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
-                                                             latestEventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithMention))))),
+                                                             latestEventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithMention))),
+                                                             numberOfReplies: 42)),
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
-                                                             latestEventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithAtRoomMention))))),
+                                                             latestEventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithAtRoomMention))),
+                                                             numberOfReplies: 42)),
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
-                                                             latestEventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithRoomAliasMention))))),
+                                                             latestEventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithRoomAliasMention))),
+                                                             numberOfReplies: 42)),
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
-                                                             latestEventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithRoomIDMention))))),
+                                                             latestEventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithRoomIDMention))),
+                                                             numberOfReplies: 42)),
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
-                                                             latestEventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithEventOnRoomIDMention))))),
+                                                             latestEventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithEventOnRoomIDMention))),
+                                                             numberOfReplies: 42)),
             TimelineThreadSummaryView(threadSummary: .loaded(senderID: "@alice:matrix.org",
                                                              sender: .init(id: "@alice:matrix.org", displayName: "Alice"),
-                                                             latestEventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithEventOnRoomAliasMention)))))
+                                                             latestEventContent: .message(.notice(.init(body: "", formattedBody: attributedStringWithEventOnRoomAliasMention))),
+                                                             numberOfReplies: 42))
         ]
     }
     
