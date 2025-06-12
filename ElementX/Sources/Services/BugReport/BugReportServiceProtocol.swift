@@ -22,7 +22,7 @@ struct BugReport: Equatable {
 }
 
 struct SubmitBugReportResponse: Decodable {
-    var reportUrl: String
+    var reportUrl: String?
 }
 
 enum BugReportServiceError: LocalizedError {
