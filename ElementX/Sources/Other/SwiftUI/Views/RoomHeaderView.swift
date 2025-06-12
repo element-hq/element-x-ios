@@ -17,6 +17,18 @@ struct RoomHeaderView: View {
     let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
+        if #available(iOS 26, *) {
+            // https://github.com/element-hq/element-x-ios/issues/4180
+            // Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'NSLayoutConstraint constant is not finite!
+            content
+        } else {
+            content
+                // Take up as much space as possible, with a leading alignment for use in the principal toolbar position
+                .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
+        }
+    }
+    
+    private var content: some View {
         HStack(spacing: 8) {
             avatarImage
                 .accessibilityHidden(true)
@@ -32,8 +44,6 @@ struct RoomHeaderView: View {
                 }
             }
         }
-        // Take up as much space as possible, with a leading alignment for use in the principal toolbar position.
-        .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
     }
     
     private var avatarImage: some View {
