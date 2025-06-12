@@ -39,21 +39,33 @@ struct ReferAFriendSettingsScreen: View {
                             }
                             .padding(.top, 24)
                             
-                            referralCodeLabel
-                                .padding(.vertical, 8)
-                            
-                            referralCodeStrip
-                            
-                            HStack(spacing: 16) {
-                                BottomInfoBox(title: "Total invited so far",
-                                              description: context.viewState.totalInvited)
-                                BottomInfoBox(title: "Pro subs", description: "0")
-                            }
-                            .padding(.top, 8)
-                            
-                            if context.viewState.hasRemaniningInvites {
-                                shareInviteButton
+                            if context.viewState.inviteSlug.isEmpty {
+                                Text("Thank you! You’ve used all of your available invites. We’ll let you know when you can invite more people.")
+                                    .font(.zero.bodyLG)
+                                    .foregroundColor(.zero.bgAccentRest)
+                                    .padding(16)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(.zero.bgAccentRest.opacity(0.15))
+                                    )
+                                    .padding(.top, 8)
+                            } else {
+                                referralCodeLabel
                                     .padding(.vertical, 8)
+                                
+                                referralCodeStrip
+                                
+                                HStack(spacing: 16) {
+                                    BottomInfoBox(title: "Total invited so far",
+                                                  description: context.viewState.totalInvited)
+                                    BottomInfoBox(title: "Pro subs", description: "0")
+                                }
+                                .padding(.top, 8)
+                                
+                                if context.viewState.hasRemaniningInvites {
+                                    shareInviteButton
+                                        .padding(.vertical, 8)
+                                }
                             }
                         }
                     }
@@ -137,6 +149,16 @@ struct ReferAFriendSettingsScreen: View {
             RoundedRectangle(cornerRadius: 12)
                 .fill(.compound.bgCanvasDefaultLevel1)
         )
+    }
+    
+    private func inviteCodeMessage(inviteSlug: String) -> String {
+        """
+        Here's your invite code to ZERO Messenger:
+        \(inviteSlug)
+
+        Join early, earn more:
+        https://zos.zero.tech/get-access
+        """
     }
 }
 

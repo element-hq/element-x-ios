@@ -31,11 +31,21 @@ class InviteFriendSettingsScreenViewModel:
     }
     
     private func onInviteCopied() {
-        UIPasteboard.general.string = state.inviteSlug
+        UIPasteboard.general.string = inviteCodeMessage(inviteSlug: state.inviteSlug)
         state.bindings.inviteCopied = true
         Task {
             try await Task.sleep(for: .seconds(2))
             state.bindings.inviteCopied = false
         }
+    }
+    
+    private func inviteCodeMessage(inviteSlug: String) -> String {
+        """
+        Here's your invite code to ZERO Messenger:
+        \(inviteSlug)
+
+        Join early, earn more:
+        https://zos.zero.tech/get-access
+        """
     }
 }

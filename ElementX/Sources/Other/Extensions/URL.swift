@@ -169,4 +169,8 @@ extension URL {
     func isDummyURL() -> Bool {
         return self.absoluteString.hasPrefix("dummy://")
     }
+    
+    func hasMatrixScheme() -> Bool {
+        return self.absoluteString.hasPrefix("mxc://")
+    }
 }

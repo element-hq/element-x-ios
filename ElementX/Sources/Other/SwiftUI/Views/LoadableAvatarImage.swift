@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Kingfisher
 import SwiftUI
 
 struct LoadableAvatarImage: View {
@@ -52,20 +53,31 @@ struct LoadableAvatarImage: View {
             .clipShape(Circle())
             .environment(\.shouldAutomaticallyLoadImages, true) // We always load avatars.
     }
+    
+    @State private var didLoadFail = false
         
     @ViewBuilder
     private var avatar: some View {
-        if let url {
-            LoadableImage(url: url,
-                          mediaType: .avatar,
-                          size: avatarSize.scaledSize,
-                          mediaProvider: mediaProvider) { image in
-                image
-                    .scaledToFill()
-            } placeholder: {
-                PlaceholderAvatarImage(name: name, contentID: contentID, onTap: {
-                    onTap?(url)
-                })
+        if let url = url, !didLoadFail {
+            if url.hasMatrixScheme() {
+                LoadableImage(url: url,
+                              mediaType: .avatar,
+                              size: avatarSize.scaledSize,
+                              mediaProvider: mediaProvider) { image in
+                    image
+                        .scaledToFill()
+                } placeholder: {
+                    Circle().fill(.black)
+                }
+            } else {
+                KFAnimatedImage(url)
+                    .onFailure({ _ in
+                        didLoadFail = true
+                    })
+                    .placeholder { _ in
+                        Circle().fill(.black)
+                    }
+                    .aspectRatio(contentMode: .fit)
             }
         } else {
             PlaceholderAvatarImage(name: name, contentID: contentID, onTap: {
