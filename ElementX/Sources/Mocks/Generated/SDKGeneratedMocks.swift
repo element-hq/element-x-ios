@@ -22215,15 +22215,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - sendLocation
 
-    var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeUnderlyingCallsCount = 0
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeCallsCount: Int {
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsThrowableError: Error?
+    var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount = 0
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeUnderlyingCallsCount
+                return sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeUnderlyingCallsCount
+                    returnValue = sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -22231,28 +22232,31 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeUnderlyingCallsCount = newValue
+                sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeUnderlyingCallsCount = newValue
+                    sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeCalled: Bool {
-        return sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeCallsCount > 0
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsCalled: Bool {
+        return sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsCallsCount > 0
     }
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReceivedArguments: (body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?)?
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReceivedInvocations: [(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?)] = []
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeClosure: ((String, String, String?, UInt8?, AssetType?) async -> Void)?
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsReceivedArguments: (body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?, replyParams: ReplyParameters?)?
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsReceivedInvocations: [(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?, replyParams: ReplyParameters?)] = []
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsClosure: ((String, String, String?, UInt8?, AssetType?, ReplyParameters?) async throws -> Void)?
 
-    open override func sendLocation(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?) async {
-        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeCallsCount += 1
-        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReceivedArguments = (body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType)
-        DispatchQueue.main.async {
-            self.sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReceivedInvocations.append((body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType))
+    open override func sendLocation(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?, replyParams: ReplyParameters?) async throws {
+        if let error = sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsThrowableError {
+            throw error
         }
-        await sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeClosure?(body, geoUri, description, zoomLevel, assetType)
+        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsCallsCount += 1
+        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsReceivedArguments = (body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType, replyParams: replyParams)
+        DispatchQueue.main.async {
+            self.sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsReceivedInvocations.append((body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType, replyParams: replyParams))
+        }
+        try await sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsClosure?(body, geoUri, description, zoomLevel, assetType, replyParams)
     }
 
     //MARK: - sendPollResponse

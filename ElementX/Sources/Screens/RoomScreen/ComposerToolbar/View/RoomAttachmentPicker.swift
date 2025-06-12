@@ -49,7 +49,7 @@ struct RoomAttachmentPicker: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
             }
             
-            if !context.viewState.isInThread, context.viewState.isLocationSharingEnabled {
+            if context.viewState.isLocationSharingEnabled {
                 Button {
                     context.send(viewAction: .attach(.location))
                 } label: {

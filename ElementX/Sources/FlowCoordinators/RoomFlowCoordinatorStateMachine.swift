@@ -60,7 +60,7 @@ extension RoomFlowCoordinator {
         case mediaUploadPicker(source: MediaPickerScreenSource, threadRootEventID: String?, previousState: State)
         case mediaUploadPreview(fileURL: URL, threadRootEventID: String?, previousState: State)
         case emojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>, previousState: State)
-        case mapNavigator(previousState: State)
+        case mapNavigator(threadRootEventID: String?, previousState: State)
         case messageForwarding(forwardingItem: MessageForwardingItem, previousState: State)
         case reportContent(itemID: TimelineItemIdentifier, senderID: String, previousState: State)
         case pollForm(previousState: State)
@@ -131,7 +131,7 @@ extension RoomFlowCoordinator {
         case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
         case dismissEmojiPicker
 
-        case presentMapNavigator(interactionMode: StaticLocationInteractionMode)
+        case presentMapNavigator(interactionMode: StaticLocationInteractionMode, threadRootEventID: String?)
         case dismissMapNavigator
         
         case presentMessageForwarding(forwardingItem: MessageForwardingItem)
@@ -196,8 +196,8 @@ extension RoomFlowCoordinator {
             case (.room, .presentMessageForwarding(let forwardingItem)):
                 return .messageForwarding(forwardingItem: forwardingItem, previousState: fromState)
 
-            case (.room, .presentMapNavigator):
-                return .mapNavigator(previousState: fromState)
+            case (.room, .presentMapNavigator(_, let threadRootEventID)):
+                return .mapNavigator(threadRootEventID: threadRootEventID, previousState: fromState)
             
             case (.room, .presentPollForm):
                 return .pollForm(previousState: fromState)
@@ -233,8 +233,8 @@ extension RoomFlowCoordinator {
             case (.thread, .presentMessageForwarding(let forwardingItem)):
                 return .messageForwarding(forwardingItem: forwardingItem, previousState: fromState)
 
-            case (.thread, .presentMapNavigator):
-                return .mapNavigator(previousState: fromState)
+            case (.thread, .presentMapNavigator(_, let threadRootEventID)):
+                return .mapNavigator(threadRootEventID: threadRootEventID, previousState: fromState)
             
             case (.thread, .presentPollForm):
                 return .pollForm(previousState: fromState)
@@ -256,7 +256,7 @@ extension RoomFlowCoordinator {
             case (.messageForwarding(_, let previousState), .dismissMessageForwarding):
                 return previousState
                 
-            case (.mapNavigator(let previousState), .dismissMapNavigator):
+            case (.mapNavigator(_, let previousState), .dismissMapNavigator):
                 return previousState
                 
             case (.pollForm(let previousState), .dismissPollForm):
