@@ -75,7 +75,19 @@ struct HomeScreen: View {
             Button {
                 context.send(viewAction: .showSettings)
             } label: {
-                HStack {
+                ZStack {
+                    if context.viewState.showNewUserRewardsIntimation {
+                        ZStack(alignment: .center) {
+                            Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 1)
+                                .frame(width: 38, height: 38)
+                            Circle().stroke(Color.zero.bgAccentRest, lineWidth: 1)
+                                .frame(width: 35, height: 35)
+                        }
+                        .task {
+                            context.send(viewAction: .rewardsIntimated)
+                        }
+                    }
+                    
                     LoadableAvatarImage(url: context.viewState.userAvatarURL,
                                         name: context.viewState.userDisplayName,
                                         contentID: context.viewState.userID,
@@ -89,18 +101,9 @@ struct HomeScreen: View {
                     .compositingGroup()
                     .overlay {
                         if context.viewState.showNewUserRewardsIntimation {
-                            ZStack(alignment: .center) {
-                                Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 1)
-                                    .frame(width: 38, height: 38)
-                                Circle().stroke(Color.zero.bgAccentRest, lineWidth: 1)
-                                    .frame(width: 35, height: 35)
-                            }
-                            .task {
-                                context.send(viewAction: .rewardsIntimated)
-                            }
-                            
                             userRewardsToolTip
                                 .offset(x: 85, y: 45)
+                                .allowsHitTesting(false)
                         }
                     }
                 }
@@ -142,30 +145,30 @@ struct HomeScreen: View {
     }
     
     private var userRewardsToolTip: some View {
-        VStack(alignment: .leading) {
-            Triangle()
-                .fill(.ultraThickMaterial)
-                .frame(width: 25, height: 15)
-                .padding(.leading, 16)
-            
-            Button {
-                context.send(viewAction: .rewardsIntimated)
-            } label: {
+        Button {
+            context.send(viewAction: .rewardsIntimated)
+        } label: {
+            VStack(alignment: .leading, spacing: 0) {
+                Triangle()
+                    .fill(.ultraThickMaterial)
+                    .frame(width: 25, height: 15)
+                    .padding(.leading, 16)
+                
                 HStack {
                     Text("You earned $\(context.viewState.userRewards.getRefPriceFormatted())")
                         .font(.inter(size: 16))
                     
                     Spacer()
                     
-                    Image(systemName: "xmark")
-                        .font(.system(size: 16))
+                    CompoundIcon(\.close)
                 }
                 .padding(.all, 16)
                 .background(.ultraThickMaterial)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             }
-            .frame(width: 225, height: 30, alignment: .leading)
         }
+        .allowsHitTesting(false)
+        .frame(width: 225, height: 30, alignment: .leading)
     }
     
     private struct Triangle: Shape {

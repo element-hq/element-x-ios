@@ -11,6 +11,7 @@ import SwiftUI
 struct CreateFeedScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let createFeedProtocol: CreateFeedProtocol
+    let fromUserProfileFlow: Bool
 }
 
 enum CreateFeedScreenCoordinatorAction {
@@ -33,7 +34,8 @@ final class CreateFeedScreenCoordinator: CoordinatorProtocol {
         viewModel = CreateFeedScreenViewModel(clientProxy: parameters.userSession.clientProxy,
                                               createFeedProtocol: parameters.createFeedProtocol,
                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                              mediaProvider: parameters.userSession.mediaProvider)
+                                              mediaProvider: parameters.userSession.mediaProvider,
+                                              fromUserProfileFlow: parameters.fromUserProfileFlow)
         viewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }

@@ -37,11 +37,13 @@ struct CreateFeedScreen: View {
                 CompoundIcon(\.attachment)
             }
         }
-        ToolbarItem(placement: .cancellationAction) {
-            Button {
-                context.send(viewAction: .dismissPost)
-            } label : {
-                CompoundIcon(\.close)
+        if context.viewState.showCloseButton {
+            ToolbarItem(placement: .cancellationAction) {
+                Button {
+                    context.send(viewAction: .dismissPost)
+                } label : {
+                    CompoundIcon(\.close)
+                }
             }
         }
     }

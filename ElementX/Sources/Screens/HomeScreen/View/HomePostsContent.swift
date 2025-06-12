@@ -37,6 +37,7 @@ struct HomePostsContent: View {
             ScrollView {
                 LazyVStack(spacing: 0) {
                     HomePostsTabView(
+                        selectedTab: (context.viewState.currentUserZeroProfile?.isFollowingOtherUsers ?? false) ? .following : .all,
                         onTabSelected: { tab in
                             selectedTab = tab
                             context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: tab == .following))
@@ -79,6 +80,8 @@ struct HomePostsContent: View {
                                     .onAppear {
                                         context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
                                     }
+                            } else {
+                                HomeTabBottomSpace()
                             }
                         }
                     }
@@ -103,7 +106,7 @@ struct HomePostsContent: View {
 struct HomePostsEmptyView: View {
     var body: some View {
         ZStack {
-            Text("No posts yet")
+            Text("No posts")
                 .font(.compound.headingMD)
                 .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, alignment: .center)

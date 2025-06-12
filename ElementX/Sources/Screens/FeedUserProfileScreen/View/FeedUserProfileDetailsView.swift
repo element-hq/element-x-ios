@@ -13,6 +13,19 @@ struct FeedUserProfileDetailsView: View {
     let scrollViewAdapter: ScrollViewAdapter
     
     var body: some View {
+        ZStack {
+            content
+            
+            if !context.viewState.shouldShowDirectChatButton {
+                FloatingActionButton(onTap: {
+                    context.send(viewAction: .newFeed)
+                })
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+            }
+        }
+    }
+    
+    var content: some View {
         GeometryReader { geometry in
             ScrollView {
                 // Feed Details view
@@ -47,7 +60,8 @@ struct FeedUserProfileDetailsView: View {
                     }
                     .disabled(true)
                 case .empty:
-                    EmptyView()
+                    HomePostsEmptyView()
+                        .padding(.bottom, 100)
                 case .feeds:
                     LazyVStack(spacing: 0) {
                         UserFeedsList(context: context)

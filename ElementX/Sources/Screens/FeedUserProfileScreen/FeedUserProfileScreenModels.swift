@@ -55,6 +55,7 @@ struct FeedUserProfileScreenViewStateBindings {
 enum FeedUserProfileScreenViewModelAction {
     case feedTapped(_ feed: HomeScreenPost)
     case openDirectChat(_ roomId: String)
+    case newFeed(CreateFeedProtocol)
 }
 
 enum FeedUserProfileScreenViewAction {
@@ -67,6 +68,7 @@ enum FeedUserProfileScreenViewAction {
     case openDirectChat
     case displayAvatar(_ url: URL)
     case openMediaPreview(_ url: URL)
+    case newFeed
 }
 
 enum UserFeedsListMode: CustomStringConvertible {

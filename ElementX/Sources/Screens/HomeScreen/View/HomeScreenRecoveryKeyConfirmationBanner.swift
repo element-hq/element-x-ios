@@ -62,13 +62,10 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 if state == .setUpRecovery {
-                    Button {
-                        context.send(viewAction: .skipRecoveryKeyConfirmation)
-                    } label: {
-                        Image(systemName: "xmark")
-                            .foregroundColor(.compound.iconSecondary)
-                            .frame(width: 12, height: 12)
-                    }
+                    CompoundIcon(\.close)
+                        .onTapGesture {
+                            context.send(viewAction: .skipRecoveryKeyConfirmation)
+                        }
                 }
             }
             

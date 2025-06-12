@@ -11,6 +11,8 @@ public struct ZCurrentUser: Codable, Identifiable {
     public let totalRewards: String?
     public let wallets: [ZWallet]?
     public let primaryWalletAddress: String?
+    public let followersCount: String?
+    public let followingCount: String?
     
     public var profileImageURL: URL? {
         URL(string: profileSummary?.profileImage ?? "")
@@ -35,7 +37,9 @@ public struct ZCurrentUser: Codable, Identifiable {
         primaryZID: nil,
         totalRewards: nil,
         wallets: nil,
-        primaryWalletAddress: nil
+        primaryWalletAddress: nil,
+        followersCount: "0",
+        followingCount: "0"
     )
 }
 
@@ -60,8 +64,16 @@ extension ZCurrentUser {
         primaryZID ?? displayFormattedAddress(primaryWalletAddress ?? thirdWebWalletAddress)
     }
     
+    var publicWalletAddress: String? {
+        primaryWalletAddress ?? thirdWebWalletAddress
+    }
+    
     var thirdWebWalletAddress: String? {
         wallets?.first(where: { $0.isThirdWeb })?.publicAddress
+    }
+    
+    var isFollowingOtherUsers: Bool {
+        (Int(followingCount ?? "0") ?? 0) > 0
     }
 }
 

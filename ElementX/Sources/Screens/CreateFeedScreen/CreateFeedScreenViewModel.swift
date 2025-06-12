@@ -27,12 +27,15 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
     init(clientProxy: ClientProxyProtocol,
          createFeedProtocol: CreateFeedProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         mediaProvider: MediaProviderProtocol) {
+         mediaProvider: MediaProviderProtocol,
+         fromUserProfileFlow: Bool) {
         self.clientProxy = clientProxy
         self.createFeedProtocol = createFeedProtocol
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: .init(userID: clientProxy.userID, bindings: .init()), mediaProvider: mediaProvider)
+        super.init(initialViewState: .init(userID: clientProxy.userID,
+                                           showCloseButton: !fromUserProfileFlow,
+                                           bindings: .init()), mediaProvider: mediaProvider)
         
         clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)

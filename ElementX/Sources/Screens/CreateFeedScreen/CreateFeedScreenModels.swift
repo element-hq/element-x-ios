@@ -12,6 +12,8 @@ struct CreateFeedScreenViewState: BindableState {
     let userID: String
     var userAvatarURL: URL?
     
+    var showCloseButton: Bool = true
+    
     var bindings: CreateFeedScreenViewStateBindings
 }
 

@@ -100,6 +100,9 @@ struct ReferAFriendSettingsScreen: View {
             Text(context.viewState.inviteSlug)
                 .font(.zero.bodyLG)
                 .foregroundColor(.compound.textPrimary)
+                .onTapGesture {
+                    context.send(viewAction: .inviteCopied)
+                }
             
             Spacer()
             

@@ -39,6 +39,8 @@ struct HomeChannelsContent: View {
                                 context.send(viewAction: .channelTapped(channel))
                             })
                         }
+                        
+                        HomeTabBottomSpace()
                     }
                 }
             }

@@ -111,7 +111,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     private var header: some View {
         if shouldShowSenderDetails {
             HStack {
-                TimelineSenderAvatarView(timelineItem: timelineItem)
+                TimelineSenderAvatarView(
+                    timelineItem: timelineItem,
+                    onTap: { _ in
+                        context.send(viewAction: .tappedOnSenderDetails(sender: timelineItem.sender))
+                    }
+                )
             }
             // sender info are read inside the `TimelineAccessibilityModifier`
             .accessibilityHidden(true)

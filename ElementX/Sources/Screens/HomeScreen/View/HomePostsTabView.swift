@@ -14,7 +14,7 @@ enum HomePostsTab: CaseIterable {
 }
 
 struct HomePostsTabView: View {
-    @State private var selectedTab: HomePostsTab = .following
+    @State var selectedTab: HomePostsTab = .following
     let onTabSelected: (HomePostsTab) -> Void
     
     private let tabs = [

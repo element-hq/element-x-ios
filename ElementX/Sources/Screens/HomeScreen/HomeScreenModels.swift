@@ -148,7 +148,8 @@ struct HomeScreenViewState: BindableState {
     let userID: String
     var userDisplayName: String?
     var userAvatarURL: URL?
-    var primaryZeroId: String?
+    
+    var currentUserZeroProfile: ZCurrentUser?
     
     var securityBannerMode = HomeScreenSecurityBannerMode.none
     

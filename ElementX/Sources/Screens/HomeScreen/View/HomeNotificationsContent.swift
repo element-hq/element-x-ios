@@ -45,6 +45,8 @@ struct HomeNotificationsContent: View {
                                     ForEach(roomsWithNotifications) { room in
                                         HomeScreenNotificationCell(room: room, context: context)
                                     }
+                                    
+                                    HomeTabBottomSpace()
                                 }
                             }
                         }

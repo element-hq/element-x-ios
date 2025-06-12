@@ -59,12 +59,16 @@ struct HomeScreenContent: View {
                             .layoutPriority(1)
                     }
                 case .rooms:
-                    if !context.viewState.shouldShowEmptyFilterState {
-                        HomeScreenRoomList(context: context)
-                            .isSearching($context.isSearchFieldFocused)
-                            .searchable(text: $context.searchQuery)
-                            .compoundSearchField()
-                            .disableAutocorrection(true)
+                    LazyVStack(spacing: 0) {
+                        if !context.viewState.shouldShowEmptyFilterState {
+                            HomeScreenRoomList(context: context)
+                                .isSearching($context.isSearchFieldFocused)
+                                .searchable(text: $context.searchQuery)
+                                .compoundSearchField()
+                                .disableAutocorrection(true)
+                            
+                            HomeTabBottomSpace()
+                        }
                     }
                 }
             }
