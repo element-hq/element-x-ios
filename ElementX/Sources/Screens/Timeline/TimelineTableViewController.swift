@@ -292,7 +292,7 @@ class TimelineTableViewController: UIViewController {
             }
         }
         
-        // We only animate when there's a new last message, so its safe
+        // We only animate when there's a new last message, so it's safe
         // to animate from the bottom (which is the top as we're flipped).
         dataSource?.defaultRowAnimation = (UIAccessibility.isReduceMotionEnabled ? .none : .top)
         tableView.delegate = self
