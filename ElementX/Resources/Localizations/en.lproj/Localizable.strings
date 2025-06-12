@@ -381,8 +381,12 @@
 "rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Create a link";
 "rich_text_editor_edit_link" = "Edit link";
+"rich_text_editor_format_action" = "%1$@, state: %2$@";
 "rich_text_editor_format_bold" = "Apply bold format";
 "rich_text_editor_format_italic" = "Apply italic format";
+"rich_text_editor_format_state_disabled" = "disabled";
+"rich_text_editor_format_state_off" = "off";
+"rich_text_editor_format_state_on" = "on";
 "rich_text_editor_format_strikethrough" = "Apply strikethrough format";
 "rich_text_editor_format_underline" = "Apply underline format";
 "rich_text_editor_full_screen_toggle" = "Toggle full screen mode";

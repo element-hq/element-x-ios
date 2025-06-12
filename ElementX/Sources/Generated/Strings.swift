@@ -930,10 +930,20 @@ internal enum L10n {
   internal static var richTextEditorCreateLink: String { return L10n.tr("Localizable", "rich_text_editor_create_link") }
   /// Edit link
   internal static var richTextEditorEditLink: String { return L10n.tr("Localizable", "rich_text_editor_edit_link") }
+  /// %1$@, state: %2$@
+  internal static func richTextEditorFormatAction(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "rich_text_editor_format_action", String(describing: p1), String(describing: p2))
+  }
   /// Apply bold format
   internal static var richTextEditorFormatBold: String { return L10n.tr("Localizable", "rich_text_editor_format_bold") }
   /// Apply italic format
   internal static var richTextEditorFormatItalic: String { return L10n.tr("Localizable", "rich_text_editor_format_italic") }
+  /// disabled
+  internal static var richTextEditorFormatStateDisabled: String { return L10n.tr("Localizable", "rich_text_editor_format_state_disabled") }
+  /// off
+  internal static var richTextEditorFormatStateOff: String { return L10n.tr("Localizable", "rich_text_editor_format_state_off") }
+  /// on
+  internal static var richTextEditorFormatStateOn: String { return L10n.tr("Localizable", "rich_text_editor_format_state_on") }
   /// Apply strikethrough format
   internal static var richTextEditorFormatStrikethrough: String { return L10n.tr("Localizable", "rich_text_editor_format_strikethrough") }
   /// Apply underline format
