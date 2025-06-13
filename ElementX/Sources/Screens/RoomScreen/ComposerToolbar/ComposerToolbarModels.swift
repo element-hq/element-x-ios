@@ -39,6 +39,8 @@ enum ComposerToolbarViewModelAction {
 
 enum ComposerToolbarViewAction {
     case composerAppeared
+    case composerDisappeared
+    
     case sendMessage
     case editLastMessage
     case cancelReply
