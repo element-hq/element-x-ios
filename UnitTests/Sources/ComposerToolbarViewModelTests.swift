@@ -787,7 +787,7 @@ class ComposerToolbarViewModelTests: XCTestCase {
     private func setUpViewModel(initialText: String? = nil, loadDraftClosure: (() async -> Result<ComposerDraftProxy?, ComposerDraftServiceError>)? = nil) {
         wysiwygViewModel = WysiwygComposerViewModel()
         completionSuggestionServiceMock = CompletionSuggestionServiceMock(configuration: .init())
-        draftServiceMock = ComposerDraftServiceMock()
+        draftServiceMock = ComposerDraftServiceMock(.init())
         if let loadDraftClosure {
             draftServiceMock.loadDraftClosure = loadDraftClosure
         }
