@@ -74,8 +74,6 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                                                         maxExpandedHeight: ComposerConstant.maxHeight,
                                                         parserStyle: .elementX)
         
-        #warning("Drafts are not handled and they can't be without rust side changes")
-        
         composerViewModel = ComposerToolbarViewModel(initialText: nil,
                                                      roomProxy: parameters.roomProxy,
                                                      isInThread: true,
@@ -144,9 +142,14 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                 timelineViewModel.process(composerAction: action)
             }
             .store(in: &cancellables)
+        
+        // Loading the draft requires the subscriptions to be set up first otherwise
+        // the room won't be be able to propagate the information to the composer.
+        composerViewModel.start()
     }
     
     func stop() {
+        composerViewModel.stop()
         viewModel.stop()
     }
         

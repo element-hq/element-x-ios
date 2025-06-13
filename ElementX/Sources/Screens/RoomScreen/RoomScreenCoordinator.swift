@@ -107,11 +107,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                          analyticsService: ServiceLocator.shared.analytics,
                                                          composerDraftService: parameters.composerDraftService)
         self.composerViewModel = composerViewModel
-        
-        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification).sink { _ in
-            composerViewModel.saveDraft()
-        }
-        .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -193,8 +188,9 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        // Loading the draft requires the subscriptions to be set up first otherwise the room won't be be able to propagate the information to the composer.
-        Task { await composerViewModel.loadDraft() }
+        // Loading the draft requires the subscriptions to be set up first otherwise
+        // the room won't be be able to propagate the information to the composer.
+        composerViewModel.start()
     }
     
     func focusOnEvent(_ focussedEvent: FocusEvent) {
@@ -212,7 +208,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func stop() {
-        composerViewModel.saveDraft()
+        composerViewModel.stop()
         roomViewModel.stop()
     }
     
@@ -221,10 +217,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
 
         return AnyView(RoomScreen(context: roomViewModel.context,
                                   timelineContext: timelineViewModel.context,
-                                  composerToolbar: composerToolbar)
-                .onDisappear { [weak self] in
-                    self?.composerViewModel.saveDraft()
-                })
+                                  composerToolbar: composerToolbar))
     }
 }
 

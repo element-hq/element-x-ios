@@ -181,6 +181,9 @@ struct ComposerToolbar: View {
         } onAppearAction: {
             context.send(viewAction: .composerAppeared)
         }
+        .onDisappear {
+            context.send(viewAction: .composerDisappeared)
+        }
         .environmentObject(context)
         .focused($composerFocused)
         .padding(.leading, context.composerFormattingEnabled ? 7 : 0)
