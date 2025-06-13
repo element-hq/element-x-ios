@@ -500,7 +500,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy,
                                                                       roomListPublisher: userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
-        let composerDraftService = ComposerDraftService(roomProxy: roomProxy, timelineItemfactory: timelineItemFactory)
+        let composerDraftService = ComposerDraftService(roomProxy: roomProxy,
+                                                        timelineItemfactory: timelineItemFactory,
+                                                        threadRootEventID: nil)
         
         let parameters = RoomScreenCoordinatorParameters(clientProxy: userSession.clientProxy,
                                                          roomProxy: roomProxy,
@@ -581,11 +583,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
         
-        guard let eventID = itemID.eventID else {
+        guard let threadRootEventID = itemID.eventID else {
             fatalError("Invalid thread event ID")
         }
         
-        guard case let .success(timelineController) = await timelineControllerFactory.buildThreadTimelineController(eventID: eventID,
+        guard case let .success(timelineController) = await timelineControllerFactory.buildThreadTimelineController(eventID: threadRootEventID,
                                                                                                                     roomProxy: roomProxy,
                                                                                                                     timelineItemFactory: timelineItemFactory,
                                                                                                                     mediaProvider: userSession.mediaProvider) else {
@@ -595,7 +597,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy,
                                                                       roomListPublisher: userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
-        let composerDraftService = ComposerDraftService(roomProxy: roomProxy, timelineItemfactory: timelineItemFactory)
+        let composerDraftService = ComposerDraftService(roomProxy: roomProxy,
+                                                        timelineItemfactory: timelineItemFactory,
+                                                        threadRootEventID: threadRootEventID)
         
         let coordinator = ThreadTimelineScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
                                                                             roomProxy: roomProxy,

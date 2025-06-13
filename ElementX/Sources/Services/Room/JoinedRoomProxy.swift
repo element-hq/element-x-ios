@@ -772,9 +772,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     // MARK: - Drafts
     
-    func saveDraft(_ draft: ComposerDraft) async -> Result<Void, RoomProxyError> {
+    func saveDraft(_ draft: ComposerDraft, threadRootEventID: String?) async -> Result<Void, RoomProxyError> {
         do {
-            try await room.saveComposerDraft(draft: draft)
+            try await room.saveComposerDraft(draft: draft, threadRoot: threadRootEventID)
             return .success(())
         } catch {
             MXLog.error("Failed saving draft with error: \(error)")
@@ -782,18 +782,18 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    func loadDraft() async -> Result<ComposerDraft?, RoomProxyError> {
+    func loadDraft(threadRootEventID: String?) async -> Result<ComposerDraft?, RoomProxyError> {
         do {
-            return try await .success(room.loadComposerDraft())
+            return try await .success(room.loadComposerDraft(threadRoot: threadRootEventID))
         } catch {
             MXLog.error("Failed restoring draft with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
     
-    func clearDraft() async -> Result<Void, RoomProxyError> {
+    func clearDraft(threadRootEventID: String?) async -> Result<Void, RoomProxyError> {
         do {
-            try await room.clearComposerDraft()
+            try await room.clearComposerDraft(threadRoot: threadRootEventID)
             return .success(())
         } catch {
             MXLog.error("Failed clearing draft with error: \(error)")

@@ -187,9 +187,9 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     // MARK: - Drafts
     
-    func saveDraft(_ draft: ComposerDraft) async -> Result<Void, RoomProxyError>
-    func loadDraft() async -> Result<ComposerDraft?, RoomProxyError>
-    func clearDraft() async -> Result<Void, RoomProxyError>
+    func saveDraft(_ draft: ComposerDraft, threadRootEventID: String?) async -> Result<Void, RoomProxyError>
+    func loadDraft(threadRootEventID: String?) async -> Result<ComposerDraft?, RoomProxyError>
+    func clearDraft(threadRootEventID: String?) async -> Result<Void, RoomProxyError>
 }
 
 extension JoinedRoomProxyProtocol {
