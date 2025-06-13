@@ -175,7 +175,10 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
-                case .newPostCreated, .dismissPost:
+                case .newPostCreated:
+                    createFeedProtocol.onNewFeedPosted()
+                    stackCoordinator.pop()
+                case .dismissPost:
                     stackCoordinator.pop()
                 case .attachMedia(let attachMediaProtocol):
                     presentMediaUploadPickerWithSource(attachMediaProtocol, stackCoordinator: stackCoordinator)

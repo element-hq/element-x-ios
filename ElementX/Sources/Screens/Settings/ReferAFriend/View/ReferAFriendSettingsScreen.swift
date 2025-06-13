@@ -18,9 +18,9 @@ struct ReferAFriendSettingsScreen: View {
                     VStack(alignment: .center, spacing: 0) {
                         Image(asset: Asset.Images.referAFriendImage)
                         
-                        VStack {
+                        VStack(spacing: 0) {
                             Text("Refer a Friend")
-                                .font(.compound.headingLGBold)
+                                .font(.compound.headingMDBold)
                                 .foregroundColor(.zero.bgAccentRest)
                             
                             Text("Earn 30% of pro subs from your code.")
@@ -37,7 +37,7 @@ struct ReferAFriendSettingsScreen: View {
                                 ReferAFriendBenefitRow(title: "Earn Affiliate Fees",
                                                        description: "Earn 30% of subscriptions from your code")
                             }
-                            .padding(.top, 24)
+                            .padding(.top, 12)
                             
                             if context.viewState.inviteSlug.isEmpty {
                                 Text("Thank you! You’ve used all of your available invites. We’ll let you know when you can invite more people.")
@@ -48,14 +48,14 @@ struct ReferAFriendSettingsScreen: View {
                                         RoundedRectangle(cornerRadius: 12)
                                             .fill(.zero.bgAccentRest.opacity(0.15))
                                     )
-                                    .padding(.top, 8)
+                                    .padding(.top, 10)
                             } else {
                                 referralCodeLabel
-                                    .padding(.vertical, 8)
+                                    .padding(.vertical, 6)
                                 
                                 referralCodeStrip
                                 
-                                HStack(spacing: 16) {
+                                HStack(spacing: 12) {
                                     BottomInfoBox(title: "Total invited so far",
                                                   description: context.viewState.totalInvited)
                                     BottomInfoBox(title: "Pro subs", description: "0")
@@ -64,7 +64,7 @@ struct ReferAFriendSettingsScreen: View {
                                 
                                 if context.viewState.hasRemaniningInvites {
                                     shareInviteButton
-                                        .padding(.vertical, 8)
+                                        .padding(.vertical, 10)
                                 }
                             }
                         }
@@ -113,7 +113,7 @@ struct ReferAFriendSettingsScreen: View {
                 }
             }
         }
-        .padding(16)
+        .padding(14)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay {
             RoundedRectangle(cornerRadius: 12)
@@ -124,7 +124,7 @@ struct ReferAFriendSettingsScreen: View {
     var shareInviteButton: some View {
         Button(action: { context.send(viewAction: .inviteCopied) }) {
             Text("Share Invite")
-                .font(.compound.bodyLGSemibold)
+                .font(.compound.bodyMDSemibold)
                 .foregroundColor(.black)
                 .padding()
                 .frame(maxWidth: .infinity)
@@ -173,11 +173,11 @@ private struct ReferAFriendBenefitRow: View {
         HStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 0) {
                 Text(title)
-                    .font(.compound.bodyLGSemibold)
+                    .font(.compound.bodyMDSemibold)
                     .foregroundColor(.compound.textPrimary)
                 
                 Text(description)
-                    .font(.compound.bodyMD)
+                    .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
                     .padding(.top, 1)
             }
@@ -186,6 +186,8 @@ private struct ReferAFriendBenefitRow: View {
             
             Image(asset: Asset.Images.checkIcon)
                 .resizable()
+                .renderingMode(.template)
+                .foregroundStyle(.zero.bgAccentRest)
                 .frame(width: 20, height: 20)
         }
         .frame(maxWidth: .infinity)
@@ -193,7 +195,7 @@ private struct ReferAFriendBenefitRow: View {
         .padding(.vertical, 10)
         .background(.compound.bgCanvasDisabled)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .padding(.vertical, 2)
+        .padding(.vertical, 1)
     }
 }
 
@@ -208,11 +210,11 @@ private struct BottomInfoBox: View {
                 .foregroundColor(.compound.textSecondary)
             
             Text(description)
-                .font(.compound.headingLG)
+                .font(.compound.headingMD)
                 .foregroundColor(.zero.bgAccentRest)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 10)
+        .padding(.vertical, 6)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay {
             RoundedRectangle(cornerRadius: 12)

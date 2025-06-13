@@ -60,8 +60,7 @@ struct FeedUserProfileDetailsView: View {
                     }
                     .disabled(true)
                 case .empty:
-                    HomePostsEmptyView()
-                        .padding(.bottom, 100)
+                    HomeContentEmptyView(message: "No posts")
                 case .feeds:
                     LazyVStack(spacing: 0) {
                         UserFeedsList(context: context)

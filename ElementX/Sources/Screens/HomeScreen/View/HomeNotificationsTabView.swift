@@ -29,6 +29,7 @@ struct HomeNotificationsTabView: View {
             ForEach(tabs, id: \.tab) { tabInfo in
                 Button(action: {
                     selectedTab = tabInfo.tab
+                    onTabSelected(tabInfo.tab)
                 }) {
                     VStack(spacing: 0) {
                         Text(tabInfo.title)
@@ -47,8 +48,5 @@ struct HomeNotificationsTabView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity)
-        .onChange(of: selectedTab) { _, newTab in
-            onTabSelected(newTab)
-        }
     }
 }

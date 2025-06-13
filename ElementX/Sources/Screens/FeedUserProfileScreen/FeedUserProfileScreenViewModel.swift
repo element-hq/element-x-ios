@@ -233,11 +233,11 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             defer {
                 userIndicatorController.retractIndicatorWithId(userIndicatorID)
             }
+            let isFollowed = state.userFollowStatus?.isFollowing ?? false
             userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                                  title: "",
+                                                                  title: isFollowed ? "Unfollowing..." : "Following...",
                                                                   persistent: true))
-            let isFollowed = state.userFollowStatus?.isFollowing ?? false
             let result = if isFollowed {
                 await clientProxy.unFollowFeedUser(userId: state.userID)
             } else {
@@ -264,7 +264,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             }
             userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                                  title: "",
+                                                                  title: "Loading...",
                                                                   persistent: true))
             switch clientProxy.directRoomForUserID(userId) {
             case .success(let roomID):
@@ -325,6 +325,6 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     }
 
     func onNewFeedPosted() {
-        fetchUserFeeds(state.userID)
+        fetchUserFeeds(state.userID, isForceRefresh: true)
     }
 }

@@ -69,7 +69,7 @@ struct HomePostsContent: View {
                         }
                         .disabled(true)
                     case .empty:
-                        HomePostsEmptyView()
+                        HomeContentEmptyView(message: "No posts")
                     case .posts:
                         LazyVStack(spacing: 0) {
                             HomeScreenPostList(context: context)
@@ -100,17 +100,5 @@ struct HomePostsContent: View {
                 context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: selectedTab == .following))
             }
         }
-    }
-}
-
-struct HomePostsEmptyView: View {
-    var body: some View {
-        ZStack {
-            Text("No posts")
-                .font(.compound.headingMD)
-                .foregroundColor(.compound.textSecondary)
-                .frame(maxWidth: .infinity, alignment: .center)
-        }
-        .frame(maxWidth: .infinity, minHeight: 500)
     }
 }
