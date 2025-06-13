@@ -135,8 +135,8 @@ extension JoinedRoomProxyMock {
         
         matrixToPermalinkReturnValue = .success(.homeDirectory)
         matrixToEventPermalinkReturnValue = .success(.homeDirectory)
-        loadDraftReturnValue = .success(nil)
-        clearDraftReturnValue = .success(())
+        loadDraftThreadRootEventIDReturnValue = .success(nil)
+        clearDraftThreadRootEventIDReturnValue = .success(())
         sendTypingNotificationIsTypingReturnValue = .success(())
         isVisibleInRoomDirectoryReturnValue = .success(configuration.isVisibleInPublicDirectory)
         
