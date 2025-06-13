@@ -46,6 +46,12 @@ internal enum L10n {
   internal static var a11yPoll: String { return L10n.tr("Localizable", "a11y_poll") }
   /// Ended poll
   internal static var a11yPollEnd: String { return L10n.tr("Localizable", "a11y_poll_end") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func a11yPollsPercentOfTotal(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "a11y_polls_percent_of_total", p1)
+  }
+  /// This is the winning answer
+  internal static var a11yPollsWinningAnswer: String { return L10n.tr("Localizable", "a11y_polls_winning_answer") }
   /// React with %1$@
   internal static func a11yReactWith(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_react_with", String(describing: p1))
@@ -314,6 +320,8 @@ internal enum L10n {
   internal static var bannerSetUpRecoverySubmit: String { return L10n.tr("Localizable", "banner_set_up_recovery_submit") }
   /// Set up recovery to protect your account
   internal static var bannerSetUpRecoveryTitle: String { return L10n.tr("Localizable", "banner_set_up_recovery_title") }
+  /// Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.
+  internal static var callInvalidAudioDeviceBluetoothDevicesDisabled: String { return L10n.tr("Localizable", "call_invalid_audio_device_bluetooth_devices_disabled") }
   /// About
   internal static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
   /// Acceptable use policy
@@ -322,6 +330,8 @@ internal enum L10n {
   internal static var commonAddingCaption: String { return L10n.tr("Localizable", "common_adding_caption") }
   /// Advanced settings
   internal static var commonAdvancedSettings: String { return L10n.tr("Localizable", "common_advanced_settings") }
+  /// an image
+  internal static var commonAnImage: String { return L10n.tr("Localizable", "common_an_image") }
   /// Analytics
   internal static var commonAnalytics: String { return L10n.tr("Localizable", "common_analytics") }
   /// Appearance
@@ -556,6 +566,8 @@ internal enum L10n {
   internal static var commonSendingFailed: String { return L10n.tr("Localizable", "common_sending_failed") }
   /// Sent
   internal static var commonSent: String { return L10n.tr("Localizable", "common_sent") }
+  /// . 
+  internal static var commonSentenceDelimiter: String { return L10n.tr("Localizable", "common_sentence_delimiter") }
   /// Server not supported
   internal static var commonServerNotSupported: String { return L10n.tr("Localizable", "common_server_not_supported") }
   /// Server URL
@@ -1315,10 +1327,26 @@ internal enum L10n {
   internal static var screenCreatePollCancelConfirmationContentIos: String { return L10n.tr("Localizable", "screen_create_poll_cancel_confirmation_content_ios") }
   /// Cancel Poll
   internal static var screenCreatePollCancelConfirmationTitleIos: String { return L10n.tr("Localizable", "screen_create_poll_cancel_confirmation_title_ios") }
+  /// Delete option %1$@
+  internal static func screenCreatePollDeleteOptionA11y(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_create_poll_delete_option_a11y", String(describing: p1))
+  }
+  /// %1$@: %2$@
+  internal static func screenCreatePollOptionAccessibilityLabel(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "screen_create_poll_option_accessibility_label", String(describing: p1), String(describing: p2))
+  }
+  /// Options
+  internal static var screenCreatePollOptionsSectionTitle: String { return L10n.tr("Localizable", "screen_create_poll_options_section_title") }
   /// Question or topic
   internal static var screenCreatePollQuestionDesc: String { return L10n.tr("Localizable", "screen_create_poll_question_desc") }
   /// What is the poll about?
   internal static var screenCreatePollQuestionHint: String { return L10n.tr("Localizable", "screen_create_poll_question_hint") }
+  /// Remove %1$@
+  internal static func screenCreatePollRemoveAccessibilityLabel(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_create_poll_remove_accessibility_label", String(describing: p1))
+  }
+  /// Settings
+  internal static var screenCreatePollSettingsSectionTitle: String { return L10n.tr("Localizable", "screen_create_poll_settings_section_title") }
   /// Create Poll
   internal static var screenCreatePollTitle: String { return L10n.tr("Localizable", "screen_create_poll_title") }
   /// New room
@@ -2302,7 +2330,7 @@ internal enum L10n {
   }
   /// View
   internal static var screenRoomSingleKnockRequestViewButtonTitle: String { return L10n.tr("Localizable", "screen_room_single_knock_request_view_button_title") }
-  /// Add emoji
+  /// Add a reaction
   internal static var screenRoomTimelineAddReaction: String { return L10n.tr("Localizable", "screen_room_timeline_add_reaction") }
   /// This is the beginning of %1$@.
   internal static func screenRoomTimelineBeginningOfRoom(_ p1: Any) -> String {
@@ -2318,6 +2346,18 @@ internal enum L10n {
   internal static var screenRoomTimelineMessageCopied: String { return L10n.tr("Localizable", "screen_room_timeline_message_copied") }
   /// You do not have permission to post to this room
   internal static var screenRoomTimelineNoPermissionToPost: String { return L10n.tr("Localizable", "screen_room_timeline_no_permission_to_post") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenRoomTimelineReactionA11y(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_timeline_reaction_a11y", p1)
+  }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenRoomTimelineReactionIncludingYouA11y(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_timeline_reaction_including_you_a11y", p1)
+  }
+  /// You reacted with %1$@
+  internal static func screenRoomTimelineReactionYouA11y(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_room_timeline_reaction_you_a11y", String(describing: p1))
+  }
   /// Show less
   internal static var screenRoomTimelineReactionsShowLess: String { return L10n.tr("Localizable", "screen_room_timeline_reactions_show_less") }
   /// Show more

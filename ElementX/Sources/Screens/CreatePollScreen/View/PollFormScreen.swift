@@ -91,6 +91,9 @@ struct PollFormScreen: View {
                         })
                         .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.addOption)
             }
+        } header: {
+            Text(L10n.screenCreatePollOptionsSectionTitle)
+                .compoundListSectionHeader()
         }
         // Disables animations when the text view resizes for multiline
         .animation(.noAnimation, value: UUID())
@@ -106,6 +109,9 @@ struct PollFormScreen: View {
             ListRow(label: .plain(title: L10n.screenCreatePollAnonymousDesc),
                     kind: .toggle($context.isUndisclosed))
                 .accessibilityIdentifier(A11yIdentifiers.pollFormScreen.pollKind)
+        } header: {
+            Text(L10n.screenCreatePollSettingsSectionTitle)
+                .compoundListSectionHeader()
         }
     }
     
@@ -168,13 +174,17 @@ private struct PollFormOptionRow: View {
                     }
                     .disabled(!canDeleteItem)
                     .buttonStyle(.compound(.textLink))
-                    .accessibilityLabel(L10n.actionRemove)
+                    .accessibilityLabel(L10n.screenCreatePollRemoveAccessibilityLabel(L10n.screenCreatePollOptionAccessibilityLabel(placeholder, text)))
                 }
                 
                 TextField(text: $text, axis: .vertical) {
                     Text(placeholder)
                         .compoundTextFieldPlaceholder()
                 }
+                // For some reason the placeholder is always read by voice over even if I disable or override the label, so if the text is empty we use an empy accessibility label
+                .accessibilityLabel(text.isEmpty ? "" : L10n.screenCreatePollOptionAccessibilityLabel(placeholder, text))
+                // Allows the move action voice over to give priority to this field over the remove button
+                .accessibilitySortPriority(1)
                 .tint(.compound.iconAccentTertiary)
                 .alignmentGuide(.listRowSeparatorLeading) { _ in 0 }
             }

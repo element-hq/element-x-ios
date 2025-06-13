@@ -12,6 +12,7 @@
 "a11y_pin_field" = "PIN field";
 "a11y_play" = "Play";
 "a11y_poll_end" = "Ended poll";
+"a11y_polls_winning_answer" = "This is the winning answer";
 "a11y_react_with" = "React with %1$@";
 "a11y_react_with_other_emojis" = "React with other emojis";
 "a11y_read_receipts_multiple" = "Read by %1$@ and %2$@";
@@ -135,10 +136,12 @@
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
 "banner_set_up_recovery_title" = "Set up recovery to protect your account";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "About";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_adding_caption" = "Adding caption";
 "common_advanced_settings" = "Advanced settings";
+"common_an_image" = "an image";
 "common_analytics" = "Analytics";
 "common_appearance" = "Appearance";
 "common_audio" = "Audio";
@@ -242,6 +245,7 @@
 "common_sending" = "Sending…";
 "common_sending_failed" = "Sending failed";
 "common_sent" = "Sent";
+"common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Server not supported";
 "common_server_url" = "Server URL";
 "common_settings" = "Settings";
@@ -432,6 +436,10 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
+"screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
+"screen_create_poll_options_section_title" = "Options";
+"screen_create_poll_remove_accessibility_label" = "Remove %1$@";
+"screen_create_poll_settings_section_title" = "Settings";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_room_access_section_header" = "Room Access";
@@ -658,6 +666,7 @@
 "screen_create_poll_anonymous_headline" = "Hide votes";
 "screen_create_poll_answer_hint" = "Option %1$d";
 "screen_create_poll_cancel_confirmation_title_ios" = "Cancel Poll";
+"screen_create_poll_delete_option_a11y" = "Delete option %1$@";
 "screen_create_poll_question_desc" = "Question or topic";
 "screen_create_poll_question_hint" = "What is the poll about?";
 "screen_create_poll_title" = "Create Poll";
@@ -967,13 +976,14 @@
 "screen_room_roles_and_permissions_roles_header" = "Roles";
 "screen_room_roles_and_permissions_room_details" = "Room details";
 "screen_room_roles_and_permissions_title" = "Roles and permissions";
-"screen_room_timeline_add_reaction" = "Add emoji";
+"screen_room_timeline_add_reaction" = "Add a reaction";
 "screen_room_timeline_beginning_of_room" = "This is the beginning of %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "This is the beginning of this conversation.";
 "screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
 "screen_room_timeline_less_reactions" = "Show less";
 "screen_room_timeline_message_copied" = "Message copied";
 "screen_room_timeline_no_permission_to_post" = "You do not have permission to post to this room";
+"screen_room_timeline_reaction_you_a11y" = "You reacted with %1$@";
 "screen_room_timeline_reactions_show_more" = "Show more";
 "screen_room_timeline_read_marker_title" = "New";
 "screen_room_title" = "Chat";
