@@ -16,7 +16,7 @@ protocol AuthenticationFlowCoordinatorDelegate: AnyObject {
 
 class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let authenticationService: AuthenticationServiceProtocol
-    private let bugReportService: BugReportServiceProtocol
+    private let bugReportService: BugReportServiceProtocol?
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let appMediator: AppMediatorProtocol
@@ -103,7 +103,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     
     init(authenticationService: AuthenticationServiceProtocol,
          qrCodeLoginService: QRCodeLoginServiceProtocol,
-         bugReportService: BugReportServiceProtocol,
+         bugReportService: BugReportServiceProtocol?,
          navigationRootCoordinator: NavigationRootCoordinator,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
@@ -263,7 +263,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private func showStartScreen(fromState: State, applying provisioningParameters: AccountProvisioningParameters? = nil) {
         let parameters = AuthenticationStartScreenParameters(authenticationService: authenticationService,
                                                              provisioningParameters: provisioningParameters,
-                                                             isBugReportServiceEnabled: bugReportService.isEnabled,
+                                                             isBugReportServiceEnabled: bugReportService?.isEnabled ?? false,
                                                              appSettings: appSettings,
                                                              userIndicatorController: userIndicatorController)
         let coordinator = AuthenticationStartScreenCoordinator(parameters: parameters)
@@ -436,6 +436,11 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Bug Report
     
     private func startBugReportFlow() {
+        guard let bugReportService else {
+            MXLog.warning("Can't launch `BugReportFlowCoordinator` from `AuthenticationFlowCoordinator`: `bugReportService` is nil.")
+            return
+        }
+
         let coordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(navigationStackCoordinator),
                                                                      userIndicatorController: userIndicatorController,
                                                                      bugReportService: bugReportService,
