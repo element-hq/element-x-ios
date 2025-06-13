@@ -1798,6 +1798,7 @@
 		794E2AEF2D7741E80067E725 /* ZNewPostUnsignedMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E2AED2D7741E80067E725 /* ZNewPostUnsignedMessage.swift */; };
 		794F08A92D6CFF5B008B575F /* ZChannelRoomId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794F08A82D6CFF56008B575F /* ZChannelRoomId.swift */; };
 		794F08AA2D6CFF5B008B575F /* ZChannelRoomId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794F08A82D6CFF56008B575F /* ZChannelRoomId.swift */; };
+		7955736B2DFCAC0800334A40 /* ElementAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1593DD87F974F8509BB619 /* ElementAnimations.swift */; };
 		795A0C832D77D4E8000928B7 /* CreateFeedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795A0C822D77D4DC000928B7 /* CreateFeedProtocol.swift */; };
 		795A0C842D77D4E8000928B7 /* CreateFeedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795A0C822D77D4DC000928B7 /* CreateFeedProtocol.swift */; };
 		795A0C862D77EBA5000928B7 /* ZeroApiProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795A0C852D77EB94000928B7 /* ZeroApiProxy.swift */; };
@@ -9188,6 +9189,7 @@
 				281BED345D59A9A6A99E9D98 /* UNNotificationContent.swift in Sources */,
 				06B55882911B4BF5B14E9851 /* URL.swift in Sources */,
 				18D5D9AC2CEB6E0D00107940 /* ZeroRewards.swift in Sources */,
+				7955736B2DFCAC0800334A40 /* ElementAnimations.swift in Sources */,
 				D98B5EE8C4F5A2CE84687AE8 /* UTType.swift in Sources */,
 				18525D0C2CF5EFC20055C5E8 /* ZMessengerInvite.swift in Sources */,
 				34357B287357BC0B9715DD51 /* UserAgentBuilder.swift in Sources */,
