@@ -30,7 +30,7 @@ struct HomeNotificationsContent: View {
                         case .skeletons:
                             LazyVStack(spacing: 0) {
                                 ForEach(context.viewState.visibleRooms) { room in
-                                    HomeScreenNotificationCell(room: room, context: context)
+                                    HomeScreenNotificationCell(room: room, context: context, selectedTab: selectedTab)
                                         .redacted(reason: .placeholder)
                                         .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
                                 }
@@ -45,7 +45,7 @@ struct HomeNotificationsContent: View {
                                     HomeContentEmptyView(message: "No new notifications")
                                 } else {
                                     ForEach(roomsWithNotifications) { room in
-                                        HomeScreenNotificationCell(room: room, context: context)
+                                        HomeScreenNotificationCell(room: room, context: context, selectedTab: selectedTab)
                                     }
                                     
                                     HomeTabBottomSpace()

@@ -356,17 +356,24 @@ final class TimelineProxy: TimelineProxyProtocol {
                       threadRootEventID: String?) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Sending location")
         
-        await timeline.sendLocation(body: body,
-                                    geoUri: geoURI.string,
-                                    description: description,
-                                    zoomLevel: zoomLevel,
-                                    assetType: assetType)
+        let replyParameters: ReplyParameters? = if let threadRootEventID {
+            ReplyParameters(eventId: threadRootEventID, enforceThread: true, replyWithinThread: false)
+        } else {
+            nil
+        }
         
-        MXLog.info("Finished sending location")
         do {
+            try await timeline.sendLocation(body: body,
+                                            geoUri: geoURI.string,
+                                            description: description,
+                                            zoomLevel: zoomLevel,
+                                            assetType: assetType,
+                                            replyParams: replyParameters)
             _ = try await zeroChatApi.notifyAboutMessage(roomId: roomId, isRoomChannel: isRoomChannel)
+            MXLog.info("Finished sending location")
         } catch {
-            MXLog.error(error)
+            MXLog.error("Failed sending location with error: \(error)")
+            return .failure(.sdkError(error))
         }
         return .success(())
     }

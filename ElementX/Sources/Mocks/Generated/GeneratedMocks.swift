@@ -12069,15 +12069,15 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
     }
     //MARK: - saveDraft
 
-    var saveDraftUnderlyingCallsCount = 0
-    var saveDraftCallsCount: Int {
+    var saveDraftThreadRootEventIDUnderlyingCallsCount = 0
+    var saveDraftThreadRootEventIDCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return saveDraftUnderlyingCallsCount
+                return saveDraftThreadRootEventIDUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = saveDraftUnderlyingCallsCount
+                    returnValue = saveDraftThreadRootEventIDUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -12085,29 +12085,29 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                saveDraftUnderlyingCallsCount = newValue
+                saveDraftThreadRootEventIDUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    saveDraftUnderlyingCallsCount = newValue
+                    saveDraftThreadRootEventIDUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var saveDraftCalled: Bool {
-        return saveDraftCallsCount > 0
+    var saveDraftThreadRootEventIDCalled: Bool {
+        return saveDraftThreadRootEventIDCallsCount > 0
     }
-    var saveDraftReceivedDraft: ComposerDraft?
-    var saveDraftReceivedInvocations: [ComposerDraft] = []
+    var saveDraftThreadRootEventIDReceivedArguments: (draft: ComposerDraft, threadRootEventID: String?)?
+    var saveDraftThreadRootEventIDReceivedInvocations: [(draft: ComposerDraft, threadRootEventID: String?)] = []
 
-    var saveDraftUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var saveDraftReturnValue: Result<Void, RoomProxyError>! {
+    var saveDraftThreadRootEventIDUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var saveDraftThreadRootEventIDReturnValue: Result<Void, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return saveDraftUnderlyingReturnValue
+                return saveDraftThreadRootEventIDUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = saveDraftUnderlyingReturnValue
+                    returnValue = saveDraftThreadRootEventIDUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -12115,39 +12115,39 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                saveDraftUnderlyingReturnValue = newValue
+                saveDraftThreadRootEventIDUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    saveDraftUnderlyingReturnValue = newValue
+                    saveDraftThreadRootEventIDUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var saveDraftClosure: ((ComposerDraft) async -> Result<Void, RoomProxyError>)?
+    var saveDraftThreadRootEventIDClosure: ((ComposerDraft, String?) async -> Result<Void, RoomProxyError>)?
 
-    func saveDraft(_ draft: ComposerDraft) async -> Result<Void, RoomProxyError> {
-        saveDraftCallsCount += 1
-        saveDraftReceivedDraft = draft
+    func saveDraft(_ draft: ComposerDraft, threadRootEventID: String?) async -> Result<Void, RoomProxyError> {
+        saveDraftThreadRootEventIDCallsCount += 1
+        saveDraftThreadRootEventIDReceivedArguments = (draft: draft, threadRootEventID: threadRootEventID)
         DispatchQueue.main.async {
-            self.saveDraftReceivedInvocations.append(draft)
+            self.saveDraftThreadRootEventIDReceivedInvocations.append((draft: draft, threadRootEventID: threadRootEventID))
         }
-        if let saveDraftClosure = saveDraftClosure {
-            return await saveDraftClosure(draft)
+        if let saveDraftThreadRootEventIDClosure = saveDraftThreadRootEventIDClosure {
+            return await saveDraftThreadRootEventIDClosure(draft, threadRootEventID)
         } else {
-            return saveDraftReturnValue
+            return saveDraftThreadRootEventIDReturnValue
         }
     }
     //MARK: - loadDraft
 
-    var loadDraftUnderlyingCallsCount = 0
-    var loadDraftCallsCount: Int {
+    var loadDraftThreadRootEventIDUnderlyingCallsCount = 0
+    var loadDraftThreadRootEventIDCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return loadDraftUnderlyingCallsCount
+                return loadDraftThreadRootEventIDUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadDraftUnderlyingCallsCount
+                    returnValue = loadDraftThreadRootEventIDUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -12155,27 +12155,29 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                loadDraftUnderlyingCallsCount = newValue
+                loadDraftThreadRootEventIDUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadDraftUnderlyingCallsCount = newValue
+                    loadDraftThreadRootEventIDUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var loadDraftCalled: Bool {
-        return loadDraftCallsCount > 0
+    var loadDraftThreadRootEventIDCalled: Bool {
+        return loadDraftThreadRootEventIDCallsCount > 0
     }
+    var loadDraftThreadRootEventIDReceivedThreadRootEventID: String?
+    var loadDraftThreadRootEventIDReceivedInvocations: [String?] = []
 
-    var loadDraftUnderlyingReturnValue: Result<ComposerDraft?, RoomProxyError>!
-    var loadDraftReturnValue: Result<ComposerDraft?, RoomProxyError>! {
+    var loadDraftThreadRootEventIDUnderlyingReturnValue: Result<ComposerDraft?, RoomProxyError>!
+    var loadDraftThreadRootEventIDReturnValue: Result<ComposerDraft?, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return loadDraftUnderlyingReturnValue
+                return loadDraftThreadRootEventIDUnderlyingReturnValue
             } else {
                 var returnValue: Result<ComposerDraft?, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadDraftUnderlyingReturnValue
+                    returnValue = loadDraftThreadRootEventIDUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -12183,35 +12185,39 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                loadDraftUnderlyingReturnValue = newValue
+                loadDraftThreadRootEventIDUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadDraftUnderlyingReturnValue = newValue
+                    loadDraftThreadRootEventIDUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var loadDraftClosure: (() async -> Result<ComposerDraft?, RoomProxyError>)?
+    var loadDraftThreadRootEventIDClosure: ((String?) async -> Result<ComposerDraft?, RoomProxyError>)?
 
-    func loadDraft() async -> Result<ComposerDraft?, RoomProxyError> {
-        loadDraftCallsCount += 1
-        if let loadDraftClosure = loadDraftClosure {
-            return await loadDraftClosure()
+    func loadDraft(threadRootEventID: String?) async -> Result<ComposerDraft?, RoomProxyError> {
+        loadDraftThreadRootEventIDCallsCount += 1
+        loadDraftThreadRootEventIDReceivedThreadRootEventID = threadRootEventID
+        DispatchQueue.main.async {
+            self.loadDraftThreadRootEventIDReceivedInvocations.append(threadRootEventID)
+        }
+        if let loadDraftThreadRootEventIDClosure = loadDraftThreadRootEventIDClosure {
+            return await loadDraftThreadRootEventIDClosure(threadRootEventID)
         } else {
-            return loadDraftReturnValue
+            return loadDraftThreadRootEventIDReturnValue
         }
     }
     //MARK: - clearDraft
 
-    var clearDraftUnderlyingCallsCount = 0
-    var clearDraftCallsCount: Int {
+    var clearDraftThreadRootEventIDUnderlyingCallsCount = 0
+    var clearDraftThreadRootEventIDCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return clearDraftUnderlyingCallsCount
+                return clearDraftThreadRootEventIDUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = clearDraftUnderlyingCallsCount
+                    returnValue = clearDraftThreadRootEventIDUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -12219,27 +12225,29 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                clearDraftUnderlyingCallsCount = newValue
+                clearDraftThreadRootEventIDUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    clearDraftUnderlyingCallsCount = newValue
+                    clearDraftThreadRootEventIDUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var clearDraftCalled: Bool {
-        return clearDraftCallsCount > 0
+    var clearDraftThreadRootEventIDCalled: Bool {
+        return clearDraftThreadRootEventIDCallsCount > 0
     }
+    var clearDraftThreadRootEventIDReceivedThreadRootEventID: String?
+    var clearDraftThreadRootEventIDReceivedInvocations: [String?] = []
 
-    var clearDraftUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var clearDraftReturnValue: Result<Void, RoomProxyError>! {
+    var clearDraftThreadRootEventIDUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var clearDraftThreadRootEventIDReturnValue: Result<Void, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return clearDraftUnderlyingReturnValue
+                return clearDraftThreadRootEventIDUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = clearDraftUnderlyingReturnValue
+                    returnValue = clearDraftThreadRootEventIDUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -12247,22 +12255,26 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                clearDraftUnderlyingReturnValue = newValue
+                clearDraftThreadRootEventIDUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    clearDraftUnderlyingReturnValue = newValue
+                    clearDraftThreadRootEventIDUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var clearDraftClosure: (() async -> Result<Void, RoomProxyError>)?
+    var clearDraftThreadRootEventIDClosure: ((String?) async -> Result<Void, RoomProxyError>)?
 
-    func clearDraft() async -> Result<Void, RoomProxyError> {
-        clearDraftCallsCount += 1
-        if let clearDraftClosure = clearDraftClosure {
-            return await clearDraftClosure()
+    func clearDraft(threadRootEventID: String?) async -> Result<Void, RoomProxyError> {
+        clearDraftThreadRootEventIDCallsCount += 1
+        clearDraftThreadRootEventIDReceivedThreadRootEventID = threadRootEventID
+        DispatchQueue.main.async {
+            self.clearDraftThreadRootEventIDReceivedInvocations.append(threadRootEventID)
+        }
+        if let clearDraftThreadRootEventIDClosure = clearDraftThreadRootEventIDClosure {
+            return await clearDraftThreadRootEventIDClosure(threadRootEventID)
         } else {
-            return clearDraftReturnValue
+            return clearDraftThreadRootEventIDReturnValue
         }
     }
 }

@@ -315,8 +315,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (_, .presentMessageForwarding(let forwardingItem), .messageForwarding):
                 presentMessageForwarding(with: forwardingItem)
 
-            case (_, .presentMapNavigator(let mode), .mapNavigator):
-                presentMapNavigator(interactionMode: mode)
+            case (_, .presentMapNavigator(let mode, let threadRootEventID), .mapNavigator):
+                presentMapNavigator(interactionMode: mode, threadRootEventID: threadRootEventID)
 
             case (_, .presentPollForm(let mode), .pollForm):
                 presentPollForm(mode: mode)
@@ -506,7 +506,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy,
                                                                       roomListPublisher: userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
-        let composerDraftService = ComposerDraftService(roomProxy: roomProxy, timelineItemfactory: timelineItemFactory)
+        let composerDraftService = ComposerDraftService(roomProxy: roomProxy,
+                                                        timelineItemfactory: timelineItemFactory,
+                                                        threadRootEventID: nil)
         
         let parameters = RoomScreenCoordinatorParameters(clientProxy: userSession.clientProxy,
                                                          roomProxy: roomProxy,
@@ -534,19 +536,25 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentRoomDetails:
                     stateMachine.tryEvent(.presentRoomDetails)
                 case .presentReportContent(let itemID, let senderID):
-                    stateMachine.tryEvent(.presentReportContent(itemID: itemID, senderID: senderID))
+                    stateMachine.tryEvent(.presentReportContent(itemID: itemID,
+                                                                senderID: senderID))
                 case .presentMediaUploadPicker(let source):
-                    stateMachine.tryEvent(.presentMediaUploadPicker(source: source, threadRootEventID: nil))
+                    stateMachine.tryEvent(.presentMediaUploadPicker(source: source,
+                                                                    threadRootEventID: nil))
                 case .presentMediaUploadPreviewScreen(let url):
-                    stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url, threadRootEventID: nil))
+                    stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url,
+                                                                     threadRootEventID: nil))
                 case .presentEmojiPicker(let itemID, let selectedEmojis):
-                    stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+                    stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID,
+                                                              selectedEmojis: selectedEmojis))
                 case .presentLocationPicker:
-                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
+                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker,
+                                                               threadRootEventID: nil))
                 case .presentPollForm(let mode):
                     stateMachine.tryEvent(.presentPollForm(mode: mode))
                 case .presentLocationViewer(_, let geoURI, let description):
-                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)))
+                    stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description),
+                                                               threadRootEventID: nil))
                 case .presentRoomMemberDetails(userID: let userID):
                     stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
                 case .presentMessageForwarding(let forwardingItem):
@@ -556,13 +564,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentPinnedEventsTimeline:
                     stateMachine.tryEvent(.presentPinnedEventsTimeline)
                 case .presentResolveSendFailure(failure: let failure, sendHandle: let sendHandle):
-                    stateMachine.tryEvent(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
+                    stateMachine.tryEvent(.presentResolveSendFailure(failure: failure,
+                                                                     sendHandle: sendHandle))
                 case .presentKnockRequestsList:
                     stateMachine.tryEvent(.presentKnockRequestsListScreen)
                 case .presentThread(let itemID):
                     stateMachine.tryEvent(.presentThread(itemID: itemID))
                 case .presentRoom(roomID: let roomID):
-                    stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
+                    stateMachine.tryEvent(.startChildFlow(roomID: roomID,
+                                                          via: [],
+                                                          entryPoint: .room))
                 }
             }
             .store(in: &cancellables)
@@ -578,11 +589,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID), zeroAttachmentService: zeroAttachmentService)
         
-        guard let eventID = itemID.eventID else {
+        guard let threadRootEventID = itemID.eventID else {
             fatalError("Invalid thread event ID")
         }
         
-        guard case let .success(timelineController) = await timelineControllerFactory.buildThreadTimelineController(eventID: eventID,
+        guard case let .success(timelineController) = await timelineControllerFactory.buildThreadTimelineController(eventID: threadRootEventID,
                                                                                                                     roomProxy: roomProxy,
                                                                                                                     timelineItemFactory: timelineItemFactory,
                                                                                                                     mediaProvider: userSession.mediaProvider) else {
@@ -592,7 +603,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy,
                                                                       roomListPublisher: userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
-        let composerDraftService = ComposerDraftService(roomProxy: roomProxy, timelineItemfactory: timelineItemFactory)
+        let composerDraftService = ComposerDraftService(roomProxy: roomProxy,
+                                                        timelineItemfactory: timelineItemFactory,
+                                                        threadRootEventID: threadRootEventID)
         
         let coordinator = ThreadTimelineScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
                                                                             roomProxy: roomProxy,
@@ -619,20 +632,25 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .presentMediaUploadPreviewScreen(let url, let threadRootEventID):
                 stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url,
                                                                  threadRootEventID: threadRootEventID))
-            case .presentLocationPicker:
-                stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker))
+            case .presentLocationPicker(let threadRootEventID):
+                stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker,
+                                                           threadRootEventID: threadRootEventID))
             case .presentPollForm(let mode):
                 stateMachine.tryEvent(.presentPollForm(mode: mode))
-            case .presentLocationViewer(_, let geoURI, let description):
-                stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)))
+            case .presentLocationViewer(_, let geoURI, let description, let threadRootEventID):
+                stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI,
+                                                                                      description: description),
+                                                           threadRootEventID: threadRootEventID))
             case .presentEmojiPicker(let itemID, let selectedEmojis):
-                stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis))
+                stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID,
+                                                          selectedEmojis: selectedEmojis))
             case .presentRoomMemberDetails(let userID):
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
             case .presentMessageForwarding(let forwardingItem):
                 stateMachine.tryEvent(.presentMessageForwarding(forwardingItem: forwardingItem))
             case .presentResolveSendFailure(let failure, let sendHandle):
-                stateMachine.tryEvent(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
+                stateMachine.tryEvent(.presentResolveSendFailure(failure: failure,
+                                                                 sendHandle: sendHandle))
             }
         }
         .store(in: &cancellables)
@@ -967,7 +985,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    private func presentMapNavigator(interactionMode: StaticLocationInteractionMode) {
+    private func presentMapNavigator(interactionMode: StaticLocationInteractionMode,
+                                     threadRootEventID: String?) {
         let stackCoordinator = NavigationStackCoordinator()
         
         let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode,
@@ -980,13 +999,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .selectedLocation(let geoURI, let isUserLocation):
                 Task {
-                    #warning("Allow sending locations within threads when the SDK allows it")
                     _ = await self.roomProxy.timeline.sendLocation(body: geoURI.bodyMessage,
                                                                    geoURI: geoURI,
                                                                    description: nil,
                                                                    zoomLevel: 15,
                                                                    assetType: isUserLocation ? .sender : .pin,
-                                                                   threadRootEventID: nil)
+                                                                   threadRootEventID: threadRootEventID)
                     self.navigationStackCoordinator.setSheetCoordinator(nil)
                 }
                 
@@ -1044,7 +1062,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func createPoll(question: String, options: [String], pollKind: Poll.Kind) {
         Task {
-            #warning("Allow sending polls within threads when the SDK allows it")
             let result = await roomProxy.timeline.createPoll(question: question, answers: options, pollKind: pollKind, threadRootEventID: nil)
 
             self.analytics.trackComposer(inThread: false,

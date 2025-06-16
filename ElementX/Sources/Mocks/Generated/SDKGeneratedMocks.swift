@@ -12618,16 +12618,16 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - clearComposerDraft
 
-    open var clearComposerDraftThrowableError: Error?
-    var clearComposerDraftUnderlyingCallsCount = 0
-    open var clearComposerDraftCallsCount: Int {
+    open var clearComposerDraftThreadRootThrowableError: Error?
+    var clearComposerDraftThreadRootUnderlyingCallsCount = 0
+    open var clearComposerDraftThreadRootCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return clearComposerDraftUnderlyingCallsCount
+                return clearComposerDraftThreadRootUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = clearComposerDraftUnderlyingCallsCount
+                    returnValue = clearComposerDraftThreadRootUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -12635,25 +12635,31 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                clearComposerDraftUnderlyingCallsCount = newValue
+                clearComposerDraftThreadRootUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    clearComposerDraftUnderlyingCallsCount = newValue
+                    clearComposerDraftThreadRootUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var clearComposerDraftCalled: Bool {
-        return clearComposerDraftCallsCount > 0
+    open var clearComposerDraftThreadRootCalled: Bool {
+        return clearComposerDraftThreadRootCallsCount > 0
     }
-    open var clearComposerDraftClosure: (() async throws -> Void)?
+    open var clearComposerDraftThreadRootReceivedThreadRoot: String?
+    open var clearComposerDraftThreadRootReceivedInvocations: [String?] = []
+    open var clearComposerDraftThreadRootClosure: ((String?) async throws -> Void)?
 
-    open override func clearComposerDraft() async throws {
-        if let error = clearComposerDraftThrowableError {
+    open override func clearComposerDraft(threadRoot: String?) async throws {
+        if let error = clearComposerDraftThreadRootThrowableError {
             throw error
         }
-        clearComposerDraftCallsCount += 1
-        try await clearComposerDraftClosure?()
+        clearComposerDraftThreadRootCallsCount += 1
+        clearComposerDraftThreadRootReceivedThreadRoot = threadRoot
+        DispatchQueue.main.async {
+            self.clearComposerDraftThreadRootReceivedInvocations.append(threadRoot)
+        }
+        try await clearComposerDraftThreadRootClosure?(threadRoot)
     }
 
     //MARK: - clearEventCacheStorage
@@ -14291,16 +14297,16 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - loadComposerDraft
 
-    open var loadComposerDraftThrowableError: Error?
-    var loadComposerDraftUnderlyingCallsCount = 0
-    open var loadComposerDraftCallsCount: Int {
+    open var loadComposerDraftThreadRootThrowableError: Error?
+    var loadComposerDraftThreadRootUnderlyingCallsCount = 0
+    open var loadComposerDraftThreadRootCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return loadComposerDraftUnderlyingCallsCount
+                return loadComposerDraftThreadRootUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadComposerDraftUnderlyingCallsCount
+                    returnValue = loadComposerDraftThreadRootUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -14308,27 +14314,29 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                loadComposerDraftUnderlyingCallsCount = newValue
+                loadComposerDraftThreadRootUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadComposerDraftUnderlyingCallsCount = newValue
+                    loadComposerDraftThreadRootUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var loadComposerDraftCalled: Bool {
-        return loadComposerDraftCallsCount > 0
+    open var loadComposerDraftThreadRootCalled: Bool {
+        return loadComposerDraftThreadRootCallsCount > 0
     }
+    open var loadComposerDraftThreadRootReceivedThreadRoot: String?
+    open var loadComposerDraftThreadRootReceivedInvocations: [String?] = []
 
-    var loadComposerDraftUnderlyingReturnValue: ComposerDraft?
-    open var loadComposerDraftReturnValue: ComposerDraft? {
+    var loadComposerDraftThreadRootUnderlyingReturnValue: ComposerDraft?
+    open var loadComposerDraftThreadRootReturnValue: ComposerDraft? {
         get {
             if Thread.isMainThread {
-                return loadComposerDraftUnderlyingReturnValue
+                return loadComposerDraftThreadRootUnderlyingReturnValue
             } else {
                 var returnValue: ComposerDraft?? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadComposerDraftUnderlyingReturnValue
+                    returnValue = loadComposerDraftThreadRootUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -14336,25 +14344,29 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                loadComposerDraftUnderlyingReturnValue = newValue
+                loadComposerDraftThreadRootUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadComposerDraftUnderlyingReturnValue = newValue
+                    loadComposerDraftThreadRootUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var loadComposerDraftClosure: (() async throws -> ComposerDraft?)?
+    open var loadComposerDraftThreadRootClosure: ((String?) async throws -> ComposerDraft?)?
 
-    open override func loadComposerDraft() async throws -> ComposerDraft? {
-        if let error = loadComposerDraftThrowableError {
+    open override func loadComposerDraft(threadRoot: String?) async throws -> ComposerDraft? {
+        if let error = loadComposerDraftThreadRootThrowableError {
             throw error
         }
-        loadComposerDraftCallsCount += 1
-        if let loadComposerDraftClosure = loadComposerDraftClosure {
-            return try await loadComposerDraftClosure()
+        loadComposerDraftThreadRootCallsCount += 1
+        loadComposerDraftThreadRootReceivedThreadRoot = threadRoot
+        DispatchQueue.main.async {
+            self.loadComposerDraftThreadRootReceivedInvocations.append(threadRoot)
+        }
+        if let loadComposerDraftThreadRootClosure = loadComposerDraftThreadRootClosure {
+            return try await loadComposerDraftThreadRootClosure(threadRoot)
         } else {
-            return loadComposerDraftReturnValue
+            return loadComposerDraftThreadRootReturnValue
         }
     }
 
@@ -15858,16 +15870,16 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 
     //MARK: - saveComposerDraft
 
-    open var saveComposerDraftDraftThrowableError: Error?
-    var saveComposerDraftDraftUnderlyingCallsCount = 0
-    open var saveComposerDraftDraftCallsCount: Int {
+    open var saveComposerDraftDraftThreadRootThrowableError: Error?
+    var saveComposerDraftDraftThreadRootUnderlyingCallsCount = 0
+    open var saveComposerDraftDraftThreadRootCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return saveComposerDraftDraftUnderlyingCallsCount
+                return saveComposerDraftDraftThreadRootUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = saveComposerDraftDraftUnderlyingCallsCount
+                    returnValue = saveComposerDraftDraftThreadRootUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -15875,31 +15887,31 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                saveComposerDraftDraftUnderlyingCallsCount = newValue
+                saveComposerDraftDraftThreadRootUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    saveComposerDraftDraftUnderlyingCallsCount = newValue
+                    saveComposerDraftDraftThreadRootUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var saveComposerDraftDraftCalled: Bool {
-        return saveComposerDraftDraftCallsCount > 0
+    open var saveComposerDraftDraftThreadRootCalled: Bool {
+        return saveComposerDraftDraftThreadRootCallsCount > 0
     }
-    open var saveComposerDraftDraftReceivedDraft: ComposerDraft?
-    open var saveComposerDraftDraftReceivedInvocations: [ComposerDraft] = []
-    open var saveComposerDraftDraftClosure: ((ComposerDraft) async throws -> Void)?
+    open var saveComposerDraftDraftThreadRootReceivedArguments: (draft: ComposerDraft, threadRoot: String?)?
+    open var saveComposerDraftDraftThreadRootReceivedInvocations: [(draft: ComposerDraft, threadRoot: String?)] = []
+    open var saveComposerDraftDraftThreadRootClosure: ((ComposerDraft, String?) async throws -> Void)?
 
-    open override func saveComposerDraft(draft: ComposerDraft) async throws {
-        if let error = saveComposerDraftDraftThrowableError {
+    open override func saveComposerDraft(draft: ComposerDraft, threadRoot: String?) async throws {
+        if let error = saveComposerDraftDraftThreadRootThrowableError {
             throw error
         }
-        saveComposerDraftDraftCallsCount += 1
-        saveComposerDraftDraftReceivedDraft = draft
+        saveComposerDraftDraftThreadRootCallsCount += 1
+        saveComposerDraftDraftThreadRootReceivedArguments = (draft: draft, threadRoot: threadRoot)
         DispatchQueue.main.async {
-            self.saveComposerDraftDraftReceivedInvocations.append(draft)
+            self.saveComposerDraftDraftThreadRootReceivedInvocations.append((draft: draft, threadRoot: threadRoot))
         }
-        try await saveComposerDraftDraftClosure?(draft)
+        try await saveComposerDraftDraftThreadRootClosure?(draft, threadRoot)
     }
 
     //MARK: - sendCallNotification
@@ -20955,6 +20967,71 @@ open class ThreadSummarySDKMock: MatrixRustSDK.ThreadSummary, @unchecked Sendabl
             return latestEventReturnValue
         }
     }
+
+    //MARK: - numReplies
+
+    var numRepliesUnderlyingCallsCount = 0
+    open var numRepliesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return numRepliesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = numRepliesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                numRepliesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    numRepliesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var numRepliesCalled: Bool {
+        return numRepliesCallsCount > 0
+    }
+
+    var numRepliesUnderlyingReturnValue: UInt64!
+    open var numRepliesReturnValue: UInt64! {
+        get {
+            if Thread.isMainThread {
+                return numRepliesUnderlyingReturnValue
+            } else {
+                var returnValue: UInt64? = nil
+                DispatchQueue.main.sync {
+                    returnValue = numRepliesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                numRepliesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    numRepliesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var numRepliesClosure: (() -> UInt64)?
+
+    open override func numReplies() -> UInt64 {
+        numRepliesCallsCount += 1
+        if let numRepliesClosure = numRepliesClosure {
+            return numRepliesClosure()
+        } else {
+            return numRepliesReturnValue
+        }
+    }
 }
 open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     init() {
@@ -22215,15 +22292,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - sendLocation
 
-    var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeUnderlyingCallsCount = 0
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeCallsCount: Int {
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsThrowableError: Error?
+    var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount = 0
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeUnderlyingCallsCount
+                return sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeUnderlyingCallsCount
+                    returnValue = sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -22231,28 +22309,31 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeUnderlyingCallsCount = newValue
+                sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeUnderlyingCallsCount = newValue
+                    sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeCalled: Bool {
-        return sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeCallsCount > 0
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsCalled: Bool {
+        return sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsCallsCount > 0
     }
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReceivedArguments: (body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?)?
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReceivedInvocations: [(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?)] = []
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeClosure: ((String, String, String?, UInt8?, AssetType?) async -> Void)?
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsReceivedArguments: (body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?, replyParams: ReplyParameters?)?
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsReceivedInvocations: [(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?, replyParams: ReplyParameters?)] = []
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsClosure: ((String, String, String?, UInt8?, AssetType?, ReplyParameters?) async throws -> Void)?
 
-    open override func sendLocation(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?) async {
-        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeCallsCount += 1
-        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReceivedArguments = (body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType)
-        DispatchQueue.main.async {
-            self.sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReceivedInvocations.append((body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType))
+    open override func sendLocation(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?, replyParams: ReplyParameters?) async throws {
+        if let error = sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsThrowableError {
+            throw error
         }
-        await sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeClosure?(body, geoUri, description, zoomLevel, assetType)
+        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsCallsCount += 1
+        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsReceivedArguments = (body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType, replyParams: replyParams)
+        DispatchQueue.main.async {
+            self.sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsReceivedInvocations.append((body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType, replyParams: replyParams))
+        }
+        try await sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsClosure?(body, geoUri, description, zoomLevel, assetType, replyParams)
     }
 
     //MARK: - sendPollResponse

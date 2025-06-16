@@ -16,5 +16,6 @@ extension ComposerDraftServiceMock {
         self.init()
         loadDraftReturnValue = .success(config.draft)
         saveDraftReturnValue = .success(())
+        clearDraftReturnValue = .success(())
     }
 }
