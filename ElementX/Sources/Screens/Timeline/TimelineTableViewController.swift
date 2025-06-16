@@ -378,6 +378,12 @@ class TimelineTableViewController: UIViewController {
                let indexPath = dataSource?.indexPath(for: kvPair.key) {
                 tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
                 coordinator.send(viewAction: .scrolledToFocussedItem)
+                // Ensure VoiceOver focus happens after the scroll animation (if any)
+                DispatchQueue.main.asyncAfter(deadline: .now() + (animated ? 0.5 : 0.0)) {
+                    if let cell = self.tableView.cellForRow(at: indexPath) {
+                        UIAccessibility.post(notification: .layoutChanged, argument: cell)
+                    }
+                }
             }
         }
     }
