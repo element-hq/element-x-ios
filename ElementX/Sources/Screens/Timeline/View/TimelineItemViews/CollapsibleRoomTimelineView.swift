@@ -38,7 +38,7 @@ struct CollapsibleRoomTimelineView: View {
                 HStack(alignment: .center, spacing: 8) {
                     Text(L10n.screenRoomTimelineStateChanges(timelineItem.items.count))
                     Text(Image(systemName: "chevron.forward"))
-                        .accessibilityLabel(isExpanded ? L10n.screenRoomGroupedViewStatesReduce : L10n.screenRoomGroupedViewStatesExpand)
+                        .accessibilityLabel(isExpanded ? L10n.screenRoomGroupedStateEventsReduce : L10n.screenRoomGroupedStateEventsExpand)
                         .rotationEffect(.degrees(isExpanded ? 90 : 0))
                         .animation(.elementDefault, value: isExpanded)
                 }

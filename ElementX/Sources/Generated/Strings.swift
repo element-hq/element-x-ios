@@ -2183,9 +2183,9 @@ internal enum L10n {
     return L10n.tr("Localizable", "screen_room_event_pill", String(describing: p1))
   }
   /// Expand
-  internal static var screenRoomGroupedViewStatesExpand: String { return L10n.tr("Localizable", "screen_room_grouped_view_states_expand") }
+  internal static var screenRoomGroupedStateEventsExpand: String { return L10n.tr("Localizable", "screen_room_grouped_state_events_expand") }
   /// Reduce
-  internal static var screenRoomGroupedViewStatesReduce: String { return L10n.tr("Localizable", "screen_room_grouped_view_states_reduce") }
+  internal static var screenRoomGroupedStateEventsReduce: String { return L10n.tr("Localizable", "screen_room_grouped_state_events_reduce") }
   /// Would you like to invite them back?
   internal static var screenRoomInviteAgainAlertMessage: String { return L10n.tr("Localizable", "screen_room_invite_again_alert_message") }
   /// You are alone in this chat
