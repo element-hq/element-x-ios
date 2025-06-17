@@ -16,6 +16,8 @@ struct HomeScreen: View {
     @State private var scrollViewAdapter = ScrollViewAdapter()
     
     @State private var selectedTab: HomeTab = .chat
+    @State private var showBackToTop = false
+    @State private var hideNavigationBar = false
     
     //    init(context: HomeScreenViewModel.Context) {
     //        self.context = context
@@ -30,33 +32,101 @@ struct HomeScreen: View {
     //    }
     
     var body: some View {
-        HomeTabView(
-            tabContent: { tab in
-                switch tab {
-                case .chat:
-                    HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                case .channels:
-                    HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                case .feed:
-                    HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                case .notifications:
-                    HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                case .myFeed:
-                    HomeMyPostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+        ZStack(alignment: .top) {
+            HomeTabView(
+                tabContent: { tab in
+                    switch tab {
+                    case .chat:
+                        HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    case .channels:
+                        HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    case .feed:
+                        HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    case .notifications:
+                        HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    case .myFeed:
+                        HomeMyPostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    }
+                },
+                onTabSelected: { tab in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            showBackToTop = false
+                            hideNavigationBar = false
+                        }
+                    }
+                    selectedTab = tab
+                },
+                hasNewNotifications: context.viewState.hasNewNotificatios,
+                isTabViewVisible: !context.isSearchFieldFocused
+            )
+            .onReceive(scrollViewAdapter.isAtTopEdge) { isAtTop in
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    showBackToTop = isAtTop
                 }
-            },
-            onTabSelected: { tab in
-                selectedTab = tab
-            },
-            hasNewNotifications: context.viewState.hasNewNotificatios,
-            isTabViewVisible: !context.isSearchFieldFocused
-        )
+            }
+            .onReceive(scrollViewAdapter.scrollDirection) { direction in
+                MXLog.info("scroll direction: \(direction)")
+                if scrollViewAdapter.isAtTopEdge.value {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        switch direction {
+                        case .up:
+                            hideNavigationBar = false
+                        case .down:
+                            hideNavigationBar = true
+                        case .none:
+                            break
+                        }
+                    }
+                } else {
+                    hideNavigationBar = false
+                }
+            }
+            
+            // Top gradient overlay when nav bar is hidden
+            if hideNavigationBar {
+                LinearGradient(
+                    gradient: Gradient(colors: [.black, .clear, .clear]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: 200)
+                .ignoresSafeArea(edges: .top)
+                .transition(.opacity)
+                .allowsHitTesting(false)
+            }
+            
+            if showBackToTop {
+                Button(action: {
+                    scrollViewAdapter.scrollToTop(needForceOffset : selectedTab != .chat)
+                }) {
+                    HStack {
+                        Text("Back to top")
+                            .font(.zero.bodyMD)
+                            .foregroundStyle(.compound.textSecondary)
+                        
+                        Image(systemName: "arrow.up")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(.compound.textSecondary)
+                            .padding(.horizontal, 2)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(.compound.bgCanvasDefault)
+                    .clipShape(RoundedRectangle(cornerRadius: 32))
+                }
+                .frame(maxWidth: .infinity)
+                .transition(.opacity.combined(with:.scale))
+                .padding(.top, 16)
+            }
+        }
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
                message: leaveRoomAlertMessage)
         //            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
         .toolbar { toolbar }
+        .navigationBarHidden(hideNavigationBar)
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
         .track(screen: .Home)
