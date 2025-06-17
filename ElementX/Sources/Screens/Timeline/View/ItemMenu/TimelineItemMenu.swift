@@ -162,15 +162,19 @@ struct TimelineItemMenu: View {
                     .foregroundColor(reactionBackgroundColor(for: emoji)))
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .accessibilityLabel(hasReacted(to: emoji) ? L10n.a11yRemoveReaction(emoji) : L10n.a11yAddReaction(emoji))
+    }
+    
+    private func hasReacted(to emoji: String) -> Bool {
+        if let reaction = item.properties.reactions.first(where: { $0.key == emoji }),
+           reaction.isHighlighted {
+            return true
+        }
+        return false
     }
     
     private func reactionBackgroundColor(for emoji: String) -> Color {
-        if let reaction = item.properties.reactions.first(where: { $0.key == emoji }),
-           reaction.isHighlighted {
-            return .compound.bgActionPrimaryRest
-        } else {
-            return .clear
-        }
+        hasReacted(to: emoji) ? .compound.bgActionPrimaryRest : .clear
     }
     
     private func viewsForActions(_ actions: [TimelineItemMenuAction]) -> some View {

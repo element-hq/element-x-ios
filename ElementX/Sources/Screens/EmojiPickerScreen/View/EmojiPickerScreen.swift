@@ -36,6 +36,7 @@ struct EmojiPickerScreen: View {
                                         .background(Circle()
                                             .foregroundColor(emojiBackgroundColor(for: emoji.value)))
                                 }
+                                .accessibilityLabel(accessibilityLabel(for: emoji.value))
                             }
                         } header: {
                             EmojiPickerScreenHeaderView(title: category.name)
@@ -59,6 +60,14 @@ struct EmojiPickerScreen: View {
         .presentationDragIndicator(isSearching ? .hidden : .visible)
         .onChange(of: searchString) {
             context.send(viewAction: .search(searchString: searchString))
+        }
+    }
+    
+    private func accessibilityLabel(for emoji: String) -> String {
+        if selectedEmojis.contains(emoji) {
+            return L10n.a11yRemoveReaction(emoji)
+        } else {
+            return L10n.a11yAddReaction(emoji)
         }
     }
     
