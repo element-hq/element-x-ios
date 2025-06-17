@@ -34,6 +34,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 configureElementCallService()
                 configureNotificationManager()
                 observeUserSessionChanges()
+                // Set up Bug Report service after user is logged because baseUrl can be dependant on user's HomeServer that is known only after logged in.
+                setupServiceLocatorBugReport(appSettings: appSettings)
                 startSync()
                 performSettingsToAccountDataMigration(userSession: userSession)
                 Task { await appHooks.configure(with: userSession) }
@@ -372,15 +374,27 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private static func setupServiceLocator(appSettings: AppSettings, appHooks: AppHooks) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         ServiceLocator.shared.register(appSettings: appSettings)
-        ServiceLocator.shared.register(bugReportService: BugReportService(baseURL: appSettings.bugReportServiceBaseURL,
-                                                                          applicationID: appSettings.bugReportApplicationID,
-                                                                          sdkGitSHA: sdkGitSha(),
-                                                                          maxUploadSize: appSettings.bugReportMaxUploadSize,
-                                                                          appHooks: appHooks))
+        // Set up Bug Report service after user is logged because baseUrl can be dependant on user's HomeServer that is known only after logged in.
+//        ServiceLocator.shared.register(bugReportService: BugReportService(baseURL: appSettings.bugReportServiceBaseURL,
+//                                                                          applicationID: appSettings.bugReportApplicationID,
+//                                                                          sdkGitSHA: sdkGitSha(),
+//                                                                          maxUploadSize: appSettings.bugReportMaxUploadSize,
+//                                                                          appHooks: appHooks))
         let posthogAnalyticsClient = PostHogAnalyticsClient()
         posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
         ServiceLocator.shared.register(analytics: AnalyticsService(client: posthogAnalyticsClient,
                                                                    appSettings: appSettings))
+    }
+    
+    // Set up Bug Report service after user is logged because baseUrl can be dependant on user's HomeServer that is known only after logged in.
+    private func setupServiceLocatorBugReport(appSettings: AppSettings) {
+        // We can force unwrap and value here because user session is initialized.
+        // swiftlint:disable:next force_unwrapping
+        ServiceLocator.shared.register(bugReportService: BugReportService(baseURL: URL(string: userSession!.clientProxy.homeserver)?.appendingPathComponent("bugreports"),
+                                                                          applicationID: appSettings.bugReportApplicationID,
+                                                                          sdkGitSHA: sdkGitSha(),
+                                                                          maxUploadSize: appSettings.bugReportMaxUploadSize,
+                                                                          appHooks: appHooks))
     }
     
     /// Perform any required migrations for the app to function correctly.

@@ -16,7 +16,8 @@ protocol AuthenticationFlowCoordinatorDelegate: AnyObject {
 
 class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let authenticationService: AuthenticationServiceProtocol
-    private let bugReportService: BugReportServiceProtocol
+    // Set `bugReportService` optional because it can be nil before user is logged.
+    private let bugReportService: BugReportServiceProtocol?
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let appMediator: AppMediatorProtocol
@@ -263,7 +264,8 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private func showStartScreen(fromState: State, applying provisioningParameters: AccountProvisioningParameters? = nil) {
         let parameters = AuthenticationStartScreenParameters(authenticationService: authenticationService,
                                                              provisioningParameters: provisioningParameters,
-                                                             isBugReportServiceEnabled: bugReportService.isEnabled,
+                                                             // Set `bugReportService` optional because it can be nil before user is logged.
+                                                             isBugReportServiceEnabled: bugReportService?.isEnabled ?? false,
                                                              appSettings: appSettings,
                                                              userIndicatorController: userIndicatorController)
         let coordinator = AuthenticationStartScreenCoordinator(parameters: parameters)
@@ -436,6 +438,12 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Bug Report
     
     private func startBugReportFlow() {
+        // Verify `bugReportService` is instantiated. It can be nil on Authentication screen while user is not logged (no HomeServer defined).
+        guard let bugReportService else {
+            MXLog.warning("Can't launch `BugReportFlowCoordinator` from `AuthenticationFlowCoordinator`: `bugReportService` is nil.")
+            return
+        }
+
         let coordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(navigationStackCoordinator),
                                                                      userIndicatorController: userIndicatorController,
                                                                      bugReportService: bugReportService,
