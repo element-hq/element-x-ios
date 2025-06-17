@@ -182,7 +182,10 @@ class TimelineTableViewController: UIViewController {
         tableView.allowsSelection = false
         tableView.keyboardDismissMode = .onDrag
         tableView.backgroundColor = .compound.bgCanvasDefault
-        tableView.transform = CGAffineTransform(scaleX: 1, y: -1)
+        
+        // The tableview should be flipped to display the newest items at the top
+        // the only exception is VoiceOver, where we want to keep the latest item at the top as Android.
+        tableView.transform = CGAffineTransform(scaleX: 1, y: UIAccessibility.isVoiceOverRunning ? 1 : -1)
         view.addSubview(tableView)
         
         // Prevents XCUITest from invoking the diffable dataSource's cellProvider
@@ -213,6 +216,15 @@ class TimelineTableViewController: UIViewController {
         NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
             .sink { [weak self] _ in
                 self?.sendLastVisibleItemReadReceipt()
+            }
+            .store(in: &cancellables)
+        
+        // Observe voice over status changes to flip the table view accordingly
+        NotificationCenter.default.publisher(for: UIAccessibility.voiceOverStatusDidChangeNotification)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                tableView.transform = CGAffineTransform(scaleX: 1, y: UIAccessibility.isVoiceOverRunning ? 1 : -1)
+                tableView.reloadData()
             }
             .store(in: &cancellables)
         
@@ -261,7 +273,8 @@ class TimelineTableViewController: UIViewController {
                 .background(Color.clear)
                 
                 // Flipping the cell can create some issues with cell resizing, so flip the content View
-                cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
+                cell.contentView.transform = CGAffineTransform(scaleX: 1, y: UIAccessibility.isVoiceOverRunning ? 1 : -1)
+                cell.accessibilityElements = [cell.contentView] // Ensure VoiceOver reads the content view only
                 
                 return cell
             default:
@@ -287,7 +300,7 @@ class TimelineTableViewController: UIViewController {
                 .background(Color.clear)
                 
                 // Flipping the cell can create some issues with cell resizing, so flip the content View
-                cell.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
+                cell.contentView.transform = CGAffineTransform(scaleX: 1, y: UIAccessibility.isVoiceOverRunning ? 1 : -1)
                 return cell
             }
         }
