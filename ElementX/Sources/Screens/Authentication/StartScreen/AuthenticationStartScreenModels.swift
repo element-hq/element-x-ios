@@ -58,7 +58,8 @@ struct AuthenticationStartScreenViewState: BindableState {
     }
     
     var isInviteCodeValid: Bool {
-        bindings.inviteCode.count == VALID_INVITE_CODE_LENGTH
+//        bindings.inviteCode.count == VALID_INVITE_CODE_LENGTH
+        !bindings.inviteCode.isEmpty
     }
 }
 
