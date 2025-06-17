@@ -19,6 +19,7 @@ ignore:
   - "**/Mock*.swift"
   - "**/*Mock.swift"
   - "**/*Proxy.swift"
+  - "**/*Protocol.swift"
 
 flag_management:
   default_rules:

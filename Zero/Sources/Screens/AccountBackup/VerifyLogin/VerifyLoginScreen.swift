@@ -91,10 +91,11 @@ struct VerifyLoginScreen: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Image(asset: Asset.Images.checkIcon)
-                        .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
+                        .renderingMode(.template)
+                        .foregroundStyle(.zero.bgAccentRest)
                     
                     Text("Your account has a backup phrase")
-                        .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
+                        .foregroundStyle(.zero.bgAccentRest)
                         .font(.zero.bodySM)
                 }
                 
@@ -120,7 +121,7 @@ struct VerifyLoginScreen: View {
             } label: {
                 Text("Verify with backup phrase")
                     .font(.zero.bodyMDSemibold)
-                    .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
+                    .foregroundStyle(.zero.bgAccentRest)
                     .frame(height: 48)
                     .frame(maxWidth: .infinity)
                     .background(Color(red: 0.99, green: 0.99, blue: 0.99).opacity(0.05))
@@ -139,7 +140,7 @@ struct VerifyLoginScreen: View {
             } label: {
                 Text("Forgot recovery key?")
                     .font(.zero.bodyMDSemibold)
-                    .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
+                    .foregroundStyle(.zero.bgAccentRest)
                     .frame(height: 48)
                     .frame(maxWidth: .infinity)
                     .background(Color(red: 0.99, green: 0.99, blue: 0.99).opacity(0.05))

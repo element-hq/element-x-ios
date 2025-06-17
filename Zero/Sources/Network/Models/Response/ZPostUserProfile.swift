@@ -11,13 +11,21 @@ struct ZPostUserProfile: Codable, Hashable {
     let userId: String
     let createdAt: String?
     let primaryZid: String?
-    let firstName: String
-    let profileImage: String?
+    var firstName: String
+    var profileImage: String?
     let publicAddress: String?
     let followersCount: String?
     let followingCount: String?
     
-    init(userId: String, createdAt: String?, primaryZid: String?, firstName: String, profileImage: String?, publicAddress: String?, followersCount: String?, followingCount: String?) {
+    init(userId: String,
+         createdAt: String? = nil,
+         firstName: String,
+         profileImage: String?,
+         primaryZid: String?,
+         publicAddress: String?,
+         followersCount: String?,
+         followingCount: String?
+    ) {
         self.userId = userId
         self.createdAt = createdAt
         self.primaryZid = primaryZid
@@ -27,20 +35,13 @@ struct ZPostUserProfile: Codable, Hashable {
         self.followersCount = followersCount
         self.followingCount = followingCount
     }
-    
-    init(userId: String, profileImage: String?, firstName: String, primaryZId: String?, publicAddress: String?) {
-        self.userId = userId
-        self.createdAt = nil
-        self.primaryZid = primaryZId
-        self.firstName = firstName
-        self.profileImage = profileImage
-        self.publicAddress = publicAddress
-        self.followersCount = nil
-        self.followingCount = nil
-    }
 }
 
 extension ZPostUserProfile {
+    var primaryZIdOrAddress: String? {
+        primaryZid ?? publicAddress
+    }
+    
     var zIdOrPublicAddressDisplayText: String? {
         if let id = primaryZid ?? publicAddress {
             if id.hasPrefix(ZeroContants.ZERO_WALLET_ADDRESS_PREFIX) {
@@ -50,6 +51,17 @@ extension ZPostUserProfile {
             }
         }
         return nil
+    }
+    
+    func withFallbackValues(_ fallbackProfile: ZPostUserProfile) -> ZPostUserProfile {
+        var mUserProfile = self
+        if mUserProfile.firstName.isEmpty {
+            mUserProfile.firstName = fallbackProfile.firstName
+        }
+        if mUserProfile.profileImage == nil {
+            mUserProfile.profileImage = fallbackProfile.profileImage
+        }
+        return mUserProfile
     }
 }
 

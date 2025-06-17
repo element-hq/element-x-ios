@@ -10,6 +10,7 @@ import SwiftUI
 struct HomeScreenNotificationCell: View {
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
+    let selectedTab: HomeNotificationsTab
     
     var notificationText: AttributedString {
         let isRoomDM = room.isDirect
@@ -20,8 +21,8 @@ struct HomeScreenNotificationCell: View {
             baseText = isRoomDM ? "\(room.name) invited you to chat" : "You are invited to join \(room.name)"
         case .room:
             baseText = room.unreadNotificationsCount > 1 ?
-            "\(room.unreadNotificationsCount) messages in \(room.name)" :
-            "\(room.unreadNotificationsCount) message in \(room.name)"
+            "\(room.unreadNotificationsCount) unread \(selectedTab == .highlighted ? "highlights" : "messages") in \(room.name)" :
+            "\(room.unreadNotificationsCount) unread \(selectedTab == .highlighted ? "highlight" : "message") in \(room.name)"
         default:
             baseText = "You may have new messages in \(room.name)"
         }

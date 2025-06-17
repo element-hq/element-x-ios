@@ -1176,7 +1176,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentCreateFeedScreen(_ createFeedProtocol: CreateFeedProtocol) {
         let stackCoordinator = NavigationStackCoordinator()
-        let coordinator = CreateFeedScreenCoordinator(parameters: .init(userSession: userSession, createFeedProtocol: createFeedProtocol))
+        let coordinator = CreateFeedScreenCoordinator(parameters: .init(userSession: userSession,
+                                                                        createFeedProtocol: createFeedProtocol,
+                                                                        fromUserProfileFlow: false))
         coordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }

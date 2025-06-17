@@ -40,6 +40,9 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
         didScrollSubject.send(())
         let insetContentOffset = scrollView.contentOffset.y + scrollView.contentInset.top
         isAtTopEdgeSubject.send(insetContentOffset >= 3)
+        
+        // Track scroll direction
+        updateScrollDirection(with: scrollView)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -70,9 +73,59 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
         return shouldScrollToTopClosure(scrollView)
     }
     
+    func scrollToTop(needForceOffset: Bool = false) {
+        guard let scrollView = scrollView else { return }
+        let yOffset = needForceOffset ? -100 : 0
+        let topOffset = CGPoint(x: 0, y: yOffset)
+        scrollView.setContentOffset(topOffset, animated: true)
+    }
+    
     // MARK: - Private
     
     private func updateDidScroll(_ scrollView: UIScrollView) {
         isScrollingSubject.send(scrollView.isDragging || scrollView.isDecelerating)
+    }
+}
+
+// Add this extension to your ScrollViewAdapter
+extension ScrollViewAdapter {
+    enum ScrollDirection {
+        case up, down, none
+    }
+    
+    private static var lastOffsetKey: UInt8 = 0
+    private static var scrollDirectionSubjectKey: UInt8 = 1
+    
+    private var lastOffset: CGFloat {
+        get {
+            objc_getAssociatedObject(self, &Self.lastOffsetKey) as? CGFloat ?? 0
+        }
+        set {
+            objc_setAssociatedObject(self, &Self.lastOffsetKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+    private var scrollDirectionSubject: PassthroughSubject<ScrollDirection, Never> {
+        if let subject = objc_getAssociatedObject(self, &Self.scrollDirectionSubjectKey) as? PassthroughSubject<ScrollDirection, Never> {
+            return subject
+        }
+        let subject = PassthroughSubject<ScrollDirection, Never>()
+        objc_setAssociatedObject(self, &Self.scrollDirectionSubjectKey, subject, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        return subject
+    }
+    
+    var scrollDirection: AnyPublisher<ScrollDirection, Never> {
+        scrollDirectionSubject.eraseToAnyPublisher()
+    }
+    
+    func updateScrollDirection(with scrollView: UIScrollView) {
+        let currentOffset = scrollView.contentOffset.y
+        let threshold: CGFloat = 5 // Minimum scroll distance to trigger direction change
+        
+        if abs(currentOffset - lastOffset) > threshold {
+            let direction: ScrollDirection = currentOffset > lastOffset ? .down : .up
+            scrollDirectionSubject.send(direction)
+            lastOffset = currentOffset
+        }
     }
 }

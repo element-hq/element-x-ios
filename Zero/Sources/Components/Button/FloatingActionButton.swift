@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct FloatingActionButton: View {
@@ -14,8 +15,7 @@ struct FloatingActionButton: View {
         Button(action: {
            onTap()
         }) {
-            Image(systemName: "plus")
-                .font(.system(size: 20))
+            CompoundIcon(\.plus)
                 .foregroundColor(.black)
                 .padding()
                 .background(.zero.bgAccentRest)

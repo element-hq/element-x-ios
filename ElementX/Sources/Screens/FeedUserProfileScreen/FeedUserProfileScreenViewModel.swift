@@ -10,7 +10,7 @@ import SwiftUI
 
 typealias FeedUserProfileScreenViewModelType = StateStoreViewModel<FeedUserProfileScreenViewState, FeedUserProfileScreenViewAction>
 
-class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUserProfileScreenViewModelProtocol {
+class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUserProfileScreenViewModelProtocol, CreateFeedProtocol {
     
     private let clientProxy: ClientProxyProtocol
     private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol?
@@ -76,6 +76,8 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             displayFullScreenAvatar(url)
         case .openMediaPreview(let url):
             displayFullScreenMedia(url)
+        case .newFeed:
+            actionsSubject.send(.newFeed(self))
         }
     }
     
@@ -90,11 +92,11 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     }
     
     private func fetchUserProfile() async {
-        if let zid = state.userProfile.primaryZid, !zid.isEmpty {
+        if let zid = state.userProfile.primaryZIdOrAddress, !zid.isEmpty {
             let result = await clientProxy.fetchFeedUserProfile(userZId: zid)
             switch result {
             case .success(let userProfile):
-                state.userProfile = userProfile
+                state.userProfile = userProfile.withFallbackValues(state.userProfile)
             case .failure(let error):
                 MXLog.error("Failed to fetch user profile for user: \(state.userID), with error: \(error)")
                 displayError()
@@ -122,7 +124,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         Task {
             defer { isFetchFeedsInProgress = false } // Ensure flag is reset when the task completes
             
-            state.userFeedsListMode = state.userFeeds.isEmpty ? .empty : .feeds
+//            state.userFeedsListMode = state.userFeeds.isEmpty ? .empty : .feeds
             let skipItems = isForceRefresh ? 0 : state.userFeeds.count
             let feedsResult = await clientProxy.fetchUserFeeds(userId: userId,
                                                                  limit: FEEDS_PAGE_COUNT,
@@ -231,11 +233,11 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             defer {
                 userIndicatorController.retractIndicatorWithId(userIndicatorID)
             }
+            let isFollowed = state.userFollowStatus?.isFollowing ?? false
             userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                                  title: "",
+                                                                  title: isFollowed ? "Unfollowing..." : "Following...",
                                                                   persistent: true))
-            let isFollowed = state.userFollowStatus?.isFollowing ?? false
             let result = if isFollowed {
                 await clientProxy.unFollowFeedUser(userId: state.userID)
             } else {
@@ -262,7 +264,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             }
             userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                                  title: "",
+                                                                  title: "Loading...",
                                                                   persistent: true))
             switch clientProxy.directRoomForUserID(userId) {
             case .success(let roomID):
@@ -320,5 +322,9 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 MXLog.error("Failed to preview feed media: \(error)")
             }
         }
+    }
+
+    func onNewFeedPosted() {
+        fetchUserFeeds(state.userID, isForceRefresh: true)
     }
 }

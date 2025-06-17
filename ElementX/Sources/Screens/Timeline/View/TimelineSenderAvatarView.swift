@@ -12,13 +12,15 @@ struct TimelineSenderAvatarView: View {
     @Environment(\.timelineContext) private var context
 
     let timelineItem: EventBasedTimelineItemProtocol
+    let onTap: ((URL) -> Void)?
         
     var body: some View {
         LoadableAvatarImage(url: timelineItem.sender.avatarURL,
                             name: timelineItem.sender.displayName,
                             contentID: timelineItem.sender.id,
                             avatarSize: .user(on: .timeline),
-                            mediaProvider: context?.mediaProvider)
+                            mediaProvider: context?.mediaProvider,
+                            onTap: onTap)
             .overlay {
                 Circle().stroke(Color.zero.bgCanvasDefault, lineWidth: 3)
             }

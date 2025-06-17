@@ -45,7 +45,7 @@ struct HomeMyPostsContent: View {
                     }
                     .disabled(true)
                 case .empty:
-                    HomePostsEmptyView()
+                    HomeContentEmptyView(message: "No posts")
                 case .posts:
                     LazyVStack(spacing: 0) {
                         ForEach(context.viewState.visibleMyPosts, id: \.id) { post in

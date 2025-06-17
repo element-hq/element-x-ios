@@ -15,6 +15,8 @@ struct HomeNotificationsContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     let scrollViewAdapter: ScrollViewAdapter
     
+    @State private var selectedTab: HomeNotificationsTab = .all
+    
     var body: some View {
         notificationsList
     }
@@ -28,23 +30,25 @@ struct HomeNotificationsContent: View {
                         case .skeletons:
                             LazyVStack(spacing: 0) {
                                 ForEach(context.viewState.visibleRooms) { room in
-                                    HomeScreenNotificationCell(room: room, context: context)
+                                    HomeScreenNotificationCell(room: room, context: context, selectedTab: selectedTab)
                                         .redacted(reason: .placeholder)
                                         .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
                                 }
                             }
                             .disabled(true)
                         case .empty:
-                            HomeNotificationsEmptyView()
+                            HomeContentEmptyView(message: "No new notifications")
                         case .rooms:
                             LazyVStack(spacing: 0) {
                                 let roomsWithNotifications = context.viewState.notificationsContent
                                 if roomsWithNotifications.isEmpty {
-                                    HomeNotificationsEmptyView()
+                                    HomeContentEmptyView(message: "No new notifications")
                                 } else {
                                     ForEach(roomsWithNotifications) { room in
-                                        HomeScreenNotificationCell(room: room, context: context)
+                                        HomeScreenNotificationCell(room: room, context: context, selectedTab: selectedTab)
                                     }
+                                    
+                                    HomeTabBottomSpace()
                                 }
                             }
                         }
@@ -110,9 +114,14 @@ struct HomeNotificationsContent: View {
 //            }
 //            .background(Color.zero.bgCanvasDefault)
 //        }
-        HomeNotificationsTabView(onTabSelected: { tab in
-            context.send(viewAction: .setNotificationFilter(tab))
-        })
+        HomeNotificationsTabView(
+            onTabSelected: { tab in
+                selectedTab = tab
+                context.send(viewAction: .setNotificationFilter(tab))
+            })
+        .onAppear {
+            context.send(viewAction: .setNotificationFilter(selectedTab))
+        }
     }
     
     /// Often times the scroll view's content size isn't correct yet when this method is called e.g. when cancelling a search
@@ -142,17 +151,5 @@ struct HomeNotificationsContent: View {
         
         // This will be deduped and throttled on the view model layer
         context.send(viewAction: .updateVisibleItemRange(firstIndex..<lastIndex))
-    }
-}
-
-struct HomeNotificationsEmptyView: View {
-    var body: some View {
-        ZStack {
-            Text("No new notifications")
-                .font(.compound.headingMD)
-                .foregroundColor(.compound.textSecondary)
-                .frame(maxWidth: .infinity, alignment: .center)
-        }
-        .frame(maxWidth: .infinity, minHeight: 500)
     }
 }

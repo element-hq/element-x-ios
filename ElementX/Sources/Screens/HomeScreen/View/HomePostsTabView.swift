@@ -14,7 +14,7 @@ enum HomePostsTab: CaseIterable {
 }
 
 struct HomePostsTabView: View {
-    @State private var selectedTab: HomePostsTab = .following
+    @State var selectedTab: HomePostsTab = .following
     let onTabSelected: (HomePostsTab) -> Void
     
     private let tabs = [
@@ -27,6 +27,7 @@ struct HomePostsTabView: View {
             ForEach(tabs, id: \.tab) { tabInfo in
                 Button(action: {
                     selectedTab = tabInfo.tab
+                    onTabSelected(tabInfo.tab)
                 }) {
                     VStack(spacing: 0) {
                         Text(tabInfo.title)
@@ -45,8 +46,5 @@ struct HomePostsTabView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity)
-        .onChange(of: selectedTab) { _, newTab in
-            onTabSelected(newTab)
-        }
     }
 }

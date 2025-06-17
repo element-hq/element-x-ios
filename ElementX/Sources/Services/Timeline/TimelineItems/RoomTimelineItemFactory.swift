@@ -837,7 +837,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             
             return .loaded(senderID: senderID,
                            sender: sender,
-                           latestEventContent: latestEventContent)
+                           latestEventContent: latestEventContent,
+                           numberOfReplies: Int(threadSummary.numReplies()))
             
         case .error(let message):
             return .error(message: message)

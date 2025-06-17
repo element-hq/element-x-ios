@@ -31,7 +31,7 @@ struct HomeChannelsContent: View {
                     }
                     .disabled(true)
                 case .empty:
-                    HomeChannelsEmptyView()
+                    HomeContentEmptyView(message: "No channels")
                 case .channels:
                     LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(context.viewState.visibleChannels, id: \.id) { channel in
@@ -39,6 +39,8 @@ struct HomeChannelsContent: View {
                                 context.send(viewAction: .channelTapped(channel))
                             })
                         }
+                        
+                        HomeTabBottomSpace()
                     }
                 }
             }
@@ -55,17 +57,5 @@ struct HomeChannelsContent: View {
 //                context.send(viewAction: .forceRefreshChannels)
 //            }
         }
-    }
-}
-
-struct HomeChannelsEmptyView: View {
-    var body: some View {
-        ZStack {
-            Text("No channels yet")
-                .font(.compound.headingMD)
-                .foregroundColor(.compound.textSecondary)
-                .frame(maxWidth: .infinity, alignment: .center)
-        }
-        .frame(maxWidth: .infinity, minHeight: 500)
     }
 }

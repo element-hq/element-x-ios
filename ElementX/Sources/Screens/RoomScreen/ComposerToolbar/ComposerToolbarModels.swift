@@ -39,6 +39,8 @@ enum ComposerToolbarViewModelAction {
 
 enum ComposerToolbarViewAction {
     case composerAppeared
+    case composerDisappeared
+    
     case sendMessage
     case editLastMessage
     case cancelReply
@@ -233,31 +235,46 @@ extension FormatItem {
     }
 
     var accessibilityLabel: String {
-        switch type {
+        let localizedAction = switch type {
         case .bold:
-            return L10n.richTextEditorFormatBold
+            L10n.richTextEditorFormatBold
         case .italic:
-            return L10n.richTextEditorFormatItalic
+            L10n.richTextEditorFormatItalic
         case .underline:
-            return L10n.richTextEditorFormatUnderline
+            L10n.richTextEditorFormatUnderline
         case .strikeThrough:
-            return L10n.richTextEditorFormatStrikethrough
+            L10n.richTextEditorFormatStrikethrough
         case .unorderedList:
-            return L10n.richTextEditorBulletList
+            L10n.richTextEditorBulletList
         case .orderedList:
-            return L10n.richTextEditorNumberedList
+            L10n.richTextEditorNumberedList
         case .indent:
-            return L10n.richTextEditorIndent
+            L10n.richTextEditorIndent
         case .unindent:
-            return L10n.richTextEditorUnindent
+            L10n.richTextEditorUnindent
         case .inlineCode:
-            return L10n.richTextEditorInlineCode
+            L10n.richTextEditorInlineCode
         case .codeBlock:
-            return L10n.richTextEditorCodeBlock
+            L10n.richTextEditorCodeBlock
         case .quote:
-            return L10n.richTextEditorQuote
+            L10n.richTextEditorQuote
         case .link:
-            return L10n.richTextEditorLink
+            L10n.richTextEditorLink
+        }
+        return L10n.richTextEditorFormatAction(localizedAction, state.localizedDescription)
+    }
+}
+
+extension ActionState {
+    /// Returns a localized string that describes the action state.
+    var localizedDescription: String {
+        switch self {
+        case .disabled:
+            L10n.richTextEditorFormatStateDisabled
+        case .enabled:
+            L10n.richTextEditorFormatStateOff
+        case .reversed:
+            L10n.richTextEditorFormatStateOn
         }
     }
 }

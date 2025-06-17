@@ -69,7 +69,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         userSession.clientProxy.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
-                self?.state.primaryZeroId = currentUser.primaryZID
+                self?.state.currentUserZeroProfile = currentUser
             }
             .store(in: &cancellables)
         
@@ -284,10 +284,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: self))
         case .openUserProfile:
             let profile = ZPostUserProfile(userId: state.userID.matrixIdToCleanHex(),
-                                           profileImage: state.userAvatarURL?.absoluteString,
                                            firstName: state.userDisplayName ?? "",
-                                           primaryZId: state.primaryZeroId,
-                                           publicAddress: state.primaryZeroId)
+                                           profileImage: state.userAvatarURL?.absoluteString,
+                                           primaryZid: state.currentUserZeroProfile?.primaryZID,
+                                           publicAddress: state.currentUserZeroProfile?.publicWalletAddress,
+                                           followersCount: state.currentUserZeroProfile?.followersCount,
+                                           followingCount: state.currentUserZeroProfile?.followingCount)
             actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: self))
         case .setNotificationFilter(let tab):
             applyCustomFilterToNotificationsList(tab)
@@ -580,7 +582,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     private func dismissNewRewardsIntimation() {
         Task {
-            try await Task.sleep(for: .seconds(5))
+            try await Task.sleep(for: .seconds(4))
             state.showNewUserRewardsIntimation = false
         }
     }
@@ -602,7 +604,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         guard !isFetchPostsInProgress else { return }
         isFetchPostsInProgress = true
         
-        defer { isFetchPostsInProgress = false } // Ensure flag is reset when the task completes
+//        defer { isFetchPostsInProgress = false } // Ensure flag is reset when the task completes
         
         if isForceRefresh {
             state.canLoadMorePosts = true
@@ -630,6 +632,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 }
                 state.posts = homePosts.uniqued(on: \.id)
                 state.postListMode = .posts
+                isFetchPostsInProgress = false
                 
                 loadPostsMediaInfo(for: state.posts)
                 loadPostLinkPreviews(for: state.posts)
@@ -643,11 +646,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             default:
                 displayError()
             }
+            isFetchPostsInProgress = false
         }
     }
     
     private func fetchMyPosts(isForceRefresh: Bool = false) async {
-        guard let primaryZeroId = state.primaryZeroId?.replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "") else {
+        guard let primaryZeroId = state.currentUserZeroProfile?.primaryZID?
+            .replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "") else {
             state.myPostListMode = .empty
             return
         }
@@ -900,7 +905,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 case .all:
                     return $0.badges.isDotShown
                 case .highlighted:
-                    return $0.badges.isDotShown && $0.isHighlighted
+                    return $0.badges.isMentionShown
                 case .muted:
                     return $0.badges.isDotShown && $0.badges.isMuteShown
                 }

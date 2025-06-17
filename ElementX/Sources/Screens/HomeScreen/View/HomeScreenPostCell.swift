@@ -22,11 +22,38 @@ struct HomeScreenPostCell: View {
     let onOpenUserProfile: (ZPostUserProfile) -> Void
     let onMediaTapped: (URL) -> Void
     
+    @State private var referenceHeight: CGFloat = .zero
+    
     var body: some View {
         HStack(alignment: .top) {
-            if showThreadLine {
-                VStack(alignment: .leading, spacing: 0) {
-                    // Sender image
+            VStack(alignment: .center) {
+                if showThreadLine {
+                    VStack(alignment: .leading, spacing: 0) {
+                        // Sender image
+                        LoadableAvatarImage(url: post.senderInfo.avatarURL,
+                                            name: nil,
+                                            contentID: post.senderInfo.userID,
+                                            avatarSize: .user(on: .home),
+                                            mediaProvider: mediaProvider,
+                                            onTap: { _ in
+                            if let postSenderProfile = post.senderProfile {
+                                onOpenUserProfile(postSenderProfile)
+                            }
+                        })
+                        
+                        if showThreadLine {
+                            // Dynamic vertical line
+                            GeometryReader { geometry in
+                                Rectangle()
+                                    .frame(width: 1, height: geometry.size.height)
+                                    .foregroundStyle(.compound.textSecondary.opacity(0.5))
+                                    .offset(x: 16, y: 8)
+                            }
+                        }
+                    }
+                    .frame(width: 42)
+                } else {
+                    //sender image
                     LoadableAvatarImage(url: post.senderInfo.avatarURL,
                                         name: nil,
                                         contentID: post.senderInfo.userID,
@@ -37,31 +64,15 @@ struct HomeScreenPostCell: View {
                             onOpenUserProfile(postSenderProfile)
                         }
                     })
-                    
-                    if showThreadLine {
-                        // Dynamic vertical line
-                        GeometryReader { geometry in
-                            Rectangle()
-                                .frame(width: 1, height: geometry.size.height)
-                                .foregroundStyle(.compound.textSecondary.opacity(0.5))
-                                .offset(x: 16, y: 8)
-                        }
-                    }
                 }
-                .frame(width: 42)
-            } else {
-                //sender image
-                LoadableAvatarImage(url: post.senderInfo.avatarURL,
-                                    name: nil,
-                                    contentID: post.senderInfo.userID,
-                                    avatarSize: .user(on: .home),
-                                    mediaProvider: mediaProvider,
-                                    onTap: { _ in
-                    if let postSenderProfile = post.senderProfile {
-                        onOpenUserProfile(postSenderProfile)
-                    }
-                })
+                Spacer()
             }
+            .frame(height: referenceHeight)
+            .contentShape(Rectangle())
+            .onTapGesture {
+                onPostTapped()
+            }
+            
             VStack(alignment: .leading) {
                 HStack(alignment: .center) {
                     Text(post.attributedSenderHeaderText)
@@ -151,8 +162,23 @@ struct HomeScreenPostCell: View {
                         onOpenArweaveLink()
                     })
                 }
-            }.padding(.leading, 8)
+            }
+            .padding(.leading, 8)
+            .background(GeometryReader { geometry in
+                Color.clear
+                    .preference(key: HeightPreferenceKey.self, value: geometry.size.height)
+            })
+            .onPreferenceChange(HeightPreferenceKey.self) { height in
+                self.referenceHeight = height
+            }
         }
+    }
+}
+
+private struct HeightPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = .zero
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = max(value, nextValue())
     }
 }
 
@@ -168,6 +194,7 @@ struct HomePostCellLinkPreview: View {
                         .placeholder {
                             Image(systemName: "link")
                         }
+                        .fade(duration: 0.3)
                         .aspectRatio(thumbnail.aspectRatio, contentMode: .fit)
                         .cornerRadius(4, corners: .allCorners)
                     

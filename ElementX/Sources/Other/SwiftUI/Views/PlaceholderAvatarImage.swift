@@ -34,6 +34,7 @@ struct PlaceholderAvatarImage: View {
                 
                 Image(asset: Asset.Images.defaultAvatarIcon)
                     .resizable()
+                    .animation(.elementDefault, value: contentID)
                     .frame(alignment: .center)
                     .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
                     .scaledToFit()

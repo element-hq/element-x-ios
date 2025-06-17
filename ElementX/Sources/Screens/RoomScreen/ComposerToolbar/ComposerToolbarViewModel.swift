@@ -162,9 +162,22 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             }
         }
         .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification).sink { [weak self] _ in
+            self?.saveDraft()
+        }
+        .store(in: &cancellables)
     }
     
     // MARK: - Public
+    
+    func start() {
+        Task { await loadDraft() }
+    }
+    
+    func stop() {
+        saveDraft()
+    }
 
     override func process(viewAction: ComposerToolbarViewAction) {
         switch viewAction {
@@ -173,6 +186,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
                 hasAppeard = true
                 wysiwygViewModel.setup()
             }
+        case .composerDisappeared:
+            saveDraft()
         case .sendMessage:
             guard !state.sendButtonDisabled else { return }
             

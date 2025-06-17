@@ -17,6 +17,7 @@ struct FeedUserProfileScreenCoordinatorParameters {
 enum FeedUserProfileScreenCoordinatorAction {
     case feedTapped(_ feed: HomeScreenPost)
     case openDirectChat(_ roomId: String)
+    case newFeed(CreateFeedProtocol)
 }
 
 final class FeedUserProfileScreenCoordinator: CoordinatorProtocol {
@@ -44,6 +45,8 @@ final class FeedUserProfileScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.feedTapped(feed))
                 case .openDirectChat(let roomId):
                     actionsSubject.send(.openDirectChat(roomId))
+                case .newFeed(let createFeedProtocol):
+                    actionsSubject.send(.newFeed(createFeedProtocol))
                 }
             }
             .store(in: &cancellables)

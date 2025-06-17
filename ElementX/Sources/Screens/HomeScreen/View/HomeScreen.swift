@@ -16,6 +16,8 @@ struct HomeScreen: View {
     @State private var scrollViewAdapter = ScrollViewAdapter()
     
     @State private var selectedTab: HomeTab = .chat
+    @State private var showBackToTop = false
+    @State private var hideNavigationBar = false
     
     //    init(context: HomeScreenViewModel.Context) {
     //        self.context = context
@@ -30,33 +32,101 @@ struct HomeScreen: View {
     //    }
     
     var body: some View {
-        HomeTabView(
-            tabContent: { tab in
-                switch tab {
-                case .chat:
-                    HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                case .channels:
-                    HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                case .feed:
-                    HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                case .notifications:
-                    HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
-                case .myFeed:
-                    HomeMyPostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+        ZStack(alignment: .top) {
+            HomeTabView(
+                tabContent: { tab in
+                    switch tab {
+                    case .chat:
+                        HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    case .channels:
+                        HomeChannelsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    case .feed:
+                        HomePostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    case .notifications:
+                        HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    case .myFeed:
+                        HomeMyPostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    }
+                },
+                onTabSelected: { tab in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            showBackToTop = false
+                            hideNavigationBar = false
+                        }
+                    }
+                    selectedTab = tab
+                },
+                hasNewNotifications: context.viewState.hasNewNotificatios,
+                isTabViewVisible: !context.isSearchFieldFocused
+            )
+            .onReceive(scrollViewAdapter.isAtTopEdge) { isAtTop in
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    showBackToTop = isAtTop
                 }
-            },
-            onTabSelected: { tab in
-                selectedTab = tab
-            },
-            hasNewNotifications: context.viewState.hasNewNotificatios,
-            isTabViewVisible: !context.isSearchFieldFocused
-        )
+            }
+            .onReceive(scrollViewAdapter.scrollDirection) { direction in
+                MXLog.info("scroll direction: \(direction)")
+                if scrollViewAdapter.isAtTopEdge.value {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        switch direction {
+                        case .up:
+                            hideNavigationBar = false
+                        case .down:
+                            hideNavigationBar = true
+                        case .none:
+                            break
+                        }
+                    }
+                } else {
+                    hideNavigationBar = false
+                }
+            }
+            
+            // Top gradient overlay when nav bar is hidden
+            if hideNavigationBar {
+                LinearGradient(
+                    gradient: Gradient(colors: [.black, .clear, .clear]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: 200)
+                .ignoresSafeArea(edges: .top)
+                .transition(.opacity)
+                .allowsHitTesting(false)
+            }
+            
+            if showBackToTop {
+                Button(action: {
+                    scrollViewAdapter.scrollToTop(needForceOffset : selectedTab != .chat)
+                }) {
+                    HStack {
+                        Text("Back to top")
+                            .font(.zero.bodyMD)
+                            .foregroundStyle(.compound.textSecondary)
+                        
+                        Image(systemName: "arrow.up")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(.compound.textSecondary)
+                            .padding(.horizontal, 2)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(.compound.bgCanvasDefault)
+                    .clipShape(RoundedRectangle(cornerRadius: 32))
+                }
+                .frame(maxWidth: .infinity)
+                .transition(.opacity.combined(with:.scale))
+                .padding(.top, 16)
+            }
+        }
         .alert(item: $context.alertInfo)
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
                message: leaveRoomAlertMessage)
         //            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
         .toolbar { toolbar }
+        .navigationBarHidden(hideNavigationBar)
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .navigationBarTitleDisplayMode(.inline)
         .track(screen: .Home)
@@ -75,7 +145,19 @@ struct HomeScreen: View {
             Button {
                 context.send(viewAction: .showSettings)
             } label: {
-                HStack {
+                ZStack {
+                    if context.viewState.showNewUserRewardsIntimation {
+                        ZStack(alignment: .center) {
+                            Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 1)
+                                .frame(width: 38, height: 38)
+                            Circle().stroke(Color.zero.bgAccentRest, lineWidth: 1)
+                                .frame(width: 35, height: 35)
+                        }
+                        .task {
+                            context.send(viewAction: .rewardsIntimated)
+                        }
+                    }
+                    
                     LoadableAvatarImage(url: context.viewState.userAvatarURL,
                                         name: context.viewState.userDisplayName,
                                         contentID: context.viewState.userID,
@@ -89,18 +171,9 @@ struct HomeScreen: View {
                     .compositingGroup()
                     .overlay {
                         if context.viewState.showNewUserRewardsIntimation {
-                            ZStack(alignment: .center) {
-                                Circle().stroke(Color.zero.bgAccentRest.opacity(0.5), lineWidth: 1)
-                                    .frame(width: 38, height: 38)
-                                Circle().stroke(Color.zero.bgAccentRest, lineWidth: 1)
-                                    .frame(width: 35, height: 35)
-                            }
-                            .task {
-                                context.send(viewAction: .rewardsIntimated)
-                            }
-                            
                             userRewardsToolTip
                                 .offset(x: 85, y: 45)
+                                .allowsHitTesting(false)
                         }
                     }
                 }
@@ -142,30 +215,30 @@ struct HomeScreen: View {
     }
     
     private var userRewardsToolTip: some View {
-        VStack(alignment: .leading) {
-            Triangle()
-                .fill(.ultraThickMaterial)
-                .frame(width: 25, height: 15)
-                .padding(.leading, 16)
-            
-            Button {
-                context.send(viewAction: .rewardsIntimated)
-            } label: {
+        Button {
+            context.send(viewAction: .rewardsIntimated)
+        } label: {
+            VStack(alignment: .leading, spacing: 0) {
+                Triangle()
+                    .fill(.ultraThickMaterial)
+                    .frame(width: 25, height: 15)
+                    .padding(.leading, 16)
+                
                 HStack {
                     Text("You earned $\(context.viewState.userRewards.getRefPriceFormatted())")
                         .font(.inter(size: 16))
                     
                     Spacer()
                     
-                    Image(systemName: "xmark")
-                        .font(.system(size: 16))
+                    CompoundIcon(\.close)
                 }
                 .padding(.all, 16)
                 .background(.ultraThickMaterial)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             }
-            .frame(width: 225, height: 30, alignment: .leading)
         }
+        .allowsHitTesting(false)
+        .frame(width: 225, height: 30, alignment: .leading)
     }
     
     private struct Triangle: Shape {
