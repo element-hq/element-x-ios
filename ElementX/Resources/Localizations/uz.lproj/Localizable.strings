@@ -1,4 +1,5 @@
 "Notification" = "Bildirishnoma";
+"a11y_add_reaction" = "Add reaction: %1$@";
 "a11y_avatar" = "Avatar";
 "a11y_delete" = "Oʻchirish";
 "a11y_hide_password" = "Parolni yashirish";
@@ -12,11 +13,13 @@
 "a11y_pin_field" = "PIN field";
 "a11y_play" = "O'ynang";
 "a11y_poll_end" = "So‘rovnoma yakunlandi";
+"a11y_polls_winning_answer" = "This is the winning answer";
 "a11y_react_with" = "React with %1$@";
 "a11y_react_with_other_emojis" = "React with other emojis";
 "a11y_read_receipts_multiple" = "Read by %1$@ and %2$@";
 "a11y_read_receipts_single" = "Read by %1$@";
 "a11y_read_receipts_tap_to_show_all" = "Tap to show all";
+"a11y_remove_reaction" = "Remove reaction: %1$@";
 "a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Fayllarni yuborish";
 "a11y_show_password" = "Parolni ko'rsatish";
@@ -135,10 +138,12 @@
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
 "banner_set_up_recovery_title" = "Set up recovery to protect your account";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Haqida";
 "common_acceptable_use_policy" = "Qabul qilinadigan foydalanish siyosati";
 "common_adding_caption" = "Adding caption";
 "common_advanced_settings" = "Kengaytirilgan sozlamalar";
+"common_an_image" = "an image";
 "common_analytics" = "Analitika";
 "common_appearance" = "Appearance";
 "common_audio" = "Audio";
@@ -241,6 +246,7 @@
 "common_sending" = "Yuborilmoqda…";
 "common_sending_failed" = "Sending failed";
 "common_sent" = "Sent";
+"common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Server qo'llab-quvvatlanmaydi";
 "common_server_url" = "Server URL manzili";
 "common_settings" = "Sozlamalar";
@@ -332,6 +338,7 @@
 "error_no_compatible_app_found" = "Bu amalni bajarish uchun mos ilova topilmadi.";
 "error_some_messages_have_not_been_sent" = "Bazi xabarlar yuborilmagan";
 "error_unknown" = "Kechirasiz, xatolik yuz berdi";
+"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
 "event_shield_reason_authenticity_not_guaranteed" = "The authenticity of this encrypted message can't be guaranteed on this device.";
 "event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
 "event_shield_reason_sent_in_clear" = "Not encrypted.";
@@ -352,6 +359,7 @@
 "notification_channel_noisy" = "Shovqinli bildirishnomalar";
 "notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Ovozsiz bildirishnomalar";
+"notification_fallback_content" = "You have new message(s).";
 "notification_incoming_call" = "📹 Incoming call";
 "notification_inline_reply_failed" = "** Yuborilmadi - iltimos, xonani oching";
 "notification_invite_body" = "Sizni suhbatga taklif qildi";
@@ -379,8 +387,12 @@
 "rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Havola yarating";
 "rich_text_editor_edit_link" = "Havolani tahrirlash";
+"rich_text_editor_format_action" = "%1$@, state: %2$@";
 "rich_text_editor_format_bold" = "Qalin formatni qo'llang";
 "rich_text_editor_format_italic" = "Kursiv formatini qo'llang";
+"rich_text_editor_format_state_disabled" = "disabled";
+"rich_text_editor_format_state_off" = "off";
+"rich_text_editor_format_state_on" = "on";
 "rich_text_editor_format_strikethrough" = "Chizilgan formatni qo'llash";
 "rich_text_editor_format_underline" = "Pastki chiziq formatini qo'llang";
 "rich_text_editor_full_screen_toggle" = "Toʻliq ekran rejimiga oʻtish";
@@ -426,6 +438,10 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
+"screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
+"screen_create_poll_options_section_title" = "Options";
+"screen_create_poll_remove_accessibility_label" = "Remove %1$@";
+"screen_create_poll_settings_section_title" = "Settings";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_room_access_section_header" = "Room Access";
@@ -515,6 +531,14 @@
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
 "screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
+"screen_room_grouped_state_events_expand" = "Expand";
+"screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_timeline_tombstoned_room_action" = "Jump to new room";
+"screen_room_timeline_tombstoned_room_message" = "This room has been replaced and is no longer active";
+"screen_room_timeline_upgraded_room_action" = "See old messages";
+"screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
+"screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Add room address";
 "screen_security_and_privacy_ask_to_join_option_description" = "Anyone can ask to join the room but an administrator or moderator will have to accept the request.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Yes, enable encryption";
@@ -647,6 +671,7 @@
 "screen_create_poll_anonymous_headline" = "Ovozlarni yashirish";
 "screen_create_poll_answer_hint" = "Variant%1$d";
 "screen_create_poll_cancel_confirmation_title_ios" = "So‘rovni bekor qilish";
+"screen_create_poll_delete_option_a11y" = "Delete option %1$@";
 "screen_create_poll_question_desc" = "Savol yoki mavzu";
 "screen_create_poll_question_hint" = "So'rovnoma nima haqida?";
 "screen_create_poll_title" = "So‘rovnoma yaratish";
@@ -963,6 +988,7 @@
 "screen_room_timeline_less_reactions" = "Kamroq ko'rsatish";
 "screen_room_timeline_message_copied" = "Xabar nusxalandi";
 "screen_room_timeline_no_permission_to_post" = "Sizda bu xonaga post yozishga ruxsat yo‘q";
+"screen_room_timeline_reaction_you_a11y" = "You reacted with %1$@";
 "screen_room_timeline_reactions_show_more" = "Ko'proq ko'rsatish";
 "screen_room_timeline_read_marker_title" = "Yangi";
 "screen_room_title" = "Chat";
@@ -1095,7 +1121,7 @@
 "state_event_room_invite_you" = "%1$@sizni taklif qildi";
 "state_event_room_join" = "%1$@xonaga qo'shildi";
 "state_event_room_join_by_you" = "Siz xonaga qo'shildingiz";
-"state_event_room_knock" = "%1$@ qo'shilishni so'radi";
+"state_event_room_knock" = "%1$@ qoʻshilishni soʻradi";
 "state_event_room_knock_accepted" = "%1$@ %2$@ga qo'shilishga ruxsat berdi";
 "state_event_room_knock_accepted_by_you" = "Siz %1$@ga qo'shilishaga ruxsat berdingiz";
 "state_event_room_knock_by_you" = "Siz qoʻshilishni soʻragansiz";
@@ -1190,7 +1216,6 @@
 "banner_set_up_recovery_submit" = "Qayta tiklashni sozlang";
 "dialog_title_error" = "Xato";
 "dialog_title_success" = "Muvaffaqiyat";
-"notification_fallback_content" = "Bildirishnoma";
 "notification_invitation_action_join" = "Qo'shilish";
 "notification_invitation_action_reject" = "Reject";
 "notification_room_action_mark_as_read" = "Mark as read";

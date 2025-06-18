@@ -1,4 +1,5 @@
 "Notification" = "Varsel";
+"a11y_add_reaction" = "Add reaction: %1$@";
 "a11y_avatar" = "Profilbilde";
 "a11y_delete" = "Slett";
 "a11y_hide_password" = "Skjul passord";
@@ -12,12 +13,14 @@
 "a11y_pin_field" = "PIN-felt";
 "a11y_play" = "Spill av";
 "a11y_poll_end" = "Avsluttet avstemning";
+"a11y_polls_winning_answer" = "Dette er vinnersvaret";
 "a11y_react_with" = "Reager med %1$@";
 "a11y_react_with_other_emojis" = "Reager med andre emojier";
 "a11y_read_receipts_multiple" = "Lest av %1$@ og %2$@";
 "a11y_read_receipts_single" = "Lest av %1$@";
 "a11y_read_receipts_tap_to_show_all" = "Trykk for å vise alle";
-"a11y_remove_reaction_with" = "Fjern reaksjonen med %1$@";
+"a11y_remove_reaction" = "Fjern reaksjonen med %1$@";
+"a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Sende filer";
 "a11y_show_password" = "Vis passord";
 "a11y_start_call" = "Start en samtale";
@@ -63,7 +66,7 @@
 "action_end_poll" = "Avslutt avstemning";
 "action_enter_pin" = "Skriv inn PIN-koden";
 "action_forgot_password" = "Glemt passordet?";
-"action_forward" = "Fremover";
+"action_forward" = "Videresend";
 "action_go_back" = "Gå tilbake";
 "action_ignore" = "Ignorer";
 "action_invite" = "Inviter";
@@ -135,10 +138,12 @@
 "banner_migrate_to_native_sliding_sync_title" = "Oppgradering tilgjengelig";
 "banner_set_up_recovery_content" = "Gjenopprett din kryptografiske identitet og meldingshistorikk med en gjenopprettingsnøkkel hvis du har mistet alle dine brukte enheter.";
 "banner_set_up_recovery_title" = "Konfigurer gjenoppretting for å beskytte kontoen din";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call støtter ikke bruk av Bluetooth-lydenheter i denne Android-versjonen. Velg en annen lydenhet.";
 "common_about" = "Om";
 "common_acceptable_use_policy" = "Retningslinjer for akseptabel bruk";
 "common_adding_caption" = "Legger til bildetekst";
 "common_advanced_settings" = "Avanserte innstillinger";
+"common_an_image" = "et bilde";
 "common_analytics" = "Analyse";
 "common_appearance" = "Utseende";
 "common_audio" = "Lyd";
@@ -241,6 +246,7 @@
 "common_sending" = "Sender...";
 "common_sending_failed" = "Kunne ikke sende";
 "common_sent" = "Sendt";
+"common_sentence_delimiter" = "";
 "common_server_not_supported" = "Server støttes ikke";
 "common_server_url" = "URL-adresse til server";
 "common_settings" = "Innstillinger";
@@ -332,6 +338,7 @@
 "error_no_compatible_app_found" = "Ingen kompatibel app ble funnet for å håndtere denne handlingen.";
 "error_some_messages_have_not_been_sent" = "Noen meldinger er ikke sendt";
 "error_unknown" = "Beklager, det oppstod en feil";
+"event_shield_mismatched_sender" = "Avsenderen av hendelsen samsvarer ikke med eieren av enheten som sendte den.";
 "event_shield_reason_authenticity_not_guaranteed" = "Ektheten til denne krypterte meldingen kan ikke garanteres på denne enheten.";
 "event_shield_reason_previously_verified" = "Kryptert av en tidligere verifisert bruker.";
 "event_shield_reason_sent_in_clear" = "Ikke kryptert.";
@@ -352,6 +359,7 @@
 "notification_channel_noisy" = "Støyende varsler";
 "notification_channel_ringing_calls" = "Ringende anrop";
 "notification_channel_silent" = "Stille varsler";
+"notification_fallback_content" = "You have new message(s).";
 "notification_incoming_call" = "📹 Innkommende anrop";
 "notification_inline_reply_failed" = "** Kunne ikke sende - vennligst åpne rommet";
 "notification_invite_body" = "Inviterte deg til å chatte";
@@ -379,8 +387,12 @@
 "rich_text_editor_composer_unencrypted_placeholder" = "Ukryptert melding...";
 "rich_text_editor_create_link" = "Opprett en lenke";
 "rich_text_editor_edit_link" = "Rediger lenke";
+"rich_text_editor_format_action" = "%1$@, tilstand: %2$@";
 "rich_text_editor_format_bold" = "Bruk fet skrift";
 "rich_text_editor_format_italic" = "Bruk kursivformat";
+"rich_text_editor_format_state_disabled" = "deaktivert";
+"rich_text_editor_format_state_off" = "av";
+"rich_text_editor_format_state_on" = "på";
 "rich_text_editor_format_strikethrough" = "Bruke gjennomstrekingsformat";
 "rich_text_editor_format_underline" = "Bruke understrekingsformat";
 "rich_text_editor_full_screen_toggle" = "Veksle fullskjermmodus";
@@ -426,6 +438,10 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "De vil kunne bli med i rommet igjen hvis de blir invitert";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Er du sikker på at du vil oppheve utestengelsen av dette medlemmet?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Oppheve utestengelsen av %1$@";
+"screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
+"screen_create_poll_options_section_title" = "Alternativer";
+"screen_create_poll_remove_accessibility_label" = "Fjern %1$@";
+"screen_create_poll_settings_section_title" = "Innstillinger";
 "screen_create_room_room_access_section_anyone_option_description" = "Alle kan bli med i dette rommet";
 "screen_create_room_room_access_section_anyone_option_title" = "Alle";
 "screen_create_room_room_access_section_header" = "Tilgang til rom";
@@ -515,6 +531,14 @@
 "screen_room_details_pinned_events_row_title" = "Festede meldinger";
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Forespørsler om å bli med";
+"screen_room_grouped_state_events_expand" = "Expand";
+"screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_timeline_tombstoned_room_action" = "Gå til nytt rom";
+"screen_room_timeline_tombstoned_room_message" = "Dette rommet har blitt erstattet og er ikke lenger aktivt";
+"screen_room_timeline_upgraded_room_action" = "Se gamle meldinger";
+"screen_room_timeline_upgraded_room_message" = "Dette rommet er en fortsettelse av et annet rom";
+"screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_tombstoned_room_description" = "Dette rommet har blitt oppgradert";
 "screen_security_and_privacy_add_room_address_action" = "Legg til romadresse";
 "screen_security_and_privacy_ask_to_join_option_description" = "Alle kan be om å bli med i rommet, men en administrator eller moderator må godta forespørselen.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Ja, aktiver kryptering";
@@ -647,6 +671,7 @@
 "screen_create_poll_anonymous_headline" = "Skjul stemmer";
 "screen_create_poll_answer_hint" = "Alternativ %1$d";
 "screen_create_poll_cancel_confirmation_title_ios" = "Avbryt avstemningen";
+"screen_create_poll_delete_option_a11y" = "Slett alternativet %1$@";
 "screen_create_poll_question_desc" = "Spørsmål eller emne";
 "screen_create_poll_question_hint" = "Hva handler avstemningen om?";
 "screen_create_poll_title" = "Opprett avstemning";
@@ -963,6 +988,7 @@
 "screen_room_timeline_less_reactions" = "Vis mindre";
 "screen_room_timeline_message_copied" = "Melding kopiert";
 "screen_room_timeline_no_permission_to_post" = "Du har ikke tillatelse til å legge ut innlegg i dette rommet";
+"screen_room_timeline_reaction_you_a11y" = "Du reagerte med %1$@";
 "screen_room_timeline_reactions_show_more" = "Vis mer";
 "screen_room_timeline_read_marker_title" = "Ny";
 "screen_room_title" = "Chat";
@@ -993,7 +1019,7 @@
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix er et åpent nettverk for sikker, desentralisert kommunikasjon.";
 "screen_server_confirmation_message_register" = "Det er her samtalene dine vil ligge - akkurat som du ville brukt en e-postleverandør til å oppbevare e-postene dine.";
 "screen_server_confirmation_title_login" = "Du er i ferd med å logge inn på %1$@";
-"screen_server_confirmation_title_picker_mode" = "Choose account provider";
+"screen_server_confirmation_title_picker_mode" = "Velg kontoleverandør";
 "screen_server_confirmation_title_register" = "Du er i ferd med å opprette en konto på %1$@";
 "screen_session_verification_cancelled_subtitle" = "Noe virker ikke riktig. Enten ble forespørselen tidsavbrutt eller forespørselen ble avslått.";
 "screen_session_verification_compare_emojis_subtitle" = "Bekreft at emojiene nedenfor samsvarer med de som vises på den andre sesjonen din.";
@@ -1190,7 +1216,6 @@
 "banner_set_up_recovery_submit" = "Konfigurer gjenoppretting";
 "dialog_title_error" = "Feil";
 "dialog_title_success" = "Suksess";
-"notification_fallback_content" = "Varsel";
 "notification_invitation_action_join" = "Bli med";
 "notification_invitation_action_reject" = "Avvis";
 "notification_room_action_mark_as_read" = "Marker som lest";

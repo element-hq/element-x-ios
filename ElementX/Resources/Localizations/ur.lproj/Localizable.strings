@@ -1,4 +1,5 @@
 "Notification" = "اطلاع";
+"a11y_add_reaction" = "Add reaction: %1$@";
 "a11y_avatar" = "Avatar";
 "a11y_delete" = "حذف کریں";
 "a11y_hide_password" = "لفظ عبور چھپائیں";
@@ -12,12 +13,14 @@
 "a11y_pin_field" = "PIN میدان";
 "a11y_play" = "چلائیں";
 "a11y_poll_end" = "رائے شماری ختم کردی";
+"a11y_polls_winning_answer" = "This is the winning answer";
 "a11y_react_with" = "%1$@ کے ساتھ رد عمل کریں";
 "a11y_react_with_other_emojis" = "دیگر رموز تعبیری سے رد عمل کریں";
 "a11y_read_receipts_multiple" = "%1$@ اور %2$@ نے پڑھا";
 "a11y_read_receipts_single" = "%1$@ نے پڑھا";
 "a11y_read_receipts_tap_to_show_all" = "سب دکھانے کے لیے تھپتھپائیں";
-"a11y_remove_reaction_with" = "%1$@ کے ساتھ رد عمل ہٹائیں";
+"a11y_remove_reaction" = "%1$@ کے ساتھ رد عمل ہٹائیں";
+"a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "مسلیں بھیجیں";
 "a11y_show_password" = "لفظ عبور دکھائیں";
 "a11y_start_call" = "مکالمہ شروع کریں";
@@ -135,10 +138,12 @@
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
 "banner_set_up_recovery_title" = "Set up recovery to protect your account";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "بمتعلق";
 "common_acceptable_use_policy" = "قابل قبول استعمال کی سیاست";
 "common_adding_caption" = "Adding caption";
 "common_advanced_settings" = "اعلیٰ ترتیبات";
+"common_an_image" = "an image";
 "common_analytics" = "تجزیات";
 "common_appearance" = "ظہور";
 "common_audio" = "صوت";
@@ -241,6 +246,7 @@
 "common_sending" = "بھیج رہا ہے…";
 "common_sending_failed" = "بھیجنا ناکام";
 "common_sent" = "ارسال کردہ";
+"common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "خادم تعاون یافتہ نہیں";
 "common_server_url" = "خادم عنوان";
 "common_settings" = "ترتیبات";
@@ -332,6 +338,7 @@
 "error_no_compatible_app_found" = "اس کارروائی کو سنبھالنے کے لیے کوئی مطابقت پذیر اطلاقیہ نہیں ملا۔";
 "error_some_messages_have_not_been_sent" = "کچھ پیغامات ارسال نہیں ہوئے";
 "error_unknown" = "معذرت، ایک خرابی واقع ہوگئی";
+"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
 "event_shield_reason_authenticity_not_guaranteed" = "اس آلہ پر اس مرموز کردہ پیغام کی صداقت کی ضمانت نہیں دی جا سکتی۔";
 "event_shield_reason_previously_verified" = "Encrypted by a previously-verified user.";
 "event_shield_reason_sent_in_clear" = "مرموز کردہ نہیں۔";
@@ -352,6 +359,7 @@
 "notification_channel_noisy" = "صاخب اطلاعات";
 "notification_channel_ringing_calls" = "بجنے والے مکالمات";
 "notification_channel_silent" = "خاموش اطلاعات";
+"notification_fallback_content" = "You have new message(s).";
 "notification_incoming_call" = "📹 آنے والا مکالمہ";
 "notification_inline_reply_failed" = "** بھیجنے میں ناکام - براہ کرم کمرہ کھولیں";
 "notification_invite_body" = "آپ کو گفتگو کیلئے مدعو کیا";
@@ -379,8 +387,12 @@
 "rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "ایک ربط بنائیں";
 "rich_text_editor_edit_link" = "ربط میں ترمیم کریں";
+"rich_text_editor_format_action" = "%1$@, state: %2$@";
 "rich_text_editor_format_bold" = "جلی وضع لاگو کریں";
 "rich_text_editor_format_italic" = "ترچھی وضع لاگو کریں";
+"rich_text_editor_format_state_disabled" = "disabled";
+"rich_text_editor_format_state_off" = "off";
+"rich_text_editor_format_state_on" = "on";
 "rich_text_editor_format_strikethrough" = "مشطوب وضع لاگو کریں";
 "rich_text_editor_format_underline" = "مسطر وضع لاگو کریں";
 "rich_text_editor_full_screen_toggle" = "مکمل نمایشگر وضع تبدیل کریں";
@@ -426,6 +438,10 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
+"screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
+"screen_create_poll_options_section_title" = "Options";
+"screen_create_poll_remove_accessibility_label" = "Remove %1$@";
+"screen_create_poll_settings_section_title" = "Settings";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Anyone";
 "screen_create_room_room_access_section_header" = "Room Access";
@@ -515,6 +531,14 @@
 "screen_room_details_pinned_events_row_title" = "مثبوتہ پیغامات";
 "screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
+"screen_room_grouped_state_events_expand" = "Expand";
+"screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_timeline_tombstoned_room_action" = "Jump to new room";
+"screen_room_timeline_tombstoned_room_message" = "This room has been replaced and is no longer active";
+"screen_room_timeline_upgraded_room_action" = "See old messages";
+"screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
+"screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Add room address";
 "screen_security_and_privacy_ask_to_join_option_description" = "Anyone can ask to join the room but an administrator or moderator will have to accept the request.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Yes, enable encryption";
@@ -647,6 +671,7 @@
 "screen_create_poll_anonymous_headline" = "آراء چھپائیں";
 "screen_create_poll_answer_hint" = "اختیار %1$d";
 "screen_create_poll_cancel_confirmation_title_ios" = "رائے شماری منسوخ کریں";
+"screen_create_poll_delete_option_a11y" = "Delete option %1$@";
 "screen_create_poll_question_desc" = "سوال یا موضوع";
 "screen_create_poll_question_hint" = "رائے شماری کس بارے میں ہے؟";
 "screen_create_poll_title" = "رائے شماری بنائیں";
@@ -963,6 +988,7 @@
 "screen_room_timeline_less_reactions" = "کم دکھائیں";
 "screen_room_timeline_message_copied" = "پیغام نقل کردہ";
 "screen_room_timeline_no_permission_to_post" = "آپ کو اس کمرے میں پوسٹ کرنے کی اجازت نہیں ہے";
+"screen_room_timeline_reaction_you_a11y" = "You reacted with %1$@";
 "screen_room_timeline_reactions_show_more" = "مزید دکھائیں";
 "screen_room_timeline_read_marker_title" = "نیا";
 "screen_room_title" = "گفتگو";
@@ -1190,7 +1216,6 @@
 "banner_set_up_recovery_submit" = "بازیابی مرتب کریں";
 "dialog_title_error" = "خرابی";
 "dialog_title_success" = "کامیابی";
-"notification_fallback_content" = "اطلاع";
 "notification_invitation_action_join" = "شامل ہوں";
 "notification_invitation_action_reject" = "مسترد کریں";
 "notification_room_action_mark_as_read" = "بطور مقروءہ نشانزد کریں";
