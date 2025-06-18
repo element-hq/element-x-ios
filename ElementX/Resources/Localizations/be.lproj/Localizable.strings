@@ -1,4 +1,5 @@
 "Notification" = "Апавяшчэнне";
+"a11y_add_reaction" = "Add reaction: %1$@";
 "a11y_avatar" = "Аватар";
 "a11y_delete" = "Выдаліць";
 "a11y_hide_password" = "Схаваць пароль";
@@ -12,12 +13,14 @@
 "a11y_pin_field" = "Поле PIN-кода";
 "a11y_play" = "Прайграць";
 "a11y_poll_end" = "Апытанне скончана";
+"a11y_polls_winning_answer" = "This is the winning answer";
 "a11y_react_with" = "Рэагаваць з %1$@";
 "a11y_react_with_other_emojis" = "Рэагаваць з іншымі эмодзі";
 "a11y_read_receipts_multiple" = "Прачытана %1$@ і %2$@";
 "a11y_read_receipts_single" = "Прачытана %1$@";
 "a11y_read_receipts_tap_to_show_all" = "Націсніце, каб паказаць усе";
-"a11y_remove_reaction_with" = "Выдаліць рэакцыю з %1$@";
+"a11y_remove_reaction" = "Выдаліць рэакцыю з %1$@";
+"a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Адправіць файлы";
 "a11y_show_password" = "Паказаць пароль";
 "a11y_start_call" = "Пазваніць";
@@ -135,10 +138,12 @@
 "banner_migrate_to_native_sliding_sync_title" = "Даступна абнаўленне";
 "banner_set_up_recovery_content" = "Стварыце новы ключ аднаўлення, які можна выкарыстоўваць для аднаўлення зашыфраванай гісторыі паведамленняў у выпадку страты доступу да вашых прылад.";
 "banner_set_up_recovery_title" = "Наладзіць аднаўленне";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Аб праграме";
 "common_acceptable_use_policy" = "Палітыка дапушчальнага выкарыстання";
 "common_adding_caption" = "Adding caption";
 "common_advanced_settings" = "Пашыраныя налады";
+"common_an_image" = "an image";
 "common_analytics" = "Аналітыка";
 "common_appearance" = "Знешні выгляд";
 "common_audio" = "Аўдыя";
@@ -241,6 +246,7 @@
 "common_sending" = "Адпраўка…";
 "common_sending_failed" = "Памылка адпраўкі";
 "common_sent" = "Адпраўлена";
+"common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Сервер не падтрымліваецца";
 "common_server_url" = "URL-адрас сервера";
 "common_settings" = "Налады";
@@ -332,6 +338,7 @@
 "error_no_compatible_app_found" = "Не знойдзена сумяшчальная праграма для выканання гэтага дзеяння.";
 "error_some_messages_have_not_been_sent" = "Некаторыя паведамленні не былі адпраўлены";
 "error_unknown" = "Выбачце, адбылася памылка";
+"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
 "event_shield_reason_authenticity_not_guaranteed" = "Сапраўднасць гэтага зашыфраванага паведамлення не можа быць гарантаваная на гэтай прыладзе.";
 "event_shield_reason_previously_verified" = "Зашыфравана раней правераным карыстальнікам.";
 "event_shield_reason_sent_in_clear" = "Не зашыфраваны.";
@@ -352,6 +359,7 @@
 "notification_channel_noisy" = "Шумныя апавяшчэнні";
 "notification_channel_ringing_calls" = "Званкі";
 "notification_channel_silent" = "Ціхія апавяшчэнні";
+"notification_fallback_content" = "You have new message(s).";
 "notification_incoming_call" = "📹 Уваходны выклік";
 "notification_inline_reply_failed" = "** Не атрымалася даслаць - калі ласка, адкрыйце пакой";
 "notification_invite_body" = "Запрасіў(-ла) вас у чат";
@@ -379,8 +387,12 @@
 "rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Стварыць спасылку";
 "rich_text_editor_edit_link" = "Рэдагаваць спасылку";
+"rich_text_editor_format_action" = "%1$@, state: %2$@";
 "rich_text_editor_format_bold" = "Ужыць тоўсты шрыфт";
 "rich_text_editor_format_italic" = "Ужыць курсіўны фармат";
+"rich_text_editor_format_state_disabled" = "disabled";
+"rich_text_editor_format_state_off" = "off";
+"rich_text_editor_format_state_on" = "on";
 "rich_text_editor_format_strikethrough" = "Ужыць фармат закрэслівання";
 "rich_text_editor_format_underline" = "Ужыць фармат падкрэслення";
 "rich_text_editor_full_screen_toggle" = "Пераключэнне поўнаэкраннага рэжыму";
@@ -426,6 +438,10 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
+"screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
+"screen_create_poll_options_section_title" = "Options";
+"screen_create_poll_remove_accessibility_label" = "Remove %1$@";
+"screen_create_poll_settings_section_title" = "Settings";
 "screen_create_room_room_access_section_anyone_option_description" = "Anyone can join this room";
 "screen_create_room_room_access_section_anyone_option_title" = "Хто заўгодна";
 "screen_create_room_room_access_section_header" = "Доступ у пакой";
@@ -515,6 +531,14 @@
 "screen_room_details_pinned_events_row_title" = "Замацаваныя паведамленні";
 "screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
+"screen_room_grouped_state_events_expand" = "Expand";
+"screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_timeline_tombstoned_room_action" = "Jump to new room";
+"screen_room_timeline_tombstoned_room_message" = "This room has been replaced and is no longer active";
+"screen_room_timeline_upgraded_room_action" = "See old messages";
+"screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
+"screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Add room address";
 "screen_security_and_privacy_ask_to_join_option_description" = "Anyone can ask to join the room but an administrator or moderator will have to accept the request.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Yes, enable encryption";
@@ -647,6 +671,7 @@
 "screen_create_poll_anonymous_headline" = "Схаваць галасы";
 "screen_create_poll_answer_hint" = "Варыянт %1$d";
 "screen_create_poll_cancel_confirmation_title_ios" = "Адмяніць апытанне";
+"screen_create_poll_delete_option_a11y" = "Delete option %1$@";
 "screen_create_poll_question_desc" = "Пытанне або тэма";
 "screen_create_poll_question_hint" = "Пра што апытанне?";
 "screen_create_poll_title" = "Стварэнне апытання";
@@ -963,6 +988,7 @@
 "screen_room_timeline_less_reactions" = "Паказаць менш";
 "screen_room_timeline_message_copied" = "Паведамленне скапіравана";
 "screen_room_timeline_no_permission_to_post" = "У Вас няма дазволу на публікацыю ў гэтым пакоі";
+"screen_room_timeline_reaction_you_a11y" = "You reacted with %1$@";
 "screen_room_timeline_reactions_show_more" = "Паказаць больш";
 "screen_room_timeline_read_marker_title" = "Новае";
 "screen_room_title" = "Чат";
@@ -1190,7 +1216,6 @@
 "banner_set_up_recovery_submit" = "Наладзьце аднаўленне";
 "dialog_title_error" = "Памылка";
 "dialog_title_success" = "Поспех";
-"notification_fallback_content" = "Апавяшчэнне";
 "notification_invitation_action_join" = "Далучыцца";
 "notification_invitation_action_reject" = "Адхіліць";
 "notification_room_action_mark_as_read" = "Пазначыць як прачытанае";

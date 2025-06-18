@@ -1,4 +1,5 @@
 "Notification" = "Notificare";
+"a11y_add_reaction" = "Add reaction: %1$@";
 "a11y_avatar" = "Avatar";
 "a11y_delete" = "Ștergere";
 "a11y_hide_password" = "Ascundeți parola";
@@ -12,12 +13,14 @@
 "a11y_pin_field" = "Câmp PIN";
 "a11y_play" = "Redați";
 "a11y_poll_end" = "Sondaj încheiat";
+"a11y_polls_winning_answer" = "This is the winning answer";
 "a11y_react_with" = "Reacționați cu %1$@";
 "a11y_react_with_other_emojis" = "Reacționați cu alte emoji-uri";
 "a11y_read_receipts_multiple" = "Citit de %1$@ și %2$@";
 "a11y_read_receipts_single" = "Citit de%1$@";
 "a11y_read_receipts_tap_to_show_all" = "Atingeți pentru a le afișa pe toate";
-"a11y_remove_reaction_with" = "Îndepărtați reacția cu %1$@";
+"a11y_remove_reaction" = "Îndepărtați reacția cu %1$@";
+"a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Trimiteți fișiere";
 "a11y_show_password" = "Afișați parola";
 "a11y_start_call" = "Începeți un apel";
@@ -135,10 +138,12 @@
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade disponibil";
 "banner_set_up_recovery_content" = "Recuperați-vă identitatea criptografică și istoricul mesajelor cu o cheie de recuperare dacă ați pierdut toate dispozitivele existente.";
 "banner_set_up_recovery_title" = "Configurați recuperarea pentru a vă proteja contul";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Despre";
 "common_acceptable_use_policy" = "Politică de utilizare rezonabilă";
 "common_adding_caption" = "Adding caption";
 "common_advanced_settings" = "Setări avansate";
+"common_an_image" = "an image";
 "common_analytics" = "Analitice";
 "common_appearance" = "Aspect";
 "common_audio" = "Audio";
@@ -241,6 +246,7 @@
 "common_sending" = "Se trimite…";
 "common_sending_failed" = "Trimiterea a eșuat";
 "common_sent" = "Trimis";
+"common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Serverul nu este compatibil";
 "common_server_url" = "Adresa URL a serverului";
 "common_settings" = "Setări";
@@ -332,6 +338,7 @@
 "error_no_compatible_app_found" = "Nu a fost găsită nicio aplicație capabilă să gestioneze această acțiune.";
 "error_some_messages_have_not_been_sent" = "Unele mesaje nu au fost trimise";
 "error_unknown" = "Ne pare rău, a apărut o eroare";
+"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
 "event_shield_reason_authenticity_not_guaranteed" = "Autenticitatea acestui mesaj criptat nu poate fi garantată pe acest dispozitiv.";
 "event_shield_reason_previously_verified" = "Criptat de un utilizator verificat anterior.";
 "event_shield_reason_sent_in_clear" = "Necriptat";
@@ -352,6 +359,7 @@
 "notification_channel_noisy" = "Notificări zgomotoase";
 "notification_channel_ringing_calls" = "Apeluri care sună";
 "notification_channel_silent" = "Notificări silențioase";
+"notification_fallback_content" = "You have new message(s).";
 "notification_incoming_call" = "Apel primit";
 "notification_inline_reply_failed" = "** Trimiterea eșuată - vă rugăm să deschideți camera";
 "notification_invite_body" = "V-a invitat la o discuție";
@@ -379,8 +387,12 @@
 "rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Creați un link";
 "rich_text_editor_edit_link" = "Editați link-ul";
+"rich_text_editor_format_action" = "%1$@, state: %2$@";
 "rich_text_editor_format_bold" = "Aplicați formatul aldin";
 "rich_text_editor_format_italic" = "Aplicați formatul italic";
+"rich_text_editor_format_state_disabled" = "disabled";
+"rich_text_editor_format_state_off" = "off";
+"rich_text_editor_format_state_on" = "on";
 "rich_text_editor_format_strikethrough" = "Aplicați formatul barat";
 "rich_text_editor_format_underline" = "Aplică formatul de subliniere";
 "rich_text_editor_full_screen_toggle" = "Comutați modul ecran complet";
@@ -426,6 +438,10 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
+"screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
+"screen_create_poll_options_section_title" = "Options";
+"screen_create_poll_remove_accessibility_label" = "Remove %1$@";
+"screen_create_poll_settings_section_title" = "Settings";
 "screen_create_room_room_access_section_anyone_option_description" = "Oricine se poate alătura acestei camere";
 "screen_create_room_room_access_section_anyone_option_title" = "Oricine";
 "screen_create_room_room_access_section_header" = "Acces la cameră";
@@ -515,6 +531,14 @@
 "screen_room_details_pinned_events_row_title" = "Mesaje fixate";
 "screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
+"screen_room_grouped_state_events_expand" = "Expand";
+"screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_timeline_tombstoned_room_action" = "Jump to new room";
+"screen_room_timeline_tombstoned_room_message" = "This room has been replaced and is no longer active";
+"screen_room_timeline_upgraded_room_action" = "See old messages";
+"screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
+"screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Add room address";
 "screen_security_and_privacy_ask_to_join_option_description" = "Anyone can ask to join the room but an administrator or moderator will have to accept the request.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Yes, enable encryption";
@@ -647,6 +671,7 @@
 "screen_create_poll_anonymous_headline" = "Sondaj anonim";
 "screen_create_poll_answer_hint" = "Opțiune %1$d";
 "screen_create_poll_cancel_confirmation_title_ios" = "Renunțați la sondaj";
+"screen_create_poll_delete_option_a11y" = "Delete option %1$@";
 "screen_create_poll_question_desc" = "Întrebare sau subiect";
 "screen_create_poll_question_hint" = "Despre ce este sondajul?";
 "screen_create_poll_title" = "Creați un sondaj";
@@ -963,6 +988,7 @@
 "screen_room_timeline_less_reactions" = "Afișați mai puțin";
 "screen_room_timeline_message_copied" = "Mesaj copiat";
 "screen_room_timeline_no_permission_to_post" = "Nu aveți permisiunea de a posta în această cameră";
+"screen_room_timeline_reaction_you_a11y" = "You reacted with %1$@";
 "screen_room_timeline_reactions_show_more" = "Afișați mai mult";
 "screen_room_timeline_read_marker_title" = "Nou";
 "screen_room_title" = "Chat";
@@ -1190,7 +1216,6 @@
 "banner_set_up_recovery_submit" = "Configurați recuperarea";
 "dialog_title_error" = "Eroare";
 "dialog_title_success" = "Succes";
-"notification_fallback_content" = "Notificare";
 "notification_invitation_action_join" = "Alăturați-vă";
 "notification_invitation_action_reject" = "Respinge";
 "notification_room_action_mark_as_read" = "Marcați ca citită";

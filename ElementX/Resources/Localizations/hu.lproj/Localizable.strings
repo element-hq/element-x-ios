@@ -1,4 +1,5 @@
 "Notification" = "Értesítés";
+"a11y_add_reaction" = "Add reaction: %1$@";
 "a11y_avatar" = "Profilkép";
 "a11y_delete" = "Törlés";
 "a11y_hide_password" = "Jelszó elrejtése";
@@ -12,12 +13,14 @@
 "a11y_pin_field" = "PIN-mező";
 "a11y_play" = "Lejátszás";
 "a11y_poll_end" = "Befejezett szavazás";
+"a11y_polls_winning_answer" = "This is the winning answer";
 "a11y_react_with" = "Reagálás a következővel: %1$@";
 "a11y_react_with_other_emojis" = "Reagálás más emodzsikkal";
 "a11y_read_receipts_multiple" = "Olvasta: %1$@ és %2$@";
 "a11y_read_receipts_single" = "Olvasta: %1$@";
 "a11y_read_receipts_tap_to_show_all" = "Koppintson az összes megjelenítéséhez";
-"a11y_remove_reaction_with" = "Reakció eltávolítása: %1$@";
+"a11y_remove_reaction" = "Reakció eltávolítása: %1$@";
+"a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Fájlküldés";
 "a11y_show_password" = "Jelszó megjelenítése";
 "a11y_start_call" = "Hanghívás indítása";
@@ -135,10 +138,12 @@
 "banner_migrate_to_native_sliding_sync_title" = "Frissítés érhető el";
 "banner_set_up_recovery_content" = "Hozzon létre egy új helyreállítási kulcsot, amellyel visszaállíthatja a titkosított üzenetek előzményeit, ha elveszíti az eszközökhöz való hozzáférést.";
 "banner_set_up_recovery_title" = "Helyreállítás beállítása a fiókja védelméhez";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Névjegy";
 "common_acceptable_use_policy" = "Elfogadható használatra vonatkozó szabályzat";
 "common_adding_caption" = "Felirat hozzáadása";
 "common_advanced_settings" = "Speciális beállítások";
+"common_an_image" = "an image";
 "common_analytics" = "Elemzések";
 "common_appearance" = "Megjelenítés";
 "common_audio" = "Hang";
@@ -241,6 +246,7 @@
 "common_sending" = "Küldés…";
 "common_sending_failed" = "A küldés sikertelen";
 "common_sent" = "Elküldve";
+"common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "A kiszolgáló nem támogatott";
 "common_server_url" = "Kiszolgáló webcíme";
 "common_settings" = "Beállítások";
@@ -332,6 +338,7 @@
 "error_no_compatible_app_found" = "Nem található kompatibilis alkalmazás a művelet kezeléséhez.";
 "error_some_messages_have_not_been_sent" = "Néhány üzenet nem került elküldésre";
 "error_unknown" = "Elnézést, hiba történt";
+"event_shield_mismatched_sender" = "Az esemény feladója nem egyezik az eseményt küldő eszköz tulajdonosával.";
 "event_shield_reason_authenticity_not_guaranteed" = "A titkosított üzenetek valódiságát ezen az eszközön nem lehet garantálni.";
 "event_shield_reason_previously_verified" = "Egy korábban ellenőrzött felhasználó által titkosítva.";
 "event_shield_reason_sent_in_clear" = "Nincs titkosítva.";
@@ -352,6 +359,7 @@
 "notification_channel_noisy" = "Zajos értesítések";
 "notification_channel_ringing_calls" = "Csörgő hívások";
 "notification_channel_silent" = "Csendes értesítések";
+"notification_fallback_content" = "Értesítés";
 "notification_incoming_call" = "📹 Bejövő hívás";
 "notification_inline_reply_failed" = "** Nem sikerült elküldeni – nyissa meg a szobát";
 "notification_invite_body" = "Meghívta, hogy csevegjen";
@@ -379,8 +387,12 @@
 "rich_text_editor_composer_unencrypted_placeholder" = "Titkosítatlan üzenet…";
 "rich_text_editor_create_link" = "Hivatkozás létrehozása";
 "rich_text_editor_edit_link" = "Hivatkozás szerkesztése";
+"rich_text_editor_format_action" = "%1$@, állapot: %2$@";
 "rich_text_editor_format_bold" = "Félkövér formátum alkalmazása";
 "rich_text_editor_format_italic" = "Dőlt formátum alkalmazása";
+"rich_text_editor_format_state_disabled" = "letiltva";
+"rich_text_editor_format_state_off" = "ki";
+"rich_text_editor_format_state_on" = "be";
 "rich_text_editor_format_strikethrough" = "Áthúzott formátum alkalmazása";
 "rich_text_editor_format_underline" = "Aláhúzott formátum alkalmazása";
 "rich_text_editor_full_screen_toggle" = "Teljes képernyős mód be/ki";
@@ -426,6 +438,10 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "Újra beléphetnek a szobába, ha meghívják őket.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Biztos, hogy feloldja a felhasználó kitiltását?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "%1$@ kitiltásának feloldása";
+"screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
+"screen_create_poll_options_section_title" = "Options";
+"screen_create_poll_remove_accessibility_label" = "Remove %1$@";
+"screen_create_poll_settings_section_title" = "Settings";
 "screen_create_room_room_access_section_anyone_option_description" = "Bárki csatlakozhat ehhez a szobához";
 "screen_create_room_room_access_section_anyone_option_title" = "Bárki";
 "screen_create_room_room_access_section_header" = "Szobahozzáférés";
@@ -515,6 +531,14 @@
 "screen_room_details_pinned_events_row_title" = "Kitűzött üzenetek";
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Csatlakozási kérelem";
+"screen_room_grouped_state_events_expand" = "Expand";
+"screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_timeline_tombstoned_room_action" = "Ugrás az új szobába";
+"screen_room_timeline_tombstoned_room_message" = "Ezt a szobát lecserélték, és már nem aktív.";
+"screen_room_timeline_upgraded_room_action" = "Régi üzenetek megtekintése";
+"screen_room_timeline_upgraded_room_message" = "Ez a szoba egy másik szoba folytatása";
+"screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_tombstoned_room_description" = "A szoba verzióját frissítették";
 "screen_security_and_privacy_add_room_address_action" = "Szobacím hozzáadása";
 "screen_security_and_privacy_ask_to_join_option_description" = "Bárki kérheti, hogy csatlakozzon a szobához, de egy adminisztrátornak vagy moderátornak el kell fogadnia a kérést.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Igen, engedélyezze a titkosítást";
@@ -647,6 +671,7 @@
 "screen_create_poll_anonymous_headline" = "Szavazatok elrejtése";
 "screen_create_poll_answer_hint" = "%1$d. lehetőség";
 "screen_create_poll_cancel_confirmation_title_ios" = "Szavazás elvetése";
+"screen_create_poll_delete_option_a11y" = "Delete option %1$@";
 "screen_create_poll_question_desc" = "Kérdés vagy téma";
 "screen_create_poll_question_hint" = "Miről szól ez a szavazás?";
 "screen_create_poll_title" = "Szavazás létrehozása";
@@ -963,6 +988,7 @@
 "screen_room_timeline_less_reactions" = "Kevesebb megjelenítése";
 "screen_room_timeline_message_copied" = "Üzenet másolva";
 "screen_room_timeline_no_permission_to_post" = "Nincs jogosultsága arra, hogy bejegyzést tegyen közzé ebben a szobában";
+"screen_room_timeline_reaction_you_a11y" = "You reacted with %1$@";
 "screen_room_timeline_reactions_show_more" = "Több megjelenítése";
 "screen_room_timeline_read_marker_title" = "Új";
 "screen_room_title" = "Csevegés";
@@ -1190,7 +1216,6 @@
 "banner_set_up_recovery_submit" = "Helyreállítás beállítása";
 "dialog_title_error" = "Hiba";
 "dialog_title_success" = "Sikeres";
-"notification_fallback_content" = "Értesítés";
 "notification_invitation_action_join" = "Csatlakozás";
 "notification_invitation_action_reject" = "Elutasítás";
 "notification_room_action_mark_as_read" = "Megjelölés olvasottként";
