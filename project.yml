@@ -94,10 +94,10 @@ packages:
   # External dependencies
   Algorithms:
     url: https://github.com/apple/swift-algorithms
-    minorVersion: 1.0.0
+    minorVersion: 1.2.1
   Collections:
     url: https://github.com/apple/swift-collections
-    minorVersion: 1.0.0
+    minorVersion: 1.2.0
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
     minorVersion: 5.5.0

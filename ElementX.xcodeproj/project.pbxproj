@@ -8824,7 +8824,7 @@
 			repositoryURL = "https://github.com/apple/swift-algorithms";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 1.2.1;
 			};
 		};
 		E2F3DA35D462724CCC61DE2C /* XCRemoteSwiftPackageReference "swift-ogg" */ = {
@@ -8872,7 +8872,7 @@
 			repositoryURL = "https://github.com/apple/swift-collections";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 1.2.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
