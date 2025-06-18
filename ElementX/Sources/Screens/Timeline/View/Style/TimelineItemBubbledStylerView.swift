@@ -150,6 +150,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             .contextMenu {
                 let provider = TimelineItemMenuActionProvider(timelineItem: timelineItem,
+                                                              canCurrentUserSendMessage: context.viewState.canCurrentUserSendMessage,
                                                               canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
                                                               canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
                                                               canCurrentUserPin: context.viewState.canCurrentUserPin,

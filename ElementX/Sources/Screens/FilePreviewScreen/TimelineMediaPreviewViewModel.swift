@@ -140,6 +140,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         state.currentItemActions = switch state.currentItem {
         case .media(let mediaItem):
             TimelineItemMenuActionProvider(timelineItem: mediaItem.timelineItem,
+                                           canCurrentUserSendMessage: timelineContext.viewState.canCurrentUserSendMessage,
                                            canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
                                            canCurrentUserRedactOthers: timelineContext.viewState.canCurrentUserRedactOthers,
                                            canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,

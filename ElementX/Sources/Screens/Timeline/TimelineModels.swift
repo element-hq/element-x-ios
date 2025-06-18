@@ -101,6 +101,7 @@ struct TimelineViewState: BindableState {
     var timelineState: TimelineState // check the doc before changing this
 
     var ownUserID: String
+    var canCurrentUserSendMessage = false
     var canCurrentUserRedactOthers = false
     var canCurrentUserRedactSelf = false
     var canCurrentUserPin = false

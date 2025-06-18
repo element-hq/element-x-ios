@@ -10,6 +10,7 @@ import Foundation
 @MainActor
 struct TimelineItemMenuActionProvider {
     let timelineItem: RoomTimelineItemProtocol
+    let canCurrentUserSendMessage: Bool
     let canCurrentUserRedactSelf: Bool
     let canCurrentUserRedactOthers: Bool
     let canCurrentUserPin: Bool
@@ -47,7 +48,7 @@ struct TimelineItemMenuActionProvider {
             actions.append(.endPoll(pollStartID: eventID))
         }
 
-        if item.canBeRepliedTo {
+        if item.canBeRepliedTo, canCurrentUserSendMessage {
             if let messageItem = item as? EventBasedMessageTimelineItemProtocol {
                 actions.append(.reply(isThread: messageItem.properties.isThreaded))
             } else {
@@ -63,7 +64,7 @@ struct TimelineItemMenuActionProvider {
             actions.append(.forward(itemID: item.id))
         }
         
-        if item.isEditable {
+        if item.isEditable, canCurrentUserSendMessage {
             if item.supportsMediaCaption {
                 if item.hasMediaCaption {
                     actions.append(.editCaption)
