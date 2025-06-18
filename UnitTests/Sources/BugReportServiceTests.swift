@@ -17,7 +17,7 @@ class BugReportServiceTests: XCTestCase {
     override func setUpWithError() throws {
         let bugReportServiceMock = BugReportServiceMock()
         bugReportServiceMock.underlyingCrashedLastRun = false
-        bugReportServiceMock.submitBugReportProgressListenerReturnValue = .success(SubmitBugReportResponse(reportUrl: "https://www.example.com/123"))
+        bugReportServiceMock.submitBugReportProgressListenerReturnValue = .success(SubmitBugReportResponse(reportURL: "https://www.example.com/123"))
         bugReportService = bugReportServiceMock
     }
 
@@ -37,7 +37,8 @@ class BugReportServiceTests: XCTestCase {
                                   files: [])
         let progressSubject = CurrentValueSubject<Double, Never>(0.0)
         let response = try await bugReportService.submitBugReport(bugReport, progressListener: progressSubject).get()
-        XCTAssertFalse(response.reportUrl.isEmpty)
+        let reportURL = try XCTUnwrap(response.reportURL)
+        XCTAssertFalse(reportURL.isEmpty)
     }
     
     func testInitialStateWithRealService() throws {
@@ -82,7 +83,7 @@ class BugReportServiceTests: XCTestCase {
         let progressSubject = CurrentValueSubject<Double, Never>(0.0)
         let response = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()
         
-        XCTAssertEqual(response.reportUrl, "https://example.com/123")
+        XCTAssertEqual(response.reportURL, "https://example.com/123")
     }
     
     func testLogsMaxSize() {
