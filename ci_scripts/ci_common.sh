@@ -34,6 +34,8 @@ install_xcode_cloud_brew_dependencies () {
 }
 
 setup_github_actions_environment() {
+    xcode_select_for_github_actions
+    
     unset HOMEBREW_NO_INSTALL_FROM_API
     export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
     
@@ -44,12 +46,20 @@ setup_github_actions_environment() {
 }
 
 setup_github_actions_translations_environment() {
+    xcode_select_for_github_actions
+    
     unset HOMEBREW_NO_INSTALL_FROM_API
     export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
 
     brew update && brew install swiftgen mint localazy/tools/localazy
 
     mint install Asana/locheck
+}
+
+xcode_select_for_github_actions() {
+    # While fastlane has its own way of selecting Xcode, that only works inside of fastlane.
+    # We need to select it globally for other processes like xcresultparser and our custom tools to use the same Xcode version.
+    sudo xcode-select -s /Applications/Xcode_16.3.app
 }
 
 generate_what_to_test_notes() {
