@@ -15,6 +15,9 @@ changelog:
     - title: 🗣 Translations
       labels:
         - pr-i18n
+    - title: 🦻 Accessibility
+      labels:
+        - pr-a11y
     - title: 🧱 Build
       labels:
         - pr-build
