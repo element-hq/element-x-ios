@@ -17,7 +17,7 @@ struct RoomHeaderView: View {
     let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
-        if #available(iOS 26, *) {
+        if #available(iOS 19, *) {
             // https://github.com/element-hq/element-x-ios/issues/4180
             // Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'NSLayoutConstraint constant is not finite!
             content
