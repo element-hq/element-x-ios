@@ -12,6 +12,8 @@ struct Application: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @Environment(\.openURL) private var openURL
     
+    @StateObject private var remoteConfig = RemoteConfigManager.shared
+    
     private var appCoordinator: AppCoordinatorProtocol!
 
     init() {
@@ -55,6 +57,13 @@ struct Application: App {
                 }
                 .task {
                     appCoordinator.start()
+                }
+                .overlay {
+                    if remoteConfig.forceUpdateEnabled {
+                        AppForceUpdateScreen()
+                    } else if remoteConfig.maintenanceModeEnabled {
+                        AppMaintenanceScreen()
+                    }
                 }
         }
     }

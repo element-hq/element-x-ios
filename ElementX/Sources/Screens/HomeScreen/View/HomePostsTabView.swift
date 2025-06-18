@@ -31,7 +31,8 @@ struct HomePostsTabView: View {
                 }) {
                     VStack(spacing: 0) {
                         Text(tabInfo.title)
-                            .foregroundStyle(tabInfo.tab == selectedTab ? .zero.bgAccentRest : .compound.iconSecondary)
+                            .font(.compound.bodyMDSemibold)
+                            .foregroundStyle(tabInfo.tab == selectedTab ? .compound.textPrimary : .compound.textSecondary)
                         
                         Rectangle()
                             .fill(tabInfo.tab == selectedTab ? Color.zero.bgAccentRest : .clear)

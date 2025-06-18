@@ -47,3 +47,4 @@ Secrets/vendor/*
 !Secrets/vendor/package-2
 
 Zero/SupportingFiles/zero_secrets.json
+Zero/SupportingFiles/GoogleService-Info.plist

@@ -89,39 +89,11 @@ struct HomeScreen: View {
             
             // Top gradient overlay when nav bar is hidden
             if hideNavigationBar {
-                LinearGradient(
-                    gradient: Gradient(colors: [.black, .clear, .clear]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(height: 200)
-                .ignoresSafeArea(edges: .top)
-                .transition(.opacity)
-                .allowsHitTesting(false)
+                topBarGradientOverlay
             }
             
             if showBackToTop {
-                Button(action: {
-                    scrollViewAdapter.scrollToTop()
-                }) {
-                    HStack {
-                        Text("Back to top")
-                            .font(.zero.bodyMD)
-                            .foregroundStyle(.compound.textSecondary)
-                        
-                        Image(systemName: "arrow.up")
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundColor(.compound.textSecondary)
-                            .padding(.horizontal, 2)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(.compound.bgCanvasDefault)
-                    .clipShape(RoundedRectangle(cornerRadius: 32))
-                }
-                .frame(maxWidth: .infinity)
-                .transition(.opacity.combined(with:.scale))
-                .padding(.top, 16)
+                backToTopButton
             }
         }
         .alert(item: $context.alertInfo)
@@ -204,6 +176,44 @@ struct HomeScreen: View {
         }
         .accessibilityLabel("action_user_profile")
         .accessibilityIdentifier("action_user_profile")
+    }
+    
+    @ViewBuilder
+    private var backToTopButton: some View {
+        Button(action: {
+            scrollViewAdapter.scrollToTop()
+        }) {
+            HStack {
+                Text("Back to Top")
+                    .font(.zero.bodyMD)
+                    .foregroundStyle(.compound.textSecondary)
+                
+                Image(systemName: "arrow.up")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundColor(.compound.textSecondary)
+                    .padding(.horizontal, 2)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(.compound.bgCanvasDefault)
+            .clipShape(RoundedRectangle(cornerRadius: 32))
+        }
+        .frame(maxWidth: .infinity)
+        .transition(.opacity.combined(with:.scale))
+        .padding(.top, 16)
+    }
+    
+    @ViewBuilder
+    private var topBarGradientOverlay: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [.black, .clear, .clear]),
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .frame(height: 200)
+        .ignoresSafeArea(edges: .top)
+        .transition(.opacity)
+        .allowsHitTesting(false)
     }
     
     @ViewBuilder

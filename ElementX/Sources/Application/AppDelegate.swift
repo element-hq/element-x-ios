@@ -7,6 +7,7 @@
 
 import Combine
 import SwiftUI
+import FirebaseCore
 
 enum AppDelegateCallback {
     case registeredNotifications(deviceToken: Data)
@@ -26,6 +27,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         NSTextAttachment.registerViewProviderClass(PillAttachmentViewProvider.self, forFileType: InfoPlistReader.main.pillsUTType)
+        FirebaseApp.configure()
+        _ = RemoteConfigManager.shared
         return true
     }
 
