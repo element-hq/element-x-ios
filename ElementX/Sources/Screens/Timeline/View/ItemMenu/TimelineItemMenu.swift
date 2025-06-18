@@ -342,6 +342,7 @@ struct TimelineItemMenu_Previews: PreviewProvider, TestablePreview {
                             deliveryStatus: TimelineItemDeliveryStatus? = nil) -> (EventBasedTimelineItemProtocol, TimelineItemMenuActions)! {
         guard var item = makeItem(itemType: itemType) else { return nil }
         let provider = TimelineItemMenuActionProvider(timelineItem: item,
+                                                      canCurrentUserSendMessage: true,
                                                       canCurrentUserRedactSelf: true,
                                                       canCurrentUserRedactOthers: false,
                                                       canCurrentUserPin: true,
