@@ -47,10 +47,6 @@ class AppHooks: AppHooksProtocol {
 
 protocol AppHooksProtocol {
     func setUp()
-    
-    #if IS_MAIN_APP
-    func configure(with userSession: UserSessionProtocol?) async
-    #endif
 }
 
 extension AppHooksProtocol {
