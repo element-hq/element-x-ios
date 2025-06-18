@@ -8,10 +8,16 @@
 import SwiftUI
 
 struct CollapsibleRoomTimelineView: View {
+    enum AccessibilityFocus {
+        case disclosure
+        case events
+    }
+    
     private let timelineItem: CollapsibleTimelineItem
     private let groupedViewStates: [RoomTimelineItemViewState]
     
     @State private var isExpanded = false
+    @AccessibilityFocusState private var accessibilityFocusState: AccessibilityFocus?
     
     init(timelineItem: CollapsibleTimelineItem) {
         self.timelineItem = timelineItem
@@ -21,13 +27,18 @@ struct CollapsibleRoomTimelineView: View {
     var body: some View {
         VStack(spacing: 0.0) {
             Button {
-                withElementAnimation {
+                if !UIAccessibility.isVoiceOverRunning {
+                    withElementAnimation {
+                        isExpanded.toggle()
+                    }
+                } else {
                     isExpanded.toggle()
                 }
             } label: {
                 HStack(alignment: .center, spacing: 8) {
                     Text(L10n.screenRoomTimelineStateChanges(timelineItem.items.count))
                     Text(Image(systemName: "chevron.forward"))
+                        .accessibilityLabel(isExpanded ? L10n.screenRoomGroupedStateEventsReduce : L10n.screenRoomGroupedStateEventsExpand)
                         .rotationEffect(.degrees(isExpanded ? 90 : 0))
                         .animation(.elementDefault, value: isExpanded)
                 }
@@ -40,12 +51,20 @@ struct CollapsibleRoomTimelineView: View {
             .buttonStyle(.plain)
             .frame(maxWidth: .infinity)
             .padding(.top, 8.0)
+            .accessibilityFocused($accessibilityFocusState, equals: .disclosure)
             
             if isExpanded {
-                ForEach(groupedViewStates) { viewState in
-                    RoomTimelineItemView(viewState: viewState)
+                VStack(spacing: 0.0) {
+                    ForEach(groupedViewStates) { viewState in
+                        RoomTimelineItemView(viewState: viewState)
+                    }
                 }
+                .accessibilityElement(children: .contain)
+                .accessibilityFocused($accessibilityFocusState, equals: .events)
             }
+        }
+        .onChange(of: isExpanded) { _, newValue in
+            accessibilityFocusState = newValue ? .events : .disclosure
         }
     }
 }

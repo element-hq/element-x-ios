@@ -522,7 +522,7 @@ internal enum L10n {
   internal static var commonRecoveryKey: String { return L10n.tr("Localizable", "common_recovery_key") }
   /// Refreshing…
   internal static var commonRefreshing: String { return L10n.tr("Localizable", "common_refreshing") }
-  /// %1$d replies
+  /// Plural format key: "%#@COUNT@"
   internal static func commonReplies(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_replies", p1)
   }
@@ -2182,6 +2182,10 @@ internal enum L10n {
   internal static func screenRoomEventPill(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_event_pill", String(describing: p1))
   }
+  /// Expand
+  internal static var screenRoomGroupedStateEventsExpand: String { return L10n.tr("Localizable", "screen_room_grouped_state_events_expand") }
+  /// Reduce
+  internal static var screenRoomGroupedStateEventsReduce: String { return L10n.tr("Localizable", "screen_room_grouped_state_events_reduce") }
   /// Would you like to invite them back?
   internal static var screenRoomInviteAgainAlertMessage: String { return L10n.tr("Localizable", "screen_room_invite_again_alert_message") }
   /// You are alone in this chat
