@@ -73,10 +73,9 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
         return shouldScrollToTopClosure(scrollView)
     }
     
-    func scrollToTop(needForceOffset: Bool = false) {
+    func scrollToTop() {
         guard let scrollView = scrollView else { return }
-        let yOffset = needForceOffset ? -100 : 0
-        let topOffset = CGPoint(x: 0, y: yOffset)
+        let topOffset = CGPoint(x: 0, y: -100)
         scrollView.setContentOffset(topOffset, animated: true)
     }
     
@@ -121,6 +120,10 @@ extension ScrollViewAdapter {
     func updateScrollDirection(with scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
         let threshold: CGFloat = 5 // Minimum scroll distance to trigger direction change
+        
+        guard scrollView.contentSize.height > scrollView.bounds.height else {
+            return
+        }
         
         if abs(currentOffset - lastOffset) > threshold {
             let direction: ScrollDirection = currentOffset > lastOffset ? .down : .up

@@ -53,6 +53,7 @@ struct HomeScreen: View {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             showBackToTop = false
                             hideNavigationBar = false
+                            scrollViewAdapter.scrollToTop()
                         }
                     }
                     selectedTab = tab
@@ -61,6 +62,9 @@ struct HomeScreen: View {
                 isTabViewVisible: !context.isSearchFieldFocused
             )
             .onReceive(scrollViewAdapter.isAtTopEdge) { isAtTop in
+                if showBackToTop == isAtTop {
+                    return
+                }
                 withAnimation(.easeInOut(duration: 0.3)) {
                     showBackToTop = isAtTop
                 }
@@ -98,7 +102,7 @@ struct HomeScreen: View {
             
             if showBackToTop {
                 Button(action: {
-                    scrollViewAdapter.scrollToTop(needForceOffset : selectedTab != .chat)
+                    scrollViewAdapter.scrollToTop()
                 }) {
                     HStack {
                         Text("Back to top")
