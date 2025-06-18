@@ -100,7 +100,7 @@ packages:
     minorVersion: 1.2.0
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
-    minorVersion: 5.5.0
+    minorVersion: 5.6.0
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
     exactVersion: 14.1.1
