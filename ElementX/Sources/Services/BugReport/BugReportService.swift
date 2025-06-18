@@ -140,9 +140,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             let uploadResponse = try decoder.decode(SubmitBugReportResponse.self, from: data)
             
-            if !(uploadResponse.reportUrl?.isEmpty ?? false) {
-                lastCrashEventID = nil
-            }
+            lastCrashEventID = nil
             
             MXLog.info("Feedback submitted.")
             
