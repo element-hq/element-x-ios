@@ -34,6 +34,18 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
             .asCurrentValuePublisher()
     }
     
+    // MARK: - Scroll direction
+    enum ScrollDirection {
+        case up, down, none
+    }
+    
+    private var lastContentOffset: CGFloat = 0
+    private let scrollDirectionSubject = PassthroughSubject<ScrollDirection, Never>()
+    
+    var scrollDirection: AnyPublisher<ScrollDirection, Never> {
+        scrollDirectionSubject.eraseToAnyPublisher()
+    }
+    
     // MARK: - UIScrollViewDelegate
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -84,51 +96,28 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
     private func updateDidScroll(_ scrollView: UIScrollView) {
         isScrollingSubject.send(scrollView.isDragging || scrollView.isDecelerating)
     }
-}
-
-// Add this extension to your ScrollViewAdapter
-extension ScrollViewAdapter {
-    enum ScrollDirection {
-        case up, down, none
-    }
     
-    private static var lastOffsetKey: UInt8 = 0
-    private static var scrollDirectionSubjectKey: UInt8 = 1
-    
-    private var lastOffset: CGFloat {
-        get {
-            objc_getAssociatedObject(self, &Self.lastOffsetKey) as? CGFloat ?? 0
-        }
-        set {
-            objc_setAssociatedObject(self, &Self.lastOffsetKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-    
-    private var scrollDirectionSubject: PassthroughSubject<ScrollDirection, Never> {
-        if let subject = objc_getAssociatedObject(self, &Self.scrollDirectionSubjectKey) as? PassthroughSubject<ScrollDirection, Never> {
-            return subject
-        }
-        let subject = PassthroughSubject<ScrollDirection, Never>()
-        objc_setAssociatedObject(self, &Self.scrollDirectionSubjectKey, subject, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        return subject
-    }
-    
-    var scrollDirection: AnyPublisher<ScrollDirection, Never> {
-        scrollDirectionSubject.eraseToAnyPublisher()
-    }
-    
-    func updateScrollDirection(with scrollView: UIScrollView) {
+    private func updateScrollDirection(with scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
         let threshold: CGFloat = 5 // Minimum scroll distance to trigger direction change
         
-        guard scrollView.contentSize.height > scrollView.bounds.height else {
-            return
-        }
+//        guard scrollView.contentSize.height > scrollView.bounds.height else {
+//            return
+//        }
         
-        if abs(currentOffset - lastOffset) > threshold {
-            let direction: ScrollDirection = currentOffset > lastOffset ? .down : .up
-            scrollDirectionSubject.send(direction)
-            lastOffset = currentOffset
+        if abs(currentOffset - lastContentOffset) > threshold {
+//            let direction: ScrollDirection = currentOffset > lastContentOffset ? .down : .up
+//            scrollDirectionSubject.send(direction)
+//            lastContentOffset = currentOffset
+            let maxOffset = max(0, scrollView.contentSize.height - scrollView.frame.height + scrollView.contentInset.bottom)
+            
+            // Avoid direction changes at very top or bottom
+            if currentOffset > 10 && currentOffset < maxOffset - 10 {
+                let direction: ScrollDirection = currentOffset > lastContentOffset ? .down : .up
+                scrollDirectionSubject.send(direction)
+            }
+            
+            lastContentOffset = currentOffset
         }
     }
 }
