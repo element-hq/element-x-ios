@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "img_app_maintenance.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
