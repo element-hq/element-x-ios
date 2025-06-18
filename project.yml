@@ -80,7 +80,7 @@ packages:
     exactVersion: 0.12.2
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
-    minorVersion: 1.4.1
+    minorVersion: 1.4.2
     # path: ../emojibase-bindings
   SwiftOGG:
     url: https://github.com/element-hq/swift-ogg

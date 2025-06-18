@@ -8760,7 +8760,7 @@
 			repositoryURL = "https://github.com/matrix-org/emojibase-bindings";
 			requirement = {
 				kind = upToNextMinorVersion;
-				minimumVersion = 1.4.1;
+				minimumVersion = 1.4.2;
 			};
 		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
