@@ -467,8 +467,11 @@ class ClientProxy: ClientProxyProtocol {
             await waitForRoomToSync(roomID: roomID, timeout: .seconds(30))
             
             return .success(())
+        } catch ClientError.MatrixApi(kind: .unknown, _, _, _) {
+            MXLog.error("Failed joining roomID: \(roomID) invalid invite")
+            return .failure(.invalidInvite)
         } catch ClientError.MatrixApi(.forbidden, _, _, _) {
-            MXLog.error("Failed joining roomAlias: \(roomID) forbidden")
+            MXLog.error("Failed joining roomID: \(roomID) forbidden")
             return .failure(.forbiddenAccess)
         } catch {
             MXLog.error("Failed joining roomID: \(roomID) with error: \(error)")
@@ -483,6 +486,9 @@ class ClientProxy: ClientProxyProtocol {
             await waitForRoomToSync(roomID: room.id(), timeout: .seconds(30))
             
             return .success(())
+        } catch ClientError.MatrixApi(kind: .unknown, _, _, _) {
+            MXLog.error("Failed joining roomAlias: \(roomAlias) invalid invite")
+            return .failure(.invalidInvite)
         } catch ClientError.MatrixApi(.forbidden, _, _, _) {
             MXLog.error("Failed joining roomAlias: \(roomAlias) forbidden")
             return .failure(.forbiddenAccess)

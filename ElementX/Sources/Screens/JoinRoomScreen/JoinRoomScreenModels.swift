@@ -111,6 +111,7 @@ enum JoinRoomScreenAlertType {
     case declineInviteAndBlock
     case cancelKnock
     case loadingError
+    case invalidInvite
 }
 
 enum JoinRoomScreenViewAction {
