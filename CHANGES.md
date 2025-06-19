@@ -1,3 +1,28 @@
+## Changes in 25.06.5 (2025-06-19)
+
+### What's Changed
+
+🐛 Bugfixes
+* Stop failing bug reports when the reportURL is omitted. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4221
+* Hide timeline item actions that the user's power level does not allow by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4227
+* Fix thread summaries being shown when the thread feature flag was disabled. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4228
+* Fix MediaTimeline screen header iOS 26 crash, update remaining version predicates. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4229
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4225
+
+🧱 Build
+* Add a section for pr-a11y in the release notes. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4223
+* Run Xcode select on the Translations and CalVer workflows. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4224
+
+Others
+* Update ui tests for the poll form screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4226
+* Bump various dependencies by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4216
+* Move all Introspect VersionPredicates into Compound to have them all in the same place. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4230
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.06.4...release/25.06.5
+
 ## Changes in 25.06.4 (2025-06-18)
 
 ### What's Changed
