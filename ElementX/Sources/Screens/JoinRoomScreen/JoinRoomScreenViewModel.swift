@@ -246,10 +246,14 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                 appSettings.seenInvites.remove(roomID)
                 actionsSubject.send(.joined)
             case .failure(let error):
-                if case .forbiddenAccess = error {
+                switch error {
+                case .forbiddenAccess:
                     MXLog.error("Failed joining room alias: \(alias) forbidden access")
                     state.mode = .forbidden
-                } else {
+                case .invalidInvite:
+                    MXLog.error("Failed joining room alias: \(alias) invalid invite")
+                    state.bindings.alertInfo = .init(id: .invalidInvite, title: L10n.dialogTitleError, message: L10n.errorInvalidInvite)
+                default:
                     MXLog.error("Failed joining room alias: \(alias) with error: \(error)")
                     userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
                 }
@@ -260,10 +264,14 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                 appSettings.seenInvites.remove(roomID)
                 actionsSubject.send(.joined)
             case .failure(let error):
-                if case .forbiddenAccess = error {
+                switch error {
+                case .forbiddenAccess:
                     MXLog.error("Failed joining room id: \(roomID) forbidden access")
                     state.mode = .forbidden
-                } else {
+                case .invalidInvite:
+                    MXLog.error("Failed joining room id: \(roomID) invalid invite")
+                    state.bindings.alertInfo = .init(id: .invalidInvite, title: L10n.dialogTitleError, message: L10n.errorInvalidInvite)
+                default:
                     MXLog.error("Failed joining room id: \(roomID) with error: \(error)")
                     userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
                 }

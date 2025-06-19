@@ -39,6 +39,7 @@ enum ClientProxyError: Error {
     case failedRetrievingUserIdentity
     case failedResolvingRoomAlias
     case roomNotInLocalStore
+    case invalidInvite
 }
 
 enum SlidingSyncConstants {
