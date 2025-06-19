@@ -407,6 +407,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func updatePermissions() async {
+        if case let .success(value) = await roomProxy.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage) {
+            state.canCurrentUserSendMessage = value
+        } else {
+            state.canCurrentUserSendMessage = false
+        }
+        
         if case let .success(value) = await roomProxy.canUserRedactOther(userID: roomProxy.ownUserID) {
             state.canCurrentUserRedactOthers = value
         } else {

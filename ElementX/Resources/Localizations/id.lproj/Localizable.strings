@@ -1,4 +1,5 @@
 "Notification" = "Notifikasi";
+"a11y_add_reaction" = "Add reaction: %1$@";
 "a11y_avatar" = "Avatar";
 "a11y_delete" = "Hapus";
 "a11y_hide_password" = "Sembunyikan kata sandi";
@@ -12,12 +13,14 @@
 "a11y_pin_field" = "Kolom PIN";
 "a11y_play" = "Putar";
 "a11y_poll_end" = "Pemungutan suara berakhir";
+"a11y_polls_winning_answer" = "This is the winning answer";
 "a11y_react_with" = "Bereaksi dengan %1$@";
 "a11y_react_with_other_emojis" = "Reaksi dengan emoji lain";
 "a11y_read_receipts_multiple" = "Dibaca oleh %1$@ dan %2$@";
 "a11y_read_receipts_single" = "Dibaca oleh %1$@";
 "a11y_read_receipts_tap_to_show_all" = "Ketuk untuk melihat semua";
-"a11y_remove_reaction_with" = "Hapus reaksi dengan %1$@";
+"a11y_remove_reaction" = "Hapus reaksi dengan %1$@";
+"a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Kirim berkas";
 "a11y_show_password" = "Tampilkan kata sandi";
 "a11y_start_call" = "Mulai panggilan";
@@ -135,10 +138,12 @@
 "banner_migrate_to_native_sliding_sync_title" = "Peningkatan tersedia";
 "banner_set_up_recovery_content" = "Buat kunci pemulihan baru yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi Anda jika Anda kehilangan akses ke perangkat Anda.";
 "banner_set_up_recovery_title" = "Siapkan pemulihan";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Tentang";
 "common_acceptable_use_policy" = "Kebijakan penggunaan wajar";
 "common_adding_caption" = "Menambahkan keterangan";
 "common_advanced_settings" = "Pengaturan tingkat lanjut";
+"common_an_image" = "an image";
 "common_analytics" = "Analitik";
 "common_appearance" = "Penampilan";
 "common_audio" = "Audio";
@@ -241,6 +246,7 @@
 "common_sending" = "Mengirim…";
 "common_sending_failed" = "Pengiriman gagal";
 "common_sent" = "Terkirim";
+"common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Server tidak didukung";
 "common_server_url" = "URL Server";
 "common_settings" = "Pengaturan";
@@ -332,6 +338,7 @@
 "error_no_compatible_app_found" = "Tidak ada aplikasi yang kompatibel yang ditemukan untuk menangani tindakan ini.";
 "error_some_messages_have_not_been_sent" = "Beberapa pesan belum terkirim";
 "error_unknown" = "Maaf, terjadi kesalahan";
+"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
 "event_shield_reason_authenticity_not_guaranteed" = "Keaslian pesan terenkripsi ini tidak dapat dijamin pada perangkat ini.";
 "event_shield_reason_previously_verified" = "Dienkripsi oleh pengguna yang telah diverifikasi sebelumnya.";
 "event_shield_reason_sent_in_clear" = "Tidak dienkripsi.";
@@ -352,6 +359,7 @@
 "notification_channel_noisy" = "Pemberitahuan berisik";
 "notification_channel_ringing_calls" = "Panggilan berdering";
 "notification_channel_silent" = "Pemberitahuan diam";
+"notification_fallback_content" = "You have new message(s).";
 "notification_incoming_call" = "📹 Panggilan masuk";
 "notification_inline_reply_failed" = "** Gagal mengirim — silakan buka ruangan";
 "notification_invite_body" = "Mengundang Anda untuk mengobrol";
@@ -379,8 +387,12 @@
 "rich_text_editor_composer_unencrypted_placeholder" = "Unencrypted message…";
 "rich_text_editor_create_link" = "Buat tautan";
 "rich_text_editor_edit_link" = "Sunting tautan";
+"rich_text_editor_format_action" = "%1$@, state: %2$@";
 "rich_text_editor_format_bold" = "Terapkan format tebal";
 "rich_text_editor_format_italic" = "Terapkan format miring";
+"rich_text_editor_format_state_disabled" = "disabled";
+"rich_text_editor_format_state_off" = "off";
+"rich_text_editor_format_state_on" = "on";
 "rich_text_editor_format_strikethrough" = "Terapkan format coret";
 "rich_text_editor_format_underline" = "Terapkan format garis bawah";
 "rich_text_editor_full_screen_toggle" = "Alihkan mode layar penuh";
@@ -426,6 +438,10 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
+"screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
+"screen_create_poll_options_section_title" = "Options";
+"screen_create_poll_remove_accessibility_label" = "Remove %1$@";
+"screen_create_poll_settings_section_title" = "Settings";
 "screen_create_room_room_access_section_anyone_option_description" = "Siapa pun dapat bergabung dengan ruangan ini";
 "screen_create_room_room_access_section_anyone_option_title" = "Siapa pun";
 "screen_create_room_room_access_section_header" = "Akses Ruangan";
@@ -515,6 +531,14 @@
 "screen_room_details_pinned_events_row_title" = "Pesan yang disematkan";
 "screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Permintaan untuk bergabung";
+"screen_room_grouped_state_events_expand" = "Expand";
+"screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_timeline_tombstoned_room_action" = "Jump to new room";
+"screen_room_timeline_tombstoned_room_message" = "This room has been replaced and is no longer active";
+"screen_room_timeline_upgraded_room_action" = "See old messages";
+"screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
+"screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Tambahkan alamat ruangan";
 "screen_security_and_privacy_ask_to_join_option_description" = "Siapa pun dapat meminta untuk bergabung dengan ruangan tetapi administrator atau moderator harus menerima permintaan tersebut.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Ya, aktifkan enkripsi";
@@ -647,6 +671,7 @@
 "screen_create_poll_anonymous_headline" = "Pemungutan suara anonim";
 "screen_create_poll_answer_hint" = "Opsi %1$d";
 "screen_create_poll_cancel_confirmation_title_ios" = "Batal pemungutan suara";
+"screen_create_poll_delete_option_a11y" = "Delete option %1$@";
 "screen_create_poll_question_desc" = "Pertanyaan atau topik";
 "screen_create_poll_question_hint" = "Tentang apa pemungutan suara ini?";
 "screen_create_poll_title" = "Buat pemungutan suara";
@@ -963,6 +988,7 @@
 "screen_room_timeline_less_reactions" = "Tampilkan lebih sedikit";
 "screen_room_timeline_message_copied" = "Pesan disalin";
 "screen_room_timeline_no_permission_to_post" = "Anda tidak memiliki izin untuk mengirim di ruangan ini";
+"screen_room_timeline_reaction_you_a11y" = "You reacted with %1$@";
 "screen_room_timeline_reactions_show_more" = "Tampilkan lebih banyak";
 "screen_room_timeline_read_marker_title" = "Baru";
 "screen_room_title" = "Obrolan";
@@ -1190,7 +1216,6 @@
 "banner_set_up_recovery_submit" = "Siapkan pemulihan";
 "dialog_title_error" = "Eror";
 "dialog_title_success" = "Berhasil";
-"notification_fallback_content" = "Notifikasi";
 "notification_invitation_action_join" = "Gabung";
 "notification_invitation_action_reject" = "Tolak";
 "notification_room_action_mark_as_read" = "Tandai sebagai dibaca";

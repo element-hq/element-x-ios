@@ -1,4 +1,5 @@
 "Notification" = "notis";
+"a11y_add_reaction" = "Add reaction: %1$@";
 "a11y_avatar" = "Avatar";
 "a11y_delete" = "Radera";
 "a11y_hide_password" = "Dölj lösenord";
@@ -12,12 +13,14 @@
 "a11y_pin_field" = "PIN-fält";
 "a11y_play" = "Spela upp";
 "a11y_poll_end" = "Avslutade omröstning";
+"a11y_polls_winning_answer" = "This is the winning answer";
 "a11y_react_with" = "Reagera med %1$@";
 "a11y_react_with_other_emojis" = "Reagera med andra emojier";
 "a11y_read_receipts_multiple" = "Läst av %1$@ och %2$@";
 "a11y_read_receipts_single" = "Läst av %1$@";
 "a11y_read_receipts_tap_to_show_all" = "Tryck för att visa alla";
-"a11y_remove_reaction_with" = "Ta bort reaktionen med %1$@";
+"a11y_remove_reaction" = "Ta bort reaktionen med %1$@";
+"a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Skicka filer";
 "a11y_show_password" = "Visa lösenord";
 "a11y_start_call" = "Starta ett samtal";
@@ -135,10 +138,12 @@
 "banner_migrate_to_native_sliding_sync_title" = "Uppgradering tillgänglig";
 "banner_set_up_recovery_content" = "Skapa en ny återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter.";
 "banner_set_up_recovery_title" = "Ställ in återställning";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Om";
 "common_acceptable_use_policy" = "Policy för godtagbar användning";
 "common_adding_caption" = "Lägga till bildtext";
 "common_advanced_settings" = "Avancerade inställningar";
+"common_an_image" = "an image";
 "common_analytics" = "Analysdata";
 "common_appearance" = "Utseende";
 "common_audio" = "Ljud";
@@ -241,6 +246,7 @@
 "common_sending" = "Skickar …";
 "common_sending_failed" = "Misslyckades att skicka";
 "common_sent" = "Skickat";
+"common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Servern stöds inte";
 "common_server_url" = "Server-URL";
 "common_settings" = "Inställningar";
@@ -332,6 +338,7 @@
 "error_no_compatible_app_found" = "Ingen kompatibel app hittades för att hantera den här åtgärden.";
 "error_some_messages_have_not_been_sent" = "Vissa meddelanden har inte skickats";
 "error_unknown" = "Tyvärr, ett fel uppstod";
+"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
 "event_shield_reason_authenticity_not_guaranteed" = "Detta krypterade meddelandes äkthet kan inte garanteras på den här enheten.";
 "event_shield_reason_previously_verified" = "Krypterat av en tidigare verifierad användare.";
 "event_shield_reason_sent_in_clear" = "Inte krypterad.";
@@ -352,6 +359,7 @@
 "notification_channel_noisy" = "Högljudda aviseringar";
 "notification_channel_ringing_calls" = "Ringande samtal";
 "notification_channel_silent" = "Tysta aviseringar";
+"notification_fallback_content" = "You have new message(s).";
 "notification_incoming_call" = "📹 Inkommande samtal";
 "notification_inline_reply_failed" = "** Misslyckades att skicka - vänligen öppna rummet";
 "notification_invite_body" = "Bjöd in dig att chatta";
@@ -379,8 +387,12 @@
 "rich_text_editor_composer_unencrypted_placeholder" = "Okrypterat meddelande …";
 "rich_text_editor_create_link" = "Skapa en länk";
 "rich_text_editor_edit_link" = "Redigera länk";
+"rich_text_editor_format_action" = "%1$@, state: %2$@";
 "rich_text_editor_format_bold" = "Använd fetstil";
 "rich_text_editor_format_italic" = "Använd kursiv stil";
+"rich_text_editor_format_state_disabled" = "disabled";
+"rich_text_editor_format_state_off" = "off";
+"rich_text_editor_format_state_on" = "on";
 "rich_text_editor_format_strikethrough" = "Använda genomstryken stil";
 "rich_text_editor_format_underline" = "Använd understruken stil";
 "rich_text_editor_full_screen_toggle" = "Växla helskärmsläge";
@@ -426,6 +438,10 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "De skulle kunna gå med i rummet igen om de blev inbjudna";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Är du säker på att du vill avbanna den här medlemmen?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Avbannar %1$@";
+"screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
+"screen_create_poll_options_section_title" = "Options";
+"screen_create_poll_remove_accessibility_label" = "Remove %1$@";
+"screen_create_poll_settings_section_title" = "Settings";
 "screen_create_room_room_access_section_anyone_option_description" = "Vem som helst kan gå med i det här rummet";
 "screen_create_room_room_access_section_anyone_option_title" = "Vem som helst";
 "screen_create_room_room_access_section_header" = "Rumsåtkomst";
@@ -515,6 +531,14 @@
 "screen_room_details_pinned_events_row_title" = "Fästa meddelanden";
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Begäran om att gå med";
+"screen_room_grouped_state_events_expand" = "Expand";
+"screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_timeline_tombstoned_room_action" = "Hoppa till nytt rum";
+"screen_room_timeline_tombstoned_room_message" = "Det här rummet har ersatts och är inte längre aktivt";
+"screen_room_timeline_upgraded_room_action" = "Se gamla meddelanden";
+"screen_room_timeline_upgraded_room_message" = "Det här rummet är en fortsättning på ett annat rum";
+"screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_tombstoned_room_description" = "Det här rummet har uppgraderats";
 "screen_security_and_privacy_add_room_address_action" = "Lägg till rumsadress";
 "screen_security_and_privacy_ask_to_join_option_description" = "Vem som helst kan be om att gå med i rummet men en administratör eller moderator måste acceptera begäran.";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "Ja, aktivera kryptering";
@@ -647,6 +671,7 @@
 "screen_create_poll_anonymous_headline" = "Dölj röster";
 "screen_create_poll_answer_hint" = "Alternativ %1$d";
 "screen_create_poll_cancel_confirmation_title_ios" = "Avbryt omröstning";
+"screen_create_poll_delete_option_a11y" = "Delete option %1$@";
 "screen_create_poll_question_desc" = "Fråga eller ämne";
 "screen_create_poll_question_hint" = "Vad handlar omröstningen om?";
 "screen_create_poll_title" = "Skapa omröstning";
@@ -963,6 +988,7 @@
 "screen_room_timeline_less_reactions" = "Visa mindre";
 "screen_room_timeline_message_copied" = "Meddelande kopierat";
 "screen_room_timeline_no_permission_to_post" = "Du är inte behörig att göra inlägg i det här rummet";
+"screen_room_timeline_reaction_you_a11y" = "You reacted with %1$@";
 "screen_room_timeline_reactions_show_more" = "Visa mer";
 "screen_room_timeline_read_marker_title" = "Nytt";
 "screen_room_title" = "Chatt";
@@ -1190,7 +1216,6 @@
 "banner_set_up_recovery_submit" = "Ställ in återställning";
 "dialog_title_error" = "Fel";
 "dialog_title_success" = "Lyckades";
-"notification_fallback_content" = "notis";
 "notification_invitation_action_join" = "Gå med";
 "notification_invitation_action_reject" = "Avvisa";
 "notification_room_action_mark_as_read" = "Markera som läst";

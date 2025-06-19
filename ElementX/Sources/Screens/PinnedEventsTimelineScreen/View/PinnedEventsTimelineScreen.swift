@@ -48,7 +48,10 @@ struct PinnedEventsTimelineScreen: View {
             .padding(.top, 48)
             .padding(.horizontal, 16)
         } else {
-            TimelineView(timelineContext: timelineContext)
+            TimelineView(
+                timelineContext: timelineContext,
+                fromPinnedTimeline: true
+            )
         }
     }
     

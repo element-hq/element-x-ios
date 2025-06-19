@@ -148,7 +148,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .onTapGesture { }
             }
             
-            if !context.viewState.timelineKind.isThread, let threadSummary = timelineItem.properties.threadSummary {
+            if context.viewState.areThreadsEnabled,
+               !context.viewState.timelineKind.isThread,
+               let threadSummary = timelineItem.properties.threadSummary {
                 TimelineThreadSummaryView(threadSummary: threadSummary) {
                     context.send(viewAction: .displayThread(itemID: timelineItem.id))
                 }
@@ -181,6 +183,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             .contextMenu {
                 let provider = TimelineItemMenuActionProvider(timelineItem: timelineItem,
+                                                              canCurrentUserSendMessage: context.viewState.canCurrentUserSendMessage,
                                                               canCurrentUserRedactSelf: context.viewState.canCurrentUserRedactSelf,
                                                               canCurrentUserRedactOthers: context.viewState.canCurrentUserRedactOthers,
                                                               canCurrentUserPin: context.viewState.canCurrentUserPin,
@@ -383,8 +386,14 @@ private extension View {
 // MARK: - Previews
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = TimelineViewModel.mock
+    static let viewModel: TimelineViewModel = {
+        ServiceLocator.shared.settings.threadsEnabled = true
+        return TimelineViewModel.mock
+    }()
+    
     static let viewModelWithPins: TimelineViewModel = {
+        ServiceLocator.shared.settings.threadsEnabled = true
+        
         let roomProxy = JoinedRoomProxyMock(.init(name: "Preview Room", pinnedEventIDs: ["pinned"]))
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,

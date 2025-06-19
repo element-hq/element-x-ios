@@ -10,6 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum L10n {
+  /// Add reaction: %1$@
+  internal static func a11yAddReaction(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "a11y_add_reaction", String(describing: p1))
+  }
   /// Avatar
   internal static var a11yAvatar: String { return L10n.tr("Localizable", "a11y_avatar") }
   /// Delete
@@ -72,6 +76,10 @@ internal enum L10n {
   }
   /// Tap to show all
   internal static var a11yReadReceiptsTapToShowAll: String { return L10n.tr("Localizable", "a11y_read_receipts_tap_to_show_all") }
+  /// Remove reaction: %1$@
+  internal static func a11yRemoveReaction(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "a11y_remove_reaction", String(describing: p1))
+  }
   /// Remove reaction with %1$@
   internal static func a11yRemoveReactionWith(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_remove_reaction_with", String(describing: p1))
@@ -838,7 +846,7 @@ internal enum L10n {
   internal static func notificationCompatSummaryTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "notification_compat_summary_title", p1)
   }
-  /// Notification
+  /// You have new message(s).
   internal static var notificationFallbackContent: String { return L10n.tr("Localizable", "notification_fallback_content") }
   /// 📹 Incoming call
   internal static var notificationIncomingCall: String { return L10n.tr("Localizable", "notification_incoming_call") }
@@ -2366,6 +2374,8 @@ internal enum L10n {
   internal static var screenRoomTimelineReactionsShowLess: String { return L10n.tr("Localizable", "screen_room_timeline_reactions_show_less") }
   /// Show more
   internal static var screenRoomTimelineReactionsShowMore: String { return L10n.tr("Localizable", "screen_room_timeline_reactions_show_more") }
+  /// Show reactions summary
+  internal static var screenRoomTimelineReactionsShowReactionsSummary: String { return L10n.tr("Localizable", "screen_room_timeline_reactions_show_reactions_summary") }
   /// New
   internal static var screenRoomTimelineReadMarkerTitle: String { return L10n.tr("Localizable", "screen_room_timeline_read_marker_title") }
   /// Plural format key: "%#@COUNT@"

@@ -137,12 +137,9 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             
             // Parse the JSON data
             let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
             let uploadResponse = try decoder.decode(SubmitBugReportResponse.self, from: data)
             
-            if !uploadResponse.reportUrl.isEmpty {
-                lastCrashEventID = nil
-            }
+            lastCrashEventID = nil
             
             MXLog.info("Feedback submitted.")
             

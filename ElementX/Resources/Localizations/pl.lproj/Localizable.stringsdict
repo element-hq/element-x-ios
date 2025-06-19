@@ -20,6 +20,22 @@
 			<string>Wprowadzono %1$d cyfr</string>
 		</dict>
 	</dict>
+	<key>a11y_polls_percent_of_total</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d percent of total votes</string>
+			<key>other</key>
+			<string>%1$d percents of total votes</string>
+		</dict>
+	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -90,6 +106,22 @@
 			<string>%d głosy</string>
 			<key>many</key>
 			<string>%d głosów</string>
+		</dict>
+	</dict>
+	<key>common_replies</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d reply</string>
+			<key>other</key>
+			<string>%1$d replies</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -288,6 +320,38 @@
 			<string>%1$@ +%2$d innych chce dołączyć do pokoju</string>
 			<key>many</key>
 			<string>%1$@ +%2$d innych chce dołączyć do pokoju</string>
+		</dict>
+	</dict>
+	<key>screen_room_timeline_reaction_a11y</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d member reacted with %2$@</string>
+			<key>other</key>
+			<string>%1$d members reacted with %2$@</string>
+		</dict>
+	</dict>
+	<key>screen_room_timeline_reaction_including_you_a11y</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>You and %1$d member reacted with %2$@</string>
+			<key>other</key>
+			<string>You and %1$d members reacted with %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>

@@ -30,6 +30,7 @@ class MockImageCache: ImageCache, @unchecked Sendable {
                         original: Data? = nil,
                         forKey key: String,
                         processorIdentifier identifier: String = "",
+                        forcedExtension: String? = nil,
                         cacheSerializer serializer: CacheSerializer = DefaultCacheSerializer.default,
                         toDisk: Bool = true,
                         callbackQueue: CallbackQueue = .untouch,

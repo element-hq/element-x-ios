@@ -17,10 +17,6 @@ jobs:
       cancel-in-progress: false
 
     steps:
-        # While fastlane has its own way of selecting Xcode, will only work inside fastlane, so we need to set it globally to allow other actions like xcresultparser to use the same Xcode version.
-      - name: Select Xcode 16.3
-        run: sudo xcode-select -s /Applications/Xcode_16.3.app
-        
       - uses: actions/checkout@v4
 
       - uses: actions/cache@v4

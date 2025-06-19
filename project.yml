@@ -47,7 +47,7 @@ settings:
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
   APP_NAME: ZERO
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)"
-  MARKETING_VERSION: 25.06.4
+  MARKETING_VERSION: 25.06.5
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
 
@@ -66,22 +66,22 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 25.06.13
+    exactVersion: 25.06.18
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: 7dcd851f7944ef99820f7ffeaef724c994d2d50a
+    revision: 4aa89193ba5bfa0d83f9bbc584900e518fdb3a26
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    minorVersion: 0.28.0
+    minorVersion: 0.29.2
     # path: ../matrix-analytics-events
   EmbeddedElementCall:
     url: https://github.com/element-hq/element-call-swift
     exactVersion: 0.12.2
   Emojibase:
     url: https://github.com/matrix-org/emojibase-bindings
-    minorVersion: 1.4.1
+    minorVersion: 1.4.2
     # path: ../emojibase-bindings
   SwiftOGG:
     url: https://github.com/element-hq/swift-ogg
@@ -95,13 +95,13 @@ packages:
   # External dependencies
   Algorithms:
     url: https://github.com/apple/swift-algorithms
-    minorVersion: 1.0.0
+    minorVersion: 1.2.1
   Collections:
     url: https://github.com/apple/swift-collections
-    minorVersion: 1.0.0
+    minorVersion: 1.2.0
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
-    minorVersion: 5.5.0
+    minorVersion: 5.6.0
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
     exactVersion: 14.1.1
@@ -113,10 +113,10 @@ packages:
     minorVersion: 1.3.2
   KeychainAccess:
     url: https://github.com/kishikawakatsumi/KeychainAccess
-    minorVersion: 4.2.0
+    minorVersion: 4.2.2
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    minorVersion: 8.0.3
+    minorVersion: 8.3.2
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     minorVersion: 1.2.0
@@ -131,10 +131,10 @@ packages:
     minorVersion: 5.13.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 3.2.5
+    minorVersion: 3.27.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    minorVersion: 8.46.0
+    minorVersion: 8.52.1
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     minorVersion: 1.18.3
@@ -143,7 +143,7 @@ packages:
     minorVersion: 6.0.0
   Version:
     url: https://github.com/mxcl/Version
-    minorVersion: 2.1.0
+    minorVersion: 2.2.0
 
 aggregateTargets:
   Periphery:

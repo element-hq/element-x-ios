@@ -1,4 +1,5 @@
 "Notification" = "Notification";
+"a11y_add_reaction" = "Add reaction: %1$@";
 "a11y_avatar" = "Avatar";
 "a11y_delete" = "Delete";
 "a11y_hide_password" = "Hide password";
@@ -18,6 +19,7 @@
 "a11y_read_receipts_multiple" = "Read by %1$@ and %2$@";
 "a11y_read_receipts_single" = "Read by %1$@";
 "a11y_read_receipts_tap_to_show_all" = "Tap to show all";
+"a11y_remove_reaction" = "Remove reaction: %1$@";
 "a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Send files";
 "a11y_show_password" = "Show password";
@@ -357,6 +359,7 @@
 "notification_channel_noisy" = "Noisy notifications";
 "notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Silent notifications";
+"notification_fallback_content" = "You have new message(s).";
 "notification_incoming_call" = "📹 Incoming call";
 "notification_inline_reply_failed" = "** Failed to send - please open room";
 "notification_invite_body" = "Invited you to chat";
@@ -534,6 +537,7 @@
 "screen_room_timeline_tombstoned_room_message" = "This room has been replaced and is no longer active";
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
+"screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Add room address";
 "screen_security_and_privacy_ask_to_join_option_description" = "Anyone can ask to join the room but an administrator or moderator will have to accept the request.";
@@ -1212,7 +1216,6 @@
 "banner_set_up_recovery_submit" = "Set up recovery";
 "dialog_title_error" = "Error";
 "dialog_title_success" = "Success";
-"notification_fallback_content" = "Notification";
 "notification_invitation_action_join" = "Join";
 "notification_invitation_action_reject" = "Reject";
 "notification_room_action_mark_as_read" = "Mark as read";

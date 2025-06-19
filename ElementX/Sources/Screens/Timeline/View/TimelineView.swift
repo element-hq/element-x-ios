@@ -11,6 +11,7 @@ import WysiwygComposer
 struct TimelineView: View {
     @ObservedObject var timelineContext: TimelineViewModel.Context
     @State private var dragOver = false
+    var fromPinnedTimeline: Bool = false
     
     var body: some View {
         TimelineViewRepresentable()
@@ -25,8 +26,9 @@ struct TimelineView: View {
                 ManageRoomMemberSheetView(context: $0.context)
             }
             .sheet(item: $timelineContext.debugInfo) { TimelineItemDebugView(info: $0) }
-            .sheet(item: $timelineContext.actionMenuInfo) { info in
+            .sheet(item: fromPinnedTimeline ? .constant(nil) : $timelineContext.actionMenuInfo) { info in
                 let actions = TimelineItemMenuActionProvider(timelineItem: info.item,
+                                                             canCurrentUserSendMessage: timelineContext.viewState.canCurrentUserSendMessage,
                                                              canCurrentUserRedactSelf: timelineContext.viewState.canCurrentUserRedactSelf,
                                                              canCurrentUserRedactOthers: timelineContext.viewState.canCurrentUserRedactOthers,
                                                              canCurrentUserPin: timelineContext.viewState.canCurrentUserPin,

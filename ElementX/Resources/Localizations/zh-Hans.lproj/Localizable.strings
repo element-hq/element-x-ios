@@ -1,4 +1,5 @@
 "Notification" = "通知";
+"a11y_add_reaction" = "Add reaction: %1$@";
 "a11y_avatar" = "头像";
 "a11y_delete" = "删除";
 "a11y_hide_password" = "隐藏密码";
@@ -12,12 +13,14 @@
 "a11y_pin_field" = "PIN 字段";
 "a11y_play" = "播放";
 "a11y_poll_end" = "投票已结束";
+"a11y_polls_winning_answer" = "This is the winning answer";
 "a11y_react_with" = "使用 %1$@ 回应";
 "a11y_react_with_other_emojis" = "使用其他表情符号回应";
 "a11y_read_receipts_multiple" = "%1$@ 和 %2$@ 已读";
 "a11y_read_receipts_single" = "%1$@ 已读";
 "a11y_read_receipts_tap_to_show_all" = "点击以显示全部";
-"a11y_remove_reaction_with" = "撤回反应 %1$@";
+"a11y_remove_reaction" = "撤回反应 %1$@";
+"a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "发送文件";
 "a11y_show_password" = "显示密码";
 "a11y_start_call" = "开始通话";
@@ -135,10 +138,12 @@
 "banner_migrate_to_native_sliding_sync_title" = "有可用升级";
 "banner_set_up_recovery_content" = "生成新的恢复密钥，该密钥可用于在您无法访问设备时恢复加密的消息历史记录。";
 "banner_set_up_recovery_title" = "设置恢复";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "关于";
 "common_acceptable_use_policy" = "可接受的使用政策";
 "common_adding_caption" = "添加标题";
 "common_advanced_settings" = "高级设置";
+"common_an_image" = "an image";
 "common_analytics" = "分析";
 "common_appearance" = "外观";
 "common_audio" = "音频";
@@ -241,6 +246,7 @@
 "common_sending" = "正在发送…";
 "common_sending_failed" = "发送失败";
 "common_sent" = "已发送";
+"common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "服务器不支持";
 "common_server_url" = "服务器 URL";
 "common_settings" = "设置";
@@ -332,6 +338,7 @@
 "error_no_compatible_app_found" = "找不到完成此项操作的合适应用。";
 "error_some_messages_have_not_been_sent" = "某些信息尚未发送";
 "error_unknown" = "抱歉，发生了错误";
+"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
 "event_shield_reason_authenticity_not_guaranteed" = "此加密消息的真实性无法在此设备上保证。";
 "event_shield_reason_previously_verified" = "由先前验证过的用户加密。";
 "event_shield_reason_sent_in_clear" = "未加密。";
@@ -352,6 +359,7 @@
 "notification_channel_noisy" = "嘈杂通知";
 "notification_channel_ringing_calls" = "来电振铃";
 "notification_channel_silent" = "静默通知";
+"notification_fallback_content" = "You have new message(s).";
 "notification_incoming_call" = "📹 来电";
 "notification_inline_reply_failed" = "** 无法发送——请打开聊天室";
 "notification_invite_body" = "邀请您聊天";
@@ -379,8 +387,12 @@
 "rich_text_editor_composer_unencrypted_placeholder" = "未加密的消息...";
 "rich_text_editor_create_link" = "创建链接";
 "rich_text_editor_edit_link" = "编辑链接";
+"rich_text_editor_format_action" = "%1$@, state: %2$@";
 "rich_text_editor_format_bold" = "应用粗体格式";
 "rich_text_editor_format_italic" = "应用斜体格式";
+"rich_text_editor_format_state_disabled" = "disabled";
+"rich_text_editor_format_state_off" = "off";
+"rich_text_editor_format_state_on" = "on";
 "rich_text_editor_format_strikethrough" = "应用删除线格式";
 "rich_text_editor_format_underline" = "应用下划线格式";
 "rich_text_editor_full_screen_toggle" = "切换全屏模式";
@@ -426,6 +438,10 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
+"screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
+"screen_create_poll_options_section_title" = "Options";
+"screen_create_poll_remove_accessibility_label" = "Remove %1$@";
+"screen_create_poll_settings_section_title" = "Settings";
 "screen_create_room_room_access_section_anyone_option_description" = "任何人都可以加入此房间";
 "screen_create_room_room_access_section_anyone_option_title" = "任何人";
 "screen_create_room_room_access_section_header" = "房间访问权限";
@@ -515,6 +531,14 @@
 "screen_room_details_pinned_events_row_title" = "置顶消息";
 "screen_room_details_profile_row_title" = "简介";
 "screen_room_details_requests_to_join_title" = "申请加入";
+"screen_room_grouped_state_events_expand" = "Expand";
+"screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_timeline_tombstoned_room_action" = "Jump to new room";
+"screen_room_timeline_tombstoned_room_message" = "This room has been replaced and is no longer active";
+"screen_room_timeline_upgraded_room_action" = "See old messages";
+"screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
+"screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "添加房间地址";
 "screen_security_and_privacy_ask_to_join_option_description" = "任何人都可以请求加入房间，但必须由管理员或版主接受请求。";
 "screen_security_and_privacy_enable_encryption_alert_confirm_button_title" = "是的，启用加密";
@@ -647,6 +671,7 @@
 "screen_create_poll_anonymous_headline" = "隐藏投票";
 "screen_create_poll_answer_hint" = "选项 %1$d";
 "screen_create_poll_cancel_confirmation_title_ios" = "取消投票";
+"screen_create_poll_delete_option_a11y" = "Delete option %1$@";
 "screen_create_poll_question_desc" = "问题或话题";
 "screen_create_poll_question_hint" = "投票的内容是什么？";
 "screen_create_poll_title" = "创建投票";
@@ -963,6 +988,7 @@
 "screen_room_timeline_less_reactions" = "折叠";
 "screen_room_timeline_message_copied" = "消息已复制";
 "screen_room_timeline_no_permission_to_post" = "您无权在此聊天室发言";
+"screen_room_timeline_reaction_you_a11y" = "You reacted with %1$@";
 "screen_room_timeline_reactions_show_more" = "展开";
 "screen_room_timeline_read_marker_title" = "新消息";
 "screen_room_title" = "聊天";
@@ -1190,7 +1216,6 @@
 "banner_set_up_recovery_submit" = "设置恢复";
 "dialog_title_error" = "错误";
 "dialog_title_success" = "成功";
-"notification_fallback_content" = "通知";
 "notification_invitation_action_join" = "加入";
 "notification_invitation_action_reject" = "拒绝";
 "notification_room_action_mark_as_read" = "标记为已读";

@@ -1,3 +1,32 @@
+## Changes in 25.06.4 (2025-06-18)
+
+### What's Changed
+
+✨ Features
+* Thread aware drafting by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4197
+
+🐛 Bugfixes
+* Fixes #4180 - Prevent room header autolayout crashes on iOS 26. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4191
+* Bump Compound and prevent Introspect from breaking on newer OS versions. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4203
+* Fix OS 26 crashes when not running a development build by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4217
+
+🚧 In development 🚧
+* Allow sending locations within threads and render the number of replies in their summaries. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4192
+
+Others
+* Update dependency jpsim/Yams to from: "6.0.1" by @renovate in https://github.com/element-hq/element-x-ios/pull/4189
+* Add state to the accessibility label of RTE formatting buttons by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4194
+* Exclude protocol files from code coverage checks. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4196
+* Improved the accessibility in PollFormScreen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4200
+* Focus voice over automatically when focussing a timeline event by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4206
+* Improved a11y in `CollapsibleRoomTimelineView` by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4208
+* Improved reactions a11y by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4215
+* Flip the timeline for voice over users by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4212
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4220
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.06.3...release/25.06.4
+
 ## Changes in 25.06.3 (2025-06-11)
 
 ### What's Changed

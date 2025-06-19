@@ -194,22 +194,30 @@ struct MediaEventsTimelineScreen: View {
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            Picker("", selection: $context.screenMode) {
-                Text(L10n.screenMediaBrowserListModeMedia)
-                    .padding()
-                    .tag(MediaEventsTimelineScreenMode.media)
-                Text(L10n.screenMediaBrowserListModeFiles)
-                    .padding()
-                    .tag(MediaEventsTimelineScreenMode.files)
+            if #available(iOS 19, *) {
+                screenModePicker
+            } else {
+                screenModePicker
+                    .frame(idealWidth: .greatestFiniteMagnitude)
             }
-            .pickerStyle(.segmented)
-            .frame(idealWidth: .greatestFiniteMagnitude)
         }
         
         ToolbarItem(placement: .primaryAction) {
             // Reserve the space trailing space to match the back button.
             CompoundIcon(\.search).hidden()
         }
+    }
+    
+    private var screenModePicker: some View {
+        Picker("", selection: $context.screenMode) {
+            Text(L10n.screenMediaBrowserListModeMedia)
+                .padding()
+                .tag(MediaEventsTimelineScreenMode.media)
+            Text(L10n.screenMediaBrowserListModeFiles)
+                .padding()
+                .tag(MediaEventsTimelineScreenMode.files)
+        }
+        .pickerStyle(.segmented)
     }
     
     func tappedItem(_ item: RoomTimelineItemViewState) {
