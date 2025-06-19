@@ -33,7 +33,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     private let HOME_SCREEN_POST_PAGE_COUNT = 10
     private var isFetchPostsInProgress = false
-    private var isFetchMyPostsInProgress = false
     
     private var channelRoomMap: [String: RoomInfoProxy] = [:]
     private var roomNotificationUpdateMap: [String: RoomNotificationModeProxy] = [:]
@@ -254,18 +253,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             Task {
                 await fetchPosts(followingOnly: following)
             }
-        case .loadMoreMyPosts:
-            Task {
-                await fetchMyPosts()
-            }
         case .forceRefreshAllPosts(let followingOnly):
             Task {
                 await fetchPosts(isForceRefresh: true, followingOnly: followingOnly)
             }
-        case .forceRefreshMyPosts:
-            Task {
-                await fetchMyPosts(isForceRefresh: true)
-            }
+        case .loadMoreMyPosts, .forceRefreshMyPosts:
+            break
         case .postTapped(let post):
             let mediaUrl = state.postMediaInfoMap[post.id]?.url
             let urlLinkPreview = state.postLinkPreviewsMap[post.id]
@@ -591,8 +584,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         Task {
             _ = await (userSession.clientProxy.checkAndLinkZeroUser(),
                        fetchChannels(),
-                       fetchPosts(),
-                       fetchMyPosts())
+                       fetchPosts())
         }
     }
     
@@ -634,8 +626,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 state.postListMode = .posts
                 isFetchPostsInProgress = false
                 
-                loadPostsMediaInfo(for: state.posts)
-                loadPostLinkPreviews(for: state.posts)
+                await loadPostsContentConcurrently(for: state.posts)
             }
         case .failure(let error):
             MXLog.error("Failed to fetch zero posts: \(error)")
@@ -647,59 +638,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 displayError()
             }
             isFetchPostsInProgress = false
-        }
-    }
-    
-    private func fetchMyPosts(isForceRefresh: Bool = false) async {
-        guard let primaryZeroId = state.currentUserZeroProfile?.primaryZID?
-            .replacingOccurrences(of: ZeroContants.ZERO_CHANNEL_PREFIX, with: "") else {
-            state.myPostListMode = .empty
-            return
-        }
-        guard !isFetchMyPostsInProgress else { return }
-        isFetchMyPostsInProgress = true
-        
-        defer { isFetchMyPostsInProgress = false } // Ensure flag is reset when the task completes
-        
-        if isForceRefresh {
-            state.canLoadMoreMyPosts = true
-        }
-        
-        state.myPostListMode = state.myPosts.isEmpty ? .skeletons : .posts
-        let skipItems = isForceRefresh ? 0 : state.myPosts.count
-        let postsResult = await userSession.clientProxy.fetchZeroFeeds(channelZId: primaryZeroId,
-                                                                       following: false,
-                                                                       limit: HOME_SCREEN_POST_PAGE_COUNT,
-                                                                       skip: skipItems)
-        switch postsResult {
-        case .success(let posts):
-            let hasNoPosts = posts.isEmpty
-            if hasNoPosts {
-                state.myPostListMode = state.myPosts.isEmpty ? .empty : .posts
-                state.canLoadMoreMyPosts = false
-            } else {
-                var homePosts: [HomeScreenPost] = isForceRefresh ? [] : state.myPosts
-                for post in posts {
-                    let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
-                                                  post: post,
-                                                  rewardsDecimalPlaces: state.userRewards.decimals)
-                    homePosts.append(homePost)
-                }
-                state.myPosts = homePosts.uniqued(on: \.id)
-                state.myPostListMode = .posts
-                
-                loadPostsMediaInfo(for: state.myPosts)
-                loadPostLinkPreviews(for: state.myPosts)
-            }
-        case .failure(let error):
-            MXLog.error("Failed to fetch zero posts: \(error)")
-            state.myPostListMode = state.myPosts.isEmpty ? .empty : .posts
-            switch error {
-            case .postsLimitReached:
-                state.canLoadMoreMyPosts = false
-            default:
-                displayError()
-            }
         }
     }
     
@@ -841,8 +779,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     func onNewFeedPosted() {
         Task {
-            await (fetchPosts(isForceRefresh: true),
-                   fetchMyPosts(isForceRefresh: true))
+            await (fetchPosts(isForceRefresh: true))
         }
     }
     
@@ -862,35 +799,55 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         roomNotificationUpdateMap.removeAll()
     }
     
-    private func loadPostsMediaInfo(for posts: [HomeScreenPost]) {
-        Task {
-            let postsToFetchMedia = posts.filter({ $0.mediaInfo != nil && state.postMediaInfoMap[$0.id] == nil })
-            let results = await postsToFetchMedia.asyncMap { post in
-                let result = await userSession.clientProxy.getPostMediaInfo(mediaId: post.mediaInfo!.id)
-                return (post.id, result)
-            }
-            for result in results {
-                if case let .success(media) = result.1 {
-                    state.postMediaInfoMap[result.0] = HomeScreenPostMediaInfo(media: media)
+    private func loadPostsContentConcurrently(for posts: [HomeScreenPost]) async {
+        async let mediaInfoTask: () = loadPostsMediaInfo(for: posts)
+        async let linkPreviewTask: () = loadPostLinkPreviews(for: posts)
+        _ = await (mediaInfoTask, linkPreviewTask)
+    }
+    
+    private func loadPostsMediaInfo(for posts: [HomeScreenPost]) async {
+        let postsToFetchMedia = posts.filter {
+            $0.mediaInfo != nil && state.postMediaInfoMap[$0.id] == nil
+        }
+        await withTaskGroup(of: (String, ZPostMedia)?.self) { group in
+            for post in postsToFetchMedia {
+                group.addTask {
+                    guard let mediaId = post.mediaInfo?.id else { return nil }
+                    if let result = await withTimeout(seconds: 5, operation: {
+                        await self.userSession.clientProxy.getPostMediaInfo(mediaId: mediaId)
+                    }), case let .success(result) = result {
+                        return (post.id, result)
+                    }
+                    return nil
                 }
+            }
+            
+            for await item in group {
+                guard let (postId, media) = item else { continue }
+                state.postMediaInfoMap[postId] = HomeScreenPostMediaInfo(media: media)
             }
         }
     }
     
-    private func loadPostLinkPreviews(for posts: [HomeScreenPost]) {
-        Task {
-            let postsToFetchLinkPreviews = posts.filter({
-                LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: $0.postText) != nil && state.postLinkPreviewsMap[$0.id] == nil
-            })
-            let results = await postsToFetchLinkPreviews.asyncMap { post in
-                let url = LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: post.postText)!
-                let result = await userSession.clientProxy.fetchYoutubeLinkMetaData(youtubrUrl: url)
-                return (post.id, result)
-            }
-            for result in results {
-                if case let .success(linkPreview) = result.1 {
-                    state.postLinkPreviewsMap[result.0] = linkPreview
+    private func loadPostLinkPreviews(for posts: [HomeScreenPost]) async {
+        let postsToFetchLinkPreviews = posts.filter({
+            LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: $0.postText) != nil && state.postLinkPreviewsMap[$0.id] == nil
+        })
+        await withTaskGroup(of: (String, ZLinkPreview)?.self) { group in
+            for post in postsToFetchLinkPreviews {
+                guard let url = LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: post.postText) else { continue }
+                group.addTask {
+                    if let previewResult = await withTimeout(seconds: 5, operation: {
+                        await self.userSession.clientProxy.fetchYoutubeLinkMetaData(youtubrUrl: url)
+                    }), case let .success(preview) = previewResult {
+                        return (post.id, preview)
+                    }
+                    return nil
                 }
+            }
+            for await item in group {
+                guard let (postId, preview) = item else { continue }
+                state.postLinkPreviewsMap[postId] = preview
             }
         }
     }

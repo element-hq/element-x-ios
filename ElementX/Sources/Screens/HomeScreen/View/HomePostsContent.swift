@@ -78,7 +78,9 @@ struct HomePostsContent: View {
                                 ProgressView()
                                     .padding()
                                     .onAppear {
-                                        context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                            context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
+                                        }
                                     }
                             } else {
                                 HomeTabBottomSpace()

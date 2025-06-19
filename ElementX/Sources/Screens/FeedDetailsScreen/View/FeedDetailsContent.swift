@@ -289,26 +289,9 @@ struct FeedDetailsSection: View {
                     }
             }
             
-            if let mediaInfo = post.mediaInfo,
-               let url = URL(string: mediaInfo.url ?? "") {
-                if mediaInfo.isVideo {
-                    VideoPlayerView(videoURL: url)
-                        .frame(height: 300)
-                        .cornerRadius(4)
-                        .onLongPressGesture {
-                            context.send(viewAction: .openMediaPreview(url))
-                        }
-                } else {
-                    KFAnimatedImage(url)
-                        .placeholder {
-                            ProgressView()
-                        }
-                        .fade(duration: 0.3)
-                        .aspectRatio(mediaInfo.aspectRatio, contentMode: .fit)
-                        .cornerRadius(4, corners: .allCorners)
-                        .onTapGesture {
-                            context.send(viewAction: .openMediaPreview(url))
-                        }
+            if let mediaInfo = post.mediaInfo {
+                HomePostMediaPreview(mediaInfo: mediaInfo, mediaUrlString: mediaInfo.url) { url in
+                    context.send(viewAction: .openMediaPreview(url))
                 }
             }
             

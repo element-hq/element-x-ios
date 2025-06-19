@@ -145,8 +145,8 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                     }
                     state.userFeeds = userFeeds.uniqued(on: \.id)
                     state.userFeedsListMode = .feeds
-                    loadFeedMediaInfo(for: state.userFeeds)
-                    loadFeedLinkPreviews(for: state.userFeeds)
+                    
+                    await loadPostsContentConcurrently(for: state.userFeeds)
                 }
             case .failure(let error):
                 MXLog.error("Failed to fetch zero post replies: \(error)")
@@ -194,35 +194,55 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         }
     }
     
-    private func loadFeedMediaInfo(for posts: [HomeScreenPost]) {
-        Task {
-            let postsToFetchMedia = posts.filter({ $0.mediaInfo != nil && state.userFeedsMediaInfoMap[$0.id] == nil })
-            let results = await postsToFetchMedia.asyncMap { post in
-                await clientProxy.getPostMediaInfo(mediaId: post.mediaInfo!.id)
-            }
-            for result in results {
-                if case let .success(media) = result,
-                   let postId = postsToFetchMedia.first(where: { $0.mediaInfo!.id == media.media.id })?.id {
-                    state.userFeedsMediaInfoMap[postId] = HomeScreenPostMediaInfo(media: media)
+    private func loadPostsContentConcurrently(for posts: [HomeScreenPost]) async {
+        async let mediaInfoTask: () = loadPostsMediaInfo(for: posts)
+        async let linkPreviewTask: () = loadPostLinkPreviews(for: posts)
+        _ = await (mediaInfoTask, linkPreviewTask)
+    }
+    
+    private func loadPostsMediaInfo(for posts: [HomeScreenPost]) async {
+        let postsToFetchMedia = posts.filter {
+            $0.mediaInfo != nil && state.userFeedsMediaInfoMap[$0.id] == nil
+        }
+        await withTaskGroup(of: (String, ZPostMedia)?.self) { group in
+            for post in postsToFetchMedia {
+                group.addTask {
+                    guard let mediaId = post.mediaInfo?.id else { return nil }
+                    if let result = await withTimeout(seconds: 5, operation: {
+                        await self.clientProxy.getPostMediaInfo(mediaId: mediaId)
+                    }), case let .success(result) = result {
+                        return (post.id, result)
+                    }
+                    return nil
                 }
+            }
+            
+            for await item in group {
+                guard let (postId, media) = item else { continue }
+                state.userFeedsMediaInfoMap[postId] = HomeScreenPostMediaInfo(media: media)
             }
         }
     }
     
-    private func loadFeedLinkPreviews(for posts: [HomeScreenPost]) {
-        Task {
-            let postsToFetchLinkPreviews = posts.filter({
-                LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: $0.postText) != nil && state.userFeedsLinkPreviewsMap[$0.id] == nil
-            })
-            let results = await postsToFetchLinkPreviews.asyncMap { post in
-                let url = LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: post.postText)!
-                let result = await clientProxy.fetchYoutubeLinkMetaData(youtubrUrl: url)
-                return (post.id, result)
-            }
-            for result in results {
-                if case let .success(linkPreview) = result.1 {
-                    state.userFeedsLinkPreviewsMap[result.0] = linkPreview
+    private func loadPostLinkPreviews(for posts: [HomeScreenPost]) async {
+        let postsToFetchLinkPreviews = posts.filter({
+            LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: $0.postText) != nil && state.userFeedsLinkPreviewsMap[$0.id] == nil
+        })
+        await withTaskGroup(of: (String, ZLinkPreview)?.self) { group in
+            for post in postsToFetchLinkPreviews {
+                guard let url = LinkPreviewUtil.shared.firstAvailableYoutubeLink(from: post.postText) else { continue }
+                group.addTask {
+                    if let previewResult = await withTimeout(seconds: 5, operation: {
+                        await self.clientProxy.fetchYoutubeLinkMetaData(youtubrUrl: url)
+                    }), case let .success(preview) = previewResult {
+                        return (post.id, preview)
+                    }
+                    return nil
                 }
+            }
+            for await item in group {
+                guard let (postId, preview) = item else { continue }
+                state.userFeedsLinkPreviewsMap[postId] = preview
             }
         }
     }

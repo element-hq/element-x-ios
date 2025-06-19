@@ -832,7 +832,6 @@
 		18E9A5E12C9829970082DDA4 /* PlaceholderAvatarImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C705E605EF57C19DBE86FFA1 /* PlaceholderAvatarImage.swift */; };
 		18E9A5E22C9829970082DDA4 /* PlaceholderScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF34A2FD6797535C95AC918D /* PlaceholderScreenCoordinator.swift */; };
 		18E9A5E32C9829970082DDA4 /* PlainMentionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE78FA0011E07920AE83135 /* PlainMentionBuilder.swift */; };
-		18E9A5E42C9829970082DDA4 /* PlatformViewVersionPredicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26813CCE39221FE30BF22CD /* PlatformViewVersionPredicate.swift */; };
 		18E9A5E52C9829970082DDA4 /* ZeroAuthApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */; };
 		18E9A5E62C9829970082DDA4 /* PollFormScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D622EC7898469BB1D0881CDD /* PollFormScreen.swift */; };
 		18E9A5E72C9829970082DDA4 /* PollFormScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F8664F1FB95AF3C4202478 /* PollFormScreenCoordinator.swift */; };
@@ -9960,7 +9959,6 @@
 				7903937A2D4D62C70022E293 /* HomePostsContent.swift in Sources */,
 				18E9A5E32C9829970082DDA4 /* PlainMentionBuilder.swift in Sources */,
 				18FFCED52CEC8F71002F2647 /* RoomSelectionScreenViewModel.swift in Sources */,
-				18E9A5E42C9829970082DDA4 /* PlatformViewVersionPredicate.swift in Sources */,
 				18E9A5E52C9829970082DDA4 /* ZeroAuthApi.swift in Sources */,
 				18E9A5E62C9829970082DDA4 /* PollFormScreen.swift in Sources */,
 				18E9A5E72C9829970082DDA4 /* PollFormScreenCoordinator.swift in Sources */,
@@ -11835,7 +11833,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.15.8;
+				MARKETING_VERSION = 0.15.9;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -11871,7 +11869,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.15.8;
+				MARKETING_VERSION = 0.15.9;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

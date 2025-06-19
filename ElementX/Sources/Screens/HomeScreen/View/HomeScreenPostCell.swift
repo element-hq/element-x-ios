@@ -113,26 +113,9 @@ struct HomeScreenPostCell: View {
                         }
                 }
                 
-                if let mediaInfo = post.mediaInfo,
-                   let url = URL(string: postMediaUrl ?? "") {
-                    if mediaInfo.isVideo {
-                        VideoPlayerView(videoURL: url)
-                            .frame(height: 300)
-                            .cornerRadius(4)
-                            .onLongPressGesture {
-                                onMediaTapped(url)
-                            }
-                    } else {
-                        KFAnimatedImage(url)
-                            .placeholder {
-                                ProgressView()
-                            }
-                            .fade(duration: 0.3)
-                            .aspectRatio(mediaInfo.aspectRatio, contentMode: .fit)
-                            .cornerRadius(4, corners: .allCorners)
-                            .onTapGesture {
-                                onMediaTapped(url)
-                            }
+                if let mediaInfo = post.mediaInfo {
+                    HomePostMediaPreview(mediaInfo: mediaInfo, mediaUrlString: postMediaUrl) { url in
+                        onMediaTapped(url)
                     }
                 }
                 
@@ -233,6 +216,50 @@ struct HomePostCellLinkPreview: View {
                         .lineLimit(1)
                 }
             }
+        }
+    }
+}
+
+struct HomePostMediaPreview: View {
+    let mediaInfo: HomeScreenPostMediaInfo
+    let mediaUrlString: String?
+    let onMediaTapped: (URL) -> Void
+    
+    var mediaURL: URL {
+        URL(string: mediaUrlString ?? "") ?? URL.dummayURL
+    }
+    
+    var body: some View {
+        if mediaInfo.isVideo {
+            if mediaUrlString != nil {
+                VideoPlayerView(videoURL: mediaURL)
+                    .frame(height: 300)
+                    .cornerRadius(4)
+                    .onLongPressGesture {
+                        if mediaUrlString != nil {
+                            onMediaTapped(mediaURL)
+                        }
+                    }
+            } else {
+                ZStack(alignment: .center) {
+                    ProgressView()
+                }
+                .frame(maxWidth: .infinity, minHeight: 300)
+                .cornerRadius(4)
+            }
+        } else {
+            KFAnimatedImage(mediaURL)
+                .placeholder {
+                    ProgressView()
+                }
+                .fade(duration: 0.3)
+                .aspectRatio(mediaInfo.aspectRatio, contentMode: .fit)
+                .cornerRadius(4, corners: .allCorners)
+                .onTapGesture {
+                    if mediaUrlString != nil {
+                        onMediaTapped(mediaURL)
+                    }
+                }
         }
     }
 }

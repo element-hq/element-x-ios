@@ -70,20 +70,12 @@ struct HomeScreen: View {
                 }
             }
             .onReceive(scrollViewAdapter.scrollDirection) { direction in
-                MXLog.info("scroll direction: \(direction)")
-                if scrollViewAdapter.isAtTopEdge.value {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        switch direction {
-                        case .up:
-                            hideNavigationBar = false
-                        case .down:
-                            hideNavigationBar = true
-                        case .none:
-                            break
-                        }
-                    }
-                } else {
-                    hideNavigationBar = false
+                let shouldHideNavBar = scrollViewAdapter.isAtTopEdge.value && direction == .down
+                
+                guard shouldHideNavBar != hideNavigationBar else { return }
+                
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    hideNavigationBar = shouldHideNavBar
                 }
             }
             

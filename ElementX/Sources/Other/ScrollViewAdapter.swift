@@ -99,7 +99,7 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
     
     private func updateScrollDirection(with scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
-        let threshold: CGFloat = 5 // Minimum scroll distance to trigger direction change
+        let threshold: CGFloat = 10 // Minimum scroll distance to trigger direction change
         
 //        guard scrollView.contentSize.height > scrollView.bounds.height else {
 //            return
@@ -112,7 +112,7 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
             let maxOffset = max(0, scrollView.contentSize.height - scrollView.frame.height + scrollView.contentInset.bottom)
             
             // Avoid direction changes at very top or bottom
-            if currentOffset > 10 && currentOffset < maxOffset - 10 {
+            if currentOffset > 20 && currentOffset < maxOffset - 20 {
                 let direction: ScrollDirection = currentOffset > lastContentOffset ? .down : .up
                 scrollDirectionSubject.send(direction)
             }

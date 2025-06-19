@@ -15,6 +15,8 @@ struct PlaceholderAvatarImage: View {
     private let contentID: String?
     private let onTap: (() -> Void)?
     
+    @State private var imageVisible = false
+    
     var body: some View {
         GeometryReader { _ in
 //            ZStack(alignment: .center) {
@@ -29,20 +31,20 @@ struct PlaceholderAvatarImage: View {
 //                        .frame(alignment: .center)
 //                }
 //            }
-            ZStack(alignment: .center) {
-                backgroundColor
-                
-                Image(asset: Asset.Images.defaultAvatarIcon)
-                    .resizable()
-                    .animation(.elementDefault, value: contentID)
-                    .frame(alignment: .center)
-                    .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
-                    .scaledToFit()
-                    .padding(4)
-            }
-            .onTapGesture {
-                onTap?()
-            }
+            Image(asset: Asset.Images.defaultAvatarIcon)
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(Asset.Colors.blue11.swiftUIColor)
+                .padding(4)
+                .opacity(imageVisible ? 1 : 0)
+                .onAppear {
+                    withAnimation(.easeIn(duration: 0.3)) {
+                        imageVisible = true
+                    }
+                }
+                .onTapGesture {
+                    onTap?()
+                }
         }
         .aspectRatio(1, contentMode: .fill)
     }
