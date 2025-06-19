@@ -6,28 +6,28 @@
 //
 
 import SwiftUI
-import SwiftUIIntrospect
+@_spi(Advanced) import SwiftUIIntrospect
 
 extension PlatformViewVersionPredicate<TextFieldType, UITextField> {
     static var supportedVersions: Self {
-        .iOS(.v17, .v18)
+        .iOS(.v16...)
     }
 }
 
 extension PlatformViewVersionPredicate<ScrollViewType, UIScrollView> {
     static var supportedVersions: Self {
-        .iOS(.v17, .v18)
+        .iOS(.v16...)
     }
 }
 
 extension PlatformViewVersionPredicate<ViewControllerType, UIViewController> {
     static var supportedVersions: Self {
-        .iOS(.v17, .v18)
+        .iOS(.v16...)
     }
 }
 
 extension PlatformViewVersionPredicate<NavigationStackType, UINavigationController> {
     static var supportedVersions: Self {
-        .iOS(.v17, .v18)
+        .iOS(.v16...)
     }
 }
