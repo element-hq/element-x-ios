@@ -1197,7 +1197,6 @@
 		EC280623A42904341363EAAF /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = A20EA00CCB9DBE0FFB17DD09 /* Collections */; };
 		EC3320639828BED8B3E5F2C6 /* EncryptionResetScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5875F7C0A2398E9F134B1284 /* EncryptionResetScreenViewModel.swift */; };
 		ED3E91E6166E4923791ACA84 /* ResolveVerifiedUserSendFailureScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56852036214ABA9D7D305768 /* ResolveVerifiedUserSendFailureScreenViewModelProtocol.swift */; };
-		ED564C8C7C43CF5F67000368 /* PlatformViewVersionPredicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26813CCE39221FE30BF22CD /* PlatformViewVersionPredicate.swift */; };
 		ED635D7F00FA07E94D3CE1E8 /* PreviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B796D347E53631576F631C /* PreviewTests.swift */; };
 		ED90A59F068FD0CA27E602ED /* UserProfileListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10DA51DBC8C7E1460DBCCBD /* UserProfileListRow.swift */; };
 		EDB6915EC953BB2A44AA608E /* EditRoomAddressScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 906451FB8CF27C628152BF7A /* EditRoomAddressScreenViewModelTests.swift */; };
@@ -2418,7 +2417,6 @@
 		D1D8479BB704B7EF696F8ABE /* RoomPollsHistoryScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPollsHistoryScreenCoordinator.swift; sourceTree = "<group>"; };
 		D1D97BAF04AA150C0EF03021 /* VerificationBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationBadge.swift; sourceTree = "<group>"; };
 		D263254AFE5B7993FFBBF324 /* NSE.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NSE.entitlements; sourceTree = "<group>"; };
-		D26813CCE39221FE30BF22CD /* PlatformViewVersionPredicate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformViewVersionPredicate.swift; sourceTree = "<group>"; };
 		D28F7A6CEEA4A2815B0F0F55 /* SettingsFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFlowCoordinator.swift; sourceTree = "<group>"; };
 		D316BB02636AF2174F2580E6 /* SoftLogoutScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftLogoutScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		D33116993D54FADC0C721C1F /* Application.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Application.swift; sourceTree = "<group>"; };
@@ -3722,7 +3720,6 @@
 				95BAC0F6C9644336E9567EE6 /* NSRegularExpresion.swift */,
 				5327E3B3C58BEB0E65F4CF98 /* Observable.swift */,
 				62B07B296D7A9D2F09120853 /* OrderedSet.swift */,
-				D26813CCE39221FE30BF22CD /* PlatformViewVersionPredicate.swift */,
 				077B01C13BBA2996272C5FB5 /* ProcessInfo.swift */,
 				1DFE0E493FB55E5A62E7852A /* ProposedViewSize.swift */,
 				7310D8DFE01AF45F0689C3AA /* Publisher.swift */,
@@ -7463,7 +7460,6 @@
 				9D79B94493FB32249F7E472F /* PlaceholderAvatarImage.swift in Sources */,
 				1BA04D05EBC6646958B1BE60 /* PlaceholderScreenCoordinator.swift in Sources */,
 				EF0D0155DD104C7A41A2EB0E /* PlainMentionBuilder.swift in Sources */,
-				ED564C8C7C43CF5F67000368 /* PlatformViewVersionPredicate.swift in Sources */,
 				B79E8AB83EBBDCD476D0362F /* PollFormScreen.swift in Sources */,
 				3DAD62988F072607441CB7A5 /* PollFormScreenCoordinator.swift in Sources */,
 				70B83D44043293B4B77440B9 /* PollFormScreenModels.swift in Sources */,
@@ -8864,7 +8860,7 @@
 			repositoryURL = "https://github.com/element-hq/compound-ios";
 			requirement = {
 				kind = revision;
-				revision = 7dcd851f7944ef99820f7ffeaef724c994d2d50a;
+				revision = 4aa89193ba5bfa0d83f9bbc584900e518fdb3a26;
 			};
 		};
 		F76A08D0EA29A07A54F4EB4D /* XCRemoteSwiftPackageReference "swift-collections" */ = {
