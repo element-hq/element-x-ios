@@ -117,7 +117,10 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             try? await Task.sleep(for: .seconds(30))
             guard !Task.isCancelled, let self else { return }
             MXLog.error("Failed to join Element Call: Timeout")
-            state.bindings.alertInfo = .init(id: UUID(), title: L10n.commonError, message: L10n.errorUnknown, primaryButton: .init(title: L10n.actionDismiss) { [weak self] in self?.actionsSubject.send(.dismiss) })
+            state.bindings.alertInfo = .init(id: UUID(),
+                                             title: L10n.commonError,
+                                             message: L10n.errorUnknown,
+                                             primaryButton: .init(title: L10n.actionDismiss) { [weak self] in self?.actionsSubject.send(.dismiss) })
             timeoutTask = nil
         }
     }
