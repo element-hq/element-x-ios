@@ -127,6 +127,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var isReportRoomSupported: Bool { get async }
     
+    var isLiveKitRTCSupported: Bool { get async }
+    
     func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError>
     
     func startSync()

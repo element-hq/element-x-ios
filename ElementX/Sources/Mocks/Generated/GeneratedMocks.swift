@@ -2330,6 +2330,23 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingIsReportRoomSupported: Bool!
     var isReportRoomSupportedClosure: (() async -> Bool)?
+    var isLiveKitRTCSupportedCallsCount = 0
+    var isLiveKitRTCSupportedCalled: Bool {
+        return isLiveKitRTCSupportedCallsCount > 0
+    }
+
+    var isLiveKitRTCSupported: Bool {
+        get async {
+            isLiveKitRTCSupportedCallsCount += 1
+            if let isLiveKitRTCSupportedClosure = isLiveKitRTCSupportedClosure {
+                return await isLiveKitRTCSupportedClosure()
+            } else {
+                return underlyingIsLiveKitRTCSupported
+            }
+        }
+    }
+    var underlyingIsLiveKitRTCSupported: Bool!
+    var isLiveKitRTCSupportedClosure: (() async -> Bool)?
 
     //MARK: - isOnlyDeviceLeft
 
