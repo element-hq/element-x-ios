@@ -116,7 +116,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         timeoutTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(30))
             guard !Task.isCancelled, let self else { return }
-            MXLog.error("[CallscreenViewModel] failed to join Element Call: Timeout")
+            MXLog.error("Failed to join Element Call: Timeout")
             state.bindings.alertInfo = .init(id: UUID(), title: L10n.commonError, message: L10n.errorUnknown, primaryButton: .init(title: L10n.actionDismiss) { [weak self] in self?.actionsSubject.send(.dismiss) })
             timeoutTask = nil
         }
@@ -156,9 +156,9 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     // MARK: - Private
 
     private func handleWidgetAction(message: String) async {
-        if let jsonDictionary = try? message.asJsonDictionary,
-           jsonDictionary["api"] as? String == "fromWidget",
-           jsonDictionary["action"] as? String == "io.element.join" {
+        if timeoutTask != nil,
+           let decodedMessage = try? DecodedWidgetMessage.decode(message: message),
+           decodedMessage.hasJoined {
             // This means that the call room was joined succesfully, we can stop the timeout task
             timeoutTask = nil
         }

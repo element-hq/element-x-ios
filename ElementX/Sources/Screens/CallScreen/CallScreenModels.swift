@@ -94,3 +94,23 @@ enum CallScreenJavaScriptMessageName: String, CaseIterable {
         allCases.map(\.postMessageScript).joined(separator: "\n")
     }
 }
+
+struct DecodedWidgetMessage: Decodable {
+    private static let decoder = JSONDecoder()
+    private static let joinAction = "io.element.join"
+    private static let fromWidget = "fromWidget"
+    
+    let action: String?
+    let api: String?
+    
+    static func decode(message: String) throws -> DecodedWidgetMessage? {
+        guard let data = message.data(using: .utf8) else {
+            return nil
+        }
+        return try decoder.decode(DecodedWidgetMessage.self, from: data)
+    }
+    
+    var hasJoined: Bool {
+        action == Self.joinAction && api == Self.fromWidget
+    }
+}
