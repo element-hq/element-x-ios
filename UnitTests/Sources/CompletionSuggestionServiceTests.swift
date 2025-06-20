@@ -60,7 +60,11 @@ final class CompletionSuggestionServiceTests: XCTestCase {
     func testUserSuggestionsIncludingAllUsers() async throws {
         let alice: RoomMemberProxyMock = .mockAlice
         let members: [RoomMemberProxyMock] = [alice, .mockBob, .mockCharlie, .mockMe]
-        let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID", name: "test", members: members, canUserTriggerRoomNotification: true))
+        let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID",
+                                                      name: "test",
+                                                      members: members,
+                                                      powerLevelsConfiguration: .init(canUserTriggerRoomNotification: true)))
+        
         let roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
         let service = CompletionSuggestionService(roomProxy: roomProxyMock,
                                                   roomListPublisher: roomSummaryProvider.roomListPublisher.eraseToAnyPublisher())
@@ -88,7 +92,10 @@ final class CompletionSuggestionServiceTests: XCTestCase {
         let alice: RoomMemberProxyMock = .mockAlice
         let bob: RoomMemberProxyMock = .mockBob
         let members: [RoomMemberProxyMock] = [alice, bob, .mockMe]
-        let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID", name: "test", members: members, canUserTriggerRoomNotification: true))
+        let roomProxyMock = JoinedRoomProxyMock(.init(id: "roomID",
+                                                      name: "test",
+                                                      members: members,
+                                                      powerLevelsConfiguration: .init(canUserTriggerRoomNotification: true)))
         let roomSummaryProvider = RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))
         let service = CompletionSuggestionService(roomProxy: roomProxyMock,
                                                   roomListPublisher: roomSummaryProvider.roomListPublisher.eraseToAnyPublisher())

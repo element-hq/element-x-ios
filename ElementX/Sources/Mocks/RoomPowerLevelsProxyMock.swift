@@ -7,24 +7,35 @@
 
 import MatrixRustSDK
 
+struct RoomPowerLevelsProxyMockConfiguration {
+    var canUserSendMessage = true
+    var canUserSendState = false
+    var canUserInvite = true
+    var canUserRedactOther = false
+    var canUserRedactOwn = true
+    var canUserKick = false
+    var canUserBan = false
+    var canUserTriggerRoomNotification = false
+    var canUserPin = true
+    var canUserJoinCall = true
+}
+
 extension RoomPowerLevelsProxyMock {
-    struct Configuration { }
-    
-    convenience init(configuration: Configuration) {
+    convenience init(configuration: RoomPowerLevelsProxyMockConfiguration) {
         self.init()
         
         underlyingValues = RoomPowerLevelsValues.mock
         
-        canUserUserIDSendMessageReturnValue = .success(true)
-        canUserUserIDSendStateEventReturnValue = .success(true)
-        canUserInviteUserIDReturnValue = .success(true)
-        canUserRedactOtherUserIDReturnValue = .success(true)
-        canUserRedactOwnUserIDReturnValue = .success(true)
-        canUserKickUserIDReturnValue = .success(true)
-        canUserBanUserIDReturnValue = .success(true)
-        canUserTriggerRoomNotificationUserIDReturnValue = .success(true)
-        canUserPinOrUnpinUserIDReturnValue = .success(true)
-        canUserJoinCallUserIDReturnValue = .success(true)
+        canUserUserIDSendMessageReturnValue = .success(configuration.canUserSendMessage)
+        canUserUserIDSendStateEventReturnValue = .success(configuration.canUserSendState)
+        canUserInviteUserIDReturnValue = .success(configuration.canUserInvite)
+        canUserRedactOtherUserIDReturnValue = .success(configuration.canUserRedactOther)
+        canUserRedactOwnUserIDReturnValue = .success(configuration.canUserRedactOwn)
+        canUserKickUserIDReturnValue = .success(configuration.canUserKick)
+        canUserBanUserIDReturnValue = .success(configuration.canUserBan)
+        canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
+        canUserPinOrUnpinUserIDReturnValue = .success(configuration.canUserPin)
+        canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
     }
 }
 

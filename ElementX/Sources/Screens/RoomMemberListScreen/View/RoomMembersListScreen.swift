@@ -198,7 +198,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
                                               roomProxy: JoinedRoomProxyMock(.init(name: "Some room",
                                                                                    members: members,
                                                                                    ownUserID: ownUserID,
-                                                                                   canUserInvite: false)),
+                                                                                   powerLevelsConfiguration: .init(canUserInvite: false))),
                                               mediaProvider: MediaProviderMock(configuration: .init()),
                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                               analytics: ServiceLocator.shared.analytics)
