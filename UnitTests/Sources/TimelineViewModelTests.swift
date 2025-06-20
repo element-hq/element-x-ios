@@ -494,7 +494,8 @@ class TimelineViewModelTests: XCTestCase {
     }
     
     func testCanUserPinEvents() async throws {
-        let configuration = JoinedRoomProxyMockConfiguration(name: "", canUserPin: true)
+        let configuration = JoinedRoomProxyMockConfiguration(name: "",
+                                                             powerLevelsConfiguration: .init(canUserPin: true))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
         let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()

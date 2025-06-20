@@ -303,7 +303,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         roomProxyMock = JoinedRoomProxyMock(.init(name: "Test",
                                                   isPublic: true,
                                                   members: mockedMembers,
-                                                  canUserInvite: false))
+                                                  powerLevelsConfiguration: .init(canUserInvite: false)))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                clientProxy: ClientProxyMock(.init()),
                                                mediaProvider: MediaProviderMock(configuration: .init()),
@@ -733,7 +733,12 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testKnockRequestsCounterIsNotShownIfNoPermissions() async throws {
         ServiceLocator.shared.settings.knockingEnabled = true
         let mockedRequests: [KnockRequestProxyMock] = [.init(), .init()]
-        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, isPublic: false, knockRequestsState: .loaded(mockedRequests), canUserInvite: false, joinRule: .knock))
+        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test",
+                                                  isDirect: false,
+                                                  isPublic: false,
+                                                  knockRequestsState: .loaded(mockedRequests),
+                                                  joinRule: .knock,
+                                                  powerLevelsConfiguration: .init(canUserInvite: false)))
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                clientProxy: ClientProxyMock(.init()),
                                                mediaProvider: MediaProviderMock(configuration: .init()),

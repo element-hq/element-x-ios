@@ -370,8 +370,8 @@ class RoomScreenViewModelTests: XCTestCase {
     func testKnockRequestsBannerDoesNotAppearIfUserHasNoPermission() async throws {
         ServiceLocator.shared.settings.knockingEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!"))]),
-                                                      canUserInvite: false,
-                                                      joinRule: .knock))
+                                                      joinRule: .knock,
+                                                      powerLevelsConfiguration: .init(canUserInvite: false)))
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,

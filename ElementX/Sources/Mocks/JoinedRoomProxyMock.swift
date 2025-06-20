@@ -36,12 +36,6 @@ struct JoinedRoomProxyMockConfiguration {
     var ownUserID = RoomMemberProxyMock.mockMe.userID
     var inviter: RoomMemberProxyProtocol?
     
-    var canUserSendMessage = true
-    var canUserInvite = true
-    var canUserTriggerRoomNotification = false
-    var canUserJoinCall = true
-    var canUserPin = true
-    
     var shouldUseAutoUpdatingTimeline = false
     
     var joinRule: JoinRule?
@@ -50,6 +44,8 @@ struct JoinedRoomProxyMockConfiguration {
     var isVisibleInPublicDirectory = false
     var predecessor: PredecessorRoom?
     var successor: SuccessorRoom?
+    
+    var powerLevelsConfiguration = RoomPowerLevelsProxyMockConfiguration()
 }
 
 extension JoinedRoomProxyMock {
@@ -99,24 +95,17 @@ extension JoinedRoomProxyMock {
         }
         updatePowerLevelsForUsersReturnValue = .success(())
         
-        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: configuration.powerLevelsConfiguration)
         
-        powerLevelsProxyMock.canUserUserIDSendMessageReturnValue = .success(configuration.canUserSendMessage)
         powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { [weak self] userID, _ in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }
-        powerLevelsProxyMock.canUserInviteUserIDReturnValue = .success(configuration.canUserInvite)
-        powerLevelsProxyMock.canUserRedactOtherUserIDReturnValue = .success(false)
-        powerLevelsProxyMock.canUserRedactOwnUserIDReturnValue = .success(true)
         powerLevelsProxyMock.canUserKickUserIDClosure = { [weak self] userID in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }
         powerLevelsProxyMock.canUserBanUserIDClosure = { [weak self] userID in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }
-        powerLevelsProxyMock.canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
-        powerLevelsProxyMock.canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
-        powerLevelsProxyMock.canUserPinOrUnpinUserIDReturnValue = .success(configuration.canUserPin)
         
         powerLevelsReturnValue = .success(powerLevelsProxyMock)
         
