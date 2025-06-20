@@ -89,9 +89,8 @@ extension JoinedRoomProxyMock {
         markAsReadReceiptTypeReturnValue = .success(())
         flagAsFavouriteReturnValue = .success(())
         
-        powerLevelsReturnValue = .success(.mock)
         applyPowerLevelChangesReturnValue = .success(())
-        resetPowerLevelsReturnValue = .success(.mock)
+        resetPowerLevelsReturnValue = .success(())
         suggestedRoleForClosure = { [weak self] userID in
             guard case .success(let member) = await self?.getMember(userID: userID) else {
                 return .failure(.sdkError(RoomProxyMockError.generic))
@@ -99,22 +98,27 @@ extension JoinedRoomProxyMock {
             return .success(member.role)
         }
         updatePowerLevelsForUsersReturnValue = .success(())
-        canUserUserIDSendMessageReturnValue = .success(configuration.canUserSendMessage)
-        canUserUserIDSendStateEventClosure = { [weak self] userID, _ in
+        
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        
+        powerLevelsProxyMock.canUserUserIDSendMessageReturnValue = .success(configuration.canUserSendMessage)
+        powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { [weak self] userID, _ in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }
-        canUserInviteUserIDReturnValue = .success(configuration.canUserInvite)
-        canUserRedactOtherUserIDReturnValue = .success(false)
-        canUserRedactOwnUserIDReturnValue = .success(true)
-        canUserKickUserIDClosure = { [weak self] userID in
+        powerLevelsProxyMock.canUserInviteUserIDReturnValue = .success(configuration.canUserInvite)
+        powerLevelsProxyMock.canUserRedactOtherUserIDReturnValue = .success(false)
+        powerLevelsProxyMock.canUserRedactOwnUserIDReturnValue = .success(true)
+        powerLevelsProxyMock.canUserKickUserIDClosure = { [weak self] userID in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }
-        canUserBanUserIDClosure = { [weak self] userID in
+        powerLevelsProxyMock.canUserBanUserIDClosure = { [weak self] userID in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }
-        canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
-        canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
-        canUserPinOrUnpinUserIDReturnValue = .success(configuration.canUserPin)
+        powerLevelsProxyMock.canUserTriggerRoomNotificationUserIDReturnValue = .success(configuration.canUserTriggerRoomNotification)
+        powerLevelsProxyMock.canUserJoinCallUserIDReturnValue = .success(configuration.canUserJoinCall)
+        powerLevelsProxyMock.canUserPinOrUnpinUserIDReturnValue = .success(configuration.canUserPin)
+        
+        powerLevelsReturnValue = .success(powerLevelsProxyMock)
         
         kickUserReasonReturnValue = .success(())
         banUserReasonReturnValue = .success(())

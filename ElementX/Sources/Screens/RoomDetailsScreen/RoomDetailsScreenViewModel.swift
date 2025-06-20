@@ -91,13 +91,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .store(in: &cancellables)
         
         Task {
-            let userID = roomProxy.ownUserID
-            if case let .success(permission) = await roomProxy.canUserJoinCall(userID: userID) {
-                state.canJoinCall = permission
-            }
-        }
-        
-        Task {
             if case let .success(permalinkURL) = await roomProxy.matrixToPermalink() {
                 state.permalink = permalinkURL
             }
@@ -288,13 +281,16 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
     
     private func updatePowerLevelPermissions() async {
-        state.canEditRoomName = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName).get()) == true
-        state.canEditRoomTopic = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic).get()) == true
-        state.canEditRoomAvatar = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar).get()) == true
         state.canEditRolesOrPermissions = await (try? roomProxy.suggestedRole(for: roomProxy.ownUserID).get()) == .administrator
-        state.canInviteUsers = await (try? roomProxy.canUserInvite(userID: roomProxy.ownUserID).get()) == true
-        state.canKickUsers = await (try? roomProxy.canUserKick(userID: roomProxy.ownUserID).get()) == true
-        state.canBanUsers = await (try? roomProxy.canUserBan(userID: roomProxy.ownUserID).get()) == true
+        
+        let powerLevels = try? await roomProxy.powerLevels().get()
+        state.canEditRoomName = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName).get()) == true
+        state.canEditRoomTopic = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic).get()) == true
+        state.canEditRoomAvatar = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar).get()) == true
+        state.canInviteUsers = (try? powerLevels?.canUserInvite(userID: roomProxy.ownUserID).get()) == true
+        state.canKickUsers = (try? powerLevels?.canUserKick(userID: roomProxy.ownUserID).get()) == true
+        state.canBanUsers = (try? powerLevels?.canUserBan(userID: roomProxy.ownUserID).get()) == true
+        state.canJoinCall = (try? powerLevels?.canUserJoinCall(userID: roomProxy.ownUserID).get()) == true
     }
     
     private func setupNotificationSettingsSubscription() {

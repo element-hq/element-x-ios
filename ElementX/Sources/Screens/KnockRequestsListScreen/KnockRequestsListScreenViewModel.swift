@@ -224,9 +224,10 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
     }
     
     private func updatePermissions() async {
-        state.canAccept = await (try? roomProxy.canUserInvite(userID: roomProxy.ownUserID).get()) == true
-        state.canDecline = await (try? roomProxy.canUserKick(userID: roomProxy.ownUserID).get()) == true
-        state.canBan = await (try? roomProxy.canUserBan(userID: roomProxy.ownUserID).get()) == true
+        let powerLevels = try? await roomProxy.powerLevels().get()
+        state.canAccept = (try? powerLevels?.canUserInvite(userID: roomProxy.ownUserID).get()) == true
+        state.canDecline = (try? powerLevels?.canUserKick(userID: roomProxy.ownUserID).get()) == true
+        state.canBan = (try? powerLevels?.canUserBan(userID: roomProxy.ownUserID).get()) == true
     }
     
     private static let loadingIndicatorIdentifier = "\(KnockRequestsListScreenViewModel.self)-Loading"

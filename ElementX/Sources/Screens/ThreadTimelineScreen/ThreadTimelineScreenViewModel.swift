@@ -65,6 +65,6 @@ class ThreadTimelineScreenViewModel: ThreadTimelineScreenViewModelType, ThreadTi
     // MARK: - Private
     
     private func handleRoomInfoUpdate(_ roomInfo: RoomInfoProxy) async {
-        state.canSendMessage = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
+        state.canSendMessage = await (try? roomProxy.powerLevels().get().canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
     }
 }
