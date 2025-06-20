@@ -6357,6 +6357,7 @@ class ElementCallWidgetDriverMock: ElementCallWidgetDriverProtocol, @unchecked S
     }
     var handleMessageClosure: ((String) async -> Result<Bool, ElementCallWidgetDriverError>)?
 
+    @discardableResult
     func handleMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError> {
         handleMessageCallsCount += 1
         handleMessageReceivedMessage = message

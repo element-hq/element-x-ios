@@ -137,3 +137,14 @@ extension String {
         return link
     }
 }
+
+extension String {
+    var asJsonDictionary: [String: Any]? {
+        get throws {
+            guard let data = data(using: .utf8) else {
+                return nil
+            }
+            return try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+        }
+    }
+}
