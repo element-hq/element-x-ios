@@ -552,9 +552,9 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     // MARK: - Power Levels
     
-    func powerLevels() async -> Result<RoomPowerLevels, RoomProxyError> {
+    func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol, RoomProxyError> {
         do {
-            return try await .success(room.getPowerLevels())
+            return try await .success(RoomPowerLevelsProxy(room.getPowerLevels()))
         } catch {
             MXLog.error("Failed building the current power level settings: \(error)")
             return .failure(.sdkError(error))
@@ -570,9 +570,10 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    func resetPowerLevels() async -> Result<RoomPowerLevels, RoomProxyError> {
+    func resetPowerLevels() async -> Result<Void, RoomProxyError> {
         do {
-            return try await .success(room.resetPowerLevels())
+            _ = try await room.resetPowerLevels()
+            return .success(())
         } catch {
             MXLog.error("Failed resetting the power levels: \(error)")
             return .failure(.sdkError(error))
@@ -594,87 +595,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return try await .success(room.updatePowerLevelsForUsers(updates: updates))
         } catch {
             MXLog.error("Failed updating user power levels changes: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func canUser(userID: String, sendMessage messageType: MessageLikeEventType) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserSendMessage(userId: userID, message: messageType))
-        } catch {
-            MXLog.error("Failed checking if the user can send message with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func canUser(userID: String, sendStateEvent event: StateEventType) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserSendState(userId: userID, stateEvent: event))
-        } catch {
-            MXLog.error("Failed checking if the user can send \(event) with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func canUserInvite(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserInvite(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can invite with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserRedactOther(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can redact others with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func canUserRedactOwn(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserRedactOwn(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can redact self with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func canUserKick(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserKick(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can kick with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func canUserBan(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserBan(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can ban with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserTriggerRoomNotification(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can trigger room notification with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
-    
-    func canUserPinOrUnpin(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserPinUnpin(userId: userID))
-        } catch {
-            MXLog.error("Failed checking if the user can pin or unnpin: \(error)")
             return .failure(.sdkError(error))
         }
     }
@@ -712,15 +632,6 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     // MARK: - Element Call
-    
-    func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError> {
-        do {
-            return try await .success(room.canUserSendState(userId: userID, stateEvent: .callMember))
-        } catch {
-            MXLog.error("Failed checking if the user can trigger room notification with error: \(error)")
-            return .failure(.sdkError(error))
-        }
-    }
     
     func elementCallWidgetDriver(deviceID: String) -> ElementCallWidgetDriverProtocol {
         ElementCallWidgetDriver(room: room, deviceID: deviceID)

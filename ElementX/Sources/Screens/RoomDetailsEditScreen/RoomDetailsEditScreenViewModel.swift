@@ -40,10 +40,10 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                                                                     bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")), mediaProvider: mediaProvider)
         
         Task {
-            // Can't use async let because the mocks aren't thread safe when calling the same method 🤦‍♂️
-            state.canEditAvatar = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar).get()) == .some(true)
-            state.canEditName = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName).get()) == .some(true)
-            state.canEditTopic = await (try? roomProxy.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic).get()) == .some(true)
+            let powerLevels = try? await roomProxy.powerLevels().get()
+            state.canEditAvatar = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar).get()) == .some(true)
+            state.canEditName = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName).get()) == .some(true)
+            state.canEditTopic = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic).get()) == .some(true)
         }
     }
     

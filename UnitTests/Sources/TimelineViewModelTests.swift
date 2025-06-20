@@ -517,7 +517,10 @@ class TimelineViewModelTests: XCTestCase {
         }
         try await deferred.fulfill()
         
-        roomProxyMock.canUserPinOrUnpinUserIDReturnValue = .success(false)
+        let powerLevelsMock = RoomPowerLevelsProxyMock(configuration: .init())
+        powerLevelsMock.canUserPinOrUnpinUserIDReturnValue = .success(false)
+        roomProxyMock.powerLevelsReturnValue = .success(powerLevelsMock)
+        
         deferred = deferFulfillment(viewModel.context.$viewState) { value in
             !value.canCurrentUserPin
         }

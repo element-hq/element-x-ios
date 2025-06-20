@@ -116,7 +116,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
     private func updatePermissions() async {
         switch await roomProxy.powerLevels() {
         case .success(let powerLevels):
-            state.permissions = .init(powerLevels: powerLevels)
+            state.permissions = .init(powerLevels: powerLevels.values)
         case .failure:
             break
         }

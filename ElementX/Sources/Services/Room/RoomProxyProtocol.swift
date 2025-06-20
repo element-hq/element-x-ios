@@ -152,20 +152,11 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     // MARK: - Power Levels
     
-    func powerLevels() async -> Result<RoomPowerLevels, RoomProxyError>
+    func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol, RoomProxyError>
     func applyPowerLevelChanges(_ changes: RoomPowerLevelChanges) async -> Result<Void, RoomProxyError>
-    func resetPowerLevels() async -> Result<RoomPowerLevels, RoomProxyError>
+    func resetPowerLevels() async -> Result<Void, RoomProxyError>
     func suggestedRole(for userID: String) async -> Result<RoomMemberRole, RoomProxyError>
     func updatePowerLevelsForUsers(_ updates: [(userID: String, powerLevel: Int64)]) async -> Result<Void, RoomProxyError>
-    func canUser(userID: String, sendMessage messageType: MessageLikeEventType) async -> Result<Bool, RoomProxyError>
-    func canUser(userID: String, sendStateEvent event: StateEventType) async -> Result<Bool, RoomProxyError>
-    func canUserInvite(userID: String) async -> Result<Bool, RoomProxyError>
-    func canUserRedactOther(userID: String) async -> Result<Bool, RoomProxyError>
-    func canUserRedactOwn(userID: String) async -> Result<Bool, RoomProxyError>
-    func canUserKick(userID: String) async -> Result<Bool, RoomProxyError>
-    func canUserBan(userID: String) async -> Result<Bool, RoomProxyError>
-    func canUserTriggerRoomNotification(userID: String) async -> Result<Bool, RoomProxyError>
-    func canUserPinOrUnpin(userID: String) async -> Result<Bool, RoomProxyError>
     
     // MARK: - Moderation
     
@@ -175,9 +166,7 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     // MARK: - Element Call
     
-    func canUserJoinCall(userID: String) async -> Result<Bool, RoomProxyError>
     func elementCallWidgetDriver(deviceID: String) -> ElementCallWidgetDriverProtocol
-    
     func sendCallNotificationIfNeeded() async -> Result<Void, RoomProxyError>
     
     // MARK: - Permalinks

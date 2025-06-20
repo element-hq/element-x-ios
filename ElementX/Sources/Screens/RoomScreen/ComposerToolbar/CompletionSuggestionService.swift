@@ -48,12 +48,7 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
             }
         
         Task {
-            switch await roomProxy.canUserTriggerRoomNotification(userID: roomProxy.ownUserID) {
-            case .success(let value):
-                canMentionAllUsers = value
-            case .failure:
-                canMentionAllUsers = false
-            }
+            canMentionAllUsers = await (try? roomProxy.powerLevels().get().canUserTriggerRoomNotification(userID: roomProxy.ownUserID).get()) == true
         }
     }
     

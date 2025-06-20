@@ -70,7 +70,7 @@ struct RoomPermissions {
 
 extension RoomPermissions {
     /// Create permissions from the room's power levels.
-    init(powerLevels: RoomPowerLevels) {
+    init(powerLevels: RoomPowerLevelsValues) {
         ban = RoomMemberDetails.Role(rustPowerLevel: powerLevels.ban)
         invite = RoomMemberDetails.Role(rustPowerLevel: powerLevels.invite)
         kick = RoomMemberDetails.Role(rustPowerLevel: powerLevels.kick)
@@ -102,20 +102,5 @@ extension RoomMemberDetails.Role {
     
     var rustPowerLevel: Int64 {
         suggestedPowerLevelForRole(role: rustRole)
-    }
-}
-
-extension RoomPowerLevels {
-    static var mock: RoomPowerLevels {
-        RoomPowerLevels(ban: 50,
-                        invite: 0,
-                        kick: 50,
-                        redact: 50,
-                        eventsDefault: 0,
-                        stateDefault: 50,
-                        usersDefault: 0,
-                        roomName: 50,
-                        roomAvatar: 50,
-                        roomTopic: 50)
     }
 }
