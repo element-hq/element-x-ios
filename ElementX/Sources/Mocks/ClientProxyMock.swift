@@ -97,6 +97,7 @@ extension ClientProxyMock {
         userIdentityForReturnValue = .success(UserIdentityProxyMock(configuration: .init()))
         
         underlyingIsReportRoomSupported = true
+        underlyingIsLiveKitRTCSupported = true
         
         underlyingTimelineMediaVisibilityPublisher = CurrentValueSubject<TimelineMediaVisibility, Never>(configuration.timelineMediaVisibility).asCurrentValuePublisher()
         underlyingHideInviteAvatarsPublisher = CurrentValueSubject<Bool, Never>(configuration.hideInviteAvatars).asCurrentValuePublisher()

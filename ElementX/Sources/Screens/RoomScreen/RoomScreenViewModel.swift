@@ -425,15 +425,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 }
 
 extension RoomScreenViewModel {
-    static func mock(roomProxyMock: JoinedRoomProxyMock) -> RoomScreenViewModel {
-        RoomScreenViewModel(clientProxy: ClientProxyMock(),
+    static func mock(roomProxyMock: JoinedRoomProxyMock,
+                     clientProxyMock: ClientProxyMock = ClientProxyMock(),
+                     appHooks: AppHooks = AppHooks()) -> RoomScreenViewModel {
+        RoomScreenViewModel(clientProxy: clientProxyMock,
                             roomProxy: roomProxyMock,
                             initialSelectedPinnedEventID: nil,
                             mediaProvider: MediaProviderMock(configuration: .init()),
                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                             appMediator: AppMediatorMock.default,
                             appSettings: ServiceLocator.shared.settings,
-                            appHooks: AppHooks(),
+                            appHooks: appHooks,
                             analyticsService: ServiceLocator.shared.analytics,
                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
