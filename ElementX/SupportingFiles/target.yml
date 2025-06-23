@@ -62,7 +62,8 @@ targets:
             CFBundleTypeRole: Editor,
             CFBundleURLName: "Application",
             CFBundleURLSchemes: [
-              $(BASE_BUNDLE_IDENTIFIER)
+              $(BASE_BUNDLE_IDENTIFIER), # The app's own scheme for custom routes
+              "matrix" # Matrix URI scheme for permalinks
             ]
           }
         ]

@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Senyuman & Orang";
 "emoji_picker_category_places" = "Wisata & Tempat";
 "emoji_picker_category_symbols" = "Simbol";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "Alamat ruangan sudah ada, silakan coba sunting kolom alamat ruangan atau ubah nama ruangan";
 "error_room_address_invalid_symbols" = "Beberapa karakter tidak diperbolehkan. Hanya huruf, angka, dan simbol berikut didukung ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
@@ -359,7 +360,7 @@
 "notification_channel_noisy" = "Pemberitahuan berisik";
 "notification_channel_ringing_calls" = "Panggilan berdering";
 "notification_channel_silent" = "Pemberitahuan diam";
-"notification_fallback_content" = "You have new message(s).";
+"notification_fallback_content" = "You have new messages.";
 "notification_incoming_call" = "📹 Panggilan masuk";
 "notification_inline_reply_failed" = "** Gagal mengirim — silakan buka ruangan";
 "notification_invite_body" = "Mengundang Anda untuk mengobrol";

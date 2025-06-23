@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Mosolyok és emberek";
 "emoji_picker_category_places" = "Utazás és helyek";
 "emoji_picker_category_symbols" = "Szimbólumok";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Ennek oka hálózati vagy kiszolgálóprobléma lehet.";
 "error_room_address_already_exists" = "Ez a szobacím már létezik. Próbálja meg szerkeszteni a szobacím mezőt, vagy módosítsa a szoba nevét.";
 "error_room_address_invalid_symbols" = "Egyes karakterek nem engedélyezettek. Csak a betűk, a számjegyek és a következő szimbólumok támogatottak: $ & '() * +/; =? @ [] - . _";

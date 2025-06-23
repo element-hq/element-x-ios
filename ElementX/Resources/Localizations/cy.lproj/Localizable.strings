@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Wynebau Hapus a Phobl";
 "emoji_picker_category_places" = "Teithio a Llefydd";
 "emoji_picker_category_symbols" = "Symbolau";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Gall hyn fod oherwydd problemau rhwydwaith neu weinydd.";
 "error_room_address_already_exists" = "Mae'r cyfeiriad ystafell hwn yn bodoli eisoes. Ceisiwch olygu'r maes cyfeiriad ystafell neu newid enw'r ystafell";
 "error_room_address_invalid_symbols" = "Dyw rhai nodau ddim yn cael eu caniatáu. Dim ond llythrennau, digidau a'r symbolau canlynol sy'n cael eu cefnogi ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";

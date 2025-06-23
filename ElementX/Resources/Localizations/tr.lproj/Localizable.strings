@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "İfadeler ve İnsanlar";
 "emoji_picker_category_places" = "Seyahat ve Yerler";
 "emoji_picker_category_symbols" = "Simgeler";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Bunun nedeni ağ veya sunucu sorunları olabilir.";
 "error_room_address_already_exists" = "Bu oda adresi zaten mevcut. Lütfen oda adres alanını düzenlemeyi deneyin veya oda adını değiştirin";
 "error_room_address_invalid_symbols" = "Bazı karakterlere izin verilmez. Yalnızca harfler, rakamlar ve aşağıdaki semboller desteklenir ! $ &amp; ' ( ) * + / ; = ? @ [ ] - . _";
@@ -359,7 +360,7 @@
 "notification_channel_noisy" = "Gürültülü bildirimler";
 "notification_channel_ringing_calls" = "Çalan aramalar";
 "notification_channel_silent" = "Sessiz bildirimler";
-"notification_fallback_content" = "You have new message(s).";
+"notification_fallback_content" = "You have new messages.";
 "notification_incoming_call" = "📹 Gelen çağrı";
 "notification_inline_reply_failed" = "** Gönderilemedi - lütfen odayı açın";
 "notification_invite_body" = "Sizi sohbete davet etti";

@@ -167,8 +167,12 @@ class RoomScreenViewModelTests: XCTestCase {
         var configuration = JoinedRoomProxyMockConfiguration(id: "TestID", name: "StartingName", avatarURL: nil, hasOngoingCall: false)
         let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
+        
+        let powerLevelsMock = RoomPowerLevelsProxyMock(configuration: .init())
+        roomProxyMock.powerLevelsReturnValue = .success(powerLevelsMock)
+        
         // setup the room proxy actions publisher
-        roomProxyMock.canUserJoinCallUserIDReturnValue = .success(false)
+        powerLevelsMock.canUserJoinCallUserIDReturnValue = .success(false)
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,
@@ -193,7 +197,7 @@ class RoomScreenViewModelTests: XCTestCase {
         configuration.name = "NewName"
         configuration.avatarURL = .mockMXCAvatar
         configuration.hasOngoingCall = true
-        roomProxyMock.canUserJoinCallUserIDReturnValue = .success(true)
+        powerLevelsMock.canUserJoinCallUserIDReturnValue = .success(true)
         
         deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.roomTitle == "NewName" &&
@@ -366,8 +370,8 @@ class RoomScreenViewModelTests: XCTestCase {
     func testKnockRequestsBannerDoesNotAppearIfUserHasNoPermission() async throws {
         ServiceLocator.shared.settings.knockingEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!"))]),
-                                                      canUserInvite: false,
-                                                      joinRule: .knock))
+                                                      joinRule: .knock,
+                                                      powerLevelsConfiguration: .init(canUserInvite: false)))
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,

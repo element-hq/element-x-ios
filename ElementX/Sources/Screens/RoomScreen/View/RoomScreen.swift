@@ -241,8 +241,8 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "stable_id",
                                                       name: "Preview room",
                                                       hasOngoingCall: true,
-                                                      canUserSendMessage: canSendMessage,
-                                                      successor: hasSuccessor ? .init(roomId: UUID().uuidString, reason: nil) : nil))
+                                                      successor: hasSuccessor ? .init(roomId: UUID().uuidString, reason: nil) : nil,
+                                                      powerLevelsConfiguration: .init(canUserSendMessage: canSendMessage)))
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
         let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                   timelineController: MockTimelineController(),

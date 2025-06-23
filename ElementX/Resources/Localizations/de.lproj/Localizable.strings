@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Smileys & Menschen";
 "emoji_picker_category_places" = "Reisen & Orte";
 "emoji_picker_category_symbols" = "Symbole";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Dies kann auf Netzwerk- oder Serverprobleme zurückzuführen sein.";
 "error_room_address_already_exists" = "Diese Chatroomadresse existiert bereits. Bitte versuchen Sie, das Adressenfeld des Chatrooms zu bearbeiten oder den Namen des Chatrooms zu ändern";
 "error_room_address_invalid_symbols" = "Einige Zeichen sind nicht erlaubt. Es werden nur Buchstaben, Ziffern und die folgenden Symbole unterstützt: ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
@@ -359,7 +360,7 @@
 "notification_channel_noisy" = "Laute Benachrichtigungen";
 "notification_channel_ringing_calls" = "Klingelnde Anrufe";
 "notification_channel_silent" = "Stumme Benachrichtigungen";
-"notification_fallback_content" = "You have new message(s).";
+"notification_fallback_content" = "You have new messages.";
 "notification_incoming_call" = "Eingehender Anruf";
 "notification_inline_reply_failed" = "** Fehler beim Senden - bitte Raum öffnen";
 "notification_invite_body" = "Sie wurden zu einem Chat eingeladen";

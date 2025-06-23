@@ -774,6 +774,8 @@ internal enum L10n {
   }
   /// Failed to upload your voice message.
   internal static var errorFailedUploadingVoiceMessage: String { return L10n.tr("Localizable", "error_failed_uploading_voice_message") }
+  /// The room no longer exists or the invite is no longer valid.
+  internal static var errorInvalidInvite: String { return L10n.tr("Localizable", "error_invalid_invite") }
   /// Message not found
   internal static var errorMessageNotFound: String { return L10n.tr("Localizable", "error_message_not_found") }
   /// This may be due to network or server issues.
@@ -846,7 +848,7 @@ internal enum L10n {
   internal static func notificationCompatSummaryTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "notification_compat_summary_title", p1)
   }
-  /// You have new message(s).
+  /// You have new messages.
   internal static var notificationFallbackContent: String { return L10n.tr("Localizable", "notification_fallback_content") }
   /// 📹 Incoming call
   internal static var notificationIncomingCall: String { return L10n.tr("Localizable", "notification_incoming_call") }

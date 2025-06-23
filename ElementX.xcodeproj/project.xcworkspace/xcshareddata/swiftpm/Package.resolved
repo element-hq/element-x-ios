@@ -1,5 +1,5 @@
 {
-  "originHash" : "f8b1a972759467ca3949cf14caf279d1e9f07305630d51b691ab51c762417a71",
+  "originHash" : "bd7b53f93032440051ddb74b94ae868aa671ca5117b333194c1c7ecb4b20d522",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -284,8 +284,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "6f6885adeb33f67fabeb9f732e8781b4f72e8955",
-        "version" : "25.6.18"
+        "revision" : "68abbf0622825f008e2e9f70678b2433006e38ef",
+        "version" : "25.6.20"
       }
     },
     {

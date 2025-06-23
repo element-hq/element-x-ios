@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Émoticônes et personnes";
 "emoji_picker_category_places" = "Voyages & lieux";
 "emoji_picker_category_symbols" = "Symboles";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Cela peut être dû à des problèmes de réseau ou de serveur.";
 "error_room_address_already_exists" = "Cette adresse de salon existe déjà, veuillez essayer de modifier le champ d'adresse de salon ou de modifier le nom du salon";
 "error_room_address_invalid_symbols" = "Certains caractères ne sont pas autorisés. Seuls les lettres, les chiffres et les symboles suivants sont utilisables ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";

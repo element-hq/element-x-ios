@@ -26,6 +26,9 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         actionsSubject.eraseToAnyPublisher()
     }
     
+    @CancellableTask
+    private var timeoutTask: Task<Void, Never>?
+        
     /// Designated initialiser
     /// - Parameters:
     ///   - elementCallService: service responsible for setting up CallKit
@@ -109,6 +112,17 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
             .store(in: &cancellables)
         
         setupCall()
+        
+        timeoutTask = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(30))
+            guard !Task.isCancelled, let self else { return }
+            MXLog.error("Failed to join Element Call: Timeout")
+            state.bindings.alertInfo = .init(id: UUID(),
+                                             title: L10n.commonError,
+                                             message: L10n.errorUnknown,
+                                             primaryButton: .init(title: L10n.actionDismiss) { [weak self] in self?.actionsSubject.send(.dismiss) })
+            timeoutTask = nil
+        }
     }
     
     override func process(viewAction: CallScreenViewAction) {
@@ -129,7 +143,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         case .outputDeviceSelected(deviceID: let deviceID):
             handleOutputDeviceSelected(deviceID: deviceID)
         case .widgetAction(let message):
-            Task { await widgetDriver.handleMessage(message) }
+            Task { await handleWidgetAction(message: message) }
         }
     }
     
@@ -143,6 +157,16 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     }
     
     // MARK: - Private
+
+    private func handleWidgetAction(message: String) async {
+        if timeoutTask != nil,
+           let decodedMessage = try? DecodedWidgetMessage.decode(message: message),
+           decodedMessage.hasJoined {
+            // This means that the call room was joined succesfully, we can stop the timeout task
+            timeoutTask = nil
+        }
+        await widgetDriver.handleMessage(message)
+    }
     
     private func setupCall() {
         switch configuration.kind {

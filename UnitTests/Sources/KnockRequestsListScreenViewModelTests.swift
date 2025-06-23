@@ -207,8 +207,8 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
                                                                                    KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org")),
                                                                                    KnockRequestProxyMock(.init(eventID: "3", userID: "@charlie:matrix.org")),
                                                                                    KnockRequestProxyMock(.init(eventID: "4", userID: "@dan:matrix.org"))]),
-                                                      canUserInvite: false,
-                                                      joinRule: .knock))
+                                                      joinRule: .knock,
+                                                      powerLevelsConfiguration: .init(canUserInvite: false)))
         viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
                                                      mediaProvider: MediaProviderMock(),
                                                      userIndicatorController: UserIndicatorControllerMock())

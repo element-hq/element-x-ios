@@ -494,7 +494,8 @@ class TimelineViewModelTests: XCTestCase {
     }
     
     func testCanUserPinEvents() async throws {
-        let configuration = JoinedRoomProxyMockConfiguration(name: "", canUserPin: true)
+        let configuration = JoinedRoomProxyMockConfiguration(name: "",
+                                                             powerLevelsConfiguration: .init(canUserPin: true))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
         let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
@@ -517,7 +518,10 @@ class TimelineViewModelTests: XCTestCase {
         }
         try await deferred.fulfill()
         
-        roomProxyMock.canUserPinOrUnpinUserIDReturnValue = .success(false)
+        let powerLevelsMock = RoomPowerLevelsProxyMock(configuration: .init())
+        powerLevelsMock.canUserPinOrUnpinUserIDReturnValue = .success(false)
+        roomProxyMock.powerLevelsReturnValue = .success(powerLevelsMock)
+        
         deferred = deferFulfillment(viewModel.context.$viewState) { value in
             !value.canCurrentUserPin
         }

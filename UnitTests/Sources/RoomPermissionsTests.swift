@@ -13,16 +13,16 @@ import XCTest
 class RoomPermissionsTests: XCTestCase {
     func testFromRust() {
         // Given a set of power level changes with various values.
-        let powerLevels = RoomPowerLevels(ban: 100,
-                                          invite: 100,
-                                          kick: 100,
-                                          redact: 50,
-                                          eventsDefault: 50,
-                                          stateDefault: 50,
-                                          usersDefault: 0,
-                                          roomName: 0,
-                                          roomAvatar: 0,
-                                          roomTopic: 0)
+        let powerLevels = RoomPowerLevelsValues(ban: 100,
+                                                invite: 100,
+                                                kick: 100,
+                                                redact: 50,
+                                                eventsDefault: 50,
+                                                stateDefault: 50,
+                                                usersDefault: 0,
+                                                roomName: 0,
+                                                roomAvatar: 0,
+                                                roomTopic: 0)
         
         // When creating room permissions from them.
         let permissions = RoomPermissions(powerLevels: powerLevels)

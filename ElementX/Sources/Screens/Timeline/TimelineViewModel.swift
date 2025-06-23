@@ -407,41 +407,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
     
     private func updatePermissions() async {
-        if case let .success(value) = await roomProxy.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage) {
-            state.canCurrentUserSendMessage = value
-        } else {
-            state.canCurrentUserSendMessage = false
-        }
-        
-        if case let .success(value) = await roomProxy.canUserRedactOther(userID: roomProxy.ownUserID) {
-            state.canCurrentUserRedactOthers = value
-        } else {
-            state.canCurrentUserRedactOthers = false
-        }
-        
-        if case let .success(value) = await roomProxy.canUserRedactOwn(userID: roomProxy.ownUserID) {
-            state.canCurrentUserRedactSelf = value
-        } else {
-            state.canCurrentUserRedactSelf = false
-        }
-        
-        if case let .success(value) = await roomProxy.canUserPinOrUnpin(userID: roomProxy.ownUserID) {
-            state.canCurrentUserPin = value
-        } else {
-            state.canCurrentUserPin = false
-        }
-        
-        if case let .success(value) = await roomProxy.canUserKick(userID: roomProxy.ownUserID) {
-            state.canCurrentUserKick = value
-        } else {
-            state.canCurrentUserKick = false
-        }
-        
-        if case let .success(value) = await roomProxy.canUserBan(userID: roomProxy.ownUserID) {
-            state.canCurrentUserBan = value
-        } else {
-            state.canCurrentUserBan = false
-        }
+        let powerLevels = try? await roomProxy.powerLevels().get()
+        state.canCurrentUserSendMessage = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
+        state.canCurrentUserRedactOthers = (try? powerLevels?.canUserRedactOther(userID: roomProxy.ownUserID).get()) == true
+        state.canCurrentUserRedactSelf = (try? powerLevels?.canUserRedactOwn(userID: roomProxy.ownUserID).get()) == true
+        state.canCurrentUserPin = (try? powerLevels?.canUserPinOrUnpin(userID: roomProxy.ownUserID).get()) == true
+        state.canCurrentUserKick = (try? powerLevels?.canUserKick(userID: roomProxy.ownUserID).get()) == true
+        state.canCurrentUserBan = (try? powerLevels?.canUserBan(userID: roomProxy.ownUserID).get()) == true
     }
     
     private func setupSubscriptions() {

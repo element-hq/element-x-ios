@@ -163,6 +163,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         return .success(url)
     }
     
+    @discardableResult
     func handleMessage(_ message: String) async -> Result<Bool, ElementCallWidgetDriverError> {
         guard let widgetDriver else {
             return .failure(.driverNotSetup)
