@@ -74,8 +74,8 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             openDirectChat()
         case .displayAvatar(let url):
             displayFullScreenAvatar(url)
-        case .openMediaPreview(let url):
-            displayFullScreenMedia(url)
+        case .openMediaPreview(let mediaId):
+            displayFullScreenMedia(mediaId)
         case .newFeed:
             actionsSubject.send(.newFeed(self))
         }
@@ -325,7 +325,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         }
     }
     
-    private func displayFullScreenMedia(_ url: URL) {
+    private func displayFullScreenMedia(_ mediaId: String) {
         let loadingIndicatorIdentifier = "roomAvatarLoadingIndicator"
         userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
         
@@ -335,7 +335,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             }
             
             do {
-                if case let .success(localUrl) = try await clientProxy.loadFileFromUrl(url) {
+                if case let .success(localUrl) = try await clientProxy.loadFileFromMediaId(mediaId) {
                     state.bindings.feedMediaPreviewItem = localUrl
                 }
             } catch {

@@ -286,8 +286,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: self))
         case .setNotificationFilter(let tab):
             applyCustomFilterToNotificationsList(tab)
-        case .openMediaPreview(let url):
-            displayFullScreenMedia(url)
+        case .openMediaPreview(let mediaId):
+            displayFullScreenMedia(mediaId)
         }
     }
     
@@ -871,7 +871,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         state.notificationsContent = filteredNotificationContent
     }
     
-    private func displayFullScreenMedia(_ url: URL) {
+    private func displayFullScreenMedia(_ mediaId: String) {
         let loadingIndicatorIdentifier = "roomAvatarLoadingIndicator"
         userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
         
@@ -881,7 +881,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             }
             
             do {
-                if case let .success(localUrl) = try await userSession.clientProxy.loadFileFromUrl(url) {
+                if case let .success(localUrl) = try await userSession.clientProxy.loadFileFromMediaId(mediaId) {
                     state.bindings.mediaPreviewItem = localUrl
                 }
             } catch {

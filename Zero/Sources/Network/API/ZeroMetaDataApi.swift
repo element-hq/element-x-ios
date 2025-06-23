@@ -8,16 +8,22 @@
 import Alamofire
 import Foundation
 
+enum MediaLoadingError: Error {
+    case invalidSignedURL
+}
+
 protocol ZeroMetaDataApiProtocol {
     func getLinkPreview(url: String) async throws -> Result<ZLinkPreview, Error>
     
-    func getPostMediaInfo(mediaId: String) async throws -> Result<ZPostMedia, Error>
+    func getPostMediaInfo(mediaId: String, isPreview: Bool) async throws -> Result<ZPostMedia, Error>
     
     func uploadMedia(media: URL) async throws -> Result<String, Error>
     
     func fetchYoutubeLinkMetaData(youtubeUrl: String) async throws -> Result<ZLinkPreview, Error>
     
     func loadFileFromUrl(_ remoteUrl: URL) async throws -> Result<URL, Error>
+    
+    func loadFileFromMediaId(_ mediaId: String) async throws -> Result<URL, Error>
 }
 
 class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
@@ -53,8 +59,8 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
         }
     }
     
-    func getPostMediaInfo(mediaId: String) async throws -> Result<ZPostMedia, any Error> {
-        let parameters: Parameters = ["is_preview": "true"]
+    func getPostMediaInfo(mediaId: String, isPreview: Bool) async throws -> Result<ZPostMedia, any Error> {
+        let parameters: Parameters = ["is_preview": isPreview.description]
         let url = MetaDataEndPoints.feedMediaEndPoint.appending("/\(mediaId)")
         let result: Result<ZPostMedia, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                               method: .get,
@@ -114,6 +120,20 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
         
         try data.write(to: destinationURL)
         return .success(destinationURL)
+    }
+    
+    func loadFileFromMediaId(_ mediaId: String) async throws -> Result<URL, any Error> {
+        let mediaInfoResult = try await getPostMediaInfo(mediaId: mediaId, isPreview: false)
+        switch mediaInfoResult {
+        case .success(let mediaInfo):
+            if let url = URL(string: mediaInfo.signedUrl) {
+                return try await loadFileFromUrl(url)
+            } else {
+                return .failure(MediaLoadingError.invalidSignedURL)
+            }
+        case .failure(let error):
+            return .failure(error)
+        }
     }
     
     // MARK: - Constants

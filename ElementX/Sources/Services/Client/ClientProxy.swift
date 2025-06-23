@@ -1310,7 +1310,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func getPostMediaInfo(mediaId: String) async -> Result<ZPostMedia, ClientProxyError> {
         do {
-            let result = try await zeroApiProxy.metaDataApi.getPostMediaInfo(mediaId: mediaId)
+            let result = try await zeroApiProxy.metaDataApi.getPostMediaInfo(mediaId: mediaId, isPreview: true)
             switch result {
             case .success(let media):
                 return .success(media)
@@ -1340,6 +1340,16 @@ class ClientProxy: ClientProxyProtocol {
     
     func loadFileFromUrl(_ remoteUrl: URL) async throws -> Result<URL, ClientProxyError> {
         let result = try await zeroApiProxy.metaDataApi.loadFileFromUrl(remoteUrl)
+        switch result {
+        case .success(let localURL):
+            return .success(localURL)
+        case .failure(let error):
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func loadFileFromMediaId(_ mediaId: String) async throws -> Result<URL, ClientProxyError> {
+        let result = try await zeroApiProxy.metaDataApi.loadFileFromMediaId(mediaId)
         switch result {
         case .success(let localURL):
             return .success(localURL)

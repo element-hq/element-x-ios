@@ -67,7 +67,7 @@ enum FeedDetailsScreenViewAction {
     case postReply
     case attachMedia
     case deleteMedia
-    case openMediaPreview(_ url: URL)
+    case openMediaPreview(_ mediaId: String)
 }
 
 enum FeedRepliesListMode: CustomStringConvertible {

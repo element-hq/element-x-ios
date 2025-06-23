@@ -20,7 +20,7 @@ struct HomeScreenPostCell: View {
     let onMeowTapped: (Int) -> Void
     let onOpenYoutubeLink: (String) -> Void
     let onOpenUserProfile: (ZPostUserProfile) -> Void
-    let onMediaTapped: (URL) -> Void
+    let onMediaTapped: (String) -> Void
     
     @State private var referenceHeight: CGFloat = .zero
     
@@ -114,8 +114,8 @@ struct HomeScreenPostCell: View {
                 }
                 
                 if let mediaInfo = post.mediaInfo {
-                    HomePostMediaPreview(mediaInfo: mediaInfo, mediaUrlString: postMediaUrl) { url in
-                        onMediaTapped(url)
+                    HomePostMediaPreview(mediaInfo: mediaInfo, mediaUrlString: postMediaUrl) {
+                        onMediaTapped(mediaInfo.id)
                     }
                 }
                 
@@ -223,7 +223,7 @@ struct HomePostCellLinkPreview: View {
 struct HomePostMediaPreview: View {
     let mediaInfo: HomeScreenPostMediaInfo
     let mediaUrlString: String?
-    let onMediaTapped: (URL) -> Void
+    let onMediaTapped: () -> Void
     
     var mediaURL: URL {
         URL(string: mediaUrlString ?? "") ?? URL.dummayURL
@@ -237,7 +237,7 @@ struct HomePostMediaPreview: View {
                     .cornerRadius(4)
                     .onLongPressGesture {
                         if mediaUrlString != nil {
-                            onMediaTapped(mediaURL)
+                            onMediaTapped()
                         }
                     }
             } else {
@@ -256,9 +256,7 @@ struct HomePostMediaPreview: View {
                 .aspectRatio(mediaInfo.aspectRatio, contentMode: .fit)
                 .cornerRadius(4, corners: .allCorners)
                 .onTapGesture {
-                    if mediaUrlString != nil {
-                        onMediaTapped(mediaURL)
-                    }
+                    onMediaTapped()
                 }
         }
     }

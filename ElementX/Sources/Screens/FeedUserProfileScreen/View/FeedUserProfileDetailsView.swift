@@ -235,8 +235,8 @@ struct UserFeedsList: View {
                     context.send(viewAction: .openYoutubeLink(url))
                 },
                                    onOpenUserProfile: { _ in },
-                                   onMediaTapped: { url in
-                    context.send(viewAction: .openMediaPreview(url))
+                                   onMediaTapped: { mediaId in
+                    context.send(viewAction: .openMediaPreview(mediaId))
                 }
                 )
                 .padding(.horizontal, 16)

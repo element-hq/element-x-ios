@@ -211,8 +211,8 @@ struct PostRepliesList: View {
                                    onOpenUserProfile: { profile in
                     context.send(viewAction: .openPostUserProfile(profile))
                 },
-                                   onMediaTapped: { url in
-                    context.send(viewAction: .openMediaPreview(url))
+                                   onMediaTapped: { mediaId in
+                    context.send(viewAction: .openMediaPreview(mediaId))
                 })
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
@@ -290,8 +290,8 @@ struct FeedDetailsSection: View {
             }
             
             if let mediaInfo = post.mediaInfo {
-                HomePostMediaPreview(mediaInfo: mediaInfo, mediaUrlString: mediaInfo.url) { url in
-                    context.send(viewAction: .openMediaPreview(url))
+                HomePostMediaPreview(mediaInfo: mediaInfo, mediaUrlString: mediaInfo.url) {
+                    context.send(viewAction: .openMediaPreview(mediaInfo.id))
                 }
             }
             

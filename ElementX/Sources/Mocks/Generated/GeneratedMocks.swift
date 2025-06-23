@@ -7260,6 +7260,80 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return loadFileFromUrlReturnValue
         }
     }
+    //MARK: - loadFileFromMediaId
+
+    var loadFileFromMediaIdThrowableError: Error?
+    var loadFileFromMediaIdUnderlyingCallsCount = 0
+    var loadFileFromMediaIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadFileFromMediaIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadFileFromMediaIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadFileFromMediaIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadFileFromMediaIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var loadFileFromMediaIdCalled: Bool {
+        return loadFileFromMediaIdCallsCount > 0
+    }
+    var loadFileFromMediaIdReceivedMediaId: String?
+    var loadFileFromMediaIdReceivedInvocations: [String] = []
+
+    var loadFileFromMediaIdUnderlyingReturnValue: Result<URL, ClientProxyError>!
+    var loadFileFromMediaIdReturnValue: Result<URL, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return loadFileFromMediaIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<URL, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadFileFromMediaIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadFileFromMediaIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadFileFromMediaIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var loadFileFromMediaIdClosure: ((String) async throws -> Result<URL, ClientProxyError>)?
+
+    func loadFileFromMediaId(_ mediaId: String) async throws -> Result<URL, ClientProxyError> {
+        if let error = loadFileFromMediaIdThrowableError {
+            throw error
+        }
+        loadFileFromMediaIdCallsCount += 1
+        loadFileFromMediaIdReceivedMediaId = mediaId
+        DispatchQueue.main.async {
+            self.loadFileFromMediaIdReceivedInvocations.append(mediaId)
+        }
+        if let loadFileFromMediaIdClosure = loadFileFromMediaIdClosure {
+            return try await loadFileFromMediaIdClosure(mediaId)
+        } else {
+            return loadFileFromMediaIdReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?

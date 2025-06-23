@@ -66,7 +66,7 @@ enum HomeScreenViewAction {
     case openYoutubeLink(_ url: String)
     case openPostUserProfile(_ profile: ZPostUserProfile)
     case openUserProfile
-    case openMediaPreview(_ url: URL)
+    case openMediaPreview(_ mediaId: String)
     
     case forceRefreshChannels
     case channelTapped(_ channel: HomeScreenChannel)
