@@ -1,5 +1,5 @@
 "Notification" = "Varsel";
-"a11y_add_reaction" = "Add reaction: %1$@";
+"a11y_add_reaction" = "Legg til reaksjon: %1$@";
 "a11y_avatar" = "Profilbilde";
 "a11y_delete" = "Slett";
 "a11y_hide_password" = "Skjul passord";
@@ -20,7 +20,7 @@
 "a11y_read_receipts_single" = "Lest av %1$@";
 "a11y_read_receipts_tap_to_show_all" = "Trykk for å vise alle";
 "a11y_remove_reaction" = "Fjern reaksjonen med %1$@";
-"a11y_remove_reaction_with" = "Remove reaction with %1$@";
+"a11y_remove_reaction_with" = "Fjern reaksjonen med %1$@";
 "a11y_send_files" = "Sende filer";
 "a11y_show_password" = "Vis passord";
 "a11y_start_call" = "Start en samtale";
@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Smilefjes og mennesker";
 "emoji_picker_category_places" = "Reising og steder";
 "emoji_picker_category_symbols" = "Symboler";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Dette kan skyldes nettverks- eller serverproblemer.";
 "error_room_address_already_exists" = "Denne romadressen finnes allerede. Prøv å redigere romadressefeltet eller endre romnavnet";
 "error_room_address_invalid_symbols" = "Noen tegn er ikke tillatt. Bare bokstaver, sifre og følgende symboler støttes! $ & '() * +/; =? @ [] - . _";
@@ -359,7 +360,7 @@
 "notification_channel_noisy" = "Støyende varsler";
 "notification_channel_ringing_calls" = "Ringende anrop";
 "notification_channel_silent" = "Stille varsler";
-"notification_fallback_content" = "You have new message(s).";
+"notification_fallback_content" = "Du har nye meldinger.";
 "notification_incoming_call" = "📹 Innkommende anrop";
 "notification_inline_reply_failed" = "** Kunne ikke sende - vennligst åpne rommet";
 "notification_invite_body" = "Inviterte deg til å chatte";
@@ -531,13 +532,13 @@
 "screen_room_details_pinned_events_row_title" = "Festede meldinger";
 "screen_room_details_profile_row_title" = "Profil";
 "screen_room_details_requests_to_join_title" = "Forespørsler om å bli med";
-"screen_room_grouped_state_events_expand" = "Expand";
-"screen_room_grouped_state_events_reduce" = "Reduce";
+"screen_room_grouped_state_events_expand" = "Utvid";
+"screen_room_grouped_state_events_reduce" = "Reduser";
 "screen_room_timeline_tombstoned_room_action" = "Gå til nytt rom";
 "screen_room_timeline_tombstoned_room_message" = "Dette rommet har blitt erstattet og er ikke lenger aktivt";
 "screen_room_timeline_upgraded_room_action" = "Se gamle meldinger";
 "screen_room_timeline_upgraded_room_message" = "Dette rommet er en fortsettelse av et annet rom";
-"screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_room_timeline_reactions_show_reactions_summary" = "Vis sammendrag av reaksjoner";
 "screen_roomlist_tombstoned_room_description" = "Dette rommet har blitt oppgradert";
 "screen_security_and_privacy_add_room_address_action" = "Legg til romadresse";
 "screen_security_and_privacy_ask_to_join_option_description" = "Alle kan be om å bli med i rommet, men en administrator eller moderator må godta forespørselen.";

@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Emojis y personas";
 "emoji_picker_category_places" = "Viajes y lugares";
 "emoji_picker_category_symbols" = "Símbolos";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Esto puede deberse a problemas de red o del servidor.";
 "error_room_address_already_exists" = "Esta dirección de sala ya existe. Intenta editar el campo de dirección de sala o cambia el nombre de la sala";
 "error_room_address_invalid_symbols" = "No se permiten algunos caracteres. Solo se admiten letras, dígitos y los siguientes símbolos ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
@@ -359,7 +360,7 @@
 "notification_channel_noisy" = "Notificaciones ruidosas";
 "notification_channel_ringing_calls" = "Llamadas entrantes";
 "notification_channel_silent" = "Notificaciones silenciosas";
-"notification_fallback_content" = "You have new message(s).";
+"notification_fallback_content" = "You have new messages.";
 "notification_incoming_call" = "📹 Llamada entrante";
 "notification_inline_reply_failed" = "** No se ha podido enviar - por favor, abre la sala";
 "notification_invite_body" = "Te invitó a chatear";
