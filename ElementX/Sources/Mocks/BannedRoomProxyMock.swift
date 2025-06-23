@@ -19,47 +19,50 @@ struct BannedRoomProxyMockConfiguration {
 
 extension BannedRoomProxyMock {
     @MainActor
-    convenience init(_ configuration: KnockedRoomProxyMockConfiguration) {
+    convenience init(_ configuration: BannedRoomProxyMockConfiguration) {
         self.init()
         id = configuration.id
-        info = RoomInfoProxy(roomInfo: .init(configuration))
+        info = RoomInfoProxyMock(configuration)
     }
 }
 
-extension RoomInfo {
-    @MainActor init(_ configuration: BannedRoomProxyMockConfiguration) {
-        self.init(id: configuration.id,
-                  encryptionState: .notEncrypted,
-                  creator: nil,
-                  displayName: configuration.name,
-                  rawName: nil,
-                  topic: nil,
-                  avatarUrl: configuration.avatarURL?.absoluteString,
-                  isDirect: false,
-                  isPublic: false,
-                  isSpace: false,
-                  successorRoom: nil,
-                  isFavourite: false,
-                  canonicalAlias: nil,
-                  alternativeAliases: [],
-                  membership: .knocked,
-                  inviter: nil,
-                  heroes: [],
-                  activeMembersCount: UInt64(configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count),
-                  invitedMembersCount: UInt64(configuration.members.filter { $0.membership == .invite }.count),
-                  joinedMembersCount: UInt64(configuration.members.filter { $0.membership == .join }.count),
-                  userPowerLevels: [:],
-                  highlightCount: 0,
-                  notificationCount: 0,
-                  cachedUserDefinedNotificationMode: nil,
-                  hasRoomCall: false,
-                  activeRoomCallParticipants: [],
-                  isMarkedUnread: false,
-                  numUnreadMessages: 0,
-                  numUnreadNotifications: 0,
-                  numUnreadMentions: 0,
-                  pinnedEventIds: [],
-                  joinRule: .knock,
-                  historyVisibility: .shared)
+private extension RoomInfoProxyMock {
+    @MainActor convenience init(_ configuration: BannedRoomProxyMockConfiguration) {
+        self.init()
+        
+        id = configuration.id
+        isEncrypted = false
+        creator = nil
+        displayName = configuration.name
+        rawName = nil
+        topic = nil
+        avatarURL = configuration.avatarURL
+        isDirect = false
+        isPublic = false
+        isSpace = false
+        successor = nil
+        isFavourite = false
+        canonicalAlias = nil
+        alternativeAliases = []
+        membership = .knocked
+        inviter = nil
+        heroes = []
+        activeMembersCount = configuration.members.filter { $0.membership == .join || $0.membership == .invite }.count
+        invitedMembersCount = configuration.members.filter { $0.membership == .invite }.count
+        joinedMembersCount = configuration.members.filter { $0.membership == .join }.count
+        highlightCount = 0
+        notificationCount = 0
+        cachedUserDefinedNotificationMode = nil
+        hasRoomCall = false
+        activeRoomCallParticipants = []
+        isMarkedUnread = false
+        unreadMessagesCount = 0
+        unreadNotificationsCount = 0
+        unreadMentionsCount = 0
+        pinnedEventIDs = []
+        joinRule = .knock
+        historyVisibility = .shared
+        
+        powerLevels = RoomPowerLevelsProxyMock(configuration: .init())
     }
 }

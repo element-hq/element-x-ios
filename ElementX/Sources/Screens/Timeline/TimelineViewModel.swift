@@ -993,13 +993,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     }
 }
 
-private extension RoomInfoProxy {
-    /// Checks if the other person left the room in a direct chat
-    var isUserAloneInDirectRoom: Bool {
-        isDirect && activeMembersCount == 1
-    }
-}
-
 // MARK: - Mocks
 
 extension TimelineViewModel {

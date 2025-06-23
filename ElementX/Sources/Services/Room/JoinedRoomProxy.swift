@@ -46,8 +46,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     let timeline: TimelineProxyProtocol
     
-    private let infoSubject: CurrentValueSubject<RoomInfoProxy, Never>
-    var infoPublisher: CurrentValuePublisher<RoomInfoProxy, Never> {
+    private let infoSubject: CurrentValueSubject<RoomInfoProxyProtocol, Never>
+    var infoPublisher: CurrentValuePublisher<RoomInfoProxyProtocol, Never> {
         infoSubject.asCurrentValuePublisher()
     }
 
@@ -137,7 +137,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         
         roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: SDKListener { [weak self] roomInfo in
             MXLog.info("Received room info update")
-            self?.infoSubject.send(.init(roomInfo: roomInfo))
+            self?.infoSubject.send(RoomInfoProxy(roomInfo: roomInfo))
         })
     }
     

@@ -210,7 +210,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
             .store(in: &cancellables)
     }
     
-    private func updateRoomInfo(roomInfo: RoomInfoProxy) {
+    private func updateRoomInfo(roomInfo: RoomInfoProxyProtocol) {
         switch roomInfo.joinRule {
         case .knock, .knockRestricted:
             state.isKnockableRoom = true

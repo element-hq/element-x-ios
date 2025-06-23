@@ -332,7 +332,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func handleRoomInfoUpdate(_ roomInfo: RoomInfoProxy) async {
+    private func handleRoomInfoUpdate(_ roomInfo: RoomInfoProxyProtocol) async {
         state.hasSuccessor = roomInfo.successor != nil
         
         let pinnedEventIDs = roomInfo.pinnedEventIDs

@@ -64,7 +64,7 @@ enum KnockRequestsState {
 
 // sourcery: AutoMockable
 protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
-    var infoPublisher: CurrentValuePublisher<RoomInfoProxy, Never> { get }
+    var infoPublisher: CurrentValuePublisher<RoomInfoProxyProtocol, Never> { get }
 
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     

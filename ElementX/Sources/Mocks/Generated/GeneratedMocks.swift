@@ -6472,11 +6472,11 @@ class InvitedRoomProxyMock: InvitedRoomProxyProtocol, @unchecked Sendable {
     }
 }
 class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
-    var infoPublisher: CurrentValuePublisher<RoomInfoProxy, Never> {
+    var infoPublisher: CurrentValuePublisher<RoomInfoProxyProtocol, Never> {
         get { return underlyingInfoPublisher }
         set(value) { underlyingInfoPublisher = value }
     }
-    var underlyingInfoPublisher: CurrentValuePublisher<RoomInfoProxy, Never>!
+    var underlyingInfoPublisher: CurrentValuePublisher<RoomInfoProxyProtocol, Never>!
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> {
         get { return underlyingMembersPublisher }
         set(value) { underlyingMembersPublisher = value }
@@ -13405,6 +13405,132 @@ class RoomDirectorySearchProxyMock: RoomDirectorySearchProxyProtocol, @unchecked
             return nextPageReturnValue
         }
     }
+}
+class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
+    var id: String {
+        get { return underlyingId }
+        set(value) { underlyingId = value }
+    }
+    var underlyingId: String!
+    var creator: String?
+    var displayName: String?
+    var rawName: String?
+    var topic: String?
+    var avatarURL: URL?
+    var avatar: RoomAvatar {
+        get { return underlyingAvatar }
+        set(value) { underlyingAvatar = value }
+    }
+    var underlyingAvatar: RoomAvatar!
+    var isEncrypted: Bool {
+        get { return underlyingIsEncrypted }
+        set(value) { underlyingIsEncrypted = value }
+    }
+    var underlyingIsEncrypted: Bool!
+    var isDirect: Bool {
+        get { return underlyingIsDirect }
+        set(value) { underlyingIsDirect = value }
+    }
+    var underlyingIsDirect: Bool!
+    var isPublic: Bool {
+        get { return underlyingIsPublic }
+        set(value) { underlyingIsPublic = value }
+    }
+    var underlyingIsPublic: Bool!
+    var isPrivate: Bool {
+        get { return underlyingIsPrivate }
+        set(value) { underlyingIsPrivate = value }
+    }
+    var underlyingIsPrivate: Bool!
+    var isSpace: Bool {
+        get { return underlyingIsSpace }
+        set(value) { underlyingIsSpace = value }
+    }
+    var underlyingIsSpace: Bool!
+    var successor: SuccessorRoom?
+    var isFavourite: Bool {
+        get { return underlyingIsFavourite }
+        set(value) { underlyingIsFavourite = value }
+    }
+    var underlyingIsFavourite: Bool!
+    var canonicalAlias: String?
+    var alternativeAliases: [String] = []
+    var membership: Membership {
+        get { return underlyingMembership }
+        set(value) { underlyingMembership = value }
+    }
+    var underlyingMembership: Membership!
+    var inviter: RoomMemberProxyProtocol?
+    var heroes: [RoomHero] = []
+    var activeMembersCount: Int {
+        get { return underlyingActiveMembersCount }
+        set(value) { underlyingActiveMembersCount = value }
+    }
+    var underlyingActiveMembersCount: Int!
+    var invitedMembersCount: Int {
+        get { return underlyingInvitedMembersCount }
+        set(value) { underlyingInvitedMembersCount = value }
+    }
+    var underlyingInvitedMembersCount: Int!
+    var joinedMembersCount: Int {
+        get { return underlyingJoinedMembersCount }
+        set(value) { underlyingJoinedMembersCount = value }
+    }
+    var underlyingJoinedMembersCount: Int!
+    var highlightCount: Int {
+        get { return underlyingHighlightCount }
+        set(value) { underlyingHighlightCount = value }
+    }
+    var underlyingHighlightCount: Int!
+    var notificationCount: Int {
+        get { return underlyingNotificationCount }
+        set(value) { underlyingNotificationCount = value }
+    }
+    var underlyingNotificationCount: Int!
+    var cachedUserDefinedNotificationMode: RoomNotificationMode?
+    var hasRoomCall: Bool {
+        get { return underlyingHasRoomCall }
+        set(value) { underlyingHasRoomCall = value }
+    }
+    var underlyingHasRoomCall: Bool!
+    var activeRoomCallParticipants: [String] = []
+    var isMarkedUnread: Bool {
+        get { return underlyingIsMarkedUnread }
+        set(value) { underlyingIsMarkedUnread = value }
+    }
+    var underlyingIsMarkedUnread: Bool!
+    var unreadMessagesCount: UInt {
+        get { return underlyingUnreadMessagesCount }
+        set(value) { underlyingUnreadMessagesCount = value }
+    }
+    var underlyingUnreadMessagesCount: UInt!
+    var unreadNotificationsCount: UInt {
+        get { return underlyingUnreadNotificationsCount }
+        set(value) { underlyingUnreadNotificationsCount = value }
+    }
+    var underlyingUnreadNotificationsCount: UInt!
+    var unreadMentionsCount: UInt {
+        get { return underlyingUnreadMentionsCount }
+        set(value) { underlyingUnreadMentionsCount = value }
+    }
+    var underlyingUnreadMentionsCount: UInt!
+    var pinnedEventIDs: Set<String> {
+        get { return underlyingPinnedEventIDs }
+        set(value) { underlyingPinnedEventIDs = value }
+    }
+    var underlyingPinnedEventIDs: Set<String>!
+    var joinRule: JoinRule?
+    var historyVisibility: RoomHistoryVisibility {
+        get { return underlyingHistoryVisibility }
+        set(value) { underlyingHistoryVisibility = value }
+    }
+    var underlyingHistoryVisibility: RoomHistoryVisibility!
+    var powerLevels: RoomPowerLevelsProxyProtocol {
+        get { return underlyingPowerLevels }
+        set(value) { underlyingPowerLevels = value }
+    }
+    var underlyingPowerLevels: RoomPowerLevelsProxyProtocol!
+
 }
 class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {
     var userID: String {
