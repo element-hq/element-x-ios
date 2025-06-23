@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Smileys & personer";
 "emoji_picker_category_places" = "Resor & platser";
 "emoji_picker_category_symbols" = "Symboler";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Detta kan bero på nätverks- eller serverproblem.";
 "error_room_address_already_exists" = "Den här rumsadressen finns redan. Försök att redigera adressfältet för rummet eller ändra rummets namn";
 "error_room_address_invalid_symbols" = "Vissa tecken är inte tillåtna. Endast bokstäver, siffror och följande symboler stöds ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
@@ -359,7 +360,7 @@
 "notification_channel_noisy" = "Högljudda aviseringar";
 "notification_channel_ringing_calls" = "Ringande samtal";
 "notification_channel_silent" = "Tysta aviseringar";
-"notification_fallback_content" = "You have new message(s).";
+"notification_fallback_content" = "You have new messages.";
 "notification_incoming_call" = "📹 Inkommande samtal";
 "notification_inline_reply_failed" = "** Misslyckades att skicka - vänligen öppna rummet";
 "notification_invite_body" = "Bjöd in dig att chatta";

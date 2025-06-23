@@ -205,9 +205,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d δωμάτιο</string>
+			<string>%d αίθουσα</string>
 			<key>other</key>
-			<string>%d δωμάτια</string>
+			<string>%d αίθουσες</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -221,9 +221,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Έχεις %1$d προσπάθεια για ξεκλείδωμα</string>
+			<string>Έχετε %1$d προσπάθεια να ξεκλειδώσετε</string>
 			<key>other</key>
-			<string>Έχεις %1$d προσπάθειες για ξεκλείδωμα</string>
+			<string>Έχετε %1$d προσπάθειες να ξεκλειδώσετε</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -285,9 +285,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Οι χρήστες %1$@ +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο</string>
+			<string>%1$@ +%2$d άλλοι θέλουν να συμμετάσχουν σε αυτή την αίθουσα</string>
 			<key>other</key>
-			<string>Οι χρήστες %1$@ +%2$d ακόμη θέλουν να συμμετάσχουν σε αυτό το δωμάτιο</string>
+			<string>%1$@ +%2$d άλλοι θέλουν να συμμετάσχουν σε αυτή την αίθουσα</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_a11y</key>
@@ -333,9 +333,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d αλλαγή δωματίου</string>
+			<string>%1$d αλλαγή αίθουσας</string>
 			<key>other</key>
-			<string>%1$d αλλαγές δωματίου</string>
+			<string>%1$d αλλαγές αίθουσας</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>

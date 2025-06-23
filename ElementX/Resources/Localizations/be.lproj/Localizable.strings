@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Усмешкі & Удзельнікі";
 "emoji_picker_category_places" = "Падарожжы & Месцы";
 "emoji_picker_category_symbols" = "Сімвалы";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
@@ -359,7 +360,7 @@
 "notification_channel_noisy" = "Шумныя апавяшчэнні";
 "notification_channel_ringing_calls" = "Званкі";
 "notification_channel_silent" = "Ціхія апавяшчэнні";
-"notification_fallback_content" = "You have new message(s).";
+"notification_fallback_content" = "You have new messages.";
 "notification_incoming_call" = "📹 Уваходны выклік";
 "notification_inline_reply_failed" = "** Не атрымалася даслаць - калі ласка, адкрыйце пакой";
 "notification_invite_body" = "Запрасіў(-ла) вас у чат";

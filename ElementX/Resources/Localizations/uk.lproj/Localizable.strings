@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Смайлики та люди";
 "emoji_picker_category_places" = "Подорожі та місця";
 "emoji_picker_category_symbols" = "Символи";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Це може бути пов'язано з проблемами мережі або сервера.";
 "error_room_address_already_exists" = "Ця адреса кімнати вже існує, будь ласка, спробуйте відредагувати поле адреси кімнати або змінити назву кімнати";
 "error_room_address_invalid_symbols" = "Деякі символи не допускаються. Підтримуються тільки букви, цифри і наступні символи! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
@@ -359,7 +360,7 @@
 "notification_channel_noisy" = "Гучні сповіщення";
 "notification_channel_ringing_calls" = "Виклики";
 "notification_channel_silent" = "Тихі сповіщення";
-"notification_fallback_content" = "You have new message(s).";
+"notification_fallback_content" = "You have new messages.";
 "notification_incoming_call" = "📹 Вхідний виклик";
 "notification_inline_reply_failed" = "** Не вдалося надіслати - відкрийте кімнату";
 "notification_invite_body" = "Запрошує вас до бесіди";

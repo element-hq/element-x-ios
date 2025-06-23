@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Irribartxoak eta jendea";
 "emoji_picker_category_places" = "Bidaiak eta tokiak";
 "emoji_picker_category_symbols" = "Ikurrak";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Sarearen edo zerbitzariaren arazoren bategatik izan daiteke.";
 "error_room_address_already_exists" = "Gela badago lehendik ere. Saiatu gelaren helbidearen eremua editatzen edo aldatu gelaren izena";
 "error_room_address_invalid_symbols" = "Karaktere batzuk ez daude baimenduta. Hizkiak, zifrak, eta ondorengo ikurrak onartzen dira bakarrik: ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
@@ -359,7 +360,7 @@
 "notification_channel_noisy" = "Jakinarazpen zaratatsuak";
 "notification_channel_ringing_calls" = "Ringing calls";
 "notification_channel_silent" = "Jakinarazpen isilak";
-"notification_fallback_content" = "You have new message(s).";
+"notification_fallback_content" = "You have new messages.";
 "notification_incoming_call" = "Deia jasotzen";
 "notification_inline_reply_failed" = "** Huts egin du bidalketak - ireki gela";
 "notification_invite_body" = "Txatetzera gonbidatu zaitu";

@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Hymiöt ja ihmiset";
 "emoji_picker_category_places" = "Matkustaminen ja paikat";
 "emoji_picker_category_symbols" = "Symbolit";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Tämä voi johtua verkko- tai palvelinongelmista.";
 "error_room_address_already_exists" = "Tämä huoneen osoite on jo käytössä, yritä muokata huoneen osoitekenttää tai muuta huoneen nimeä";
 "error_room_address_invalid_symbols" = "Jotkin merkit eivät ole sallittuja. Vain kirjaimet, numerot ja seuraavat symbolit ovat tuettuja ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
@@ -359,7 +360,7 @@
 "notification_channel_noisy" = "Äänekkäät ilmoitukset";
 "notification_channel_ringing_calls" = "Soivat puhelut";
 "notification_channel_silent" = "Hiljaiset ilmoitukset";
-"notification_fallback_content" = "You have new message(s).";
+"notification_fallback_content" = "You have new messages.";
 "notification_incoming_call" = "📹 Saapuva puhelu";
 "notification_inline_reply_failed" = "** Lähetys epäonnistui - avaa huone";
 "notification_invite_body" = "Kutsui sinut keskustelemaan";

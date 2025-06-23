@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Smileys & Mensen";
 "emoji_picker_category_places" = "Reizen & Locaties";
 "emoji_picker_category_symbols" = "Symbolen";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
@@ -359,7 +360,7 @@
 "notification_channel_noisy" = "Luide meldingen";
 "notification_channel_ringing_calls" = "Overgaande oproepen";
 "notification_channel_silent" = "Stille meldingen";
-"notification_fallback_content" = "You have new message(s).";
+"notification_fallback_content" = "You have new messages.";
 "notification_incoming_call" = "📹 Inkomende oproep";
 "notification_inline_reply_failed" = "** Verzenden is mislukt - open de kamer";
 "notification_invite_body" = "Nodigde je uit om te chatten";

@@ -1,5 +1,5 @@
 "Notification" = "Oznámení";
-"a11y_add_reaction" = "Add reaction: %1$@";
+"a11y_add_reaction" = "Přidat reakci: %1$@";
 "a11y_avatar" = "Profilový obrázek";
 "a11y_delete" = "Smazat";
 "a11y_hide_password" = "Skrýt heslo";
@@ -20,7 +20,7 @@
 "a11y_read_receipts_single" = "%1$@ přečetl(a)";
 "a11y_read_receipts_tap_to_show_all" = "Klepnutím zobrazíte vše";
 "a11y_remove_reaction" = "Odstraňit reakci s %1$@";
-"a11y_remove_reaction_with" = "Remove reaction with %1$@";
+"a11y_remove_reaction_with" = "Odstranit reakci pomocí %1$@";
 "a11y_send_files" = "Odeslat soubory";
 "a11y_show_password" = "Zobrazit heslo";
 "a11y_start_call" = "Zahájit hovor";
@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Smajlíci a lidé";
 "emoji_picker_category_places" = "Cestování a místa";
 "emoji_picker_category_symbols" = "Symboly";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Může to být způsobeno problémy se sítí nebo serverem.";
 "error_room_address_already_exists" = "Tato adresa místnosti již existuje, zkuste prosím upravit pole adresy místnosti nebo změnit název místnosti";
 "error_room_address_invalid_symbols" = "Některé znaky nejsou povoleny. Podporovány jsou pouze písmena, číslice a následující symboly ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
@@ -537,7 +538,7 @@
 "screen_room_timeline_tombstoned_room_message" = "Tato místnost byla nahrazena a již není aktivní";
 "screen_room_timeline_upgraded_room_action" = "Zobrazit staré zprávy";
 "screen_room_timeline_upgraded_room_message" = "Tato místnost je pokračováním jiné místnosti";
-"screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_room_timeline_reactions_show_reactions_summary" = "Zobrazit souhrn reakcí";
 "screen_roomlist_tombstoned_room_description" = "Tato místnost byla aktualizována";
 "screen_security_and_privacy_add_room_address_action" = "Přidat adresu místnosti";
 "screen_security_and_privacy_ask_to_join_option_description" = "Kdokoli může požádat o vstup do místnosti, ale správce nebo moderátor bude muset žádost přijmout.";

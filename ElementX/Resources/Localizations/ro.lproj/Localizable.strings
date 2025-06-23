@@ -325,6 +325,7 @@
 "emoji_picker_category_people" = "Fețe zâmbitoare & Oameni";
 "emoji_picker_category_places" = "Călătorii & Locuri";
 "emoji_picker_category_symbols" = "Simboluri";
+"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
@@ -359,7 +360,7 @@
 "notification_channel_noisy" = "Notificări zgomotoase";
 "notification_channel_ringing_calls" = "Apeluri care sună";
 "notification_channel_silent" = "Notificări silențioase";
-"notification_fallback_content" = "You have new message(s).";
+"notification_fallback_content" = "You have new messages.";
 "notification_incoming_call" = "Apel primit";
 "notification_inline_reply_failed" = "** Trimiterea eșuată - vă rugăm să deschideți camera";
 "notification_invite_body" = "V-a invitat la o discuție";
