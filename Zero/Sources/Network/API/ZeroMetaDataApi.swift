@@ -29,6 +29,9 @@ protocol ZeroMetaDataApiProtocol {
 class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     private let appSettings: AppSettings
     
+    private var linkPreviewsCacheMap: [String: ZLinkPreview] = [:]
+    private var feedMediaCacheMap: [String: ZPostMedia] = [:]
+    
     init(appSettings: AppSettings) {
         self.appSettings = appSettings
     }
@@ -36,6 +39,10 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     // MARK: - Public
     
     func getLinkPreview(url: String) async throws -> Result<ZLinkPreview, any Error> {
+        if let cachedLinkPreview = linkPreviewsCacheMap[url] {
+            return .success(cachedLinkPreview)
+        }
+        
         let items: [String: Any] = ["url": url]
         let jsonData = try! JSONSerialization.data(withJSONObject: items)
         let json = String(data: jsonData, encoding: .utf8)!
@@ -53,6 +60,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
                                encoding: URLEncoding.queryString)
         switch result {
         case .success(let linkPreview):
+            linkPreviewsCacheMap[url] = linkPreview
             return .success(linkPreview)
         case .failure(let error):
             return .failure(error)
@@ -60,6 +68,10 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     }
     
     func getPostMediaInfo(mediaId: String, isPreview: Bool) async throws -> Result<ZPostMedia, any Error> {
+        if isPreview, let cachedMediaInfo = feedMediaCacheMap[mediaId] {
+            return .success(cachedMediaInfo)
+        }
+        
         let parameters: Parameters = ["is_preview": isPreview.description]
         let url = MetaDataEndPoints.feedMediaEndPoint.appending("/\(mediaId)")
         let result: Result<ZPostMedia, Error> = try await APIManager.shared.authorisedRequest(url,
@@ -69,6 +81,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
                                                                                               encoding: URLEncoding.queryString)
         switch result {
         case .success(let mediaInfo):
+            feedMediaCacheMap[mediaId] = mediaInfo
             return .success(mediaInfo)
         case .failure(let error):
             return .failure(error)
@@ -82,6 +95,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
                                         appSettings: appSettings)
         switch result {
         case .success(let mediaInfo):
+            _ = try await getPostMediaInfo(mediaId: mediaInfo.id, isPreview: true)
             return .success(mediaInfo.id)
         case .failure(let error):
             return .failure(error)
@@ -89,6 +103,10 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     }
     
     func fetchYoutubeLinkMetaData(youtubeUrl: String) async throws -> Result<ZLinkPreview, any Error> {
+        if let cachedLinkPreview = linkPreviewsCacheMap[youtubeUrl] {
+            return .success(cachedLinkPreview)
+        }
+        
         let parameters: Parameters = [
             "url": youtubeUrl,
             "format": "json"
@@ -102,7 +120,9 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
                                encoding: URLEncoding.queryString)
         switch result {
         case .success(let metaData):
-            return .success(metaData.toLinkPreview(youtubeUrl))
+            let linkPreview = metaData.toLinkPreview(youtubeUrl)
+            linkPreviewsCacheMap[youtubeUrl] = linkPreview
+            return .success(linkPreview)
         case .failure(let error):
             return .failure(error)
         }
