@@ -99,10 +99,10 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                                bannedMembers: roomMembersDetails.bannedMembers,
                                bindings: state.bindings)
             
-            let powerLevels = try? await roomProxy.powerLevels().get()
-            self.state.canInviteUsers = (try? powerLevels?.canUserInvite(userID: roomProxy.ownUserID).get()) == true
-            self.state.canKickUsers = (try? powerLevels?.canUserKick(userID: roomProxy.ownUserID).get()) == true
-            self.state.canBanUsers = (try? powerLevels?.canUserBan(userID: roomProxy.ownUserID).get()) == true
+            let powerLevels = roomProxy.infoPublisher.value.powerLevels
+            self.state.canInviteUsers = (try? powerLevels.canUserInvite(userID: roomProxy.ownUserID).get()) == true
+            self.state.canKickUsers = (try? powerLevels.canUserKick(userID: roomProxy.ownUserID).get()) == true
+            self.state.canBanUsers = (try? powerLevels.canUserBan(userID: roomProxy.ownUserID).get()) == true
                         
             hideLoadingIndicator(Self.updateStateLoadingIndicatorIdentifier)
         }

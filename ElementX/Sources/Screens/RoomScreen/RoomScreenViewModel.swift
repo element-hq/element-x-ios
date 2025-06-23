@@ -348,12 +348,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.isKnockableRoom = false
         }
 
-        let powerLevels = try? await roomProxy.powerLevels().get()
-        state.canSendMessage = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
-        state.canJoinCall = (try? powerLevels?.canUserJoinCall(userID: roomProxy.ownUserID).get()) == true
-        state.canAcceptKnocks = (try? powerLevels?.canUserInvite(userID: roomProxy.ownUserID).get()) == true
-        state.canDeclineKnocks = (try? powerLevels?.canUserKick(userID: roomProxy.ownUserID).get()) == true
-        state.canBan = (try? powerLevels?.canUserBan(userID: roomProxy.ownUserID).get()) == true
+        state.canSendMessage = (try? roomInfo.powerLevels.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
+        state.canJoinCall = (try? roomInfo.powerLevels.canUserJoinCall(userID: roomProxy.ownUserID).get()) == true
+        state.canAcceptKnocks = (try? roomInfo.powerLevels.canUserInvite(userID: roomProxy.ownUserID).get()) == true
+        state.canDeclineKnocks = (try? roomInfo.powerLevels.canUserKick(userID: roomProxy.ownUserID).get()) == true
+        state.canBan = (try? roomInfo.powerLevels.canUserBan(userID: roomProxy.ownUserID).get()) == true
     }
     
     private func setupPinnedEventsTimelineItemProviderIfNeeded() {

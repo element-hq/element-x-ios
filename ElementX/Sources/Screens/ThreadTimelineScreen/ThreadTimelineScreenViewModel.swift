@@ -29,14 +29,12 @@ class ThreadTimelineScreenViewModel: ThreadTimelineScreenViewModelType, ThreadTi
                     return
                 }
                 
-                await self?.handleRoomInfoUpdate(roomInfo)
+                self?.handleRoomInfoUpdate(roomInfo)
             }
         }
         .store(in: &cancellables)
         
-        Task {
-            await handleRoomInfoUpdate(roomProxy.infoPublisher.value)
-        }
+        handleRoomInfoUpdate(roomProxy.infoPublisher.value)
     }
     
     // MARK: - Public
@@ -65,6 +63,6 @@ class ThreadTimelineScreenViewModel: ThreadTimelineScreenViewModelType, ThreadTi
     // MARK: - Private
     
     private func handleRoomInfoUpdate(_ roomInfo: RoomInfoProxy) async {
-        state.canSendMessage = await (try? roomProxy.powerLevels().get().canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
+        state.canSendMessage = (try? roomInfo.powerLevels.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
     }
 }
