@@ -179,18 +179,6 @@ extension RoomInfoProxyMock {
         historyVisibility = .shared
         
         powerLevels = RoomPowerLevelsProxyMock(configuration: configuration.powerLevelsConfiguration)
-        
-        avatar = {
-            guard successor == nil else {
-                return .tombstoned
-            }
-            
-            if isDirect, avatarURL == nil, heroes.count == 1 {
-                return .heroes(heroes.map(UserProfileProxy.init))
-            }
-            
-            return .room(id: id, name: displayName, avatarURL: avatarURL)
-        }()
     }
 }
 

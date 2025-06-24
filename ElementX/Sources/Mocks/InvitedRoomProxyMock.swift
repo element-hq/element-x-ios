@@ -42,9 +42,6 @@ extension RoomInfoProxyMock {
         topic = nil
         
         avatarURL = configuration.avatarURL
-        avatar = .room(id: configuration.id,
-                       name: configuration.name,
-                       avatarURL: configuration.avatarURL)
         
         isDirect = false
         isPublic = false

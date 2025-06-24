@@ -59,6 +59,8 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
 struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     let roomPreviewInfo: RoomPreviewInfo
     
+    let successor: SuccessorRoom? = nil
+    
     var id: String { roomPreviewInfo.roomId }
     var displayName: String? { roomPreviewInfo.name }
     var heroes: [RoomHero] { roomPreviewInfo.heroes ?? [] }
@@ -72,12 +74,4 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     
     var joinRule: JoinRule { roomPreviewInfo.joinRule }
     var membership: Membership? { roomPreviewInfo.membership }
-    
-    /// The room's avatar info for use in a ``RoomAvatarImage``.
-    var avatar: RoomAvatar {
-        if isDirect, avatarURL == nil, heroes.count == 1 {
-            return .heroes(heroes.map(UserProfileProxy.init))
-        }
-        return .room(id: id, name: displayName, avatarURL: avatarURL)
-    }
 }

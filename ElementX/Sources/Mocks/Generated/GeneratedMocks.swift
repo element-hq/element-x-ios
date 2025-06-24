@@ -13417,11 +13417,6 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
     var rawName: String?
     var topic: String?
     var avatarURL: URL?
-    var avatar: RoomAvatar {
-        get { return underlyingAvatar }
-        set(value) { underlyingAvatar = value }
-    }
-    var underlyingAvatar: RoomAvatar!
     var isEncrypted: Bool {
         get { return underlyingIsEncrypted }
         set(value) { underlyingIsEncrypted = value }
@@ -13447,7 +13442,6 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingIsSpace = value }
     }
     var underlyingIsSpace: Bool!
-    var successor: SuccessorRoom?
     var isFavourite: Bool {
         get { return underlyingIsFavourite }
         set(value) { underlyingIsFavourite = value }
@@ -13461,7 +13455,6 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
     }
     var underlyingMembership: Membership!
     var inviter: RoomMemberProxyProtocol?
-    var heroes: [RoomHero] = []
     var activeMembersCount: Int {
         get { return underlyingActiveMembersCount }
         set(value) { underlyingActiveMembersCount = value }
@@ -13530,6 +13523,8 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingPowerLevels = value }
     }
     var underlyingPowerLevels: RoomPowerLevelsProxyProtocol!
+    var successor: SuccessorRoom?
+    var heroes: [RoomHero] = []
 
 }
 class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {

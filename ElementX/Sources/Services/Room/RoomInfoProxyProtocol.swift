@@ -11,7 +11,6 @@ import MatrixRustSDK
 protocol BaseRoomInfoProxyProtocol {
     var id: String { get }
     var displayName: String? { get }
-    var avatar: RoomAvatar { get }
     var topic: String? { get }
     var canonicalAlias: String? { get }
     var avatarURL: URL? { get }
@@ -19,6 +18,9 @@ protocol BaseRoomInfoProxyProtocol {
     var joinedMembersCount: Int { get }
     var isDirect: Bool { get }
     var isSpace: Bool { get }
+    
+    var successor: SuccessorRoom? { get }
+    var heroes: [RoomHero] { get }
 }
 
 // sourcery: AutoMockable
@@ -30,8 +32,6 @@ protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var topic: String? { get }
     /// The room's avatar URL. Use this for editing and favour ``avatar`` for display.
     var avatarURL: URL? { get }
-    /// The room's avatar info for use in a ``RoomAvatarImage``.
-    var avatar: RoomAvatar { get }
 
     var isEncrypted: Bool { get }
     var isDirect: Bool { get }
@@ -40,13 +40,13 @@ protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var isPrivate: Bool { get }
     
     var isSpace: Bool { get }
-    var successor: SuccessorRoom? { get }
+    
     var isFavourite: Bool { get }
     var canonicalAlias: String? { get }
     var alternativeAliases: [String] { get }
     var membership: Membership { get }
     var inviter: RoomMemberProxyProtocol? { get }
-    var heroes: [RoomHero] { get }
+    
     var activeMembersCount: Int { get }
     var invitedMembersCount: Int { get }
     var joinedMembersCount: Int { get }
@@ -66,7 +66,7 @@ protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var powerLevels: RoomPowerLevelsProxyProtocol { get }
 }
 
-extension RoomInfoProxyProtocol {
+extension BaseRoomInfoProxyProtocol {
     /// The room's avatar info for use in a ``RoomAvatarImage``.
     var avatar: RoomAvatar {
         guard successor == nil else {
@@ -79,7 +79,9 @@ extension RoomInfoProxyProtocol {
         
         return .room(id: id, name: displayName, avatarURL: avatarURL)
     }
-    
+}
+
+extension RoomInfoProxyProtocol {
     /// A room might be non public but also not private given the fact that the join rule might be missing or unsupported.
     var isPrivate: Bool {
         switch joinRule {
