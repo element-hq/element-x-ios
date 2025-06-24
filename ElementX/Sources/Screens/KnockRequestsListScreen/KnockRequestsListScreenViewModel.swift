@@ -27,9 +27,6 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         super.init(initialViewState: KnockRequestsListScreenViewState(), mediaProvider: mediaProvider)
         
         updateRoomInfo(roomInfo: roomProxy.infoPublisher.value)
-        Task {
-            await updatePermissions()
-        }
         
         setupSubscriptions()
     }
@@ -189,7 +186,6 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
             .receive(on: DispatchQueue.main)
             .sink { [weak self] roomInfo in
                 self?.updateRoomInfo(roomInfo: roomInfo)
-                Task { await self?.updatePermissions() }
             }
             .store(in: &cancellables)
         
@@ -214,20 +210,17 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
             .store(in: &cancellables)
     }
     
-    private func updateRoomInfo(roomInfo: RoomInfoProxy) {
+    private func updateRoomInfo(roomInfo: RoomInfoProxyProtocol) {
         switch roomInfo.joinRule {
         case .knock, .knockRestricted:
             state.isKnockableRoom = true
         default:
             state.isKnockableRoom = false
         }
-    }
-    
-    private func updatePermissions() async {
-        let powerLevels = try? await roomProxy.powerLevels().get()
-        state.canAccept = (try? powerLevels?.canUserInvite(userID: roomProxy.ownUserID).get()) == true
-        state.canDecline = (try? powerLevels?.canUserKick(userID: roomProxy.ownUserID).get()) == true
-        state.canBan = (try? powerLevels?.canUserBan(userID: roomProxy.ownUserID).get()) == true
+        
+        state.canAccept = (try? roomInfo.powerLevels.canUserInvite(userID: roomProxy.ownUserID).get()) == true
+        state.canDecline = (try? roomInfo.powerLevels.canUserKick(userID: roomProxy.ownUserID).get()) == true
+        state.canBan = (try? roomInfo.powerLevels.canUserBan(userID: roomProxy.ownUserID).get()) == true
     }
     
     private static let loadingIndicatorIdentifier = "\(KnockRequestsListScreenViewModel.self)-Loading"

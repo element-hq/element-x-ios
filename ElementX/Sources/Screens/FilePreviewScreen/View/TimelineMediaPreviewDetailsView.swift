@@ -180,27 +180,24 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
         if case let .media(mediaItem) = viewModel.state.currentItem {
             TimelineMediaPreviewDetailsView(item: mediaItem, context: viewModel.context, sheetHeight: $sheetHeight)
                 .previewDisplayName("Image")
-                .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
-                    state.currentItemActions?.secondaryActions.contains(.redact) ?? false
-                })
+                .snapshotPreferences(expect: mediaItem.observe(\.fileHandle).map { $0 != nil }.eraseToStream())
         }
         
         if case let .media(mediaItem) = loadingViewModel.state.currentItem {
             TimelineMediaPreviewDetailsView(item: mediaItem, context: loadingViewModel.context, sheetHeight: $sheetHeight)
                 .previewDisplayName("Loading")
-                .snapshotPreferences(expect: loadingViewModel.context.$viewState.map { state in
-                    state.currentItemActions?.secondaryActions.contains(.redact) ?? false
-                })
         }
         
         if case let .media(mediaItem) = unknownTypeViewModel.state.currentItem {
             TimelineMediaPreviewDetailsView(item: mediaItem, context: unknownTypeViewModel.context, sheetHeight: $sheetHeight)
                 .previewDisplayName("Unknown type")
+                .snapshotPreferences(expect: mediaItem.observe(\.fileHandle).map { $0 != nil }.eraseToStream())
         }
         
         if case let .media(mediaItem) = presentedOnRoomViewModel.state.currentItem {
             TimelineMediaPreviewDetailsView(item: mediaItem, context: presentedOnRoomViewModel.context, sheetHeight: $sheetHeight)
                 .previewDisplayName("Incoming on Room")
+                .snapshotPreferences(expect: mediaItem.observe(\.fileHandle).map { $0 != nil }.eraseToStream())
         }
     }
     

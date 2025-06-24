@@ -119,9 +119,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         setupSubscriptions()
         setupDirectRoomSubscriptionsIfNeeded()
         
-        // Set initial values for redacting from the macOS context menu.
-        Task { await updatePermissions() }
-
+        updateRoomInfo(roomInfo: roomProxy.infoPublisher.value)
+        
         state.audioPlayerStateProvider = { [weak self] itemID -> AudioPlayerState? in
             guard let self else {
                 return nil
@@ -403,14 +402,15 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
     }
     
-    private func updatePermissions() async {
-        let powerLevels = try? await roomProxy.powerLevels().get()
-        state.canCurrentUserSendMessage = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
-        state.canCurrentUserRedactOthers = (try? powerLevels?.canUserRedactOther(userID: roomProxy.ownUserID).get()) == true
-        state.canCurrentUserRedactSelf = (try? powerLevels?.canUserRedactOwn(userID: roomProxy.ownUserID).get()) == true
-        state.canCurrentUserPin = (try? powerLevels?.canUserPinOrUnpin(userID: roomProxy.ownUserID).get()) == true
-        state.canCurrentUserKick = (try? powerLevels?.canUserKick(userID: roomProxy.ownUserID).get()) == true
-        state.canCurrentUserBan = (try? powerLevels?.canUserBan(userID: roomProxy.ownUserID).get()) == true
+    private func updateRoomInfo(roomInfo: RoomInfoProxyProtocol) {
+        state.pinnedEventIDs = roomInfo.pinnedEventIDs
+        
+        state.canCurrentUserSendMessage = (try? roomInfo.powerLevels.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
+        state.canCurrentUserRedactOthers = (try? roomInfo.powerLevels.canUserRedactOther(userID: roomProxy.ownUserID).get()) == true
+        state.canCurrentUserRedactSelf = (try? roomInfo.powerLevels.canUserRedactOwn(userID: roomProxy.ownUserID).get()) == true
+        state.canCurrentUserPin = (try? roomInfo.powerLevels.canUserPinOrUnpin(userID: roomProxy.ownUserID).get()) == true
+        state.canCurrentUserKick = (try? roomInfo.powerLevels.canUserKick(userID: roomProxy.ownUserID).get()) == true
+        state.canCurrentUserBan = (try? roomInfo.powerLevels.canUserBan(userID: roomProxy.ownUserID).get()) == true
     }
     
     private func setupSubscriptions() {
@@ -445,8 +445,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 guard !Task.isCancelled else {
                     return
                 }
-                self?.state.pinnedEventIDs = roomInfo.pinnedEventIDs
-                await self?.updatePermissions()
+                
+                self?.updateRoomInfo(roomInfo: roomInfo)
             }
         }
         .store(in: &cancellables)
@@ -487,10 +487,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 case .displayMediaUploadPreviewScreen(let url):
                     actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
                 case .showActionMenu(let actionMenuInfo):
-                    Task {
-                        await self.updatePermissions()
-                        self.state.bindings.actionMenuInfo = actionMenuInfo
-                    }
+                    self.state.bindings.actionMenuInfo = actionMenuInfo
                 case .showDebugInfo(let debugInfo):
                     state.bindings.debugInfo = debugInfo
                 case .viewInRoomTimeline(let eventID):
@@ -993,13 +990,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                               type: .toast,
                                                               title: title,
                                                               iconName: "xmark"))
-    }
-}
-
-private extension RoomInfoProxy {
-    /// Checks if the other person left the room in a direct chat
-    var isUserAloneInDirectRoom: Bool {
-        isDirect && activeMembersCount == 1
     }
 }
 

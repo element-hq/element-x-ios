@@ -274,7 +274,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         var configuration = JoinedRoomProxyMockConfiguration()
         let roomProxy = JoinedRoomProxyMock(configuration)
         
-        let roomInfoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: .init(configuration)))
+        let roomInfoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
         roomProxy.infoPublisher = roomInfoSubject.asCurrentValuePublisher()
         
         clientProxy.roomForIdentifierClosure = { _ in
@@ -288,7 +288,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         }
         
         configuration.membership = .left
-        roomInfoSubject.send(.init(roomInfo: .init(configuration)))
+        roomInfoSubject.send(RoomInfoProxyMock(configuration))
         
         try await fulfillment.fulfill()
     }

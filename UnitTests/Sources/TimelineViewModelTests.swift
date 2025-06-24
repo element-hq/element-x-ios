@@ -468,7 +468,7 @@ class TimelineViewModelTests: XCTestCase {
         var configuration = JoinedRoomProxyMockConfiguration(name: "",
                                                              pinnedEventIDs: .init(["test1"]))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
-        let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
@@ -489,7 +489,7 @@ class TimelineViewModelTests: XCTestCase {
         let deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.pinnedEventIDs == ["test1", "test2"]
         }
-        infoSubject.send(.init(roomInfo: RoomInfo(configuration)))
+        infoSubject.send(RoomInfoProxyMock(configuration))
         try await deferred.fulfill()
     }
     
@@ -497,7 +497,7 @@ class TimelineViewModelTests: XCTestCase {
         let configuration = JoinedRoomProxyMockConfiguration(name: "",
                                                              powerLevelsConfiguration: .init(canUserPin: true))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
-        let infoSubject = CurrentValueSubject<RoomInfoProxy, Never>(.init(roomInfo: RoomInfo(configuration)))
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
@@ -518,14 +518,17 @@ class TimelineViewModelTests: XCTestCase {
         }
         try await deferred.fulfill()
         
-        let powerLevelsMock = RoomPowerLevelsProxyMock(configuration: .init())
-        powerLevelsMock.canUserPinOrUnpinUserIDReturnValue = .success(false)
-        roomProxyMock.powerLevelsReturnValue = .success(powerLevelsMock)
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        powerLevelsProxyMock.canUserPinOrUnpinUserIDReturnValue = .success(false)
+        roomProxyMock.powerLevelsReturnValue = .success(powerLevelsProxyMock)
+        
+        let roomInfoProxyMock = RoomInfoProxyMock(configuration)
+        roomInfoProxyMock.powerLevels = powerLevelsProxyMock
         
         deferred = deferFulfillment(viewModel.context.$viewState) { value in
             !value.canCurrentUserPin
         }
-        infoSubject.send(.init(roomInfo: RoomInfo(configuration)))
+        infoSubject.send(roomInfoProxyMock)
         try await deferred.fulfill()
     }
     

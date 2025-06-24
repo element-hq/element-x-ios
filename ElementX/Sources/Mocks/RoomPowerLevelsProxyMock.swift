@@ -26,6 +26,17 @@ extension RoomPowerLevelsProxyMock {
         
         underlyingValues = RoomPowerLevelsValues.mock
         
+        canOwnUserSendMessageReturnValue = configuration.canUserSendMessage
+        canOwnUserSendStateEventReturnValue = configuration.canUserSendState
+        canOwnUserInviteReturnValue = configuration.canUserInvite
+        canOwnUserRedactOtherReturnValue = configuration.canUserRedactOther
+        canOwnUserRedactOwnReturnValue = configuration.canUserRedactOwn
+        canOwnUserKickReturnValue = configuration.canUserKick
+        canOwnUserBanReturnValue = configuration.canUserBan
+        canOwnUserTriggerRoomNotificationReturnValue = configuration.canUserTriggerRoomNotification
+        canOwnUserPinOrUnpinReturnValue = configuration.canUserPin
+        canOwnUserJoinCallReturnValue = configuration.canUserJoinCall
+        
         canUserUserIDSendMessageReturnValue = .success(configuration.canUserSendMessage)
         canUserUserIDSendStateEventReturnValue = .success(configuration.canUserSendState)
         canUserInviteUserIDReturnValue = .success(configuration.canUserInvite)
