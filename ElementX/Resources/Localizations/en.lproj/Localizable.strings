@@ -632,6 +632,7 @@
 "screen_bug_report_error_description_too_short" = "The description is too short, please provide more details about what happened. Thanks!";
 "screen_bug_report_include_crash_logs" = "Send crash logs";
 "screen_bug_report_include_logs" = "Allow logs";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Send screenshot";
 "screen_bug_report_logs_description" = "Logs will be included with your message to make sure that everything is working properly. To send your message without logs, turn off this setting.";
 "screen_bug_report_view_logs" = "View logs";

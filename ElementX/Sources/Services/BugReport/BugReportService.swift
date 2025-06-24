@@ -80,8 +80,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))
         }
         
-        if bugReport.includeLogs {
-            let logAttachments = await zipFiles(Tracing.logFiles)
+        if let logFiles = bugReport.logFiles {
+            let logAttachments = await zipFiles(logFiles)
             for url in logAttachments.files {
                 params.append(MultipartFormData(key: "compressed-log", type: .file(url: url)))
             }
