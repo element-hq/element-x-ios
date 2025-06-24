@@ -18,6 +18,46 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
         powerLevels.values()
     }
     
+    func canOwnUser(sendMessage messageType: MessageLikeEventType) -> Bool {
+        powerLevels.canOwnUserSendMessage(message: messageType)
+    }
+    
+    func canOwnUser(sendStateEvent stateEventType: StateEventType) -> Bool {
+        powerLevels.canOwnUserSendState(stateEvent: stateEventType)
+    }
+    
+    func canOwnUserInvite() -> Bool {
+        powerLevels.canOwnUserInvite()
+    }
+    
+    func canOwnUserRedactOther() -> Bool {
+        powerLevels.canOwnUserRedactOther()
+    }
+    
+    func canOwnUserRedactOwn() -> Bool {
+        powerLevels.canOwnUserRedactOwn()
+    }
+    
+    func canOwnUserKick() -> Bool {
+        powerLevels.canOwnUserKick()
+    }
+    
+    func canOwnUserBan() -> Bool {
+        powerLevels.canOwnUserBan()
+    }
+    
+    func canOwnUserTriggerRoomNotification() -> Bool {
+        powerLevels.canOwnUserTriggerRoomNotification()
+    }
+    
+    func canOwnUserPinOrUnpin() -> Bool {
+        powerLevels.canOwnUserPinUnpin()
+    }
+    
+    func canOwnUserJoinCall() -> Bool {
+        powerLevels.canOwnUserSendState(stateEvent: .callMember)
+    }
+    
     func canUser(userID: String, sendMessage messageType: MessageLikeEventType) -> Result<Bool, RoomProxyError> {
         do {
             return try .success(powerLevels.canUserSendMessage(userId: userID, message: messageType))
