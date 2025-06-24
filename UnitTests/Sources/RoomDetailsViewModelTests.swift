@@ -355,14 +355,24 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testCanEditAvatar() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
-        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, isPublic: false, members: mockedMembers))
         
-        let powerLevelsMock = RoomPowerLevelsProxyMock(configuration: .init())
-        roomProxyMock.powerLevelsReturnValue = .success(powerLevelsMock)
+        let configuration = JoinedRoomProxyMockConfiguration(name: "Test",
+                                                             isDirect: false,
+                                                             isPublic: false,
+                                                             members: mockedMembers)
         
-        powerLevelsMock.canUserUserIDSendStateEventClosure = { _, event in
+        roomProxyMock = JoinedRoomProxyMock(configuration)
+        
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { _, event in
             .success(event == .roomAvatar)
         }
+        roomProxyMock.powerLevelsReturnValue = .success(powerLevelsProxyMock)
+        
+        let roomInfoProxyMock = RoomInfoProxyMock(configuration)
+        roomInfoProxyMock.powerLevels = powerLevelsProxyMock
+        roomProxyMock.infoPublisher = CurrentValueSubject(roomInfoProxyMock).asCurrentValuePublisher()
+        
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                clientProxy: ClientProxyMock(.init()),
                                                mediaProvider: MediaProviderMock(configuration: .init()),
@@ -383,14 +393,24 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testCanEditName() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
-        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, isPublic: false, members: mockedMembers))
         
-        let powerLevelsMock = RoomPowerLevelsProxyMock(configuration: .init())
-        roomProxyMock.powerLevelsReturnValue = .success(powerLevelsMock)
+        let configuration = JoinedRoomProxyMockConfiguration(name: "Test",
+                                                             isDirect: false,
+                                                             isPublic: false,
+                                                             members: mockedMembers)
         
-        powerLevelsMock.canUserUserIDSendStateEventClosure = { _, event in
+        roomProxyMock = JoinedRoomProxyMock(configuration)
+        
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { _, event in
             .success(event == .roomName)
         }
+        roomProxyMock.powerLevelsReturnValue = .success(powerLevelsProxyMock)
+        
+        let roomInfoProxyMock = RoomInfoProxyMock(configuration)
+        roomInfoProxyMock.powerLevels = powerLevelsProxyMock
+        roomProxyMock.infoPublisher = CurrentValueSubject(roomInfoProxyMock).asCurrentValuePublisher()
+        
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                clientProxy: ClientProxyMock(.init()),
                                                mediaProvider: MediaProviderMock(configuration: .init()),
@@ -411,14 +431,24 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     
     func testCanEditTopic() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockMe, .mockBob, .mockAlice]
-        roomProxyMock = JoinedRoomProxyMock(.init(name: "Test", isDirect: false, isPublic: false, members: mockedMembers))
         
-        let powerLevelsMock = RoomPowerLevelsProxyMock(configuration: .init())
-        roomProxyMock.powerLevelsReturnValue = .success(powerLevelsMock)
+        let configuration = JoinedRoomProxyMockConfiguration(name: "Test",
+                                                             isDirect: false,
+                                                             isPublic: false,
+                                                             members: mockedMembers)
         
-        powerLevelsMock.canUserUserIDSendStateEventClosure = { _, event in
+        roomProxyMock = JoinedRoomProxyMock(configuration)
+        
+        let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
+        powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { _, event in
             .success(event == .roomTopic)
         }
+        roomProxyMock.powerLevelsReturnValue = .success(powerLevelsProxyMock)
+        
+        let roomInfoProxyMock = RoomInfoProxyMock(configuration)
+        roomInfoProxyMock.powerLevels = powerLevelsProxyMock
+        roomProxyMock.infoPublisher = CurrentValueSubject(roomInfoProxyMock).asCurrentValuePublisher()
+        
         viewModel = RoomDetailsScreenViewModel(roomProxy: roomProxyMock,
                                                clientProxy: ClientProxyMock(.init()),
                                                mediaProvider: MediaProviderMock(configuration: .init()),
