@@ -14,6 +14,7 @@ enum HomeTab: CaseIterable {
     case feed
     case notifications
     case myFeed
+    case wallet
 }
 
 struct HomeTabView<Content: View>: View {
@@ -29,6 +30,7 @@ struct HomeTabView<Content: View>: View {
         (title: "Channels", icon: Asset.Images.homeTabExplorerIcon, tab: HomeTab.channels),
         (title: "Feed", icon: Asset.Images.homeTabFeedIcon, tab: HomeTab.feed),
         (title: "Notifications", icon: Asset.Images.homeTabNotificationsIcon, tab: HomeTab.notifications),
+        (title: "Wallet", icon: Asset.Images.homeTabWalletIcon, tab: HomeTab.wallet),
 //        (title: "My Feed", icon: Asset.Images.homeTabProfileIcon, tab: HomeTab.myFeed)
     ]
     

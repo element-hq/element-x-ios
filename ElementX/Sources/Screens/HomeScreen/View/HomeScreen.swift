@@ -46,6 +46,8 @@ struct HomeScreen: View {
                         HomeNotificationsContent(context: context, scrollViewAdapter: scrollViewAdapter)
                     case .myFeed:
                         HomeMyPostsContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    case .wallet:
+                        HomeWalletContent(context: context, scrollViewAdapter: scrollViewAdapter)
                     }
                 },
                 onTabSelected: { tab in

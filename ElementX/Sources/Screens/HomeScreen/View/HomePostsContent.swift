@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+enum HomePostsTab: CaseIterable {
+    case following
+    case all
+}
+
 struct HomePostsContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
@@ -36,13 +41,18 @@ struct HomePostsContent: View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    HomePostsTabView(
-                        selectedTab: (context.viewState.currentUserZeroProfile?.isFollowingOtherUsers ?? false) ? .following : .all,
-                        onTabSelected: { tab in
-                            selectedTab = tab
-                            context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: tab == .following))
+                    SimpleTabButtonsView(tabs: HomePostsTab.allCases,
+                                         selectedTab: selectedTab,
+                                         tabTitle: { tab in
+                        switch tab {
+                        case .following: return "Following"
+                        case .all: return "Everything"
                         }
-                    )
+                    },
+                                         onTabSelected: { tab in
+                        selectedTab = tab
+                        context.send(viewAction: .forceRefreshAllPosts(followingPostsOnly: tab == .following))
+                    })
                     
                     switch context.viewState.postListMode {
                     case .skeletons:
