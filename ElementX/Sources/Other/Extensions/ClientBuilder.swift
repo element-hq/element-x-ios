@@ -44,11 +44,11 @@ extension ClientBuilder {
             if enableOnlySignedDeviceIsolationMode {
                 builder = builder
                     .roomKeyRecipientStrategy(strategy: .identityBasedStrategy)
-                    .roomDecryptionTrustRequirement(trustRequirement: .crossSignedOrLegacy)
+                    .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .crossSignedOrLegacy))
             } else {
                 builder = builder
                     .roomKeyRecipientStrategy(strategy: .errorOnVerifiedUserProblem)
-                    .roomDecryptionTrustRequirement(trustRequirement: .untrusted)
+                    .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .untrusted))
             }
         }
         
