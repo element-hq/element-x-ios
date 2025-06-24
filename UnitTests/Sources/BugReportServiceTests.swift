@@ -31,7 +31,7 @@ class BugReportServiceTests: XCTestCase {
                                   ed25519: nil,
                                   curve25519: nil,
                                   text: "i cannot send message",
-                                  includeLogs: true,
+                                  logFiles: [URL(filePath: "/logs/1.log"), URL(filePath: "/logs/2.log")],
                                   canContact: false,
                                   githubLabels: [],
                                   files: [])
@@ -76,7 +76,7 @@ class BugReportServiceTests: XCTestCase {
                                   ed25519: nil,
                                   curve25519: nil,
                                   text: "i cannot send message",
-                                  includeLogs: true,
+                                  logFiles: Tracing.logFiles,
                                   canContact: false,
                                   githubLabels: [],
                                   files: [])

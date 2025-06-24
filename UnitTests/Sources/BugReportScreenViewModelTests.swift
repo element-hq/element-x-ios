@@ -79,14 +79,14 @@ class BugReportScreenViewModelTests: XCTestCase {
         
         context.send(viewAction: .submit)
         try await deferred.fulfill()
-                
+        
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.userID, "@mock.client.com")
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.deviceID, "ABCDEFGH")
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.curve25519, "THECURVEKEYKEY")
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.ed25519, "THEEDKEYKEY")
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.text, "This will succeed")
-        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.includeLogs, true)
+        XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.logFiles?.isEmpty, false)
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.canContact, false)
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.githubLabels, [])
         XCTAssertEqual(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport.files, [])

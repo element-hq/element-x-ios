@@ -15,7 +15,7 @@ struct BugReport: Equatable {
     let ed25519: String?
     let curve25519: String?
     let text: String
-    let includeLogs: Bool
+    let logFiles: [URL]?
     let canContact: Bool
     var githubLabels: [String]
     let files: [URL]

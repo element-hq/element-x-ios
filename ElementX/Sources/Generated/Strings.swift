@@ -1224,6 +1224,8 @@ internal enum L10n {
   internal static var screenBugReportIncludeCrashLogs: String { return L10n.tr("Localizable", "screen_bug_report_include_crash_logs") }
   /// Allow logs
   internal static var screenBugReportIncludeLogs: String { return L10n.tr("Localizable", "screen_bug_report_include_logs") }
+  /// Your logs are excessively large so cannot be included in this report, please send them to us another way.
+  internal static var screenBugReportIncludeLogsError: String { return L10n.tr("Localizable", "screen_bug_report_include_logs_error") }
   /// Send screenshot
   internal static var screenBugReportIncludeScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_include_screenshot") }
   /// Logs will be included with your message to make sure that everything is working properly. To send your message without logs, turn off this setting.
