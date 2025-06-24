@@ -338,13 +338,13 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         RoomDetailsScreen(context: genericRoomViewModel.context)
             .snapshotPreferences(expect: genericRoomViewModel.context.$viewState.map { state in
-                state.shortcuts.contains(.invite)
+                state.canSeeSecurityAndPrivacy == true
             })
             .previewDisplayName("Generic Room")
         
         RoomDetailsScreen(context: simpleRoomViewModel.context)
             .snapshotPreferences(expect: simpleRoomViewModel.context.$viewState.map { state in
-                state.shortcuts.contains(.invite)
+                state.canSeeSecurityAndPrivacy == true
             })
             .previewDisplayName("Simple Room")
         
