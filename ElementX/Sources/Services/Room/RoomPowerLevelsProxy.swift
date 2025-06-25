@@ -10,12 +10,20 @@ import MatrixRustSDK
 struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
     private let powerLevels: RoomPowerLevels
     
-    init(_ powerLevels: RoomPowerLevels) {
+    init?(_ powerLevels: RoomPowerLevels?) {
+        guard let powerLevels else {
+            return nil
+        }
+        
         self.powerLevels = powerLevels
     }
     
     var values: RoomPowerLevelsValues {
         powerLevels.values()
+    }
+    
+    var userPowerLevels: [String: Int64] {
+        powerLevels.userPowerLevels()
     }
     
     func canOwnUser(sendMessage messageType: MessageLikeEventType) -> Bool {

@@ -63,7 +63,7 @@ protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var joinRule: JoinRule? { get }
     var historyVisibility: RoomHistoryVisibility { get }
     
-    var powerLevels: RoomPowerLevelsProxyProtocol { get }
+    var powerLevels: RoomPowerLevelsProxyProtocol? { get }
 }
 
 extension BaseRoomInfoProxyProtocol {

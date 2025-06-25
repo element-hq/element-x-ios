@@ -152,7 +152,7 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     // MARK: - Power Levels
     
-    func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol, RoomProxyError>
+    func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol?, RoomProxyError>
     func applyPowerLevelChanges(_ changes: RoomPowerLevelChanges) async -> Result<Void, RoomProxyError>
     func resetPowerLevels() async -> Result<Void, RoomProxyError>
     func suggestedRole(for userID: String) async -> Result<RoomMemberRole, RoomProxyError>

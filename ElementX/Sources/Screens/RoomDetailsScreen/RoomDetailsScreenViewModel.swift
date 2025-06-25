@@ -224,13 +224,17 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.isKnockableRoom = false
         }
         
-        state.canEditRoomName = roomInfo.powerLevels.canOwnUser(sendStateEvent: .roomName)
-        state.canEditRoomTopic = roomInfo.powerLevels.canOwnUser(sendStateEvent: .roomTopic)
-        state.canEditRoomAvatar = roomInfo.powerLevels.canOwnUser(sendStateEvent: .roomAvatar)
-        state.canInviteUsers = roomInfo.powerLevels.canOwnUserInvite()
-        state.canKickUsers = roomInfo.powerLevels.canOwnUserKick()
-        state.canBanUsers = roomInfo.powerLevels.canOwnUserBan()
-        state.canJoinCall = roomInfo.powerLevels.canOwnUserJoinCall()
+        if let powerLevels = roomInfo.powerLevels {
+            state.canEditRoomName = powerLevels.canOwnUser(sendStateEvent: .roomName)
+            state.canEditRoomTopic = powerLevels.canOwnUser(sendStateEvent: .roomTopic)
+            state.canEditRoomAvatar = powerLevels.canOwnUser(sendStateEvent: .roomAvatar)
+            state.canInviteUsers = powerLevels.canOwnUserInvite()
+            state.canKickUsers = powerLevels.canOwnUserKick()
+            state.canBanUsers = powerLevels.canOwnUserBan()
+            state.canJoinCall = powerLevels.canOwnUserJoinCall()
+        } else {
+            fatalError("Missing room power levels")
+        }
         
         Task {
             state.canEditRolesOrPermissions = await (try? roomProxy.suggestedRole(for: roomProxy.ownUserID).get()) == .administrator
