@@ -224,13 +224,13 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.isKnockableRoom = false
         }
         
-        state.canEditRoomName = (try? roomInfo.powerLevels.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName).get()) == true
-        state.canEditRoomTopic = (try? roomInfo.powerLevels.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic).get()) == true
-        state.canEditRoomAvatar = (try? roomInfo.powerLevels.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar).get()) == true
-        state.canInviteUsers = (try? roomInfo.powerLevels.canUserInvite(userID: roomProxy.ownUserID).get()) == true
-        state.canKickUsers = (try? roomInfo.powerLevels.canUserKick(userID: roomProxy.ownUserID).get()) == true
-        state.canBanUsers = (try? roomInfo.powerLevels.canUserBan(userID: roomProxy.ownUserID).get()) == true
-        state.canJoinCall = (try? roomInfo.powerLevels.canUserJoinCall(userID: roomProxy.ownUserID).get()) == true
+        state.canEditRoomName = roomInfo.powerLevels.canOwnUser(sendStateEvent: .roomName)
+        state.canEditRoomTopic = roomInfo.powerLevels.canOwnUser(sendStateEvent: .roomTopic)
+        state.canEditRoomAvatar = roomInfo.powerLevels.canOwnUser(sendStateEvent: .roomAvatar)
+        state.canInviteUsers = roomInfo.powerLevels.canOwnUserInvite()
+        state.canKickUsers = roomInfo.powerLevels.canOwnUserKick()
+        state.canBanUsers = roomInfo.powerLevels.canOwnUserBan()
+        state.canJoinCall = roomInfo.powerLevels.canOwnUserJoinCall()
         
         Task {
             state.canEditRolesOrPermissions = await (try? roomProxy.suggestedRole(for: roomProxy.ownUserID).get()) == .administrator

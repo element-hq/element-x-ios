@@ -218,9 +218,9 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
             state.isKnockableRoom = false
         }
         
-        state.canAccept = (try? roomInfo.powerLevels.canUserInvite(userID: roomProxy.ownUserID).get()) == true
-        state.canDecline = (try? roomInfo.powerLevels.canUserKick(userID: roomProxy.ownUserID).get()) == true
-        state.canBan = (try? roomInfo.powerLevels.canUserBan(userID: roomProxy.ownUserID).get()) == true
+        state.canAccept = roomInfo.powerLevels.canOwnUserInvite()
+        state.canDecline = roomInfo.powerLevels.canOwnUserKick()
+        state.canBan = roomInfo.powerLevels.canOwnUserBan()
     }
     
     private static let loadingIndicatorIdentifier = "\(KnockRequestsListScreenViewModel.self)-Loading"

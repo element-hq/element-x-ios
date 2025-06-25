@@ -348,11 +348,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.isKnockableRoom = false
         }
 
-        state.canSendMessage = (try? roomInfo.powerLevels.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
-        state.canJoinCall = (try? roomInfo.powerLevels.canUserJoinCall(userID: roomProxy.ownUserID).get()) == true
-        state.canAcceptKnocks = (try? roomInfo.powerLevels.canUserInvite(userID: roomProxy.ownUserID).get()) == true
-        state.canDeclineKnocks = (try? roomInfo.powerLevels.canUserKick(userID: roomProxy.ownUserID).get()) == true
-        state.canBan = (try? roomInfo.powerLevels.canUserBan(userID: roomProxy.ownUserID).get()) == true
+        state.canSendMessage = roomInfo.powerLevels.canOwnUser(sendMessage: .roomMessage)
+        state.canJoinCall = roomInfo.powerLevels.canOwnUserJoinCall()
+        state.canAcceptKnocks = roomInfo.powerLevels.canOwnUserInvite()
+        state.canDeclineKnocks = roomInfo.powerLevels.canOwnUserKick()
+        state.canBan = roomInfo.powerLevels.canOwnUserBan()
     }
     
     private func setupPinnedEventsTimelineItemProviderIfNeeded() {

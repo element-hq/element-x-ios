@@ -405,12 +405,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func updateRoomInfo(roomInfo: RoomInfoProxyProtocol) {
         state.pinnedEventIDs = roomInfo.pinnedEventIDs
         
-        state.canCurrentUserSendMessage = (try? roomInfo.powerLevels.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
-        state.canCurrentUserRedactOthers = (try? roomInfo.powerLevels.canUserRedactOther(userID: roomProxy.ownUserID).get()) == true
-        state.canCurrentUserRedactSelf = (try? roomInfo.powerLevels.canUserRedactOwn(userID: roomProxy.ownUserID).get()) == true
-        state.canCurrentUserPin = (try? roomInfo.powerLevels.canUserPinOrUnpin(userID: roomProxy.ownUserID).get()) == true
-        state.canCurrentUserKick = (try? roomInfo.powerLevels.canUserKick(userID: roomProxy.ownUserID).get()) == true
-        state.canCurrentUserBan = (try? roomInfo.powerLevels.canUserBan(userID: roomProxy.ownUserID).get()) == true
+        state.canCurrentUserSendMessage = roomInfo.powerLevels.canOwnUser(sendMessage: .roomMessage)
+        state.canCurrentUserRedactOthers = roomInfo.powerLevels.canOwnUserRedactOther()
+        state.canCurrentUserRedactSelf = roomInfo.powerLevels.canOwnUserRedactOwn()
+        state.canCurrentUserPin = roomInfo.powerLevels.canOwnUserPinOrUnpin()
+        state.canCurrentUserKick = roomInfo.powerLevels.canOwnUserKick()
+        state.canCurrentUserBan = roomInfo.powerLevels.canOwnUserBan()
     }
     
     private func setupSubscriptions() {

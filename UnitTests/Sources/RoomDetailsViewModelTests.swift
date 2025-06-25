@@ -367,6 +367,9 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { _, event in
             .success(event == .roomAvatar)
         }
+        powerLevelsProxyMock.canOwnUserSendStateEventClosure = { event in
+            event == .roomAvatar
+        }
         roomProxyMock.powerLevelsReturnValue = .success(powerLevelsProxyMock)
         
         let roomInfoProxyMock = RoomInfoProxyMock(configuration)
@@ -405,6 +408,9 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { _, event in
             .success(event == .roomName)
         }
+        powerLevelsProxyMock.canOwnUserSendStateEventClosure = { event in
+            event == .roomName
+        }
         roomProxyMock.powerLevelsReturnValue = .success(powerLevelsProxyMock)
         
         let roomInfoProxyMock = RoomInfoProxyMock(configuration)
@@ -442,6 +448,9 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
         powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { _, event in
             .success(event == .roomTopic)
+        }
+        powerLevelsProxyMock.canOwnUserSendStateEventClosure = { event in
+            event == .roomTopic
         }
         roomProxyMock.powerLevelsReturnValue = .success(powerLevelsProxyMock)
         

@@ -87,9 +87,9 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     // MARK: - Private
     
     private func updateRoomInfo(roomInfo: RoomInfoProxyProtocol) {
-        state.canEditAvatar = (try? roomInfo.powerLevels.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar).get()) == .some(true)
-        state.canEditName = (try? roomInfo.powerLevels.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName).get()) == .some(true)
-        state.canEditTopic = (try? roomInfo.powerLevels.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic).get()) == .some(true)
+        state.canEditAvatar = roomInfo.powerLevels.canOwnUser(sendStateEvent: .roomAvatar)
+        state.canEditName = roomInfo.powerLevels.canOwnUser(sendStateEvent: .roomName)
+        state.canEditTopic = roomInfo.powerLevels.canOwnUser(sendStateEvent: .roomTopic)
     }
     
     private func saveRoomDetails() {

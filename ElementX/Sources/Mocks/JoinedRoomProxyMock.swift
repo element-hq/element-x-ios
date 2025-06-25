@@ -99,11 +99,22 @@ extension JoinedRoomProxyMock {
         powerLevelsProxyMock.canUserUserIDSendStateEventClosure = { [weak self] userID, _ in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }
+        powerLevelsProxyMock.canOwnUserSendStateEventClosure = { [weak self] _ in
+            self?.membersPublisher.value.first { $0.userID == configuration.ownUserID }?.role ?? .user != .user
+        }
+        
         powerLevelsProxyMock.canUserKickUserIDClosure = { [weak self] userID in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
         }
+        powerLevelsProxyMock.canOwnUserKickClosure = { [weak self] in
+            self?.membersPublisher.value.first { $0.userID == configuration.ownUserID }?.role ?? .user != .user
+        }
+        
         powerLevelsProxyMock.canUserBanUserIDClosure = { [weak self] userID in
             .success(self?.membersPublisher.value.first { $0.userID == userID }?.role ?? .user != .user)
+        }
+        powerLevelsProxyMock.canOwnUserBanClosure = { [weak self] in
+            self?.membersPublisher.value.first { $0.userID == configuration.ownUserID }?.role ?? .user != .user
         }
         
         powerLevelsReturnValue = .success(powerLevelsProxyMock)
