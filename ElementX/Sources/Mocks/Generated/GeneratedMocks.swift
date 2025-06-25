@@ -13427,16 +13427,6 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingIsDirect = value }
     }
     var underlyingIsDirect: Bool!
-    var isPublic: Bool {
-        get { return underlyingIsPublic }
-        set(value) { underlyingIsPublic = value }
-    }
-    var underlyingIsPublic: Bool!
-    var isPrivate: Bool {
-        get { return underlyingIsPrivate }
-        set(value) { underlyingIsPrivate = value }
-    }
-    var underlyingIsPrivate: Bool!
     var isSpace: Bool {
         get { return underlyingIsSpace }
         set(value) { underlyingIsSpace = value }

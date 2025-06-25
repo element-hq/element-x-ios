@@ -35,13 +35,9 @@ protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
 
     var isEncrypted: Bool { get }
     var isDirect: Bool { get }
-    var isPublic: Bool { get }
-    
-    var isPrivate: Bool { get }
-    
     var isSpace: Bool { get }
-    
     var isFavourite: Bool { get }
+    
     var canonicalAlias: String? { get }
     var alternativeAliases: [String] { get }
     var membership: Membership { get }

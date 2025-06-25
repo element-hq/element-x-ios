@@ -21,7 +21,6 @@ struct JoinedRoomProxyMockConfiguration {
     var avatarURL: URL?
     var isDirect = false
     var isSpace = false
-    var isPublic = false
     var isEncrypted = true
     var hasOngoingCall = true
     var canonicalAlias: String?
@@ -38,7 +37,7 @@ struct JoinedRoomProxyMockConfiguration {
     
     var shouldUseAutoUpdatingTimeline = false
     
-    var joinRule: JoinRule?
+    var joinRule: JoinRule? = .invite
     var membership: Membership = .joined
     
     var isVisibleInPublicDirectory = false
@@ -172,7 +171,6 @@ extension RoomInfoProxyMock {
         topic = configuration.topic
         avatarURL = configuration.avatarURL
         isDirect = configuration.isDirect
-        isPublic = configuration.isPublic
         isSpace = configuration.isSpace
         successor = configuration.successor
         isFavourite = false
