@@ -26,6 +26,8 @@ extension RoomPowerLevelsProxyMock {
         
         underlyingValues = RoomPowerLevelsValues.mock
         
+        suggestedRoleForUserReturnValue = .administrator
+        
         canOwnUserSendMessageReturnValue = configuration.canUserSendMessage
         canOwnUserSendStateEventReturnValue = configuration.canUserSendState
         canOwnUserInviteReturnValue = configuration.canUserInvite

@@ -117,6 +117,14 @@ extension JoinedRoomProxyMock {
             self?.membersPublisher.value.first { $0.userID == configuration.ownUserID }?.role ?? .user != .user
         }
         
+        powerLevelsProxyMock.suggestedRoleForUserClosure = { [weak self] userID in
+            guard let member = self?.membersPublisher.value.first(where: { $0.userID == userID }) else {
+                return .user
+            }
+            
+            return member.role
+        }
+        
         powerLevelsReturnValue = .success(powerLevelsProxyMock)
         
         kickUserReasonReturnValue = .success(())
