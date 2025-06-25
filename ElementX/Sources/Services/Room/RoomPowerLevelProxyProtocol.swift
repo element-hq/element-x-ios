@@ -10,8 +10,9 @@ import MatrixRustSDK
 // sourcery: AutoMockable
 protocol RoomPowerLevelsProxyProtocol {
     var values: RoomPowerLevelsValues { get }
-    
     var userPowerLevels: [String: Int64] { get }
+    
+    func suggestedRole(forUser userID: String) -> RoomMemberRole
     
     func canOwnUser(sendMessage messageType: MessageLikeEventType) -> Bool
     func canOwnUser(sendStateEvent event: StateEventType) -> Bool

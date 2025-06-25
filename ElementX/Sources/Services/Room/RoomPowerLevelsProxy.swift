@@ -26,6 +26,11 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
         powerLevels.userPowerLevels()
     }
     
+    func suggestedRole(forUser userID: String) -> RoomMemberRole {
+        let powerLevel = powerLevels.userPowerLevels()[userID] ?? 0
+        return suggestedRoleForPowerLevel(powerLevel: powerLevel)
+    }
+    
     func canOwnUser(sendMessage messageType: MessageLikeEventType) -> Bool {
         powerLevels.canOwnUserSendMessage(message: messageType)
     }
