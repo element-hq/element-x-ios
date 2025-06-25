@@ -24,10 +24,13 @@ struct HomeWalletContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
     @ObservedObject var context: HomeScreenViewModel.Context
-    let scrollViewAdapter: ScrollViewAdapter
+    private let scrollViewAdapter: ScrollViewAdapter = ScrollViewAdapter()
     
     @State private var showWalletBalance: Bool = true
     @State private var selectedTab: HomeWalletTab = .token
+    
+    @State private var scrollOffset: CGFloat = 0
+    @State private var isCompactMode: Bool = false
     
     var body: some View {
         walletContent
@@ -35,57 +38,103 @@ struct HomeWalletContent: View {
     
     private var walletContent: some View {
         GeometryReader { geometry in
-            ScrollView {
-                LazyVStack {
-                    zeroCardDetails
+            VStack {
+                cardDetailsView
+                    .animation(.easeIn(duration: 0.25), value: isCompactMode)
+                
+                walletTabsView
+                
+                ScrollView {
+                    offsetReader
+                        .frame(height: 0)
                     
-                    HStack(spacing: 12) {
-                        WalletActionButton(action: .receive, onTap: {
-                            
-                        })
-                        WalletActionButton(action: .swap, onTap: {
-                            
-                        })
-                        WalletActionButton(action: .send, onTap: {
-                            
-                        })
+                    LazyVStack {
+//                        ForEach(0..<30) { i in
+//                            Text("Token Row \(i)")
+//                                .frame(maxWidth: .infinity)
+//                                .padding()
+//                                .background(Color.black.opacity(0.05))
+//                        }
                     }
-                    .padding(.vertical, 12)
-                    
-                    ZStack(alignment: .trailing) {
-                        SimpleTabButtonsView(tabs: HomeWalletTab.allCases,
-                                             selectedTab: selectedTab,
-                                             tabTitle: { tab in
-                            switch tab {
-                            case .token: return "Tokens"
-                            case .transaction: return "Transactions"
-                            case .account: return "Accounts"
-                            }
-                        },
-                                             onTabSelected: { tab in
-                            selectedTab = tab
-                        },
-                                             showDivider: true)
-                        
-                        Image(systemName: "ellipsis")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 18, height: 18)
-                            .foregroundStyle(.compound.textSecondary)
-                            .padding([.bottom, .trailing], 8)
-                    }
-                    .frame(maxWidth: .infinity)
-                    
-                    Spacer()
                 }
-                .padding()
+                .coordinateSpace(name: "scroll")
+                .introspect(.scrollView, on: .supportedVersions) { scrollView in
+                    guard scrollView != scrollViewAdapter.scrollView else { return }
+                    scrollViewAdapter.scrollView = scrollView
+                }
+                .scrollDismissesKeyboard(.immediately)
             }
-            .introspect(.scrollView, on: .supportedVersions) { scrollView in
-                guard scrollView != scrollViewAdapter.scrollView else { return }
-                scrollViewAdapter.scrollView = scrollView
-            }
-            .scrollDismissesKeyboard(.immediately)
+            .padding(.horizontal)
         }
+    }
+    
+    @ViewBuilder
+    private var cardDetailsView: some View {
+        if isCompactMode {
+            compatCardDetails
+        } else {
+            VStack(spacing: 0) {
+                zeroCardDetails
+                
+                actionButtonsView
+                    .padding(.vertical, 6)
+            }
+        }
+    }
+    
+    var offsetReader: some View {
+        GeometryReader { proxy in
+            Color.clear
+                .preference(key: ScrollOffsetKey.self, value: proxy.frame(in: .named("scroll")).minY)
+        }
+        .onPreferenceChange(ScrollOffsetKey.self) { value in
+            scrollOffset = value
+            withAnimation(.easeInOut(duration: 0.3)) {
+                isCompactMode = scrollOffset < -60
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var actionButtonsView: some View {
+        HStack(spacing: 10) {
+            WalletActionButton(action: .receive, onTap: {
+                
+            })
+            WalletActionButton(action: .swap, onTap: {
+                
+            })
+            WalletActionButton(action: .send, onTap: {
+                
+            })
+        }
+    }
+    
+    @ViewBuilder
+    private var walletTabsView: some View {
+        ZStack(alignment: .trailing) {
+            SimpleTabButtonsView(tabs: HomeWalletTab.allCases,
+                                 selectedTab: selectedTab,
+                                 tabTitle: { tab in
+                switch tab {
+                case .token: return "Tokens"
+                case .transaction: return "Transactions"
+                case .account: return "Accounts"
+                }
+            },
+                                 onTabSelected: { tab in
+                selectedTab = tab
+            },
+                                 showDivider: true)
+            
+            Image(systemName: "ellipsis")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 18, height: 18)
+                .foregroundStyle(.compound.textSecondary)
+                .padding([.bottom, .trailing], 8)
+        }
+        .frame(maxWidth: .infinity)
     }
     
     @ViewBuilder
@@ -96,10 +145,10 @@ struct HomeWalletContent: View {
                 .scaledToFit()
                 .frame(maxWidth: .infinity)
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 0) {
                 Spacer()
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 0) {
                     HStack {
                         Text("Balance")
                             .font(.zero.bodyMD)
@@ -116,7 +165,7 @@ struct HomeWalletContent: View {
                         .font(.robotoMonoRegular(size: 22))
                         .foregroundColor(.compound.textPrimary)
                         .shadow(color: .white.opacity(0.5), radius: 8)
-                        .padding(.vertical, 0.5)
+                        .padding(.vertical, 4)
                     
                     Text("+5.56%")
                         .font(.zero.bodyMD)
@@ -129,14 +178,62 @@ struct HomeWalletContent: View {
                 Text("Lefty Wilder".uppercased())
                     .font(.robotoMonoRegular(size: 12))
                     .foregroundColor(.compound.textSecondary)
+                    .padding(.bottom, 8)
             }
             .padding(.all, 14)
         }
+        .frame(height: 225)
+    }
+    
+    @ViewBuilder
+    private var compatCardDetails: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack {
+                    Text("Balance")
+                        .font(.zero.bodyMD)
+                        .foregroundColor(.compound.textSecondary)
+                    
+                    CompoundIcon(showWalletBalance ? \.visibilityOn : \.visibilityOff, size: .custom(16), relativeTo: .body)
+                        .foregroundStyle(.compound.textSecondary)
+                        .onTapGesture {
+                            showWalletBalance.toggle()
+                        }
+                }
+                
+                Text("$78,810.04")
+                    .font(.robotoMonoRegular(size: 22))
+                    .foregroundColor(.compound.textPrimary)
+                    .shadow(color: .white.opacity(0.5), radius: 8)
+                    .padding(.vertical, 4)
+                
+                Text("+5.56%")
+                    .font(.zero.bodyMD)
+                    .foregroundColor(.zero.bgAccentRest)
+            }
+            .padding(.vertical, 4)
+            
+            Spacer()
+            
+            HStack(spacing: 10) {
+                WalletActionButton(action: .receive, compactButtonStyle: true, onTap: {
+                    
+                })
+                WalletActionButton(action: .swap, compactButtonStyle: true, onTap: {
+                    
+                })
+                WalletActionButton(action: .send, compactButtonStyle: true, onTap: {
+                    
+                })
+            }
+        }
+        .padding(.vertical, 8)
     }
 }
 
 private struct WalletActionButton : View {
     var action: WalletAction
+    var compactButtonStyle: Bool = false
     var onTap: () -> Void
     
     var body: some View {
@@ -153,8 +250,8 @@ private struct WalletActionButton : View {
                         CompoundIcon(customImage: Image(systemName: "arrow.up.arrow.down"),
                                      size: .custom(18),
                                      relativeTo: .body)
-                            .rotationEffect(.degrees(90))
-                            .padding(.horizontal, 2)
+                        .rotationEffect(.degrees(90))
+                        .padding(.horizontal, 2)
                     }
                 }
                 .foregroundColor(.zero.bgAccentRest)
@@ -162,21 +259,30 @@ private struct WalletActionButton : View {
                     onTap()
                 }
                 
-                Text(action.rawValue)
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundColor(.zero.bgAccentRest)
-                    .onTapGesture { onTap() }
-                    .padding(.horizontal, 2)
+                if !compactButtonStyle {
+                    Text(action.rawValue)
+                        .font(.compound.bodyMDSemibold)
+                        .foregroundColor(.zero.bgAccentRest)
+                        .onTapGesture { onTap() }
+                        .padding(.horizontal, 2)
+                }
             }
         }
-        .frame(maxWidth: .infinity)
-        .padding(12)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .frame(width: compactButtonStyle ? 50: 115, height: 50)
         .background(.zero.bgAccentRest.opacity(0.1))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay {
             RoundedRectangle(cornerRadius: 12)
                 .stroke(.zero.bgAccentRest.opacity(0.3), lineWidth: 1)
         }
         .onTapGesture { onTap() }
+    }
+}
+
+// PreferenceKey to track scroll offset
+private struct ScrollOffsetKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
     }
 }
