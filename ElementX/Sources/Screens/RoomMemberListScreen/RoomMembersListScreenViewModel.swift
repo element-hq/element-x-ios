@@ -88,6 +88,10 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         Task {
             showLoadingIndicator(Self.updateStateLoadingIndicatorIdentifier)
             
+            defer {
+                hideLoadingIndicator(Self.updateStateLoadingIndicatorIdentifier)
+            }
+            
             let members = members.sorted()
             let roomMembersDetails = await buildMembersDetails(members: members)
             self.members = members
@@ -99,12 +103,10 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                                bannedMembers: roomMembersDetails.bannedMembers,
                                bindings: state.bindings)
             
-            let powerLevels = roomProxy.infoPublisher.value.powerLevels
+            guard let powerLevels = roomProxy.infoPublisher.value.powerLevels else { fatalError("Missing room power levels") }
             self.state.canInviteUsers = powerLevels.canOwnUserInvite()
             self.state.canKickUsers = powerLevels.canOwnUserKick()
             self.state.canBanUsers = powerLevels.canOwnUserBan()
-                        
-            hideLoadingIndicator(Self.updateStateLoadingIndicatorIdentifier)
         }
     }
     

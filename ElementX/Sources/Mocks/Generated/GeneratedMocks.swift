@@ -8651,13 +8651,13 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         return powerLevelsCallsCount > 0
     }
 
-    var powerLevelsUnderlyingReturnValue: Result<RoomPowerLevelsProxyProtocol, RoomProxyError>!
-    var powerLevelsReturnValue: Result<RoomPowerLevelsProxyProtocol, RoomProxyError>! {
+    var powerLevelsUnderlyingReturnValue: Result<RoomPowerLevelsProxyProtocol?, RoomProxyError>!
+    var powerLevelsReturnValue: Result<RoomPowerLevelsProxyProtocol?, RoomProxyError>! {
         get {
             if Thread.isMainThread {
                 return powerLevelsUnderlyingReturnValue
             } else {
-                var returnValue: Result<RoomPowerLevelsProxyProtocol, RoomProxyError>? = nil
+                var returnValue: Result<RoomPowerLevelsProxyProtocol?, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = powerLevelsUnderlyingReturnValue
                 }
@@ -8675,9 +8675,9 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var powerLevelsClosure: (() async -> Result<RoomPowerLevelsProxyProtocol, RoomProxyError>)?
+    var powerLevelsClosure: (() async -> Result<RoomPowerLevelsProxyProtocol?, RoomProxyError>)?
 
-    func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol, RoomProxyError> {
+    func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol?, RoomProxyError> {
         powerLevelsCallsCount += 1
         if let powerLevelsClosure = powerLevelsClosure {
             return await powerLevelsClosure()
@@ -13518,11 +13518,7 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingHistoryVisibility = value }
     }
     var underlyingHistoryVisibility: RoomHistoryVisibility!
-    var powerLevels: RoomPowerLevelsProxyProtocol {
-        get { return underlyingPowerLevels }
-        set(value) { underlyingPowerLevels = value }
-    }
-    var underlyingPowerLevels: RoomPowerLevelsProxyProtocol!
+    var powerLevels: RoomPowerLevelsProxyProtocol?
     var successor: SuccessorRoom?
     var heroes: [RoomHero] = []
 
@@ -13587,6 +13583,7 @@ class RoomPowerLevelsProxyMock: RoomPowerLevelsProxyProtocol, @unchecked Sendabl
         set(value) { underlyingValues = value }
     }
     var underlyingValues: RoomPowerLevelsValues!
+    var userPowerLevels: [String: Int64] = [:]
 
     //MARK: - canOwnUser
 

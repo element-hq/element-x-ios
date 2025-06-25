@@ -552,7 +552,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     // MARK: - Power Levels
     
-    func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol, RoomProxyError> {
+    func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol?, RoomProxyError> {
         do {
             return try await .success(RoomPowerLevelsProxy(room.getPowerLevels()))
         } catch {

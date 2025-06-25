@@ -47,7 +47,8 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                 self?.suggestionTriggerSubject.value != nil ? .milliseconds(500) : .milliseconds(0)
             }
         
-        canMentionAllUsers = roomProxy.infoPublisher.value.powerLevels.canOwnUserTriggerRoomNotification()
+        guard let powerLevels = roomProxy.infoPublisher.value.powerLevels else { fatalError("Missing room power levels") }
+        canMentionAllUsers = powerLevels.canOwnUserTriggerRoomNotification()
     }
     
     func processTextMessage(_ textMessage: String, selectedRange: NSRange) {

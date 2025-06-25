@@ -348,11 +348,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.isKnockableRoom = false
         }
 
-        state.canSendMessage = roomInfo.powerLevels.canOwnUser(sendMessage: .roomMessage)
-        state.canJoinCall = roomInfo.powerLevels.canOwnUserJoinCall()
-        state.canAcceptKnocks = roomInfo.powerLevels.canOwnUserInvite()
-        state.canDeclineKnocks = roomInfo.powerLevels.canOwnUserKick()
-        state.canBan = roomInfo.powerLevels.canOwnUserBan()
+        guard let powerLevels = roomInfo.powerLevels else { fatalError("Missing room power levels") }
+        state.canSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
+        state.canJoinCall = powerLevels.canOwnUserJoinCall()
+        state.canAcceptKnocks = powerLevels.canOwnUserInvite()
+        state.canDeclineKnocks = powerLevels.canOwnUserKick()
+        state.canBan = powerLevels.canOwnUserBan()
     }
     
     private func setupPinnedEventsTimelineItemProviderIfNeeded() {

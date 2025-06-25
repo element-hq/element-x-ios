@@ -87,9 +87,10 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     // MARK: - Private
     
     private func updateRoomInfo(roomInfo: RoomInfoProxyProtocol) {
-        state.canEditAvatar = roomInfo.powerLevels.canOwnUser(sendStateEvent: .roomAvatar)
-        state.canEditName = roomInfo.powerLevels.canOwnUser(sendStateEvent: .roomName)
-        state.canEditTopic = roomInfo.powerLevels.canOwnUser(sendStateEvent: .roomTopic)
+        guard let powerLevels = roomInfo.powerLevels else { fatalError("Missing room power levels") }
+        state.canEditAvatar = powerLevels.canOwnUser(sendStateEvent: .roomAvatar)
+        state.canEditName = powerLevels.canOwnUser(sendStateEvent: .roomName)
+        state.canEditTopic = powerLevels.canOwnUser(sendStateEvent: .roomTopic)
     }
     
     private func saveRoomDetails() {

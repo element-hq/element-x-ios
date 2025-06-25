@@ -405,12 +405,13 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private func updateRoomInfo(roomInfo: RoomInfoProxyProtocol) {
         state.pinnedEventIDs = roomInfo.pinnedEventIDs
         
-        state.canCurrentUserSendMessage = roomInfo.powerLevels.canOwnUser(sendMessage: .roomMessage)
-        state.canCurrentUserRedactOthers = roomInfo.powerLevels.canOwnUserRedactOther()
-        state.canCurrentUserRedactSelf = roomInfo.powerLevels.canOwnUserRedactOwn()
-        state.canCurrentUserPin = roomInfo.powerLevels.canOwnUserPinOrUnpin()
-        state.canCurrentUserKick = roomInfo.powerLevels.canOwnUserKick()
-        state.canCurrentUserBan = roomInfo.powerLevels.canOwnUserBan()
+        guard let powerLevels = roomInfo.powerLevels else { fatalError("Missing room power levels") }
+        state.canCurrentUserSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
+        state.canCurrentUserRedactOthers = powerLevels.canOwnUserRedactOther()
+        state.canCurrentUserRedactSelf = powerLevels.canOwnUserRedactOwn()
+        state.canCurrentUserPin = powerLevels.canOwnUserPinOrUnpin()
+        state.canCurrentUserKick = powerLevels.canOwnUserKick()
+        state.canCurrentUserBan = powerLevels.canOwnUserBan()
     }
     
     private func setupSubscriptions() {

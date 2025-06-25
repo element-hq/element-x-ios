@@ -218,9 +218,10 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
             state.isKnockableRoom = false
         }
         
-        state.canAccept = roomInfo.powerLevels.canOwnUserInvite()
-        state.canDecline = roomInfo.powerLevels.canOwnUserKick()
-        state.canBan = roomInfo.powerLevels.canOwnUserBan()
+        guard let powerLevels = roomProxy.infoPublisher.value.powerLevels else { fatalError("Missing room power levels") }
+        state.canAccept = powerLevels.canOwnUserInvite()
+        state.canDecline = powerLevels.canOwnUserKick()
+        state.canBan = powerLevels.canOwnUserBan()
     }
     
     private static let loadingIndicatorIdentifier = "\(KnockRequestsListScreenViewModel.self)-Loading"
