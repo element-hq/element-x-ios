@@ -92,7 +92,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         case .always:
             false
         case .privateOnly:
-            !roomProxy.infoPublisher.value.isPrivate
+            !(roomProxy.infoPublisher.value.isPrivate ?? true)
         case .never:
             true
         }
@@ -524,7 +524,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 case .privateOnly:
                     guard let self else { return Just(false).eraseToAnyPublisher() }
                     return roomProxy.infoPublisher
-                        .map { !$0.isPrivate }
+                        .map { !($0.isPrivate ?? false) }
                         .removeDuplicates()
                         .eraseToAnyPublisher()
                 }

@@ -27,7 +27,7 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
     }
     
     func suggestedRole(forUser userID: String) -> RoomMemberRole {
-        let powerLevel = powerLevels.userPowerLevels()[userID] ?? 0
+        let powerLevel = powerLevels.userPowerLevels()[userID] ?? values.usersDefault
         return suggestedRoleForPowerLevel(powerLevel: powerLevel)
     }
     

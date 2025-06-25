@@ -79,12 +79,18 @@ extension BaseRoomInfoProxyProtocol {
 
 extension RoomInfoProxyProtocol {
     /// A room might be non public but also not private given the fact that the join rule might be missing or unsupported.
-    var isPrivate: Bool {
-        switch joinRule {
-        case .invite, .knock, .restricted, .knockRestricted:
+    var isPrivate: Bool? {
+        guard let joinRule else {
+            return nil
+        }
+        
+        return switch joinRule {
+        case .invite, .knock, .restricted, .knockRestricted, .private:
             true
-        default:
+        case .public:
             false
+        case .custom: // We don't know how to handle this
+            nil
         }
     }
     

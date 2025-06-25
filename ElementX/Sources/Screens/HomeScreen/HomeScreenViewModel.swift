@@ -364,7 +364,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 return
             }
             
-            if !roomProxy.infoPublisher.value.isPrivate {
+            if !(roomProxy.infoPublisher.value.isPrivate ?? true) {
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: .public)
             } else {
                 state.bindings.leaveRoomAlertItem = if roomProxy.infoPublisher.value.joinedMembersCount > 1 {
