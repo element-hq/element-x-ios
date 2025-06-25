@@ -752,7 +752,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func clearCaches() async -> Result<Void, ClientProxyError> {
         do {
-            return try await .success(client.clearCaches())
+            return try await .success(client.clearCaches(syncService: syncService))
         } catch {
             MXLog.error("Failed clearing client caches with error: \(error)")
             return .failure(.sdkError(error))
