@@ -554,16 +554,16 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - clearCaches
 
-    open var clearCachesThrowableError: Error?
-    var clearCachesUnderlyingCallsCount = 0
-    open var clearCachesCallsCount: Int {
+    open var clearCachesSyncServiceThrowableError: Error?
+    var clearCachesSyncServiceUnderlyingCallsCount = 0
+    open var clearCachesSyncServiceCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return clearCachesUnderlyingCallsCount
+                return clearCachesSyncServiceUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = clearCachesUnderlyingCallsCount
+                    returnValue = clearCachesSyncServiceUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -571,25 +571,31 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                clearCachesUnderlyingCallsCount = newValue
+                clearCachesSyncServiceUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    clearCachesUnderlyingCallsCount = newValue
+                    clearCachesSyncServiceUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var clearCachesCalled: Bool {
-        return clearCachesCallsCount > 0
+    open var clearCachesSyncServiceCalled: Bool {
+        return clearCachesSyncServiceCallsCount > 0
     }
-    open var clearCachesClosure: (() async throws -> Void)?
+    open var clearCachesSyncServiceReceivedSyncService: SyncService?
+    open var clearCachesSyncServiceReceivedInvocations: [SyncService?] = []
+    open var clearCachesSyncServiceClosure: ((SyncService?) async throws -> Void)?
 
-    open override func clearCaches() async throws {
-        if let error = clearCachesThrowableError {
+    open override func clearCaches(syncService: SyncService?) async throws {
+        if let error = clearCachesSyncServiceThrowableError {
             throw error
         }
-        clearCachesCallsCount += 1
-        try await clearCachesClosure?()
+        clearCachesSyncServiceCallsCount += 1
+        clearCachesSyncServiceReceivedSyncService = syncService
+        DispatchQueue.main.async {
+            self.clearCachesSyncServiceReceivedInvocations.append(syncService)
+        }
+        try await clearCachesSyncServiceClosure?(syncService)
     }
 
     //MARK: - createRoom
@@ -13199,13 +13205,13 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return isPublicCallsCount > 0
     }
 
-    var isPublicUnderlyingReturnValue: Bool!
-    open var isPublicReturnValue: Bool! {
+    var isPublicUnderlyingReturnValue: Bool?
+    open var isPublicReturnValue: Bool? {
         get {
             if Thread.isMainThread {
                 return isPublicUnderlyingReturnValue
             } else {
-                var returnValue: Bool? = nil
+                var returnValue: Bool?? = nil
                 DispatchQueue.main.sync {
                     returnValue = isPublicUnderlyingReturnValue
                 }
@@ -13223,9 +13229,9 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             }
         }
     }
-    open var isPublicClosure: (() -> Bool)?
+    open var isPublicClosure: (() -> Bool?)?
 
-    open override func isPublic() -> Bool {
+    open override func isPublic() -> Bool? {
         isPublicCallsCount += 1
         if let isPublicClosure = isPublicClosure {
             return isPublicClosure()
