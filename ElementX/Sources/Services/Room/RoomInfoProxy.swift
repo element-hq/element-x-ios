@@ -27,9 +27,8 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
     var isEncrypted: Bool { roomInfo.encryptionState == .encrypted }
     
     var isDirect: Bool { roomInfo.isDirect }
-    var isPublic: Bool { roomInfo.isPublic }
-    
     var isSpace: Bool { roomInfo.isSpace }
+    
     var successor: SuccessorRoom? { roomInfo.successorRoom }
     var isFavourite: Bool { roomInfo.isFavourite }
     var canonicalAlias: String? { roomInfo.canonicalAlias }
@@ -72,6 +71,6 @@ struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {
     var activeMembersCount: Int { Int(roomPreviewInfo.numActiveMembers ?? roomPreviewInfo.numJoinedMembers) }
     var joinedMembersCount: Int { Int(roomPreviewInfo.numJoinedMembers) }
     
-    var joinRule: JoinRule { roomPreviewInfo.joinRule }
+    var joinRule: JoinRule? { roomPreviewInfo.joinRule }
     var membership: Membership? { roomPreviewInfo.membership }
 }

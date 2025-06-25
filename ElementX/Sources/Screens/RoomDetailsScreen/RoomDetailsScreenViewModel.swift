@@ -125,7 +125,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id,
                                                                    isDM: roomProxy.isDirectOneToOneRoom,
-                                                                   state: roomProxy.infoPublisher.value.isPublic ? .public : .private)
+                                                                   state: roomProxy.infoPublisher.value.isPrivate ? .private : .public)
         case .confirmLeave:
             Task { await leaveRoom() }
         case .processTapIgnore:

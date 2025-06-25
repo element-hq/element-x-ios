@@ -40,7 +40,6 @@ extension RoomInfoProxyMock {
         avatarURL = configuration.avatarURL
         
         isDirect = false
-        isPublic = false
         isSpace = false
         successor = nil
         isFavourite = false
