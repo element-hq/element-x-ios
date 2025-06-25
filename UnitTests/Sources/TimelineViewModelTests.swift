@@ -520,6 +520,7 @@ class TimelineViewModelTests: XCTestCase {
         
         let powerLevelsProxyMock = RoomPowerLevelsProxyMock(configuration: .init())
         powerLevelsProxyMock.canUserPinOrUnpinUserIDReturnValue = .success(false)
+        powerLevelsProxyMock.canOwnUserPinOrUnpinReturnValue = false
         roomProxyMock.powerLevelsReturnValue = .success(powerLevelsProxyMock)
         
         let roomInfoProxyMock = RoomInfoProxyMock(configuration)
