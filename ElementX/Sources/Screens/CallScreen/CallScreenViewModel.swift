@@ -294,7 +294,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         
         let deviceList = if currentOutput.portType == .builtInSpeaker {
             // This allows the webview to display the earpiece option
-            "{id: '\(currentOutput.uid)', name: '\(currentOutput.portName)', forEarpiece: true}"
+            "{id: '\(currentOutput.uid)', name: '\(currentOutput.portName)', forEarpiece: true, isSpeaker: true}"
         } else {
             // Doesn't matter because the switch is handled through the OS
             "{id: 'dummy', name: 'dummy'}"
