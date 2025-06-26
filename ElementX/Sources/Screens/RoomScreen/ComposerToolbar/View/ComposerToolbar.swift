@@ -127,7 +127,7 @@ struct ComposerToolbar: View {
                 .scaledFrame(size: 30, relativeTo: .compound.headingLG)
                 .scaledPadding(7, relativeTo: .compound.headingLG)
         }
-        .accessibilityLabel(L10n.actionClose)
+        .accessibilityLabel(L10n.richTextEditorCloseFormattingOptions)
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.composerToolbar.closeFormattingOptions)
     }
     
