@@ -26,6 +26,17 @@ enum RoomAvatar: Equatable {
             .tombstoned
         }
     }
+    
+    var hasURL: Bool {
+        switch self {
+        case let .room(_, _, url):
+            return url != nil
+        case let .heroes(heroes):
+            return heroes.first?.avatarURL != nil
+        case .tombstoned:
+            return false
+        }
+    }
 }
 
 /// A view that shows the avatar for a room, or a cluster of heroes if provided.

@@ -25,6 +25,7 @@
 "a11y_show_password" = "Show password";
 "a11y_start_call" = "Start a call";
 "a11y_user_menu" = "User menu";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "View details";
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Record voice message.";
