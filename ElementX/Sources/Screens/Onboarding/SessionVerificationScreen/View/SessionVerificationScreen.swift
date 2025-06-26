@@ -10,7 +10,12 @@ import MatrixRustSDK
 import SwiftUI
 
 struct SessionVerificationScreen: View {
+    enum AccessibilityFocus {
+        case title
+    }
+    
     @ObservedObject var context: SessionVerificationScreenViewModel.Context
+    @AccessibilityFocusState private var accessibilityFocus: AccessibilityFocus?
     
     var body: some View {
         FullscreenDialog {
@@ -56,6 +61,10 @@ struct SessionVerificationScreen: View {
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
                 .accessibilityIdentifier(context.viewState.titleAccessibilityIdentifier)
+                .onChange(of: context.viewState.title) { _, _ in
+                    accessibilityFocus = .title
+                }
+                .accessibilityFocused($accessibilityFocus, equals: .title)
 
             Text(context.viewState.message)
                 .font(.compound.bodyMD)
