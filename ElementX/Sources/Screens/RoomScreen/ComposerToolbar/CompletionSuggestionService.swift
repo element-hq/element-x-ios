@@ -19,9 +19,12 @@ private enum SuggestionTriggerRegex {
 final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
     private var canMentionAllUsers = false
+    
     private(set) var suggestionsPublisher: AnyPublisher<[SuggestionItem], Never> = Empty().eraseToAnyPublisher()
     
     private let suggestionTriggerSubject = CurrentValueSubject<SuggestionTrigger?, Never>(nil)
+    
+    private var cancellables = Set<AnyCancellable>()
     
     init(roomProxy: JoinedRoomProxyProtocol,
          roomListPublisher: AnyPublisher<[RoomSummary], Never>) {
@@ -47,8 +50,14 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                 self?.suggestionTriggerSubject.value != nil ? .milliseconds(500) : .milliseconds(0)
             }
         
-        guard let powerLevels = roomProxy.infoPublisher.value.powerLevels else { fatalError("Missing room power levels") }
-        canMentionAllUsers = powerLevels.canOwnUserTriggerRoomNotification()
+        roomProxy.infoPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] roomInfo in
+                self?.updateRoomInfo(roomInfo)
+            }
+            .store(in: &cancellables)
+        
+        updateRoomInfo(roomProxy.infoPublisher.value)
     }
     
     func processTextMessage(_ textMessage: String, selectedRange: NSRange) {
@@ -60,6 +69,12 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     }
     
     // MARK: - Private
+    
+    private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
+        if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
+            canMentionAllUsers = powerLevels.canOwnUserTriggerRoomNotification()
+        }
+    }
     
     private func membersSuggestions(suggestionTrigger: SuggestionTrigger,
                                     members: [RoomMemberProxyProtocol],

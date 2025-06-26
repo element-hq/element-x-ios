@@ -114,8 +114,9 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
     // MARK: - Permissions
     
     private func updateRoomInfo(roomInfo: RoomInfoProxyProtocol) {
-        guard let powerLevels = roomInfo.powerLevels else { fatalError("Missing room power levels") }
-        state.permissions = .init(powerLevels: powerLevels.values)
+        if let powerLevels = roomInfo.powerLevels {
+            state.permissions = .init(powerLevels: powerLevels.values)
+        }
     }
     
     private func editPermissions(group: RoomRolesAndPermissionsScreenPermissionsGroup) {

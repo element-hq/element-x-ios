@@ -179,7 +179,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     private func setupRoomSubscription() {
         roomProxy.infoPublisher
-            .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] roomInfo in
                 self?.updateRoomInfo(roomInfo)
             }
@@ -233,8 +233,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.canBanUsers = powerLevels.canOwnUserBan()
             state.canJoinCall = powerLevels.canOwnUserJoinCall()
             state.canEditRolesOrPermissions = powerLevels.suggestedRole(forUser: roomProxy.ownUserID) == .administrator
-        } else {
-            fatalError("Missing room power levels")
         }
     }
     

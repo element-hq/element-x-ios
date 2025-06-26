@@ -165,15 +165,19 @@ class RoomScreenViewModelTests: XCTestCase {
     
     func testRoomInfoUpdate() async throws {
         var configuration = JoinedRoomProxyMockConfiguration(id: "TestID", name: "StartingName", avatarURL: nil, hasOngoingCall: false)
-        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(RoomInfoProxyMock(configuration))
         let roomProxyMock = JoinedRoomProxyMock(configuration)
         
         let powerLevelsMock = RoomPowerLevelsProxyMock(configuration: .init())
+        powerLevelsMock.canUserJoinCallUserIDReturnValue = .success(false)
+        powerLevelsMock.canOwnUserJoinCallReturnValue = false
         roomProxyMock.powerLevelsReturnValue = .success(powerLevelsMock)
         
-        // setup the room proxy actions publisher
-        powerLevelsMock.canUserJoinCallUserIDReturnValue = .success(false)
+        let roomInfoProxyMock = RoomInfoProxyMock(configuration)
+        roomInfoProxyMock.powerLevels = powerLevelsMock
+        
+        let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(roomInfoProxyMock)
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
+        
         let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
@@ -186,27 +190,25 @@ class RoomScreenViewModelTests: XCTestCase {
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController)
         self.viewModel = viewModel
         
-        var deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
-            viewState.roomTitle == "StartingName" &&
-                viewState.roomAvatar == .room(id: "TestID", name: "StartingName", avatarURL: nil) &&
-                !viewState.canJoinCall &&
-                !viewState.hasOngoingCall
-        }
-        try await deferred.fulfill()
-        
-        configuration.name = "NewName"
-        configuration.avatarURL = .mockMXCAvatar
-        configuration.hasOngoingCall = true
-        powerLevelsMock.canUserJoinCallUserIDReturnValue = .success(true)
-        
-        deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
+        XCTAssertEqual(viewModel.state.roomTitle, "StartingName")
+        XCTAssertEqual(viewModel.state.roomAvatar, .room(id: "TestID", name: "StartingName", avatarURL: nil))
+        XCTAssertFalse(viewModel.state.canJoinCall)
+        XCTAssertFalse(viewModel.state.hasOngoingCall)
+                
+        let deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
             viewState.roomTitle == "NewName" &&
                 viewState.roomAvatar == .room(id: "TestID", name: "NewName", avatarURL: .mockMXCAvatar) &&
                 viewState.canJoinCall &&
                 viewState.hasOngoingCall
         }
         
+        configuration.name = "NewName"
+        configuration.avatarURL = .mockMXCAvatar
+        configuration.hasOngoingCall = true
+        powerLevelsMock.canUserJoinCallUserIDReturnValue = .success(true)
+        
         infoSubject.send(RoomInfoProxyMock(configuration))
+        
         try await deferred.fulfill()
     }
     

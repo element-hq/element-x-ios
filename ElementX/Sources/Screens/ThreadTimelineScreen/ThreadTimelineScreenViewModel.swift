@@ -23,18 +23,14 @@ class ThreadTimelineScreenViewModel: ThreadTimelineScreenViewModelType, ThreadTi
         
         super.init(initialViewState: ThreadTimelineScreenViewState())
         
-        Task { [weak self] in
-            for await roomInfo in roomProxy.infoPublisher.receive(on: DispatchQueue.main).values {
-                guard !Task.isCancelled else {
-                    return
-                }
-                
-                self?.handleRoomInfoUpdate(roomInfo)
+        roomProxy.infoPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] roomInfo in
+                self?.updateRoomInfo(roomInfo)
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
         
-        handleRoomInfoUpdate(roomProxy.infoPublisher.value)
+        updateRoomInfo(roomProxy.infoPublisher.value)
     }
     
     // MARK: - Public
@@ -62,8 +58,9 @@ class ThreadTimelineScreenViewModel: ThreadTimelineScreenViewModelType, ThreadTi
     
     // MARK: - Private
     
-    private func handleRoomInfoUpdate(_ roomInfo: RoomInfoProxyProtocol) {
-        guard let powerLevels = roomInfo.powerLevels else { fatalError("Missing room power levels") }
-        state.canSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
+    private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
+        if let powerLevels = roomInfo.powerLevels {
+            state.canSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
+        }
     }
 }
