@@ -1782,6 +1782,10 @@ internal enum L10n {
   internal static var screenNotificationSettingsSystemNotificationsTurnedOff: String { return L10n.tr("Localizable", "screen_notification_settings_system_notifications_turned_off") }
   /// Notifications
   internal static var screenNotificationSettingsTitle: String { return L10n.tr("Localizable", "screen_notification_settings_title") }
+  /// Version %1$@
+  internal static func screenOnboardingAppVersion(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_onboarding_app_version", String(describing: p1))
+  }
   /// Sign in manually
   internal static var screenOnboardingSignInManually: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_manually") }
   /// Sign in to %1$@

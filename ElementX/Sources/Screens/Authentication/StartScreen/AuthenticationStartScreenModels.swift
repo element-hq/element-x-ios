@@ -36,7 +36,6 @@ struct AuthenticationStartScreenViewState: BindableState {
     let serverName: String?
     let showCreateAccountButton: Bool
     let showQRCodeLoginButton: Bool
-    let showReportProblemButton: Bool
     
     var bindings = AuthenticationStartScreenViewStateBindings()
     
