@@ -119,8 +119,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         setupSubscriptions()
         setupDirectRoomSubscriptionsIfNeeded()
         
-        updateRoomInfo(roomInfo: roomProxy.infoPublisher.value)
-        
         state.audioPlayerStateProvider = { [weak self] itemID -> AudioPlayerState? in
             guard let self else {
                 return nil
@@ -144,6 +142,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         state.timelineState.paginationState = timelineController.paginationState
         buildTimelineViews(timelineItems: timelineController.timelineItems)
         
+        updateRoomInfo(roomProxy.infoPublisher.value)
         updateMembers(roomProxy.membersPublisher.value)
 
         // Note: beware if we get to e.g. restore a reply / edit,
@@ -402,16 +401,17 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
     }
     
-    private func updateRoomInfo(roomInfo: RoomInfoProxyProtocol) {
+    private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
         state.pinnedEventIDs = roomInfo.pinnedEventIDs
         
-        guard let powerLevels = roomInfo.powerLevels else { fatalError("Missing room power levels") }
-        state.canCurrentUserSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
-        state.canCurrentUserRedactOthers = powerLevels.canOwnUserRedactOther()
-        state.canCurrentUserRedactSelf = powerLevels.canOwnUserRedactOwn()
-        state.canCurrentUserPin = powerLevels.canOwnUserPinOrUnpin()
-        state.canCurrentUserKick = powerLevels.canOwnUserKick()
-        state.canCurrentUserBan = powerLevels.canOwnUserBan()
+        if let powerLevels = roomInfo.powerLevels {
+            state.canCurrentUserSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
+            state.canCurrentUserRedactOthers = powerLevels.canOwnUserRedactOther()
+            state.canCurrentUserRedactSelf = powerLevels.canOwnUserRedactOwn()
+            state.canCurrentUserPin = powerLevels.canOwnUserPinOrUnpin()
+            state.canCurrentUserKick = powerLevels.canOwnUserKick()
+            state.canCurrentUserBan = powerLevels.canOwnUserBan()
+        }
     }
     
     private func setupSubscriptions() {
@@ -440,17 +440,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             }
             .store(in: &cancellables)
 
-        let roomInfoSubscription = roomProxy.infoPublisher
-        Task { [weak self] in
-            for await roomInfo in roomInfoSubscription.receive(on: DispatchQueue.main).values {
-                guard !Task.isCancelled else {
-                    return
-                }
-                
-                self?.updateRoomInfo(roomInfo: roomInfo)
+        roomProxy.infoPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] roomInfo in
+                self?.updateRoomInfo(roomInfo)
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
         
         setupAppSettingsSubscriptions()
         

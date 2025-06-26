@@ -103,10 +103,11 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                                bannedMembers: roomMembersDetails.bannedMembers,
                                bindings: state.bindings)
             
-            guard let powerLevels = roomProxy.infoPublisher.value.powerLevels else { fatalError("Missing room power levels") }
-            self.state.canInviteUsers = powerLevels.canOwnUserInvite()
-            self.state.canKickUsers = powerLevels.canOwnUserKick()
-            self.state.canBanUsers = powerLevels.canOwnUserBan()
+            if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
+                self.state.canInviteUsers = powerLevels.canOwnUserInvite()
+                self.state.canKickUsers = powerLevels.canOwnUserKick()
+                self.state.canBanUsers = powerLevels.canOwnUserBan()
+            }
         }
     }
     

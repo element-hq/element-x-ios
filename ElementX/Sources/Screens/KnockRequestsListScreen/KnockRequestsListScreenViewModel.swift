@@ -26,7 +26,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         self.userIndicatorController = userIndicatorController
         super.init(initialViewState: KnockRequestsListScreenViewState(), mediaProvider: mediaProvider)
         
-        updateRoomInfo(roomInfo: roomProxy.infoPublisher.value)
+        updateRoomInfo(roomProxy.infoPublisher.value)
         
         setupSubscriptions()
     }
@@ -185,7 +185,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
         roomProxy.infoPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] roomInfo in
-                self?.updateRoomInfo(roomInfo: roomInfo)
+                self?.updateRoomInfo(roomInfo)
             }
             .store(in: &cancellables)
         
@@ -210,7 +210,7 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
             .store(in: &cancellables)
     }
     
-    private func updateRoomInfo(roomInfo: RoomInfoProxyProtocol) {
+    private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
         switch roomInfo.joinRule {
         case .knock, .knockRestricted:
             state.isKnockableRoom = true
@@ -218,10 +218,11 @@ class KnockRequestsListScreenViewModel: KnockRequestsListScreenViewModelType, Kn
             state.isKnockableRoom = false
         }
         
-        guard let powerLevels = roomProxy.infoPublisher.value.powerLevels else { fatalError("Missing room power levels") }
-        state.canAccept = powerLevels.canOwnUserInvite()
-        state.canDecline = powerLevels.canOwnUserKick()
-        state.canBan = powerLevels.canOwnUserBan()
+        if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
+            state.canAccept = powerLevels.canOwnUserInvite()
+            state.canDecline = powerLevels.canOwnUserKick()
+            state.canBan = powerLevels.canOwnUserBan()
+        }
     }
     
     private static let loadingIndicatorIdentifier = "\(KnockRequestsListScreenViewModel.self)-Loading"
