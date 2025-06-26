@@ -14,7 +14,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     private let bugReportService: BugReportServiceProtocol
     private let clientProxy: ClientProxyProtocol?
     
-    private let logFiles = Tracing.logFiles
+    private let logFiles: [URL]
     
     private let actionsSubject: PassthroughSubject<BugReportScreenViewModelAction, Never> = .init()
     // periphery:ignore - when set to nil this is automatically cancelled
@@ -26,10 +26,12 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     
     init(bugReportService: BugReportServiceProtocol,
          clientProxy: ClientProxyProtocol?,
+         logFiles: [URL] = Tracing.logFiles,
          screenshot: UIImage?,
          isModallyPresented: Bool) {
         self.bugReportService = bugReportService
         self.clientProxy = clientProxy
+        self.logFiles = logFiles
         
         let canSendLogFiles = Self.validate(logFiles)
         let bindings = BugReportScreenViewStateBindings(reportText: "", sendingLogsEnabled: canSendLogFiles, canContact: false)
