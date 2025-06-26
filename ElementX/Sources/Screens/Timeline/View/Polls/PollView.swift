@@ -65,12 +65,14 @@ struct PollView: View {
             CompoundIcon(poll.hasEnded ? \.pollsEnd : \.polls,
                          size: .custom(22),
                          relativeTo: .compound.bodyLGSemibold)
-                .accessibilityHidden(true)
+                .accessibilityLabel(poll.hasEnded ? L10n.a11yPollEnd : L10n.a11yPoll)
 
             Text(poll.question)
                 .multilineTextAlignment(.leading)
                 .font(.compound.bodyLGSemibold)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
     }
 
     private var optionsView: some View {
