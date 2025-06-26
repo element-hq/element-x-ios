@@ -152,6 +152,18 @@ struct AvatarHeaderView<Footer: View>: View {
         }
     }
     
+    private var avatarAccessibilityLabel: String {
+        guard onAvatarTap != nil else {
+            return L10n.a11yAvatar
+        }
+        switch avatarInfo {
+        case .room(let roomAvatar):
+            return roomAvatar.hasURL ? L10n.a11yViewAvatar : L10n.a11yAvatar
+        case .user(let userProfileProxy):
+            return userProfileProxy.avatarURL != nil ? L10n.a11yViewAvatar : L10n.a11yAvatar
+        }
+    }
+    
     @ViewBuilder
     private var avatar: some View {
         switch avatarInfo {
@@ -160,7 +172,7 @@ struct AvatarHeaderView<Footer: View>: View {
                             avatarSize: avatarSize,
                             mediaProvider: mediaProvider,
                             onAvatarTap: onAvatarTap)
-                .accessibilityLabel(L10n.a11yAvatar)
+                .accessibilityLabel(avatarAccessibilityLabel)
             
         case .user(let userProfile):
             LoadableAvatarImage(url: userProfile.avatarURL,
@@ -169,7 +181,7 @@ struct AvatarHeaderView<Footer: View>: View {
                                 avatarSize: avatarSize,
                                 mediaProvider: mediaProvider,
                                 onTap: onAvatarTap)
-                .accessibilityLabel(L10n.a11yAvatar)
+                .accessibilityLabel(avatarAccessibilityLabel)
         }
     }
     
