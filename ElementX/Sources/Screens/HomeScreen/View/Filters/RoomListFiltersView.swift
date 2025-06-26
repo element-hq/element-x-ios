@@ -64,7 +64,7 @@ struct RoomListFiltersView: View {
                 .font(.system(size: 24))
                 .foregroundColor(.compound.bgActionPrimaryRest)
         })
-        .accessibilityLabel(L10n.screenRoomlistRemoveAllFilters)
+        .accessibilityLabel(L10n.screenRoomlistClearFilters)
     }
     
     private func getBinding(for filter: RoomListFilter, scrollViewProxy: ScrollViewProxy) -> Binding<Bool> {
