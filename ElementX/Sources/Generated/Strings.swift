@@ -2422,6 +2422,8 @@ internal enum L10n {
   internal static var screenRoomVoiceMessageTooltip: String { return L10n.tr("Localizable", "screen_room_voice_message_tooltip") }
   /// Create a new conversation or room
   internal static var screenRoomlistA11yCreateMessage: String { return L10n.tr("Localizable", "screen_roomlist_a11y_create_message") }
+  /// Clear filters
+  internal static var screenRoomlistClearFilters: String { return L10n.tr("Localizable", "screen_roomlist_clear_filters") }
   /// Get started by messaging someone.
   internal static var screenRoomlistEmptyMessage: String { return L10n.tr("Localizable", "screen_roomlist_empty_message") }
   /// No chats yet.
@@ -2464,8 +2466,6 @@ internal enum L10n {
   internal static var screenRoomlistMarkAsRead: String { return L10n.tr("Localizable", "screen_roomlist_mark_as_read") }
   /// Mark as unread
   internal static var screenRoomlistMarkAsUnread: String { return L10n.tr("Localizable", "screen_roomlist_mark_as_unread") }
-  /// Remove all filters
-  internal static var screenRoomlistRemoveAllFilters: String { return L10n.tr("Localizable", "screen_roomlist_remove_all_filters") }
   /// This room has been upgraded
   internal static var screenRoomlistTombstonedRoomDescription: String { return L10n.tr("Localizable", "screen_roomlist_tombstoned_room_description") }
   /// Add room address
