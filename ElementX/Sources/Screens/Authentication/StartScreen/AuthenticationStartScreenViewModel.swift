@@ -16,6 +16,8 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
+    private let canReportProblem: Bool
+    
     private var actionsSubject: PassthroughSubject<AuthenticationStartScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<AuthenticationStartScreenViewModelAction, Never> {
@@ -31,6 +33,7 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         self.provisioningParameters = provisioningParameters
         self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
+        canReportProblem = isBugReportServiceEnabled
         
         let isQRCodeScanningSupported = !ProcessInfo.processInfo.isiOSAppOnMac
         
@@ -39,20 +42,17 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             // The assumption here being that if you're running a custom app, your users will already be created.
             AuthenticationStartScreenViewState(serverName: appSettings.accountProviders.count == 1 ? appSettings.accountProviders[0] : nil,
                                                showCreateAccountButton: false,
-                                               showQRCodeLoginButton: isQRCodeScanningSupported,
-                                               showReportProblemButton: isBugReportServiceEnabled)
+                                               showQRCodeLoginButton: isQRCodeScanningSupported)
         } else if let provisioningParameters {
             // We only show the "Sign in to …" button when using a provisioning link.
             AuthenticationStartScreenViewState(serverName: provisioningParameters.accountProvider,
                                                showCreateAccountButton: false,
-                                               showQRCodeLoginButton: false,
-                                               showReportProblemButton: isBugReportServiceEnabled)
+                                               showQRCodeLoginButton: false)
         } else {
             // The default configuration.
             AuthenticationStartScreenViewState(serverName: nil,
                                                showCreateAccountButton: appSettings.showCreateAccountButton,
-                                               showQRCodeLoginButton: isQRCodeScanningSupported,
-                                               showReportProblemButton: isBugReportServiceEnabled)
+                                               showQRCodeLoginButton: isQRCodeScanningSupported)
         }
         
         super.init(initialViewState: initialViewState)
@@ -70,7 +70,9 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
         case .register:
             actionsSubject.send(.register)
         case .reportProblem:
-            actionsSubject.send(.reportProblem)
+            if canReportProblem {
+                actionsSubject.send(.reportProblem)
+            }
         }
     }
     

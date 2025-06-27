@@ -229,8 +229,8 @@ class AuthenticationFlowCoordinatorUITests: XCTestCase {
     }
     
     func verifyReportBugButton(_ app: XCUIApplication) async throws {
-        // Splash Screen: Report a problem button.
-        app.buttons[A11yIdentifiers.authenticationStartScreen.reportAProblem].tap()
+        // Splash Screen: Tap the version 7 times to report a problem
+        app.staticTexts[A11yIdentifiers.authenticationStartScreen.appVersion].tap(withNumberOfTaps: 7, numberOfTouches: 1)
         
         // Bug report: Make sure it exists then cancel.
         XCTAssert(app.textFields[A11yIdentifiers.bugReportScreen.report].exists)

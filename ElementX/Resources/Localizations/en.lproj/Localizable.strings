@@ -795,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "system settings";
 "screen_notification_settings_system_notifications_turned_off" = "System notifications turned off";
 "screen_notification_settings_title" = "Notifications";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Sign in manually";
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Sign in with QR code";

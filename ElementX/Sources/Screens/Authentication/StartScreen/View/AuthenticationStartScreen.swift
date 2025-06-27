@@ -35,18 +35,15 @@ struct AuthenticationStartScreen: View {
             }
             .frame(maxHeight: .infinity)
             .safeAreaInset(edge: .bottom) {
-                if context.viewState.showReportProblemButton {
-                    Button {
+                versionText
+                    .font(.compound.bodySM)
+                    .foregroundColor(.compound.textSecondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom)
+                    .onTapGesture(count: 7) {
                         context.send(viewAction: .reportProblem)
-                    } label: {
-                        Text(L10n.commonReportAProblem)
-                            .font(.compound.bodySM)
-                            .foregroundColor(.compound.textSecondary)
-                            .padding(.bottom)
                     }
-                    .frame(width: geometry.size.width)
-                    .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.reportAProblem)
-                }
+                    .accessibilityIdentifier(A11yIdentifiers.authenticationStartScreen.appVersion)
             }
         }
         .navigationBarHidden(true)
@@ -117,28 +114,31 @@ struct AuthenticationStartScreen: View {
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
         .readableFrame()
     }
+    
+    var versionText: Text {
+        // Let's not deal with snapshotting a changing version string.
+        let shortVersionString = ProcessInfo.isRunningTests ? "0.0.0" : InfoPlistReader.main.bundleShortVersionString
+        return Text(L10n.screenOnboardingAppVersion(shortVersionString))
+    }
 }
 
 // MARK: - Previews
 
 struct AuthenticationStartScreen_Previews: PreviewProvider, TestablePreview {
     static let viewModel = makeViewModel()
-    static let bugReportDisabledViewModel = makeViewModel(isBugReportServiceEnabled: false)
     static let provisionedViewModel = makeViewModel(provisionedServerName: "example.com")
     
     static var previews: some View {
         AuthenticationStartScreen(context: viewModel.context)
             .previewDisplayName("Default")
-        AuthenticationStartScreen(context: bugReportDisabledViewModel.context)
-            .previewDisplayName("Bug report disabled")
         AuthenticationStartScreen(context: provisionedViewModel.context)
             .previewDisplayName("Provisioned")
     }
     
-    static func makeViewModel(isBugReportServiceEnabled: Bool = true, provisionedServerName: String? = nil) -> AuthenticationStartScreenViewModel {
+    static func makeViewModel(provisionedServerName: String? = nil) -> AuthenticationStartScreenViewModel {
         AuthenticationStartScreenViewModel(authenticationService: AuthenticationService.mock,
                                            provisioningParameters: provisionedServerName.map { .init(accountProvider: $0, loginHint: nil) },
-                                           isBugReportServiceEnabled: isBugReportServiceEnabled,
+                                           isBugReportServiceEnabled: true,
                                            appSettings: ServiceLocator.shared.settings,
                                            userIndicatorController: UserIndicatorControllerMock())
     }
