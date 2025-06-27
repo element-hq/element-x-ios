@@ -48,14 +48,7 @@ struct HomeWalletContent: View {
                     offsetReader
                         .frame(height: 0)
                     
-                    LazyVStack {
-//                        ForEach(0..<30) { i in
-//                            Text("Token Row \(i)")
-//                                .frame(maxWidth: .infinity)
-//                                .padding()
-//                                .background(Color.black.opacity(0.05))
-//                        }
-                    }
+                    HomeWalletTabsContentView(context: context, selectedWalletTab: selectedTab)
                 }
                 .coordinateSpace(name: "scroll")
                 .introspect(.scrollView, on: .supportedVersions) { scrollView in
@@ -63,6 +56,7 @@ struct HomeWalletContent: View {
                     scrollViewAdapter.scrollView = scrollView
                 }
                 .scrollDismissesKeyboard(.immediately)
+                .scrollIndicators(.hidden)
             }
             .padding(.horizontal)
         }

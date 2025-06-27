@@ -1876,6 +1876,8 @@
 		799616302E0B2708008E73C4 /* HomeWalletContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996162E2E0B2702008E73C4 /* HomeWalletContent.swift */; };
 		799616322E0B36D6008E73C4 /* SimpleTabButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799616312E0B36B4008E73C4 /* SimpleTabButtonsView.swift */; };
 		799616332E0B36D6008E73C4 /* SimpleTabButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799616312E0B36B4008E73C4 /* SimpleTabButtonsView.swift */; };
+		799616352E0C7A30008E73C4 /* HomeWalletTabsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799616342E0C7A25008E73C4 /* HomeWalletTabsContent.swift */; };
+		799616362E0C7A30008E73C4 /* HomeWalletTabsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799616342E0C7A25008E73C4 /* HomeWalletTabsContent.swift */; };
 		7999A7DD2D955CD700738A7C /* MapTilerURLBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1033290D99D5BBA1AF3560A /* MapTilerURLBuilderProtocol.swift */; };
 		7999A7DE2D955CF300738A7C /* MapTilerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A1FAE3EEAB27D8D38E3273 /* MapTilerConfiguration.swift */; };
 		799D7F212DB03A5800B17C18 /* SDKListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5CD2993048222B64C45006 /* SDKListener.swift */; };
@@ -3496,6 +3498,7 @@
 		7994E5642DD52B3F005F7039 /* YoutubeLinkMetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeLinkMetaData.swift; sourceTree = "<group>"; };
 		7996162E2E0B2702008E73C4 /* HomeWalletContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWalletContent.swift; sourceTree = "<group>"; };
 		799616312E0B36B4008E73C4 /* SimpleTabButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTabButtonsView.swift; sourceTree = "<group>"; };
+		799616342E0C7A25008E73C4 /* HomeWalletTabsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWalletTabsContent.swift; sourceTree = "<group>"; };
 		799E1D182DBBA85400E3D512 /* ZeroMetaDataApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMetaDataApi.swift; sourceTree = "<group>"; };
 		799E1D1B2DBBA8B300E3D512 /* ZLinkPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLinkPreview.swift; sourceTree = "<group>"; };
 		799E1D1F2DBF7DD500E3D512 /* TimelineLinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineLinkPreviewView.swift; sourceTree = "<group>"; };
@@ -5955,6 +5958,7 @@
 				79E1E7EF2DFB6C7F00195CF0 /* HomeTabBottomSpace.swift */,
 				790393702D4CD63A0022E293 /* HomeTabView.swift */,
 				7996162E2E0B2702008E73C4 /* HomeWalletContent.swift */,
+				799616342E0C7A25008E73C4 /* HomeWalletTabsContent.swift */,
 				037A5661B26EC6BE068188D7 /* Filters */,
 			);
 			path = View;
@@ -10240,6 +10244,7 @@
 				18E9A6B52C9829970082DDA4 /* SessionDirectories.swift in Sources */,
 				18E9A6B62C9829970082DDA4 /* SessionVerificationControllerProxy.swift in Sources */,
 				182258E72CCC3E6500BBEDC0 /* RoomHeaderView.swift in Sources */,
+				799616362E0C7A30008E73C4 /* HomeWalletTabsContent.swift in Sources */,
 				18E9A6B72C9829970082DDA4 /* SessionVerificationControllerProxyMock.swift in Sources */,
 				18E9A6B82C9829970082DDA4 /* SessionVerificationControllerProxyProtocol.swift in Sources */,
 				18E9A6B92C9829970082DDA4 /* SessionVerificationScreen.swift in Sources */,
@@ -11406,6 +11411,7 @@
 				47305C0911C9E1AA774A4000 /* TemplateScreenCoordinator.swift in Sources */,
 				CCBEC2100CAF2EEBE9DB4156 /* TemplateScreenModels.swift in Sources */,
 				275EDE8849A2AC1D9309ED7C /* TemplateScreenViewModel.swift in Sources */,
+				799616352E0C7A30008E73C4 /* HomeWalletTabsContent.swift in Sources */,
 				2C4C750D0039AFABDF24236C /* TemplateScreenViewModelProtocol.swift in Sources */,
 				642DF13C49ED4121C148230E /* TestablePreview.swift in Sources */,
 				887AC93C523AEFB640EA5EC8 /* TextBasedRoomTimelineItem.swift in Sources */,
