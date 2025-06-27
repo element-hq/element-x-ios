@@ -96,8 +96,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
 
     func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextView, context: Context) -> CGSize? {
         // Note: Coalescing a width of zero here returns a size for the view with 1 line of text visible.
-        let newSize = uiView.sizeThatFits(CGSize(width: proposal.width ?? .zero,
-                                                 height: CGFloat.greatestFiniteMagnitude))
+        let newSize = uiView.sizeThatFits(CGSize(width: proposal.width ?? .zero, height: maxHeight))
         let width = proposal.width ?? newSize.width
         let height = min(maxHeight, newSize.height)
 
