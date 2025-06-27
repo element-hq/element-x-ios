@@ -5,11 +5,11 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-protocol ZeroWalletsApiProtocol {
+protocol ZeroWalletApiProtocol {
     func initializeThirdWebWallet() async throws -> Result<Void, Error>
 }
 
-class ZeroWalletsApi: ZeroWalletsApiProtocol {
+class ZeroWalletApi: ZeroWalletApiProtocol {
     private let appSettings: AppSettings
     
     init(appSettings: AppSettings) {

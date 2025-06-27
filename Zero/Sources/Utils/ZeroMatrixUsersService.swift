@@ -2,7 +2,7 @@ import Foundation
 import MatrixRustSDK
 
 class ZeroMatrixUsersService {
-    private let zeroUsersApi: ZeroUsersApiProtocol
+    private let zeroUsersApi: ZeroUserApiProtocol
     private let appSettings: AppSettings
     private let client: ClientProtocol
         
@@ -13,7 +13,7 @@ class ZeroMatrixUsersService {
         (try? client.userId()) ?? ""
     }
     
-    init(zeroUsersApi: ZeroUsersApiProtocol, appSettings: AppSettings, client: ClientProtocol) {
+    init(zeroUsersApi: ZeroUserApiProtocol, appSettings: AppSettings, client: ClientProtocol) {
         self.zeroUsersApi = zeroUsersApi
         self.appSettings = appSettings
         self.client = client

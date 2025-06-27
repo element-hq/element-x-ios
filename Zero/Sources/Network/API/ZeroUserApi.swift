@@ -1,7 +1,7 @@
 import Alamofire
 import Foundation
 
-protocol ZeroUsersApiProtocol {
+protocol ZeroUserApiProtocol {
     func fetchUsers(fromMatrixIds ids: [String]) async throws -> Result<[ZMatrixUser], any Error>
     
     func searchUsers(_ query: String, offset: Int, limit: Int) async throws -> Result<[ZMatrixSearchedUser], any Error>
@@ -11,7 +11,7 @@ protocol ZeroUsersApiProtocol {
     func fetchCurrentUser() async throws -> Result<ZCurrentUser, Error>
 }
 
-class ZeroUsersApi: ZeroUsersApiProtocol {
+class ZeroUserApi: ZeroUserApiProtocol {
     private let appSettings: AppSettings
     
     init(appSettings: AppSettings) {

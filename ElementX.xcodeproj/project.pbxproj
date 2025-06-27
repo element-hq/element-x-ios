@@ -277,7 +277,7 @@
 		187112542CF75350001E8964 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187112522CF75344001E8964 /* View+Extensions.swift */; };
 		18793DE82CF5052F00F1C85D /* KnockRequestsBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F441A78A5CAA9E2937E463 /* KnockRequestsBannerView.swift */; };
 		188207EB2CEF3FAF00856A39 /* TimelineProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A8AA0DFA06012A9DAB951E /* TimelineProxyMock.swift */; };
-		1882EB792C8F84BD001DA2A9 /* ZeroUsersApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */; };
+		1882EB792C8F84BD001DA2A9 /* ZeroUserApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB782C8F84BD001DA2A9 /* ZeroUserApi.swift */; };
 		1882EB7B2C8F8542001DA2A9 /* ZMatrixUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB7A2C8F8542001DA2A9 /* ZMatrixUser.swift */; };
 		1882EB7E2C8F85C7001DA2A9 /* Tagged in Frameworks */ = {isa = PBXBuildFile; productRef = 1882EB7D2C8F85C7001DA2A9 /* Tagged */; };
 		1882EB802C8F85C7001DA2A9 /* TaggedMoney in Frameworks */ = {isa = PBXBuildFile; productRef = 1882EB7F2C8F85C7001DA2A9 /* TaggedMoney */; };
@@ -378,8 +378,8 @@
 		18D46BA62D2DACA3009F4041 /* StateBus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D46BA42D2DAC9D009F4041 /* StateBus.swift */; };
 		18D5D9A42CEB56FE00107940 /* ZRewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A32CEB56F500107940 /* ZRewards.swift */; };
 		18D5D9A52CEB56FE00107940 /* ZRewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A32CEB56F500107940 /* ZRewards.swift */; };
-		18D5D9A72CEB577300107940 /* ZeroRewardsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A62CEB576B00107940 /* ZeroRewardsApi.swift */; };
-		18D5D9A82CEB577300107940 /* ZeroRewardsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A62CEB576B00107940 /* ZeroRewardsApi.swift */; };
+		18D5D9A72CEB577300107940 /* ZeroRewardApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A62CEB576B00107940 /* ZeroRewardApi.swift */; };
+		18D5D9A82CEB577300107940 /* ZeroRewardApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A62CEB576B00107940 /* ZeroRewardApi.swift */; };
 		18D5D9AA2CEB5A9600107940 /* ZeroRewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A92CEB5A9000107940 /* ZeroRewards.swift */; };
 		18D5D9AB2CEB5A9600107940 /* ZeroRewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A92CEB5A9000107940 /* ZeroRewards.swift */; };
 		18D5D9AC2CEB6E0D00107940 /* ZeroRewards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D5D9A92CEB5A9000107940 /* ZeroRewards.swift */; };
@@ -426,7 +426,7 @@
 		18E9A42B2C9829970082DDA4 /* AnalyticsConsentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B6B383F1FD04CC0E7B60C6 /* AnalyticsConsentState.swift */; };
 		18E9A42C2C9829970082DDA4 /* AnalyticsPromptScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53BFB7E4F329621C844E8C3 /* AnalyticsPromptScreen.swift */; };
 		18E9A42D2C9829970082DDA4 /* AnalyticsPromptScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B67DF223EEB8DCAF178A1D4 /* AnalyticsPromptScreenCoordinator.swift */; };
-		18E9A42E2C9829970082DDA4 /* ZeroUsersApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */; };
+		18E9A42E2C9829970082DDA4 /* ZeroUserApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1882EB782C8F84BD001DA2A9 /* ZeroUserApi.swift */; };
 		18E9A42F2C9829970082DDA4 /* AnalyticsPromptScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18486B87745B1811E7FBD3D2 /* AnalyticsPromptScreenModels.swift */; };
 		18E9A4302C9829970082DDA4 /* AnalyticsPromptScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C8EC6EA7EDFCE46710DA306 /* AnalyticsPromptScreenViewModel.swift */; };
 		18E9A4312C9829970082DDA4 /* AnalyticsPromptScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFD012C3A9F5EF276DDD4AA /* AnalyticsPromptScreenViewModelProtocol.swift */; };
@@ -1726,8 +1726,8 @@
 		78A3D84BA47DAC69B4D0A34C /* CollapsibleRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF273BC2BFB9F3EEFA988B /* CollapsibleRoomTimelineView.swift */; };
 		790393712D4CD63E0022E293 /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393702D4CD63A0022E293 /* HomeTabView.swift */; };
 		790393722D4CD63E0022E293 /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393702D4CD63A0022E293 /* HomeTabView.swift */; };
-		790393742D4CDC7A0022E293 /* ZeroPostsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393732D4CDC750022E293 /* ZeroPostsApi.swift */; };
-		790393752D4CDC7A0022E293 /* ZeroPostsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393732D4CDC750022E293 /* ZeroPostsApi.swift */; };
+		790393742D4CDC7A0022E293 /* ZeroPostApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393732D4CDC750022E293 /* ZeroPostApi.swift */; };
+		790393752D4CDC7A0022E293 /* ZeroPostApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393732D4CDC750022E293 /* ZeroPostApi.swift */; };
 		790393772D4CDE4B0022E293 /* ZPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393762D4CDE470022E293 /* ZPosts.swift */; };
 		790393782D4CDE4B0022E293 /* ZPosts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393762D4CDE470022E293 /* ZPosts.swift */; };
 		7903937A2D4D62C70022E293 /* HomePostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393792D4D62B40022E293 /* HomePostsContent.swift */; };
@@ -1745,8 +1745,8 @@
 		790393892D53A1A70022E293 /* TimelineProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62EACAFB3F3E017060F9F1C5 /* TimelineProviderMock.swift */; };
 		7903938B2D53A22F0022E293 /* TimelineMediaPreviewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD40B92FCF20165658296AD /* TimelineMediaPreviewModifier.swift */; };
 		7903938C2D53A2440022E293 /* TimelineMediaPreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDE60FEE95039CCCEEEE3B0 /* TimelineMediaPreviewController.swift */; };
-		7905F9A72D67620900C3A203 /* ZeroChannelsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9A62D67620300C3A203 /* ZeroChannelsApi.swift */; };
-		7905F9A82D67620900C3A203 /* ZeroChannelsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9A62D67620300C3A203 /* ZeroChannelsApi.swift */; };
+		7905F9A72D67620900C3A203 /* ZeroChannelApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9A62D67620300C3A203 /* ZeroChannelApi.swift */; };
+		7905F9A82D67620900C3A203 /* ZeroChannelApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9A62D67620300C3A203 /* ZeroChannelApi.swift */; };
 		7905F9AA2D676AB400C3A203 /* HomeChannelsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */; };
 		7905F9AB2D676AB400C3A203 /* HomeChannelsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */; };
 		7905F9AD2D676BB000C3A203 /* HomeScreenChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */; };
@@ -1793,8 +1793,8 @@
 		7944A7692D589F5800B75DAC /* CreateFeedScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A7672D589F4D00B75DAC /* CreateFeedScreenViewModelProtocol.swift */; };
 		7944A76C2D589F6900B75DAC /* CreateFeedScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */; };
 		7944A76D2D589F6900B75DAC /* CreateFeedScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */; };
-		794E2AEB2D773ACB0067E725 /* ZeroWalletsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E2AEA2D773AC10067E725 /* ZeroWalletsApi.swift */; };
-		794E2AEC2D773ACB0067E725 /* ZeroWalletsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E2AEA2D773AC10067E725 /* ZeroWalletsApi.swift */; };
+		794E2AEB2D773ACB0067E725 /* ZeroWalletApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */; };
+		794E2AEC2D773ACB0067E725 /* ZeroWalletApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */; };
 		794E2AEE2D7741E80067E725 /* ZNewPostUnsignedMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E2AED2D7741E80067E725 /* ZNewPostUnsignedMessage.swift */; };
 		794E2AEF2D7741E80067E725 /* ZNewPostUnsignedMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794E2AED2D7741E80067E725 /* ZNewPostUnsignedMessage.swift */; };
 		794F08A92D6CFF5B008B575F /* ZChannelRoomId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794F08A82D6CFF56008B575F /* ZChannelRoomId.swift */; };
@@ -2941,7 +2941,7 @@
 		1868A8C12CA338DF00DC382D /* Encodable+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extensions.swift"; sourceTree = "<group>"; };
 		1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyResponse.swift; sourceTree = "<group>"; };
 		187112522CF75344001E8964 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
-		1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroUsersApi.swift; sourceTree = "<group>"; };
+		1882EB782C8F84BD001DA2A9 /* ZeroUserApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroUserApi.swift; sourceTree = "<group>"; };
 		1882EB7A2C8F8542001DA2A9 /* ZMatrixUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixUser.swift; sourceTree = "<group>"; };
 		1882EB832C8F85F5001DA2A9 /* ZMatrixUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixUserProfile.swift; sourceTree = "<group>"; };
 		1882EB8B2C90C8EC001DA2A9 /* Sequence+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sequence+Extensions.swift"; sourceTree = "<group>"; };
@@ -2965,7 +2965,7 @@
 		18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ZeroInfo.plist; sourceTree = "<group>"; };
 		18D46BA42D2DAC9D009F4041 /* StateBus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateBus.swift; sourceTree = "<group>"; };
 		18D5D9A32CEB56F500107940 /* ZRewards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZRewards.swift; sourceTree = "<group>"; };
-		18D5D9A62CEB576B00107940 /* ZeroRewardsApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroRewardsApi.swift; sourceTree = "<group>"; };
+		18D5D9A62CEB576B00107940 /* ZeroRewardApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroRewardApi.swift; sourceTree = "<group>"; };
 		18D5D9A92CEB5A9000107940 /* ZeroRewards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroRewards.swift; sourceTree = "<group>"; };
 		18D5D9B02CEB732E00107940 /* UserRewardsSettingsScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRewardsSettingsScreenModels.swift; sourceTree = "<group>"; };
 		18D5D9B32CEB741C00107940 /* UserRewardsSettingsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRewardsSettingsScreenViewModel.swift; sourceTree = "<group>"; };
@@ -3445,12 +3445,12 @@
 		7893780A1FD6E3F38B3E9049 /* UserIndicatorControllerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIndicatorControllerMock.swift; sourceTree = "<group>"; };
 		78BBDF7A05CF53B5CDC13682 /* landscape_test_video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = landscape_test_video.mov; sourceTree = "<group>"; };
 		790393702D4CD63A0022E293 /* HomeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabView.swift; sourceTree = "<group>"; };
-		790393732D4CDC750022E293 /* ZeroPostsApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPostsApi.swift; sourceTree = "<group>"; };
+		790393732D4CDC750022E293 /* ZeroPostApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPostApi.swift; sourceTree = "<group>"; };
 		790393762D4CDE470022E293 /* ZPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPosts.swift; sourceTree = "<group>"; };
 		790393792D4D62B40022E293 /* HomePostsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePostsContent.swift; sourceTree = "<group>"; };
 		7903937C2D50DA8E0022E293 /* DateUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtil.swift; sourceTree = "<group>"; };
 		7903937F2D50DFE60022E293 /* HomeScreenPostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostList.swift; sourceTree = "<group>"; };
-		7905F9A62D67620300C3A203 /* ZeroChannelsApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroChannelsApi.swift; sourceTree = "<group>"; };
+		7905F9A62D67620300C3A203 /* ZeroChannelApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroChannelApi.swift; sourceTree = "<group>"; };
 		7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeChannelsContent.swift; sourceTree = "<group>"; };
 		7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenChannelCell.swift; sourceTree = "<group>"; };
 		7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaSelectedProtocol.swift; sourceTree = "<group>"; };
@@ -3467,7 +3467,7 @@
 		7944A7642D589F3F00B75DAC /* CreateFeedScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenViewModel.swift; sourceTree = "<group>"; };
 		7944A7672D589F4D00B75DAC /* CreateFeedScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenView.swift; sourceTree = "<group>"; };
-		794E2AEA2D773AC10067E725 /* ZeroWalletsApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletsApi.swift; sourceTree = "<group>"; };
+		794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletApi.swift; sourceTree = "<group>"; };
 		794E2AED2D7741E80067E725 /* ZNewPostUnsignedMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ZNewPostUnsignedMessage.swift; path = Zero/Sources/Network/Models/ZNewPostUnsignedMessage.swift; sourceTree = SOURCE_ROOT; };
 		794F08A82D6CFF56008B575F /* ZChannelRoomId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZChannelRoomId.swift; sourceTree = "<group>"; };
 		795A0C822D77D4DC000928B7 /* CreateFeedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedProtocol.swift; sourceTree = "<group>"; };
@@ -4692,17 +4692,17 @@
 		184D6FCB2C7D8A97006266D8 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				794E2AEA2D773AC10067E725 /* ZeroWalletsApi.swift */,
+				794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */,
 				797751812DDB2499006CF62D /* ZeroPostUserApi.swift */,
-				790393732D4CDC750022E293 /* ZeroPostsApi.swift */,
+				790393732D4CDC750022E293 /* ZeroPostApi.swift */,
 				189E88512D0CA773002FA063 /* ZeroAccountApi.swift */,
-				7905F9A62D67620300C3A203 /* ZeroChannelsApi.swift */,
+				7905F9A62D67620300C3A203 /* ZeroChannelApi.swift */,
 				18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */,
 				18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */,
 				799E1D182DBBA85400E3D512 /* ZeroMetaDataApi.swift */,
-				18D5D9A62CEB576B00107940 /* ZeroRewardsApi.swift */,
+				18D5D9A62CEB576B00107940 /* ZeroRewardApi.swift */,
 				184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */,
-				1882EB782C8F84BD001DA2A9 /* ZeroUsersApi.swift */,
+				1882EB782C8F84BD001DA2A9 /* ZeroUserApi.swift */,
 				18E99FF32C944F670082DDA4 /* ZeroAttachmentApi.swift */,
 				1868A8B82CA2D18600DC382D /* ZeroChatApi.swift */,
 			);
@@ -9403,7 +9403,7 @@
 				18E9A42C2C9829970082DDA4 /* AnalyticsPromptScreen.swift in Sources */,
 				18D467B42D10A0B800861AA6 /* SecurityAndPrivacyScreenViewModelProtocol.swift in Sources */,
 				18E9A42D2C9829970082DDA4 /* AnalyticsPromptScreenCoordinator.swift in Sources */,
-				18E9A42E2C9829970082DDA4 /* ZeroUsersApi.swift in Sources */,
+				18E9A42E2C9829970082DDA4 /* ZeroUserApi.swift in Sources */,
 				790393862D53A12D0022E293 /* TimelineController.swift in Sources */,
 				18E9A42F2C9829970082DDA4 /* AnalyticsPromptScreenModels.swift in Sources */,
 				18E9A4302C9829970082DDA4 /* AnalyticsPromptScreenViewModel.swift in Sources */,
@@ -9458,7 +9458,7 @@
 				18E9A4542C9829970082DDA4 /* AppLockSetupSettingsScreenCoordinator.swift in Sources */,
 				18D5D9AB2CEB5A9600107940 /* ZeroRewards.swift in Sources */,
 				18E9A4552C9829970082DDA4 /* AppLockSetupSettingsScreenModels.swift in Sources */,
-				794E2AEC2D773ACB0067E725 /* ZeroWalletsApi.swift in Sources */,
+				794E2AEC2D773ACB0067E725 /* ZeroWalletApi.swift in Sources */,
 				18FFCED22CEC8EB9002F2647 /* ShareExtensionModels.swift in Sources */,
 				18E9A4562C9829970082DDA4 /* AppLockSetupSettingsScreenViewModel.swift in Sources */,
 				18E9A4572C9829970082DDA4 /* AppLockSetupSettingsScreenViewModelProtocol.swift in Sources */,
@@ -9956,7 +9956,7 @@
 				18E9A5D72C9829970082DDA4 /* ZMatrixUser.swift in Sources */,
 				18E9A5D82C9829970082DDA4 /* PinnedEventsTimelineFlowCoordinator.swift in Sources */,
 				18E9A5D92C9829970082DDA4 /* PinnedEventsTimelineScreen.swift in Sources */,
-				7905F9A82D67620900C3A203 /* ZeroChannelsApi.swift in Sources */,
+				7905F9A82D67620900C3A203 /* ZeroChannelApi.swift in Sources */,
 				18E9A5DA2C9829970082DDA4 /* PinnedEventsTimelineScreenCoordinator.swift in Sources */,
 				18E9A5DB2C9829970082DDA4 /* PinnedEventsTimelineScreenModels.swift in Sources */,
 				185454ED2CFFAD09003CA957 /* ZInviter.swift in Sources */,
@@ -10049,7 +10049,7 @@
 				18E9A6202C9829970082DDA4 /* RoomChangeRolesScreenSection.swift in Sources */,
 				18E9A6212C9829970082DDA4 /* RoomChangeRolesScreenSelectedItem.swift in Sources */,
 				18E9A6222C9829970082DDA4 /* RoomChangeRolesScreenViewModel.swift in Sources */,
-				790393742D4CDC7A0022E293 /* ZeroPostsApi.swift in Sources */,
+				790393742D4CDC7A0022E293 /* ZeroPostApi.swift in Sources */,
 				18E9A6232C9829970082DDA4 /* RoomChangeRolesScreenViewModelProtocol.swift in Sources */,
 				18E9A6242C9829970082DDA4 /* RoomDetails.swift in Sources */,
 				18DFC5C82CD954EF00462FE1 /* EncryptionResetFlowCoordinator.swift in Sources */,
@@ -10179,7 +10179,7 @@
 				18D467A72D109B9700861AA6 /* ImageMediaEventsTimelineView.swift in Sources */,
 				18D5D9A52CEB56FE00107940 /* ZRewards.swift in Sources */,
 				18E9A6852C9829970082DDA4 /* RoundedCornerShape.swift in Sources */,
-				18D5D9A72CEB577300107940 /* ZeroRewardsApi.swift in Sources */,
+				18D5D9A72CEB577300107940 /* ZeroRewardApi.swift in Sources */,
 				18525CF82CF5E7D50055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift in Sources */,
 				18E9A6882C9829970082DDA4 /* SDKGeneratedMocks.swift in Sources */,
 				18E9A6892C9829970082DDA4 /* SFNumberedListView.swift in Sources */,
@@ -10525,7 +10525,7 @@
 				24A1BBADAC43DC3F3A7347DA /* AnalyticsPromptScreen.swift in Sources */,
 				1868A8B92CA2D18600DC382D /* ZeroChatApi.swift in Sources */,
 				DCFE7CB3B9A104330BBB96AD /* AnalyticsPromptScreenCoordinator.swift in Sources */,
-				1882EB792C8F84BD001DA2A9 /* ZeroUsersApi.swift in Sources */,
+				1882EB792C8F84BD001DA2A9 /* ZeroUserApi.swift in Sources */,
 				6DC8E43BA04AC2AC4EB2EB97 /* AnalyticsPromptScreenModels.swift in Sources */,
 				DB65401349C143DFF883E2B0 /* AnalyticsPromptScreenViewModel.swift in Sources */,
 				05BAB510CBC2ED35C154ADD0 /* AnalyticsPromptScreenViewModelProtocol.swift in Sources */,
@@ -10822,7 +10822,7 @@
 				62C5876C4254C58C2086F0DE /* HomeScreenContent.swift in Sources */,
 				8CC12086CBF91A7E10CDC205 /* HomeScreenCoordinator.swift in Sources */,
 				77BB228AEA861E50FFD6A228 /* HomeScreenEmptyStateView.swift in Sources */,
-				794E2AEB2D773ACB0067E725 /* ZeroWalletsApi.swift in Sources */,
+				794E2AEB2D773ACB0067E725 /* ZeroWalletApi.swift in Sources */,
 				22C5483D01EEB290B8339817 /* HomeScreenInviteCell.swift in Sources */,
 				86DFA58FBBEB0AF671D2A1E1 /* HomeScreenKnockedCell.swift in Sources */,
 				185454CB2CFDE6B3003CA957 /* CreateAccountScreenView.swift in Sources */,
@@ -11022,13 +11022,13 @@
 				454311EAC17D778E19F46592 /* NotificationPermissionsScreenCoordinator.swift in Sources */,
 				3E7B65C2C97748D5D65AAA8B /* NotificationPermissionsScreenModels.swift in Sources */,
 				D4D7CCECC6C0AAFC42E165BB /* NotificationPermissionsScreenViewModel.swift in Sources */,
-				790393752D4CDC7A0022E293 /* ZeroPostsApi.swift in Sources */,
+				790393752D4CDC7A0022E293 /* ZeroPostApi.swift in Sources */,
 				C8A9C595038AFA2D707AC8C1 /* NotificationPermissionsScreenViewModelProtocol.swift in Sources */,
 				C0090506A52A1991BAF4BA68 /* NotificationSettingsChatType.swift in Sources */,
 				AA93B3F9B5DD097DEF79F981 /* NotificationSettingsEditScreen.swift in Sources */,
 				53A59720F4729D9BBFFB7CAB /* NotificationSettingsEditScreenCoordinator.swift in Sources */,
 				4EA1CE0E88EA68E862FF0EA2 /* NotificationSettingsEditScreenModels.swift in Sources */,
-				7905F9A72D67620900C3A203 /* ZeroChannelsApi.swift in Sources */,
+				7905F9A72D67620900C3A203 /* ZeroChannelApi.swift in Sources */,
 				119AE9A3FC6E0606C1146528 /* NotificationSettingsEditScreenRoomCell.swift in Sources */,
 				D5FE90A6AF5FD5AE91BD37C7 /* NotificationSettingsEditScreenViewModel.swift in Sources */,
 				2F623DA1122140A987B34D08 /* NotificationSettingsEditScreenViewModelProtocol.swift in Sources */,
@@ -11575,7 +11575,7 @@
 				CA12AE0DCD57D49CD96C699A /* WaveformCursorView.swift in Sources */,
 				63CDC201A5980F304F6D0A1C /* WaveformInteractionModifier.swift in Sources */,
 				B773ACD8881DB18E876D950C /* WaveformSource.swift in Sources */,
-				18D5D9A82CEB577300107940 /* ZeroRewardsApi.swift in Sources */,
+				18D5D9A82CEB577300107940 /* ZeroRewardApi.swift in Sources */,
 				08CB4BD12CEEDE6AAE4A18DD /* WindowManager.swift in Sources */,
 				AE5AAD9E32511544FDFA5560 /* WindowManagerProtocol.swift in Sources */,
 				80F1B442DB5E2C362ACDD8E2 /* ZoomTransition.swift in Sources */,
