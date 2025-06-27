@@ -6993,6 +6993,216 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return initializeThirdWebWalletForUserReturnValue
         }
     }
+    //MARK: - getWalletTokenBalances
+
+    var getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount = 0
+    var getWalletTokenBalancesWalletAddressNextPageCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getWalletTokenBalancesWalletAddressNextPageUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getWalletTokenBalancesWalletAddressNextPageCalled: Bool {
+        return getWalletTokenBalancesWalletAddressNextPageCallsCount > 0
+    }
+    var getWalletTokenBalancesWalletAddressNextPageReceivedArguments: (walletAddress: String, nextPage: NextPageParams?)?
+    var getWalletTokenBalancesWalletAddressNextPageReceivedInvocations: [(walletAddress: String, nextPage: NextPageParams?)] = []
+
+    var getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue: Result<ZWalletTokenBalances, ClientProxyError>!
+    var getWalletTokenBalancesWalletAddressNextPageReturnValue: Result<ZWalletTokenBalances, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTokenBalances, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getWalletTokenBalancesWalletAddressNextPageUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getWalletTokenBalancesWalletAddressNextPageClosure: ((String, NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError>)?
+
+    func getWalletTokenBalances(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError> {
+        getWalletTokenBalancesWalletAddressNextPageCallsCount += 1
+        getWalletTokenBalancesWalletAddressNextPageReceivedArguments = (walletAddress: walletAddress, nextPage: nextPage)
+        DispatchQueue.main.async {
+            self.getWalletTokenBalancesWalletAddressNextPageReceivedInvocations.append((walletAddress: walletAddress, nextPage: nextPage))
+        }
+        if let getWalletTokenBalancesWalletAddressNextPageClosure = getWalletTokenBalancesWalletAddressNextPageClosure {
+            return await getWalletTokenBalancesWalletAddressNextPageClosure(walletAddress, nextPage)
+        } else {
+            return getWalletTokenBalancesWalletAddressNextPageReturnValue
+        }
+    }
+    //MARK: - getWalletNFTs
+
+    var getWalletNFTsWalletAddressNextPageUnderlyingCallsCount = 0
+    var getWalletNFTsWalletAddressNextPageCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getWalletNFTsWalletAddressNextPageUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getWalletNFTsWalletAddressNextPageUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getWalletNFTsWalletAddressNextPageUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getWalletNFTsWalletAddressNextPageUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getWalletNFTsWalletAddressNextPageCalled: Bool {
+        return getWalletNFTsWalletAddressNextPageCallsCount > 0
+    }
+    var getWalletNFTsWalletAddressNextPageReceivedArguments: (walletAddress: String, nextPage: NextPageParams?)?
+    var getWalletNFTsWalletAddressNextPageReceivedInvocations: [(walletAddress: String, nextPage: NextPageParams?)] = []
+
+    var getWalletNFTsWalletAddressNextPageUnderlyingReturnValue: Result<ZWalletNFTs, ClientProxyError>!
+    var getWalletNFTsWalletAddressNextPageReturnValue: Result<ZWalletNFTs, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getWalletNFTsWalletAddressNextPageUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletNFTs, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getWalletNFTsWalletAddressNextPageUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getWalletNFTsWalletAddressNextPageUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getWalletNFTsWalletAddressNextPageUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getWalletNFTsWalletAddressNextPageClosure: ((String, NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError>)?
+
+    func getWalletNFTs(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError> {
+        getWalletNFTsWalletAddressNextPageCallsCount += 1
+        getWalletNFTsWalletAddressNextPageReceivedArguments = (walletAddress: walletAddress, nextPage: nextPage)
+        DispatchQueue.main.async {
+            self.getWalletNFTsWalletAddressNextPageReceivedInvocations.append((walletAddress: walletAddress, nextPage: nextPage))
+        }
+        if let getWalletNFTsWalletAddressNextPageClosure = getWalletNFTsWalletAddressNextPageClosure {
+            return await getWalletNFTsWalletAddressNextPageClosure(walletAddress, nextPage)
+        } else {
+            return getWalletNFTsWalletAddressNextPageReturnValue
+        }
+    }
+    //MARK: - getWalletTransactions
+
+    var getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount = 0
+    var getWalletTransactionsWalletAddressNextPageCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getWalletTransactionsWalletAddressNextPageUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getWalletTransactionsWalletAddressNextPageCalled: Bool {
+        return getWalletTransactionsWalletAddressNextPageCallsCount > 0
+    }
+    var getWalletTransactionsWalletAddressNextPageReceivedArguments: (walletAddress: String, nextPage: TransactionNextPageParams?)?
+    var getWalletTransactionsWalletAddressNextPageReceivedInvocations: [(walletAddress: String, nextPage: TransactionNextPageParams?)] = []
+
+    var getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue: Result<ZWalletTransactions, ClientProxyError>!
+    var getWalletTransactionsWalletAddressNextPageReturnValue: Result<ZWalletTransactions, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactions, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getWalletTransactionsWalletAddressNextPageUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getWalletTransactionsWalletAddressNextPageClosure: ((String, TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError>)?
+
+    func getWalletTransactions(walletAddress: String, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError> {
+        getWalletTransactionsWalletAddressNextPageCallsCount += 1
+        getWalletTransactionsWalletAddressNextPageReceivedArguments = (walletAddress: walletAddress, nextPage: nextPage)
+        DispatchQueue.main.async {
+            self.getWalletTransactionsWalletAddressNextPageReceivedInvocations.append((walletAddress: walletAddress, nextPage: nextPage))
+        }
+        if let getWalletTransactionsWalletAddressNextPageClosure = getWalletTransactionsWalletAddressNextPageClosure {
+            return await getWalletTransactionsWalletAddressNextPageClosure(walletAddress, nextPage)
+        } else {
+            return getWalletTransactionsWalletAddressNextPageReturnValue
+        }
+    }
     //MARK: - getLinkPreviewMetaData
 
     var getLinkPreviewMetaDataUrlUnderlyingCallsCount = 0

@@ -1310,6 +1310,51 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func getWalletTokenBalances(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.getTokenBalances(walletAddress: walletAddress, nextPageParams: nextPage)
+            switch result {
+            case .success(let tokenBalances):
+                return .success(tokenBalances)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to fetch token balances for wallet address: \(walletAddress), with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func getWalletNFTs(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.getNFTs(walletAddress: walletAddress, nextPageParams: nextPage)
+            switch result {
+            case .success(let nfts):
+                return .success(nfts)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to fetch nfts for wallet address: \(walletAddress), with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func getWalletTransactions(walletAddress: String, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.getTransactions(walletAddress: walletAddress, nextPageParams: nextPage)
+            switch result {
+            case .success(let transactions):
+                return .success(transactions)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to fetch transactions for wallet address: \(walletAddress), with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.metaDataApi.getLinkPreview(url: url)

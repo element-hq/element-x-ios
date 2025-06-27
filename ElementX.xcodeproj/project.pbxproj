@@ -1878,6 +1878,12 @@
 		799616332E0B36D6008E73C4 /* SimpleTabButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799616312E0B36B4008E73C4 /* SimpleTabButtonsView.swift */; };
 		799616352E0C7A30008E73C4 /* HomeWalletTabsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799616342E0C7A25008E73C4 /* HomeWalletTabsContent.swift */; };
 		799616362E0C7A30008E73C4 /* HomeWalletTabsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799616342E0C7A25008E73C4 /* HomeWalletTabsContent.swift */; };
+		799616382E0EA06B008E73C4 /* ZWalletTokenBalances.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799616372E0EA061008E73C4 /* ZWalletTokenBalances.swift */; };
+		799616392E0EA06B008E73C4 /* ZWalletTokenBalances.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799616372E0EA061008E73C4 /* ZWalletTokenBalances.swift */; };
+		7996163B2E0EA313008E73C4 /* ZWalletNFTs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996163A2E0EA30C008E73C4 /* ZWalletNFTs.swift */; };
+		7996163C2E0EA313008E73C4 /* ZWalletNFTs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996163A2E0EA30C008E73C4 /* ZWalletNFTs.swift */; };
+		7996163E2E0EA5B5008E73C4 /* ZWalletTransactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996163D2E0EA5A8008E73C4 /* ZWalletTransactions.swift */; };
+		7996163F2E0EA5B5008E73C4 /* ZWalletTransactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7996163D2E0EA5A8008E73C4 /* ZWalletTransactions.swift */; };
 		7999A7DD2D955CD700738A7C /* MapTilerURLBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1033290D99D5BBA1AF3560A /* MapTilerURLBuilderProtocol.swift */; };
 		7999A7DE2D955CF300738A7C /* MapTilerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A1FAE3EEAB27D8D38E3273 /* MapTilerConfiguration.swift */; };
 		799D7F212DB03A5800B17C18 /* SDKListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE5CD2993048222B64C45006 /* SDKListener.swift */; };
@@ -3499,6 +3505,9 @@
 		7996162E2E0B2702008E73C4 /* HomeWalletContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWalletContent.swift; sourceTree = "<group>"; };
 		799616312E0B36B4008E73C4 /* SimpleTabButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTabButtonsView.swift; sourceTree = "<group>"; };
 		799616342E0C7A25008E73C4 /* HomeWalletTabsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWalletTabsContent.swift; sourceTree = "<group>"; };
+		799616372E0EA061008E73C4 /* ZWalletTokenBalances.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletTokenBalances.swift; sourceTree = "<group>"; };
+		7996163A2E0EA30C008E73C4 /* ZWalletNFTs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletNFTs.swift; sourceTree = "<group>"; };
+		7996163D2E0EA5A8008E73C4 /* ZWalletTransactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletTransactions.swift; sourceTree = "<group>"; };
 		799E1D182DBBA85400E3D512 /* ZeroMetaDataApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroMetaDataApi.swift; sourceTree = "<group>"; };
 		799E1D1B2DBBA8B300E3D512 /* ZLinkPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLinkPreview.swift; sourceTree = "<group>"; };
 		799E1D1F2DBF7DD500E3D512 /* TimelineLinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineLinkPreviewView.swift; sourceTree = "<group>"; };
@@ -4692,19 +4701,19 @@
 		184D6FCB2C7D8A97006266D8 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */,
-				797751812DDB2499006CF62D /* ZeroPostUserApi.swift */,
-				790393732D4CDC750022E293 /* ZeroPostApi.swift */,
 				189E88512D0CA773002FA063 /* ZeroAccountApi.swift */,
+				18E99FF32C944F670082DDA4 /* ZeroAttachmentApi.swift */,
+				184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */,
 				7905F9A62D67620300C3A203 /* ZeroChannelApi.swift */,
+				1868A8B82CA2D18600DC382D /* ZeroChatApi.swift */,
 				18659CB92CFB1BE3000EF0A6 /* ZeroCreateAccountApi.swift */,
 				18525D0D2CF5F0FC0055C5E8 /* ZeroMessengerInviteApi.swift */,
 				799E1D182DBBA85400E3D512 /* ZeroMetaDataApi.swift */,
+				790393732D4CDC750022E293 /* ZeroPostApi.swift */,
+				797751812DDB2499006CF62D /* ZeroPostUserApi.swift */,
 				18D5D9A62CEB576B00107940 /* ZeroRewardApi.swift */,
-				184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */,
 				1882EB782C8F84BD001DA2A9 /* ZeroUserApi.swift */,
-				18E99FF32C944F670082DDA4 /* ZeroAttachmentApi.swift */,
-				1868A8B82CA2D18600DC382D /* ZeroChatApi.swift */,
+				794E2AEA2D773AC10067E725 /* ZeroWalletApi.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -4721,12 +4730,12 @@
 		184D6FCF2C7D8B87006266D8 /* Request */ = {
 			isa = PBXGroup;
 			children = (
-				1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */,
 				18659CBF2CFB287E000EF0A6 /* ZCreateAccount.swift */,
 				18659CC22CFB2D2A000EF0A6 /* ZFinaliseCreateAccount.swift */,
 				18FD9F832D27EB80004225EA /* ZLinkMatrixUser.swift */,
-				798457512D5FD58A0039623F /* ZPostMeowAmount.swift */,
 				794E2AED2D7741E80067E725 /* ZNewPostUnsignedMessage.swift */,
+				798457512D5FD58A0039623F /* ZPostMeowAmount.swift */,
+				1868A8BE2CA2D91000DC382D /* ZSentMessage.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -4736,24 +4745,27 @@
 			children = (
 				1868A8C42CA33BBE00DC382D /* EmptyResponse.swift */,
 				7994E5642DD52B3F005F7039 /* YoutubeLinkMetaData.swift */,
-				799E1D1B2DBBA8B300E3D512 /* ZLinkPreview.swift */,
+				18E99FF52C9450F00082DDA4 /* ZAttachmentUploadInfo.swift */,
 				794F08A82D6CFF56008B575F /* ZChannelRoomId.swift */,
-				798457572D5FDEF50039623F /* ZPostMeowAmountResponse.swift */,
-				790393762D4CDE470022E293 /* ZPosts.swift */,
-				79FC2A452DCA8F7700D14182 /* ZPostMedia.swift */,
-				797751842DDB251B006CF62D /* ZPostUserProfile.swift */,
 				1828CE432D010108002FF640 /* ZCurrentUser.swift */,
 				185454EB2CFFAD05003CA957 /* ZInviter.swift */,
-				18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */,
-				18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */,
-				18D5D9A32CEB56F500107940 /* ZRewards.swift */,
+				799E1D1B2DBBA8B300E3D512 /* ZLinkPreview.swift */,
 				180EE5D52CAFF08800891BBC /* ZMatrixSearchedUser.swift */,
 				184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */,
-				184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */,
-				184D6FD52C7D9261006266D8 /* ZSSOToken.swift */,
 				1882EB7A2C8F8542001DA2A9 /* ZMatrixUser.swift */,
 				1882EB832C8F85F5001DA2A9 /* ZMatrixUserProfile.swift */,
-				18E99FF52C9450F00082DDA4 /* ZAttachmentUploadInfo.swift */,
+				18525D032CF5EDE60055C5E8 /* ZMessengerInvite.swift */,
+				18659CBC2CFB257C000EF0A6 /* ZNonceResponse.swift */,
+				790393762D4CDE470022E293 /* ZPosts.swift */,
+				79FC2A452DCA8F7700D14182 /* ZPostMedia.swift */,
+				798457572D5FDEF50039623F /* ZPostMeowAmountResponse.swift */,
+				797751842DDB251B006CF62D /* ZPostUserProfile.swift */,
+				18D5D9A32CEB56F500107940 /* ZRewards.swift */,
+				184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */,
+				184D6FD52C7D9261006266D8 /* ZSSOToken.swift */,
+				7996163A2E0EA30C008E73C4 /* ZWalletNFTs.swift */,
+				799616372E0EA061008E73C4 /* ZWalletTokenBalances.swift */,
+				7996163D2E0EA5A8008E73C4 /* ZWalletTransactions.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -9417,6 +9429,7 @@
 				18E9A4362C9829970082DDA4 /* AnalyticsSettingsScreenViewModel.swift in Sources */,
 				18525D042CF5EDED0055C5E8 /* ZMessengerInvite.swift in Sources */,
 				18E9A4372C9829970082DDA4 /* AnalyticsSettingsScreenViewModelProtocol.swift in Sources */,
+				7996163C2E0EA313008E73C4 /* ZWalletNFTs.swift in Sources */,
 				18E9A4382C9829970082DDA4 /* AppActivityView.swift in Sources */,
 				18E9A4392C9829970082DDA4 /* AppAppearance.swift in Sources */,
 				18E9A43A2C9829970082DDA4 /* AppCoordinator.swift in Sources */,
@@ -9961,6 +9974,7 @@
 				18E9A5DB2C9829970082DDA4 /* PinnedEventsTimelineScreenModels.swift in Sources */,
 				185454ED2CFFAD09003CA957 /* ZInviter.swift in Sources */,
 				79FCB1A42DA5BA1200669122 /* ReportRoomScreenModels.swift in Sources */,
+				799616392E0EA06B008E73C4 /* ZWalletTokenBalances.swift in Sources */,
 				7975DBDC2D561F2400D5EB12 /* BannedRoomProxy.swift in Sources */,
 				792A87AA2DAD8F51009C3E4F /* Result.swift in Sources */,
 				18E9A5DC2C9829970082DDA4 /* PinnedEventsTimelineScreenViewModel.swift in Sources */,
@@ -10356,6 +10370,7 @@
 				18E9A70E2C9829970082DDA4 /* TimelineView.swift in Sources */,
 				18E9A70F2C9829970082DDA4 /* TimelineViewModel.swift in Sources */,
 				798C78852D79397700C1272F /* JoinRoomByAddressView.swift in Sources */,
+				7996163E2E0EA5B5008E73C4 /* ZWalletTransactions.swift in Sources */,
 				18E9A7102C9829970082DDA4 /* TimelineViewModelProtocol.swift in Sources */,
 				798457522D5FD58A0039623F /* ZPostMeowAmount.swift in Sources */,
 				18E9A7122C9829970082DDA4 /* TypingIndicatorView.swift in Sources */,
@@ -10820,6 +10835,7 @@
 				0C1E537A49ABB386F7554D4A /* HighlightedTimelineItemModifier.swift in Sources */,
 				964B9D2EC38C488C360CE0C9 /* HomeScreen.swift in Sources */,
 				62C5876C4254C58C2086F0DE /* HomeScreenContent.swift in Sources */,
+				7996163B2E0EA313008E73C4 /* ZWalletNFTs.swift in Sources */,
 				8CC12086CBF91A7E10CDC205 /* HomeScreenCoordinator.swift in Sources */,
 				77BB228AEA861E50FFD6A228 /* HomeScreenEmptyStateView.swift in Sources */,
 				794E2AEB2D773ACB0067E725 /* ZeroWalletApi.swift in Sources */,
@@ -10870,6 +10886,7 @@
 				B8D9960F77B213FD1B0B0FD3 /* JoinRoomByAddressView.swift in Sources */,
 				6A54F52443EC52AC5CD772C0 /* JoinRoomScreen.swift in Sources */,
 				79AD65502D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */,
+				799616382E0EA06B008E73C4 /* ZWalletTokenBalances.swift in Sources */,
 				AFE2AB612A1460E49578D746 /* JoinRoomScreenCoordinator.swift in Sources */,
 				1882EB9A2C91BA2E001DA2A9 /* ZeroMatrixUsersService.swift in Sources */,
 				7903937E2D50DA930022E293 /* DateUtil.swift in Sources */,
@@ -11524,6 +11541,7 @@
 				988BA75A182738150894A23F /* UserIndicator.swift in Sources */,
 				C4E0D03DF88242697545A9B7 /* UserIndicatorController.swift in Sources */,
 				18525D0E2CF5F1040055C5E8 /* ZeroMessengerInviteApi.swift in Sources */,
+				7996163F2E0EA5B5008E73C4 /* ZWalletTransactions.swift in Sources */,
 				3467FEE8210D301FF1B77001 /* UserIndicatorControllerMock.swift in Sources */,
 				E3E1E255DC8CB34BD8573E0D /* UserIndicatorControllerProtocol.swift in Sources */,
 				A14A9419105A1CD42F0511C4 /* UserIndicatorModalView.swift in Sources */,
