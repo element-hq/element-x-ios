@@ -265,6 +265,7 @@ struct RoomDetailsScreen: View {
                                         icon: \.lock,
                                         iconAlignment: .top),
                         kind: .label)
+                    .accessibilityAddTraits(.isHeader)
             } header: {
                 Text(L10n.commonSecurity)
                     .compoundListSectionHeader()
