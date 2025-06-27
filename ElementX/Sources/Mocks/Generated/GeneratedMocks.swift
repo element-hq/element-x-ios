@@ -2142,6 +2142,47 @@ class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sendable {
     var underlyingCrashedLastRun: Bool!
     var lastCrashEventID: String?
 
+    //MARK: - applyConfiguration
+
+    var applyConfigurationUnderlyingCallsCount = 0
+    var applyConfigurationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return applyConfigurationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = applyConfigurationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                applyConfigurationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    applyConfigurationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var applyConfigurationCalled: Bool {
+        return applyConfigurationCallsCount > 0
+    }
+    var applyConfigurationReceivedConfiguration: RageshakeConfiguration?
+    var applyConfigurationReceivedInvocations: [RageshakeConfiguration] = []
+    var applyConfigurationClosure: ((RageshakeConfiguration) -> Void)?
+
+    func applyConfiguration(_ configuration: RageshakeConfiguration) {
+        applyConfigurationCallsCount += 1
+        applyConfigurationReceivedConfiguration = configuration
+        DispatchQueue.main.async {
+            self.applyConfigurationReceivedInvocations.append(configuration)
+        }
+        applyConfigurationClosure?(configuration)
+    }
     //MARK: - submitBugReport
 
     var submitBugReportProgressListenerUnderlyingCallsCount = 0
