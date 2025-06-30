@@ -25,6 +25,7 @@
 "a11y_show_password" = "Erakutsi pasahitza";
 "a11y_start_call" = "Hasi dei bat";
 "a11y_user_menu" = "Erabiltzailea-menua";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Ikusi xehetasunak";
 "a11y_voice_message" = "Ahots-mezua, iraupena: %1$@";
 "a11y_voice_message_record" = "Grabatu ahots-mezua.";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Gehitu gelaren helbidea";
 "screen_security_and_privacy_ask_to_join_option_description" = "Anyone can ask to join the room but an administrator or moderator will have to accept the request.";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "Deskribapena laburregia da; eman gertatutakoari buruzko xehetasun gehiago. Eskerrik asko!";
 "screen_bug_report_include_crash_logs" = "Bidali kraskaduraren erregistroak";
 "screen_bug_report_include_logs" = "Baimendu erregistroak";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Bidali pantaila-argazkia";
 "screen_bug_report_logs_description" = "Logs will be included with your message to make sure that everything is working properly. To send your message without logs, turn off this setting.";
 "screen_bug_report_view_logs" = "Ikusi erregistroak";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "sistemaren ezarpenak";
 "screen_notification_settings_system_notifications_turned_off" = "Sistemaren jakinarazpenak desaktibatuta daude";
 "screen_notification_settings_title" = "Jakinarazpenak";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Hasi saioa eskuz";
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Hasi saioa QR kodearekin";

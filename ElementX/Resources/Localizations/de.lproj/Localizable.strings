@@ -25,6 +25,7 @@
 "a11y_show_password" = "Passwort anzeigen";
 "a11y_start_call" = "Anruf starten";
 "a11y_user_menu" = "Benutzermenü";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Details anzeigen";
 "a11y_voice_message" = "Sprachnachricht, Dauer: %1$@";
 "a11y_voice_message_record" = "Sprachnachricht aufnehmen.";
@@ -381,7 +382,7 @@
 "preference_rageshake" = "Schüttel heftig zum Melden von Fehlern";
 "rageshake_detection_dialog_content" = "Sie scheinen das Telefon aus Frustration zu schütteln. Möchten Sie den Bildschirm für einen Fehlerbericht öffnen?";
 "rich_text_editor_bullet_list" = "Aufzählungsliste umschalten";
-"rich_text_editor_close_formatting_options" = "Formatierungsoptionen schließen";
+"rich_text_editor_close_formatting_options" = "Cancel and close text formatting";
 "rich_text_editor_code_block" = "Codeblock umschalten";
 "rich_text_editor_composer_encrypted_placeholder" = "Verschlüsselte Nachricht...";
 "rich_text_editor_composer_placeholder" = "Nachricht...";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Chatroomadresse hinzufügen";
 "screen_security_and_privacy_ask_to_join_option_description" = "Jeder kann den Zutritt zum Raum beantragen, aber ein Administrator oder ein Moderator müssen die Anfrage akzeptieren.";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "Die Beschreibung ist zu kurz. Bitte geben Sie weitere Informationen darüber an, was passiert ist.";
 "screen_bug_report_include_crash_logs" = "Absturzprotokolle senden";
 "screen_bug_report_include_logs" = "Logdateien mitsenden";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Bildschirmfoto senden";
 "screen_bug_report_logs_description" = "Die Protokolle werden deiner Nachricht beigefügt, um sicherzustellen, dass alles ordnungsgemäß funktioniert. Um deine Nachricht ohne Protokolle zu senden, deaktiviere diese Einstellung.";
 "screen_bug_report_view_logs" = "Logs ansehen";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "Systemeinstellungen";
 "screen_notification_settings_system_notifications_turned_off" = "Systembenachrichtigungen deaktiviert";
 "screen_notification_settings_title" = "Benachrichtigungen";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Manuell anmelden";
 "screen_onboarding_sign_in_to" = "Bei %1$@ anmelden";
 "screen_onboarding_sign_in_with_qr_code" = "Mit QR-Code anmelden";

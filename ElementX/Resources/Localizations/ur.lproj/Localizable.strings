@@ -25,6 +25,7 @@
 "a11y_show_password" = "لفظ عبور دکھائیں";
 "a11y_start_call" = "مکالمہ شروع کریں";
 "a11y_user_menu" = "لائحۂ صارف";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "View details";
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "صوتی پیغام ثبت کریں۔";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Add room address";
 "screen_security_and_privacy_ask_to_join_option_description" = "Anyone can ask to join the room but an administrator or moderator will have to accept the request.";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "تفصیل بہت مختصر ہے، براہ کرم مزید تفصیلات فراہم کریں کہ کیا ہوا۔ شکریہ!";
 "screen_bug_report_include_crash_logs" = "ٹکر کے نوشتے بھیجیں";
 "screen_bug_report_include_logs" = "نوشتہجات کی اجازت دیں۔";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "پردۂ عکس بھیجیں";
 "screen_bug_report_logs_description" = "نوشتہ جات آپکے پیغام کیساتھ شامل کیے جائینگے تاکہ یقینی بنایا جا سکے کہ سب کچھ ٹھیک سے کام کر رہا ہے۔ بغیر نوشتہ جات کے اپنا پیغام بھیجنے کے لیے، اس ترتیب کو بند کریں۔";
 "screen_bug_report_view_logs" = "نوشتہ جات ملحوظ کریں";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "نظام کی ترتیبات";
 "screen_notification_settings_system_notifications_turned_off" = "نظام کی اطلاعات بند کر دی گئیں";
 "screen_notification_settings_title" = "اطلاعات";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "دستی طور پر داخل ہوں";
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "کیو آر (QR) رمز کیساتھ داخل ہوں";
