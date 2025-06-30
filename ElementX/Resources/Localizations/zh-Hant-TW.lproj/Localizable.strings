@@ -25,6 +25,7 @@
 "a11y_show_password" = "顯示密碼";
 "a11y_start_call" = "開始通話";
 "a11y_user_menu" = "使用者選單";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "檢視詳細資訊";
 "a11y_voice_message" = "語音訊息，時長：%1$@";
 "a11y_voice_message_record" = "錄製語音訊息。";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "新增聊天室地址";
 "screen_security_and_privacy_ask_to_join_option_description" = "任何人都可以要求加入聊天室，但管理員必須接受請求。";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "您的描述太短了，請提供更多細節。謝謝！";
 "screen_bug_report_include_crash_logs" = "傳送當機紀錄";
 "screen_bug_report_include_logs" = "提供日誌";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "傳送螢幕截圖";
 "screen_bug_report_logs_description" = "紀錄檔將包含在您的訊息中以確保一切運作正常。要在不包含紀錄檔的情況下傳送訊息，請關閉此設定。";
 "screen_bug_report_view_logs" = "查看日誌";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "系統設定";
 "screen_notification_settings_system_notifications_turned_off" = "已關閉系統通知";
 "screen_notification_settings_title" = "通知";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "手動登入";
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "使用 QR code 登入";

@@ -25,6 +25,7 @@
 "a11y_show_password" = "显示密码";
 "a11y_start_call" = "开始通话";
 "a11y_user_menu" = "用户菜单";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "查看详情";
 "a11y_voice_message" = "语音消息，时长：%1$@";
 "a11y_voice_message_record" = "录制语音消息";
@@ -53,7 +54,7 @@
 "action_deactivate" = "停用";
 "action_deactivate_account" = "停用账户";
 "action_decline" = "拒绝";
-"action_decline_and_block" = "Decline and block";
+"action_decline_and_block" = "拒绝并屏蔽";
 "action_delete_poll" = "删除投票";
 "action_disable" = "禁用";
 "action_discard" = "丢弃";
@@ -99,11 +100,11 @@
 "action_remove_message" = "删除消息";
 "action_reply" = "回复";
 "action_reply_in_thread" = "在消息列中回复";
-"action_report" = "Report";
+"action_report" = "举报";
 "action_report_bug" = "报告错误";
 "action_report_content" = "举报内容";
-"action_report_dm" = "Report conversation";
-"action_report_room" = "Report room";
+"action_report_dm" = "举报对话";
+"action_report_room" = "举报房间";
 "action_reset" = "重置";
 "action_reset_identity" = "重置身份";
 "action_retry" = "重试";
@@ -215,7 +216,7 @@
 "common_permalink" = "固定链接";
 "common_permission" = "权限";
 "common_pinned" = "已置顶";
-"common_please_check_internet_connection" = "Please check your internet connection";
+"common_please_check_internet_connection" = "请检查 Internet 连接";
 "common_please_wait" = "请稍候……";
 "common_poll_end_confirmation" = "确定要结束这个投票吗？";
 "common_poll_summary" = "投票：%1$@";
@@ -253,7 +254,7 @@
 "common_shared_location" = "共享位置";
 "common_signing_out" = "正在登出";
 "common_something_went_wrong" = "发生了一些错误";
-"common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_something_went_wrong_message" = "我们遇到了一个问题。请重试。";
 "common_starting_chat" = "开始聊天...";
 "common_sticker" = "贴纸";
 "common_success" = "成功";
@@ -311,8 +312,8 @@
 "dialog_permission_microphone_title_ios" = "%1$@ 需要权限才能访问麦克风。";
 "dialog_permission_notification" = "为了让应用程序显示通知，请在系统设置中授予权限。";
 "dialog_permission_photo_library_title_ios" = "%1$@无权访问您的照片库。";
-"dialog_room_reported" = "Room reported";
-"dialog_room_reported_and_left" = "Reported and left room";
+"dialog_room_reported" = "已举报房间";
+"dialog_room_reported_and_left" = "举报并离开房间";
 "dialog_title_confirmation" = "确认";
 "dialog_title_warning" = "警告";
 "dialog_unsaved_changes_description_ios" = "更改不会保存";
@@ -388,12 +389,12 @@
 "rich_text_editor_composer_unencrypted_placeholder" = "未加密的消息...";
 "rich_text_editor_create_link" = "创建链接";
 "rich_text_editor_edit_link" = "编辑链接";
-"rich_text_editor_format_action" = "%1$@, state: %2$@";
+"rich_text_editor_format_action" = "%1$@，状态：%2$@";
 "rich_text_editor_format_bold" = "应用粗体格式";
 "rich_text_editor_format_italic" = "应用斜体格式";
-"rich_text_editor_format_state_disabled" = "disabled";
-"rich_text_editor_format_state_off" = "off";
-"rich_text_editor_format_state_on" = "on";
+"rich_text_editor_format_state_disabled" = "已禁用";
+"rich_text_editor_format_state_off" = "关";
+"rich_text_editor_format_state_on" = "开";
 "rich_text_editor_format_strikethrough" = "应用删除线格式";
 "rich_text_editor_format_underline" = "应用下划线格式";
 "rich_text_editor_full_screen_toggle" = "切换全屏模式";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "添加房间地址";
 "screen_security_and_privacy_ask_to_join_option_description" = "任何人都可以请求加入房间，但必须由管理员或版主接受请求。";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "描述太短，请提供详细情况。谢谢！";
 "screen_bug_report_include_crash_logs" = "发送崩溃日志";
 "screen_bug_report_include_logs" = "允许日志";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "发送屏幕截图";
 "screen_bug_report_logs_description" = "为确认一切正常运行，您的消息中将包含日志。如要发送不带日志的消息，请关闭此设置。";
 "screen_bug_report_view_logs" = "查看日志";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "系统设置";
 "screen_notification_settings_system_notifications_turned_off" = "系统通知已关闭";
 "screen_notification_settings_title" = "通知";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "手动登录";
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "使用二维码登录";

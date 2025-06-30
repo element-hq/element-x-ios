@@ -25,6 +25,7 @@
 "a11y_show_password" = "Mostrar senha";
 "a11y_start_call" = "Iniciar uma chamada";
 "a11y_user_menu" = "Menu do usuário";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Visualizar detalhes";
 "a11y_voice_message" = "Mensagem de voz, duração: %1$@";
 "a11y_voice_message_record" = "Gravar mensagem de voz.";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Adicionar endereço da sala";
 "screen_security_and_privacy_ask_to_join_option_description" = "Qualquer pessoa pode pedir para entrar na sala, mas um administrador ou moderador terá que aceitar a solicitação.";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "A descrição é muito curta, por favor, forneça mais detalhes sobre o que aconteceu. Obrigado!";
 "screen_bug_report_include_crash_logs" = "Enviar registros de falhas";
 "screen_bug_report_include_logs" = "Permitir registros";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Enviar captura de tela";
 "screen_bug_report_logs_description" = "Os registros serão incluídos com sua mensagem para garantir que tudo esteja funcionando corretamente. Para enviar sua mensagem sem registros, desative essa configuração.";
 "screen_bug_report_view_logs" = "Ver registros";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "configurações do sistema";
 "screen_notification_settings_system_notifications_turned_off" = "Notificações do sistema desativadas";
 "screen_notification_settings_title" = "Notificações";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Iniciar sessão manualmente";
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Iniciar sessão com código QR";
