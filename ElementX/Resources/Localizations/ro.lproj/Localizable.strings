@@ -25,6 +25,7 @@
 "a11y_show_password" = "Afișați parola";
 "a11y_start_call" = "Începeți un apel";
 "a11y_user_menu" = "Meniu utilizator";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "View details";
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Înregistrați un mesaj vocal";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Add room address";
 "screen_security_and_privacy_ask_to_join_option_description" = "Anyone can ask to join the room but an administrator or moderator will have to accept the request.";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "Descrierea este prea scurtă, vă rugăm să oferiți mai multe detalii despre ceea ce s-a întâmplat. Vă mulțumim!";
 "screen_bug_report_include_crash_logs" = "Trimiteți log-uri";
 "screen_bug_report_include_logs" = "Permiteți log-uri";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Trimiteți captură de ecran";
 "screen_bug_report_logs_description" = "Pentru a verifica că lucrurile funcționează conform așteptărilor, log-uri vor fi trimise împreună cu mesajul. Acestea vor fi private. Pentru a trimite doar mesajul, dezactivați această setare.";
 "screen_bug_report_view_logs" = "Vizualizați log-urile";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "Setări de sistem";
 "screen_notification_settings_system_notifications_turned_off" = "Notificările de sistem sunt dezactivate";
 "screen_notification_settings_title" = "Notificări";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Conectați-vă manual";
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Conectați-vă cu un cod QR";

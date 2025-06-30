@@ -25,6 +25,7 @@
 "a11y_show_password" = "Zobrazit heslo";
 "a11y_start_call" = "Zahájit hovor";
 "a11y_user_menu" = "Uživatelské menu";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Zobrazit podrobnosti";
 "a11y_voice_message" = "Hlasová zpráva, délka: %1$@";
 "a11y_voice_message_record" = "Nahrajte hlasovou zprávu.";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "Zobrazit staré zprávy";
 "screen_room_timeline_upgraded_room_message" = "Tato místnost je pokračováním jiné místnosti";
 "screen_room_timeline_reactions_show_reactions_summary" = "Zobrazit souhrn reakcí";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "Tato místnost byla aktualizována";
 "screen_security_and_privacy_add_room_address_action" = "Přidat adresu místnosti";
 "screen_security_and_privacy_ask_to_join_option_description" = "Kdokoli může požádat o vstup do místnosti, ale správce nebo moderátor bude muset žádost přijmout.";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "Popis je příliš krátký, uveďte prosím více podrobností o tom, co se stalo. Děkujeme!";
 "screen_bug_report_include_crash_logs" = "Odeslat záznamy o selhání";
 "screen_bug_report_include_logs" = "Povolit protokoly";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Odeslat snímek obrazovky";
 "screen_bug_report_logs_description" = "Protokoly budou součástí vaší zprávy, aby se zajistilo že vše funguje správně. Chcete-li odeslat zprávu bez protokolů, vypněte toto nastavení.";
 "screen_bug_report_view_logs" = "Zobrazit protokoly";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "systémová nastavení";
 "screen_notification_settings_system_notifications_turned_off" = "Systémová oznámení byla vypnuta";
 "screen_notification_settings_title" = "Oznámení";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Ruční přihlášení";
 "screen_onboarding_sign_in_to" = "Přihlásit se do %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Přihlásit se pomocí QR kódu";

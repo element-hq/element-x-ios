@@ -25,6 +25,7 @@
 "a11y_show_password" = "نمایش گذرواژه";
 "a11y_start_call" = "آغاز یک تماس";
 "a11y_user_menu" = "فهرست کاربر";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "دیدن جزییات";
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "ضبط پیام صوتی.";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "افزودن نشانی اتاق";
 "screen_security_and_privacy_ask_to_join_option_description" = "Anyone can ask to join the room but an administrator or moderator will have to accept the request.";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "The description is too short, please provide more details about what happened. Thanks!";
 "screen_bug_report_include_crash_logs" = "ارسال رخدادنگارهای خطا";
 "screen_bug_report_include_logs" = "اجازه به گزارش‌ها";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "ارسال تصویر صفحه";
 "screen_bug_report_logs_description" = "Logs will be included with your message to make sure that everything is working properly. To send your message without logs, turn off this setting.";
 "screen_bug_report_view_logs" = "دیدن گزارش‌ها";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "تنظیمات سامانه";
 "screen_notification_settings_system_notifications_turned_off" = "آگاهی‌های سامانه‌ای خاموش شدند";
 "screen_notification_settings_title" = "آگاهی‌ها";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "ورود دستی";
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "ورود با کد QR";
@@ -870,7 +874,7 @@
 "screen_recovery_key_setup_success" = "برپایی بازیابی موفّق بود";
 "screen_recovery_key_setup_title" = "برپایی بازیابی";
 "screen_report_content_block_user_hint" = "Check if you want to hide all current and future messages from this user";
-"screen_report_content_explanation" = "This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages.";
+"screen_report_content_explanation" = "این پیام به مدیر سرور خانگی شما گزارش خواهد شد. آنها قادر به خواندن پیام های رمزگذاری شده نخواهند بود.";
 "screen_report_content_hint" = "دلیل گزارش این محتوا";
 "screen_reset_encryption_confirmation_alert_action" = "بله. اکنون بازنشانی شود";
 "screen_reset_encryption_confirmation_alert_subtitle" = "این فرایند بازگشت‌ناپذیر است.";

@@ -98,10 +98,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d reply</string>
 			<key>other</key>
-			<string>%1$d replies</string>
+			<string>%1$d 个回复</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>

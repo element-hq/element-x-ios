@@ -29,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d percent of total votes</string>
+			<string>az összes szavazat %1$d százaléka</string>
 			<key>other</key>
-			<string>%1$d percents of total votes</string>
+			<string>az összes szavazat %1$d százaléka</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -299,9 +299,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d member reacted with %2$@</string>
+			<string>%1$d tag reagált így: %2$@</string>
 			<key>other</key>
-			<string>%1$d members reacted with %2$@</string>
+			<string>%1$d tag reagált így: %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_including_you_a11y</key>
@@ -315,9 +315,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You and %1$d member reacted with %2$@</string>
+			<string>Ön és %1$d tag reagáltak így: %2$@</string>
 			<key>other</key>
-			<string>You and %1$d members reacted with %2$@</string>
+			<string>Ön és %1$d tag reagáltak így: %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>

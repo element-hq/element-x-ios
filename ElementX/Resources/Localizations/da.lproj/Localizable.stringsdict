@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d dígito inserido</string>
+			<string>%1$d ciffer indtastet</string>
 			<key>other</key>
-			<string>%1$d dígitos inseridos</string>
+			<string>%1$d cifre indtastet</string>
 		</dict>
 	</dict>
 	<key>a11y_polls_percent_of_total</key>
@@ -29,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d porcento de todos os votos</string>
+			<string>%1$d% af de samlede stemmer</string>
 			<key>other</key>
-			<string>%1$d porcento de todos os votos</string>
+			<string>%1$d procent af det samlede antal stemmer</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Lida por %1$@ e %2$d outro</string>
+			<string>Læst af %1$@ og %2$d andre</string>
 			<key>other</key>
-			<string>Lida por %1$@ e %2$d outros</string>
+			<string>Læst af %1$@ og %2$d andre</string>
 		</dict>
 	</dict>
 	<key>common_many_members</key>
@@ -61,9 +61,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d outro</string>
+			<string>%d anden</string>
 			<key>other</key>
-			<string>%d outros</string>
+			<string>%d andre</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -77,9 +77,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d membro</string>
+			<string>%1$d medlem</string>
 			<key>other</key>
-			<string>%1$d membros</string>
+			<string>%1$d medlemmer</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -93,9 +93,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d voto</string>
+			<string>%d stemme</string>
 			<key>other</key>
-			<string>%d votos</string>
+			<string>%d stemmer</string>
 		</dict>
 	</dict>
 	<key>common_replies</key>
@@ -108,10 +108,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d resposta</string>
 			<key>other</key>
-			<string>%1$d respostas</string>
+			<string>%1$d svar</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -125,9 +123,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d mensagem</string>
+			<string>%1$@: %2$d besked</string>
 			<key>other</key>
-			<string>%1$@: %2$d mensagens</string>
+			<string>%1$@: %2$d beskeder</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -141,9 +139,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d notificação</string>
+			<string>%d notifikation</string>
 			<key>other</key>
-			<string>%d notificações</string>
+			<string>%d notifikationer</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -157,9 +155,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d convite</string>
+			<string>%d invitation</string>
 			<key>other</key>
-			<string>%d convites</string>
+			<string>%d invitationer</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -173,9 +171,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d mensagem nova</string>
+			<string>%d ny besked</string>
 			<key>other</key>
-			<string>%d mensagens novas</string>
+			<string>%d nye beskeder</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -189,9 +187,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d mensagem notificada não lida</string>
+			<string>%d ulæst besked</string>
 			<key>other</key>
-			<string>%d mensagens notificadas não lidas</string>
+			<string>%d ulæste beskeder</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -205,9 +203,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d sala</string>
+			<string>%d rum</string>
 			<key>other</key>
-			<string>%d salas</string>
+			<string>%d rum</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -221,9 +219,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Tens %1$d tentativa de desbloqueio</string>
+			<string>Du har %1$d forsøg på at låse op</string>
 			<key>other</key>
-			<string>Tens %1$d tentativas de desbloqueio</string>
+			<string>Du har %1$d forsøg på at låse op</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -237,9 +235,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>PIN incorreto. Tens mais %1$d tentativa</string>
+			<string>Forkert PIN-kode. Du har %1$d chance mere</string>
 			<key>other</key>
-			<string>PIN incorreto. Tens mais %1$d tentativas</string>
+			<string>Forkert PIN-kode. Du har %1$d flere chancer</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -253,9 +251,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Mensagem afixada</string>
+			<string>%1$d Fastgjort besked</string>
 			<key>other</key>
-			<string>%1$d Mensagens afixadas</string>
+			<string>%1$d Fastgjorte beskeder</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -269,9 +267,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d pessoa</string>
+			<string>%1$d person</string>
 			<key>other</key>
-			<string>%1$d pessoas</string>
+			<string>%1$d personer</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -285,9 +283,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ +%2$d outro querem entrar nesta sala</string>
+			<string>%1$@ + %2$d anden ønsker at deltage i dette rum</string>
 			<key>other</key>
-			<string>%1$@ +%2$d outros querem entrar nesta sala</string>
+			<string>%1$@ + %2$d andre ønsker at deltage i dette rum</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_a11y</key>
@@ -301,9 +299,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d membro reagiu com %2$@</string>
+			<string>%1$d medlem reagerede med %2$@</string>
 			<key>other</key>
-			<string>%1$d membros reagiram com %2$@</string>
+			<string>%1$d medlemmer reagerede med %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_including_you_a11y</key>
@@ -317,9 +315,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Tu e %1$d membro reagiram com %2$@</string>
+			<string>Du og %1$d medlem reagerede med %2$@</string>
 			<key>other</key>
-			<string>Tu e %1$d membros reagiram com %2$@</string>
+			<string>Du og %1$d medlemmer reagerede med %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
@@ -333,9 +331,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d alteração à sala</string>
+			<string>%1$d rumændring</string>
 			<key>other</key>
-			<string>%1$d alterações à sala</string>
+			<string>%1$d rumændringer</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>
@@ -349,9 +347,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@, %2$@ e %3$d outro</string>
+			<string>%1$@, %2$@ og %3$d anden</string>
 			<key>other</key>
-			<string>%1$@, %2$@ e %3$d outros</string>
+			<string>%1$@, %2$@ og %3$d andre</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -365,9 +363,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ está a escrever</string>
+			<string>%1$@ skriver</string>
 			<key>other</key>
-			<string>%1$@ estão a escrever</string>
+			<string>%1$@ skriver</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
@@ -381,9 +379,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d fornecedor de envio encontrado: %2$@</string>
+			<string>Fandt %1$d push-udbyder: %2$@</string>
 			<key>other</key>
-			<string>%1$d fornecedores de envio encontrados: %2$@</string>
+			<string>Fandt %1$d push-udbydere: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
@@ -397,9 +395,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d distribuidor encontrado: %2$@.</string>
+			<string>%1$d distributør fundet:%2$@.</string>
 			<key>other</key>
-			<string>%1$d distribuidores encontrados: %2$@.</string>
+			<string>%1$d distributører fundet:%2$@.</string>
 		</dict>
 	</dict>
 </dict>

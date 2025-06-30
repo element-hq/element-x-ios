@@ -25,6 +25,7 @@
 "a11y_show_password" = "Parolni ko'rsatish";
 "a11y_start_call" = "Start a call";
 "a11y_user_menu" = "Foydalanuvchi menyusi";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "View details";
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Ovoz yozishni amalga oshiring";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Add room address";
 "screen_security_and_privacy_ask_to_join_option_description" = "Anyone can ask to join the room but an administrator or moderator will have to accept the request.";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "The description is too short, please provide more details about what happened. Thanks!";
 "screen_bug_report_include_crash_logs" = "Buzilish jurnallarini yuboring";
 "screen_bug_report_include_logs" = "Jurnallarga ruxsat bering";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Ekran tasvirini yuboring";
 "screen_bug_report_logs_description" = "Har bir narsa to'ri ishlayotganiga ishonch hosil qilish uchun xabaringizga jurnallar kiritiladi. Xabarni jurnallarsiz yuborish uchun ushbu sozlamani oʻchiring.";
 "screen_bug_report_view_logs" = "View logs";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "tizim sozlamalari";
 "screen_notification_settings_system_notifications_turned_off" = "Tizim bildirishnomalari o'chirilgan";
 "screen_notification_settings_title" = "Bildirishnomalar";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Qo'lda tizimga kiring";
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "QR kod bilan tizimga kiring";

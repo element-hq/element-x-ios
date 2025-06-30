@@ -25,6 +25,7 @@
 "a11y_show_password" = "Tampilkan kata sandi";
 "a11y_start_call" = "Mulai panggilan";
 "a11y_user_menu" = "Menu pengguna";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "View details";
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Rekam pesan suara.";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Tambahkan alamat ruangan";
 "screen_security_and_privacy_ask_to_join_option_description" = "Siapa pun dapat meminta untuk bergabung dengan ruangan tetapi administrator atau moderator harus menerima permintaan tersebut.";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "Deskripsinya terlalu pendek, silakan menyediakan detail tambahan tentang apa yang terjadi. Terima kasih!";
 "screen_bug_report_include_crash_logs" = "Kirim log kerusakan";
 "screen_bug_report_include_logs" = "Izinkan log";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Kirim tangkapan layar";
 "screen_bug_report_logs_description" = "Log akan disertakan dengan pesan Anda untuk memastikan bahwa semuanya berfungsi dengan baik. Untuk mengirimkan pesan Anda tanpa log, matikan pengaturan ini.";
 "screen_bug_report_view_logs" = "Tampilkan catatan";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "pengaturan sistem";
 "screen_notification_settings_system_notifications_turned_off" = "Pemberitahuan sistem dimatikan";
 "screen_notification_settings_title" = "Notifikasi";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Masuk secara manual";
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Masuk dengan kode QR";
