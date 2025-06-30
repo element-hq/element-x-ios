@@ -15,12 +15,15 @@ struct InviteUsersScreenSelectedItem: View {
     var body: some View {
         VStack(spacing: 0) {
             avatar
+                .accessibilityHidden(true)
             
             Text(user.displayName ?? user.userID)
                 .font(.zero.bodyMD)
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityAction(named: L10n.actionRemove, dismissAction)
     }
     
     // MARK: - Private

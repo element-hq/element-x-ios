@@ -108,7 +108,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         }
         
         updateRoomInfo(roomProxy.infoPublisher.value)
-        Task { await updatePowerLevelPermissions() }
                 
         setupRoomSubscription()
         Task { await fetchMembersIfNeeded() }
@@ -137,7 +136,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id,
                                                                    isDM: roomProxy.isDirectOneToOneRoom,
-                                                                   state: roomProxy.infoPublisher.value.isPublic ? .public : .private)
+                                                                   state: roomProxy.infoPublisher.value.isPrivate ?? true ? .private : .public)
         case .confirmLeave:
             Task { await leaveRoom() }
         case .processTapIgnore:
@@ -203,10 +202,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     private func setupRoomSubscription() {
         roomProxy.infoPublisher
-            .throttle(for: .milliseconds(200), scheduler: DispatchQueue.main, latest: true)
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] roomInfo in
                 self?.updateRoomInfo(roomInfo)
-                Task { await self?.updatePowerLevelPermissions() }
             }
             .store(in: &cancellables)
         
@@ -229,7 +227,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .store(in: &cancellables)
     }
     
-    private func updateRoomInfo(_ roomInfo: RoomInfoProxy) {
+    private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
         state.isEncrypted = roomInfo.isEncrypted
         state.isDirect = roomInfo.isDirect
         state.bindings.isFavourite = roomInfo.isFavourite
@@ -247,6 +245,17 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.isKnockableRoom = true
         default:
             state.isKnockableRoom = false
+        }
+        
+        if let powerLevels = roomInfo.powerLevels {
+            state.canEditRoomName = powerLevels.canOwnUser(sendStateEvent: .roomName)
+            state.canEditRoomTopic = powerLevels.canOwnUser(sendStateEvent: .roomTopic)
+            state.canEditRoomAvatar = powerLevels.canOwnUser(sendStateEvent: .roomAvatar)
+            state.canInviteUsers = powerLevels.canOwnUserInvite()
+            state.canKickUsers = powerLevels.canOwnUserKick()
+            state.canBanUsers = powerLevels.canOwnUserBan()
+            state.canJoinCall = powerLevels.canOwnUserJoinCall()
+            state.canEditRolesOrPermissions = powerLevels.suggestedRole(forUser: roomProxy.ownUserID) == .administrator
         }
     }
     
@@ -301,19 +310,6 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             
             state.hasMemberIdentityVerificationStateViolations = false
         }
-    }
-    
-    private func updatePowerLevelPermissions() async {
-        state.canEditRolesOrPermissions = await (try? roomProxy.suggestedRole(for: roomProxy.ownUserID).get()) == .administrator
-        
-        let powerLevels = try? await roomProxy.powerLevels().get()
-        state.canEditRoomName = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName).get()) == true
-        state.canEditRoomTopic = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic).get()) == true
-        state.canEditRoomAvatar = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar).get()) == true
-        state.canInviteUsers = (try? powerLevels?.canUserInvite(userID: roomProxy.ownUserID).get()) == true
-        state.canKickUsers = (try? powerLevels?.canUserKick(userID: roomProxy.ownUserID).get()) == true
-        state.canBanUsers = (try? powerLevels?.canUserBan(userID: roomProxy.ownUserID).get()) == true
-        state.canJoinCall = (try? powerLevels?.canUserJoinCall(userID: roomProxy.ownUserID).get()) == true
     }
     
     private func setupNotificationSettingsSubscription() {

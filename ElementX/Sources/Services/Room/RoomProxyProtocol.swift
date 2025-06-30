@@ -64,7 +64,7 @@ enum KnockRequestsState {
 
 // sourcery: AutoMockable
 protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
-    var infoPublisher: CurrentValuePublisher<RoomInfoProxy, Never> { get }
+    var infoPublisher: CurrentValuePublisher<RoomInfoProxyProtocol, Never> { get }
 
     var membersPublisher: CurrentValuePublisher<[RoomMemberProxyProtocol], Never> { get }
     
@@ -154,7 +154,7 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     // MARK: - Power Levels
     
-    func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol, RoomProxyError>
+    func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol?, RoomProxyError>
     func applyPowerLevelChanges(_ changes: RoomPowerLevelChanges) async -> Result<Void, RoomProxyError>
     func resetPowerLevels() async -> Result<Void, RoomProxyError>
     func suggestedRole(for userID: String) async -> Result<RoomMemberRole, RoomProxyError>
@@ -190,7 +190,7 @@ extension JoinedRoomProxyProtocol {
                     avatar: infoPublisher.value.avatar,
                     canonicalAlias: infoPublisher.value.canonicalAlias,
                     isEncrypted: infoPublisher.value.isEncrypted,
-                    isPublic: infoPublisher.value.isPublic,
+                    isPublic: !(infoPublisher.value.isPrivate ?? false),
                     isDirect: infoPublisher.value.isDirect)
     }
     

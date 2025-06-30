@@ -1450,6 +1450,7 @@
 		42A5A42ACF063EEE6B1980D2 /* ReportContentScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B17B1F29448D1B9049B11C /* ReportContentScreenViewModel.swift */; };
 		42B084FDE621FBEE433AF444 /* LegalInformationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4176C3E20C772DE8D182863C /* LegalInformationScreen.swift */; };
 		42F1C8731166633E35A6D7E6 /* RoomEventStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A307A44F952CD73E63AE31 /* RoomEventStringBuilder.swift */; };
+		432EA37BDC97CEDBAB7B23A6 /* RoomInfoProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14517E5597594956FCE1950D /* RoomInfoProxyProtocol.swift */; };
 		43F06DF42EC00B3CE2B020A4 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3F82523D6F48B926D6AF68 /* AppSettings.swift */; };
 		43F35A7E5703D64DB0519C59 /* ServerSelectionScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD469F7513574341181F7EAA /* ServerSelectionScreen.swift */; };
 		440123E29E2F9B001A775BBE /* TimelineItemProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D505843AB66822EB91F0DF0 /* TimelineItemProxy.swift */; };
@@ -2878,6 +2879,7 @@
 		13F354AD441E2FD83DED89AF /* SeparatorMediaEventsTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorMediaEventsTimelineView.swift; sourceTree = "<group>"; };
 		1423AB065857FA546444DB15 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		1434D5169F0EE319E226DA7F /* RoomMembershipDetailsProxyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembershipDetailsProxyProtocol.swift; sourceTree = "<group>"; };
+		14517E5597594956FCE1950D /* RoomInfoProxyProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomInfoProxyProtocol.swift; sourceTree = "<group>"; };
 		1454CF3AABD242F55C8A2615 /* InviteUsersScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteUsersScreenModels.swift; sourceTree = "<group>"; };
 		1511B1DCECC0DC75EB267328 /* KnockRequestsListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnockRequestsListScreen.swift; sourceTree = "<group>"; };
 		1562EAF6231151A675BED7A9 /* RoomDirectorySearchScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDirectorySearchScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -5691,6 +5693,7 @@
 				C07851F4EA81AA3339806A7B /* KnockRequestProxyProtocol.swift */,
 				B6404166CBF5CC88673FF9E2 /* RoomDetails.swift */,
 				40A66E8BC8D9AE4A08EFB2DF /* RoomInfoProxy.swift */,
+				14517E5597594956FCE1950D /* RoomInfoProxyProtocol.swift */,
 				974AEAF3FE0C577A6C04AD6E /* RoomPermissions.swift */,
 				4D635709C1D6D37C225AD40E /* RoomPowerLevelProxyProtocol.swift */,
 				CFFA5E881D281810AB428EA3 /* RoomPowerLevelsProxy.swift */,
@@ -11208,6 +11211,7 @@
 				8DF0EBD97753033C715D716E /* RoomFlowCoordinatorStateMachine.swift in Sources */,
 				9C63171267E22FEB288EC860 /* RoomHeaderView.swift in Sources */,
 				5C8804B4F25903516E2DAB81 /* RoomInfoProxy.swift in Sources */,
+				432EA37BDC97CEDBAB7B23A6 /* RoomInfoProxyProtocol.swift in Sources */,
 				18D5D9BF2CEB768600107940 /* UserRewardsSettingsScreen.swift in Sources */,
 				8A83D715940378B9BA9F739E /* RoomInviterLabel.swift in Sources */,
 				F4996C82A4B3A5FF0C8EDD03 /* RoomListFilterModels.swift in Sources */,
@@ -12786,7 +12790,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 25.06.20;
+				version = "25.06.25-2";
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {
@@ -12810,7 +12814,7 @@
 			repositoryURL = "https://github.com/element-hq/element-call-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 0.12.2;
+				version = "0.13.0-rc.1";
 			};
 		};
 		821C67C9A7F8CC3FD41B28B4 /* XCRemoteSwiftPackageReference "emojibase-bindings" */ = {

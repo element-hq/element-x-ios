@@ -123,14 +123,14 @@ enum A11yIdentifiers {
     struct AuthenticationStartScreen {
         let signIn = "authentication_start-sign_in"
         let signInWithQr = "authentication_start-sign_in_with_qr"
-        let reportAProblem = "authentication_start-report_a_problem"
+        let appVersion = "authentication_start-app_version"
         let hidden = "authentication_start-hidden"
     }
     
     struct ReportContent {
         let ignoreUser = "report_content-ignore_user"
     }
-        
+    
     struct RoomScreen {
         let name = "room-name"
         let avatar = "room-avatar"

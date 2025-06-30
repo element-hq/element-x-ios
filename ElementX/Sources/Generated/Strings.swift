@@ -92,6 +92,8 @@ internal enum L10n {
   internal static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
   /// User menu
   internal static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
+  /// View avatar
+  internal static var a11yViewAvatar: String { return L10n.tr("Localizable", "a11y_view_avatar") }
   /// View details
   internal static var a11yViewDetails: String { return L10n.tr("Localizable", "a11y_view_details") }
   /// Voice message, duration: %1$@
@@ -1780,6 +1782,10 @@ internal enum L10n {
   internal static var screenNotificationSettingsSystemNotificationsTurnedOff: String { return L10n.tr("Localizable", "screen_notification_settings_system_notifications_turned_off") }
   /// Notifications
   internal static var screenNotificationSettingsTitle: String { return L10n.tr("Localizable", "screen_notification_settings_title") }
+  /// Version %1$@
+  internal static func screenOnboardingAppVersion(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_onboarding_app_version", String(describing: p1))
+  }
   /// Sign in manually
   internal static var screenOnboardingSignInManually: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_manually") }
   /// Sign in to %1$@
@@ -2420,6 +2426,8 @@ internal enum L10n {
   internal static var screenRoomVoiceMessageTooltip: String { return L10n.tr("Localizable", "screen_room_voice_message_tooltip") }
   /// Create a new conversation or room
   internal static var screenRoomlistA11yCreateMessage: String { return L10n.tr("Localizable", "screen_roomlist_a11y_create_message") }
+  /// Clear filters
+  internal static var screenRoomlistClearFilters: String { return L10n.tr("Localizable", "screen_roomlist_clear_filters") }
   /// Get started by messaging someone.
   internal static var screenRoomlistEmptyMessage: String { return L10n.tr("Localizable", "screen_roomlist_empty_message") }
   /// No chats yet.

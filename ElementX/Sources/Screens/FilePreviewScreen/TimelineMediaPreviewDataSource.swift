@@ -140,7 +140,7 @@ enum TimelineMediaPreviewItem: Equatable {
     case loading(Loading)
     
     /// Wraps a media file and title to be previewed with QuickLook.
-    class Media: NSObject, QLPreviewItem, Identifiable {
+    @Observable class Media: NSObject, QLPreviewItem, Identifiable {
         fileprivate(set) var timelineItem: EventBasedMessageTimelineItemProtocol
         var fileHandle: MediaFileHandleProxy?
         var downloadError: Error?

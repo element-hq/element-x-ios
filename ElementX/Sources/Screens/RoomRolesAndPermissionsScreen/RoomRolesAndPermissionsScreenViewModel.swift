@@ -39,12 +39,12 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         // Automatically update the room permissions
         roomProxy.infoPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                Task { await self?.updatePermissions() }
+            .sink { [weak self] roomInfo in
+                self?.updateRoomInfo(roomInfo: roomInfo)
             }
             .store(in: &cancellables)
         
-        Task { await updatePermissions() }
+        updateRoomInfo(roomInfo: roomProxy.infoPublisher.value)
     }
     
     // MARK: - Public
@@ -113,12 +113,9 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
     
     // MARK: - Permissions
     
-    private func updatePermissions() async {
-        switch await roomProxy.powerLevels() {
-        case .success(let powerLevels):
+    private func updateRoomInfo(roomInfo: RoomInfoProxyProtocol) {
+        if let powerLevels = roomInfo.powerLevels {
             state.permissions = .init(powerLevels: powerLevels.values)
-        case .failure:
-            break
         }
     }
     

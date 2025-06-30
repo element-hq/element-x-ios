@@ -53,8 +53,8 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     let timeline: TimelineProxyProtocol
     
-    private let infoSubject: CurrentValueSubject<RoomInfoProxy, Never>
-    var infoPublisher: CurrentValuePublisher<RoomInfoProxy, Never> {
+    private let infoSubject: CurrentValueSubject<RoomInfoProxyProtocol, Never>
+    var infoPublisher: CurrentValuePublisher<RoomInfoProxyProtocol, Never> {
         infoSubject.asCurrentValuePublisher()
     }
 
@@ -598,7 +598,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     // MARK: - Power Levels
     
-    func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol, RoomProxyError> {
+    func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol?, RoomProxyError> {
         do {
             return try await .success(RoomPowerLevelsProxy(room.getPowerLevels()))
         } catch {

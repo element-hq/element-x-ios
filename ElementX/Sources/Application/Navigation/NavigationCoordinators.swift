@@ -437,6 +437,7 @@ private struct NavigationSplitCoordinatorView: View {
             module.coordinator?.toPresentable()
                 .id(module.id)
         }
+        .accessibilityHidden(navigationSplitCoordinator.overlayModule?.coordinator != nil && navigationSplitCoordinator.overlayPresentationMode == .fullScreen)
         .overlay {
             Group {
                 if let coordinator = navigationSplitCoordinator.overlayModule?.coordinator {
