@@ -35,6 +35,7 @@ protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
 
     var isEncrypted: Bool { get }
     var isDirect: Bool { get }
+    var isAChannel: Bool { get }
     var isSpace: Bool { get }
     var isFavourite: Bool { get }
     

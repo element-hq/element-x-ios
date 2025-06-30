@@ -24,7 +24,7 @@ extension InvitedRoomProxyMock {
         self.init()
         id = configuration.id
         inviter = configuration.inviter
-        info = RoomInfoProxyMock(configuration, roomAvatarCached: nil)
+        info = RoomInfoProxyMock(configuration)
         
         rejectInvitationReturnValue = .success(())
     }

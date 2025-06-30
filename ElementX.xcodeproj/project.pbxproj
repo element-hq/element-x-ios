@@ -1813,6 +1813,7 @@
 		795CF4462D834F5E0014B537 /* HomeMyPostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */; };
 		795CF4472D834F5E0014B537 /* HomeMyPostsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795CF4452D834F5A0014B537 /* HomeMyPostsContent.swift */; };
 		795EAA0D2D4AD83D0015DAD8 /* TimelineMediaPreviewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18A454132A5A5247802821E /* TimelineMediaPreviewDataSource.swift */; };
+		7961D6432E128DCA00AF5113 /* RoomInfoProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14517E5597594956FCE1950D /* RoomInfoProxyProtocol.swift */; };
 		79621A4C2DA78E040006C391 /* ManageRoomMemberSheetModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 787E84119E626E2F0E0BFBE8 /* ManageRoomMemberSheetModels.swift */; };
 		79621A4D2DA78E080006C391 /* ManageRoomMemberSheetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A34D9BCA1A7D9A56E1EAF1D /* ManageRoomMemberSheetViewModel.swift */; };
 		79621A4E2DA78E0D0006C391 /* ManageRoomMemberSheetViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB7B588A06911B455AC0B4C9 /* ManageRoomMemberSheetViewModelProtocol.swift */; };
@@ -10429,6 +10430,7 @@
 				7937A5952DB28A0F001A60CB /* BloomModifier.swift in Sources */,
 				18E9A7392C9829970082DDA4 /* UserProfileScreen.swift in Sources */,
 				18E9A73A2C9829970082DDA4 /* UserProfileScreenCoordinator.swift in Sources */,
+				7961D6432E128DCA00AF5113 /* RoomInfoProxyProtocol.swift in Sources */,
 				18E9A73B2C9829970082DDA4 /* UserProfileScreenModels.swift in Sources */,
 				18E9A73C2C9829970082DDA4 /* UserProfileScreenViewModel.swift in Sources */,
 				18E9A73D2C9829970082DDA4 /* UserProfileScreenViewModelProtocol.swift in Sources */,

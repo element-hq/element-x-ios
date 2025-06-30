@@ -15659,6 +15659,11 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingIsDirect = value }
     }
     var underlyingIsDirect: Bool!
+    var isAChannel: Bool {
+        get { return underlyingIsAChannel }
+        set(value) { underlyingIsAChannel = value }
+    }
+    var underlyingIsAChannel: Bool!
     var isSpace: Bool {
         get { return underlyingIsSpace }
         set(value) { underlyingIsSpace = value }

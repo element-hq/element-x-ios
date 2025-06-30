@@ -153,7 +153,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         
         roomInfoObservationToken = room.subscribeToRoomInfoUpdates(listener: SDKListener { [weak self] roomInfo in
             MXLog.info("Received room info update")
-            self?.infoSubject.send(.init(roomInfo: roomInfo, roomAvatarCached: cachedRoomAvatar))
+            self?.infoSubject.send(RoomInfoProxy(roomInfo: roomInfo, roomAvatarCached: cachedRoomAvatar))
         })
     }
     
