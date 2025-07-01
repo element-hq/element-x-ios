@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias RoomRolesAndPermissionsScreenViewModelType = StateStoreViewModel<RoomRolesAndPermissionsScreenViewState, RoomRolesAndPermissionsScreenViewAction>
+typealias RoomRolesAndPermissionsScreenViewModelType = StateStoreViewModelV2<RoomRolesAndPermissionsScreenViewState, RoomRolesAndPermissionsScreenViewAction>
 
 class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewModelType, RoomRolesAndPermissionsScreenViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
