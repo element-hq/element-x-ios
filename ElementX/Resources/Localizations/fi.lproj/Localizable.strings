@@ -25,6 +25,7 @@
 "a11y_show_password" = "Näytä salasana";
 "a11y_start_call" = "Aloita puhelu";
 "a11y_user_menu" = "Käyttäjävalikko";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Näytä tiedot";
 "a11y_voice_message" = "Ääniviesti, kesto: %1$@";
 "a11y_voice_message_record" = "Nauhoita ääniviesti.";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "Katso vanhoja viestejä";
 "screen_room_timeline_upgraded_room_message" = "Tämä huone on jatkoa toiselle huoneelle";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "Tämä huone on päivitetty";
 "screen_security_and_privacy_add_room_address_action" = "Lisää huoneen osoite";
 "screen_security_and_privacy_ask_to_join_option_description" = "Kuka tahansa voi pyytää saada liittyä huoneeseen, mutta ylläpitäjän tai valvojan on hyväksyttävä pyyntö.";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "Kuvaus on liian lyhyt. Kerro tarkemmin mitä tapahtui, kiitos!";
 "screen_bug_report_include_crash_logs" = "Lähetä kaatumislokit";
 "screen_bug_report_include_logs" = "Lähetä lokitiedostot";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Lähetä kuvakaappaus";
 "screen_bug_report_logs_description" = "Lähetä lokitiedostot viestisi kanssa, jotta voimme varmistaa, että kaikki toimii oikein. Jos haluat lähettää viestisi ilman lokeja, jätä tämä asetus valitsematta.";
 "screen_bug_report_view_logs" = "Näytä lokitiedostot";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "järjestelmäsi asetuksia";
 "screen_notification_settings_system_notifications_turned_off" = "Järjestelmän ilmoitukset on poissa päältä";
 "screen_notification_settings_title" = "Ilmoitukset";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Kirjaudu sisään manuaalisesti";
 "screen_onboarding_sign_in_to" = "Kirjaudu sisään %1$@ -palvelimelle";
 "screen_onboarding_sign_in_with_qr_code" = "Kirjaudu sisään QR-koodilla";

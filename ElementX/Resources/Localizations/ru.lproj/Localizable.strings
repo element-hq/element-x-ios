@@ -25,6 +25,7 @@
 "a11y_show_password" = "Показать пароль";
 "a11y_start_call" = "Начать звонок";
 "a11y_user_menu" = "Меню пользователя";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Подробнее";
 "a11y_voice_message" = "Голосовое сообщение, продолжительность: %1$@";
 "a11y_voice_message_record" = "Записать голосовое сообщение.";
@@ -539,6 +540,7 @@
 "screen_room_timeline_upgraded_room_action" = "Посмотреть старые сообщения";
 "screen_room_timeline_upgraded_room_message" = "Эта комната является продолжением другой комнаты";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "Эта комната была обновлена";
 "screen_security_and_privacy_add_room_address_action" = "Добавить адрес комнаты";
 "screen_security_and_privacy_ask_to_join_option_description" = "Любой желающий может подать заявку на присоединение к комнате, но администратор или модератор должен будет принять запрос.";
@@ -632,6 +634,7 @@
 "screen_bug_report_error_description_too_short" = "Описание слишком короткое, пожалуйста, расскажите подробнее о том, что произошло. Спасибо!";
 "screen_bug_report_include_crash_logs" = "Отправка журналов сбоев";
 "screen_bug_report_include_logs" = "Разрешить ведение журналов";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Отправить снимок экрана";
 "screen_bug_report_logs_description" = "Чтобы убедиться, что все работает правильно, в сообщение будут включены журналы. Чтобы отправить сообщение без журналов, отключите эту настройку.";
 "screen_bug_report_view_logs" = "Просмотр журналов";
@@ -792,6 +795,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "настройки системы";
 "screen_notification_settings_system_notifications_turned_off" = "Системные уведомления выключены";
 "screen_notification_settings_title" = "Уведомления";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Войти вручную";
 "screen_onboarding_sign_in_to" = "Войти в %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Войти QR-кодом";

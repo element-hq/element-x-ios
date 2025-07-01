@@ -253,7 +253,7 @@ final class AppSettings {
         
     // MARK: - Bug report
 
-    let bugReportServiceBaseURL: URL? = Secrets.rageshakeServerURL.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
+    let bugReportRageshakeURL: URL? = Secrets.rageshakeURL.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     let bugReportSentryURL: URL? = Secrets.sentryDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     let bugReportSentryRustURL: URL? = Secrets.sentryRustDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     /// The name allocated by the bug report server
