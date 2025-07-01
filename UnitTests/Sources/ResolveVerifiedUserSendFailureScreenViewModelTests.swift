@@ -26,7 +26,7 @@ class ResolveVerifiedUserSendFailureScreenViewModelTests: XCTestCase {
     func testMultipleUnsignedDevices() async throws {
         // Given a failure where a multiple users have unverified devices.
         let userIDs = ["@alice:matrix.org", "@bob:matrix.org", "@charlie:matrix.org"]
-        let devices = Dictionary(uniqueKeysWithValues: userIDs.map { (key: $0, value: ["DEVICE1, DEVICE2"]) })
+        let devices = Dictionary(uniqueKeysWithValues: userIDs.map { ($0, ["DEVICE1, DEVICE2"]) })
         viewModel = makeViewModel(with: .hasUnsignedDevice(devices: devices))
         
         try await verifyResolving(userIDs: userIDs, assertStrings: false)
