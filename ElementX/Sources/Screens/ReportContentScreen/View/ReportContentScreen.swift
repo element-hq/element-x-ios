@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct ReportContentScreen: View {
-    @ObservedObject var context: ReportContentScreenViewModel.Context
+    @Bindable var context: ReportContentScreenViewModel.Context
 
     var body: some View {
         Form {
