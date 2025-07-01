@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct BlockedUsersScreen: View {
-    @ObservedObject var context: BlockedUsersScreenViewModel.Context
+    @Bindable var context: BlockedUsersScreenViewModel.Context
     
     var body: some View {
         content
