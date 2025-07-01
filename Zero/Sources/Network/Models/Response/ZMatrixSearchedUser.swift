@@ -8,6 +8,7 @@ public struct ZMatrixSearchedUser: Codable, Identifiable, Hashable {
     public let profileImage: String?
     public let primaryZID: String?
     public let primaryWalletAddress: String?
+    public let subscriptions: ZeroSubscription
 }
 
 extension ZMatrixSearchedUser {

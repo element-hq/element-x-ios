@@ -127,10 +127,17 @@ struct UserProfileDetailsSection: View {
             
             HStack(spacing: 0) {
                 VStack(alignment: .leading) {
-                    Text(context.viewState.userProfile.firstName)
-                        .font(.compound.headingMDBold)
-                        .foregroundStyle(.compound.textPrimary)
-                        .lineLimit(1)
+                    HStack {
+                        Text(context.viewState.userProfile.firstName)
+                            .font(.compound.headingMDBold)
+                            .foregroundStyle(.compound.textPrimary)
+                            .lineLimit(1)
+                        
+                        if context.viewState.userProfile.isZeroProSubscriber {
+                            CompoundIcon(\.verified)
+                                .foregroundStyle(.zero.bgAccentRest)
+                        }
+                    }
                     
                     if let zid = context.viewState.userProfile.zIdOrPublicAddressDisplayText {
                         Text(zid)

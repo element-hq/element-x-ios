@@ -16,6 +16,7 @@ struct ZPostUserProfile: Codable, Hashable {
     let publicAddress: String?
     let followersCount: String?
     let followingCount: String?
+    let isZeroProSubscriber: Bool
     
     init(userId: String,
          createdAt: String? = nil,
@@ -24,7 +25,8 @@ struct ZPostUserProfile: Codable, Hashable {
          primaryZid: String?,
          publicAddress: String?,
          followersCount: String?,
-         followingCount: String?
+         followingCount: String?,
+         isZeroProSubscriber: Bool
     ) {
         self.userId = userId
         self.createdAt = createdAt
@@ -34,6 +36,7 @@ struct ZPostUserProfile: Codable, Hashable {
         self.publicAddress = publicAddress
         self.followersCount = followersCount
         self.followingCount = followingCount
+        self.isZeroProSubscriber = isZeroProSubscriber
     }
 }
 

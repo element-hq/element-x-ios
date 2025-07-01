@@ -13,6 +13,7 @@ public struct ZCurrentUser: Codable, Identifiable {
     public let primaryWalletAddress: String?
     public let followersCount: String?
     public let followingCount: String?
+    public let subscriptions: ZeroSubscription
     
     public var profileImageURL: URL? {
         URL(string: profileSummary?.profileImage ?? "")
@@ -39,8 +40,14 @@ public struct ZCurrentUser: Codable, Identifiable {
         wallets: nil,
         primaryWalletAddress: nil,
         followersCount: "0",
-        followingCount: "0"
+        followingCount: "0",
+        subscriptions: .init(wilderPro: false, zeroPro: false)
     )
+}
+
+public struct ZeroSubscription: Codable, Hashable {
+    public let wilderPro: Bool
+    public let zeroPro: Bool
 }
 
 extension ZCurrentUser: Equatable {

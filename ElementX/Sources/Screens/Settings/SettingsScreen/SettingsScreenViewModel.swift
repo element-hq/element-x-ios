@@ -48,6 +48,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.primaryZeroId = currentUser.zIdOrPublicAddressDisplayText
+                self?.state.isZeroProSubscriber = currentUser.subscriptions.zeroPro
             }
             .store(in: &cancellables)
         

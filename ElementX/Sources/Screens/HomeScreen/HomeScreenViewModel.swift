@@ -282,7 +282,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                            primaryZid: state.currentUserZeroProfile?.primaryZID,
                                            publicAddress: state.currentUserZeroProfile?.publicWalletAddress,
                                            followersCount: state.currentUserZeroProfile?.followersCount,
-                                           followingCount: state.currentUserZeroProfile?.followingCount)
+                                           followingCount: state.currentUserZeroProfile?.followingCount,
+                                           isZeroProSubscriber: state.currentUserZeroProfile?.subscriptions.zeroPro ?? false)
             actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: self))
         case .setNotificationFilter(let tab):
             applyCustomFilterToNotificationsList(tab)
