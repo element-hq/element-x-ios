@@ -39,4 +39,4 @@ jobs:
           base: develop
           add-paths: |
             *.yml
-            *.xcodeproj
+            *.xcodeproj/**
