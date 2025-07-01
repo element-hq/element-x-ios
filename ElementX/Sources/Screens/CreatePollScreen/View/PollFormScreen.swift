@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct PollFormScreen: View {
-    @ObservedObject var context: PollFormScreenViewModel.Context
+    @Bindable var context: PollFormScreenViewModel.Context
     @FocusState var focus: Focus?
     
     enum Focus: Hashable {
