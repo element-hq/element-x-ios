@@ -16,8 +16,8 @@ struct ZWalletToken: Codable {
     let tokenAddress: String
     let symbol: String
     let name: String
-    let amount: Double
-    let logo: String
+    let amount: String
+    let logo: String?
     let decimals: Int
 }
 

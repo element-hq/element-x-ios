@@ -83,11 +83,10 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     
     private func fetchUserProfileData() {
         Task {
-            await(
-                fetchUserProfile(),
-                fetchUserFollowStatus(),
-                fetchUserFeeds(state.userID)
-            )
+            async let profile: () = fetchUserProfile()
+            async let followStatus: () = fetchUserFollowStatus()
+            async let feeds: () = fetchUserFeeds(state.userID)
+            _ = await (profile, followStatus, feeds)
         }
     }
     

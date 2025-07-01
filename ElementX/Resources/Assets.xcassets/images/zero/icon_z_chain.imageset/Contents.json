@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "icon_z_chain.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

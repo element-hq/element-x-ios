@@ -70,8 +70,8 @@ struct HomeWalletContent: View {
             VStack(spacing: 0) {
                 zeroCardDetails
                 
-                actionButtonsView
-                    .padding(.vertical, 6)
+//                actionButtonsView
+//                    .padding(.vertical, 6)
             }
         }
     }
@@ -107,7 +107,7 @@ struct HomeWalletContent: View {
     @ViewBuilder
     private var walletTabsView: some View {
         ZStack(alignment: .trailing) {
-            SimpleTabButtonsView(tabs: HomeWalletTab.allCases,
+            SimpleTabButtonsView(tabs: [HomeWalletTab.token, HomeWalletTab.transaction],
                                  selectedTab: selectedTab,
                                  tabTitle: { tab in
                 switch tab {
@@ -121,12 +121,12 @@ struct HomeWalletContent: View {
             },
                                  showDivider: true)
             
-            Image(systemName: "ellipsis")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 18, height: 18)
-                .foregroundStyle(.compound.textSecondary)
-                .padding([.bottom, .trailing], 8)
+//            Image(systemName: "ellipsis")
+//                .resizable()
+//                .scaledToFit()
+//                .frame(width: 18, height: 18)
+//                .foregroundStyle(.compound.textSecondary)
+//                .padding([.bottom, .trailing], 8)
         }
         .frame(maxWidth: .infinity)
     }
@@ -155,24 +155,26 @@ struct HomeWalletContent: View {
                             }
                     }
                     
-                    Text("$78,810.04")
+                    Text(showWalletBalance ? "******" : "$ 0")
                         .font(.robotoMonoRegular(size: 22))
                         .foregroundColor(.compound.textPrimary)
                         .shadow(color: .white.opacity(0.5), radius: 8)
                         .padding(.vertical, 4)
                     
-                    Text("+5.56%")
-                        .font(.zero.bodyMD)
-                        .foregroundColor(.zero.bgAccentRest)
+//                    Text("+5.56%")
+//                        .font(.zero.bodyMD)
+//                        .foregroundColor(.zero.bgAccentRest)
                 }
                 .padding(.top, 6)
                 
                 Spacer()
                 
-                Text("Lefty Wilder".uppercased())
-                    .font(.robotoMonoRegular(size: 12))
-                    .foregroundColor(.compound.textSecondary)
-                    .padding(.bottom, 8)
+                if let userName = context.viewState.currentUserZeroProfile?.displayName {
+                    Text(userName.uppercased())
+                        .font(.robotoMonoRegular(size: 12))
+                        .foregroundColor(.compound.textSecondary)
+                        .padding(.bottom, 8)
+                }
             }
             .padding(.all, 14)
         }
@@ -195,7 +197,7 @@ struct HomeWalletContent: View {
                         }
                 }
                 
-                Text("$78,810.04")
+                Text(showWalletBalance ? "******" : "$ 0")
                     .font(.robotoMonoRegular(size: 22))
                     .foregroundColor(.compound.textPrimary)
                     .shadow(color: .white.opacity(0.5), radius: 8)
@@ -209,17 +211,17 @@ struct HomeWalletContent: View {
             
             Spacer()
             
-            HStack(spacing: 10) {
-                WalletActionButton(action: .receive, compactButtonStyle: true, onTap: {
-                    
-                })
-                WalletActionButton(action: .swap, compactButtonStyle: true, onTap: {
-                    
-                })
-                WalletActionButton(action: .send, compactButtonStyle: true, onTap: {
-                    
-                })
-            }
+//            HStack(spacing: 10) {
+//                WalletActionButton(action: .receive, compactButtonStyle: true, onTap: {
+//                    
+//                })
+//                WalletActionButton(action: .swap, compactButtonStyle: true, onTap: {
+//                    
+//                })
+//                WalletActionButton(action: .send, compactButtonStyle: true, onTap: {
+//                    
+//                })
+//            }
         }
         .padding(.vertical, 8)
     }

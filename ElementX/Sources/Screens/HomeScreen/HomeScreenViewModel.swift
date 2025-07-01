@@ -69,6 +69,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.currentUserZeroProfile = currentUser
+                self?.fetchWalletData()
             }
             .store(in: &cancellables)
         
@@ -97,8 +98,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .receive(on: DispatchQueue.main)
             .filter { state in
                 state.verificationState != .unknown
-                    && state.recoveryState != .settingUp
-                    && state.recoveryState != .unknown
+                && state.recoveryState != .settingUp
+                && state.recoveryState != .unknown
             }
             .sink { [weak self] state in
                 guard let self else { return }
@@ -164,7 +165,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         updateRooms()
         
         fetchZeroHomeScreenData()
-                                
+        
         Task {
             await checkSlidingSyncMigration()
         }
@@ -288,6 +289,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             applyCustomFilterToNotificationsList(tab)
         case .openMediaPreview(let mediaId):
             displayFullScreenMedia(mediaId)
+        case .loadMoreWalletTokens:
+            loadMoreWalletTokenBalances()
+        case .loadMoreWalletTransactions:
+            loadMoreWalletTransactions()
+        case .loadMoreWalletNFTs:
+            loadMoreWalletNFTs()
         }
     }
     
@@ -299,8 +306,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                                       title: L10n.crashDetectionDialogContent(InfoPlistReader.main.bundleDisplayName),
                                                       primaryButton: .init(title: L10n.actionNo, action: nil),
                                                       secondaryButton: .init(title: L10n.actionYes) { [weak self] in
-                                                          self?.actionsSubject.send(.presentFeedbackScreen)
-                                                      })
+                self?.actionsSubject.send(.presentFeedbackScreen)
+            })
         }
     }
     
@@ -327,7 +334,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
         
         analyticsService.signpost.beginFirstRooms()
-                
+        
         roomSummaryProvider.statePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
@@ -377,7 +384,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             }
         }
     }
-        
+    
     private func updateRooms() {
         guard let roomSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
@@ -417,8 +424,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             self.state.bindings.alertInfo = AlertInfo(id: UUID(),
                                                       title: L10n.bannerMigrateToNativeSlidingSyncAppForceLogoutTitle(InfoPlistReader.main.bundleDisplayName),
                                                       primaryButton: .init(title: L10n.bannerMigrateToNativeSlidingSyncAction) { [weak self] in
-                                                          self?.actionsSubject.send(.logoutWithoutConfirmation)
-                                                      })
+                self?.actionsSubject.send(.logoutWithoutConfirmation)
+            })
         }
     }
     
@@ -490,17 +497,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
         
-//        guard case let .invited(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
-//            displayError()
-//            return
-//        }
+        //        guard case let .invited(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+        //            displayError()
+        //            return
+        //        }
         
         switch await userSession.clientProxy.joinRoom(roomID, via: []) {
         case .success:
             actionsSubject.send(.presentRoom(roomIdentifier: roomID))
-//            analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
-//                                             isSpace: roomProxy.info.isSpace,
-//                                             activeMemberCount: UInt(roomProxy.info.activeMembersCount))
+            //            analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
+            //                                             isSpace: roomProxy.info.isSpace,
+            //                                             activeMemberCount: UInt(roomProxy.info.activeMembersCount))
             appSettings.seenInvites.remove(roomID)
         case .failure(let error):
             switch error {
@@ -555,7 +562,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
         
         let result = await roomProxy.rejectInvitation()
-//        let result = await userSession.clientProxy.leaveRoom(roomID)
+        //        let result = await userSession.clientProxy.leaveRoom(roomID)
         
         if case .failure = result {
             displayError()
@@ -587,9 +594,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     private func fetchZeroHomeScreenData() {
         Task {
-            _ = await (userSession.clientProxy.checkAndLinkZeroUser(),
-                       fetchChannels(),
-                       fetchPosts())
+            async let checkUser: () = userSession.clientProxy.checkAndLinkZeroUser()
+            async let channels: () = fetchChannels()
+            async let posts: () = fetchPosts()
+            _ = await (checkUser, channels, posts)
         }
     }
     
@@ -891,6 +899,101 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 }
             } catch {
                 MXLog.error("Failed to preview feed media: \(error)")
+            }
+        }
+    }
+    
+    private func fetchWalletData() {
+        if let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
+            state.walletContentListMode = .skeletons
+            Task {
+                async let balances = userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: nil)
+                async let nfts = userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress, nextPage: nil)
+                async let transactions = userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress, nextPage: nil)
+                
+                let results = await (balances, nfts, transactions)
+                if case .success(let walletTokenBalances) = results.0 {
+                    var homeWalletContent: [HomeScreenWalletContent] = []
+                    for token in walletTokenBalances.tokens {
+                        let content = HomeScreenWalletContent(walletToken: token)
+                        homeWalletContent.append(content)
+                    }
+                    state.walletTokens = homeWalletContent.uniqued(on: \.id)
+                    state.walletTokenNextPageParams = walletTokenBalances.nextPageParams
+                }
+                if case .success(let walletNFTs) = results.1 {
+                    var homeWalletContent: [HomeScreenWalletContent] = []
+                    for nft in walletNFTs.nfts {
+                        let content = HomeScreenWalletContent(walletNFT: nft)
+                        homeWalletContent.append(content)
+                    }
+                    state.walletNFTs = homeWalletContent.uniqued(on: \.id)
+                    state.walletNFTsNextPageParams = walletNFTs.nextPageParams
+                }
+                if case .success(let walletTransactions) = results.2 {
+                    var homeWalletContent: [HomeScreenWalletContent] = []
+                    for transaction in walletTransactions.transactions {
+                        let content = HomeScreenWalletContent(walletTransaction: transaction)
+                        homeWalletContent.append(content)
+                    }
+                    state.walletTransactions = homeWalletContent.uniqued(on: \.id)
+                    state.walletTransactionsNextPageParams = walletTransactions.nextPageParams
+                }
+                state.walletContentListMode = .content
+            }
+        }
+    }
+    
+    private func loadMoreWalletTokenBalances() {
+        if let nextPageParams = state.walletTokenNextPageParams,
+           let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
+            Task {
+                let result = await userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: nextPageParams)
+                if case .success(let walletTokenBalances) = result {
+                    var homeWalletContent: [HomeScreenWalletContent] = state.walletTokens
+                    for token in walletTokenBalances.tokens {
+                        let content = HomeScreenWalletContent(walletToken: token)
+                        homeWalletContent.append(content)
+                    }
+                    state.walletTokens = homeWalletContent.uniqued(on: \.id)
+                    state.walletTokenNextPageParams = walletTokenBalances.nextPageParams
+                }
+            }
+        }
+    }
+    
+    private func loadMoreWalletNFTs() {
+        if let nextPageParams = state.walletTokenNextPageParams,
+           let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
+            Task {
+                let result = await userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress, nextPage: nextPageParams)
+                if case .success(let walletNFTs) = result {
+                    var homeWalletContent: [HomeScreenWalletContent] = state.walletNFTs
+                    for nft in walletNFTs.nfts {
+                        let content = HomeScreenWalletContent(walletNFT: nft)
+                        homeWalletContent.append(content)
+                    }
+                    state.walletNFTs = homeWalletContent.uniqued(on: \.id)
+                    state.walletNFTsNextPageParams = walletNFTs.nextPageParams
+                }
+            }
+        }
+    }
+    
+    private func loadMoreWalletTransactions() {
+        if let nextPageParams = state.walletTransactionsNextPageParams,
+           let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
+            Task {
+                let result = await userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress, nextPage: nextPageParams)
+                if case .success(let walletTransactions) = result {
+                    var homeWalletContent: [HomeScreenWalletContent] = state.walletTransactions
+                    for transaction in walletTransactions.transactions {
+                        let content = HomeScreenWalletContent(walletTransaction: transaction)
+                        homeWalletContent.append(content)
+                    }
+                    state.walletTransactions = homeWalletContent.uniqued(on: \.id)
+                    state.walletTransactionsNextPageParams = walletTransactions.nextPageParams
+                }
             }
         }
     }

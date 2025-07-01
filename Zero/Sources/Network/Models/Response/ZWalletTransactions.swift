@@ -18,14 +18,14 @@ struct WalletTransaction: Codable {
     let to: String
     let action: String
     let token: TransactionToken
-    let amount: String
+    let amount: String?
     let timestamp: String
 }
 
 struct TransactionToken: Codable {
     let symbol: String
     let name: String
-    let logo: String
+    let logo: String?
     let decimals: Int
 }
 
