@@ -126,18 +126,23 @@ private struct HomeWalletTabContentCell : View {
                 )
                 
                 VStack(alignment: .leading) {
-                    HStack {
-                        if let preTitleText = content.titlePreText {
-                            Text(preTitleText)
+                    if let transactionAction = content.transactionAction {
+                        HStack {
+                            Text(transactionAction)
+                                .font(.zero.bodySM)
+                                .foregroundColor(.compound.textSecondary)
+                                .lineLimit(1)
+                                .layoutPriority(1)
+                            
+                            Image(asset: Asset.Images.iconZChain)
+                            
+                            Text(content.transactionAddress ?? "")
                                 .font(.zero.bodySM)
                                 .foregroundColor(.compound.textSecondary)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
+                                .padding(.trailing, 8)
                         }
-                        
-                        //                        Text("ACTIVE")
-                        //                            .font(.zero.bodySM)
-                        //                            .foregroundColor(.zero.bgAccentRest)
                     }
                     
                     Text(content.title)
@@ -152,7 +157,7 @@ private struct HomeWalletTabContentCell : View {
                             .font(.zero.bodySM)
                             .foregroundColor(.compound.textSecondary)
                             .lineLimit(1)
-                            .truncationMode(.tail)
+                            .truncationMode(.middle)
                     }
                 }
                 .padding(.leading, 4)
@@ -170,7 +175,7 @@ private struct HomeWalletTabContentCell : View {
                     
                     Text(content.actionText)
                         .font(.zero.bodyLG)
-                        .foregroundColor(.compound.textPrimary)
+                        .foregroundColor(.zero.bgAccentRest)
                         .lineLimit(1)
                         .truncationMode(.tail)
                         .padding(.vertical, 1)

@@ -155,7 +155,7 @@ struct HomeWalletContent: View {
                             }
                     }
                     
-                    Text(showWalletBalance ? "******" : "$ 0")
+                    Text(showWalletBalance ? "******" : "$0")
                         .font(.robotoMonoRegular(size: 22))
                         .foregroundColor(.compound.textPrimary)
                         .shadow(color: .white.opacity(0.5), radius: 8)
@@ -197,7 +197,7 @@ struct HomeWalletContent: View {
                         }
                 }
                 
-                Text(showWalletBalance ? "******" : "$ 0")
+                Text(showWalletBalance ? "******" : "$0")
                     .font(.robotoMonoRegular(size: 22))
                     .foregroundColor(.compound.textPrimary)
                     .shadow(color: .white.opacity(0.5), radius: 8)

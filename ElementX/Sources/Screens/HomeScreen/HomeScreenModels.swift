@@ -491,7 +491,8 @@ struct HomeScreenWalletContent: Identifiable, Equatable {
     let icon: String?
     let header: String?
     
-    let titlePreText: String?
+    let transactionAction: String?
+    let transactionAddress: String?
     let title: String
     let description: String?
     
@@ -503,7 +504,8 @@ struct HomeScreenWalletContent: Identifiable, Equatable {
         .init(id: UUID().uuidString,
               icon: nil,
               header: nil,
-              titlePreText: nil,
+              transactionAction: nil,
+              transactionAddress: nil,
               title: "placeholder title",
               description: "placeholder description",
               actionPreText: nil,
@@ -715,11 +717,12 @@ extension HomeScreenWalletContent {
         self.init(id: walletToken.tokenAddress,
                   icon: walletToken.logo,
                   header: nil,
-                  titlePreText: nil,
+                  transactionAction: nil,
+                  transactionAddress: nil,
                   title: walletToken.name,
-                  description: "\(walletToken.amount) \(walletToken.symbol.uppercased())",
+                  description: nil,
                   actionPreText: nil,
-                  actionText: "$0",
+                  actionText: "\(walletToken.amount) MEOW",
                   actionPostText: nil)
     }
     
@@ -727,7 +730,8 @@ extension HomeScreenWalletContent {
         self.init(id: walletNFT.id,
                   icon: walletNFT.imageUrl,
                   header: nil,
-                  titlePreText: nil,
+                  transactionAction: nil,
+                  transactionAddress: nil,
                   title: walletNFT.collectionName ?? walletNFT.metadata.name ?? "",
                   description: nil,
                   actionPreText: nil,
@@ -736,15 +740,16 @@ extension HomeScreenWalletContent {
     }
     
     init(walletTransaction: WalletTransaction) {
+        let isTransactionReceived = walletTransaction.action.lowercased() == "receive"
         self.init(id: walletTransaction.hash,
                   icon: walletTransaction.token.logo,
                   header: nil, //walletTransaction.timestamp
-                  titlePreText: walletTransaction.action.lowercased() == "receive" ?
-                  "Received from \(walletTransaction.from)" : "Sent to \(walletTransaction.to)",
+                  transactionAction: isTransactionReceived ? "Received from" : "Sent to",
+                  transactionAddress: isTransactionReceived ? walletTransaction.from : walletTransaction.to,
                   title: walletTransaction.token.name,
                   description: nil,
-                  actionPreText: (walletTransaction.amount != nil) ? "\(walletTransaction.amount!) \(walletTransaction.token.symbol.uppercased())" : nil,
-                  actionText: "$0",
+                  actionPreText: nil,
+                  actionText: (walletTransaction.amount != nil) ? "\(walletTransaction.amount!) MEOW" : "0 MEOW",
                   actionPostText: nil)
     }
 }
