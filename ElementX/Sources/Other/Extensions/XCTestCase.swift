@@ -169,7 +169,7 @@ extension XCTestCase {
                              timeout: TimeInterval,
                              message: String? = nil,
                              until condition: @escaping (Value) -> Bool) -> DeferredFulfillment<Void> {
-        let expectation = expectation(description: message ?? "Awaiting publisher")
+        let expectation = expectation(description: message ?? "Awaiting stream")
         expectation.isInverted = true
         var hasFulfilled = false
         
