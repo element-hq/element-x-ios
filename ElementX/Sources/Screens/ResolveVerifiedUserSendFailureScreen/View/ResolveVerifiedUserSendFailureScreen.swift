@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct ResolveVerifiedUserSendFailureScreen: View {
-    @ObservedObject var context: ResolveVerifiedUserSendFailureScreenViewModel.Context
+    let context: ResolveVerifiedUserSendFailureScreenViewModel.Context
     @State private var sheetFrame: CGRect = .zero
     
     var body: some View {

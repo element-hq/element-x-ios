@@ -95,6 +95,9 @@ packages:
   Algorithms:
     url: https://github.com/apple/swift-algorithms
     minorVersion: 1.2.1
+  AsyncAlgorithms:
+    url: https://github.com/apple/swift-async-algorithms
+    minorVersion: 1.0.0
   Collections:
     url: https://github.com/apple/swift-collections
     minorVersion: 1.2.0

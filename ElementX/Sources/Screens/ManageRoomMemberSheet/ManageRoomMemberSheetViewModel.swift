@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import SwiftUI
 
-typealias ManageRoomMemberSheetViewModelType = StateStoreViewModel<ManageRoomMemberSheetViewState, ManageRoomMemberSheetViewAction>
+typealias ManageRoomMemberSheetViewModelType = StateStoreViewModelV2<ManageRoomMemberSheetViewState, ManageRoomMemberSheetViewAction>
 
 class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, ManageRoomMemberSheetViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol

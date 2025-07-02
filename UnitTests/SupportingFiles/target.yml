@@ -32,6 +32,7 @@ targets:
     dependencies:
     - target: ElementX
     - package: MatrixRustSDK
+    - package: AsyncAlgorithms
 
     info:
       path: ../SupportingFiles/Info.plist

@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import AsyncAlgorithms
 import Combine
 import MatrixRustSDK
 import SwiftUI
@@ -48,9 +49,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
-        let deferred = deferFulfillment(context.$viewState) { state in
-            state.bindings.leaveRoomAlertItem != nil
-        }
+        let deferred = deferFulfillment(context.observe(\.viewState.bindings.leaveRoomAlertItem)) { $0 != nil }
         
         context.send(viewAction: .processTapLeave)
         try await deferred.fulfill()
@@ -71,9 +70,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
-        let deferred = deferFulfillment(context.$viewState) { state in
-            state.bindings.leaveRoomAlertItem != nil
-        }
+        let deferred = deferFulfillment(context.observe(\.viewState.bindings.leaveRoomAlertItem)) { $0 != nil }
         
         context.send(viewAction: .processTapLeave)
         
@@ -150,9 +147,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        let deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.dmRecipientInfo != nil
-        }
+        let deferred = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
         try await deferred.fulfill()
         
@@ -174,21 +169,18 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.dmRecipientInfo != nil
-        }
+        let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
-        try await deferred.fulfill()
+        try await deferredRecipient.fulfill()
         
         XCTAssertEqual(context.viewState.dmRecipientInfo?.member, RoomMemberDetails(withProxy: recipient))
-        
-        deferred = deferFulfillment(viewModel.context.$viewState,
-                                    keyPath: \.isProcessingIgnoreRequest,
-                                    transitionValues: [false, true, false])
+                                    
+        let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
+                                                  transitionValues: [false, true, false])
         
         context.send(viewAction: .ignoreConfirmed)
         
-        try await deferred.fulfill()
+        try await deferredProcessing.fulfill()
         
         XCTAssert(context.viewState.dmRecipientInfo?.member.isIgnored == true)
     }
@@ -209,21 +201,18 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.dmRecipientInfo != nil
-        }
+        let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
-        try await deferred.fulfill()
+        try await deferredRecipient.fulfill()
         
         XCTAssertEqual(context.viewState.dmRecipientInfo?.member, RoomMemberDetails(withProxy: recipient))
         
-        deferred = deferFulfillment(viewModel.context.$viewState,
-                                    keyPath: \.isProcessingIgnoreRequest,
-                                    transitionValues: [false, true, false])
+        let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
+                                                  transitionValues: [false, true, false])
         
         context.send(viewAction: .ignoreConfirmed)
         
-        try await deferred.fulfill()
+        try await deferredProcessing.fulfill()
         
         XCTAssert(context.viewState.dmRecipientInfo?.member.isIgnored == false)
         XCTAssertNotNil(context.alertInfo)
@@ -243,21 +232,18 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.dmRecipientInfo != nil
-        }
+        let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
-        try await deferred.fulfill()
+        try await deferredRecipient.fulfill()
         
         XCTAssertEqual(context.viewState.dmRecipientInfo?.member, RoomMemberDetails(withProxy: recipient))
         
-        deferred = deferFulfillment(viewModel.context.$viewState,
-                                    keyPath: \.isProcessingIgnoreRequest,
-                                    transitionValues: [false, true, false])
+        let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
+                                                  transitionValues: [false, true, false])
         
         context.send(viewAction: .unignoreConfirmed)
                 
-        try await deferred.fulfill()
+        try await deferredProcessing.fulfill()
         
         XCTAssert(context.viewState.dmRecipientInfo?.member.isIgnored == false)
     }
@@ -278,21 +264,18 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        var deferred = deferFulfillment(viewModel.context.$viewState) { state in
-            state.dmRecipientInfo != nil
-        }
+        let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
         
-        try await deferred.fulfill()
+        try await deferredRecipient.fulfill()
         
         XCTAssertEqual(context.viewState.dmRecipientInfo?.member, RoomMemberDetails(withProxy: recipient))
         
-        deferred = deferFulfillment(viewModel.context.$viewState,
-                                    keyPath: \.isProcessingIgnoreRequest,
-                                    transitionValues: [false, true, false])
+        let deferredProcessing = deferFulfillment(viewModel.context.observe(\.viewState.isProcessingIgnoreRequest),
+                                                  transitionValues: [false, true, false])
         
         context.send(viewAction: .unignoreConfirmed)
                 
-        try await deferred.fulfill()
+        try await deferredProcessing.fulfill()
         
         XCTAssert(context.viewState.dmRecipientInfo?.member.isIgnored == true)
         XCTAssertNotNil(context.alertInfo)
@@ -314,7 +297,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
+        _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
         XCTAssertFalse(context.viewState.canInviteUsers)
     }
@@ -332,7 +315,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
+        _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
         XCTAssertTrue(context.viewState.canInviteUsers)
         
@@ -385,7 +368,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
+        _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
         XCTAssertTrue(context.viewState.canEditRoomAvatar)
         XCTAssertFalse(context.viewState.canEditRoomName)
@@ -425,7 +408,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
+        _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
         XCTAssertFalse(context.viewState.canEditRoomAvatar)
         XCTAssertTrue(context.viewState.canEditRoomName)
@@ -465,7 +448,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
+        _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
         XCTAssertFalse(context.viewState.canEditRoomAvatar)
         XCTAssertFalse(context.viewState.canEditRoomName)
@@ -486,7 +469,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
+        _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
         XCTAssertFalse(context.viewState.canEditRoomAvatar)
         XCTAssertFalse(context.viewState.canEditRoomName)
@@ -507,7 +490,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
+        _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
         XCTAssertFalse(context.viewState.canEdit)
     }
@@ -526,17 +509,13 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        var deferred = deferFulfillment(context.$viewState) { state in
-            state.notificationSettingsState.isError
-        }
+        var deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { $0.isError }
         
         try await deferred.fulfill()
         
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         
-        deferred = deferFulfillment(context.$viewState) { state in
-            state.notificationSettingsState.isError
-        }
+        deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { $0.isError }
         
         try await deferred.fulfill()
         
@@ -551,9 +530,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testNotificationDefaultMode() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: true))
         
-        let deferred = deferFulfillment(context.$viewState) { state in
-            state.notificationSettingsState.isLoaded
-        }
+        let deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { $0.isLoaded }
         
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
@@ -564,9 +541,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testNotificationCustomMode() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .allMessages, isDefault: false))
         
-        let deferred = deferFulfillment(context.$viewState) { state in
-            state.notificationSettingsState.isCustom
-        }
+        let deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { $0.isCustom }
         
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
@@ -577,14 +552,12 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testNotificationRoomMuted() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mute, isDefault: false))
         
-        let deferred = deferFulfillment(context.$viewState) { state in
-            state.notificationSettingsState.isLoaded
-        }
+        let deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { $0.isLoaded }
         
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
         
-        _ = await context.$viewState.debounce(for: .milliseconds(100), scheduler: DispatchQueue.main).values.first()
+        _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
         
         XCTAssertEqual(context.viewState.notificationShortcutButtonTitle, L10n.commonUnmute)
         XCTAssertEqual(context.viewState.notificationShortcutButtonIcon, \.notificationsOff)
@@ -593,9 +566,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     func testNotificationRoomNotMuted() async throws {
         notificationSettingsProxyMock.getNotificationSettingsRoomIdIsEncryptedIsOneToOneReturnValue = RoomNotificationSettingsProxyMock(with: .init(mode: .mentionsAndKeywordsOnly, isDefault: false))
         
-        let deferred = deferFulfillment(context.$viewState) { state in
-            state.notificationSettingsState.isLoaded
-        }
+        let deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { $0.isLoaded }
         
         notificationSettingsProxyMock.callbacks.send(.settingsDidChange)
         try await deferred.fulfill()
@@ -667,12 +638,10 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         
         XCTAssertFalse(context.viewState.isProcessingMuteToggleAction)
         
-        let deferred = deferFulfillment(context.$viewState) { state in
-            switch state.notificationSettingsState {
-            case .loaded(settings: let settings):
-                return settings.mode == .mute
-            default:
-                return false
+        let deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { state in
+            switch state {
+            case .loaded(settings: let settings): settings.mode == .mute
+            default: false
             }
         }
         
@@ -700,12 +669,10 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         
         XCTAssertFalse(context.viewState.isProcessingMuteToggleAction)
         
-        let deferred = deferFulfillment(context.$viewState) { state in
-            switch state.notificationSettingsState {
-            case .loaded(settings: let settings):
-                return settings.mode == .allMessages
-            default:
-                return false
+        let deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { state in
+            switch state {
+            case .loaded(settings: let settings): settings.mode == .allMessages
+            default: false
             }
         }
         
@@ -736,7 +703,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        let deferred = deferFulfillment(context.$viewState) { state in
+        let deferred = deferFulfillment(context.observe(\.viewState)) { state in
             state.knockRequestsCount == 2 && state.canSeeKnockingRequests
         }
         try await deferred.fulfill()
@@ -759,7 +726,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        let deferred = deferFulfillment(context.$viewState) { state in
+        let deferred = deferFulfillment(context.observe(\.viewState)) { state in
             state.knockRequestsCount == 0 && state.canSeeKnockingRequests
         }
         
@@ -784,7 +751,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        let deferred = deferFulfillment(context.$viewState) { state in
+        let deferred = deferFulfillment(context.observe(\.viewState)) { state in
             state.knockRequestsCount == 2 &&
                 state.dmRecipientInfo == nil &&
                 !state.canSeeKnockingRequests &&
@@ -809,7 +776,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
-        let deferred = deferFulfillment(context.$viewState) { state in
+        let deferred = deferFulfillment(context.observe(\.viewState)) { state in
             state.knockRequestsCount == 2 &&
                 !state.canSeeKnockingRequests &&
                 state.dmRecipientInfo != nil &&

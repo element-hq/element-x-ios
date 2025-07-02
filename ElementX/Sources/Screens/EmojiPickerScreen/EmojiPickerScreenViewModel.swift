@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias EmojiPickerScreenViewModelType = StateStoreViewModel<EmojiPickerScreenViewState, EmojiPickerScreenViewAction>
+typealias EmojiPickerScreenViewModelType = StateStoreViewModelV2<EmojiPickerScreenViewState, EmojiPickerScreenViewAction>
 
 class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<EmojiPickerScreenViewModelAction, Never> = .init()
