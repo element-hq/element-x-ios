@@ -50,11 +50,8 @@ struct HomeScreen: View {
                 },
                 onTabSelected: { tab in
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            showBackToTop = false
-                            hideNavigationBar = false
-                            scrollViewAdapter.scrollToTop()
-                        }
+                        showBackToTop = false
+                        hideNavigationBar = false
                     }
                     selectedTab = tab
                 },
