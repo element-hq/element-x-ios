@@ -82,7 +82,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
             widgetSettings = try newVirtualElementCallWidget(props: .init(elementCallUrl: baseURL.absoluteString,
                                                                           widgetId: widgetID,
                                                                           parentUrl: nil,
-                                                                          header: .appBar,
+                                                                          header: .some(.none),
                                                                           hideHeader: nil,
                                                                           preload: nil,
                                                                           fontScale: nil,
