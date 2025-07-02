@@ -16,10 +16,21 @@ struct CallScreen: View {
     @ObservedObject var context: CallScreenViewModel.Context
     
     var body: some View {
-        content
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .alert(item: $context.alertInfo)
+        NavigationStack {
+            content
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button { context.send(viewAction: .navigateBack) } label: {
+                            Image(systemSymbol: .chevronBackward)
+                                .fontWeight(.semibold)
+                        }
+                    }
+                }
+        }
+        .alert(item: $context.alertInfo)
     }
     
     @ViewBuilder
@@ -174,8 +185,6 @@ private struct CallView: UIViewRepresentable {
             case .onOutputDeviceSelect:
                 guard let deviceID = message.body as? String else { return }
                 viewModelContext?.send(viewAction: .outputDeviceSelected(deviceID: deviceID))
-            case .onBackButtonPressed:
-                viewModelContext?.send(viewAction: .navigateBack)
             }
         }
         
@@ -345,6 +354,8 @@ struct CallScreen_Previews: PreviewProvider {
     }()
     
     static var previews: some View {
-        CallScreen(context: viewModel.context)
+        NavigationStack {
+            CallScreen(context: viewModel.context)
+        }
     }
 }

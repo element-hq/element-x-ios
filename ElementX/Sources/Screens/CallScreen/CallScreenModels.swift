@@ -56,8 +56,6 @@ enum CallScreenJavaScriptMessageName: String, CaseIterable {
     case showNativeOutputDevicePicker
     /// Used to determine if the webview has selected the earpiece or not.
     case onOutputDeviceSelect
-    /// Used to handle the webview back button
-    case onBackButtonPressed
     
     private var postMessageScript: String {
         switch self {
@@ -88,12 +86,6 @@ enum CallScreenJavaScriptMessageName: String, CaseIterable {
             window.controls.\(rawValue) = (id) => {
                 window.webkit.messageHandlers.\(rawValue).postMessage(id);
             };
-            """
-        case .onBackButtonPressed:
-            """
-            window.controls.\(rawValue) = () => {
-                window.webkit.messageHandlers.\(rawValue).postMessage("");
-            }
             """
         }
     }
