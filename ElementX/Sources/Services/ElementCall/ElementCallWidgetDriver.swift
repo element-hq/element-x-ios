@@ -83,7 +83,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
                                                                           widgetId: widgetID,
                                                                           parentUrl: nil,
                                                                           header: .some(.none),
-                                                                          hideHeader: nil,
+                                                                          hideHeader: true,
                                                                           preload: nil,
                                                                           fontScale: nil,
                                                                           appPrompt: false,
