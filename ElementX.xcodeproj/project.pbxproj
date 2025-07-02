@@ -1943,7 +1943,6 @@
 		79F31B272E02BE5A0043E100 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 79F31B262E02BE5A0043E100 /* FirebaseRemoteConfig */; };
 		79F31B292E02BE930043E100 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 79F31B282E02BE930043E100 /* FirebaseCore */; };
 		79F31B2B2E02BE9E0043E100 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 79F31B2A2E02BE9E0043E100 /* FirebaseRemoteConfig */; };
-		79F31B2D2E02EDCE0043E100 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 79F31B2C2E02EDCE0043E100 /* GoogleService-Info.plist */; };
 		79F31B2E2E02EDCE0043E100 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 79F31B2C2E02EDCE0043E100 /* GoogleService-Info.plist */; };
 		79F31B2F2E02EDCE0043E100 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 79F31B2C2E02EDCE0043E100 /* GoogleService-Info.plist */; };
 		79F31B312E02F5F80043E100 /* AppForceUpdateScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F31B302E02F5EF0043E100 /* AppForceUpdateScreen.swift */; };
@@ -8885,7 +8884,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				18DDDF9A2D1573FC00CBB04E /* zero_secrets.json in Resources */,
-				79F31B2D2E02EDCE0043E100 /* GoogleService-Info.plist in Resources */,
 				7FED77802940EA7DF4D0D3A2 /* PrivacyInfo.xcprivacy in Resources */,
 				D2D70B5DB1A5E4AF0CD88330 /* target.yml in Resources */,
 			);
@@ -11851,7 +11849,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.16.1;
+				MARKETING_VERSION = 0.16.2;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -11887,7 +11885,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.16.1;
+				MARKETING_VERSION = 0.16.2;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
