@@ -97,17 +97,16 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
                 // Continue anyway without the screenshot.
             }
         }
-        let ed25519 = await clientProxy?.ed25519Base64()
-        let curve25519 = await clientProxy?.curve25519Base64()
-        let bugReport = BugReport(userID: clientProxy?.userID,
-                                  deviceID: clientProxy?.deviceID,
-                                  ed25519: ed25519,
-                                  curve25519: curve25519,
-                                  text: context.reportText,
-                                  logFiles: context.sendingLogsEnabled ? logFiles : nil,
-                                  canContact: context.canContact,
-                                  githubLabels: [],
-                                  files: files)
+        
+        let bugReport = await BugReport(userID: clientProxy?.userID,
+                                        deviceID: clientProxy?.deviceID,
+                                        ed25519: clientProxy?.ed25519Base64(),
+                                        curve25519: clientProxy?.curve25519Base64(),
+                                        text: context.reportText,
+                                        logFiles: context.sendingLogsEnabled ? logFiles : nil,
+                                        canContact: context.canContact,
+                                        githubLabels: [],
+                                        files: files)
         
         switch await bugReportService.submitBugReport(bugReport,
                                                       progressListener: progressSubject) {
