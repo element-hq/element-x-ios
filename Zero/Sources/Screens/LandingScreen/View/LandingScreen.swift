@@ -81,11 +81,9 @@ struct LandingScreen: View {
                     Text("Invite Code")
                         .foregroundColor(.compound.textSecondary)
                 }
-//                .limitInputLength(context.viewState.VALID_INVITE_CODE_LENGTH, text: $context.inviteCode)
                 .frame(maxWidth: 200)
                 .textFieldStyle(.element(accessibilityIdentifier: "create-account_invite_code"))
                 .disableAutocorrection(true)
-                .autocapitalization(.allCharacters)
                 .submitLabel(.next)
                 .onSubmit {
                     if context.viewState.isInviteCodeValid {
