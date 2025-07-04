@@ -7173,6 +7173,77 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 
+    //MARK: - threadsEnabled
+
+    var threadsEnabledEnabledUnderlyingCallsCount = 0
+    open var threadsEnabledEnabledCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return threadsEnabledEnabledUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = threadsEnabledEnabledUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                threadsEnabledEnabledUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    threadsEnabledEnabledUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var threadsEnabledEnabledCalled: Bool {
+        return threadsEnabledEnabledCallsCount > 0
+    }
+    open var threadsEnabledEnabledReceivedEnabled: Bool?
+    open var threadsEnabledEnabledReceivedInvocations: [Bool] = []
+
+    var threadsEnabledEnabledUnderlyingReturnValue: ClientBuilder!
+    open var threadsEnabledEnabledReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return threadsEnabledEnabledUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = threadsEnabledEnabledUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                threadsEnabledEnabledUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    threadsEnabledEnabledUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var threadsEnabledEnabledClosure: ((Bool) -> ClientBuilder)?
+
+    open override func threadsEnabled(enabled: Bool) -> ClientBuilder {
+        threadsEnabledEnabledCallsCount += 1
+        threadsEnabledEnabledReceivedEnabled = enabled
+        DispatchQueue.main.async {
+            self.threadsEnabledEnabledReceivedInvocations.append(enabled)
+        }
+        if let threadsEnabledEnabledClosure = threadsEnabledEnabledClosure {
+            return threadsEnabledEnabledClosure(enabled)
+        } else {
+            return threadsEnabledEnabledReturnValue
+        }
+    }
+
     //MARK: - userAgent
 
     var userAgentUserAgentUnderlyingCallsCount = 0
@@ -10011,13 +10082,13 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
     open var getNotificationRoomIdEventIdReceivedArguments: (roomId: String, eventId: String)?
     open var getNotificationRoomIdEventIdReceivedInvocations: [(roomId: String, eventId: String)] = []
 
-    var getNotificationRoomIdEventIdUnderlyingReturnValue: NotificationItem?
-    open var getNotificationRoomIdEventIdReturnValue: NotificationItem? {
+    var getNotificationRoomIdEventIdUnderlyingReturnValue: NotificationStatus!
+    open var getNotificationRoomIdEventIdReturnValue: NotificationStatus! {
         get {
             if Thread.isMainThread {
                 return getNotificationRoomIdEventIdUnderlyingReturnValue
             } else {
-                var returnValue: NotificationItem?? = nil
+                var returnValue: NotificationStatus? = nil
                 DispatchQueue.main.sync {
                     returnValue = getNotificationRoomIdEventIdUnderlyingReturnValue
                 }
@@ -10035,9 +10106,9 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
             }
         }
     }
-    open var getNotificationRoomIdEventIdClosure: ((String, String) async throws -> NotificationItem?)?
+    open var getNotificationRoomIdEventIdClosure: ((String, String) async throws -> NotificationStatus)?
 
-    open override func getNotification(roomId: String, eventId: String) async throws -> NotificationItem? {
+    open override func getNotification(roomId: String, eventId: String) async throws -> NotificationStatus {
         if let error = getNotificationRoomIdEventIdThrowableError {
             throw error
         }
@@ -10086,13 +10157,13 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
     open var getNotificationsRequestsReceivedRequests: [NotificationItemsRequest]?
     open var getNotificationsRequestsReceivedInvocations: [[NotificationItemsRequest]] = []
 
-    var getNotificationsRequestsUnderlyingReturnValue: [String: NotificationItem]!
-    open var getNotificationsRequestsReturnValue: [String: NotificationItem]! {
+    var getNotificationsRequestsUnderlyingReturnValue: [String: BatchNotificationResult]!
+    open var getNotificationsRequestsReturnValue: [String: BatchNotificationResult]! {
         get {
             if Thread.isMainThread {
                 return getNotificationsRequestsUnderlyingReturnValue
             } else {
-                var returnValue: [String: NotificationItem]? = nil
+                var returnValue: [String: BatchNotificationResult]? = nil
                 DispatchQueue.main.sync {
                     returnValue = getNotificationsRequestsUnderlyingReturnValue
                 }
@@ -10110,9 +10181,9 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
             }
         }
     }
-    open var getNotificationsRequestsClosure: (([NotificationItemsRequest]) async throws -> [String: NotificationItem])?
+    open var getNotificationsRequestsClosure: (([NotificationItemsRequest]) async throws -> [String: BatchNotificationResult])?
 
-    open override func getNotifications(requests: [NotificationItemsRequest]) async throws -> [String: NotificationItem] {
+    open override func getNotifications(requests: [NotificationItemsRequest]) async throws -> [String: BatchNotificationResult] {
         if let error = getNotificationsRequestsThrowableError {
             throw error
         }
