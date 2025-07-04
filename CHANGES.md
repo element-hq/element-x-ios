@@ -1,3 +1,26 @@
+## Changes in 25.07.1 (2025-07-04)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix some panics caused by SDK order assertions. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4281
+* Fix a bug with switching to bluetooth earphones during a call. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4285
+
+⚠️ API Changes
+* Adopt StateStoreViewModelV2 in more screens. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4275
+
+🧱 Build
+* Update the project for Xcode 16.4 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4277
+
+Others
+* Update dependency apple/swift-argument-parser to from: "1.6.1" by @renovate in https://github.com/element-hq/element-x-ios/pull/4278
+* Update Element Call to the actual release of 0.13.0. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4279
+* Add a few more labels when sending a rageshake. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4284
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4286
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.07.0...release/25.07.1
+
 ## Changes in 25.07.0 (2025-07-01)
 
 ### What's Changed
