@@ -18,12 +18,14 @@ extension ClientBuilder {
                             enableOnlySignedDeviceIsolationMode: Bool,
                             enableKeyShareOnInvite: Bool,
                             requestTimeout: UInt64? = 30000,
-                            maxRequestRetryTime: UInt64? = nil) -> ClientBuilder {
+                            maxRequestRetryTime: UInt64? = nil,
+                            threadsEnabled: Bool) -> ClientBuilder {
         var builder = ClientBuilder()
             .crossProcessStoreLocksHolderName(holderName: InfoPlistReader.main.bundleIdentifier)
             .enableOidcRefreshLock()
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
+            .threadsEnabled(enabled: threadsEnabled)
             .requestConfig(config: .init(retryLimit: 0,
                                          timeout: requestTimeout,
                                          maxConcurrentRequests: nil,
