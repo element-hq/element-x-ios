@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Hangüzenet, időtartam: %1$@";
 "a11y_voice_message_record" = "Hangüzenet felvétele.";
 "a11y_voice_message_stop_recording" = "Rögzítés leállítása";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Elfogadás";
 "action_add_caption" = "Felirat hozzáadása";
 "action_add_to_timeline" = "Hozzáadás az idővonalhoz";
@@ -132,6 +136,10 @@
 "action_view_source" = "Forrás megtekintése";
 "action_yes" = "Igen";
 "action_yes_try_again" = "Igen, újrapróbálkozás";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Kijelentkezés és frissítés";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ már nem támogatja a régi protokollt. Kérjük, jelentkezzen ki és jelentkezzen be újra az alkalmazás használatának folytatásához.";
 "banner_migrate_to_native_sliding_sync_description" = "A kiszolgálója mostantól egy új, gyorsabb protokollt támogat. A frissítéshez jelentkezzen ki, majd jelentkezzen be újra. Ha ezt most megteszi, elkerülheti a kényszerített kijelentkeztetést a régi protokollt eltávolításakor.";

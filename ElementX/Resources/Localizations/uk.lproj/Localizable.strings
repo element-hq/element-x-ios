@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Голосове повідомлення, тривалість: %1$@";
 "a11y_voice_message_record" = "Записати голосове повідомлення.";
 "a11y_voice_message_stop_recording" = "Припинити запис";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Прийняти";
 "action_add_caption" = "Додати підпис";
 "action_add_to_timeline" = "Додати до стрічки";
@@ -132,6 +136,10 @@
 "action_view_source" = "Переглянути джерело";
 "action_yes" = "Так";
 "action_yes_try_again" = "Так, повторити спробу";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Вийти та оновити";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ більше не підтримує старий протокол. Вийдіть і знов увійдіть, щоб продовжити користуватися застосунком.";
 "banner_migrate_to_native_sliding_sync_description" = "Ваш сервер тепер підтримує новий, швидший протокол. Вийдіть із системи та увійдіть знову, щоб оновити систему зараз. Якщо ви зробите це зараз, це допоможе вам уникнути примусового виходу з системи, коли старий протокол буде видалено пізніше.";
@@ -144,7 +152,7 @@
 "common_acceptable_use_policy" = "Політика прийнятного використання";
 "common_adding_caption" = "Додавання підпису";
 "common_advanced_settings" = "Додаткові налаштування";
-"common_an_image" = "an image";
+"common_an_image" = "зображення";
 "common_analytics" = "Аналітика";
 "common_appearance" = "Тема";
 "common_audio" = "Аудіо";

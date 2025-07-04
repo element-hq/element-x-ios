@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Ahots-mezua, iraupena: %1$@";
 "a11y_voice_message_record" = "Grabatu ahots-mezua.";
 "a11y_voice_message_stop_recording" = "Utzi grabatzeari";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Onartu";
 "action_add_caption" = "Gehitu testua";
 "action_add_to_timeline" = "Gehitu denbora-lerrora";
@@ -132,6 +136,10 @@
 "action_view_source" = "Ikusi iturburua";
 "action_yes" = "Bai";
 "action_yes_try_again" = "Bai, saiatu berriro";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Amaitu saioa eta bertsio-berritu";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@(e)k ez da bateragarria lehengo protokoloarekin. Amaitu saioa eta hasi berriro aplikazioa erabiltzen jarraitzeko.";
 "banner_migrate_to_native_sliding_sync_description" = "Orain zure zerbitzaria protokolo berri eta azkarrago batekin da bateragarria. Amaitu saioa eta hasi berriro protokolo berria erabiltzeko. Orain eginez gero, etorkizunean protokolo zaharra kentzen denean ez zaizu behartutako saioa ixtera.";

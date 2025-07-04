@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Запісаць галасавое паведамленне.";
 "a11y_voice_message_stop_recording" = "Спыніць запіс";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Прыняць";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Дадаць у хроніку";
@@ -132,6 +136,10 @@
 "action_view_source" = "Прагляд зыходнага кода";
 "action_yes" = "Так";
 "action_yes_try_again" = "Yes, try again";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Выйсці і абнавіць";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Ваш сервер зараз падтрымлівае новы, хутчэйшы пратакол. Выйдзіце з сістэмы і зноў увайдзіце, каб абнавіць яе. Гэта дапаможа вам пазбегнуць прымусовага выхаду з сістэмы, калі стары пратакол будзе пазней выдалены.";

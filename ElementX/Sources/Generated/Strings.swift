@@ -3108,6 +3108,28 @@ internal enum L10n {
   }
   /// Check UnifiedPush
   internal static var troubleshootNotificationsTestUnifiedPushTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_title") }
+
+  internal enum A11y {
+    /// Other user's avatar
+    internal static var otherUserAvatar: String { return L10n.tr("Localizable", "a11y.other_user_avatar") }
+    /// Room avatar
+    internal static var roomAvatar: String { return L10n.tr("Localizable", "a11y.room_avatar") }
+    /// User avatar
+    internal static var userAvatar: String { return L10n.tr("Localizable", "a11y.user_avatar") }
+    /// Your avatar
+    internal static var yourAvatar: String { return L10n.tr("Localizable", "a11y.your_avatar") }
+  }
+
+  internal enum Action {
+    /// Open context menu
+    internal static var openContextMenu: String { return L10n.tr("Localizable", "action.open_context_menu") }
+    /// Send edited message
+    internal static var sendEditedMessage: String { return L10n.tr("Localizable", "action.send_edited_message") }
+    /// Send voice message
+    internal static var sendVoiceMessage: String { return L10n.tr("Localizable", "action.send_voice_message") }
+    /// View
+    internal static var view: String { return L10n.tr("Localizable", "action.view") }
+  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

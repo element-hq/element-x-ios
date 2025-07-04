@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Φωνητικό μήνυμα, διάρκεια: %1$@";
 "a11y_voice_message_record" = "Εγγραφή φωνητικού μηνύματος.";
 "a11y_voice_message_stop_recording" = "Διακοπή καταγραφής";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Αποδοχή";
 "action_add_caption" = "Προσθήκη λεζάντας";
 "action_add_to_timeline" = "Προσθήκη στο χρονοδιάγραμμα";
@@ -132,6 +136,10 @@
 "action_view_source" = "Προβολή πηγής";
 "action_yes" = "Ναι";
 "action_yes_try_again" = "Ναι, δοκιμή ξανά";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Αποσύνδεση & Αναβάθμιση";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "Το %1$@ δεν υποστηρίζει πλέον το παλιό πρωτόκολλο. Αποσυνδεθείτε και συνδεθείτε ξανά για να συνεχίσετε να χρησιμοποιείτε την εφαρμογή.";
 "banner_migrate_to_native_sliding_sync_description" = "Ο διακομιστής σου υποστηρίζει τώρα ένα νέο, ταχύτερο πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για αναβάθμιση τώρα. Κάνοντας αυτό τώρα θα σε βοηθήσει να αποφύγεις μια αναγκαστική αποσύνδεση όταν το παλιό πρωτόκολλο καταργηθεί αργότερα.";

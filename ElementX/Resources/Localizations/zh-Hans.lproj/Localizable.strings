@@ -30,6 +30,10 @@
 "a11y_voice_message" = "语音消息，时长：%1$@";
 "a11y_voice_message_record" = "录制语音消息";
 "a11y_voice_message_stop_recording" = "停止录制";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "接受";
 "action_add_caption" = "添加标题";
 "action_add_to_timeline" = "添加到时间线";
@@ -132,6 +136,10 @@
 "action_view_source" = "查看源码";
 "action_yes" = "是";
 "action_yes_try_again" = "是的，再试一次";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "登出并升级";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ 不再支持旧协议。请注销并重新登录以继续使用该应用程序。";
 "banner_migrate_to_native_sliding_sync_description" = "您的服务器现在支持更快的新协议。现在登出并重新登录以进行升级。现在这样做可以帮助您避免在以后删除旧协议时被强制登出。";
