@@ -30,6 +30,10 @@
 "a11y_voice_message" = "語音訊息，時長：%1$@";
 "a11y_voice_message_record" = "錄製語音訊息。";
 "a11y_voice_message_stop_recording" = "停止錄音";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "接受";
 "action_add_caption" = "新增標題";
 "action_add_to_timeline" = "新增至時間軸";
@@ -132,6 +136,10 @@
 "action_view_source" = "檢視來源";
 "action_yes" = "是";
 "action_yes_try_again" = "是的，再試一次";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "登出並升級";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ 不再支援舊版通訊協定。請登出並重新登入以繼續使用應用程式。";
 "banner_migrate_to_native_sliding_sync_description" = "您的伺服器現在支援新的、更快的協定。立即登出並重新登入以進行升級。現在這樣做將協助您避免在稍後移除舊協定時被強制登出。";

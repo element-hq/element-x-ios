@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Sesli mesajı kaydedin.";
 "a11y_voice_message_stop_recording" = "Kaydı durdur";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Kabul et";
 "action_add_caption" = "Açıklama ekle";
 "action_add_to_timeline" = "Zaman çizelgesine ekle";
@@ -132,6 +136,10 @@
 "action_view_source" = "Kaynağı görüntüle";
 "action_yes" = "Evet";
 "action_yes_try_again" = "Evet, tekrar dene";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Çıkış Yap ve Yükselt";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Sunucunuz artık yeni, daha hızlı bir protokolü destekliyor. Şimdi oturumu kapatıp tekrar oturum açarak yükseltme yapın. Bunu şimdi yapmak, eski protokol daha sonra kaldırıldığında zorunlu oturum kapatmayı önlemenize yardımcı olacaktır.";

@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Înregistrați un mesaj vocal";
 "a11y_voice_message_stop_recording" = "Opriți înregistrarea";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Acceptați";
 "action_add_caption" = "Add caption";
 "action_add_to_timeline" = "Adăugați conversației";
@@ -132,6 +136,10 @@
 "action_view_source" = "Vedeți sursă";
 "action_yes" = "Da";
 "action_yes_try_again" = "Yes, try again";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Deconectați-vă și faceți upgrade";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Serverul dvs. acceptă acum un protocol nou, mai rapid. Deconectați-vă și conectați-vă din nou pentru a face upgrade acum. Dacă faceți acest lucru acum, vă va ajuta să evitați o deconectare forțată atunci când vechiul protocol este eliminat ulterior.";

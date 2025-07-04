@@ -121,9 +121,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d reply</string>
-			<key>other</key>
-			<string>%1$d replies</string>
+			<string>%1$d відповідь</string>
+			<key>few</key>
+			<string>%1$d відповіді</string>
+			<key>many</key>
+			<string>%1$d відповідей</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
