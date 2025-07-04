@@ -63,7 +63,8 @@ final class NSEUserSession {
                          enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
                          enableKeyShareOnInvite: appSettings.enableKeyShareOnInvite,
                          requestTimeout: 15000,
-                         maxRequestRetryTime: 5000)
+                         maxRequestRetryTime: 5000,
+                         threadsEnabled: appSettings.threadsEnabled)
             .systemIsMemoryConstrained()
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
