@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Hlasová správa, dĺžka: %1$@";
 "a11y_voice_message_record" = "Nahrať hlasovú správu.";
 "a11y_voice_message_stop_recording" = "Zastaviť nahrávanie";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Prijať";
 "action_add_caption" = "Pridať titulok";
 "action_add_to_timeline" = "Pridať na časovú os";
@@ -132,6 +136,10 @@
 "action_view_source" = "Zobraziť zdroj";
 "action_yes" = "Áno";
 "action_yes_try_again" = "Áno, skúsiť to znova";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Odhlásiť sa a aktualizovať";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ už nepodporuje starý protokol. Odhláste sa a znova prihláste, aby ste mohli pokračovať v používaní aplikácie.";
 "banner_migrate_to_native_sliding_sync_description" = "Váš server teraz podporuje nový, rýchlejší protokol. Odhláste sa a prihláste sa znova, aby ste mohli aktualizovať. Ak to urobíte teraz, pomôže vám vyhnúť sa nútenému odhláseniu, keď sa starý protokol neskôr odstráni.";

@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Ääniviesti, kesto: %1$@";
 "a11y_voice_message_record" = "Nauhoita ääniviesti.";
 "a11y_voice_message_stop_recording" = "Lopeta nauhoittaminen";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Hyväksy";
 "action_add_caption" = "Lisää kuvateksti";
 "action_add_to_timeline" = "Lisää aikajanalle";
@@ -132,6 +136,10 @@
 "action_view_source" = "Näytä lähde";
 "action_yes" = "Kyllä";
 "action_yes_try_again" = "Kyllä, yritä uudelleen";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Kirjaudu Ulos & Päivitä";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ei enää tue vanhaa protokollaa. Kirjaudu ulos ja takaisin sisään jatkaaksesi sovelluksen käyttöä.";
 "banner_migrate_to_native_sliding_sync_description" = "Palvelimesi tukee nyt uutta, nopeampaa protokollaa. Kirjaudu ulos ja takaisin sisään päivittääksesi nyt. Jos teet tämän nyt, voit välttää pakotetun uloskirjautumisen, kun vanha protokolla poistetaan myöhemmin.";

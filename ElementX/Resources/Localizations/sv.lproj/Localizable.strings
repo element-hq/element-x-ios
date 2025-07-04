@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Röstmeddelande, varaktighet: %1$@";
 "a11y_voice_message_record" = "Spela in röstmeddelande.";
 "a11y_voice_message_stop_recording" = "Stoppa inspelning";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Godkänn";
 "action_add_caption" = "Lägg till bildtext";
 "action_add_to_timeline" = "Lägg till i tidslinjen";
@@ -132,6 +136,10 @@
 "action_view_source" = "Visa källkod";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, försök igen";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Logga ut och uppgradera";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ stöder inte längre det gamla protokollet. Logga ut och logga in igen för att fortsätta använda appen.";
 "banner_migrate_to_native_sliding_sync_description" = "Din server stöder nu ett nytt, snabbare protokoll. Logga ut och logga in igen för att uppgradera nu. Om du gör detta nu hjälper du dig att undvika en tvingad utloggning när det gamla protokollet tas bort senare.";

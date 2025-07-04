@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Talemelding, lengde: %1$@";
 "a11y_voice_message_record" = "Ta opp talemelding.";
 "a11y_voice_message_stop_recording" = "Stopp opptaket";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Godta";
 "action_add_caption" = "Legg til bildetekst";
 "action_add_to_timeline" = "Legg til i tidslinjen";
@@ -132,6 +136,10 @@
 "action_view_source" = "Vis kilde";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, prøv igjen";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Logg ut og oppgrader";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ støtter ikke lenger den gamle protokollen. Logg ut og logg inn igjen for å fortsette å bruke appen.";
 "banner_migrate_to_native_sliding_sync_description" = "Serveren din støtter nå en ny, raskere protokoll. Logg ut og logg inn igjen for å oppgradere nå. Ved å gjøre dette nå, unngår du å bli tvunget til å logge ut når den gamle protokollen fjernes senere.";

@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Mensaje de voz, duración: %1$@";
 "a11y_voice_message_record" = "Grabar mensaje de voz";
 "a11y_voice_message_stop_recording" = "Detener grabación";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Aceptar";
 "action_add_caption" = "Agregar leyenda";
 "action_add_to_timeline" = "Añadir a la cronología";
@@ -132,6 +136,10 @@
 "action_view_source" = "Ver fuente";
 "action_yes" = "Sí";
 "action_yes_try_again" = "Sí, intentar de nuevo";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Cerrar sesión y actualizar";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ya no es compatible con el antiguo protocolo. Cierra sesión y vuelve a iniciarla para seguir usando la aplicación.";
 "banner_migrate_to_native_sliding_sync_description" = "Tu servidor es ahora compatible con un protocolo nuevo y más rápido. Cierra la sesión y vuelve a iniciarla para actualizar ahora. Haciéndolo ahora, evitarás tener que cerrar la sesión cuando se elimine el protocolo antiguo.";

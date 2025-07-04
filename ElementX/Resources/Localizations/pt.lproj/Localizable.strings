@@ -22,7 +22,7 @@
 "a11y_remove_reaction" = "Remover reação com %1$@";
 "a11y_remove_reaction_with" = "Remover reação com %1$@";
 "a11y_send_files" = "Enviar ficheiros";
-"a11y_show_password" = "Mostrar senha";
+"a11y_show_password" = "Mostrar palavra-passe";
 "a11y_start_call" = "Iniciar chamada";
 "a11y_user_menu" = "Menu de utilizador";
 "a11y_view_avatar" = "Ver avatar";
@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Mensagem de voz, duração: %1$@";
 "a11y_voice_message_record" = "Gravar mensagem de voz.";
 "a11y_voice_message_stop_recording" = "Parar gravação";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Aceitar";
 "action_add_caption" = "Adicionar legenda";
 "action_add_to_timeline" = "Adicionar à cronologia";
@@ -53,7 +57,7 @@
 "action_create_a_room" = "Criar uma sala";
 "action_deactivate" = "Desativar";
 "action_deactivate_account" = "Desativar conta";
-"action_decline" = "Rejeitar";
+"action_decline" = "Recusar";
 "action_decline_and_block" = "Recusar e bloquear";
 "action_delete_poll" = "Eliminar sondagem";
 "action_disable" = "Desativar";
@@ -66,7 +70,7 @@
 "action_enable" = "Ativar";
 "action_end_poll" = "Fim da sondagem";
 "action_enter_pin" = "Inserir PIN";
-"action_forgot_password" = "Esqueceu-se da senha?";
+"action_forgot_password" = "Esqueceu-se da palavra-passe?";
 "action_forward" = "Reencaminhar";
 "action_go_back" = "Voltar";
 "action_ignore" = "Ignorar";
@@ -80,7 +84,7 @@
 "action_leave" = "Sair";
 "action_leave_conversation" = "Sair da conversa";
 "action_leave_room" = "Sair da sala";
-"action_load_more" = "Carrega mais";
+"action_load_more" = "Carregar mais";
 "action_manage_account" = "Gerir conta";
 "action_manage_devices" = "Gerir dispositivos";
 "action_message" = "Enviar mensagem";
@@ -88,7 +92,7 @@
 "action_no" = "Não";
 "action_not_now" = "Agora não";
 "action_ok" = "OK";
-"action_open_settings" = "Configurações";
+"action_open_settings" = "Definições";
 "action_open_with" = "Abrir com";
 "action_pin" = "Afixar";
 "action_quick_reply" = "Resposta rápida";
@@ -132,6 +136,10 @@
 "action_view_source" = "Ver fonte";
 "action_yes" = "Sim";
 "action_yes_try_again" = "Sim, tentar novamente";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Sair & Atualizar";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ já não suporta o protocolo antigo. Termina a sessão e volta a iniciar sessão para continuares a utilizar a aplicação.";
 "banner_migrate_to_native_sliding_sync_description" = "O teu servidor suporta agora um protocolo novo e mais rápido. Termina a sessão e volta a iniciar sessão para atualizar agora. Se o fizeres agora, evitarás um fim de sessão forçado quando o protocolo antigo for removido mais tarde.";
@@ -430,7 +438,7 @@
 "screen_bottom_sheet_manage_room_member_banning_user" = "A banir %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Remover";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "Poderão entrar na sala novamente se convidados.";
-"screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Tens a certeza que queres remover este membro?";
+"screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Tens certeza que queres remover este membro?";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Ver perfil";
 "screen_bottom_sheet_manage_room_member_remove" = "Remover da sala";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Remover participante e proibir que entre no futuro?";
