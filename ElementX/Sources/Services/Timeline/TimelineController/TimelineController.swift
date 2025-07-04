@@ -124,16 +124,11 @@ class TimelineController: TimelineControllerProtocol {
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async {
         let receiptType: MatrixRustSDK.ReceiptType = appSettings.sharePresence ? .read : .readPrivate
         
-        // Mark the whole room as read if it's the last timeline item
-        if timelineItems.last?.id == itemID {
-            _ = await roomProxy.markAsRead(receiptType: receiptType)
-        } else {
-            guard let eventID = itemID.eventID else {
-                return
-            }
-            
-            _ = await activeTimeline.sendReadReceipt(for: eventID, type: receiptType)
+        guard let eventID = itemID.eventID else {
+            return
         }
+            
+        _ = await activeTimeline.sendReadReceipt(for: eventID, type: receiptType)
     }
     
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async {
