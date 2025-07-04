@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct RoomScreenFooterView: View {
@@ -23,21 +24,23 @@ struct RoomScreenFooterView: View {
         }
     }
     
-    private var gradientColor: Color {
+    private var gradient: Gradient {
         switch details {
         case .pinViolation:
-            .compound.bgInfoSubtle
+            .compound.info
         case .verificationViolation:
-            .compound.bgCriticalSubtle
+            Gradient(colors: [.compound.bgCriticalSubtle, .clear])
         case .none:
-            Color.compound.bgCanvasDefault
+            Gradient(colors: [.clear])
         }
     }
     
     var body: some View {
         if let details {
             detailsView(details)
-                .highlight(borderColor: borderColor, primaryColor: gradientColor, secondaryColor: .compound.bgCanvasDefault)
+                .highlight(gradient: gradient,
+                           borderColor: borderColor,
+                           backgroundColor: .compound.bgCanvasDefault)
                 .padding(.top, 8)
                 .fixedSize(horizontal: false, vertical: true)
         }

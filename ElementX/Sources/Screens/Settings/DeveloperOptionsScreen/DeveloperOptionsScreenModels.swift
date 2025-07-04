@@ -46,7 +46,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var elementCallBaseURLOverride: URL? { get set }
     var knockingEnabled: Bool { get set }
     var threadsEnabled: Bool { get set }
-    var isNewBloomEnabled: Bool { get set }
     var hideQuietNotificationAlerts: Bool { get set }
 }
 
