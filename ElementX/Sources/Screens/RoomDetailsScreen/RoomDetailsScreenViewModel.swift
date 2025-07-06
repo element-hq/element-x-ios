@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias RoomDetailsScreenViewModelType = StateStoreViewModel<RoomDetailsScreenViewState, RoomDetailsScreenViewAction>
+typealias RoomDetailsScreenViewModelType = StateStoreViewModelV2<RoomDetailsScreenViewState, RoomDetailsScreenViewAction>
 
 class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScreenViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol

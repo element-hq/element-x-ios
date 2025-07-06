@@ -9,7 +9,7 @@ import Combine
 import MatrixRustSDK
 import SwiftUI
 
-typealias UserProfileScreenViewModelType = StateStoreViewModel<UserProfileScreenViewState, UserProfileScreenViewAction>
+typealias UserProfileScreenViewModelType = StateStoreViewModelV2<UserProfileScreenViewState, UserProfileScreenViewAction>
 
 class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScreenViewModelProtocol {
     private let clientProxy: ClientProxyProtocol

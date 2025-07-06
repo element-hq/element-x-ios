@@ -8,7 +8,7 @@
 import Combine
 import Foundation
 
-typealias StaticLocationScreenViewModelType = StateStoreViewModel<StaticLocationScreenViewState, StaticLocationScreenViewAction>
+typealias StaticLocationScreenViewModelType = StateStoreViewModelV2<StaticLocationScreenViewState, StaticLocationScreenViewAction>
 
 class StaticLocationScreenViewModel: StaticLocationScreenViewModelType, StaticLocationScreenViewModelProtocol {
     private let actionsSubject: PassthroughSubject<StaticLocationScreenViewModelAction, Never> = .init()

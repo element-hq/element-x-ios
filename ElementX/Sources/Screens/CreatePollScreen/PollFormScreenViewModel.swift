@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias PollFormScreenViewModelType = StateStoreViewModel<PollFormScreenViewState, PollFormScreenViewAction>
+typealias PollFormScreenViewModelType = StateStoreViewModelV2<PollFormScreenViewState, PollFormScreenViewAction>
 
 class PollFormScreenViewModel: PollFormScreenViewModelType, PollFormScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<PollFormScreenViewModelAction, Never> = .init()

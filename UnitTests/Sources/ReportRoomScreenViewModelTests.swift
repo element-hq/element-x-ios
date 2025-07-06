@@ -90,9 +90,7 @@ class ReportRoomScreenViewModelTests: XCTestCase {
             return .failure(.eventNotFound)
         }
         
-        let deferred = deferFulfillment(context.$viewState) { state in
-            state.bindings.alert != nil
-        }
+        let deferred = deferFulfillment(context.observe(\.viewState.bindings.alert)) { $0 != nil }
         
         context.reason = reason
         context.shouldLeaveRoom = true

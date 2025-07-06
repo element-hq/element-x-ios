@@ -158,6 +158,36 @@ extension XCTestCase {
         }
     }
     
+    /// XCTest utility that assists in subscribing to an async stream and deferring the failure for a particular value until some other actions have been performed.
+    /// - Parameters:
+    ///   - asyncStream: The stream to wait on.
+    ///   - timeout: A timeout after which we give up.
+    ///   - message: An optional custom expectation message
+    ///   - until: callback that evaluates outputs until some condition is reached
+    /// - Returns: The deferred fulfilment to be executed after some actions. The stream's result is not returned from this fulfilment.
+    func deferFailure<Value>(_ asyncStream: AsyncStream<Value>,
+                             timeout: TimeInterval,
+                             message: String? = nil,
+                             until condition: @escaping (Value) -> Bool) -> DeferredFulfillment<Void> {
+        let expectation = expectation(description: message ?? "Awaiting stream")
+        expectation.isInverted = true
+        var hasFulfilled = false
+        
+        let task = Task {
+            for await value in asyncStream {
+                if condition(value), !hasFulfilled {
+                    expectation.fulfill()
+                    hasFulfilled = true
+                }
+            }
+        }
+        
+        return DeferredFulfillment<Void> {
+            await self.fulfillment(of: [expectation], timeout: timeout)
+            task.cancel()
+        }
+    }
+    
     struct DeferredFulfillment<T> {
         let closure: () async throws -> T
         @discardableResult func fulfill() async throws -> T {

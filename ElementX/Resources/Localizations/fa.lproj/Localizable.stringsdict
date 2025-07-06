@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@: %2$d message</string>
+			<string>%1$@:%2$d پیام</string>
 			<key>other</key>
-			<string>%1$@: %2$d messages</string>
+			<string>%1$@:%2$d پیام‌</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -141,9 +141,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d notification</string>
+			<string>%dاعلان</string>
 			<key>other</key>
-			<string>%d notifications</string>
+			<string>%dاعلان‌</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -157,9 +157,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d invitation</string>
+			<string>%d دعوت</string>
 			<key>other</key>
-			<string>%d invitations</string>
+			<string>%d دعوت</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -189,9 +189,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d unread notified message</string>
+			<string>%d پیام اعلان نشده</string>
 			<key>other</key>
-			<string>%d unread notified messages</string>
+			<string>%d پیام اعلان نشده</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -205,9 +205,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d room</string>
+			<string>%d اتاق</string>
 			<key>other</key>
-			<string>%d rooms</string>
+			<string>%d اتاق</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -221,9 +221,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
+			<string>شما %1$d تلاش برای باز کردن قفل دارید</string>
 			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>شما %1$d تلاش برای باز کردن قفل دارید</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -237,9 +237,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Wrong PIN. You have %1$d more chance</string>
+			<string>پین اشتباه است. شما %1$d شانس دیگر دارید</string>
 			<key>other</key>
-			<string>Wrong PIN. You have %1$d more chances</string>
+			<string>پین اشتباه است. شما %1$d شانس دیگر دارید</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -269,9 +269,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d person</string>
+			<string>%1$d نفر</string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d نفر</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -333,9 +333,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d room change</string>
+			<string>%1$dتغییر اتاق</string>
 			<key>other</key>
-			<string>%1$d room changes</string>
+			<string>%1$dتغییر اتاق</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>

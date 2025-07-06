@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Wiadomość głosowa, czas trwania: %1$@";
 "a11y_voice_message_record" = "Nagraj wiadomość głosową.";
 "a11y_voice_message_stop_recording" = "Zatrzymaj nagrywanie";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Akceptuj";
 "action_add_caption" = "Dodaj opis";
 "action_add_to_timeline" = "Dodaj do osi czasu";
@@ -132,6 +136,10 @@
 "action_view_source" = "Wyświetl źródło";
 "action_yes" = "Tak";
 "action_yes_try_again" = "Tak, spróbuj ponownie";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Wyloguj się i zaktualizuj";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ już nie wspiera starego protokołu. Zaloguj się ponownie, aby dalej korzystać z aplikacji.";
 "banner_migrate_to_native_sliding_sync_description" = "Twój serwer obsługuje teraz nowy, szybszy protokół. Wyloguj się i zaloguj ponownie, aby uaktualnić teraz. Zrobienie tego teraz pomoże uniknąć wymuszonego wylogowania, gdy stary protokół zostanie później usunięty.";

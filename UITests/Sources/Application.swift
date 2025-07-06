@@ -47,7 +47,7 @@ enum Application {
         guard deviceModel == requirediPhoneSimulator || deviceModel == requirediPadSimulator else {
             fatalError("Running on \(deviceModel) but we only support \(requirediPhoneSimulator) and \(requirediPadSimulator).")
         }
-        guard UIDevice.current.snapshotName == "iPhone-18.4" || UIDevice.current.snapshotName == "iPad-18.4" else {
+        guard UIDevice.current.snapshotName == "iPhone-18.5" || UIDevice.current.snapshotName == "iPad-18.5" else {
             fatalError("Running on a simulator that hasn't been renamed to match the expected snapshot filenames.")
         }
     }

@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct StaticLocationScreen: View {
-    @ObservedObject var context: StaticLocationScreenViewModel.Context
+    @Bindable var context: StaticLocationScreenViewModel.Context
     
     var body: some View {
         VStack(spacing: 0) {

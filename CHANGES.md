@@ -1,3 +1,86 @@
+## Changes in 25.07.1 (2025-07-04)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix some panics caused by SDK order assertions. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4281
+* Fix a bug with switching to bluetooth earphones during a call. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4285
+
+⚠️ API Changes
+* Adopt StateStoreViewModelV2 in more screens. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4275
+
+🧱 Build
+* Update the project for Xcode 16.4 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4277
+
+Others
+* Update dependency apple/swift-argument-parser to from: "1.6.1" by @renovate in https://github.com/element-hq/element-x-ios/pull/4278
+* Update Element Call to the actual release of 0.13.0. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4279
+* Add a few more labels when sending a rageshake. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4284
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4286
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.07.0...release/25.07.1
+
+## Changes in 25.07.0 (2025-07-01)
+
+### What's Changed
+
+✨ Features
+* Advertise support for `matrix` as a URL scheme. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4236
+
+🙌 Improvements
+* Adopt room info power levels by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4245
+* Adopt new `canOwnUser*` power level methods instead of the throwing ones by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4247
+* EC: handle back navigation from the webview by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4250
+
+🐛 Bugfixes
+* Proper error handling when trying to accept invalid invites by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4232
+* Fix a crash when attempting to send a bug report with excessively large logs. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4243
+* Fix media previews in private room notifications and pagination on upgraded rooms. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4246
+* Be more lenient with the power levels by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4261
+* Fix earpiece button visibility in Element Call. by @toger5 in https://github.com/element-hq/element-x-ios/pull/4263
+* Attempt to fix message composer layout crashes when running as an iPad app on MacOS by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4264
+
+⚠️ API Changes
+* Support runtime customisation of the rageshake URL. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4267
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4240
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4268
+
+🦻 Accessibility
+* Add View Avatar a11y label by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4253
+* Use the close formatting option a11y label by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4254
+* a11y poll improvements by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4255
+* a11y improvement for removing a selected user by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4256
+* voice over focuses title when it changes in session verification view by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4258
+* a11y added a label to the remove all filters button by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4259
+* Stop VoiceOver from reading the screen behind the current call. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4265
+* Added a11y isHeader to the security section list row by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4266
+
+🧱 Build
+* Use mock log files for the BugReportScreenViewModelTests. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4257
+* Make the BuildSDK tool an AsyncParsableCommand and avoid help showing up after the command is run by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4260
+* Fix the calver workflow. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4274
+* Bump the calendar version ready for the next release by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4273
+
+🚧 In development 🚧
+* EC Timeout if it doesn't respond after 30 seconds by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4237
+
+Others
+* Refactor how we deal with user permissions. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4235
+* Expose isLiveKitRTCSupported on the ClientProxy. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4238
+* Update dependency jpsim/Yams to from: "6.0.2" by @renovate in https://github.com/element-hq/element-x-ios/pull/4244
+* Replace the Report a Problem button with the app's version on the start screen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4262
+* Fix flakey AuthenticationService test. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4270
+* Update dependency apple/swift-argument-parser to from: "1.6.0" by @renovate in https://github.com/element-hq/element-x-ios/pull/4271
+* Updated SDK to 25.07.01 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4276
+
+### New Contributors
+* @toger5 made their first contribution in https://github.com/element-hq/element-x-ios/pull/4263
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.06.5...release/25.07.0
+
 ## Changes in 25.06.5 (2025-06-19)
 
 ### What's Changed

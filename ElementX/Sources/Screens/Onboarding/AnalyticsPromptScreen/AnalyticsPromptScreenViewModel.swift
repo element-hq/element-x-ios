@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias AnalyticsPromptScreenViewModelType = StateStoreViewModel<AnalyticsPromptScreenViewState, AnalyticsPromptScreenViewAction>
+typealias AnalyticsPromptScreenViewModelType = StateStoreViewModelV2<AnalyticsPromptScreenViewState, AnalyticsPromptScreenViewAction>
 
 class AnalyticsPromptScreenViewModel: AnalyticsPromptScreenViewModelType, AnalyticsPromptScreenViewModelProtocol {
     private var actionsSubject: PassthroughSubject<AnalyticsPromptScreenViewModelAction, Never> = .init()

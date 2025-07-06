@@ -1,5 +1,5 @@
 {
-  "originHash" : "bd7b53f93032440051ddb74b94ae868aa671ca5117b333194c1c7ecb4b20d522",
+  "originHash" : "f573b0754209479f46b77206f67033b0073bb2df38ede53b3289703615c5a48f",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "b3ceeddf59652a0806c008858ef9885bdd924d4c",
-        "version" : "0.13.0-rc.1"
+        "revision" : "dc273bd1fbb08c41ab517574b39c23ef667718c9",
+        "version" : "0.13.1"
       }
     },
     {
@@ -284,8 +284,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "302397835194e0bb73de876dc2ef2d3e1a7c7740",
-        "version" : "25.6.25-2"
+        "revision" : "9ca4d9e3b6fc15f1decf024a7474b368525ef52a",
+        "version" : "25.7.4"
       }
     },
     {
@@ -403,6 +403,15 @@
       "state" : {
         "revision" : "87e50f483c54e6efd60e885f7f5aa946cee68023",
         "version" : "1.2.1"
+      }
+    },
+    {
+      "identity" : "swift-async-algorithms",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-async-algorithms",
+      "state" : {
+        "revision" : "042e1c4d9d19748c9c228f8d4ebc97bb1e339b0b",
+        "version" : "1.0.4"
       }
     },
     {

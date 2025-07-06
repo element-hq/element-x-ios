@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Message vocal, durée: %1$@";
 "a11y_voice_message_record" = "Enregistrer un message vocal.";
 "a11y_voice_message_stop_recording" = "Arrêter l'enregistrement";
+"a11y.other_user_avatar" = "Avatar de l'autre utilisateur";
+"a11y.room_avatar" = "Avatar du salon";
+"a11y.user_avatar" = "Avatar de l'utilisateur";
+"a11y.your_avatar" = "Votre avatar";
 "action_accept" = "Accepter";
 "action_add_caption" = "Ajouter une légende";
 "action_add_to_timeline" = "Ajouter à la discussion";
@@ -132,6 +136,10 @@
 "action_view_source" = "Afficher la source";
 "action_yes" = "Oui";
 "action_yes_try_again" = "Oui, réessayez";
+"action.open_context_menu" = "Ouvrir le menu contextuel";
+"action.send_edited_message" = "Envoyer un message modifié";
+"action.send_voice_message" = "Envoyer un message vocal";
+"action.view" = "Voir";
 "banner_migrate_to_native_sliding_sync_action" = "Déconnecter et mettre à niveau";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ne prend plus en charge l'ancien protocole. Veuillez vous déconnecter puis vous reconnecter pour continuer à utiliser l'application.";
 "banner_migrate_to_native_sliding_sync_description" = "Votre serveur prend désormais en charge un nouveau protocole plus rapide. Déconnectez-vous, puis reconnectez-vous pour effectuer la mise à niveau dès maintenant. En le faisant tout de suite, vous éviterez une déconnexion forcée lorsque l'ancien protocole sera supprimé.";

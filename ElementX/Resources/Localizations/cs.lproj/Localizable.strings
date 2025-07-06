@@ -30,6 +30,10 @@
 "a11y_voice_message" = "Hlasová zpráva, délka: %1$@";
 "a11y_voice_message_record" = "Nahrajte hlasovou zprávu.";
 "a11y_voice_message_stop_recording" = "Zastavit nahrávání";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Přijmout";
 "action_add_caption" = "Přidat titulek";
 "action_add_to_timeline" = "Přidat na časovou osu";
@@ -132,6 +136,10 @@
 "action_view_source" = "Zobrazit zdroj";
 "action_yes" = "Ano";
 "action_yes_try_again" = "Ano, zkusit znovu";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Odhlásit se a upgradovat";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ již nepodporuje starý protokol. Odhlaste se a znovu přihlaste, abyste mohli pokračovat v používání aplikace.";
 "banner_migrate_to_native_sliding_sync_description" = "Váš server nyní podporuje nový, rychlejší protokol. Chcete-li upgradovat, odhlaste se a znovu se přihlaste. Pokud to uděláte nyní, pomůže vám vyhnout se nucenému odhlášení, když bude starý protokol později odstraněn.";

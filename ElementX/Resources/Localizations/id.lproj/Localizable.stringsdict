@@ -26,10 +26,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d percent of total votes</string>
 			<key>other</key>
-			<string>%1$d percents of total votes</string>
+			<string>%1$d persen dari total suara</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -98,10 +96,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d reply</string>
 			<key>other</key>
-			<string>%1$d replies</string>
+			<string>%1$d balasan</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -268,10 +264,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>%1$d member reacted with %2$@</string>
 			<key>other</key>
-			<string>%1$d members reacted with %2$@</string>
+			<string>%1$d anggota bereaksi dengan %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_including_you_a11y</key>
@@ -284,10 +278,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>You and %1$d member reacted with %2$@</string>
 			<key>other</key>
-			<string>You and %1$d members reacted with %2$@</string>
+			<string>Anda dan %1$d anggota bereaksi dengan %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>

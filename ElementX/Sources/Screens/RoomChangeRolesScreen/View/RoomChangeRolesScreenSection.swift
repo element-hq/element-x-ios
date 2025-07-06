@@ -13,7 +13,7 @@ struct RoomChangeRolesScreenSection: View {
     let title: String
     var isAdministratorsSection = false
     
-    @ObservedObject var context: RoomChangeRolesScreenViewModel.Context
+    let context: RoomChangeRolesScreenViewModel.Context
     
     var body: some View {
         if !members.isEmpty {

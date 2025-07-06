@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias DeclineAndBlockScreenViewModelType = StateStoreViewModel<DeclineAndBlockScreenViewState, DeclineAndBlockScreenViewAction>
+typealias DeclineAndBlockScreenViewModelType = StateStoreViewModelV2<DeclineAndBlockScreenViewState, DeclineAndBlockScreenViewAction>
 
 class DeclineAndBlockScreenViewModel: DeclineAndBlockScreenViewModelType, DeclineAndBlockScreenViewModelProtocol {
     let userID: String

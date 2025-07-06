@@ -68,7 +68,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             fatalError("No bug report URL set, the screen should not be shown in this case.")
         }
         
-        let bugReport = appHooks.bugReportHook.update(bugReport)
+        var bugReport = appHooks.bugReportHook.update(bugReport)
         
         var params = [
             MultipartFormData(key: "text", type: .text(value: bugReport.text)),
@@ -77,6 +77,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         
         if let userID = bugReport.userID {
             params.append(.init(key: "user_id", type: .text(value: userID)))
+        } else {
+            bugReport.githubLabels.append("login")
         }
         
         if let deviceID = bugReport.deviceID {
@@ -88,7 +90,16 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             params.append(.init(key: "device_keys", type: .text(value: compactKeys)))
         }
         
+        if let crashEventID = lastCrashEventID {
+            params.append(MultipartFormData(key: "crash_report", type: .text(value: "<https://sentry.tools.element.io/organizations/element/issues/?project=44&query=\(crashEventID)>")))
+            bugReport.githubLabels.append("crash")
+        }
+        
         params.append(contentsOf: defaultParams)
+        
+        if InfoPlistReader.main.baseBundleIdentifier == "io.element.elementx.nightly" {
+            bugReport.githubLabels.append("Nightly")
+        }
         
         for label in bugReport.githubLabels {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))
@@ -99,10 +110,6 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             for url in logAttachments.files {
                 params.append(MultipartFormData(key: "compressed-log", type: .file(url: url)))
             }
-        }
-        
-        if let crashEventID = lastCrashEventID {
-            params.append(MultipartFormData(key: "crash_report", type: .text(value: "<https://sentry.tools.element.io/organizations/element/issues/?project=44&query=\(crashEventID)>")))
         }
         
         for url in bugReport.files {
