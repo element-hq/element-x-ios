@@ -833,9 +833,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     if let result = await withTimeout(seconds: 10, operation: {
                         await self.userSession.clientProxy.getPostMediaInfo(mediaId: mediaId)
                     }), case let .success(media) = result {
-                        if let url = URL(string: media.signedUrl) {
-                            ImagePrefetcher(urls: [url]).start()
-                        }
+//                        if let url = URL(string: media.signedUrl) {
+//                            ImagePrefetcher(urls: [url]).start()
+//                        }
                         return (post, media)
                     }
                     return nil
