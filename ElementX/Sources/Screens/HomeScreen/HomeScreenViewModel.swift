@@ -9,6 +9,7 @@ import AnalyticsEvents
 import Combine
 import MatrixRustSDK
 import SwiftUI
+import Kingfisher
 
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
 
@@ -69,7 +70,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.currentUserZeroProfile = currentUser
-                self?.fetchWalletData()
+                if ZeroFlaggedFeaturesService.shared.zeroWalletEnabled() {
+                    self?.fetchWalletData()
+                }
             }
             .store(in: &cancellables)
         
@@ -822,22 +825,26 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         let postsToFetchMedia = posts.filter {
             $0.mediaInfo != nil && state.postMediaInfoMap[$0.id] == nil
         }
-        await withTaskGroup(of: (String, ZPostMedia)?.self) { group in
+        await withTaskGroup(of: (HomeScreenPost, ZPostMedia)?.self) { group in
             for post in postsToFetchMedia {
                 group.addTask {
                     guard let mediaId = post.mediaInfo?.id else { return nil }
-                    if let result = await withTimeout(seconds: 5, operation: {
+                    if let result = await withTimeout(seconds: 10, operation: {
                         await self.userSession.clientProxy.getPostMediaInfo(mediaId: mediaId)
-                    }), case let .success(result) = result {
-                        return (post.id, result)
+                    }), case let .success(media) = result {
+                        if let url = URL(string: media.signedUrl) {
+                            ImagePrefetcher(urls: [url]).start()
+                        }
+                        return (post, media)
                     }
                     return nil
                 }
             }
             
             for await item in group {
-                guard let (postId, media) = item else { continue }
-                state.postMediaInfoMap[postId] = HomeScreenPostMediaInfo(media: media)
+                guard let (post, media) = item else { continue }
+//                MXLog.info("FEED_MEDIA_FETCHED: Post: \(post.postText ?? "(no text)"); Media: \(media.signedUrl); IsPreviewImage: \(media.signedUrl.contains("preview")) \n\n")
+                state.postMediaInfoMap[post.id] = HomeScreenPostMediaInfo(media: media)
             }
         }
     }

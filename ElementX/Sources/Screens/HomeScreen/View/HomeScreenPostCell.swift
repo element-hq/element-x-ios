@@ -248,7 +248,18 @@ struct HomePostMediaPreview: View {
                 .cornerRadius(4)
             }
         } else {
+//            if mediaUrlString != nil {
+//                Text("Image Loaded")
+//                    .font(.headline)
+//                    .frame(height: 300)
+//            } else {
+//                Text("LOADING IMAGE...")
+//                    .font(.headline)
+//                    .frame(height: 300)
+//            }
             KFAnimatedImage(mediaURL)
+                .setProcessor(DownsamplingImageProcessor(size: CGSize(width: 300, height: 300)))
+                .scaleFactor(UIScreen.main.scale)
                 .placeholder {
                     ProgressView()
                 }
