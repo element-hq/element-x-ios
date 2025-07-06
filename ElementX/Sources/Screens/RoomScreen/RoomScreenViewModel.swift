@@ -77,13 +77,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         super.init(initialViewState: appHooks.roomScreenHook.update(viewState),
                    mediaProvider: mediaProvider)
         
-        Task {
-            await handleRoomInfoUpdate(roomProxy.infoPublisher.value)
-            await updateVerificationBadge()
-        }
-        
+        updateRoomInfo(roomProxy.infoPublisher.value)
         setupSubscriptions(ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher)
         
+        Task {
+            await updateVerificationBadge()
+        }
         fetchZeroUserProfile()
     }
 
@@ -159,30 +158,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         appSettings.$knockingEnabled
             .weakAssign(to: \.state.isKnockingEnabled, on: self)
             .store(in: &cancellables)
-        
-        let roomInfoSubscription = roomProxy
-            .infoPublisher
-        
-        roomInfoSubscription
-            .throttle(for: .seconds(1), scheduler: DispatchQueue.main, latest: true)
+                
+        roomProxy.infoPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] roomInfo in
-                guard let self else { return }
-                state.roomTitle = roomInfo.displayName ?? roomProxy.id
-                state.roomAvatar = roomInfo.avatar
-                state.hasOngoingCall = roomInfo.hasRoomCall
+                self?.updateRoomInfo(roomInfo)
             }
             .store(in: &cancellables)
-        
-        Task { [weak self] in
-            for await roomInfo in roomInfoSubscription.receive(on: DispatchQueue.main).values {
-                guard !Task.isCancelled else {
-                    return
-                }
-                
-                await self?.handleRoomInfoUpdate(roomInfo)
-            }
-        }
-        .store(in: &cancellables)
         
         let identityStatusChangesPublisher = roomProxy.identityStatusChangesPublisher.receive(on: DispatchQueue.main)
         
@@ -334,7 +316,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func handleRoomInfoUpdate(_ roomInfo: RoomInfoProxy) async {
+    private func updateRoomInfo(_ roomInfo: RoomInfoProxyProtocol) {
+        state.roomTitle = roomInfo.displayName ?? roomProxy.id
+        state.roomAvatar = roomInfo.avatar
+        state.hasOngoingCall = roomInfo.hasRoomCall
         state.hasSuccessor = roomInfo.successor != nil
         
         let pinnedEventIDs = roomInfo.pinnedEventIDs
@@ -350,12 +335,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.isKnockableRoom = false
         }
 
-        let powerLevels = try? await roomProxy.powerLevels().get()
-        state.canSendMessage = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendMessage: .roomMessage).get()) == true
-        state.canJoinCall = (try? powerLevels?.canUserJoinCall(userID: roomProxy.ownUserID).get()) == true
-        state.canAcceptKnocks = (try? powerLevels?.canUserInvite(userID: roomProxy.ownUserID).get()) == true
-        state.canDeclineKnocks = (try? powerLevels?.canUserKick(userID: roomProxy.ownUserID).get()) == true
-        state.canBan = (try? powerLevels?.canUserBan(userID: roomProxy.ownUserID).get()) == true
+        if let powerLevels = roomInfo.powerLevels {
+            state.canSendMessage = powerLevels.canOwnUser(sendMessage: .roomMessage)
+            state.canJoinCall = powerLevels.canOwnUserJoinCall()
+            state.canAcceptKnocks = powerLevels.canOwnUserInvite()
+            state.canDeclineKnocks = powerLevels.canOwnUserKick()
+            state.canBan = powerLevels.canOwnUserBan()
+        }
     }
     
     private func setupPinnedEventsTimelineItemProviderIfNeeded() {

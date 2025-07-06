@@ -10,7 +10,7 @@ import SwiftUI
 
 /// A prompt that asks the user whether they would like to enable Analytics or not.
 struct AnalyticsPromptScreen: View {
-    @ObservedObject var context: AnalyticsPromptScreenViewModel.Context
+    let context: AnalyticsPromptScreenViewModel.Context
     
     var body: some View {
         FullscreenDialog(topPadding: UIConstants.startScreenBreakerScreenTopPadding, background: .gradient) {

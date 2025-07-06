@@ -1,13 +1,13 @@
 import Alamofire
 import Foundation
 
-protocol ZeroRewardsApiProtocol {
+protocol ZeroRewardApiProtocol {
     func fetchMyRewards() async throws -> Result<ZRewards, Error>
 
     func loadZeroCurrenyRate() async throws -> Result<ZeroCurrency, Error>
 }
 
-class ZeroRewardsApi: ZeroRewardsApiProtocol {
+class ZeroRewardApi: ZeroRewardApiProtocol {
     private let appSettings: AppSettings
 
     init(appSettings: AppSettings) {

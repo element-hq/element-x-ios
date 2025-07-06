@@ -25,10 +25,15 @@
 "a11y_show_password" = "Visa lösenord";
 "a11y_start_call" = "Starta ett samtal";
 "a11y_user_menu" = "Användarmeny";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Visa detaljer";
 "a11y_voice_message" = "Röstmeddelande, varaktighet: %1$@";
 "a11y_voice_message_record" = "Spela in röstmeddelande.";
 "a11y_voice_message_stop_recording" = "Stoppa inspelning";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Godkänn";
 "action_add_caption" = "Lägg till bildtext";
 "action_add_to_timeline" = "Lägg till i tidslinjen";
@@ -131,6 +136,10 @@
 "action_view_source" = "Visa källkod";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, försök igen";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Logga ut och uppgradera";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ stöder inte längre det gamla protokollet. Logga ut och logga in igen för att fortsätta använda appen.";
 "banner_migrate_to_native_sliding_sync_description" = "Din server stöder nu ett nytt, snabbare protokoll. Logga ut och logga in igen för att uppgradera nu. Om du gör detta nu hjälper du dig att undvika en tvingad utloggning när det gamla protokollet tas bort senare.";
@@ -539,6 +548,7 @@
 "screen_room_timeline_upgraded_room_action" = "Se gamla meddelanden";
 "screen_room_timeline_upgraded_room_message" = "Det här rummet är en fortsättning på ett annat rum";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "Det här rummet har uppgraderats";
 "screen_security_and_privacy_add_room_address_action" = "Lägg till rumsadress";
 "screen_security_and_privacy_ask_to_join_option_description" = "Vem som helst kan be om att gå med i rummet men en administratör eller moderator måste acceptera begäran.";
@@ -632,6 +642,7 @@
 "screen_bug_report_error_description_too_short" = "Beskrivningen är för kort, vänligen ge mer information om vad som hände. Tack!";
 "screen_bug_report_include_crash_logs" = "Skicka kraschloggar";
 "screen_bug_report_include_logs" = "Tillåt loggar";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Skicka skärmdump";
 "screen_bug_report_logs_description" = "Loggar kommer att inkluderas i ditt meddelande för att se till att allt fungerar korrekt. Om du vill skicka ditt meddelande utan loggar stänger du av den här inställningen.";
 "screen_bug_report_view_logs" = "Se loggar";
@@ -792,6 +803,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "systeminställningar";
 "screen_notification_settings_system_notifications_turned_off" = "Systemaviseringar avstängda";
 "screen_notification_settings_title" = "Aviseringar";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Logga in manuellt";
 "screen_onboarding_sign_in_to" = "Logga in på %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Logga in med QR-kod";

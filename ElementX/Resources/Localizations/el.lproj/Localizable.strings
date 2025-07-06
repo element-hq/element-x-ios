@@ -25,10 +25,15 @@
 "a11y_show_password" = "Εμφάνιση κωδικού πρόσβασης";
 "a11y_start_call" = "Ξεκίνησε μια κλήση";
 "a11y_user_menu" = "Μενού χρήστη";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Προβολή λεπτομερειών";
 "a11y_voice_message" = "Φωνητικό μήνυμα, διάρκεια: %1$@";
 "a11y_voice_message_record" = "Εγγραφή φωνητικού μηνύματος.";
 "a11y_voice_message_stop_recording" = "Διακοπή καταγραφής";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Αποδοχή";
 "action_add_caption" = "Προσθήκη λεζάντας";
 "action_add_to_timeline" = "Προσθήκη στο χρονοδιάγραμμα";
@@ -131,6 +136,10 @@
 "action_view_source" = "Προβολή πηγής";
 "action_yes" = "Ναι";
 "action_yes_try_again" = "Ναι, δοκιμή ξανά";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Αποσύνδεση & Αναβάθμιση";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "Το %1$@ δεν υποστηρίζει πλέον το παλιό πρωτόκολλο. Αποσυνδεθείτε και συνδεθείτε ξανά για να συνεχίσετε να χρησιμοποιείτε την εφαρμογή.";
 "banner_migrate_to_native_sliding_sync_description" = "Ο διακομιστής σου υποστηρίζει τώρα ένα νέο, ταχύτερο πρωτόκολλο. Αποσυνδέσου και συνδέσου ξανά για αναβάθμιση τώρα. Κάνοντας αυτό τώρα θα σε βοηθήσει να αποφύγεις μια αναγκαστική αποσύνδεση όταν το παλιό πρωτόκολλο καταργηθεί αργότερα.";
@@ -539,6 +548,7 @@
 "screen_room_timeline_upgraded_room_action" = "Δες παλιά μηνύματα";
 "screen_room_timeline_upgraded_room_message" = "Αυτή η αίθουσα αποτελεί συνέχεια μιας άλλης αίθουσας";
 "screen_room_timeline_reactions_show_reactions_summary" = "Εμφάνιση περίληψης αντιδράσεων";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "Αυτή η αίθουσα έχει αναβαθμιστεί";
 "screen_security_and_privacy_add_room_address_action" = "Προσθήκη διεύθυνσης αίθουσας";
 "screen_security_and_privacy_ask_to_join_option_description" = "Οποιοσδήποτε μπορεί να ζητήσει να συμμετάσχει στην αίθουσα, αλλά ένας διαχειριστής ή συντονιστής θα πρέπει να αποδεχτεί το αίτημα.";
@@ -632,6 +642,7 @@
 "screen_bug_report_error_description_too_short" = "Η περιγραφή είναι πολύ σύντομη, δώσε περισσότερες λεπτομέρειες σχετικά με το τί συνέβη. Ευχαριστώ!";
 "screen_bug_report_include_crash_logs" = "Αποστολή αρχείων καταγραφής σφαλμάτων";
 "screen_bug_report_include_logs" = "Να επιτρέπονται τα αρχεία καταγραφής";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Αποστολή στιγμιοτύπου οθόνης";
 "screen_bug_report_logs_description" = "Τα αρχεία καταγραφής θα συμπεριληφθούν στο μήνυμά σου για να βεβαιωθούμε ότι όλα λειτουργούν σωστά. Για να στείλεις το μήνυμά σου χωρίς αρχεία καταγραφής, απενεργοποίησε αυτήν τη ρύθμιση.";
 "screen_bug_report_view_logs" = "Προβολή αρχείων καταγραφής";
@@ -792,6 +803,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "ρυθμίσεις συστήματος";
 "screen_notification_settings_system_notifications_turned_off" = "Ειδοποιήσεις συστήματος ανενεργές";
 "screen_notification_settings_title" = "Ειδοποιήσεις";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Σύνδεση χειροκίνητα";
 "screen_onboarding_sign_in_to" = "Συνδέσου στο %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Συνδέσου με κωδικό QR";

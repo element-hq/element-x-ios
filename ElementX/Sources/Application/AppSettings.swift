@@ -19,6 +19,7 @@ protocol CommonSettingsProtocol {
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var enableKeyShareOnInvite: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
+    var threadsEnabled: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -253,7 +254,7 @@ final class AppSettings {
         
     // MARK: - Bug report
 
-    let bugReportServiceBaseURL: URL? = Secrets.rageshakeServerURL.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
+    let bugReportRageshakeURL: URL? = Secrets.rageshakeURL.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     let bugReportSentryURL: URL? = Secrets.sentryDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     let bugReportSentryRustURL: URL? = Secrets.sentryRustDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     /// The name allocated by the bug report server
@@ -347,9 +348,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
     
-    @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var threadsEnabled
-    
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
     
@@ -376,6 +374,9 @@ final class AppSettings {
 
     @UserPreference(key: UserDefaultsKeys.hideQuietNotificationAlerts, defaultValue: false, storageType: .userDefaults(store))
     var hideQuietNotificationAlerts
+    
+    @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var threadsEnabled
     
     // MARK: - ZERO Access Token
     

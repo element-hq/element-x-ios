@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct RoomChangePermissionsScreen: View {
-    @ObservedObject var context: RoomChangePermissionsScreenViewModel.Context
+    @Bindable var context: RoomChangePermissionsScreenViewModel.Context
     
     var body: some View {
         Form {

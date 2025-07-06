@@ -9,6 +9,12 @@ import Compound
 import SentrySwiftUI
 import SwiftUI
 
+enum HomeNotificationsTab: CaseIterable {
+    case all
+    case highlighted
+    case muted
+}
+
 struct HomeNotificationsContent: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
@@ -114,11 +120,19 @@ struct HomeNotificationsContent: View {
 //            }
 //            .background(Color.zero.bgCanvasDefault)
 //        }
-        HomeNotificationsTabView(
-            onTabSelected: { tab in
-                selectedTab = tab
-                context.send(viewAction: .setNotificationFilter(tab))
-            })
+        SimpleTabButtonsView(tabs: HomeNotificationsTab.allCases,
+                             selectedTab: selectedTab,
+                             tabTitle: { tab in
+            switch tab {
+            case .highlighted: return "Highlights"
+            case .muted: return "Muted"
+            case .all: return "All"
+            }
+        },
+                             onTabSelected: { tab in
+            selectedTab = tab
+            context.send(viewAction: .setNotificationFilter(tab))
+        })
         .onAppear {
             context.send(viewAction: .setNotificationFilter(selectedTab))
         }

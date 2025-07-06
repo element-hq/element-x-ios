@@ -49,7 +49,8 @@ struct AuthenticationClientBuilder: AuthenticationClientBuilderProtocol {
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks,
                          enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
-                         enableKeyShareOnInvite: appSettings.enableKeyShareOnInvite)
+                         enableKeyShareOnInvite: appSettings.enableKeyShareOnInvite,
+                         threadsEnabled: appSettings.threadsEnabled)
             .sessionPaths(dataPath: sessionDirectories.dataPath,
                           cachePath: sessionDirectories.cachePath)
             .sessionPassphrase(passphrase: passphrase)

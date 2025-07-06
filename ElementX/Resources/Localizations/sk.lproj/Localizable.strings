@@ -25,10 +25,15 @@
 "a11y_show_password" = "Zobraziť heslo";
 "a11y_start_call" = "Začať hovor";
 "a11y_user_menu" = "Používateľské menu";
+"a11y_view_avatar" = "Zobraziť profilový obrázok";
 "a11y_view_details" = "Zobraziť podrobnosti";
 "a11y_voice_message" = "Hlasová správa, dĺžka: %1$@";
 "a11y_voice_message_record" = "Nahrať hlasovú správu.";
 "a11y_voice_message_stop_recording" = "Zastaviť nahrávanie";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Prijať";
 "action_add_caption" = "Pridať titulok";
 "action_add_to_timeline" = "Pridať na časovú os";
@@ -131,6 +136,10 @@
 "action_view_source" = "Zobraziť zdroj";
 "action_yes" = "Áno";
 "action_yes_try_again" = "Áno, skúsiť to znova";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Odhlásiť sa a aktualizovať";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ už nepodporuje starý protokol. Odhláste sa a znova prihláste, aby ste mohli pokračovať v používaní aplikácie.";
 "banner_migrate_to_native_sliding_sync_description" = "Váš server teraz podporuje nový, rýchlejší protokol. Odhláste sa a prihláste sa znova, aby ste mohli aktualizovať. Ak to urobíte teraz, pomôže vám vyhnúť sa nútenému odhláseniu, keď sa starý protokol neskôr odstráni.";
@@ -381,7 +390,7 @@
 "preference_rageshake" = "Zúrivo potriasť pre nahlásenie chyby";
 "rageshake_detection_dialog_content" = "Zdá sa, že zúrivo trasiete telefónom. Chcete otvoriť obrazovku s hlásením chýb?";
 "rich_text_editor_bullet_list" = "Prepnúť zoznam odrážok";
-"rich_text_editor_close_formatting_options" = "Zatvoriť možnosti formátovania";
+"rich_text_editor_close_formatting_options" = "Zrušiť a zatvoriť formátovanie textu";
 "rich_text_editor_code_block" = "Prepnúť blok kódu";
 "rich_text_editor_composer_encrypted_placeholder" = "Šifrovaná správa...";
 "rich_text_editor_composer_placeholder" = "Správa…";
@@ -539,6 +548,7 @@
 "screen_room_timeline_upgraded_room_action" = "Zobraziť staré správy";
 "screen_room_timeline_upgraded_room_message" = "Táto miestnosť je pokračovaním inej miestnosti";
 "screen_room_timeline_reactions_show_reactions_summary" = "Zobraziť súhrn reakcií";
+"screen_roomlist_clear_filters" = "Vyčistiť filtre";
 "screen_roomlist_tombstoned_room_description" = "Táto miestnosť bola aktualizovaná";
 "screen_security_and_privacy_add_room_address_action" = "Pridať adresu miestnosti";
 "screen_security_and_privacy_ask_to_join_option_description" = "Ktokoľvek môže požiadať o pripojenie do miestnosti, ale správca alebo moderátor bude musieť žiadosť prijať.";
@@ -632,6 +642,7 @@
 "screen_bug_report_error_description_too_short" = "Popis je príliš krátky, uveďte viac podrobností o tom, čo sa stalo. Ďakujeme!";
 "screen_bug_report_include_crash_logs" = "Odoslať záznamy o zlyhaní";
 "screen_bug_report_include_logs" = "Povoliť záznamy";
+"screen_bug_report_include_logs_error" = "Vaše záznamy sú príliš veľké, takže ich nemožno zahrnúť do tejto správy, pošlite nám ich prosím iným spôsobom.";
 "screen_bug_report_include_screenshot" = "Odoslať snímku obrazovky";
 "screen_bug_report_logs_description" = "K vašej správe budú priložené záznamy o chybe, aby sme sa uistili, že všetko funguje správne. Ak chcete odoslať správu bez záznamov o chybe, vypnite toto nastavenie.";
 "screen_bug_report_view_logs" = "Zobraziť záznamy";
@@ -792,6 +803,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "nastavenia systému";
 "screen_notification_settings_system_notifications_turned_off" = "Systémové oznámenia sú vypnuté";
 "screen_notification_settings_title" = "Oznámenia";
+"screen_onboarding_app_version" = "Verzia %1$@";
 "screen_onboarding_sign_in_manually" = "Prihlásiť sa manuálne";
 "screen_onboarding_sign_in_to" = "Prihlásiť sa do %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Prihlásiť sa pomocou QR kódu";

@@ -25,10 +25,15 @@
 "a11y_show_password" = "Wachtwoord weergeven";
 "a11y_start_call" = "Begin een oproep";
 "a11y_user_menu" = "Gebruikersmenu";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Details bekijken";
 "a11y_voice_message" = "Spraakbericht, duur: %1$@";
 "a11y_voice_message_record" = "Spraakbericht opnemen.";
 "a11y_voice_message_stop_recording" = "Opnemen stoppen";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Accepteren";
 "action_add_caption" = "Beschrijving toevoegen";
 "action_add_to_timeline" = "Toevoegen aan tijdlijn";
@@ -131,6 +136,10 @@
 "action_view_source" = "Bron weergeven";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Yes, try again";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Uitloggen & Upgraden";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Je server ondersteunt nu een nieuw, sneller protocol. Log uit en log opnieuw in om nu te upgraden. Als je dit nu doet, voorkom je dat je geforceerd uitlogt wordt wanneer het oude protocol later wordt verwijderd.";
@@ -539,6 +548,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Add room address";
 "screen_security_and_privacy_ask_to_join_option_description" = "Anyone can ask to join the room but an administrator or moderator will have to accept the request.";
@@ -632,6 +642,7 @@
 "screen_bug_report_error_description_too_short" = "De beschrijving is te kort, geef meer details over wat er is gebeurd. Bedankt!";
 "screen_bug_report_include_crash_logs" = "Crashlogboeken verzenden";
 "screen_bug_report_include_logs" = "Logboeken toestaan";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Schermafbeelding verzenden";
 "screen_bug_report_logs_description" = "Er worden logbestanden bij uw bericht gevoegd om er zeker van te zijn dat alles goed werkt. Als u uw bericht zonder logbestanden wilt verzenden, schakelt u deze instelling uit.";
 "screen_bug_report_view_logs" = "Logboeken weergeven";
@@ -792,6 +803,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "systeeminstellingen";
 "screen_notification_settings_system_notifications_turned_off" = "Systeemmeldingen uitgeschakeld";
 "screen_notification_settings_title" = "Meldingen";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Handmatig inloggen";
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Inloggen met QR-code";

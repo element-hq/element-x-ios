@@ -312,6 +312,12 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError>
     
+    func getWalletTokenBalances(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError>
+    
+    func getWalletNFTs(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError>
+    
+    func getWalletTransactions(walletAddress: String, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError>
+    
     // MARK: - Zero MetaData
     
     func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError>

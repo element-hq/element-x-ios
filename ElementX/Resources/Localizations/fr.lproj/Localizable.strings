@@ -25,10 +25,15 @@
 "a11y_show_password" = "Afficher le mot de passe";
 "a11y_start_call" = "Démarrer un appel";
 "a11y_user_menu" = "Menu utilisateur";
+"a11y_view_avatar" = "Voir l'avatar";
 "a11y_view_details" = "Afficher les détails";
 "a11y_voice_message" = "Message vocal, durée: %1$@";
 "a11y_voice_message_record" = "Enregistrer un message vocal.";
 "a11y_voice_message_stop_recording" = "Arrêter l'enregistrement";
+"a11y.other_user_avatar" = "Avatar de l'autre utilisateur";
+"a11y.room_avatar" = "Avatar du salon";
+"a11y.user_avatar" = "Avatar de l'utilisateur";
+"a11y.your_avatar" = "Votre avatar";
 "action_accept" = "Accepter";
 "action_add_caption" = "Ajouter une légende";
 "action_add_to_timeline" = "Ajouter à la discussion";
@@ -131,6 +136,10 @@
 "action_view_source" = "Afficher la source";
 "action_yes" = "Oui";
 "action_yes_try_again" = "Oui, réessayez";
+"action.open_context_menu" = "Ouvrir le menu contextuel";
+"action.send_edited_message" = "Envoyer un message modifié";
+"action.send_voice_message" = "Envoyer un message vocal";
+"action.view" = "Voir";
 "banner_migrate_to_native_sliding_sync_action" = "Déconnecter et mettre à niveau";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ne prend plus en charge l'ancien protocole. Veuillez vous déconnecter puis vous reconnecter pour continuer à utiliser l'application.";
 "banner_migrate_to_native_sliding_sync_description" = "Votre serveur prend désormais en charge un nouveau protocole plus rapide. Déconnectez-vous, puis reconnectez-vous pour effectuer la mise à niveau dès maintenant. En le faisant tout de suite, vous éviterez une déconnexion forcée lorsque l'ancien protocole sera supprimé.";
@@ -325,7 +334,7 @@
 "emoji_picker_category_people" = "Émoticônes et personnes";
 "emoji_picker_category_places" = "Voyages & lieux";
 "emoji_picker_category_symbols" = "Symboles";
-"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
+"error_invalid_invite" = "Ce salon n'existe plus ou l'invitation n'est plus valable.";
 "error_network_or_server_issue" = "Cela peut être dû à des problèmes de réseau ou de serveur.";
 "error_room_address_already_exists" = "Cette adresse de salon existe déjà, veuillez essayer de modifier le champ d'adresse de salon ou de modifier le nom du salon";
 "error_room_address_invalid_symbols" = "Certains caractères ne sont pas autorisés. Seuls les lettres, les chiffres et les symboles suivants sont utilisables ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
@@ -381,7 +390,7 @@
 "preference_rageshake" = "Rageshake pour signaler un problème";
 "rageshake_detection_dialog_content" = "Vous semblez secouez votre téléphone avec frustration. Souhaitez-vous ouvrir le formulaire pour reporter un problème ?";
 "rich_text_editor_bullet_list" = "Afficher une liste à puces";
-"rich_text_editor_close_formatting_options" = "Fermer les options de formatage";
+"rich_text_editor_close_formatting_options" = "Annuler et fermer les options de formatage";
 "rich_text_editor_code_block" = "Afficher le bloc de code";
 "rich_text_editor_composer_encrypted_placeholder" = "Message chiffré…";
 "rich_text_editor_composer_placeholder" = "Message…";
@@ -539,6 +548,7 @@
 "screen_room_timeline_upgraded_room_action" = "Voir les anciens messages";
 "screen_room_timeline_upgraded_room_message" = "Ce salon est la continuation du salon précédent";
 "screen_room_timeline_reactions_show_reactions_summary" = "Afficher le résumé des réactions";
+"screen_roomlist_clear_filters" = "Supprimer les filtres";
 "screen_roomlist_tombstoned_room_description" = "Ce salon a été mis à niveau.";
 "screen_security_and_privacy_add_room_address_action" = "Ajouter l'adresse du salon";
 "screen_security_and_privacy_ask_to_join_option_description" = "N'importe qui peut demander à rejoindre le salon, mais un administrateur ou un modérateur devra accepter la demande.";
@@ -632,6 +642,7 @@
 "screen_bug_report_error_description_too_short" = "La description est trop courte, veuillez fournir plus de détails sur ce qui s'est passé. Merci !";
 "screen_bug_report_include_crash_logs" = "Envoyer des journaux d’incident";
 "screen_bug_report_include_logs" = "Autoriser à inclure les journaux techniques";
+"screen_bug_report_include_logs_error" = "Vos fichiers de log sont trop volumineux et ne peuvent donc pas être inclus dans ce rapport, veuillez nous les envoyer par un autre moyen.";
 "screen_bug_report_include_screenshot" = "Envoyer une capture d’écran";
 "screen_bug_report_logs_description" = "Pour vérifier que les choses fonctionnent comme prévu, des journaux techniques seront envoyés avec votre message. Pour ne pas envoyer ces journaux, désactivez ce paramètre.";
 "screen_bug_report_view_logs" = "Afficher les journaux";
@@ -792,6 +803,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "paramètres du système";
 "screen_notification_settings_system_notifications_turned_off" = "Les notifications du système sont désactivées";
 "screen_notification_settings_title" = "Notifications";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Se connecter manuellement";
 "screen_onboarding_sign_in_to" = "Se connecter à %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Se connecter avec un QR code";

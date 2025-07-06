@@ -14,6 +14,7 @@ enum HomeTab: CaseIterable {
     case feed
     case notifications
     case myFeed
+    case wallet
 }
 
 struct HomeTabView<Content: View>: View {
@@ -29,6 +30,7 @@ struct HomeTabView<Content: View>: View {
         (title: "Channels", icon: Asset.Images.homeTabExplorerIcon, tab: HomeTab.channels),
         (title: "Feed", icon: Asset.Images.homeTabFeedIcon, tab: HomeTab.feed),
         (title: "Notifications", icon: Asset.Images.homeTabNotificationsIcon, tab: HomeTab.notifications),
+        (title: "Wallet", icon: Asset.Images.homeTabWalletIcon, tab: HomeTab.wallet),
 //        (title: "My Feed", icon: Asset.Images.homeTabProfileIcon, tab: HomeTab.myFeed)
     ]
     
@@ -40,14 +42,6 @@ struct HomeTabView<Content: View>: View {
         self.onTabSelected = onTabSelected
         self.hasNewNotifications = hasNewNotifications
         self.isTabViewVisible = isTabViewVisible
-        
-//        let appearance = UITabBarAppearance()
-//        appearance.configureWithTransparentBackground()
-//        appearance.backgroundEffect = UIBlurEffect(style: .regular)
-//        appearance.backgroundColor = UIColor.black.withAlphaComponent(0.15) // Tint color
-//        
-//        UITabBar.appearance().standardAppearance = appearance
-//        UITabBar.appearance().scrollEdgeAppearance = appearance
     }
     
     var body: some View {
@@ -61,29 +55,20 @@ struct HomeTabView<Content: View>: View {
             }
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
-        
-//        TabView(selection: $selectedTab) {
-//            ForEach(tabs, id: \.tab) { tabInfo in
-//                tabContent(tabInfo.tab)
-//                    .background(.zero.bgCanvasDefault)
-//                    .tabItem {
-//                        Image(asset: tabInfo.icon)
-//                            .foregroundStyle(tabInfo.tab == selectedTab ? .zero.bgAccentRest : .compound.iconSecondary)
-//                        //Text(tabInfo.title)
-//                    }
-//                    .tag(tabInfo.tab)
-//            }
-//        }
-//        .accentColor(.zero.bgAccentRest)
-//        .onChange(of: selectedTab) { _, newTab in
-//            onTabSelected(newTab)
-//        }
+    }
+    
+    private var homeTabs: [(title: String, icon: ImageAsset, tab: HomeTab)] {
+        if ZeroFlaggedFeaturesService.shared.zeroWalletEnabled() {
+            return tabs
+        } else {
+            return tabs.dropLast()
+        }
     }
     
     var customTabView: some View {
         ZStack {
             HStack {
-                ForEach(tabs, id: \.tab) { tabInfo in
+                ForEach(homeTabs, id: \.tab) { tabInfo in
                     Button {
                         selectedTab = tabInfo.tab
                         onTabSelected(tabInfo.tab)

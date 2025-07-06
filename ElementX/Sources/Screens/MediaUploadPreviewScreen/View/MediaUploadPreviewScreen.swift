@@ -13,7 +13,7 @@ import SwiftUI
 struct MediaUploadPreviewScreen: View {
     @Environment(\.colorScheme) private var colorScheme
     
-    @ObservedObject var context: MediaUploadPreviewScreenViewModel.Context
+    @Bindable var context: MediaUploadPreviewScreenViewModel.Context
     
     @State private var captionWarningFrame: CGRect = .zero
     @FocusState private var isComposerFocussed

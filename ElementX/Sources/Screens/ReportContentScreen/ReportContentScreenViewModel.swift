@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias ReportContentScreenViewModelType = StateStoreViewModel<ReportContentScreenViewState, ReportContentScreenViewAction>
+typealias ReportContentScreenViewModelType = StateStoreViewModelV2<ReportContentScreenViewState, ReportContentScreenViewAction>
 
 class ReportContentScreenViewModel: ReportContentScreenViewModelType, ReportContentScreenViewModelProtocol {
     private let eventID: String

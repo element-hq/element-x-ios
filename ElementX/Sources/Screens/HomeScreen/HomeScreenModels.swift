@@ -71,6 +71,10 @@ enum HomeScreenViewAction {
     case forceRefreshChannels
     case channelTapped(_ channel: HomeScreenChannel)
     case setNotificationFilter(_ tab: HomeNotificationsTab)
+    
+    case loadMoreWalletTokens
+    case loadMoreWalletTransactions
+    case loadMoreWalletNFTs
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -124,6 +128,20 @@ enum HomeScreenChannelListMode: CustomStringConvertible {
     }
 }
 
+enum HomeScreenWalletContentListMode: CustomStringConvertible {
+    case skeletons
+    case content
+    
+    var description: String {
+        switch self {
+        case .skeletons:
+            return "Showing placeholders"
+        case .content:
+            return "Showing wallet content"
+        }
+    }
+}
+
 enum HomeScreenSecurityBannerMode: Equatable {
     case none
     case dismissed
@@ -154,22 +172,30 @@ struct HomeScreenViewState: BindableState {
     var securityBannerMode = HomeScreenSecurityBannerMode.none
     
     var requiresExtraAccountSetup = false
-        
+    
     var rooms: [HomeScreenRoom] = []
     var posts: [HomeScreenPost] = []
     var myPosts: [HomeScreenPost] = []
     var channels: [HomeScreenChannel] = []
+    var walletTokens: [HomeScreenWalletContent] = []
+    var walletTransactions: [HomeScreenWalletContent] = []
+    var walletNFTs: [HomeScreenWalletContent] = []
+    
+    var walletTokenNextPageParams: NextPageParams? = nil
+    var walletNFTsNextPageParams: NextPageParams? = nil
+    var walletTransactionsNextPageParams: TransactionNextPageParams? = nil
     
     var roomListMode: HomeScreenRoomListMode = .skeletons
     var postListMode: HomeScreenPostListMode = .skeletons
     var myPostListMode: HomeScreenPostListMode = .skeletons
     var channelsListMode: HomeScreenChannelListMode = .skeletons
+    var walletContentListMode: HomeScreenWalletContentListMode = .skeletons
     
     var canLoadMorePosts: Bool = true
     var canLoadMoreMyPosts: Bool = true
     
     var hasPendingInvitations = false
-        
+    
     var selectedRoomID: String?
     
     var hideInviteAvatars = false
@@ -187,7 +213,7 @@ struct HomeScreenViewState: BindableState {
         
         return rooms
     }
-        
+    
     var visiblePosts: [HomeScreenPost] {
         if postListMode == .skeletons {
             return placeholderPosts
@@ -209,10 +235,28 @@ struct HomeScreenViewState: BindableState {
         
         return channels
     }
+    var visibleWalletTokens: [HomeScreenWalletContent] {
+        if walletContentListMode == .skeletons {
+            return placeholderWalletContent
+        }
+        return walletTokens
+    }
+    var visibleWalletTransactions: [HomeScreenWalletContent] {
+        if walletContentListMode == .skeletons {
+            return placeholderWalletContent
+        }
+        return walletTransactions
+    }
+    var visibleWalletNFTs: [HomeScreenWalletContent] {
+        if walletContentListMode == .skeletons {
+            return placeholderWalletContent
+        }
+        return walletNFTs
+    }
     
     var userRewards = ZeroRewards.empty()
     var showNewUserRewardsIntimation = false
-        
+    
     var bindings = HomeScreenViewStateBindings()
     
     var placeholderRooms: [HomeScreenRoom] {
@@ -228,6 +272,11 @@ struct HomeScreenViewState: BindableState {
     var placeholderChannels: [HomeScreenChannel] {
         (1...20).map { index in
             HomeScreenChannel.placeholder(index)
+        }
+    }
+    var placeholderWalletContent: [HomeScreenWalletContent] {
+        (1...20).map { _ in
+            HomeScreenWalletContent.placeholder()
         }
     }
     
@@ -265,7 +314,7 @@ struct HomeScreenViewStateBindings {
     var filtersState = RoomListFiltersState()
     var searchQuery = ""
     var isSearchFieldFocused = false
-        
+    
     var alertInfo: AlertInfo<UUID>?
     var leaveRoomAlertItem: LeaveRoomAlertItem?
     
@@ -282,7 +331,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     }
     
     static let placeholderLastMessage = AttributedString("Hidden last message")
-        
+    
     /// The list item identifier is it's room identifier.
     let id: String
     
@@ -319,7 +368,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     let lastMessage: AttributedString?
     
     let avatar: RoomAvatar
-        
+    
     let canonicalAlias: String?
     
     let isTombstoned: Bool
@@ -437,13 +486,41 @@ struct HomeScreenChannel: Identifiable, Equatable {
     }
 }
 
+struct HomeScreenWalletContent: Identifiable, Equatable {
+    let id: String
+    let icon: String?
+    let header: String?
+    
+    let transactionAction: String?
+    let transactionAddress: String?
+    let title: String
+    let description: String?
+    
+    let actionPreText: String?
+    let actionText: String
+    let actionPostText: String?
+    
+    static func placeholder() -> HomeScreenWalletContent {
+        .init(id: UUID().uuidString,
+              icon: nil,
+              header: nil,
+              transactionAction: nil,
+              transactionAddress: nil,
+              title: "placeholder title",
+              description: "placeholder description",
+              actionPreText: nil,
+              actionText: "placeholder action text",
+              actionPostText: "placeholder action post text")
+    }
+}
+
 extension HomeScreenRoom {
     init(summary: RoomSummary, hideUnreadMessagesBadge: Bool, seenInvites: Set<String> = []) {
         let roomID = summary.id
         
         let hasUnreadMessages = hideUnreadMessagesBadge ? false : summary.hasUnreadMessages
         let isUnseenInvite = summary.joinRequestType?.isInvite == true && !seenInvites.contains(roomID)
-
+        
         let isDotShown = hasUnreadMessages || summary.hasUnreadMentions || summary.hasUnreadNotifications || summary.isMarkedUnread || isUnseenInvite
         let isMentionShown = summary.hasUnreadMentions && !summary.isMuted
         let isMuteShown = summary.isMuted
@@ -632,5 +709,47 @@ extension HomeScreenPostMediaInfo {
     
     var isVideo: Bool {
         return mimeType?.hasPrefix("video/") == true
+    }
+}
+
+extension HomeScreenWalletContent {
+    init (walletToken: ZWalletToken) {
+        self.init(id: walletToken.tokenAddress,
+                  icon: walletToken.logo,
+                  header: nil,
+                  transactionAction: nil,
+                  transactionAddress: nil,
+                  title: walletToken.name,
+                  description: nil,
+                  actionPreText: nil,
+                  actionText: "\(walletToken.amount) MEOW",
+                  actionPostText: nil)
+    }
+    
+    init(walletNFT: NFT) {
+        self.init(id: walletNFT.id,
+                  icon: walletNFT.imageUrl,
+                  header: nil,
+                  transactionAction: nil,
+                  transactionAddress: nil,
+                  title: walletNFT.collectionName ?? walletNFT.metadata.name ?? "",
+                  description: nil,
+                  actionPreText: nil,
+                  actionText: "0",
+                  actionPostText: nil)
+    }
+    
+    init(walletTransaction: WalletTransaction) {
+        let isTransactionReceived = walletTransaction.action.lowercased() == "receive"
+        self.init(id: walletTransaction.hash,
+                  icon: walletTransaction.token.logo,
+                  header: nil, //walletTransaction.timestamp
+                  transactionAction: isTransactionReceived ? "Received from" : "Sent to",
+                  transactionAddress: isTransactionReceived ? walletTransaction.from : walletTransaction.to,
+                  title: walletTransaction.token.name,
+                  description: nil,
+                  actionPreText: nil,
+                  actionText: (walletTransaction.amount != nil) ? "\(walletTransaction.amount!) MEOW" : "0 MEOW",
+                  actionPostText: nil)
     }
 }

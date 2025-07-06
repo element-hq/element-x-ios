@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct RoomChangeRolesScreen: View {
-    @ObservedObject var context: RoomChangeRolesScreenViewModel.Context
+    @Bindable var context: RoomChangeRolesScreenViewModel.Context
     
     var showTopSection: Bool { !context.viewState.membersWithRole.isEmpty }
     

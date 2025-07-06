@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias ReportRoomScreenViewModelType = StateStoreViewModel<ReportRoomScreenViewState, ReportRoomScreenViewAction>
+typealias ReportRoomScreenViewModelType = StateStoreViewModelV2<ReportRoomScreenViewState, ReportRoomScreenViewAction>
 
 class ReportRoomScreenViewModel: ReportRoomScreenViewModelType, ReportRoomScreenViewModelProtocol {
     let roomProxy: JoinedRoomProxyProtocol

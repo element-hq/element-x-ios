@@ -10,12 +10,65 @@ import MatrixRustSDK
 struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
     private let powerLevels: RoomPowerLevels
     
-    init(_ powerLevels: RoomPowerLevels) {
+    init?(_ powerLevels: RoomPowerLevels?) {
+        guard let powerLevels else {
+            return nil
+        }
+        
         self.powerLevels = powerLevels
     }
     
     var values: RoomPowerLevelsValues {
         powerLevels.values()
+    }
+    
+    var userPowerLevels: [String: Int64] {
+        powerLevels.userPowerLevels()
+    }
+    
+    func suggestedRole(forUser userID: String) -> RoomMemberRole {
+        let powerLevel = powerLevels.userPowerLevels()[userID] ?? values.usersDefault
+        return suggestedRoleForPowerLevel(powerLevel: powerLevel)
+    }
+    
+    func canOwnUser(sendMessage messageType: MessageLikeEventType) -> Bool {
+        powerLevels.canOwnUserSendMessage(message: messageType)
+    }
+    
+    func canOwnUser(sendStateEvent stateEventType: StateEventType) -> Bool {
+        powerLevels.canOwnUserSendState(stateEvent: stateEventType)
+    }
+    
+    func canOwnUserInvite() -> Bool {
+        powerLevels.canOwnUserInvite()
+    }
+    
+    func canOwnUserRedactOther() -> Bool {
+        powerLevels.canOwnUserRedactOther()
+    }
+    
+    func canOwnUserRedactOwn() -> Bool {
+        powerLevels.canOwnUserRedactOwn()
+    }
+    
+    func canOwnUserKick() -> Bool {
+        powerLevels.canOwnUserKick()
+    }
+    
+    func canOwnUserBan() -> Bool {
+        powerLevels.canOwnUserBan()
+    }
+    
+    func canOwnUserTriggerRoomNotification() -> Bool {
+        powerLevels.canOwnUserTriggerRoomNotification()
+    }
+    
+    func canOwnUserPinOrUnpin() -> Bool {
+        powerLevels.canOwnUserPinUnpin()
+    }
+    
+    func canOwnUserJoinCall() -> Bool {
+        powerLevels.canOwnUserSendState(stateEvent: .callMember)
     }
     
     func canUser(userID: String, sendMessage messageType: MessageLikeEventType) -> Result<Bool, RoomProxyError> {

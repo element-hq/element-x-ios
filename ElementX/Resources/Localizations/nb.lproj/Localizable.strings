@@ -25,10 +25,15 @@
 "a11y_show_password" = "Vis passord";
 "a11y_start_call" = "Start en samtale";
 "a11y_user_menu" = "Brukermeny";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Vis detaljer";
 "a11y_voice_message" = "Talemelding, lengde: %1$@";
 "a11y_voice_message_record" = "Ta opp talemelding.";
 "a11y_voice_message_stop_recording" = "Stopp opptaket";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Godta";
 "action_add_caption" = "Legg til bildetekst";
 "action_add_to_timeline" = "Legg til i tidslinjen";
@@ -131,6 +136,10 @@
 "action_view_source" = "Vis kilde";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, prøv igjen";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Logg ut og oppgrader";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ støtter ikke lenger den gamle protokollen. Logg ut og logg inn igjen for å fortsette å bruke appen.";
 "banner_migrate_to_native_sliding_sync_description" = "Serveren din støtter nå en ny, raskere protokoll. Logg ut og logg inn igjen for å oppgradere nå. Ved å gjøre dette nå, unngår du å bli tvunget til å logge ut når den gamle protokollen fjernes senere.";
@@ -325,7 +334,7 @@
 "emoji_picker_category_people" = "Smilefjes og mennesker";
 "emoji_picker_category_places" = "Reising og steder";
 "emoji_picker_category_symbols" = "Symboler";
-"error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
+"error_invalid_invite" = "Rommet eksisterer ikke lenger, eller invitasjonen er ikke lenger gyldig.";
 "error_network_or_server_issue" = "Dette kan skyldes nettverks- eller serverproblemer.";
 "error_room_address_already_exists" = "Denne romadressen finnes allerede. Prøv å redigere romadressefeltet eller endre romnavnet";
 "error_room_address_invalid_symbols" = "Noen tegn er ikke tillatt. Bare bokstaver, sifre og følgende symboler støttes! $ & '() * +/; =? @ [] - . _";
@@ -539,6 +548,7 @@
 "screen_room_timeline_upgraded_room_action" = "Se gamle meldinger";
 "screen_room_timeline_upgraded_room_message" = "Dette rommet er en fortsettelse av et annet rom";
 "screen_room_timeline_reactions_show_reactions_summary" = "Vis sammendrag av reaksjoner";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "Dette rommet har blitt oppgradert";
 "screen_security_and_privacy_add_room_address_action" = "Legg til romadresse";
 "screen_security_and_privacy_ask_to_join_option_description" = "Alle kan be om å bli med i rommet, men en administrator eller moderator må godta forespørselen.";
@@ -632,6 +642,7 @@
 "screen_bug_report_error_description_too_short" = "Beskrivelsen er for kort, vennligst gi flere detaljer om hva som skjedde. Takk skal du ha!";
 "screen_bug_report_include_crash_logs" = "Send krasjlogger";
 "screen_bug_report_include_logs" = "Tillat logger";
+"screen_bug_report_include_logs_error" = "Loggene dine er for store og kan derfor ikke inkluderes i denne rapporten. Vennligst send dem til oss på en annen måte.";
 "screen_bug_report_include_screenshot" = "Send skjermbilde";
 "screen_bug_report_logs_description" = "Logger vil bli inkludert i meldingen din, for å sikre at alt fungerer som det skal. For å sende meldingen uten logger, slå av denne innstillingen.";
 "screen_bug_report_view_logs" = "Vis logger";
@@ -792,6 +803,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "systeminnstillinger";
 "screen_notification_settings_system_notifications_turned_off" = "Systemvarsler er slått av";
 "screen_notification_settings_title" = "Varslinger";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Logg på manuelt";
 "screen_onboarding_sign_in_to" = "Logg inn på %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Logg inn med QR-kode";

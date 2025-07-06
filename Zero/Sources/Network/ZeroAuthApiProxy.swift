@@ -8,17 +8,17 @@
 protocol ZeroAuthApiProxyProtocol {
     var authApi: ZeroAuthApiProtocol { get }
     var createAccountApi: ZeroCreateAccountApiProtocol { get }
-    var usersApi: ZeroUsersApiProtocol { get }
+    var usersApi: ZeroUserApiProtocol { get }
 }
 
 class ZeroAuthApiProxy: ZeroAuthApiProxyProtocol {
     let authApi: ZeroAuthApiProtocol
     let createAccountApi: ZeroCreateAccountApiProtocol
-    let usersApi: ZeroUsersApiProtocol
+    let usersApi: ZeroUserApiProtocol
     
     init(authApi: ZeroAuthApiProtocol,
          createAccountApi: ZeroCreateAccountApiProtocol,
-         usersApi: ZeroUsersApiProtocol) {
+         usersApi: ZeroUserApiProtocol) {
         self.authApi = authApi
         self.createAccountApi = createAccountApi
         self.usersApi = usersApi
@@ -29,6 +29,6 @@ extension ZeroAuthApiProxy {
     convenience init(appSettings: AppSettings) {
         self.init(authApi: ZeroAuthApi(appSettings: appSettings),
                   createAccountApi: ZeroCreateAccountApi(appSettings: appSettings),
-                  usersApi: ZeroUsersApi(appSettings: appSettings))
+                  usersApi: ZeroUserApi(appSettings: appSettings))
     }
 }

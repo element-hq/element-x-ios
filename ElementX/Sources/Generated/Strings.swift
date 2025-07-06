@@ -92,6 +92,8 @@ internal enum L10n {
   internal static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
   /// User menu
   internal static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
+  /// View avatar
+  internal static var a11yViewAvatar: String { return L10n.tr("Localizable", "a11y_view_avatar") }
   /// View details
   internal static var a11yViewDetails: String { return L10n.tr("Localizable", "a11y_view_details") }
   /// Voice message, duration: %1$@
@@ -936,7 +938,7 @@ internal enum L10n {
   internal static var richTextEditorA11yAddAttachment: String { return L10n.tr("Localizable", "rich_text_editor_a11y_add_attachment") }
   /// Toggle bullet list
   internal static var richTextEditorBulletList: String { return L10n.tr("Localizable", "rich_text_editor_bullet_list") }
-  /// Close formatting options
+  /// Cancel and close text formatting
   internal static var richTextEditorCloseFormattingOptions: String { return L10n.tr("Localizable", "rich_text_editor_close_formatting_options") }
   /// Toggle code block
   internal static var richTextEditorCodeBlock: String { return L10n.tr("Localizable", "rich_text_editor_code_block") }
@@ -1224,6 +1226,8 @@ internal enum L10n {
   internal static var screenBugReportIncludeCrashLogs: String { return L10n.tr("Localizable", "screen_bug_report_include_crash_logs") }
   /// Allow logs
   internal static var screenBugReportIncludeLogs: String { return L10n.tr("Localizable", "screen_bug_report_include_logs") }
+  /// Your logs are excessively large so cannot be included in this report, please send them to us another way.
+  internal static var screenBugReportIncludeLogsError: String { return L10n.tr("Localizable", "screen_bug_report_include_logs_error") }
   /// Send screenshot
   internal static var screenBugReportIncludeScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_include_screenshot") }
   /// Logs will be included with your message to make sure that everything is working properly. To send your message without logs, turn off this setting.
@@ -1778,6 +1782,10 @@ internal enum L10n {
   internal static var screenNotificationSettingsSystemNotificationsTurnedOff: String { return L10n.tr("Localizable", "screen_notification_settings_system_notifications_turned_off") }
   /// Notifications
   internal static var screenNotificationSettingsTitle: String { return L10n.tr("Localizable", "screen_notification_settings_title") }
+  /// Version %1$@
+  internal static func screenOnboardingAppVersion(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_onboarding_app_version", String(describing: p1))
+  }
   /// Sign in manually
   internal static var screenOnboardingSignInManually: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_manually") }
   /// Sign in to %1$@
@@ -2418,6 +2426,8 @@ internal enum L10n {
   internal static var screenRoomVoiceMessageTooltip: String { return L10n.tr("Localizable", "screen_room_voice_message_tooltip") }
   /// Create a new conversation or room
   internal static var screenRoomlistA11yCreateMessage: String { return L10n.tr("Localizable", "screen_roomlist_a11y_create_message") }
+  /// Clear filters
+  internal static var screenRoomlistClearFilters: String { return L10n.tr("Localizable", "screen_roomlist_clear_filters") }
   /// Get started by messaging someone.
   internal static var screenRoomlistEmptyMessage: String { return L10n.tr("Localizable", "screen_roomlist_empty_message") }
   /// No chats yet.
@@ -3098,6 +3108,28 @@ internal enum L10n {
   }
   /// Check UnifiedPush
   internal static var troubleshootNotificationsTestUnifiedPushTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_title") }
+
+  internal enum A11y {
+    /// Other user's avatar
+    internal static var otherUserAvatar: String { return L10n.tr("Localizable", "a11y.other_user_avatar") }
+    /// Room avatar
+    internal static var roomAvatar: String { return L10n.tr("Localizable", "a11y.room_avatar") }
+    /// User avatar
+    internal static var userAvatar: String { return L10n.tr("Localizable", "a11y.user_avatar") }
+    /// Your avatar
+    internal static var yourAvatar: String { return L10n.tr("Localizable", "a11y.your_avatar") }
+  }
+
+  internal enum Action {
+    /// Open context menu
+    internal static var openContextMenu: String { return L10n.tr("Localizable", "action.open_context_menu") }
+    /// Send edited message
+    internal static var sendEditedMessage: String { return L10n.tr("Localizable", "action.send_edited_message") }
+    /// Send voice message
+    internal static var sendVoiceMessage: String { return L10n.tr("Localizable", "action.send_voice_message") }
+    /// View
+    internal static var view: String { return L10n.tr("Localizable", "action.view") }
+  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

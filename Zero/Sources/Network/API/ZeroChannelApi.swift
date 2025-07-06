@@ -8,13 +8,13 @@
 import Alamofire
 import Foundation
 
-protocol ZeroChannelsApiProtocol {
+protocol ZeroChannelApiProtocol {
     func fetchZeroIds() async throws -> Result<[String], any Error>
     
     func joinChannel(roomAliasOrId: String) async throws -> Result<String, any Error>
 }
 
-class ZeroChannelsApi: ZeroChannelsApiProtocol {
+class ZeroChannelApi: ZeroChannelApiProtocol {
     private let appSettings: AppSettings
     
     init(appSettings: AppSettings) {

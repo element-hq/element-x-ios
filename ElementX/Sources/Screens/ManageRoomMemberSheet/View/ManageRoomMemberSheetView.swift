@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct ManageRoomMemberSheetView: View {
-    @ObservedObject var context: ManageRoomMemberSheetViewModelType.Context
+    @Bindable var context: ManageRoomMemberSheetViewModelType.Context
     
     var body: some View {
         Form {

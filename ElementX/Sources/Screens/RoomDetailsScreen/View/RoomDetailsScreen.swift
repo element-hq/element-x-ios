@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct RoomDetailsScreen: View {
-    @ObservedObject var context: RoomDetailsScreenViewModel.Context
+    @Bindable var context: RoomDetailsScreenViewModel.Context
     
     @State private var isTopicExpanded = false
     
@@ -268,10 +268,11 @@ struct RoomDetailsScreen: View {
         if context.viewState.isEncrypted {
             Section {
                 ZeroListRow(label: .default(title: L10n.screenRoomDetailsEncryptionEnabledTitle,
-                                            description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
-                                            icon: \.lock,
-                                            iconAlignment: .top),
-                            kind: .label)
+                                        description: L10n.screenRoomDetailsEncryptionEnabledSubtitle,
+                                        icon: \.lock,
+                                        iconAlignment: .top),
+                        kind: .label)
+                    .accessibilityAddTraits(.isHeader)
             } header: {
                 Text(L10n.commonSecurity)
                     .compoundListSectionHeader()
@@ -344,33 +345,23 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         RoomDetailsScreen(context: genericRoomViewModel.context)
-            .snapshotPreferences(expect: genericRoomViewModel.context.$viewState.map { state in
-                state.shortcuts.contains(.invite)
-            })
+            .snapshotPreferences(expect: genericRoomViewModel.context.observe(\.viewState.permalink).map { $0 != nil }.eraseToStream())
             .previewDisplayName("Generic Room")
         
         RoomDetailsScreen(context: simpleRoomViewModel.context)
-            .snapshotPreferences(expect: simpleRoomViewModel.context.$viewState.map { state in
-                state.shortcuts.contains(.invite)
-            })
+            .snapshotPreferences(expect: simpleRoomViewModel.context.observe(\.viewState.permalink).map { $0 != nil }.eraseToStream())
             .previewDisplayName("Simple Room")
         
         RoomDetailsScreen(context: dmRoomViewModel.context)
-            .snapshotPreferences(expect: dmRoomViewModel.context.$viewState.map { state in
-                state.accountOwner != nil
-            })
+            .snapshotPreferences(expect: dmRoomViewModel.context.observe(\.viewState.accountOwner).map { $0 != nil }.eraseToStream())
             .previewDisplayName("DM Room")
         
         RoomDetailsScreen(context: dmRoomVerifiedViewModel.context)
-            .snapshotPreferences(expect: dmRoomVerifiedViewModel.context.$viewState.map { state in
-                state.accountOwner != nil
-            })
+            .snapshotPreferences(expect: dmRoomVerifiedViewModel.context.observe(\.viewState.dmRecipientInfo?.verificationState).map { $0 == .verified }.eraseToStream())
             .previewDisplayName("DM Room Verified")
         
         RoomDetailsScreen(context: dmRoomVerificationViolationViewModel.context)
-            .snapshotPreferences(expect: dmRoomVerificationViolationViewModel.context.$viewState.map { state in
-                state.accountOwner != nil
-            })
+            .snapshotPreferences(expect: dmRoomVerificationViolationViewModel.context.observe(\.viewState.accountOwner).map { $0 != nil }.eraseToStream())
             .previewDisplayName("DM Room Verification Violation")
     }
     

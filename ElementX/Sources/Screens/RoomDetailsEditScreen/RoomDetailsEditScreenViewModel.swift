@@ -39,12 +39,14 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                                                                     avatarURL: roomAvatar,
                                                                     bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")), mediaProvider: mediaProvider)
         
-        Task {
-            let powerLevels = try? await roomProxy.powerLevels().get()
-            state.canEditAvatar = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomAvatar).get()) == .some(true)
-            state.canEditName = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomName).get()) == .some(true)
-            state.canEditTopic = (try? powerLevels?.canUser(userID: roomProxy.ownUserID, sendStateEvent: .roomTopic).get()) == .some(true)
-        }
+        roomProxy.infoPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] roomInfo in
+                self?.updateRoomInfo(roomInfo: roomInfo)
+            }
+            .store(in: &cancellables)
+        
+        updateRoomInfo(roomInfo: roomProxy.infoPublisher.value)
     }
     
     // MARK: - Public
@@ -90,6 +92,14 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     }
     
     // MARK: - Private
+    
+    private func updateRoomInfo(roomInfo: RoomInfoProxyProtocol) {
+        if let powerLevels = roomInfo.powerLevels {
+            state.canEditAvatar = powerLevels.canOwnUser(sendStateEvent: .roomAvatar)
+            state.canEditName = powerLevels.canOwnUser(sendStateEvent: .roomName)
+            state.canEditTopic = powerLevels.canOwnUser(sendStateEvent: .roomTopic)
+        }
+    }
     
     private func saveRoomDetails() {
         Task {

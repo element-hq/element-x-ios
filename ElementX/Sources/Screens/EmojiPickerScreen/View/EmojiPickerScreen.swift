@@ -9,7 +9,7 @@ import Compound
 import SwiftUI
 
 struct EmojiPickerScreen: View {
-    @ObservedObject var context: EmojiPickerScreenViewModel.Context
+    let context: EmojiPickerScreenViewModel.Context
     
     var selectedEmojis = Set<String>()
     @State var searchString = ""
@@ -106,9 +106,7 @@ struct EmojiPickerScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         EmojiPickerScreen(context: viewModel.context, selectedEmojis: ["😀", "😄"])
             .previewDisplayName("Screen")
-            .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
-                !state.categories.isEmpty
-            })
+            .snapshotPreferences(expect: viewModel.context.observe(\.viewState.categories).map { !$0.isEmpty }.eraseToStream())
     }
 }
 

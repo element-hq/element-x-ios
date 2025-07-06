@@ -812,7 +812,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return .notLoaded
         case .pending:
             return .loading
-        case .ready(let content, let senderID, let senderProfile):
+        case .ready(let content, let senderID, let senderProfile, _, _):
             let sender = buildTimelineItemSender(senderID: senderID, senderProfile: senderProfile)
             
             let latestEventContent: TimelineEventContent = switch content {
@@ -952,7 +952,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return .init(details: .notLoaded(eventID: details.eventId()), isThreaded: isThreaded)
         case .pending:
             return .init(details: .loading(eventID: details.eventId()), isThreaded: isThreaded)
-        case let .ready(timelineItem, senderID, senderProfile):
+        case let .ready(timelineItem, senderID, senderProfile, _, _):
             let sender = buildTimelineItemSender(senderID: senderID, senderProfile: senderProfile)
             
             let replyContent: TimelineEventContent
@@ -1055,11 +1055,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
 private extension EmbeddedEventDetails {
     var isThreaded: Bool {
         switch self {
-        case .ready(let content, _, _):
-            guard case let .msgLike(messageLikeContent) = content else {
-                return false
-            }
-            
+        case .ready(.msgLike(let messageLikeContent), _, _, _, _):
             return messageLikeContent.threadRoot != nil
         default:
             return false

@@ -8,7 +8,7 @@
 import Alamofire
 import Foundation
 
-protocol ZeroPostsApiProtocol {
+protocol ZeroPostApiProtocol {
     func fetchPosts(channelZId: String?, following: Bool, limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
     func fetchPostDetails(postId: String) async throws -> Result<ZPost, Error>
     func fetchPostReplies(postId: String, limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
@@ -19,7 +19,7 @@ protocol ZeroPostsApiProtocol {
     func fetchUserPosts(userId: String, limit: Int, skip: Int) async throws -> Result<[ZPost], Error>
 }
 
-class ZeroPostsApi: ZeroPostsApiProtocol {
+class ZeroPostApi: ZeroPostApiProtocol {
     
     private let appSettings: AppSettings
     

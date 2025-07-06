@@ -31,7 +31,7 @@ class BugReportServiceTests: XCTestCase {
                                   ed25519: nil,
                                   curve25519: nil,
                                   text: "i cannot send message",
-                                  includeLogs: true,
+                                  logFiles: [URL(filePath: "/logs/1.log"), URL(filePath: "/logs/2.log")],
                                   canContact: false,
                                   githubLabels: [],
                                   files: [])
@@ -42,7 +42,7 @@ class BugReportServiceTests: XCTestCase {
     }
     
     func testInitialStateWithRealService() throws {
-        let service = BugReportService(baseURL: "https://www.example.com",
+        let service = BugReportService(rageshakeURL: "https://example.com/submit",
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
@@ -53,7 +53,7 @@ class BugReportServiceTests: XCTestCase {
     }
     
     func testInitialStateWithRealServiceAndNoURL() throws {
-        let service = BugReportService(baseURL: nil,
+        let service = BugReportService(rageshakeURL: nil,
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
@@ -64,7 +64,7 @@ class BugReportServiceTests: XCTestCase {
     }
     
     @MainActor func testSubmitBugReportWithRealService() async throws {
-        let service = BugReportService(baseURL: "https://www.example.com",
+        let service = BugReportService(rageshakeURL: "https://example.com/submit",
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
@@ -76,7 +76,7 @@ class BugReportServiceTests: XCTestCase {
                                   ed25519: nil,
                                   curve25519: nil,
                                   text: "i cannot send message",
-                                  includeLogs: true,
+                                  logFiles: Tracing.logFiles,
                                   canContact: false,
                                   githubLabels: [],
                                   files: [])
@@ -84,6 +84,62 @@ class BugReportServiceTests: XCTestCase {
         let response = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()
         
         XCTAssertEqual(response.reportURL, "https://example.com/123")
+    }
+    
+    @MainActor func testConfigurations() async throws {
+        let service = BugReportService(rageshakeURL: "https://example.com/submit",
+                                       applicationID: "mock_app_id",
+                                       sdkGitSHA: "1234",
+                                       maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
+                                       session: .mock,
+                                       appHooks: AppHooks())
+        XCTAssertTrue(service.isEnabled)
+        
+        service.applyConfiguration(.disabled)
+        XCTAssertFalse(service.isEnabled)
+        
+        service.applyConfiguration(.url("https://bugs.server.net/submit"))
+        XCTAssertTrue(service.isEnabled)
+
+        let bugReport = BugReport(userID: "@mock:client.com",
+                                  deviceID: nil,
+                                  ed25519: nil,
+                                  curve25519: nil,
+                                  text: "i cannot send message",
+                                  logFiles: Tracing.logFiles,
+                                  canContact: false,
+                                  githubLabels: [],
+                                  files: [])
+        let progressSubject = CurrentValueSubject<Double, Never>(0.0)
+        let customConfigurationResponse = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()
+        
+        XCTAssertEqual(customConfigurationResponse.reportURL, "https://bugs.server.net/123")
+        
+        service.applyConfiguration(.default)
+        XCTAssertTrue(service.isEnabled)
+        
+        let defaultConfigurationResponse = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()
+        
+        XCTAssertEqual(defaultConfigurationResponse.reportURL, "https://example.com/123")
+    }
+    
+    func testDisabledConfigurations() {
+        let service = BugReportService(rageshakeURL: nil,
+                                       applicationID: "mock_app_id",
+                                       sdkGitSHA: "1234",
+                                       maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
+                                       session: .mock,
+                                       appHooks: AppHooks())
+        XCTAssertFalse(service.isEnabled)
+        
+        service.applyConfiguration(.disabled)
+        XCTAssertFalse(service.isEnabled)
+        
+        service.applyConfiguration(.url("https://bugs.server.net/submit"))
+        XCTAssertTrue(service.isEnabled)
+        
+        service.applyConfiguration(.default)
+        XCTAssertFalse(service.isEnabled)
     }
     
     func testLogsMaxSize() {
@@ -114,9 +170,11 @@ class BugReportServiceTests: XCTestCase {
 
 private class MockURLProtocol: URLProtocol {
     override func startLoading() {
-        let response = "{\"report_url\":\"https://example.com/123\"}"
+        guard let url = request.url else { return }
+        let reportURL = url.deletingLastPathComponent().appending(path: "123")
+        let response = "{\"report_url\":\"\(reportURL.absoluteString)\"}"
+        
         if let data = response.data(using: .utf8),
-           let url = request.url,
            let urlResponse = HTTPURLResponse(url: url, statusCode: 200, httpVersion: nil, headerFields: nil) {
             client?.urlProtocol(self, didReceive: urlResponse, cacheStoragePolicy: .allowedInMemoryOnly)
             client?.urlProtocol(self, didLoad: data)

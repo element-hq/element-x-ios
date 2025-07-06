@@ -13,6 +13,7 @@ import XCTest
 class AuthenticationStartScreenViewModelTests: XCTestCase {
     var clientBuilderFactory: AuthenticationClientBuilderFactoryMock!
     var client: ClientSDKMock!
+    var appSettings: AppSettings!
     var authenticationService: AuthenticationServiceProtocol!
     
     var viewModel: AuthenticationStartScreenViewModel!
@@ -20,8 +21,9 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
     
     override func setUp() {
         AppSettings.resetAllSettings()
-        let appSettings = AppSettings()
-        ServiceLocator.shared.register(appSettings: appSettings)
+        appSettings = AppSettings()
+        // These app settings are kept local to the tests on purpose as if they are registered in the
+        // ServiceLocator, the providers override that we apply will break other tests in the suite.
     }
     
     override func tearDown() {
@@ -142,13 +144,13 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         authenticationService = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                                                       encryptionKeyProvider: EncryptionKeyProvider(),
                                                       clientBuilderFactory: clientBuilderFactory,
-                                                      appSettings: ServiceLocator.shared.settings,
+                                                      appSettings: appSettings,
                                                       appHooks: AppHooks())
         
         viewModel = AuthenticationStartScreenViewModel(authenticationService: authenticationService,
                                                        provisioningParameters: provisioningParameters,
                                                        isBugReportServiceEnabled: true,
-                                                       appSettings: ServiceLocator.shared.settings,
+                                                       appSettings: appSettings,
                                                        userIndicatorController: UserIndicatorControllerMock())
         
         // Add a fake window in order for the OIDC flow to continue
@@ -156,7 +158,6 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
     }
     
     private func setAllowedAccountProviders(_ providers: [String]) {
-        let appSettings: AppSettings! = ServiceLocator.shared.settings
         appSettings.override(accountProviders: providers,
                              allowOtherAccountProviders: false,
                              pushGatewayBaseURL: appSettings.pushGatewayBaseURL,

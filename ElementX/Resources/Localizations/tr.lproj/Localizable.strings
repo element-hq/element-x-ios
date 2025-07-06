@@ -25,10 +25,15 @@
 "a11y_show_password" = "Şifreyi göster";
 "a11y_start_call" = "Bir arama başlatın";
 "a11y_user_menu" = "Kullanıcı menüsü";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Ayrıntıları görüntüle";
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Sesli mesajı kaydedin.";
 "a11y_voice_message_stop_recording" = "Kaydı durdur";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Kabul et";
 "action_add_caption" = "Açıklama ekle";
 "action_add_to_timeline" = "Zaman çizelgesine ekle";
@@ -131,6 +136,10 @@
 "action_view_source" = "Kaynağı görüntüle";
 "action_yes" = "Evet";
 "action_yes_try_again" = "Evet, tekrar dene";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Çıkış Yap ve Yükselt";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Sunucunuz artık yeni, daha hızlı bir protokolü destekliyor. Şimdi oturumu kapatıp tekrar oturum açarak yükseltme yapın. Bunu şimdi yapmak, eski protokol daha sonra kaldırıldığında zorunlu oturum kapatmayı önlemenize yardımcı olacaktır.";
@@ -539,6 +548,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Oda adresi ekle";
 "screen_security_and_privacy_ask_to_join_option_description" = "Herkes odaya katılma isteğinde bulunabilir ancak bir yönetici veya moderatörün isteği kabul etmesi gerekir.";
@@ -632,6 +642,7 @@
 "screen_bug_report_error_description_too_short" = "Açıklama çok kısa, lütfen ne olduğu hakkında daha fazla ayrıntı verin. Teşekkürler!";
 "screen_bug_report_include_crash_logs" = "Hata günlüklerini gönder";
 "screen_bug_report_include_logs" = "Günlüklere izin ver";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Ekran görüntüsü gönder";
 "screen_bug_report_logs_description" = "Her şeyin düzgün çalıştığından emin olmak için günlükler mesajınıza dahil edilecektir. Mesajınızı kayıt tutmadan göndermek için bu ayarı kapatın.";
 "screen_bug_report_view_logs" = "Günlükleri görüntüle";
@@ -792,6 +803,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "si̇stem ayarları";
 "screen_notification_settings_system_notifications_turned_off" = "Sistem bildirimleri kapalı";
 "screen_notification_settings_title" = "Bildirimler";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Manuel olarak oturum aç";
 "screen_onboarding_sign_in_to" = "Sign in to %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "QR kodu ile giriş yap";

@@ -18,12 +18,14 @@ extension ClientBuilder {
                             enableOnlySignedDeviceIsolationMode: Bool,
                             enableKeyShareOnInvite: Bool,
                             requestTimeout: UInt64? = 25000,
-                            maxRequestRetryTime: UInt64? = nil) -> ClientBuilder {
+                            maxRequestRetryTime: UInt64? = nil,
+                            threadsEnabled: Bool) -> ClientBuilder {
         var builder = ClientBuilder()
             .crossProcessStoreLocksHolderName(holderName: InfoPlistReader.main.bundleIdentifier)
             .enableOidcRefreshLock()
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
+            .threadsEnabled(enabled: threadsEnabled)
             .requestConfig(config: .init(retryLimit: 0,
                                          timeout: requestTimeout,
                                          maxConcurrentRequests: nil,
@@ -44,11 +46,11 @@ extension ClientBuilder {
             if enableOnlySignedDeviceIsolationMode {
                 builder = builder
                     .roomKeyRecipientStrategy(strategy: .identityBasedStrategy)
-                    .roomDecryptionTrustRequirement(trustRequirement: .crossSignedOrLegacy)
+                    .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .crossSignedOrLegacy))
             } else {
                 builder = builder
                     .roomKeyRecipientStrategy(strategy: .errorOnVerifiedUserProblem)
-                    .roomDecryptionTrustRequirement(trustRequirement: .untrusted)
+                    .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .untrusted))
             }
         }
         

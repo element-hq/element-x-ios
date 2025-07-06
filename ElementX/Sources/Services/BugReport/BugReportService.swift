@@ -12,27 +12,30 @@ import Sentry
 import UIKit
 
 class BugReportService: NSObject, BugReportServiceProtocol {
-    private let baseURL: URL?
+    /// The rageshake URL as provided in the init.
+    private let defaultRageshakeURL: URL?
+    /// The rageshake URL currently being used by the service.
+    private var rageshakeURL: URL?
     private let applicationID: String
     private let sdkGitSHA: String
     private let maxUploadSize: Int
     private let session: URLSession
-    
     private let appHooks: AppHooks
     
     private let progressSubject = PassthroughSubject<Double, Never>()
     private var cancellables = Set<AnyCancellable>()
     
-    var isEnabled: Bool { baseURL != nil }
+    var isEnabled: Bool { rageshakeURL != nil }
     var lastCrashEventID: String?
     
-    init(baseURL: URL?,
+    init(rageshakeURL: URL?,
          applicationID: String,
          sdkGitSHA: String,
          maxUploadSize: Int,
          session: URLSession = .shared,
          appHooks: AppHooks) {
-        self.baseURL = baseURL
+        defaultRageshakeURL = rageshakeURL
+        self.rageshakeURL = rageshakeURL
         self.applicationID = applicationID
         self.sdkGitSHA = sdkGitSHA
         self.maxUploadSize = maxUploadSize
@@ -46,15 +49,26 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     var crashedLastRun: Bool {
         SentrySDK.crashedLastRun
     }
-        
+    
+    func applyConfiguration(_ configuration: RageshakeConfiguration) {
+        switch configuration {
+        case .url(let url):
+            rageshakeURL = url
+        case .disabled:
+            rageshakeURL = nil
+        case .default:
+            rageshakeURL = defaultRageshakeURL
+        }
+    }
+    
     // swiftlint:disable:next cyclomatic_complexity
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError> {
-        guard let baseURL else {
+        guard let rageshakeURL else {
             fatalError("No bug report URL set, the screen should not be shown in this case.")
         }
         
-        let bugReport = appHooks.bugReportHook.update(bugReport)
+        var bugReport = appHooks.bugReportHook.update(bugReport)
         
         var params = [
             MultipartFormData(key: "text", type: .text(value: bugReport.text)),
@@ -63,6 +77,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         
         if let userID = bugReport.userID {
             params.append(.init(key: "user_id", type: .text(value: userID)))
+        } else {
+            bugReport.githubLabels.append("login")
         }
         
         if let deviceID = bugReport.deviceID {
@@ -74,21 +90,26 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             params.append(.init(key: "device_keys", type: .text(value: compactKeys)))
         }
         
+        if let crashEventID = lastCrashEventID {
+            params.append(MultipartFormData(key: "crash_report", type: .text(value: "<https://sentry.tools.element.io/organizations/element/issues/?project=44&query=\(crashEventID)>")))
+            bugReport.githubLabels.append("crash")
+        }
+        
         params.append(contentsOf: defaultParams)
+        
+        if InfoPlistReader.main.baseBundleIdentifier == "io.element.elementx.nightly" {
+            bugReport.githubLabels.append("Nightly")
+        }
         
         for label in bugReport.githubLabels {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))
         }
         
-        if bugReport.includeLogs {
-            let logAttachments = await zipFiles(Tracing.logFiles)
+        if let logFiles = bugReport.logFiles {
+            let logAttachments = await zipFiles(logFiles)
             for url in logAttachments.files {
                 params.append(MultipartFormData(key: "compressed-log", type: .file(url: url)))
             }
-        }
-        
-        if let crashEventID = lastCrashEventID {
-            params.append(MultipartFormData(key: "crash_report", type: .text(value: "<https://sentry.tools.element.io/organizations/element/issues/?project=44&query=\(crashEventID)>")))
         }
         
         for url in bugReport.files {
@@ -107,7 +128,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         }
         body.appendString(string: "--\(boundary)--\r\n")
 
-        var request = URLRequest(url: baseURL)
+        var request = URLRequest(url: rageshakeURL)
         request.addValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
         request.httpMethod = "POST"

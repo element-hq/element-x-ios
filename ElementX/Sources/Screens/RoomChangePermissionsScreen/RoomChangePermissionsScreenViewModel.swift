@@ -9,7 +9,7 @@ import Combine
 import MatrixRustSDK
 import SwiftUI
 
-typealias RoomChangePermissionsScreenViewModelType = StateStoreViewModel<RoomChangePermissionsScreenViewState, RoomChangePermissionsScreenViewAction>
+typealias RoomChangePermissionsScreenViewModelType = StateStoreViewModelV2<RoomChangePermissionsScreenViewState, RoomChangePermissionsScreenViewAction>
 
 class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModelType, RoomChangePermissionsScreenViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol

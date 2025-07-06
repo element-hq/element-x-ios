@@ -114,7 +114,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         setupCall()
         
         timeoutTask = Task { [weak self] in
-            try? await Task.sleep(for: .seconds(30))
+            try? await Task.sleep(for: .seconds(10))
             guard !Task.isCancelled, let self else { return }
             MXLog.error("Failed to join Element Call: Timeout")
             state.bindings.alertInfo = .init(id: UUID(),
@@ -191,7 +191,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 switch await widgetDriver.start(baseURL: baseURL,
                                                 clientID: clientID,
                                                 colorScheme: colorScheme,
-                                                rageshakeURL: appSettings.bugReportServiceBaseURL?.absoluteString,
+                                                rageshakeURL: appSettings.bugReportRageshakeURL?.absoluteString,
                                                 analyticsConfiguration: analyticsConfiguration) {
                 case .success(let url):
                     state.url = url
@@ -294,7 +294,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
         
         let deviceList = if currentOutput.portType == .builtInSpeaker {
             // This allows the webview to display the earpiece option
-            "{id: '\(currentOutput.uid)', name: '\(currentOutput.portName)', forEarpiece: true}"
+            "{id: '\(currentOutput.uid)', name: '\(currentOutput.portName)', forEarpiece: true, isSpeaker: true}"
         } else {
             // Doesn't matter because the switch is handled through the OS
             "{id: 'dummy', name: 'dummy'}"

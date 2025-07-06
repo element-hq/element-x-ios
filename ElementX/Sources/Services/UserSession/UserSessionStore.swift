@@ -124,7 +124,8 @@ class UserSessionStore: UserSessionStoreProtocol {
                          sessionDelegate: keychainController,
                          appHooks: appHooks,
                          enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
-                         enableKeyShareOnInvite: appSettings.enableKeyShareOnInvite)
+                         enableKeyShareOnInvite: appSettings.enableKeyShareOnInvite,
+                         threadsEnabled: appSettings.threadsEnabled)
             .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
                           cachePath: credentials.restorationToken.sessionDirectories.cachePath)
             .username(username: credentials.userID)

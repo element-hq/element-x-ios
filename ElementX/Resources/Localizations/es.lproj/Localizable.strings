@@ -25,10 +25,15 @@
 "a11y_show_password" = "Mostrar contraseña";
 "a11y_start_call" = "Iniciar llamada";
 "a11y_user_menu" = "Menú de usuario";
+"a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Mostrar detalles";
 "a11y_voice_message" = "Mensaje de voz, duración: %1$@";
 "a11y_voice_message_record" = "Grabar mensaje de voz";
 "a11y_voice_message_stop_recording" = "Detener grabación";
+"a11y.other_user_avatar" = "Other user's avatar";
+"a11y.room_avatar" = "Room avatar";
+"a11y.user_avatar" = "User avatar";
+"a11y.your_avatar" = "Your avatar";
 "action_accept" = "Aceptar";
 "action_add_caption" = "Agregar leyenda";
 "action_add_to_timeline" = "Añadir a la cronología";
@@ -131,6 +136,10 @@
 "action_view_source" = "Ver fuente";
 "action_yes" = "Sí";
 "action_yes_try_again" = "Sí, intentar de nuevo";
+"action.open_context_menu" = "Open context menu";
+"action.send_edited_message" = "Send edited message";
+"action.send_voice_message" = "Send voice message";
+"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Cerrar sesión y actualizar";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ya no es compatible con el antiguo protocolo. Cierra sesión y vuelve a iniciarla para seguir usando la aplicación.";
 "banner_migrate_to_native_sliding_sync_description" = "Tu servidor es ahora compatible con un protocolo nuevo y más rápido. Cierra la sesión y vuelve a iniciarla para actualizar ahora. Haciéndolo ahora, evitarás tener que cerrar la sesión cuando se elimine el protocolo antiguo.";
@@ -539,6 +548,7 @@
 "screen_room_timeline_upgraded_room_action" = "See old messages";
 "screen_room_timeline_upgraded_room_message" = "This room is a continuation of another room";
 "screen_room_timeline_reactions_show_reactions_summary" = "Show reactions summary";
+"screen_roomlist_clear_filters" = "Clear filters";
 "screen_roomlist_tombstoned_room_description" = "This room has been upgraded";
 "screen_security_and_privacy_add_room_address_action" = "Agregar dirección de sala";
 "screen_security_and_privacy_ask_to_join_option_description" = "Cualquiera puede solicitar unirse a la sala, pero un administrador o moderador tendrá que aceptar la solicitud.";
@@ -632,6 +642,7 @@
 "screen_bug_report_error_description_too_short" = "La descripción es demasiado corta. Proporciona más detalles sobre lo sucedido. ¡Gracias!";
 "screen_bug_report_include_crash_logs" = "Enviar registros de fallos";
 "screen_bug_report_include_logs" = "Permitir registros";
+"screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Enviar captura de pantalla";
 "screen_bug_report_logs_description" = "Los registros se incluirán con tu mensaje para asegurarse de que todo funciona correctamente. Para enviar tu mensaje sin registros, desactiva esta opción.";
 "screen_bug_report_view_logs" = "Ver los registros";
@@ -792,6 +803,7 @@
 "screen_notification_settings_system_notifications_action_required_content_link" = "ajustes del sistema";
 "screen_notification_settings_system_notifications_turned_off" = "Notificaciones del sistema desactivadas";
 "screen_notification_settings_title" = "Notificaciones";
+"screen_onboarding_app_version" = "Version %1$@";
 "screen_onboarding_sign_in_manually" = "Iniciar sesión manualmente";
 "screen_onboarding_sign_in_to" = "Iniciar sesión en %1$@";
 "screen_onboarding_sign_in_with_qr_code" = "Iniciar sesión con un código QR";

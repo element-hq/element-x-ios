@@ -8,7 +8,7 @@
 import Combine
 import SwiftUI
 
-typealias BlockedUsersScreenViewModelType = StateStoreViewModel<BlockedUsersScreenViewState, BlockedUsersScreenViewAction>
+typealias BlockedUsersScreenViewModelType = StateStoreViewModelV2<BlockedUsersScreenViewState, BlockedUsersScreenViewAction>
 
 class BlockedUsersScreenViewModel: BlockedUsersScreenViewModelType, BlockedUsersScreenViewModelProtocol {
     let hideProfiles: Bool
