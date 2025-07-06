@@ -1782,6 +1782,8 @@
 		793899D42DF0ECB600980991 /* HorizontalDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899D22DF0ECAB00980991 /* HorizontalDivider.swift */; };
 		793899D62DF0F2AA00980991 /* FloatingActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899D52DF0F2A400980991 /* FloatingActionButton.swift */; };
 		793899D72DF0F2AA00980991 /* FloatingActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793899D52DF0F2A400980991 /* FloatingActionButton.swift */; };
+		793F3A5C2E1801B2002F96F0 /* ZeroFlaggedFeaturesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793F3A5B2E1801AB002F96F0 /* ZeroFlaggedFeaturesService.swift */; };
+		793F3A5D2E1801B2002F96F0 /* ZeroFlaggedFeaturesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793F3A5B2E1801AB002F96F0 /* ZeroFlaggedFeaturesService.swift */; };
 		793FA5B72D5B33E700893AC4 /* HomeScreenPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */; };
 		793FA5B82D5B33E700893AC4 /* HomeScreenPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */; };
 		7944A75F2D589F3000B75DAC /* CreateFeedScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7944A75E2D589F2700B75DAC /* CreateFeedScreenCoordinator.swift */; };
@@ -3472,6 +3474,7 @@
 		793899CF2DEF995700980991 /* ReferAFriendSettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreen.swift; sourceTree = "<group>"; };
 		793899D22DF0ECAB00980991 /* HorizontalDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalDivider.swift; sourceTree = "<group>"; };
 		793899D52DF0F2A400980991 /* FloatingActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingActionButton.swift; sourceTree = "<group>"; };
+		793F3A5B2E1801AB002F96F0 /* ZeroFlaggedFeaturesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroFlaggedFeaturesService.swift; sourceTree = "<group>"; };
 		793FA5B62D5B33DE00893AC4 /* HomeScreenPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostCell.swift; sourceTree = "<group>"; };
 		7944A75E2D589F2700B75DAC /* CreateFeedScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenCoordinator.swift; sourceTree = "<group>"; };
 		7944A7612D589F3200B75DAC /* CreateFeedScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFeedScreenModels.swift; sourceTree = "<group>"; };
@@ -4962,6 +4965,7 @@
 		18C852FE2D11A127009AF206 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				793F3A5B2E1801AB002F96F0 /* ZeroFlaggedFeaturesService.swift */,
 				79F31B202E02BB0C0043E100 /* RemoteConfigManager.swift */,
 				18C852FF2D11A12E009AF206 /* WalletConnectService.swift */,
 			);
@@ -9593,6 +9597,7 @@
 				18E9A4B42C9829970082DDA4 /* ComposerDraftService.swift in Sources */,
 				18E9A4B52C9829970082DDA4 /* ComposerDraftServiceMock.swift in Sources */,
 				18E9A4B62C9829970082DDA4 /* ComposerDraftServiceProtocol.swift in Sources */,
+				793F3A5D2E1801B2002F96F0 /* ZeroFlaggedFeaturesService.swift in Sources */,
 				18FFCED32CEC8F45002F2647 /* RoomSelectionScreenCoordinator.swift in Sources */,
 				18E9A4B72C9829970082DDA4 /* ComposerToolbar.swift in Sources */,
 				18E9A4B82C9829970082DDA4 /* ComposerToolbarModels.swift in Sources */,
@@ -11386,6 +11391,7 @@
 				762DB0973865293F0C3D3D7B /* SessionVerificationScreenViewModelProtocol.swift in Sources */,
 				798457622D6090DD0039623F /* FeedDetailsUpdatedProtocol.swift in Sources */,
 				755395927DDD6EBDDA5E217A /* SettingsFlowCoordinator.swift in Sources */,
+				793F3A5C2E1801B2002F96F0 /* ZeroFlaggedFeaturesService.swift in Sources */,
 				34F1261CEF6D6A00D559B520 /* SettingsScreen.swift in Sources */,
 				AF8BFA37791E1756EE243E08 /* SettingsScreenCoordinator.swift in Sources */,
 				B93D7CE520088AD53FA6D53C /* SettingsScreenModels.swift in Sources */,
