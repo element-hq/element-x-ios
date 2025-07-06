@@ -15,6 +15,10 @@ struct InviteFriendSettingsScreenViewState: BindableState {
     var totalInvited: String {
         bindings.messengerInvite.invitesUsed.description
     }
+    
+    var proSubscriptionsCount: String {
+        bindings.messengerInvite.proSubscriptions.description
+    }
 }
 
 struct InviteFriendSettingsScreenViewStateBindings {

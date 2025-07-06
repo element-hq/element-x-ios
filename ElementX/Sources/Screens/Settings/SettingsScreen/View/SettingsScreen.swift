@@ -74,9 +74,16 @@ struct SettingsScreen: View {
                         .accessibilityHidden(true)
                         
                         VStack {
-                            Text(context.viewState.userDisplayName ?? "")
-                                .font(.zero.headingSMSemibold)
-                                .foregroundColor(.compound.textPrimary)
+                            HStack {
+                                Text(context.viewState.userDisplayName ?? "")
+                                    .font(.zero.headingSMSemibold)
+                                    .foregroundColor(.compound.textPrimary)
+                                
+                                if context.viewState.isZeroProSubscriber {
+                                    CompoundIcon(\.verified)
+                                        .foregroundStyle(.zero.bgAccentRest)
+                                }
+                            }
                             
                             if context.viewState.primaryZeroId != nil {
                                 Text(context.viewState.primaryZeroId!)

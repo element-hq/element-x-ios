@@ -57,7 +57,8 @@ struct ReferAFriendSettingsScreen: View {
                             HStack(spacing: 12) {
                                 BottomInfoBox(title: "Total invited so far",
                                               description: context.viewState.totalInvited)
-                                BottomInfoBox(title: "Pro subs", description: "0")
+                                BottomInfoBox(title: "Pro subs",
+                                              description: context.viewState.proSubscriptionsCount)
                             }
                             
                             referralCodeStrip

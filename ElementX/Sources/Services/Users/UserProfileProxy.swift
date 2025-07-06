@@ -108,6 +108,7 @@ extension UserProfileProxy {
               primaryZid: primaryZeroId,
               publicAddress: nil,
               followersCount: nil,
-              followingCount: nil)
+              followingCount: nil,
+              isZeroProSubscriber: false)
     }
 }

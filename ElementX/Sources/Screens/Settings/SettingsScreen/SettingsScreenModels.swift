@@ -43,6 +43,7 @@ struct SettingsScreenViewState: BindableState {
     var userDisplayName: String?
     var showDeveloperOptions: Bool
     var primaryZeroId: String?
+    var isZeroProSubscriber: Bool = false
     
     var securitySectionMode = SettingsScreenSecuritySectionMode.none
     var showSecuritySectionBadge = false
