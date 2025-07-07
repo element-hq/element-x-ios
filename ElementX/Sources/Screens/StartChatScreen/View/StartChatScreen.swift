@@ -128,6 +128,7 @@ struct StartChatScreen: View {
             }
         } else {
             Section.empty
+                .accessibilityHidden(true)
         }
     }
     
