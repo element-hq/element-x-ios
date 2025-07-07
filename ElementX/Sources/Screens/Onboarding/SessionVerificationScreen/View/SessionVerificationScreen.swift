@@ -193,10 +193,12 @@ struct SessionVerificationScreen: View {
             VStack(spacing: 16.0) {
                 Text(emoji.symbol)
                     .font(.compound.headingXLBold)
+                    .accessibilityHidden(true)
                 Text(emoji.localizedDescription.capitalized)
                     .font(.compound.bodyMD)
                     .foregroundColor(.compound.textSecondary)
             }
+            .accessibilityElement(children: .combine)
             .padding(8.0)
         }
     }
