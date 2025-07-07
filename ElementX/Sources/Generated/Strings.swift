@@ -32,6 +32,12 @@ internal enum L10n {
   internal static var a11yNotificationsMentionsOnly: String { return L10n.tr("Localizable", "a11y_notifications_mentions_only") }
   /// Muted
   internal static var a11yNotificationsMuted: String { return L10n.tr("Localizable", "a11y_notifications_muted") }
+  /// New mentions
+  internal static var a11yNotificationsNewMentions: String { return L10n.tr("Localizable", "a11y_notifications_new_mentions") }
+  /// New messages
+  internal static var a11yNotificationsNewMessages: String { return L10n.tr("Localizable", "a11y_notifications_new_messages") }
+  /// Ongoing call
+  internal static var a11yNotificationsOngoingCall: String { return L10n.tr("Localizable", "a11y_notifications_ongoing_call") }
   /// Page %1$d
   internal static func a11yPageN(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_page_n", p1)
@@ -1482,6 +1488,10 @@ internal enum L10n {
   internal static var screenEncryptionResetFooter: String { return L10n.tr("Localizable", "screen_encryption_reset_footer") }
   /// Can't confirm? You’ll need to reset your identity.
   internal static var screenEncryptionResetTitle: String { return L10n.tr("Localizable", "screen_encryption_reset_title") }
+  /// Chats
+  internal static var screenHomeTabChats: String { return L10n.tr("Localizable", "screen_home_tab_chats") }
+  /// Spaces
+  internal static var screenHomeTabSpaces: String { return L10n.tr("Localizable", "screen_home_tab_spaces") }
   /// Can't confirm?
   internal static var screenIdentityConfirmationCannotConfirm: String { return L10n.tr("Localizable", "screen_identity_confirmation_cannot_confirm") }
   /// Create a new recovery key

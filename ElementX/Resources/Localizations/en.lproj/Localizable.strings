@@ -7,6 +7,9 @@
 "a11y_jump_to_bottom" = "Jump to bottom";
 "a11y_notifications_mentions_only" = "Mentions only";
 "a11y_notifications_muted" = "Muted";
+"a11y_notifications_new_mentions" = "New mentions";
+"a11y_notifications_new_messages" = "New messages";
+"a11y_notifications_ongoing_call" = "Ongoing call";
 "a11y_page_n" = "Page %1$d";
 "a11y_pause" = "Pause";
 "a11y_paused_voice_message" = "Voice message, duration: %1$@, current position: %2$@";
@@ -466,6 +469,8 @@
 "screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
 "screen_edit_room_address_title" = "Room address";
+"screen_home_tab_chats" = "Chats";
+"screen_home_tab_spaces" = "Spaces";
 "screen_join_room_cancel_knock_action" = "Cancel request";
 "screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
 "screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
