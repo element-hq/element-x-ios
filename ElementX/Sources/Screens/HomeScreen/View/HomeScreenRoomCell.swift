@@ -108,6 +108,7 @@ struct HomeScreenRoomCell: View {
             HStack(spacing: 8) {
                 if room.badges.isCallShown {
                     CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
+                        .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
                 }
                 
                 if room.badges.isMuteShown {
@@ -122,6 +123,7 @@ struct HomeScreenRoomCell: View {
                 if room.badges.isDotShown {
                     Circle()
                         .frame(width: 12, height: 12)
+                        .accessibilityLabel(L10n.a11yNotificationsNewMessages)
                 }
             }
             .foregroundColor(room.isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
@@ -130,7 +132,7 @@ struct HomeScreenRoomCell: View {
             
     private var mentionIcon: some View {
         CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
-            .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
+            .accessibilityLabel(L10n.a11yNotificationsNewMentions)
     }
     
     @ViewBuilder
