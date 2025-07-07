@@ -309,6 +309,7 @@ private struct PinnedIndicatorViewModifier: ViewModifier {
     private var pinnedIndicator: some View {
         CompoundIcon(\.pinSolid, size: .xSmall, relativeTo: .compound.bodyMD)
             .foregroundStyle(Color.compound.iconTertiary)
+            .accessibilityLabel(L10n.commonPinned)
     }
 }
 
