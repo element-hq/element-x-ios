@@ -2,6 +2,7 @@
 "a11y_add_reaction" = "Add reaction: %1$@";
 "a11y_avatar" = "Avatar";
 "a11y_delete" = "Delete";
+"a11y_edit_avatar" = "Edit avatar";
 "a11y_hide_password" = "Hide password";
 "a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "Jump to bottom";
