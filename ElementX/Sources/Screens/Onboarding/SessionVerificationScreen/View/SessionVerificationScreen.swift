@@ -198,8 +198,8 @@ struct SessionVerificationScreen: View {
                     .font(.compound.bodyMD)
                     .foregroundColor(.compound.textSecondary)
             }
-            .padding(8.0)
             .accessibilityElement(children: .combine)
+            .padding(8.0)
         }
     }
 }
