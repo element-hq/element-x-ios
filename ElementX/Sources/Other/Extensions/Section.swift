@@ -15,5 +15,6 @@ extension Section where Parent == Color, Content == EmptyView, Footer == EmptyVi
         } header: {
             Color.clear
         }
+        .accessibilityHidden(true)
     }
 }

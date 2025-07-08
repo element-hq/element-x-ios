@@ -22,7 +22,8 @@ struct PollRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             PollView(poll: poll,
-                     state: state) { action in
+                     state: state,
+                     sender: timelineItem.sender) { action in
                 switch action {
                 case .selectOption(let optionID):
                     guard let eventID, let option = poll.options.first(where: { $0.id == optionID }), !option.isSelected else { return }
