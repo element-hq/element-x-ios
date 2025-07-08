@@ -94,7 +94,7 @@ struct PollView: View {
         ForEach(poll.options, id: \.id) { option in
             if #available(iOS 18, *) {
                 pollOption(option: option)
-                    .accessibilityHint("Will remove previous selection",
+                    .accessibilityHint(L10n.a11yPollsWillRemoveSelection,
                                        isEnabled: isRemovePreviousSelectionHintEnabled(option: option))
             } else {
                 pollOption(option: option)
