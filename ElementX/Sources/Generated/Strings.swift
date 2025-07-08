@@ -22,6 +22,8 @@ internal enum L10n {
   internal static func a11yDigitsEntered(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_digits_entered", p1)
   }
+  /// Edit avatar
+  internal static var a11yEditAvatar: String { return L10n.tr("Localizable", "a11y_edit_avatar") }
   /// Hide password
   internal static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
   /// Join call
