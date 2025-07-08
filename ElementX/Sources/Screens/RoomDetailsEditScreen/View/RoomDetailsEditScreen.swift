@@ -60,7 +60,7 @@ struct RoomDetailsEditScreen: View {
                                    contentID: context.viewState.roomID,
                                    avatarSize: .user(on: .memberDetails),
                                    mediaProvider: context.mediaProvider)
-                .accessibilityLabel(context.viewState.canEditAvatar ? L10n.a11yEditAvatar : L10n.a11yAvatar)
+                .accessibilityLabel(L10n.a11yEditAvatar)
                 .overlay(alignment: .bottomTrailing) {
                     if context.viewState.canEditAvatar {
                         avatarOverlayIcon
