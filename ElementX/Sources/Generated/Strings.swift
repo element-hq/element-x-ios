@@ -100,6 +100,8 @@ internal enum L10n {
   internal static var a11yShowPassword: String { return L10n.tr("Localizable", "a11y_show_password") }
   /// Start a call
   internal static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
+  /// Time limited action required
+  internal static var a11yTimeLimitedActionRequired: String { return L10n.tr("Localizable", "a11y_time_limited_action_required") }
   /// User menu
   internal static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
   /// View avatar

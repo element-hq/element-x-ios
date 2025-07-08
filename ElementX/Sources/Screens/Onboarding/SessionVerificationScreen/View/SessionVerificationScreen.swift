@@ -31,6 +31,11 @@ struct SessionVerificationScreen: View {
         .interactiveDismissDisabled()
         .navigationBarBackButtonHidden(context.viewState.verificationState == .verified)
         .toolbar { toolbar }
+        .onAppear {
+            var announcement = AttributedString(L10n.a11yTimeLimitedActionRequired)
+            announcement.accessibilitySpeechAnnouncementPriority = .high
+            AccessibilityNotification.Announcement(announcement).post()
+        }
     }
     
     // MARK: - Private
