@@ -92,18 +92,32 @@ struct PollView: View {
 
     private var optionsView: some View {
         ForEach(poll.options, id: \.id) { option in
-            Button {
-                guard !option.isSelected else { return }
-                actionHandler(.selectOption(optionID: option.id))
-                feedbackGenerator.impactOccurred()
-            } label: {
-                PollOptionView(pollOption: option,
-                               showVotes: showVotes,
-                               isFinalResult: poll.hasEnded)
-                    .foregroundColor(progressBarColor(for: option))
+            if #available(iOS 18, *) {
+                pollOption(option: option)
+                    .accessibilityHint(L10n.a11yPollsWillRemoveSelection,
+                                       isEnabled: isRemovePreviousSelectionHintEnabled(option: option))
+            } else {
+                pollOption(option: option)
             }
-            .disabled(poll.hasEnded)
         }
+    }
+    
+    private func isRemovePreviousSelectionHintEnabled(option: Poll.Option) -> Bool {
+        !poll.hasEnded && poll.hasMaxSelections && !option.isSelected
+    }
+    
+    private func pollOption(option: Poll.Option) -> some View {
+        Button {
+            guard !option.isSelected else { return }
+            actionHandler(.selectOption(optionID: option.id))
+            feedbackGenerator.impactOccurred()
+        } label: {
+            PollOptionView(pollOption: option,
+                           showVotes: showVotes,
+                           isFinalResult: poll.hasEnded)
+                .foregroundColor(progressBarColor(for: option))
+        }
+        .disabled(poll.hasEnded)
     }
 
     @ViewBuilder
