@@ -15,6 +15,12 @@ protocol ZeroWalletApiProtocol {
     func getNFTs(walletAddress: String, nextPageParams: NextPageParams?) async throws -> Result<ZWalletNFTs, Error>
     
     func getTransactions(walletAddress: String, nextPageParams: TransactionNextPageParams?) async throws -> Result<ZWalletTransactions, Error>
+    
+    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String) async throws -> Result<ZWalletTransactionResponse, Error>
+    
+    func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async throws -> Result<ZWalletTransactionResponse, Error>
+    
+    func getTransactionReceipt(transactionHash: String) async throws -> Result<ZWalletTransactionReceipt, Error>
 }
 
 class ZeroWalletApi: ZeroWalletApiProtocol {
@@ -86,6 +92,51 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         }
     }
     
+    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
+        let parameters = ZWalletTransferToken(recipientWalletAddress: recipientWalletAddress, amount: amount, tokenAddress: tokenAddress)
+            .toDictionary()
+        let url = WalletEndPoints.transferToken.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: senderWalletAddress)
+        let transactionResult: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
+                                                                                                               method: .post,
+                                                                                                               appSettings: appSettings,
+                                                                                                               parameters: parameters)
+        switch transactionResult {
+        case .success(let transaction):
+            return .success(transaction)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
+        let parameters = ZWalletTransferNFT(recipientWalletAddress: recipientWalletAddress, tokenId: tokenId, nftAddress: nftAddress)
+            .toDictionary()
+        let url = WalletEndPoints.transferNft.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: senderWalletAddress)
+        let transactionResult: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
+                                                                                                               method: .post,
+                                                                                                               appSettings: appSettings,
+                                                                                                               parameters: parameters)
+        switch transactionResult {
+        case .success(let transaction):
+            return .success(transaction)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func getTransactionReceipt(transactionHash: String) async throws -> Result<ZWalletTransactionReceipt, any Error> {
+        let url = WalletEndPoints.transactionReceipt.replacingOccurrences(of: WalletApiConstants.trasaction_hash_path_parameter, with: transactionHash)
+        let receiptResult: Result<ZWalletTransactionReceipt, Error> = try await APIManager.shared.authorisedRequest(url,
+                                                                                                                    method: .get,
+                                                                                                                    appSettings: appSettings)
+        switch receiptResult {
+        case .success(let receipt):
+            return .success(receipt)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum WalletEndPoints {
@@ -95,9 +146,13 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         static let tokenBalances = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/tokens"
         static let nfts = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/nfts"
         static let transactions = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/transactions"
+        static let transferToken = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/transactions/transfer-token"
+        static let transferNft = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/transactions/transfer-nft"
+        static let transactionReceipt = "\(hostURL)api/wallet/transaction/\(WalletApiConstants.trasaction_hash_path_parameter)/receipt"
     }
     
     private enum WalletApiConstants {
         static let address_path_parameter = "{address}"
+        static let trasaction_hash_path_parameter = "{transaction_hash}"
     }
 }

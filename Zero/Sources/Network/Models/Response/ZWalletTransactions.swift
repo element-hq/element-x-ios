@@ -20,6 +20,8 @@ struct WalletTransaction: Codable {
     let token: TransactionToken
     let amount: String?
     let timestamp: String
+    let tokenId: String?
+    let type: String
 }
 
 struct TransactionToken: Codable {

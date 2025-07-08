@@ -7244,6 +7244,216 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return getWalletTransactionsWalletAddressNextPageReturnValue
         }
     }
+    //MARK: - transferToken
+
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressUnderlyingCallsCount = 0
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressCalled: Bool {
+        return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressCallsCount > 0
+    }
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressReceivedArguments: (senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String)?
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressReceivedInvocations: [(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String)] = []
+
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressUnderlyingReturnValue: Result<ZWalletTransactionResponse, ClientProxyError>!
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressReturnValue: Result<ZWalletTransactionResponse, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactionResponse, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressClosure: ((String, String, String, String) async -> Result<ZWalletTransactionResponse, ClientProxyError>)?
+
+    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String) async -> Result<ZWalletTransactionResponse, ClientProxyError> {
+        transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressCallsCount += 1
+        transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressReceivedArguments = (senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, amount: amount, tokenAddress: tokenAddress)
+        DispatchQueue.main.async {
+            self.transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressReceivedInvocations.append((senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, amount: amount, tokenAddress: tokenAddress))
+        }
+        if let transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressClosure = transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressClosure {
+            return await transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressClosure(senderWalletAddress, recipientWalletAddress, amount, tokenAddress)
+        } else {
+            return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressReturnValue
+        }
+    }
+    //MARK: - transferNFT
+
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount = 0
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressCalled: Bool {
+        return transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressCallsCount > 0
+    }
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReceivedArguments: (senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String)?
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReceivedInvocations: [(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String)] = []
+
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue: Result<ZWalletTransactionResponse, ClientProxyError>!
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReturnValue: Result<ZWalletTransactionResponse, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactionResponse, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressClosure: ((String, String, String, String) async -> Result<ZWalletTransactionResponse, ClientProxyError>)?
+
+    func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async -> Result<ZWalletTransactionResponse, ClientProxyError> {
+        transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressCallsCount += 1
+        transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReceivedArguments = (senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, tokenId: tokenId, nftAddress: nftAddress)
+        DispatchQueue.main.async {
+            self.transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReceivedInvocations.append((senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, tokenId: tokenId, nftAddress: nftAddress))
+        }
+        if let transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressClosure = transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressClosure {
+            return await transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressClosure(senderWalletAddress, recipientWalletAddress, tokenId, nftAddress)
+        } else {
+            return transferNFTSenderWalletAddressRecipientWalletAddressTokenIdNftAddressReturnValue
+        }
+    }
+    //MARK: - getTransactionReceipt
+
+    var getTransactionReceiptTransactionHashUnderlyingCallsCount = 0
+    var getTransactionReceiptTransactionHashCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getTransactionReceiptTransactionHashUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getTransactionReceiptTransactionHashUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getTransactionReceiptTransactionHashUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getTransactionReceiptTransactionHashUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getTransactionReceiptTransactionHashCalled: Bool {
+        return getTransactionReceiptTransactionHashCallsCount > 0
+    }
+    var getTransactionReceiptTransactionHashReceivedTransactionHash: String?
+    var getTransactionReceiptTransactionHashReceivedInvocations: [String] = []
+
+    var getTransactionReceiptTransactionHashUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>!
+    var getTransactionReceiptTransactionHashReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getTransactionReceiptTransactionHashUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactionReceipt, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getTransactionReceiptTransactionHashUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getTransactionReceiptTransactionHashUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getTransactionReceiptTransactionHashUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getTransactionReceiptTransactionHashClosure: ((String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
+
+    func getTransactionReceipt(transactionHash: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+        getTransactionReceiptTransactionHashCallsCount += 1
+        getTransactionReceiptTransactionHashReceivedTransactionHash = transactionHash
+        DispatchQueue.main.async {
+            self.getTransactionReceiptTransactionHashReceivedInvocations.append(transactionHash)
+        }
+        if let getTransactionReceiptTransactionHashClosure = getTransactionReceiptTransactionHashClosure {
+            return await getTransactionReceiptTransactionHashClosure(transactionHash)
+        } else {
+            return getTransactionReceiptTransactionHashReturnValue
+        }
+    }
     //MARK: - getLinkPreviewMetaData
 
     var getLinkPreviewMetaDataUrlUnderlyingCallsCount = 0

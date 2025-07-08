@@ -1355,6 +1355,51 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String) async -> Result<ZWalletTransactionResponse, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.transferToken(senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, amount: amount, tokenAddress: tokenAddress)
+            switch result {
+            case .success(let transactionResponse):
+                return .success(transactionResponse)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to transfer token, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async -> Result<ZWalletTransactionResponse, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.transferNFT(senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, tokenId: tokenId, nftAddress: nftAddress)
+            switch result {
+            case .success(let transactionResponse):
+                return .success(transactionResponse)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to transfer nft, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func getTransactionReceipt(transactionHash: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.getTransactionReceipt(transactionHash: transactionHash)
+            switch result {
+            case .success(let receipt):
+                return .success(receipt)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to get transaction receipt, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.metaDataApi.getLinkPreview(url: url)
