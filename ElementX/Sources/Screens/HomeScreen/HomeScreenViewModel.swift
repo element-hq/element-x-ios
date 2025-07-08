@@ -733,7 +733,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 markChannelRead(channel)
                 getRoomInfoFromAlias(channel.id)
             case .failure(let error):
-                MXLog.error("Failed to resolve room alias: \(channel.id). Error: \(error)")
+//                MXLog.error("Failed to resolve room alias: \(channel.id). Error: \(error)")
                 let joinChannelResult = await userSession.clientProxy.joinChannel(roomAliasOrId: channel.id)
                 switch joinChannelResult {
                 case .success(let roomId):

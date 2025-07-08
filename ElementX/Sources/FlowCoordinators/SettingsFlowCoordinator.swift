@@ -139,6 +139,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentInviteFriend()
                 case .referAFriend:
                     presentReferAFriend()
+                case .zeroProSub:
+                    presentZeroProSubSettings()
                 }
             }
             .store(in: &cancellables)
@@ -301,6 +303,12 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
 //        navigationStackCoordinator.push(coordinator)
         let parameters = InviteFriendSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
         let coordinator = InviteFriendSettingsScreenCoordinator(parameters: parameters)
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentZeroProSubSettings() {
+        let parameters = ZeroProSubcriptionScreenCoordinatorParams(userSession: parameters.userSession)
+        let coordinator = ZeroProSubcriptionScreenCoordinator(parameters: parameters)
         navigationStackCoordinator.push(coordinator)
     }
 

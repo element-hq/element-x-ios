@@ -17,7 +17,7 @@ struct ReferAFriendSettingsScreen: View {
         Form {
             ZeroListRow(kind: .custom {
                 VStack(alignment: .center, spacing: 0) {
-                    Image(asset: Asset.Images.referAFriendImage)
+                    Image(asset: Asset.Images.imgReferFriend)
                     
                     VStack(spacing: 0) {
                         Text("Refer a Friend")
@@ -29,13 +29,13 @@ struct ReferAFriendSettingsScreen: View {
                             .foregroundColor(.compound.textPrimary)
                         
                         VStack {
-                            ReferAFriendBenefitRow(title: "Receive a Bonus",
+                            ZeroSettingsBenefitRow(title: "Receive a Bonus",
                                                    description: "Both you and the invitee get free tokens")
                             
-                            ReferAFriendBenefitRow(title: "Earn Passive Income",
+                            ZeroSettingsBenefitRow(title: "Earn Passive Income",
                                                    description: "Receive 30% of Pro subscription revenue")
                             
-                            ReferAFriendBenefitRow(title: "Grow your Reputation",
+                            ZeroSettingsBenefitRow(title: "Grow your Reputation",
                                                    description: "Increase your clout with a bigger network")
                         }
                         .padding(.top, 12)
@@ -51,7 +51,7 @@ struct ReferAFriendSettingsScreen: View {
                                 )
                                 .padding(.vertical, 10)
                         } else {
-                            referralCodeLabel
+                            StrikedLabel(text: "Your referral code")
                                 .padding(.vertical, 6)
                             
                             HStack(spacing: 12) {
@@ -76,20 +76,6 @@ struct ReferAFriendSettingsScreen: View {
         }
         .ignoresSafeArea()
         .zeroList()
-    }
-    
-    private var referralCodeLabel: some View {
-        ZStack {
-            Rectangle()
-                .fill(.compound.textSecondary.opacity(0.2))
-                .frame(height: 1)
-            
-            Text("Your referral code")
-                .font(.compound.bodySM)
-                .foregroundColor(.compound.textSecondary)
-                .padding(.horizontal, 8)
-                .background(.black)
-        }
     }
     
     private var referralCodeStrip: some View {
@@ -175,40 +161,6 @@ struct ReferAFriendSettingsScreen: View {
         Join early, earn more:
         https://zos.zero.tech/get-access
         """
-    }
-}
-
-private struct ReferAFriendBenefitRow: View {
-    let title: String
-    let description: String
-    
-    var body: some View {
-        HStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 0) {
-                Text(title)
-                    .font(.compound.bodyMDSemibold)
-                    .foregroundColor(.compound.textPrimary)
-                
-                Text(description)
-                    .font(.compound.bodySM)
-                    .foregroundColor(.compound.textSecondary)
-                    .padding(.top, 1)
-            }
-            
-            Spacer()
-            
-            Image(asset: Asset.Images.checkIcon)
-                .resizable()
-                .renderingMode(.template)
-                .foregroundStyle(.zero.bgAccentRest)
-                .frame(width: 20, height: 20)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .background(.compound.bgCanvasDisabled)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .padding(.vertical, 1)
     }
 }
 

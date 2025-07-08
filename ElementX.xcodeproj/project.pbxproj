@@ -1752,6 +1752,20 @@
 		7905F9AB2D676AB400C3A203 /* HomeChannelsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */; };
 		7905F9AD2D676BB000C3A203 /* HomeScreenChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */; };
 		7905F9AE2D676BB000C3A203 /* HomeScreenChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */; };
+		790AB79B2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */; };
+		790AB79C2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */; };
+		790AB79E2E1BE15200555B1F /* ZeroProSubcriptionScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */; };
+		790AB79F2E1BE15200555B1F /* ZeroProSubcriptionScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */; };
+		790AB7A12E1BE15E00555B1F /* ZeroProSubcriptionScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7A02E1BE15700555B1F /* ZeroProSubcriptionScreenModels.swift */; };
+		790AB7A22E1BE15E00555B1F /* ZeroProSubcriptionScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7A02E1BE15700555B1F /* ZeroProSubcriptionScreenModels.swift */; };
+		790AB7A42E1BE16700555B1F /* ZeroProSubcriptionScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7A32E1BE16100555B1F /* ZeroProSubcriptionScreenCoordinator.swift */; };
+		790AB7A52E1BE16700555B1F /* ZeroProSubcriptionScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7A32E1BE16100555B1F /* ZeroProSubcriptionScreenCoordinator.swift */; };
+		790AB7A72E1BE17200555B1F /* ZeroProSubcriptionScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7A62E1BE16B00555B1F /* ZeroProSubcriptionScreenView.swift */; };
+		790AB7A82E1BE17200555B1F /* ZeroProSubcriptionScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7A62E1BE16B00555B1F /* ZeroProSubcriptionScreenView.swift */; };
+		790AB7AA2E1C517600555B1F /* StrikedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7A92E1C516800555B1F /* StrikedLabel.swift */; };
+		790AB7AB2E1C517600555B1F /* StrikedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7A92E1C516800555B1F /* StrikedLabel.swift */; };
+		790AB7AD2E1C53AB00555B1F /* ZeroSettingsBenefitRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7AC2E1C53A300555B1F /* ZeroSettingsBenefitRow.swift */; };
+		790AB7AE2E1C53AB00555B1F /* ZeroSettingsBenefitRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7AC2E1C53A300555B1F /* ZeroSettingsBenefitRow.swift */; };
 		790E42BC2D88ABE700FEAEF7 /* TargetConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D829FD8958376614504B18 /* TargetConfiguration.swift */; };
 		791341542D6F58E1000E497F /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3557ACB95D0F666EF5AF0CE /* Secrets.swift */; };
 		791DEF872D9381000057E6C5 /* EmbeddedElementCall in Frameworks */ = {isa = PBXBuildFile; productRef = 791DEF862D9381000057E6C5 /* EmbeddedElementCall */; };
@@ -3466,6 +3480,13 @@
 		7905F9A62D67620300C3A203 /* ZeroChannelApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroChannelApi.swift; sourceTree = "<group>"; };
 		7905F9A92D676AA700C3A203 /* HomeChannelsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeChannelsContent.swift; sourceTree = "<group>"; };
 		7905F9AC2D676BA900C3A203 /* HomeScreenChannelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenChannelCell.swift; sourceTree = "<group>"; };
+		790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenViewModelProtocol.swift; sourceTree = "<group>"; };
+		790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenViewModel.swift; sourceTree = "<group>"; };
+		790AB7A02E1BE15700555B1F /* ZeroProSubcriptionScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenModels.swift; sourceTree = "<group>"; };
+		790AB7A32E1BE16100555B1F /* ZeroProSubcriptionScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenCoordinator.swift; sourceTree = "<group>"; };
+		790AB7A62E1BE16B00555B1F /* ZeroProSubcriptionScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenView.swift; sourceTree = "<group>"; };
+		790AB7A92E1C516800555B1F /* StrikedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrikedLabel.swift; sourceTree = "<group>"; };
+		790AB7AC2E1C53A300555B1F /* ZeroSettingsBenefitRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroSettingsBenefitRow.swift; sourceTree = "<group>"; };
 		7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaSelectedProtocol.swift; sourceTree = "<group>"; };
 		793899C22DEF98F000980991 /* ReferAFriendSettingsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenCoordinator.swift; sourceTree = "<group>"; };
 		793899C52DEF990800980991 /* ReferAFriendSettingsScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenModel.swift; sourceTree = "<group>"; };
@@ -4932,6 +4953,8 @@
 		18AF61512CF85A6B00921644 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				790AB7AC2E1C53A300555B1F /* ZeroSettingsBenefitRow.swift */,
+				790AB7A92E1C516800555B1F /* StrikedLabel.swift */,
 				799616312E0B36B4008E73C4 /* SimpleTabButtonsView.swift */,
 				793899D22DF0ECAB00980991 /* HorizontalDivider.swift */,
 				185454EE2D0042DE003CA957 /* SecureInputField */,
@@ -6339,6 +6362,7 @@
 				B364E08924AD15820350CDD9 /* SettingsScreen */,
 				4775A7D6FBB210BF21318AD9 /* UserDetailsEditScreen */,
 				18D5D9AF2CEB72A900107940 /* UserRewards */,
+				790AB7982E1BDD9700555B1F /* ZeroProSubscription */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -6600,6 +6624,26 @@
 				4137900E28201C314C835C11 /* RoomScreenFooterView.swift */,
 				4552D3466B1453F287223ADA /* SwipeRightAction.swift */,
 				464C6BFAA853DC755B9C1F60 /* PinnedItemsBanner */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		790AB7982E1BDD9700555B1F /* ZeroProSubscription */ = {
+			isa = PBXGroup;
+			children = (
+				790AB7A32E1BE16100555B1F /* ZeroProSubcriptionScreenCoordinator.swift */,
+				790AB7A02E1BE15700555B1F /* ZeroProSubcriptionScreenModels.swift */,
+				790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */,
+				790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */,
+				790AB7992E1BDDB100555B1F /* View */,
+			);
+			path = ZeroProSubscription;
+			sourceTree = "<group>";
+		};
+		790AB7992E1BDDB100555B1F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				790AB7A62E1BE16B00555B1F /* ZeroProSubcriptionScreenView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -9482,6 +9526,7 @@
 				18D46BA52D2DACA3009F4041 /* StateBus.swift in Sources */,
 				18AF61672CF85F5600921644 /* ListRowTrailingSectionSpacing.swift in Sources */,
 				18FFCED12CEC8E71002F2647 /* Avatars.swift in Sources */,
+				790AB7A52E1BE16700555B1F /* ZeroProSubcriptionScreenCoordinator.swift in Sources */,
 				18E9A4542C9829970082DDA4 /* AppLockSetupSettingsScreenCoordinator.swift in Sources */,
 				18D5D9AB2CEB5A9600107940 /* ZeroRewards.swift in Sources */,
 				18E9A4552C9829970082DDA4 /* AppLockSetupSettingsScreenModels.swift in Sources */,
@@ -9777,6 +9822,7 @@
 				18E9A5352C9829970082DDA4 /* ImageRoomTimelineItem.swift in Sources */,
 				18E9A5362C9829970082DDA4 /* ImageRoomTimelineItemContent.swift in Sources */,
 				79C6BB272D47B73B00FC3CBF /* RoomMembershipDetailsProxyProtocol.swift in Sources */,
+				790AB7AE2E1C53AB00555B1F /* ZeroSettingsBenefitRow.swift in Sources */,
 				18E9A5372C9829970082DDA4 /* ImageRoomTimelineView.swift in Sources */,
 				18E9A5382C9829970082DDA4 /* InfoPlistReader.swift in Sources */,
 				18E9A5392C9829970082DDA4 /* IntentionalMentions.swift in Sources */,
@@ -9847,6 +9893,7 @@
 				79C6BB252D47B6E700FC3CBF /* RoomPreviewProxyProtocol.swift in Sources */,
 				18E9A56B2C9829970082DDA4 /* LoginScreenViewModelProtocol.swift in Sources */,
 				189334A52D071C0400CC87B9 /* MediaEventsTimelineScreenViewModel.swift in Sources */,
+				790AB7A72E1BE17200555B1F /* ZeroProSubcriptionScreenView.swift in Sources */,
 				18E9A56C2C9829970082DDA4 /* LongPressWithFeedback.swift in Sources */,
 				18E9A56D2C9829970082DDA4 /* MXLog.swift in Sources */,
 				18E9A56E2C9829970082DDA4 /* MapLibreMapView.swift in Sources */,
@@ -9998,6 +10045,7 @@
 				18E9A5DF2C9829970082DDA4 /* MessageContentHandler.swift in Sources */,
 				18E9A5E02C9829970082DDA4 /* PinnedItemsIndicatorView.swift in Sources */,
 				18E9A5E12C9829970082DDA4 /* PlaceholderAvatarImage.swift in Sources */,
+				790AB79F2E1BE15200555B1F /* ZeroProSubcriptionScreenViewModel.swift in Sources */,
 				79E1E7F32DFC2D6200195CF0 /* HomeContentEmptyView.swift in Sources */,
 				790393782D4CDE4B0022E293 /* ZPosts.swift in Sources */,
 				18E9A5E22C9829970082DDA4 /* PlaceholderScreenCoordinator.swift in Sources */,
@@ -10212,6 +10260,7 @@
 				18525CF82CF5E7D50055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift in Sources */,
 				18E9A6882C9829970082DDA4 /* SDKGeneratedMocks.swift in Sources */,
 				18E9A6892C9829970082DDA4 /* SFNumberedListView.swift in Sources */,
+				790AB79C2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */,
 				187112542CF75350001E8964 /* View+Extensions.swift in Sources */,
 				18E9A68D2C9829970082DDA4 /* SceneDelegate.swift in Sources */,
 				7937A5942DB289A0001A60CB /* TimelineThreadSummaryView.swift in Sources */,
@@ -10454,6 +10503,7 @@
 				18E9A7442C9829970082DDA4 /* UserSessionStore.swift in Sources */,
 				18E9A7452C9829970082DDA4 /* UserSessionStoreProtocol.swift in Sources */,
 				18E9A7462C9829970082DDA4 /* VideoRoomTimelineItem.swift in Sources */,
+				790AB7AB2E1C517600555B1F /* StrikedLabel.swift in Sources */,
 				18E9A7472C9829970082DDA4 /* VideoRoomTimelineItemContent.swift in Sources */,
 				18FFCED42CEC8F66002F2647 /* RoomSelectionScreenModels.swift in Sources */,
 				18E9A7482C9829970082DDA4 /* VideoRoomTimelineView.swift in Sources */,
@@ -10461,6 +10511,7 @@
 				7996162C2E09EDE1008E73C4 /* RoomPowerLevelProxyProtocol.swift in Sources */,
 				79EC88BF2DDDBF0B006629EE /* ThreadTimelineScreenViewModelProtocol.swift in Sources */,
 				18E9A74A2C9829970082DDA4 /* VoiceMessageButton.swift in Sources */,
+				790AB7A12E1BE15E00555B1F /* ZeroProSubcriptionScreenModels.swift in Sources */,
 				18C454072CF09A4200F25539 /* KnockRequestsListScreenModels.swift in Sources */,
 				18E9A74B2C9829970082DDA4 /* VoiceMessageCache.swift in Sources */,
 				18E9A74C2C9829970082DDA4 /* VoiceMessageCacheProtocol.swift in Sources */,
@@ -10703,6 +10754,7 @@
 				0C797CD650DFD2876BEC5173 /* CollapsibleReactionLayout.swift in Sources */,
 				78A3D84BA47DAC69B4D0A34C /* CollapsibleRoomTimelineView.swift in Sources */,
 				0DC815CA24E1BD7F408F37D3 /* CollapsibleTimelineItem.swift in Sources */,
+				790AB7A82E1BE17200555B1F /* ZeroProSubcriptionScreenView.swift in Sources */,
 				185454C42CFDE681003CA957 /* CreateAccountScreenViewModel.swift in Sources */,
 				663E198678778F7426A9B27D /* Collection.swift in Sources */,
 				24B7CD41342C143117ADA768 /* Comparable.swift in Sources */,
@@ -10833,6 +10885,7 @@
 				F5D2270B5021D521C0D22E11 /* FlowCoordinatorProtocol.swift in Sources */,
 				18E3786918486D4C9726BC84 /* FormButtonStyles.swift in Sources */,
 				CCFDEC922C811B8F00C17FC3 /* VerifyBackupKeyScreen.swift in Sources */,
+				790AB7A22E1BE15E00555B1F /* ZeroProSubcriptionScreenModels.swift in Sources */,
 				4D0F4385B7DDB68C66C78857 /* FormattedBodyText.swift in Sources */,
 				793899D72DF0F2AA00980991 /* FloatingActionButton.swift in Sources */,
 				7807B1DEE32617896886A8E5 /* FormattingToolbar.swift in Sources */,
@@ -10960,6 +11013,7 @@
 				5EDBDE802761B5ECB54E6787 /* LogLevel.swift in Sources */,
 				36DE961B784087D5E18EF9BA /* LogViewerScreen.swift in Sources */,
 				79AD65532D84FD0B005C5934 /* HomeScreenNotificationCell.swift in Sources */,
+				790AB7AD2E1C53AB00555B1F /* ZeroSettingsBenefitRow.swift in Sources */,
 				795A0C892D78453B000928B7 /* ZeroAuthApiProxy.swift in Sources */,
 				CF38B70D8C6DD42C00A56A27 /* LogViewerScreenCoordinator.swift in Sources */,
 				5518DA4A6C9B4FC4B497EA9A /* LogViewerScreenModels.swift in Sources */,
@@ -11163,6 +11217,7 @@
 				46A261AA898344A1F3C406B1 /* ReportContentScreenModels.swift in Sources */,
 				42A5A42ACF063EEE6B1980D2 /* ReportContentScreenViewModel.swift in Sources */,
 				8285FF4B2C2331758C437FF7 /* ReportContentScreenViewModelProtocol.swift in Sources */,
+				790AB7A42E1BE16700555B1F /* ZeroProSubcriptionScreenCoordinator.swift in Sources */,
 				9CCF6711DD50BFF8B5ACE9CF /* ReportRoomScreen.swift in Sources */,
 				1C598D3B785645AAC7B35760 /* ReportRoomScreenCoordinator.swift in Sources */,
 				182D532B736178A1DED9F76E /* ReportRoomScreenModels.swift in Sources */,
@@ -11293,6 +11348,7 @@
 				66832DE7B5C2E861045265DC /* RoomSelectionScreen.swift in Sources */,
 				18FDE4ED6D83B0771452B43D /* RoomSelectionScreenCoordinator.swift in Sources */,
 				790393802D50DFE60022E293 /* HomeScreenPostList.swift in Sources */,
+				790AB7AA2E1C517600555B1F /* StrikedLabel.swift in Sources */,
 				27FEF0F40750465195C9D6D6 /* RoomSelectionScreenModels.swift in Sources */,
 				8DCA1F05C3BA6ED826F1599D /* RoomSelectionScreenViewModel.swift in Sources */,
 				39DFC4B9EB6A8757210BDEC6 /* RoomSelectionScreenViewModelProtocol.swift in Sources */,
@@ -11542,6 +11598,7 @@
 				18867F4F1C8991EEC56EA932 /* UTType.swift in Sources */,
 				84226AD2E1F1FBC965F3B09E /* UnitTestsAppCoordinator.swift in Sources */,
 				34C752A73717C691582DC6C7 /* UnsupportedRoomTimelineItem.swift in Sources */,
+				790AB79B2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */,
 				D8459AAD6969B1431ECBE990 /* UnsupportedRoomTimelineView.swift in Sources */,
 				7A71AEF419904209BB8C2833 /* UserAgentBuilder.swift in Sources */,
 				7D58B4F46CAA9A7C3E4C6A30 /* UserDetailsEditScreen.swift in Sources */,
@@ -11569,6 +11626,7 @@
 				E3291AD16D7A5CB14781819C /* UserNotificationCenterProtocol.swift in Sources */,
 				40B79D20A873620F7F128A2C /* UserPreference.swift in Sources */,
 				80DEA2A4B20F9E279EAE6B2B /* UserProfile+Mock.swift in Sources */,
+				790AB79E2E1BE15200555B1F /* ZeroProSubcriptionScreenViewModel.swift in Sources */,
 				ED90A59F068FD0CA27E602ED /* UserProfileListRow.swift in Sources */,
 				185454DF2CFF0E74003CA957 /* CompleteProfileScreenModels.swift in Sources */,
 				E21FE4C5B614F311C0955859 /* UserProfileProxy.swift in Sources */,

@@ -13,7 +13,7 @@ struct UserRewardsSettingsScreen: View {
         VStack(spacing: 0) {
             if !showRewardsFAQ {
                 ZStack(alignment: .center) {
-                    Image(asset: Asset.Images.rewardsVector)
+                    Image(asset: Asset.Images.frameRewardsVector)
                     Image(asset: Asset.Images.zeroLogoMark)
                 }
                 .frame(maxWidth: .infinity)
