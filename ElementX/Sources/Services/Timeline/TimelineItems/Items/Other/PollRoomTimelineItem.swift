@@ -37,6 +37,10 @@ struct Poll: Hashable {
         case disclosed
         case undisclosed
     }
+    
+    var hasMaxSelections: Bool {
+        options.filter(\.isSelected).count == maxSelections
+    }
 
     struct Option: Hashable {
         let id: String

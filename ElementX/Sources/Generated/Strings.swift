@@ -62,6 +62,8 @@ internal enum L10n {
   internal static func a11yPollsPercentOfTotal(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_polls_percent_of_total", p1)
   }
+  /// Will remove previous selection
+  internal static var a11yPollsWillRemoveSelection: String { return L10n.tr("Localizable", "a11y_polls_will_remove_selection") }
   /// This is the winning answer
   internal static var a11yPollsWinningAnswer: String { return L10n.tr("Localizable", "a11y_polls_winning_answer") }
   /// React with %1$@
