@@ -10,6 +10,8 @@ import UIKit
 
 struct ZeroProSubcriptionScreenViewState: BindableState {
     var isZeroProSubscriber: Bool = false
+    var canPurchaseSubscription: Bool = false
+    
     var bindings: ZeroProSubcriptionScreenBindings
 }
 
@@ -18,5 +20,5 @@ struct ZeroProSubcriptionScreenBindings {
 }
 
 enum ZeroProSubcriptionScreenViewAction {
-   
+    case purchaseSubscriptionTapped
 }

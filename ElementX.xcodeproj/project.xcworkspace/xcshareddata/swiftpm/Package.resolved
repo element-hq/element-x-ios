@@ -1,5 +1,5 @@
 {
-  "originHash" : "f573b0754209479f46b77206f67033b0073bb2df38ede53b3289703615c5a48f",
+  "originHash" : "1ca12a4d273b1d9ada7063ec10504453f247181357d5f4d496eba4fd1535b3de",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -394,6 +394,15 @@
       "state" : {
         "revision" : "a063fda2b8145a231953c20e7a646be254365396",
         "version" : "3.1.2"
+      }
+    },
+    {
+      "identity" : "storekitplus",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/danielsaidi/StoreKitPlus.git",
+      "state" : {
+        "revision" : "465b53ba9dbee01680b7f7b93337577dade3172c",
+        "version" : "0.7.1"
       }
     },
     {

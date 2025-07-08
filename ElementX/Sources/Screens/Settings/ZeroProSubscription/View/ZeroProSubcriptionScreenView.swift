@@ -11,6 +11,8 @@ import SwiftUI
 struct ZeroProSubcriptionScreenView: View {
     @ObservedObject var context: ZeroProSubcriptionScreenViewModel.Context
     
+    @State private var showZeroSubscriptionModal: Bool = false
+    
     var body: some View {
         Form {
             ZeroListRow(kind: .custom({
@@ -62,7 +64,9 @@ struct ZeroProSubcriptionScreenView: View {
                     if context.viewState.isZeroProSubscriber {
                         manageZeroProSubscription
                     } else {
-                        subscribeToZeroProButton
+                        if context.viewState.canPurchaseSubscription {
+                            subscribeToZeroProButton
+                        }
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -70,10 +74,17 @@ struct ZeroProSubcriptionScreenView: View {
         }
         .ignoresSafeArea()
         .zeroList()
+        .sheet(isPresented: $showZeroSubscriptionModal, content: {
+            ZeroSubscriptionModalView(
+                onSubscribe: { context.send(viewAction: .purchaseSubscriptionTapped) }
+            )
+            .presentationDetents([.fraction(0.3)])
+            .presentationDragIndicator(.visible)
+        })
     }
     
     private var subscribeToZeroProButton: some View {
-        Button(action: {  }) {
+        Button(action: { showZeroSubscriptionModal.toggle() }) {
             Text("Subscribe to ZERO Pro")
                 .font(.compound.bodyMDSemibold)
                 .foregroundColor(.black)
@@ -122,5 +133,57 @@ struct ZeroProSubcriptionScreenView: View {
             }
             .padding(.vertical, 6)
         }
+    }
+}
+
+private struct ZeroSubscriptionModalView : View {
+    let onSubscribe: () -> Void
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("ZERO Pro Subscription")
+                .font(.compound.bodyMDSemibold)
+                .foregroundColor(.compound.textPrimary)
+            
+            VStack(alignment: .leading) {
+                HStack {
+                    Text("Monthly Plan")
+                        .font(.compound.bodyMD)
+                        .foregroundColor(.compound.textPrimary)
+                    
+                    Spacer()
+                    
+                    Text("$10 / month")
+                        .font(.compound.bodyMD)
+                        .foregroundColor(.compound.textPrimary)
+                }
+                
+                Text("$120 per year, billed monthly")
+                    .font(.compound.bodySM)
+                    .foregroundColor(.compound.textSecondary)
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(.zero.bgAccentRest.opacity(0.15))
+                    .stroke(.zero.bgAccentRest)
+            )
+            
+            Button(action: { onSubscribe() }) {
+                Text("Subscribe")
+                    .font(.compound.bodyMDSemibold)
+                    .foregroundColor(.black)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(.zero.bgAccentRest)
+                    )
+            }
+            .padding(.vertical, 8)
+        }
+        .padding()
+        .background(.zero.bgCanvasDefault)
+        .ignoresSafeArea()
     }
 }

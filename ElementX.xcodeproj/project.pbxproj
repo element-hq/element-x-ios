@@ -1766,6 +1766,10 @@
 		790AB7AB2E1C517600555B1F /* StrikedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7A92E1C516800555B1F /* StrikedLabel.swift */; };
 		790AB7AD2E1C53AB00555B1F /* ZeroSettingsBenefitRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7AC2E1C53A300555B1F /* ZeroSettingsBenefitRow.swift */; };
 		790AB7AE2E1C53AB00555B1F /* ZeroSettingsBenefitRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7AC2E1C53A300555B1F /* ZeroSettingsBenefitRow.swift */; };
+		790AB7B12E1D316300555B1F /* StoreKitPlus in Frameworks */ = {isa = PBXBuildFile; productRef = 790AB7B02E1D316300555B1F /* StoreKitPlus */; };
+		790AB7B42E1D31EA00555B1F /* ZeroSubscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7B32E1D31E500555B1F /* ZeroSubscriptions.swift */; };
+		790AB7B52E1D31EA00555B1F /* ZeroSubscriptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB7B32E1D31E500555B1F /* ZeroSubscriptions.swift */; };
+		790AB7B72E1D397100555B1F /* ZeroConfiguration.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 790AB7B62E1D397100555B1F /* ZeroConfiguration.storekit */; };
 		790E42BC2D88ABE700FEAEF7 /* TargetConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D829FD8958376614504B18 /* TargetConfiguration.swift */; };
 		791341542D6F58E1000E497F /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3557ACB95D0F666EF5AF0CE /* Secrets.swift */; };
 		791DEF872D9381000057E6C5 /* EmbeddedElementCall in Frameworks */ = {isa = PBXBuildFile; productRef = 791DEF862D9381000057E6C5 /* EmbeddedElementCall */; };
@@ -3487,6 +3491,8 @@
 		790AB7A62E1BE16B00555B1F /* ZeroProSubcriptionScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenView.swift; sourceTree = "<group>"; };
 		790AB7A92E1C516800555B1F /* StrikedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StrikedLabel.swift; sourceTree = "<group>"; };
 		790AB7AC2E1C53A300555B1F /* ZeroSettingsBenefitRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroSettingsBenefitRow.swift; sourceTree = "<group>"; };
+		790AB7B32E1D31E500555B1F /* ZeroSubscriptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroSubscriptions.swift; sourceTree = "<group>"; };
+		790AB7B62E1D397100555B1F /* ZeroConfiguration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = ZeroConfiguration.storekit; sourceTree = "<group>"; };
 		7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaSelectedProtocol.swift; sourceTree = "<group>"; };
 		793899C22DEF98F000980991 /* ReferAFriendSettingsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenCoordinator.swift; sourceTree = "<group>"; };
 		793899C52DEF990800980991 /* ReferAFriendSettingsScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenModel.swift; sourceTree = "<group>"; };
@@ -4259,6 +4265,7 @@
 				18E9A7822C9829970082DDA4 /* Version in Frameworks */,
 				18E9A7832C9829970082DDA4 /* CryptoSwift in Frameworks */,
 				18E9A7842C9829970082DDA4 /* Tagged in Frameworks */,
+				790AB7B12E1D316300555B1F /* StoreKitPlus in Frameworks */,
 				18E9A7862C9829970082DDA4 /* Emojibase in Frameworks */,
 				18E9A7882C9829970082DDA4 /* SwiftOGG in Frameworks */,
 				791DEF872D9381000057E6C5 /* EmbeddedElementCall in Frameworks */,
@@ -5033,6 +5040,7 @@
 		18D1EE242CAE998A007BEB15 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				790AB7B62E1D397100555B1F /* ZeroConfiguration.storekit */,
 				79F31B2C2E02EDCE0043E100 /* GoogleService-Info.plist */,
 				18DDDF962D15735E00CBB04E /* ZeroSecrets.swift */,
 				18D1EE262CAE99B9007BEB15 /* ZeroInfo.plist */,
@@ -6631,6 +6639,7 @@
 		790AB7982E1BDD9700555B1F /* ZeroProSubscription */ = {
 			isa = PBXGroup;
 			children = (
+				790AB7B22E1D31C000555B1F /* ZeroSubscriptions */,
 				790AB7A32E1BE16100555B1F /* ZeroProSubcriptionScreenCoordinator.swift */,
 				790AB7A02E1BE15700555B1F /* ZeroProSubcriptionScreenModels.swift */,
 				790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */,
@@ -6646,6 +6655,14 @@
 				790AB7A62E1BE16B00555B1F /* ZeroProSubcriptionScreenView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		790AB7B22E1D31C000555B1F /* ZeroSubscriptions */ = {
+			isa = PBXGroup;
+			children = (
+				790AB7B32E1D31E500555B1F /* ZeroSubscriptions.swift */,
+			);
+			path = ZeroSubscriptions;
 			sourceTree = "<group>";
 		};
 		793899C12DEF969A00980991 /* ReferAFriend */ = {
@@ -8553,6 +8570,7 @@
 				791DEF862D9381000057E6C5 /* EmbeddedElementCall */,
 				79F31B282E02BE930043E100 /* FirebaseCore */,
 				79F31B2A2E02BE9E0043E100 /* FirebaseRemoteConfig */,
+				790AB7B02E1D316300555B1F /* StoreKitPlus */,
 			);
 			productName = ElementX;
 			productReference = 18E9A7922C9829970082DDA4 /* Zero.app */;
@@ -8857,6 +8875,7 @@
 				18C853082D11AE4B009AF206 /* XCRemoteSwiftPackageReference "Starscream" */,
 				18C8530B2D11AEAE009AF206 /* XCRemoteSwiftPackageReference "Web3" */,
 				79F31B232E02BE5A0043E100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				790AB7AF2E1D316300555B1F /* XCRemoteSwiftPackageReference "StoreKitPlus" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -8891,6 +8910,7 @@
 				1868A8AF2CA21A2200DC382D /* Inter-Medium.ttf in Resources */,
 				18DDDF952D15714900CBB04E /* zero_secrets.json in Resources */,
 				18E9A7632C9829970082DDA4 /* (null) in Resources */,
+				790AB7B72E1D397100555B1F /* ZeroConfiguration.storekit in Resources */,
 				18E9A7642C9829970082DDA4 /* PrivacyInfo.xcprivacy in Resources */,
 				79F31B2E2E02EDCE0043E100 /* GoogleService-Info.plist in Resources */,
 				1868A8AB2CA21A2200DC382D /* Inter-ExtraBold.ttf in Resources */,
@@ -9581,6 +9601,7 @@
 				793849372DF85D6200316004 /* HTMLParserStyle.swift in Sources */,
 				7968A4332D540A0900E9056A /* FeedDetailsScreenModels.swift in Sources */,
 				7937A5932DB28819001A60CB /* TimelineEventContent.swift in Sources */,
+				790AB7B52E1D31EA00555B1F /* ZeroSubscriptions.swift in Sources */,
 				791341542D6F58E1000E497F /* Secrets.swift in Sources */,
 				18E9A4872C9829970082DDA4 /* BlockedUsersScreenCoordinator.swift in Sources */,
 				18E9A4882C9829970082DDA4 /* BlockedUsersScreenModels.swift in Sources */,
@@ -11154,6 +11175,7 @@
 				767D366C40F1311CFA333763 /* PillContext.swift in Sources */,
 				7708976CEE6AFB5CFAEFBA68 /* PillTextAttachment.swift in Sources */,
 				8C050A8012E6078BEAEF5BC8 /* PillTextAttachmentData.swift in Sources */,
+				790AB7B42E1D31EA00555B1F /* ZeroSubscriptions.swift in Sources */,
 				11D2FDD22DDF34F8323489B9 /* PillUtilities.swift in Sources */,
 				7E2BB42805C59DB57E95610F /* PillView.swift in Sources */,
 				1882EB7B2C8F8542001DA2A9 /* ZMatrixUser.swift in Sources */,
@@ -12884,6 +12906,14 @@
 				minimumVersion = 1.3.2;
 			};
 		};
+		790AB7AF2E1D316300555B1F /* XCRemoteSwiftPackageReference "StoreKitPlus" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielsaidi/StoreKitPlus.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.7.1;
+			};
+		};
 		79F31B232E02BE5A0043E100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -13422,6 +13452,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = CCD235515AFCEE6D2005B705 /* XCRemoteSwiftPackageReference "LRUCache" */;
 			productName = LRUCache;
+		};
+		790AB7B02E1D316300555B1F /* StoreKitPlus */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 790AB7AF2E1D316300555B1F /* XCRemoteSwiftPackageReference "StoreKitPlus" */;
+			productName = StoreKitPlus;
 		};
 		791DEF862D9381000057E6C5 /* EmbeddedElementCall */ = {
 			isa = XCSwiftPackageProductDependency;
