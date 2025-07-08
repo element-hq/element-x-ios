@@ -47,22 +47,10 @@ struct PollView: View {
     
     var body: some View {
         if state.isPreview {
-            questionView
+            accessibleQuestionView
         } else {
             VStack(alignment: .leading, spacing: 16) {
-                if #available(iOS 18, *) {
-                    questionView
-                        .accessibilityLabel { label in
-                            if poll.createdByAccountOwner {
-                                Text(L10n.commonYou)
-                            } else {
-                                Text(sender.disambiguatedDisplayName ?? sender.id)
-                            }
-                            label
-                        }
-                } else {
-                    questionView
-                }
+                accessibleQuestionView
                 optionsView
                 summaryView
                 toolbarView
@@ -72,6 +60,23 @@ struct PollView: View {
     }
 
     // MARK: - Private
+    
+    @ViewBuilder
+    private var accessibleQuestionView: some View {
+        if #available(iOS 18, *) {
+            questionView
+                .accessibilityLabel { label in
+                    if poll.createdByAccountOwner {
+                        Text(L10n.commonYou)
+                    } else {
+                        Text(sender.disambiguatedDisplayName ?? sender.id)
+                    }
+                    label
+                }
+        } else {
+            questionView
+        }
+    }
 
     private var questionView: some View {
         HStack(alignment: .top, spacing: 12) {
