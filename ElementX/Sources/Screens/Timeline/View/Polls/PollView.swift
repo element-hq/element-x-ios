@@ -61,21 +61,18 @@ struct PollView: View {
 
     // MARK: - Private
     
+    private var senderString: String { poll.createdByAccountOwner ? L10n.commonYou : sender.disambiguatedDisplayName ?? sender.id }
+    
     @ViewBuilder
     private var accessibleQuestionView: some View {
-        if #available(iOS 18, *) {
-            questionView
-                .accessibilityLabel { label in
-                    if poll.createdByAccountOwner {
-                        Text(L10n.commonYou)
-                    } else {
-                        Text(sender.disambiguatedDisplayName ?? sender.id)
-                    }
-                    label
+        questionView
+            .accessibilityRepresentation {
+                HStack(spacing: 0) {
+                    Text(senderString)
+                    questionView
                 }
-        } else {
-            questionView
-        }
+                .accessibilityElement(children: .combine)
+            }
     }
 
     private var questionView: some View {
