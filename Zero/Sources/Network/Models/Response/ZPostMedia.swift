@@ -24,6 +24,12 @@ struct ZPostMediaInfo: Codable {
     let createdAt: String?
 }
 
+extension ZPostMediaInfo {
+    var isVideo: Bool {
+        return mimeType?.hasPrefix("video/") == true
+    }
+}
+
 struct ZPostMediaUploadedInfo: Codable {
     let id: String
     let centralizedStorageKey: String

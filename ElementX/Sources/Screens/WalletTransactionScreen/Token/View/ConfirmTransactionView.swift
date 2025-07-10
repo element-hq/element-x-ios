@@ -134,7 +134,7 @@ private struct AssetInfoView: View {
             
             if isSenderSideInfo {
                 HStack {
-                    TextField("Enter amount", text: $amount)
+                    TextField("0", text: $amount)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(.plain)
                         .font(.zero.headingSMSemibold)

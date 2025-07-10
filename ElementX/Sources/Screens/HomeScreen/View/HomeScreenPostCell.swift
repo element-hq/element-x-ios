@@ -152,7 +152,11 @@ struct HomeScreenPostCell: View {
                     .preference(key: HeightPreferenceKey.self, value: geometry.size.height)
             })
             .onPreferenceChange(HeightPreferenceKey.self) { height in
-                self.referenceHeight = height
+                if referenceHeight != height {
+                    DispatchQueue.main.async {
+                        self.referenceHeight = height
+                    }
+                }
             }
         }
     }
@@ -225,50 +229,73 @@ struct HomePostMediaPreview: View {
     let mediaUrlString: String?
     let onMediaTapped: () -> Void
     
-    var mediaURL: URL {
-        URL(string: mediaUrlString ?? "") ?? URL.dummayURL
+    @State private var didFail = false
+    
+    private var mediaURL: URL? {
+        guard let mediaUrlString else { return nil }
+        return URL(string: mediaUrlString)
     }
     
     var body: some View {
-        if mediaInfo.isVideo {
-            if mediaUrlString != nil {
-                VideoPlayerView(videoURL: mediaURL)
-                    .frame(height: 300)
-                    .cornerRadius(4)
-                    .onLongPressGesture {
-                        if mediaUrlString != nil {
-                            onMediaTapped()
-                        }
-                    }
+        Group {
+            if mediaInfo.isVideo {
+                videoView
             } else {
-                ZStack(alignment: .center) {
-                    ProgressView()
-                }
-                .frame(maxWidth: .infinity, minHeight: 300)
-                .cornerRadius(4)
+                imageView
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var videoView: some View {
+        if let mediaURL {
+            VideoPlayerView(videoURL: mediaURL)
+                .frame(height: 300)
+                .cornerRadius(4)
+                .onLongPressGesture {
+                    onMediaTapped()
+                }
         } else {
-//            if mediaUrlString != nil {
-//                Text("Image Loaded")
-//                    .font(.headline)
-//                    .frame(height: 300)
-//            } else {
-//                Text("LOADING IMAGE...")
-//                    .font(.headline)
-//                    .frame(height: 300)
-//            }
+            ZStack {
+                ProgressView()
+            }
+            .frame(maxWidth: .infinity, minHeight: 300)
+            .cornerRadius(4)
+        }
+    }
+    
+    @ViewBuilder
+    private var imageView: some View {
+        if didFail {
+            ZStack {
+                Image(systemName: "exclamationmark.triangle")
+                    .resizable()
+                    .frame(width: 80, height: 70)
+            }
+            .frame(maxWidth: .infinity, minHeight: 300)
+            .cornerRadius(4)
+        } else if let mediaURL {
             KFAnimatedImage(mediaURL)
                 .setProcessor(DownsamplingImageProcessor(size: CGSize(width: 300, height: 300)))
                 .scaleFactor(UIScreen.main.scale)
-                .placeholder {
-                    ProgressView()
+                .placeholder { ProgressView() }
+                .retry(maxCount: 2, interval: .seconds(2))
+                .onFailure { error in
+                    MXLog.error("Failed to load feed media image: \(error)")
+                    didFail = true
                 }
                 .fade(duration: 0.3)
                 .aspectRatio(mediaInfo.aspectRatio, contentMode: .fit)
-                .cornerRadius(4, corners: .allCorners)
+                .cornerRadius(4)
                 .onTapGesture {
                     onMediaTapped()
                 }
+        } else {
+            ZStack {
+                ProgressView()
+            }
+            .frame(maxWidth: .infinity, minHeight: 300)
+            .cornerRadius(4)
         }
     }
 }

@@ -99,24 +99,26 @@ class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
     
     private func updateScrollDirection(with scrollView: UIScrollView) {
         let currentOffset = scrollView.contentOffset.y
-        let threshold: CGFloat = 10 // Minimum scroll distance to trigger direction change
-        
-//        guard scrollView.contentSize.height > scrollView.bounds.height else {
-//            return
-//        }
-        
+        let threshold: CGFloat = 10.0
+
+        // Only consider a direction change if we've scrolled more than the threshold
+        // since the last time we updated the direction.
         if abs(currentOffset - lastContentOffset) > threshold {
-//            let direction: ScrollDirection = currentOffset > lastContentOffset ? .down : .up
-//            scrollDirectionSubject.send(direction)
-//            lastContentOffset = currentOffset
-            let maxOffset = max(0, scrollView.contentSize.height - scrollView.frame.height + scrollView.contentInset.bottom)
+            let contentHeight = scrollView.contentSize.height
+            let frameHeight = scrollView.frame.height
             
-            // Avoid direction changes at very top or bottom
-            if currentOffset > 20 && currentOffset < maxOffset - 20 {
+            // The scrollable area, excluding bounce areas.
+            let topBoundary = -scrollView.contentInset.top
+            let bottomBoundary = contentHeight - frameHeight + scrollView.contentInset.bottom
+
+            // Don't send direction changes if the content is not scrollable
+            // or if we are "bouncing" at the top or bottom.
+            if contentHeight > frameHeight, currentOffset > topBoundary, currentOffset < bottomBoundary {
                 let direction: ScrollDirection = currentOffset > lastContentOffset ? .down : .up
                 scrollDirectionSubject.send(direction)
             }
             
+            // Update the offset to measure the next scroll from here.
             lastContentOffset = currentOffset
         }
     }

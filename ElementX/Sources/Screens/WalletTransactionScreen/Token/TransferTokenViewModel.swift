@@ -122,7 +122,7 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
         if let currentUserAddress = state.currentUser?.publicWalletAddress,
            let recipient = state.transferRecipient,
            let token = state.tokenAsset {
-            showLoadingIndicator()
+            showLoadingIndicator(title: "Sending...")
             Task {
                 defer { hideLoadingIndicator() }
                 
@@ -145,12 +145,12 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
     
     private static let loadingIndicatorID = "\(UserFeedProfileFlowCoordinator.self)-Loading"
     
-    private func showLoadingIndicator(delay: Duration? = nil) {
+    private func showLoadingIndicator(delay: Duration? = nil, title: String = L10n.commonLoading) {
         userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorID,
                                                       type: .modal(progress: .indeterminate,
                                                                    interactiveDismissDisabled: false,
                                                                    allowsInteraction: false),
-                                                      title: L10n.commonLoading, persistent: true),
+                                                      title: title, persistent: true),
                                                 delay: delay)
     }
     

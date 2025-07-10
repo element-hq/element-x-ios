@@ -30,7 +30,19 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     private let appSettings: AppSettings
     
     private var linkPreviewsCacheMap: [String: ZLinkPreview] = [:]
-    private var feedMediaCacheMap: [String: ZPostMedia] = [:]
+    private let feedMediaCacheActor = FeedMediaCacheActor()
+    
+    actor FeedMediaCacheActor {
+        private var cache: [String: ZPostMedia] = [:]
+
+        func value(for id: String) -> ZPostMedia? {
+            cache[id]
+        }
+
+        func store(_ value: ZPostMedia, for id: String) {
+            cache[id] = value
+        }
+    }
     
     init(appSettings: AppSettings) {
         self.appSettings = appSettings
@@ -68,7 +80,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     }
     
     func getPostMediaInfo(mediaId: String, isPreview: Bool) async throws -> Result<ZPostMedia, any Error> {
-        if isPreview, let cachedMediaInfo = feedMediaCacheMap[mediaId] {
+        if isPreview, let cachedMediaInfo = await feedMediaCacheActor.value(for: mediaId) {
             return .success(cachedMediaInfo)
         }
         
@@ -81,7 +93,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
                                                                                               encoding: URLEncoding.queryString)
         switch result {
         case .success(let mediaInfo):
-            feedMediaCacheMap[mediaId] = mediaInfo
+            await feedMediaCacheActor.store(mediaInfo, for: mediaId)
             return .success(mediaInfo)
         case .failure(let error):
             return .failure(error)

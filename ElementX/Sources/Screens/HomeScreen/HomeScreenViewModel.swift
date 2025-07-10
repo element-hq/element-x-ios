@@ -830,14 +830,19 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
         await withTaskGroup(of: (HomeScreenPost, ZPostMedia)?.self) { group in
             for post in postsToFetchMedia {
+                guard !Task.isCancelled else { continue }
                 group.addTask {
                     guard let mediaId = post.mediaInfo?.id else { return nil }
-                    if let result = await withTimeout(seconds: 10, operation: {
+                    let result = await withTimeout(seconds: 10, operation: {
                         await self.userSession.clientProxy.getPostMediaInfo(mediaId: mediaId)
-                    }), case let .success(media) = result {
-//                        if let url = URL(string: media.signedUrl) {
-//                            ImagePrefetcher(urls: [url]).start()
-//                        }
+                    })
+                    if Task.isCancelled {
+                        return nil
+                    }
+                    if case .success(let media) = result {
+                        if let url = URL(string: media.signedUrl), !media.media.isVideo {
+                            ImagePrefetcher(urls: [url]).start()
+                        }
                         return (post, media)
                     }
                     return nil
@@ -846,7 +851,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             
             for await item in group {
                 guard let (post, media) = item else { continue }
-//                MXLog.info("FEED_MEDIA_FETCHED: Post: \(post.postText ?? "(no text)"); Media: \(media.signedUrl); IsPreviewImage: \(media.signedUrl.contains("preview")) \n\n")
                 state.postMediaInfoMap[post.id] = HomeScreenPostMediaInfo(media: media)
             }
         }
