@@ -52,6 +52,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - used to avoid deallocation
     private var userFeedProfileFlowCoordinator: UserFeedProfileFlowCoordinator?
     
+    // periphery:ignore - used to avoid deallocation
+    private var zeroWalletTransactionsFlowCoordinator: ZeroWalletTransactionsFlowCoordinator?
+    
     private var cancellables = Set<AnyCancellable>()
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
@@ -572,6 +575,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     presentFeedDetailsScreen(post, feedUpdatedProtocol: feedUpdatedProtocol)
                 case .openPostUserProfile(let profile, let feedUpdatedProtocol):
                     startUserProfileWithFeedFlow(userID: nil, profile: profile, feedUpdatedProtocol: feedUpdatedProtocol)
+                case .sendWalletToken(let walletTransactionProtocol):
+                    presentSendWalletTokenSheet(walletTransactionProtocol)
                 }
             }
             .store(in: &cancellables)
@@ -1292,5 +1297,25 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedUserProfileScreen)
         }
+    }
+    
+    private func presentSendWalletTokenSheet(_ walletTransactionProtocol: WalletTransactionProtocol) {
+        let flowCoordinator = ZeroWalletTransactionsFlowCoordinator(rootStackCoordinator: detailNavigationStackCoordinator,
+                                                             userSession: userSession,
+                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                             appMediator: appMediator)
+        flowCoordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .transactionCompleted:
+                walletTransactionProtocol.onTransactionCompleted()
+            case .finished:
+                detailNavigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        zeroWalletTransactionsFlowCoordinator = flowCoordinator
+        flowCoordinator.start()
     }
 }

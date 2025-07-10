@@ -6136,6 +6136,41 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         checkAndLinkZeroUserCallsCount += 1
         await checkAndLinkZeroUserClosure?()
     }
+    //MARK: - fetchZCurrentUser
+
+    var fetchZCurrentUserUnderlyingCallsCount = 0
+    var fetchZCurrentUserCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchZCurrentUserUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchZCurrentUserUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchZCurrentUserUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchZCurrentUserUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchZCurrentUserCalled: Bool {
+        return fetchZCurrentUserCallsCount > 0
+    }
+    var fetchZCurrentUserClosure: (() -> Void)?
+
+    func fetchZCurrentUser() {
+        fetchZCurrentUserCallsCount += 1
+        fetchZCurrentUserClosure?()
+    }
     //MARK: - fetchZeroFeeds
 
     var fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount = 0
@@ -7452,6 +7487,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return await getTransactionReceiptTransactionHashClosure(transactionHash)
         } else {
             return getTransactionReceiptTransactionHashReturnValue
+        }
+    }
+    //MARK: - searchTransactionRecipient
+
+    var searchTransactionRecipientQueryUnderlyingCallsCount = 0
+    var searchTransactionRecipientQueryCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return searchTransactionRecipientQueryUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = searchTransactionRecipientQueryUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                searchTransactionRecipientQueryUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    searchTransactionRecipientQueryUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var searchTransactionRecipientQueryCalled: Bool {
+        return searchTransactionRecipientQueryCallsCount > 0
+    }
+    var searchTransactionRecipientQueryReceivedQuery: String?
+    var searchTransactionRecipientQueryReceivedInvocations: [String] = []
+
+    var searchTransactionRecipientQueryUnderlyingReturnValue: Result<[WalletRecipient], ClientProxyError>!
+    var searchTransactionRecipientQueryReturnValue: Result<[WalletRecipient], ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return searchTransactionRecipientQueryUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[WalletRecipient], ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = searchTransactionRecipientQueryUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                searchTransactionRecipientQueryUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    searchTransactionRecipientQueryUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var searchTransactionRecipientQueryClosure: ((String) async -> Result<[WalletRecipient], ClientProxyError>)?
+
+    func searchTransactionRecipient(query: String) async -> Result<[WalletRecipient], ClientProxyError> {
+        searchTransactionRecipientQueryCallsCount += 1
+        searchTransactionRecipientQueryReceivedQuery = query
+        DispatchQueue.main.async {
+            self.searchTransactionRecipientQueryReceivedInvocations.append(query)
+        }
+        if let searchTransactionRecipientQueryClosure = searchTransactionRecipientQueryClosure {
+            return await searchTransactionRecipientQueryClosure(query)
+        } else {
+            return searchTransactionRecipientQueryReturnValue
         }
     }
     //MARK: - getLinkPreviewMetaData

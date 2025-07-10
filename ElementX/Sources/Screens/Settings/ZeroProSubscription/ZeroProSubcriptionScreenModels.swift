@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 struct ZeroProSubcriptionScreenViewState: BindableState {
+    var currentUser: ZCurrentUser?
     var isZeroProSubscriber: Bool = false
     var canPurchaseSubscription: Bool = false
     

@@ -278,6 +278,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func checkAndLinkZeroUser() async
     
+    func fetchZCurrentUser()
+    
     // MARK: - Zero Feed
     
     func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
@@ -323,6 +325,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async -> Result<ZWalletTransactionResponse, ClientProxyError>
     
     func getTransactionReceipt(transactionHash: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
+    
+    func searchTransactionRecipient(query: String) async -> Result<[WalletRecipient], ClientProxyError>
     
     // MARK: - Zero MetaData
     

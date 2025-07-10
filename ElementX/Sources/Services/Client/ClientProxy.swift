@@ -1100,6 +1100,16 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func fetchZCurrentUser() {
+        Task {
+            do {
+                _ = try await fetchZeroCurrentUser()
+            } catch {
+                MXLog.error("Failed to fetch zero current user. Error: \(error)")
+            }
+        }
+    }
+    
     func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
             let zeroPostsResult = try await zeroApiProxy.postsApi.fetchPosts(channelZId: channelZId, following: following, limit: limit, skip: skip)
@@ -1396,6 +1406,21 @@ class ClientProxy: ClientProxyProtocol {
             }
         } catch {
             MXLog.error("Failed to get transaction receipt, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func searchTransactionRecipient(query: String) async -> Result<[WalletRecipient], ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.searchRecipients(query: query)
+            switch result {
+                case .success(let recipients):
+                return .success(recipients)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to search recipients, with error: \(error)")
             return .failure(.zeroError(error))
         }
     }

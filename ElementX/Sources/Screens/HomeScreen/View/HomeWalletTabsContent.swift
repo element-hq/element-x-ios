@@ -7,6 +7,7 @@
 
 import Compound
 import SwiftUI
+import Kingfisher
 
 private struct WalletTabContent {
     let items: [HomeScreenWalletContent]
@@ -24,7 +25,7 @@ struct HomeWalletTabsContentView : View {
         case .skeletons:
             LazyVStack(alignment: .leading, spacing: 0) {
                 ForEach(context.viewState.visibleWalletTokens) { content in
-                    HomeWalletTabContentCell(content: content, selectedWalletTab: selectedWalletTab, mediaProvider: context.mediaProvider)
+                    HomeWalletTabContentCell(content: content, selectedWalletTab: selectedWalletTab, mediaProvider: context.mediaProvider) {}
                         .redacted(reason: .placeholder)
                         .shimmer()
                 }
@@ -82,7 +83,7 @@ struct HomeWalletTabsContentView : View {
         } else {
             LazyVStack(alignment: .leading, spacing: 0) {
                 ForEach(tabContent.items) { content in
-                    HomeWalletTabContentCell(content: content, selectedWalletTab: selectedTab, mediaProvider: mediaProvider)
+                    HomeWalletTabContentCell(content: content, selectedWalletTab: selectedTab, mediaProvider: mediaProvider) {}
                         .padding(.vertical, 12)
                 }
                 
@@ -102,10 +103,11 @@ struct HomeWalletTabsContentView : View {
     }
 }
 
-private struct HomeWalletTabContentCell : View {
+struct HomeWalletTabContentCell : View {
     let content: HomeScreenWalletContent
     let selectedWalletTab: HomeWalletTab
     let mediaProvider: MediaProviderProtocol?
+    let onTap: () -> Void
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -117,13 +119,7 @@ private struct HomeWalletTabContentCell : View {
             }
             
             HStack {
-                LoadableAvatarImage(url: URL(string: content.icon ?? ""),
-                                    name: content.title,
-                                    contentID: content.id,
-                                    avatarSize: .user(on: .roomDetails),
-                                    mediaProvider: mediaProvider,
-                                    onTap: { _ in }
-                )
+                WalletTokenImage(url: content.icon)
                 
                 VStack(alignment: .leading) {
                     if let transactionAction = content.transactionAction {
@@ -175,7 +171,7 @@ private struct HomeWalletTabContentCell : View {
                     
                     Text(content.actionText)
                         .font(.zero.bodyLG)
-                        .foregroundColor(.zero.bgAccentRest)
+                        .foregroundColor(.compound.textPrimary)
                         .lineLimit(1)
                         .truncationMode(.tail)
                         .padding(.vertical, 1)
@@ -190,5 +186,31 @@ private struct HomeWalletTabContentCell : View {
                 }
             }
         }
+        .onTapGesture {
+            onTap()
+        }
+    }
+}
+
+struct WalletTokenImage: View {
+    let url: String?
+    var size: CGFloat = 44
+    
+    private var imageURL: URL? {
+        guard let urlString = url else { return nil }
+        return URL(string: urlString)
+    }
+    
+    var body: some View {
+        KFImage(imageURL)
+            .placeholder {
+                PlaceholderAvatarImage(name: "", contentID: "", onTap: {})
+                    .background(Color.compound.bgCanvasDefault)
+                    .clipShape(Circle())
+                    .frame(width: size, height: size)
+            }
+            .fade(duration: 0.3)
+            .frame(width: size, height: size)
+            .clipShape(Circle())
     }
 }

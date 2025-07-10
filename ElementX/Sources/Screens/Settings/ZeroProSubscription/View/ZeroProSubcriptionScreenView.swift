@@ -12,7 +12,7 @@ struct ZeroProSubcriptionScreenView: View {
     @ObservedObject var context: ZeroProSubcriptionScreenViewModel.Context
     
     @State private var showZeroSubscriptionModal: Bool = false
-    
+        
     var body: some View {
         Form {
             ZeroListRow(kind: .custom({
@@ -76,7 +76,10 @@ struct ZeroProSubcriptionScreenView: View {
         .zeroList()
         .sheet(isPresented: $showZeroSubscriptionModal, content: {
             ZeroSubscriptionModalView(
-                onSubscribe: { context.send(viewAction: .purchaseSubscriptionTapped) }
+                onSubscribe: {
+                    showZeroSubscriptionModal.toggle()
+                    context.send(viewAction: .purchaseSubscriptionTapped)
+                }
             )
             .presentationDetents([.fraction(0.3)])
             .presentationDragIndicator(.visible)
@@ -114,7 +117,7 @@ struct ZeroProSubcriptionScreenView: View {
                         .font(.zero.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
                     
-                    Text("$19.99 / month")
+                    Text("$\(ZeroContants.ZERO_PRO_SUBSCRIPTION_USD) / month")
                         .font(.zero.bodyLG)
                         .foregroundStyle(.compound.textPrimary)
                 }
@@ -153,12 +156,12 @@ private struct ZeroSubscriptionModalView : View {
                     
                     Spacer()
                     
-                    Text("$10 / month")
+                    Text("$\(ZeroContants.ZERO_PRO_SUBSCRIPTION_USD) / month")
                         .font(.compound.bodyMD)
                         .foregroundColor(.compound.textPrimary)
                 }
                 
-                Text("$120 per year, billed monthly")
+                Text("$\(ZeroContants.ZERO_PRO_SUBSCRIPTION_USD * 12) per year, billed monthly")
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
             }
@@ -183,7 +186,6 @@ private struct ZeroSubscriptionModalView : View {
             .padding(.vertical, 8)
         }
         .padding()
-        .background(.zero.bgCanvasDefault)
-        .ignoresSafeArea()
+        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
     }
 }

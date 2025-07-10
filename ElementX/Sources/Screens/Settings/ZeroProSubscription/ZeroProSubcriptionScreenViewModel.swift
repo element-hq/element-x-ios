@@ -14,19 +14,18 @@ typealias ZeroProSubcriptionScreenViewModelType = StateStoreViewModel<ZeroProSub
 
 class ZeroProSubcriptionScreenViewModel: ZeroProSubcriptionScreenViewModelType, ZeroProSubcriptionScreenViewModelProtocol {
     
+    private let clientProxy: ClientProxyProtocol
     private let storeContext: StoreContext
     private let storeService: StandardStoreService
     
     private var zeroProSubscriptionProduct: Product?
     
     init(userSession: UserSessionProtocol) {
-        
+        self.clientProxy = userSession.clientProxy
         // Initialize StoreKit
         let products = ZeroSubscriptions.allCases
         storeContext = StoreContext()
         storeService = StandardStoreService(products: products)
-        let available = products.available(in: storeContext)
-        let purchased = products.purchased(in: storeContext)
         
         super.init(
             initialViewState: .init(bindings: .init())
@@ -35,6 +34,7 @@ class ZeroProSubcriptionScreenViewModel: ZeroProSubcriptionScreenViewModelType, 
         userSession.clientProxy.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
+                self?.state.currentUser = currentUser
                 self?.state.isZeroProSubscriber = currentUser.subscriptions.zeroPro
             }
             .store(in: &cancellables)
@@ -86,10 +86,14 @@ class ZeroProSubcriptionScreenViewModel: ZeroProSubcriptionScreenViewModelType, 
         }
         Task {
             do {
-                let result = try await storeService.purchase(zeroProSubscriptionProduct, options: [
-                    .custom(key: "user_id", value: ""),
-                    .custom(key: "user_email", value: "")
-                ])
+                var options: Set<Product.PurchaseOption> = []
+                if let currentUser = state.currentUser {
+                    options.insert(.custom(key: "user_id", value: currentUser.id.rawValue))
+                }
+                let result = try await storeService.purchase(zeroProSubscriptionProduct, options: options)
+                if case .success(_) = result.0 {
+                    clientProxy.fetchZCurrentUser()
+                }
                 syncStoreKit()
             } catch {
                 MXLog.error("Failed to purchase zero pro subscription: \(error)")

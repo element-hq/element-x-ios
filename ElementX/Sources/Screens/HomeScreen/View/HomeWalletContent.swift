@@ -57,6 +57,7 @@ struct HomeWalletContent: View {
                 }
                 .scrollDismissesKeyboard(.immediately)
                 .scrollIndicators(.hidden)
+                .animation(.elementDefault, value: context.viewState.walletContentListMode)
             }
             .padding(.horizontal)
         }
@@ -67,11 +68,13 @@ struct HomeWalletContent: View {
         if isCompactMode {
             compatCardDetails
         } else {
-            VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 0) {
                 zeroCardDetails
                 
-//                actionButtonsView
-//                    .padding(.vertical, 6)
+                if context.viewState.walletTokens.count > 0 {
+                    actionButtonsView
+                        .padding(.vertical, 6)
+                }
             }
         }
     }
@@ -92,14 +95,14 @@ struct HomeWalletContent: View {
     @ViewBuilder
     private var actionButtonsView: some View {
         HStack(spacing: 10) {
-            WalletActionButton(action: .receive, onTap: {
-                
-            })
-            WalletActionButton(action: .swap, onTap: {
-                
-            })
+//            WalletActionButton(action: .receive, onTap: {
+//                
+//            })
+//            WalletActionButton(action: .swap, onTap: {
+//                
+//            })
             WalletActionButton(action: .send, onTap: {
-                
+                context.send(viewAction: .sendWalletToken)
             })
         }
     }
@@ -203,25 +206,27 @@ struct HomeWalletContent: View {
                     .shadow(color: .white.opacity(0.5), radius: 8)
                     .padding(.vertical, 4)
                 
-                Text("+5.56%")
-                    .font(.zero.bodyMD)
-                    .foregroundColor(.zero.bgAccentRest)
+//                Text("+5.56%")
+//                    .font(.zero.bodyMD)
+//                    .foregroundColor(.zero.bgAccentRest)
             }
             .padding(.vertical, 4)
             
             Spacer()
             
-//            HStack(spacing: 10) {
-//                WalletActionButton(action: .receive, compactButtonStyle: true, onTap: {
-//                    
-//                })
-//                WalletActionButton(action: .swap, compactButtonStyle: true, onTap: {
-//                    
-//                })
-//                WalletActionButton(action: .send, compactButtonStyle: true, onTap: {
-//                    
-//                })
-//            }
+            if context.viewState.walletTokens.count > 0 {
+                HStack(spacing: 10) {
+    //                WalletActionButton(action: .receive, compactButtonStyle: true, onTap: {
+    //
+    //                })
+    //                WalletActionButton(action: .swap, compactButtonStyle: true, onTap: {
+    //
+    //                })
+                    WalletActionButton(action: .send, compactButtonStyle: true, onTap: {
+                        context.send(viewAction: .sendWalletToken)
+                    })
+                }
+            }
         }
         .padding(.vertical, 8)
     }

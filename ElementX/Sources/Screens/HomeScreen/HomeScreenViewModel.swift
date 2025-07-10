@@ -17,7 +17,7 @@ protocol RoomNotificationModeUpdatedProtocol {
     func onRoomNotificationModeUpdated(for roomId: String, mode: RoomNotificationModeProxy)
 }
 
-class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol, CreateFeedProtocol, RoomNotificationModeUpdatedProtocol {
+class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol, CreateFeedProtocol, RoomNotificationModeUpdatedProtocol, WalletTransactionProtocol {
     private let userSession: UserSessionProtocol
     private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
@@ -299,6 +299,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             loadMoreWalletTransactions()
         case .loadMoreWalletNFTs:
             loadMoreWalletNFTs()
+        case .sendWalletToken:
+            actionsSubject.send(.sendWalletToken(self))
         }
     }
     
@@ -733,7 +735,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 markChannelRead(channel)
                 getRoomInfoFromAlias(channel.id)
             case .failure(let error):
-//                MXLog.error("Failed to resolve room alias: \(channel.id). Error: \(error)")
+                MXLog.error("Failed to resolve room alias: \(channel.id). Error: \(error)")
                 let joinChannelResult = await userSession.clientProxy.joinChannel(roomAliasOrId: channel.id)
                 switch joinChannelResult {
                 case .success(let roomId):
@@ -1004,5 +1006,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 }
             }
         }
+    }
+    
+    func onTransactionCompleted() {
+        fetchWalletData()
     }
 }

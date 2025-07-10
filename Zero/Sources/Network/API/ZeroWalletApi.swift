@@ -21,6 +21,8 @@ protocol ZeroWalletApiProtocol {
     func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async throws -> Result<ZWalletTransactionResponse, Error>
     
     func getTransactionReceipt(transactionHash: String) async throws -> Result<ZWalletTransactionReceipt, Error>
+    
+    func searchRecipients(query: String) async throws -> Result<[WalletRecipient], Error>
 }
 
 class ZeroWalletApi: ZeroWalletApiProtocol {
@@ -137,6 +139,21 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         }
     }
     
+    func searchRecipients(query: String) async throws -> Result<[WalletRecipient], any Error> {
+        let parameters = ["query": query]
+        let result: Result<ZWalletRecipients, Error> = try await APIManager.shared.authorisedRequest(WalletEndPoints.searchRecipients,
+                                                                   method: .get,
+                                                                   appSettings: appSettings,
+                                                                   parameters: parameters,
+                                                                   encoding: URLEncoding.queryString)
+        switch result {
+        case .success(let response):
+            return .success(response.recipients)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum WalletEndPoints {
@@ -149,6 +166,7 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         static let transferToken = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/transactions/transfer-token"
         static let transferNft = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/transactions/transfer-nft"
         static let transactionReceipt = "\(hostURL)api/wallet/transaction/\(WalletApiConstants.trasaction_hash_path_parameter)/receipt"
+        static let searchRecipients = "\(hostURL)api/wallet/search-recipients"
     }
     
     private enum WalletApiConstants {

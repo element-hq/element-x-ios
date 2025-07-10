@@ -30,9 +30,9 @@ extension Publisher where Output: Equatable, Failure == Never {
 extension Publisher where Output == String, Failure == Never {
     /// Debounce text queries and remove duplicates.
     /// Clearing the text publishes the update immediately.
-    func debounceTextQueriesAndRemoveDuplicates() -> AnyPublisher<String, Never> {
+    func debounceTextQueriesAndRemoveDuplicates(debounceTimeMillis: Int = 250) -> AnyPublisher<String, Never> {
         debounceAndRemoveDuplicates(on: DispatchQueue.main) { query in
-            query.isEmpty ? .milliseconds(0) : .milliseconds(250)
+            query.isEmpty ? .milliseconds(0) : .milliseconds(debounceTimeMillis)
         }
     }
 }
