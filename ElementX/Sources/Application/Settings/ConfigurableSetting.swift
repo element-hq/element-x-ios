@@ -12,10 +12,11 @@ import Combine
 ///
 /// Unlike ``UserPreference``, this type of setting isn't settable by the user, nor is the
 /// override persisted between app launches.
-struct ConfigurableSetting<T> {
+struct ConfigurableSetting<T: Equatable> {
     private let initialValue: T
     private let subject: CurrentValueSubject<T, Never>
     var publisher: CurrentValuePublisher<T, Never> { subject.asCurrentValuePublisher() }
+    var isOverridden: Bool { subject.value != initialValue }
     
     init(_ initialValue: T) {
         self.initialValue = initialValue
@@ -27,6 +28,8 @@ struct ConfigurableSetting<T> {
     }
     
     func reset() {
-        subject.send(initialValue)
+        if isOverridden {
+            subject.send(initialValue)
+        }
     }
 }

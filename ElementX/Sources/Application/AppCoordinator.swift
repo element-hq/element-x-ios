@@ -18,6 +18,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
+    private let targetConfiguration: Target.Configuration
     private let appMediator: AppMediator
     private let appSettings: AppSettings
     private let appDelegate: AppDelegate
@@ -74,9 +75,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         let appSettings = appHooks.appSettingsHook.configure(AppSettings())
         
-        Target.mainApp.configure(logLevel: appSettings.logLevel,
-                                 traceLogPacks: appSettings.traceLogPacks,
-                                 sentryURL: appSettings.bugReportSentryRustURL)
+        targetConfiguration = Target.mainApp.configure(logLevel: appSettings.logLevel,
+                                                       traceLogPacks: appSettings.traceLogPacks,
+                                                       sentryURL: appSettings.bugReportSentryRustURL)
         
         let appName = InfoPlistReader.main.bundleDisplayName
         let appVersion = InfoPlistReader.main.bundleShortVersionString

@@ -10,6 +10,8 @@
 import XCTest
 
 class LoggingTests: XCTestCase {
+    static var targetConfiguration: Target.Configuration?
+    
     private enum Constants {
         static let genericFailure = "Test failed"
     }
@@ -22,7 +24,9 @@ class LoggingTests: XCTestCase {
         let target = "tests"
         XCTAssertTrue(Tracing.logFiles.isEmpty)
         
-        await Target.tests.configure(logLevel: .info, traceLogPacks: [], sentryURL: nil)
+        if Self.targetConfiguration == nil {
+            Self.targetConfiguration = Target.tests.configure(logLevel: .info, traceLogPacks: [], sentryURL: nil)
+        }
         
         // There is something weird with Rust logging where the file writing handle doesn't
         // notice that the file it is writing to was deleted, so we can't run these checks
@@ -175,7 +179,9 @@ class LoggingTests: XCTestCase {
                                                               contentType: nil))
         
         // When logging that value
-        await Target.tests.configure(logLevel: .info, traceLogPacks: [], sentryURL: nil)
+        if Self.targetConfiguration == nil {
+            Self.targetConfiguration = Target.tests.configure(logLevel: .info, traceLogPacks: [], sentryURL: nil)
+        }
         
         MXLog.info(textMessage)
         MXLog.info(noticeMessage)
