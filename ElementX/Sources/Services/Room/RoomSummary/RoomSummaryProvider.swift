@@ -177,10 +177,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .sink { [weak self] roomIDs in
                 guard let self else { return }
                 
-                do {
-                    try roomListService.subscribeToRooms(roomIds: roomIDs)
-                } catch {
-                    MXLog.error("Failed subscribing to rooms with error: \(error)")
+                Task { [weak self] in
+                    do {
+                        try await self?.roomListService.subscribeToRooms(roomIds: roomIDs)
+                    } catch {
+                        MXLog.error("Failed subscribing to rooms with error: \(error)")
+                    }
                 }
             }
             .store(in: &cancellables)

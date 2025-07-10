@@ -57,6 +57,7 @@ final class AppSettings {
         case knockingEnabled
         case threadsEnabled
         case developerOptionsEnabled
+        case sharePosEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -345,6 +346,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.sharePosEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var sharePosEnabled
     
     #endif
     
