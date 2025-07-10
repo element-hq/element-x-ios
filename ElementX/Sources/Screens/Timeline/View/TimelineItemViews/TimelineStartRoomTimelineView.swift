@@ -46,7 +46,7 @@ struct TimelineStartRoomTimelineView: View {
         .padding(.top, 16)
         .padding(.bottom, 8)
         .padding(.horizontal, 16)
-        .highlight(borderColor: .compound.borderInfoSubtle, primaryColor: .compound.bgInfoSubtle, secondaryColor: Color.clear)
+        .highlight(gradient: .compound.info, borderColor: .compound.borderInfoSubtle)
     }
     
     private var title: String {

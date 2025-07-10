@@ -509,6 +509,12 @@ extension PreviewTests {
         }
     }
 
+    func testPillViewOnBubble() async throws {
+        for (index, preview) in PillViewOnBubble_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testPillView() async throws {
         for (index, preview) in PillView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

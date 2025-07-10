@@ -22,6 +22,8 @@ internal enum L10n {
   internal static func a11yDigitsEntered(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_digits_entered", p1)
   }
+  /// Edit avatar
+  internal static var a11yEditAvatar: String { return L10n.tr("Localizable", "a11y_edit_avatar") }
   /// Hide password
   internal static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
   /// Join call
@@ -32,6 +34,12 @@ internal enum L10n {
   internal static var a11yNotificationsMentionsOnly: String { return L10n.tr("Localizable", "a11y_notifications_mentions_only") }
   /// Muted
   internal static var a11yNotificationsMuted: String { return L10n.tr("Localizable", "a11y_notifications_muted") }
+  /// New mentions
+  internal static var a11yNotificationsNewMentions: String { return L10n.tr("Localizable", "a11y_notifications_new_mentions") }
+  /// New messages
+  internal static var a11yNotificationsNewMessages: String { return L10n.tr("Localizable", "a11y_notifications_new_messages") }
+  /// Ongoing call
+  internal static var a11yNotificationsOngoingCall: String { return L10n.tr("Localizable", "a11y_notifications_ongoing_call") }
   /// Page %1$d
   internal static func a11yPageN(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_page_n", p1)
@@ -54,6 +62,8 @@ internal enum L10n {
   internal static func a11yPollsPercentOfTotal(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_polls_percent_of_total", p1)
   }
+  /// Will remove previous selection
+  internal static var a11yPollsWillRemoveSelection: String { return L10n.tr("Localizable", "a11y_polls_will_remove_selection") }
   /// This is the winning answer
   internal static var a11yPollsWinningAnswer: String { return L10n.tr("Localizable", "a11y_polls_winning_answer") }
   /// React with %1$@
@@ -90,6 +100,8 @@ internal enum L10n {
   internal static var a11yShowPassword: String { return L10n.tr("Localizable", "a11y_show_password") }
   /// Start a call
   internal static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
+  /// Time limited action required
+  internal static var a11yTimeLimitedActionRequired: String { return L10n.tr("Localizable", "a11y_time_limited_action_required") }
   /// User menu
   internal static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
   /// View avatar
@@ -1482,6 +1494,10 @@ internal enum L10n {
   internal static var screenEncryptionResetFooter: String { return L10n.tr("Localizable", "screen_encryption_reset_footer") }
   /// Can't confirm? You’ll need to reset your identity.
   internal static var screenEncryptionResetTitle: String { return L10n.tr("Localizable", "screen_encryption_reset_title") }
+  /// Chats
+  internal static var screenHomeTabChats: String { return L10n.tr("Localizable", "screen_home_tab_chats") }
+  /// Spaces
+  internal static var screenHomeTabSpaces: String { return L10n.tr("Localizable", "screen_home_tab_spaces") }
   /// Can't confirm?
   internal static var screenIdentityConfirmationCannotConfirm: String { return L10n.tr("Localizable", "screen_identity_confirmation_cannot_confirm") }
   /// Create a new recovery key

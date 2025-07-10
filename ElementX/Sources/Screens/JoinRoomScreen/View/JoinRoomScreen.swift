@@ -94,7 +94,7 @@ struct JoinRoomScreen: View {
                 }
                 
                 if !context.viewState.isDMInvite, let memberCount = context.viewState.roomDetails?.memberCount {
-                    BadgeLabel(title: "\(memberCount)", icon: \.userProfile, isHighlighted: false)
+                    BadgeLabel(title: "\(memberCount)", icon: \.userProfile, style: .default)
                 }
                 
                 if let topic = context.viewState.roomDetails?.topic {

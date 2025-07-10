@@ -1860,6 +1860,7 @@ private struct ClientProxyServices {
         let syncService = try await client
             .syncService()
             .withCrossProcessLock()
+            .withSharePos(enable: appSettings.sharePosEnabled)
             .finish()
         
         let roomListService = syncService.roomListService()
