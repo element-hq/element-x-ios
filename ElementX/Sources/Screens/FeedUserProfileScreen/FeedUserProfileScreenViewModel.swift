@@ -7,6 +7,7 @@
 
 import Combine
 import SwiftUI
+import Kingfisher
 
 typealias FeedUserProfileScreenViewModelType = StateStoreViewModel<FeedUserProfileScreenViewState, FeedUserProfileScreenViewAction>
 
@@ -203,22 +204,30 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         let postsToFetchMedia = posts.filter {
             $0.mediaInfo != nil && state.userFeedsMediaInfoMap[$0.id] == nil
         }
-        await withTaskGroup(of: (String, ZPostMedia)?.self) { group in
+        await withTaskGroup(of: (HomeScreenPost, ZPostMedia)?.self) { group in
             for post in postsToFetchMedia {
+                guard !Task.isCancelled else { continue }
                 group.addTask {
                     guard let mediaId = post.mediaInfo?.id else { return nil }
-                    if let result = await withTimeout(seconds: 5, operation: {
+                    let result = await withTimeout(seconds: 10, operation: {
                         await self.clientProxy.getPostMediaInfo(mediaId: mediaId)
-                    }), case let .success(result) = result {
-                        return (post.id, result)
+                    })
+                    if Task.isCancelled {
+                        return nil
+                    }
+                    if case .success(let media) = result {
+                        if let url = URL(string: media.signedUrl), !media.media.isVideo {
+                            ImagePrefetcher(urls: [url]).start()
+                        }
+                        return (post, media)
                     }
                     return nil
                 }
             }
             
             for await item in group {
-                guard let (postId, media) = item else { continue }
-                state.userFeedsMediaInfoMap[postId] = HomeScreenPostMediaInfo(media: media)
+                guard let (post, media) = item else { continue }
+                state.userFeedsMediaInfoMap[post.id] = HomeScreenPostMediaInfo(media: media)
             }
         }
     }
