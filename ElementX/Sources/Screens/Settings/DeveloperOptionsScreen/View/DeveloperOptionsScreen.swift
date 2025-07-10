@@ -59,6 +59,13 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
+            Section("Sync") {
+                Toggle(isOn: $context.sharePosEnabled) {
+                    Text("Share pos")
+                    Text("Keep the sliding sync pos to make initial syncs faster. Requires an app restart to take effect. Might make the sync unstable.")
+                }
+            }
+            
             Section {
                 Toggle(isOn: $context.enableOnlySignedDeviceIsolationMode) {
                     Text("Exclude insecure devices when sending/receiving messages")

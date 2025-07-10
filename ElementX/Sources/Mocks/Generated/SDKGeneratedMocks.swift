@@ -18125,9 +18125,9 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
     }
     open var subscribeToRoomsRoomIdsReceivedRoomIds: [String]?
     open var subscribeToRoomsRoomIdsReceivedInvocations: [[String]] = []
-    open var subscribeToRoomsRoomIdsClosure: (([String]) throws -> Void)?
+    open var subscribeToRoomsRoomIdsClosure: (([String]) async throws -> Void)?
 
-    open override func subscribeToRooms(roomIds: [String]) throws {
+    open override func subscribeToRooms(roomIds: [String]) async throws {
         if let error = subscribeToRoomsRoomIdsThrowableError {
             throw error
         }
@@ -18136,7 +18136,7 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
         DispatchQueue.main.async {
             self.subscribeToRoomsRoomIdsReceivedInvocations.append(roomIds)
         }
-        try subscribeToRoomsRoomIdsClosure?(roomIds)
+        try await subscribeToRoomsRoomIdsClosure?(roomIds)
     }
 
     //MARK: - syncIndicator
@@ -21661,6 +21661,77 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
             return withOfflineModeClosure()
         } else {
             return withOfflineModeReturnValue
+        }
+    }
+
+    //MARK: - withSharePos
+
+    var withSharePosEnableUnderlyingCallsCount = 0
+    open var withSharePosEnableCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return withSharePosEnableUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = withSharePosEnableUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                withSharePosEnableUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    withSharePosEnableUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var withSharePosEnableCalled: Bool {
+        return withSharePosEnableCallsCount > 0
+    }
+    open var withSharePosEnableReceivedEnable: Bool?
+    open var withSharePosEnableReceivedInvocations: [Bool] = []
+
+    var withSharePosEnableUnderlyingReturnValue: SyncServiceBuilder!
+    open var withSharePosEnableReturnValue: SyncServiceBuilder! {
+        get {
+            if Thread.isMainThread {
+                return withSharePosEnableUnderlyingReturnValue
+            } else {
+                var returnValue: SyncServiceBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = withSharePosEnableUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                withSharePosEnableUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    withSharePosEnableUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var withSharePosEnableClosure: ((Bool) -> SyncServiceBuilder)?
+
+    open override func withSharePos(enable: Bool) -> SyncServiceBuilder {
+        withSharePosEnableCallsCount += 1
+        withSharePosEnableReceivedEnable = enable
+        DispatchQueue.main.async {
+            self.withSharePosEnableReceivedInvocations.append(enable)
+        }
+        if let withSharePosEnableClosure = withSharePosEnableClosure {
+            return withSharePosEnableClosure(enable)
+        } else {
+            return withSharePosEnableReturnValue
         }
     }
 }
