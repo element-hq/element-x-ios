@@ -21,6 +21,7 @@ options:
     - UnitTests
     - PreviewTests
     - UITests
+    - AccessibilityTests
     - IntegrationTests
     - DevelopmentAssets
     - Secrets
@@ -39,6 +40,7 @@ options:
     - Screens
     - Other
     - UITests
+    - AccessibilityTests
   postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
 
 settings:
@@ -59,6 +61,7 @@ include:
 - path: IntegrationTests/SupportingFiles/target.yml
 - path: NSE/SupportingFiles/target.yml
 - path: ShareExtension/SupportingFiles/target.yml
+- path: AccessibilityTests/SupportingFiles/target.yml
 # - path: MyAppVariant/override.yml
 
 packages:
