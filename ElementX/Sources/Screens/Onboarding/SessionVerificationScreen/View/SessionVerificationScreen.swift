@@ -31,6 +31,11 @@ struct SessionVerificationScreen: View {
         .interactiveDismissDisabled()
         .navigationBarBackButtonHidden(context.viewState.verificationState == .verified)
         .toolbar { toolbar }
+        .onAppear {
+            var announcement = AttributedString(L10n.a11yTimeLimitedActionRequired)
+            announcement.accessibilitySpeechAnnouncementPriority = .high
+            AccessibilityNotification.Announcement(announcement).post()
+        }
     }
     
     // MARK: - Private
@@ -193,10 +198,12 @@ struct SessionVerificationScreen: View {
             VStack(spacing: 16.0) {
                 Text(emoji.symbol)
                     .font(.zero.headingXLBold)
+                    .accessibilityHidden(true)
                 Text(emoji.localizedDescription.capitalized)
                     .font(.zero.bodyMD)
                     .foregroundColor(.compound.textSecondary)
             }
+            .accessibilityElement(children: .combine)
             .padding(8.0)
         }
     }

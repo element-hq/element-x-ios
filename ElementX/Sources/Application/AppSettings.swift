@@ -46,7 +46,6 @@ final class AppSettings {
         case optimizeMediaUploads
         case appAppearance
         case sharePresence
-        case isNewBloomEnabled
         
         case elementCallBaseURLOverride
         
@@ -58,6 +57,7 @@ final class AppSettings {
         case knockingEnabled
         case threadsEnabled
         case developerOptionsEnabled
+        case sharePosEnabled
         case zeroAccessToken
         case zeroRewardsCredit
         case zeroLoggedInUser
@@ -351,8 +351,8 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
     
-    @UserPreference(key: UserDefaultsKeys.isNewBloomEnabled, defaultValue: false, storageType: .userDefaults(store))
-    var isNewBloomEnabled
+    @UserPreference(key: UserDefaultsKeys.sharePosEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var sharePosEnabled
     
     #endif
     

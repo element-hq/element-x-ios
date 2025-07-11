@@ -20,6 +20,14 @@ struct WalletTransaction: Codable {
     let token: TransactionToken
     let amount: String?
     let timestamp: String
+    let tokenId: String?
+    let type: String
+}
+
+extension WalletTransaction {
+    var formattedAmount: String {
+        String(format: "%.2f", Double(amount ?? "0") ?? 0)
+    }
 }
 
 struct TransactionToken: Codable {

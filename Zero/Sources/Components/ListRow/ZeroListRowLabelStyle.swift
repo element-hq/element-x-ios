@@ -53,6 +53,7 @@ public struct ZeroListRowLabel<Icon: View>: View {
     
     var role: Role?
     public enum Role {
+        case zero
         /// A role that indicates a destructive action.
         case destructive
         /// A role that indicates an error.
@@ -69,9 +70,16 @@ public struct ZeroListRowLabel<Icon: View>: View {
     
     var titleColor: Color {
         guard isEnabled else { return .compound.textDisabled }
-        return role == .destructive ? .compound.textCriticalPrimary : .compound.textPrimary
+        return switch role {
+        case .zero:
+                .zero.bgAccentRest
+        case .destructive:
+                .compound.textCriticalPrimary
+        default:
+                .compound.textPrimary
+        }
     }
-
+    
     var titleLineLimit: Int? { layout == .avatar ? 1 : lineLimit }
     
     var statusColor: Color {
@@ -81,7 +89,7 @@ public struct ZeroListRowLabel<Icon: View>: View {
     var descriptionColor: Color {
         isEnabled ? .compound.textSecondary : .compound.textDisabled
     }
-
+    
     var descriptionLineLimit: Int? {
         guard layout == .avatar else { return lineLimit }
         return role != .error ? 1 : lineLimit
@@ -89,14 +97,27 @@ public struct ZeroListRowLabel<Icon: View>: View {
     
     var iconForegroundColor: Color {
         guard isEnabled else { return .compound.iconTertiaryAlpha }
-        if role == .destructive { return .compound.textCriticalPrimary }
-        return hideIconBackground ? .compound.iconPrimary : .compound.iconTertiaryAlpha
+        return switch role {
+        case .zero:
+                .zero.bgAccentRest
+        case .destructive:
+                .compound.textCriticalPrimary
+        default:
+            hideIconBackground ? .compound.iconPrimary : .compound.iconTertiaryAlpha
+        }
     }
     
     var iconBackgroundColor: Color {
         if hideIconBackground { return .clear }
         guard isEnabled else { return .compound._bgSubtleSecondaryAlpha }
-        return role == .destructive ? .compound._bgCriticalSubtleAlpha : .compound._bgSubtleSecondaryAlpha
+        return switch role {
+        case .zero:
+                .zero.bgAccentRest
+        case .destructive:
+                .compound._bgCriticalSubtleAlpha
+        default:
+                .compound._bgSubtleSecondaryAlpha
+        }
     }
     
     public var body: some View {

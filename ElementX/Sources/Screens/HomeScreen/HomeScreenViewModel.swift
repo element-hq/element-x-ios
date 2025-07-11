@@ -17,7 +17,7 @@ protocol RoomNotificationModeUpdatedProtocol {
     func onRoomNotificationModeUpdated(for roomId: String, mode: RoomNotificationModeProxy)
 }
 
-class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol, CreateFeedProtocol, RoomNotificationModeUpdatedProtocol {
+class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol, CreateFeedProtocol, RoomNotificationModeUpdatedProtocol, WalletTransactionProtocol {
     private let userSession: UserSessionProtocol
     private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
@@ -53,7 +53,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         
-        super.init(initialViewState: .init(userID: userSession.clientProxy.userID, isNewBloomEnabled: appSettings.isNewBloomEnabled),
+        super.init(initialViewState: .init(userID: userSession.clientProxy.userID),
                    mediaProvider: userSession.mediaProvider)
         
         userSession.clientProxy.userAvatarURLPublisher
@@ -299,6 +299,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             loadMoreWalletTransactions()
         case .loadMoreWalletNFTs:
             loadMoreWalletNFTs()
+        case .sendWalletToken:
+            actionsSubject.send(.sendWalletToken(self))
         }
     }
     
@@ -1008,5 +1010,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 }
             }
         }
+    }
+    
+    func onTransactionCompleted() {
+        fetchWalletData()
     }
 }

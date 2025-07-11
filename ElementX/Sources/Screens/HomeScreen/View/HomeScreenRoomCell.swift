@@ -106,9 +106,10 @@ struct HomeScreenRoomCell: View {
             Spacer()
             
             HStack(spacing: 8) {
-//                if room.badges.isCallShown {
-//                    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
-//                }
+                //if room.badges.isCallShown {
+                //    CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
+                //        .accessibilityLabel(L10n.a11yNotificationsOngoingCall)
+                //}
                 
                 if room.badges.isMuteShown {
                     CompoundIcon(\.notificationsOffSolid, size: .custom(15), relativeTo: .compound.bodyMD)
@@ -123,16 +124,6 @@ struct HomeScreenRoomCell: View {
                     Circle()
                         .frame(width: 6, height: 6)
                         .foregroundStyle(.zero.bgAccentRest)
-//                    ZStack {
-//                        Circle()
-//                            .frame(width: 16, height: 16, alignment: .center)
-//                        if room.unreadNotificationsCount > 0 {
-//                            Text("\(room.unreadNotificationsCount)")
-//                                .font(.compound.bodyXS)
-//                                .foregroundColor(.black)
-//                                .frame(alignment: .center)
-//                        }
-//                    }
                 }
             }
             .foregroundColor(room.isHighlighted ? Asset.Colors.blue11.swiftUIColor : .compound.iconQuaternary)
@@ -141,7 +132,7 @@ struct HomeScreenRoomCell: View {
             
     private var mentionIcon: some View {
         CompoundIcon(\.mention, size: .custom(15), relativeTo: .compound.bodyMD)
-            .accessibilityLabel(L10n.a11yNotificationsMentionsOnly)
+            .accessibilityLabel(L10n.a11yNotificationsNewMentions)
     }
     
     @ViewBuilder

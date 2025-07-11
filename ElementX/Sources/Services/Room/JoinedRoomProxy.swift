@@ -125,7 +125,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         subscribedForUpdates = true
 
         do {
-            try roomListService.subscribeToRooms(roomIds: [id])
+            try await roomListService.subscribeToRooms(roomIds: [id])
         } catch {
             MXLog.error("Failed subscribing to room with error: \(error)")
         }
@@ -193,7 +193,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func threadTimeline(eventID: String) async -> Result<TimelineProxyProtocol, RoomProxyError> {
         do {
-            let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .thread(rootEventId: eventID, numEvents: 20),
+            let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .thread(rootEventId: eventID),
                                                                                             filter: .all,
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily,
@@ -217,7 +217,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             let rustFocus: MatrixRustSDK.TimelineFocus = switch focus {
             case .live: .live(hideThreadedEvents: false)
             case .eventID(let eventID): .event(eventId: eventID, numContextEvents: 100, hideThreadedEvents: false)
-            case .thread(let eventID): .thread(rootEventId: eventID, numEvents: 20)
+            case .thread(let eventID): .thread(rootEventId: eventID)
             case .pinned: .pinnedEvents(maxEventsToLoad: 100, maxConcurrentRequests: 10)
             }
             

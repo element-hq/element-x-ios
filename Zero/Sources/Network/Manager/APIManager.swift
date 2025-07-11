@@ -94,6 +94,32 @@ class APIManager {
         }
     }
     
+    func debugAuthRequest(_ url: String,
+                          method: HTTPMethod,
+                          appSettings: AppSettings,
+                          parameters: Parameters? = nil,
+                          headers: HTTPHeaders? = nil,
+                          encoding: ParameterEncoding = JSONEncoding.default) async throws -> Result<Void, Error> {
+        var authHeaders = headers
+        if let accessToken = appSettings.zeroAccessToken {
+            authHeaders = getAuthHeaders(headers: headers, accessToken: accessToken)
+        }
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.request(url, method: method, parameters: parameters, encoding: encoding, headers: authHeaders)
+                .validate()
+                .responseString { response in
+                    switch response.result {
+                    case .success(let jsonString):
+                        print("✅ Raw JSON String:\n\(jsonString)")
+                        continuation.resume(returning: .success(()))
+                    case .failure(let error):
+                        print("❌ Error: \(error)")
+                        continuation.resume(returning: .failure(error))
+                    }
+                }
+        }
+    }
+    
     func authorisedMultipartRequest<T: Decodable>(
         _ url: String,
         mediaFile: URL?,

@@ -117,6 +117,14 @@ struct SettingsScreen: View {
                 }
             })
             
+            /// Zero Pro
+            ZeroListRow(label: .plain(title: context.viewState.isZeroProSubscriber ? "Manage ZERO Pro" : "Join ZERO Pro",
+                                      role: .zero),
+                        kind: .navigationLink {
+                context.send(viewAction: .zeroProSub)
+            })
+            .accessibilityIdentifier("settings-refer-friend")
+            
             /// Refer A Friend
             ZeroListRow(label: .plain(title: "Refer a Friend"),
                         kind: .navigationLink {

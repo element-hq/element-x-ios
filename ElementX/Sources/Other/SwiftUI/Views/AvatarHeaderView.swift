@@ -130,19 +130,19 @@ struct AvatarHeaderView<Footer: View>: View {
                 case .encrypted(true):
                     BadgeLabel(title: L10n.screenRoomDetailsBadgeEncrypted,
                                icon: \.lockSolid,
-                               isHighlighted: true)
+                               style: .accent)
                 case .encrypted(false):
                     BadgeLabel(title: L10n.screenRoomDetailsBadgeNotEncrypted,
                                icon: \.lockOff,
-                               isHighlighted: false)
+                               style: .info)
                 case .public:
                     BadgeLabel(title: L10n.screenRoomDetailsBadgePublic,
                                icon: \.public,
-                               isHighlighted: false)
+                               style: .info)
                 case .verified:
                     BadgeLabel(title: L10n.commonVerified,
                                icon: \.verified,
-                               isHighlighted: true)
+                               style: .accent)
                 }
             }
         }

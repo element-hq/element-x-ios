@@ -21,6 +21,12 @@ struct ZWalletToken: Codable {
     let decimals: Int
 }
 
+extension ZWalletToken {
+    var formattedAmount: String {
+        String(format: "%.2f", Double(amount) ?? 0)
+    }
+}
+
 struct NextPageParams: Codable {
     let itemsCount: Int
     let tokenName: String?

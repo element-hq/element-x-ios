@@ -47,7 +47,7 @@ struct LandingScreen: View {
     }
     
     var landingViewBackground: some View {
-        Image(asset: Asset.Images.landingBackground)
+        Image(asset: Asset.Images.backgroundLanding)
             .resizable()
             .scaledToFill()
             .ignoresSafeArea()

@@ -144,6 +144,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.inviteFriend)
         case .referAFriend:
             actionsSubject.send(.referAFriend)
+        case .zeroProSub:
+            actionsSubject.send(.zeroProSub)
         }
     }
     

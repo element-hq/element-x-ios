@@ -1100,6 +1100,16 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func fetchZCurrentUser() {
+        Task {
+            do {
+                _ = try await fetchZeroCurrentUser()
+            } catch {
+                MXLog.error("Failed to fetch zero current user. Error: \(error)")
+            }
+        }
+    }
+    
     func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
             let zeroPostsResult = try await zeroApiProxy.postsApi.fetchPosts(channelZId: channelZId, following: following, limit: limit, skip: skip)
@@ -1351,6 +1361,66 @@ class ClientProxy: ClientProxyProtocol {
             }
         } catch {
             MXLog.error("Failed to fetch transactions for wallet address: \(walletAddress), with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String) async -> Result<ZWalletTransactionResponse, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.transferToken(senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, amount: amount, tokenAddress: tokenAddress)
+            switch result {
+            case .success(let transactionResponse):
+                return .success(transactionResponse)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to transfer token, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async -> Result<ZWalletTransactionResponse, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.transferNFT(senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, tokenId: tokenId, nftAddress: nftAddress)
+            switch result {
+            case .success(let transactionResponse):
+                return .success(transactionResponse)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to transfer nft, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func getTransactionReceipt(transactionHash: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.getTransactionReceipt(transactionHash: transactionHash)
+            switch result {
+            case .success(let receipt):
+                return .success(receipt)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to get transaction receipt, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func searchTransactionRecipient(query: String) async -> Result<[WalletRecipient], ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.searchRecipients(query: query)
+            switch result {
+                case .success(let recipients):
+                return .success(recipients)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to search recipients, with error: \(error)")
             return .failure(.zeroError(error))
         }
     }
@@ -1790,6 +1860,7 @@ private struct ClientProxyServices {
         let syncService = try await client
             .syncService()
             .withCrossProcessLock()
+            .withSharePos(enable: appSettings.sharePosEnabled)
             .finish()
         
         let roomListService = syncService.roomListService()

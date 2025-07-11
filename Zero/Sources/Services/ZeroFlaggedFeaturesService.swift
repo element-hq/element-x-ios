@@ -10,7 +10,7 @@ import Foundation
 class ZeroFlaggedFeaturesService {
     static let shared = ZeroFlaggedFeaturesService()
     
-    private var isZeroWalletEnabled: Bool = false
+    private var isZeroWalletEnabled: Bool = true
     
     private init() {}
     

@@ -28,6 +28,7 @@ enum HomeScreenViewModelAction {
     case logout
     case postTapped(_ post: HomeScreenPost, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
     case openPostUserProfile(_ profile: ZPostUserProfile, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
+    case sendWalletToken(WalletTransactionProtocol)
 }
 
 enum HomeScreenViewAction {
@@ -75,6 +76,7 @@ enum HomeScreenViewAction {
     case loadMoreWalletTokens
     case loadMoreWalletTransactions
     case loadMoreWalletNFTs
+    case sendWalletToken
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -201,10 +203,6 @@ struct HomeScreenViewState: BindableState {
     var hideInviteAvatars = false
     
     var reportRoomEnabled = false
-    
-    // Intentionally not mutable so that we don't have to reset the navigation bar's
-    // appearance whenever the feature flag is toggled (requires a restart).
-    let isNewBloomEnabled: Bool
     
     var visibleRooms: [HomeScreenRoom] {
         if roomListMode == .skeletons {
@@ -722,7 +720,7 @@ extension HomeScreenWalletContent {
                   title: walletToken.name,
                   description: nil,
                   actionPreText: nil,
-                  actionText: "\(walletToken.amount) MEOW",
+                  actionText: "\(walletToken.formattedAmount) \(walletToken.symbol.uppercased())",
                   actionPostText: nil)
     }
     
@@ -741,15 +739,16 @@ extension HomeScreenWalletContent {
     
     init(walletTransaction: WalletTransaction) {
         let isTransactionReceived = walletTransaction.action.lowercased() == "receive"
+        let tokenSymbol = walletTransaction.token.symbol.uppercased()
         self.init(id: walletTransaction.hash,
                   icon: walletTransaction.token.logo,
                   header: nil, //walletTransaction.timestamp
                   transactionAction: isTransactionReceived ? "Received from" : "Sent to",
-                  transactionAddress: isTransactionReceived ? walletTransaction.from : walletTransaction.to,
+                  transactionAddress: isTransactionReceived ? displayFormattedAddress(walletTransaction.from) : displayFormattedAddress( walletTransaction.to),
                   title: walletTransaction.token.name,
                   description: nil,
                   actionPreText: nil,
-                  actionText: (walletTransaction.amount != nil) ? "\(walletTransaction.amount!) MEOW" : "0 MEOW",
+                  actionText: "\(walletTransaction.formattedAmount) \(tokenSymbol)",
                   actionPostText: nil)
     }
 }

@@ -137,7 +137,7 @@
 "action_yes" = "Oui";
 "action_yes_try_again" = "Oui, réessayez";
 "action.open_context_menu" = "Ouvrir le menu contextuel";
-"action.send_edited_message" = "Envoyer un message modifié";
+"action.send_edited_message" = "Envoyer les modifications";
 "action.send_voice_message" = "Envoyer un message vocal";
 "action.view" = "Voir";
 "banner_migrate_to_native_sliding_sync_action" = "Déconnecter et mettre à niveau";

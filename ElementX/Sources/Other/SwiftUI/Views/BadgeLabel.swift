@@ -9,46 +9,64 @@ import Compound
 import SwiftUI
 
 struct BadgeLabel: View {
+    enum Style {
+        case accent
+        case info
+        case `default`
+    }
+    
     let title: String
     let icon: KeyPath<CompoundIcons, Image>
-    let isHighlighted: Bool
+    let style: Style
     
     var body: some View {
         Label(title,
               icon: icon,
               iconSize: .xSmall,
               relativeTo: .compound.bodySM)
-            .labelStyle(BadgeLabelStyle(isHighlighted: isHighlighted))
-    }
-}
-
-private struct BadgeLabelStyle: LabelStyle {
-    let isHighlighted: Bool
-    
-    var titleColor: Color {
-        isHighlighted ? .zero._badgeTextSuccess : .compound.textBadgeInfo
+            .labelStyle(LabelStyle(style: style))
     }
     
-    var iconColor: Color {
-        isHighlighted ? .zero.iconSuccessPrimary : .compound.iconSecondary
-    }
-    
-    var backgroundColor: Color {
-        isHighlighted ? .zero._bgBadgeSuccess : .compound.bgSubtlePrimary
-    }
-    
-    func makeBody(configuration: Configuration) -> some View {
-        HStack(spacing: 4) {
-            configuration.icon
-                .foregroundStyle(iconColor)
-            configuration.title
-                .foregroundStyle(titleColor)
+    private struct LabelStyle: SwiftUI.LabelStyle {
+        let style: Style
+        
+        var titleColor: Color {
+            switch style {
+            case .accent: .zero._badgeTextSuccess
+            case .info: .compound.textBadgeInfo
+            case .default: .compound.textPrimary
+            }
         }
-        .font(.zero.bodySM)
-        .padding(.leading, 8)
-        .padding(.trailing, 12)
-        .padding(.vertical, 4)
-        .background(Capsule().fill(backgroundColor))
+        
+        var iconColor: Color {
+            switch style {
+            case .accent: .zero.iconSuccessPrimary
+            case .info: .compound.iconSecondary
+            case .default: .compound.iconSecondary
+            }
+        }
+        
+        var backgroundColor: Color {
+            switch style {
+            case .accent: .zero._bgBadgeSuccess
+            case .info: .compound.bgBadgeInfo
+            case .default: .compound.bgBadgeDefault
+            }
+        }
+        
+        func makeBody(configuration: Configuration) -> some View {
+            HStack(spacing: 4) {
+                configuration.icon
+                    .foregroundStyle(iconColor)
+                configuration.title
+                    .foregroundStyle(titleColor)
+            }
+            .font(.zero.bodySM)
+            .padding(.leading, 8)
+            .padding(.trailing, 12)
+            .padding(.vertical, 4)
+            .background(Capsule().fill(backgroundColor))
+        }
     }
 }
 
@@ -57,10 +75,13 @@ struct BadgeLabel_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 10) {
             BadgeLabel(title: "Encrypted",
                        icon: \.lockSolid,
-                       isHighlighted: true)
+                       style: .accent)
             BadgeLabel(title: "Not encrypted",
                        icon: \.lockSolid,
-                       isHighlighted: false)
+                       style: .info)
+            BadgeLabel(title: "1234",
+                       icon: \.userProfile,
+                       style: .default)
         }
     }
 }

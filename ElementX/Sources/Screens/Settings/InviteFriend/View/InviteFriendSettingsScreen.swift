@@ -9,7 +9,7 @@ struct InviteFriendSettingsScreen: View {
             ZeroListRow(kind: .custom {
                 ZStack {
                     VStack {
-                        Image(asset: Asset.Images.inviteImage)
+                        Image(asset: Asset.Images.imgInviteFriend)
                         
                         Text("Invite a friend.")
                             .font(.compound.headingMDBold)
