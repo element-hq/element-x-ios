@@ -23,6 +23,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
     private(set) var flow: AuthenticationFlow
     
+    private let qrLoginProgressSubject = PassthroughSubject<QrLoginProgress, Never>()
+    var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
+        qrLoginProgressSubject.eraseToAnyPublisher()
+    }
+    
     init(userSessionStore: UserSessionStoreProtocol,
          encryptionKeyProvider: EncryptionKeyProviderProtocol,
          clientBuilderFactory: AuthenticationClientBuilderFactoryProtocol = AuthenticationClientBuilderFactory(),
@@ -146,6 +151,45 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
+    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        let qrData: QrCodeData
+        do {
+            qrData = try QrCodeData.fromBytes(bytes: data)
+        } catch {
+            MXLog.error("QRCode decode error: \(error)")
+            return .failure(.qrCodeError(.invalidQRCode))
+        }
+        
+        guard let scannedServerName = qrData.serverName() else {
+            MXLog.error("The QR code is from a device that is not yet signed in.")
+            return .failure(.qrCodeError(.deviceNotSignedIn))
+        }
+        
+        if !appSettings.allowOtherAccountProviders, !appSettings.accountProviders.contains(scannedServerName) {
+            MXLog.error("The scanned device's server is not allowed: \(scannedServerName)")
+            return .failure(.qrCodeError(.providerNotAllowed(scannedProvider: scannedServerName, allowedProviders: appSettings.accountProviders)))
+        }
+        
+        let listener = SDKListener { [weak self] progress in
+            self?.qrLoginProgressSubject.send(progress)
+        }
+        
+        do {
+            let client = try await makeClientBuilder().build(homeserverAddress: scannedServerName)
+            try await client.loginWithQrCode(qrCodeData: qrData,
+                                             oidcConfiguration: appSettings.oidcConfiguration.rustValue,
+                                             progressListener: listener)
+            MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
+            return await userSession(for: client)
+        } catch let error as HumanQrLoginError {
+            MXLog.error("QRCode login error: \(error)")
+            return .failure(error.serviceError)
+        } catch {
+            MXLog.error("QRCode login unknown error: \(error)")
+            return .failure(.qrCodeError(.unknown))
+        }
+    }
+    
     func reset() {
         homeserverSubject.send(LoginHomeserver(address: appSettings.accountProviders[0], loginMode: .unknown))
         flow = .login
@@ -177,6 +221,29 @@ class AuthenticationService: AuthenticationServiceProtocol {
             return .success(clientProxy)
         case .failure:
             return .failure(.failedLoggingIn)
+        }
+    }
+}
+
+private extension HumanQrLoginError {
+    var serviceError: AuthenticationServiceError {
+        switch self {
+        case .Cancelled:
+            .qrCodeError(.cancelled)
+        case .ConnectionInsecure:
+            .qrCodeError(.connectionInsecure)
+        case .Declined:
+            .qrCodeError(.declined)
+        case .LinkingNotSupported:
+            .qrCodeError(.linkingNotSupported)
+        case .Expired:
+            .qrCodeError(.expired)
+        case .SlidingSyncNotAvailable:
+            .qrCodeError(.deviceNotSupported)
+        case .OtherDeviceNotSignedIn:
+            .qrCodeError(.deviceNotSignedIn)
+        case .Unknown, .OidcMetadataInvalid:
+            .qrCodeError(.unknown)
         }
     }
 }
