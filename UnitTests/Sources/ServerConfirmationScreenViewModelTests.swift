@@ -316,8 +316,7 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         client = ClientSDKMock(configuration: .init(oidcLoginURL: supportsOIDC ? "https://account.matrix.org/authorize" : nil,
                                                     supportsOIDCCreatePrompt: supportsOIDCCreatePrompt,
                                                     supportsPasswordLogin: supportsPasswordLogin))
-        let configuration = AuthenticationClientBuilderMock.Configuration(homeserverClients: ["matrix.org": client],
-                                                                          qrCodeClient: client)
+        let configuration = AuthenticationClientBuilderMock.Configuration(homeserverClients: ["matrix.org": client])
         
         clientBuilderFactory = AuthenticationClientBuilderFactoryMock(configuration: .init(builderConfiguration: configuration))
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),

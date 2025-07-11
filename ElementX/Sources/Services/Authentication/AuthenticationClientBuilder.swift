@@ -11,9 +11,6 @@ import MatrixRustSDK
 // sourcery: AutoMockable
 protocol AuthenticationClientBuilderProtocol {
     func build(homeserverAddress: String) async throws -> ClientProtocol
-    func buildWithQRCode(qrCodeData: QrCodeData,
-                         oidcConfiguration: OIDCConfigurationProxy,
-                         progressListener: SDKListener<QrLoginProgress>) async throws -> ClientProtocol
 }
 
 /// A wrapper around `ClientBuilder` to share reusable code between Normal and QR logins.
@@ -28,15 +25,6 @@ struct AuthenticationClientBuilder: AuthenticationClientBuilderProtocol {
     /// Builds a Client for login using OIDC or password authentication.
     func build(homeserverAddress: String) async throws -> ClientProtocol {
         try await makeClientBuilder().serverNameOrHomeserverUrl(serverNameOrUrl: homeserverAddress).build()
-    }
-    
-    /// Builds a Client, authenticating with the given QR code data.
-    func buildWithQRCode(qrCodeData: QrCodeData,
-                         oidcConfiguration: OIDCConfigurationProxy,
-                         progressListener: SDKListener<QrLoginProgress>) async throws -> ClientProtocol {
-        try await makeClientBuilder().buildWithQrCode(qrCodeData: qrCodeData,
-                                                      oidcConfiguration: oidcConfiguration.rustValue,
-                                                      progressListener: progressListener)
     }
     
     // MARK: - Private
