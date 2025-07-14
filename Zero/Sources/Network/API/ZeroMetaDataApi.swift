@@ -12,6 +12,27 @@ enum MediaLoadingError: Error {
     case invalidSignedURL
 }
 
+actor FeedMediaCacheActor {
+    private var mediaUrlCache: [String: ZPostMedia] = [:]
+    private var linkPreviewCache: [String: ZLinkPreview] = [:]
+
+    func valueMedia(for id: String) -> ZPostMedia? {
+        mediaUrlCache[id]
+    }
+    
+    func valueLinkPreview(for id: String) -> ZLinkPreview? {
+        linkPreviewCache[id]
+    }
+
+    func storeMedia(_ value: ZPostMedia, for id: String) {
+        mediaUrlCache[id] = value
+    }
+    
+    func storeLinkPreview(_ value: ZLinkPreview, for id: String) {
+        linkPreviewCache[id] = value
+    }
+}
+
 protocol ZeroMetaDataApiProtocol {
     func getLinkPreview(url: String) async throws -> Result<ZLinkPreview, Error>
     
@@ -28,21 +49,7 @@ protocol ZeroMetaDataApiProtocol {
 
 class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     private let appSettings: AppSettings
-    
-    private var linkPreviewsCacheMap: [String: ZLinkPreview] = [:]
     private let feedMediaCacheActor = FeedMediaCacheActor()
-    
-    actor FeedMediaCacheActor {
-        private var cache: [String: ZPostMedia] = [:]
-
-        func value(for id: String) -> ZPostMedia? {
-            cache[id]
-        }
-
-        func store(_ value: ZPostMedia, for id: String) {
-            cache[id] = value
-        }
-    }
     
     init(appSettings: AppSettings) {
         self.appSettings = appSettings
@@ -51,7 +58,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     // MARK: - Public
     
     func getLinkPreview(url: String) async throws -> Result<ZLinkPreview, any Error> {
-        if let cachedLinkPreview = linkPreviewsCacheMap[url] {
+        if let cachedLinkPreview = await feedMediaCacheActor.valueLinkPreview(for: url) {
             return .success(cachedLinkPreview)
         }
         
@@ -72,7 +79,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
                                encoding: URLEncoding.queryString)
         switch result {
         case .success(let linkPreview):
-            linkPreviewsCacheMap[url] = linkPreview
+            await feedMediaCacheActor.storeLinkPreview(linkPreview, for: url)
             return .success(linkPreview)
         case .failure(let error):
             return .failure(error)
@@ -80,7 +87,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     }
     
     func getPostMediaInfo(mediaId: String, isPreview: Bool) async throws -> Result<ZPostMedia, any Error> {
-        if isPreview, let cachedMediaInfo = await feedMediaCacheActor.value(for: mediaId) {
+        if isPreview, let cachedMediaInfo = await feedMediaCacheActor.valueMedia(for: mediaId) {
             return .success(cachedMediaInfo)
         }
         
@@ -93,7 +100,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
                                                                                               encoding: URLEncoding.queryString)
         switch result {
         case .success(let mediaInfo):
-            await feedMediaCacheActor.store(mediaInfo, for: mediaId)
+            await feedMediaCacheActor.storeMedia(mediaInfo, for: mediaId)
             return .success(mediaInfo)
         case .failure(let error):
             return .failure(error)
@@ -115,7 +122,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     }
     
     func fetchYoutubeLinkMetaData(youtubeUrl: String) async throws -> Result<ZLinkPreview, any Error> {
-        if let cachedLinkPreview = linkPreviewsCacheMap[youtubeUrl] {
+        if let cachedLinkPreview = await feedMediaCacheActor.valueLinkPreview(for: youtubeUrl) {
             return .success(cachedLinkPreview)
         }
         
@@ -133,7 +140,7 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
         switch result {
         case .success(let metaData):
             let linkPreview = metaData.toLinkPreview(youtubeUrl)
-            linkPreviewsCacheMap[youtubeUrl] = linkPreview
+            await feedMediaCacheActor.storeLinkPreview(linkPreview, for: youtubeUrl)
             return .success(linkPreview)
         case .failure(let error):
             return .failure(error)

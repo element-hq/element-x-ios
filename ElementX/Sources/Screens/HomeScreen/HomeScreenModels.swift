@@ -32,6 +32,8 @@ enum HomeScreenViewModelAction {
 }
 
 enum HomeScreenViewAction {
+    case onHomeTabChanged
+    
     case selectRoom(roomIdentifier: String)
     case showRoomDetails(roomIdentifier: String)
     case leaveRoom(roomIdentifier: String)
@@ -68,6 +70,7 @@ enum HomeScreenViewAction {
     case openPostUserProfile(_ profile: ZPostUserProfile)
     case openUserProfile
     case openMediaPreview(_ mediaId: String)
+    case reloadFeedMedia(_ post: HomeScreenPost)
     
     case forceRefreshChannels
     case channelTapped(_ channel: HomeScreenChannel)

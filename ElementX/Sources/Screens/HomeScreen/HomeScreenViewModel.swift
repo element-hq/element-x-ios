@@ -178,6 +178,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     override func process(viewAction: HomeScreenViewAction) {
         switch viewAction {
+        case .onHomeTabChanged:
+            onHomeTabChanged()
         case .selectRoom(let roomIdentifier):
             actionsSubject.send(.presentRoom(roomIdentifier: roomIdentifier))
         case .showRoomDetails(let roomIdentifier):
@@ -301,6 +303,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             loadMoreWalletNFTs()
         case .sendWalletToken:
             actionsSubject.send(.sendWalletToken(self))
+        case .reloadFeedMedia(let post):
+            reloadFeedMedia(post)
+        }
+    }
+    
+    private func onHomeTabChanged() {
+        Task.detached {
+            await self.fetchPosts(isForceRefresh: true)
         }
     }
     
@@ -819,39 +829,75 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func loadPostsContentConcurrently(for posts: [HomeScreenPost]) async {
-        async let mediaInfoTask: () = loadPostsMediaInfo(for: posts)
+        async let mediaInfoTask: ([HomeScreenPost]) = loadPostsMediaInfo(for: posts)
         async let linkPreviewTask: () = loadPostLinkPreviews(for: posts)
-        _ = await (mediaInfoTask, linkPreviewTask)
+        let results = await (mediaInfoTask, linkPreviewTask)
+        
+        let failedPosts = results.0
+        if !failedPosts.isEmpty {
+            _ = await loadPostsMediaInfo(for: failedPosts)
+        }
     }
     
-    private func loadPostsMediaInfo(for posts: [HomeScreenPost]) async {
+    private func loadPostsMediaInfo(for posts: [HomeScreenPost]) async -> [HomeScreenPost] {
         let postsToFetchMedia = posts.filter {
             $0.mediaInfo != nil && state.postMediaInfoMap[$0.id] == nil
         }
-        await withTaskGroup(of: (HomeScreenPost, ZPostMedia)?.self) { group in
+        guard !postsToFetchMedia.isEmpty else { return [] }
+        let results = await withTaskGroup(of: (HomeScreenPost, ZPostMedia?).self) { group in
             for post in postsToFetchMedia {
+                
                 guard !Task.isCancelled else { continue }
+                
                 group.addTask {
-                    guard let mediaId = post.mediaInfo?.id else { return nil }
+                    guard let mediaId = post.mediaInfo?.id else { return (post, nil) }
                     let result = await withTimeout(seconds: 10, operation: {
                         await self.userSession.clientProxy.getPostMediaInfo(mediaId: mediaId)
                     })
-                    if Task.isCancelled {
-                        return nil
-                    }
+                    
+                    guard !Task.isCancelled else { return (post, nil) }
+                    
                     if case .success(let media) = result {
                         if let url = URL(string: media.signedUrl), !media.media.isVideo {
-                            ImagePrefetcher(urls: [url]).start()
+                            FeedMediaPreLoader.shared.preloadMedia(url, mediaId: mediaId)
                         }
                         return (post, media)
                     }
-                    return nil
+                    return (post, nil)
                 }
             }
             
-            for await item in group {
-                guard let (post, media) = item else { continue }
-                state.postMediaInfoMap[post.id] = HomeScreenPostMediaInfo(media: media)
+            var successPosts: [String: ZPostMedia] = [:]
+            var failedPosts: [HomeScreenPost] = []
+            for await (post, media) in group {
+                if let media = media {
+                    successPosts[post.id] = media
+                } else {
+                    failedPosts.append(post)
+                }
+            }
+            updateFeedMediaStateWithResults(successPosts)
+            return failedPosts
+        }
+        return results
+    }
+    
+    @MainActor
+    private func updateFeedMediaStateWithResults(_ results: [String: ZPostMedia]) {
+        for (postId, media) in results {
+            state.postMediaInfoMap[postId] = HomeScreenPostMediaInfo(media: media)
+        }
+    }
+    
+    private func reloadFeedMedia(_ post: HomeScreenPost) {
+        guard let mediaId = post.mediaInfo?.id else { return }
+        Task {
+            async let mediaInfo = userSession.clientProxy.getPostMediaInfo(mediaId: mediaId)
+            let result = await(mediaInfo)
+            if case .success(let media) = result {
+                await MainActor.run {
+                    state.postMediaInfoMap[post.id] = HomeScreenPostMediaInfo(media: media)
+                }
             }
         }
     }

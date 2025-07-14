@@ -151,7 +151,7 @@
 		18115E522CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
 		18115E532CAEA4D9001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
 		18115E542CAEB318001A8F4A /* ZeroContants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18115E512CAEA4D4001A8F4A /* ZeroContants.swift */; };
-		1812FEE72CF48C530098241C /* MatrixRustSDK in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A3E22C9829970082DDA4 /* MatrixRustSDK */; };
+		1812FEE72CF48C530098241C /* MatrixRustSDK in Embed Frameworks */ = {isa = PBXBuildFile; productRef = 18E9A3E22C9829970082DDA4 /* MatrixRustSDK */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		1812FEE82CF48CA70098241C /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3D8BEEFCA07BEA43F4F4BF77 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1812FEEB2CF48CEC0098241C /* KnockRequestsListEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627A8B5E798CC778C363655E /* KnockRequestsListEmptyStateView.swift */; };
 		182258E42CCC3D5B00BBEDC0 /* BigIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01FD1171FF40E34D707FD00 /* BigIcon.swift */; };
@@ -1950,6 +1950,18 @@
 		799E1D202DBF7DDA00E3D512 /* TimelineLinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E1D1F2DBF7DD500E3D512 /* TimelineLinkPreviewView.swift */; };
 		799E1D212DBF7DDA00E3D512 /* TimelineLinkPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E1D1F2DBF7DD500E3D512 /* TimelineLinkPreviewView.swift */; };
 		79A49F702D917196005D365D /* TraceLogPack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7149BDDE47F8AD104E644E2 /* TraceLogPack.swift */; };
+		79AB3A892E252A4900E94E54 /* PostActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A882E252A3600E94E54 /* PostActions.swift */; };
+		79AB3A8A2E252A4900E94E54 /* PostActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A882E252A3600E94E54 /* PostActions.swift */; };
+		79AB3A8D2E252BBF00E94E54 /* PostMediaPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A8C2E252BBB00E94E54 /* PostMediaPreview.swift */; };
+		79AB3A8E2E252BBF00E94E54 /* PostMediaPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A8C2E252BBB00E94E54 /* PostMediaPreview.swift */; };
+		79AB3A902E252BE300E94E54 /* RefreshButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A8F2E252BDF00E94E54 /* RefreshButton.swift */; };
+		79AB3A912E252BE300E94E54 /* RefreshButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A8F2E252BDF00E94E54 /* RefreshButton.swift */; };
+		79AB3A932E252C8800E94E54 /* PostVideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A922E252C8300E94E54 /* PostVideoPlayerView.swift */; };
+		79AB3A942E252C8800E94E54 /* PostVideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A922E252C8300E94E54 /* PostVideoPlayerView.swift */; };
+		79AB3A962E252CF200E94E54 /* PostLinkPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A952E252CE900E94E54 /* PostLinkPreview.swift */; };
+		79AB3A972E252CF200E94E54 /* PostLinkPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A952E252CE900E94E54 /* PostLinkPreview.swift */; };
+		79AB3A992E2586A400E94E54 /* FeedMediaPreLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A982E25869C00E94E54 /* FeedMediaPreLoader.swift */; };
+		79AB3A9A2E2586A400E94E54 /* FeedMediaPreLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB3A982E25869C00E94E54 /* FeedMediaPreLoader.swift */; };
 		79AD65502D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
 		79AD65512D84FC2C005C5934 /* HomeNotificationsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */; };
 		79AD65532D84FD0B005C5934 /* HomeScreenNotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */; };
@@ -3599,6 +3611,12 @@
 		799E1D1B2DBBA8B300E3D512 /* ZLinkPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZLinkPreview.swift; sourceTree = "<group>"; };
 		799E1D1F2DBF7DD500E3D512 /* TimelineLinkPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineLinkPreviewView.swift; sourceTree = "<group>"; };
 		79A106D76741914F82664959 /* StateStoreViewModelV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateStoreViewModelV2.swift; sourceTree = "<group>"; };
+		79AB3A882E252A3600E94E54 /* PostActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostActions.swift; sourceTree = "<group>"; };
+		79AB3A8C2E252BBB00E94E54 /* PostMediaPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMediaPreview.swift; sourceTree = "<group>"; };
+		79AB3A8F2E252BDF00E94E54 /* RefreshButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshButton.swift; sourceTree = "<group>"; };
+		79AB3A922E252C8300E94E54 /* PostVideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVideoPlayerView.swift; sourceTree = "<group>"; };
+		79AB3A952E252CE900E94E54 /* PostLinkPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLinkPreview.swift; sourceTree = "<group>"; };
+		79AB3A982E25869C00E94E54 /* FeedMediaPreLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaPreLoader.swift; sourceTree = "<group>"; };
 		79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNotificationsContent.swift; sourceTree = "<group>"; };
 		79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenNotificationCell.swift; sourceTree = "<group>"; };
 		79B04C412DE07F5300A98D3E /* UserFeedProfileFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedProfileFlowCoordinator.swift; sourceTree = "<group>"; };
@@ -6858,6 +6876,26 @@
 			path = LinkPreviews;
 			sourceTree = "<group>";
 		};
+		79AB3A872E252A3000E94E54 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				79AB3A982E25869C00E94E54 /* FeedMediaPreLoader.swift */,
+				79AB3A882E252A3600E94E54 /* PostActions.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		79AB3A8B2E252BAD00E94E54 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				79AB3A952E252CE900E94E54 /* PostLinkPreview.swift */,
+				79AB3A922E252C8300E94E54 /* PostVideoPlayerView.swift */,
+				79AB3A8F2E252BDF00E94E54 /* RefreshButton.swift */,
+				79AB3A8C2E252BBB00E94E54 /* PostMediaPreview.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		79C6F7202DF82378003CEBB9 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -7668,6 +7706,8 @@
 		B53CA9BECD3F97805E1432D0 /* HomeScreen */ = {
 			isa = PBXGroup;
 			children = (
+				79AB3A872E252A3000E94E54 /* Helper */,
+				79AB3A8B2E252BAD00E94E54 /* Components */,
 				D653265D006E708E4E51AD64 /* HomeScreenCoordinator.swift */,
 				71BC7CA1BC1041E93077BBA1 /* HomeScreenModels.swift */,
 				31D6764D6976D235926FE5FC /* HomeScreenViewModel.swift */,
@@ -9583,6 +9623,7 @@
 				18E9A41F2C9829970082DDA4 /* AccessibilityIdentifiers.swift in Sources */,
 				180EE5D82CB01D5800891BBC /* MediaProviderMock.swift in Sources */,
 				7995C3BA2D8964C400E4D98E /* PillUtilities.swift in Sources */,
+				79AB3A8D2E252BBF00E94E54 /* PostMediaPreview.swift in Sources */,
 				18D5D9B42CEB742000107940 /* UserRewardsSettingsScreenViewModel.swift in Sources */,
 				18E9A4252C9829970082DDA4 /* AggregatedReactionMock.swift in Sources */,
 				18E9A4262C9829970082DDA4 /* AggregratedReaction.swift in Sources */,
@@ -9630,10 +9671,12 @@
 				18E9A4442C9829970082DDA4 /* AppLockScreenViewModel.swift in Sources */,
 				18E9A4452C9829970082DDA4 /* AppLockScreenViewModelProtocol.swift in Sources */,
 				18E9A4462C9829970082DDA4 /* AppLockService.swift in Sources */,
+				79AB3A992E2586A400E94E54 /* FeedMediaPreLoader.swift in Sources */,
 				790922682E1FBC0600833940 /* CompletedTransactionView.swift in Sources */,
 				18E9A4472C9829970082DDA4 /* AppLockServiceProtocol.swift in Sources */,
 				18E9A4482C9829970082DDA4 /* AppLockSetupBiometricsScreen.swift in Sources */,
 				18E9A4492C9829970082DDA4 /* AppLockSetupBiometricsScreenCoordinator.swift in Sources */,
+				79AB3A932E252C8800E94E54 /* PostVideoPlayerView.swift in Sources */,
 				79B8FEC02DE72A0800FF871D /* TimelineItemProvider.swift in Sources */,
 				18E9A44A2C9829970082DDA4 /* AppLockSetupBiometricsScreenModels.swift in Sources */,
 				18E9A44B2C9829970082DDA4 /* AppLockSetupBiometricsScreenViewModel.swift in Sources */,
@@ -9830,7 +9873,9 @@
 				7903938C2D53A2440022E293 /* TimelineMediaPreviewController.swift in Sources */,
 				18E9A4E72C9829970082DDA4 /* EmojiPickerScreenCoordinator.swift in Sources */,
 				18E9A4E82C9829970082DDA4 /* EmojiPickerScreenHeaderView.swift in Sources */,
+				79AB3A902E252BE300E94E54 /* RefreshButton.swift in Sources */,
 				79B04C422DE07F6500A98D3E /* UserFeedProfileFlowCoordinator.swift in Sources */,
+				79AB3A962E252CF200E94E54 /* PostLinkPreview.swift in Sources */,
 				79C6F7282DF82462003CEBB9 /* DeactivateAccountScreenViewModel.swift in Sources */,
 				18E9A4E92C9829970082DDA4 /* EmojiPickerScreenModels.swift in Sources */,
 				18E9A4EA2C9829970082DDA4 /* EmojiPickerScreenViewModel.swift in Sources */,
@@ -10398,6 +10443,7 @@
 				18E9A6892C9829970082DDA4 /* SFNumberedListView.swift in Sources */,
 				790AB79C2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */,
 				187112542CF75350001E8964 /* View+Extensions.swift in Sources */,
+				79AB3A8A2E252A4900E94E54 /* PostActions.swift in Sources */,
 				18E9A68D2C9829970082DDA4 /* SceneDelegate.swift in Sources */,
 				7937A5942DB289A0001A60CB /* TimelineThreadSummaryView.swift in Sources */,
 				18E9A68E2C9829970082DDA4 /* ScreenTrackerViewModifier.swift in Sources */,
@@ -10908,6 +10954,7 @@
 				24B7CD41342C143117ADA768 /* Comparable.swift in Sources */,
 				19DF5600A7F547B22DD7872A /* CompletionSuggestionService.swift in Sources */,
 				EAB3C1F0BC7F671ED8BDF82D /* CompletionSuggestionServiceProtocol.swift in Sources */,
+				79AB3A9A2E2586A400E94E54 /* FeedMediaPreLoader.swift in Sources */,
 				16E4F1B8B9BFE1367F96DDA7 /* CompletionSuggestionView.swift in Sources */,
 				FE578B12750E5E602D62B365 /* ComposerDisabledView.swift in Sources */,
 				3AA9E878FDCFF85664AC071F /* ComposerDraftService.swift in Sources */,
@@ -11214,6 +11261,7 @@
 				C67FCC854F3A6FC7A2EC04D0 /* MediaUploadPreviewScreen.swift in Sources */,
 				C8BD80891BAD688EF2C15CDB /* MediaUploadPreviewScreenCoordinator.swift in Sources */,
 				3B0F9B57D25B07E66F15762A /* MediaUploadPreviewScreenModels.swift in Sources */,
+				79AB3A972E252CF200E94E54 /* PostLinkPreview.swift in Sources */,
 				A969147E0EEE0E27EE226570 /* MediaUploadPreviewScreenViewModel.swift in Sources */,
 				9B872FF37DBE6BE054903831 /* MediaUploadPreviewScreenViewModelProtocol.swift in Sources */,
 				8A0BD60CA4A6004DB06B5403 /* MediaUploadingPreprocessor.swift in Sources */,
@@ -11378,6 +11426,7 @@
 				4715FE33667C5899E64DD0E6 /* ResolveVerifiedUserSendFailureScreen.swift in Sources */,
 				583A41A4BE76E2E9E0B97881 /* ResolveVerifiedUserSendFailureScreenCoordinator.swift in Sources */,
 				1868A8C22CA338DF00DC382D /* Encodable+Extensions.swift in Sources */,
+				79AB3A8E2E252BBF00E94E54 /* PostMediaPreview.swift in Sources */,
 				797751752DD9F889006CF62D /* FeedUserProfileScreenModels.swift in Sources */,
 				108D3C0707A90B0F848CDBB9 /* ResolveVerifiedUserSendFailureScreenModels.swift in Sources */,
 				9A0326D2375075871D2AB537 /* ResolveVerifiedUserSendFailureScreenViewModel.swift in Sources */,
@@ -11507,6 +11556,7 @@
 				8DCA1F05C3BA6ED826F1599D /* RoomSelectionScreenViewModel.swift in Sources */,
 				39DFC4B9EB6A8757210BDEC6 /* RoomSelectionScreenViewModelProtocol.swift in Sources */,
 				6C34237AFB808E38FC8776B9 /* RoomStateEventStringBuilder.swift in Sources */,
+				79AB3A942E252C8800E94E54 /* PostVideoPlayerView.swift in Sources */,
 				59C41313AED7566C3AC51163 /* RoomSummary.swift in Sources */,
 				983896D611ABF52A5C37498D /* RoomSummaryProvider.swift in Sources */,
 				7984575E2D60849F0039623F /* HomeScreenPostMeowButton.swift in Sources */,
@@ -11777,6 +11827,7 @@
 				3467FEE8210D301FF1B77001 /* UserIndicatorControllerMock.swift in Sources */,
 				E3E1E255DC8CB34BD8573E0D /* UserIndicatorControllerProtocol.swift in Sources */,
 				A14A9419105A1CD42F0511C4 /* UserIndicatorModalView.swift in Sources */,
+				79AB3A912E252BE300E94E54 /* RefreshButton.swift in Sources */,
 				793899CC2DEF994200980991 /* ReferAFriendSettingsScreenViewModelProtocol.swift in Sources */,
 				9E838A62918E47BC72D6640D /* UserIndicatorPresenter.swift in Sources */,
 				F7BC744FFA7FE248FAE7F570 /* UserIndicatorToastView.swift in Sources */,
@@ -11789,6 +11840,7 @@
 				E21FE4C5B614F311C0955859 /* UserProfileProxy.swift in Sources */,
 				1A3B073568D1DC8F76F1F3A0 /* UserProfileScreen.swift in Sources */,
 				6AEB650311F694A5702255C9 /* UserProfileScreenCoordinator.swift in Sources */,
+				79AB3A892E252A4900E94E54 /* PostActions.swift in Sources */,
 				D4CB979EB4FE26AAD9F9A72B /* UserProfileScreenModels.swift in Sources */,
 				AC1DB27A4134470846BE49F6 /* UserProfileScreenViewModel.swift in Sources */,
 				46A183C6125A669AEB005699 /* UserProfileScreenViewModelProtocol.swift in Sources */,
@@ -12112,7 +12164,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.16.8;
+				MARKETING_VERSION = 0.16.9;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -12148,7 +12200,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.16.8;
+				MARKETING_VERSION = 0.16.9;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;

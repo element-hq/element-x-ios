@@ -23,24 +23,29 @@ struct HomeScreenPostList: View {
                                    postMediaUrl: context.viewState.postMediaInfoMap[post.id]?.url,
                                    availableLinkPreview: context.viewState.postLinkPreviewsMap[post.id],
                                    showThreadLine: false,
-                                   onPostTapped: {
-                    context.send(viewAction: .postTapped(post))
-                },
-                                   onOpenArweaveLink: {
-                    context.send(viewAction: .openArweaveLink(post))
-                },
-                                   onMeowTapped: { count in
-                    context.send(viewAction: .addMeowToPost(postId: post.id, amount: count))
-                },
-                                   onOpenYoutubeLink: { url in
-                    context.send(viewAction: .openYoutubeLink(url))
-                },
-                                   onOpenUserProfile: { profile in
-                    context.send(viewAction: .openPostUserProfile(profile))
-                },
-                                   onMediaTapped: { mediaId in
-                    context.send(viewAction: .openMediaPreview(mediaId))
-                })
+                                   actions: PostActions(
+                                    onPostTapped: {
+                                        context.send(viewAction: .postTapped(post))
+                                    },
+                                    onOpenArweaveLink: {
+                                        context.send(viewAction: .openArweaveLink(post))
+                                    },
+                                    onMeowTapped: { count in
+                                        context.send(viewAction: .addMeowToPost(postId: post.id, amount: count))
+                                    },
+                                    onOpenYoutubeLink: { url in
+                                        context.send(viewAction: .openYoutubeLink(url))
+                                    },
+                                    onOpenUserProfile: { profile in
+                                        context.send(viewAction: .openPostUserProfile(profile))
+                                    },
+                                    onMediaTapped: { mediaId in
+                                        context.send(viewAction: .openMediaPreview(mediaId))
+                                    },
+                                    onReloadMedia: {
+                                        context.send(viewAction: .reloadFeedMedia(post))
+                                    })
+                )
                 .padding(.horizontal, 16)
                 .padding(.top, 12)
                 .padding(.bottom, 6)

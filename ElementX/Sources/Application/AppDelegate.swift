@@ -8,6 +8,7 @@
 import Combine
 import SwiftUI
 import FirebaseCore
+import Kingfisher
 
 enum AppDelegateCallback {
     case registeredNotifications(deviceToken: Data)
@@ -36,6 +37,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 //        print("\n\nDeviceToken *****:")
 //        print(deviceToken.reduce("", { $0 + String(format: "%02X", $1) }))
         callbacks.send(.registeredNotifications(deviceToken: deviceToken))
+        setupKFImageCache()
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -44,5 +46,16 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         orientationLock
+    }
+    
+    private func setupKFImageCache() {
+        let downloader = ImageDownloader.default
+        downloader.sessionConfiguration.requestCachePolicy = .useProtocolCachePolicy
+
+        let cache = ImageCache.default
+        cache.diskStorage.config.expiration = .days(3) // Optional: keep for 3 days
+        cache.diskStorage.config.sizeLimit = 100 * 1024 * 1024 // 100 MB
+        
+        MXLog.info("KingFisher: Configurations setup")
     }
 }

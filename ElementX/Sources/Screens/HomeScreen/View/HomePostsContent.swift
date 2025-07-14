@@ -59,17 +59,7 @@ struct HomePostsContent: View {
                         LazyVStack(spacing: 0) {
                             ForEach(context.viewState.visiblePosts) { post in
                                 VStack {
-                                    HomeScreenPostCell(post: post,
-                                                       mediaProvider: context.mediaProvider,
-                                                       postMediaUrl: nil,
-                                                       availableLinkPreview: nil,
-                                                       showThreadLine: false,
-                                                       onPostTapped: {},
-                                                       onOpenArweaveLink: {},
-                                                       onMeowTapped: { _ in },
-                                                       onOpenYoutubeLink: { _ in },
-                                                       onOpenUserProfile: { _ in },
-                                                       onMediaTapped: { _ in })
+                                    HomeScreenPostCell(post: post)
                                     .padding(.all, 16)
                                     Divider()
                                 }

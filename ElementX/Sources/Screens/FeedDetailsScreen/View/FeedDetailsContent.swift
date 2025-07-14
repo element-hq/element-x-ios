@@ -25,13 +25,13 @@ struct FeedDetailsContent: View {
     private var feedDetails: some View {
         VStack {
             isRefreshable
-                    ? AnyView(actualContent.refreshable { context.send(viewAction: .forceRefreshFeed) })
-                    : AnyView(actualContent)
+            ? AnyView(actualContent.refreshable { context.send(viewAction: .forceRefreshFeed) })
+            : AnyView(actualContent)
             
             //Add post reply content
             addPostReplyView
         }
-
+        
     }
     
     private var actualContent: some View {
@@ -59,7 +59,7 @@ struct FeedDetailsContent: View {
                                                    context: context,
                                                    shouldNavigateToDetails: false,
                                                    onOpenUserProfile: { _ in })
-                                    .padding(.all, 16)
+                                .padding(.all, 16)
                                 Divider()
                             }
                             .redacted(reason: .placeholder)
@@ -173,7 +173,7 @@ struct FeedDetailsContent: View {
             }
         }
         .padding()
-            
+        
     }
 }
 
@@ -189,31 +189,36 @@ struct PostRepliesList: View {
         ForEach(Array(context.viewState.visibleReplies.enumerated()), id: \.element.id) { index, post in
             let nextPost = index < context.viewState.visibleReplies.count - 1 ? context.viewState.visibleReplies[index + 1] : nil
             let showThreadLine = nextPost?.senderInfo.userID == post.senderInfo.userID
-
+            
             VStack(alignment: .leading) {
                 HomeScreenPostCell(post: post,
                                    mediaProvider: context.mediaProvider,
                                    postMediaUrl: context.viewState.postRepliesMediaInfoMap[post.id]?.url,
                                    availableLinkPreview: context.viewState.postRepliesLinkPreviewsMap[post.id],
                                    showThreadLine: showThreadLine,
-                                   onPostTapped: {
-                    context.send(viewAction: .replyTapped(post))
-                },
-                                   onOpenArweaveLink: {
-                    context.send(viewAction: .openArweaveLink(post))
-                },
-                                   onMeowTapped: { count in
-                    context.send(viewAction: .meowTapped(post.id, amount: count, isPostAReply: true))
-                },
-                                   onOpenYoutubeLink: { url in
-                    context.send(viewAction: .openYoutubeLink(url))
-                },
-                                   onOpenUserProfile: { profile in
-                    context.send(viewAction: .openPostUserProfile(profile))
-                },
-                                   onMediaTapped: { mediaId in
-                    context.send(viewAction: .openMediaPreview(mediaId))
-                })
+                                   actions: PostActions(
+                                    onPostTapped: {
+                                        context.send(viewAction: .replyTapped(post))
+                                    },
+                                    onOpenArweaveLink: {
+                                        context.send(viewAction: .openArweaveLink(post))
+                                    },
+                                    onMeowTapped: { count in
+                                        context.send(viewAction: .meowTapped(post.id, amount: count, isPostAReply: true))
+                                    },
+                                    onOpenYoutubeLink: { url in
+                                        context.send(viewAction: .openYoutubeLink(url))
+                                    },
+                                    onOpenUserProfile: { profile in
+                                        context.send(viewAction: .openPostUserProfile(profile))
+                                    },
+                                    onMediaTapped: { mediaId in
+                                        context.send(viewAction: .openMediaPreview(mediaId))
+                                    },
+                                    onReloadMedia: {
+                                        
+                                    })
+                )
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 Divider()
@@ -282,7 +287,7 @@ struct FeedDetailsSection: View {
             }
             
             if let linkPreview = post.urlLinkPreview {
-                HomePostCellLinkPreview(linkPreview: linkPreview)
+                PostLinkPreview(linkPreview: linkPreview)
                     .padding(.vertical, 4)
                     .onTapGesture {
                         context.send(viewAction: .openYoutubeLink(linkPreview.url))
@@ -290,9 +295,10 @@ struct FeedDetailsSection: View {
             }
             
             if let mediaInfo = post.mediaInfo {
-                HomePostMediaPreview(mediaInfo: mediaInfo, mediaUrlString: mediaInfo.url) {
-                    context.send(viewAction: .openMediaPreview(mediaInfo.id))
-                }
+                PostMediaPreview(mediaInfo: mediaInfo,
+                                 mediaUrlString: mediaInfo.url,
+                                 onMediaTapped: { context.send(viewAction: .openMediaPreview(mediaInfo.id)) },
+                                 onReloadMedia: {})
             }
             
             Text(post.postDateTime)
