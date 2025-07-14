@@ -69,7 +69,7 @@ struct DocumentPicker: UIViewControllerRepresentable {
             }
             
             do {
-                let _ = url.startAccessingSecurityScopedResource()
+                _ = url.startAccessingSecurityScopedResource()
                 let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: url)
                 url.stopAccessingSecurityScopedResource()
                 documentPicker.callback(.selectFile(newURL))
