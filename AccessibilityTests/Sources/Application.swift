@@ -9,13 +9,13 @@ import SnapshotTesting
 import XCTest
 
 enum Application {
-    static func launch() -> XCUIApplication {
+    static func launch(viewID: String) -> XCUIApplication {
         checkEnvironments()
         
         let app = XCUIApplication()
         
         let launchEnvironment = [
-            "ACCESSIBILITY_VIEW": "1"
+            "ACCESSIBILITY_VIEW": viewID
         ]
         
         app.launchEnvironment = launchEnvironment

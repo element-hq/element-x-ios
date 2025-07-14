@@ -29,6 +29,11 @@ enum UITestsSignal: Codable, Equatable {
     
     /// Posts a notification.
     case notification(name: Notification.Name)
+    
+    /// Asks for the next preview
+    case nextPreview
+    case nextPreviewReady(name: String)
+    case noMorePreviews
 }
 
 enum UITestsSignalError: String, LocalizedError {

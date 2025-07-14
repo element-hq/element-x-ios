@@ -113,7 +113,7 @@ targets:
     - path: ../../ElementX/Sources/Other/Pills/PlainMentionBuilder.swift
     - path: ../../ElementX/Sources/Other/SDKListener.swift
     - path: ../../ElementX/Sources/Other/SwiftUI/Views/PlaceholderAvatarImage.swift
-    - path: ../../ElementX/Sources/Other/TestablePreview.swift
+    - path: ../../ElementX/Sources/Other/TestablePreview/TestablePreview.swift
     - path: ../../ElementX/Sources/Other/UserAgentBuilder.swift
     - path: ../../ElementX/Sources/Other/UserPreference.swift
     - path: ../../ElementX/Sources/Services/ElementCall/ElementCallServiceConstants.swift

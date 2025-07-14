@@ -1,0 +1,31 @@
+// swiftlint:disable all
+// swiftformat:disable all
+
+import SwiftUI
+
+{% if argument.mainTarget %}
+@testable import {{ argument.mainTarget }}
+{% endif %}
+{% for import in argument.imports %}
+{% if import != "last" %}
+import {{ import }}
+{% endif %}
+{% endfor %}
+{% for import in argument.testableImports %}
+{% if import != "last" %}
+@testable import {{ import }}
+{% endif %}
+{% endfor %}
+
+enum TestablePreviewsDictionary {
+    static let dictionary: [String: any PreviewProvider.Type] = {
+        var previews: [String: any PreviewProvider.Type] = [:]
+        {% for type in types.types where (type.implements.TestablePreview or type.based.TestablePreview or type|annotated:"TestablePreview") and type.name != "TestablePreview" %}
+        previews["{{ type.name }}"] = {{ type.name }}.self
+        {% endfor %}
+        return previews
+    }()
+ }
+
+// swiftlint:enable all
+// swiftformat:enable all

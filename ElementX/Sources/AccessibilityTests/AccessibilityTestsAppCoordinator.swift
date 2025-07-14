@@ -12,7 +12,7 @@ import UIKit
 
 class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
     var windowManager: any SecureWindowManagerProtocol
-        
+    
     func handleDeepLink(_ url: URL, isExternalURL: Bool) -> Bool {
         fatalError("Not implemented")
     }
@@ -25,14 +25,14 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
         fatalError("Not implemented")
     }
     
-    private var navigationRootCoordinator: NavigationRootCoordinator
+    private let previewsWrapper: PreviewsWrapper
+    
+    private var cancellables = Set<AnyCancellable>()
     
     init(appDelegate: AppDelegate) {
         windowManager = WindowManager(appDelegate: appDelegate)
         // disabling View animations
         UIView.setAnimationsEnabled(false)
-        
-        navigationRootCoordinator = NavigationRootCoordinator()
         
         MXLog.configure(currentTarget: "accessibility-tests")
         
@@ -47,14 +47,106 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
         analyticsClient.isRunning = false
         ServiceLocator.shared.register(analytics: AnalyticsService(client: analyticsClient,
                                                                    appSettings: ServiceLocator.shared.settings))
-    }
-    
-    func start() {
-        guard let screenID = ProcessInfo.accessibilityViewID else { fatalError("Unable to launch with unknown screen.") }
+        
+        guard let name = ProcessInfo.accessibilityViewID,
+              let previewType = TestablePreviewsDictionary.dictionary[name]
+        else { fatalError("Unable to launch with unknown screen.")
+        }
+        previewsWrapper = .init(name: name, previews: previewType._allPreviews)
+        
+        setupSignalling()
     }
     
     func toPresentable() -> AnyView {
-        HomeScreen_Previews._allPreviews.enumerated().map(\.1).first!.content
+        AnyView(PreviewsWrapperView(wrapper: previewsWrapper))
+    }
+    
+    private func setupSignalling() {
+        do {
+            let client = try UITestsSignalling.Client(mode: .app)
+            client.signals.sink { [weak self] signal in
+                guard let self else { return }
+                switch signal {
+                case .nextPreview:
+                    Task { [weak self] in
+                        guard let self else { return }
+                        await previewsWrapper.updateCurrentIndex()
+                        do {
+                            guard !previewsWrapper.isDone else {
+                                try client.send(.noMorePreviews)
+                                return
+                            }
+                            
+                            try client.send(.nextPreviewReady(name: previewsWrapper.previewName))
+                        } catch {
+                            fatalError("failed sending signal: \(signal)")
+                        }
+                    }
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
+        } catch {
+            fatalError("Unable to start client signalling")
+        }
     }
 }
+
+struct PreviewsWrapperView: View {
+    @ObservedObject var wrapper: PreviewsWrapper
     
+    var body: some View {
+        if wrapper.currentIndex < 0 || wrapper.isDone {
+            EmptyView()
+        } else {
+            wrapper.currentPreview.content
+                .id(wrapper.previewName)
+        }
+    }
+}
+
+final class PreviewsWrapper: ObservableObject {
+    private let name: String
+    private let previews: [_Preview]
+    @Published var currentIndex = -1
+    var currentPreview: _Preview { previews[currentIndex] }
+    
+    private(set) var isDone = false
+    
+    var previewName: String {
+        "\(name)-\(currentPreview.displayName ?? String(currentIndex))"
+    }
+    
+    init(name: String, previews: [_Preview]) {
+        self.name = name
+        self.previews = previews
+    }
+    
+    @MainActor
+    func updateCurrentIndex() async {
+        let newIndex = currentIndex + 1
+        guard newIndex < previews.count else {
+            isDone = true
+            return
+        }
+        let newPreview = previews[newIndex]
+        var fulfillmentSource: SnapshotFulfillmentPreferenceKey.Source?
+        let preferenceReadingView = newPreview.content.onPreferenceChange(SnapshotFulfillmentPreferenceKey.self) { fulfillmentSource = $0?.source }
+        
+        // Render an image of the view in order to trigger the preference updates to occur.
+        let imageRenderer = ImageRenderer(content: preferenceReadingView)
+        _ = imageRenderer.uiImage
+        
+        switch fulfillmentSource {
+        case .publisher(let publisher):
+            _ = await publisher.values.first { $0 == true }
+        case .stream(let stream):
+            _ = await stream.first { $0 == true }
+        case .none:
+            break
+        }
+        
+        currentIndex = newIndex
+    }
+}
