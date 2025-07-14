@@ -9,15 +9,14 @@ import SwiftUI
 import VideoPlayer
 import CoreMedia
 
-struct PostVideoPlayerView: View {
+struct ExternalFeedVideoPlayer : View {
     let videoURL: URL
-    //    @StateObject private var viewModel = VideoPlayerViewModel()
     
     @State private var play: Bool = false
     @State private var showControls: Bool = true
     @State private var isLoading: Bool = false
     @State private var time: CMTime = .zero
-        
+    
     var body: some View {
         ZStack {
             VideoPlayer(url: videoURL, play: $play, time: $time)
@@ -60,49 +59,5 @@ struct PostVideoPlayerView: View {
         .onTapGesture {
             showControls = !showControls
         }
-        //        ZStack {
-        //            if let player = viewModel.player {
-        //                VideoPlayer(player: player)
-        //            } else {
-        //                ProgressView()
-        //            }
-        //        }
-        //        .onAppear {
-        //            viewModel.setup(url: videoURL)
-        //        }
-        //        .onDisappear {
-        //            viewModel.cleanup()
-        //        }
     }
 }
-
-//private final class VideoPlayerViewModel: ObservableObject {
-//    @Published var player: AVPlayer?
-//    @Published var failedToLoad: Bool = false
-//
-//    private var playerItemObservation: NSKeyValueObservation?
-//
-//    func setup(url: URL) {
-//        MXLog.info("VIDEO_URL_REQUESTED: \(url.absoluteString)")
-//        let item = AVPlayerItem(url: url)
-//
-//        // Observe status
-//        playerItemObservation = item.observe(\.status, options: [.new, .initial]) { [weak self] item, _ in
-//            if item.status == .failed {
-//                DispatchQueue.main.async {
-//                    self?.failedToLoad = true
-//                    MXLog.error("❌ Video failed to load: \(item.error?.localizedDescription ?? "Unknown error")")
-//                }
-//            }
-//        }
-//
-//        let player = AVPlayer(playerItem: item)
-//        self.player = player
-//    }
-//
-//    func cleanup() {
-//        player?.pause()
-//        player = nil
-//        playerItemObservation = nil
-//    }
-//}

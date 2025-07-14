@@ -7,14 +7,17 @@
 
 import Foundation
 import Kingfisher
+import VideoPlayer
 
 class FeedMediaPreLoader {
     
     static let shared = FeedMediaPreLoader()
     
-    private init() { }
+    private init() {
+        VideoPlayer.preloadByteCount = 1024 * 1024 // = 1M
+    }
     
-    func preloadMedia(_ url: URL, mediaId: String) {
+    func preloadImageMedia(_ url: URL, mediaId: String) {
         Task.detached {
             let options: KingfisherOptionsInfo = [
                     .preloadAllAnimationData,
@@ -30,5 +33,9 @@ class FeedMediaPreLoader {
                 }
             }
         }
+    }
+    
+    func preloadVideoMedia(_ url: URL, mediaId: String) {
+//        VideoPlayer.preload(urls: [url])
     }
 }

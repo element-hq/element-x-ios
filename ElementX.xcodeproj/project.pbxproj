@@ -1977,6 +1977,11 @@
 		79B8E34D2D660CEC000304AE /* VerificationBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D97BAF04AA150C0EF03021 /* VerificationBadge.swift */; };
 		79B8FEBF2DE729EB00FF871D /* TimelineItemProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829D3CE4F6C4DF6CC02D33C3 /* TimelineItemProviderProtocol.swift */; };
 		79B8FEC02DE72A0800FF871D /* TimelineItemProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8520AFD6680CBAD388F6D927 /* TimelineItemProvider.swift */; };
+		79C25B4B2E258C1200936A5D /* VideoPlayer in Frameworks */ = {isa = PBXBuildFile; productRef = 79C25B4A2E258C1200936A5D /* VideoPlayer */; };
+		79C25B4D2E259E9E00936A5D /* ExternalFeedVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C25B4C2E259E9500936A5D /* ExternalFeedVideoPlayer.swift */; };
+		79C25B4E2E259E9E00936A5D /* ExternalFeedVideoPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C25B4C2E259E9500936A5D /* ExternalFeedVideoPlayer.swift */; };
+		79C25B502E259EFE00936A5D /* ExternalFeedImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C25B4F2E259EF900936A5D /* ExternalFeedImageViewer.swift */; };
+		79C25B512E259EFE00936A5D /* ExternalFeedImageViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C25B4F2E259EF900936A5D /* ExternalFeedImageViewer.swift */; };
 		79C524162DA3820900B61378 /* CompoundHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B89D6C760E8CAE29CA28FB1 /* CompoundHook.swift */; };
 		79C6BB252D47B6E700FC3CBF /* RoomPreviewProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739077686814E4EA339B1C83 /* RoomPreviewProxyProtocol.swift */; };
 		79C6BB262D47B6F400FC3CBF /* RoomPreviewProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3D94852AD5BB376CBCC3544 /* RoomPreviewProxy.swift */; };
@@ -3620,6 +3625,8 @@
 		79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNotificationsContent.swift; sourceTree = "<group>"; };
 		79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenNotificationCell.swift; sourceTree = "<group>"; };
 		79B04C412DE07F5300A98D3E /* UserFeedProfileFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedProfileFlowCoordinator.swift; sourceTree = "<group>"; };
+		79C25B4C2E259E9500936A5D /* ExternalFeedVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalFeedVideoPlayer.swift; sourceTree = "<group>"; };
+		79C25B4F2E259EF900936A5D /* ExternalFeedImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalFeedImageViewer.swift; sourceTree = "<group>"; };
 		79E1E7EF2DFB6C7F00195CF0 /* HomeTabBottomSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBottomSpace.swift; sourceTree = "<group>"; };
 		79E1E7F22DFC2D5B00195CF0 /* HomeContentEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeContentEmptyView.swift; sourceTree = "<group>"; };
 		79F31B202E02BB0C0043E100 /* RemoteConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigManager.swift; sourceTree = "<group>"; };
@@ -4320,6 +4327,7 @@
 				18E9A7742C9829970082DDA4 /* Kingfisher in Frameworks */,
 				18E9A7752C9829970082DDA4 /* KZFileWatchers in Frameworks */,
 				18E9A7762C9829970082DDA4 /* Alamofire in Frameworks */,
+				79C25B4B2E258C1200936A5D /* VideoPlayer in Frameworks */,
 				18E9A7772C9829970082DDA4 /* TaggedMoney in Frameworks */,
 				18E9A7782C9829970082DDA4 /* Alamofire in Frameworks */,
 				18E9A7792C9829970082DDA4 /* LoremSwiftum in Frameworks */,
@@ -6888,6 +6896,8 @@
 		79AB3A8B2E252BAD00E94E54 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				79C25B4F2E259EF900936A5D /* ExternalFeedImageViewer.swift */,
+				79C25B4C2E259E9500936A5D /* ExternalFeedVideoPlayer.swift */,
 				79AB3A952E252CE900E94E54 /* PostLinkPreview.swift */,
 				79AB3A922E252C8300E94E54 /* PostVideoPlayerView.swift */,
 				79AB3A8F2E252BDF00E94E54 /* RefreshButton.swift */,
@@ -8713,6 +8723,7 @@
 				79F31B282E02BE930043E100 /* FirebaseCore */,
 				79F31B2A2E02BE9E0043E100 /* FirebaseRemoteConfig */,
 				790AB7B02E1D316300555B1F /* StoreKitPlus */,
+				79C25B4A2E258C1200936A5D /* VideoPlayer */,
 			);
 			productName = ElementX;
 			productReference = 18E9A7922C9829970082DDA4 /* Zero.app */;
@@ -9018,6 +9029,7 @@
 				18C8530B2D11AEAE009AF206 /* XCRemoteSwiftPackageReference "Web3" */,
 				79F31B232E02BE5A0043E100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				790AB7AF2E1D316300555B1F /* XCRemoteSwiftPackageReference "StoreKitPlus" */,
+				79C25B492E258C1200936A5D /* XCRemoteSwiftPackageReference "VideoPlayer" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -9748,6 +9760,7 @@
 				7968A4332D540A0900E9056A /* FeedDetailsScreenModels.swift in Sources */,
 				7937A5932DB28819001A60CB /* TimelineEventContent.swift in Sources */,
 				790AB7B52E1D31EA00555B1F /* ZeroSubscriptions.swift in Sources */,
+				79C25B502E259EFE00936A5D /* ExternalFeedImageViewer.swift in Sources */,
 				791341542D6F58E1000E497F /* Secrets.swift in Sources */,
 				18E9A4872C9829970082DDA4 /* BlockedUsersScreenCoordinator.swift in Sources */,
 				18E9A4882C9829970082DDA4 /* BlockedUsersScreenModels.swift in Sources */,
@@ -10391,6 +10404,7 @@
 				18E9A65F2C9829970082DDA4 /* RoomPollsHistoryScreen.swift in Sources */,
 				799616332E0B36D6008E73C4 /* SimpleTabButtonsView.swift in Sources */,
 				793FA5B82D5B33E700893AC4 /* HomeScreenPostCell.swift in Sources */,
+				79C25B4D2E259E9E00936A5D /* ExternalFeedVideoPlayer.swift in Sources */,
 				184EC9982CA5AF2A000F405E /* UserSessionStoreMock.swift in Sources */,
 				18E9A6602C9829970082DDA4 /* RoomPollsHistoryScreenCoordinator.swift in Sources */,
 				18E9A6612C9829970082DDA4 /* RoomPollsHistoryScreenModels.swift in Sources */,
@@ -11720,6 +11734,7 @@
 				793899D42DF0ECB600980991 /* HorizontalDivider.swift in Sources */,
 				71643093F87153F633A1B025 /* ThreadDecorator.swift in Sources */,
 				5EB116B58533C9A0EBA22717 /* ThreadTimelineScreen.swift in Sources */,
+				79C25B4E2E259E9E00936A5D /* ExternalFeedVideoPlayer.swift in Sources */,
 				09693596AA3CA4E598C0D2F1 /* ThreadTimelineScreenCoordinator.swift in Sources */,
 				A46B93EA564F539CEC252ECC /* ThreadTimelineScreenModels.swift in Sources */,
 				738288EAEE235CAC0893AB9E /* ThreadTimelineScreenViewModel.swift in Sources */,
@@ -11864,6 +11879,7 @@
 				4681820102DAC8BA586357D4 /* VoiceMessageCache.swift in Sources */,
 				4F2DF6138E87A4B8C2488CA3 /* VoiceMessageCacheProtocol.swift in Sources */,
 				4870F7F72CEBEFDAD1C973A6 /* VoiceMessageMediaEventsTimelineView.swift in Sources */,
+				79C25B512E259EFE00936A5D /* ExternalFeedImageViewer.swift in Sources */,
 				386720B603F87D156DB01FB2 /* VoiceMessageMediaManager.swift in Sources */,
 				9DE801D278AC34737467F937 /* VoiceMessageMediaManagerProtocol.swift in Sources */,
 				F7932A3F075B0D3F24DEECB5 /* VoiceMessagePreviewComposer.swift in Sources */,
@@ -13102,6 +13118,14 @@
 				minimumVersion = 0.7.1;
 			};
 		};
+		79C25B492E258C1200936A5D /* XCRemoteSwiftPackageReference "VideoPlayer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/wxxsw/VideoPlayer";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.5;
+			};
+		};
 		79F31B232E02BE5A0043E100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -13650,6 +13674,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8213398B60F9B660D9216ADF /* XCRemoteSwiftPackageReference "element-call-swift" */;
 			productName = EmbeddedElementCall;
+		};
+		79C25B4A2E258C1200936A5D /* VideoPlayer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 79C25B492E258C1200936A5D /* XCRemoteSwiftPackageReference "VideoPlayer" */;
+			productName = VideoPlayer;
 		};
 		79F31B242E02BE5A0043E100 /* FirebaseCore */ = {
 			isa = XCSwiftPackageProductDependency;

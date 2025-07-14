@@ -858,8 +858,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     guard !Task.isCancelled else { return (post, nil) }
                     
                     if case .success(let media) = result {
-                        if let url = URL(string: media.signedUrl), !media.media.isVideo {
-                            FeedMediaPreLoader.shared.preloadMedia(url, mediaId: mediaId)
+                        if let url = URL(string: media.signedUrl) {
+                            if media.media.isVideo {
+                                FeedMediaPreLoader.shared.preloadVideoMedia(url, mediaId: mediaId)
+                            } else {
+                                FeedMediaPreLoader.shared.preloadImageMedia(url, mediaId: mediaId)
+                            }
                         }
                         return (post, media)
                     }
