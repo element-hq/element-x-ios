@@ -36,6 +36,7 @@
 "a11y_voice_message" = "Voice message, duration: %1$@";
 "a11y_voice_message_record" = "Record voice message.";
 "a11y_voice_message_stop_recording" = "Stop recording";
+"a11y.encryption_details" = "Encryption details";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";

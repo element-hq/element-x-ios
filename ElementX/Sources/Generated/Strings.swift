@@ -3126,6 +3126,8 @@ internal enum L10n {
   internal static var troubleshootNotificationsTestUnifiedPushTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_title") }
 
   internal enum A11y {
+    /// Encryption details
+    internal static var encryptionDetails: String { return L10n.tr("Localizable", "a11y.encryption_details") }
     /// Other user's avatar
     internal static var otherUserAvatar: String { return L10n.tr("Localizable", "a11y.other_user_avatar") }
     /// Room avatar
