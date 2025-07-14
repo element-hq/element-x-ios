@@ -3031,6 +3031,52 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         try await loginWithOidcCallbackCallbackUrlClosure?(callbackUrl)
     }
 
+    //MARK: - loginWithQrCode
+
+    open var loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerThrowableError: Error?
+    var loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount = 0
+    open var loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerCalled: Bool {
+        return loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerCallsCount > 0
+    }
+    open var loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments: (qrCodeData: QrCodeData, oidcConfiguration: OidcConfiguration, progressListener: QrLoginProgressListener)?
+    open var loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations: [(qrCodeData: QrCodeData, oidcConfiguration: OidcConfiguration, progressListener: QrLoginProgressListener)] = []
+    open var loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerClosure: ((QrCodeData, OidcConfiguration, QrLoginProgressListener) async throws -> Void)?
+
+    open override func loginWithQrCode(qrCodeData: QrCodeData, oidcConfiguration: OidcConfiguration, progressListener: QrLoginProgressListener) async throws {
+        if let error = loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerThrowableError {
+            throw error
+        }
+        loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerCallsCount += 1
+        loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments = (qrCodeData: qrCodeData, oidcConfiguration: oidcConfiguration, progressListener: progressListener)
+        DispatchQueue.main.async {
+            self.loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations.append((qrCodeData: qrCodeData, oidcConfiguration: oidcConfiguration, progressListener: progressListener))
+        }
+        try await loginWithQrCodeQrCodeDataOidcConfigurationProgressListenerClosure?(qrCodeData, oidcConfiguration, progressListener)
+    }
+
     //MARK: - logout
 
     open var logoutThrowableError: Error?
@@ -5634,81 +5680,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
             return try await buildClosure()
         } else {
             return buildReturnValue
-        }
-    }
-
-    //MARK: - buildWithQrCode
-
-    open var buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerThrowableError: Error?
-    var buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount = 0
-    open var buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerCalled: Bool {
-        return buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerCallsCount > 0
-    }
-    open var buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments: (qrCodeData: QrCodeData, oidcConfiguration: OidcConfiguration, progressListener: QrLoginProgressListener)?
-    open var buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations: [(qrCodeData: QrCodeData, oidcConfiguration: OidcConfiguration, progressListener: QrLoginProgressListener)] = []
-
-    var buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue: Client!
-    open var buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerReturnValue: Client! {
-        get {
-            if Thread.isMainThread {
-                return buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue
-            } else {
-                var returnValue: Client? = nil
-                DispatchQueue.main.sync {
-                    returnValue = buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerClosure: ((QrCodeData, OidcConfiguration, QrLoginProgressListener) async throws -> Client)?
-
-    open override func buildWithQrCode(qrCodeData: QrCodeData, oidcConfiguration: OidcConfiguration, progressListener: QrLoginProgressListener) async throws -> Client {
-        if let error = buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerThrowableError {
-            throw error
-        }
-        buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerCallsCount += 1
-        buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments = (qrCodeData: qrCodeData, oidcConfiguration: oidcConfiguration, progressListener: progressListener)
-        DispatchQueue.main.async {
-            self.buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations.append((qrCodeData: qrCodeData, oidcConfiguration: oidcConfiguration, progressListener: progressListener))
-        }
-        if let buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerClosure = buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerClosure {
-            return try await buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerClosure(qrCodeData, oidcConfiguration, progressListener)
-        } else {
-            return buildWithQrCodeQrCodeDataOidcConfigurationProgressListenerReturnValue
         }
     }
 

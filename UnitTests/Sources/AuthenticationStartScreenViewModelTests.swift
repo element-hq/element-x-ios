@@ -137,8 +137,7 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         client = ClientSDKMock(configuration: .init(oidcLoginURL: supportsOIDC ? "https://account.company.com/authorize" : nil,
                                                     supportsOIDCCreatePrompt: false,
                                                     supportsPasswordLogin: true))
-        let configuration = AuthenticationClientBuilderMock.Configuration(homeserverClients: ["company.com": client],
-                                                                          qrCodeClient: client)
+        let configuration = AuthenticationClientBuilderMock.Configuration(homeserverClients: ["company.com": client])
         
         clientBuilderFactory = AuthenticationClientBuilderFactoryMock(configuration: .init(builderConfiguration: configuration))
         authenticationService = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),

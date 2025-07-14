@@ -31,7 +31,6 @@ extension AuthenticationClientBuilderMock {
                                                              supportsOIDCCreatePrompt: false,
                                                              supportsPasswordLogin: false))
         ]
-        var qrCodeClient = ClientSDKMock(configuration: .init())
     }
     
     convenience init(configuration: Configuration) {
@@ -43,7 +42,5 @@ extension AuthenticationClientBuilderMock {
             }
             return client
         }
-        
-        buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReturnValue = configuration.qrCodeClient
     }
 }

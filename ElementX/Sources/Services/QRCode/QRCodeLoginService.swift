@@ -58,9 +58,10 @@ final class QRCodeLoginService: QRCodeLoginServiceProtocol {
         }
         
         do {
-            let client = try await makeClientBuilder().buildWithQRCode(qrCodeData: qrData,
-                                                                       oidcConfiguration: appSettings.oidcConfiguration,
-                                                                       progressListener: listener)
+            let client = try await makeClientBuilder().build(homeserverAddress: scannedServerName)
+            try await client.loginWithQrCode(qrCodeData: qrData,
+                                             oidcConfiguration: appSettings.oidcConfiguration.rustValue,
+                                             progressListener: listener)
             MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
             return await userSession(for: client)
         } catch let error as HumanQrLoginError {
