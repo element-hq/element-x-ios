@@ -514,6 +514,19 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
     }
     
+    func markAsRead(receiptType: ReceiptType) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Marking as \(receiptType)")
+        
+        do {
+            try await timeline.markAsRead(receiptType: receiptType)
+            MXLog.info("Finished marking as read")
+            return .success(())
+        } catch {
+            MXLog.error("Failed marking as \(receiptType) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func toggleReaction(_ reaction: String, to eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async -> Result<Void, TimelineProxyError> {
         MXLog.info("Toggling reaction \(reaction) for event: \(eventOrTransactionID)")
         

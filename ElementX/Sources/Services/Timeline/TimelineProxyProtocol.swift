@@ -119,6 +119,7 @@ protocol TimelineProxyProtocol {
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError>
+    func markAsRead(receiptType: ReceiptType) async -> Result<Void, TimelineProxyError>
     
     func sendMessageEventContent(_ messageContent: RoomMessageEventContentWithoutRelation) async -> Result<Void, TimelineProxyError>
     
