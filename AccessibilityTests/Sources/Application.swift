@@ -25,7 +25,6 @@ enum Application {
     
     private static func checkEnvironments() {
         let requirediPhoneSimulator = "iPhone17,3" // iPhone 16
-        let requirediPadSimulator = "iPad13,18" // iPad (10th generation)
         let requiredOSVersion = 18
         
         let osVersion = ProcessInfo().operatingSystemVersion
@@ -36,8 +35,8 @@ enum Application {
         guard let deviceModel = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] else {
             fatalError("Unknown simulator.")
         }
-        guard deviceModel == requirediPhoneSimulator || deviceModel == requirediPadSimulator else {
-            fatalError("Running on \(deviceModel) but we only support \(requirediPhoneSimulator) and \(requirediPadSimulator).")
+        guard deviceModel == requirediPhoneSimulator else {
+            fatalError("Running on \(deviceModel) but we only support \(requirediPhoneSimulator)")
         }
     }
 }
