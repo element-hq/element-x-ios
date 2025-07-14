@@ -309,6 +309,8 @@ struct HomeScreenViewState: BindableState {
         }
         return !allNotificationContent.isEmpty
     }
+    
+    var feedMediaExternalLoadingEnabled: Bool = true
 }
 
 struct HomeScreenViewStateBindings {

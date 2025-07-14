@@ -19,6 +19,7 @@ struct HomeScreenPostList: View {
         ForEach(context.viewState.visiblePosts, id: \.id) { post in
             VStack(alignment: .leading) {
                 HomeScreenPostCell(post: post,
+                                   externalLoading: context.viewState.feedMediaExternalLoadingEnabled,
                                    mediaProvider: context.mediaProvider,
                                    postMediaUrl: context.viewState.postMediaInfoMap[post.id]?.url,
                                    availableLinkPreview: context.viewState.postLinkPreviewsMap[post.id],

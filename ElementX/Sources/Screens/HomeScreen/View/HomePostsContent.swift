@@ -35,6 +35,9 @@ struct HomePostsContent: View {
                 EmptyView()
             }
         }
+        .task {
+            context.send(viewAction: .loadMoreAllPosts(followingPostsOnly: selectedTab == .following))
+        }
     }
     
     private var postList: some View {

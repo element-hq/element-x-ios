@@ -13,9 +13,7 @@ class FeedMediaPreLoader {
     
     static let shared = FeedMediaPreLoader()
     
-    private init() {
-        VideoPlayer.preloadByteCount = 1024 * 1024 // = 1M
-    }
+    private init() { }
     
     func preloadImageMedia(_ url: URL, mediaId: String) {
         Task.detached {
@@ -36,6 +34,6 @@ class FeedMediaPreLoader {
     }
     
     func preloadVideoMedia(_ url: URL, mediaId: String) {
-//        VideoPlayer.preload(urls: [url])
+        VideoPlayer.preload(urls: [url])
     }
 }

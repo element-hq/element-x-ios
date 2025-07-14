@@ -51,6 +51,8 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var threadsEnabled: Bool { get set }
     var hideQuietNotificationAlerts: Bool { get set }
     var sharePosEnabled: Bool { get set }
+    
+    var enableExternalMediaLoading: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

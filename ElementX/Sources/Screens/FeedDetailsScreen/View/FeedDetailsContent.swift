@@ -295,7 +295,8 @@ struct FeedDetailsSection: View {
             }
             
             if let mediaInfo = post.mediaInfo {
-                PostMediaPreview(mediaInfo: mediaInfo,
+                PostMediaPreview(externalLoading: true,
+                                 mediaInfo: mediaInfo,
                                  mediaUrlString: mediaInfo.url,
                                  onMediaTapped: { context.send(viewAction: .openMediaPreview(mediaInfo.id)) },
                                  onReloadMedia: {})

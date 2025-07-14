@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PostMediaPreview: View {
+    let externalLoading: Bool
     let mediaInfo: HomeScreenPostMediaInfo
     let mediaUrlString: String?
     let onMediaTapped: () -> Void
@@ -31,12 +32,21 @@ struct PostMediaPreview: View {
     @ViewBuilder
     private var videoView: some View {
         if let mediaURL {
-            ExternalFeedVideoPlayer(videoURL: mediaURL)
-                .frame(height: 300)
-                .cornerRadius(4)
-                .onLongPressGesture {
-                    onMediaTapped()
-                }
+            if externalLoading {
+                ExternalFeedVideoPlayer(videoURL: mediaURL)
+                    .frame(height: 300)
+                    .cornerRadius(4)
+                    .onLongPressGesture {
+                        onMediaTapped()
+                    }
+            } else {
+                InternalFeedVideoPlayer(videoURL: mediaURL)
+                    .frame(height: 300)
+                    .cornerRadius(4)
+                    .onLongPressGesture {
+                        onMediaTapped()
+                    }
+            }
         } else {
             ZStack {
                 ProgressView()
@@ -48,9 +58,16 @@ struct PostMediaPreview: View {
     
     @ViewBuilder
     private var imageView: some View {
-        ExternalFeedImageViewer(mediaInfo: mediaInfo,
-                                mediaUrlString: mediaUrlString,
-                                onMediaTapped: onMediaTapped,
-                                onReloadMedia: onReloadMedia)
+        if externalLoading {
+            ExternalFeedImageViewer(mediaInfo: mediaInfo,
+                                    mediaUrlString: mediaUrlString,
+                                    onMediaTapped: onMediaTapped,
+                                    onReloadMedia: onReloadMedia)
+        } else {
+            InternalFeedImageViewer(mediaInfo: mediaInfo,
+                                    mediaUrlString: mediaUrlString,
+                                    onMediaTapped: onMediaTapped,
+                                    onReloadMedia: onReloadMedia)
+        }
     }
 }

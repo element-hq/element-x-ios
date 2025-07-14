@@ -38,6 +38,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private var channelRoomMap: [String: RoomInfoProxy] = [:]
     private var roomNotificationUpdateMap: [String: RoomNotificationModeProxy] = [:]
     
+    private var feedMediaPreLoader: FeedMediaInternalPreLoader? = nil
+    
     init(userSession: UserSessionProtocol,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
          appSettings: AppSettings,
@@ -55,6 +57,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         super.init(initialViewState: .init(userID: userSession.clientProxy.userID),
                    mediaProvider: userSession.mediaProvider)
+        
+        self.feedMediaPreLoader = FeedMediaInternalPreLoader(mediaProtocol: .init(onMediaLoaded: { map in
+            self.state.postMediaInfoMap = map
+        }),
+                                                             clientProxy: userSession.clientProxy,
+                                                             appSetting: appSettings)
         
         userSession.clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)
@@ -142,6 +150,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.hideInviteAvatars, on: self)
             .store(in: &cancellables)
+        
+        state.feedMediaExternalLoadingEnabled = appSettings.enableExternalMediaLoading
         
         Task {
             state.reportRoomEnabled = await userSession.clientProxy.isReportRoomSupported
@@ -612,8 +622,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         Task {
             async let checkUser: () = userSession.clientProxy.checkAndLinkZeroUser()
             async let channels: () = fetchChannels()
-            async let posts: () = fetchPosts()
-            _ = await (checkUser, channels, posts)
+//            async let posts: () = fetchPosts()
+            _ = await (checkUser, channels)
         }
     }
     
@@ -655,7 +665,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 state.postListMode = .posts
                 isFetchPostsInProgress = false
                 
-                await loadPostsContentConcurrently(for: state.posts)
+                if appSettings.enableExternalMediaLoading {
+                    await loadPostsContentConcurrently(for: state.posts)
+                } else {
+                    await loadPostContentConcurrentlyInternal(for: state.posts, followingPosts: followingOnly)
+                }
             }
         case .failure(let error):
             MXLog.error("Failed to fetch zero posts: \(error)")
@@ -839,6 +853,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
+    private func loadPostContentConcurrentlyInternal(for posts: [HomeScreenPost], followingPosts: Bool) async {
+        async let mediaInfoTask: () = if followingPosts {
+            feedMediaPreLoader?.preFetchFollowingPosts(currentPostsCount: state.posts.count) ?? ()
+        } else {
+            feedMediaPreLoader?.preFetchAllPosts(currentPostsCount: state.posts.count) ?? ()
+        }
+        async let linkPreviewTask: () = loadPostLinkPreviews(for: posts)
+        _ = await (mediaInfoTask, linkPreviewTask)
+    }
+    
     private func loadPostsMediaInfo(for posts: [HomeScreenPost]) async -> [HomeScreenPost] {
         let postsToFetchMedia = posts.filter {
             $0.mediaInfo != nil && state.postMediaInfoMap[$0.id] == nil
@@ -858,11 +882,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     guard !Task.isCancelled else { return (post, nil) }
                     
                     if case .success(let media) = result {
-                        if let url = URL(string: media.signedUrl) {
-                            if media.media.isVideo {
-                                FeedMediaPreLoader.shared.preloadVideoMedia(url, mediaId: mediaId)
-                            } else {
-                                FeedMediaPreLoader.shared.preloadImageMedia(url, mediaId: mediaId)
+                        if await self.appSettings.enableExternalMediaLoading {
+                            if let url = URL(string: media.signedUrl) {
+                                if media.media.isVideo {
+                                    FeedMediaPreLoader.shared.preloadVideoMedia(url, mediaId: mediaId)
+                                } else {
+                                    FeedMediaPreLoader.shared.preloadImageMedia(url, mediaId: mediaId)
+                                }
                             }
                         }
                         return (post, media)

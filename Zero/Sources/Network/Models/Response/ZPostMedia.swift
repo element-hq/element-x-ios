@@ -34,3 +34,10 @@ struct ZPostMediaUploadedInfo: Codable {
     let id: String
     let centralizedStorageKey: String
 }
+
+extension ZPostMedia {
+    func withUrl(_ url: URL) -> ZPostMedia {
+        var media = self.media
+        return ZPostMedia(media: self.media, signedUrl: url.absoluteString)
+    }
+}
