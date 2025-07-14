@@ -182,7 +182,7 @@ enum SlidingSyncVersionV1: Equatable {
 }
 
 extension SessionV1: Codable {
-    public init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let slidingSyncProxy = try container.decodeIfPresent(String.self, forKey: .slidingSyncProxy)
         self = try .init(accessToken: container.decode(String.self, forKey: .accessToken),
@@ -194,7 +194,7 @@ extension SessionV1: Codable {
                          slidingSyncVersion: slidingSyncProxy.map { .proxy(url: $0) } ?? .native)
     }
     
-    public func encode(to encoder: Encoder) throws {
+    func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(accessToken, forKey: .accessToken)
         try container.encode(refreshToken, forKey: .refreshToken)

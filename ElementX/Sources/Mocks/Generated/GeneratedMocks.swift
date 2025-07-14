@@ -17520,6 +17520,76 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
             return sendReadReceiptForTypeReturnValue
         }
     }
+    //MARK: - markAsRead
+
+    var markAsReadReceiptTypeUnderlyingCallsCount = 0
+    var markAsReadReceiptTypeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return markAsReadReceiptTypeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAsReadReceiptTypeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAsReadReceiptTypeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAsReadReceiptTypeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var markAsReadReceiptTypeCalled: Bool {
+        return markAsReadReceiptTypeCallsCount > 0
+    }
+    var markAsReadReceiptTypeReceivedReceiptType: ReceiptType?
+    var markAsReadReceiptTypeReceivedInvocations: [ReceiptType] = []
+
+    var markAsReadReceiptTypeUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var markAsReadReceiptTypeReturnValue: Result<Void, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return markAsReadReceiptTypeUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAsReadReceiptTypeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAsReadReceiptTypeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAsReadReceiptTypeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var markAsReadReceiptTypeClosure: ((ReceiptType) async -> Result<Void, TimelineProxyError>)?
+
+    func markAsRead(receiptType: ReceiptType) async -> Result<Void, TimelineProxyError> {
+        markAsReadReceiptTypeCallsCount += 1
+        markAsReadReceiptTypeReceivedReceiptType = receiptType
+        DispatchQueue.main.async {
+            self.markAsReadReceiptTypeReceivedInvocations.append(receiptType)
+        }
+        if let markAsReadReceiptTypeClosure = markAsReadReceiptTypeClosure {
+            return await markAsReadReceiptTypeClosure(receiptType)
+        } else {
+            return markAsReadReceiptTypeReturnValue
+        }
+    }
     //MARK: - sendMessageEventContent
 
     var sendMessageEventContentUnderlyingCallsCount = 0
