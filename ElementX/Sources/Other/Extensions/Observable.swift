@@ -20,8 +20,8 @@ extension Observable {
                 let value = withObservationTracking {
                     self[keyPath: property]
                 } onChange: {
-                    // Dispatch the update as this is willSet not didSet.
-                    DispatchQueue.main.async {
+                    // Handle the update on the next run loop as this is willSet not didSet.
+                    Task {
                         guard isActive else { return }
                         observe()
                     }
