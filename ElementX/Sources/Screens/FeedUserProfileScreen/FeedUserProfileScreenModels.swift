@@ -67,7 +67,7 @@ enum FeedUserProfileScreenViewAction {
     case toggleFollowUser
     case openDirectChat
     case displayAvatar(_ url: URL)
-    case openMediaPreview(_ mediaId: String)
+    case openMediaPreview(_ mediaId: String, key: String)
     case newFeed
 }
 

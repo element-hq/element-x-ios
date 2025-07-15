@@ -41,7 +41,7 @@ struct HomeScreenPostList: View {
                                         context.send(viewAction: .openPostUserProfile(profile))
                                     },
                                     onMediaTapped: { mediaId in
-                                        context.send(viewAction: .openMediaPreview(mediaId))
+                                        context.send(viewAction: .openMediaPreview(mediaId, key: post.id))
                                     },
                                     onReloadMedia: {
                                         context.send(viewAction: .reloadFeedMedia(post))

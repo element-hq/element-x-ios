@@ -395,7 +395,7 @@ final class AppSettings {
     var zeroLoggedInUser: ZCurrentUser
     
     // MARK: - ZERO User
-    @UserPreference(key: UserDefaultsKeys.enableExternalMediaLoading, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.enableExternalMediaLoading, defaultValue: true, storageType: .userDefaults(store))
     var enableExternalMediaLoading: Bool
 }
 

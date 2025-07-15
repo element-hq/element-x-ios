@@ -296,7 +296,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             }
             
             do {
-                if case let .success(localUrl) = try await clientProxy.loadFileFromMediaId(mediaId) {
+                if case let .success(localUrl) = try await clientProxy.loadFileFromMediaId(mediaId, key: state.bindings.feed.id) {
                     state.bindings.mediaPreviewItem = localUrl
                 }
             } catch {

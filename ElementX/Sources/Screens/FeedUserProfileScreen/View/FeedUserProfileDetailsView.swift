@@ -233,7 +233,7 @@ struct UserFeedsList: View {
                                         context.send(viewAction: .openYoutubeLink(url))
                                     },
                                     onMediaTapped: { mediaId in
-                                        context.send(viewAction: .openMediaPreview(mediaId))
+                                        context.send(viewAction: .openMediaPreview(mediaId, key: post.id))
                                     },
                                     onReloadMedia: {
                                         

@@ -7771,16 +7771,16 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     //MARK: - loadFileFromUrl
 
-    var loadFileFromUrlThrowableError: Error?
-    var loadFileFromUrlUnderlyingCallsCount = 0
-    var loadFileFromUrlCallsCount: Int {
+    var loadFileFromUrlKeyThrowableError: Error?
+    var loadFileFromUrlKeyUnderlyingCallsCount = 0
+    var loadFileFromUrlKeyCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return loadFileFromUrlUnderlyingCallsCount
+                return loadFileFromUrlKeyUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadFileFromUrlUnderlyingCallsCount
+                    returnValue = loadFileFromUrlKeyUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7788,29 +7788,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                loadFileFromUrlUnderlyingCallsCount = newValue
+                loadFileFromUrlKeyUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadFileFromUrlUnderlyingCallsCount = newValue
+                    loadFileFromUrlKeyUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var loadFileFromUrlCalled: Bool {
-        return loadFileFromUrlCallsCount > 0
+    var loadFileFromUrlKeyCalled: Bool {
+        return loadFileFromUrlKeyCallsCount > 0
     }
-    var loadFileFromUrlReceivedRemoteUrl: URL?
-    var loadFileFromUrlReceivedInvocations: [URL] = []
+    var loadFileFromUrlKeyReceivedArguments: (remoteUrl: URL, key: String)?
+    var loadFileFromUrlKeyReceivedInvocations: [(remoteUrl: URL, key: String)] = []
 
-    var loadFileFromUrlUnderlyingReturnValue: Result<URL, ClientProxyError>!
-    var loadFileFromUrlReturnValue: Result<URL, ClientProxyError>! {
+    var loadFileFromUrlKeyUnderlyingReturnValue: Result<URL, ClientProxyError>!
+    var loadFileFromUrlKeyReturnValue: Result<URL, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return loadFileFromUrlUnderlyingReturnValue
+                return loadFileFromUrlKeyUnderlyingReturnValue
             } else {
                 var returnValue: Result<URL, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadFileFromUrlUnderlyingReturnValue
+                    returnValue = loadFileFromUrlKeyUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7818,43 +7818,43 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                loadFileFromUrlUnderlyingReturnValue = newValue
+                loadFileFromUrlKeyUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadFileFromUrlUnderlyingReturnValue = newValue
+                    loadFileFromUrlKeyUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var loadFileFromUrlClosure: ((URL) async throws -> Result<URL, ClientProxyError>)?
+    var loadFileFromUrlKeyClosure: ((URL, String) async throws -> Result<URL, ClientProxyError>)?
 
-    func loadFileFromUrl(_ remoteUrl: URL) async throws -> Result<URL, ClientProxyError> {
-        if let error = loadFileFromUrlThrowableError {
+    func loadFileFromUrl(_ remoteUrl: URL, key: String) async throws -> Result<URL, ClientProxyError> {
+        if let error = loadFileFromUrlKeyThrowableError {
             throw error
         }
-        loadFileFromUrlCallsCount += 1
-        loadFileFromUrlReceivedRemoteUrl = remoteUrl
+        loadFileFromUrlKeyCallsCount += 1
+        loadFileFromUrlKeyReceivedArguments = (remoteUrl: remoteUrl, key: key)
         DispatchQueue.main.async {
-            self.loadFileFromUrlReceivedInvocations.append(remoteUrl)
+            self.loadFileFromUrlKeyReceivedInvocations.append((remoteUrl: remoteUrl, key: key))
         }
-        if let loadFileFromUrlClosure = loadFileFromUrlClosure {
-            return try await loadFileFromUrlClosure(remoteUrl)
+        if let loadFileFromUrlKeyClosure = loadFileFromUrlKeyClosure {
+            return try await loadFileFromUrlKeyClosure(remoteUrl, key)
         } else {
-            return loadFileFromUrlReturnValue
+            return loadFileFromUrlKeyReturnValue
         }
     }
     //MARK: - loadFileFromMediaId
 
-    var loadFileFromMediaIdThrowableError: Error?
-    var loadFileFromMediaIdUnderlyingCallsCount = 0
-    var loadFileFromMediaIdCallsCount: Int {
+    var loadFileFromMediaIdKeyThrowableError: Error?
+    var loadFileFromMediaIdKeyUnderlyingCallsCount = 0
+    var loadFileFromMediaIdKeyCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return loadFileFromMediaIdUnderlyingCallsCount
+                return loadFileFromMediaIdKeyUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadFileFromMediaIdUnderlyingCallsCount
+                    returnValue = loadFileFromMediaIdKeyUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7862,29 +7862,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                loadFileFromMediaIdUnderlyingCallsCount = newValue
+                loadFileFromMediaIdKeyUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadFileFromMediaIdUnderlyingCallsCount = newValue
+                    loadFileFromMediaIdKeyUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var loadFileFromMediaIdCalled: Bool {
-        return loadFileFromMediaIdCallsCount > 0
+    var loadFileFromMediaIdKeyCalled: Bool {
+        return loadFileFromMediaIdKeyCallsCount > 0
     }
-    var loadFileFromMediaIdReceivedMediaId: String?
-    var loadFileFromMediaIdReceivedInvocations: [String] = []
+    var loadFileFromMediaIdKeyReceivedArguments: (mediaId: String, key: String)?
+    var loadFileFromMediaIdKeyReceivedInvocations: [(mediaId: String, key: String)] = []
 
-    var loadFileFromMediaIdUnderlyingReturnValue: Result<URL, ClientProxyError>!
-    var loadFileFromMediaIdReturnValue: Result<URL, ClientProxyError>! {
+    var loadFileFromMediaIdKeyUnderlyingReturnValue: Result<URL, ClientProxyError>!
+    var loadFileFromMediaIdKeyReturnValue: Result<URL, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return loadFileFromMediaIdUnderlyingReturnValue
+                return loadFileFromMediaIdKeyUnderlyingReturnValue
             } else {
                 var returnValue: Result<URL, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = loadFileFromMediaIdUnderlyingReturnValue
+                    returnValue = loadFileFromMediaIdKeyUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7892,29 +7892,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                loadFileFromMediaIdUnderlyingReturnValue = newValue
+                loadFileFromMediaIdKeyUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    loadFileFromMediaIdUnderlyingReturnValue = newValue
+                    loadFileFromMediaIdKeyUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var loadFileFromMediaIdClosure: ((String) async throws -> Result<URL, ClientProxyError>)?
+    var loadFileFromMediaIdKeyClosure: ((String, String) async throws -> Result<URL, ClientProxyError>)?
 
-    func loadFileFromMediaId(_ mediaId: String) async throws -> Result<URL, ClientProxyError> {
-        if let error = loadFileFromMediaIdThrowableError {
+    func loadFileFromMediaId(_ mediaId: String, key: String) async throws -> Result<URL, ClientProxyError> {
+        if let error = loadFileFromMediaIdKeyThrowableError {
             throw error
         }
-        loadFileFromMediaIdCallsCount += 1
-        loadFileFromMediaIdReceivedMediaId = mediaId
+        loadFileFromMediaIdKeyCallsCount += 1
+        loadFileFromMediaIdKeyReceivedArguments = (mediaId: mediaId, key: key)
         DispatchQueue.main.async {
-            self.loadFileFromMediaIdReceivedInvocations.append(mediaId)
+            self.loadFileFromMediaIdKeyReceivedInvocations.append((mediaId: mediaId, key: key))
         }
-        if let loadFileFromMediaIdClosure = loadFileFromMediaIdClosure {
-            return try await loadFileFromMediaIdClosure(mediaId)
+        if let loadFileFromMediaIdKeyClosure = loadFileFromMediaIdKeyClosure {
+            return try await loadFileFromMediaIdKeyClosure(mediaId, key)
         } else {
-            return loadFileFromMediaIdReturnValue
+            return loadFileFromMediaIdKeyReturnValue
         }
     }
     //MARK: - loadMediaContentForSource
