@@ -6,9 +6,7 @@
 //
 
 import Combine
-import MatrixRustSDK
 import SwiftUI
-import UIKit
 
 class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
     var windowManager: any SecureWindowManagerProtocol
@@ -49,8 +47,8 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
                                                                    appSettings: ServiceLocator.shared.settings))
         
         guard let name = ProcessInfo.accessibilityViewID,
-              let previewType = TestablePreviewsDictionary.dictionary[name]
-        else { fatalError("Unable to launch with unknown screen.")
+              let previewType = TestablePreviewsDictionary.dictionary[name] else {
+            fatalError("Unable to launch with unknown screen.")
         }
         previewsWrapper = .init(name: name, previews: previewType._allPreviews)
         
@@ -67,20 +65,25 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
             client.signals.sink { [weak self] signal in
                 guard let self else { return }
                 switch signal {
-                case .nextPreview:
-                    Task { [weak self] in
-                        guard let self else { return }
-                        await previewsWrapper.updateCurrentIndex()
-                        do {
-                            guard !previewsWrapper.isDone else {
-                                try client.send(.noMorePreviews)
-                                return
+                case .accessibilityAudit(let auditSignal):
+                    switch auditSignal {
+                    case .nextPreview:
+                        Task { [weak self] in
+                            guard let self else { return }
+                            await previewsWrapper.updateCurrentIndex()
+                            do {
+                                guard !previewsWrapper.isDone else {
+                                    try client.send(.accessibilityAudit(.noMorePreviews))
+                                    return
+                                }
+                                
+                                try client.send(.accessibilityAudit(.nextPreviewReady(name: previewsWrapper.previewName)))
+                            } catch {
+                                fatalError("Failed sending signal: \(signal)")
                             }
-                            
-                            try client.send(.nextPreviewReady(name: previewsWrapper.previewName))
-                        } catch {
-                            fatalError("failed sending signal: \(signal)")
                         }
+                    default:
+                        break
                     }
                 default:
                     break
@@ -94,7 +97,7 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
 }
 
 struct PreviewsWrapperView: View {
-    @ObservedObject var wrapper: PreviewsWrapper
+    let wrapper: PreviewsWrapper
     
     var body: some View {
         if wrapper.currentIndex < 0 || wrapper.isDone {
@@ -106,10 +109,10 @@ struct PreviewsWrapperView: View {
     }
 }
 
-final class PreviewsWrapper: ObservableObject {
+@Observable final class PreviewsWrapper {
     private let name: String
     private let previews: [_Preview]
-    @Published var currentIndex = -1
+    private(set) var currentIndex = -1
     var currentPreview: _Preview { previews[currentIndex] }
     
     private(set) var isDone = false

@@ -27,20 +27,7 @@ targets:
 
     dependencies:
     - target: ElementX
-    - package: MatrixRustSDK
-    - package: AnalyticsEvents
-    - package: DeviceKit
-    - package: DTCoreText
-    - package: KeychainAccess
-    - package: Kingfisher
     - package: KZFileWatchers
-    - package: PostHog
-    - package: SwiftState
-    - package: GZIP
-    - package: Sentry
-    - package: SnapshotTesting
-    - package: Collections
-    - package: SwiftOGG
 
     info:
       path: ../SupportingFiles/Info.plist

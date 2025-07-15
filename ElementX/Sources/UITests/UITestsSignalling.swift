@@ -30,10 +30,15 @@ enum UITestsSignal: Codable, Equatable {
     /// Posts a notification.
     case notification(name: Notification.Name)
     
-    /// Asks for the next preview
-    case nextPreview
-    case nextPreviewReady(name: String)
-    case noMorePreviews
+    case accessibilityAudit(AccessibilityAudit)
+    enum AccessibilityAudit: Codable, Equatable {
+        /// Ask the app for the next preview.
+        case nextPreview
+        /// Tell the test runner about a loaded preview.
+        case nextPreviewReady(name: String)
+        /// Tell the test runner that there are no more previews.
+        case noMorePreviews
+    }
 }
 
 enum UITestsSignalError: String, LocalizedError {

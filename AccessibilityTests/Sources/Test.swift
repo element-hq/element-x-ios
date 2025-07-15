@@ -17,17 +17,22 @@ class Test: XCTestCase {
         await client.waitForApp()
         defer { try? client.stop() }
         
-        try client.send(.nextPreview)
+        try client.send(.accessibilityAudit(.nextPreview))
         forLoop: for await signal in client.signals.values {
             switch signal {
-            case .nextPreviewReady(let name):
-                try? app.performAccessibilityAudit { issue in
-                    XCTFail("\(name): \(issue)")
-                    return true
+            case .accessibilityAudit(let auditSignal):
+                switch auditSignal {
+                case .nextPreviewReady(let name):
+                    try? app.performAccessibilityAudit { issue in
+                        XCTFail("\(name): \(issue)")
+                        return true
+                    }
+                    try? client.send(.accessibilityAudit(.nextPreview))
+                case .noMorePreviews:
+                    break forLoop
+                default:
+                    fatalError("Unhandled signal")
                 }
-                try? client.send(.nextPreview)
-            case .noMorePreviews:
-                break forLoop
             default:
                 fatalError("Unhandled signal")
             }
