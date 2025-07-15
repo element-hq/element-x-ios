@@ -54,6 +54,7 @@ struct HomeScreen: View {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         showBackToTop = false
                         hideNavigationBar = false
+                        context.send(viewAction: .onHomeTabChanged)
                     }
                     selectedTab = tab
                 },

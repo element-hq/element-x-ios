@@ -6,21 +6,16 @@
 //
 
 import SwiftUI
-import Kingfisher
-import AVKit
 
 struct HomeScreenPostCell: View {
     let post: HomeScreenPost
-    let mediaProvider: MediaProviderProtocol?
-    let postMediaUrl: String?
-    let availableLinkPreview: ZLinkPreview?
-    let showThreadLine: Bool
-    let onPostTapped: () -> Void
-    let onOpenArweaveLink: () -> Void
-    let onMeowTapped: (Int) -> Void
-    let onOpenYoutubeLink: (String) -> Void
-    let onOpenUserProfile: (ZPostUserProfile) -> Void
-    let onMediaTapped: (String) -> Void
+    
+    var externalLoading: Bool = true
+    var mediaProvider: MediaProviderProtocol? = nil
+    var postMediaUrl: String? = nil
+    var availableLinkPreview: ZLinkPreview? = nil
+    var showThreadLine: Bool = false
+    var actions: PostActions? = nil
     
     @State private var referenceHeight: CGFloat = .zero
     
@@ -37,7 +32,7 @@ struct HomeScreenPostCell: View {
                                             mediaProvider: mediaProvider,
                                             onTap: { _ in
                             if let postSenderProfile = post.senderProfile {
-                                onOpenUserProfile(postSenderProfile)
+                                actions?.onOpenUserProfile(postSenderProfile)
                             }
                         })
                         
@@ -61,7 +56,7 @@ struct HomeScreenPostCell: View {
                                         mediaProvider: mediaProvider,
                                         onTap: { _ in
                         if let postSenderProfile = post.senderProfile {
-                            onOpenUserProfile(postSenderProfile)
+                            actions?.onOpenUserProfile(postSenderProfile)
                         }
                     })
                 }
@@ -70,7 +65,7 @@ struct HomeScreenPostCell: View {
             .frame(height: referenceHeight)
             .contentShape(Rectangle())
             .onTapGesture {
-                onPostTapped()
+                actions?.onPostTapped()
             }
             
             VStack(alignment: .leading) {
@@ -79,7 +74,7 @@ struct HomeScreenPostCell: View {
                         .lineLimit(1)
                         .onTapGesture {
                             if let postSenderProfile = post.senderProfile {
-                                onOpenUserProfile(postSenderProfile)
+                                actions?.onOpenUserProfile(postSenderProfile)
                             }
                         }
                     
@@ -106,17 +101,19 @@ struct HomeScreenPostCell: View {
                 }
                 
                 if let linkPreview = availableLinkPreview {
-                    HomePostCellLinkPreview(linkPreview: linkPreview)
+                    PostLinkPreview(linkPreview: linkPreview)
                         .padding(.vertical, 4)
                         .onTapGesture {
-                            onOpenYoutubeLink(linkPreview.url)
+                            actions?.onOpenYoutubeLink(linkPreview.url)
                         }
                 }
                 
                 if let mediaInfo = post.mediaInfo {
-                    HomePostMediaPreview(mediaInfo: mediaInfo, mediaUrlString: postMediaUrl) {
-                        onMediaTapped(mediaInfo.id)
-                    }
+                    PostMediaPreview(externalLoading: externalLoading,
+                                     mediaInfo: mediaInfo,
+                                     mediaUrlString: postMediaUrl,
+                                     onMediaTapped: { actions?.onMediaTapped(mediaInfo.id) },
+                                     onReloadMedia: { actions?.onReloadMedia() })
                 }
                 
                 HStack {
@@ -124,7 +121,7 @@ struct HomeScreenPostCell: View {
                                              count: post.repliesCount,
                                              highlightColor: false,
                                              action: {
-                        onPostTapped()
+                        actions?.onPostTapped()
                     })
                     
                     Spacer()
@@ -133,7 +130,7 @@ struct HomeScreenPostCell: View {
                                              highlightColor: post.isMeowedByMe,
                                              isEnabled: !post.isMyPost,
                                              onMeowTouchEnded: { count in
-                        onMeowTapped(count)
+                        actions?.onMeowTapped(count)
                     })
                     
                     Spacer()
@@ -142,7 +139,7 @@ struct HomeScreenPostCell: View {
                                              count: "",
                                              highlightColor: false,
                                              action: {
-                        onOpenArweaveLink()
+                        actions?.onOpenArweaveLink()
                     })
                 }
             }
@@ -166,148 +163,5 @@ private struct HeightPreferenceKey: PreferenceKey {
     static var defaultValue: CGFloat = .zero
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = max(value, nextValue())
-    }
-}
-
-struct HomePostCellLinkPreview: View {
-    let linkPreview: ZLinkPreview
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            if let thumbnail = linkPreview.thumbnail,
-               let thumbnailURL = linkPreview.thumbnailURL {
-                ZStack {
-                    KFAnimatedImage(thumbnailURL)
-                        .placeholder {
-                            Image(systemName: "link")
-                        }
-                        .fade(duration: 0.3)
-                        .aspectRatio(thumbnail.aspectRatio, contentMode: .fit)
-                        .cornerRadius(4, corners: .allCorners)
-                    
-                    if linkPreview.isAYoutubeVideo {
-                        Image(systemName: "play")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .padding()
-                            .background(.black)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .aspectRatio(contentMode: .fit)
-                    }
-                }
-            }
-            
-            HStack(alignment: .center) {
-                if linkPreview.thumbnail == nil {
-                    Image(systemName: "link")
-                        .resizable()
-                        .frame(width: 24, height: 24)
-                        .aspectRatio(contentMode: .fit)
-                        .cornerRadius(4, corners: .allCorners)
-                }
-                VStack(alignment: .leading) {
-                    if let title = linkPreview.title {
-                        Text(title)
-                            .font(.zero.bodyMDSemibold)
-                            .foregroundColor(.compound.textPrimary)
-                            .lineLimit(1)
-                    }
-                    
-                    let description = linkPreview.isAYoutubeVideo ? linkPreview.youtubeVideoDescription : linkPreview.url
-                    Text(description)
-                        .font(.zero.bodyMD)
-                        .foregroundColor(.compound.textSecondary)
-                        .lineLimit(1)
-                }
-            }
-        }
-    }
-}
-
-struct HomePostMediaPreview: View {
-    let mediaInfo: HomeScreenPostMediaInfo
-    let mediaUrlString: String?
-    let onMediaTapped: () -> Void
-    
-    @State private var didFail = false
-    
-    private var mediaURL: URL? {
-        guard let mediaUrlString else { return nil }
-        return URL(string: mediaUrlString)
-    }
-    
-    var body: some View {
-        Group {
-            if mediaInfo.isVideo {
-                videoView
-            } else {
-                imageView
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private var videoView: some View {
-        if let mediaURL {
-            VideoPlayerView(videoURL: mediaURL)
-                .frame(height: 300)
-                .cornerRadius(4)
-                .onLongPressGesture {
-                    onMediaTapped()
-                }
-        } else {
-            ZStack {
-                ProgressView()
-            }
-            .frame(maxWidth: .infinity, minHeight: 300)
-            .cornerRadius(4)
-        }
-    }
-    
-    @ViewBuilder
-    private var imageView: some View {
-        if didFail {
-            ZStack {
-                Image(systemName: "exclamationmark.triangle")
-                    .resizable()
-                    .frame(width: 80, height: 70)
-            }
-            .frame(maxWidth: .infinity, minHeight: 300)
-            .cornerRadius(4)
-        } else if let mediaURL {
-            KFAnimatedImage(mediaURL)
-                .setProcessor(DownsamplingImageProcessor(size: CGSize(width: 300, height: 300)))
-                .scaleFactor(UIScreen.main.scale)
-                .placeholder { ProgressView() }
-                .retry(maxCount: 2, interval: .seconds(2))
-                .onFailure { error in
-                    MXLog.error("Failed to load feed media image: \(error)")
-                    didFail = true
-                }
-                .fade(duration: 0.3)
-                .aspectRatio(mediaInfo.aspectRatio, contentMode: .fit)
-                .cornerRadius(4)
-                .onTapGesture {
-                    onMediaTapped()
-                }
-        } else {
-            ZStack {
-                ProgressView()
-            }
-            .frame(maxWidth: .infinity, minHeight: 300)
-            .cornerRadius(4)
-        }
-    }
-}
-
-struct VideoPlayerView: View {
-    let videoURL: URL
-    
-    var body: some View {
-        VideoPlayer(player: AVPlayer(url: videoURL))
-        //            .aspectRatio(16/9, contentMode: .fit)
-            .onAppear {
-                AVPlayer(url: videoURL).play()
-            }
     }
 }

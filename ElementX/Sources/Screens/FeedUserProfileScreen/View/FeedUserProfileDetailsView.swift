@@ -40,18 +40,8 @@ struct FeedUserProfileDetailsView: View {
                     LazyVStack(spacing: 0) {
                         ForEach(context.viewState.visibleFeeds) { feed in
                             VStack {
-                                HomeScreenPostCell(post: feed,
-                                                   mediaProvider: context.mediaProvider,
-                                                   postMediaUrl: nil,
-                                                   availableLinkPreview: nil,
-                                                   showThreadLine: false,
-                                                   onPostTapped: {},
-                                                   onOpenArweaveLink: {},
-                                                   onMeowTapped: { _ in },
-                                                   onOpenYoutubeLink: { _ in },
-                                                   onOpenUserProfile: { _ in },
-                                                   onMediaTapped: { _ in })
-                                .padding(.all, 16)
+                                HomeScreenPostCell(post: feed)
+                                    .padding(.all, 16)
                                 Divider()
                             }
                             .redacted(reason: .placeholder)
@@ -229,22 +219,25 @@ struct UserFeedsList: View {
                                    postMediaUrl: context.viewState.userFeedsMediaInfoMap[post.id]?.url,
                                    availableLinkPreview: context.viewState.userFeedsLinkPreviewsMap[post.id],
                                    showThreadLine: false,
-                                   onPostTapped: {
-                    context.send(viewAction: .feedTapped(post))
-                },
-                                   onOpenArweaveLink: {
-                    context.send(viewAction: .openArweaveLink(post))
-                },
-                                   onMeowTapped: { count in
-                    context.send(viewAction: .addMeowToPost(postId: post.id, amount: count))
-                },
-                                   onOpenYoutubeLink: { url in
-                    context.send(viewAction: .openYoutubeLink(url))
-                },
-                                   onOpenUserProfile: { _ in },
-                                   onMediaTapped: { mediaId in
-                    context.send(viewAction: .openMediaPreview(mediaId))
-                }
+                                   actions: PostActions(
+                                    onPostTapped: {
+                                        context.send(viewAction: .feedTapped(post))
+                                    },
+                                    onOpenArweaveLink: {
+                                        context.send(viewAction: .openArweaveLink(post))
+                                    },
+                                    onMeowTapped: { count in
+                                        context.send(viewAction: .addMeowToPost(postId: post.id, amount: count))
+                                    },
+                                    onOpenYoutubeLink: { url in
+                                        context.send(viewAction: .openYoutubeLink(url))
+                                    },
+                                    onMediaTapped: { mediaId in
+                                        context.send(viewAction: .openMediaPreview(mediaId, key: post.id))
+                                    },
+                                    onReloadMedia: {
+                                        
+                                    })
                 )
                 .padding(.horizontal, 16)
                 .padding(.top, 12)

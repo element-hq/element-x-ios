@@ -25,17 +25,7 @@ struct HomeMyPostsContent: View {
                     LazyVStack(spacing: 0) {
                         ForEach(context.viewState.visibleMyPosts) { post in
                             VStack {
-                                HomeScreenPostCell(post: post,
-                                                   mediaProvider: context.mediaProvider,
-                                                   postMediaUrl: nil,
-                                                   availableLinkPreview: nil,
-                                                   showThreadLine: false,
-                                                   onPostTapped: {},
-                                                   onOpenArweaveLink: {},
-                                                   onMeowTapped: { _ in },
-                                                   onOpenYoutubeLink: { _ in },
-                                                   onOpenUserProfile: { _ in },
-                                                   onMediaTapped: { _ in })
+                                HomeScreenPostCell(post: post)
                                 .padding(.all, 16)
                                 Divider()
                             }
@@ -54,24 +44,7 @@ struct HomeMyPostsContent: View {
                                                    mediaProvider: context.mediaProvider,
                                                    postMediaUrl: context.viewState.postMediaInfoMap[post.id]?.url,
                                                    availableLinkPreview: nil,
-                                                   showThreadLine: false,
-                                                   onPostTapped: {
-                                    context.send(viewAction: .postTapped(post))
-                                },
-                                                   onOpenArweaveLink: {
-                                    context.send(viewAction: .openArweaveLink(post))
-                                },
-                                                   onMeowTapped: { _ in
-                                },
-                                                   onOpenYoutubeLink: { url in
-                                    context.send(viewAction: .openYoutubeLink(url))
-                                },
-                                                   onOpenUserProfile: { profile in
-                                    context.send(viewAction: .openPostUserProfile(profile))
-                                },
-                                                   onMediaTapped: { url in
-                                    context.send(viewAction: .openMediaPreview(url))
-                                })
+                                                   showThreadLine: false)
                                 .padding(.horizontal, 16)
                                 .padding(.top, 12)
                                 .padding(.bottom, 6)

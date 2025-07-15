@@ -336,7 +336,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func fetchYoutubeLinkMetaData(youtubrUrl: String) async -> Result<ZLinkPreview, ClientProxyError>
     
-    func loadFileFromUrl(_ remoteUrl: URL) async throws -> Result<URL, ClientProxyError>
+    func loadFileFromUrl(_ remoteUrl: URL, key: String) async throws -> Result<URL, ClientProxyError>
     
-    func loadFileFromMediaId(_ mediaId: String) async throws -> Result<URL, ClientProxyError>
+    func loadFileFromMediaId(_ mediaId: String, key: String) async throws -> Result<URL, ClientProxyError>
 }
