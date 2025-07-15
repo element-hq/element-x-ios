@@ -23,7 +23,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     private let appSettings: AppSettings
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let qrCodeLoginService: QRCodeLoginServiceProtocol
     
     enum State: StateType {
         /// The state machine hasn't started.
@@ -102,7 +101,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     weak var delegate: AuthenticationFlowCoordinatorDelegate?
     
     init(authenticationService: AuthenticationServiceProtocol,
-         qrCodeLoginService: QRCodeLoginServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          navigationRootCoordinator: NavigationRootCoordinator,
          appMediator: AppMediatorProtocol,
@@ -116,7 +114,6 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         self.appSettings = appSettings
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
-        self.qrCodeLoginService = qrCodeLoginService
         
         navigationStackCoordinator = NavigationStackCoordinator()
         
@@ -300,7 +297,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - QR Code
     
     private func showQRCodeLoginScreen() {
-        let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(qrCodeLoginService: qrCodeLoginService,
+        let coordinator = QRCodeLoginScreenCoordinator(parameters: .init(qrCodeLoginService: authenticationService,
                                                                          canSignInManually: appSettings.allowOtherAccountProviders, // No need to worry about provisioning links as we hide QR login.
                                                                          orientationManager: appMediator.windowManager,
                                                                          appMediator: appMediator))

@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Foundation
 import MatrixRustSDK
 
@@ -19,6 +20,9 @@ enum AuthenticationFlow {
 enum AuthenticationServiceError: Error, Equatable {
     /// An error occurred during OIDC authentication.
     case oidcError(OIDCError)
+    /// An error occurred during login with QR Code.
+    case qrCodeError(QRCodeLoginError)
+    
     case invalidServer
     case invalidCredentials
     case invalidHomeserverAddress
@@ -32,7 +36,7 @@ enum AuthenticationServiceError: Error, Equatable {
     case failedUsingWebCredentials
 }
 
-protocol AuthenticationServiceProtocol {
+protocol AuthenticationServiceProtocol: QRCodeLoginServiceProtocol {
     /// The currently configured homeserver.
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { get }
     /// The type of flow the service is currently configured with.
@@ -85,4 +89,26 @@ extension OAuthAuthorizationData: @retroactive Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(loginUrl())
     }
+}
+
+// MARK: - Login with QR code
+
+enum QRCodeLoginError: Error, Equatable {
+    case invalidQRCode
+    case providerNotAllowed(scannedProvider: String, allowedProviders: [String])
+    case cancelled
+    case connectionInsecure
+    case declined
+    case linkingNotSupported
+    case expired
+    case deviceNotSupported
+    case deviceNotSignedIn
+    case unknown
+}
+
+// sourcery: AutoMockable
+protocol QRCodeLoginServiceProtocol {
+    var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> { get }
+    
+    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, AuthenticationServiceError>
 }
