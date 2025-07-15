@@ -5108,16 +5108,16 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - urlForOidc
 
-    open var urlForOidcOidcConfigurationPromptLoginHintThrowableError: Error?
-    var urlForOidcOidcConfigurationPromptLoginHintUnderlyingCallsCount = 0
-    open var urlForOidcOidcConfigurationPromptLoginHintCallsCount: Int {
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdThrowableError: Error?
+    var urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingCallsCount = 0
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return urlForOidcOidcConfigurationPromptLoginHintUnderlyingCallsCount
+                return urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = urlForOidcOidcConfigurationPromptLoginHintUnderlyingCallsCount
+                    returnValue = urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5125,29 +5125,29 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                urlForOidcOidcConfigurationPromptLoginHintUnderlyingCallsCount = newValue
+                urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    urlForOidcOidcConfigurationPromptLoginHintUnderlyingCallsCount = newValue
+                    urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var urlForOidcOidcConfigurationPromptLoginHintCalled: Bool {
-        return urlForOidcOidcConfigurationPromptLoginHintCallsCount > 0
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdCalled: Bool {
+        return urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount > 0
     }
-    open var urlForOidcOidcConfigurationPromptLoginHintReceivedArguments: (oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?)?
-    open var urlForOidcOidcConfigurationPromptLoginHintReceivedInvocations: [(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?)] = []
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdReceivedArguments: (oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?, deviceId: String?)?
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdReceivedInvocations: [(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?, deviceId: String?)] = []
 
-    var urlForOidcOidcConfigurationPromptLoginHintUnderlyingReturnValue: OAuthAuthorizationData!
-    open var urlForOidcOidcConfigurationPromptLoginHintReturnValue: OAuthAuthorizationData! {
+    var urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingReturnValue: OAuthAuthorizationData!
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdReturnValue: OAuthAuthorizationData! {
         get {
             if Thread.isMainThread {
-                return urlForOidcOidcConfigurationPromptLoginHintUnderlyingReturnValue
+                return urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingReturnValue
             } else {
                 var returnValue: OAuthAuthorizationData? = nil
                 DispatchQueue.main.sync {
-                    returnValue = urlForOidcOidcConfigurationPromptLoginHintUnderlyingReturnValue
+                    returnValue = urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -5155,29 +5155,29 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                urlForOidcOidcConfigurationPromptLoginHintUnderlyingReturnValue = newValue
+                urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    urlForOidcOidcConfigurationPromptLoginHintUnderlyingReturnValue = newValue
+                    urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var urlForOidcOidcConfigurationPromptLoginHintClosure: ((OidcConfiguration, OidcPrompt?, String?) async throws -> OAuthAuthorizationData)?
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdClosure: ((OidcConfiguration, OidcPrompt?, String?, String?) async throws -> OAuthAuthorizationData)?
 
-    open override func urlForOidc(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?) async throws -> OAuthAuthorizationData {
-        if let error = urlForOidcOidcConfigurationPromptLoginHintThrowableError {
+    open override func urlForOidc(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?, deviceId: String?) async throws -> OAuthAuthorizationData {
+        if let error = urlForOidcOidcConfigurationPromptLoginHintDeviceIdThrowableError {
             throw error
         }
-        urlForOidcOidcConfigurationPromptLoginHintCallsCount += 1
-        urlForOidcOidcConfigurationPromptLoginHintReceivedArguments = (oidcConfiguration: oidcConfiguration, prompt: prompt, loginHint: loginHint)
+        urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount += 1
+        urlForOidcOidcConfigurationPromptLoginHintDeviceIdReceivedArguments = (oidcConfiguration: oidcConfiguration, prompt: prompt, loginHint: loginHint, deviceId: deviceId)
         DispatchQueue.main.async {
-            self.urlForOidcOidcConfigurationPromptLoginHintReceivedInvocations.append((oidcConfiguration: oidcConfiguration, prompt: prompt, loginHint: loginHint))
+            self.urlForOidcOidcConfigurationPromptLoginHintDeviceIdReceivedInvocations.append((oidcConfiguration: oidcConfiguration, prompt: prompt, loginHint: loginHint, deviceId: deviceId))
         }
-        if let urlForOidcOidcConfigurationPromptLoginHintClosure = urlForOidcOidcConfigurationPromptLoginHintClosure {
-            return try await urlForOidcOidcConfigurationPromptLoginHintClosure(oidcConfiguration, prompt, loginHint)
+        if let urlForOidcOidcConfigurationPromptLoginHintDeviceIdClosure = urlForOidcOidcConfigurationPromptLoginHintDeviceIdClosure {
+            return try await urlForOidcOidcConfigurationPromptLoginHintDeviceIdClosure(oidcConfiguration, prompt, loginHint, deviceId)
         } else {
-            return urlForOidcOidcConfigurationPromptLoginHintReturnValue
+            return urlForOidcOidcConfigurationPromptLoginHintDeviceIdReturnValue
         }
     }
 

@@ -34,7 +34,7 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         // Given a view model that has no provisioning parameters.
         setupViewModel()
         XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintCallsCount, 0)
+        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount, 0)
         
         // When tapping any of the buttons on the screen
         let actions: [(AuthenticationStartScreenViewAction, AuthenticationStartScreenViewModelAction)] = [
@@ -51,7 +51,7 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
             
             // Then the authentication service should not be used yet.
             XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
-            XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintCallsCount, 0)
+            XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount, 0)
             XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
         }
     }
@@ -60,7 +60,7 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         // Given a view model that has been provisioned with a server that supports OIDC.
         setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: "user@company.com"))
         XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintCallsCount, 0)
+        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount, 0)
         
         // When tapping the login button the authentication service should be used and the screen
         // should request to continue the flow without any server selection needed.
@@ -69,9 +69,9 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintReceivedArguments?.prompt, .consent)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintReceivedArguments?.loginHint, "user@company.com")
+        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount, 1)
+        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdReceivedArguments?.prompt, .consent)
+        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdReceivedArguments?.loginHint, "user@company.com")
         XCTAssertEqual(authenticationService.homeserver.value.loginMode, .oidc(supportsCreatePrompt: false))
     }
     
@@ -79,7 +79,7 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         // Given a view model that has been provisioned with a server that does not support OIDC.
         setupViewModel(provisioningParameters: .init(accountProvider: "company.com", loginHint: "user@company.com"), supportsOIDC: false)
         XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintCallsCount, 0)
+        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount, 0)
         
         // When tapping the login button the authentication service should be used and the screen
         // should request to continue the flow without any server selection needed.
@@ -97,7 +97,7 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         setAllowedAccountProviders(["company.com"])
         setupViewModel()
         XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintCallsCount, 0)
+        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount, 0)
         
         // When tapping the login button the authentication service should be used and the screen
         // should request to continue the flow without any server selection needed.
@@ -106,9 +106,9 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintCallsCount, 1)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintReceivedArguments?.prompt, .consent)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintReceivedArguments?.loginHint, nil)
+        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount, 1)
+        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdReceivedArguments?.prompt, .consent)
+        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdReceivedArguments?.loginHint, nil)
         XCTAssertEqual(authenticationService.homeserver.value.loginMode, .oidc(supportsCreatePrompt: false))
     }
     
@@ -117,7 +117,7 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
         setAllowedAccountProviders(["company.com"])
         setupViewModel(supportsOIDC: false)
         XCTAssertEqual(authenticationService.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintCallsCount, 0)
+        XCTAssertEqual(client.urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount, 0)
         
         // When tapping the login button the authentication service should be used and the screen
         // should request to continue the flow without any server selection needed.
