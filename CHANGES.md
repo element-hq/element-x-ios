@@ -1,3 +1,60 @@
+## Changes in 25.07.2 (2025-07-15)
+
+### What's Changed
+
+🙌 Improvements
+* Update and enable the new bloom style on the home screen. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4291
+* Change the order of timeline media visibility UI by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4294
+
+🐛 Bugfixes
+* Fix some panics caused by SDK order assertions. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4281
+* Fix a bug with switching to bluetooth earphones during a call. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4285
+* Fix the contrast on mention pills. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4313
+* Fix a sync performance regression. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4324
+
+⚠️ API Changes
+* Adopt StateStoreViewModelV2 in more screens. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4275
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4290
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4293
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4318
+
+🦻 Accessibility
+* Group emojis accessibility in session verification screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4296
+* Added a11y labels to the home screen cell notification symbols by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4298
+* A11y pinned items improvement by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4300
+* Hide accessibility of empty section by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4302
+* Accessibility label for editing the avatar by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4304
+* Add the sender name to VoiceOver for poll titles by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4306
+* A11y: added a hint to inform the user that max selections have been reached by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4308
+* Announce session verification request as time limited by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4310
+
+🧱 Build
+* Update the project for Xcode 16.4 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4277
+* Automatic Accessibility Audits on previews part 1 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4322
+
+📄 Documentation
+* Update to the status and clarifications with respect to the legacy app. by @mxandreas in https://github.com/element-hq/element-x-ios/pull/4316
+
+🚧 In development 🚧
+* Add support for threaded read receipts by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4288
+
+Others
+* Update dependency apple/swift-argument-parser to from: "1.6.1" by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4278
+* Update Element Call to the actual release of 0.13.0. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4279
+* Add a few more labels when sending a rageshake. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4284
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4286
+* Update Compound and add some new snapshot tests. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4311
+* FF for enabling share pos and defaults to `false` by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4312
+* Use the timeline when marking a room as read by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4319
+* Update the SDK and build a client before logging in with a QR code. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4320
+
+### New Contributors
+* @mxandreas made their first contribution in https://github.com/element-hq/element-x-ios/pull/4316
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.07.0...release/25.07.2
+
 ## Changes in 25.07.1 (2025-07-04)
 
 ### What's Changed
