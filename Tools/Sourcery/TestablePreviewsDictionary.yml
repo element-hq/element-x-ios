@@ -1,0 +1,7 @@
+sources:
+  include:
+    - ../../ElementX
+templates:
+  - TestablePreviewsDictionary.stencil
+output:
+  ../../ElementX/Sources/Other/TestablePreview/TestablePreviewsDictionary.swift
