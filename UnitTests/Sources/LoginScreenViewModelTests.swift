@@ -14,7 +14,7 @@ class LoginScreenViewModelTests: XCTestCase {
     var viewModel: LoginScreenViewModelProtocol!
     var context: LoginScreenViewModelType.Context { viewModel.context }
     
-    var clientBuilderFactory: AuthenticationClientBuilderFactoryMock!
+    var clientFactory: AuthenticationClientFactoryMock!
     var service: AuthenticationServiceProtocol!
     
     func testBasicServer() async {
@@ -157,10 +157,10 @@ class LoginScreenViewModelTests: XCTestCase {
     // MARK: - Helpers
     
     private func setupViewModel(homeserverAddress: String = "example.com", loginHint: String? = nil) async {
-        clientBuilderFactory = AuthenticationClientBuilderFactoryMock(configuration: .init())
+        clientFactory = AuthenticationClientFactoryMock(configuration: .init())
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
-                                        clientBuilderFactory: clientBuilderFactory,
+                                        clientFactory: clientFactory,
                                         appSettings: ServiceLocator.shared.settings,
                                         appHooks: AppHooks())
         

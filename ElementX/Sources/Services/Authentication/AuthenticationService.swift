@@ -14,7 +14,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private var sessionDirectories: SessionDirectories
     private let passphrase: String
     
-    private let clientBuilderFactory: AuthenticationClientBuilderFactoryProtocol
+    private let clientFactory: AuthenticationClientFactoryProtocol
     private let userSessionStore: UserSessionStoreProtocol
     private let appSettings: AppSettings
     private let appHooks: AppHooks
@@ -30,12 +30,12 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     init(userSessionStore: UserSessionStoreProtocol,
          encryptionKeyProvider: EncryptionKeyProviderProtocol,
-         clientBuilderFactory: AuthenticationClientBuilderFactoryProtocol = AuthenticationClientBuilderFactory(),
+         clientFactory: AuthenticationClientFactoryProtocol = AuthenticationClientFactory(),
          appSettings: AppSettings,
          appHooks: AppHooks) {
         sessionDirectories = .init()
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
-        self.clientBuilderFactory = clientBuilderFactory
+        self.clientFactory = clientFactory
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
         self.appHooks = appHooks
@@ -51,7 +51,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         do {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
-            let client = try await makeClientBuilder().build(homeserverAddress: homeserverAddress)
+            let client = try await makeClient(homeserverAddress: homeserverAddress)
             let loginDetails = await client.homeserverLoginDetails()
             
             MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
@@ -175,7 +175,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
         
         do {
-            let client = try await makeClientBuilder().build(homeserverAddress: scannedServerName)
+            let client = try await makeClient(homeserverAddress: scannedServerName)
             try await client.loginWithQrCode(qrCodeData: qrData,
                                              oidcConfiguration: appSettings.oidcConfiguration.rustValue,
                                              progressListener: listener)
@@ -198,16 +198,17 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     // MARK: - Private
     
-    private func makeClientBuilder() -> AuthenticationClientBuilderProtocol {
+    private func makeClient(homeserverAddress: String) async throws -> ClientProtocol {
         // Use a fresh session directory each time the user enters a different server
         // so that caches (e.g. server versions) are always fresh for the new server.
         rotateSessionDirectory()
         
-        return clientBuilderFactory.makeBuilder(sessionDirectories: sessionDirectories,
-                                                passphrase: passphrase,
-                                                clientSessionDelegate: userSessionStore.clientSessionDelegate,
-                                                appSettings: appSettings,
-                                                appHooks: appHooks)
+        return try await clientFactory.makeClient(homeserverAddress: homeserverAddress,
+                                                  sessionDirectories: sessionDirectories,
+                                                  passphrase: passphrase,
+                                                  clientSessionDelegate: userSessionStore.clientSessionDelegate,
+                                                  appSettings: appSettings,
+                                                  appHooks: appHooks)
     }
     
     private func rotateSessionDirectory() {
@@ -254,7 +255,7 @@ extension AuthenticationService {
     static var mock: AuthenticationService {
         AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                               encryptionKeyProvider: EncryptionKeyProvider(),
-                              clientBuilderFactory: AuthenticationClientBuilderFactoryMock(configuration: .init()),
+                              clientFactory: AuthenticationClientFactoryMock(configuration: .init()),
                               appSettings: ServiceLocator.shared.settings,
                               appHooks: AppHooks())
     }
