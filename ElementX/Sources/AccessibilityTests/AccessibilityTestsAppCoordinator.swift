@@ -143,7 +143,9 @@ struct PreviewsWrapperView: View {
         
         switch fulfillmentSource {
         case .publisher(let publisher):
-            _ = await publisher.values.first { $0 == true }
+            _ = await publisher
+                .timeout(.seconds(1), scheduler: DispatchQueue.main)
+                .values.first { $0 == true }
         case .stream(let stream):
             _ = await stream.first { $0 == true }
         case .none:

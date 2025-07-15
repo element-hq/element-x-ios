@@ -21,6 +21,9 @@ struct RoomHeaderView: View {
             // https://github.com/element-hq/element-x-ios/issues/4180
             // Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'NSLayoutConstraint constant is not finite!
             content
+        } else if ProcessInfo.isRunningAccessibilityTests {
+            // Accessibility tests scale up the dynamic size in real time which may break the view
+            content
         } else {
             content
                 // Take up as much space as possible, with a leading alignment for use in the principal toolbar position

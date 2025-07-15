@@ -8,12 +8,12 @@
 import XCTest
 
 @MainActor
-class Test: XCTestCase {
+final class AccessibilityTests: XCTestCase {
     var app: XCUIApplication!
     
-    func test() async throws {
+    func performAccessibilityAudit(named name: String) async throws {
         let client = try UITestsSignalling.Client(mode: .tests)
-        app = Application.launch(viewID: "SecureBackupLogoutConfirmationScreen_Previews")
+        app = Application.launch(viewID: name)
         await client.waitForApp()
         defer { try? client.stop() }
         
