@@ -95,14 +95,14 @@ struct HomeWalletContent: View {
     @ViewBuilder
     private var actionButtonsView: some View {
         HStack(spacing: 10) {
-//            WalletActionButton(action: .receive, onTap: {
-//                
-//            })
+            WalletActionButton(action: .receive, onTap: {
+                context.send(viewAction: .startWalletTransaction(.receiveTransaction))
+            })
 //            WalletActionButton(action: .swap, onTap: {
 //                
 //            })
             WalletActionButton(action: .send, onTap: {
-                context.send(viewAction: .sendWalletToken)
+                context.send(viewAction: .startWalletTransaction(.sendToken))
             })
         }
     }
@@ -216,14 +216,14 @@ struct HomeWalletContent: View {
             
             if context.viewState.walletTokens.count > 0 {
                 HStack(spacing: 10) {
-    //                WalletActionButton(action: .receive, compactButtonStyle: true, onTap: {
-    //
-    //                })
+                    WalletActionButton(action: .receive, compactButtonStyle: true, onTap: {
+                        context.send(viewAction: .startWalletTransaction(.receiveTransaction))
+                    })
     //                WalletActionButton(action: .swap, compactButtonStyle: true, onTap: {
     //
     //                })
                     WalletActionButton(action: .send, compactButtonStyle: true, onTap: {
-                        context.send(viewAction: .sendWalletToken)
+                        context.send(viewAction: .startWalletTransaction(.sendToken))
                     })
                 }
             }

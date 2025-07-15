@@ -575,8 +575,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     presentFeedDetailsScreen(post, feedUpdatedProtocol: feedUpdatedProtocol)
                 case .openPostUserProfile(let profile, let feedUpdatedProtocol):
                     startUserProfileWithFeedFlow(userID: nil, profile: profile, feedUpdatedProtocol: feedUpdatedProtocol)
-                case .sendWalletToken(let walletTransactionProtocol):
-                    presentSendWalletTokenSheet(walletTransactionProtocol)
+                case .startWalletTransaction(let walletTransactionProtocol, let type):
+                    startZeroWalletTransactionsFlow(walletTransactionProtocol, type: type)
                 }
             }
             .store(in: &cancellables)
@@ -1299,11 +1299,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentSendWalletTokenSheet(_ walletTransactionProtocol: WalletTransactionProtocol) {
+    private func startZeroWalletTransactionsFlow(_ walletTransactionProtocol: WalletTransactionProtocol, type: WalletTransactionType) {
         let flowCoordinator = ZeroWalletTransactionsFlowCoordinator(rootStackCoordinator: detailNavigationStackCoordinator,
-                                                             userSession: userSession,
-                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                             appMediator: appMediator)
+                                                                    userSession: userSession,
+                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                    appMediator: appMediator,
+                                                                    transactionType: type)
         flowCoordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             
