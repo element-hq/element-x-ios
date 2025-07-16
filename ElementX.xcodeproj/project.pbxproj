@@ -1957,7 +1957,6 @@
 		799D85822E2706E1000A362A /* WalletTransactionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799D85802E2706D9000A362A /* WalletTransactionType.swift */; };
 		799D85842E2709F7000A362A /* UserWalletInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799D85832E2709E9000A362A /* UserWalletInfoView.swift */; };
 		799D85852E2709F7000A362A /* UserWalletInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799D85832E2709E9000A362A /* UserWalletInfoView.swift */; };
-		799D85882E271142000A362A /* QRCode in Frameworks */ = {isa = PBXBuildFile; productRef = 799D85872E271142000A362A /* QRCode */; };
 		799E1D192DBBA85B00E3D512 /* ZeroMetaDataApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E1D182DBBA85400E3D512 /* ZeroMetaDataApi.swift */; };
 		799E1D1A2DBBA85B00E3D512 /* ZeroMetaDataApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E1D182DBBA85400E3D512 /* ZeroMetaDataApi.swift */; };
 		799E1D1C2DBBA8BB00E3D512 /* ZLinkPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 799E1D1B2DBBA8B300E3D512 /* ZLinkPreview.swift */; };
@@ -4365,7 +4364,6 @@
 				18E9A7772C9829970082DDA4 /* TaggedMoney in Frameworks */,
 				18E9A7782C9829970082DDA4 /* Alamofire in Frameworks */,
 				18E9A7792C9829970082DDA4 /* LoremSwiftum in Frameworks */,
-				799D85882E271142000A362A /* QRCode in Frameworks */,
 				18E9A77A2C9829970082DDA4 /* LRUCache in Frameworks */,
 				18E9A77B2C9829970082DDA4 /* Mapbox in Frameworks */,
 				18D467B82D10A57900861AA6 /* ReownAppKit in Frameworks */,
@@ -8786,7 +8784,6 @@
 				79F31B2A2E02BE9E0043E100 /* FirebaseRemoteConfig */,
 				790AB7B02E1D316300555B1F /* StoreKitPlus */,
 				79C25B4A2E258C1200936A5D /* VideoPlayer */,
-				799D85872E271142000A362A /* QRCode */,
 			);
 			productName = ElementX;
 			productReference = 18E9A7922C9829970082DDA4 /* Zero.app */;
@@ -9093,7 +9090,6 @@
 				79F31B232E02BE5A0043E100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				790AB7AF2E1D316300555B1F /* XCRemoteSwiftPackageReference "StoreKitPlus" */,
 				79C25B492E258C1200936A5D /* XCRemoteSwiftPackageReference "VideoPlayer" */,
-				799D85862E271142000A362A /* XCRemoteSwiftPackageReference "QRCode" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -13204,14 +13200,6 @@
 				minimumVersion = 0.7.1;
 			};
 		};
-		799D85862E271142000A362A /* XCRemoteSwiftPackageReference "QRCode" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/dagronf/QRCode";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 26.10.0;
-			};
-		};
 		79C25B492E258C1200936A5D /* XCRemoteSwiftPackageReference "VideoPlayer" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/wxxsw/VideoPlayer";
@@ -13768,11 +13756,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8213398B60F9B660D9216ADF /* XCRemoteSwiftPackageReference "element-call-swift" */;
 			productName = EmbeddedElementCall;
-		};
-		799D85872E271142000A362A /* QRCode */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 799D85862E271142000A362A /* XCRemoteSwiftPackageReference "QRCode" */;
-			productName = QRCode;
 		};
 		79C25B4A2E258C1200936A5D /* VideoPlayer */ = {
 			isa = XCSwiftPackageProductDependency;
