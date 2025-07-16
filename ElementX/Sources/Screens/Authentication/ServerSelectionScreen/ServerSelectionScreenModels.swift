@@ -66,4 +66,6 @@ enum ServerSelectionScreenErrorType: Hashable {
     case loginAlert
     /// An alert that informs the user that registration isn't supported.
     case registrationAlert
+    /// An alert that informs the user that Element Pro should be used for a particular server.
+    case elementProAlert
 }

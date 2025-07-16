@@ -70,6 +70,8 @@ enum LoginScreenErrorType: Hashable {
     case invalidWellKnownAlert(String)
     /// An alert that allows the user to learn about sliding sync.
     case slidingSyncAlert
+    /// An alert that informs the user that Element Pro should be used for a particular server.
+    case elementProAlert
     /// An alert that informs the user that login failed due to a refresh token being returned.
     case refreshTokenAlert
     /// The response from the homeserver was unexpected.

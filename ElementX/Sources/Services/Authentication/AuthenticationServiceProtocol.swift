@@ -30,6 +30,7 @@ enum AuthenticationServiceError: Error, Equatable {
     case slidingSyncNotAvailable
     case loginNotSupported
     case registrationNotSupported
+    case elementProRequired(serverName: String)
     case accountDeactivated
     case failedLoggingIn
     case sessionTokenRefreshNotSupported
