@@ -35,13 +35,13 @@ jobs:
       - name: Zip results # for faster upload
         if: failure()
         working-directory: fastlane/test_output
-        run: zip -r UITests.xcresult.zip UITests.xcresult
+        run: zip -r AccessibilityTests.xcresult.zip AccessibilityTests.xcresult
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: ${{ matrix.device }}
-          path: fastlane/test_output/UITests.xcresult.zip
+          path: fastlane/test_output/AccessibilityTests.xcresult.zip
           retention-days: 7
           if-no-files-found: ignore
