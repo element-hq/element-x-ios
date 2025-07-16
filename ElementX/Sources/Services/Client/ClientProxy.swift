@@ -927,7 +927,8 @@ class ClientProxy: ClientProxyProtocol {
             }
             
             for member in members where member.isActive && member.userID != userID {
-                users.append(.init(userID: member.userID, displayName: member.displayName, avatarURL: member.avatarURL))
+                let zeroProfile = try? await zeroApiProxy.matrixUsersService.fetchZeroUser(userId: member.userID)
+                users.append(.init(userID: member.userID, displayName: member.displayName, avatarURL: member.avatarURL, zeroUserProfile: zeroProfile))
                 
                 // Return early to avoid unnecessary work
                 if users.count >= maxResultsToReturn {

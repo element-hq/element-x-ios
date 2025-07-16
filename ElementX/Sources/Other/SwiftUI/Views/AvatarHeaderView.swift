@@ -33,6 +33,7 @@ struct AvatarHeaderView<Footer: View>: View {
     init(room: RoomDetails,
          roomSubtitle: String?,
          avatarSize: Avatars.Size,
+         showProSubscriberBadge: Bool = false,
          mediaProvider: MediaProviderProtocol? = nil,
          onAvatarTap: ((URL) -> Void)? = nil,
          @ViewBuilder footer: @escaping () -> Footer) {
@@ -46,7 +47,13 @@ struct AvatarHeaderView<Footer: View>: View {
         self.footer = footer
         
         var badges = [Badge]()
-        badges.append(.encrypted(room.isEncrypted))
+        if room.isDirect {
+            if showProSubscriberBadge {
+                badges.append(.verified)
+            }
+        } else {
+            badges.append(.encrypted(room.isEncrypted))
+        }
 //        if room.isPublic {
 //            badges.append(.public)
 //        }
@@ -188,11 +195,17 @@ struct AvatarHeaderView<Footer: View>: View {
             Spacer()
                 .frame(height: 9)
             
-            Text(title)
-                .foregroundColor(.compound.textPrimary)
-                .font(.zero.headingMDBold)
-                .multilineTextAlignment(.center)
-                .textSelection(.enabled)
+            HStack {
+                Text(title)
+                    .foregroundColor(.compound.textPrimary)
+                    .font(.zero.headingMDBold)
+                    .multilineTextAlignment(.center)
+                    .textSelection(.enabled)
+                
+                if !badges.isEmpty {
+                    badgesStack
+                }
+            }
             
             if let subtitle {
                 Text(subtitle)
@@ -202,9 +215,9 @@ struct AvatarHeaderView<Footer: View>: View {
                     .textSelection(.enabled)
             }
             
-            if !badges.isEmpty {
-                badgesStack
-            }
+//            if !badges.isEmpty {
+//                badgesStack
+//            }
             
             footer()
         }

@@ -13,12 +13,14 @@ struct UserProfileProxy: Equatable, Hashable {
     let displayName: String?
     let avatarURL: URL?
     var primaryZeroId: String?
+    var isZeroProSubscriber: Bool
     
-    init(userID: String, displayName: String? = nil, avatarURL: URL? = nil) {
+    init(userID: String, displayName: String? = nil, avatarURL: URL? = nil, zeroUserProfile: ZMatrixUser? = nil) {
         self.userID = userID
         self.displayName = displayName
         self.avatarURL = avatarURL
-        primaryZeroId = nil
+        primaryZeroId = zeroUserProfile?.primaryZID
+        isZeroProSubscriber = zeroUserProfile?.subscriptions.zeroPro ?? false
     }
     
     init(member: RoomMemberDetails) {
@@ -26,12 +28,14 @@ struct UserProfileProxy: Equatable, Hashable {
         displayName = member.isBanned ? nil : member.name
         avatarURL = member.isBanned ? nil : member.avatarURL
         primaryZeroId = member.primaryZeroId
+        isZeroProSubscriber = member.isZeroProSubscriber
     }
     
     init(sender: TimelineItemSender) {
         userID = sender.id
         displayName = sender.displayName
         avatarURL = sender.avatarURL
+        isZeroProSubscriber = false
     }
     
     init(sdkUserProfile: MatrixRustSDK.UserProfile) {
@@ -39,6 +43,7 @@ struct UserProfileProxy: Equatable, Hashable {
         displayName = sdkUserProfile.displayName
         avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
         primaryZeroId = nil
+        isZeroProSubscriber = false
     }
     
     init(sdkRoomHero: MatrixRustSDK.RoomHero) {
@@ -46,6 +51,7 @@ struct UserProfileProxy: Equatable, Hashable {
         displayName = sdkRoomHero.displayName
         avatarURL = sdkRoomHero.avatarUrl.flatMap(URL.init(string:))
         primaryZeroId = nil
+        isZeroProSubscriber = false
     }
     
     init(zeroSearchedUser: ZMatrixSearchedUser, avatarUrl: String?) {
@@ -53,6 +59,7 @@ struct UserProfileProxy: Equatable, Hashable {
         displayName = zeroSearchedUser.name
         avatarURL = avatarUrl.flatMap(URL.init(string:))
         primaryZeroId = zeroSearchedUser.zIdOrPublicAddressDisplayText
+        isZeroProSubscriber = zeroSearchedUser.subscriptions.zeroPro
     }
     
     init(sdkUserProfile: MatrixRustSDK.UserProfile, zeroUserProfile: ZMatrixSearchedUser?) {
@@ -60,6 +67,7 @@ struct UserProfileProxy: Equatable, Hashable {
         displayName = sdkUserProfile.displayName
         avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
         primaryZeroId = zeroUserProfile?.zIdOrPublicAddressDisplayText
+        isZeroProSubscriber = zeroUserProfile?.subscriptions.zeroPro ?? false
     }
     
     init(zeroUserProfile: ZMatrixUser?, sdkUserProfile: MatrixRustSDK.UserProfile) {
@@ -67,6 +75,7 @@ struct UserProfileProxy: Equatable, Hashable {
         displayName = sdkUserProfile.displayName
         avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
         primaryZeroId = zeroUserProfile?.primaryZIdOrWalletAddress ?? ""
+        isZeroProSubscriber = zeroUserProfile?.subscriptions.zeroPro ?? false
     }
     
     /// A user is meant to be "verified" when the GET profile returns back either the display name or the avatar
@@ -109,6 +118,6 @@ extension UserProfileProxy {
               publicAddress: nil,
               followersCount: nil,
               followingCount: nil,
-              isZeroProSubscriber: false)
+              isZeroProSubscriber: isZeroProSubscriber)
     }
 }

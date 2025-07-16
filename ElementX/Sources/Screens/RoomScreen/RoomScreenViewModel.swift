@@ -430,6 +430,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     guard let self else { return }
                     guard (directMember?.matrixId == otherMemberId) else { return }
                     
+                    state.showProSubscriptionBadge = roomProxy.isDirectRoom && (directMember?.subscriptions.zeroPro ?? false)
                     state.roomSubtitle = directMember?.zIdOrPublicAddressDisplayText
                 }
                 .store(in: &cancellables)

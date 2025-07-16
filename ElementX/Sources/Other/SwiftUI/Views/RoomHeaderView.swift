@@ -13,6 +13,7 @@ struct RoomHeaderView: View {
     let roomName: String
     let roomSubtitle: String?
     let roomAvatar: RoomAvatar
+    let showProSubscriptionBadge: Bool
     var dmRecipientVerificationState: UserIdentityVerificationState?
     
     let mediaProvider: MediaProviderProtocol?
@@ -36,10 +37,17 @@ struct RoomHeaderView: View {
                 .accessibilityHidden(true)
             HStack(spacing: 4) {
             VStack(alignment: .leading) {
-                Text(roomName)
-                    .lineLimit(1)
-                    .font(.zero.bodyMDSemibold)
-                    .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
+                HStack {
+                    Text(roomName)
+                        .lineLimit(1)
+                        .font(.zero.bodyMDSemibold)
+                        .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
+                    
+                    if showProSubscriptionBadge {
+                        CompoundIcon(\.verified, size: .xSmall, relativeTo: .zero.bodyMDSemibold)
+                            .foregroundStyle(.zero.bgAccentRest)
+                    }
+                }
                 if let subtitle = roomSubtitle {
                     Text(subtitle)
                         .lineLimit(1)
@@ -82,6 +90,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                        roomAvatar: .room(id: "1",
                                          name: "Some Room Name",
                                          avatarURL: avatarURL),
+                       showProSubscriptionBadge: false,
                        dmRecipientVerificationState: verificationState,
                        mediaProvider: MediaProviderMock(configuration: .init()))
             .padding()

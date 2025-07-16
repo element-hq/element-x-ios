@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Compound
 
 struct RoomMembersListScreenMemberCell: View {
     let listEntry: RoomMemberListScreenEntry
@@ -25,10 +26,18 @@ struct RoomMembersListScreenMemberCell: View {
                 
                 HStack(alignment: .center, spacing: 4) {
                     VStack(alignment: .leading, spacing: 0) {
-                        Text(title)
-                            .font(.zero.bodyMDSemibold)
-                            .foregroundColor(.compound.textPrimary)
-                            .lineLimit(1)
+                        HStack(spacing: 0) {
+                            Text(title)
+                                .font(.zero.bodyMDSemibold)
+                                .foregroundColor(.compound.textPrimary)
+                                .lineLimit(1)
+                            
+                            if isZeroProSubscriber {
+                                CompoundIcon(\.verified, size: .small, relativeTo: .zero.bodyMDSemibold)
+                                    .foregroundStyle(.zero.bgAccentRest)
+                                    .padding(.horizontal, 4)
+                            }
+                        }
                         
 //                        if let subtitle {
 //                            Text(subtitle)
@@ -39,7 +48,7 @@ struct RoomMembersListScreenMemberCell: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    VerificationBadge(verificationState: listEntry.verificationState)
+//                    VerificationBadge(verificationState: listEntry.verificationState)
                     
                     if let role {
                         Text(role)
@@ -83,6 +92,10 @@ struct RoomMembersListScreenMemberCell: View {
     
     var avatarURL: URL? {
         listEntry.member.isBanned ? nil : listEntry.member.avatarURL
+    }
+    
+    var isZeroProSubscriber: Bool {
+        listEntry.member.isZeroProSubscriber
     }
 }
 

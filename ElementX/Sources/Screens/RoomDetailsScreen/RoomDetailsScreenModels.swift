@@ -123,6 +123,7 @@ struct RoomDetailsScreenViewState: BindableState {
     }
     
     var roomSubtitle: String? = nil
+    var showProSubscriptionBadge: Bool = false
 }
 
 struct RoomDetailsScreenViewStateBindings {

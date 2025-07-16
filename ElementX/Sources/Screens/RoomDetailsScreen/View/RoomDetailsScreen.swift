@@ -67,6 +67,7 @@ struct RoomDetailsScreen: View {
         AvatarHeaderView(room: context.viewState.details,
                          roomSubtitle: context.viewState.roomSubtitle,
                          avatarSize: .room(on: .details),
+                         showProSubscriberBadge: context.viewState.showProSubscriptionBadge,
                          mediaProvider: context.mediaProvider) { url in
             context.send(viewAction: .displayAvatar(url))
         } footer: {

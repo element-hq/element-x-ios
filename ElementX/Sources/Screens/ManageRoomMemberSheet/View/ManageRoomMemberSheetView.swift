@@ -16,6 +16,7 @@ struct ManageRoomMemberSheetView: View {
             switch context.viewState.memberDetails {
             case .memberDetails(let member):
                 AvatarHeaderView(member: member,
+                                 isVerified: member.isZeroProSubscriber,
                                  avatarSize: .user(on: .memberDetails),
                                  mediaProvider: context.mediaProvider) {
                     EmptyView()

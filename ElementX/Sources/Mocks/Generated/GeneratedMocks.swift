@@ -16137,6 +16137,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {
     }
     var underlyingRole: RoomMemberRole!
     var primaryZeroId: String?
+    var isZeroProSubscriber: Bool {
+        get { return underlyingIsZeroProSubscriber }
+        set(value) { underlyingIsZeroProSubscriber = value }
+    }
+    var underlyingIsZeroProSubscriber: Bool!
 
 }
 class RoomMembershipDetailsProxyMock: RoomMembershipDetailsProxyProtocol, @unchecked Sendable {
