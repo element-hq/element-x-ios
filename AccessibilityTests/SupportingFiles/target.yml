@@ -48,4 +48,5 @@ targets:
     - path: ../Sources
     - path: ../SupportingFiles
     - path: ../../ElementX/Sources/UITests/UITestsSignalling.swift
+    - path: ../../ElementX/Sources/Other/AccessibilityIdentifiers.swift
 
