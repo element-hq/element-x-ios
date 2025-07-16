@@ -88,12 +88,14 @@ class ZeroWalletTransactionsFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 switch action {
                 case .finish:
+                    self?.actionsSubject.send(.transactionCompleted)
                     self?.actionsSubject.send(.finished)
                 }
             }
             .store(in: &cancellables)
         stackCoordinator.setRootCoordinator(coordinator)
         rootStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.actionsSubject.send(.transactionCompleted)
             self?.actionsSubject.send(.finished)
         }
     }

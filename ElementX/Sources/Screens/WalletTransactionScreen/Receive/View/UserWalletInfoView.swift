@@ -7,11 +7,12 @@
 
 import Compound
 import SwiftUI
-import UIKit
-import QRCode
 
 struct UserWalletInfoView: View {
     @ObservedObject var context: ReceiveTransactionViewModel.Context
+    
+    @State private var qrCodeImage: UIImage?
+    @State private var showShareSheet: Bool = false
     
     var body: some View {
         VStack {
@@ -29,8 +30,10 @@ struct UserWalletInfoView: View {
                             .foregroundStyle(.compound.textSecondary)
                     }
                     
-                    QRCodeView(address: address)
-                        .padding(.vertical, 12)
+                    UserWalletQRCode(walletAddress: address, onQRCodeGenerated: { qrCodeImage in
+                        self.qrCodeImage = qrCodeImage
+                    })
+                    .padding(.vertical, 12)
                     
                     Text("Supported Networks")
                         .font(.zero.bodySM)
@@ -47,72 +50,33 @@ struct UserWalletInfoView: View {
                     context.send(viewAction: .copyAddress)
                 })
                 
-                //                ShareButton(onTap: {
-                //
-                //                })
+                if qrCodeImage != nil {
+                    ShareButton(onTap: {
+                        showShareSheet = true
+                    })
+                }
             }
             .padding(.bottom, 16)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
         .padding()
+        .sheet(isPresented: $showShareSheet) {
+            if let qrImage = qrCodeImage {
+                ShareSheet(activityItems: [qrImage])
+            }
+        }
     }
 }
 
-struct QRCodeView: View {
-    let address: String
-    let targetLogoFraction: CGFloat = 0.4  // 40% of QR dimension
+private struct ShareSheet: UIViewControllerRepresentable {
+    let activityItems: [Any]
     
-    private var fgColor: CGColor { UIColor(.black).cgColor }
-    private var bgColor: CGColor { UIColor(.zero.bgAccentRest).cgColor }
-    
-    private var logoTemplate: QRCode.LogoTemplate? {
-        guard let uiImage = UIImage(named: Asset.Images.zeroLogoMark.name),
-              let tinted = tintedCGImage(from: uiImage, tintColor: .black) else {
-            return nil
-        }
-        
-        let inset: CGFloat = 4
-        let size = targetLogoFraction
-        let rect = CGRect(x: (1 - size)/2,
-                          y: (1 - size)/2,
-                          width: size,
-                          height: size)
-        let path = CGPath(ellipseIn: rect, transform: nil)
-        
-        return QRCode.LogoTemplate(
-            image: tinted,
-            path: path,
-            inset: inset
-        )
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
     }
     
-    var body: some View {
-        QRCodeViewUI(
-            content: address,
-            foregroundColor: fgColor,
-            backgroundColor: bgColor,
-            pixelStyle: QRCode.PixelShape.Circle(),
-            eyeStyle: QRCode.EyeShape.Circle(),
-            pupilStyle: QRCode.PupilShape.Circle(),
-            logoTemplate: logoTemplate,
-            additionalQuietZonePixels: 1,
-            backgroundFractionalCornerRadius: 4
-        )
-        .frame(width: 175, height: 175)
-    }
-    
-    private func tintedCGImage(from image: UIImage, tintColor: UIColor) -> CGImage? {
-        UIGraphicsBeginImageContextWithOptions(image.size, false, 0.0)
-        defer { UIGraphicsEndImageContext() }
-        
-        tintColor.setFill()
-        
-        let rect = CGRect(origin: .zero, size: image.size)
-        image.withRenderingMode(.alwaysTemplate).draw(in: rect)
-        
-        return UIGraphicsGetImageFromCurrentImageContext()?.cgImage
-    }
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
 struct CopyButton: View {
