@@ -87,6 +87,24 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.alertInfo?.id, .registrationAlert)
     }
     
+    func testElementProRequiredAlert() async throws {
+        // Given a view model for login.
+        setupViewModel(authenticationFlow: .login)
+        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
+        XCTAssertNil(context.alertInfo)
+        
+        // When selecting a server that requires Element Pro
+        context.homeserverAddress = "secure.gov"
+        let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
+        context.send(viewAction: .confirm)
+        try await deferred.fulfill()
+        
+        // Then selection should fail with an alert telling the user to download Element Pro.
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
+        XCTAssertEqual(context.alertInfo?.id, .elementProAlert)
+    }
+    
     func testInvalidServer() async throws {
         // Given a new instance of the view model.
         setupViewModel(authenticationFlow: .login)
@@ -131,6 +149,7 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         
         viewModel = ServerSelectionScreenViewModel(authenticationService: service,
                                                    authenticationFlow: authenticationFlow,
+                                                   appSettings: ServiceLocator.shared.settings,
                                                    userIndicatorController: UserIndicatorControllerMock())
     }
 }

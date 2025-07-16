@@ -196,6 +196,23 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.alertInfo?.id, .login)
     }
     
+    func testElementProRequired() async throws {
+        // Given a view model for login using a service that hasn't been configured and the default server requires Element Pro.
+        setupViewModel(authenticationFlow: .login, supportsOIDC: false, supportsOIDCCreatePrompt: false, supportsPasswordLogin: false, requiresElementPro: true)
+        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
+        XCTAssertNil(context.alertInfo)
+        
+        // When continuing from the confirmation screen.
+        let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
+        context.send(viewAction: .confirm)
+        try await deferred.fulfill()
+        
+        // Then the configuration should fail with an alert telling the user to download Element Pro.
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
+        XCTAssertEqual(context.alertInfo?.id, .elementProRequired(serverName: "matrix.org"))
+    }
+    
     // MARK: - Picker mode
     
     func testPickerWithoutConfiguration() async throws {
@@ -288,7 +305,8 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
                                 supportsOIDC: Bool = true,
                                 supportsOIDCCreatePrompt: Bool = true,
                                 supportsPasswordLogin: Bool = true,
-                                restrictedFlow: Bool = false) {
+                                restrictedFlow: Bool = false,
+                                requiresElementPro: Bool = false) {
         var mode = ServerConfirmationScreenMode.confirmation("matrix.org")
         if restrictedFlow {
             appSettings.override(accountProviders: ["matrix.org", "beta.matrix.org"],
@@ -315,7 +333,8 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         // Manually create a configuration as the default homeserver address setting is immutable.
         client = ClientSDKMock(configuration: .init(oidcLoginURL: supportsOIDC ? "https://account.matrix.org/authorize" : nil,
                                                     supportsOIDCCreatePrompt: supportsOIDCCreatePrompt,
-                                                    supportsPasswordLogin: supportsPasswordLogin))
+                                                    supportsPasswordLogin: supportsPasswordLogin,
+                                                    elementWellKnown: requiresElementPro ? "{\"version\":1,\"enforce_element_pro\":true}" : nil))
         let configuration = AuthenticationClientFactoryMock.Configuration(homeserverClients: ["matrix.org": client])
         
         clientFactory = AuthenticationClientFactoryMock(configuration: configuration)
@@ -328,6 +347,7 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         viewModel = ServerConfirmationScreenViewModel(authenticationService: service,
                                                       mode: mode,
                                                       authenticationFlow: authenticationFlow,
+                                                      appSettings: ServiceLocator.shared.settings,
                                                       userIndicatorController: UserIndicatorControllerMock())
         
         // Add a fake window in order for the OIDC flow to continue

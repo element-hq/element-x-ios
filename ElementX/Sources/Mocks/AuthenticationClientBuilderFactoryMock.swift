@@ -25,11 +25,18 @@ extension AuthenticationClientFactoryMock {
                                                               supportsOIDCCreatePrompt: false,
                                                               supportsPasswordLogin: false)),
             "server.net": ClientSDKMock(configuration: .init(serverAddress: "server.net",
-                                                             homeserverURL: "https://matrix.example.com",
+                                                             homeserverURL: "https://matrix.server.net",
                                                              slidingSyncVersion: .native,
                                                              oidcLoginURL: nil,
                                                              supportsOIDCCreatePrompt: false,
-                                                             supportsPasswordLogin: false))
+                                                             supportsPasswordLogin: false)),
+            "secure.gov": ClientSDKMock(configuration: .init(serverAddress: "secure.gov",
+                                                             homeserverURL: "https://ess.secure.gov",
+                                                             slidingSyncVersion: .native,
+                                                             oidcLoginURL: "https://auth.secure.gov/oidc",
+                                                             supportsOIDCCreatePrompt: false,
+                                                             supportsPasswordLogin: false,
+                                                             elementWellKnown: "{\"version\":1,\"enforce_element_pro\":true}"))
         ]
     }
     

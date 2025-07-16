@@ -18,6 +18,7 @@ extension ClientSDKMock {
         var oidcLoginURL: String? = "https://account.matrix.org/authorize"
         var supportsOIDCCreatePrompt = true
         var supportsPasswordLogin = true
+        var elementWellKnown: String?
         var validCredentials = (username: "alice", password: "12345678")
         
         // MARK: Session
@@ -51,6 +52,14 @@ extension ClientSDKMock {
         
         userIdReturnValue = configuration.userID
         sessionReturnValue = configuration.session
+        getUrlUrlClosure = { url in
+            guard url.contains(".well-known/element/element.json") else { throw MockError.generic }
+            if let elementWellKnown = configuration.elementWellKnown {
+                return elementWellKnown
+            } else {
+                throw MockError.generic
+            }
+        }
     }
 }
 
