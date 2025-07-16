@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: ${{ matrix.device }}
+          name: Results
           path: fastlane/test_output/AccessibilityTests.xcresult.zip
           retention-days: 7
           if-no-files-found: ignore
