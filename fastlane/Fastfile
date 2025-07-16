@@ -101,7 +101,6 @@ lane :accessibility_tests do |options|
     ensure_devices_found: true,
     prelaunch_simulator: false,
     result_bundle: true,
-    only_testing: test_to_run,
     number_of_retries: 0,
     reset_simulator: reset_simulator
   )
