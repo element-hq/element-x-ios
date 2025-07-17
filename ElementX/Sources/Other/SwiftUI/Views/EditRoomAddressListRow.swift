@@ -13,12 +13,17 @@ struct EditRoomAddressListRow: View {
     var serverName: String
     var shouldDisplayError: Bool
     
+    private var fullAddress: String {
+        "#\(aliasLocalPart):\(serverName)"
+    }
+    
     var body: some View {
         ListRow(kind: .custom {
             HStack(spacing: 0) {
                 Text("#")
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textSecondary)
+                    .accessibilityHidden(true)
                 TextField("", text: $aliasLocalPart)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
@@ -27,9 +32,11 @@ struct EditRoomAddressListRow: View {
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textPrimary)
                     .padding(.horizontal, 8)
+                    .accessibilityHint(L10n.a11yEditRoomAddressHint(fullAddress))
                 Text(":\(serverName)")
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textSecondary)
+                    .accessibilityHidden(true)
             }
             .padding(ListRowPadding.textFieldInsets)
             .environment(\.layoutDirection, .leftToRight)

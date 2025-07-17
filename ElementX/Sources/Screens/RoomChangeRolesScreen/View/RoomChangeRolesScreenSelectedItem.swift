@@ -21,6 +21,10 @@ struct RoomChangeRolesScreenSelectedItem: View {
                 .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityAction(named: L10n.actionDismiss) {
+            dismissAction()
+        }
     }
     
     // MARK: - Private
@@ -31,6 +35,7 @@ struct RoomChangeRolesScreenSelectedItem: View {
                             contentID: member.id,
                             avatarSize: .user(on: .inviteUsers),
                             mediaProvider: mediaProvider)
+            .accessibilityHidden(true)
             .overlay(alignment: .topTrailing) {
                 if member.role != .administrator {
                     Button(action: dismissAction) {
@@ -39,7 +44,12 @@ struct RoomChangeRolesScreenSelectedItem: View {
                             .scaledFrame(size: 20)
                             .symbolRenderingMode(.palette)
                             .foregroundStyle(Color.compound.iconOnSolidPrimary, Color.compound.iconPrimary)
+                            // Increase hit area
+                            .padding(.leading, 5)
+                            .padding(.bottom, 5)
                     }
+                    // We will use the accessibility action
+                    .accessibilityHidden(true)
                     .offset(x: 4)
                 }
             }

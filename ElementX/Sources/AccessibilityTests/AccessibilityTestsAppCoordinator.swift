@@ -101,13 +101,14 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
 
 struct PreviewsWrapperView: View {
     let wrapper: PreviewsWrapper
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
     var body: some View {
         if wrapper.currentIndex < 0 || wrapper.isDone {
             EmptyView()
         } else {
             wrapper.currentPreview.content
-                .id(wrapper.previewName)
+                .id("\(wrapper.previewName)-\(dynamicTypeSize)")
         }
     }
 }

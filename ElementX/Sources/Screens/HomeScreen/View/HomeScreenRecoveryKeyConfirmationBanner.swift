@@ -68,6 +68,9 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
                         Image(systemName: "xmark")
                             .foregroundColor(.compound.iconSecondary)
                             .frame(width: 12, height: 12)
+                            // Increase hit area
+                            .padding(.leading, 5)
+                            .padding(.bottom, 2)
                     }
                 }
             }

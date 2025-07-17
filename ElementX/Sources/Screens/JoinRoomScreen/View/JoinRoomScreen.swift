@@ -72,12 +72,14 @@ struct JoinRoomScreen: View {
                                 avatarSize: .room(on: .joinRoom),
                                 mediaProvider: context.mediaProvider)
                     .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
+                    .accessibilityHidden(true)
             } else {
                 RoomAvatarImage(avatar: .room(id: "", name: nil, avatarURL: nil),
                                 avatarSize: .room(on: .joinRoom),
                                 mediaProvider: context.mediaProvider)
                     .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                     .hidden()
+                    .accessibilityHidden(true)
             }
             
             VStack(spacing: 8) {
@@ -129,19 +131,12 @@ struct JoinRoomScreen: View {
             }
         }
     }
-    
-    private var knockMessageFooterString: String {
-        guard !context.knockMessage.isEmpty else {
-            return L10n.screenJoinRoomKnockMessageDescription
-        }
-        return "\(context.knockMessage.count)/\(maxKnockMessageLength)"
-    }
         
     @ViewBuilder
     private var knockMessage: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 0) {
-                TextField("", text: $context.knockMessage, axis: .vertical)
+                TextField(L10n.screenJoinRoomKnockMessageDescription, text: $context.knockMessage, axis: .vertical)
                     .focused($focus, equals: .knockMessage)
                     .onChange(of: context.knockMessage) { _, newValue in
                         context.knockMessage = String(newValue.prefix(maxKnockMessageLength))
@@ -151,6 +146,7 @@ struct JoinRoomScreen: View {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
                     .id(Focus.knockMessage)
+                    .accessibilityHint(L10n.screenJoinRoomKnockMessageCharactersCount(context.knockMessage.count, maxKnockMessageLength))
             }
             .background(.compound.bgCanvasDefault)
             .cornerRadius(8)
@@ -158,11 +154,14 @@ struct JoinRoomScreen: View {
                 RoundedRectangle(cornerRadius: 8)
                     .inset(by: 0.5)
                     .stroke(.compound.borderInteractivePrimary)
+                    .accessibilityHidden(true)
             }
             
-            Text(knockMessageFooterString)
+            Text("\(context.knockMessage.count)/\(maxKnockMessageLength)")
                 .font(.compound.bodySM)
                 .foregroundStyle(.compound.textSecondary)
+                // We will have a hint for this in voice over mode
+                .accessibilityHidden(true)
         }
     }
     

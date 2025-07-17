@@ -8,51 +8,42 @@
 import Foundation
 import MatrixRustSDK
 
-@MainActor
 enum Target: String {
     case mainApp = "elementx"
     case nse
     case shareExtension = "shareextension"
     case tests
     
-    private static var isConfigured = false
-    
-    func configure(logLevel: LogLevel, traceLogPacks: Set<TraceLogPack>, sentryURL: URL?) {
-        guard !Self.isConfigured else {
-            return
+    var useLightweightTokioRuntime: Bool {
+        switch self {
+        case .mainApp: false
+        case .nse: true
+        case .shareExtension: true
+        case .tests: false
         }
+    }
+    
+    var logFilePrefix: String? {
+        switch self {
+        case .mainApp: nil
+        default: rawValue
+        }
+    }
+    
+    /// Configures the target with logging and an appropriate runtime.
+    ///
+    /// Returns a `Configuration` which should be stored to
+    ///   a) detect whether the platform is already configured.
+    ///   b) reconfigure the platform if necessary.
+    func configure(logLevel: LogLevel, traceLogPacks: Set<TraceLogPack>, sentryURL: URL?) -> Configuration {
+        let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
+                                                              traceLogPacks: traceLogPacks,
+                                                              currentTarget: rawValue,
+                                                              filePrefix: logFilePrefix,
+                                                              sentryURL: sentryURL)
         
         do {
-            switch self {
-            case .mainApp:
-                let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
-                                                                      traceLogPacks: traceLogPacks,
-                                                                      currentTarget: rawValue,
-                                                                      filePrefix: nil,
-                                                                      sentryURL: sentryURL)
-                try initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: false)
-            case .nse:
-                let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
-                                                                      traceLogPacks: traceLogPacks,
-                                                                      currentTarget: rawValue,
-                                                                      filePrefix: rawValue,
-                                                                      sentryURL: sentryURL)
-                try initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: true)
-            case .shareExtension:
-                let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
-                                                                      traceLogPacks: traceLogPacks,
-                                                                      currentTarget: rawValue,
-                                                                      filePrefix: rawValue,
-                                                                      sentryURL: sentryURL)
-                try initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: true)
-            case .tests:
-                let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
-                                                                      traceLogPacks: traceLogPacks,
-                                                                      currentTarget: rawValue,
-                                                                      filePrefix: rawValue,
-                                                                      sentryURL: sentryURL)
-                try initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: false)
-            }
+            try initPlatform(config: tracingConfiguration, useLightweightTokioRuntime: useLightweightTokioRuntime)
         } catch {
             fatalError("Failed configuring target \(self) with error: \(error)")
         }
@@ -63,6 +54,14 @@ enum Target: String {
         
         MXLog.configure(currentTarget: rawValue)
         
-        Self.isConfigured = true
+        return Configuration(tracingConfiguration: tracingConfiguration)
+    }
+    
+    /// Represents the configuration that was applied by ``configure(logLevel:traceLogPacks:sentryURL:)``.
+    struct Configuration {
+        /// The configuration applied when calling ``configure(logLevel:traceLogPacks:sentryURL:)``.
+        ///
+        /// **Note:** This is immutable and won't be updated to reflect further changes.
+        let tracingConfiguration: TracingConfiguration
     }
 }

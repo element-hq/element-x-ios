@@ -65,7 +65,6 @@ final class AppSettings {
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
-    private static var remoteSuiteName = "\(InfoPlistReader.main.appGroupIdentifier).remote"
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
@@ -252,8 +251,8 @@ final class AppSettings {
     var pusherProfileTag: String?
         
     // MARK: - Bug report
-
-    let bugReportRageshakeURL: URL? = Secrets.rageshakeURL.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
+    
+    let bugReportRageshakeURL: ConfigurableSetting<RageshakeConfiguration> = .init(Secrets.rageshakeURL.map { .url(URL(string: $0)!) } ?? .disabled) // swiftlint:disable:this force_unwrapping
     let bugReportSentryURL: URL? = Secrets.sentryDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     let bugReportSentryRustURL: URL? = Secrets.sentryRustDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     /// The name allocated by the bug report server

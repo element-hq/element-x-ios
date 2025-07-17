@@ -106,6 +106,8 @@ internal enum L10n {
   internal static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
   /// Time limited action required
   internal static var a11yTimeLimitedActionRequired: String { return L10n.tr("Localizable", "a11y_time_limited_action_required") }
+  /// Tombstoned room
+  internal static var a11yTombstonedRoom: String { return L10n.tr("Localizable", "a11y_tombstoned_room") }
   /// User menu
   internal static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
   /// View avatar
@@ -1222,6 +1224,8 @@ internal enum L10n {
   internal static func screenBottomSheetManageRoomMemberUnbanningUser(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unbanning_user", String(describing: p1))
   }
+  /// Screenshot
+  internal static var screenBugReportA11yScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_a11y_screenshot") }
   /// Attach screenshot
   internal static var screenBugReportAttachScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_attach_screenshot") }
   /// You may contact me if you have any follow up questions.
@@ -1590,6 +1594,10 @@ internal enum L10n {
   internal static var screenJoinRoomJoinRestrictedMessage: String { return L10n.tr("Localizable", "screen_join_room_join_restricted_message") }
   /// Send request to join
   internal static var screenJoinRoomKnockAction: String { return L10n.tr("Localizable", "screen_join_room_knock_action") }
+  /// Allowed characters %1$d of %2$d
+  internal static func screenJoinRoomKnockMessageCharactersCount(_ p1: Int, _ p2: Int) -> String {
+    return L10n.tr("Localizable", "screen_join_room_knock_message_characters_count", p1, p2)
+  }
   /// Message (optional)
   internal static var screenJoinRoomKnockMessageDescription: String { return L10n.tr("Localizable", "screen_join_room_knock_message_description") }
   /// You will receive an invite to join the room if your request is accepted.
