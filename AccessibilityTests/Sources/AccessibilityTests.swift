@@ -17,18 +17,18 @@ final class AccessibilityTests: XCTestCase {
         await client.waitForApp()
         defer { try? client.stop() }
         
+        try client.send(.accessibilityAudit(.nextPreview))
         // To handle system interrupts
-        let allowButtonPredicate = NSPredicate(format: "label == 'Allow Once' || label == 'Allow While Using App'")
-        _ = addUIInterruptionMonitor(withDescription: "Allow to access your location?") { alert -> Bool in
-            let alwaysAllowButton = alert.buttons.matching(allowButtonPredicate).element.firstMatch
+        _ = addUIInterruptionMonitor(withDescription: "Location access alert handler") { alert in
+            let alwaysAllowButton = alert.buttons["Allow While Using App"]
             if alwaysAllowButton.exists {
                 alwaysAllowButton.tap()
                 return true
             }
             return false
         }
+        app.tap()
         
-        try client.send(.accessibilityAudit(.nextPreview))
         forLoop: for await signal in client.signals.values {
             switch signal {
             case .accessibilityAudit(let auditSignal):
