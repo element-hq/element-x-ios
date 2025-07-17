@@ -58,9 +58,11 @@ final class AppSettings {
         case threadsEnabled
         case developerOptionsEnabled
         case sharePosEnabled
+        
         case zeroAccessToken
         case zeroRewardsCredit
         case zeroLoggedInUser
+        case cachedZeroUsers
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -393,6 +395,9 @@ final class AppSettings {
     // MARK: - ZERO User
     @UserPreference(key: UserDefaultsKeys.zeroLoggedInUser, defaultValue: ZCurrentUser.placeholder, storageType: .userDefaults(store))
     var zeroLoggedInUser: ZCurrentUser
+    
+    @UserPreference(key: UserDefaultsKeys.cachedZeroUsers, defaultValue: [], storageType: .userDefaults(store))
+    var cachedZeroUsers: [ZMatrixUser]
     
     // MARK: - ZERO User
     @UserPreference(key: UserDefaultsKeys.enableExternalMediaLoading, defaultValue: true, storageType: .userDefaults(store))

@@ -78,6 +78,14 @@ struct UserProfileProxy: Equatable, Hashable {
         isZeroProSubscriber = zeroUserProfile?.subscriptions.zeroPro ?? false
     }
     
+    init(zeroUserProfile: ZMatrixUser) {
+        userID = zeroUserProfile.matrixId
+        displayName = zeroUserProfile.displayName
+        avatarURL = zeroUserProfile.profileImageURL
+        primaryZeroId = zeroUserProfile.primaryZIdOrWalletAddress ?? ""
+        isZeroProSubscriber = zeroUserProfile.subscriptions.zeroPro
+    }
+    
     /// A user is meant to be "verified" when the GET profile returns back either the display name or the avatar
     /// If isn't we aren't sure that the related matrix id really exists.
     var isVerified: Bool {
