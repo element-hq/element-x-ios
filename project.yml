@@ -134,6 +134,9 @@ packages:
   Mapbox:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
     minorVersion: 5.13.0
+  Mutex: # Backports Swift's built in Mutex so we can use it on iOS 17.
+    url: https://github.com/swhitty/swift-mutex
+    minorVersion: 0.0.6
   PostHog:
     url: https://github.com/PostHog/posthog-ios
     minorVersion: 3.27.0
