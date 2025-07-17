@@ -179,6 +179,7 @@ struct HomeScreenViewState: BindableState {
     var requiresExtraAccountSetup = false
     
     var rooms: [HomeScreenRoom] = []
+    var directRoomsUserStatusMap: [String : Bool] = [:]
     var posts: [HomeScreenPost] = []
     var myPosts: [HomeScreenPost] = []
     var channels: [HomeScreenChannel] = []
