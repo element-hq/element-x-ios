@@ -6,6 +6,7 @@
 //
 
 import Combine
+import CoreLocation
 import SwiftUI
 
 class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
@@ -51,8 +52,10 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
             fatalError("Unable to launch with unknown screen.")
         }
         previewsWrapper = .init(name: name, previews: previewType._allPreviews)
-        
+                
         setupSignalling()
+        // Used to get rid of the request check for the rest of the tests on CI
+        CLLocationManager().requestWhenInUseAuthorization()
     }
     
     func toPresentable() -> AnyView {

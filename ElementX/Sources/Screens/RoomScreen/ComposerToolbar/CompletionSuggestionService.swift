@@ -168,3 +168,9 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
         return roomName.localizedStandardContains(searchText) || roomAlias.localizedStandardContains(searchText)
     }
 }
+
+extension PillUtilities {
+    static var everyone: String {
+        L10n.commonEveryone
+    }
+}

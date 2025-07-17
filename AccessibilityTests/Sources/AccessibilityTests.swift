@@ -17,7 +17,6 @@ final class AccessibilityTests: XCTestCase {
         await client.waitForApp()
         defer { try? client.stop() }
         
-        try client.send(.accessibilityAudit(.nextPreview))
         // To handle system interrupts
         _ = addUIInterruptionMonitor(withDescription: "Location access alert handler") { alert in
             let alwaysAllowButton = alert.buttons["Allow While Using App"]
@@ -27,8 +26,10 @@ final class AccessibilityTests: XCTestCase {
             }
             return false
         }
+        // This interaction is needed to have the UIInterruptionMonitor work properly.
         app.tap()
         
+        try client.send(.accessibilityAudit(.nextPreview))
         forLoop: for await signal in client.signals.values {
             switch signal {
             case .accessibilityAudit(let auditSignal):
@@ -59,9 +60,14 @@ final class AccessibilityTests: XCTestCase {
                     guard let element = issue.element else {
                         return true
                     }
-                    
+                                        
                     // We are fine with elements that only partially support dynamic types
                     guard issue.compactDescription != Self.partiallyUnsupportedDynamicTypeMessage else {
+                        return true
+                    }
+                    
+                    // We can filter out matrix entities from the non human-readable error
+                    if issue.compactDescription == "Label not human-readable", Self.isMatrixString(element.label) {
                         return true
                     }
                     
@@ -78,7 +84,12 @@ final class AccessibilityTests: XCTestCase {
         }
     }
     
+    private static func isMatrixString(_ string: String) -> Bool {
+        MatrixEntityRegex.isMatrixRoomAlias(string) || MatrixEntityRegex.isMatrixUserIdentifier(string)
+    }
+    
     private static let partiallyUnsupportedDynamicTypeMessage = "Dynamic Type font sizes are partially unsupported"
+    private static let notHumanReadableMessage = ""
     
     /// Use this array to filter add specific filters to ignore specific issues for certain elements
     private static let ignoredA11yIdentifiers: [String: [FilterType]] = [A11yIdentifiers.authenticationStartScreen.appVersion: [.auditType(.hitRegion)]]
