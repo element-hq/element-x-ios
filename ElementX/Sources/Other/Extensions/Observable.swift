@@ -21,7 +21,7 @@ extension Observable {
                     self[keyPath: property]
                 } onChange: {
                     // Handle the update on the next run loop as this is willSet not didSet.
-                    Task {
+                    Task(priority: .low) {
                         guard isActive else { return }
                         observe()
                     }
