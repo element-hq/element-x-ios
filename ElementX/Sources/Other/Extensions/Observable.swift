@@ -21,7 +21,7 @@ extension Observable {
                     self[keyPath: property]
                 } onChange: {
                     // Handle the update on the next run loop as this is willSet not didSet.
-                    DispatchQueue.main.async {
+                    RunLoop.current.perform {
                         guard isActive else { return }
                         observe()
                     }
