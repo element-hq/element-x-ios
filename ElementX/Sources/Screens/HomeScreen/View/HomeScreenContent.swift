@@ -33,6 +33,9 @@ struct HomeScreenContent: View {
                         }
                     }
                     .disabled(true)
+                    .accessibilityRepresentation {
+                        Text(L10n.commonLoading)
+                    }
                 case .empty:
                     HomeScreenEmptyStateLayout(minHeight: geometry.size.height) {
                         topSection
