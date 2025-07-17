@@ -172,7 +172,7 @@ struct SettingsScreen: View {
     private var userRewardsView: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading) {
-                Text("Rewards")
+                Text("Earnings")
                     .font(.zero.bodyMD)
                     .foregroundStyle(.compound.textPrimary)
                     .padding(.vertical, 2)
@@ -201,6 +201,10 @@ struct SettingsScreen: View {
                 Text("\(context.viewState.userRewards.getZeroCreditsFormatted()) MEOW")
                     .font(.robotoMonoRegular(size: 14))
                     .foregroundColor(.compound.textSecondary)
+                
+                ClaimEarningsButton(onTap: {
+                    
+                })
             }
             
             Spacer()

@@ -315,6 +315,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             actionsSubject.send(.sendWalletToken(self))
         case .reloadFeedMedia(let post):
             reloadFeedMedia(post)
+        case .claimEarnings:
+            state.bindings.showEarningsClaimedSheet = true
         }
     }
     

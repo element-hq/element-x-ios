@@ -1970,6 +1970,10 @@
 		79ADA9662DC5137D00C895F1 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327E3B3C58BEB0E65F4CF98 /* Observable.swift */; };
 		79B04C422DE07F6500A98D3E /* UserFeedProfileFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B04C412DE07F5300A98D3E /* UserFeedProfileFlowCoordinator.swift */; };
 		79B04C432DE07F6500A98D3E /* UserFeedProfileFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B04C412DE07F5300A98D3E /* UserFeedProfileFlowCoordinator.swift */; };
+		79B2A78C2E28F6E800A76430 /* ClaimEarningsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A78B2E28F6E200A76430 /* ClaimEarningsButton.swift */; };
+		79B2A78D2E28F6E800A76430 /* ClaimEarningsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A78B2E28F6E200A76430 /* ClaimEarningsButton.swift */; };
+		79B2A78F2E28FAA000A76430 /* ClaimedEarningsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A78E2E28FA9900A76430 /* ClaimedEarningsSheetView.swift */; };
+		79B2A7902E28FAA000A76430 /* ClaimedEarningsSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A78E2E28FA9900A76430 /* ClaimedEarningsSheetView.swift */; };
 		79B716492DA843F200A68055 /* EventTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81FD0C60175FA081EB19AD /* EventTimelineItem.swift */; };
 		79B8E34A2D660B68000304AE /* UserIdentityProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F793C422BDACE0C60C774F4 /* UserIdentityProxyProtocol.swift */; };
 		79B8E34B2D660BA9000304AE /* UserIdentityProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8536B40F578BA7FDB23D97B1 /* UserIdentityProxyMock.swift */; };
@@ -3633,6 +3637,8 @@
 		79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNotificationsContent.swift; sourceTree = "<group>"; };
 		79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenNotificationCell.swift; sourceTree = "<group>"; };
 		79B04C412DE07F5300A98D3E /* UserFeedProfileFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedProfileFlowCoordinator.swift; sourceTree = "<group>"; };
+		79B2A78B2E28F6E200A76430 /* ClaimEarningsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaimEarningsButton.swift; sourceTree = "<group>"; };
+		79B2A78E2E28FA9900A76430 /* ClaimedEarningsSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaimedEarningsSheetView.swift; sourceTree = "<group>"; };
 		79C25B4C2E259E9500936A5D /* ExternalFeedVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalFeedVideoPlayer.swift; sourceTree = "<group>"; };
 		79C25B4F2E259EF900936A5D /* ExternalFeedImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalFeedImageViewer.swift; sourceTree = "<group>"; };
 		79C25B522E25A1EE00936A5D /* FeedMediaInternalPreLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaInternalPreLoader.swift; sourceTree = "<group>"; };
@@ -5040,6 +5046,7 @@
 		18AF61512CF85A6B00921644 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				79B2A78B2E28F6E200A76430 /* ClaimEarningsButton.swift */,
 				790AB7AC2E1C53A300555B1F /* ZeroSettingsBenefitRow.swift */,
 				790AB7A92E1C516800555B1F /* StrikedLabel.swift */,
 				799616312E0B36B4008E73C4 /* SimpleTabButtonsView.swift */,
@@ -6910,6 +6917,7 @@
 		79AB3A8B2E252BAD00E94E54 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				79B2A78E2E28FA9900A76430 /* ClaimedEarningsSheetView.swift */,
 				79C25B582E25AACE00936A5D /* InternalFeedImageViewer.swift */,
 				79C25B4F2E259EF900936A5D /* ExternalFeedImageViewer.swift */,
 				79C25B5B2E25AB2500936A5D /* InternalFeedVideoPlayer.swift */,
@@ -9778,6 +9786,7 @@
 				790AB7B52E1D31EA00555B1F /* ZeroSubscriptions.swift in Sources */,
 				79C25B502E259EFE00936A5D /* ExternalFeedImageViewer.swift in Sources */,
 				791341542D6F58E1000E497F /* Secrets.swift in Sources */,
+				79B2A78C2E28F6E800A76430 /* ClaimEarningsButton.swift in Sources */,
 				18E9A4872C9829970082DDA4 /* BlockedUsersScreenCoordinator.swift in Sources */,
 				18E9A4882C9829970082DDA4 /* BlockedUsersScreenModels.swift in Sources */,
 				18E9A4892C9829970082DDA4 /* BlockedUsersScreenViewModel.swift in Sources */,
@@ -10249,6 +10258,7 @@
 				79FCB1A42DA5BA1200669122 /* ReportRoomScreenModels.swift in Sources */,
 				799616392E0EA06B008E73C4 /* ZWalletTokenBalances.swift in Sources */,
 				7975DBDC2D561F2400D5EB12 /* BannedRoomProxy.swift in Sources */,
+				79B2A7902E28FAA000A76430 /* ClaimedEarningsSheetView.swift in Sources */,
 				792A87AA2DAD8F51009C3E4F /* Result.swift in Sources */,
 				18E9A5DC2C9829970082DDA4 /* PinnedEventsTimelineScreenViewModel.swift in Sources */,
 				18E9A5DD2C9829970082DDA4 /* PinnedEventsTimelineScreenViewModelProtocol.swift in Sources */,
@@ -11036,6 +11046,7 @@
 				5DD85A0FE3D85AEC3C7EFE36 /* DeveloperOptionsScreenCoordinator.swift in Sources */,
 				784592335560C2E91D32D177 /* DeveloperOptionsScreenModels.swift in Sources */,
 				B3D652AA1654270742072FB3 /* DeveloperOptionsScreenViewModel.swift in Sources */,
+				79B2A78D2E28F6E800A76430 /* ClaimEarningsButton.swift in Sources */,
 				B9CB30FED3E29D2036EA3FCC /* DeveloperOptionsScreenViewModelProtocol.swift in Sources */,
 				037006FB6DF1374F94E4058D /* Dictionary.swift in Sources */,
 				EDF8919F15DE0FF00EF99E70 /* DocumentPicker.swift in Sources */,
@@ -11300,6 +11311,7 @@
 				9B872FF37DBE6BE054903831 /* MediaUploadPreviewScreenViewModelProtocol.swift in Sources */,
 				8A0BD60CA4A6004DB06B5403 /* MediaUploadingPreprocessor.swift in Sources */,
 				8C706DA7EAC0974CA2F8F1CD /* MentionBuilder.swift in Sources */,
+				79B2A78F2E28FAA000A76430 /* ClaimedEarningsSheetView.swift in Sources */,
 				F669B55BC237CDA5EC9332FE /* MentionSuggestionItemView.swift in Sources */,
 				795A0C842D77D4E8000928B7 /* CreateFeedProtocol.swift in Sources */,
 				64AB99285DC4437C0DDE9585 /* MenuSheetLabelStyle.swift in Sources */,

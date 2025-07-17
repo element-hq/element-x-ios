@@ -103,6 +103,13 @@ struct HomeScreen: View {
         //                   isNewBloomEnabled: context.viewState.isNewBloomEnabled)
         .sentryTrace("\(Self.self)")
         .quickLookPreview($context.mediaPreviewItem)
+        .sheet(isPresented: $context.showEarningsClaimedSheet) {
+            ClaimedEarningsSheetView(onDismiss: {
+                context.showEarningsClaimedSheet = false
+            })
+            .presentationDetents([.height(400)])
+            .presentationDragIndicator(.hidden)
+        }
     }
     
     // MARK: - Private

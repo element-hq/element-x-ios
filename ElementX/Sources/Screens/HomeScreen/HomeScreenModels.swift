@@ -80,6 +80,8 @@ enum HomeScreenViewAction {
     case loadMoreWalletTransactions
     case loadMoreWalletNFTs
     case sendWalletToken
+    
+    case claimEarnings
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -323,6 +325,7 @@ struct HomeScreenViewStateBindings {
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: URL?
+    var showEarningsClaimedSheet: Bool = false
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {
