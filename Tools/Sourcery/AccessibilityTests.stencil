@@ -16,10 +16,14 @@ import {{ import }}
 {% endfor %}
 
 extension AccessibilityTests {
+
     {% for type in types.types where (type.implements.TestablePreview or type.based.TestablePreview or type|annotated:"TestablePreview") and type.name != "TestablePreview" %}
-    func test_{{ type.name }}() async throws {
+    func test{{ type.name|replace:"_Previews", "" }}() async throws {
         try await performAccessibilityAudit(named: "{{ type.name }}")
     }
+    {%- if not forloop.last %}
+
+    {% endif %}
     {% endfor %}
 }
 

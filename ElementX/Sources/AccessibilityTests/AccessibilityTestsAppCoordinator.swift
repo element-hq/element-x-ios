@@ -144,6 +144,9 @@ struct PreviewsWrapperView: View {
         switch fulfillmentSource {
         case .publisher(let publisher):
             _ = await publisher
+                // Not sure whye byt some publisher seem to not properly comunicate their completion,
+                // so we added a timeout. Since we are going to migrate from publishers to stream,
+                // this is a temporary solution
                 .timeout(.seconds(1), scheduler: DispatchQueue.main)
                 .values.first { $0 == true }
         case .stream(let stream):

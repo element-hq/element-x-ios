@@ -4,4 +4,4 @@ sources:
 templates:
   - AccessibilityTests.stencil
 output:
-  ../../AccessibilityTests/Sources/GeneratedTests.swift
+  ../../AccessibilityTests/Sources/GeneratedAccessibilityTests.swift
