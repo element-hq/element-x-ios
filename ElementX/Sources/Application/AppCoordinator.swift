@@ -372,7 +372,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private static func setupServiceLocator(appSettings: AppSettings, appHooks: AppHooks) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         ServiceLocator.shared.register(appSettings: appSettings)
-        ServiceLocator.shared.register(bugReportService: BugReportService(rageshakeURL: appSettings.bugReportRageshakeURL,
+        ServiceLocator.shared.register(bugReportService: BugReportService(rageshakeURLPublisher: appSettings.bugReportRageshakeURL.publisher,
                                                                           applicationID: appSettings.bugReportApplicationID,
                                                                           sdkGitSHA: sdkGitSha(),
                                                                           maxUploadSize: appSettings.bugReportMaxUploadSize,
@@ -403,7 +403,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    // This could be removed once the adotpion of 25.06.x is widespread.
+    // This could be removed once the adoption of 25.06.x is widespread.
     private func performSettingsToAccountDataMigration(userSession: UserSessionProtocol) {
         guard let userDefaults = UserDefaults(suiteName: InfoPlistReader.main.appGroupIdentifier) else {
             return

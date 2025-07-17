@@ -46,13 +46,11 @@ enum BugReportServiceError: LocalizedError {
     }
 }
 
-enum RageshakeConfiguration {
+enum RageshakeConfiguration: Equatable {
     /// Rageshakes should be sent to the provided URL
     case url(URL)
     /// Rageshakes are disabled.
     case disabled
-    /// No customisations are made, use the default configuration.
-    case `default`
 }
 
 // sourcery: AutoMockable
@@ -61,8 +59,6 @@ protocol BugReportServiceProtocol: AnyObject {
     var crashedLastRun: Bool { get }
     
     var lastCrashEventID: String? { get set }
-    
-    func applyConfiguration(_ configuration: RageshakeConfiguration)
     
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: CurrentValueSubject<Double, Never>) async -> Result<SubmitBugReportResponse, BugReportServiceError>
