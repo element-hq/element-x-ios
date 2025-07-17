@@ -18,7 +18,7 @@ final class AccessibilityTests: XCTestCase {
         defer { try? client.stop() }
         
         // To handle system interrupts
-        let allowButtonPredicate = NSPredicate(format: "label == 'Always Allow' || label == 'Allow'")
+        let allowButtonPredicate = NSPredicate(format: "label == 'Allow Once' || label == 'Allow While Using App'")
         _ = addUIInterruptionMonitor(withDescription: "Allow to access your location?") { alert -> Bool in
             let alwaysAllowButton = alert.buttons.matching(allowButtonPredicate).element.firstMatch
             if alwaysAllowButton.exists {
