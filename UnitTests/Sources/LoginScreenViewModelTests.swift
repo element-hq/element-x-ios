@@ -143,6 +143,21 @@ class LoginScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.alertInfo?.id, .unknown, "An alert should be shown to the user.")
     }
     
+    func testElementProRequired() async throws {
+        // Given the screen configured for matrix.org
+        await setupViewModel()
+        XCTAssertNil(context.alertInfo, "There shouldn't be an alert when the screen loads.")
+        
+        // When entering a username for an unsupported homeserver.
+        let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
+        context.username = "@bob:secure.gov"
+        context.send(viewAction: .parseUsername)
+        try await deferred.fulfill()
+
+        // Then the view state should be updated to show an alert.
+        XCTAssertEqual(context.alertInfo?.id, .elementProAlert, "An alert should be shown to the user.")
+    }
+    
     func testLoginHint() async throws {
         await setupViewModel(loginHint: "")
         XCTAssertEqual(context.username, "")
@@ -172,6 +187,7 @@ class LoginScreenViewModelTests: XCTestCase {
         viewModel = LoginScreenViewModel(authenticationService: service,
                                          loginHint: loginHint,
                                          userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings,
                                          analytics: ServiceLocator.shared.analytics)
     }
 }

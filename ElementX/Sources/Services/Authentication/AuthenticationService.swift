@@ -52,6 +52,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
             let client = try await makeClient(homeserverAddress: homeserverAddress)
+            try await appHooks.elementWellKnownHook.validate(using: client).get()
             let loginDetails = await client.homeserverLoginDetails()
             
             MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
@@ -81,6 +82,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
         } catch ClientBuildError.SlidingSyncVersion(let error) {
             MXLog.info("User entered a homeserver that isn't configured for sliding sync: \(error)")
             return .failure(.slidingSyncNotAvailable)
+        } catch ElementWellKnownError.elementProRequired(let serverName) {
+            return .failure(.elementProRequired(serverName: serverName))
         } catch {
             MXLog.error("Failed configuring a server: \(error)")
             return .failure(.invalidHomeserverAddress)
@@ -176,6 +179,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         
         do {
             let client = try await makeClient(homeserverAddress: scannedServerName)
+            try await appHooks.elementWellKnownHook.validate(using: client).get()
             try await client.loginWithQrCode(qrCodeData: qrData,
                                              oidcConfiguration: appSettings.oidcConfiguration.rustValue,
                                              progressListener: listener)
@@ -184,6 +188,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
         } catch let error as HumanQrLoginError {
             MXLog.error("QRCode login error: \(error)")
             return .failure(error.serviceError)
+        } catch ElementWellKnownError.elementProRequired(let serverName) {
+            return .failure(.elementProRequired(serverName: serverName))
         } catch {
             MXLog.error("QRCode login unknown error: \(error)")
             return .failure(.qrCodeError(.unknown))

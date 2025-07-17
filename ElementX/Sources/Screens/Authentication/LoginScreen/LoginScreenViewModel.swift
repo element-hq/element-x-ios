@@ -13,6 +13,7 @@ typealias LoginScreenViewModelType = StateStoreViewModelV2<LoginScreenViewState,
 class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtocol {
     private let authenticationService: AuthenticationServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appSettings: AppSettings
     private let analytics: AnalyticsService
     
     private var actionsSubject: PassthroughSubject<LoginScreenViewModelAction, Never> = .init()
@@ -23,9 +24,11 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
     init(authenticationService: AuthenticationServiceProtocol,
          loginHint: String?,
          userIndicatorController: UserIndicatorControllerProtocol,
+         appSettings: AppSettings,
          analytics: AnalyticsService) {
         self.authenticationService = authenticationService
         self.userIndicatorController = userIndicatorController
+        self.appSettings = appSettings
         self.analytics = analytics
         
         let username = switch loginHint {
@@ -144,6 +147,16 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
                                                  title: L10n.commonServerNotSupported,
                                                  message: L10n.screenChangeServerErrorNoSlidingSyncMessage(nonBreakingAppName))
             
+            // Clear out the invalid username to avoid an attempted login to matrix.org
+            state.bindings.username = ""
+        case .elementProRequired(let serverName):
+            state.bindings.alertInfo = AlertInfo(id: .elementProAlert,
+                                                 title: L10n.screenChangeServerErrorElementProRequiredTitle,
+                                                 message: L10n.screenChangeServerErrorElementProRequiredMessage(serverName),
+                                                 primaryButton: .init(title: L10n.screenChangeServerErrorElementProRequiredActionIos) {
+                                                     UIApplication.shared.open(self.appSettings.elementProAppStoreURL)
+                                                 },
+                                                 secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
             // Clear out the invalid username to avoid an attempted login to matrix.org
             state.bindings.username = ""
         case .sessionTokenRefreshNotSupported:
