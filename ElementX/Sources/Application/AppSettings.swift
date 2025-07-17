@@ -190,6 +190,7 @@ final class AppSettings {
     /// The domain that account provisioning links will be hosted on - used for handling the links.
     private(set) var accountProvisioningHost = "mobile.element.io"
     /// The App Store URL for Element Pro, shown to the user when a homeserver requires that app.
+    /// **Note:** This property isn't overridable as it in unexpected for forks to come across the error (or to even have a "Pro" app).
     let elementProAppStoreURL: URL = "https://apps.apple.com/app/element-pro-for-work/id6502951615"
     
     @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))

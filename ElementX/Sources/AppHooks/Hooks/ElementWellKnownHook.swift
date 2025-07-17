@@ -13,6 +13,9 @@ protocol ElementWellKnownHookProtocol {
 }
 
 struct DefaultElementWellKnownHook: ElementWellKnownHookProtocol {
+    /// A best effort implementation to let Element X advertise to users when they should be using
+    /// Element Pro. In an ideal world the backend would be able to validate the client's requests
+    /// instead of relying on it to check a well-known file for this.
     func validate(using client: ClientProtocol) async -> Result<Void, ElementWellKnownError> {
         guard case let .success(wellKnownData) = await client.elementWellKnown() else {
             // Nothing to check, carry on as normal.
