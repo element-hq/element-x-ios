@@ -26,7 +26,7 @@ enum MatrixEntityRegex: String {
         case .uri:
             return "matrix:(r|u|roomid)\\/[A-Z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*(?:\\?[A-Z0-9\\-._~:/?#\\[\\]@!$&'()*+,;=%]*)?"
         case .allUsers:
-            return "@room"
+            return PillUtilities.atRoom
         }
     }
     
