@@ -195,7 +195,7 @@ extension JoinedRoomProxyProtocol {
     }
     
     var isDirectOneToOneRoom: Bool {
-        infoPublisher.value.isDirect && infoPublisher.value.activeMembersCount <= 2
+        infoPublisher.value.isDirect && infoPublisher.value.activeMembersCount < 3
     }
     
     var hasOnlyOneMember: Bool {

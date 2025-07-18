@@ -33,7 +33,7 @@ struct ConfirmTransactionView: View {
                 
                 VStack(alignment: .leading) {
                     UserInfoView(preText: "Sending To:",
-                                 userName: "\(recipient.name)(\(recipient.primaryZid))",
+                                 userName: recipient.displayName,
                                  userAddress: displayFormattedAddress(recipient.publicAddress))
                     
                     AssetInfoView(tokenAsset: token, amount: $transferAmount, isSenderSideInfo: false, iconUrl: token.logo)

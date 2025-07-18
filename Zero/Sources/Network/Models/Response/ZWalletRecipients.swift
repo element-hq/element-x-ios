@@ -15,9 +15,9 @@ struct WalletRecipient: Codable, Identifiable {
     let userId: String
     let matrixId: String
     let publicAddress: String
-    let name: String
-    let profileImage: String
-    let primaryZid: String
+    let name: String?
+    let profileImage: String?
+    let primaryZid: String?
 
     var id: String { userId } // For Identifiable conformance
     
@@ -30,5 +30,11 @@ struct WalletRecipient: Codable, Identifiable {
             profileImage: URL.dummayURL.absoluteString,
             primaryZid: "0://placeholder_id"
         )
+    }
+}
+
+extension WalletRecipient {
+    var displayName: String {
+        return "\(String(describing: name ?? ""))(\(String(describing: primaryZid ?? ""))".trim()
     }
 }

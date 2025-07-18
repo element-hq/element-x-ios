@@ -81,7 +81,7 @@ private struct RecipientView: View {
                 .font(.zero.bodySMSemibold)
                 .foregroundStyle(.compound.textSecondary)
             
-            Text("\(recipient.name)(\(recipient.primaryZid))")
+            Text(recipient.displayName)
                 .font(.compound.bodySMSemibold)
                 .foregroundStyle(.compound.textPrimary)
                 .lineLimit(1)

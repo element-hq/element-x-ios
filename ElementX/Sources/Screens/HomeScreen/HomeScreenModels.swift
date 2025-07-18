@@ -80,6 +80,7 @@ enum HomeScreenViewAction {
     case loadMoreWalletTransactions
     case loadMoreWalletNFTs
     case startWalletTransaction(WalletTransactionType)
+    case viewTransactionDetails(HomeScreenWalletContent)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {

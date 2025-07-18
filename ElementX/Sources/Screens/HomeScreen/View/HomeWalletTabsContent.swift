@@ -42,7 +42,8 @@ struct HomeWalletTabsContentView : View {
                         loadMoreAction: { context.send(viewAction: .loadMoreWalletTokens) }
                     ),
                     selectedTab: selectedWalletTab,
-                    mediaProvider: context.mediaProvider
+                    mediaProvider: context.mediaProvider,
+                    onTap: { _ in }
                 )
                 
             case .transaction:
@@ -54,7 +55,10 @@ struct HomeWalletTabsContentView : View {
                         loadMoreAction: { context.send(viewAction: .loadMoreWalletTransactions) }
                     ),
                     selectedTab: selectedWalletTab,
-                    mediaProvider: context.mediaProvider
+                    mediaProvider: context.mediaProvider,
+                    onTap: { content in
+                        context.send(viewAction: .viewTransactionDetails(content))
+                    }
                 )
                 
             case .account:
@@ -66,7 +70,8 @@ struct HomeWalletTabsContentView : View {
                         loadMoreAction: { context.send(viewAction: .loadMoreWalletNFTs) }
                     ),
                     selectedTab: selectedWalletTab,
-                    mediaProvider: context.mediaProvider
+                    mediaProvider: context.mediaProvider,
+                    onTap: { _ in }
                 )
             }
         }
@@ -76,14 +81,18 @@ struct HomeWalletTabsContentView : View {
     fileprivate func walletTabContentView(
         tabContent: WalletTabContent,
         selectedTab: HomeWalletTab,
-        mediaProvider: MediaProviderProtocol?
+        mediaProvider: MediaProviderProtocol?,
+        onTap: @escaping (HomeScreenWalletContent) -> Void
     ) -> some View {
         if tabContent.items.isEmpty {
             HomeContentEmptyView(message: tabContent.emptyMessage)
         } else {
             LazyVStack(alignment: .leading, spacing: 0) {
                 ForEach(tabContent.items) { content in
-                    HomeWalletTabContentCell(content: content, selectedWalletTab: selectedTab, mediaProvider: mediaProvider) {}
+                    HomeWalletTabContentCell(content: content,
+                                             selectedWalletTab: selectedTab,
+                                             mediaProvider: mediaProvider,
+                                             onTap: { onTap(content) })
                         .padding(.vertical, 12)
                 }
                 
@@ -186,6 +195,11 @@ struct HomeWalletTabContentCell : View {
                                 .lineLimit(1)
                                 .truncationMode(.tail)
                         }
+                    }
+                    
+                    if content.transactionAction != nil {
+                        CompoundIcon(\.chevronRight, size: .small, relativeTo: .zero.bodyLG)
+                            .foregroundStyle(.compound.textSecondary)
                     }
                 }
             }

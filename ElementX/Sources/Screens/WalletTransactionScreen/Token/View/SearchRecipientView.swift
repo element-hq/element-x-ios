@@ -121,7 +121,7 @@ struct RecipientInfoCell: View {
         }) {
             HStack {
                 LoadableAvatarImage(
-                    url: URL(string: recipient.profileImage),
+                    url: URL(string: recipient.profileImage ?? ""),
                     name: recipient.name,
                     contentID: recipient.id,
                     avatarSize: .user(on: .home),
@@ -131,15 +131,21 @@ struct RecipientInfoCell: View {
                 
                 VStack(alignment: .leading) {
                     HStack {
-                        Text(recipient.name)
-                            .font(.zero.bodyLG)
-                            .foregroundStyle(.compound.textPrimary)
+                        if let userName = recipient.name {
+                            Text(userName)
+                                .font(.zero.bodyLG)
+                                .foregroundStyle(.compound.textPrimary)
+                                .layoutPriority(1)
+                                .lineLimit(1)
+                        }
                         
-                        Text(recipient.primaryZid)
-                            .font(.zero.bodyMD)
-                            .foregroundStyle(.compound.textSecondary)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
+                        if let primaryZid = recipient.primaryZid {
+                            Text(primaryZid)
+                                .font(.zero.bodyMD)
+                                .foregroundStyle(.compound.textSecondary)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                        }
                     }
                     
                     if let address = displayFormattedAddress(recipient.publicAddress) {

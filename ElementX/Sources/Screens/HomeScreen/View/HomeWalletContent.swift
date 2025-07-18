@@ -71,10 +71,8 @@ struct HomeWalletContent: View {
             VStack(alignment: .leading, spacing: 0) {
                 zeroCardDetails
                 
-                if context.viewState.walletTokens.count > 0 {
-                    actionButtonsView
-                        .padding(.vertical, 6)
-                }
+                actionButtonsView
+                    .padding(.vertical, 6)
             }
         }
     }

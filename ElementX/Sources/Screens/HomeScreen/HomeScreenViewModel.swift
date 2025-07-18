@@ -323,6 +323,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             actionsSubject.send(.startWalletTransaction(self, type))
         case .reloadFeedMedia(let post):
             reloadFeedMedia(post)
+        case .viewTransactionDetails(let walletContent):
+            viewWalletTransactionDetails(walletContent)
         }
     }
     
@@ -1008,10 +1010,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             state.walletContentListMode = silentRefresh ? state.walletContentListMode : .skeletons
             Task {
                 async let balances = userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: nil)
-                async let nfts = userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress, nextPage: nil)
+//                async let nfts = userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress, nextPage: nil)
                 async let transactions = userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress, nextPage: nil)
                 
-                let results = await (balances, nfts, transactions)
+                let results = await (balances, transactions)
                 if case .success(let walletTokenBalances) = results.0 {
                     var homeWalletContent: [HomeScreenWalletContent] = []
                     for token in walletTokenBalances.tokens {
@@ -1021,16 +1023,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     state.walletTokens = homeWalletContent.uniqued(on: \.id)
                     state.walletTokenNextPageParams = walletTokenBalances.nextPageParams
                 }
-                if case .success(let walletNFTs) = results.1 {
-                    var homeWalletContent: [HomeScreenWalletContent] = []
-                    for nft in walletNFTs.nfts {
-                        let content = HomeScreenWalletContent(walletNFT: nft)
-                        homeWalletContent.append(content)
-                    }
-                    state.walletNFTs = homeWalletContent.uniqued(on: \.id)
-                    state.walletNFTsNextPageParams = walletNFTs.nextPageParams
-                }
-                if case .success(let walletTransactions) = results.2 {
+//                if case .success(let walletNFTs) = results.1 {
+//                    var homeWalletContent: [HomeScreenWalletContent] = []
+//                    for nft in walletNFTs.nfts {
+//                        let content = HomeScreenWalletContent(walletNFT: nft)
+//                        homeWalletContent.append(content)
+//                    }
+//                    state.walletNFTs = homeWalletContent.uniqued(on: \.id)
+//                    state.walletNFTsNextPageParams = walletNFTs.nextPageParams
+//                }
+                if case .success(let walletTransactions) = results.1 {
                     var homeWalletContent: [HomeScreenWalletContent] = []
                     for transaction in walletTransactions.transactions {
                         let content = HomeScreenWalletContent(walletTransaction: transaction)
@@ -1123,7 +1125,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             return
         }
 
-        let directChatRooms = roomSummaryProvider.roomListPublisher.value.filter(\.isDirect)
+        let directChatRooms = roomSummaryProvider.roomListPublisher.value.filter(\.isDirectOneToOneRoom)
         let currentUserId = userSession.clientProxy.userID
 
         let userStatusMap: [String: Bool] = directChatRooms.reduce(into: [:]) { result, room in
@@ -1141,5 +1143,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
 
         state.directRoomsUserStatusMap = userStatusMap
+    }
+    
+    private func viewWalletTransactionDetails(_ walletContent: HomeScreenWalletContent) {
+        if let link = URL(string: ZeroContants.WALLET_TRANSACTION_LINK.appending(walletContent.id)) {
+            UIApplication.shared.open(link)
+        }
     }
 }

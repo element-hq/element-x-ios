@@ -63,6 +63,12 @@ struct RoomSummary {
     var isMuted: Bool { notificationMode == .mute }
 }
 
+extension RoomSummary {
+    var isDirectOneToOneRoom: Bool {
+        isDirect && activeMembersCount < 3
+    }
+}
+
 extension RoomSummary: CustomStringConvertible {
     var description: String { """
     RoomSummary: - id: \(id) \
