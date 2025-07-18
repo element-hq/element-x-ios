@@ -20,6 +20,7 @@ protocol CommonSettingsProtocol {
     var enableKeyShareOnInvite: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
     var threadsEnabled: Bool { get }
+    var bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> { get }
 }
 
 /// Store Element specific app settings.
@@ -252,7 +253,6 @@ final class AppSettings {
         
     // MARK: - Bug report
     
-    let bugReportRageshakeURL: ConfigurableSetting<RageshakeConfiguration> = .init(Secrets.rageshakeURL.map { .url(URL(string: $0)!) } ?? .disabled) // swiftlint:disable:this force_unwrapping
     let bugReportSentryURL: URL? = Secrets.sentryDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     let bugReportSentryRustURL: URL? = Secrets.sentryRustDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     /// The name allocated by the bug report server
@@ -375,6 +375,8 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var threadsEnabled
+    
+    let bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> = .init(Secrets.rageshakeURL.map { .url(URL(string: $0)!) } ?? .disabled) // swiftlint:disable:this force_unwrapping
 }
 
 extension AppSettings: CommonSettingsProtocol { }

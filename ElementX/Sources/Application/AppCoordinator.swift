@@ -702,6 +702,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             tearDownUserSession()
             
             AppSettings.resetSessionSpecificSettings()
+            appHooks.remoteSettingsHook.reset(appSettings)
             
             // Reset analytics
             ServiceLocator.shared.analytics.optOut()
