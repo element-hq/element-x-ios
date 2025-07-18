@@ -17,6 +17,7 @@ enum SettingsFlowCoordinatorAction {
     case forceLogout
     
     case runDeleteAccountFlow
+    case claimUserRewards
 }
 
 struct SettingsFlowCoordinatorParameters {
@@ -141,6 +142,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentReferAFriend()
                 case .zeroProSub:
                     presentZeroProSubSettings()
+                case .claimRewards:
+                    actionsSubject.send(.claimUserRewards)
+                    parameters.navigationSplitCoordinator.setSheetCoordinator(nil)
                 }
             }
             .store(in: &cancellables)

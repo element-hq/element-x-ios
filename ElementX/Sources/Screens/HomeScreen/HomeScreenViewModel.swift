@@ -17,7 +17,9 @@ protocol RoomNotificationModeUpdatedProtocol {
     func onRoomNotificationModeUpdated(for roomId: String, mode: RoomNotificationModeProxy)
 }
 
-class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol, FeedDetailsUpdatedProtocol, CreateFeedProtocol, RoomNotificationModeUpdatedProtocol, WalletTransactionProtocol {
+class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
+                           FeedProtocol, RoomNotificationModeUpdatedProtocol,
+                           WalletTransactionProtocol, UserRewardsProtocol {
     private let userSession: UserSessionProtocol
     private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
@@ -201,7 +203,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .reportRoom(let roomIdentifier):
             actionsSubject.send(.presentReportRoom(roomIdentifier: roomIdentifier))
         case .showSettings:
-            actionsSubject.send(.presentSettingsScreen)
+            actionsSubject.send(.presentSettingsScreen(userRewardsProtocol: self))
         case .setupRecovery:
             actionsSubject.send(.presentSecureBackupSettings)
         case .confirmRecoveryKey:
@@ -215,7 +217,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .startChat:
             actionsSubject.send(.presentStartChatScreen)
         case .newFeed:
-            actionsSubject.send(.presentCreateFeedScreen(createFeedProtocol: self))
+            actionsSubject.send(.presentCreateFeedScreen(feedProtocol: self))
         case .globalSearch:
             actionsSubject.send(.presentGlobalSearch)
         case .markRoomAsUnread(let roomIdentifier):
@@ -278,7 +280,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .postTapped(let post):
             let mediaUrl = state.postMediaInfoMap[post.id]?.url
             let urlLinkPreview = state.postLinkPreviewsMap[post.id]
-            actionsSubject.send(.postTapped(post.withUpdatedData(url: mediaUrl, urlLinkPreview: urlLinkPreview), feedUpdatedProtocol: self))
+            actionsSubject.send(.postTapped(post.withUpdatedData(url: mediaUrl, urlLinkPreview: urlLinkPreview), feedProtocol: self))
         case .openArweaveLink(let post):
             openArweaveLink(post)
         case .addMeowToPost(let postId, let amount):
@@ -290,7 +292,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .openYoutubeLink(let url):
             openYoutubeLink(url)
         case .openPostUserProfile(let profile):
-            actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: self))
+            actionsSubject.send(.openPostUserProfile(profile, feedProtocol: self))
         case .openUserProfile:
             let profile = ZPostUserProfile(userId: state.userID.matrixIdToCleanHex(),
                                            firstName: state.userDisplayName ?? "",
@@ -300,7 +302,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                            followersCount: state.currentUserZeroProfile?.followersCount,
                                            followingCount: state.currentUserZeroProfile?.followingCount,
                                            isZeroProSubscriber: state.currentUserZeroProfile?.subscriptions.zeroPro ?? false)
-            actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: self))
+            actionsSubject.send(.openPostUserProfile(profile, feedProtocol: self))
         case .setNotificationFilter(let tab):
             applyCustomFilterToNotificationsList(tab)
         case .openMediaPreview(let mediaId, let key):
@@ -315,8 +317,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             actionsSubject.send(.sendWalletToken(self))
         case .reloadFeedMedia(let post):
             reloadFeedMedia(post)
-        case .claimEarnings:
-            state.bindings.showEarningsClaimedSheet = true
+        case .claimRewards(let trigger):
+            if trigger {
+                claimUserRewards()
+            } else {
+                state.claimRewardsState = .none
+                state.bindings.showEarningsClaimedSheet = false
+            }
         }
     }
     
@@ -805,33 +812,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
-    func onFeedUpdated(_ feedId: String) {
-        Task {
-            let feedDetailsResult = await userSession.clientProxy.fetchFeedDetails(feedId: feedId)
-            switch feedDetailsResult {
-            case .success(let post):
-                let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
-                                              post: post,
-                                              rewardsDecimalPlaces: state.userRewards.decimals)
-                if let index = state.posts.firstIndex(where: { $0.id == homePost.id }) {
-                    state.posts[index] = homePost
-                }
-            case .failure(let error):
-                MXLog.error("Failed to fetch updated feed details: \(error)")
-            }
-        }
-    }
-    
-    func onNewFeedPosted() {
-        Task {
-            await (fetchPosts(isForceRefresh: true))
-        }
-    }
-    
-    func onRoomNotificationModeUpdated(for roomId: String, mode: RoomNotificationModeProxy) {
-        roomNotificationUpdateMap[roomId] = mode
-    }
-    
     private func checkAndUpdateRoomNotificationMode() {
         roomNotificationUpdateMap.forEach { roomId, mode in
             guard let roomSummary = state.rooms.first(where: { $0.roomID == roomId }) else { return }
@@ -1090,7 +1070,58 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
+    // MARK: Zero Protcol Functions
+    
+    func onFeedUpdated(_ feedId: String) {
+        Task {
+            let feedDetailsResult = await userSession.clientProxy.fetchFeedDetails(feedId: feedId)
+            switch feedDetailsResult {
+            case .success(let post):
+                let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
+                                              post: post,
+                                              rewardsDecimalPlaces: state.userRewards.decimals)
+                if let index = state.posts.firstIndex(where: { $0.id == homePost.id }) {
+                    state.posts[index] = homePost
+                }
+            case .failure(let error):
+                MXLog.error("Failed to fetch updated feed details: \(error)")
+            }
+        }
+    }
+    
+    func onNewFeedPosted() {
+        Task {
+            await (fetchPosts(isForceRefresh: true))
+        }
+    }
+    
+    func onRoomNotificationModeUpdated(for roomId: String, mode: RoomNotificationModeProxy) {
+        roomNotificationUpdateMap[roomId] = mode
+    }
+    
     func onTransactionCompleted() {
         fetchWalletData()
+    }
+    
+    func claimUserRewards() {
+        if let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
+            state.claimRewardsState = .claiming
+            state.bindings.showEarningsClaimedSheet = true
+            //            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            //                self.state.claimRewardsState = .success
+            //            }
+            //            DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+            //                self.state.claimRewardsState = .failure
+            //            }
+            Task {
+                let result = await userSession.clientProxy.claimRewards(userWalletAddress: walletAddress)
+                switch result {
+                case .success:
+                    state.claimRewardsState = .success
+                case .failure(_):
+                    state.claimRewardsState = .failure
+                }
+            }
+        }
     }
 }

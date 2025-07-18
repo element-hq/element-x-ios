@@ -328,6 +328,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func searchTransactionRecipient(query: String) async -> Result<[WalletRecipient], ClientProxyError>
     
+    func claimRewards(userWalletAddress: String) async -> Result<Void, ClientProxyError>
+    
     // MARK: - Zero MetaData
     
     func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError>

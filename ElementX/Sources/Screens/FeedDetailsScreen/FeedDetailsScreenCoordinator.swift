@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FeedDetailsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let feedUpdatedProtocol: FeedDetailsUpdatedProtocol?
+    let feedProtocol: FeedProtocol?
     let feedItem: HomeScreenPost
     let isFeedDetailsRefreshable: Bool
 }
@@ -35,7 +35,7 @@ final class FeedDetailsScreenCoordinator: CoordinatorProtocol {
     init(parameters: FeedDetailsScreenCoordinatorParameters) {
         self.isFeedDetailsRefreshable = parameters.isFeedDetailsRefreshable
         viewModel = FeedDetailsScreenViewModel(userSession: parameters.userSession,
-                                               feedUpdatedProtocol: parameters.feedUpdatedProtocol,
+                                               feedProtocol: parameters.feedProtocol,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                feedItem: parameters.feedItem)
         viewModel.actions

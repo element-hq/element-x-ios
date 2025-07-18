@@ -19,15 +19,15 @@ enum HomeScreenViewModelAction {
     case presentSecureBackupSettings
     case presentRecoveryKeyScreen
     case presentEncryptionResetScreen
-    case presentSettingsScreen
+    case presentSettingsScreen(userRewardsProtocol: UserRewardsProtocol)
     case presentFeedbackScreen
     case presentStartChatScreen
-    case presentCreateFeedScreen(createFeedProtocol: CreateFeedProtocol)
+    case presentCreateFeedScreen(feedProtocol: FeedProtocol)
     case presentGlobalSearch
     case logoutWithoutConfirmation
     case logout
-    case postTapped(_ post: HomeScreenPost, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
-    case openPostUserProfile(_ profile: ZPostUserProfile, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
+    case postTapped(_ post: HomeScreenPost, feedProtocol: FeedProtocol)
+    case openPostUserProfile(_ profile: ZPostUserProfile, feedProtocol: FeedProtocol)
     case sendWalletToken(WalletTransactionProtocol)
 }
 
@@ -81,7 +81,7 @@ enum HomeScreenViewAction {
     case loadMoreWalletNFTs
     case sendWalletToken
     
-    case claimEarnings
+    case claimRewards(trigger: Bool)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -167,6 +167,13 @@ enum HomeScreenSecurityBannerMode: Equatable {
         default: false
         }
     }
+}
+
+enum ClaimRewardsState {
+    case none
+    case claiming
+    case success
+    case failure
 }
 
 struct HomeScreenViewState: BindableState {
@@ -313,6 +320,8 @@ struct HomeScreenViewState: BindableState {
     }
     
     var feedMediaExternalLoadingEnabled: Bool = true
+    
+    var claimRewardsState: ClaimRewardsState = .none
 }
 
 struct HomeScreenViewStateBindings {

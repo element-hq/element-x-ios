@@ -5,6 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-protocol CreateFeedProtocol {
+protocol FeedProtocol {
+    func onFeedUpdated(_ feedId: String)
+    
     func onNewFeedPosted()
 }

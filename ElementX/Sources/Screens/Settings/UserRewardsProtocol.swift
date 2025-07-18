@@ -5,6 +5,6 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-protocol FeedDetailsUpdatedProtocol {
-    func onFeedUpdated(_ feedId: String)
+protocol UserRewardsProtocol {
+    func claimUserRewards()
 }

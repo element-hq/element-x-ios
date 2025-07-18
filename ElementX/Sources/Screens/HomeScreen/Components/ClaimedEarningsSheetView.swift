@@ -9,7 +9,44 @@ import Compound
 import SwiftUI
 
 struct ClaimedEarningsSheetView: View {
+    var state: ClaimRewardsState = .none
     let onDismiss: () -> Void
+    let onRetryClaim: () -> Void
+    
+    var headerText: String {
+        return switch state {
+        case .none: ""
+        case .claiming:
+            "Processing Claim..."
+        case .failure:
+            "Claim Failed"
+        case .success:
+            "25,000.23 MEOW"
+        }
+    }
+    
+    var headerColor: Color {
+        return switch state {
+        case .claiming:
+                .compound.textPrimary
+        case .failure:
+                .compound.textCriticalPrimary
+        default:
+                .zero.bgAccentRest
+        }
+    }
+    
+    var description: String {
+        return switch state {
+        case .none: ""
+        case .claiming:
+            "Please wait while we process your claim."
+        case .failure:
+            "No rewards available to claim at this time."
+        case .success:
+            "$1200.24"
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -17,21 +54,26 @@ struct ClaimedEarningsSheetView: View {
             
             VStack(alignment: .leading) {
                 HStack {
-                    Text("Earnings Claimed")
+                    Text("Claim Earnings")
                         .font(.compound.bodyLGSemibold)
                         .foregroundStyle(.compound.textPrimary)
                     
                     Spacer()
                     
-                    CompoundIcon(\.close, size: .small, relativeTo: .compound.bodyLGSemibold)
-                        .padding(4)
-                        .background(Circle().fill(.compound.bgCanvasDefaultLevel1))
-                        .onTapGesture { onDismiss() }
+                    Button {
+                        onDismiss()
+                    } label: {
+                        CompoundIcon(\.close, size: .small, relativeTo: .compound.bodyLGSemibold)
+                            .padding(4)
+                            .background(Circle().fill(.compound.bgCanvasDefaultLevel1))
+                    }
                 }
                 
-                Text("Your daily earnings have been added to you Wallet.")
-                    .font(.compound.bodyMD)
-                    .foregroundStyle(.compound.textSecondary)
+                if case .success = state {
+                    Text("Your daily earnings have been added to you Wallet.")
+                        .font(.compound.bodyMD)
+                        .foregroundStyle(.compound.textSecondary)
+                }
                 
                 Spacer()
                 
@@ -50,7 +92,7 @@ struct ClaimedEarningsSheetView: View {
                                 .padding(12)
                                 .frame(width: 75, height: 75)
                                 .foregroundStyle(.zero.bgAccentRest)
-                                                        
+                            
                             Image(asset: Asset.Images.iconZChain)
                                 .resizable()
                                 .frame(width: 16, height: 16)
@@ -60,12 +102,12 @@ struct ClaimedEarningsSheetView: View {
                                 .stroke(.compound.bgCanvasDefaultLevel1, lineWidth: 1)
                         )
                         
-                        Text("25,000.23 MEOW")
-                            .font(.compound.bodyLGSemibold)
-                            .foregroundStyle(.zero.bgAccentRest)
+                        Text(headerText)
+                            .font(.compound.headingSMSemibold)
+                            .foregroundStyle(headerColor)
                             .shadow(color: .white.opacity(0.5), radius: 4)
                         
-                        Text("$1200.24")
+                        Text(description)
                             .font(.compound.bodyMD)
                             .foregroundStyle(.compound.textSecondary)
                     }
@@ -76,7 +118,9 @@ struct ClaimedEarningsSheetView: View {
                 Spacer()
                 
                 HStack {
-                    shareOnXButton
+                    if case .failure = state {
+                        secondaryActionButton
+                    }
                     closeButton
                 }
             }
@@ -88,9 +132,9 @@ struct ClaimedEarningsSheetView: View {
     }
     
     @ViewBuilder
-    var shareOnXButton: some View {
-        Button(action: {  }) {
-            Text("Share on X")
+    var secondaryActionButton: some View {
+        Button(action: { onRetryClaim() }) {
+            Text("Try Again")
                 .font(.compound.bodyMDSemibold)
                 .foregroundColor(.zero.bgAccentRest)
                 .padding()

@@ -143,13 +143,6 @@ struct HomeWalletContent: View {
                 .frame(maxWidth: .infinity)
             
             VStack(alignment: .leading, spacing: 0) {
-                if let userName = context.viewState.currentUserZeroProfile?.displayName {
-                    Text(userName.uppercased())
-                        .font(.robotoMonoRegular(size: 12))
-                        .foregroundColor(.compound.textSecondary)
-                        .padding(.top, 28)
-                        .padding(.leading, 4)
-                }
                 
                 Spacer()
                 
@@ -176,13 +169,16 @@ struct HomeWalletContent: View {
 //                        .font(.zero.bodyMD)
 //                        .foregroundColor(.zero.bgAccentRest)
                 }
+                .padding(.top, 6)
                 
                 Spacer()
                 
-                ClaimEarningsButton {
-                    context.send(viewAction: .claimEarnings)
+                if let userName = context.viewState.currentUserZeroProfile?.displayName {
+                    Text(userName.uppercased())
+                        .font(.robotoMonoRegular(size: 12))
+                        .foregroundColor(.compound.textSecondary)
+                        .padding(.bottom, 10)
                 }
-                .padding(.bottom, 2)
             }
             .padding(.all, 14)
         }

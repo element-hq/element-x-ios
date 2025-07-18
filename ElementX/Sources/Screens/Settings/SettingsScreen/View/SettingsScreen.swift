@@ -102,7 +102,7 @@ struct SettingsScreen: View {
         Section {
             /// User Rewards
             ZeroListRow(kind: .custom {
-                VStack {
+                VStack(alignment: .leading) {
                     HorizontalDivider()
                         .padding(.vertical, 8)
                     
@@ -111,6 +111,11 @@ struct SettingsScreen: View {
                     } label: {
                         userRewardsView
                     }
+                    
+                    ClaimEarningsButton(onTap: {
+                        context.send(viewAction: .claimRewards)
+                    })
+                    .padding(.horizontal, 16)
                     
                     HorizontalDivider()
                         .padding(.vertical, 8)
@@ -201,10 +206,6 @@ struct SettingsScreen: View {
                 Text("\(context.viewState.userRewards.getZeroCreditsFormatted()) MEOW")
                     .font(.robotoMonoRegular(size: 14))
                     .foregroundColor(.compound.textSecondary)
-                
-                ClaimEarningsButton(onTap: {
-                    
-                })
             }
             
             Spacer()

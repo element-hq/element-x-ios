@@ -1425,6 +1425,21 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func claimRewards(userWalletAddress: String) async -> Result<Void, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.claimRewards(walletAddress: userWalletAddress)
+            switch result {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to claim user rewards, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.metaDataApi.getLinkPreview(url: url)

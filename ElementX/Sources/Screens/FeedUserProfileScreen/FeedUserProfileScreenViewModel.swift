@@ -11,10 +11,10 @@ import Kingfisher
 
 typealias FeedUserProfileScreenViewModelType = StateStoreViewModel<FeedUserProfileScreenViewState, FeedUserProfileScreenViewAction>
 
-class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUserProfileScreenViewModelProtocol, CreateFeedProtocol {
+class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUserProfileScreenViewModelProtocol, FeedProtocol {
     
     private let clientProxy: ClientProxyProtocol
-    private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol?
+    private let feedProtocol: FeedProtocol?
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let mediaProvider: MediaProviderProtocol
     
@@ -28,11 +28,11 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     
     init(clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
-         feedUpdatedProtocol: FeedDetailsUpdatedProtocol?,
+         feedProtocol: FeedProtocol?,
          userIndicatorController: UserIndicatorControllerProtocol,
          userProfile: ZPostUserProfile) {
         self.clientProxy = clientProxy
-        self.feedUpdatedProtocol = feedUpdatedProtocol
+        self.feedProtocol = feedProtocol
         self.userIndicatorController = userIndicatorController
         self.mediaProvider = mediaProvider
         
@@ -186,7 +186,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 if let index = state.userFeeds.firstIndex(where: { $0.id == homePost.id }) {
                     state.userFeeds[index] = homePost
                 }
-                feedUpdatedProtocol?.onFeedUpdated(postId)
+                feedProtocol?.onFeedUpdated(postId)
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
                 displayError()
@@ -351,6 +351,8 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             }
         }
     }
+    
+    func onFeedUpdated(_ feedId: String) { }
 
     func onNewFeedPosted() {
         fetchUserFeeds(state.userID, isForceRefresh: true)

@@ -23,6 +23,8 @@ protocol ZeroWalletApiProtocol {
     func getTransactionReceipt(transactionHash: String) async throws -> Result<ZWalletTransactionReceipt, Error>
     
     func searchRecipients(query: String) async throws -> Result<[WalletRecipient], Error>
+    
+    func claimRewards(walletAddress: String) async throws -> Result<ZWalletTransactionResponse, Error>
 }
 
 class ZeroWalletApi: ZeroWalletApiProtocol {
@@ -154,6 +156,19 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         }
     }
     
+    func claimRewards(walletAddress: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
+        let url = WalletEndPoints.transactions.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: walletAddress)
+        let result: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
+                                                                                                               method: .post,
+                                                                                                               appSettings: appSettings)
+        switch result {
+        case .success(let transaction):
+            return .success(transaction)
+        case .failure(let failure):
+            return .failure(failure)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum WalletEndPoints {
@@ -167,6 +182,7 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         static let transferNft = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/transactions/transfer-nft"
         static let transactionReceipt = "\(hostURL)api/wallet/transaction/\(WalletApiConstants.trasaction_hash_path_parameter)/receipt"
         static let searchRecipients = "\(hostURL)api/wallet/search-recipients"
+        static let claimRewards = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/claim-rewards"
     }
     
     private enum WalletApiConstants {

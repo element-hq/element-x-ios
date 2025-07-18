@@ -7559,6 +7559,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return searchTransactionRecipientQueryReturnValue
         }
     }
+    //MARK: - claimRewards
+
+    var claimRewardsUserWalletAddressUnderlyingCallsCount = 0
+    var claimRewardsUserWalletAddressCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return claimRewardsUserWalletAddressUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = claimRewardsUserWalletAddressUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                claimRewardsUserWalletAddressUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    claimRewardsUserWalletAddressUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var claimRewardsUserWalletAddressCalled: Bool {
+        return claimRewardsUserWalletAddressCallsCount > 0
+    }
+    var claimRewardsUserWalletAddressReceivedUserWalletAddress: String?
+    var claimRewardsUserWalletAddressReceivedInvocations: [String] = []
+
+    var claimRewardsUserWalletAddressUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var claimRewardsUserWalletAddressReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return claimRewardsUserWalletAddressUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = claimRewardsUserWalletAddressUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                claimRewardsUserWalletAddressUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    claimRewardsUserWalletAddressUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var claimRewardsUserWalletAddressClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func claimRewards(userWalletAddress: String) async -> Result<Void, ClientProxyError> {
+        claimRewardsUserWalletAddressCallsCount += 1
+        claimRewardsUserWalletAddressReceivedUserWalletAddress = userWalletAddress
+        DispatchQueue.main.async {
+            self.claimRewardsUserWalletAddressReceivedInvocations.append(userWalletAddress)
+        }
+        if let claimRewardsUserWalletAddressClosure = claimRewardsUserWalletAddressClosure {
+            return await claimRewardsUserWalletAddressClosure(userWalletAddress)
+        } else {
+            return claimRewardsUserWalletAddressReturnValue
+        }
+    }
     //MARK: - getLinkPreviewMetaData
 
     var getLinkPreviewMetaDataUrlUnderlyingCallsCount = 0

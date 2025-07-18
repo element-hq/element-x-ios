@@ -104,9 +104,15 @@ struct HomeScreen: View {
         .sentryTrace("\(Self.self)")
         .quickLookPreview($context.mediaPreviewItem)
         .sheet(isPresented: $context.showEarningsClaimedSheet) {
-            ClaimedEarningsSheetView(onDismiss: {
-                context.showEarningsClaimedSheet = false
-            })
+            ClaimedEarningsSheetView(
+                state: context.viewState.claimRewardsState,
+                onDismiss: {
+                    context.send(viewAction: .claimRewards(trigger: false))
+                },
+                onRetryClaim: {
+                    context.send(viewAction: .claimRewards(trigger: true))
+                }
+            )
             .presentationDetents([.height(400)])
             .presentationDragIndicator(.hidden)
         }
