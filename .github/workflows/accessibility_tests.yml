@@ -1,0 +1,47 @@
+name: Accessibility Tests
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    - cron:  '0 2 * * 1-5'
+    
+jobs:
+  tests:
+    name: Tests
+    runs-on: macos-15
+
+    concurrency:
+      # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ format('accessibility-tests-{0}', github.ref) }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 #v1.2.3
+
+      - uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Setup environment
+        run: source ci_scripts/ci_common.sh && setup_github_actions_environment
+
+      - name: Run tests
+        run: bundle exec fastlane accessibility_tests
+
+      - name: Zip results # for faster upload
+        if: failure()
+        working-directory: fastlane/test_output
+        run: zip -r AccessibilityTests.xcresult.zip AccessibilityTests.xcresult
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: Results
+          path: fastlane/test_output/AccessibilityTests.xcresult.zip
+          retention-days: 7
+          if-no-files-found: ignore

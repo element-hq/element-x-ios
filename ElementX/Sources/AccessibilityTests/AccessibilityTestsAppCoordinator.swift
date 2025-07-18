@@ -6,6 +6,7 @@
 //
 
 import Combine
+import CoreLocation
 import SwiftUI
 
 class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
@@ -53,6 +54,8 @@ class AccessibilityTestsAppCoordinator: AppCoordinatorProtocol {
         previewsWrapper = .init(name: name, previews: previewType._allPreviews)
         
         setupSignalling()
+        // Used to perform the request check before the tests run on CI, so it can be immediately dismissed.
+        CLLocationManager().requestWhenInUseAuthorization()
     }
     
     func toPresentable() -> AnyView {
@@ -143,7 +146,12 @@ struct PreviewsWrapperView: View {
         
         switch fulfillmentSource {
         case .publisher(let publisher):
-            _ = await publisher.values.first { $0 == true }
+            _ = await publisher
+                // Not sure whye byt some publisher seem to not properly comunicate their completion,
+                // so we added a timeout. Since we are going to migrate from publishers to stream,
+                // this is a temporary solution
+                .timeout(.seconds(1), scheduler: DispatchQueue.main)
+                .values.first { $0 == true }
         case .stream(let stream):
             _ = await stream.first { $0 == true }
         case .none:

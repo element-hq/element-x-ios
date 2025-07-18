@@ -189,6 +189,7 @@ targets:
         export PATH="$PATH:/opt/homebrew/bin"
         if which sourcery >/dev/null; then
             sourcery --config Tools/Sourcery/TestablePreviewsDictionary.yml
+            sourcery --config Tools/Sourcery/AccessibilityTests.yml
         else
             echo "warning: Sourcery not installed, run swift run tools setup-project"
         fi

@@ -85,6 +85,20 @@ lane :ui_tests do |options|
   )
 end
 
+lane :accessibility_tests do |options|
+  reset_simulator = ENV.key?('CI')
+  
+  run_tests(
+    scheme: "AccessibilityTests",
+    device: "iPhone 16 (18.5)",
+    ensure_devices_found: true,
+    prelaunch_simulator: false,
+    result_bundle: true,
+    number_of_retries: 0,
+    reset_simulator: reset_simulator
+  )
+end
+
 
 lane :integration_tests do
   clear_derived_data()

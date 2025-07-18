@@ -9,9 +9,6 @@ import Foundation
 
 enum PillUtilities {
     static let atRoom = "@room"
-    static var everyone: String {
-        L10n.commonEveryone
-    }
 
     /// Used by the WYSIWYG as the urlString value to identify @room mentions
     static let composerAtRoomURLString = "#"
