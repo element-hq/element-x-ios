@@ -124,6 +124,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         notificationManager.delegate = self
         notificationManager.start()
         
+        appSettings.bugReportRageshakeURL.publisher
+            .sink { [weak self] _ in
+                guard let self else { return }
+                appHooks.targetHook.update(targetConfiguration, with: appSettings)
+            }
+            .store(in: &cancellables)
+        
         guard let currentVersion = Version(InfoPlistReader(bundle: .main).bundleShortVersionString) else {
             fatalError("The app's version number **must** use semver for migration purposes.")
         }

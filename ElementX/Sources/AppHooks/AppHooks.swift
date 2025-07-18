@@ -39,6 +39,11 @@ class AppHooks: AppHooksProtocol {
     }
     #endif
     
+    private(set) var targetHook: TargetHookProtocol = DefaultTargetHook()
+    func registerTargetHook(_ hook: TargetHookProtocol) {
+        targetHook = hook
+    }
+    
     private(set) var clientBuilderHook: ClientBuilderHookProtocol = DefaultClientBuilderHook()
     func registerClientBuilderHook(_ hook: ClientBuilderHookProtocol) {
         clientBuilderHook = hook

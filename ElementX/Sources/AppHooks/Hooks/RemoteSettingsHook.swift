@@ -18,7 +18,7 @@ protocol RemoteSettingsHookProtocol {
     func updateCache(using client: ClientProtocol) async
     func reset(_ appSettings: CommonSettingsProtocol)
     #endif
-    func loadCache(forHomeserver: String, applyingTo appSettings: CommonSettingsProtocol)
+    func loadCache(forHomeserver homeserver: String, applyingTo appSettings: CommonSettingsProtocol)
 }
 
 struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
@@ -51,7 +51,7 @@ struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
     func reset(_ appSettings: any CommonSettingsProtocol) { }
     #endif
     
-    func loadCache(forHomeserver: String, applyingTo appSettings: CommonSettingsProtocol) { }
+    func loadCache(forHomeserver homeserver: String, applyingTo appSettings: CommonSettingsProtocol) { }
 }
 
 private struct ElementWellKnown: Decodable {

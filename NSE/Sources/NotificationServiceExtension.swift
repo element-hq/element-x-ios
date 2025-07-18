@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import MatrixRustSDK
 import UserNotifications
 
@@ -36,6 +37,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     private let keychainController = KeychainController(service: .sessions,
                                                         accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
     
+    private var cancellables: Set<AnyCancellable> = []
+    
     // We can make the whole NSE a MainActor after https://github.com/swiftlang/swift-evolution/blob/main/proposals/0371-isolated-synchronous-deinit.md
     // otherwise we wouldn't be able to log the tag in the deinit.
     deinit {
@@ -52,6 +55,15 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                                                             traceLogPacks: settings.traceLogPacks,
                                                             sentryURL: nil)
         }
+        
+        super.init()
+        
+        settings.bugReportRageshakeURL.publisher
+            .sink { [weak self] _ in
+                guard let self, let targetConfiguration = Self.targetConfiguration else { return }
+                appHooks.targetHook.update(targetConfiguration, with: settings)
+            }
+            .store(in: &cancellables)
     }
     
     override func didReceive(_ request: UNNotificationRequest,
