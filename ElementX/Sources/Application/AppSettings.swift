@@ -400,7 +400,7 @@ final class AppSettings {
     var cachedZeroUsers: [ZMatrixUser]
     
     // MARK: - ZERO User
-    @UserPreference(key: UserDefaultsKeys.enableExternalMediaLoading, defaultValue: true, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.enableExternalMediaLoading, defaultValue: false, storageType: .userDefaults(store))
     var enableExternalMediaLoading: Bool
 }
 
