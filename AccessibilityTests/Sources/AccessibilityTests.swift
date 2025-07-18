@@ -16,11 +16,11 @@ final class AccessibilityTests: XCTestCase {
         app = Application.launch(viewID: name)
         await client.waitForApp()
         defer { try? client.stop() }
-        
-        // To handle location sharing popup
-        allowLocationPermissions()
-        
+                
         try client.send(.accessibilityAudit(.nextPreview))
+        
+        // To handle location sharing popup in CI
+        allowLocationPermissions()
         forLoop: for await signal in client.signals.values {
             switch signal {
             case .accessibilityAudit(let auditSignal):
@@ -44,7 +44,7 @@ final class AccessibilityTests: XCTestCase {
     private func allowLocationPermissions() {
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
         let notificationAlertAllowButton = springboard.buttons["Allow While Using App"].firstMatch
-        if notificationAlertAllowButton.waitForExistence(timeout: 10.0) {
+        if notificationAlertAllowButton.exists {
             notificationAlertAllowButton.tap()
         }
     }
