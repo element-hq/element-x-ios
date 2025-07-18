@@ -311,8 +311,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             loadMoreWalletTransactions()
         case .loadMoreWalletNFTs:
             loadMoreWalletNFTs()
-        case .sendWalletToken:
-            actionsSubject.send(.sendWalletToken(self))
+        case .startWalletTransaction(let type):
+            actionsSubject.send(.startWalletTransaction(self, type))
         case .reloadFeedMedia(let post):
             reloadFeedMedia(post)
         }
@@ -993,9 +993,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
-    private func fetchWalletData() {
+    private func fetchWalletData(silentRefresh: Bool = false) {
         if let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
-            state.walletContentListMode = .skeletons
+            state.walletContentListMode = silentRefresh ? state.walletContentListMode : .skeletons
             Task {
                 async let balances = userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: nil)
                 async let nfts = userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress, nextPage: nil)
@@ -1089,6 +1089,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     func onTransactionCompleted() {
-        fetchWalletData()
+        fetchWalletData(silentRefresh: true)
     }
 }

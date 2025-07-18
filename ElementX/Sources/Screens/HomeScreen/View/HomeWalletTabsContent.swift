@@ -110,85 +110,88 @@ struct HomeWalletTabContentCell : View {
     let onTap: () -> Void
     
     var body: some View {
-        VStack(alignment: .leading) {
-            //header
-            if let header = content.header {
-                Text(header)
-                    .font(.zero.bodySM)
-                    .foregroundColor(.compound.textSecondary)
-            }
-            
-            HStack {
-                WalletTokenImage(url: content.icon)
+        Button {
+            onTap()
+        } label: {
+            VStack(alignment: .leading) {
+                //header
+                if let header = content.header {
+                    Text(header)
+                        .font(.zero.bodySM)
+                        .foregroundColor(.compound.textSecondary)
+                }
                 
-                VStack(alignment: .leading) {
-                    if let transactionAction = content.transactionAction {
-                        HStack {
-                            Text(transactionAction)
+                HStack {
+                    WalletTokenImage(url: content.icon)
+                    
+                    VStack(alignment: .leading) {
+                        if let transactionAction = content.transactionAction {
+                            HStack {
+                                Text(transactionAction)
+                                    .font(.zero.bodySM)
+                                    .foregroundColor(.compound.textSecondary)
+                                    .lineLimit(1)
+                                    .layoutPriority(1)
+                                
+                                Image(asset: Asset.Images.iconZChain)
+                                
+                                Text(content.transactionAddress ?? "")
+                                    .font(.zero.bodySM)
+                                    .foregroundColor(.compound.textSecondary)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
+                                    .padding(.trailing, 8)
+                            }
+                        }
+                        
+                        Text(content.title)
+                            .font(.zero.bodyLG)
+                            .foregroundColor(.compound.textPrimary)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .padding(.vertical, 1)
+                        
+                        if let description = content.description {
+                            Text(description)
                                 .font(.zero.bodySM)
                                 .foregroundColor(.compound.textSecondary)
                                 .lineLimit(1)
-                                .layoutPriority(1)
-                            
-                            Image(asset: Asset.Images.iconZChain)
-                            
-                            Text(content.transactionAddress ?? "")
+                                .truncationMode(.middle)
+                        }
+                    }
+                    .padding(.leading, 4)
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .trailing) {
+                        if let actionPreText = content.actionPreText {
+                            Text(actionPreText)
                                 .font(.zero.bodySM)
                                 .foregroundColor(.compound.textSecondary)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
-                                .padding(.trailing, 8)
                         }
-                    }
-                    
-                    Text(content.title)
-                        .font(.zero.bodyLG)
-                        .foregroundColor(.compound.textPrimary)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                        .padding(.vertical, 1)
-                    
-                    if let description = content.description {
-                        Text(description)
-                            .font(.zero.bodySM)
-                            .foregroundColor(.compound.textSecondary)
-                            .lineLimit(1)
-                            .truncationMode(.middle)
-                    }
-                }
-                .padding(.leading, 4)
-                
-                Spacer()
-                
-                VStack(alignment: .trailing) {
-                    if let actionPreText = content.actionPreText {
-                        Text(actionPreText)
-                            .font(.zero.bodySM)
-                            .foregroundColor(.compound.textSecondary)
+                        
+                        Text(content.actionText)
+                            .font(.zero.bodyLG)
+                            .foregroundColor(.compound.textPrimary)
                             .lineLimit(1)
                             .truncationMode(.tail)
-                    }
-                    
-                    Text(content.actionText)
-                        .font(.zero.bodyLG)
-                        .foregroundColor(.compound.textPrimary)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                        .padding(.vertical, 1)
-                    
-                    if let actionPostText = content.actionPostText {
-                        Text(actionPostText)
-                            .font(.zero.bodySM)
-                            .foregroundColor(.zero.bgAccentRest)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
+                            .padding(.vertical, 1)
+                        
+                        if let actionPostText = content.actionPostText {
+                            Text(actionPostText)
+                                .font(.zero.bodySM)
+                                .foregroundColor(.zero.bgAccentRest)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                        }
                     }
                 }
             }
+            .contentShape(Rectangle())
         }
-        .onTapGesture {
-            onTap()
-        }
+        .buttonStyle(.plain)
     }
 }
 
