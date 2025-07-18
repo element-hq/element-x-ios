@@ -8,7 +8,6 @@
 import Foundation
 
 enum PillUtilities {
-    // Make sure to change also the matrix entity regex one
     static let atRoom = "@room"
 
     /// Used by the WYSIWYG as the urlString value to identify @room mentions

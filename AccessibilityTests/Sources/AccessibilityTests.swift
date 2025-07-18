@@ -60,14 +60,14 @@ final class AccessibilityTests: XCTestCase {
                     guard let element = issue.element else {
                         return true
                     }
-                                        
+                    
                     // We are fine with elements that only partially support dynamic types
                     guard issue.compactDescription != Self.partiallyUnsupportedDynamicTypeMessage else {
                         return true
                     }
                     
                     // We can filter out matrix entities from the non human-readable error
-                    if issue.compactDescription == "Label not human-readable", Self.isMatrixString(element.label) {
+                    if issue.compactDescription == Self.notHumanReadableMessage, Self.isMatrixIdentifier(element.label) {
                         return true
                     }
                     
@@ -84,12 +84,12 @@ final class AccessibilityTests: XCTestCase {
         }
     }
     
-    private static func isMatrixString(_ string: String) -> Bool {
-        MatrixEntityRegex.isMatrixRoomAlias(string) || MatrixEntityRegex.isMatrixUserIdentifier(string)
+    private static func isMatrixIdentifier(_ string: String) -> Bool {
+        MatrixEntityRegex.isMatrixRoomAlias(string) || MatrixEntityRegex.isMatrixUserIdentifier(string) || string == PillUtilities.atRoom
     }
     
     private static let partiallyUnsupportedDynamicTypeMessage = "Dynamic Type font sizes are partially unsupported"
-    private static let notHumanReadableMessage = ""
+    private static let notHumanReadableMessage = "Label not human-readable"
     
     /// Use this array to filter add specific filters to ignore specific issues for certain elements
     private static let ignoredA11yIdentifiers: [String: [FilterType]] = [A11yIdentifiers.authenticationStartScreen.appVersion: [.auditType(.hitRegion)]]
