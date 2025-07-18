@@ -14,49 +14,70 @@ struct UserWalletInfoView: View {
     @State private var qrCodeImage: UIImage?
     @State private var showShareSheet: Bool = false
     
+    @State private var userAddressCopied: Bool = false
+    
     var body: some View {
-        VStack {
-            Spacer()
-            
-            if let user = context.viewState.currentUser, let address = user.publicWalletAddress {
-                VStack {
-                    Text(user.displayName)
-                        .font(.compound.headingSMSemibold)
-                        .foregroundStyle(.compound.textPrimary)
-                    
-                    if let formattedAddress = displayFormattedAddress(address) {
-                        Text(formattedAddress)
-                            .font(.zero.bodyMD)
+        ZStack {
+            VStack {
+                Spacer()
+                
+                if let user = context.viewState.currentUser, let address = user.publicWalletAddress {
+                    VStack {
+                        Text(user.displayName)
+                            .font(.compound.headingSMSemibold)
+                            .foregroundStyle(.compound.textPrimary)
+                        
+                        if let formattedAddress = displayFormattedAddress(address) {
+                            Button {
+                                context.send(viewAction: .copyAddress)
+                                userAddressCopied.toggle()
+                            } label: {
+                                Text(formattedAddress)
+                                    .font(.zero.bodyMD)
+                                    .foregroundStyle(.compound.textSecondary)
+                            }
+                        }
+                        
+                        UserWalletQRCode(walletAddress: address, onQRCodeGenerated: { qrCodeImage in
+                            self.qrCodeImage = qrCodeImage
+                        })
+                        .padding(.vertical, 12)
+                        
+                        Text("Supported Networks")
+                            .font(.zero.bodySM)
                             .foregroundStyle(.compound.textSecondary)
+                        
+                        Image(asset: Asset.Images.iconZChain)
                     }
                     
-                    UserWalletQRCode(walletAddress: address, onQRCodeGenerated: { qrCodeImage in
-                        self.qrCodeImage = qrCodeImage
-                    })
-                    .padding(.vertical, 12)
-                    
-                    Text("Supported Networks")
-                        .font(.zero.bodySM)
-                        .foregroundStyle(.compound.textSecondary)
-                    
-                    Image(asset: Asset.Images.iconZChain)
+                    Spacer()
                 }
                 
-                Spacer()
+                HStack(spacing: 12) {
+                    CopyButton(onTap : {
+                        context.send(viewAction: .copyAddress)
+                        userAddressCopied.toggle()
+                    })
+                    
+                    if qrCodeImage != nil {
+                        ShareButton(onTap: {
+                            showShareSheet = true
+                        })
+                    }
+                }
+                .padding(.bottom, 16)
             }
             
-            HStack(spacing: 12) {
-                CopyButton(onTap : {
-                    context.send(viewAction: .copyAddress)
-                })
-                
-                if qrCodeImage != nil {
-                    ShareButton(onTap: {
-                        showShareSheet = true
-                    })
-                }
+            if userAddressCopied {
+                AddressCopiedView()
+                    .frame(maxHeight: .infinity, alignment: .bottom)
+                    .padding(.bottom, 150)
+                    .onAppear() {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            userAddressCopied.toggle()
+                        }
+                    }
             }
-            .padding(.bottom, 16)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
@@ -77,6 +98,25 @@ private struct ShareSheet: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
+}
+
+private struct AddressCopiedView: View {
+    var body: some View {
+        HStack(spacing: 12) {
+            CompoundIcon(\.check)
+                .foregroundColor(.zero.bgAccentRest)
+            
+            Text("Address Copied")
+                .font(.zero.bodyMD)
+                .foregroundStyle(.zero.bgAccentRest)
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.zero.bgAccentRest.opacity(0.15))
+                .stroke(.zero.bgAccentRest, lineWidth: 1)
+        )
+    }
 }
 
 struct CopyButton: View {

@@ -33,7 +33,7 @@ struct ConfirmTransactionView: View {
                 
                 VStack(alignment: .leading) {
                     UserInfoView(preText: "Sending To:",
-                                 userName: recipient.primaryZid,
+                                 userName: "\(recipient.name)(\(recipient.primaryZid))",
                                  userAddress: displayFormattedAddress(recipient.publicAddress))
                     
                     AssetInfoView(tokenAsset: token, amount: $transferAmount, isSenderSideInfo: false, iconUrl: token.logo)
@@ -144,21 +144,30 @@ private struct AssetInfoView: View {
                                 self.isFocused = true
                             }
                         }
+                        .onChange(of: amount) { _, newValue in
+                            let enteredAmount = Double(newValue) ?? 0
+                            let maxAccount = Double(tokenAsset.formattedAmount) ?? 0
+                            if enteredAmount > maxAccount {
+                                amount = tokenAsset.formattedAmount
+                            }
+                        }
                     
                     Spacer()
                     
                     if amount != tokenAsset.formattedAmount {
-                        Text("Use Max")
-                            .font(.zero.bodySMSemibold)
-                            .foregroundStyle(.compound.textPrimary)
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12).fill(.compound.bgCanvasDefaultLevel1)
-                            )
-                            .onTapGesture {
-                                amount = tokenAsset.formattedAmount
-                            }
+                        Button {
+                            amount = tokenAsset.formattedAmount
+                        } label: {
+                            Text("Use Max")
+                                .font(.zero.bodySMSemibold)
+                                .foregroundStyle(.compound.textPrimary)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12).fill(.compound.bgCanvasDefaultLevel1)
+                                )
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 .padding(.vertical, 12)
