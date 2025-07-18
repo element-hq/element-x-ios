@@ -175,6 +175,11 @@ class ClientProxy: ClientProxyProtocol {
         zeroCurrentUserSubject.asCurrentValuePublisher()
     }
     
+    private let homeRoomSummariesUsersSubject = CurrentValueSubject<[ZMatrixUser], Never>([])
+    var homeRoomSummariesUsersPublisher: CurrentValuePublisher<[ZMatrixUser], Never> {
+        homeRoomSummariesUsersSubject.asCurrentValuePublisher()
+    }
+    
     var roomsToAwait: Set<String> = []
     
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
@@ -252,6 +257,9 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Send queue failed in room: \(roomID) with error: \(error)")
             self?.sendQueueStatusSubject.send(false)
         })
+        
+        let allCachedUsers = zeroApiProxy.matrixUsersService.getAllCachedUsers()
+        homeRoomSummariesUsersSubject.send(allCachedUsers)
         
         sendQueueStatusSubject
             .combineLatest(networkMonitor.reachabilityPublisher)
@@ -801,16 +809,34 @@ class ClientProxy: ClientProxyProtocol {
             return .success(.init(zeroUserProfile: zeroProfileResult, sdkUserProfile: sdkProfileResult))
         } catch {
             MXLog.error("Failed retrieving profile for userID: \(userID) with error: \(error)")
-            return .failure(.sdkError(error))
+            if let cachedUser = zeroApiProxy.matrixUsersService.userFromCache(userID) {
+                return .success(.init(zeroUserProfile: cachedUser))
+            } else {
+                return .failure(.sdkError(error))
+            }
         }
     }
     
     func zeroProfile(userId: String) async {
         do {
-            let zeroProfile = try await zeroApiProxy.matrixUsersService.fetchZeroUser(userId: userId)
-            directMemberZeroProfileSubject.send(zeroProfile)
+            if let cachedUser = zeroApiProxy.matrixUsersService.userFromCache(userId) {
+                directMemberZeroProfileSubject.send(cachedUser)
+            }
+            if let zeroProfile = try await zeroApiProxy.matrixUsersService.fetchZeroUser(userId: userId) {
+                directMemberZeroProfileSubject.send(zeroProfile)
+            }
         } catch {
             MXLog.error("Failed retrieving zero profile for userID: \(userID) with error: \(error)")
+        }
+    }
+    
+    func zeroProfiles(userIds: Set<String>) async {
+        do {
+            let zeroProfiles = try await zeroApiProxy.matrixUsersService.fetchZeroUsers(userIds: Array(userIds))
+            //TODO: save these profiles in cache to check zero pro badge status
+            homeRoomSummariesUsersSubject.send(zeroProfiles)
+        } catch {
+            MXLog.error("Failed retrieving zero profiles for userIDs: \(userIds) with error: \(error)")
         }
     }
     
@@ -927,7 +953,8 @@ class ClientProxy: ClientProxyProtocol {
             }
             
             for member in members where member.isActive && member.userID != userID {
-                users.append(.init(userID: member.userID, displayName: member.displayName, avatarURL: member.avatarURL))
+                let zeroProfile = try? await zeroApiProxy.matrixUsersService.fetchZeroUser(userId: member.userID)
+                users.append(.init(userID: member.userID, displayName: member.displayName, avatarURL: member.avatarURL, zeroUserProfile: zeroProfile))
                 
                 // Return early to avoid unnecessary work
                 if users.count >= maxResultsToReturn {

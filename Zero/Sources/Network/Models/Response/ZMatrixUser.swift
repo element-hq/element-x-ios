@@ -13,6 +13,7 @@ public struct ZMatrixUser: Codable, Identifiable {
     public let primaryZID: String?
     public let primaryWalletAddress: String?
     public let wallets: [ZWallet]?
+    public let subscriptions: ZeroSubscription
     
     public var profileImageURL: URL? {
         URL(string: profileSummary?.profileImage ?? "")

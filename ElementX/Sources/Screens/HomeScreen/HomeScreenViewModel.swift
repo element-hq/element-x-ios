@@ -151,6 +151,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .weakAssign(to: \.state.hideInviteAvatars, on: self)
             .store(in: &cancellables)
         
+        userSession.clientProxy.homeRoomSummariesUsersPublisher
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] users in
+                self?.mapDirectChatUsersProBadgeStatus(users)
+            }
+            .store(in: &cancellables)
+        
         state.feedMediaExternalLoadingEnabled = appSettings.enableExternalMediaLoading
         
         Task {
@@ -420,7 +428,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         var rooms = [HomeScreenRoom]()
         let seenInvites = appSettings.seenInvites
         
-        for summary in roomSummaryProvider.roomListPublisher.value {
+        let matrixRoomSummaries = roomSummaryProvider.roomListPublisher.value
+        for summary in matrixRoomSummaries {
             let room = HomeScreenRoom(summary: summary,
                                       hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge,
                                       seenInvites: seenInvites)
@@ -435,6 +444,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         state.rooms = rooms
         applyCustomFilterToNotificationsList(.all)
+        extractAllRoomUsers(matrixRoomSummaries)
     }
     
     /// Check whether we can inform the user about potential migrations
@@ -1090,5 +1100,46 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     func onTransactionCompleted() {
         fetchWalletData(silentRefresh: true)
+    }
+    
+    private func extractAllRoomUsers(_ rooms: [RoomSummary]) {
+        let heroUserIds = rooms.flatMap { $0.heroes.compactMap(\.userID) }
+        var userIds = Set(heroUserIds)
+        // Add current logged-in user as well
+        userIds.insert(userSession.clientProxy.userID)
+        
+        Task.detached {
+            await self.userSession.clientProxy.zeroProfiles(userIds: userIds)
+        }
+    }
+    
+    private func mapDirectChatUsersProBadgeStatus(_ zeroProfiles: [ZMatrixUser]) {
+        guard let roomSummaryProvider else {
+            MXLog.error("Room summary provider unavailable")
+            return
+        }
+        guard !zeroProfiles.isEmpty else {
+            MXLog.error("User profiles are unavailable")
+            return
+        }
+
+        let directChatRooms = roomSummaryProvider.roomListPublisher.value.filter(\.isDirect)
+        let currentUserId = userSession.clientProxy.userID
+
+        let userStatusMap: [String: Bool] = directChatRooms.reduce(into: [:]) { result, room in
+            let directUser = if let hero = room.heroes.first, hero.userID != currentUserId {
+                zeroProfiles.first { $0.matrixId == hero.userID }
+            } else {
+                zeroProfiles.first {
+                    $0.displayName.caseInsensitiveCompare(room.name) == .orderedSame ||
+                    $0.id.rawValue.caseInsensitiveCompare(room.name) == .orderedSame
+                }
+            }
+            if let user = directUser {
+                result[room.id] = user.subscriptions.zeroPro
+            }
+        }
+
+        state.directRoomsUserStatusMap = userStatusMap
     }
 }

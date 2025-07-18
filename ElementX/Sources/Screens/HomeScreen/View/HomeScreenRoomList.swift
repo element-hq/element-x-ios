@@ -33,7 +33,10 @@ struct HomeScreenRoomList: View {
             case .room:
                 let isSelected = context.viewState.selectedRoomID == room.id
                 
-                HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)
+                HomeScreenRoomCell(room: room,
+                                   context: context,
+                                   isSelected: isSelected,
+                                   showProBadge: context.viewState.directRoomsUserStatusMap[room.id] == true)
                     .contextMenu {
                         if room.badges.isDotShown {
                             Button {

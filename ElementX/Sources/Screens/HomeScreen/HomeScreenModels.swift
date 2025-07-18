@@ -179,6 +179,7 @@ struct HomeScreenViewState: BindableState {
     var requiresExtraAccountSetup = false
     
     var rooms: [HomeScreenRoom] = []
+    var directRoomsUserStatusMap: [String : Bool] = [:]
     var posts: [HomeScreenPost] = []
     var myPosts: [HomeScreenPost] = []
     var channels: [HomeScreenChannel] = []
@@ -591,7 +592,7 @@ extension HomeScreenPost {
             postText: post.text,
             attributedSenderHeaderText: attributedSenderHeaderText,
             attributedPostText: attributedPostText,
-            postUpdatedAt: post.updatedAt,
+            postUpdatedAt: postTimeStamp,
             postCreatedAt: post.createdAt,
             postTimestamp: postTimeStamp,
             postImageURL: (post.imageUrl != nil) ? URL(string: post.imageUrl!) : nil,

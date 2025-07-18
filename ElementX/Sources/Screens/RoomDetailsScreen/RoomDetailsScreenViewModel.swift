@@ -97,6 +97,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 guard let self else { return }
                 guard roomProxy.isDirectOneToOneRoom else { return }
                 
+                state.showProSubscriptionBadge = directMember?.subscriptions.zeroPro ?? false
                 state.roomSubtitle = directMember?.zIdOrPublicAddressDisplayText
             }
             .store(in: &cancellables)

@@ -17,6 +17,8 @@ struct HomeScreenRoomCell: View {
     let context: HomeScreenViewModel.Context
     let isSelected: Bool
     
+    var showProBadge: Bool = false
+    
     private let verticalInsets = 12.0
     private let horizontalInsets = 16.0
     
@@ -76,11 +78,19 @@ struct HomeScreenRoomCell: View {
     @ViewBuilder
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
-            Text(room.name)
-                .font(.zero.bodyLG)
-                .foregroundColor(room.badges.isDotShown ? .compound.textPrimary : .compound.textSecondary)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack(spacing: 0) {
+                Text(room.name)
+                    .font(.zero.bodyLG)
+                    .foregroundColor(room.badges.isDotShown ? .compound.textPrimary : .compound.textSecondary)
+                    .lineLimit(1)
+                
+                if showProBadge {
+                    CompoundIcon(\.verified, size: .small, relativeTo: .zero.bodyLG)
+                        .foregroundStyle(.zero.bgAccentRest)
+                        .padding(.horizontal, 6)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
             
             if let timestamp = room.timestamp {
                 Text(timestamp)

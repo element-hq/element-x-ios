@@ -46,4 +46,6 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
     var role: RoomMemberRole { member.suggestedRoleForPowerLevel }
     
     var primaryZeroId: String? { zeroMember?.primaryZID }
+    
+    var isZeroProSubscriber: Bool { zeroMember?.subscriptions.zeroPro ?? false }
 }

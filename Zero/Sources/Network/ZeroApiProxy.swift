@@ -41,8 +41,7 @@ class ZeroApiProxy: ZeroApiProxyProtocol {
         /// Configure Zero Utlils, Services and APIs
         let zeroUsersApi = ZeroUserApi(appSettings: appSettings)
         matrixUsersService = ZeroMatrixUsersService(zeroUsersApi: zeroUsersApi,
-                                                        appSettings: appSettings,
-                                                        client: client)
+                                                        appSettings: appSettings)
         rewardsApi = ZeroRewardApi(appSettings: appSettings)
         messengerInviteApi = ZeroMessengerInviteApi(appSettings: appSettings)
         createAccountApi = ZeroCreateAccountApi(appSettings: appSettings)

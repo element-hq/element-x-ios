@@ -253,14 +253,24 @@ struct FeedDetailsSection: View {
                 })
                 VStack(alignment: .leading) {
                     HStack(alignment: .center) {
-                        Text(post.senderInfo.displayName ?? "")
-                            .font(.compound.bodySMSemibold)
-                            .lineLimit(1)
-                            .onTapGesture {
-                                if let postSenderProfile = post.senderProfile {
-                                    onOpenUserProfile(postSenderProfile)
+                        HStack(spacing: 0) {
+                            Text(post.senderInfo.displayName ?? "")
+                                .font(.compound.bodyMDSemibold)
+                                .foregroundStyle(.compound.textPrimary)
+                                .lineLimit(1)
+                                .onTapGesture {
+                                    if let postSenderProfile = post.senderProfile {
+                                        onOpenUserProfile(postSenderProfile)
+                                    }
                                 }
+                            
+                            let isZeroProSubscriber: Bool = post.senderProfile?.isZeroProSubscriber == true
+                            if isZeroProSubscriber {
+                                CompoundIcon(\.verified, size: .small, relativeTo: .compound.bodyMDSemibold)
+                                    .foregroundStyle(.zero.bgAccentRest)
+                                    .padding(.horizontal, 4)
                             }
+                        }
                         
                         if post.worldPrimaryZId != nil && !post.isPostInOwnFeed {
                             Spacer()

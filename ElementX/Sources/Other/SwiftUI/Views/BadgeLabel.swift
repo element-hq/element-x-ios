@@ -22,7 +22,7 @@ struct BadgeLabel: View {
     var body: some View {
         Label(title,
               icon: icon,
-              iconSize: .xSmall,
+              iconSize: .small,
               relativeTo: .compound.bodySM)
             .labelStyle(LabelStyle(style: style))
     }
@@ -55,17 +55,21 @@ struct BadgeLabel: View {
         }
         
         func makeBody(configuration: Configuration) -> some View {
-            HStack(spacing: 4) {
+//            HStack(spacing: 4) {
+//                configuration.icon
+//                    .foregroundStyle(iconColor)
+//                configuration.title
+//                    .foregroundStyle(titleColor)
+//            }
+//            .font(.zero.bodySM)
+//            .padding(.leading, 8)
+//            .padding(.trailing, 12)
+//            .padding(.vertical, 4)
+//            .background(Capsule().fill(backgroundColor))
+            HStack {
                 configuration.icon
                     .foregroundStyle(iconColor)
-                configuration.title
-                    .foregroundStyle(titleColor)
             }
-            .font(.zero.bodySM)
-            .padding(.leading, 8)
-            .padding(.trailing, 12)
-            .padding(.vertical, 4)
-            .background(Capsule().fill(backgroundColor))
         }
     }
 }
