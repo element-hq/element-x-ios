@@ -17,17 +17,8 @@ final class AccessibilityTests: XCTestCase {
         await client.waitForApp()
         defer { try? client.stop() }
         
-        // To handle system interrupts
-        _ = addUIInterruptionMonitor(withDescription: "Location access alert handler") { alert in
-            let alwaysAllowButton = alert.buttons["Allow While Using App"]
-            if alwaysAllowButton.exists {
-                alwaysAllowButton.tap()
-                return true
-            }
-            return false
-        }
-        // This interaction is needed to have the UIInterruptionMonitor work properly.
-        app.tap()
+        // To handle location sharing popup
+        allowLocationPermissions()
         
         try client.send(.accessibilityAudit(.nextPreview))
         forLoop: for await signal in client.signals.values {
@@ -48,6 +39,14 @@ final class AccessibilityTests: XCTestCase {
         }
         
         app.terminate()
+    }
+    
+    private func allowLocationPermissions() {
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        let notificationAlertAllowButton = springboard.buttons["Allow While Using App"].firstMatch
+        if notificationAlertAllowButton.waitForExistence(timeout: 10.0) {
+            notificationAlertAllowButton.tap()
+        }
     }
     
     private func performAccessibilityAuditForPreview(named name: String) {
