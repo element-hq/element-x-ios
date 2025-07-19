@@ -56,8 +56,14 @@ final class FeedMediaInternalPreLoader {
                                                       following: following,
                                                       limit: FEED_LOAD_SIZE,
                                                       skip: loadedCount)
-        guard case .success(let posts) = result else { return }
-
+        guard case .success(let posts) = result else {
+            ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+                "type": "Prefetch posts",
+                "status": "Failure",
+                "followingPosts": following,
+            ])
+            return
+        }
         if following {
             loadedFollowingPostsCount += posts.count
         } else {
@@ -84,7 +90,6 @@ final class FeedMediaInternalPreLoader {
                     if case .success(let media) = result, let remoteUrl = URL(string: media.signedUrl) {
                         let fileName = remoteUrl.lastPathComponent
                         let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(post.id)-\(fileName)")
-                        MXLog.info("MEDIA_FILE: Post: \(post.id); Path: \(destinationURL.path)")
                         
                         if FileManager.default.fileExists(atPath: destinationURL.path) {
                             return (post.id, media.withUrl(destinationURL))
@@ -92,6 +97,16 @@ final class FeedMediaInternalPreLoader {
                             return (post.id, media)
                         }
                     } else {
+                        if case .failure(let error) = result {
+                            ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+                                "type": "Prefetch post media url",
+                                "status": "Failure",
+                                "postId" : post.id,
+                                "postText" : post.postText ?? "",
+                                "postMediaId" : post.mediaInfo?.id ?? "",
+                                "error": error.localizedDescription
+                            ])
+                        }
                         return (post.id, nil)
                     }
                 }
@@ -112,17 +127,43 @@ final class FeedMediaInternalPreLoader {
 
     private func loadMediaFiles(_ results: [String: ZPostMedia]) async {
         guard !results.isEmpty else { return }
+        
+        ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+            "type": "Prefetch post media files",
+            "status": "InProgress",
+            "count" : results.count
+        ])
 
         let finalResults = await withTaskGroup(of: (String, ZPostMedia?).self) { group in
             for (postId, media) in results {
                 group.addTask {
                     guard let url = URL(string: media.signedUrl) else { return (postId, nil) }
 
-                    let fileResult = try? await self.clientProxy.loadFileFromUrl(url, key: postId)
-                    if case .success(let localUrl) = fileResult {
-                        return (postId, media.withUrl(localUrl))
+                    do {
+                        let fileResult = try await self.clientProxy.loadFileFromUrl(url, key: postId)
+                        switch fileResult {
+                        case .success(let localUrl):
+                            return (postId, media.withUrl(localUrl))
+                        case .failure(let error):
+                            ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+                                "type": "Download post media file",
+                                "status": "Failure",
+                                "postId" : postId,
+                                "mediaUrl": url.absoluteString,
+                                "error": error.localizedDescription
+                            ])
+                            return (postId, nil)
+                        }
+                    } catch {
+                        ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+                            "type": "Download post media file",
+                            "status": "Failure",
+                            "postId" : postId,
+                            "mediaUrl": url.absoluteString,
+                            "error": error.localizedDescription
+                        ])
+                        return (postId, nil)
                     }
-                    return (postId, nil)
                 }
             }
 
@@ -140,6 +181,12 @@ final class FeedMediaInternalPreLoader {
 
     @MainActor
     private func updateFeedMediaStateWithResults(_ results: [String: ZPostMedia]) {
+        ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+            "type": "Prefetch post media files",
+            "status": "Success",
+            "count" : results.count
+        ])
+        
         for (postId, media) in results {
             mediaMapCache[postId] = HomeScreenPostMediaInfo(media: media)
         }

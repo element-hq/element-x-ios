@@ -44,6 +44,12 @@ private final class VideoPlayerViewModel: ObservableObject {
             if item.status == .failed {
                 DispatchQueue.main.async {
                     self?.failedToLoad = true
+                    ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+                        "type": "Feed Media Preview Video - Internal",
+                        "status": "Failure",
+                        "mediaUrl": url.absoluteString,
+                        "error": item.error?.localizedDescription ?? "Unknown error"
+                    ])
                     MXLog.error("❌ Video failed to load: \(item.error?.localizedDescription ?? "Unknown error")")
                 }
             }

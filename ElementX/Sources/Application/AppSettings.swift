@@ -244,7 +244,7 @@ final class AppSettings {
     }
     
     var pushGatewayBaseURL: URL = "https://zos-push-gateway-c101e2f4da49.herokuapp.com/_matrix/push/v1/notify"
-    var pushGatewayNotifyEndpoint: URL { pushGatewayBaseURL.appending(path: "_matrix/push/v1/notify") }
+    var pushGatewayNotifyEndpoint: URL { pushGatewayBaseURL }
     
     @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
     var enableNotifications

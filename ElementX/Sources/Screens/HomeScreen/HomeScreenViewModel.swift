@@ -77,6 +77,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         userSession.clientProxy.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
+                
+                ZeroCustomEventService.shared.setup(userId: currentUser.id.rawValue, userName: currentUser.displayName)
+                
                 self?.state.currentUserZeroProfile = currentUser
                 if ZeroFlaggedFeaturesService.shared.zeroWalletEnabled() {
                     self?.fetchWalletData()
@@ -1105,6 +1108,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func extractAllRoomUsers(_ rooms: [RoomSummary]) {
+        ZeroCustomEventService.shared.logUserRooms(rooms: rooms)
+        
         let heroUserIds = rooms.flatMap { $0.heroes.compactMap(\.userID) }
         var userIds = Set(heroUserIds)
         // Add current logged-in user as well

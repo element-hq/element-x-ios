@@ -38,6 +38,20 @@ struct UserWalletInfoView: View {
                             }
                         }
                         
+                        HStack{
+                            CompoundIcon(\.info)
+                                .foregroundStyle(.compound.textSecondary)
+                            Text("Only send ZChain assets to this address.")
+                                .font(.zero.bodyMD)
+                                .foregroundStyle(.compound.textSecondary)
+                        }
+                        .padding(8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.compound.bgCanvasDefault)
+                        )
+                        .padding(12)
+                        
                         UserWalletQRCode(walletAddress: address, onQRCodeGenerated: { qrCodeImage in
                             self.qrCodeImage = qrCodeImage
                         })

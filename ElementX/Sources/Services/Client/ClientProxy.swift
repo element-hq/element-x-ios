@@ -1503,6 +1503,13 @@ class ClientProxy: ClientProxyProtocol {
         case .success(let localURL):
             return .success(localURL)
         case .failure(let error):
+            ZeroCustomEventService.shared.feedApiEvent(parameters: [
+                "type": "LOAD_FILE_FROM_URL",
+                "status": "Failure",
+                "url": remoteUrl.absoluteString,
+                "key": key,
+                "error": error.localizedDescription
+            ])
             return .failure(.zeroError(error))
         }
     }

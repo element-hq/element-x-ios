@@ -1813,6 +1813,7 @@
 		791DEF872D9381000057E6C5 /* EmbeddedElementCall in Frameworks */ = {isa = PBXBuildFile; productRef = 791DEF862D9381000057E6C5 /* EmbeddedElementCall */; };
 		791DEF882D93959C0057E6C5 /* ZCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1828CE432D010108002FF640 /* ZCurrentUser.swift */; };
 		791DEF892D93959C0057E6C5 /* ZCurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1828CE432D010108002FF640 /* ZCurrentUser.swift */; };
+		79211FC62E2B05DA00A7EDE7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 79211FC52E2B05DA00A7EDE7 /* FirebaseFirestore */; };
 		7924416F2DCC9B8700CD45B9 /* FeedMediaSelectedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */; };
 		792441702DCC9B8700CD45B9 /* FeedMediaSelectedProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7924416E2DCC9B7100CD45B9 /* FeedMediaSelectedProtocol.swift */; };
 		792A87AA2DAD8F51009C3E4F /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADECBBB672497BCD4822468 /* Result.swift */; };
@@ -1984,6 +1985,8 @@
 		79ADA9662DC5137D00C895F1 /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5327E3B3C58BEB0E65F4CF98 /* Observable.swift */; };
 		79B04C422DE07F6500A98D3E /* UserFeedProfileFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B04C412DE07F5300A98D3E /* UserFeedProfileFlowCoordinator.swift */; };
 		79B04C432DE07F6500A98D3E /* UserFeedProfileFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B04C412DE07F5300A98D3E /* UserFeedProfileFlowCoordinator.swift */; };
+		79B2A79C2E2AFC9400A76430 /* ZeroCustomEventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A79B2E2AFC8200A76430 /* ZeroCustomEventService.swift */; };
+		79B2A79D2E2AFC9400A76430 /* ZeroCustomEventService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B2A79B2E2AFC8200A76430 /* ZeroCustomEventService.swift */; };
 		79B716492DA843F200A68055 /* EventTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A81FD0C60175FA081EB19AD /* EventTimelineItem.swift */; };
 		79B8E34A2D660B68000304AE /* UserIdentityProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F793C422BDACE0C60C774F4 /* UserIdentityProxyProtocol.swift */; };
 		79B8E34B2D660BA9000304AE /* UserIdentityProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8536B40F578BA7FDB23D97B1 /* UserIdentityProxyMock.swift */; };
@@ -3655,6 +3658,7 @@
 		79AD654F2D84FC24005C5934 /* HomeNotificationsContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNotificationsContent.swift; sourceTree = "<group>"; };
 		79AD65522D84FD04005C5934 /* HomeScreenNotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenNotificationCell.swift; sourceTree = "<group>"; };
 		79B04C412DE07F5300A98D3E /* UserFeedProfileFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserFeedProfileFlowCoordinator.swift; sourceTree = "<group>"; };
+		79B2A79B2E2AFC8200A76430 /* ZeroCustomEventService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroCustomEventService.swift; sourceTree = "<group>"; };
 		79C25B4C2E259E9500936A5D /* ExternalFeedVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalFeedVideoPlayer.swift; sourceTree = "<group>"; };
 		79C25B4F2E259EF900936A5D /* ExternalFeedImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalFeedImageViewer.swift; sourceTree = "<group>"; };
 		79C25B522E25A1EE00936A5D /* FeedMediaInternalPreLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMediaInternalPreLoader.swift; sourceTree = "<group>"; };
@@ -4359,6 +4363,7 @@
 				180EE5DD2CB01F7000891BBC /* WysiwygComposer in Frameworks */,
 				18C853122D11B2FA009AF206 /* Web3ContractABI in Frameworks */,
 				18E9A7732C9829970082DDA4 /* KeychainAccess in Frameworks */,
+				79211FC62E2B05DA00A7EDE7 /* FirebaseFirestore in Frameworks */,
 				18E9A7742C9829970082DDA4 /* Kingfisher in Frameworks */,
 				18E9A7752C9829970082DDA4 /* KZFileWatchers in Frameworks */,
 				18E9A7762C9829970082DDA4 /* Alamofire in Frameworks */,
@@ -5097,6 +5102,7 @@
 		18C852FE2D11A127009AF206 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				79B2A79B2E2AFC8200A76430 /* ZeroCustomEventService.swift */,
 				793F3A5B2E1801AB002F96F0 /* ZeroFlaggedFeaturesService.swift */,
 				79F31B202E02BB0C0043E100 /* RemoteConfigManager.swift */,
 				18C852FF2D11A12E009AF206 /* WalletConnectService.swift */,
@@ -8785,6 +8791,7 @@
 				79F31B2A2E02BE9E0043E100 /* FirebaseRemoteConfig */,
 				790AB7B02E1D316300555B1F /* StoreKitPlus */,
 				79C25B4A2E258C1200936A5D /* VideoPlayer */,
+				79211FC52E2B05DA00A7EDE7 /* FirebaseFirestore */,
 			);
 			productName = ElementX;
 			productReference = 18E9A7922C9829970082DDA4 /* Zero.app */;
@@ -10805,6 +10812,7 @@
 				18E9A75A2C9829970082DDA4 /* WaveformSource.swift in Sources */,
 				18E9A75B2C9829970082DDA4 /* WindowManager.swift in Sources */,
 				79C6F7322DF8277D003CEBB9 /* TombstonedAvatarImage.swift in Sources */,
+				79B2A79C2E2AFC9400A76430 /* ZeroCustomEventService.swift in Sources */,
 				18E9A75C2C9829970082DDA4 /* WindowManagerProtocol.swift in Sources */,
 				79C6F7342DF828F9003CEBB9 /* RoomFlowCoordinatorStateMachine.swift in Sources */,
 				79C6F72C2DF82753003CEBB9 /* AuthenticationStartScreenCoordinator.swift in Sources */,
@@ -11548,6 +11556,7 @@
 				E78D429F18071545BF661A52 /* RoomDetailsEditScreenCoordinator.swift in Sources */,
 				A6D4C5EEA85A6A0ABA1559D6 /* RoomDetailsEditScreenModels.swift in Sources */,
 				659E5B766F76FDEC1BF393A4 /* RoomDetailsEditScreenViewModel.swift in Sources */,
+				79B2A79D2E2AFC9400A76430 /* ZeroCustomEventService.swift in Sources */,
 				799D85842E2709F7000A362A /* UserWalletInfoView.swift in Sources */,
 				797751802DD9F8C4006CF62D /* FeedUserProfileScreenView.swift in Sources */,
 				C49FCC766673006B6D299F1C /* RoomDetailsEditScreenViewModelProtocol.swift in Sources */,
@@ -12265,7 +12274,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.17.1;
+				MARKETING_VERSION = 0.17.2;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -12301,7 +12310,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.17.1;
+				MARKETING_VERSION = 0.17.2;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -13759,6 +13768,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8213398B60F9B660D9216ADF /* XCRemoteSwiftPackageReference "element-call-swift" */;
 			productName = EmbeddedElementCall;
+		};
+		79211FC52E2B05DA00A7EDE7 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 79F31B232E02BE5A0043E100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 		79C25B4A2E258C1200936A5D /* VideoPlayer */ = {
 			isa = XCSwiftPackageProductDependency;

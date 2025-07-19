@@ -32,6 +32,12 @@ struct ExternalFeedVideoPlayer : View {
                         isLoading = false
                     case .error(let error):
                         MXLog.error("Failed to load video: \(error)")
+                        ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+                            "type": "Feed Media Preview Video - External",
+                            "status": "Failure",
+                            "mediaUrl": videoURL.absoluteString,
+                            "error": error.localizedDescription
+                        ])
                     default:
                         break
                     }

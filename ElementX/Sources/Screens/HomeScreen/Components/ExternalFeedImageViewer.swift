@@ -37,6 +37,13 @@ struct ExternalFeedImageViewer: View {
                 .placeholder { ProgressView() }
                 .onFailure { error in
                     MXLog.error("KingFisher: Failed to load feed media image: \(error)")
+                    ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+                        "type": "Feed Media Preview Image - External",
+                        "status": "Failure",
+                        "mediaId" : mediaInfo.id,
+                        "mediaUrl": mediaUrlString ?? "",
+                        "error": error.localizedDescription
+                    ])
                     didFail = true
                 }
                 .onSuccess { result in

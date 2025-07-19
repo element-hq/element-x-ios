@@ -33,6 +33,13 @@ struct InternalFeedImageViewer: View {
                 .placeholder { ProgressView() }
                 .onFailure { error in
                     MXLog.error("KingFisher: Failed to load feed media image: \(error)")
+                    ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+                        "type": "Feed Media Preview Image - Internal",
+                        "status": "Failure",
+                        "mediaId" : mediaInfo.id,
+                        "mediaUrl": mediaUrlString ?? "",
+                        "error": error.localizedDescription
+                    ])
                     didFail = true
                 }
                 .onSuccess { result in
