@@ -14,38 +14,40 @@ struct ConfirmTransactionView: View {
     @State var transferAmount: String = ""
     
     var body: some View {
-        VStack(alignment: .leading) {
-            if let currentUser = context.viewState.currentUser,
-               let recipient = context.viewState.transferRecipient,
-               let token = context.viewState.tokenAsset {
-                
-                VStack(alignment: .leading) {
-                    UserInfoView(preText: "From:",
-                                 userName: currentUser.primaryZID ?? currentUser.displayName,
-                                 userAddress: displayFormattedAddress(currentUser.publicWalletAddress))
+        ZStack(alignment: .bottom) {
+            VStack(alignment: .leading) {
+                if let currentUser = context.viewState.currentUser,
+                   let recipient = context.viewState.transferRecipient,
+                   let token = context.viewState.tokenAsset {
                     
-                    AssetInfoView(tokenAsset: token, amount: $transferAmount, isSenderSideInfo: true, iconUrl: token.logo)
-                }
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(.compound.bgCanvasDefaultLevel1, lineWidth: 1)
-                )
-                
-                VStack(alignment: .leading) {
-                    UserInfoView(preText: "Sending To:",
-                                 userName: recipient.displayName,
-                                 userAddress: displayFormattedAddress(recipient.publicAddress))
+                    VStack(alignment: .leading) {
+                        UserInfoView(preText: "From:",
+                                     userName: currentUser.primaryZID ?? currentUser.displayName,
+                                     userAddress: displayFormattedAddress(currentUser.publicWalletAddress))
+                        
+                        AssetInfoView(tokenAsset: token, amount: $transferAmount, isSenderSideInfo: true, iconUrl: token.logo)
+                    }
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(.compound.bgCanvasDefaultLevel1, lineWidth: 1)
+                    )
                     
-                    AssetInfoView(tokenAsset: token, amount: $transferAmount, isSenderSideInfo: false, iconUrl: token.logo)
+                    VStack(alignment: .leading) {
+                        UserInfoView(preText: "Sending To:",
+                                     userName: recipient.displayName,
+                                     userAddress: displayFormattedAddress(recipient.publicAddress))
+                        
+                        AssetInfoView(tokenAsset: token, amount: $transferAmount, isSenderSideInfo: false, iconUrl: token.logo)
+                    }
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(.compound.bgCanvasDefaultLevel1, lineWidth: 1)
+                    )
+                    .padding(.vertical, 12)
                 }
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(.compound.bgCanvasDefaultLevel1, lineWidth: 1)
-                )
-                .padding(.vertical, 12)
             }
-            
-            Spacer()
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .padding()
             
             if !transferAmount.isEmpty {
                 VStack {
@@ -59,11 +61,11 @@ struct ConfirmTransactionView: View {
                     })
                     .padding(.vertical, 12)
                 }
+                .padding()
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
-        .padding()
+        .ignoresSafeArea(.keyboard)
     }
 }
 
@@ -125,7 +127,7 @@ private struct AssetInfoView: View {
                         .font(.zero.bodyLG)
                         .foregroundStyle(.compound.textPrimary)
                     
-                    Text("ZChain") //default chain for now
+                    Text("Z Chain") //default chain for now
                         .font(.zero.bodySM)
                         .foregroundStyle(.compound.textSecondary)
                         .padding(.vertical, 1)
@@ -137,6 +139,7 @@ private struct AssetInfoView: View {
                     TextField("0", text: $amount)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(.plain)
+                        .submitLabel(.done)
                         .font(.zero.headingSMSemibold)
                         .focused($isFocused)
                         .onAppear {
@@ -149,6 +152,14 @@ private struct AssetInfoView: View {
                             let maxAccount = Double(tokenAsset.formattedAmount) ?? 0
                             if enteredAmount > maxAccount {
                                 amount = tokenAsset.formattedAmount
+                            }
+                        }
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("Done") {
+                                    isFocused = false
+                                }
                             }
                         }
                     

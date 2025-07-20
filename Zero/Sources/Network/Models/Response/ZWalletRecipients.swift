@@ -35,6 +35,11 @@ struct WalletRecipient: Codable, Identifiable {
 
 extension WalletRecipient {
     var displayName: String {
-        return "\(String(describing: name ?? ""))(\(String(describing: primaryZid ?? ""))".trim()
+        let postfix = primaryZid ?? publicAddress
+        return if let name = name {
+            "\(name)(\(postfix))"
+        } else {
+            postfix
+        }
     }
 }

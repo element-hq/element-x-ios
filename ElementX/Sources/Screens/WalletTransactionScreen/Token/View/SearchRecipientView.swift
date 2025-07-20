@@ -47,11 +47,12 @@ struct SearchRecipientView: View {
                     }
                     .disabled(true)
                 case .empty:
-                    if context.searchRecipientQuery.isEmpty {
-                        EmptyView()
-                    } else {
-                        HomeContentEmptyView(message: "No recipients found")
-                    }
+                    EmptyView()
+//                    if context.searchRecipientQuery.isEmpty {
+//                        EmptyView()
+//                    } else {
+//                        HomeContentEmptyView(message: "No recipients found")
+//                    }
                 case .recipients(let recipients):
                     LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(recipients, id: \.id) { recipient in

@@ -39,10 +39,10 @@ struct UserWalletInfoView: View {
                         }
                         
                         HStack{
-                            CompoundIcon(\.info)
+                            CompoundIcon(\.info, size: .xSmall, relativeTo: .zero.bodySM)
                                 .foregroundStyle(.compound.textSecondary)
-                            Text("Only send ZChain assets to this address.")
-                                .font(.zero.bodyMD)
+                            Text("Only send Z Chain assets to this address.")
+                                .font(.zero.bodySM)
                                 .foregroundStyle(.compound.textSecondary)
                         }
                         .padding(8)

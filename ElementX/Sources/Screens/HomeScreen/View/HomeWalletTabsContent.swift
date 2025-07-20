@@ -135,7 +135,7 @@ struct HomeWalletTabContentCell : View {
                     
                     VStack(alignment: .leading) {
                         if let transactionAction = content.transactionAction {
-                            HStack {
+                            HStack(spacing: 2) {
                                 Text(transactionAction)
                                     .font(.zero.bodySM)
                                     .foregroundColor(.compound.textSecondary)

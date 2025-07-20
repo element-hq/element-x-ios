@@ -167,8 +167,8 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
     }
     
     func loadFileFromUrl(_ remoteUrl: URL, key: String) async throws -> Result<URL, any Error> {
-        let fileName = remoteUrl.lastPathComponent
-        let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(key)-\(fileName)")
+        let fileName = remoteUrl.sanitizedFileName(key: key)
+        let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
         
         if FileManager.default.fileExists(atPath: destinationURL.path) {
             return .success(destinationURL)

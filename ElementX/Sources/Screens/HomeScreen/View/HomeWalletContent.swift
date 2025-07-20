@@ -93,16 +93,20 @@ struct HomeWalletContent: View {
     @ViewBuilder
     private var actionButtonsView: some View {
         HStack(spacing: 10) {
-            WalletActionButton(action: .receive, onTap: {
+            WalletActionButton(action: .receive, compactButtonStyle: isCompactMode) {
                 context.send(viewAction: .startWalletTransaction(.receiveTransaction))
-            })
-//            WalletActionButton(action: .swap, onTap: {
-//                
-//            })
-            WalletActionButton(action: .send, onTap: {
+            }
+            
+            // Uncomment when swap is ready
+            // WalletActionButton(action: .swap) {
+            //     // swap action
+            // }
+            
+            WalletActionButton(action: .send, compactButtonStyle: isCompactMode) {
                 context.send(viewAction: .startWalletTransaction(.sendToken))
-            })
+            }
         }
+        .modifier(ActionButtonFrameModifier(isCompact: isCompactMode))
     }
     
     @ViewBuilder
@@ -212,19 +216,7 @@ struct HomeWalletContent: View {
             
             Spacer()
             
-            if context.viewState.walletTokens.count > 0 {
-                HStack(spacing: 10) {
-                    WalletActionButton(action: .receive, compactButtonStyle: true, onTap: {
-                        context.send(viewAction: .startWalletTransaction(.receiveTransaction))
-                    })
-    //                WalletActionButton(action: .swap, compactButtonStyle: true, onTap: {
-    //
-    //                })
-                    WalletActionButton(action: .send, compactButtonStyle: true, onTap: {
-                        context.send(viewAction: .startWalletTransaction(.sendToken))
-                    })
-                }
-            }
+            actionButtonsView
         }
         .padding(.vertical, 8)
     }
@@ -267,7 +259,7 @@ private struct WalletActionButton : View {
                 }
             }
         }
-        .frame(width: compactButtonStyle ? 50: 115, height: 50)
+        .frame(maxWidth: .infinity, minHeight: 50)
         .background(.zero.bgAccentRest.opacity(0.1))
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .overlay {
@@ -275,6 +267,18 @@ private struct WalletActionButton : View {
                 .stroke(.zero.bgAccentRest.opacity(0.3), lineWidth: 1)
         }
         .onTapGesture { onTap() }
+    }
+}
+
+private struct ActionButtonFrameModifier: ViewModifier {
+    let isCompact: Bool
+
+    func body(content: Content) -> some View {
+        if isCompact {
+            content.frame(width: 110)
+        } else {
+            content.frame(maxWidth: .infinity)
+        }
     }
 }
 
