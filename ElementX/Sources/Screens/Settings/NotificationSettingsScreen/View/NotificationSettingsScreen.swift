@@ -66,6 +66,7 @@ struct NotificationSettingsScreen: View {
                 HStack(alignment: .firstTextBaseline, spacing: 13) {
                     Image(systemSymbol: .exclamationmarkCircleFill)
                         .foregroundColor(.compound.iconTertiaryAlpha)
+                        .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(L10n.screenNotificationSettingsSystemNotificationsTurnedOff)
                             .font(.compound.bodyLG)
