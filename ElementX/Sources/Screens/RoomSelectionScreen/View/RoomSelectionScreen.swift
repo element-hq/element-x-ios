@@ -57,6 +57,7 @@ struct RoomSelectionScreen: View {
     private var emptyRectangle: some View {
         Rectangle()
             .frame(width: 0, height: 0)
+            .accessibilityHidden(true)
     }
 }
 
