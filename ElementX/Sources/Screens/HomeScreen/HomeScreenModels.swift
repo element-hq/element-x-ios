@@ -80,7 +80,7 @@ enum HomeScreenViewAction {
     case loadMoreWalletTransactions
     case loadMoreWalletNFTs
     case startWalletTransaction(WalletTransactionType)
-    case viewTransactionDetails(HomeScreenWalletContent)
+    case viewTransactionDetails(transactionId: String)
     case claimRewards(trigger: Bool)
 }
 

@@ -2,15 +2,16 @@ import Foundation
 
 public struct ZeroRewards: Codable, Equatable {
     private var zero: Double
-    private var zeroPreviousDay: Double
     private var unclaimedRewards: Double
     private var price: Double
     private var reference: String
     var decimals: Int
     
     init(rewards: ZRewards, currency: ZeroCurrency) {
-        zero = Self.parseCredits(credits: rewards.meow, decimals: rewards.decimals)
-        zeroPreviousDay = Self.parseCredits(credits: rewards.meowPreviousDay, decimals: rewards.decimals)
+        zero = Self.parseTotalEarnings(zeroCredits: rewards.legacyRewards,
+                                       dailyRewards: rewards.totalDailyRewards,
+                                       referralRewards: rewards.totalReferralFees,
+                                       decimals: rewards.decimals)
         unclaimedRewards = Self.parseCredits(credits: rewards.unclaimedRewards, decimals: rewards.decimals)
         decimals = rewards.decimals
         price = currency.price ?? 0.0
@@ -19,7 +20,6 @@ public struct ZeroRewards: Codable, Equatable {
     
     init() {
         zero = 0.0
-        zeroPreviousDay = 0.0
         unclaimedRewards = 0.0
         decimals = 0
         price = 0.0
@@ -28,6 +28,13 @@ public struct ZeroRewards: Codable, Equatable {
     
     static func empty() -> ZeroRewards {
         ZeroRewards()
+    }
+    
+    private static func parseTotalEarnings(zeroCredits: String, dailyRewards: String, referralRewards: String, decimals: Int) -> Double {
+        let legacyEarnings = parseCredits(credits: zeroCredits, decimals: decimals)
+        let dailyEarnings = parseCredits(credits: dailyRewards, decimals: decimals)
+        let referralEarnings = parseCredits(credits: referralRewards, decimals: decimals)
+        return legacyEarnings + dailyEarnings + referralEarnings
     }
     
     private static func parseCredits(credits: String, decimals: Int) -> Double {

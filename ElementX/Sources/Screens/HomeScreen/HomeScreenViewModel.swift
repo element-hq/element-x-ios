@@ -328,8 +328,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             actionsSubject.send(.startWalletTransaction(self, type))
         case .reloadFeedMedia(let post):
             reloadFeedMedia(post)
-        case .viewTransactionDetails(let walletContent):
-            viewWalletTransactionDetails(walletContent)
+        case .viewTransactionDetails(let walletTransactionId):
+            viewWalletTransactionDetails(walletTransactionId)
         case .claimRewards(let trigger):
             if trigger {
                 claimUserRewards()
@@ -1121,12 +1121,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private func extractAllRoomUsers(_ rooms: [RoomSummary]) {
         ZeroCustomEventService.shared.logUserRooms(rooms: rooms)
         
-        let heroUserIds = rooms.flatMap { $0.heroes.compactMap(\.userID) }
-        var userIds = Set(heroUserIds)
-        // Add current logged-in user as well
-        userIds.insert(userSession.clientProxy.userID)
-        
         Task.detached {
+            let heroUserIds = rooms.flatMap { $0.heroes.compactMap(\.userID) }
+            var userIds = Set(heroUserIds)
+            // Add current logged-in user as well
+            await userIds.insert(self.userSession.clientProxy.userID)
+            
             await self.userSession.clientProxy.zeroProfiles(userIds: userIds)
         }
     }
@@ -1161,8 +1161,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         state.directRoomsUserStatusMap = userStatusMap
     }
     
-    private func viewWalletTransactionDetails(_ walletContent: HomeScreenWalletContent) {
-        if let link = URL(string: ZeroContants.WALLET_TRANSACTION_LINK.appending(walletContent.id)) {
+    private func viewWalletTransactionDetails(_ walletTransactionId: String) {
+        if let link = URL(string: ZeroContants.WALLET_TRANSACTION_LINK.appending(walletTransactionId)) {
             UIApplication.shared.open(link)
         }
     }

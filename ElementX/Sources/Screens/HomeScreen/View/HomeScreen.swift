@@ -114,7 +114,7 @@ struct HomeScreen: View {
                     context.send(viewAction: .claimRewards(trigger: true))
                 },
                 onViewClaimTransaction: { transactionId in
-                    //view transaction here
+                    context.send(viewAction: .viewTransactionDetails(transactionId: transactionId))
                 }
             )
             .presentationDetents([.height(400)])
