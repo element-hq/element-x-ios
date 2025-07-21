@@ -44,9 +44,6 @@ struct RoomChangeRolesScreenSelectedItem: View {
                             .scaledFrame(size: 20)
                             .symbolRenderingMode(.palette)
                             .foregroundStyle(Color.compound.iconOnSolidPrimary, Color.compound.iconPrimary)
-                            // Increase hit area
-                            .padding(.leading, 5)
-                            .padding(.bottom, 5)
                     }
                     // We will use the accessibility action
                     .accessibilityHidden(true)

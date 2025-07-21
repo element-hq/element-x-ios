@@ -82,9 +82,6 @@ struct MediaUploadPreviewScreen: View {
             context.isPresentingMediaCaptionWarning = true
         } label: {
             CompoundIcon(\.infoSolid, size: .xSmall, relativeTo: .compound.bodyLG)
-                // Increase hit area
-                .padding(.leading, 5)
-                .padding(.vertical, 2)
         }
         .tint(.compound.iconCriticalPrimary)
         .popover(isPresented: $context.isPresentingMediaCaptionWarning, arrowEdge: .bottom) {

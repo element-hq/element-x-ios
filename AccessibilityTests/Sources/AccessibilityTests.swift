@@ -91,9 +91,9 @@ final class AccessibilityTests: XCTestCase {
     private static let notHumanReadableMessage = "Label not human-readable"
     
     /// Use this array to filter add specific filters to ignore specific issues for certain elements
-    private static let ignoredA11yIdentifiers: [String: [FilterType]] = [A11yIdentifiers.authenticationStartScreen.appVersion: [.auditType(.hitRegion)],
-                                                                         A11yIdentifiers.pollView.summary: [.auditType(.hitRegion)],
-                                                                         A11yIdentifiers.serverConfirmationScreen.serverPicker: [.compactDescription(notHumanReadableMessage)]]
+    private static let ignoredA11yIdentifiers: [String: [FilterType]] = [
+        A11yIdentifiers.serverConfirmationScreen.serverPicker: [.compactDescription(notHumanReadableMessage)]
+    ]
 }
 
 private enum FilterType {
