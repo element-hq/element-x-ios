@@ -13,14 +13,8 @@ struct MentionSuggestionItemView: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
-            switch item.suggestionType {
-            case .user(let user):
-                LoadableAvatarImage(url: user.avatarURL, name: user.displayName, contentID: user.id, avatarSize: .user(on: .completionSuggestions), mediaProvider: mediaProvider)
-            case .allUsers(let avatar):
-                RoomAvatarImage(avatar: avatar, avatarSize: .room(on: .completionSuggestions), mediaProvider: mediaProvider)
-            case .room(let room):
-                RoomAvatarImage(avatar: room.avatar, avatarSize: .room(on: .completionSuggestions), mediaProvider: mediaProvider)
-            }
+            avatar
+                .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 0) {
                 Text(item.displayName)
                     .font(.compound.bodyLG)
@@ -33,6 +27,19 @@ struct MentionSuggestionItemView: View {
                         .lineLimit(1)
                 }
             }
+        }
+        .accessibilityElement(children: .combine)
+    }
+    
+    @ViewBuilder
+    private var avatar: some View {
+        switch item.suggestionType {
+        case .user(let user):
+            LoadableAvatarImage(url: user.avatarURL, name: user.displayName, contentID: user.id, avatarSize: .user(on: .completionSuggestions), mediaProvider: mediaProvider)
+        case .allUsers(let avatar):
+            RoomAvatarImage(avatar: avatar, avatarSize: .room(on: .completionSuggestions), mediaProvider: mediaProvider)
+        case .room(let room):
+            RoomAvatarImage(avatar: room.avatar, avatarSize: .room(on: .completionSuggestions), mediaProvider: mediaProvider)
         }
     }
 }
