@@ -3,6 +3,7 @@
 "a11y_avatar" = "Avatar";
 "a11y_delete" = "Poista";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "Piilota salasana";
 "a11y_join_call" = "Liity puheluun";
 "a11y_jump_to_bottom" = "Siirry loppuun";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "Nauhoita ääniviesti.";
 "a11y_voice_message_stop_recording" = "Lopeta nauhoittaminen";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "Muu";
 "screen_change_account_provider_subtitle" = "Käytä toista palveluntarjoajaa, kuten omaa yksityistä palvelintasi tai työpaikkaasi.";
 "screen_change_account_provider_title" = "Vaihda palveluntarjoajaa";
+"screen_change_server_error_element_pro_required_action_ios" = "App Store";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "Kotipalvelimeen ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palvelimesi ylläpitäjään.";
 "screen_change_server_error_invalid_well_known" = "Palvelin ei ole saatavilla .well-known tiedostossa olevan ongelman vuoksi:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Valitsemasi palveluntarjoaja ei tue sliding syncia. Palvelimen päivitys tarvitaan %1$@ -sovelluksen käyttämiseen.";

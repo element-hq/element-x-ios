@@ -3,6 +3,7 @@
 "a11y_avatar" = "چهرک";
 "a11y_delete" = "حذف";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "نهفتن گذرواژه";
 "a11y_join_call" = "پیوستن به تماس";
 "a11y_jump_to_bottom" = "به پایین بروید";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "ضبط پیام صوتی.";
 "a11y_voice_message_stop_recording" = "توقّف ضبط";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "دیگر";
 "screen_change_account_provider_subtitle" = "استفاده از فراهم کنندهٔ حسابی دیگر چون کارساز خصوصی خوتان یا حسابی کاری.";
 "screen_change_account_provider_title" = "تغییر فراهم کنندهٔ حساب";
+"screen_change_server_error_element_pro_required_action_ios" = "App Store";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "ما نتوانستیم به این سرور خانگی برسیم. لطفاً بررسی کنید که URL سرور اصلی را به درستی وارد کرده اید. اگر URL صحیح است، برای کمک بیشتر با مدیر سرور خانگی خود تماس بگیرید.";
 "screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the .well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";

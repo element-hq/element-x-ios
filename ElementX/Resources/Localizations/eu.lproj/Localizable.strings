@@ -3,6 +3,7 @@
 "a11y_avatar" = "Abatarra";
 "a11y_delete" = "Ezabatu";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "Ezkutatu pasahitza";
 "a11y_join_call" = "Batu deira";
 "a11y_jump_to_bottom" = "Joan behera";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "Grabatu ahots-mezua.";
 "a11y_voice_message_stop_recording" = "Utzi grabatzeari";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "Beste bat";
 "screen_change_account_provider_subtitle" = "Erabili beste kontu-hornitzaile bat, hala nola zure zerbitzari pribatua edo laneko kontu bat.";
 "screen_change_account_provider_title" = "Aldatu kontu-hornitzailea";
+"screen_change_server_error_element_pro_required_action_ios" = "App Store";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.";
 "screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the .well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";

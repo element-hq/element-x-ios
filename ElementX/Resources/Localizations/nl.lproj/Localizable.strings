@@ -3,6 +3,7 @@
 "a11y_avatar" = "Afbeelding";
 "a11y_delete" = "Verwijderen";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "Wachtwoord verbergen";
 "a11y_join_call" = "Deelnemen aan gesprek";
 "a11y_jump_to_bottom" = "Spring naar einde";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "Spraakbericht opnemen.";
 "a11y_voice_message_stop_recording" = "Opnemen stoppen";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "Anders";
 "screen_change_account_provider_subtitle" = "Gebruik een andere accountprovider, zoals je eigen privéserver of een zakelijke account.";
 "screen_change_account_provider_title" = "Wijzig accountprovider";
+"screen_change_server_error_element_pro_required_action_ios" = "App Store";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "We konden deze homeserver niet bereiken. Controleer of je de homeserver-URL juist hebt ingevoerd. Als de URL juist is, neem dan contact op met de beheerder van je homeserver voor verdere hulp.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync is niet beschikbaar vanwege een probleem in het well-known bestand:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";

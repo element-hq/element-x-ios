@@ -3,6 +3,7 @@
 "a11y_avatar" = "Εικόνα Προφίλ";
 "a11y_delete" = "Διαγραφή";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "Απόκρυψη κωδικού πρόσβασης";
 "a11y_join_call" = "Συμμετοχή στην κλήση";
 "a11y_jump_to_bottom" = "Άλμα προς τα κάτω";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "Εγγραφή φωνητικού μηνύματος.";
 "a11y_voice_message_stop_recording" = "Διακοπή καταγραφής";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "Άλλο";
 "screen_change_account_provider_subtitle" = "Χρησιμοποίησε διαφορετικό πάροχο λογαριασμού, όπως τον δικό σου ιδιωτικό διακομιστή ή έναν εργασιακό λογαριασμό.";
 "screen_change_account_provider_title" = "Αλλαγή παρόχου λογαριασμού";
+"screen_change_server_error_element_pro_required_action_ios" = "App Store";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "Δεν μπορούσαμε να επικοινωνήσουμε με αυτόν τον οικιακό διακομιστή. Βεβαιώσου ότι έχεις εισαγάγει σωστά τη διεύθυνση URL του αρχικού διακομιστή. Εάν η διεύθυνση URL είναι σωστή, επικοινώνησε με τον διαχειριστή του κεντρικού διακομιστή για περαιτέρω βοήθεια.";
 "screen_change_server_error_invalid_well_known" = "Ο διακομιστής δεν είναι διαθέσιμος λόγω προβλήματος στο αρχείο .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Ο επιλεγμένος πάροχος λογαριασμού δεν υποστηρίζει sliding sync. Απαιτείται αναβάθμιση στο διακομιστή για χρήση του %1$@.";

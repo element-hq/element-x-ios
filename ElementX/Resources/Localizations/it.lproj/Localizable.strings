@@ -3,6 +3,7 @@
 "a11y_avatar" = "Avatar";
 "a11y_delete" = "Elimina";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "Nascondi password";
 "a11y_join_call" = "Entra in chiamata";
 "a11y_jump_to_bottom" = "Vai alla fine";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "Registra un messaggio vocale.";
 "a11y_voice_message_stop_recording" = "Ferma la registrazione";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "Altro";
 "screen_change_account_provider_subtitle" = "Utilizza un provider di account diverso, ad esempio il tuo server privato o un account di lavoro.";
 "screen_change_account_provider_title" = "Cambia fornitore dell'account";
+"screen_change_server_error_element_pro_required_action_ios" = "App Store";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "Non siamo riusciti a raggiungere questo homeserver. Verifica di aver inserito correttamente l'URL. Se l'URL è corretto, contatta l'amministratore del homeserver per ulteriore assistenza.";
 "screen_change_server_error_invalid_well_known" = "Il server non è disponibile per un problema nel file well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Il fornitore di account selezionato non supporta la Sliding sync. Per utilizzare %1$@ è necessario un aggiornamento del server.";

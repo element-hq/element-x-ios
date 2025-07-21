@@ -3,6 +3,7 @@
 "a11y_avatar" = "Profilbilde";
 "a11y_delete" = "Slett";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "Skjul passord";
 "a11y_join_call" = "Bli med i samtale";
 "a11y_jump_to_bottom" = "Hopp til bunnen";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "Ta opp talemelding.";
 "a11y_voice_message_stop_recording" = "Stopp opptaket";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "Annet";
 "screen_change_account_provider_subtitle" = "Bruk en annen kontotilbyder, for eksempel din egen private server eller en arbeidskonto.";
 "screen_change_account_provider_title" = "Bytt kontotilbyder";
+"screen_change_server_error_element_pro_required_action_ios" = "App Store";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "Vi kunne ikke nå denne hjemmeserveren. Kontroller at du har skrevet inn hjemmeserverens URL riktig. Hvis URL-en er riktig, kontakt administratoren for hjemmeserveren din for å få mer hjelp.";
 "screen_change_server_error_invalid_well_known" = "Serveren er ikke tilgjengelig på grunn av et problem i den velkjente filen:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Den valgte kontoleverandøren støtter ikke sliding sync. En oppgradering av serveren er nødvendig for å bruke %1$@.";

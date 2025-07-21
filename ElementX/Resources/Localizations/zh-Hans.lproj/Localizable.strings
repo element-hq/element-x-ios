@@ -3,6 +3,7 @@
 "a11y_avatar" = "头像";
 "a11y_delete" = "删除";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "隐藏密码";
 "a11y_join_call" = "加入通话";
 "a11y_jump_to_bottom" = "跳转到底部";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "录制语音消息";
 "a11y_voice_message_stop_recording" = "停止录制";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "其他";
 "screen_change_account_provider_subtitle" = "使用其他账户提供商，例如您自己的私人服务器或工作账户。";
 "screen_change_account_provider_title" = "更改账户提供方";
+"screen_change_server_error_element_pro_required_action_ios" = "App Store";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "我们无法访问此服务器。请检查您输入的服务器网址是否正确。如果 URL 正确，请联系您的服务器管理员寻求进一步帮助。";
 "screen_change_server_error_invalid_well_known" = "由于 Well Known 文件中的问题，Sliding Sync 不可用：\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
