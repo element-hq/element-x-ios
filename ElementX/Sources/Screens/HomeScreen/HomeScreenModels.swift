@@ -319,9 +319,7 @@ struct HomeScreenViewState: BindableState {
         }
         return !allNotificationContent.isEmpty
     }
-    
-    var feedMediaExternalLoadingEnabled: Bool = true
-    
+        
     var claimRewardsState: ClaimRewardsState = .none
 }
 
@@ -725,6 +723,11 @@ extension HomeScreenPostMediaInfo {
     
     var isVideo: Bool {
         return mimeType?.hasPrefix("video/") == true
+    }
+    
+    func withUpdatedUrl(mediaUrl: URL) -> HomeScreenPostMediaInfo {
+        return .init(id: self.id, mimeType: self.mimeType, aspectRatio: self.aspectRatio,
+                     width: self.width, height: self.height, url: mediaUrl.absoluteString)
     }
 }
 

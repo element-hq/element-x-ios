@@ -22,6 +22,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     private var currentUserWalletAddress: String? = nil
     private var defaultChannelZId: String? = nil
     
+    private var feedMediaPreFetchService: FeedMediaPreFetchService? = nil
+    
     private var actionsSubject: PassthroughSubject<FeedDetailsScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<FeedDetailsScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
@@ -36,6 +38,11 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(userID: clientProxy.userID, bindings: .init(feed: feedItem)), mediaProvider: userSession.mediaProvider)
+        
+        self.feedMediaPreFetchService = FeedMediaPreFetchService(mediaProtocol: .init(onMediaLoaded: { map in
+            self.state.postRepliesMediaInfoMap = map
+        }),
+                                                                 clientProxy: userSession.clientProxy)
         
         userSession.clientProxy.userRewardsPublisher
             .receive(on: DispatchQueue.main)
@@ -85,6 +92,8 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
             actionsSubject.send(.openPostUserProfile(profile))
         case .openMediaPreview(let mediaId):
             displayFullScreenMedia(mediaId)
+        case .reloadFeedMedia(let post):
+            reloadFeedMedia(post)
         }
     }
     
@@ -130,7 +139,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                     state.feedReplies = feedReplies.uniqued(on: \.id)
                     state.repliesListMode = .replies
                     
-                    await loadPostsContentConcurrently(for: state.feedReplies)
+                    await loadPostContentConcurrently(for: state.feedReplies)
                 }
             case .failure(let error):
                 MXLog.error("Failed to fetch zero post replies: \(error)")
@@ -229,33 +238,16 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         }
     }
     
-    private func loadPostsContentConcurrently(for posts: [HomeScreenPost]) async {
-        async let mediaInfoTask: () = loadPostsMediaInfo(for: posts)
+    private func loadPostContentConcurrently(for posts: [HomeScreenPost]) async {
+        async let nextPagePostsTask: () =  feedMediaPreFetchService?.loadFeedRepliesPage(postId: state.bindings.feed.id,
+                                                                                         currentCount: posts.count) ?? ()
         async let linkPreviewTask: () = loadPostLinkPreviews(for: posts)
-        _ = await (mediaInfoTask, linkPreviewTask)
+        _ = await (nextPagePostsTask, linkPreviewTask)
     }
     
-    private func loadPostsMediaInfo(for posts: [HomeScreenPost]) async {
-        let postsToFetchMedia = posts.filter {
-            $0.mediaInfo != nil && state.postRepliesMediaInfoMap[$0.id] == nil
-        }
-        await withTaskGroup(of: (String, ZPostMedia)?.self) { group in
-            for post in postsToFetchMedia {
-                group.addTask {
-                    guard let mediaId = post.mediaInfo?.id else { return nil }
-                    if let result = await withTimeout(seconds: 5, operation: {
-                        await self.clientProxy.getPostMediaInfo(mediaId: mediaId)
-                    }), case let .success(result) = result {
-                        return (post.id, result)
-                    }
-                    return nil
-                }
-            }
-            
-            for await item in group {
-                guard let (postId, media) = item else { continue }
-                state.postRepliesMediaInfoMap[postId] = HomeScreenPostMediaInfo(media: media)
-            }
+    private func reloadFeedMedia(_ post: HomeScreenPost) {
+        feedMediaPreFetchService?.reloadMedia(post) { mediaInfo in
+            self.state.postRepliesMediaInfoMap[post.id] = mediaInfo
         }
     }
     

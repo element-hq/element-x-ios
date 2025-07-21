@@ -177,11 +177,11 @@ extension URL {
     
     func sanitizedFileName(key: String) -> String {
         let fileExtension = self.pathExtension
-        let fileNameWithoutExtension = self.deletingPathExtension().lastPathComponent
+        let fileNameWithoutExtension = "\(key)-\(self.deletingPathExtension().lastPathComponent)"
         
         let hash = SHA256
             .hash(data: Data(fileNameWithoutExtension.utf8))
             .compactMap { String(format: "%02x", $0) }.joined()
-        return "\(key)-\(hash).\(fileExtension)"
+        return "\(hash).\(fileExtension)"
     }
 }

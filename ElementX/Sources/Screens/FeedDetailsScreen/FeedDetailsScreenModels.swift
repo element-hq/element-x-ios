@@ -68,6 +68,7 @@ enum FeedDetailsScreenViewAction {
     case attachMedia
     case deleteMedia
     case openMediaPreview(_ mediaId: String)
+    case reloadFeedMedia(_ post: HomeScreenPost)
 }
 
 enum FeedRepliesListMode: CustomStringConvertible {

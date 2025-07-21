@@ -8,13 +8,21 @@
 import SwiftUI
 import AVKit
 
-struct InternalFeedVideoPlayer : View {
+struct PostVideoPlayer : View {
     let videoURL: URL
+    let onReloadMedia: () -> Void
+    
     @StateObject private var viewModel = VideoPlayerViewModel()
     
     var body: some View {
         ZStack {
-            if let player = viewModel.player {
+            if viewModel.failedToLoad {
+                ZStack {
+                    RefreshButton(onRefresh: { onReloadMedia() })
+                }
+                .frame(maxWidth: .infinity, minHeight: 300)
+                .cornerRadius(4)
+            } else if let player = viewModel.player {
                 VideoPlayer(player: player)
             } else {
                 ProgressView()
@@ -36,27 +44,33 @@ private final class VideoPlayerViewModel: ObservableObject {
     private var playerItemObservation: NSKeyValueObservation?
 
     func setup(url: URL) {
-        MXLog.info("VIDEO_URL_REQUESTED: \(url.absoluteString)")
         let item = AVPlayerItem(url: url)
 
         // Observe status
         playerItemObservation = item.observe(\.status, options: [.new, .initial]) { [weak self] item, _ in
             if item.status == .failed {
-                DispatchQueue.main.async {
-                    self?.failedToLoad = true
-                    ZeroCustomEventService.shared.feedScreenEvent(parameters: [
-                        "type": "Feed Media Preview Video - Internal",
-                        "status": "Failure",
-                        "mediaUrl": url.absoluteString,
-                        "error": item.error?.localizedDescription ?? "Unknown error"
-                    ])
-                    MXLog.error("❌ Video failed to load: \(item.error?.localizedDescription ?? "Unknown error")")
-                }
+                self?.setFailedToLoad(failed: true)
+                ZeroCustomEventService.shared.feedScreenEvent(parameters: [
+                    "type": "Feed Media Preview Video",
+                    "status": "Failure",
+                    "mediaUrl": url.absoluteString,
+                    "error": item.error?.localizedDescription ?? "Unknown error"
+                ])
+            }
+            
+            if item.status == .readyToPlay {
+                self?.setFailedToLoad(failed: false)
             }
         }
 
         let player = AVPlayer(playerItem: item)
         self.player = player
+    }
+    
+    private func setFailedToLoad(failed: Bool) {
+        DispatchQueue.main.async {
+            self.failedToLoad = failed
+        }
     }
 
     func cleanup() {

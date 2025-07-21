@@ -236,7 +236,7 @@ struct UserFeedsList: View {
                                         context.send(viewAction: .openMediaPreview(mediaId, key: post.id))
                                     },
                                     onReloadMedia: {
-                                        
+                                        context.send(viewAction: .reloadFeedMedia(post))
                                     })
                 )
                 .padding(.horizontal, 16)

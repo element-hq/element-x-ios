@@ -76,12 +76,6 @@ struct DeveloperOptionsScreen: View {
 //            } footer: {
 //                Text("This setting controls how end-to-end encryption (E2EE) keys are exchanged. Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners.")
 //            }
-            
-            Section("Feed Media") {
-                Toggle(isOn: $context.enableExternalMediaLoading) {
-                    Text("Load using third party")
-                }
-            }
 
             Section {
                 Button(role: .destructive) {

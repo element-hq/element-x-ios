@@ -833,7 +833,6 @@ class ClientProxy: ClientProxyProtocol {
     func zeroProfiles(userIds: Set<String>) async {
         do {
             let zeroProfiles = try await zeroApiProxy.matrixUsersService.fetchZeroUsers(userIds: Array(userIds))
-            //TODO: save these profiles in cache to check zero pro badge status
             homeRoomSummariesUsersSubject.send(zeroProfiles)
         } catch {
             MXLog.error("Failed retrieving zero profiles for userIDs: \(userIds) with error: \(error)")

@@ -11,7 +11,6 @@ import Compound
 struct HomeScreenPostCell: View {
     let post: HomeScreenPost
     
-    var externalLoading: Bool = true
     var mediaProvider: MediaProviderProtocol? = nil
     var postMediaUrl: String? = nil
     var availableLinkPreview: ZLinkPreview? = nil
@@ -127,8 +126,7 @@ struct HomeScreenPostCell: View {
                 }
                 
                 if let mediaInfo = post.mediaInfo {
-                    PostMediaPreview(externalLoading: externalLoading,
-                                     mediaInfo: mediaInfo,
+                    PostMediaPreview(mediaInfo: mediaInfo,
                                      mediaUrlString: postMediaUrl,
                                      onMediaTapped: { actions?.onMediaTapped(mediaInfo.id) },
                                      onReloadMedia: { actions?.onReloadMedia() })

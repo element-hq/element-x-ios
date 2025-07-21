@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct FeedMediaInternalLoaderProtocol {
+struct FeedMediaPreFetchProtocol {
     var onMediaLoaded: ([String: HomeScreenPostMediaInfo]) -> Void
 }

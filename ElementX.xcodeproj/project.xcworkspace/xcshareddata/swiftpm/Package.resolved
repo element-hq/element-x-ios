@@ -1,5 +1,5 @@
 {
-  "originHash" : "3657dacdc2d4343cf6b3fa510b2f7a72efd1c5255f073e03f1d6a18ed9eecca8",
+  "originHash" : "abe8d52ba2b23f252244a3a21d5efde6e2180bdad3c48f9f932112e79c9b0eb4",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -169,15 +169,6 @@
       "state" : {
         "revision" : "cc0001a0cf963aa40501d9c2b181e7fc9fd8ec71",
         "version" : "1.69.0"
-      }
-    },
-    {
-      "identity" : "gsplayer",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/wxxsw/GSPlayer.git",
-      "state" : {
-        "revision" : "49ebb0fe4cacfcdedc04c3c2fa3ed3c15c9249a4",
-        "version" : "0.2.29"
       }
     },
     {
@@ -547,15 +538,6 @@
       "state" : {
         "revision" : "67ce582bb9de70e1eb2ee41fd71aad3b5f86d97b",
         "version" : "2.2.0"
-      }
-    },
-    {
-      "identity" : "videoplayer",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/wxxsw/VideoPlayer",
-      "state" : {
-        "revision" : "7a388d3e16ba7a9c347ef2c41079d517eecc9c5a",
-        "version" : "1.2.5"
       }
     },
     {

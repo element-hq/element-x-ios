@@ -40,7 +40,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private var channelRoomMap: [String: RoomInfoProxy] = [:]
     private var roomNotificationUpdateMap: [String: RoomNotificationModeProxy] = [:]
     
-    private var feedMediaPreLoader: FeedMediaInternalPreLoader? = nil
+    private var feedMediaPreFetchService: FeedMediaPreFetchService? = nil
     
     init(userSession: UserSessionProtocol,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
@@ -60,11 +60,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         super.init(initialViewState: .init(userID: userSession.clientProxy.userID),
                    mediaProvider: userSession.mediaProvider)
         
-        self.feedMediaPreLoader = FeedMediaInternalPreLoader(mediaProtocol: .init(onMediaLoaded: { map in
+        self.feedMediaPreFetchService = FeedMediaPreFetchService(mediaProtocol: .init(onMediaLoaded: { map in
             self.state.postMediaInfoMap = map
         }),
-                                                             clientProxy: userSession.clientProxy,
-                                                             appSetting: appSettings)
+                                                                 clientProxy: userSession.clientProxy,
+                                                                 loadInitialPosts: true)
         
         userSession.clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)
@@ -163,9 +163,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 self?.mapDirectChatUsersProBadgeStatus(users)
             }
             .store(in: &cancellables)
-        
-        state.feedMediaExternalLoadingEnabled = appSettings.enableExternalMediaLoading
-        
+                
         Task {
             state.reportRoomEnabled = await userSession.clientProxy.isReportRoomSupported
         }
@@ -689,11 +687,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 state.postListMode = .posts
                 isFetchPostsInProgress = false
                 
-                if appSettings.enableExternalMediaLoading {
-                    await loadPostsContentConcurrently(for: state.posts)
-                } else {
-                    await loadPostContentConcurrentlyInternal(for: state.posts, followingPosts: followingOnly)
-                }
+                await loadPostContentConcurrently(for: state.posts, followingPosts: followingOnly)
             }
         case .failure(let error):
             MXLog.error("Failed to fetch zero posts: \(error)")
@@ -839,93 +833,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         roomNotificationUpdateMap.removeAll()
     }
     
-    private func loadPostsContentConcurrently(for posts: [HomeScreenPost]) async {
-        async let mediaInfoTask: ([HomeScreenPost]) = loadPostsMediaInfo(for: posts)
+    private func loadPostContentConcurrently(for posts: [HomeScreenPost], followingPosts: Bool) async {
+        async let nextPagePostsTask: () =  feedMediaPreFetchService?.loadHomePostsPage(following: followingPosts,
+                                                                                       currentCount: posts.count) ?? ()
         async let linkPreviewTask: () = loadPostLinkPreviews(for: posts)
-        let results = await (mediaInfoTask, linkPreviewTask)
-        
-        let failedPosts = results.0
-        if !failedPosts.isEmpty {
-            _ = await loadPostsMediaInfo(for: failedPosts)
-        }
-    }
-    
-    private func loadPostContentConcurrentlyInternal(for posts: [HomeScreenPost], followingPosts: Bool) async {
-        async let mediaInfoTask: () = if followingPosts {
-            feedMediaPreLoader?.preFetchFollowingPosts(currentPostsCount: state.posts.count) ?? ()
-        } else {
-            feedMediaPreLoader?.preFetchAllPosts(currentPostsCount: state.posts.count) ?? ()
-        }
-        async let linkPreviewTask: () = loadPostLinkPreviews(for: posts)
-        _ = await (mediaInfoTask, linkPreviewTask)
-    }
-    
-    private func loadPostsMediaInfo(for posts: [HomeScreenPost]) async -> [HomeScreenPost] {
-        let postsToFetchMedia = posts.filter {
-            $0.mediaInfo != nil && state.postMediaInfoMap[$0.id] == nil
-        }
-        guard !postsToFetchMedia.isEmpty else { return [] }
-        let results = await withTaskGroup(of: (HomeScreenPost, ZPostMedia?).self) { group in
-            for post in postsToFetchMedia {
-                
-                guard !Task.isCancelled else { continue }
-                
-                group.addTask {
-                    guard let mediaId = post.mediaInfo?.id else { return (post, nil) }
-                    let result = await withTimeout(seconds: 10, operation: {
-                        await self.userSession.clientProxy.getPostMediaInfo(mediaId: mediaId)
-                    })
-                    
-                    guard !Task.isCancelled else { return (post, nil) }
-                    
-                    if case .success(let media) = result {
-                        if await self.appSettings.enableExternalMediaLoading {
-                            if let url = URL(string: media.signedUrl) {
-                                if media.media.isVideo {
-                                    FeedMediaPreLoader.shared.preloadVideoMedia(url, mediaId: mediaId)
-                                } else {
-                                    FeedMediaPreLoader.shared.preloadImageMedia(url, mediaId: mediaId)
-                                }
-                            }
-                        }
-                        return (post, media)
-                    }
-                    return (post, nil)
-                }
-            }
-            
-            var successPosts: [String: ZPostMedia] = [:]
-            var failedPosts: [HomeScreenPost] = []
-            for await (post, media) in group {
-                if let media = media {
-                    successPosts[post.id] = media
-                } else {
-                    failedPosts.append(post)
-                }
-            }
-            updateFeedMediaStateWithResults(successPosts)
-            return failedPosts
-        }
-        return results
-    }
-    
-    @MainActor
-    private func updateFeedMediaStateWithResults(_ results: [String: ZPostMedia]) {
-        for (postId, media) in results {
-            state.postMediaInfoMap[postId] = HomeScreenPostMediaInfo(media: media)
-        }
+        _ = await (nextPagePostsTask, linkPreviewTask)
     }
     
     private func reloadFeedMedia(_ post: HomeScreenPost) {
-        guard let mediaId = post.mediaInfo?.id else { return }
-        Task {
-            async let mediaInfo = userSession.clientProxy.getPostMediaInfo(mediaId: mediaId)
-            let result = await(mediaInfo)
-            if case .success(let media) = result {
-                await MainActor.run {
-                    state.postMediaInfoMap[post.id] = HomeScreenPostMediaInfo(media: media)
-                }
-            }
+        feedMediaPreFetchService?.reloadMedia(post) { mediaInfo in
+            self.state.postMediaInfoMap[post.id] = mediaInfo
         }
     }
     
@@ -1141,24 +1058,26 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             return
         }
 
-        let directChatRooms = roomSummaryProvider.roomListPublisher.value.filter(\.isDirectOneToOneRoom)
-        let currentUserId = userSession.clientProxy.userID
+        Task {
+            let directChatRooms = roomSummaryProvider.roomListPublisher.value.filter(\.isDirectOneToOneRoom)
+            let currentUserId = userSession.clientProxy.userID
 
-        let userStatusMap: [String: Bool] = directChatRooms.reduce(into: [:]) { result, room in
-            let directUser = if let hero = room.heroes.first, hero.userID != currentUserId {
-                zeroProfiles.first { $0.matrixId == hero.userID }
-            } else {
-                zeroProfiles.first {
-                    $0.displayName.caseInsensitiveCompare(room.name) == .orderedSame ||
-                    $0.id.rawValue.caseInsensitiveCompare(room.name) == .orderedSame
+            let userStatusMap: [String: Bool] = directChatRooms.reduce(into: [:]) { result, room in
+                let directUser = if let hero = room.heroes.first, hero.userID != currentUserId {
+                    zeroProfiles.first { $0.matrixId == hero.userID }
+                } else {
+                    zeroProfiles.first {
+                        $0.displayName.caseInsensitiveCompare(room.name) == .orderedSame ||
+                        $0.id.rawValue.caseInsensitiveCompare(room.name) == .orderedSame
+                    }
+                }
+                if let user = directUser {
+                    result[room.id] = user.subscriptions.zeroPro
                 }
             }
-            if let user = directUser {
-                result[room.id] = user.subscriptions.zeroPro
-            }
-        }
 
-        state.directRoomsUserStatusMap = userStatusMap
+            state.directRoomsUserStatusMap = userStatusMap
+        }
     }
     
     private func viewWalletTransactionDetails(_ walletTransactionId: String) {

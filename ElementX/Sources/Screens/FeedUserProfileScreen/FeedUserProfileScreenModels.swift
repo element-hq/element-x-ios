@@ -69,6 +69,7 @@ enum FeedUserProfileScreenViewAction {
     case displayAvatar(_ url: URL)
     case openMediaPreview(_ mediaId: String, key: String)
     case newFeed
+    case reloadFeedMedia(_ post: HomeScreenPost)
 }
 
 enum UserFeedsListMode: CustomStringConvertible {

@@ -67,8 +67,6 @@ final class AppSettings {
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
         case hideQuietNotificationAlerts
-        
-        case enableExternalMediaLoading
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -398,10 +396,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.cachedZeroUsers, defaultValue: [], storageType: .userDefaults(store))
     var cachedZeroUsers: [ZMatrixUser]
-    
-    // MARK: - ZERO User
-    @UserPreference(key: UserDefaultsKeys.enableExternalMediaLoading, defaultValue: false, storageType: .userDefaults(store))
-    var enableExternalMediaLoading: Bool
 }
 
 extension AppSettings: CommonSettingsProtocol { }
