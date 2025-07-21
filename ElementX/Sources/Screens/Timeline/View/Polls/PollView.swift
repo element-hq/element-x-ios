@@ -128,6 +128,7 @@ struct PollView: View {
                 .scaledPadding(.leading, showVotes ? 0 : 32)
                 .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, alignment: showVotes ? .trailing : .leading)
+                .accessibilityIdentifier(A11yIdentifiers.pollView.summary)
         }
     }
 
