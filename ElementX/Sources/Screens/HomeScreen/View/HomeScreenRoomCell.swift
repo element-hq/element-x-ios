@@ -43,6 +43,7 @@ struct HomeScreenRoomCell: View {
         }
         .buttonStyle(HomeScreenRoomCellButtonStyle(isSelected: isSelected))
         .accessibilityIdentifier(A11yIdentifiers.homeScreen.roomName(room.name))
+        .accessibilityHidden(redactionReasons.contains(.placeholder) ? true : false)
     }
     
     @ViewBuilder @MainActor
