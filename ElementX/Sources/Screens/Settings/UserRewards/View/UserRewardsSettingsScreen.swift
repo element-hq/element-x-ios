@@ -52,16 +52,23 @@ struct UserRewardsSettingsScreen: View {
         VStack(spacing: 0) {
             VStack(alignment: .center, spacing: 0) {
                 Text(
-                    "$\(context.viewState.bindings.userRewards.getRefPriceFormatted())"
+                    "$\(context.userRewards.getRefPriceFormatted())"
                 )
                 .font(.robotoMonoRegular(size: 38))
                 .foregroundColor(.compound.textPrimary)
 
                 Text(
-                    "\(context.viewState.bindings.userRewards.getZeroCreditsFormatted()) MEOW"
+                    "\(context.userRewards.getZeroCreditsFormatted()) MEOW"
                 )
                 .font(.robotoMonoRegular(size: 14))
                 .foregroundColor(.compound.textSecondary)
+                
+                if context.userRewards.hasUnclaimedRewards() {
+                    Text("You can now claim $\(context.userRewards.getUnclaimedRewardsRefPriceFormatted())")
+                        .font(.zero.bodyMD)
+                        .foregroundStyle(.compound.textSecondary)
+                        .padding(.vertical, 12)
+                }
             }
 
             Spacer()

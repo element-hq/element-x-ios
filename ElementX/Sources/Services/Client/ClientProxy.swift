@@ -977,8 +977,8 @@ class ClientProxy: ClientProxyProtocol {
                     let zeroRewards = ZeroRewards(rewards: zRewards, currency: zCurrency)
                     
                     if shouldCheckRewardsIntiamtion {
-                        let oldCredits = oldRewards.getZeroCredits()
-                        let newCredits = zeroRewards.getZeroCredits()
+                        let oldCredits = oldRewards.zeroCredits
+                        let newCredits = zeroRewards.zeroCredits
                         showNewUserRewardsIntimationSubject.send(newCredits > oldCredits)
                     }
                     
@@ -1425,12 +1425,13 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func claimRewards(userWalletAddress: String) async -> Result<Void, ClientProxyError> {
+    func claimRewards(userWalletAddress: String) async -> Result<String, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.walletsApi.claimRewards(walletAddress: userWalletAddress)
             switch result {
-            case .success:
-                return .success(())
+            case .success(let transaction):
+                _ = await getUserRewards()
+                return .success(transaction.transactionHash)
             case .failure(let error):
                 return .failure(.zeroError(error))
             }

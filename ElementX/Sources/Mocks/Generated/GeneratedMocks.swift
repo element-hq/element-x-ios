@@ -7591,13 +7591,13 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var claimRewardsUserWalletAddressReceivedUserWalletAddress: String?
     var claimRewardsUserWalletAddressReceivedInvocations: [String] = []
 
-    var claimRewardsUserWalletAddressUnderlyingReturnValue: Result<Void, ClientProxyError>!
-    var claimRewardsUserWalletAddressReturnValue: Result<Void, ClientProxyError>! {
+    var claimRewardsUserWalletAddressUnderlyingReturnValue: Result<String, ClientProxyError>!
+    var claimRewardsUserWalletAddressReturnValue: Result<String, ClientProxyError>! {
         get {
             if Thread.isMainThread {
                 return claimRewardsUserWalletAddressUnderlyingReturnValue
             } else {
-                var returnValue: Result<Void, ClientProxyError>? = nil
+                var returnValue: Result<String, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = claimRewardsUserWalletAddressUnderlyingReturnValue
                 }
@@ -7615,9 +7615,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var claimRewardsUserWalletAddressClosure: ((String) async -> Result<Void, ClientProxyError>)?
+    var claimRewardsUserWalletAddressClosure: ((String) async -> Result<String, ClientProxyError>)?
 
-    func claimRewards(userWalletAddress: String) async -> Result<Void, ClientProxyError> {
+    func claimRewards(userWalletAddress: String) async -> Result<String, ClientProxyError> {
         claimRewardsUserWalletAddressCallsCount += 1
         claimRewardsUserWalletAddressReceivedUserWalletAddress = userWalletAddress
         DispatchQueue.main.async {

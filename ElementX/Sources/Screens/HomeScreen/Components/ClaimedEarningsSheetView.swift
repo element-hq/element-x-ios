@@ -10,8 +10,11 @@ import SwiftUI
 
 struct ClaimedEarningsSheetView: View {
     var state: ClaimRewardsState = .none
+    
+    let userRewards: ZeroRewards
     let onDismiss: () -> Void
     let onRetryClaim: () -> Void
+    let onViewClaimTransaction: (String) -> Void
     
     var headerText: String {
         return switch state {
@@ -21,7 +24,7 @@ struct ClaimedEarningsSheetView: View {
         case .failure:
             "Claim Failed"
         case .success:
-            "25,000.23 MEOW"
+            "\(userRewards.getUnclaimedRewardsFormatted()) MEOW"
         }
     }
     
@@ -44,7 +47,16 @@ struct ClaimedEarningsSheetView: View {
         case .failure:
             "No rewards available to claim at this time."
         case .success:
-            "$1200.24"
+            "$\(userRewards.getUnclaimedRewardsRefPriceFormatted())"
+        }
+    }
+    
+    var secondaryButtonText: String {
+        return switch state {
+        case .success:
+            "View Transaction"
+        default:
+            "Try Again"
         }
     }
     
@@ -118,9 +130,7 @@ struct ClaimedEarningsSheetView: View {
                 Spacer()
                 
                 HStack {
-                    if case .failure = state {
-                        secondaryActionButton
-                    }
+                    secondaryActionButton
                     closeButton
                 }
             }
@@ -133,8 +143,15 @@ struct ClaimedEarningsSheetView: View {
     
     @ViewBuilder
     var secondaryActionButton: some View {
-        Button(action: { onRetryClaim() }) {
-            Text("Try Again")
+        Button(action: {
+            if case .success(let transaction) = state {
+                onViewClaimTransaction(transaction)
+            }
+            if case .failure = state {
+                onRetryClaim()
+            }
+        }) {
+            Text(secondaryButtonText)
                 .font(.compound.bodyMDSemibold)
                 .foregroundColor(.zero.bgAccentRest)
                 .padding()

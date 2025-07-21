@@ -172,7 +172,7 @@ enum HomeScreenSecurityBannerMode: Equatable {
 enum ClaimRewardsState {
     case none
     case claiming
-    case success
+    case success(String)
     case failure
 }
 

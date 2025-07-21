@@ -112,10 +112,16 @@ struct SettingsScreen: View {
                         userRewardsView
                     }
                     
-                    ClaimEarningsButton(onTap: {
-                        context.send(viewAction: .claimRewards)
-                    })
-                    .padding(.horizontal, 16)
+                    if context.viewState.userRewards.hasUnclaimedRewards() {
+                        Text("You can now claim $\(context.viewState.userRewards.getUnclaimedRewardsRefPriceFormatted())")
+                            .font(.zero.bodyMD)
+                            .foregroundStyle(.compound.textSecondary)
+                        
+                        ClaimEarningsButton(onTap: {
+                            context.send(viewAction: .claimRewards)
+                        })
+                        .padding(.horizontal, 16)
+                    }
                     
                     HorizontalDivider()
                         .padding(.vertical, 8)

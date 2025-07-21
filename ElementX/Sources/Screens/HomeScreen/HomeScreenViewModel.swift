@@ -1107,17 +1107,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         if let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
             state.claimRewardsState = .claiming
             state.bindings.showEarningsClaimedSheet = true
-            //            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            //                self.state.claimRewardsState = .success
-            //            }
-            //            DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
-            //                self.state.claimRewardsState = .failure
-            //            }
             Task {
                 let result = await userSession.clientProxy.claimRewards(userWalletAddress: walletAddress)
                 switch result {
-                case .success:
-                    state.claimRewardsState = .success
+                case .success(let transactionHash):
+                    state.claimRewardsState = .success(transactionHash)
                 case .failure(_):
                     state.claimRewardsState = .failure
                 }
