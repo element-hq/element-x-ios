@@ -3,6 +3,7 @@
 "a11y_avatar" = "Avatar";
 "a11y_delete" = "Hapus";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "Sembunyikan kata sandi";
 "a11y_join_call" = "Bergabung dalam panggilan";
 "a11y_jump_to_bottom" = "Lompat ke bawah";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "Rekam pesan suara.";
 "a11y_voice_message_stop_recording" = "Berhenti merekam";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Avatar pengguna lain";
 "a11y.room_avatar" = "Avatar ruangan";
 "a11y.user_avatar" = "Avatar pengguna";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "Lainnya";
 "screen_change_account_provider_subtitle" = "Gunakan penyedia akun yang berbeda, seperti server pribadi Anda sendiri atau akun kerja.";
 "screen_change_account_provider_title" = "Ubah penyedia akun";
+"screen_change_server_error_element_pro_required_action_ios" = "App Store";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "Kami tidak dapat menjangkau server ini. Periksa apakah Anda telah memasukkan URL homeserver dengan benar. Jika URL sudah benar, hubungi administrator homeserver Anda untuk bantuan lebih lanjut.";
 "screen_change_server_error_invalid_well_known" = "Server tidak tersedia karena ada masalah dalam berkas .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Penyedia akun yang dipilih tidak mendukung sinkronisasi geser. Peningkatan server diperlukan untuk digunakan %1$@.";

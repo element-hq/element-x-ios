@@ -3,6 +3,7 @@
 "a11y_avatar" = "Avatar";
 "a11y_delete" = "Delete";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "Hide password";
 "a11y_join_call" = "Join call";
 "a11y_jump_to_bottom" = "Jump to bottom";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "Record voice message.";
 "a11y_voice_message_stop_recording" = "Stop recording";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";

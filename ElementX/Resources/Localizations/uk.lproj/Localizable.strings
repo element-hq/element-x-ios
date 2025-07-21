@@ -3,6 +3,7 @@
 "a11y_avatar" = "Аватар";
 "a11y_delete" = "Видалити";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "Cховати пароль";
 "a11y_join_call" = "Приєднатися до виклику";
 "a11y_jump_to_bottom" = "Перейти вниз";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "Записати голосове повідомлення.";
 "a11y_voice_message_stop_recording" = "Припинити запис";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "Інше";
 "screen_change_account_provider_subtitle" = "Використати іншого провайдера облікових записів, наприклад, власний приватний сервер або робочий обліковий запис.";
 "screen_change_account_provider_title" = "Змінити провайдера облікового запису";
+"screen_change_server_error_element_pro_required_action_ios" = "App Store";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "Не вдалося під'єднатися до цього домашнього сервера. Перевірте правильність введеної URL-адреси домашнього сервера. Якщо URL-адреса правильна, зверніться по додаткову допомогу до адміністратора домашнього сервера.";
 "screen_change_server_error_invalid_well_known" = "Сервер недоступний через помилку у файлі well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Вибраний постачальник облікових записів не підтримує sliding sync. Щоб користуватися %1$@ необхідно оновити сервер.";

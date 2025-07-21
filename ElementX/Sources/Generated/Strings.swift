@@ -24,6 +24,10 @@ internal enum L10n {
   }
   /// Edit avatar
   internal static var a11yEditAvatar: String { return L10n.tr("Localizable", "a11y_edit_avatar") }
+  /// The full address will be %1$@
+  internal static func a11yEditRoomAddressHint(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "a11y_edit_room_address_hint", String(describing: p1))
+  }
   /// Hide password
   internal static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
   /// Join call
@@ -3136,6 +3140,8 @@ internal enum L10n {
   internal enum A11y {
     /// Encryption details
     internal static var encryptionDetails: String { return L10n.tr("Localizable", "a11y.encryption_details") }
+    /// Move the map to my location
+    internal static var moveTheMapToMyLocation: String { return L10n.tr("Localizable", "a11y.move_the_map_to_my_location") }
     /// Other user's avatar
     internal static var otherUserAvatar: String { return L10n.tr("Localizable", "a11y.other_user_avatar") }
     /// Room avatar

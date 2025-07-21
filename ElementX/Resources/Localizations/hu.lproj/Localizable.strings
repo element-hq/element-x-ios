@@ -3,6 +3,7 @@
 "a11y_avatar" = "Profilkép";
 "a11y_delete" = "Törlés";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "Jelszó elrejtése";
 "a11y_join_call" = "Csatlakozás a híváshoz";
 "a11y_jump_to_bottom" = "Ugrás az aljára";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "Hangüzenet felvétele.";
 "a11y_voice_message_stop_recording" = "Rögzítés leállítása";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "Egyéb";
 "screen_change_account_provider_subtitle" = "Másik fiókszolgáltató, például a saját privát kiszolgáló vagy egy munkahelyi fiók használata.";
 "screen_change_account_provider_title" = "Fiókszolgáltató módosítása";
+"screen_change_server_error_element_pro_required_action_ios" = "App Store";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "Nem sikerült elérni ezt a Matrix-kiszolgálót. Ellenőrizze, hogy helyesen adta-e meg a Matrix-kiszolgáló webcímét. Ha a webcím helyes, akkor további segítségért lépjen kapcsolatba a Matrix-kiszolgáló adminisztrátorával.";
 "screen_change_server_error_invalid_well_known" = "A kiszolgáló a well-known fájl problémája miatt nem érhető el:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "A kiválasztott fiókszolgáltató nem támogatja a csúszóablakos szinkronizálást. Az %1$@ használatához kiszolgálófrissítés szükséges.";

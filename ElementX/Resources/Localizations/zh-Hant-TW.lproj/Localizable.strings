@@ -3,6 +3,7 @@
 "a11y_avatar" = "大頭貼";
 "a11y_delete" = "刪除";
 "a11y_edit_avatar" = "Edit avatar";
+"a11y_edit_room_address_hint" = "The full address will be %1$@";
 "a11y_hide_password" = "隱藏密碼";
 "a11y_join_call" = "加入通話";
 "a11y_jump_to_bottom" = "跳至底部";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "錄製語音訊息。";
 "a11y_voice_message_stop_recording" = "停止錄音";
 "a11y.encryption_details" = "Encryption details";
+"a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
 "a11y.user_avatar" = "User avatar";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "其他";
 "screen_change_account_provider_subtitle" = "使用不同的帳戶提供者，例如您自己的伺服器或工作帳號。";
 "screen_change_account_provider_title" = "更改帳號提供者";
+"screen_change_server_error_element_pro_required_action_ios" = "App Store";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Element Pro required";
 "screen_change_server_error_invalid_homeserver" = "我們無法連線至此家伺服器。請檢查您是否已正確輸入家伺服器 URL。若 URL 正確，請聯絡您家伺服器的管理員以取得進一步協助。";
 "screen_change_server_error_invalid_well_known" = "因為 well-known 檔案的問題，伺服器不可用：\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "選定的帳號提供者不支援 sliding sync。必須升級伺服器才能使用 %1$@。";

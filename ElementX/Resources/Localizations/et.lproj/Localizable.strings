@@ -3,6 +3,7 @@
 "a11y_avatar" = "Tunnuspilt";
 "a11y_delete" = "Kustuta";
 "a11y_edit_avatar" = "Muuda tunnuspilti";
+"a11y_edit_room_address_hint" = "Täisaadress saab olema %1$@";
 "a11y_hide_password" = "Peida salasõna";
 "a11y_join_call" = "Liitu kõnega";
 "a11y_jump_to_bottom" = "Mine lõppu";
@@ -37,6 +38,7 @@
 "a11y_voice_message_record" = "Salvesta häälsõnum.";
 "a11y_voice_message_stop_recording" = "Lõpeta salvestamine";
 "a11y.encryption_details" = "Krüptimise üksikasjad";
+"a11y.move_the_map_to_my_location" = "Nihuta kaart minu asukohta";
 "a11y.other_user_avatar" = "Teise kasutaja tunnuspilt";
 "a11y.room_avatar" = "Jututoa tunnuspilt";
 "a11y.user_avatar" = "Kasutaja tunnuspilt";
@@ -659,6 +661,9 @@
 "screen_change_account_provider_other" = "Muu teenusepakkuja";
 "screen_change_account_provider_subtitle" = "Kasuta erinevat teenusepakkujat, milleks võib olla ka sinu oma server või töökoha hallatav server.";
 "screen_change_account_provider_title" = "Muuda teenusepakkujat";
+"screen_change_server_error_element_pro_required_action_ios" = "Rakendustepood";
+"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "Vajalik on Element Pro";
 "screen_change_server_error_invalid_homeserver" = "Me ei suutnud luuaühendust selle koduserveriga. Palun kontrolli, kas koduserveri aadress on õige. Kui aadress on õige, siis täiendavat teavet oskab sulle anda koduserveri haldaja.";
 "screen_change_server_error_invalid_well_known" = "Server pole saadaval vea tõttu well-known failis:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Valitud teenusepakkuja ei toeta „sliding sync“ režiimi. Rakenduse %1$@ kasutamiseks on vaja serverit uuendada.";
