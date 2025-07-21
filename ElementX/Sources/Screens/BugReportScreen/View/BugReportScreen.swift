@@ -107,6 +107,7 @@ struct BugReportScreen: View {
                     .frame(width: 100)
                     .cornerRadius(4)
                     .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.screenshot)
+                    .accessibilityLabel(L10n.screenBugReportA11yScreenshot)
                     .overlay(alignment: .topTrailing) {
                         Button { context.send(viewAction: .removeScreenshot) } label: {
                             CompoundIcon(\.close, size: .small, relativeTo: .compound.bodyMD)
