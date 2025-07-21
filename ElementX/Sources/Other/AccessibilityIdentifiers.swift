@@ -42,7 +42,6 @@ enum A11yIdentifiers {
     static let pollFormScreen = PollFormScreen()
     static let roomPollsHistoryScreen = RoomPollsHistoryScreen()
     static let manageRoomMemberSheet = ManageRoomMemberSheet()
-    static let pollView = PollView()
     
     struct AlertInfo {
         let primaryButton = "alert_info-primary_button"
@@ -297,9 +296,5 @@ enum A11yIdentifiers {
     
     struct ManageRoomMemberSheet {
         let viewProfile = "manage_room_member_sheet-view_profile"
-    }
-    
-    struct PollView {
-        let summary = "poll_view-summary"
     }
 }
