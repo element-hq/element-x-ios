@@ -273,8 +273,11 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var directMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never> { get }
     var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser, Never> { get }
+    var homeRoomSummariesUsersPublisher: CurrentValuePublisher<[ZMatrixUser], Never> { get }
         
     func zeroProfile(userId: String) async
+    
+    func zeroProfiles(userIds: Set<String>) async
     
     func checkAndLinkZeroUser() async
     

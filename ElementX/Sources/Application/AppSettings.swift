@@ -58,9 +58,11 @@ final class AppSettings {
         case threadsEnabled
         case developerOptionsEnabled
         case sharePosEnabled
+        
         case zeroAccessToken
         case zeroRewardsCredit
         case zeroLoggedInUser
+        case cachedZeroUsers
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -242,7 +244,7 @@ final class AppSettings {
     }
     
     var pushGatewayBaseURL: URL = "https://zos-push-gateway-c101e2f4da49.herokuapp.com/_matrix/push/v1/notify"
-    var pushGatewayNotifyEndpoint: URL { pushGatewayBaseURL.appending(path: "_matrix/push/v1/notify") }
+    var pushGatewayNotifyEndpoint: URL { pushGatewayBaseURL }
     
     @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))
     var enableNotifications
@@ -394,8 +396,11 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.zeroLoggedInUser, defaultValue: ZCurrentUser.placeholder, storageType: .userDefaults(store))
     var zeroLoggedInUser: ZCurrentUser
     
+    @UserPreference(key: UserDefaultsKeys.cachedZeroUsers, defaultValue: [], storageType: .userDefaults(store))
+    var cachedZeroUsers: [ZMatrixUser]
+    
     // MARK: - ZERO User
-    @UserPreference(key: UserDefaultsKeys.enableExternalMediaLoading, defaultValue: true, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.enableExternalMediaLoading, defaultValue: false, storageType: .userDefaults(store))
     var enableExternalMediaLoading: Bool
 }
 

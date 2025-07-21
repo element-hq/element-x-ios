@@ -34,6 +34,7 @@ struct RoomScreenViewState: BindableState {
     var roomTitle = ""
     var roomAvatar: RoomAvatar
     var roomSubtitle: String? = nil
+    var showProSubscriptionBadge: Bool = false
     var dmRecipientVerificationState: UserIdentityVerificationState?
     
     var lastScrollDirection: ScrollDirection?

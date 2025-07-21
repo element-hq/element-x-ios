@@ -28,6 +28,8 @@ protocol RoomMemberProxyProtocol: AnyObject {
     var role: RoomMemberRole { get }
     
     var primaryZeroId: String? { get }
+    
+    var isZeroProSubscriber: Bool { get }
 }
 
 extension RoomMemberProxyProtocol {

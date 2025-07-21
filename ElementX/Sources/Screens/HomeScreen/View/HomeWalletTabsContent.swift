@@ -42,7 +42,8 @@ struct HomeWalletTabsContentView : View {
                         loadMoreAction: { context.send(viewAction: .loadMoreWalletTokens) }
                     ),
                     selectedTab: selectedWalletTab,
-                    mediaProvider: context.mediaProvider
+                    mediaProvider: context.mediaProvider,
+                    onTap: { _ in }
                 )
                 
             case .transaction:
@@ -54,7 +55,10 @@ struct HomeWalletTabsContentView : View {
                         loadMoreAction: { context.send(viewAction: .loadMoreWalletTransactions) }
                     ),
                     selectedTab: selectedWalletTab,
-                    mediaProvider: context.mediaProvider
+                    mediaProvider: context.mediaProvider,
+                    onTap: { content in
+                        context.send(viewAction: .viewTransactionDetails(content))
+                    }
                 )
                 
             case .account:
@@ -66,7 +70,8 @@ struct HomeWalletTabsContentView : View {
                         loadMoreAction: { context.send(viewAction: .loadMoreWalletNFTs) }
                     ),
                     selectedTab: selectedWalletTab,
-                    mediaProvider: context.mediaProvider
+                    mediaProvider: context.mediaProvider,
+                    onTap: { _ in }
                 )
             }
         }
@@ -76,14 +81,18 @@ struct HomeWalletTabsContentView : View {
     fileprivate func walletTabContentView(
         tabContent: WalletTabContent,
         selectedTab: HomeWalletTab,
-        mediaProvider: MediaProviderProtocol?
+        mediaProvider: MediaProviderProtocol?,
+        onTap: @escaping (HomeScreenWalletContent) -> Void
     ) -> some View {
         if tabContent.items.isEmpty {
             HomeContentEmptyView(message: tabContent.emptyMessage)
         } else {
             LazyVStack(alignment: .leading, spacing: 0) {
                 ForEach(tabContent.items) { content in
-                    HomeWalletTabContentCell(content: content, selectedWalletTab: selectedTab, mediaProvider: mediaProvider) {}
+                    HomeWalletTabContentCell(content: content,
+                                             selectedWalletTab: selectedTab,
+                                             mediaProvider: mediaProvider,
+                                             onTap: { onTap(content) })
                         .padding(.vertical, 12)
                 }
                 
@@ -110,85 +119,93 @@ struct HomeWalletTabContentCell : View {
     let onTap: () -> Void
     
     var body: some View {
-        VStack(alignment: .leading) {
-            //header
-            if let header = content.header {
-                Text(header)
-                    .font(.zero.bodySM)
-                    .foregroundColor(.compound.textSecondary)
-            }
-            
-            HStack {
-                WalletTokenImage(url: content.icon)
+        Button {
+            onTap()
+        } label: {
+            VStack(alignment: .leading) {
+                //header
+                if let header = content.header {
+                    Text(header)
+                        .font(.zero.bodySM)
+                        .foregroundColor(.compound.textSecondary)
+                }
                 
-                VStack(alignment: .leading) {
-                    if let transactionAction = content.transactionAction {
-                        HStack {
-                            Text(transactionAction)
+                HStack {
+                    WalletTokenImage(url: content.icon)
+                    
+                    VStack(alignment: .leading) {
+                        if let transactionAction = content.transactionAction {
+                            HStack(spacing: 2) {
+                                Text(transactionAction)
+                                    .font(.zero.bodySM)
+                                    .foregroundColor(.compound.textSecondary)
+                                    .lineLimit(1)
+                                    .layoutPriority(1)
+                                
+                                Image(asset: Asset.Images.iconZChain)
+                                
+                                Text(content.transactionAddress ?? "")
+                                    .font(.zero.bodySM)
+                                    .foregroundColor(.compound.textSecondary)
+                                    .lineLimit(1)
+                                    .truncationMode(.tail)
+                                    .padding(.trailing, 8)
+                            }
+                        }
+                        
+                        Text(content.title)
+                            .font(.zero.bodyLG)
+                            .foregroundColor(.compound.textPrimary)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .padding(.vertical, 1)
+                        
+                        if let description = content.description {
+                            Text(description)
                                 .font(.zero.bodySM)
                                 .foregroundColor(.compound.textSecondary)
                                 .lineLimit(1)
-                                .layoutPriority(1)
-                            
-                            Image(asset: Asset.Images.iconZChain)
-                            
-                            Text(content.transactionAddress ?? "")
+                                .truncationMode(.middle)
+                        }
+                    }
+                    .padding(.leading, 4)
+                    
+                    Spacer()
+                    
+                    VStack(alignment: .trailing) {
+                        if let actionPreText = content.actionPreText {
+                            Text(actionPreText)
                                 .font(.zero.bodySM)
                                 .foregroundColor(.compound.textSecondary)
                                 .lineLimit(1)
                                 .truncationMode(.tail)
-                                .padding(.trailing, 8)
+                        }
+                        
+                        Text(content.actionText)
+                            .font(.zero.bodyLG)
+                            .foregroundColor(.compound.textPrimary)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .padding(.vertical, 1)
+                        
+                        if let actionPostText = content.actionPostText {
+                            Text(actionPostText)
+                                .font(.zero.bodySM)
+                                .foregroundColor(.zero.bgAccentRest)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
                         }
                     }
                     
-                    Text(content.title)
-                        .font(.zero.bodyLG)
-                        .foregroundColor(.compound.textPrimary)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                        .padding(.vertical, 1)
-                    
-                    if let description = content.description {
-                        Text(description)
-                            .font(.zero.bodySM)
-                            .foregroundColor(.compound.textSecondary)
-                            .lineLimit(1)
-                            .truncationMode(.middle)
-                    }
-                }
-                .padding(.leading, 4)
-                
-                Spacer()
-                
-                VStack(alignment: .trailing) {
-                    if let actionPreText = content.actionPreText {
-                        Text(actionPreText)
-                            .font(.zero.bodySM)
-                            .foregroundColor(.compound.textSecondary)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-                    }
-                    
-                    Text(content.actionText)
-                        .font(.zero.bodyLG)
-                        .foregroundColor(.compound.textPrimary)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                        .padding(.vertical, 1)
-                    
-                    if let actionPostText = content.actionPostText {
-                        Text(actionPostText)
-                            .font(.zero.bodySM)
-                            .foregroundColor(.zero.bgAccentRest)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
+                    if content.transactionAction != nil {
+                        CompoundIcon(\.chevronRight, size: .small, relativeTo: .zero.bodyLG)
+                            .foregroundStyle(.compound.textSecondary)
                     }
                 }
             }
+            .contentShape(Rectangle())
         }
-        .onTapGesture {
-            onTap()
-        }
+        .buttonStyle(.plain)
     }
 }
 

@@ -18,10 +18,12 @@ struct SearchRecipientView: View {
                 context.searchRecipientQuery = query
             })
             
-            Text("Results")
-                .font(.compound.bodyMDSemibold)
-                .foregroundStyle(.compound.textSecondary)
-                .padding(.top, 8)
+            if case .recipients(_) = context.viewState.recipientsListMode {
+                Text("Results")
+                    .font(.compound.bodyMDSemibold)
+                    .foregroundStyle(.compound.textSecondary)
+                    .padding(.top, 8)
+            }
             
             recipientsList
         }
@@ -45,8 +47,12 @@ struct SearchRecipientView: View {
                     }
                     .disabled(true)
                 case .empty:
-//                    HomeContentEmptyView(message: "No recipients found")
                     EmptyView()
+//                    if context.searchRecipientQuery.isEmpty {
+//                        EmptyView()
+//                    } else {
+//                        HomeContentEmptyView(message: "No recipients found")
+//                    }
                 case .recipients(let recipients):
                     LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(recipients, id: \.id) { recipient in
@@ -70,6 +76,7 @@ struct RecipientSearchBar: View {
     let onSearch: (String) -> Void
     
     @State var text: String = ""
+    @FocusState var isFocused: Bool
     
     var body: some View {
         HStack {
@@ -80,6 +87,7 @@ struct RecipientSearchBar: View {
             TextField("Name, ZNS or Address", text: $text)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
+                .focused($isFocused)
             
             if !text.isEmpty {
                 CompoundIcon(\.close)
@@ -95,6 +103,11 @@ struct RecipientSearchBar: View {
         .onChange(of: text) { _, newValue in
             onSearch(newValue)
         }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                isFocused = true
+            }
+        }
     }
 }
 
@@ -104,38 +117,50 @@ struct RecipientInfoCell: View {
     let onRecipientSelected: () -> Void
     
     var body: some View {
-        HStack {
-            LoadableAvatarImage(url: URL(string: recipient.profileImage),
-                                name: recipient.name,
-                                contentID: recipient.id,
-                                avatarSize: .user(on: .home),
-                                mediaProvider: mediaProvider,
-                                onTap: { _ in
-            })
-            
-            VStack(alignment: .leading) {
-                HStack {
-                    Text(recipient.name)
-                        .font(.zero.bodyLG)
-                        .foregroundStyle(.compound.textPrimary)
+        Button(action: {
+            onRecipientSelected()
+        }) {
+            HStack {
+                LoadableAvatarImage(
+                    url: URL(string: recipient.profileImage ?? ""),
+                    name: recipient.name,
+                    contentID: recipient.id,
+                    avatarSize: .user(on: .home),
+                    mediaProvider: mediaProvider,
+                    onTap: { _ in }
+                )
+                
+                VStack(alignment: .leading) {
+                    HStack {
+                        if let userName = recipient.name {
+                            Text(userName)
+                                .font(.zero.bodyLG)
+                                .foregroundStyle(.compound.textPrimary)
+                                .layoutPriority(1)
+                                .lineLimit(1)
+                        }
+                        
+                        if let primaryZid = recipient.primaryZid {
+                            Text(primaryZid)
+                                .font(.zero.bodyMD)
+                                .foregroundStyle(.compound.textSecondary)
+                                .lineLimit(1)
+                                .truncationMode(.tail)
+                        }
+                    }
                     
-                    Text(recipient.primaryZid)
-                        .font(.zero.bodyMD)
-                        .foregroundStyle(.compound.textSecondary)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                }
-                if let address = displayFormattedAddress(recipient.publicAddress) {
-                    Text(address)
-                        .font(.zero.bodyMD)
-                        .foregroundStyle(.compound.textSecondary)
-                        .lineLimit(1)
+                    if let address = displayFormattedAddress(recipient.publicAddress) {
+                        Text(address)
+                            .font(.zero.bodyMD)
+                            .foregroundStyle(.compound.textSecondary)
+                            .lineLimit(1)
+                    }
                 }
             }
+            .padding(.vertical, 12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
         }
-        .padding(.vertical, 12)
-        .onTapGesture {
-            onRecipientSelected()
-        }
+        .buttonStyle(.plain)
     }
 }

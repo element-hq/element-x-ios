@@ -77,7 +77,7 @@ struct CompletedTransactionView: View {
                     
                     UserInfoView(
                         image: recipient.profileImage,
-                        name: recipient.primaryZid,
+                        name: recipient.displayName,
                         address: displayFormattedAddress(recipient.publicAddress),
                         mediaProvider: context.mediaProvider
                     )

@@ -14,6 +14,7 @@ struct RoomMemberDetails: Identifiable, Hashable {
     let avatarURL: URL?
     let permalink: URL?
     let primaryZeroId: String?
+    let isZeroProSubscriber: Bool
     
     var isInvited: Bool
     var isIgnored: Bool
@@ -37,6 +38,7 @@ extension RoomMemberDetails {
         avatarURL = proxy.avatarURL
         permalink = proxy.permalink
         primaryZeroId = proxy.primaryZeroId
+        isZeroProSubscriber = proxy.isZeroProSubscriber
         
         isActive = proxy.isActive
         isInvited = proxy.membership == .invite

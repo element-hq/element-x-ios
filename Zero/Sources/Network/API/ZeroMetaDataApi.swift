@@ -82,6 +82,12 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
             await feedMediaCacheActor.storeLinkPreview(linkPreview, for: url)
             return .success(linkPreview)
         case .failure(let error):
+            ZeroCustomEventService.shared.feedApiEvent(parameters: [
+                "type": "GET_LINK_PREVIEW",
+                "status": "Failure",
+                "url": url,
+                "error": error.localizedDescription
+            ])
             return .failure(error)
         }
     }
@@ -103,6 +109,13 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
             await feedMediaCacheActor.storeMedia(mediaInfo, for: mediaId)
             return .success(mediaInfo)
         case .failure(let error):
+            ZeroCustomEventService.shared.feedApiEvent(parameters: [
+                "type": "GET_POST_MEDIA_INFO",
+                "status": "Failure",
+                "mediaId": mediaId,
+                "isPreview": isPreview,
+                "error": error.localizedDescription
+            ])
             return .failure(error)
         }
     }
@@ -143,13 +156,19 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
             await feedMediaCacheActor.storeLinkPreview(linkPreview, for: youtubeUrl)
             return .success(linkPreview)
         case .failure(let error):
+            ZeroCustomEventService.shared.feedApiEvent(parameters: [
+                "type": "FETCH_YOUTUBE_LINK_PREVIEW",
+                "status": "Failure",
+                "url": youtubeUrl,
+                "error": error.localizedDescription
+            ])
             return .failure(error)
         }
     }
     
     func loadFileFromUrl(_ remoteUrl: URL, key: String) async throws -> Result<URL, any Error> {
-        let fileName = remoteUrl.lastPathComponent
-        let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(key)-\(fileName)")
+        let fileName = remoteUrl.sanitizedFileName(key: key)
+        let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
         
         if FileManager.default.fileExists(atPath: destinationURL.path) {
             return .success(destinationURL)
@@ -171,6 +190,13 @@ class ZeroMetaDataApi: ZeroMetaDataApiProtocol {
                 return .failure(MediaLoadingError.invalidSignedURL)
             }
         case .failure(let error):
+            ZeroCustomEventService.shared.feedApiEvent(parameters: [
+                "type": "LOAD_FILE_FROM_MEDIA_ID",
+                "status": "Failure",
+                "mediaId": mediaId,
+                "key": key,
+                "error": error.localizedDescription
+            ])
             return .failure(error)
         }
     }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Compound
 
 struct HomeScreenPostCell: View {
     let post: HomeScreenPost
@@ -70,13 +71,30 @@ struct HomeScreenPostCell: View {
             
             VStack(alignment: .leading) {
                 HStack(alignment: .center) {
-                    Text(post.attributedSenderHeaderText)
-                        .lineLimit(1)
-                        .onTapGesture {
-                            if let postSenderProfile = post.senderProfile {
-                                actions?.onOpenUserProfile(postSenderProfile)
+                    HStack(spacing: 0) {
+                        Text(post.senderInfo.displayName ?? "")
+                            .font(.compound.bodyMDSemibold)
+                            .foregroundStyle(.compound.textPrimary)
+                            .lineLimit(1)
+                            .onTapGesture {
+                                if let postSenderProfile = post.senderProfile {
+                                    actions?.onOpenUserProfile(postSenderProfile)
+                                }
                             }
+                        
+                        let isZeroProSubscriber: Bool = post.senderProfile?.isZeroProSubscriber == true
+                        if isZeroProSubscriber {
+                            CompoundIcon(\.verified, size: .small, relativeTo: .compound.bodyMDSemibold)
+                                .foregroundStyle(.zero.bgAccentRest)
+                                .padding(.horizontal, 4)
                         }
+                        
+                        Text("• \(post.postUpdatedAt)")
+                            .font(.zero.bodyMD)
+                            .foregroundStyle(.compound.textSecondary)
+                            .layoutPriority(1)
+                            .padding(.horizontal, isZeroProSubscriber ? 0 : 4)
+                    }
                     
                     if post.worldPrimaryZId != nil && !post.isPostInOwnFeed {
                         Spacer()

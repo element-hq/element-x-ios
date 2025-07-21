@@ -37,6 +37,7 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
                 self?.state.currentUser = currentUser
+                self?.loadWalletTokenBalances()
             }
             .store(in: &cancellables)
         
@@ -58,7 +59,6 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
         case .onRecipientSelected(let recipient):
             state.transferRecipient = recipient
             setFlowState(.asset, isNavigatingForward: true)
-            loadWalletTokenBalances()
         case .loadMoreTokenAssets:
             loadWalletTokenBalances()
         case .onTokenAssetSelected(let asset):

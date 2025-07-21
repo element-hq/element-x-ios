@@ -296,6 +296,7 @@ struct JoinRoomScreen: View {
                     RoomHeaderView(roomName: context.viewState.title,
                                    roomSubtitle: nil,
                                    roomAvatar: avatar,
+                                   showProSubscriptionBadge: false,
                                    mediaProvider: context.mediaProvider)
                 }
             }

@@ -48,6 +48,7 @@ public struct ZeroListRowLabel<Icon: View>: View {
     
     var title: String?
     var status: String?
+    var isVerified: Bool = false
     var description: String?
     var icon: Icon?
     
@@ -177,9 +178,9 @@ public struct ZeroListRowLabel<Icon: View>: View {
     }
     
     var titleAndDescription: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: 0) {
             if let title {
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                HStack(spacing: 8) {
                     Text(title)
                         .font(.compound.bodyLG)
                         .foregroundColor(titleColor)
@@ -192,6 +193,11 @@ public struct ZeroListRowLabel<Icon: View>: View {
                             .font(.compound.bodySM)
                             .foregroundColor(statusColor)
                             .lineLimit(1)
+                    }
+                    
+                    if isVerified {
+                        CompoundIcon(\.verified, size: .xSmall, relativeTo: .compound.bodyLG)
+                            .foregroundStyle(.zero.bgAccentRest)
                     }
                 }
             }
@@ -307,11 +313,13 @@ public struct ZeroListRowLabel<Icon: View>: View {
     /// A label that displays an avatar as it's icon, such as a user profile row or for a room picker.
     public static func avatar(title: String,
                               status: String? = nil,
+                              isVerified: Bool = false,
                               description: String? = nil,
                               icon: Icon,
                               role: ZeroListRowLabel.Role? = nil) -> ZeroListRowLabel {
         ZeroListRowLabel(title: title,
                          status: status,
+                         isVerified: isVerified,
                          description: description,
                          icon: icon,
                          role: role,

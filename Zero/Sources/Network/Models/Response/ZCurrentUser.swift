@@ -64,15 +64,16 @@ extension ZCurrentUser: Hashable {
 
 extension ZCurrentUser {
     public var primaryZIdOrWalletAddress: String? {
-        primaryZID ?? (primaryWalletAddress ?? thirdWebWalletAddress)
+        primaryZID ?? publicWalletAddress
     }
     
     public var zIdOrPublicAddressDisplayText: String? {
-        primaryZID ?? displayFormattedAddress(primaryWalletAddress ?? thirdWebWalletAddress)
+        primaryZID ?? displayFormattedAddress(publicWalletAddress)
     }
     
     var publicWalletAddress: String? {
-        primaryWalletAddress ?? thirdWebWalletAddress
+//        primaryWalletAddress ?? thirdWebWalletAddress
+        thirdWebWalletAddress
     }
     
     var thirdWebWalletAddress: String? {

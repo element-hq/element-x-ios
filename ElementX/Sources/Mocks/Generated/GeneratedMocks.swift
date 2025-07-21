@@ -2413,6 +2413,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingZeroCurrentUserPublisher = value }
     }
     var underlyingZeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser, Never>!
+    var homeRoomSummariesUsersPublisher: CurrentValuePublisher<[ZMatrixUser], Never> {
+        get { return underlyingHomeRoomSummariesUsersPublisher }
+        set(value) { underlyingHomeRoomSummariesUsersPublisher = value }
+    }
+    var underlyingHomeRoomSummariesUsersPublisher: CurrentValuePublisher<[ZMatrixUser], Never>!
 
     //MARK: - isOnlyDeviceLeft
 
@@ -6100,6 +6105,47 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             self.zeroProfileUserIdReceivedInvocations.append(userId)
         }
         await zeroProfileUserIdClosure?(userId)
+    }
+    //MARK: - zeroProfiles
+
+    var zeroProfilesUserIdsUnderlyingCallsCount = 0
+    var zeroProfilesUserIdsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return zeroProfilesUserIdsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = zeroProfilesUserIdsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                zeroProfilesUserIdsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    zeroProfilesUserIdsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var zeroProfilesUserIdsCalled: Bool {
+        return zeroProfilesUserIdsCallsCount > 0
+    }
+    var zeroProfilesUserIdsReceivedUserIds: Set<String>?
+    var zeroProfilesUserIdsReceivedInvocations: [Set<String>] = []
+    var zeroProfilesUserIdsClosure: ((Set<String>) async -> Void)?
+
+    func zeroProfiles(userIds: Set<String>) async {
+        zeroProfilesUserIdsCallsCount += 1
+        zeroProfilesUserIdsReceivedUserIds = userIds
+        DispatchQueue.main.async {
+            self.zeroProfilesUserIdsReceivedInvocations.append(userIds)
+        }
+        await zeroProfilesUserIdsClosure?(userIds)
     }
     //MARK: - checkAndLinkZeroUser
 
@@ -16207,6 +16253,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {
     }
     var underlyingRole: RoomMemberRole!
     var primaryZeroId: String?
+    var isZeroProSubscriber: Bool {
+        get { return underlyingIsZeroProSubscriber }
+        set(value) { underlyingIsZeroProSubscriber = value }
+    }
+    var underlyingIsZeroProSubscriber: Bool!
 
 }
 class RoomMembershipDetailsProxyMock: RoomMembershipDetailsProxyProtocol, @unchecked Sendable {

@@ -36,7 +36,7 @@ enum HomeScreenCoordinatorAction {
     case logout
     case postTapped(_ post: HomeScreenPost, FeedProtocol)
     case openPostUserProfile(_ profile: ZPostUserProfile, FeedProtocol)
-    case sendWalletToken(WalletTransactionProtocol)
+    case startWalletTransaction(WalletTransactionProtocol, WalletTransactionType)
 }
 
 final class HomeScreenCoordinator: CoordinatorProtocol {
@@ -99,8 +99,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.postTapped(post, feedProtocol))
                 case .openPostUserProfile(let profile, let feedProtocol):
                     actionsSubject.send(.openPostUserProfile(profile, feedProtocol))
-                case .sendWalletToken(let walletTransactionProtocol):
-                    actionsSubject.send(.sendWalletToken(walletTransactionProtocol))
+                case .startWalletTransaction(let walletTransactionProtocol, let type):
+                    actionsSubject.send(.startWalletTransaction(walletTransactionProtocol, type))
                 }
             }
             .store(in: &cancellables)

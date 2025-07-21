@@ -79,6 +79,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         userSession.clientProxy.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in
+                
+                ZeroCustomEventService.shared.setup(userId: currentUser.id.rawValue, userName: currentUser.displayName)
+                
                 self?.state.currentUserZeroProfile = currentUser
                 if ZeroFlaggedFeaturesService.shared.zeroWalletEnabled() {
                     self?.fetchWalletData()
@@ -151,6 +154,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.hideInviteAvatars, on: self)
+            .store(in: &cancellables)
+        
+        userSession.clientProxy.homeRoomSummariesUsersPublisher
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] users in
+                self?.mapDirectChatUsersProBadgeStatus(users)
+            }
             .store(in: &cancellables)
         
         state.feedMediaExternalLoadingEnabled = appSettings.enableExternalMediaLoading
@@ -313,10 +324,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             loadMoreWalletTransactions()
         case .loadMoreWalletNFTs:
             loadMoreWalletNFTs()
-        case .sendWalletToken:
-            actionsSubject.send(.sendWalletToken(self))
+        case .startWalletTransaction(let type):
+            actionsSubject.send(.startWalletTransaction(self, type))
         case .reloadFeedMedia(let post):
             reloadFeedMedia(post)
+        case .viewTransactionDetails(let walletContent):
+            viewWalletTransactionDetails(walletContent)
         case .claimRewards(let trigger):
             if trigger {
                 claimUserRewards()
@@ -429,7 +442,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         var rooms = [HomeScreenRoom]()
         let seenInvites = appSettings.seenInvites
         
-        for summary in roomSummaryProvider.roomListPublisher.value {
+        let matrixRoomSummaries = roomSummaryProvider.roomListPublisher.value
+        for summary in matrixRoomSummaries {
             let room = HomeScreenRoom(summary: summary,
                                       hideUnreadMessagesBadge: appSettings.hideUnreadMessagesBadge,
                                       seenInvites: seenInvites)
@@ -444,6 +458,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         state.rooms = rooms
         applyCustomFilterToNotificationsList(.all)
+        extractAllRoomUsers(matrixRoomSummaries)
     }
     
     /// Check whether we can inform the user about potential migrations
@@ -975,15 +990,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
-    private func fetchWalletData() {
+    private func fetchWalletData(silentRefresh: Bool = false) {
         if let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
-            state.walletContentListMode = .skeletons
+            state.walletContentListMode = silentRefresh ? state.walletContentListMode : .skeletons
             Task {
                 async let balances = userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: nil)
-                async let nfts = userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress, nextPage: nil)
+//                async let nfts = userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress, nextPage: nil)
                 async let transactions = userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress, nextPage: nil)
                 
-                let results = await (balances, nfts, transactions)
+                let results = await (balances, transactions)
                 if case .success(let walletTokenBalances) = results.0 {
                     var homeWalletContent: [HomeScreenWalletContent] = []
                     for token in walletTokenBalances.tokens {
@@ -993,16 +1008,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     state.walletTokens = homeWalletContent.uniqued(on: \.id)
                     state.walletTokenNextPageParams = walletTokenBalances.nextPageParams
                 }
-                if case .success(let walletNFTs) = results.1 {
-                    var homeWalletContent: [HomeScreenWalletContent] = []
-                    for nft in walletNFTs.nfts {
-                        let content = HomeScreenWalletContent(walletNFT: nft)
-                        homeWalletContent.append(content)
-                    }
-                    state.walletNFTs = homeWalletContent.uniqued(on: \.id)
-                    state.walletNFTsNextPageParams = walletNFTs.nextPageParams
-                }
-                if case .success(let walletTransactions) = results.2 {
+//                if case .success(let walletNFTs) = results.1 {
+//                    var homeWalletContent: [HomeScreenWalletContent] = []
+//                    for nft in walletNFTs.nfts {
+//                        let content = HomeScreenWalletContent(walletNFT: nft)
+//                        homeWalletContent.append(content)
+//                    }
+//                    state.walletNFTs = homeWalletContent.uniqued(on: \.id)
+//                    state.walletNFTsNextPageParams = walletNFTs.nextPageParams
+//                }
+                if case .success(let walletTransactions) = results.1 {
                     var homeWalletContent: [HomeScreenWalletContent] = []
                     for transaction in walletTransactions.transactions {
                         let content = HomeScreenWalletContent(walletTransaction: transaction)
@@ -1100,7 +1115,56 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     func onTransactionCompleted() {
-        fetchWalletData()
+        fetchWalletData(silentRefresh: true)
+    }
+    
+    private func extractAllRoomUsers(_ rooms: [RoomSummary]) {
+        ZeroCustomEventService.shared.logUserRooms(rooms: rooms)
+        
+        let heroUserIds = rooms.flatMap { $0.heroes.compactMap(\.userID) }
+        var userIds = Set(heroUserIds)
+        // Add current logged-in user as well
+        userIds.insert(userSession.clientProxy.userID)
+        
+        Task.detached {
+            await self.userSession.clientProxy.zeroProfiles(userIds: userIds)
+        }
+    }
+    
+    private func mapDirectChatUsersProBadgeStatus(_ zeroProfiles: [ZMatrixUser]) {
+        guard let roomSummaryProvider else {
+            MXLog.error("Room summary provider unavailable")
+            return
+        }
+        guard !zeroProfiles.isEmpty else {
+            MXLog.error("User profiles are unavailable")
+            return
+        }
+
+        let directChatRooms = roomSummaryProvider.roomListPublisher.value.filter(\.isDirectOneToOneRoom)
+        let currentUserId = userSession.clientProxy.userID
+
+        let userStatusMap: [String: Bool] = directChatRooms.reduce(into: [:]) { result, room in
+            let directUser = if let hero = room.heroes.first, hero.userID != currentUserId {
+                zeroProfiles.first { $0.matrixId == hero.userID }
+            } else {
+                zeroProfiles.first {
+                    $0.displayName.caseInsensitiveCompare(room.name) == .orderedSame ||
+                    $0.id.rawValue.caseInsensitiveCompare(room.name) == .orderedSame
+                }
+            }
+            if let user = directUser {
+                result[room.id] = user.subscriptions.zeroPro
+            }
+        }
+
+        state.directRoomsUserStatusMap = userStatusMap
+    }
+    
+    private func viewWalletTransactionDetails(_ walletContent: HomeScreenWalletContent) {
+        if let link = URL(string: ZeroContants.WALLET_TRANSACTION_LINK.appending(walletContent.id)) {
+            UIApplication.shared.open(link)
+        }
     }
     
     func claimUserRewards() {

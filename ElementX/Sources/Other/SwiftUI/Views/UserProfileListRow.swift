@@ -32,6 +32,7 @@ struct UserProfileListRow: View {
     
     var body: some View {
         ZeroListRow(label: .avatar(title: user.displayName ?? user.userID,
+                                   isVerified: user.isZeroProSubscriber,
                                    description: user.primaryZeroId,
                                    icon: avatar,
                                    role: isUnknownProfile ? .error : nil),

@@ -7,6 +7,7 @@
 
 import Foundation
 import UniformTypeIdentifiers
+import CryptoKit
 
 extension URL: @retroactive ExpressibleByStringLiteral {
     public init(stringLiteral value: StaticString) {
@@ -172,5 +173,15 @@ extension URL {
     
     func hasMatrixScheme() -> Bool {
         return self.absoluteString.hasPrefix("mxc://")
+    }
+    
+    func sanitizedFileName(key: String) -> String {
+        let fileExtension = self.pathExtension
+        let fileNameWithoutExtension = self.deletingPathExtension().lastPathComponent
+        
+        let hash = SHA256
+            .hash(data: Data(fileNameWithoutExtension.utf8))
+            .compactMap { String(format: "%02x", $0) }.joined()
+        return "\(key)-\(hash).\(fileExtension)"
     }
 }

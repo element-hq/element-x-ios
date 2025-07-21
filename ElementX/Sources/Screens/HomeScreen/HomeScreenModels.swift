@@ -28,7 +28,7 @@ enum HomeScreenViewModelAction {
     case logout
     case postTapped(_ post: HomeScreenPost, feedProtocol: FeedProtocol)
     case openPostUserProfile(_ profile: ZPostUserProfile, feedProtocol: FeedProtocol)
-    case sendWalletToken(WalletTransactionProtocol)
+    case startWalletTransaction(WalletTransactionProtocol, WalletTransactionType)
 }
 
 enum HomeScreenViewAction {
@@ -79,8 +79,8 @@ enum HomeScreenViewAction {
     case loadMoreWalletTokens
     case loadMoreWalletTransactions
     case loadMoreWalletNFTs
-    case sendWalletToken
-    
+    case startWalletTransaction(WalletTransactionType)
+    case viewTransactionDetails(HomeScreenWalletContent)
     case claimRewards(trigger: Bool)
 }
 
@@ -188,6 +188,7 @@ struct HomeScreenViewState: BindableState {
     var requiresExtraAccountSetup = false
     
     var rooms: [HomeScreenRoom] = []
+    var directRoomsUserStatusMap: [String : Bool] = [:]
     var posts: [HomeScreenPost] = []
     var myPosts: [HomeScreenPost] = []
     var channels: [HomeScreenChannel] = []
@@ -603,7 +604,7 @@ extension HomeScreenPost {
             postText: post.text,
             attributedSenderHeaderText: attributedSenderHeaderText,
             attributedPostText: attributedPostText,
-            postUpdatedAt: post.updatedAt,
+            postUpdatedAt: postTimeStamp,
             postCreatedAt: post.createdAt,
             postTimestamp: postTimeStamp,
             postImageURL: (post.imageUrl != nil) ? URL(string: post.imageUrl!) : nil,
