@@ -1594,6 +1594,10 @@ internal enum L10n {
   internal static var screenJoinRoomJoinRestrictedMessage: String { return L10n.tr("Localizable", "screen_join_room_join_restricted_message") }
   /// Send request to join
   internal static var screenJoinRoomKnockAction: String { return L10n.tr("Localizable", "screen_join_room_knock_action") }
+  /// Allowed characters %1$d of %2$d
+  internal static func screenJoinRoomKnockMessageCharactersCount(_ p1: Int, _ p2: Int) -> String {
+    return L10n.tr("Localizable", "screen_join_room_knock_message_characters_count", p1, p2)
+  }
   /// Message (optional)
   internal static var screenJoinRoomKnockMessageDescription: String { return L10n.tr("Localizable", "screen_join_room_knock_message_description") }
   /// You will receive an invite to join the room if your request is accepted.

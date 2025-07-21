@@ -11,7 +11,7 @@ import MatrixRustSDK
 extension RoomPreviewProxyMock {
     struct Configuration {
         var roomID = "1"
-        var canonicalAlias = "#3🌞problem:matrix.org"
+        var canonicalAlias = "#3-body-problem:matrix.org"
         var name = "The Three-Body Problem - 三体"
         var topic: String? = "“Science and technology were the only keys to opening the door to the future, and people approached science with the faith and sincerity of elementary school students.”"
         var avatarURL = URL.mockMXCAvatar.absoluteString

@@ -69,8 +69,8 @@ struct HomeScreenRecoveryKeyConfirmationBanner: View {
                             .foregroundColor(.compound.iconSecondary)
                             .frame(width: 12, height: 12)
                             // Increase hit area
-                            .padding(.leading, 10)
-                            .padding(.bottom, 10)
+                            .padding(.leading, 5)
+                            .padding(.bottom, 2)
                     }
                 }
             }
