@@ -25,6 +25,7 @@ struct TombstonedAvatarImage: View {
                     .font(.system(size: geometry.size.width * 0.5625, weight: .semibold))
                     .minimumScaleFactor(0.001)
                     .frame(alignment: .center)
+                    .accessibilityLabel(L10n.a11yTombstonedRoom)
             }
         }
         .aspectRatio(1, contentMode: .fill)

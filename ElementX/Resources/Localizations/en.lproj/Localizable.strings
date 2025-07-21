@@ -31,6 +31,7 @@
 "a11y_show_password" = "Show password";
 "a11y_start_call" = "Start a call";
 "a11y_time_limited_action_required" = "Time limited action required";
+"a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "User menu";
 "a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "View details";
