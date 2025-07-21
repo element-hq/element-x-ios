@@ -72,12 +72,14 @@ struct JoinRoomScreen: View {
                                 avatarSize: .room(on: .joinRoom),
                                 mediaProvider: context.mediaProvider)
                     .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
+                    .accessibilityHidden(true)
             } else {
                 RoomAvatarImage(avatar: .room(id: "", name: nil, avatarURL: nil),
                                 avatarSize: .room(on: .joinRoom),
                                 mediaProvider: context.mediaProvider)
                     .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
                     .hidden()
+                    .accessibilityHidden(true)
             }
             
             VStack(spacing: 8) {
