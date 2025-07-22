@@ -42,17 +42,8 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
                                                                                    appSettings: appSettings)
         switch initializeWalletResult {
         case .success:
-            ZeroCustomEventService.shared.walletApiEvent(parameters: [
-                "type": "INITIALIZE_THIRD_WEB_WALLET",
-                "status": "Success",
-            ])
             return .success(())
         case .failure(let error):
-            ZeroCustomEventService.shared.walletApiEvent(parameters: [
-                "type": "INITIALIZE_THIRD_WEB_WALLET",
-                "status": "Failure",
-                "error": error.localizedDescription
-            ])
             return .failure(error)
         }
     }
@@ -67,22 +58,8 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
                                                                                                                      encoding: URLEncoding.queryString)
         switch tokenBalancesResult {
         case .success(let tokenBalances):
-            ZeroCustomEventService.shared.walletApiEvent(parameters: [
-                "type": "GET_TOKEN_BALANCES",
-                "status": "Success",
-                "address": walletAddress,
-                "nextPageParams": (try? nextPageParams?.json()) ?? "",
-                "tokenBalancesCount": tokenBalances.tokens.count
-            ])
             return .success(tokenBalances)
         case .failure(let error):
-            ZeroCustomEventService.shared.walletApiEvent(parameters: [
-                "type": "GET_TOKEN_BALANCES",
-                "status": "Failure",
-                "address": walletAddress,
-                "nextPageParams": (try? nextPageParams?.json()) ?? "",
-                "error": error.localizedDescription
-            ])
             return .failure(error)
         }
     }
@@ -113,21 +90,8 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
                                                                                                    encoding: URLEncoding.queryString)
         switch transactionsResult {
         case .success(let transactions):
-            ZeroCustomEventService.shared.walletApiEvent(parameters: [
-                "type": "GET_TRANSACTIONS",
-                "status": "Success",
-                "address": walletAddress,
-                "transactionsCount": transactions.transactions.count
-            ])
             return .success(transactions)
         case .failure(let error):
-            ZeroCustomEventService.shared.walletApiEvent(parameters: [
-                "type": "GET_TRANSACTIONS",
-                "status": "Failure",
-                "address": walletAddress,
-                "nextPageParams": (try? nextPageParams?.json()) ?? "",
-                "error": error.localizedDescription
-            ])
             return .failure(error)
         }
     }
@@ -142,26 +106,8 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
                                                                                                                parameters: parameters)
         switch transactionResult {
         case .success(let transaction):
-            ZeroCustomEventService.shared.walletApiEvent(parameters: [
-                "type": "TRANSFER_TOKEN",
-                "status": "Success",
-                "sender": senderWalletAddress,
-                "receiver": recipientWalletAddress,
-                "amount": amount,
-                "token": tokenAddress,
-                "transactionHash": transaction.transactionHash
-            ])
             return .success(transaction)
         case .failure(let error):
-            ZeroCustomEventService.shared.walletApiEvent(parameters: [
-                "type": "TRANSFER_TOKEN",
-                "status": "Failure",
-                "sender": senderWalletAddress,
-                "receiver": recipientWalletAddress,
-                "amount": amount,
-                "token": tokenAddress,
-                "error": error.localizedDescription
-            ])
             return .failure(error)
         }
     }
@@ -204,20 +150,8 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
                                                                    encoding: URLEncoding.queryString)
         switch result {
         case .success(let response):
-            ZeroCustomEventService.shared.walletApiEvent(parameters: [
-                "type": "SEARCH_RECIPIENTS",
-                "status": "Success",
-                "query": query,
-                "resultCount": response.recipients.count
-            ])
             return .success(response.recipients)
         case .failure(let error):
-            ZeroCustomEventService.shared.walletApiEvent(parameters: [
-                "type": "SEARCH_RECIPIENTS",
-                "status": "Failure",
-                "query": query,
-                "error": error.localizedDescription
-            ])
             return .failure(error)
         }
     }

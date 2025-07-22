@@ -21,6 +21,8 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
     var actions: AnyPublisher<TransferTokenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+    
+    private var completedTransactionReceipt: ZWalletTransactionReceipt?
         
     init(clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -68,6 +70,8 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
             performTokenTransaction(amount)
         case .transactionCompleted:
             actionsSubject.send(.finished)
+        case .viewTransaction:
+            viewTransaction()
         }
     }
     
@@ -129,10 +133,11 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
                                                              amount: amount,
                                                              tokenAddress: token.tokenAddress)
                 switch result {
-                case .success(_):
+                case .success(let transaction):
                     state.tokenAmount = amount
                     setFlowState(.completed)
                     actionsSubject.send(.transactionCompleted)
+                    getTransactionReceipt(transaction.transactionHash)
                 case .failure(let failure):
                     MXLog.error("Failed to transfer token: \(failure)")
                     showError(error: failure.localizedDescription)
@@ -145,5 +150,21 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
         userIndicatorController.alertInfo = AlertInfo(id: UUID(),
                                                       title: "Transaction Failed",
                                                       message: error)
+    }
+    
+    private func getTransactionReceipt(_ transactionHash: String) {
+        Task.detached {
+            if case .success(let receipt) = await self.clientProxy.getTransactionReceipt(transactionHash: transactionHash) {
+                await MainActor.run {
+                    self.completedTransactionReceipt = receipt
+                }
+            }
+        }
+    }
+    
+    private func viewTransaction() {
+        if let receipt = completedTransactionReceipt, let link = URL(string: receipt.blockExplorerUrl) {
+            UIApplication.shared.open(link)
+        }
     }
 }

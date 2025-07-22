@@ -80,7 +80,7 @@ struct TransferTokenView: View {
     private var toolbar: some ToolbarContent {
         let flowState = context.viewState.transferTokenFlowState
         
-        if flowState != .recipient && flowState != .completed {
+        if context.viewState.showTopBarBackButton {
             ToolbarItem(placement: .navigationBarLeading) {
                 CompoundIcon(\.chevronLeft)
                     .frame(width: 32, height: 32)
