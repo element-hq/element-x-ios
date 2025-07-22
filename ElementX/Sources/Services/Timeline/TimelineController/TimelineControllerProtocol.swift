@@ -68,6 +68,8 @@ protocol TimelineControllerProtocol {
                      inReplyToEventID: String?,
                      intentionalMentions: IntentionalMentions) async
     
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16]) async -> Result<Void, TimelineProxyError>
+    
     func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
               message: String,
               html: String?,

@@ -19610,15 +19610,15 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol, @unchecked Sendabl
     }
     //MARK: - sendVoiceMessage
 
-    var sendVoiceMessageInRoomAudioConverterThreadRootEventIDUnderlyingCallsCount = 0
-    var sendVoiceMessageInRoomAudioConverterThreadRootEventIDCallsCount: Int {
+    var sendVoiceMessageTimelineControllerAudioConverterUnderlyingCallsCount = 0
+    var sendVoiceMessageTimelineControllerAudioConverterCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendVoiceMessageInRoomAudioConverterThreadRootEventIDUnderlyingCallsCount
+                return sendVoiceMessageTimelineControllerAudioConverterUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVoiceMessageInRoomAudioConverterThreadRootEventIDUnderlyingCallsCount
+                    returnValue = sendVoiceMessageTimelineControllerAudioConverterUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -19626,29 +19626,29 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol, @unchecked Sendabl
         }
         set {
             if Thread.isMainThread {
-                sendVoiceMessageInRoomAudioConverterThreadRootEventIDUnderlyingCallsCount = newValue
+                sendVoiceMessageTimelineControllerAudioConverterUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVoiceMessageInRoomAudioConverterThreadRootEventIDUnderlyingCallsCount = newValue
+                    sendVoiceMessageTimelineControllerAudioConverterUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var sendVoiceMessageInRoomAudioConverterThreadRootEventIDCalled: Bool {
-        return sendVoiceMessageInRoomAudioConverterThreadRootEventIDCallsCount > 0
+    var sendVoiceMessageTimelineControllerAudioConverterCalled: Bool {
+        return sendVoiceMessageTimelineControllerAudioConverterCallsCount > 0
     }
-    var sendVoiceMessageInRoomAudioConverterThreadRootEventIDReceivedArguments: (roomProxy: JoinedRoomProxyProtocol, audioConverter: AudioConverterProtocol, threadRootEventID: String?)?
-    var sendVoiceMessageInRoomAudioConverterThreadRootEventIDReceivedInvocations: [(roomProxy: JoinedRoomProxyProtocol, audioConverter: AudioConverterProtocol, threadRootEventID: String?)] = []
+    var sendVoiceMessageTimelineControllerAudioConverterReceivedArguments: (timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol)?
+    var sendVoiceMessageTimelineControllerAudioConverterReceivedInvocations: [(timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol)] = []
 
-    var sendVoiceMessageInRoomAudioConverterThreadRootEventIDUnderlyingReturnValue: Result<Void, VoiceMessageRecorderError>!
-    var sendVoiceMessageInRoomAudioConverterThreadRootEventIDReturnValue: Result<Void, VoiceMessageRecorderError>! {
+    var sendVoiceMessageTimelineControllerAudioConverterUnderlyingReturnValue: Result<Void, VoiceMessageRecorderError>!
+    var sendVoiceMessageTimelineControllerAudioConverterReturnValue: Result<Void, VoiceMessageRecorderError>! {
         get {
             if Thread.isMainThread {
-                return sendVoiceMessageInRoomAudioConverterThreadRootEventIDUnderlyingReturnValue
+                return sendVoiceMessageTimelineControllerAudioConverterUnderlyingReturnValue
             } else {
                 var returnValue: Result<Void, VoiceMessageRecorderError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVoiceMessageInRoomAudioConverterThreadRootEventIDUnderlyingReturnValue
+                    returnValue = sendVoiceMessageTimelineControllerAudioConverterUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -19656,26 +19656,26 @@ class VoiceMessageRecorderMock: VoiceMessageRecorderProtocol, @unchecked Sendabl
         }
         set {
             if Thread.isMainThread {
-                sendVoiceMessageInRoomAudioConverterThreadRootEventIDUnderlyingReturnValue = newValue
+                sendVoiceMessageTimelineControllerAudioConverterUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVoiceMessageInRoomAudioConverterThreadRootEventIDUnderlyingReturnValue = newValue
+                    sendVoiceMessageTimelineControllerAudioConverterUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var sendVoiceMessageInRoomAudioConverterThreadRootEventIDClosure: ((JoinedRoomProxyProtocol, AudioConverterProtocol, String?) async -> Result<Void, VoiceMessageRecorderError>)?
+    var sendVoiceMessageTimelineControllerAudioConverterClosure: ((TimelineControllerProtocol, AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError>)?
 
-    func sendVoiceMessage(inRoom roomProxy: JoinedRoomProxyProtocol, audioConverter: AudioConverterProtocol, threadRootEventID: String?) async -> Result<Void, VoiceMessageRecorderError> {
-        sendVoiceMessageInRoomAudioConverterThreadRootEventIDCallsCount += 1
-        sendVoiceMessageInRoomAudioConverterThreadRootEventIDReceivedArguments = (roomProxy: roomProxy, audioConverter: audioConverter, threadRootEventID: threadRootEventID)
+    func sendVoiceMessage(timelineController: TimelineControllerProtocol, audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError> {
+        sendVoiceMessageTimelineControllerAudioConverterCallsCount += 1
+        sendVoiceMessageTimelineControllerAudioConverterReceivedArguments = (timelineController: timelineController, audioConverter: audioConverter)
         DispatchQueue.main.async {
-            self.sendVoiceMessageInRoomAudioConverterThreadRootEventIDReceivedInvocations.append((roomProxy: roomProxy, audioConverter: audioConverter, threadRootEventID: threadRootEventID))
+            self.sendVoiceMessageTimelineControllerAudioConverterReceivedInvocations.append((timelineController: timelineController, audioConverter: audioConverter))
         }
-        if let sendVoiceMessageInRoomAudioConverterThreadRootEventIDClosure = sendVoiceMessageInRoomAudioConverterThreadRootEventIDClosure {
-            return await sendVoiceMessageInRoomAudioConverterThreadRootEventIDClosure(roomProxy, audioConverter, threadRootEventID)
+        if let sendVoiceMessageTimelineControllerAudioConverterClosure = sendVoiceMessageTimelineControllerAudioConverterClosure {
+            return await sendVoiceMessageTimelineControllerAudioConverterClosure(timelineController, audioConverter)
         } else {
-            return sendVoiceMessageInRoomAudioConverterThreadRootEventIDReturnValue
+            return sendVoiceMessageTimelineControllerAudioConverterReturnValue
         }
     }
 }

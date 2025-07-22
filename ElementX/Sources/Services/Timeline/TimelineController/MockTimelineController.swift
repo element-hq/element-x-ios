@@ -18,6 +18,8 @@ class MockTimelineController: TimelineControllerProtocol {
     var incomingItems: [RoomTimelineItemProtocol] = []
     
     var roomProxy: JoinedRoomProxyProtocol?
+    var timelineProxy: TimelineProxyProtocol?
+    
     var roomID: String { roomProxy?.id ?? "MockRoomIdentifier" }
     var timelineKind: TimelineKind
     
@@ -46,9 +48,13 @@ class MockTimelineController: TimelineControllerProtocol {
         return mock
     }
     
-    init(timelineKind: TimelineKind = .live, listenForSignals: Bool = false, timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default) {
+    init(timelineKind: TimelineKind = .live,
+         listenForSignals: Bool = false,
+         timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default,
+         timelineProxy: TimelineProxyProtocol? = nil) {
         self.timelineKind = timelineKind
         self.timelineItems = timelineItems
+        self.timelineProxy = timelineProxy
         
         callbacks.send(.paginationState(paginationState))
         callbacks.send(.isLive(true))
@@ -107,6 +113,10 @@ class MockTimelineController: TimelineControllerProtocol {
                      html: String?,
                      inReplyToEventID: String?,
                      intentionalMentions: IntentionalMentions) async { }
+    
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16]) async -> Result<Void, TimelineProxyError> {
+        await timelineProxy?.sendVoiceMessage(url: url, audioInfo: audioInfo, waveform: waveform, requestHandle: { _ in }) ?? .success(())
+    }
         
     func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async { }
     

@@ -38,9 +38,8 @@ protocol VoiceMessageRecorderProtocol {
     func seekPlayback(to progress: Double) async
     func deleteRecording() async
     
-    func sendVoiceMessage(inRoom roomProxy: JoinedRoomProxyProtocol,
-                          audioConverter: AudioConverterProtocol,
-                          threadRootEventID: String?) async -> Result<Void, VoiceMessageRecorderError>
+    func sendVoiceMessage(timelineController: TimelineControllerProtocol,
+                          audioConverter: AudioConverterProtocol) async -> Result<Void, VoiceMessageRecorderError>
 }
 
 // sourcery: AutoMockable

@@ -145,6 +145,8 @@ class TimelineController: TimelineControllerProtocol {
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) { }
     
+    // MARK: - Sending
+    
     func sendMessage(_ message: String,
                      html: String?,
                      inReplyToEventID: String?,
@@ -153,7 +155,6 @@ class TimelineController: TimelineControllerProtocol {
         
         switch await activeTimeline.sendMessage(message,
                                                 html: html,
-                                                threadRootEventID: timelineKind.threadRootEventID,
                                                 inReplyToEventID: inReplyToEventID,
                                                 intentionalMentions: intentionalMentions) {
         case .success:
@@ -162,6 +163,12 @@ class TimelineController: TimelineControllerProtocol {
         case .failure(let error):
             MXLog.error("Failed sending message with error: \(error)")
         }
+    }
+    
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16]) async -> Result<Void, TimelineProxyError> {
+        await activeTimeline.sendVoiceMessage(url: url,
+                                              audioInfo: audioInfo,
+                                              waveform: waveform) { _ in }
     }
     
     private func donateSendMessageIntent() async {
