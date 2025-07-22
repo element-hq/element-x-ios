@@ -12,9 +12,9 @@ final class RoomPreviewProxy: RoomPreviewProxyProtocol {
     
     let info: RoomPreviewInfoProxy
     
-    init(roomPreview: RoomPreview) throws {
+    init(roomPreview: RoomPreview) {
         self.roomPreview = roomPreview
-        info = try .init(roomPreviewInfo: roomPreview.info())
+        info = .init(roomPreviewInfo: roomPreview.info())
     }
     
     var ownMembershipDetails: RoomMembershipDetailsProxyProtocol? {

@@ -15153,10 +15153,10 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return reportRoomReasonCallsCount > 0
     }
     open var reportRoomReasonReceivedReason: String?
-    open var reportRoomReasonReceivedInvocations: [String?] = []
-    open var reportRoomReasonClosure: ((String?) async throws -> Void)?
+    open var reportRoomReasonReceivedInvocations: [String] = []
+    open var reportRoomReasonClosure: ((String) async throws -> Void)?
 
-    open override func reportRoom(reason: String?) async throws {
+    open override func reportRoom(reason: String) async throws {
         if let error = reportRoomReasonThrowableError {
             throw error
         }
@@ -19941,7 +19941,6 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
 
     //MARK: - info
 
-    open var infoThrowableError: Error?
     var infoUnderlyingCallsCount = 0
     open var infoCallsCount: Int {
         get {
@@ -19994,15 +19993,12 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
             }
         }
     }
-    open var infoClosure: (() throws -> RoomPreviewInfo)?
+    open var infoClosure: (() -> RoomPreviewInfo)?
 
-    open override func info() throws -> RoomPreviewInfo {
-        if let error = infoThrowableError {
-            throw error
-        }
+    open override func info() -> RoomPreviewInfo {
         infoCallsCount += 1
         if let infoClosure = infoClosure {
-            return try infoClosure()
+            return infoClosure()
         } else {
             return infoReturnValue
         }
