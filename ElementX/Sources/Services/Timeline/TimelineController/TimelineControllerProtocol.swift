@@ -63,13 +63,6 @@ protocol TimelineControllerProtocol {
     
     func sendReadReceipt(for itemID: TimelineItemIdentifier) async
     
-    func sendMessage(_ message: String,
-                     html: String?,
-                     inReplyToEventID: String?,
-                     intentionalMentions: IntentionalMentions) async
-    
-    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16]) async -> Result<Void, TimelineProxyError>
-    
     func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
               message: String,
               html: String?,
@@ -97,4 +90,13 @@ protocol TimelineControllerProtocol {
     func sendHandle(for itemID: TimelineItemIdentifier) -> SendHandleProxy?
     
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date?
+    
+    // MARK: - Sending
+    
+    func sendMessage(_ message: String,
+                     html: String?,
+                     inReplyToEventID: String?,
+                     intentionalMentions: IntentionalMentions) async
+    
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16]) async -> Result<Void, TimelineProxyError>
 }
