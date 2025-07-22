@@ -967,7 +967,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         switch await roomProxy.timeline.sendMessage(replyText,
                                                     html: nil,
-                                                    threadRootEventID: nil,
                                                     inReplyToEventID: nil,
                                                     intentionalMentions: .empty) {
         case .success:

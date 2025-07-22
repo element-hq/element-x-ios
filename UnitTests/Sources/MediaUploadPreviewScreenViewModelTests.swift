@@ -106,16 +106,16 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
     
     private func setUpViewModel(url: URL, expectedCaption: String?) {
         timelineProxy = TimelineProxyMock(.init())
-        timelineProxy.sendAudioUrlAudioInfoCaptionThreadRootEventIDRequestHandleClosure = { [weak self] _, _, caption, _, _ in
+        timelineProxy.sendAudioUrlAudioInfoCaptionRequestHandleClosure = { [weak self] _, _, caption, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendFileUrlFileInfoCaptionThreadRootEventIDRequestHandleClosure = { [weak self] _, _, caption, _, _ in
+        timelineProxy.sendFileUrlFileInfoCaptionRequestHandleClosure = { [weak self] _, _, caption, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionThreadRootEventIDRequestHandleClosure = { [weak self] _, _, _, caption, _, _ in
+        timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure = { [weak self] _, _, _, caption, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendVideoUrlThumbnailURLVideoInfoCaptionThreadRootEventIDRequestHandleClosure = { [weak self] _, _, _, caption, _, _ in
+        timelineProxy.sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure = { [weak self] _, _, _, caption, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
         
