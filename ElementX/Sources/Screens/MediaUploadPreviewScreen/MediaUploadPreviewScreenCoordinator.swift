@@ -9,13 +9,13 @@ import Combine
 import SwiftUI
 
 struct MediaUploadPreviewScreenCoordinatorParameters {
-    let roomProxy: JoinedRoomProxyProtocol
     let timelineController: TimelineControllerProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let title: String?
     let url: URL
     let shouldShowCaptionWarning: Bool
+    let isRoomEncrypted: Bool
 }
 
 enum MediaUploadPreviewScreenCoordinatorAction {
@@ -32,13 +32,13 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: MediaUploadPreviewScreenCoordinatorParameters) {
-        viewModel = MediaUploadPreviewScreenViewModel(roomProxy: parameters.roomProxy,
-                                                      timelineController: parameters.timelineController,
+        viewModel = MediaUploadPreviewScreenViewModel(timelineController: parameters.timelineController,
                                                       userIndicatorController: parameters.userIndicatorController,
                                                       mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
                                                       title: parameters.title,
                                                       url: parameters.url,
-                                                      shouldShowCaptionWarning: parameters.shouldShowCaptionWarning)
+                                                      shouldShowCaptionWarning: parameters.shouldShowCaptionWarning,
+                                                      isRoomEncrypted: parameters.isRoomEncrypted)
     }
     
     func start() {

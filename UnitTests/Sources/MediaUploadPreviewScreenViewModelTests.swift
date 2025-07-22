@@ -119,15 +119,13 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
         
-        let roomProxy = JoinedRoomProxyMock(.init())
-        roomProxy.timeline = timelineProxy
-        viewModel = MediaUploadPreviewScreenViewModel(roomProxy: roomProxy,
-                                                      timelineController: MockTimelineController(timelineProxy: timelineProxy),
+        viewModel = MediaUploadPreviewScreenViewModel(timelineController: MockTimelineController(timelineProxy: timelineProxy),
                                                       userIndicatorController: UserIndicatorControllerMock(),
                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                                       title: "Some File",
                                                       url: url,
-                                                      shouldShowCaptionWarning: true)
+                                                      shouldShowCaptionWarning: true,
+                                                      isRoomEncrypted: true)
     }
     
     private func verifyCaption(_ caption: String?, expectedCaption: String?) -> Result<Void, TimelineProxyError> {

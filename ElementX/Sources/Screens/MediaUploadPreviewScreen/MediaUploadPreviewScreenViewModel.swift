@@ -12,7 +12,6 @@ import SwiftUI
 typealias MediaUploadPreviewScreenViewModelType = StateStoreViewModelV2<MediaUploadPreviewScreenViewState, MediaUploadPreviewScreenViewAction>
 
 class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, MediaUploadPreviewScreenViewModelProtocol {
-    private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: TimelineControllerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -28,14 +27,13 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(roomProxy: JoinedRoomProxyProtocol,
-         timelineController: TimelineControllerProtocol,
+    init(timelineController: TimelineControllerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          title: String?,
          url: URL,
-         shouldShowCaptionWarning: Bool) {
-        self.roomProxy = roomProxy
+         shouldShowCaptionWarning: Bool,
+         isRoomEncrypted: Bool) {
         self.timelineController = timelineController
         self.userIndicatorController = userIndicatorController
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
@@ -47,7 +45,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url,
                                                                        title: title,
                                                                        shouldShowCaptionWarning: shouldShowCaptionWarning,
-                                                                       isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted))
+                                                                       isRoomEncrypted: isRoomEncrypted))
     }
     
     override func process(viewAction: MediaUploadPreviewScreenViewAction) {
@@ -90,31 +88,31 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     // MARK: - Private
     
-    private func sendAttachment(mediaInfo: MediaInfo, caption: String?) async -> Result<Void, TimelineProxyError> {
+    private func sendAttachment(mediaInfo: MediaInfo, caption: String?) async -> Result<Void, TimelineControllerError> {
         let requestHandle: ((SendAttachmentJoinHandleProtocol) -> Void) = { [weak self] handle in
             self?.requestHandle = handle
         }
         
         switch mediaInfo {
         case let .image(imageURL, thumbnailURL, imageInfo):
-            return await roomProxy.timeline.sendImage(url: imageURL,
+            return await timelineController.sendImage(url: imageURL,
                                                       thumbnailURL: thumbnailURL,
                                                       imageInfo: imageInfo,
                                                       caption: caption,
                                                       requestHandle: requestHandle)
         case let .video(videoURL, thumbnailURL, videoInfo):
-            return await roomProxy.timeline.sendVideo(url: videoURL,
+            return await timelineController.sendVideo(url: videoURL,
                                                       thumbnailURL: thumbnailURL,
                                                       videoInfo: videoInfo,
                                                       caption: caption,
                                                       requestHandle: requestHandle)
         case let .audio(audioURL, audioInfo):
-            return await roomProxy.timeline.sendAudio(url: audioURL,
+            return await timelineController.sendAudio(url: audioURL,
                                                       audioInfo: audioInfo,
                                                       caption: caption,
                                                       requestHandle: requestHandle)
         case let .file(fileURL, fileInfo):
-            return await roomProxy.timeline.sendFile(url: fileURL,
+            return await timelineController.sendFile(url: fileURL,
                                                      fileInfo: fileInfo,
                                                      caption: caption,
                                                      requestHandle: requestHandle)
