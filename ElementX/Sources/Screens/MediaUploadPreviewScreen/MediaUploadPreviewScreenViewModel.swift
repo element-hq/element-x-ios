@@ -12,11 +12,12 @@ import SwiftUI
 typealias MediaUploadPreviewScreenViewModelType = StateStoreViewModelV2<MediaUploadPreviewScreenViewState, MediaUploadPreviewScreenViewAction>
 
 class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, MediaUploadPreviewScreenViewModelProtocol {
-    private let userIndicatorController: UserIndicatorControllerProtocol
     private let roomProxy: JoinedRoomProxyProtocol
+    private let timelineController: TimelineControllerProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let url: URL
-    private let threadRootEventID: String?
     
     private var processingTask: Task<Result<MediaInfo, MediaUploadingPreprocessorError>, Never>
     private var requestHandle: SendAttachmentJoinHandleProtocol?
@@ -27,18 +28,18 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(userIndicatorController: UserIndicatorControllerProtocol,
-         roomProxy: JoinedRoomProxyProtocol,
+    init(roomProxy: JoinedRoomProxyProtocol,
+         timelineController: TimelineControllerProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          title: String?,
          url: URL,
-         threadRootEventID: String?,
          shouldShowCaptionWarning: Bool) {
-        self.userIndicatorController = userIndicatorController
         self.roomProxy = roomProxy
+        self.timelineController = timelineController
+        self.userIndicatorController = userIndicatorController
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.url = url
-        self.threadRootEventID = threadRootEventID
         
         // Start processing the media whilst the user is reviewing it/adding a caption.
         processingTask = Task { await mediaUploadingPreprocessor.processMedia(at: url) }

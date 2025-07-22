@@ -57,10 +57,10 @@ extension RoomFlowCoordinator {
         case roomMemberDetails(userID: String, previousState: State)
         case userProfile(userID: String, previousState: State)
         case inviteUsersScreen(previousState: State)
-        case mediaUploadPicker(source: MediaPickerScreenSource, threadRootEventID: String?, previousState: State)
-        case mediaUploadPreview(fileURL: URL, threadRootEventID: String?, previousState: State)
+        case mediaUploadPicker(source: MediaPickerScreenSource, previousState: State)
+        case mediaUploadPreview(fileURL: URL, previousState: State)
         case emojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>, previousState: State)
-        case mapNavigator(threadRootEventID: String?, previousState: State)
+        case mapNavigator(previousState: State)
         case messageForwarding(forwardingItem: MessageForwardingItem, previousState: State)
         case reportContent(itemID: TimelineItemIdentifier, senderID: String, previousState: State)
         case pollForm(previousState: State)
@@ -83,6 +83,7 @@ extension RoomFlowCoordinator {
     
     struct EventUserInfo {
         let animated: Bool
+        var timelineController: TimelineControllerProtocol?
     }
 
     enum Event: EventType {
@@ -122,16 +123,16 @@ extension RoomFlowCoordinator {
         case presentInviteUsersScreen
         case dismissInviteUsersScreen
                 
-        case presentMediaUploadPicker(source: MediaPickerScreenSource, threadRootEventID: String?)
+        case presentMediaUploadPicker(source: MediaPickerScreenSource)
         case dismissMediaUploadPicker
         
-        case presentMediaUploadPreview(fileURL: URL, threadRootEventID: String?)
+        case presentMediaUploadPreview(fileURL: URL)
         case dismissMediaUploadPreview
         
         case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
         case dismissEmojiPicker
 
-        case presentMapNavigator(interactionMode: StaticLocationInteractionMode, threadRootEventID: String?)
+        case presentMapNavigator(interactionMode: StaticLocationInteractionMode)
         case dismissMapNavigator
         
         case presentMessageForwarding(forwardingItem: MessageForwardingItem)
@@ -184,11 +185,11 @@ extension RoomFlowCoordinator {
             case (.room, .presentReportContent(let itemID, let senderID)):
                 return .reportContent(itemID: itemID, senderID: senderID, previousState: fromState)
                 
-            case (.room, .presentMediaUploadPicker(let source, let threadRootEventID)):
-                return .mediaUploadPicker(source: source, threadRootEventID: threadRootEventID, previousState: fromState)
+            case (.room, .presentMediaUploadPicker(let source)):
+                return .mediaUploadPicker(source: source, previousState: fromState)
             
-            case (.room, .presentMediaUploadPreview(let fileURL, let threadRootEventID)):
-                return .mediaUploadPreview(fileURL: fileURL, threadRootEventID: threadRootEventID, previousState: fromState)
+            case (.room, .presentMediaUploadPreview(let fileURL)):
+                return .mediaUploadPreview(fileURL: fileURL, previousState: fromState)
                 
             case (.room, .presentEmojiPicker(let itemID, let selectedEmoji)):
                 return .emojiPicker(itemID: itemID, selectedEmojis: selectedEmoji, previousState: fromState)
@@ -196,8 +197,8 @@ extension RoomFlowCoordinator {
             case (.room, .presentMessageForwarding(let forwardingItem)):
                 return .messageForwarding(forwardingItem: forwardingItem, previousState: fromState)
 
-            case (.room, .presentMapNavigator(_, let threadRootEventID)):
-                return .mapNavigator(threadRootEventID: threadRootEventID, previousState: fromState)
+            case (.room, .presentMapNavigator(_)):
+                return .mapNavigator(previousState: fromState)
             
             case (.room, .presentPollForm):
                 return .pollForm(previousState: fromState)
@@ -221,11 +222,11 @@ extension RoomFlowCoordinator {
             case (.thread, .presentReportContent(let itemID, let senderID)):
                 return .reportContent(itemID: itemID, senderID: senderID, previousState: fromState)
                 
-            case (.thread, .presentMediaUploadPicker(let source, let threadRootEventID)):
-                return .mediaUploadPicker(source: source, threadRootEventID: threadRootEventID, previousState: fromState)
+            case (.thread, .presentMediaUploadPicker(let source)):
+                return .mediaUploadPicker(source: source, previousState: fromState)
             
-            case (.thread, .presentMediaUploadPreview(let fileURL, let threadRootEventID)):
-                return .mediaUploadPreview(fileURL: fileURL, threadRootEventID: threadRootEventID, previousState: fromState)
+            case (.thread, .presentMediaUploadPreview(let fileURL)):
+                return .mediaUploadPreview(fileURL: fileURL, previousState: fromState)
                 
             case (.thread, .presentEmojiPicker(let itemID, let selectedEmoji)):
                 return .emojiPicker(itemID: itemID, selectedEmojis: selectedEmoji, previousState: fromState)
@@ -233,8 +234,8 @@ extension RoomFlowCoordinator {
             case (.thread, .presentMessageForwarding(let forwardingItem)):
                 return .messageForwarding(forwardingItem: forwardingItem, previousState: fromState)
 
-            case (.thread, .presentMapNavigator(_, let threadRootEventID)):
-                return .mapNavigator(threadRootEventID: threadRootEventID, previousState: fromState)
+            case (.thread, .presentMapNavigator(_)):
+                return .mapNavigator(previousState: fromState)
             
             case (.thread, .presentPollForm):
                 return .pollForm(previousState: fromState)
@@ -244,7 +245,7 @@ extension RoomFlowCoordinator {
                 
             // Room + Thread
                 
-            case (.mediaUploadPicker(_, _, let previousState), .dismissMediaUploadPicker):
+            case (.mediaUploadPicker(_, let previousState), .dismissMediaUploadPicker):
                 return previousState
                 
             case (.emojiPicker(_, _, let previouState), .dismissEmojiPicker):
@@ -256,7 +257,7 @@ extension RoomFlowCoordinator {
             case (.messageForwarding(_, let previousState), .dismissMessageForwarding):
                 return previousState
                 
-            case (.mapNavigator(_, let previousState), .dismissMapNavigator):
+            case (.mapNavigator(let previousState), .dismissMapNavigator):
                 return previousState
                 
             case (.pollForm(let previousState), .dismissPollForm):
@@ -343,7 +344,7 @@ extension RoomFlowCoordinator {
             case (.knockRequestsList(let previousState), .dismissKnockRequestsListScreen):
                 return previousState
                 
-            case (.mediaUploadPreview(_, _, let previousState), .dismissMediaUploadPreview):
+            case (.mediaUploadPreview(_, let previousState), .dismissMediaUploadPreview):
                 return previousState
                 
             case (.notificationSettings, .presentGlobalNotificationSettingsScreen):
@@ -361,8 +362,8 @@ extension RoomFlowCoordinator {
             case (.pollsHistoryForm, .dismissPollForm):
                 return .pollsHistory
                 
-            case (.mediaUploadPicker(_, _, let previousMediaUploadPickerState), .presentMediaUploadPreview(let fileURL, let threadRootEventID)):
-                return .mediaUploadPreview(fileURL: fileURL, threadRootEventID: threadRootEventID, previousState: previousMediaUploadPickerState)
+            case (.mediaUploadPicker(_, let previousMediaUploadPickerState), .presentMediaUploadPreview(let fileURL)):
+                return .mediaUploadPreview(fileURL: fileURL, previousState: previousMediaUploadPickerState)
                 
             case (_, .presentInviteUsersScreen):
                 return .inviteUsersScreen(previousState: fromState)
