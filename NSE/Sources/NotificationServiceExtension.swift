@@ -29,12 +29,10 @@ import UserNotifications
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
     private static var targetConfiguration: Target.Configuration?
-    private var notificationHandler: NotificationHandler?
-    
-    private let appHooks = AppHooks()
-    
     private let settings: CommonSettingsProtocol = AppSettings()
+    private let appHooks: AppHooks
     
+    private var notificationHandler: NotificationHandler?
     private let keychainController = KeychainController(service: .sessions,
                                                         accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
     
@@ -46,6 +44,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
     
     override init() {
+        appHooks = AppHooks()
+        appHooks.setUp()
+        
         if Self.targetConfiguration == nil {
             Self.targetConfiguration = Target.nse.configure(logLevel: settings.logLevel,
                                                             traceLogPacks: settings.traceLogPacks,
@@ -67,6 +68,9 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             // - NotificationID could not be resolved
             return contentHandler(request.content)
         }
+        
+        let homeserverURL = credentials.restorationToken.session.homeserverUrl
+        appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: settings)
         
         guard let mutableContent = request.content.mutableCopy() as? UNMutableNotificationContent else {
             return contentHandler(request.content)

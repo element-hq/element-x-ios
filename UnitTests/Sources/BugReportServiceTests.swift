@@ -112,10 +112,10 @@ class BugReportServiceTests: XCTestCase {
                                        appHooks: AppHooks())
         XCTAssertTrue(service.isEnabled)
         
-        appSettings.bugReportRageshakeURL.override(.disabled)
+        appSettings.bugReportRageshakeURL.applyRemoteValue(.disabled)
         XCTAssertFalse(service.isEnabled)
         
-        appSettings.bugReportRageshakeURL.override(.url("https://bugs.server.net/submit"))
+        appSettings.bugReportRageshakeURL.applyRemoteValue(.url("https://bugs.server.net/submit"))
         XCTAssertTrue(service.isEnabled)
 
         let bugReport = BugReport(userID: "@mock:client.com",

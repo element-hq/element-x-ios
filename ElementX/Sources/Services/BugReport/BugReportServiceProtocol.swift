@@ -46,13 +46,6 @@ enum BugReportServiceError: LocalizedError {
     }
 }
 
-enum RageshakeConfiguration: Equatable {
-    /// Rageshakes should be sent to the provided URL
-    case url(URL)
-    /// Rageshakes are disabled.
-    case disabled
-}
-
 // sourcery: AutoMockable
 protocol BugReportServiceProtocol: AnyObject {
     var isEnabled: Bool { get }

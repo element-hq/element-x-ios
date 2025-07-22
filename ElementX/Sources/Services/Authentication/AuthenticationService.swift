@@ -52,7 +52,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
             let client = try await makeClient(homeserverAddress: homeserverAddress)
-            try await appHooks.elementWellKnownHook.validate(using: client).get()
             let loginDetails = await client.homeserverLoginDetails()
             
             MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
@@ -82,7 +81,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         } catch ClientBuildError.SlidingSyncVersion(let error) {
             MXLog.info("User entered a homeserver that isn't configured for sliding sync: \(error)")
             return .failure(.slidingSyncNotAvailable)
-        } catch ElementWellKnownError.elementProRequired(let serverName) {
+        } catch RemoteSettingsError.elementProRequired(let serverName) {
             return .failure(.elementProRequired(serverName: serverName))
         } catch {
             MXLog.error("Failed configuring a server: \(error)")
@@ -179,7 +178,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
         
         do {
             let client = try await makeClient(homeserverAddress: scannedServerName)
-            try await appHooks.elementWellKnownHook.validate(using: client).get()
             try await client.loginWithQrCode(qrCodeData: qrData,
                                              oidcConfiguration: appSettings.oidcConfiguration.rustValue,
                                              progressListener: listener)
@@ -188,7 +186,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         } catch let error as HumanQrLoginError {
             MXLog.error("QRCode login error: \(error)")
             return .failure(error.serviceError)
-        } catch ElementWellKnownError.elementProRequired(let serverName) {
+        } catch RemoteSettingsError.elementProRequired(let serverName) {
             return .failure(.elementProRequired(serverName: serverName))
         } catch {
             MXLog.error("QRCode login unknown error: \(error)")
@@ -209,12 +207,15 @@ class AuthenticationService: AuthenticationServiceProtocol {
         // so that caches (e.g. server versions) are always fresh for the new server.
         rotateSessionDirectory()
         
-        return try await clientFactory.makeClient(homeserverAddress: homeserverAddress,
-                                                  sessionDirectories: sessionDirectories,
-                                                  passphrase: passphrase,
-                                                  clientSessionDelegate: userSessionStore.clientSessionDelegate,
-                                                  appSettings: appSettings,
-                                                  appHooks: appHooks)
+        let client = try await clientFactory.makeClient(homeserverAddress: homeserverAddress,
+                                                        sessionDirectories: sessionDirectories,
+                                                        passphrase: passphrase,
+                                                        clientSessionDelegate: userSessionStore.clientSessionDelegate,
+                                                        appSettings: appSettings,
+                                                        appHooks: appHooks)
+        try await appHooks.remoteSettingsHook.initializeCache(using: client, applyingTo: appSettings).get()
+        
+        return client
     }
     
     private func rotateSessionDirectory() {

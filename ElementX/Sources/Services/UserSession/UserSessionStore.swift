@@ -117,6 +117,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         }
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
+        appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
         
         let builder = ClientBuilder
             .baseBuilder(httpProxy: URL(string: homeserverURL)?.globalProxy,
@@ -134,10 +135,11 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         do {
             let client = try await builder.build()
-            
             try await client.restoreSession(session: credentials.restorationToken.session)
             
             MXLog.info("Set up session for user \(credentials.userID) at: \(credentials.restorationToken.sessionDirectories)")
+            
+            Task(priority: .low) { await appHooks.remoteSettingsHook.updateCache(using: client) }
             
             return try await .success(setupProxyForClient(client, needsSlidingSyncMigration: credentials.restorationToken.needsSlidingSyncMigration))
         } catch UserSessionStoreError.failedSettingUpClientProxy(let error) {

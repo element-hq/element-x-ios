@@ -11,10 +11,18 @@ import SwiftUI
 class ShareExtensionViewController: UIViewController {
     private static var targetConfiguration: Target.Configuration?
     private let appSettings: CommonSettingsProtocol = AppSettings()
+    private var appHooks: AppHooks!
+    
+    private let keychainController = KeychainController(service: .sessions,
+                                                        accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+    
     private let hostingController = UIHostingController(rootView: ShareExtensionView())
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        appHooks = AppHooks()
+        appHooks.setUp()
         
         if Self.targetConfiguration == nil {
             Self.targetConfiguration = Target.shareExtension.configure(logLevel: appSettings.logLevel,
@@ -29,6 +37,14 @@ class ShareExtensionViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        if let credentials = keychainController.restorationTokens().first {
+            let homeserverURL = credentials.restorationToken.session.homeserverUrl
+            appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
+        } else {
+            // We should really show a different state when there isn't a logged in user, but for now this is fine.
+            MXLog.error("Not logged in, launching app to show the authentication flow.")
+        }
         
         Task {
             if let payload = await prepareSharePayload() {
