@@ -281,13 +281,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             // Room
                 
             case (_, .presentRoom(let presentationAction), .room):
-                guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
-                    fatalError()
-                }
                 Task {
                     await self.presentRoom(fromState: context.fromState,
                                            presentationAction: presentationAction,
-                                           timelineController: timelineController,
                                            animated: animated)
                 }
             case (_, .dismissFlow, .complete):
@@ -433,11 +429,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     /// - Parameters:
     ///   - fromState: The state that asked for the room presentation.
     ///   - presentationAction: The action that should happen after the room is presented
-    ///   - timelineController: This room's main timeline controller
     ///   - animated: whether it should animate the transition
     private func presentRoom(fromState: State,
                              presentationAction: PresentationAction?,
-                             timelineController: TimelineControllerProtocol,
                              animated: Bool) async {
         // If any sheets are presented dismiss them, rely on their dismissal callbacks to transition the state machine
         // through the correct states before presenting the room
@@ -941,13 +935,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                  animated: Bool) {
         let stackCoordinator = NavigationStackCoordinator()
 
-        let parameters = MediaUploadPreviewScreenCoordinatorParameters(roomProxy: roomProxy,
-                                                                       timelineController: timelineController,
+        let parameters = MediaUploadPreviewScreenCoordinatorParameters(timelineController: timelineController,
                                                                        userIndicatorController: userIndicatorController,
                                                                        mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                                        title: url.lastPathComponent,
                                                                        url: url,
-                                                                       shouldShowCaptionWarning: appSettings.shouldShowMediaCaptionWarning)
+                                                                       shouldShowCaptionWarning: appSettings.shouldShowMediaCaptionWarning,
+                                                                       isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted)
 
         let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters)
         
