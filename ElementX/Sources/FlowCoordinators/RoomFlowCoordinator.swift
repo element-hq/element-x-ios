@@ -1008,11 +1008,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .selectedLocation(let geoURI, let isUserLocation):
                 Task {
-                    _ = await self.roomProxy.timeline.sendLocation(body: geoURI.bodyMessage,
-                                                                   geoURI: geoURI,
-                                                                   description: nil,
-                                                                   zoomLevel: 15,
-                                                                   assetType: isUserLocation ? .sender : .pin)
+                    _ = await timelineController.sendLocation(body: geoURI.bodyMessage,
+                                                              geoURI: geoURI,
+                                                              description: nil,
+                                                              zoomLevel: 15,
+                                                              assetType: isUserLocation ? .sender : .pin)
                     self.navigationStackCoordinator.setSheetCoordinator(nil)
                 }
                 
