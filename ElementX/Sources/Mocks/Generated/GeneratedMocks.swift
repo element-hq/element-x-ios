@@ -17752,76 +17752,6 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
             return editPollOriginalQuestionAnswersPollKindReturnValue
         }
     }
-    //MARK: - endPoll
-
-    var endPollPollStartIDTextUnderlyingCallsCount = 0
-    var endPollPollStartIDTextCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return endPollPollStartIDTextUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = endPollPollStartIDTextUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                endPollPollStartIDTextUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    endPollPollStartIDTextUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var endPollPollStartIDTextCalled: Bool {
-        return endPollPollStartIDTextCallsCount > 0
-    }
-    var endPollPollStartIDTextReceivedArguments: (pollStartID: String, text: String)?
-    var endPollPollStartIDTextReceivedInvocations: [(pollStartID: String, text: String)] = []
-
-    var endPollPollStartIDTextUnderlyingReturnValue: Result<Void, TimelineProxyError>!
-    var endPollPollStartIDTextReturnValue: Result<Void, TimelineProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return endPollPollStartIDTextUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, TimelineProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = endPollPollStartIDTextUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                endPollPollStartIDTextUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    endPollPollStartIDTextUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var endPollPollStartIDTextClosure: ((String, String) async -> Result<Void, TimelineProxyError>)?
-
-    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineProxyError> {
-        endPollPollStartIDTextCallsCount += 1
-        endPollPollStartIDTextReceivedArguments = (pollStartID: pollStartID, text: text)
-        DispatchQueue.main.async {
-            self.endPollPollStartIDTextReceivedInvocations.append((pollStartID: pollStartID, text: text))
-        }
-        if let endPollPollStartIDTextClosure = endPollPollStartIDTextClosure {
-            return await endPollPollStartIDTextClosure(pollStartID, text)
-        } else {
-            return endPollPollStartIDTextReturnValue
-        }
-    }
     //MARK: - sendPollResponse
 
     var sendPollResponsePollStartIDAnswersUnderlyingCallsCount = 0
@@ -17890,6 +17820,76 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
             return await sendPollResponsePollStartIDAnswersClosure(pollStartID, answers)
         } else {
             return sendPollResponsePollStartIDAnswersReturnValue
+        }
+    }
+    //MARK: - endPoll
+
+    var endPollPollStartIDTextUnderlyingCallsCount = 0
+    var endPollPollStartIDTextCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return endPollPollStartIDTextUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = endPollPollStartIDTextUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                endPollPollStartIDTextUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    endPollPollStartIDTextUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var endPollPollStartIDTextCalled: Bool {
+        return endPollPollStartIDTextCallsCount > 0
+    }
+    var endPollPollStartIDTextReceivedArguments: (pollStartID: String, text: String)?
+    var endPollPollStartIDTextReceivedInvocations: [(pollStartID: String, text: String)] = []
+
+    var endPollPollStartIDTextUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var endPollPollStartIDTextReturnValue: Result<Void, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return endPollPollStartIDTextUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = endPollPollStartIDTextUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                endPollPollStartIDTextUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    endPollPollStartIDTextUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var endPollPollStartIDTextClosure: ((String, String) async -> Result<Void, TimelineProxyError>)?
+
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineProxyError> {
+        endPollPollStartIDTextCallsCount += 1
+        endPollPollStartIDTextReceivedArguments = (pollStartID: pollStartID, text: text)
+        DispatchQueue.main.async {
+            self.endPollPollStartIDTextReceivedInvocations.append((pollStartID: pollStartID, text: text))
+        }
+        if let endPollPollStartIDTextClosure = endPollPollStartIDTextClosure {
+            return await endPollPollStartIDTextClosure(pollStartID, text)
+        } else {
+            return endPollPollStartIDTextReturnValue
         }
     }
     //MARK: - getLoadedReplyDetails

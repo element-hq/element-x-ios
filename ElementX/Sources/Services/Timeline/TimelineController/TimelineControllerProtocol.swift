@@ -131,4 +131,17 @@ protocol TimelineControllerProtocol {
                           audioInfo: AudioInfo,
                           waveform: [UInt16],
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError>
+    
+    // MARK: - Poll
+    
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError>
+    
+    func editPoll(original eventID: String,
+                  question: String,
+                  answers: [String],
+                  pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError>
+    
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineControllerError>
+    
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineControllerError>
 }

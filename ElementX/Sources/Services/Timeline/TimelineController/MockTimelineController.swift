@@ -244,6 +244,24 @@ class MockTimelineController: TimelineControllerProtocol {
         
         return .success(())
     }
+    
+    // MARK: - Polls
+    
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        .success(())
+    }
+    
+    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        .success(())
+    }
+    
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineControllerError> {
+        .success(())
+    }
+    
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineControllerError> {
+        .success(())
+    }
         
     // MARK: - UI Test signalling
     

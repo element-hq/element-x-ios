@@ -321,7 +321,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentMapNavigator(interactionMode: mode, timelineController: timelineController, animated: animated)
 
             case (_, .presentPollForm(let mode), .pollForm):
-                presentPollForm(mode: mode)
+                guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
+                    fatalError()
+                }
+                presentPollForm(mode: mode, timelineController: timelineController)
                 
             case (_, .presentResolveSendFailure(let failure, let sendHandle), .resolveSendFailure):
                 presentResolveSendFailure(failure: failure, sendHandle: sendHandle)
@@ -343,7 +346,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentRoomMembersList()
                 
             case (.roomDetails, .presentPollsHistory, .pollsHistory):
-                presentPollsHistory()
+                Task { await self.presentRoomPollsHistory(animated: animated) }
                 
             case (.roomDetails, .presentPinnedEventsTimeline, .pinnedEventsTimeline):
                 startPinnedEventsTimelineFlow()
@@ -392,7 +395,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 replaceRoomMemberDetailsWithUserProfile(userID: userID)
                     
             case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
-                presentPollForm(mode: mode)
+                guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
+                    fatalError()
+                }
+                presentPollForm(mode: mode, timelineController: timelineController)
                 
             case (_, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL, _)):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
@@ -557,7 +563,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .presentPollForm(let mode):
-                    stateMachine.tryEvent(.presentPollForm(mode: mode))
+                    stateMachine.tryEvent(.presentPollForm(mode: mode),
+                                          userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .presentLocationViewer(_, let geoURI, let description):
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI, description: description)),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
@@ -642,7 +649,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
             case .presentPollForm(let mode):
-                stateMachine.tryEvent(.presentPollForm(mode: mode))
+                stateMachine.tryEvent(.presentPollForm(mode: mode),
+                                      userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
             case .presentLocationViewer(_, let geoURI, let description):
                 stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI,
                                                                                       description: description)),
@@ -1034,7 +1042,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentPollForm(mode: PollFormMode) {
+    private func presentPollForm(mode: PollFormMode, timelineController: TimelineControllerProtocol) {
         let stackCoordinator = NavigationStackCoordinator()
         let coordinator = PollFormScreenCoordinator(parameters: .init(mode: mode))
         stackCoordinator.setRootCoordinator(coordinator)
@@ -1055,9 +1063,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case let .submit(question, options, pollKind):
                     switch mode {
                     case .new:
-                        createPoll(question: question, options: options, pollKind: pollKind)
+                        createPoll(question: question,
+                                   options: options,
+                                   pollKind: pollKind,
+                                   timelineController: timelineController)
                     case .edit(let eventID, _):
-                        editPoll(pollStartID: eventID, question: question, options: options, pollKind: pollKind)
+                        editPoll(pollStartID: eventID,
+                                 question: question,
+                                 options: options,
+                                 pollKind: pollKind,
+                                 timelineController: timelineController)
                     }
                 }
             }
@@ -1068,9 +1083,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func createPoll(question: String, options: [String], pollKind: Poll.Kind) {
+    private func createPoll(question: String, options: [String], pollKind: Poll.Kind, timelineController: TimelineControllerProtocol) {
         Task {
-            let result = await roomProxy.timeline.createPoll(question: question, answers: options, pollKind: pollKind)
+            let result = await timelineController.createPoll(question: question, answers: options, pollKind: pollKind)
 
             self.analytics.trackComposer(inThread: false,
                                          isEditing: false,
@@ -1089,9 +1104,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func editPoll(pollStartID: String, question: String, options: [String], pollKind: Poll.Kind) {
+    private func editPoll(pollStartID: String, question: String, options: [String], pollKind: Poll.Kind, timelineController: TimelineControllerProtocol) {
         Task {
-            let result = await roomProxy.timeline.editPoll(original: pollStartID, question: question, answers: options, pollKind: pollKind)
+            let result = await timelineController.editPoll(original: pollStartID, question: question, answers: options, pollKind: pollKind)
             
             switch result {
             case .success:
@@ -1120,13 +1135,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentPollsHistory() {
-        Task {
-            await asyncPresentRoomPollsHistory()
-        }
-    }
-    
-    private func asyncPresentRoomPollsHistory() async {
+    private func presentRoomPollsHistory(animated: Bool) async {
         let userID = userSession.clientProxy.userID
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
@@ -1138,7 +1147,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                    timelineItemFactory: timelineItemFactory,
                                                                                    mediaProvider: userSession.mediaProvider)
         
-        let parameters = RoomPollsHistoryScreenCoordinatorParameters(pollInteractionHandler: PollInteractionHandler(analyticsService: analytics, roomProxy: roomProxy),
+        let parameters = RoomPollsHistoryScreenCoordinatorParameters(pollInteractionHandler: PollInteractionHandler(analyticsService: analytics,
+                                                                                                                    timelineController: timelineController),
                                                                      timelineController: timelineController)
         let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
         coordinator.actions
@@ -1147,7 +1157,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .editPoll(let pollStartID, let poll):
-                    stateMachine.tryEvent(.presentPollForm(mode: .edit(eventID: pollStartID, poll: poll)))
+                    stateMachine.tryEvent(.presentPollForm(mode: .edit(eventID: pollStartID, poll: poll)),
+                                          userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 }
             }
             .store(in: &cancellables)
