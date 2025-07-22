@@ -179,7 +179,7 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         
         let result = await timelineController.sendVoiceMessage(url: oggFile,
                                                                audioInfo: audioInfo,
-                                                               waveform: waveform)
+                                                               waveform: waveform) { _ in }
         
         if case .failure(let error) = result {
             MXLog.error("Failed to send the voice message. \(error)")

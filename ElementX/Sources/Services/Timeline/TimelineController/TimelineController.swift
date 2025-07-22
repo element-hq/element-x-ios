@@ -301,10 +301,65 @@ class TimelineController: TimelineControllerProtocol {
         }
     }
     
-    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16]) async -> Result<Void, TimelineProxyError> {
+    func sendAudio(url: URL,
+                   audioInfo: MatrixRustSDK.AudioInfo,
+                   caption: String?,
+                   requestHandle: @MainActor (any MatrixRustSDK.SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        await activeTimeline.sendAudio(url: url,
+                                       audioInfo: audioInfo,
+                                       caption: caption,
+                                       requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+    }
+    
+    func sendFile(url: URL,
+                  fileInfo: MatrixRustSDK.FileInfo,
+                  caption: String?,
+                  requestHandle: @MainActor (any MatrixRustSDK.SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        await activeTimeline.sendFile(url: url,
+                                      fileInfo: fileInfo,
+                                      caption: caption,
+                                      requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+    }
+    
+    func sendImage(url: URL,
+                   thumbnailURL: URL,
+                   imageInfo: MatrixRustSDK.ImageInfo,
+                   caption: String?,
+                   requestHandle: @MainActor (any MatrixRustSDK.SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        await activeTimeline.sendImage(url: url,
+                                       thumbnailURL: thumbnailURL,
+                                       imageInfo: imageInfo,
+                                       caption: caption,
+                                       requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+    }
+    
+    func sendVideo(url: URL,
+                   thumbnailURL: URL,
+                   videoInfo: MatrixRustSDK.VideoInfo,
+                   caption: String?,
+                   requestHandle: @MainActor (any MatrixRustSDK.SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        await activeTimeline.sendVideo(url: url,
+                                       thumbnailURL: thumbnailURL,
+                                       videoInfo: videoInfo,
+                                       caption: caption,
+                                       requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+    }
+    
+    func sendLocation(body: String,
+                      geoURI: GeoURI,
+                      description: String?,
+                      zoomLevel: UInt8?,
+                      assetType: AssetType?) async -> Result<Void, TimelineControllerError> {
+        await activeTimeline.sendLocation(body: body, geoURI: geoURI, description: description, zoomLevel: zoomLevel, assetType: assetType).mapError(TimelineControllerError.timelineProxyError)
+    }
+    
+    func sendVoiceMessage(url: URL,
+                          audioInfo: MatrixRustSDK.AudioInfo,
+                          waveform: [UInt16],
+                          requestHandle: @MainActor (any MatrixRustSDK.SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
         await activeTimeline.sendVoiceMessage(url: url,
                                               audioInfo: audioInfo,
-                                              waveform: waveform) { _ in }
+                                              waveform: waveform, requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
     }
     
     // MARK: - Private
