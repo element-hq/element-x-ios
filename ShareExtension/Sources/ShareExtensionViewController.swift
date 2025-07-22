@@ -9,15 +9,18 @@ import IntentsUI
 import SwiftUI
 
 class ShareExtensionViewController: UIViewController {
+    private static var targetConfiguration: Target.Configuration?
     private let appSettings: CommonSettingsProtocol = AppSettings()
     private let hostingController = UIHostingController(rootView: ShareExtensionView())
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Target.shareExtension.configure(logLevel: appSettings.logLevel,
-                                        traceLogPacks: appSettings.traceLogPacks,
-                                        sentryURL: nil)
+        if Self.targetConfiguration == nil {
+            Self.targetConfiguration = Target.shareExtension.configure(logLevel: appSettings.logLevel,
+                                                                       traceLogPacks: appSettings.traceLogPacks,
+                                                                       sentryURL: nil)
+        }
         
         addChild(hostingController)
         view.addMatchedSubview(hostingController.view)

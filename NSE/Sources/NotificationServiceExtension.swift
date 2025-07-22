@@ -28,12 +28,13 @@ import UserNotifications
 // notification.
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
+    private static var targetConfiguration: Target.Configuration?
     private var notificationHandler: NotificationHandler?
     
     private let appHooks = AppHooks()
     
     private let settings: CommonSettingsProtocol = AppSettings()
-
+    
     private let keychainController = KeychainController(service: .sessions,
                                                         accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
     
@@ -42,6 +43,14 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     deinit {
         ExtensionLogger.logMemory(with: tag)
         MXLog.info("\(tag) deinit")
+    }
+    
+    override init() {
+        if Self.targetConfiguration == nil {
+            Self.targetConfiguration = Target.nse.configure(logLevel: settings.logLevel,
+                                                            traceLogPacks: settings.traceLogPacks,
+                                                            sentryURL: nil)
+        }
     }
     
     override func didReceive(_ request: UNNotificationRequest,
@@ -63,17 +72,13 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
             return contentHandler(request.content)
         }
         
+        MXLog.info("\(tag) #########################################")
+        
+        ExtensionLogger.logMemory(with: tag)
+        
+        MXLog.info("\(tag) Received payload: \(request.content.userInfo)")
+        
         Task {
-            await Target.nse.configure(logLevel: settings.logLevel,
-                                       traceLogPacks: settings.traceLogPacks,
-                                       sentryURL: nil)
-            
-            MXLog.info("\(tag) #########################################")
-            
-            ExtensionLogger.logMemory(with: tag)
-            
-            MXLog.info("\(tag) Received payload: \(request.content.userInfo)")
-            
             do {
                 let userSession = try await NSEUserSession(credentials: credentials,
                                                            roomID: roomID,

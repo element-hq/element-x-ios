@@ -185,13 +185,23 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
                 }
                 
                 // We only set the analytics configuration if analytics are enabled
-                let analyticsConfiguration = analyticsService.isEnabled ? ElementCallAnalyticsConfiguration(posthogAPIHost: appSettings.elementCallPosthogAPIHost,
-                                                                                                            posthogAPIKey: appSettings.elementCallPosthogAPIKey,
-                                                                                                            sentryDSN: appSettings.elementCallPosthogSentryDSN) : nil
+                let analyticsConfiguration: ElementCallAnalyticsConfiguration? = if analyticsService.isEnabled {
+                    .init(posthogAPIHost: appSettings.elementCallPosthogAPIHost,
+                          posthogAPIKey: appSettings.elementCallPosthogAPIKey,
+                          sentryDSN: appSettings.elementCallPosthogSentryDSN)
+                } else {
+                    nil
+                }
+                let rageshakeURL: String? = if case let .url(baseURL) = appSettings.bugReportRageshakeURL.publisher.value {
+                    baseURL.absoluteString
+                } else {
+                    nil
+                }
+                
                 switch await widgetDriver.start(baseURL: baseURL,
                                                 clientID: clientID,
                                                 colorScheme: colorScheme,
-                                                rageshakeURL: appSettings.bugReportRageshakeURL?.absoluteString,
+                                                rageshakeURL: rageshakeURL,
                                                 analyticsConfiguration: analyticsConfiguration) {
                 case .success(let url):
                     state.url = url

@@ -79,7 +79,7 @@ targets:
     - path: ../Sources
     - path: ../SupportingFiles
     - path: ../../ElementX/Sources/ShareExtension
-    - path: ../../ElementX/Sources/Application/AppSettings.swift
+    - path: ../../ElementX/Sources/Application/Settings
     - path: ../../ElementX/Sources/Application/TargetConfiguration.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
     - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
@@ -88,6 +88,6 @@ targets:
     - path: ../../ElementX/Sources/Other/Extensions/UIView.swift
     - path: ../../ElementX/Sources/Other/Extensions/URL.swift
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
+    - path: ../../ElementX/Sources/Other/CurrentValuePublisher.swift
     - path: ../../ElementX/Sources/Other/Logging
-    - path: ../../ElementX/Sources/Other/UserPreference.swift
     - path: ../../ElementX/Sources/UITests/UITestsScreenIdentifier.swift
