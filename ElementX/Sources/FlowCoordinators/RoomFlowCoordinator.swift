@@ -638,18 +638,18 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .presentReportContent(let itemID, let senderID):
                 stateMachine.tryEvent(.presentReportContent(itemID: itemID, senderID: senderID))
-            case .presentMediaUploadPicker(let source, let threadRootEventID):
+            case .presentMediaUploadPicker(let source):
                 stateMachine.tryEvent(.presentMediaUploadPicker(source: source),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-            case .presentMediaUploadPreviewScreen(let url, let threadRootEventID):
+            case .presentMediaUploadPreviewScreen(let url):
                 stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-            case .presentLocationPicker(let threadRootEventID):
+            case .presentLocationPicker:
                 stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
             case .presentPollForm(let mode):
                 stateMachine.tryEvent(.presentPollForm(mode: mode))
-            case .presentLocationViewer(_, let geoURI, let description, let threadRootEventID):
+            case .presentLocationViewer(_, let geoURI, let description):
                 stateMachine.tryEvent(.presentMapNavigator(interactionMode: .viewOnly(geoURI: geoURI,
                                                                                       description: description)),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
