@@ -362,6 +362,24 @@ class TimelineController: TimelineControllerProtocol {
                                               waveform: waveform, requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
     }
     
+    // MARK: - Polls
+    
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        await activeTimeline.createPoll(question: question, answers: answers, pollKind: pollKind).mapError(TimelineControllerError.timelineProxyError)
+    }
+    
+    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        await activeTimeline.editPoll(original: eventID, question: question, answers: answers, pollKind: pollKind).mapError(TimelineControllerError.timelineProxyError)
+    }
+    
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineControllerError> {
+        await activeTimeline.sendPollResponse(pollStartID: pollStartID, answers: answers).mapError(TimelineControllerError.timelineProxyError)
+    }
+    
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineControllerError> {
+        await activeTimeline.endPoll(pollStartID: pollStartID, text: text).mapError(TimelineControllerError.timelineProxyError)
+    }
+    
     // MARK: - Private
     
     /// The cancellable used to update the timeline items.

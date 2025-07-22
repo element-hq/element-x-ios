@@ -85,7 +85,9 @@ class TimelineInteractionHandler {
         self.emojiProvider = emojiProvider
         self.timelineControllerFactory = timelineControllerFactory
         self.clientProxy = clientProxy
-        pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService, roomProxy: roomProxy)
+        
+        pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService,
+                                                        timelineController: timelineController)
     }
     
     // MARK: Timeline Item Action Menu
