@@ -3309,8 +3309,8 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var reportRoomForIdentifierReasonCalled: Bool {
         return reportRoomForIdentifierReasonCallsCount > 0
     }
-    var reportRoomForIdentifierReasonReceivedArguments: (identifier: String, reason: String?)?
-    var reportRoomForIdentifierReasonReceivedInvocations: [(identifier: String, reason: String?)] = []
+    var reportRoomForIdentifierReasonReceivedArguments: (identifier: String, reason: String)?
+    var reportRoomForIdentifierReasonReceivedInvocations: [(identifier: String, reason: String)] = []
 
     var reportRoomForIdentifierReasonUnderlyingReturnValue: Result<Void, ClientProxyError>!
     var reportRoomForIdentifierReasonReturnValue: Result<Void, ClientProxyError>! {
@@ -3336,9 +3336,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var reportRoomForIdentifierReasonClosure: ((String, String?) async -> Result<Void, ClientProxyError>)?
+    var reportRoomForIdentifierReasonClosure: ((String, String) async -> Result<Void, ClientProxyError>)?
 
-    func reportRoomForIdentifier(_ identifier: String, reason: String?) async -> Result<Void, ClientProxyError> {
+    func reportRoomForIdentifier(_ identifier: String, reason: String) async -> Result<Void, ClientProxyError> {
         reportRoomForIdentifierReasonCallsCount += 1
         reportRoomForIdentifierReasonReceivedArguments = (identifier: identifier, reason: reason)
         DispatchQueue.main.async {
@@ -6946,7 +6946,7 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         return reportRoomReasonCallsCount > 0
     }
     var reportRoomReasonReceivedReason: String?
-    var reportRoomReasonReceivedInvocations: [String?] = []
+    var reportRoomReasonReceivedInvocations: [String] = []
 
     var reportRoomReasonUnderlyingReturnValue: Result<Void, RoomProxyError>!
     var reportRoomReasonReturnValue: Result<Void, RoomProxyError>! {
@@ -6972,9 +6972,9 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var reportRoomReasonClosure: ((String?) async -> Result<Void, RoomProxyError>)?
+    var reportRoomReasonClosure: ((String) async -> Result<Void, RoomProxyError>)?
 
-    func reportRoom(reason: String?) async -> Result<Void, RoomProxyError> {
+    func reportRoom(reason: String) async -> Result<Void, RoomProxyError> {
         reportRoomReasonCallsCount += 1
         reportRoomReasonReceivedReason = reason
         DispatchQueue.main.async {
