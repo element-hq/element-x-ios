@@ -57,7 +57,7 @@ struct HomeWalletTabsContentView : View {
                     selectedTab: selectedWalletTab,
                     mediaProvider: context.mediaProvider,
                     onTap: { content in
-                        context.send(viewAction: .viewTransactionDetails(content))
+                        context.send(viewAction: .viewTransactionDetails(transactionId: content.id))
                     }
                 )
                 

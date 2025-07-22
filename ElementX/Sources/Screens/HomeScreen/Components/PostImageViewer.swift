@@ -8,18 +8,13 @@
 import SwiftUI
 import Kingfisher
 
-struct ExternalFeedImageViewer: View {
+struct PostImageViewer: View {
     let mediaInfo: HomeScreenPostMediaInfo
-    let mediaUrlString: String?
+    let mediaUrl: URL?
     let onMediaTapped: () -> Void
     let onReloadMedia: () -> Void
     
     @State private var didFail = false
-    
-    private var mediaURL: URL? {
-        guard let mediaUrlString else { return nil }
-        return URL(string: mediaUrlString)
-    }
     
     var body: some View {
         if didFail {
@@ -28,26 +23,21 @@ struct ExternalFeedImageViewer: View {
             }
             .frame(maxWidth: .infinity, minHeight: 300)
             .cornerRadius(4)
-        } else if let mediaURL {
-            let source = KF.ImageResource(downloadURL: mediaURL, cacheKey: mediaInfo.id)
-            KFAnimatedImage(source: .network(source))
-                .cacheOriginalImage()
-                .diskCacheExpiration(.days(3))
-                .retry(maxCount: 2, interval: .seconds(1))
+        } else if let mediaUrl {
+            KFAnimatedImage(mediaUrl)
                 .placeholder { ProgressView() }
                 .onFailure { error in
-                    MXLog.error("KingFisher: Failed to load feed media image: \(error)")
                     ZeroCustomEventService.shared.feedScreenEvent(parameters: [
-                        "type": "Feed Media Preview Image - External",
+                        "type": "Feed Media Preview Image",
                         "status": "Failure",
                         "mediaId" : mediaInfo.id,
-                        "mediaUrl": mediaUrlString ?? "",
+                        "mediaUrl": mediaUrl.absoluteString,
                         "error": error.localizedDescription
                     ])
                     didFail = true
                 }
-                .onSuccess { result in
-                    MXLog.info("KingFisher: Media Loaded from: \(result.cacheType)")
+                .onSuccess { _ in
+                    didFail = false
                 }
                 .fade(duration: 0.3)
                 .aspectRatio(mediaInfo.aspectRatio, contentMode: .fit)

@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct PostMediaPreview: View {
-    let externalLoading: Bool
     let mediaInfo: HomeScreenPostMediaInfo
     let mediaUrlString: String?
     let onMediaTapped: () -> Void
     let onReloadMedia: () -> Void
-        
+    
     private var mediaURL: URL? {
         guard let mediaUrlString else { return nil }
         return URL(string: mediaUrlString)
@@ -32,20 +31,12 @@ struct PostMediaPreview: View {
     @ViewBuilder
     private var videoView: some View {
         if let mediaURL {
-            if externalLoading {
-                ExternalFeedVideoPlayer(videoURL: mediaURL)
-                    .frame(height: 300)
-                    .cornerRadius(4)
-                    .onLongPressGesture {
-                        onMediaTapped()
-                    }
-            } else {
-                InternalFeedVideoPlayer(videoURL: mediaURL)
-                    .frame(height: 300)
-                    .cornerRadius(4)
-                    .onLongPressGesture {
-                        onMediaTapped()
-                    }
+            PostVideoPlayer(videoURL: mediaURL,
+                            onReloadMedia: onReloadMedia)
+            .frame(height: 300)
+            .cornerRadius(4)
+            .onLongPressGesture {
+                onMediaTapped()
             }
         } else {
             ZStack {
@@ -58,16 +49,9 @@ struct PostMediaPreview: View {
     
     @ViewBuilder
     private var imageView: some View {
-        if externalLoading {
-            ExternalFeedImageViewer(mediaInfo: mediaInfo,
-                                    mediaUrlString: mediaUrlString,
-                                    onMediaTapped: onMediaTapped,
-                                    onReloadMedia: onReloadMedia)
-        } else {
-            InternalFeedImageViewer(mediaInfo: mediaInfo,
-                                    mediaUrlString: mediaUrlString,
-                                    onMediaTapped: onMediaTapped,
-                                    onReloadMedia: onReloadMedia)
-        }
+        PostImageViewer(mediaInfo: mediaInfo,
+                        mediaUrl: mediaURL,
+                        onMediaTapped: onMediaTapped,
+                        onReloadMedia: onReloadMedia)
     }
 }

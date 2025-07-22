@@ -108,6 +108,7 @@ struct TimelineThreadSummaryView: View {
                        formattedBody: nil,
                        numberOfReplies: 42)
                 .redacted(reason: .placeholder)
+                .accessibilityLabel(L10n.commonLoading)
         }
     }
     
@@ -124,6 +125,7 @@ struct TimelineThreadSummaryView: View {
             HStack(spacing: 4) {
                 CompoundIcon(\.threads, size: .xSmall, relativeTo: .compound.bodyXS)
                     .foregroundColor(.compound.iconSecondary)
+                    .accessibilityLabel(L10n.commonThread)
                 
                 Text(L10n.commonReplies(numberOfReplies))
                     .font(.compound.bodyXSSemibold)
@@ -134,6 +136,7 @@ struct TimelineThreadSummaryView: View {
                                     contentID: sender?.id,
                                     avatarSize: .user(on: .threadSummary),
                                     mediaProvider: context.mediaProvider)
+                    .accessibilityHidden(true)
                 
                 Text(sender?.disambiguatedDisplayName ?? senderID)
                     .font(.compound.bodyXSSemibold)
@@ -144,6 +147,7 @@ struct TimelineThreadSummaryView: View {
                     .font(.compound.bodyXS)
                     .foregroundColor(.compound.textSecondary)
             }
+            .accessibilityElement(children: .combine)
             .lineLimit(1)
             .padding(.vertical, 7.0)
             .padding(.horizontal, 8.0)

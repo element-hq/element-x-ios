@@ -27,6 +27,7 @@ enum SettingsScreenViewModelAction: Equatable {
     case inviteFriend
     case referAFriend
     case zeroProSub
+    case claimRewards
 }
 
 enum SettingsScreenSecuritySectionMode {
@@ -84,4 +85,5 @@ enum SettingsScreenViewAction {
     case inviteFriend
     case referAFriend
     case zeroProSub
+    case claimRewards
 }

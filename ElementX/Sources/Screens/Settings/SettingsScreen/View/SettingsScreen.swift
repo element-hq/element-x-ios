@@ -102,7 +102,7 @@ struct SettingsScreen: View {
         Section {
             /// User Rewards
             ZeroListRow(kind: .custom {
-                VStack {
+                VStack(alignment: .leading) {
                     HorizontalDivider()
                         .padding(.vertical, 8)
                     
@@ -111,6 +111,21 @@ struct SettingsScreen: View {
                     } label: {
                         userRewardsView
                     }
+                    
+                    if context.viewState.userRewards.hasUnclaimedRewards() {
+                        Text("You can now claim $\(context.viewState.userRewards.getUnclaimedRewardsRefPriceFormatted())")
+                            .font(.zero.bodyMD)
+                            .foregroundStyle(.compound.textSecondary)
+                            .padding(.horizontal, 16)
+                            .padding(.top, 8)
+                    }
+                    
+                    ClaimEarningsButton(
+                        disabled: !context.viewState.userRewards.hasUnclaimedRewards(),
+                        onTap: {
+                            context.send(viewAction: .claimRewards)
+                        })
+                    .padding(.horizontal, 16)
                     
                     HorizontalDivider()
                         .padding(.vertical, 8)
@@ -172,7 +187,7 @@ struct SettingsScreen: View {
     private var userRewardsView: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading) {
-                Text("Rewards")
+                Text("Earnings")
                     .font(.zero.bodyMD)
                     .foregroundStyle(.compound.textPrimary)
                     .padding(.vertical, 2)

@@ -48,6 +48,7 @@ struct CompletedTransactionView: View {
                             .font(.compound.headingMDBold)
                             .foregroundStyle(.compound.textPrimary)
                     }
+                    .padding(.vertical, 12)
                 }
                 
                 Spacer()
@@ -57,7 +58,7 @@ struct CompletedTransactionView: View {
                     
                     UserInfoView(
                         image: currentUser.profileImageURL?.absoluteString,
-                        name: currentUser.primaryZID ?? currentUser.displayName,
+                        name: currentUser.displayName,
                         address: displayFormattedAddress(currentUser.publicWalletAddress),
                         mediaProvider: context.mediaProvider
                     )
@@ -105,16 +106,33 @@ struct CompletedTransactionView: View {
                         .font(.zero.bodySM)
                         .foregroundStyle(.compound.textSecondary)
                     
-                    Button(action: { context.send(viewAction: .transactionCompleted) }) {
-                        Text("Close")
-                            .font(.compound.bodyMDSemibold)
-                            .foregroundColor(.black)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(.zero.bgAccentRest)
-                            )
+                    HStack(spacing: 12) {
+                        Button(action: { context.send(viewAction: .transactionCompleted) }) {
+                            Text("Close")
+                                .font(.compound.bodyMDSemibold)
+                                .foregroundColor(.black)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(.zero.bgAccentRest)
+                                )
+                        }
+                        
+                        Button(action: {
+                            context.send(viewAction: .viewTransaction)
+                        }) {
+                            Text("View on ZScan")
+                                .font(.compound.bodyMDSemibold)
+                                .foregroundColor(.zero.bgAccentRest)
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(.zero.bgAccentRest.opacity(0.15))
+                                        .stroke(.zero.bgAccentRest)
+                                )
+                        }
                     }
                     .padding(.vertical, 12)
                 }

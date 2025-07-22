@@ -1620,7 +1620,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                              fromHomeFlow: false,
                                                              userId: userId,
                                                              userFeedProfile: nil,
-                                                             feedUpdatedProtocol: nil)
+                                                             feedProtocol: nil)
         flowCoordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             

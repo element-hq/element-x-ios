@@ -1,23 +1,26 @@
 import Foundation
 
 public struct ZeroRewards: Codable, Equatable {
-    var zero: String
-    var zeroPreviousDay: String
+    private var zero: Double
+    private var unclaimedRewards: Double
+    private var price: Double
+    private var reference: String
     var decimals: Int
-    var price: Double
-    var reference: String
     
     init(rewards: ZRewards, currency: ZeroCurrency) {
-        zero = rewards.zero
-        zeroPreviousDay = rewards.zeroPreviousDay
+        zero = Self.parseTotalEarnings(zeroCredits: rewards.legacyRewards,
+                                       dailyRewards: rewards.totalDailyRewards,
+                                       referralRewards: rewards.totalReferralFees,
+                                       decimals: rewards.decimals)
+        unclaimedRewards = Self.parseCredits(credits: rewards.unclaimedRewards, decimals: rewards.decimals)
         decimals = rewards.decimals
         price = currency.price ?? 0.0
         reference = currency.reference ?? ""
     }
     
     init() {
-        zero = "0"
-        zeroPreviousDay = "0"
+        zero = 0.0
+        unclaimedRewards = 0.0
         decimals = 0
         price = 0.0
         reference = ""
@@ -26,53 +29,67 @@ public struct ZeroRewards: Codable, Equatable {
     static func empty() -> ZeroRewards {
         ZeroRewards()
     }
+    
+    private static func parseTotalEarnings(zeroCredits: String, dailyRewards: String, referralRewards: String, decimals: Int) -> Double {
+        let legacyEarnings = parseCredits(credits: zeroCredits, decimals: decimals)
+        let dailyEarnings = parseCredits(credits: dailyRewards, decimals: decimals)
+        let referralEarnings = parseCredits(credits: referralRewards, decimals: decimals)
+        return legacyEarnings + dailyEarnings + referralEarnings
+    }
+    
+    private static func parseCredits(credits: String, decimals: Int) -> Double {
+        let delimiter = credits.count - decimals
+        if delimiter < 0 { return 0 }
+        let value = String(credits.prefix(delimiter)) + "." + (credits.substr(delimiter, 2) ?? "0")
+        return (try? Double(value)) ?? 0.0
+    }
 }
 
 extension ZeroRewards {
-    func hasEarnedRewards() -> Bool {
-        let current = parseCredits(credits: zero, decimals: decimals)
-        let previous = parseCredits(credits: zeroPreviousDay, decimals: decimals)
-        return Int((current - previous).rounded()) > 0
+    var zeroCredits: Double {
+        zero
     }
     
-    func getZeroCredits() -> Double {
-        let credits = parseCredits(credits: zero, decimals: decimals)
-        return credits
+    func hasUnclaimedRewards() -> Bool {
+        return unclaimedRewards > 0
     }
     
     func getZeroCreditsFormatted() -> String {
-        getZeroCredits().formatToThousandSeparatedString()
+        zeroCredits.formatToThousandSeparatedString()
     }
     
-    func getRefPrice() -> Double {
-        let refPrice = price
-        do {
-            let credits = parseCredits(credits: zero, decimals: decimals)
-            if refPrice > 0 {
-                return credits * refPrice
-            } else {
-                return 0.0
-            }
-        } catch {
-            return 0.0
-        }
+    func getUnclaimedRewardsFormatted() -> String {
+        unclaimedRewards.formatToThousandSeparatedString()
     }
     
     func getRefPriceFormatted() -> String {
         getRefPrice().formatToSuffix()
     }
-}
-
-private extension ZeroRewards {
-    func parseCredits(credits: String, decimals: Int) -> Double {
-        let delimiter = credits.count - decimals
-        if delimiter < 0 { return 0 }
-        let value = String(credits.prefix(delimiter)) + "." + (credits.substr(delimiter, 2) ?? "0")
-        return Double(value) ?? 0.0
+    
+    func getUnclaimedRewardsRefPriceFormatted() -> String {
+        getUnclaimedRewardsRefPrice().formatToSuffix()
+    }
+    
+    private func getRefPrice() -> Double {
+        let refPrice = price
+        if refPrice > 0 {
+            return zeroCredits * refPrice
+        } else {
+            return 0.0
+        }
+    }
+    
+    private func getUnclaimedRewardsRefPrice() -> Double {
+        let refPrice = price
+        if refPrice > 0 {
+            return unclaimedRewards * refPrice
+        } else {
+            return 0.0
+        }
     }
 }
 
-private extension Double {
+extension Double {
     func formatToThousandSeparatedString() -> String {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal

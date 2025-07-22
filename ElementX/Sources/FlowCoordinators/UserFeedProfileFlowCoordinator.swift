@@ -24,7 +24,7 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
     
     private let userId: String
     private var userFeedProfile: ZPostUserProfile?
-    private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol?
+    private let feedProtocol: FeedProtocol?
     
     private let actionsSubject: PassthroughSubject<UserFeedProfileFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<UserFeedProfileFlowCoordinatorAction, Never> {
@@ -40,7 +40,7 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
          fromHomeFlow: Bool,
          userId: String,
          userFeedProfile: ZPostUserProfile?,
-         feedUpdatedProtocol: FeedDetailsUpdatedProtocol?) {
+         feedProtocol: FeedProtocol?) {
         self.navigationStackCoordinator = navigationStackCoordinator
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
@@ -49,7 +49,7 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
 
         self.userId = userId
         self.userFeedProfile = userFeedProfile
-        self.feedUpdatedProtocol = feedUpdatedProtocol
+        self.feedProtocol = feedProtocol
     }
     
     func start() {
@@ -88,7 +88,7 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
         
         let stackCoordinator = NavigationStackCoordinator()
         let profileCoordinator = FeedUserProfileScreenCoordinator(parameters: .init(userSession: userSession,
-                                                                                    feedUpdatedProtocol: feedUpdatedProtocol,
+                                                                                    feedProtocol: feedProtocol,
                                                                                     userProfile: userFeedProfile))
         profileCoordinator.actions
             .sink { [weak self] action in
@@ -99,7 +99,7 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
                     if fromHomeFlow {
                         actionsSubject.send(.presentFeedDetails(feed: feed))
                     } else {
-                        presentFeedDetailsScreen(feed, feedUpdatedProtocol: feedUpdatedProtocol)
+                        presentFeedDetailsScreen(feed, feedProtocol: feedProtocol)
                     }
                 case .openDirectChat(let roomId):
                     navigationStackCoordinator.setSheetCoordinator(nil)
@@ -116,11 +116,11 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentFeedDetailsScreen(_ post: HomeScreenPost,
-                                          feedUpdatedProtocol: FeedDetailsUpdatedProtocol?,
+                                          feedProtocol: FeedProtocol?,
                                           isChildFeed: Bool = false) {
         let stackCoordinator = NavigationStackCoordinator()
         let parameters = FeedDetailsScreenCoordinatorParameters(userSession: userSession,
-                                                                feedUpdatedProtocol: feedUpdatedProtocol,
+                                                                feedProtocol: feedProtocol,
                                                                 feedItem: post,
                                                                 isFeedDetailsRefreshable: true)
         let coordinator = FeedDetailsScreenCoordinator(parameters: parameters)
@@ -129,7 +129,7 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .replyTapped(let reply):
-                    presentFeedDetailsScreen(reply, feedUpdatedProtocol: feedUpdatedProtocol, isChildFeed: true)
+                    presentFeedDetailsScreen(reply, feedProtocol: feedProtocol, isChildFeed: true)
                 case .attachMedia(let attachMediaProtocol):
                     presentMediaUploadPickerWithSource(attachMediaProtocol, stackCoordinator: stackCoordinator)
                 case .openPostUserProfile( _):
@@ -166,17 +166,17 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
         stackCoordinator.push(mediaPickerCoordinator)
     }
     
-    private func presentCreateFeedScreen(_ createFeedProtocol: CreateFeedProtocol,
+    private func presentCreateFeedScreen(_ feedProtocol: FeedProtocol,
                                          stackCoordinator: NavigationStackCoordinator) {
         let coordinator = CreateFeedScreenCoordinator(parameters: .init(userSession: userSession,
-                                                                        createFeedProtocol: createFeedProtocol,
+                                                                        feedProtocol: feedProtocol,
                                                                         fromUserProfileFlow: true))
         coordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
                 case .newPostCreated:
-                    createFeedProtocol.onNewFeedPosted()
+                    feedProtocol.onNewFeedPosted()
                     stackCoordinator.pop()
                 case .dismissPost:
                     stackCoordinator.pop()

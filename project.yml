@@ -21,6 +21,7 @@ options:
     - UnitTests
     - PreviewTests
     - UITests
+    - AccessibilityTests
     - IntegrationTests
     - DevelopmentAssets
     - Secrets
@@ -39,6 +40,7 @@ options:
     - Screens
     - Other
     - UITests
+    - AccessibilityTests
   postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
 
 settings:
@@ -47,7 +49,7 @@ settings:
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
   APP_NAME: ZERO
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)"
-  MARKETING_VERSION: 25.07.2
+  MARKETING_VERSION: 25.07.3
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
 
@@ -60,17 +62,18 @@ include:
 - path: IntegrationTests/SupportingFiles/target.yml
 - path: NSE/SupportingFiles/target.yml
 - path: ShareExtension/SupportingFiles/target.yml
+- path: AccessibilityTests/SupportingFiles/target.yml
 # - path: MyAppVariant/override.yml
 
 packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 25.07.10
+    exactVersion: 25.07.15
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
-    revision: a32db8bc30f534fd4f189c10cb99afd4abc0f6ea
+    revision: 089904dc1aeb3bacce3b7bb757b7637274e46008
     # path: ../compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
@@ -132,6 +135,9 @@ packages:
   Mapbox:
     url: https://github.com/maplibre/maplibre-gl-native-distribution
     minorVersion: 5.13.0
+  Mutex: # Backports Swift's built in Mutex so we can use it on iOS 17.
+    url: https://github.com/swhitty/swift-mutex
+    minorVersion: 0.0.6
   PostHog:
     url: https://github.com/PostHog/posthog-ios
     minorVersion: 3.27.0

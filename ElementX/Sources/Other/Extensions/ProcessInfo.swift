@@ -33,16 +33,33 @@ extension ProcessInfo {
         false
         #endif
     }
+    
+    static var isRunningAccessibilityTests: Bool {
+        #if DEBUG
+        processInfo.environment["ACCESSIBILITY_VIEW"] != nil
+        #else
+        false
+        #endif
+    }
 
     /// Flag indicating whether the app is running the UI tests or unit tests.
     static var isRunningTests: Bool {
-        isRunningUITests || isRunningUnitTests || isRunningIntegrationTests
+        isRunningUITests || isRunningUnitTests || isRunningIntegrationTests || isRunningAccessibilityTests
     }
     
     /// The identifier of the screen to be loaded when running UI tests.
     static var testScreenID: UITestsScreenIdentifier? {
         #if DEBUG
         processInfo.environment["UI_TESTS_SCREEN"].flatMap(UITestsScreenIdentifier.init)
+        #else
+        nil
+        #endif
+    }
+    
+    /// The identifier of the preview that will be accessibility tested
+    static var accessibilityViewID: String? {
+        #if DEBUG
+        processInfo.environment["ACCESSIBILITY_VIEW"]
         #else
         nil
         #endif

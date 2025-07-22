@@ -1,8 +1,19 @@
 {
   "images" : [
     {
-      "filename" : "icon_z_chain.pdf",
-      "idiom" : "universal"
+      "filename" : "icon-zchain.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "icon-zchain@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "icon-zchain@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

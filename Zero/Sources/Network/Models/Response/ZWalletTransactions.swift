@@ -27,7 +27,8 @@ struct WalletTransaction: Codable {
 extension WalletTransaction {
     var formattedAmount: String {
         if let amount = amount, let doubleAmount = Double(amount), doubleAmount > 0 {
-            return String(format: "%.2f", doubleAmount)
+//            return String(format: "%.2f", doubleAmount)
+            return doubleAmount.formatToThousandSeparatedString()
         } else {
             return amount ?? "0"
         }

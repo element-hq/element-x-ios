@@ -448,14 +448,16 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
-        
+    
     func markAsRead(receiptType: ReceiptType) async -> Result<Void, RoomProxyError> {
-        do {
-            try await room.markAsRead(receiptType: receiptType)
-            return .success(())
-        } catch {
-            MXLog.error("Failed marking room \(id) as read with error: \(error)")
-            return .failure(.sdkError(error))
+        // Defer to the timeline here as room.markAsRead will build a fresh timeline.
+        switch await timeline.markAsRead(receiptType: receiptType) {
+        case .success:
+            .success(())
+        case .failure(.sdkError(let error)):
+            .failure(.sdkError(error))
+        case .failure(let error):
+            .failure(.timelineError(error))
         }
     }
     

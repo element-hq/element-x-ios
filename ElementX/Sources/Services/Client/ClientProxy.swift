@@ -833,7 +833,6 @@ class ClientProxy: ClientProxyProtocol {
     func zeroProfiles(userIds: Set<String>) async {
         do {
             let zeroProfiles = try await zeroApiProxy.matrixUsersService.fetchZeroUsers(userIds: Array(userIds))
-            //TODO: save these profiles in cache to check zero pro badge status
             homeRoomSummariesUsersSubject.send(zeroProfiles)
         } catch {
             MXLog.error("Failed retrieving zero profiles for userIDs: \(userIds) with error: \(error)")
@@ -1004,8 +1003,8 @@ class ClientProxy: ClientProxyProtocol {
                     let zeroRewards = ZeroRewards(rewards: zRewards, currency: zCurrency)
                     
                     if shouldCheckRewardsIntiamtion {
-                        let oldCredits = oldRewards.getZeroCredits()
-                        let newCredits = zeroRewards.getZeroCredits()
+                        let oldCredits = oldRewards.zeroCredits
+                        let newCredits = zeroRewards.zeroCredits
                         showNewUserRewardsIntimationSubject.send(newCredits > oldCredits)
                     }
                     
@@ -1448,6 +1447,22 @@ class ClientProxy: ClientProxyProtocol {
             }
         } catch {
             MXLog.error("Failed to search recipients, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func claimRewards(userWalletAddress: String) async -> Result<String, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.claimRewards(walletAddress: userWalletAddress)
+            switch result {
+            case .success(let transaction):
+                _ = await getUserRewards()
+                return .success(transaction.transactionHash)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to claim user rewards, with error: \(error)")
             return .failure(.zeroError(error))
         }
     }

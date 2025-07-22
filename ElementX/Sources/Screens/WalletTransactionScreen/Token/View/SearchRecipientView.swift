@@ -138,6 +138,7 @@ struct RecipientInfoCell: View {
                                 .foregroundStyle(.compound.textPrimary)
                                 .layoutPriority(1)
                                 .lineLimit(1)
+                                .truncationMode(.tail)
                         }
                         
                         if let primaryZid = recipient.primaryZid {

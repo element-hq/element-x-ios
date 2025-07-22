@@ -1,0 +1,7 @@
+sources:
+  include:
+    - ../../ElementX
+templates:
+  - AccessibilityTests.stencil
+output:
+  ../../AccessibilityTests/Sources/GeneratedAccessibilityTests.swift

@@ -103,6 +103,23 @@ struct HomeScreen: View {
         //                   isNewBloomEnabled: context.viewState.isNewBloomEnabled)
         .sentryTrace("\(Self.self)")
         .quickLookPreview($context.mediaPreviewItem)
+        .sheet(isPresented: $context.showEarningsClaimedSheet) {
+            ClaimedEarningsSheetView(
+                state: context.viewState.claimRewardsState,
+                userRewards: context.viewState.userRewards,
+                onDismiss: {
+                    context.send(viewAction: .claimRewards(trigger: false))
+                },
+                onRetryClaim: {
+                    context.send(viewAction: .claimRewards(trigger: true))
+                },
+                onViewClaimTransaction: { transactionId in
+                    context.send(viewAction: .viewTransactionDetails(transactionId: transactionId))
+                }
+            )
+            .presentationDetents([.height(400)])
+            .presentationDragIndicator(.hidden)
+        }
     }
     
     // MARK: - Private

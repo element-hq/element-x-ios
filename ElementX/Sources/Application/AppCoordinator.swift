@@ -14,7 +14,6 @@ import Sentry
 import SwiftUI
 import Version
 import Kingfisher
-import VideoPlayer
 
 class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDelegate, NotificationManagerDelegate, SecureWindowManagerDelegate {
     private let stateMachine: AppCoordinatorStateMachine
@@ -147,9 +146,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         observeAppLockChanges()
         
         registerBackgroundAppRefresh()
-        
-        setupKFImageCache(externalMediaEnabled: appSettings.enableExternalMediaLoading)
-        
+                
         appSettings.$analyticsConsentState
             .dropFirst() // Called above before configuring the ServiceLocator
             .sink { _ in
@@ -174,27 +171,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 }
             }
             .store(in: &cancellables)
-    }
-    
-    private func setupKFImageCache(externalMediaEnabled: Bool) {
-        let cache = ImageCache.default
-        if externalMediaEnabled {
-            VideoPlayer.preloadByteCount = 1024 * 1024 // 1 MB
-            
-            let downloader = ImageDownloader.default
-            downloader.sessionConfiguration.requestCachePolicy = .useProtocolCachePolicy
-
-            let cache = ImageCache.default
-            cache.diskStorage.config.expiration = .days(3) // Optional: keep for 3 days
-            cache.diskStorage.config.sizeLimit = 100 * 1024 * 1024 // 100 MB
-            
-            MXLog.info("KingFisher: Configurations setup")
-        } else {
-            // clear all caches
-            VideoPlayer.cleanAllCache()
-            cache.clearMemoryCache()
-            cache.clearDiskCache()
-        }
     }
     
     func start() {
@@ -572,13 +548,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                           encryptionKeyProvider: encryptionKeyProvider,
                                                           appSettings: appSettings,
                                                           appHooks: appHooks)
-        let qrCodeLoginService = QRCodeLoginService(encryptionKeyProvider: encryptionKeyProvider,
-                                                    userSessionStore: userSessionStore,
-                                                    appSettings: appSettings,
-                                                    appHooks: appHooks)
         
         let coordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
-                                                        qrCodeLoginService: qrCodeLoginService,
                                                         bugReportService: ServiceLocator.shared.bugReportService,
                                                         navigationRootCoordinator: navigationRootCoordinator,
                                                         appMediator: appMediator,
@@ -1052,6 +1023,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
+        ZeroCustomEventService.shared.logEvent("APP_COORDINATOR", category: "SDK", parameters: [
+            "request_type": "startSync",
+            "status": "starting"
+        ])
+        
         clientProxyObserver = userSession.clientProxy
             .loadingStatePublisher
             .removeDuplicates()
@@ -1062,9 +1038,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 switch state {
                 case .loading:
                     if self?.appMediator.networkMonitor.reachabilityPublisher.value == .reachable {
+                        ZeroCustomEventService.shared.logEvent("APP_COORDINATOR", category: "SDK", parameters: [
+                            "request_type": "startSync",
+                            "status": "in_progress",
+                            "time": Date().timeIntervalSince1970
+                        ])
                         ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
                     }
                 case .notLoading:
+                    ZeroCustomEventService.shared.logEvent("APP_COORDINATOR", category: "SDK", parameters: [
+                        "request_type": "startSync",
+                        "status": "completed",
+                        "time": Date().timeIntervalSince1970
+                    ])
                     ServiceLocator.shared.analytics.signpost.endFirstSync()
                     ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(toastIdentifier)
                 }

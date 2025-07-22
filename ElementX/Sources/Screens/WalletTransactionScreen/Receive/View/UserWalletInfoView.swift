@@ -41,16 +41,16 @@ struct UserWalletInfoView: View {
                         HStack{
                             CompoundIcon(\.info, size: .xSmall, relativeTo: .zero.bodySM)
                                 .foregroundStyle(.compound.textSecondary)
-                            Text("Only send Z Chain assets to this address.")
+                            Text("This address can only receive assets native to Z Chain. Other EVM assets sent to this address will be inaccessible.")
                                 .font(.zero.bodySM)
                                 .foregroundStyle(.compound.textSecondary)
                         }
-                        .padding(8)
+                        .padding(10)
                         .background(
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(.compound.bgCanvasDefault)
                         )
-                        .padding(12)
+                        .padding(16)
                         
                         UserWalletQRCode(walletAddress: address, onQRCodeGenerated: { qrCodeImage in
                             self.qrCodeImage = qrCodeImage

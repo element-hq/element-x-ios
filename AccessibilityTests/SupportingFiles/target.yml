@@ -1,0 +1,55 @@
+name: AccessibilityTests
+
+schemes:
+  AccessibilityTests:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        AccessibilityTests: all
+    profile:
+      config: Release
+    run:
+      config: Debug
+      disableMainThreadChecker: false
+    test:
+      config: Debug
+      testPlans:
+        - path: AccessibilityTests.xctestplan
+          defaultPlan: true
+
+targets:
+  AccessibilityTests:
+    type: bundle.ui-testing
+    platform: iOS
+
+    dependencies:
+    - target: ElementX
+    - package: KZFileWatchers
+
+    info:
+      path: ../SupportingFiles/Info.plist
+
+    settings:
+      base:
+        PRODUCT_NAME: AccessibilityTests
+        PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.accessibility.tests
+      configs:
+      # This is required to remove the $(inherited) flags
+      # which would prevent SnapshotTesting to be imported in UI Tests
+        debug:
+          OTHER_SWIFT_FLAGS: ["-DDEBUG"]
+        release:
+          OTHER_SWIFT_FLAGS: ["-DRELEASE"]
+
+    sources:
+    - path: ../Sources
+    - path: ../SupportingFiles
+    - path: ../../ElementX/Sources/UITests/UITestsSignalling.swift
+    - path: ../../ElementX/Sources/Other/AccessibilityIdentifiers.swift
+    - path: ../../ElementX/Sources/Other/MatrixEntityRegex.swift
+    - path: ../../ElementX/Sources/Other/Pills/PillUtilities.swift
+    - path: ../../ElementX/Sources/Other/Extensions/NSRegularExpresion.swift
+

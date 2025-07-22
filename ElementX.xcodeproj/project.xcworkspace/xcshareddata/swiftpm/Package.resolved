@@ -1,5 +1,5 @@
 {
-  "originHash" : "3657dacdc2d4343cf6b3fa510b2f7a72efd1c5255f073e03f1d6a18ed9eecca8",
+  "originHash" : "b1dbf848264dfb6f21dc8e3a0f5382d87f4903321fb629ced1aab8a5ecb9d7c0",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-design-tokens",
       "state" : {
-        "revision" : "b0addc0775526685ad96fd9ef9c04b2de4456314",
-        "version" : "5.0.1"
+        "revision" : "9da344135825e0a949e41b7a68987ec9205b1d27",
+        "version" : "5.0.2"
       }
     },
     {
@@ -51,7 +51,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "a32db8bc30f534fd4f189c10cb99afd4abc0f6ea"
+        "revision" : "089904dc1aeb3bacce3b7bb757b7637274e46008"
       }
     },
     {
@@ -172,15 +172,6 @@
       }
     },
     {
-      "identity" : "gsplayer",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/wxxsw/GSPlayer.git",
-      "state" : {
-        "revision" : "49ebb0fe4cacfcdedc04c3c2fa3ed3c15c9249a4",
-        "version" : "0.2.29"
-      }
-    },
-    {
       "identity" : "gtm-session-fetcher",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/gtm-session-fetcher.git",
@@ -293,8 +284,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "91d7262dfdea3eec2e6a6fff5ab303ca953dd90b",
-        "version" : "25.7.10"
+        "revision" : "1c896dcca3bd302b492a71b3d020f50d8407fea0",
+        "version" : "25.7.15"
       }
     },
     {
@@ -451,6 +442,15 @@
       }
     },
     {
+      "identity" : "swift-mutex",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swhitty/swift-mutex",
+      "state" : {
+        "revision" : "1770152df756b54c28ef1787df1e957d93cc62d5",
+        "version" : "0.0.6"
+      }
+    },
+    {
       "identity" : "swift-numerics",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-numerics",
@@ -547,15 +547,6 @@
       "state" : {
         "revision" : "67ce582bb9de70e1eb2ee41fd71aad3b5f86d97b",
         "version" : "2.2.0"
-      }
-    },
-    {
-      "identity" : "videoplayer",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/wxxsw/VideoPlayer",
-      "state" : {
-        "revision" : "7a388d3e16ba7a9c347ef2c41079d517eecc9c5a",
-        "version" : "1.2.5"
       }
     },
     {

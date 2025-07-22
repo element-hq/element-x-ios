@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CreateFeedScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let createFeedProtocol: CreateFeedProtocol
+    let feedProtocol: FeedProtocol
     let fromUserProfileFlow: Bool
 }
 
@@ -32,7 +32,7 @@ final class CreateFeedScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: CreateFeedScreenCoordinatorParameters) {
         viewModel = CreateFeedScreenViewModel(clientProxy: parameters.userSession.clientProxy,
-                                              createFeedProtocol: parameters.createFeedProtocol,
+                                              feedProtocol: parameters.feedProtocol,
                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                               mediaProvider: parameters.userSession.mediaProvider,
                                               fromUserProfileFlow: parameters.fromUserProfileFlow)

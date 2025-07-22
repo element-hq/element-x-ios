@@ -24,18 +24,18 @@ enum HomeScreenCoordinatorAction {
     case presentReportRoom(roomIdentifier: String)
     case presentDeclineAndBlock(userID: String, roomID: String)
     case roomLeft(roomIdentifier: String)
-    case presentSettingsScreen
+    case presentSettingsScreen(UserRewardsProtocol)
     case presentFeedbackScreen
     case presentSecureBackupSettings
     case presentRecoveryKeyScreen
     case presentEncryptionResetScreen
     case presentStartChatScreen
-    case presentCreateFeedScreen(createFeedProtocol: CreateFeedProtocol)
+    case presentCreateFeedScreen(FeedProtocol)
     case presentGlobalSearch
     case logoutWithoutConfirmation
     case logout
-    case postTapped(_ post: HomeScreenPost, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
-    case openPostUserProfile(_ profile: ZPostUserProfile, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
+    case postTapped(_ post: HomeScreenPost, FeedProtocol)
+    case openPostUserProfile(_ profile: ZPostUserProfile, FeedProtocol)
     case startWalletTransaction(WalletTransactionProtocol, WalletTransactionType)
 }
 
@@ -75,8 +75,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.roomLeft(roomIdentifier: roomIdentifier))
                 case .presentFeedbackScreen:
                     actionsSubject.send(.presentFeedbackScreen)
-                case .presentSettingsScreen:
-                    actionsSubject.send(.presentSettingsScreen)
+                case .presentSettingsScreen(let userRewardsProtocol):
+                    actionsSubject.send(.presentSettingsScreen(userRewardsProtocol))
                 case .presentSecureBackupSettings:
                     actionsSubject.send(.presentSecureBackupSettings)
                 case .presentRecoveryKeyScreen:
@@ -85,8 +85,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentEncryptionResetScreen)
                 case .presentStartChatScreen:
                     actionsSubject.send(.presentStartChatScreen)
-                case .presentCreateFeedScreen(let createFeedProtocol):
-                    actionsSubject.send(.presentCreateFeedScreen(createFeedProtocol: createFeedProtocol))
+                case .presentCreateFeedScreen(let feedProtocol):
+                    actionsSubject.send(.presentCreateFeedScreen(feedProtocol))
                 case .presentGlobalSearch:
                     actionsSubject.send(.presentGlobalSearch)
                 case .logoutWithoutConfirmation:
@@ -95,10 +95,10 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.logout)
                 case .presentDeclineAndBlock(let userID, let roomID):
                     actionsSubject.send(.presentDeclineAndBlock(userID: userID, roomID: roomID))
-                case .postTapped(let post, let feedUpdatedProtocol):
-                    actionsSubject.send(.postTapped(post, feedUpdatedProtocol: feedUpdatedProtocol))
-                case .openPostUserProfile(let profile, let feedUpdatedProtocol):
-                    actionsSubject.send(.openPostUserProfile(profile, feedUpdatedProtocol: feedUpdatedProtocol))
+                case .postTapped(let post, let feedProtocol):
+                    actionsSubject.send(.postTapped(post, feedProtocol))
+                case .openPostUserProfile(let profile, let feedProtocol):
+                    actionsSubject.send(.openPostUserProfile(profile, feedProtocol))
                 case .startWalletTransaction(let walletTransactionProtocol, let type):
                     actionsSubject.send(.startWalletTransaction(walletTransactionProtocol, type))
                 }

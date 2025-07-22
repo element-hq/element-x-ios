@@ -110,13 +110,15 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             case let .success(session):
                 MXLog.info("QR Login completed")
                 actionsSubject.send(.done(userSession: session))
-            case .failure(let error):
-                handleError(error: error)
+            case .failure(.qrCodeError(let error)):
+                handleError(error)
+            case .failure:
+                handleError(.unknown)
             }
         }
     }
     
-    private func handleError(error: QRCodeLoginServiceError) {
+    private func handleError(_ error: QRCodeLoginError) {
         MXLog.error("Failed to scan the QR code: \(error)")
         switch error {
         case .invalidQRCode:
@@ -137,7 +139,7 @@ class QRCodeLoginScreenViewModel: QRCodeLoginScreenViewModelType, QRCodeLoginScr
             state.state = .error(.expired)
         case .deviceNotSupported:
             state.state = .error(.deviceNotSupported)
-        case .failedLoggingIn, .unknown:
+        case .unknown:
             state.state = .error(.unknown)
         }
     }

@@ -67,8 +67,6 @@ final class AppSettings {
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
         case hideQuietNotificationAlerts
-        
-        case enableExternalMediaLoading
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -196,6 +194,9 @@ final class AppSettings {
     private(set) var elementWebHosts = ["app.element.io", "staging.element.io", "develop.element.io"]
     /// The domain that account provisioning links will be hosted on - used for handling the links.
     private(set) var accountProvisioningHost = "mobile.element.io"
+    /// The App Store URL for Element Pro, shown to the user when a homeserver requires that app.
+    /// **Note:** This property isn't overridable as it in unexpected for forks to come across the error (or to even have a "Pro" app).
+    let elementProAppStoreURL: URL = "https://apps.apple.com/app/element-pro-for-work/id6502951615"
     
     @UserPreference(key: UserDefaultsKeys.appAppearance, defaultValue: .system, storageType: .userDefaults(store))
     var appAppearance: AppAppearance
@@ -352,7 +353,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
     
-    @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
     
     @UserPreference(key: UserDefaultsKeys.sharePosEnabled, defaultValue: false, storageType: .userDefaults(store))
@@ -398,10 +399,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.cachedZeroUsers, defaultValue: [], storageType: .userDefaults(store))
     var cachedZeroUsers: [ZMatrixUser]
-    
-    // MARK: - ZERO User
-    @UserPreference(key: UserDefaultsKeys.enableExternalMediaLoading, defaultValue: false, storageType: .userDefaults(store))
-    var enableExternalMediaLoading: Bool
 }
 
 extension AppSettings: CommonSettingsProtocol { }

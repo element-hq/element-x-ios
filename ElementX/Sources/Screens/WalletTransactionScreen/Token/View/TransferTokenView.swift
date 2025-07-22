@@ -49,6 +49,20 @@ struct TransferTokenView: View {
                     )
             }
             
+            if flowState == .inProgress {
+                TransactionInProgressView(
+                    size: 80,
+                    color: .zero.bgAccentRest,
+                    message: "Sending"
+                )
+                    .transition(
+                        .asymmetric(
+                            insertion: isNavigatingForward ? .move(edge: .trailing) : .identity,
+                            removal: isNavigatingForward ? .identity : .move(edge: .trailing)
+                        )
+                    )
+            }
+            
             if flowState == .completed {
                 CompletedTransactionView(context: context)
                     .transition(.move(edge: .trailing))
@@ -66,7 +80,7 @@ struct TransferTokenView: View {
     private var toolbar: some ToolbarContent {
         let flowState = context.viewState.transferTokenFlowState
         
-        if flowState != .recipient && flowState != .completed {
+        if context.viewState.showTopBarBackButton {
             ToolbarItem(placement: .navigationBarLeading) {
                 CompoundIcon(\.chevronLeft)
                     .frame(width: 32, height: 32)

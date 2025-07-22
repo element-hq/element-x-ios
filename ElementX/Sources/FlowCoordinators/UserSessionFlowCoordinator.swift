@@ -67,6 +67,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private var userRewardsProtcol: UserRewardsProtocol? = nil
+    
     /// For testing purposes.
     var statePublisher: AnyPublisher<UserSessionFlowCoordinatorStateMachine.State, Never> { stateMachine.statePublisher }
     
@@ -391,6 +393,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 actionsSubject.send(.forceLogout)
             case .runDeleteAccountFlow:
                 self.runDeleteAccountFlow()
+            case .claimUserRewards:
+                userRewardsProtcol?.claimUserRewards()
             }
         }
         .store(in: &cancellables)
@@ -549,7 +553,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                        roomListSelectedRoomID == roomID {
                         clearRoute(animated: true)
                     }
-                case .presentSettingsScreen:
+                case .presentSettingsScreen(let userRewardsProtcol):
+                    self.userRewardsProtcol = userRewardsProtcol
                     settingsFlowCoordinator.handleAppRoute(.settings, animated: true)
                 case .presentFeedbackScreen:
                     stateMachine.processEvent(.feedbackScreen)
@@ -561,8 +566,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.startEncryptionResetFlow)
                 case .presentStartChatScreen:
                     stateMachine.processEvent(.showStartChatScreen)
-                case .presentCreateFeedScreen(let createFeedProtocol):
-                    presentCreateFeedScreen(createFeedProtocol)
+                case .presentCreateFeedScreen(let feedProtocol):
+                    presentCreateFeedScreen(feedProtocol)
                 case .presentGlobalSearch:
                     presentGlobalSearch()
                 case .logoutWithoutConfirmation:
@@ -571,10 +576,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     Task { await self.runLogoutFlow() }
                 case .presentDeclineAndBlock(let userID, let roomID):
                     stateMachine.processEvent(.presentDeclineAndBlockScreen(userID: userID, roomID: roomID))
-                case .postTapped(let post, let feedUpdatedProtocol):
-                    presentFeedDetailsScreen(post, feedUpdatedProtocol: feedUpdatedProtocol)
-                case .openPostUserProfile(let profile, let feedUpdatedProtocol):
-                    startUserProfileWithFeedFlow(userID: nil, profile: profile, feedUpdatedProtocol: feedUpdatedProtocol)
+                case .postTapped(let post, let feedProtocol):
+                    presentFeedDetailsScreen(post, feedProtocol: feedProtocol)
+                case .openPostUserProfile(let profile, let feedProtocol):
+                    startUserProfileWithFeedFlow(userID: nil, profile: profile, feedProtocol: feedProtocol)
                 case .startWalletTransaction(let walletTransactionProtocol, let type):
                     startZeroWalletTransactionsFlow(walletTransactionProtocol, type: type)
                 }
@@ -1017,7 +1022,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentUserProfileScreen(userID: String, animated: Bool) {
         clearRoute(animated: animated)
-        startUserProfileWithFeedFlow(userID: userID, profile: nil, feedUpdatedProtocol: nil)
+        startUserProfileWithFeedFlow(userID: userID, profile: nil, feedProtocol: nil)
     }
     
     // MARK: Sharing
@@ -1149,10 +1154,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentFeedDetailsScreen(_ post: HomeScreenPost,
-                                          feedUpdatedProtocol: FeedDetailsUpdatedProtocol?,
+                                          feedProtocol: FeedProtocol?,
                                           showSheetCoodinator: Bool = false) {
         let parameters = FeedDetailsScreenCoordinatorParameters(userSession: userSession,
-                                                                feedUpdatedProtocol: feedUpdatedProtocol,
+                                                                feedProtocol: feedProtocol,
                                                                 feedItem: post,
                                                                 isFeedDetailsRefreshable: true)
         let coordinator = FeedDetailsScreenCoordinator(parameters: parameters)
@@ -1161,13 +1166,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .replyTapped(let reply):
-                    presentFeedDetailsScreen(reply, feedUpdatedProtocol: feedUpdatedProtocol, showSheetCoodinator: true)
+                    presentFeedDetailsScreen(reply, feedProtocol: feedProtocol, showSheetCoodinator: true)
                 case .attachMedia(let attachMediaProtocol):
                     presentMediaUploadPickerWithSource(attachMediaProtocol,
                                                        stackCoordinator: NavigationStackCoordinator(),
                                                        fromFeedDetails: true)
                 case .openPostUserProfile(let profile):
-                    startUserProfileWithFeedFlow(userID: nil, profile: profile, feedUpdatedProtocol: feedUpdatedProtocol)
+                    startUserProfileWithFeedFlow(userID: nil, profile: profile, feedProtocol: feedProtocol)
                 }
             }
             .store(in: &cancellables)
@@ -1179,10 +1184,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
 //        }
     }
     
-    private func presentCreateFeedScreen(_ createFeedProtocol: CreateFeedProtocol) {
+    private func presentCreateFeedScreen(_ feedProtocol: FeedProtocol) {
         let stackCoordinator = NavigationStackCoordinator()
         let coordinator = CreateFeedScreenCoordinator(parameters: .init(userSession: userSession,
-                                                                        createFeedProtocol: createFeedProtocol,
+                                                                        feedProtocol: feedProtocol,
                                                                         fromUserProfileFlow: false))
         coordinator.actions
             .sink { [weak self] action in
@@ -1236,7 +1241,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func startUserProfileWithFeedFlow(userID: String?, profile: ZPostUserProfile?, feedUpdatedProtocol: FeedDetailsUpdatedProtocol?) {
+    private func startUserProfileWithFeedFlow(userID: String?, profile: ZPostUserProfile?, feedProtocol: FeedProtocol?) {
         guard let userId = userID ?? profile?.userId.toMatrixUserIdFormat(ZeroContants.appServer.matrixHomeServerPostfix) else {
             return
         }
@@ -1247,7 +1252,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                              fromHomeFlow: true,
                                                              userId: userId,
                                                              userFeedProfile: profile,
-                                                             feedUpdatedProtocol: feedUpdatedProtocol)
+                                                             feedProtocol: feedProtocol)
         flowCoordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             
@@ -1257,7 +1262,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             case .presentMatrixProfile:
                 presentMatrixProfileScreen(userID: userId, animated: true)
             case .presentFeedDetails(let feed):
-                presentFeedDetailsScreen(feed, feedUpdatedProtocol: feedUpdatedProtocol)
+                presentFeedDetailsScreen(feed, feedProtocol: feedProtocol)
             case .openDirectChat(let roomId):
                 stateMachine.processEvent(.selectRoom(roomID: roomId, via: [], entryPoint: .room))
             }

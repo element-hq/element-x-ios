@@ -33,6 +33,11 @@ class AppHooks: AppHooksProtocol {
         certificateValidatorHook = hook
     }
     
+    private(set) var elementWellKnownHook: ElementWellKnownHookProtocol = DefaultElementWellKnownHook()
+    func registerElementWellKnownHook(_ hook: ElementWellKnownHookProtocol) {
+        elementWellKnownHook = hook
+    }
+    
     private(set) var roomScreenHook: RoomScreenHookProtocol = DefaultRoomScreenHook()
     func registerRoomScreenHook(_ hook: RoomScreenHookProtocol) {
         roomScreenHook = hook

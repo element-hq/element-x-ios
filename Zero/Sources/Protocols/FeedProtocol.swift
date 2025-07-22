@@ -5,8 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Foundation
-
-struct FeedMediaInternalLoaderProtocol {
-    var onMediaLoaded: ([String: HomeScreenPostMediaInfo]) -> Void
+protocol FeedProtocol {
+    func onFeedUpdated(_ feedId: String)
+    
+    func onNewFeedPosted()
 }

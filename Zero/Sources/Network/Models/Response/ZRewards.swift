@@ -1,13 +1,14 @@
 public struct ZRewards: Codable {
-    public init(zero: String, zeroPreviousDay: String, decimals: Int) {
-        self.zero = zero
-        self.zeroPreviousDay = zeroPreviousDay
-        self.decimals = decimals
-    }
-
     public let zero: String
     public let zeroPreviousDay: String
     public let decimals: Int
+    
+    public let legacyRewards: String
+    public let meow: String
+    public let meowPreviousDay: String
+    public let totalDailyRewards: String
+    public let totalReferralFees: String
+    public let unclaimedRewards: String
 }
 
 // MARK: - ZeroCurrency

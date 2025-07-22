@@ -11,15 +11,17 @@ import Kingfisher
 
 typealias FeedUserProfileScreenViewModelType = StateStoreViewModel<FeedUserProfileScreenViewState, FeedUserProfileScreenViewAction>
 
-class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUserProfileScreenViewModelProtocol, CreateFeedProtocol {
+class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUserProfileScreenViewModelProtocol, FeedProtocol {
     
     private let clientProxy: ClientProxyProtocol
-    private let feedUpdatedProtocol: FeedDetailsUpdatedProtocol?
+    private let feedProtocol: FeedProtocol?
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let mediaProvider: MediaProviderProtocol
     
     private let FEEDS_PAGE_COUNT = 10
     private var isFetchFeedsInProgress = false
+    
+    private var feedMediaPreFetchService: FeedMediaPreFetchService? = nil
     
     private var actionsSubject: PassthroughSubject<FeedUserProfileScreenViewModelAction, Never> = .init()
     var actions: AnyPublisher<FeedUserProfileScreenViewModelAction, Never> {
@@ -28,11 +30,11 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
     
     init(clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
-         feedUpdatedProtocol: FeedDetailsUpdatedProtocol?,
+         feedProtocol: FeedProtocol?,
          userIndicatorController: UserIndicatorControllerProtocol,
          userProfile: ZPostUserProfile) {
         self.clientProxy = clientProxy
-        self.feedUpdatedProtocol = feedUpdatedProtocol
+        self.feedProtocol = feedProtocol
         self.userIndicatorController = userIndicatorController
         self.mediaProvider = mediaProvider
         
@@ -44,6 +46,11 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                                            shouldShowDirectChatButton: !isUserMe,
                                            bindings: .init()),
                    mediaProvider: mediaProvider)
+        
+        self.feedMediaPreFetchService = FeedMediaPreFetchService(mediaProtocol: .init(onMediaLoaded: { map in
+            self.state.userFeedsMediaInfoMap = map
+        }),
+                                                                 clientProxy: clientProxy)
         
         clientProxy.userRewardsPublisher
             .receive(on: DispatchQueue.main)
@@ -79,6 +86,8 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             displayFullScreenMedia(mediaId, key: key)
         case .newFeed:
             actionsSubject.send(.newFeed(self))
+        case .reloadFeedMedia(let post):
+            reloadFeedMedia(post)
         }
     }
     
@@ -146,7 +155,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                     state.userFeeds = userFeeds.uniqued(on: \.id)
                     state.userFeedsListMode = .feeds
                     
-                    await loadPostsContentConcurrently(for: state.userFeeds)
+                    await loadPostContentConcurrently(for: state.userFeeds)
                 }
             case .failure(let error):
                 MXLog.error("Failed to fetch zero post replies: \(error)")
@@ -186,7 +195,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 if let index = state.userFeeds.firstIndex(where: { $0.id == homePost.id }) {
                     state.userFeeds[index] = homePost
                 }
-                feedUpdatedProtocol?.onFeedUpdated(postId)
+                feedProtocol?.onFeedUpdated(postId)
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
                 displayError()
@@ -194,41 +203,16 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         }
     }
     
-    private func loadPostsContentConcurrently(for posts: [HomeScreenPost]) async {
-        async let mediaInfoTask: () = loadPostsMediaInfo(for: posts)
+    private func loadPostContentConcurrently(for posts: [HomeScreenPost]) async {
+        async let nextPagePostsTask: () =  feedMediaPreFetchService?.loadUserFeedsNextPage(userId: state.userID,
+                                                                                           currentCount: posts.count) ?? ()
         async let linkPreviewTask: () = loadPostLinkPreviews(for: posts)
-        _ = await (mediaInfoTask, linkPreviewTask)
+        _ = await (nextPagePostsTask, linkPreviewTask)
     }
     
-    private func loadPostsMediaInfo(for posts: [HomeScreenPost]) async {
-        let postsToFetchMedia = posts.filter {
-            $0.mediaInfo != nil && state.userFeedsMediaInfoMap[$0.id] == nil
-        }
-        await withTaskGroup(of: (HomeScreenPost, ZPostMedia)?.self) { group in
-            for post in postsToFetchMedia {
-                guard !Task.isCancelled else { continue }
-                group.addTask {
-                    guard let mediaId = post.mediaInfo?.id else { return nil }
-                    let result = await withTimeout(seconds: 10, operation: {
-                        await self.clientProxy.getPostMediaInfo(mediaId: mediaId)
-                    })
-                    if Task.isCancelled {
-                        return nil
-                    }
-                    if case .success(let media) = result {
-                        if let url = URL(string: media.signedUrl), !media.media.isVideo {
-                            ImagePrefetcher(urls: [url]).start()
-                        }
-                        return (post, media)
-                    }
-                    return nil
-                }
-            }
-            
-            for await item in group {
-                guard let (post, media) = item else { continue }
-                state.userFeedsMediaInfoMap[post.id] = HomeScreenPostMediaInfo(media: media)
-            }
+    private func reloadFeedMedia(_ post: HomeScreenPost) {
+        feedMediaPreFetchService?.reloadMedia(post) { mediaInfo in
+            self.state.userFeedsMediaInfoMap[post.id] = mediaInfo
         }
     }
     
@@ -351,6 +335,8 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
             }
         }
     }
+    
+    func onFeedUpdated(_ feedId: String) { }
 
     func onNewFeedPosted() {
         fetchUserFeeds(state.userID, isForceRefresh: true)

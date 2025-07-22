@@ -10,14 +10,14 @@ import SwiftUI
 
 struct FeedUserProfileScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let feedUpdatedProtocol: FeedDetailsUpdatedProtocol?
+    let feedProtocol: FeedProtocol?
     let userProfile: ZPostUserProfile
 }
 
 enum FeedUserProfileScreenCoordinatorAction {
     case feedTapped(_ feed: HomeScreenPost)
     case openDirectChat(_ roomId: String)
-    case newFeed(CreateFeedProtocol)
+    case newFeed(FeedProtocol)
 }
 
 final class FeedUserProfileScreenCoordinator: CoordinatorProtocol {
@@ -33,7 +33,7 @@ final class FeedUserProfileScreenCoordinator: CoordinatorProtocol {
     init(parameters: FeedUserProfileScreenCoordinatorParameters) {
         viewModel = FeedUserProfileScreenViewModel(clientProxy: parameters.userSession.clientProxy,
                                                    mediaProvider: parameters.userSession.mediaProvider,
-                                                   feedUpdatedProtocol: parameters.feedUpdatedProtocol,
+                                                   feedProtocol: parameters.feedProtocol,
                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                    userProfile: parameters.userProfile)
         viewModel.actions

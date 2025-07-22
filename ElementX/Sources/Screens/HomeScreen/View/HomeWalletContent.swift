@@ -26,7 +26,7 @@ struct HomeWalletContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     private let scrollViewAdapter: ScrollViewAdapter = ScrollViewAdapter()
     
-    @State private var showWalletBalance: Bool = true
+    @State private var showWalletBalance: Bool = false
     @State private var selectedTab: HomeWalletTab = .token
     
     @State private var scrollOffset: CGFloat = 0
@@ -145,6 +145,7 @@ struct HomeWalletContent: View {
                 .frame(maxWidth: .infinity)
             
             VStack(alignment: .leading, spacing: 0) {
+                
                 Spacer()
                 
                 VStack(alignment: .leading, spacing: 0) {
@@ -178,7 +179,7 @@ struct HomeWalletContent: View {
                     Text(userName.uppercased())
                         .font(.robotoMonoRegular(size: 12))
                         .foregroundColor(.compound.textSecondary)
-                        .padding(.bottom, 8)
+                        .padding(.bottom, 10)
                 }
             }
             .padding(.all, 14)

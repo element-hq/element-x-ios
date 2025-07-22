@@ -14,7 +14,7 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
     
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let createFeedProtocol: CreateFeedProtocol
+    private let feedProtocol: FeedProtocol
     
     private var currentUserWalletAddress: String? = nil
     private var defaultChannelZId: String? = nil
@@ -25,12 +25,12 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
     }
     
     init(clientProxy: ClientProxyProtocol,
-         createFeedProtocol: CreateFeedProtocol,
+         feedProtocol: FeedProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          mediaProvider: MediaProviderProtocol,
          fromUserProfileFlow: Bool) {
         self.clientProxy = clientProxy
-        self.createFeedProtocol = createFeedProtocol
+        self.feedProtocol = feedProtocol
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(userID: clientProxy.userID,
@@ -94,7 +94,7 @@ class CreateFeedScreenViewModel: CreateFeedScreenViewModelType, CreateFeedScreen
                                                                mediaFile: state.bindings.selectedFeedMediaUrl)
             switch postFeedResult {
             case .success:
-                createFeedProtocol.onNewFeedPosted()
+                feedProtocol.onNewFeedPosted()
                 actionsSubject.send(.newFeedPosted)
             case .failure(_):
                 state.bindings.alertInfo = .init(id: UUID(),

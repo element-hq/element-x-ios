@@ -42,7 +42,10 @@ struct FeedDetailsContent: View {
                                    context: context,
                                    shouldNavigateToDetails: false,
                                    onOpenUserProfile: { profile in
-                    context.send(viewAction: .openPostUserProfile(profile))
+                    context.send(viewAction: .openPostUserProfile(profile),)
+                },
+                                   onReloadMedia: {
+                    context.send(viewAction: .reloadFeedMedia(context.feed))
                 })
                 .padding(.all, 16)
                 
@@ -58,7 +61,8 @@ struct FeedDetailsContent: View {
                                 FeedDetailsSection(post: reply,
                                                    context: context,
                                                    shouldNavigateToDetails: false,
-                                                   onOpenUserProfile: { _ in })
+                                                   onOpenUserProfile: { _ in },
+                                                   onReloadMedia: { })
                                 .padding(.all, 16)
                                 Divider()
                             }
@@ -216,7 +220,7 @@ struct PostRepliesList: View {
                                         context.send(viewAction: .openMediaPreview(mediaId))
                                     },
                                     onReloadMedia: {
-                                        
+                                        context.send(viewAction: .reloadFeedMedia(post))
                                     })
                 )
                 .padding(.horizontal, 16)
@@ -236,6 +240,7 @@ struct FeedDetailsSection: View {
     let shouldNavigateToDetails: Bool
     
     let onOpenUserProfile: (ZPostUserProfile) -> Void
+    let onReloadMedia: () -> Void
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -305,11 +310,10 @@ struct FeedDetailsSection: View {
             }
             
             if let mediaInfo = post.mediaInfo {
-                PostMediaPreview(externalLoading: true,
-                                 mediaInfo: mediaInfo,
+                PostMediaPreview(mediaInfo: mediaInfo,
                                  mediaUrlString: mediaInfo.url,
                                  onMediaTapped: { context.send(viewAction: .openMediaPreview(mediaInfo.id)) },
-                                 onReloadMedia: {})
+                                 onReloadMedia: onReloadMedia)
             }
             
             Text(post.postDateTime)

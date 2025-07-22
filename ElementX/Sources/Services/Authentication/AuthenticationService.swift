@@ -14,7 +14,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     private var sessionDirectories: SessionDirectories
     private let passphrase: String
     
-    private let clientBuilderFactory: AuthenticationClientBuilderFactoryProtocol
+    private let clientFactory: AuthenticationClientFactoryProtocol
     private let userSessionStore: UserSessionStoreProtocol
     private let appSettings: AppSettings
     private let appHooks: AppHooks
@@ -25,14 +25,19 @@ class AuthenticationService: AuthenticationServiceProtocol {
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
     private(set) var flow: AuthenticationFlow
     
+    private let qrLoginProgressSubject = PassthroughSubject<QrLoginProgress, Never>()
+    var qrLoginProgressPublisher: AnyPublisher<QrLoginProgress, Never> {
+        qrLoginProgressSubject.eraseToAnyPublisher()
+    }
+    
     init(userSessionStore: UserSessionStoreProtocol,
          encryptionKeyProvider: EncryptionKeyProviderProtocol,
-         clientBuilderFactory: AuthenticationClientBuilderFactoryProtocol = AuthenticationClientBuilderFactory(),
+         clientFactory: AuthenticationClientFactoryProtocol = AuthenticationClientFactory(),
          appSettings: AppSettings,
          appHooks: AppHooks) {
         sessionDirectories = .init()
         passphrase = encryptionKeyProvider.generateKey().base64EncodedString()
-        self.clientBuilderFactory = clientBuilderFactory
+        self.clientFactory = clientFactory
         self.userSessionStore = userSessionStore
         self.appSettings = appSettings
         self.appHooks = appHooks
@@ -50,7 +55,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
         do {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
-            let client = try await makeClientBuilder().build(homeserverAddress: homeserverAddress)
+            let client = try await makeClient(homeserverAddress: homeserverAddress)
+            try await appHooks.elementWellKnownHook.validate(using: client).get()
             let loginDetails = await client.homeserverLoginDetails()
             
             MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
@@ -80,6 +86,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
         } catch ClientBuildError.SlidingSyncVersion(let error) {
             MXLog.info("User entered a homeserver that isn't configured for sliding sync: \(error)")
             return .failure(.slidingSyncNotAvailable)
+        } catch ElementWellKnownError.elementProRequired(let serverName) {
+            return .failure(.elementProRequired(serverName: serverName))
         } catch {
             MXLog.error("Failed configuring a server: \(error)")
             return .failure(.invalidHomeserverAddress)
@@ -93,7 +101,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
             // let prompt: OidcPrompt = flow == .register ? .create : .consent
             let oidcData = try await client.urlForOidc(oidcConfiguration: appSettings.oidcConfiguration.rustValue,
                                                        prompt: .consent,
-                                                       loginHint: loginHint)
+                                                       loginHint: loginHint,
+                                                       deviceId: nil)
             return .success(OIDCAuthorizationDataProxy(underlyingData: oidcData))
         } catch {
             MXLog.error("Failed to get URL for OIDC login: \(error)")
@@ -194,6 +203,48 @@ class AuthenticationService: AuthenticationServiceProtocol {
         }
     }
     
+    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        let qrData: QrCodeData
+        do {
+            qrData = try QrCodeData.fromBytes(bytes: data)
+        } catch {
+            MXLog.error("QRCode decode error: \(error)")
+            return .failure(.qrCodeError(.invalidQRCode))
+        }
+        
+        guard let scannedServerName = qrData.serverName() else {
+            MXLog.error("The QR code is from a device that is not yet signed in.")
+            return .failure(.qrCodeError(.deviceNotSignedIn))
+        }
+        
+        if !appSettings.allowOtherAccountProviders, !appSettings.accountProviders.contains(scannedServerName) {
+            MXLog.error("The scanned device's server is not allowed: \(scannedServerName)")
+            return .failure(.qrCodeError(.providerNotAllowed(scannedProvider: scannedServerName, allowedProviders: appSettings.accountProviders)))
+        }
+        
+        let listener = SDKListener { [weak self] progress in
+            self?.qrLoginProgressSubject.send(progress)
+        }
+        
+        do {
+            let client = try await makeClient(homeserverAddress: scannedServerName)
+            try await appHooks.elementWellKnownHook.validate(using: client).get()
+            try await client.loginWithQrCode(qrCodeData: qrData,
+                                             oidcConfiguration: appSettings.oidcConfiguration.rustValue,
+                                             progressListener: listener)
+            MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
+            return await userSession(for: client)
+        } catch let error as HumanQrLoginError {
+            MXLog.error("QRCode login error: \(error)")
+            return .failure(error.serviceError)
+        } catch ElementWellKnownError.elementProRequired(let serverName) {
+            return .failure(.elementProRequired(serverName: serverName))
+        } catch {
+            MXLog.error("QRCode login unknown error: \(error)")
+            return .failure(.qrCodeError(.unknown))
+        }
+    }
+    
     func reset() {
         homeserverSubject.send(LoginHomeserver(address: appSettings.accountProviders[0], loginMode: .unknown))
         flow = .login
@@ -267,16 +318,17 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     // MARK: - Private
     
-    private func makeClientBuilder() -> AuthenticationClientBuilderProtocol {
+    private func makeClient(homeserverAddress: String) async throws -> ClientProtocol {
         // Use a fresh session directory each time the user enters a different server
         // so that caches (e.g. server versions) are always fresh for the new server.
         rotateSessionDirectory()
         
-        return clientBuilderFactory.makeBuilder(sessionDirectories: sessionDirectories,
-                                                passphrase: passphrase,
-                                                clientSessionDelegate: userSessionStore.clientSessionDelegate,
-                                                appSettings: appSettings,
-                                                appHooks: appHooks)
+        return try await clientFactory.makeClient(homeserverAddress: homeserverAddress,
+                                                  sessionDirectories: sessionDirectories,
+                                                  passphrase: passphrase,
+                                                  clientSessionDelegate: userSessionStore.clientSessionDelegate,
+                                                  appSettings: appSettings,
+                                                  appHooks: appHooks)
     }
     
     private func rotateSessionDirectory() {
@@ -339,13 +391,36 @@ class AuthenticationService: AuthenticationServiceProtocol {
     }
 }
 
+private extension HumanQrLoginError {
+    var serviceError: AuthenticationServiceError {
+        switch self {
+        case .Cancelled:
+            .qrCodeError(.cancelled)
+        case .ConnectionInsecure:
+            .qrCodeError(.connectionInsecure)
+        case .Declined:
+            .qrCodeError(.declined)
+        case .LinkingNotSupported:
+            .qrCodeError(.linkingNotSupported)
+        case .Expired:
+            .qrCodeError(.expired)
+        case .SlidingSyncNotAvailable:
+            .qrCodeError(.deviceNotSupported)
+        case .OtherDeviceNotSignedIn:
+            .qrCodeError(.deviceNotSignedIn)
+        case .Unknown, .OidcMetadataInvalid:
+            .qrCodeError(.unknown)
+        }
+    }
+}
+
 // MARK: - Mocks
 
 extension AuthenticationService {
     static var mock: AuthenticationService {
         AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                               encryptionKeyProvider: EncryptionKeyProvider(),
-                              clientBuilderFactory: AuthenticationClientBuilderFactoryMock(configuration: .init()),
+                              clientFactory: AuthenticationClientFactoryMock(configuration: .init()),
                               appSettings: ServiceLocator.shared.settings,
                               appHooks: AppHooks())
     }

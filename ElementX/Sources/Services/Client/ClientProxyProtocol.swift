@@ -37,6 +37,7 @@ enum ClientProxyError: Error {
     
     case invalidMedia
     case invalidServerName
+    case invalidResponse
     case failedUploadingMedia(ErrorKind)
     case roomPreviewIsPrivate
     case failedRetrievingUserIdentity
@@ -330,6 +331,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func getTransactionReceipt(transactionHash: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
     
     func searchTransactionRecipient(query: String) async -> Result<[WalletRecipient], ClientProxyError>
+    
+    func claimRewards(userWalletAddress: String) async -> Result<String, ClientProxyError>
     
     // MARK: - Zero MetaData
     

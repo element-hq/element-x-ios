@@ -5,6 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-protocol FeedDetailsUpdatedProtocol {
-    func onFeedUpdated(_ feedId: String)
+import Foundation
+
+struct FeedMediaPreFetchProtocol {
+    var onMediaLoaded: ([String: HomeScreenPostMediaInfo]) -> Void
 }

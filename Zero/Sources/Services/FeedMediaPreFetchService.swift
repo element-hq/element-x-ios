@@ -8,47 +8,45 @@
 import Foundation
 import Combine
 
-final class FeedMediaInternalPreLoader {
+final class FeedMediaPreFetchService {
     private let FEED_LOAD_SIZE = 30
     private let FEED_LOAD_OFFSET = 20
 
     private var loadedFollowingPostsCount = 0
     private var loadedAllPostsCount = 0
+    private var loadedFeedRepliesCount = 0
+    private var loadedUserFeedsCount = 0
 
-    private let mediaProtocol: FeedMediaInternalLoaderProtocol
+    private let mediaProtocol: FeedMediaPreFetchProtocol
     private let clientProxy: ClientProxyProtocol
 
     private var mediaMapCache: [String: HomeScreenPostMediaInfo] = [:]
 
-    init(mediaProtocol: FeedMediaInternalLoaderProtocol,
+    init(mediaProtocol: FeedMediaPreFetchProtocol,
          clientProxy: ClientProxyProtocol,
-         appSetting: AppSettings) {
+         loadInitialPosts: Bool = false) {
         self.mediaProtocol = mediaProtocol
         self.clientProxy = clientProxy
-
-        if !appSetting.enableExternalMediaLoading {
-            loadInitialFeeds()
+        
+        if loadInitialPosts {
+            ZeroCustomEventService.shared.logEvent("HOME", category: "SCREEN", parameters: [
+                "request_type": "initial_feed_media_prefetch",
+                "status": "in_progress",
+            ])
+            self.loadInitialFeeds()
         }
     }
 
     private func loadInitialFeeds() {
         Task.detached { [weak self] in
             guard let self else { return }
-            async let following: () = self.preFetchPosts(following: true, currentCount: 0)
-            async let all: () = self.preFetchPosts(following: false, currentCount: 0)
+            async let following: () = self.loadHomePostsPage(following: true, currentCount: 0)
+            async let all: () = self.loadHomePostsPage(following: false, currentCount: 0)
             _ = await (following, all)
         }
     }
 
-    func preFetchFollowingPosts(currentPostsCount: Int = 0) async {
-        await preFetchPosts(following: true, currentCount: currentPostsCount)
-    }
-
-    func preFetchAllPosts(currentPostsCount: Int = 0) async {
-        await preFetchPosts(following: false, currentCount: currentPostsCount)
-    }
-
-    private func preFetchPosts(following: Bool, currentCount: Int) async {
+    func loadHomePostsPage(following: Bool, currentCount: Int) async {
         let loadedCount = following ? loadedFollowingPostsCount : loadedAllPostsCount
         if loadedCount - currentCount > FEED_LOAD_OFFSET { return }
 
@@ -57,11 +55,6 @@ final class FeedMediaInternalPreLoader {
                                                       limit: FEED_LOAD_SIZE,
                                                       skip: loadedCount)
         guard case .success(let posts) = result else {
-            ZeroCustomEventService.shared.feedScreenEvent(parameters: [
-                "type": "Prefetch posts",
-                "status": "Failure",
-                "followingPosts": following,
-            ])
             return
         }
         if following {
@@ -71,6 +64,43 @@ final class FeedMediaInternalPreLoader {
         }
 
         await loadPostsMedia(posts)
+    }
+    
+    func loadFeedRepliesPage(postId: String, currentCount: Int) async {
+        if loadedFeedRepliesCount - currentCount > FEED_LOAD_OFFSET { return }
+
+        let result = await clientProxy.fetchFeedReplies(feedId: postId,
+                                                        limit: FEED_LOAD_SIZE,
+                                                        skip: loadedFeedRepliesCount)
+        guard case .success(let posts) = result else {
+            return
+        }
+        loadedFeedRepliesCount += posts.count
+        await loadPostsMedia(posts)
+    }
+    
+    func loadUserFeedsNextPage(userId: String, currentCount: Int) async {
+        if loadedUserFeedsCount - currentCount > FEED_LOAD_OFFSET { return }
+
+        let result = await clientProxy.fetchUserFeeds(userId: userId,
+                                                      limit: FEED_LOAD_SIZE,
+                                                      skip: loadedUserFeedsCount)
+        guard case .success(let posts) = result else {
+            return
+        }
+        loadedUserFeedsCount += posts.count
+        await loadPostsMedia(posts)
+    }
+    
+    func reloadMedia(_ post: HomeScreenPost, onMediaReloaded: @escaping (HomeScreenPostMediaInfo) -> Void) {
+        guard let mediaInfo = post.mediaInfo else { return }
+        
+        Task.detached {
+            let file = try await self.clientProxy.loadFileFromMediaId(mediaInfo.id, key: post.id)
+            if case .success(let url) = file {
+                onMediaReloaded(mediaInfo.withUpdatedUrl(mediaUrl: url))
+            }
+        }
     }
 
     private func loadPostsMedia(_ posts: [ZPost]) async {
@@ -88,8 +118,8 @@ final class FeedMediaInternalPreLoader {
                         await self.clientProxy.getPostMediaInfo(mediaId: post.mediaInfo!.id)
                     }
                     if case .success(let media) = result, let remoteUrl = URL(string: media.signedUrl) {
-                        let fileName = remoteUrl.lastPathComponent
-                        let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(post.id)-\(fileName)")
+                        let fileName = remoteUrl.sanitizedFileName(key: post.id)
+                        let destinationURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
                         
                         if FileManager.default.fileExists(atPath: destinationURL.path) {
                             return (post.id, media.withUrl(destinationURL))
@@ -127,12 +157,6 @@ final class FeedMediaInternalPreLoader {
 
     private func loadMediaFiles(_ results: [String: ZPostMedia]) async {
         guard !results.isEmpty else { return }
-        
-        ZeroCustomEventService.shared.feedScreenEvent(parameters: [
-            "type": "Prefetch post media files",
-            "status": "InProgress",
-            "count" : results.count
-        ])
 
         let finalResults = await withTaskGroup(of: (String, ZPostMedia?).self) { group in
             for (postId, media) in results {
@@ -181,12 +205,11 @@ final class FeedMediaInternalPreLoader {
 
     @MainActor
     private func updateFeedMediaStateWithResults(_ results: [String: ZPostMedia]) {
-        ZeroCustomEventService.shared.feedScreenEvent(parameters: [
-            "type": "Prefetch post media files",
-            "status": "Success",
-            "count" : results.count
+        ZeroCustomEventService.shared.logEvent("HOME", category: "SCREEN", parameters: [
+            "request_type": "initial_feed_media_prefetch",
+            "status": "success",
+            "result_count": results.count,
         ])
-        
         for (postId, media) in results {
             mediaMapCache[postId] = HomeScreenPostMediaInfo(media: media)
         }

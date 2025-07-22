@@ -36,6 +36,15 @@ struct TransferTokenViewState: BindableState {
             HomeScreenWalletContent.placeholder()
         }
     }
+    
+    var showTopBarBackButton: Bool {
+        switch transferTokenFlowState {
+        case .recipient, .inProgress, .completed:
+            return false
+        default:
+            return true
+        }
+    }
 }
 
 struct TransferTokenBindings {
@@ -54,6 +63,7 @@ enum TransferTokenViewAction {
     case loadMoreTokenAssets
     case onTokenAssetSelected(HomeScreenWalletContent)
     case onTransactionConfirmed(amount: String)
+    case viewTransaction
     
     case transactionCompleted
 }
@@ -96,5 +106,6 @@ enum TransferTokenFlowState {
     case recipient
     case asset
     case confirmation
+    case inProgress
     case completed
 }

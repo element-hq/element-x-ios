@@ -19,15 +19,15 @@ enum HomeScreenViewModelAction {
     case presentSecureBackupSettings
     case presentRecoveryKeyScreen
     case presentEncryptionResetScreen
-    case presentSettingsScreen
+    case presentSettingsScreen(userRewardsProtocol: UserRewardsProtocol)
     case presentFeedbackScreen
     case presentStartChatScreen
-    case presentCreateFeedScreen(createFeedProtocol: CreateFeedProtocol)
+    case presentCreateFeedScreen(feedProtocol: FeedProtocol)
     case presentGlobalSearch
     case logoutWithoutConfirmation
     case logout
-    case postTapped(_ post: HomeScreenPost, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
-    case openPostUserProfile(_ profile: ZPostUserProfile, feedUpdatedProtocol: FeedDetailsUpdatedProtocol)
+    case postTapped(_ post: HomeScreenPost, feedProtocol: FeedProtocol)
+    case openPostUserProfile(_ profile: ZPostUserProfile, feedProtocol: FeedProtocol)
     case startWalletTransaction(WalletTransactionProtocol, WalletTransactionType)
 }
 
@@ -80,7 +80,8 @@ enum HomeScreenViewAction {
     case loadMoreWalletTransactions
     case loadMoreWalletNFTs
     case startWalletTransaction(WalletTransactionType)
-    case viewTransactionDetails(HomeScreenWalletContent)
+    case viewTransactionDetails(transactionId: String)
+    case claimRewards(trigger: Bool)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -166,6 +167,13 @@ enum HomeScreenSecurityBannerMode: Equatable {
         default: false
         }
     }
+}
+
+enum ClaimRewardsState {
+    case none
+    case claiming
+    case success(String)
+    case failure
 }
 
 struct HomeScreenViewState: BindableState {
@@ -311,8 +319,8 @@ struct HomeScreenViewState: BindableState {
         }
         return !allNotificationContent.isEmpty
     }
-    
-    var feedMediaExternalLoadingEnabled: Bool = true
+        
+    var claimRewardsState: ClaimRewardsState = .none
 }
 
 struct HomeScreenViewStateBindings {
@@ -325,6 +333,7 @@ struct HomeScreenViewStateBindings {
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: URL?
+    var showEarningsClaimedSheet: Bool = false
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {
@@ -714,6 +723,11 @@ extension HomeScreenPostMediaInfo {
     
     var isVideo: Bool {
         return mimeType?.hasPrefix("video/") == true
+    }
+    
+    func withUpdatedUrl(mediaUrl: URL) -> HomeScreenPostMediaInfo {
+        return .init(id: self.id, mimeType: self.mimeType, aspectRatio: self.aspectRatio,
+                     width: self.width, height: self.height, url: mediaUrl.absoluteString)
     }
 }
 
