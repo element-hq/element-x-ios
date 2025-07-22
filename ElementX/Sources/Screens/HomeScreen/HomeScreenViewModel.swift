@@ -1048,8 +1048,19 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func viewWalletTransactionDetails(_ walletTransactionId: String) {
-        if let link = URL(string: ZeroContants.WALLET_TRANSACTION_LINK.appending(walletTransactionId)) {
-            UIApplication.shared.open(link)
+        Task {
+            let userIndicatorID = UUID().uuidString
+            defer {
+                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+            }
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                                  title: L10n.commonLoading,
+                                                                  persistent: true))
+            if case .success(let receipt) = await userSession.clientProxy.getTransactionReceipt(transactionHash: walletTransactionId),
+               let link = URL(string: receipt.blockExplorerUrl) {
+                await UIApplication.shared.open(link)
+            }
         }
     }
     

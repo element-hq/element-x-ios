@@ -22,7 +22,6 @@ struct WalletTransaction: Codable {
     let timestamp: String
     let tokenId: String?
     let type: String
-    let explorerUrl: String?
 }
 
 extension WalletTransaction {

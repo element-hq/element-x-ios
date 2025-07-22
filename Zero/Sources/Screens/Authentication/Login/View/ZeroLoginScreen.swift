@@ -157,6 +157,7 @@ struct ZeroLoginScreen_Previews: PreviewProvider, TestablePreview {
         let viewModel = LoginScreenViewModel(authenticationService: authenticationService,
                                              loginHint: nil,
                                              userIndicatorController: UserIndicatorControllerMock(),
+                                             appSettings: ServiceLocator.shared.settings,
                                              analytics: ServiceLocator.shared.analytics)
         
         if withCredentials {

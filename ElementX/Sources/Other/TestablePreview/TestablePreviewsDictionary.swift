@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.7 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.2.6 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -60,6 +60,7 @@ enum TestablePreviewsDictionary {
         "IdentityConfirmedScreen_Previews" : IdentityConfirmedScreen_Previews.self,
         "ImageMediaEventsTimelineView_Previews" : ImageMediaEventsTimelineView_Previews.self,
         "ImageRoomTimelineView_Previews" : ImageRoomTimelineView_Previews.self,
+        "InviteFriendSettingsScreen_Previews" : InviteFriendSettingsScreen_Previews.self,
         "InviteUsersScreenSelectedItem_Previews" : InviteUsersScreenSelectedItem_Previews.self,
         "InviteUsersScreen_Previews" : InviteUsersScreen_Previews.self,
         "JoinRoomByAddressView_Previews" : JoinRoomByAddressView_Previews.self,
@@ -185,6 +186,7 @@ enum TestablePreviewsDictionary {
         "UserIndicatorToastView_Previews" : UserIndicatorToastView_Previews.self,
         "UserProfileCell_Previews" : UserProfileCell_Previews.self,
         "UserProfileScreen_Previews" : UserProfileScreen_Previews.self,
+        "UserRewardsSettingsScreen_Previews" : UserRewardsSettingsScreen_Previews.self,
         "VerificationBadge_Previews" : VerificationBadge_Previews.self,
         "VideoMediaEventsTimelineView_Previews" : VideoMediaEventsTimelineView_Previews.self,
         "VideoRoomTimelineView_Previews" : VideoRoomTimelineView_Previews.self,

@@ -177,10 +177,8 @@
 		184D6FD42C7D8F45006266D8 /* ZSessionDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD32C7D8F45006266D8 /* ZSessionDataResponse.swift */; };
 		184D6FD62C7D9261006266D8 /* ZSSOToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184D6FD52C7D9261006266D8 /* ZSSOToken.swift */; };
 		184EC9962CA5AEDD000F405E /* ProcessInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 077B01C13BBA2996272C5FB5 /* ProcessInfo.swift */; };
-		184EC9972CA5AF03000F405E /* AuthenticationClientBuilderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B655A536341D2695158C6664 /* AuthenticationClientBuilderFactory.swift */; };
 		184EC9982CA5AF2A000F405E /* UserSessionStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB9BA2F30EB8C33226D8FF1 /* UserSessionStoreMock.swift */; };
 		184EC9992CA5AF34000F405E /* AuthenticationClientBuilderFactoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0554FEA301486A8CFA475D5A /* AuthenticationClientBuilderFactoryMock.swift */; };
-		184EC99A2CA5AF3F000F405E /* AuthenticationClientBuilderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4760CE2128FBC217304272AB /* AuthenticationClientBuilderMock.swift */; };
 		184EC99C2CA5AFCC000F405E /* ClientSDKMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAF4A49F3ACD8BB8B0D2371 /* ClientSDKMock.swift */; };
 		18525CF52CF5E7B20055C5E8 /* InviteFriendSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525CF42CF5E7A60055C5E8 /* InviteFriendSettingsScreen.swift */; };
 		18525CF62CF5E7B20055C5E8 /* InviteFriendSettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18525CF42CF5E7A60055C5E8 /* InviteFriendSettingsScreen.swift */; };
@@ -488,7 +486,6 @@
 		18E9A4702C9829970082DDA4 /* AudioRoomTimelineItemContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7475C5AE20BA896930907EA8 /* AudioRoomTimelineItemContent.swift */; };
 		18E9A4712C9829970082DDA4 /* AudioRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2EAFFD44F81F86012D6EC27 /* AudioRoomTimelineView.swift */; };
 		18E9A4722C9829970082DDA4 /* AudioSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB284643AF7AB131E307DCE0 /* AudioSessionProtocol.swift */; };
-		18E9A4732C9829970082DDA4 /* AuthenticationClientBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F569CFB77E0D40BD82203D9 /* AuthenticationClientBuilder.swift */; };
 		18E9A4742C9829970082DDA4 /* AuthenticationFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9B069D7772DDF6513E0F1B8 /* AuthenticationFlowCoordinator.swift */; };
 		18E9A4752C9829970082DDA4 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3A1AB5A84D843B6AC8D5F1E /* AuthenticationService.swift */; };
 		18E9A4762C9829970082DDA4 /* AuthenticationServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E75948AA1FE1D1A7809931F /* AuthenticationServiceProtocol.swift */; };
@@ -848,8 +845,6 @@
 		18E9A5FB2C9829970082DDA4 /* QRCodeLoginScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDEDD4D2DE0646DA724985D5 /* QRCodeLoginScreenModels.swift */; };
 		18E9A5FC2C9829970082DDA4 /* QRCodeLoginScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC1B7CB061C9865B2B91B56 /* QRCodeLoginScreenViewModel.swift */; };
 		18E9A5FD2C9829970082DDA4 /* QRCodeLoginScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718D8767035D37E2DB5CC550 /* QRCodeLoginScreenViewModelProtocol.swift */; };
-		18E9A5FE2C9829970082DDA4 /* QRCodeLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4427AF4B7FB7EF3E3D424C7 /* QRCodeLoginService.swift */; };
-		18E9A5FF2C9829970082DDA4 /* QRCodeLoginServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536C0E2178949B290776EA4E /* QRCodeLoginServiceProtocol.swift */; };
 		18E9A6002C9829970082DDA4 /* QRCodeScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DB574F954CC2B40F7BE892 /* QRCodeScannerView.swift */; };
 		18E9A6012C9829970082DDA4 /* ReactionsSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02EE0FABA8ED6D6C1D6CE71D /* ReactionsSummaryView.swift */; };
 		18E9A6022C9829970082DDA4 /* ReadMarkerRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF3D25B3EDB283B5807EADCF /* ReadMarkerRoomTimelineItem.swift */; };
@@ -1067,7 +1062,6 @@
 		18E9A6E62C9829970082DDA4 /* TemplateScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA40B98B098B6F0371B750B3 /* TemplateScreenModels.swift */; };
 		18E9A6E72C9829970082DDA4 /* TemplateScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43456E73F8A2D52B69B9FB9 /* TemplateScreenViewModel.swift */; };
 		18E9A6E82C9829970082DDA4 /* TemplateScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 342BEBC3C5FC3F9943C41C4C /* TemplateScreenViewModelProtocol.swift */; };
-		18E9A6E92C9829970082DDA4 /* TestablePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1E227F34BE43B08E098796E /* TestablePreview.swift */; };
 		18E9A6EA2C9829970082DDA4 /* TextBasedRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E33FD32BBC44D703C7AE4F9 /* TextBasedRoomTimelineItem.swift */; };
 		18E9A6EB2C9829970082DDA4 /* ZeroAttachmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E99FF12C944F350082DDA4 /* ZeroAttachmentService.swift */; };
 		18E9A6EC2C9829970082DDA4 /* TextBasedRoomTimelineViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6EA0D8B0BBD8805F7D5A133 /* TextBasedRoomTimelineViewProtocol.swift */; };
@@ -1386,7 +1380,6 @@
 		370AF5BFCD4384DD455479B6 /* ElementCallWidgetDriverProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6C11AD9813045E44F950410 /* ElementCallWidgetDriverProtocol.swift */; };
 		37906355E207DB5703754675 /* AppLockSetupBiometricsScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F893F4A111CB7BA5C96949 /* AppLockSetupBiometricsScreenViewModel.swift */; };
 		37D789F24199B32E3FD1AA7B /* FileRoomTimelineItemContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216F0DDC98F2A2C162D09C28 /* FileRoomTimelineItemContent.swift */; };
-		37E47F5101C0C036289D3807 /* WysiwygComposer in Frameworks */ = {isa = PBXBuildFile; productRef = CA07D57389DACE18AEB6A5E2 /* WysiwygComposer */; };
 		384D6B9A7DFD7260139D6852 /* UITestsNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBEB8D9F4940E161B18FE4BC /* UITestsNotificationCenter.swift */; };
 		38546A6010A2CF240EC9AF73 /* BindableState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA1D2CBAEA5D0BD00B90D1B /* BindableState.swift */; };
 		386720B603F87D156DB01FB2 /* VoiceMessageMediaManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40076C770A5FB83325252973 /* VoiceMessageMediaManager.swift */; };
@@ -2043,6 +2036,16 @@
 		79EC88BE2DDDBF07006629EE /* ThreadTimelineScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9ACDD96F36510C1FC0836B /* ThreadTimelineScreenViewModel.swift */; };
 		79EC88BF2DDDBF0B006629EE /* ThreadTimelineScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C1C19A4BE46EDE1411ECCE /* ThreadTimelineScreenViewModelProtocol.swift */; };
 		79EC88C02DDDBF10006629EE /* ThreadTimelineScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC2E7CEE6E9314FD69FE0ED9 /* ThreadTimelineScreen.swift */; };
+		79EF670C2E2FA99300D86B0F /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF670B2E2FA99300D86B0F /* FirebaseFirestore */; };
+		79EF670E2E2FAA6D00D86B0F /* StoreKitPlus in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF670D2E2FAA6D00D86B0F /* StoreKitPlus */; };
+		79EF670F2E2FB11300D86B0F /* TestablePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43F773904F87FF5ADFE4DD1 /* TestablePreview.swift */; };
+		79EF67102E2FB13E00D86B0F /* AuthenticationClientFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD19057FDB154A44335CE62 /* AuthenticationClientFactory.swift */; };
+		79EF67112E2FB16E00D86B0F /* AccessibilityTestsAppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CABD320DE5566D133890B24 /* AccessibilityTestsAppCoordinator.swift */; };
+		79EF67122E2FB19700D86B0F /* TestablePreviewsDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA723686F23EF45E2B398FBC /* TestablePreviewsDictionary.swift */; };
+		79EF67132E2FB1E300D86B0F /* PillViewOnBubblePreviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2005B4AD70A792340E2694F1 /* PillViewOnBubblePreviews.swift */; };
+		79EF67142E2FB3F400D86B0F /* ElementWellKnownHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0142FAE169CC4619D8A30262 /* ElementWellKnownHook.swift */; };
+		79EF67152E2FB41F00D86B0F /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0724EBDFE8BB4C9E5547C57D /* Client.swift */; };
+		79EF67172E2FB46500D86B0F /* Mutex in Frameworks */ = {isa = PBXBuildFile; productRef = 79EF67162E2FB46500D86B0F /* Mutex */; };
 		79F31B212E02BB140043E100 /* RemoteConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F31B202E02BB0C0043E100 /* RemoteConfigManager.swift */; };
 		79F31B222E02BB140043E100 /* RemoteConfigManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F31B202E02BB0C0043E100 /* RemoteConfigManager.swift */; };
 		79F31B252E02BE5A0043E100 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 79F31B242E02BE5A0043E100 /* FirebaseCore */; };
@@ -2794,6 +2797,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = C0FAEB81CFD9776CD78CE489;
 			remoteInfo = ElementX;
+		};
+		79EF67072E2FA8A800D86B0F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC22997D58D612146053154D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FEB53A5BC378C913769656D8;
+			remoteInfo = NSE;
+		};
+		79EF67082E2FA8A800D86B0F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC22997D58D612146053154D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 19F0C845D67E9BEA4BE7133E;
+			remoteInfo = ShareExtension;
 		};
 		889C131F86E6415074D382B9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -3928,7 +3945,7 @@
 		AAD8234D0E9C9B12BF9F240B /* LocationAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAnnotation.swift; sourceTree = "<group>"; };
 		AB07F03461023BC39C730922 /* PhishingDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhishingDetector.swift; sourceTree = "<group>"; };
 		AB26D5444A4A7E095222DE8B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
-		AB389C38BD41EB3E47092CFB /* AccessibilityTests.xctestplan */ = {isa = PBXFileReference; path = AccessibilityTests.xctestplan; sourceTree = "<group>"; };
+		AB389C38BD41EB3E47092CFB /* AccessibilityTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = AccessibilityTests.xctestplan; sourceTree = "<group>"; };
 		ABA4CF2F5B4F68D02E412004 /* ServerConfirmationScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfirmationScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		AC0275CEE9CA078B34028BDF /* AppLockScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLockScreenViewModelTests.swift; sourceTree = "<group>"; };
 		AC1DA29A5A041CC0BACA7CB0 /* MockImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockImageCache.swift; sourceTree = "<group>"; };
@@ -4389,6 +4406,7 @@
 				18E9A7822C9829970082DDA4 /* Version in Frameworks */,
 				18E9A7832C9829970082DDA4 /* CryptoSwift in Frameworks */,
 				18E9A7842C9829970082DDA4 /* Tagged in Frameworks */,
+				79EF67172E2FB46500D86B0F /* Mutex in Frameworks */,
 				790AB7B12E1D316300555B1F /* StoreKitPlus in Frameworks */,
 				18E9A7862C9829970082DDA4 /* Emojibase in Frameworks */,
 				18E9A7882C9829970082DDA4 /* SwiftOGG in Frameworks */,
@@ -4518,23 +4536,23 @@
 				A0D7E5BD0298A97DCBDCE40B /* SentrySwiftUI in Frameworks */,
 				44F0E1B576C7599DF8022071 /* Version in Frameworks */,
 				A93661C962B12942C08864B6 /* Emojibase in Frameworks */,
-				37E47F5101C0C036289D3807 /* WysiwygComposer in Frameworks */,
 				4610C57A4785FFF5E67F0C6D /* SwiftOGG in Frameworks */,
 				A88328D7E17F73AB64501B51 /* DSWaveformImageViews in Frameworks */,
-				EAC6FE2CD4F50A43068ADCD8 /* PostHog in Frameworks */,
-				754602A7B2AAD443C4228ED4 /* SwiftState in Frameworks */,
-				B0CB16349B96262AA65A04AF /* GZIP in Frameworks */,
-				36AD4DD4C798E22584ED3200 /* Sentry in Frameworks */,
-				36CD6E11B37396E14F032CB6 /* SentrySwiftUI in Frameworks */,
+				EAC6FE2CD4F50A43068ADCD8 /* Mutex in Frameworks */,
+				754602A7B2AAD443C4228ED4 /* PostHog in Frameworks */,
+				B0CB16349B96262AA65A04AF /* SwiftState in Frameworks */,
+				36AD4DD4C798E22584ED3200 /* GZIP in Frameworks */,
+				36CD6E11B37396E14F032CB6 /* Sentry in Frameworks */,
 				79F31B272E02BE5A0043E100 /* FirebaseRemoteConfig in Frameworks */,
-				A0D7E5BD0298A97DCBDCE40B /* Version in Frameworks */,
-				44F0E1B576C7599DF8022071 /* Emojibase in Frameworks */,
-				37E47F5101C0C036289D3807 /* SwiftOGG in Frameworks */,
-				4610C57A4785FFF5E67F0C6D /* DSWaveformImageViews in Frameworks */,
+				A0D7E5BD0298A97DCBDCE40B /* SentrySwiftUI in Frameworks */,
+				44F0E1B576C7599DF8022071 /* Version in Frameworks */,
+				4610C57A4785FFF5E67F0C6D /* SwiftOGG in Frameworks */,
+				79EF670E2E2FAA6D00D86B0F /* StoreKitPlus in Frameworks */,
 				180EE5DB2CB01F5A00891BBC /* WysiwygComposer in Frameworks */,
 				18C8531C2D11B3AF009AF206 /* Web3ContractABI in Frameworks */,
 				CB137BFB3E083C33E398A6CB /* EmbeddedElementCall in Frameworks */,
 				3C549A0BF39F8A854D45D9FD /* KeychainAccess in Frameworks */,
+				79EF670C2E2FA99300D86B0F /* FirebaseFirestore in Frameworks */,
 				41DFDD212D1BE57CA50D783B /* Kingfisher in Frameworks */,
 				1882EB802C8F85C7001DA2A9 /* TaggedMoney in Frameworks */,
 				184D6FC22C7D83B1006266D8 /* Alamofire in Frameworks */,
@@ -4544,17 +4562,16 @@
 				8F2FAA98457750D9D664136F /* LRUCache in Frameworks */,
 				FC10228E73323BDC09526F97 /* Mapbox in Frameworks */,
 				18C853142D11B3AE009AF206 /* ReownAppKit in Frameworks */,
-				EAC6FE2CD4F50A43068ADCD8 /* PostHog in Frameworks */,
-				754602A7B2AAD443C4228ED4 /* SwiftState in Frameworks */,
+				EAC6FE2CD4F50A43068ADCD8 /* Mutex in Frameworks */,
+				754602A7B2AAD443C4228ED4 /* PostHog in Frameworks */,
 				1882EB822C8F85C7001DA2A9 /* TaggedTime in Frameworks */,
-				B0CB16349B96262AA65A04AF /* GZIP in Frameworks */,
-				36AD4DD4C798E22584ED3200 /* Sentry in Frameworks */,
+				B0CB16349B96262AA65A04AF /* SwiftState in Frameworks */,
+				36AD4DD4C798E22584ED3200 /* GZIP in Frameworks */,
 				30E009912C9CBBFB00CF9115 /* Alamofire in Frameworks */,
-				36CD6E11B37396E14F032CB6 /* SentrySwiftUI in Frameworks */,
+				36CD6E11B37396E14F032CB6 /* Sentry in Frameworks */,
 				18E99FF92C9459DE0082DDA4 /* CryptoSwift in Frameworks */,
 				1882EB7E2C8F85C7001DA2A9 /* Tagged in Frameworks */,
-				A0D7E5BD0298A97DCBDCE40B /* Version in Frameworks */,
-				37E47F5101C0C036289D3807 /* SwiftOGG in Frameworks */,
+				A0D7E5BD0298A97DCBDCE40B /* SentrySwiftUI in Frameworks */,
 				18C853182D11B3AE009AF206 /* Starscream in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -6784,14 +6801,6 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		79654D131C1B234A7D034532 /* AccessibilityTests */ = {
-			isa = PBXGroup;
-			children = (
-				5CABD320DE5566D133890B24 /* AccessibilityTestsAppCoordinator.swift */,
-			);
-			path = AccessibilityTests;
-			sourceTree = "<group>";
-		};
 		790922302E1DC8CF00833940 /* Request */ = {
 			isa = PBXGroup;
 			children = (
@@ -6920,6 +6929,14 @@
 				7944A76B2D589F6300B75DAC /* CreateFeedScreenView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		79654D131C1B234A7D034532 /* AccessibilityTests */ = {
+			isa = PBXGroup;
+			children = (
+				5CABD320DE5566D133890B24 /* AccessibilityTestsAppCoordinator.swift */,
+			);
+			path = AccessibilityTests;
 			sourceTree = "<group>";
 		};
 		7968A42A2D5409AE00E9056A /* FeedDetailsScreen */ = {
@@ -8862,6 +8879,7 @@
 				79F31B2A2E02BE9E0043E100 /* FirebaseRemoteConfig */,
 				790AB7B02E1D316300555B1F /* StoreKitPlus */,
 				796146CE2E2E63AA00ECDE0A /* FirebaseFirestore */,
+				79EF67162E2FB46500D86B0F /* Mutex */,
 			);
 			productName = ElementX;
 			productReference = 18E9A7922C9829970082DDA4 /* Zero.app */;
@@ -9017,6 +9035,8 @@
 				18C8531B2D11B3AF009AF206 /* Web3ContractABI */,
 				79F31B242E02BE5A0043E100 /* FirebaseCore */,
 				79F31B262E02BE5A0043E100 /* FirebaseRemoteConfig */,
+				79EF670B2E2FA99300D86B0F /* FirebaseFirestore */,
+				79EF670D2E2FAA6D00D86B0F /* StoreKitPlus */,
 			);
 			productName = ElementX;
 			productReference = 4CD6AC7546E8D7E5C73CEA48 /* ElementX.app */;
@@ -9662,7 +9682,6 @@
 				719E7AAD1F8E68F68F30FECD /* Task.swift in Sources */,
 				CE4B342F9DD747CF4BEDB5AB /* TestablePreview.swift in Sources */,
 				1882EB852C8F8A38001DA2A9 /* ZMatrixUser.swift in Sources */,
-				E0FB26262689F04D66A949D7 /* TestablePreview.swift in Sources */,
 				AC3C3D6D4AD31F13EE987390 /* TraceLogPack.swift in Sources */,
 				B81840E45D8746A4692DA774 /* Tracing.swift in Sources */,
 				18525D072CF5EE240055C5E8 /* ZeroMessengerInvite.swift in Sources */,
@@ -9904,6 +9923,7 @@
 				18D5D9AB2CEB5A9600107940 /* ZeroRewards.swift in Sources */,
 				18E9A4552C9829970082DDA4 /* AppLockSetupSettingsScreenModels.swift in Sources */,
 				794E2AEC2D773ACB0067E725 /* ZeroWalletApi.swift in Sources */,
+				79EF67112E2FB16E00D86B0F /* AccessibilityTestsAppCoordinator.swift in Sources */,
 				18FFCED22CEC8EB9002F2647 /* ShareExtensionModels.swift in Sources */,
 				79B2A7962E2A856800A76430 /* UserRewardsProtocol.swift in Sources */,
 				18E9A4562C9829970082DDA4 /* AppLockSetupSettingsScreenViewModel.swift in Sources */,
@@ -9913,6 +9933,7 @@
 				18E9A45A2C9829970082DDA4 /* AppMediator.swift in Sources */,
 				18E9A45B2C9829970082DDA4 /* AppMediatorMock.swift in Sources */,
 				18E9A45C2C9829970082DDA4 /* AppMediatorProtocol.swift in Sources */,
+				79EF670F2E2FB11300D86B0F /* TestablePreview.swift in Sources */,
 				18E9A45D2C9829970082DDA4 /* AppRoutes.swift in Sources */,
 				18E9A45E2C9829970082DDA4 /* AppSettings.swift in Sources */,
 				7968A42F2D5409FC00E9056A /* FeedDetailsScreenViewModel.swift in Sources */,
@@ -9937,7 +9958,6 @@
 				18E9A4702C9829970082DDA4 /* AudioRoomTimelineItemContent.swift in Sources */,
 				18E9A4712C9829970082DDA4 /* AudioRoomTimelineView.swift in Sources */,
 				18E9A4722C9829970082DDA4 /* AudioSessionProtocol.swift in Sources */,
-				18E9A4732C9829970082DDA4 /* AuthenticationClientBuilder.swift in Sources */,
 				79621A4C2DA78E040006C391 /* ManageRoomMemberSheetModels.swift in Sources */,
 				185454C32CFDE681003CA957 /* CreateAccountScreenViewModel.swift in Sources */,
 				18E9A4742C9829970082DDA4 /* AuthenticationFlowCoordinator.swift in Sources */,
@@ -10021,6 +10041,7 @@
 				18E9A4B52C9829970082DDA4 /* ComposerDraftServiceMock.swift in Sources */,
 				18E9A4B62C9829970082DDA4 /* ComposerDraftServiceProtocol.swift in Sources */,
 				793F3A5D2E1801B2002F96F0 /* ZeroFlaggedFeaturesService.swift in Sources */,
+				79EF67142E2FB3F400D86B0F /* ElementWellKnownHook.swift in Sources */,
 				18FFCED32CEC8F45002F2647 /* RoomSelectionScreenCoordinator.swift in Sources */,
 				18E9A4B72C9829970082DDA4 /* ComposerToolbar.swift in Sources */,
 				18E9A4B82C9829970082DDA4 /* ComposerToolbarModels.swift in Sources */,
@@ -10149,7 +10170,6 @@
 				79B8E34A2D660B68000304AE /* UserIdentityProxyProtocol.swift in Sources */,
 				18E9A50A2C9829970082DDA4 /* FileRoomTimelineView.swift in Sources */,
 				18E9A50B2C9829970082DDA4 /* FlowCoordinatorProtocol.swift in Sources */,
-				184EC99A2CA5AF3F000F405E /* AuthenticationClientBuilderMock.swift in Sources */,
 				18E9A50C2C9829970082DDA4 /* FormButtonStyles.swift in Sources */,
 				188207EB2CEF3FAF00856A39 /* TimelineProxyMock.swift in Sources */,
 				18E9A50D2C9829970082DDA4 /* VerifyBackupKeyScreen.swift in Sources */,
@@ -10219,6 +10239,7 @@
 				7944A7682D589F5800B75DAC /* CreateFeedScreenViewModelProtocol.swift in Sources */,
 				18E9A53B2C9829970082DDA4 /* InviteUsersScreen.swift in Sources */,
 				18E9A53C2C9829970082DDA4 /* InviteUsersScreenCoordinator.swift in Sources */,
+				79EF67152E2FB41F00D86B0F /* Client.swift in Sources */,
 				18E9A53D2C9829970082DDA4 /* InviteUsersScreenModels.swift in Sources */,
 				18E9A53E2C9829970082DDA4 /* InviteUsersScreenSelectedItem.swift in Sources */,
 				793899C72DEF991700980991 /* ReferAFriendSettingsScreenModel.swift in Sources */,
@@ -10264,6 +10285,7 @@
 				18E9A55C2C9829970082DDA4 /* LocationRoomTimelineItem.swift in Sources */,
 				790AB7BF2E1DB66400555B1F /* ZWalletTransactionResponse.swift in Sources */,
 				18E9A55D2C9829970082DDA4 /* LocationRoomTimelineItemContent.swift in Sources */,
+				79EF67122E2FB19700D86B0F /* TestablePreviewsDictionary.swift in Sources */,
 				18E9A55E2C9829970082DDA4 /* LocationRoomTimelineView.swift in Sources */,
 				790E42BC2D88ABE700FEAEF7 /* TargetConfiguration.swift in Sources */,
 				18E9A55F2C9829970082DDA4 /* LocationSharingScreenModels.swift in Sources */,
@@ -10478,8 +10500,6 @@
 				7995C3BB2D89650100E4D98E /* CharacterSet.swift in Sources */,
 				18115E522CAEA4D9001A8F4A /* ZeroContants.swift in Sources */,
 				18E9A5FD2C9829970082DDA4 /* QRCodeLoginScreenViewModelProtocol.swift in Sources */,
-				18E9A5FE2C9829970082DDA4 /* QRCodeLoginService.swift in Sources */,
-				18E9A5FF2C9829970082DDA4 /* QRCodeLoginServiceProtocol.swift in Sources */,
 				79FCB1A72DA5BA1F00669122 /* ReportRoomScreen.swift in Sources */,
 				799E1D202DBF7DDA00E3D512 /* TimelineLinkPreviewView.swift in Sources */,
 				18E9A6002C9829970082DDA4 /* QRCodeScannerView.swift in Sources */,
@@ -10530,6 +10550,7 @@
 				18DFC5C82CD954EF00462FE1 /* EncryptionResetFlowCoordinator.swift in Sources */,
 				18E9A6252C9829970082DDA4 /* RoomDetailsEditScreen.swift in Sources */,
 				79C6F7252DF8244E003CEBB9 /* AdvancedSettingsScreen.swift in Sources */,
+				79EF67102E2FB13E00D86B0F /* AuthenticationClientFactory.swift in Sources */,
 				79FCB1A32DA5BA0900669122 /* ReportRoomScreenCoordinator.swift in Sources */,
 				18E9A6262C9829970082DDA4 /* RoomDetailsEditScreenCoordinator.swift in Sources */,
 				18E9A6272C9829970082DDA4 /* RoomDetailsEditScreenModels.swift in Sources */,
@@ -10643,7 +10664,6 @@
 				18E9A6792C9829970082DDA4 /* ZeroAttachmentApi.swift in Sources */,
 				18E9A67B2C9829970082DDA4 /* RoomTimelineItemFactory.swift in Sources */,
 				18E9A67C2C9829970082DDA4 /* RoomTimelineItemFactoryProtocol.swift in Sources */,
-				184EC9972CA5AF03000F405E /* AuthenticationClientBuilderFactory.swift in Sources */,
 				18AF615A2CF85B7100921644 /* ZeroListRowLabelStyle.swift in Sources */,
 				18E9A67D2C9829970082DDA4 /* RoomTimelineItemFixtures.swift in Sources */,
 				18FFCED72CEC8F7E002F2647 /* RoomSelectionScreen.swift in Sources */,
@@ -10786,7 +10806,6 @@
 				189E88532D0CA77A002FA063 /* ZeroAccountApi.swift in Sources */,
 				18E9A6E82C9829970082DDA4 /* TemplateScreenViewModelProtocol.swift in Sources */,
 				7984575B2D6084710039623F /* HomeScreenPostFooterItem.swift in Sources */,
-				18E9A6E92C9829970082DDA4 /* TestablePreview.swift in Sources */,
 				79C25B592E25AAD400936A5D /* PostImageViewer.swift in Sources */,
 				798457592D5FDEF60039623F /* ZPostMeowAmountResponse.swift in Sources */,
 				18E9A6EA2C9829970082DDA4 /* TextBasedRoomTimelineItem.swift in Sources */,
@@ -10909,6 +10928,7 @@
 				18E9A7462C9829970082DDA4 /* VideoRoomTimelineItem.swift in Sources */,
 				790AB7AB2E1C517600555B1F /* StrikedLabel.swift in Sources */,
 				18E9A7472C9829970082DDA4 /* VideoRoomTimelineItemContent.swift in Sources */,
+				79EF67132E2FB1E300D86B0F /* PillViewOnBubblePreviews.swift in Sources */,
 				18FFCED42CEC8F66002F2647 /* RoomSelectionScreenModels.swift in Sources */,
 				18E9A7482C9829970082DDA4 /* VideoRoomTimelineView.swift in Sources */,
 				18E9A7492C9829970082DDA4 /* ViewFrameReader.swift in Sources */,
@@ -11639,8 +11659,6 @@
 				185454F02D0042F7003CA957 /* SecureInputField.swift in Sources */,
 				E9D2ED1C4186931E3D5FDA4E /* QRCodeLoginScreenViewModelProtocol.swift in Sources */,
 				18D5D9B12CEB733C00107940 /* UserRewardsSettingsScreenModels.swift in Sources */,
-				C8C7AF33AADF88B306CD2695 /* QRCodeLoginService.swift in Sources */,
-				BB04B1D8E7401C90506D401E /* QRCodeLoginServiceProtocol.swift in Sources */,
 				18C853012D11A135009AF206 /* WalletConnectService.swift in Sources */,
 				FDD5B4B616D9FF4DE3E9A418 /* QRCodeScannerView.swift in Sources */,
 				18AF61632CF85F1900921644 /* ZeroListRowAccessory.swift in Sources */,
@@ -12192,12 +12210,12 @@
 		18C8531F2D121361009AF206 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 19F0C845D67E9BEA4BE7133E /* ShareExtension */;
-			targetProxy = 18C8531E2D121361009AF206 /* PBXContainerItemProxy */;
+			targetProxy = 79EF67082E2FA8A800D86B0F /* PBXContainerItemProxy */;
 		};
 		18E9A3E02C9829970082DDA4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = FEB53A5BC378C913769656D8 /* NSE */;
-			targetProxy = 18E9A3E12C9829970082DDA4 /* PBXContainerItemProxy */;
+			targetProxy = 79EF67072E2FA8A800D86B0F /* PBXContainerItemProxy */;
 		};
 		2C29670603B37E38705D5FF1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -12619,6 +12637,25 @@
 			};
 			name = Debug;
 		};
+		79EF67092E2FA8C900D86B0F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = AccessibilityTests;
+			};
+			name = Debug;
+		};
+		79EF670A2E2FA8C900D86B0F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				PRODUCT_NAME = AccessibilityTests;
+			};
+			name = Release;
+		};
 		7A90A3EBE1ABAB9EAE0952F0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -12969,8 +13006,8 @@
 		8FFA8C81E8F740B7AC0183EC /* Build configuration list for PBXNativeTarget "AccessibilityTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				33096BC465A038B6B6D76B7A /* Debug */,
-				2F9917BC52CB6F9FFACE9D64 /* Release */,
+				79EF67092E2FA8C900D86B0F /* Debug */,
+				79EF670A2E2FA8C900D86B0F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -13935,6 +13972,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 79F31B232E02BE5A0043E100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		79EF670B2E2FA99300D86B0F /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 79F31B232E02BE5A0043E100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		79EF670D2E2FAA6D00D86B0F /* StoreKitPlus */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 790AB7AF2E1D316300555B1F /* XCRemoteSwiftPackageReference "StoreKitPlus" */;
+			productName = StoreKitPlus;
+		};
+		79EF67162E2FB46500D86B0F /* Mutex */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 91740346377FEBEAF7AD32FC /* XCRemoteSwiftPackageReference "swift-mutex" */;
+			productName = Mutex;
 		};
 		79F31B242E02BE5A0043E100 /* FirebaseCore */ = {
 			isa = XCSwiftPackageProductDependency;

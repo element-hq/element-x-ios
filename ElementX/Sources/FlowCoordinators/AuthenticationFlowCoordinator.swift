@@ -336,6 +336,7 @@ class AuthenticationFlowCoordinator: FlowCoordinatorProtocol {
         
         let parameters = ServerSelectionScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                     authenticationFlow: authenticationFlow,
+                                                                    appSettings: appSettings,
                                                                     userIndicatorController: userIndicatorController)
         let coordinator = ServerSelectionScreenCoordinator(parameters: parameters)
         
