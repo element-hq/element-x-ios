@@ -9,12 +9,12 @@ import Combine
 import SwiftUI
 
 struct MediaUploadPreviewScreenCoordinatorParameters {
-    let userIndicatorController: UserIndicatorControllerProtocol
     let roomProxy: JoinedRoomProxyProtocol
+    let timelineController: TimelineControllerProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let title: String?
     let url: URL
-    let threadRootEventID: String?
     let shouldShowCaptionWarning: Bool
 }
 
@@ -32,12 +32,12 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: MediaUploadPreviewScreenCoordinatorParameters) {
-        viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: parameters.userIndicatorController,
-                                                      roomProxy: parameters.roomProxy,
+        viewModel = MediaUploadPreviewScreenViewModel(roomProxy: parameters.roomProxy,
+                                                      timelineController: parameters.timelineController,
+                                                      userIndicatorController: parameters.userIndicatorController,
                                                       mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
                                                       title: parameters.title,
                                                       url: parameters.url,
-                                                      threadRootEventID: parameters.threadRootEventID,
                                                       shouldShowCaptionWarning: parameters.shouldShowCaptionWarning)
     }
     

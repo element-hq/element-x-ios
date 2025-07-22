@@ -115,7 +115,11 @@ class MockTimelineController: TimelineControllerProtocol {
                      intentionalMentions: IntentionalMentions) async { }
     
     func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16]) async -> Result<Void, TimelineProxyError> {
-        await timelineProxy?.sendVoiceMessage(url: url, audioInfo: audioInfo, waveform: waveform, requestHandle: { _ in }) ?? .success(())
+        if let timelineProxy {
+            return await timelineProxy.sendVoiceMessage(url: url, audioInfo: audioInfo, waveform: waveform) { _ in }
+        }
+        
+        return .success(())
     }
         
     func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async { }

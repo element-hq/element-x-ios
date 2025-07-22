@@ -121,12 +121,12 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
         
         let roomProxy = JoinedRoomProxyMock(.init())
         roomProxy.timeline = timelineProxy
-        viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: UserIndicatorControllerMock(),
-                                                      roomProxy: roomProxy,
+        viewModel = MediaUploadPreviewScreenViewModel(roomProxy: roomProxy,
+                                                      timelineController: MockTimelineController(timelineProxy: timelineProxy),
+                                                      userIndicatorController: UserIndicatorControllerMock(),
                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                                       title: "Some File",
                                                       url: url,
-                                                      threadRootEventID: nil,
                                                       shouldShowCaptionWarning: true)
     }
     
