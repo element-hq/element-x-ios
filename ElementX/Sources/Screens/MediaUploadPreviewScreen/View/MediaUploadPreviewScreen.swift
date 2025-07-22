@@ -227,13 +227,13 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
     static let snapshotURL = URL.picturesDirectory
     static let testURL = Bundle.main.url(forResource: "AppIcon60x60@2x", withExtension: "png")
     
-    static let viewModel = MediaUploadPreviewScreenViewModel(roomProxy: JoinedRoomProxyMock(.init()),
-                                                             timelineController: MockTimelineController(),
+    static let viewModel = MediaUploadPreviewScreenViewModel(timelineController: MockTimelineController(),
                                                              userIndicatorController: UserIndicatorControllerMock.default,
                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                                              title: "App Icon.png",
                                                              url: snapshotURL,
-                                                             shouldShowCaptionWarning: true)
+                                                             shouldShowCaptionWarning: true,
+                                                             isRoomEncrypted: true)
     static var previews: some View {
         NavigationStack {
             MediaUploadPreviewScreen(context: viewModel.context)
