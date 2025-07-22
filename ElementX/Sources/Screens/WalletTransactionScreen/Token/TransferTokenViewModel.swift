@@ -58,12 +58,12 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
             setFlowState(flowState, isNavigatingForward: false)
         case .onRecipientSelected(let recipient):
             state.transferRecipient = recipient
-            setFlowState(.asset, isNavigatingForward: true)
+            setFlowState(.asset)
         case .loadMoreTokenAssets:
             loadWalletTokenBalances()
         case .onTokenAssetSelected(let asset):
             state.tokenAsset = _walletTokenAssets.first { $0.tokenAddress == asset.id }
-            setFlowState(.confirmation, isNavigatingForward: true)
+            setFlowState(.confirmation)
         case .onTransactionConfirmed(let amount):
             performTokenTransaction(amount)
         case .transactionCompleted:
@@ -122,10 +122,8 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
         if let currentUserAddress = state.currentUser?.publicWalletAddress,
            let recipient = state.transferRecipient,
            let token = state.tokenAsset {
-            showLoadingIndicator(title: "Sending...")
             Task {
-                defer { hideLoadingIndicator() }
-                
+                setFlowState(.inProgress)
                 let result = await clientProxy.transferToken(senderWalletAddress: currentUserAddress,
                                                              recipientWalletAddress: recipient.publicAddress,
                                                              amount: amount,
@@ -133,7 +131,7 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
                 switch result {
                 case .success(_):
                     state.tokenAmount = amount
-                    setFlowState(.completed, isNavigatingForward: true)
+                    setFlowState(.completed)
                     actionsSubject.send(.transactionCompleted)
                 case .failure(let failure):
                     MXLog.error("Failed to transfer token: \(failure)")
@@ -141,21 +139,6 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
                 }
             }
         }
-    }
-    
-    private static let loadingIndicatorID = "\(UserFeedProfileFlowCoordinator.self)-Loading"
-    
-    private func showLoadingIndicator(delay: Duration? = nil, title: String = L10n.commonLoading) {
-        userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorID,
-                                                      type: .modal(progress: .indeterminate,
-                                                                   interactiveDismissDisabled: false,
-                                                                   allowsInteraction: false),
-                                                      title: title, persistent: true),
-                                                delay: delay)
-    }
-    
-    private func hideLoadingIndicator() {
-        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
     }
     
     private func showError(error: String) {

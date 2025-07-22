@@ -49,6 +49,20 @@ struct TransferTokenView: View {
                     )
             }
             
+            if flowState == .inProgress {
+                TransactionInProgressView(
+                    size: 80,
+                    color: .zero.bgAccentRest,
+                    message: "Sending"
+                )
+                    .transition(
+                        .asymmetric(
+                            insertion: isNavigatingForward ? .move(edge: .trailing) : .identity,
+                            removal: isNavigatingForward ? .identity : .move(edge: .trailing)
+                        )
+                    )
+            }
+            
             if flowState == .completed {
                 CompletedTransactionView(context: context)
                     .transition(.move(edge: .trailing))

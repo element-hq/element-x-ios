@@ -26,7 +26,7 @@ struct HomeWalletContent: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     private let scrollViewAdapter: ScrollViewAdapter = ScrollViewAdapter()
     
-    @State private var showWalletBalance: Bool = true
+    @State private var showWalletBalance: Bool = false
     @State private var selectedTab: HomeWalletTab = .token
     
     @State private var scrollOffset: CGFloat = 0

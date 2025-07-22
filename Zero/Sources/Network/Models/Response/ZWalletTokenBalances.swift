@@ -24,7 +24,8 @@ struct ZWalletToken: Codable {
 extension ZWalletToken {
     var formattedAmount: String {
         if let doubleAmount = Double(amount), doubleAmount > 0 {
-            return String(format: "%.2f", doubleAmount)
+//            return String(format: "%.2f", doubleAmount)
+            return doubleAmount.formatToThousandSeparatedString()
         } else {
             return amount
         }

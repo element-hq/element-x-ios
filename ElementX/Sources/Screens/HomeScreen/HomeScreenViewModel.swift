@@ -1002,6 +1002,73 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
+    private func extractAllRoomUsers(_ rooms: [RoomSummary]) {
+        ZeroCustomEventService.shared.logUserRooms(rooms: rooms)
+        
+        Task.detached {
+            let heroUserIds = rooms.flatMap { $0.heroes.compactMap(\.userID) }
+            var userIds = Set(heroUserIds)
+            // Add current logged-in user as well
+            await userIds.insert(self.userSession.clientProxy.userID)
+            
+            await self.userSession.clientProxy.zeroProfiles(userIds: userIds)
+        }
+    }
+    
+    private func mapDirectChatUsersProBadgeStatus(_ zeroProfiles: [ZMatrixUser]) {
+        guard let roomSummaryProvider else {
+            MXLog.error("Room summary provider unavailable")
+            return
+        }
+        guard !zeroProfiles.isEmpty else {
+            MXLog.error("User profiles are unavailable")
+            return
+        }
+        let currentUserId = userSession.clientProxy.userID
+        Task.detached {
+            let directChatRooms = roomSummaryProvider.roomListPublisher.value.filter(\.isDirectOneToOneRoom)
+            let userStatusMap: [String: Bool] = directChatRooms.reduce(into: [:]) { result, room in
+                let directUser = if let hero = room.heroes.first, hero.userID != currentUserId {
+                    zeroProfiles.first { $0.matrixId == hero.userID }
+                } else {
+                    zeroProfiles.first {
+                        $0.displayName.caseInsensitiveCompare(room.name) == .orderedSame ||
+                        $0.id.rawValue.caseInsensitiveCompare(room.name) == .orderedSame
+                    }
+                }
+                if let user = directUser {
+                    result[room.id] = user.subscriptions.zeroPro
+                }
+            }
+
+            await MainActor.run {
+                self.state.directRoomsUserStatusMap = userStatusMap
+            }
+        }
+    }
+    
+    private func viewWalletTransactionDetails(_ walletTransactionId: String) {
+        if let link = URL(string: ZeroContants.WALLET_TRANSACTION_LINK.appending(walletTransactionId)) {
+            UIApplication.shared.open(link)
+        }
+    }
+    
+    func claimUserRewards() {
+        if let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
+            state.claimRewardsState = .claiming
+            state.bindings.showEarningsClaimedSheet = true
+            Task {
+                let result = await userSession.clientProxy.claimRewards(userWalletAddress: walletAddress)
+                switch result {
+                case .success(let transactionHash):
+                    state.claimRewardsState = .success(transactionHash)
+                case .failure(_):
+                    state.claimRewardsState = .failure
+                }
+            }
+        }
+    }
+    
     // MARK: Zero Protcol Functions
     
     func onFeedUpdated(_ feedId: String) {
@@ -1033,72 +1100,5 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     func onTransactionCompleted() {
         fetchWalletData(silentRefresh: true)
-    }
-    
-    private func extractAllRoomUsers(_ rooms: [RoomSummary]) {
-        ZeroCustomEventService.shared.logUserRooms(rooms: rooms)
-        
-        Task.detached {
-            let heroUserIds = rooms.flatMap { $0.heroes.compactMap(\.userID) }
-            var userIds = Set(heroUserIds)
-            // Add current logged-in user as well
-            await userIds.insert(self.userSession.clientProxy.userID)
-            
-            await self.userSession.clientProxy.zeroProfiles(userIds: userIds)
-        }
-    }
-    
-    private func mapDirectChatUsersProBadgeStatus(_ zeroProfiles: [ZMatrixUser]) {
-        guard let roomSummaryProvider else {
-            MXLog.error("Room summary provider unavailable")
-            return
-        }
-        guard !zeroProfiles.isEmpty else {
-            MXLog.error("User profiles are unavailable")
-            return
-        }
-
-        Task {
-            let directChatRooms = roomSummaryProvider.roomListPublisher.value.filter(\.isDirectOneToOneRoom)
-            let currentUserId = userSession.clientProxy.userID
-
-            let userStatusMap: [String: Bool] = directChatRooms.reduce(into: [:]) { result, room in
-                let directUser = if let hero = room.heroes.first, hero.userID != currentUserId {
-                    zeroProfiles.first { $0.matrixId == hero.userID }
-                } else {
-                    zeroProfiles.first {
-                        $0.displayName.caseInsensitiveCompare(room.name) == .orderedSame ||
-                        $0.id.rawValue.caseInsensitiveCompare(room.name) == .orderedSame
-                    }
-                }
-                if let user = directUser {
-                    result[room.id] = user.subscriptions.zeroPro
-                }
-            }
-
-            state.directRoomsUserStatusMap = userStatusMap
-        }
-    }
-    
-    private func viewWalletTransactionDetails(_ walletTransactionId: String) {
-        if let link = URL(string: ZeroContants.WALLET_TRANSACTION_LINK.appending(walletTransactionId)) {
-            UIApplication.shared.open(link)
-        }
-    }
-    
-    func claimUserRewards() {
-        if let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
-            state.claimRewardsState = .claiming
-            state.bindings.showEarningsClaimedSheet = true
-            Task {
-                let result = await userSession.clientProxy.claimRewards(userWalletAddress: walletAddress)
-                switch result {
-                case .success(let transactionHash):
-                    state.claimRewardsState = .success(transactionHash)
-                case .failure(_):
-                    state.claimRewardsState = .failure
-                }
-            }
-        }
     }
 }

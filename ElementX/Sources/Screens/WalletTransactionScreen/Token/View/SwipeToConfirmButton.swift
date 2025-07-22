@@ -38,7 +38,7 @@ struct SwipeToConfirmButton: View {
                 Text(isConfirmed ? "Confirmed" : "Swipe to Confirm")
                     .foregroundColor(.zero.bgAccentRest)
                     .font(.compound.bodyLGSemibold)
-                    .opacity(dragOffset < threshold ? 1.0 : isConfirmed ? 1.0 : 0.0)
+                    .opacity(isConfirmed ? 1.0 : max(0, 1.0 - (dragOffset / threshold)))
 
                 HStack {
                     ZStack {

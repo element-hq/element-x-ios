@@ -37,7 +37,7 @@ extension WalletRecipient {
     var displayName: String {
         let postfix = primaryZid ?? publicAddress
         return if let name = name {
-            "\(name)(\(postfix))"
+            name
         } else {
             postfix
         }

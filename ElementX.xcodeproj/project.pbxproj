@@ -1185,7 +1185,6 @@
 		18E9A7602C9829970082DDA4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 91DE43B8815918E590912DDA /* InfoPlist.strings */; };
 		18E9A7612C9829970082DDA4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7109E709A7738E6BCC4553E6 /* Localizable.strings */; };
 		18E9A7622C9829970082DDA4 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 187853A7E643995EE49FAD43 /* Localizable.stringsdict */; };
-		18E9A7632C9829970082DDA4 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		18E9A7642C9829970082DDA4 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 048A21188AB19349D026BECD /* PrivacyInfo.xcprivacy */; };
 		18E9A7652C9829970082DDA4 /* SAS.strings in Resources */ = {isa = PBXBuildFile; fileRef = 135FC689EA39AE1D34153B58 /* SAS.strings */; };
 		18E9A7662C9829970082DDA4 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B050A6B233D95807A09289E7 /* Settings.bundle */; };
@@ -1786,6 +1785,8 @@
 		790922682E1FBC0600833940 /* CompletedTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790922662E1FBBFB00833940 /* CompletedTransactionView.swift */; };
 		7909226A2E1FC01B00833940 /* WalletTransactionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790922692E1FC01200833940 /* WalletTransactionProtocol.swift */; };
 		7909226B2E1FC01B00833940 /* WalletTransactionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790922692E1FC01200833940 /* WalletTransactionProtocol.swift */; };
+		79096A332E2F0A5100877A07 /* TransactionInProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79096A322E2F0A4800877A07 /* TransactionInProgressView.swift */; };
+		79096A342E2F0A5100877A07 /* TransactionInProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79096A322E2F0A4800877A07 /* TransactionInProgressView.swift */; };
 		790AB79B2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */; };
 		790AB79C2E1BE14700555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */; };
 		790AB79E2E1BE15200555B1F /* ZeroProSubcriptionScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */; };
@@ -3574,6 +3575,7 @@
 		790922632E1FB1EE00833940 /* SwipeToConfirmButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeToConfirmButton.swift; sourceTree = "<group>"; };
 		790922662E1FBBFB00833940 /* CompletedTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedTransactionView.swift; sourceTree = "<group>"; };
 		790922692E1FC01200833940 /* WalletTransactionProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletTransactionProtocol.swift; sourceTree = "<group>"; };
+		79096A322E2F0A4800877A07 /* TransactionInProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionInProgressView.swift; sourceTree = "<group>"; };
 		790AB79A2E1BE13200555B1F /* ZeroProSubcriptionScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		790AB79D2E1BE14E00555B1F /* ZeroProSubcriptionScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenViewModel.swift; sourceTree = "<group>"; };
 		790AB7A02E1BE15700555B1F /* ZeroProSubcriptionScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroProSubcriptionScreenModels.swift; sourceTree = "<group>"; };
@@ -6758,6 +6760,7 @@
 		790922442E1DCB9D00833940 /* WalletTransactionScreen */ = {
 			isa = PBXGroup;
 			children = (
+				79096A322E2F0A4800877A07 /* TransactionInProgressView.swift */,
 				799D85802E2706D9000A362A /* WalletTransactionType.swift */,
 				790922692E1FC01200833940 /* WalletTransactionProtocol.swift */,
 				799D856F2E270302000A362A /* Receive */,
@@ -9127,7 +9130,6 @@
 				18D1EE272CAE99B9007BEB15 /* ZeroInfo.plist in Resources */,
 				1868A8AF2CA21A2200DC382D /* Inter-Medium.ttf in Resources */,
 				18DDDF952D15714900CBB04E /* zero_secrets.json in Resources */,
-				18E9A7632C9829970082DDA4 /* (null) in Resources */,
 				790AB7B72E1D397100555B1F /* ZeroConfiguration.storekit in Resources */,
 				18E9A7642C9829970082DDA4 /* PrivacyInfo.xcprivacy in Resources */,
 				79F31B2E2E02EDCE0043E100 /* GoogleService-Info.plist in Resources */,
@@ -10685,6 +10687,7 @@
 				18E9A6FF2C9829970082DDA4 /* TimelineItemSender.swift in Sources */,
 				18E9A7002C9829970082DDA4 /* TimelineItemStatusView.swift in Sources */,
 				18E9A7012C9829970082DDA4 /* TimelineMediaFrame.swift in Sources */,
+				79096A332E2F0A5100877A07 /* TransactionInProgressView.swift in Sources */,
 				18E9A7022C9829970082DDA4 /* TimelineModels.swift in Sources */,
 				18E9A7032C9829970082DDA4 /* TimelineProxy.swift in Sources */,
 				18E9A7042C9829970082DDA4 /* TimelineProxyProtocol.swift in Sources */,
@@ -11573,6 +11576,7 @@
 				1DC227816777A2F3A19657E5 /* RoomDirectorySearchScreenViewModel.swift in Sources */,
 				799616322E0B36D6008E73C4 /* SimpleTabButtonsView.swift in Sources */,
 				790922672E1FBC0600833940 /* CompletedTransactionView.swift in Sources */,
+				79096A342E2F0A5100877A07 /* TransactionInProgressView.swift in Sources */,
 				790393722D4CD63E0022E293 /* HomeTabView.swift in Sources */,
 				42F1C8731166633E35A6D7E6 /* RoomEventStringBuilder.swift in Sources */,
 				D55AF9B5B55FEED04771A461 /* RoomFlowCoordinator.swift in Sources */,

@@ -48,6 +48,7 @@ struct CompletedTransactionView: View {
                             .font(.compound.headingMDBold)
                             .foregroundStyle(.compound.textPrimary)
                     }
+                    .padding(.vertical, 12)
                 }
                 
                 Spacer()
@@ -57,7 +58,7 @@ struct CompletedTransactionView: View {
                     
                     UserInfoView(
                         image: currentUser.profileImageURL?.absoluteString,
-                        name: currentUser.primaryZID ?? currentUser.displayName,
+                        name: currentUser.displayName,
                         address: displayFormattedAddress(currentUser.publicWalletAddress),
                         mediaProvider: context.mediaProvider
                     )

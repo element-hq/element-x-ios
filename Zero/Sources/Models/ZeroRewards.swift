@@ -89,7 +89,7 @@ extension ZeroRewards {
     }
 }
 
-private extension Double {
+extension Double {
     func formatToThousandSeparatedString() -> String {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal

@@ -96,5 +96,6 @@ enum TransferTokenFlowState {
     case recipient
     case asset
     case confirmation
+    case inProgress
     case completed
 }
