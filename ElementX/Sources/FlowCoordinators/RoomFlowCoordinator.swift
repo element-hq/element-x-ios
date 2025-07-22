@@ -997,8 +997,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                    geoURI: geoURI,
                                                                    description: nil,
                                                                    zoomLevel: 15,
-                                                                   assetType: isUserLocation ? .sender : .pin,
-                                                                   threadRootEventID: threadRootEventID)
+                                                                   assetType: isUserLocation ? .sender : .pin)
                     self.navigationStackCoordinator.setSheetCoordinator(nil)
                 }
                 
@@ -1056,7 +1055,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func createPoll(question: String, options: [String], pollKind: Poll.Kind) {
         Task {
-            let result = await roomProxy.timeline.createPoll(question: question, answers: options, pollKind: pollKind, threadRootEventID: nil)
+            let result = await roomProxy.timeline.createPoll(question: question, answers: options, pollKind: pollKind)
 
             self.analytics.trackComposer(inThread: false,
                                          isEditing: false,
