@@ -40,6 +40,7 @@ final class ServerConfirmationScreenCoordinator: CoordinatorProtocol {
         viewModel = ServerConfirmationScreenViewModel(authenticationService: parameters.authenticationService,
                                                       mode: mode,
                                                       authenticationFlow: parameters.authenticationFlow,
+                                                      appSettings: parameters.appSettings,
                                                       userIndicatorController: parameters.userIndicatorController)
     }
     

@@ -11,7 +11,7 @@ import XCTest
 
 @MainActor
 class ServerSelectionScreenViewModelTests: XCTestCase {
-    var clientBuilderFactory: AuthenticationClientBuilderFactoryMock!
+    var clientFactory: AuthenticationClientFactoryMock!
     var service: AuthenticationServiceProtocol!
     
     var viewModel: ServerSelectionScreenViewModelProtocol!
@@ -21,7 +21,7 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         // Given a view model for login.
         setupViewModel(authenticationFlow: .login)
         XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
         
         // When selecting matrix.org.
         context.homeserverAddress = "matrix.org"
@@ -30,7 +30,7 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then selection should succeed.
-        XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
         XCTAssertEqual(service.homeserver.value, .mockMatrixDotOrg)
     }
     
@@ -38,7 +38,7 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         // Given a view model for login.
         setupViewModel(authenticationFlow: .login)
         XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
         XCTAssertNil(context.alertInfo)
         
         // When selecting a server that doesn't support login.
@@ -48,7 +48,7 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then selection should fail with an alert about not supporting registration.
-        XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
         XCTAssertEqual(context.alertInfo?.id, .loginAlert)
     }
     
@@ -56,7 +56,7 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         // Given a view model for registration.
         setupViewModel(authenticationFlow: .register)
         XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
         
         // When selecting matrix.org.
         context.homeserverAddress = "matrix.org"
@@ -65,7 +65,7 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then selection should succeed.
-        XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
         XCTAssertEqual(service.homeserver.value, .mockMatrixDotOrg)
     }
     
@@ -73,7 +73,7 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         // Given a view model for registration.
         setupViewModel(authenticationFlow: .register)
         XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
-        XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
         XCTAssertNil(context.alertInfo)
         
         // When selecting a server that doesn't support registration.
@@ -83,8 +83,26 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
         try await deferred.fulfill()
         
         // Then selection should fail with an alert about not supporting registration.
-        XCTAssertEqual(clientBuilderFactory.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
         XCTAssertEqual(context.alertInfo?.id, .registrationAlert)
+    }
+    
+    func testElementProRequiredAlert() async throws {
+        // Given a view model for login.
+        setupViewModel(authenticationFlow: .login)
+        XCTAssertEqual(service.homeserver.value.loginMode, .unknown)
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 0)
+        XCTAssertNil(context.alertInfo)
+        
+        // When selecting a server that requires Element Pro
+        context.homeserverAddress = "secure.gov"
+        let deferred = deferFulfillment(context.observe(\.alertInfo)) { $0 != nil }
+        context.send(viewAction: .confirm)
+        try await deferred.fulfill()
+        
+        // Then selection should fail with an alert telling the user to download Element Pro.
+        XCTAssertEqual(clientFactory.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount, 1)
+        XCTAssertEqual(context.alertInfo?.id, .elementProAlert)
     }
     
     func testInvalidServer() async throws {
@@ -122,15 +140,16 @@ class ServerSelectionScreenViewModelTests: XCTestCase {
     // MARK: - Helpers
     
     private func setupViewModel(authenticationFlow: AuthenticationFlow) {
-        clientBuilderFactory = AuthenticationClientBuilderFactoryMock(configuration: .init())
+        clientFactory = AuthenticationClientFactoryMock(configuration: .init())
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
-                                        clientBuilderFactory: clientBuilderFactory,
+                                        clientFactory: clientFactory,
                                         appSettings: ServiceLocator.shared.settings,
                                         appHooks: AppHooks())
         
         viewModel = ServerSelectionScreenViewModel(authenticationService: service,
                                                    authenticationFlow: authenticationFlow,
+                                                   appSettings: ServiceLocator.shared.settings,
                                                    userIndicatorController: UserIndicatorControllerMock())
     }
 }

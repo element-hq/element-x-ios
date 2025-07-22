@@ -17,6 +17,7 @@ enum RoomProxyError: Error {
     case eventNotFound
     case missingTransactionID
     case failedCreatingPinnedTimeline
+    case timelineError(TimelineProxyError)
 }
 
 /// An enum that describes the relationship between the current user and the room, and contains a reference to the specific implementation of the `RoomProxy`.

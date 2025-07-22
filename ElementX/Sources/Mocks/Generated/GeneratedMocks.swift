@@ -1823,19 +1823,20 @@ class AudioSessionMock: AudioSessionProtocol, @unchecked Sendable {
         try setActiveOptionsClosure?(active, options)
     }
 }
-class AuthenticationClientBuilderFactoryMock: AuthenticationClientBuilderFactoryProtocol, @unchecked Sendable {
+class AuthenticationClientFactoryMock: AuthenticationClientFactoryProtocol, @unchecked Sendable {
 
-    //MARK: - makeBuilder
+    //MARK: - makeClient
 
-    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount = 0
-    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount: Int {
+    var makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksThrowableError: Error?
+    var makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount = 0
+    var makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount
+                return makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount
+                    returnValue = makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -1843,103 +1844,29 @@ class AuthenticationClientBuilderFactoryMock: AuthenticationClientBuilderFactory
         }
         set {
             if Thread.isMainThread {
-                makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount = newValue
+                makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount = newValue
+                    makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCalled: Bool {
-        return makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount > 0
+    var makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCalled: Bool {
+        return makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount > 0
     }
-    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments: (sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)?
-    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedInvocations: [(sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)] = []
+    var makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments: (homeserverAddress: String, sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)?
+    var makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedInvocations: [(homeserverAddress: String, sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks)] = []
 
-    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue: AuthenticationClientBuilderProtocol!
-    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReturnValue: AuthenticationClientBuilderProtocol! {
+    var makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue: ClientProtocol!
+    var makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReturnValue: ClientProtocol! {
         get {
             if Thread.isMainThread {
-                return makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue
-            } else {
-                var returnValue: AuthenticationClientBuilderProtocol? = nil
-                DispatchQueue.main.sync {
-                    returnValue = makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure: ((SessionDirectories, String, ClientSessionDelegate, AppSettings, AppHooks) -> AuthenticationClientBuilderProtocol)?
-
-    func makeBuilder(sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks) -> AuthenticationClientBuilderProtocol {
-        makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount += 1
-        makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments = (sessionDirectories: sessionDirectories, passphrase: passphrase, clientSessionDelegate: clientSessionDelegate, appSettings: appSettings, appHooks: appHooks)
-        DispatchQueue.main.async {
-            self.makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedInvocations.append((sessionDirectories: sessionDirectories, passphrase: passphrase, clientSessionDelegate: clientSessionDelegate, appSettings: appSettings, appHooks: appHooks))
-        }
-        if let makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure = makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure {
-            return makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure(sessionDirectories, passphrase, clientSessionDelegate, appSettings, appHooks)
-        } else {
-            return makeBuilderSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReturnValue
-        }
-    }
-}
-class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol, @unchecked Sendable {
-
-    //MARK: - build
-
-    var buildHomeserverAddressThrowableError: Error?
-    var buildHomeserverAddressUnderlyingCallsCount = 0
-    var buildHomeserverAddressCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return buildHomeserverAddressUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = buildHomeserverAddressUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                buildHomeserverAddressUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    buildHomeserverAddressUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var buildHomeserverAddressCalled: Bool {
-        return buildHomeserverAddressCallsCount > 0
-    }
-    var buildHomeserverAddressReceivedHomeserverAddress: String?
-    var buildHomeserverAddressReceivedInvocations: [String] = []
-
-    var buildHomeserverAddressUnderlyingReturnValue: ClientProtocol!
-    var buildHomeserverAddressReturnValue: ClientProtocol! {
-        get {
-            if Thread.isMainThread {
-                return buildHomeserverAddressUnderlyingReturnValue
+                return makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue
             } else {
                 var returnValue: ClientProtocol? = nil
                 DispatchQueue.main.sync {
-                    returnValue = buildHomeserverAddressUnderlyingReturnValue
+                    returnValue = makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -1947,103 +1874,29 @@ class AuthenticationClientBuilderMock: AuthenticationClientBuilderProtocol, @unc
         }
         set {
             if Thread.isMainThread {
-                buildHomeserverAddressUnderlyingReturnValue = newValue
+                makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    buildHomeserverAddressUnderlyingReturnValue = newValue
+                    makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var buildHomeserverAddressClosure: ((String) async throws -> ClientProtocol)?
+    var makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure: ((String, SessionDirectories, String, ClientSessionDelegate, AppSettings, AppHooks) async throws -> ClientProtocol)?
 
-    func build(homeserverAddress: String) async throws -> ClientProtocol {
-        if let error = buildHomeserverAddressThrowableError {
+    func makeClient(homeserverAddress: String, sessionDirectories: SessionDirectories, passphrase: String, clientSessionDelegate: ClientSessionDelegate, appSettings: AppSettings, appHooks: AppHooks) async throws -> ClientProtocol {
+        if let error = makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksThrowableError {
             throw error
         }
-        buildHomeserverAddressCallsCount += 1
-        buildHomeserverAddressReceivedHomeserverAddress = homeserverAddress
+        makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksCallsCount += 1
+        makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedArguments = (homeserverAddress: homeserverAddress, sessionDirectories: sessionDirectories, passphrase: passphrase, clientSessionDelegate: clientSessionDelegate, appSettings: appSettings, appHooks: appHooks)
         DispatchQueue.main.async {
-            self.buildHomeserverAddressReceivedInvocations.append(homeserverAddress)
+            self.makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReceivedInvocations.append((homeserverAddress: homeserverAddress, sessionDirectories: sessionDirectories, passphrase: passphrase, clientSessionDelegate: clientSessionDelegate, appSettings: appSettings, appHooks: appHooks))
         }
-        if let buildHomeserverAddressClosure = buildHomeserverAddressClosure {
-            return try await buildHomeserverAddressClosure(homeserverAddress)
+        if let makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure = makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure {
+            return try await makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksClosure(homeserverAddress, sessionDirectories, passphrase, clientSessionDelegate, appSettings, appHooks)
         } else {
-            return buildHomeserverAddressReturnValue
-        }
-    }
-    //MARK: - buildWithQRCode
-
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerThrowableError: Error?
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount = 0
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerCalled: Bool {
-        return buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerCallsCount > 0
-    }
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments: (qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: SDKListener<QrLoginProgress>)?
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations: [(qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: SDKListener<QrLoginProgress>)] = []
-
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue: ClientProtocol!
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReturnValue: ClientProtocol! {
-        get {
-            if Thread.isMainThread {
-                return buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue
-            } else {
-                var returnValue: ClientProtocol? = nil
-                DispatchQueue.main.sync {
-                    returnValue = buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerClosure: ((QrCodeData, OIDCConfigurationProxy, SDKListener<QrLoginProgress>) async throws -> ClientProtocol)?
-
-    func buildWithQRCode(qrCodeData: QrCodeData, oidcConfiguration: OIDCConfigurationProxy, progressListener: SDKListener<QrLoginProgress>) async throws -> ClientProtocol {
-        if let error = buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerThrowableError {
-            throw error
-        }
-        buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerCallsCount += 1
-        buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedArguments = (qrCodeData: qrCodeData, oidcConfiguration: oidcConfiguration, progressListener: progressListener)
-        DispatchQueue.main.async {
-            self.buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReceivedInvocations.append((qrCodeData: qrCodeData, oidcConfiguration: oidcConfiguration, progressListener: progressListener))
-        }
-        if let buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerClosure = buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerClosure {
-            return try await buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerClosure(qrCodeData, oidcConfiguration, progressListener)
-        } else {
-            return buildWithQRCodeQrCodeDataOidcConfigurationProgressListenerReturnValue
+            return makeClientHomeserverAddressSessionDirectoriesPassphraseClientSessionDelegateAppSettingsAppHooksReturnValue
         }
     }
 }
@@ -15929,13 +15782,13 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol, @unchecked Sendable {
     var loginWithQRCodeDataReceivedData: Data?
     var loginWithQRCodeDataReceivedInvocations: [Data] = []
 
-    var loginWithQRCodeDataUnderlyingReturnValue: Result<UserSessionProtocol, QRCodeLoginServiceError>!
-    var loginWithQRCodeDataReturnValue: Result<UserSessionProtocol, QRCodeLoginServiceError>! {
+    var loginWithQRCodeDataUnderlyingReturnValue: Result<UserSessionProtocol, AuthenticationServiceError>!
+    var loginWithQRCodeDataReturnValue: Result<UserSessionProtocol, AuthenticationServiceError>! {
         get {
             if Thread.isMainThread {
                 return loginWithQRCodeDataUnderlyingReturnValue
             } else {
-                var returnValue: Result<UserSessionProtocol, QRCodeLoginServiceError>? = nil
+                var returnValue: Result<UserSessionProtocol, AuthenticationServiceError>? = nil
                 DispatchQueue.main.sync {
                     returnValue = loginWithQRCodeDataUnderlyingReturnValue
                 }
@@ -15953,9 +15806,9 @@ class QRCodeLoginServiceMock: QRCodeLoginServiceProtocol, @unchecked Sendable {
             }
         }
     }
-    var loginWithQRCodeDataClosure: ((Data) async -> Result<UserSessionProtocol, QRCodeLoginServiceError>)?
+    var loginWithQRCodeDataClosure: ((Data) async -> Result<UserSessionProtocol, AuthenticationServiceError>)?
 
-    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, QRCodeLoginServiceError> {
+    func loginWithQRCode(data: Data) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         loginWithQRCodeDataCallsCount += 1
         loginWithQRCodeDataReceivedData = data
         DispatchQueue.main.async {
@@ -20192,6 +20045,76 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
             return await sendReadReceiptForTypeClosure(eventID, type)
         } else {
             return sendReadReceiptForTypeReturnValue
+        }
+    }
+    //MARK: - markAsRead
+
+    var markAsReadReceiptTypeUnderlyingCallsCount = 0
+    var markAsReadReceiptTypeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return markAsReadReceiptTypeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAsReadReceiptTypeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAsReadReceiptTypeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAsReadReceiptTypeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var markAsReadReceiptTypeCalled: Bool {
+        return markAsReadReceiptTypeCallsCount > 0
+    }
+    var markAsReadReceiptTypeReceivedReceiptType: ReceiptType?
+    var markAsReadReceiptTypeReceivedInvocations: [ReceiptType] = []
+
+    var markAsReadReceiptTypeUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var markAsReadReceiptTypeReturnValue: Result<Void, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return markAsReadReceiptTypeUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAsReadReceiptTypeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAsReadReceiptTypeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAsReadReceiptTypeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var markAsReadReceiptTypeClosure: ((ReceiptType) async -> Result<Void, TimelineProxyError>)?
+
+    func markAsRead(receiptType: ReceiptType) async -> Result<Void, TimelineProxyError> {
+        markAsReadReceiptTypeCallsCount += 1
+        markAsReadReceiptTypeReceivedReceiptType = receiptType
+        DispatchQueue.main.async {
+            self.markAsReadReceiptTypeReceivedInvocations.append(receiptType)
+        }
+        if let markAsReadReceiptTypeClosure = markAsReadReceiptTypeClosure {
+            return await markAsReadReceiptTypeClosure(receiptType)
+        } else {
+            return markAsReadReceiptTypeReturnValue
         }
     }
     //MARK: - sendMessageEventContent

@@ -105,6 +105,7 @@ struct TimelineReplyView: View {
         var body: some View {
             ReplyView(sender: .init(id: "@alice:matrix.org"), plainBody: "Hello world", formattedBody: nil)
                 .redacted(reason: .placeholder)
+                .accessibilityLabel(L10n.commonLoading)
         }
     }
     
@@ -138,6 +139,7 @@ struct TimelineReplyView: View {
                     .foregroundColor(.compound.iconPrimary)
                     .background(Color.compound.bgSubtlePrimary)
                     .cornerRadius(icon?.cornerRadii ?? 0.0, corners: .allCorners)
+                    .accessibilityHidden(true)
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(sender.disambiguatedDisplayName ?? sender.id)
@@ -154,6 +156,7 @@ struct TimelineReplyView: View {
                 .padding(.leading, icon == nil ? 8 : 0)
                 .padding(.trailing, 8)
             }
+            .accessibilityElement(children: .combine)
         }
         
         @ViewBuilder

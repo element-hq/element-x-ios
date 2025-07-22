@@ -21,6 +21,8 @@ struct Application: App {
             appCoordinator = UITestsAppCoordinator(appDelegate: appDelegate)
         } else if ProcessInfo.isRunningUnitTests {
             appCoordinator = UnitTestsAppCoordinator(appDelegate: appDelegate)
+        } else if ProcessInfo.isRunningAccessibilityTests {
+            appCoordinator = AccessibilityTestsAppCoordinator(appDelegate: appDelegate)
         } else {
             appCoordinator = AppCoordinator(appDelegate: appDelegate)
         }

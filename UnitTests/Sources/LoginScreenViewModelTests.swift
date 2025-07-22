@@ -14,7 +14,7 @@ class LoginScreenViewModelTests: XCTestCase {
     var viewModel: LoginScreenViewModelProtocol!
     var context: LoginScreenViewModelType.Context { viewModel.context }
     
-    var clientBuilderFactory: AuthenticationClientBuilderFactoryMock!
+    var clientFactory: AuthenticationClientFactoryMock!
     var service: AuthenticationServiceProtocol!
     
     func testBasicServer() async {
@@ -143,6 +143,21 @@ class LoginScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.alertInfo?.id, .unknown, "An alert should be shown to the user.")
     }
     
+    func testElementProRequired() async throws {
+        // Given the screen configured for matrix.org
+        await setupViewModel()
+        XCTAssertNil(context.alertInfo, "There shouldn't be an alert when the screen loads.")
+        
+        // When entering a username for an unsupported homeserver.
+        let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
+        context.username = "@bob:secure.gov"
+        context.send(viewAction: .parseUsername)
+        try await deferred.fulfill()
+
+        // Then the view state should be updated to show an alert.
+        XCTAssertEqual(context.alertInfo?.id, .elementProAlert, "An alert should be shown to the user.")
+    }
+    
     func testLoginHint() async throws {
         await setupViewModel(loginHint: "")
         XCTAssertEqual(context.username, "")
@@ -157,10 +172,10 @@ class LoginScreenViewModelTests: XCTestCase {
     // MARK: - Helpers
     
     private func setupViewModel(homeserverAddress: String = "example.com", loginHint: String? = nil) async {
-        clientBuilderFactory = AuthenticationClientBuilderFactoryMock(configuration: .init())
+        clientFactory = AuthenticationClientFactoryMock(configuration: .init())
         service = AuthenticationService(userSessionStore: UserSessionStoreMock(configuration: .init()),
                                         encryptionKeyProvider: EncryptionKeyProvider(),
-                                        clientBuilderFactory: clientBuilderFactory,
+                                        clientFactory: clientFactory,
                                         appSettings: ServiceLocator.shared.settings,
                                         appHooks: AppHooks())
         
@@ -172,6 +187,7 @@ class LoginScreenViewModelTests: XCTestCase {
         viewModel = LoginScreenViewModel(authenticationService: service,
                                          loginHint: loginHint,
                                          userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings,
                                          analytics: ServiceLocator.shared.analytics)
     }
 }

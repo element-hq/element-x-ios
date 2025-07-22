@@ -1,0 +1,31 @@
+// swiftlint:disable all
+// swiftformat:disable all
+
+{% if argument.mainTarget %}
+@testable import {{ argument.mainTarget }}
+{% endif %}
+{% for import in argument.imports %}
+{% if import != "last" %}
+import {{ import }}
+{% endif %}
+{% endfor %}
+{% for import in argument.testableImports %}
+{% if import != "last" %}
+@testable import {{ import }}
+{% endif %}
+{% endfor %}
+
+extension AccessibilityTests {
+
+    {% for type in types.types where (type.implements.TestablePreview or type.based.TestablePreview or type|annotated:"TestablePreview") and type.name != "TestablePreview" %}
+    func test{{ type.name|replace:"_Previews", "" }}() async throws {
+        try await performAccessibilityAudit(named: "{{ type.name }}")
+    }
+    {%- if not forloop.last %}
+
+    {% endif %}
+    {% endfor %}
+}
+
+// swiftlint:enable all
+// swiftformat:enable all

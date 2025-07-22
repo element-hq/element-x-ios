@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import MatrixRustSDK
 
 // https://spec.matrix.org/latest/appendices/#identifier-grammar
 enum MatrixEntityRegex: String {

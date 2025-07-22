@@ -548,13 +548,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                           encryptionKeyProvider: encryptionKeyProvider,
                                                           appSettings: appSettings,
                                                           appHooks: appHooks)
-        let qrCodeLoginService = QRCodeLoginService(encryptionKeyProvider: encryptionKeyProvider,
-                                                    userSessionStore: userSessionStore,
-                                                    appSettings: appSettings,
-                                                    appHooks: appHooks)
         
         let coordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
-                                                        qrCodeLoginService: qrCodeLoginService,
                                                         bugReportService: ServiceLocator.shared.bugReportService,
                                                         navigationRootCoordinator: navigationRootCoordinator,
                                                         appMediator: appMediator,

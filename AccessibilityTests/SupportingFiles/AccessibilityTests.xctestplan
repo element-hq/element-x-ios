@@ -1,0 +1,52 @@
+{
+  "configurations" : [
+    {
+      "id" : "EFC6A442-D3B7-4273-B349-7A923C06AF5E",
+      "name" : "Default",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "addressSanitizer" : {
+      "enabled" : true
+    },
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:ElementX.xcodeproj",
+          "identifier" : "C0FAEB81CFD9776CD78CE489",
+          "name" : "ElementX"
+        }
+      ]
+    },
+    "defaultTestExecutionTimeAllowance" : 120,
+    "environmentVariableEntries" : [
+
+    ],
+    "language" : "en-US",
+    "locationScenario" : {
+      "identifier" : "San Francisco, CA, USA",
+      "referenceType" : "built-in"
+    },
+    "region" : "US",
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:ElementX.xcodeproj",
+      "identifier" : "C0C687DE1D270F9895FEE186",
+      "name" : "AccessibilityTests"
+    },
+    "testTimeoutsEnabled" : true,
+    "undefinedBehaviorSanitizerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:ElementX.xcodeproj",
+        "identifier" : "C0C687DE1D270F9895FEE186",
+        "name" : "AccessibilityTests"
+      }
+    }
+  ],
+  "version" : 1
+}

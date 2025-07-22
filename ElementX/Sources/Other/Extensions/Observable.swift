@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Mutex
 
 extension Observable {
     /// Creates an async stream for the specified property on this object. We probably won't need this once SE-0475 is available:
@@ -14,22 +15,22 @@ extension Observable {
     /// - Parameter property: The key path to the property you would like to observe.
     func observe<Value>(_ property: KeyPath<Self, Value>) -> AsyncStream<Value> {
         AsyncStream { continuation in
-            var isActive = true
+            let isActive = Mutex(true)
             
             @Sendable func observe() {
                 let value = withObservationTracking {
                     self[keyPath: property]
                 } onChange: {
-                    // Dispatch the update as this is willSet not didSet.
+                    // Handle the update on the next run loop as this is willSet not didSet.
                     DispatchQueue.main.async {
-                        guard isActive else { return }
+                        guard isActive.withLock({ $0 }) else { return }
                         observe()
                     }
                 }
                 continuation.yield(value)
             }
             
-            continuation.onTermination = { _ in isActive = false }
+            continuation.onTermination = { _ in isActive.withLock { $0 = false } }
             
             observe()
         }

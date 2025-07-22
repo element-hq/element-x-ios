@@ -32,9 +32,9 @@ struct PINTextField: View {
     @ViewBuilder
     var textField: some View {
         if isSecure {
-            SecureField("", text: $pinCode)
+            SecureField(L10n.a11yPinField, text: $pinCode)
         } else {
-            TextField("", text: $pinCode)
+            TextField(L10n.a11yPinField, text: $pinCode)
         }
     }
     

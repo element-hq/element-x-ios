@@ -32,6 +32,7 @@ struct SessionVerificationRequestDetailsView: View {
                                 contentID: details.senderProfile.userID,
                                 avatarSize: .user(on: .sessionVerification),
                                 mediaProvider: mediaProvider)
+                .accessibilityHidden(true)
             
             VStack(alignment: .leading, spacing: 0) {
                 Text(details.senderProfile.displayName ?? details.senderProfile.userID)
@@ -45,6 +46,7 @@ struct SessionVerificationRequestDetailsView: View {
                 }
             }
         }
+        .accessibilityElement(children: .combine)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
         .background(.compound.bgSubtleSecondary)
