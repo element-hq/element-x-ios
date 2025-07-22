@@ -108,19 +108,6 @@ class MockTimelineController: TimelineControllerProtocol {
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async { }
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async { }
-    
-    func sendMessage(_ message: String,
-                     html: String?,
-                     inReplyToEventID: String?,
-                     intentionalMentions: IntentionalMentions) async { }
-    
-    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16]) async -> Result<Void, TimelineProxyError> {
-        if let timelineProxy {
-            return await timelineProxy.sendVoiceMessage(url: url, audioInfo: audioInfo, waveform: waveform) { _ in }
-        }
-        
-        return .success(())
-    }
         
     func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async { }
     
@@ -159,6 +146,21 @@ class MockTimelineController: TimelineControllerProtocol {
         
     func eventTimestamp(for itemID: TimelineItemIdentifier) -> Date? {
         timelineItemsTimestamp[itemID] ?? .now
+    }
+    
+    // MARK: - Sending
+    
+    func sendMessage(_ message: String,
+                     html: String?,
+                     inReplyToEventID: String?,
+                     intentionalMentions: IntentionalMentions) async { }
+    
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16]) async -> Result<Void, TimelineProxyError> {
+        if let timelineProxy {
+            return await timelineProxy.sendVoiceMessage(url: url, audioInfo: audioInfo, waveform: waveform) { _ in }
+        }
+        
+        return .success(())
     }
     
     // MARK: - UI Test signalling

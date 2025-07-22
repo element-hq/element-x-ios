@@ -145,83 +145,6 @@ class TimelineController: TimelineControllerProtocol {
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) { }
     
-    // MARK: - Sending
-    
-    func sendMessage(_ message: String,
-                     html: String?,
-                     inReplyToEventID: String?,
-                     intentionalMentions: IntentionalMentions) async {
-        MXLog.info("Send message in \(roomID)")
-        
-        switch await activeTimeline.sendMessage(message,
-                                                html: html,
-                                                inReplyToEventID: inReplyToEventID,
-                                                intentionalMentions: intentionalMentions) {
-        case .success:
-            MXLog.info("Finished sending message")
-            await donateSendMessageIntent()
-        case .failure(let error):
-            MXLog.error("Failed sending message with error: \(error)")
-        }
-    }
-    
-    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16]) async -> Result<Void, TimelineProxyError> {
-        await activeTimeline.sendVoiceMessage(url: url,
-                                              audioInfo: audioInfo,
-                                              waveform: waveform) { _ in }
-    }
-    
-    private func donateSendMessageIntent() async {
-        guard let displayName = roomProxy.details.name ?? roomProxy.details.canonicalAlias, !displayName.isEmpty else {
-            MXLog.error("Failed donating send message intent, room missing name or alias.")
-            return
-        }
-        
-        let groupName = INSpeakableString(spokenPhrase: displayName)
-        
-        let sendMessageIntent = INSendMessageIntent(recipients: nil,
-                                                    outgoingMessageType: .outgoingMessageText,
-                                                    content: nil,
-                                                    speakableGroupName: groupName,
-                                                    conversationIdentifier: roomProxy.id,
-                                                    serviceName: nil,
-                                                    sender: nil,
-                                                    attachments: nil)
-        
-        let avatarURL: URL? = switch roomProxy.details.avatar {
-        case .room(_, _, let avatarURL):
-            avatarURL
-        case .heroes(let userProfiles):
-            userProfiles.first?.avatarURL
-        case .tombstoned:
-            nil
-        }
-        
-        func addPlacehoder() {
-            if let imageData = Avatars.generatePlaceholderAvatarImageData(name: displayName, id: roomProxy.id, size: .init(width: 100, height: 100)) {
-                sendMessageIntent.setImage(INImage(imageData: imageData), forParameterNamed: \.speakableGroupName)
-            }
-        }
-        
-        if let avatarURL, let mediaSource = try? MediaSourceProxy(url: avatarURL, mimeType: nil) {
-            if case let .success(avatarData) = await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
-                sendMessageIntent.setImage(INImage(imageData: avatarData), forParameterNamed: \.speakableGroupName)
-            } else {
-                addPlacehoder()
-            }
-        } else {
-            addPlacehoder()
-        }
-        
-        let interaction = INInteraction(intent: sendMessageIntent, response: nil)
-        
-        do {
-            try await interaction.donate()
-        } catch {
-            MXLog.error("Failed donating send message intent with error: \(error)")
-        }
-    }
-    
     func toggleReaction(_ reaction: String, to eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async {
         MXLog.info("Toggle reaction \(reaction) to \(eventOrTransactionID)")
         
@@ -356,6 +279,32 @@ class TimelineController: TimelineControllerProtocol {
         }
         
         return nil
+    }
+    
+    // MARK: - Sending
+    
+    func sendMessage(_ message: String,
+                     html: String?,
+                     inReplyToEventID: String?,
+                     intentionalMentions: IntentionalMentions) async {
+        MXLog.info("Send message in \(roomID)")
+        
+        switch await activeTimeline.sendMessage(message,
+                                                html: html,
+                                                inReplyToEventID: inReplyToEventID,
+                                                intentionalMentions: intentionalMentions) {
+        case .success:
+            MXLog.info("Finished sending message")
+            await donateSendMessageIntent()
+        case .failure(let error):
+            MXLog.error("Failed sending message with error: \(error)")
+        }
+    }
+    
+    func sendVoiceMessage(url: URL, audioInfo: AudioInfo, waveform: [UInt16]) async -> Result<Void, TimelineProxyError> {
+        await activeTimeline.sendVoiceMessage(url: url,
+                                              audioInfo: audioInfo,
+                                              waveform: waveform) { _ in }
     }
     
     // MARK: - Private
@@ -528,6 +477,57 @@ class TimelineController: TimelineControllerProtocol {
             }
         }
         return nil
+    }
+    
+    private func donateSendMessageIntent() async {
+        guard let displayName = roomProxy.details.name ?? roomProxy.details.canonicalAlias, !displayName.isEmpty else {
+            MXLog.error("Failed donating send message intent, room missing name or alias.")
+            return
+        }
+        
+        let groupName = INSpeakableString(spokenPhrase: displayName)
+        
+        let sendMessageIntent = INSendMessageIntent(recipients: nil,
+                                                    outgoingMessageType: .outgoingMessageText,
+                                                    content: nil,
+                                                    speakableGroupName: groupName,
+                                                    conversationIdentifier: roomProxy.id,
+                                                    serviceName: nil,
+                                                    sender: nil,
+                                                    attachments: nil)
+        
+        let avatarURL: URL? = switch roomProxy.details.avatar {
+        case .room(_, _, let avatarURL):
+            avatarURL
+        case .heroes(let userProfiles):
+            userProfiles.first?.avatarURL
+        case .tombstoned:
+            nil
+        }
+        
+        func addPlacehoder() {
+            if let imageData = Avatars.generatePlaceholderAvatarImageData(name: displayName, id: roomProxy.id, size: .init(width: 100, height: 100)) {
+                sendMessageIntent.setImage(INImage(imageData: imageData), forParameterNamed: \.speakableGroupName)
+            }
+        }
+        
+        if let avatarURL, let mediaSource = try? MediaSourceProxy(url: avatarURL, mimeType: nil) {
+            if case let .success(avatarData) = await mediaProvider.loadThumbnailForSource(source: mediaSource, size: .init(width: 100, height: 100)) {
+                sendMessageIntent.setImage(INImage(imageData: avatarData), forParameterNamed: \.speakableGroupName)
+            } else {
+                addPlacehoder()
+            }
+        } else {
+            addPlacehoder()
+        }
+        
+        let interaction = INInteraction(intent: sendMessageIntent, response: nil)
+        
+        do {
+            try await interaction.donate()
+        } catch {
+            MXLog.error("Failed donating send message intent with error: \(error)")
+        }
     }
 }
 
