@@ -93,7 +93,7 @@ struct HomeWalletTabsContentView : View {
                                              selectedWalletTab: selectedTab,
                                              mediaProvider: mediaProvider,
                                              onTap: { onTap(content) })
-                        .padding(.vertical, 12)
+                    .padding(.vertical, 12)
                 }
                 
                 if tabContent.nextPageParams != nil {
@@ -217,17 +217,23 @@ struct WalletTokenImage: View {
         guard let urlString = url else { return nil }
         return URL(string: urlString)
     }
+    @State private var didLoadFail = false
     
     var body: some View {
-        KFImage(imageURL)
-            .placeholder {
+        ZStack {
+            if didLoadFail {
                 PlaceholderAvatarImage(name: "", contentID: "", onTap: {})
                     .background(Color.compound.bgCanvasDefault)
-                    .clipShape(Circle())
-                    .frame(width: size, height: size)
+            } else {
+                KFAnimatedImage(imageURL)
+                    .placeholder { Circle().fill(.black) }
+                    .onFailure({ _ in didLoadFail = true })
+                    .onSuccess({ _ in didLoadFail = false })
+                    .fade(duration: 0.3)
+                    .aspectRatio(contentMode: .fit)
             }
-            .fade(duration: 0.3)
-            .frame(width: size, height: size)
-            .clipShape(Circle())
+        }
+        .clipShape(Circle())
+        .frame(width: size, height: size)
     }
 }

@@ -57,7 +57,7 @@ struct CompletedTransactionView: View {
                     Spacer()
                     
                     UserInfoView(
-                        image: currentUser.profileImageURL?.absoluteString,
+                        image: context.viewState.userAvatarURL?.absoluteString,
                         name: currentUser.displayName,
                         address: displayFormattedAddress(currentUser.publicWalletAddress),
                         mediaProvider: context.mediaProvider

@@ -10,7 +10,6 @@ enum ZeroContants {
     
     static let accountProvider: String = ZeroContants.appServer.matrixHomeServerUrl.replacingOccurrences(of: "https://", with: "")
     static let ZERO_PRO_SUBSCRIPTION_USD: Int = 13
-    static let WALLET_TRANSACTION_LINK = "https://zephyr-blockscout.eu-north-2.gateway.fm/tx/"
 }
 
 protocol AppServer {

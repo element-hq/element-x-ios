@@ -29,10 +29,6 @@ final class FeedMediaPreFetchService {
         self.clientProxy = clientProxy
         
         if loadInitialPosts {
-            ZeroCustomEventService.shared.logEvent("HOME", category: "SCREEN", parameters: [
-                "request_type": "initial_feed_media_prefetch",
-                "status": "in_progress",
-            ])
             self.loadInitialFeeds()
         }
     }
@@ -205,11 +201,6 @@ final class FeedMediaPreFetchService {
 
     @MainActor
     private func updateFeedMediaStateWithResults(_ results: [String: ZPostMedia]) {
-        ZeroCustomEventService.shared.logEvent("HOME", category: "SCREEN", parameters: [
-            "request_type": "initial_feed_media_prefetch",
-            "status": "success",
-            "result_count": results.count,
-        ])
         for (postId, media) in results {
             mediaMapCache[postId] = HomeScreenPostMediaInfo(media: media)
         }

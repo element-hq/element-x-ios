@@ -1023,11 +1023,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
-        ZeroCustomEventService.shared.logEvent("APP_COORDINATOR", category: "SDK", parameters: [
-            "request_type": "startSync",
-            "status": "starting"
-        ])
-        
         clientProxyObserver = userSession.clientProxy
             .loadingStatePublisher
             .removeDuplicates()
@@ -1038,19 +1033,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 switch state {
                 case .loading:
                     if self?.appMediator.networkMonitor.reachabilityPublisher.value == .reachable {
-                        ZeroCustomEventService.shared.logEvent("APP_COORDINATOR", category: "SDK", parameters: [
-                            "request_type": "startSync",
-                            "status": "in_progress",
-                            "time": Date().timeIntervalSince1970
-                        ])
                         ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: toastIdentifier, type: .toast(progress: .indeterminate), title: L10n.commonSyncing, persistent: true))
                     }
                 case .notLoading:
-                    ZeroCustomEventService.shared.logEvent("APP_COORDINATOR", category: "SDK", parameters: [
-                        "request_type": "startSync",
-                        "status": "completed",
-                        "time": Date().timeIntervalSince1970
-                    ])
                     ServiceLocator.shared.analytics.signpost.endFirstSync()
                     ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(toastIdentifier)
                 }

@@ -1004,8 +1004,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func extractAllRoomUsers(_ rooms: [RoomSummary]) {
-//        ZeroCustomEventService.shared.logUserRooms(rooms: rooms)
-        
         if !isRoomUsersExtractionInProgress {
             isRoomUsersExtractionInProgress = true
             ZeroCustomEventService.shared.logEvent("HOME", category: "SCREEN", parameters: [
@@ -1026,20 +1024,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private func mapDirectChatUsersProBadgeStatus(_ zeroProfiles: [ZMatrixUser]) {
         guard let roomSummaryProvider else {
             isRoomUsersExtractionInProgress = false
-            ZeroCustomEventService.shared.logEvent("HOME", category: "SCREEN", parameters: [
-                "request_type": "load_room_users",
-                "status": "failure",
-                "error": "roomSummaryProvider is unavailable"
-            ])
             return
         }
         guard !zeroProfiles.isEmpty else {
             isRoomUsersExtractionInProgress = false
-            ZeroCustomEventService.shared.logEvent("HOME", category: "SCREEN", parameters: [
-                "request_type": "load_room_users",
-                "status": "failure",
-                "error": "zeroProfiles are empty"
-            ])
             return
         }
         let currentUserId = userSession.clientProxy.userID
@@ -1060,11 +1048,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             }
 
             await MainActor.run {
-                ZeroCustomEventService.shared.logEvent("HOME", category: "SCREEN", parameters: [
-                    "request_type": "load_room_users",
-                    "status": "success",
-                    "result": userStatusMap.count
-                ])
                 self.isRoomUsersExtractionInProgress = false
                 self.state.directRoomsUserStatusMap = userStatusMap
             }

@@ -58,16 +58,16 @@ struct ZeroProSubcriptionScreenView: View {
                     }
                     .padding(.top, 12)
                     
-                    HorizontalDivider()
-                        .padding(.vertical, 24)
-                    
-                    if context.viewState.isZeroProSubscriber {
-                        manageZeroProSubscription
-                    } else {
-                        if context.viewState.canPurchaseSubscription {
-                            subscribeToZeroProButton
-                        }
-                    }
+//                    HorizontalDivider()
+//                        .padding(.vertical, 24)
+//                    
+//                    if context.viewState.isZeroProSubscriber {
+//                        manageZeroProSubscription
+//                    } else {
+//                        if context.viewState.canPurchaseSubscription {
+//                            subscribeToZeroProButton
+//                        }
+//                    }
                 }
                 .frame(maxWidth: .infinity)
             }))

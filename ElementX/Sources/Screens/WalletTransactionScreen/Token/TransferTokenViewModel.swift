@@ -35,6 +35,11 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
             mediaProvider: mediaProvider
         )
         
+        clientProxy.userAvatarURLPublisher
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.userAvatarURL, on: self)
+            .store(in: &cancellables)
+        
         clientProxy.zeroCurrentUserPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] currentUser in

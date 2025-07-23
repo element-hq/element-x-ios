@@ -16,6 +16,7 @@ struct TransferTokenViewState: BindableState {
     var isNavigatingForward: Bool = true
     
     var currentUser: ZCurrentUser?
+    var userAvatarURL: URL?
     var transferRecipient: WalletRecipient?
     var tokenAsset: ZWalletToken?
     var tokenAmount: String?
