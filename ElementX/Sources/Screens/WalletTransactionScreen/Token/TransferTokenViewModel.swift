@@ -24,14 +24,15 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
     
     private var completedTransactionReceipt: ZWalletTransactionReceipt?
         
-    init(clientProxy: ClientProxyProtocol,
+    init(meowPrice: ZeroCurrency?,
+         clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
         super.init(
-            initialViewState: .init(bindings: .init()),
+            initialViewState: .init(bindings: .init(), meowPrice: meowPrice),
             mediaProvider: mediaProvider
         )
         
@@ -116,7 +117,7 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
                         tokens
                     } else { [] }
                     for token in walletTokenBalances.tokens {
-                        let content = HomeScreenWalletContent(walletToken: token)
+                        let content = HomeScreenWalletContent(walletToken: token, meowPrice: state.meowPrice)
                         homeWalletContent.append(content)
                     }
                     let uniqueAssets = homeWalletContent.uniqued(on: \.id)

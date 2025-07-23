@@ -1711,6 +1711,8 @@
 		785613C0C092B532198EB3BB /* TimelineStartRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECC9D66400727DFFEE12E8 /* TimelineStartRoomTimelineView.swift */; };
 		7856DE3EA4580AE0329986EB /* ComposerDraftServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E600B315B920B9687F8EE1B /* ComposerDraftServiceMock.swift */; };
 		78A3D84BA47DAC69B4D0A34C /* CollapsibleRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF273BC2BFB9F3EEFA988B /* CollapsibleRoomTimelineView.swift */; };
+		7902C42B2E3176D90002F0A5 /* ZeroWalletUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7902C42A2E3176D40002F0A5 /* ZeroWalletUtil.swift */; };
+		7902C42C2E3176D90002F0A5 /* ZeroWalletUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7902C42A2E3176D40002F0A5 /* ZeroWalletUtil.swift */; };
 		790393712D4CD63E0022E293 /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393702D4CD63A0022E293 /* HomeTabView.swift */; };
 		790393722D4CD63E0022E293 /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393702D4CD63A0022E293 /* HomeTabView.swift */; };
 		790393742D4CDC7A0022E293 /* ZeroPostApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393732D4CDC750022E293 /* ZeroPostApi.swift */; };
@@ -3570,6 +3572,7 @@
 		78913D6E120D46138E97C107 /* NavigationSplitCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationSplitCoordinatorTests.swift; sourceTree = "<group>"; };
 		7893780A1FD6E3F38B3E9049 /* UserIndicatorControllerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIndicatorControllerMock.swift; sourceTree = "<group>"; };
 		78BBDF7A05CF53B5CDC13682 /* landscape_test_video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = landscape_test_video.mov; sourceTree = "<group>"; };
+		7902C42A2E3176D40002F0A5 /* ZeroWalletUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroWalletUtil.swift; sourceTree = "<group>"; };
 		790393702D4CD63A0022E293 /* HomeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabView.swift; sourceTree = "<group>"; };
 		790393732D4CDC750022E293 /* ZeroPostApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroPostApi.swift; sourceTree = "<group>"; };
 		790393762D4CDE470022E293 /* ZPosts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPosts.swift; sourceTree = "<group>"; };
@@ -5098,6 +5101,7 @@
 				185454D62CFEFC79003CA957 /* ValidationUtil.swift */,
 				79FC2A482DCAA79F00D14182 /* LinkPreviewUtil.swift */,
 				18D5D9C02CEBB70300107940 /* ZeroRewardFAQs.swift */,
+				7902C42A2E3176D40002F0A5 /* ZeroWalletUtil.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -10219,6 +10223,7 @@
 				18E9A5332C9829970082DDA4 /* IdentityConfirmedScreenViewModelProtocol.swift in Sources */,
 				18E9A5342C9829970082DDA4 /* ImageCache.swift in Sources */,
 				185454E22CFF0EEB003CA957 /* CompleteProfileScreenViewModel.swift in Sources */,
+				7902C42C2E3176D90002F0A5 /* ZeroWalletUtil.swift in Sources */,
 				799D857F2E2703A7000A362A /* ReceiveTransactionView.swift in Sources */,
 				18E9A5352C9829970082DDA4 /* ImageRoomTimelineItem.swift in Sources */,
 				18E9A5362C9829970082DDA4 /* ImageRoomTimelineItemContent.swift in Sources */,
@@ -11658,6 +11663,7 @@
 				30E5628F74AD3C27A061BF25 /* QRCodeLoginScreenViewModel.swift in Sources */,
 				185454F02D0042F7003CA957 /* SecureInputField.swift in Sources */,
 				E9D2ED1C4186931E3D5FDA4E /* QRCodeLoginScreenViewModelProtocol.swift in Sources */,
+				7902C42B2E3176D90002F0A5 /* ZeroWalletUtil.swift in Sources */,
 				18D5D9B12CEB733C00107940 /* UserRewardsSettingsScreenModels.swift in Sources */,
 				18C853012D11A135009AF206 /* WalletConnectService.swift in Sources */,
 				FDD5B4B616D9FF4DE3E9A418 /* QRCodeScannerView.swift in Sources */,

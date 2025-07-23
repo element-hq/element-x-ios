@@ -21,6 +21,8 @@ struct TransferTokenViewState: BindableState {
     var tokenAsset: ZWalletToken?
     var tokenAmount: String?
     
+    var meowPrice: ZeroCurrency?
+    
     // Recipient
     var recipientsListMode: WalletRecipientsListMode = .empty
     var placeholderRecipeints: [WalletRecipient] {

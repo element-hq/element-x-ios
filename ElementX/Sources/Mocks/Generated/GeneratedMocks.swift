@@ -5620,6 +5620,70 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return getUserRewardsShouldCheckRewardsIntiamtionReturnValue
         }
     }
+    //MARK: - getZeroMeowPrice
+
+    var getZeroMeowPriceUnderlyingCallsCount = 0
+    var getZeroMeowPriceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getZeroMeowPriceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getZeroMeowPriceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getZeroMeowPriceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getZeroMeowPriceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getZeroMeowPriceCalled: Bool {
+        return getZeroMeowPriceCallsCount > 0
+    }
+
+    var getZeroMeowPriceUnderlyingReturnValue: Result<ZeroCurrency, ClientProxyError>!
+    var getZeroMeowPriceReturnValue: Result<ZeroCurrency, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getZeroMeowPriceUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZeroCurrency, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getZeroMeowPriceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getZeroMeowPriceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getZeroMeowPriceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getZeroMeowPriceClosure: (() async -> Result<ZeroCurrency, ClientProxyError>)?
+
+    func getZeroMeowPrice() async -> Result<ZeroCurrency, ClientProxyError> {
+        getZeroMeowPriceCallsCount += 1
+        if let getZeroMeowPriceClosure = getZeroMeowPriceClosure {
+            return await getZeroMeowPriceClosure()
+        } else {
+            return getZeroMeowPriceReturnValue
+        }
+    }
     //MARK: - dismissRewardsIntimation
 
     var dismissRewardsIntimationUnderlyingCallsCount = 0

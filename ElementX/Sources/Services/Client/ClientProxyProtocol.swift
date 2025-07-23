@@ -254,6 +254,9 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var showNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never> { get }
     
     func getUserRewards(shouldCheckRewardsIntiamtion: Bool) async -> Result<Void, ClientProxyError>
+    
+    func getZeroMeowPrice() async -> Result<ZeroCurrency, ClientProxyError>
+    
     func dismissRewardsIntimation()
     
     // MARK: - Zero Messenger Invite

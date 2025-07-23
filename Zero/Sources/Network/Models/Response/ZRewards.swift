@@ -16,4 +16,5 @@ public struct ZRewards: Codable {
 public struct ZeroCurrency: Codable {
     public let reference: String?
     public let price, diff: Double?
+    public let volume, cap, holders: Double?
 }

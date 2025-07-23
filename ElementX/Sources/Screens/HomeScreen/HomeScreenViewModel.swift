@@ -324,7 +324,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         case .loadMoreWalletNFTs:
             loadMoreWalletNFTs()
         case .startWalletTransaction(let type):
-            actionsSubject.send(.startWalletTransaction(self, type))
+            actionsSubject.send(.startWalletTransaction(self, type, state.meowPrice))
         case .reloadFeedMedia(let post):
             reloadFeedMedia(post)
         case .viewTransactionDetails(let walletTransactionId):
@@ -915,12 +915,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 async let balances = userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: nil)
 //                async let nfts = userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress, nextPage: nil)
                 async let transactions = userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress, nextPage: nil)
+                async let meowPrice = userSession.clientProxy.getZeroMeowPrice()
                 
-                let results = await (balances, transactions)
+                let results = await (balances, transactions, meowPrice)
+                if case .success(let meowPrice) = results.2 {
+                    state.meowPrice = meowPrice
+                }
                 if case .success(let walletTokenBalances) = results.0 {
                     var homeWalletContent: [HomeScreenWalletContent] = []
                     for token in walletTokenBalances.tokens {
-                        let content = HomeScreenWalletContent(walletToken: token)
+                        let content = HomeScreenWalletContent(walletToken: token, meowPrice: state.meowPrice)
                         homeWalletContent.append(content)
                     }
                     state.walletTokens = homeWalletContent.uniqued(on: \.id)
@@ -938,7 +942,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 if case .success(let walletTransactions) = results.1 {
                     var homeWalletContent: [HomeScreenWalletContent] = []
                     for transaction in walletTransactions.transactions {
-                        let content = HomeScreenWalletContent(walletTransaction: transaction)
+                        let content = HomeScreenWalletContent(walletTransaction: transaction, meowPrice: state.meowPrice)
                         homeWalletContent.append(content)
                     }
                     state.walletTransactions = homeWalletContent.uniqued(on: \.id)
@@ -957,7 +961,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 if case .success(let walletTokenBalances) = result {
                     var homeWalletContent: [HomeScreenWalletContent] = state.walletTokens
                     for token in walletTokenBalances.tokens {
-                        let content = HomeScreenWalletContent(walletToken: token)
+                        let content = HomeScreenWalletContent(walletToken: token, meowPrice: state.meowPrice)
                         homeWalletContent.append(content)
                     }
                     state.walletTokens = homeWalletContent.uniqued(on: \.id)
@@ -993,7 +997,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 if case .success(let walletTransactions) = result {
                     var homeWalletContent: [HomeScreenWalletContent] = state.walletTransactions
                     for transaction in walletTransactions.transactions {
-                        let content = HomeScreenWalletContent(walletTransaction: transaction)
+                        let content = HomeScreenWalletContent(walletTransaction: transaction, meowPrice: state.meowPrice)
                         homeWalletContent.append(content)
                     }
                     state.walletTransactions = homeWalletContent.uniqued(on: \.id)

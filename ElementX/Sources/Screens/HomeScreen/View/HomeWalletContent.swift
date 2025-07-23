@@ -146,32 +146,32 @@ struct HomeWalletContent: View {
             
             VStack(alignment: .leading, spacing: 0) {
                 
-                Spacer()
-                
-                VStack(alignment: .leading, spacing: 0) {
-                    HStack {
-                        Text("Balance")
-                            .font(.zero.bodyMD)
-                            .foregroundColor(.compound.textSecondary)
-                        
-                        CompoundIcon(showWalletBalance ? \.visibilityOn : \.visibilityOff, size: .custom(16), relativeTo: .body)
-                            .foregroundStyle(.compound.textSecondary)
-                            .onTapGesture {
-                                showWalletBalance.toggle()
-                            }
-                    }
-                    
-                    Text(showWalletBalance ? "******" : "$0")
-                        .font(.robotoMonoRegular(size: 22))
-                        .foregroundColor(.compound.textPrimary)
-                        .shadow(color: .white.opacity(0.5), radius: 8)
-                        .padding(.vertical, 4)
-                    
-//                    Text("+5.56%")
-//                        .font(.zero.bodyMD)
-//                        .foregroundColor(.zero.bgAccentRest)
-                }
-                .padding(.top, 6)
+//                Spacer()
+//                
+//                VStack(alignment: .leading, spacing: 0) {
+//                    HStack {
+//                        Text("Balance")
+//                            .font(.zero.bodyMD)
+//                            .foregroundColor(.compound.textSecondary)
+//                        
+//                        CompoundIcon(showWalletBalance ? \.visibilityOn : \.visibilityOff, size: .custom(16), relativeTo: .body)
+//                            .foregroundStyle(.compound.textSecondary)
+//                            .onTapGesture {
+//                                showWalletBalance.toggle()
+//                            }
+//                    }
+//                    
+//                    Text(showWalletBalance ? "******" : "$0")
+//                        .font(.robotoMonoRegular(size: 22))
+//                        .foregroundColor(.compound.textPrimary)
+//                        .shadow(color: .white.opacity(0.5), radius: 8)
+//                        .padding(.vertical, 4)
+//                    
+////                    Text("+5.56%")
+////                        .font(.zero.bodyMD)
+////                        .foregroundColor(.zero.bgAccentRest)
+//                }
+//                .padding(.top, 6)
                 
                 Spacer()
                 
@@ -190,30 +190,30 @@ struct HomeWalletContent: View {
     @ViewBuilder
     private var compatCardDetails: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack {
-                    Text("Balance")
-                        .font(.zero.bodyMD)
-                        .foregroundColor(.compound.textSecondary)
-                    
-                    CompoundIcon(showWalletBalance ? \.visibilityOn : \.visibilityOff, size: .custom(16), relativeTo: .body)
-                        .foregroundStyle(.compound.textSecondary)
-                        .onTapGesture {
-                            showWalletBalance.toggle()
-                        }
-                }
-                
-                Text(showWalletBalance ? "******" : "$0")
-                    .font(.robotoMonoRegular(size: 22))
-                    .foregroundColor(.compound.textPrimary)
-                    .shadow(color: .white.opacity(0.5), radius: 8)
-                    .padding(.vertical, 4)
-                
-//                Text("+5.56%")
-//                    .font(.zero.bodyMD)
-//                    .foregroundColor(.zero.bgAccentRest)
-            }
-            .padding(.vertical, 4)
+//            VStack(alignment: .leading, spacing: 0) {
+//                HStack {
+//                    Text("Balance")
+//                        .font(.zero.bodyMD)
+//                        .foregroundColor(.compound.textSecondary)
+//                    
+//                    CompoundIcon(showWalletBalance ? \.visibilityOn : \.visibilityOff, size: .custom(16), relativeTo: .body)
+//                        .foregroundStyle(.compound.textSecondary)
+//                        .onTapGesture {
+//                            showWalletBalance.toggle()
+//                        }
+//                }
+//                
+//                Text(showWalletBalance ? "******" : "$0")
+//                    .font(.robotoMonoRegular(size: 22))
+//                    .foregroundColor(.compound.textPrimary)
+//                    .shadow(color: .white.opacity(0.5), radius: 8)
+//                    .padding(.vertical, 4)
+//                
+////                Text("+5.56%")
+////                    .font(.zero.bodyMD)
+////                    .foregroundColor(.zero.bgAccentRest)
+//            }
+//            .padding(.vertical, 4)
             
             Spacer()
             

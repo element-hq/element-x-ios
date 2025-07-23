@@ -9,6 +9,7 @@ import Combine
 import SwiftUI
 
 struct TransferTokenCoordinatorParams {
+    let meowPrice: ZeroCurrency?
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -29,7 +30,8 @@ final class TransferTokenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: TransferTokenCoordinatorParams) {
-        viewModel = TransferTokenViewModel(clientProxy: parameters.clientProxy,
+        viewModel = TransferTokenViewModel(meowPrice: parameters.meowPrice,
+                                           clientProxy: parameters.clientProxy,
                                            mediaProvider: parameters.mediaProvider,
                                            userIndicatorController: parameters.userIndicatorController)
         viewModel.actions

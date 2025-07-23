@@ -580,8 +580,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     presentFeedDetailsScreen(post, feedProtocol: feedProtocol)
                 case .openPostUserProfile(let profile, let feedProtocol):
                     startUserProfileWithFeedFlow(userID: nil, profile: profile, feedProtocol: feedProtocol)
-                case .startWalletTransaction(let walletTransactionProtocol, let type):
-                    startZeroWalletTransactionsFlow(walletTransactionProtocol, type: type)
+                case .startWalletTransaction(let walletTransactionProtocol, let type, let meowPrice):
+                    startZeroWalletTransactionsFlow(walletTransactionProtocol, type: type, meowPrice: meowPrice)
                 }
             }
             .store(in: &cancellables)
@@ -1304,12 +1304,15 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func startZeroWalletTransactionsFlow(_ walletTransactionProtocol: WalletTransactionProtocol, type: WalletTransactionType) {
+    private func startZeroWalletTransactionsFlow(_ walletTransactionProtocol: WalletTransactionProtocol,
+                                                 type: WalletTransactionType,
+                                                 meowPrice: ZeroCurrency?) {
         let flowCoordinator = ZeroWalletTransactionsFlowCoordinator(rootStackCoordinator: detailNavigationStackCoordinator,
                                                                     userSession: userSession,
                                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                     appMediator: appMediator,
-                                                                    transactionType: type)
+                                                                    transactionType: type,
+                                                                    meowPrice: meowPrice)
         flowCoordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             

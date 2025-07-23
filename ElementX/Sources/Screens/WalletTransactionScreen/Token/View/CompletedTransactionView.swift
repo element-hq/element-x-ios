@@ -48,7 +48,12 @@ struct CompletedTransactionView: View {
                             .font(.compound.headingMDBold)
                             .foregroundStyle(.compound.textPrimary)
                     }
-                    .padding(.vertical, 12)
+                    .padding(.top, 12)
+                    
+                    Text(ZeroWalletUtil.shared.meowPriceFormatted(tokenAmount: amount, refPrice: context.viewState.meowPrice))
+                        .font(.compound.bodyLGSemibold)
+                        .foregroundStyle(.compound.textSecondary)
+                        .padding(.top, 4)
                 }
                 
                 Spacer()

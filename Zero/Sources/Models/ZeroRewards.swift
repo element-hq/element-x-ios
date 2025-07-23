@@ -99,7 +99,7 @@ extension Double {
         return numberFormatter.string(from: NSNumber(value: self)) ?? String(self)
     }
     
-    func formatToSuffix() -> String {
+    func formatToSuffix(maxFracDigits: Int = 2) -> String {
         let suffixes = ["", "K", "M", "B", "T", "P", "E"]
         var value = self
         var index = 0
@@ -111,7 +111,7 @@ extension Double {
         
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
-        numberFormatter.maximumFractionDigits = 2
+        numberFormatter.maximumFractionDigits = maxFracDigits
         numberFormatter.minimumFractionDigits = 0
         
         if let formattedValue = numberFormatter.string(from: NSNumber(value: value)) {

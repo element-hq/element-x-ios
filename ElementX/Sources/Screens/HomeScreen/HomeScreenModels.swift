@@ -28,7 +28,7 @@ enum HomeScreenViewModelAction {
     case logout
     case postTapped(_ post: HomeScreenPost, feedProtocol: FeedProtocol)
     case openPostUserProfile(_ profile: ZPostUserProfile, feedProtocol: FeedProtocol)
-    case startWalletTransaction(WalletTransactionProtocol, WalletTransactionType)
+    case startWalletTransaction(WalletTransactionProtocol, WalletTransactionType, ZeroCurrency?)
 }
 
 enum HomeScreenViewAction {
@@ -199,6 +199,8 @@ struct HomeScreenViewState: BindableState {
     var walletTokenNextPageParams: NextPageParams? = nil
     var walletNFTsNextPageParams: NextPageParams? = nil
     var walletTransactionsNextPageParams: TransactionNextPageParams? = nil
+    
+    var meowPrice: ZeroCurrency? = nil
     
     var roomListMode: HomeScreenRoomListMode = .skeletons
     var postListMode: HomeScreenPostListMode = .skeletons
@@ -732,7 +734,7 @@ extension HomeScreenPostMediaInfo {
 }
 
 extension HomeScreenWalletContent {
-    init (walletToken: ZWalletToken) {
+    init (walletToken: ZWalletToken, meowPrice: ZeroCurrency?) {
         self.init(id: walletToken.tokenAddress,
                   icon: walletToken.logo,
                   header: nil,
@@ -742,7 +744,7 @@ extension HomeScreenWalletContent {
                   description: nil,
                   actionPreText: nil,
                   actionText: "\(walletToken.formattedAmount) \(walletToken.symbol.uppercased())",
-                  actionPostText: nil)
+                  actionPostText: walletToken.meowPriceFormatted(ref: meowPrice))
     }
     
     init(walletNFT: NFT) {
@@ -758,7 +760,7 @@ extension HomeScreenWalletContent {
                   actionPostText: nil)
     }
     
-    init(walletTransaction: WalletTransaction) {
+    init(walletTransaction: WalletTransaction, meowPrice: ZeroCurrency?) {
         let isTransactionReceived = walletTransaction.action.lowercased() == "receive"
         let tokenSymbol = walletTransaction.token.symbol.uppercased()
         self.init(id: walletTransaction.hash,
@@ -770,6 +772,6 @@ extension HomeScreenWalletContent {
                   description: nil,
                   actionPreText: nil,
                   actionText: "\(walletTransaction.formattedAmount) \(tokenSymbol)",
-                  actionPostText: nil)
+                  actionPostText: walletTransaction.meowPriceFormatted(ref: meowPrice))
     }
 }

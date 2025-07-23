@@ -1023,6 +1023,16 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func getZeroMeowPrice() async -> Result<ZeroCurrency, ClientProxyError> {
+        let result = try! await zeroApiProxy.rewardsApi.loadZeroCurrenyRate()
+        switch result {
+        case .success(let currency):
+            return .success(currency)
+        case .failure(let error):
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func dismissRewardsIntimation() {
         Task {
             try await Task.sleep(for: .seconds(3))

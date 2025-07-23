@@ -19,6 +19,7 @@ class ZeroWalletTransactionsFlowCoordinator: FlowCoordinatorProtocol {
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
     private let startWithTransactionType: WalletTransactionType
+    private let meowPrice: ZeroCurrency?
     
     private let actionsSubject: PassthroughSubject<ZeroWalletTransactionsFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<ZeroWalletTransactionsFlowCoordinatorAction, Never> {
@@ -31,12 +32,14 @@ class ZeroWalletTransactionsFlowCoordinator: FlowCoordinatorProtocol {
          userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol,
-         transactionType: WalletTransactionType) {
+         transactionType: WalletTransactionType,
+         meowPrice: ZeroCurrency?) {
         self.rootStackCoordinator = rootStackCoordinator
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
         self.startWithTransactionType = transactionType
+        self.meowPrice = meowPrice
     }
     
     func start() {
@@ -62,7 +65,8 @@ class ZeroWalletTransactionsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentWalletTokenTransferSheet() {
         let stackCoordinator = NavigationStackCoordinator()
-        let transferTokenCoordinator = TransferTokenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
+        let transferTokenCoordinator = TransferTokenCoordinator(parameters: .init(meowPrice: meowPrice,
+                                                                                  clientProxy: userSession.clientProxy,
                                                                                   mediaProvider: userSession.mediaProvider,
                                                                                   userIndicatorController: userIndicatorController))
         transferTokenCoordinator.actions
