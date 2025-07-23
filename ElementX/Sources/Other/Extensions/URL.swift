@@ -26,7 +26,7 @@ extension URL {
 
     /// The base directory where all session data is stored.
     static var sessionsBaseDirectory: URL {
-        let applicationSupportSessionsURL = applicationSupportBaseDirectory.appendingPathComponent("Sessions", isDirectory: true)
+        let applicationSupportSessionsURL = applicationSupportBaseDirectory.appending(component: "Sessions", directoryHint: .isDirectory)
         
         try? FileManager.default.createDirectoryIfNeeded(at: applicationSupportSessionsURL)
 
@@ -36,9 +36,9 @@ extension URL {
     /// The base directory where all application support data is stored.
     static var applicationSupportBaseDirectory: URL {
         var url = appGroupContainerDirectory
-            .appendingPathComponent("Library", isDirectory: true)
-            .appendingPathComponent("Application Support", isDirectory: true)
-            .appendingPathComponent(InfoPlistReader.main.baseBundleIdentifier, isDirectory: true)
+            .appending(component: "Library", directoryHint: .isDirectory)
+            .appending(component: "Application Support", directoryHint: .isDirectory)
+            .appending(component: InfoPlistReader.main.baseBundleIdentifier, directoryHint: .isDirectory)
 
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         
@@ -56,10 +56,10 @@ extension URL {
     /// The base directory where all application support data is stored.
     static var sessionCachesBaseDirectory: URL {
         let url = appGroupContainerDirectory
-            .appendingPathComponent("Library", isDirectory: true)
-            .appendingPathComponent("Caches", isDirectory: true)
-            .appendingPathComponent(InfoPlistReader.main.baseBundleIdentifier, isDirectory: true)
-            .appendingPathComponent("Sessions", isDirectory: true)
+            .appending(component: "Library", directoryHint: .isDirectory)
+            .appending(component: "Caches", directoryHint: .isDirectory)
+            .appending(component: InfoPlistReader.main.baseBundleIdentifier, directoryHint: .isDirectory)
+            .appending(component: "Sessions", directoryHint: .isDirectory)
 
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         
@@ -75,7 +75,7 @@ extension URL {
     /// Make sure to manually tidy up any files you place in here once you've transferred them from one bundle to another.
     static var appGroupTemporaryDirectory: URL {
         let url = appGroupContainerDirectory
-            .appendingPathComponent("tmp", isDirectory: true)
+            .appending(component: "tmp", directoryHint: .isDirectory)
 
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         
