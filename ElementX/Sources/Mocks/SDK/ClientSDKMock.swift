@@ -43,7 +43,7 @@ extension ClientSDKMock {
         userIdServerNameThrowableError = MockError.generic
         serverReturnValue = "https://\(configuration.serverAddress)"
         homeserverReturnValue = configuration.homeserverURL
-        urlForOidcOidcConfigurationPromptLoginHintDeviceIdReturnValue = OAuthAuthorizationDataSDKMock(configuration: configuration)
+        urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReturnValue = OAuthAuthorizationDataSDKMock(configuration: configuration)
         loginUsernamePasswordInitialDeviceNameDeviceIdClosure = { username, password, _, _ in
             guard username == configuration.validCredentials.username,
                   password == configuration.validCredentials.password else {
@@ -56,7 +56,8 @@ extension ClientSDKMock {
         getUrlUrlClosure = { url in
             guard url.contains(".well-known/element/element.json") else { throw MockError.generic }
             if let elementWellKnown = configuration.elementWellKnown {
-                return elementWellKnown
+                guard let data = elementWellKnown.data(using: .utf8) else { fatalError() }
+                return data
             } else {
                 throw MockError.generic
             }

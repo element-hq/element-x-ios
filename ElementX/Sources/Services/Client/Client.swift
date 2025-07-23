@@ -21,11 +21,7 @@ extension ClientProtocol {
                 return .failure(.invalidServerName)
             }
             
-            let response = try await getUrl(url: url.absoluteString)
-            
-            guard let data = response.data(using: .utf8) else {
-                return .failure(.invalidResponse)
-            }
+            let data = try await getUrl(url: url.absoluteString)
             
             return .success(data)
         } catch {
