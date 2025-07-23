@@ -2168,13 +2168,13 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var getUrlUrlReceivedUrl: String?
     open var getUrlUrlReceivedInvocations: [String] = []
 
-    var getUrlUrlUnderlyingReturnValue: String!
-    open var getUrlUrlReturnValue: String! {
+    var getUrlUrlUnderlyingReturnValue: Data!
+    open var getUrlUrlReturnValue: Data! {
         get {
             if Thread.isMainThread {
                 return getUrlUrlUnderlyingReturnValue
             } else {
-                var returnValue: String? = nil
+                var returnValue: Data? = nil
                 DispatchQueue.main.sync {
                     returnValue = getUrlUrlUnderlyingReturnValue
                 }
@@ -2192,9 +2192,9 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             }
         }
     }
-    open var getUrlUrlClosure: ((String) async throws -> String)?
+    open var getUrlUrlClosure: ((String) async throws -> Data)?
 
-    open override func getUrl(url: String) async throws -> String {
+    open override func getUrl(url: String) async throws -> Data {
         if let error = getUrlUrlThrowableError {
             throw error
         }
