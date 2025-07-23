@@ -17,7 +17,7 @@ class LoggingTests: XCTestCase {
     }
 
     override func setUpWithError() throws {
-        Tracing.deleteLogFiles()
+        Tracing.deleteLogFiles(in: Tracing.logsDirectory)
     }
     
     func testLogging() async throws {

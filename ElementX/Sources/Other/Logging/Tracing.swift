@@ -109,9 +109,13 @@ enum Tracing {
     }
     
     /// Delete all log files.
-    static func deleteLogFiles() {
+    static func deleteLogFiles(in directory: URL) {
         let fileManager = FileManager.default
-        for logFileURL in logFiles {
+        
+        // We don't simply delete logsDirectory as once upon a time the logs
+        // we written to the very top-level of the app group container and
+        // there's a migration in place for old users of the app.
+        for logFileURL in logFiles(in: directory) {
             try? fileManager.removeItem(at: logFileURL)
         }
     }

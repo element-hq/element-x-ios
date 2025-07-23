@@ -401,7 +401,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         if oldVersion < Version(1, 6, 7) {
-            Tracing.deleteLogFiles()
+            Tracing.deleteLogFiles(in: Tracing.legacyLogsDirectory)
             MXLog.info("Migrating to v1.6.7, log files have been wiped")
         }
         
