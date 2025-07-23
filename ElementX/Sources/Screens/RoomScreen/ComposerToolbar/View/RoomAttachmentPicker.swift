@@ -40,14 +40,12 @@ struct RoomAttachmentPicker: View {
             }
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
             
-            if !context.viewState.isInThread {
-                Button {
-                    context.send(viewAction: .attach(.poll))
-                } label: {
-                    Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
-                }
-                .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
+            Button {
+                context.send(viewAction: .attach(.poll))
+            } label: {
+                Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
             }
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
             
             if context.viewState.isLocationSharingEnabled {
                 Button {

@@ -76,7 +76,6 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
         
         composerViewModel = ComposerToolbarViewModel(initialText: nil,
                                                      roomProxy: parameters.roomProxy,
-                                                     isInThread: true,
                                                      wysiwygViewModel: wysiwygViewModel,
                                                      completionSuggestionService: parameters.completionSuggestionService,
                                                      mediaProvider: parameters.mediaProvider,
