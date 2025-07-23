@@ -7,15 +7,9 @@
 
 import Foundation
 
-extension URL: @retroactive ExpressibleByStringLiteral {
-    public init(stringLiteral value: StaticString) {
-        guard let url = URL(string: "\(value)") else {
-            fatalError("The static string used to create this URL is invalid")
-        }
+// MARK: - Custom URLs
 
-        self = url
-    }
-
+extension URL {
     /// The URL of the primary app group container.
     static var appGroupContainerDirectory: URL {
         guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: InfoPlistReader.main.appGroupIdentifier) else {
@@ -104,6 +98,45 @@ extension URL: @retroactive ExpressibleByStringLiteral {
         return nil
     }
     
+    // MARK: Mocks
+    
+    static var mockMXCAudio: URL { "mxc://matrix.org/1234567890AuDiO" }
+    static var mockMXCFile: URL { "mxc://matrix.org/1234567890FiLe" }
+    static var mockMXCImage: URL { "mxc://matrix.org/1234567890ImAgE" }
+    static var mockMXCVideo: URL { "mxc://matrix.org/1234567890ViDeO" }
+    static var mockMXCAvatar: URL { "mxc://matrix.org/1234567890AvAtAr" }
+    static var mockMXCUserAvatar: URL { "mxc://matrix.org/1234567890AvAtArUsEr" }
+}
+
+// MARK: - Helpers
+
+extension URL: @retroactive ExpressibleByStringLiteral {
+    public init(stringLiteral value: StaticString) {
+        guard let url = URL(string: "\(value)") else {
+            fatalError("The static string used to create this URL is invalid")
+        }
+        
+        self = url
+    }
+    
+    /// Sanitises the URL for use as the name of a directory.
+    func asDirectoryName() -> String {
+        absoluteString.asURLDirectoryName()
+    }
+}
+
+extension String {
+    /// Assumes that the string is a URL and sanitises it for use as the name of a directory.
+    func asURLDirectoryName() -> String {
+        replacingOccurrences(of: "https://", with: "")
+            .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+            .replacing(/[:\/\p{C}]/, with: "-")
+    }
+}
+
+// MARK: - Phishing Confirmation URL
+
+extension URL {
     static let confirmationScheme = "confirm"
     
     var requiresConfirmation: Bool {
@@ -117,15 +150,6 @@ extension URL: @retroactive ExpressibleByStringLiteral {
         }
         return ConfirmURLParameters(queryItems: queryItems)
     }
-    
-    // MARK: Mocks
-    
-    static var mockMXCAudio: URL { "mxc://matrix.org/1234567890AuDiO" }
-    static var mockMXCFile: URL { "mxc://matrix.org/1234567890FiLe" }
-    static var mockMXCImage: URL { "mxc://matrix.org/1234567890ImAgE" }
-    static var mockMXCVideo: URL { "mxc://matrix.org/1234567890ViDeO" }
-    static var mockMXCAvatar: URL { "mxc://matrix.org/1234567890AvAtAr" }
-    static var mockMXCUserAvatar: URL { "mxc://matrix.org/1234567890AvAtArUsEr" }
 }
 
 struct ConfirmURLParameters {

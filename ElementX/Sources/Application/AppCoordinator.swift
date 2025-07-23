@@ -18,7 +18,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
-    private let targetConfiguration: Target.Configuration
+    private let targetConfiguration: Target.ConfigurationResult
     private let appMediator: AppMediator
     private let appSettings: AppSettings
     private let appDelegate: AppDelegate
@@ -77,7 +77,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         targetConfiguration = Target.mainApp.configure(logLevel: appSettings.logLevel,
                                                        traceLogPacks: appSettings.traceLogPacks,
-                                                       sentryURL: appSettings.bugReportSentryRustURL)
+                                                       sentryURL: appSettings.bugReportSentryRustURL,
+                                                       rageshakeURL: appSettings.bugReportRageshakeURL,
+                                                       appHooks: appHooks)
         
         let appName = InfoPlistReader.main.bundleDisplayName
         let appVersion = InfoPlistReader.main.bundleShortVersionString
@@ -123,13 +125,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         notificationManager.delegate = self
         notificationManager.start()
-        
-        appSettings.bugReportRageshakeURL.publisher
-            .sink { [weak self] _ in
-                guard let self else { return }
-                appHooks.targetHook.update(targetConfiguration, with: appSettings)
-            }
-            .store(in: &cancellables)
         
         guard let currentVersion = Version(InfoPlistReader(bundle: .main).bundleShortVersionString) else {
             fatalError("The app's version number **must** use semver for migration purposes.")

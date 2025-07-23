@@ -81,7 +81,7 @@ targets:
     - path: ../Sources
     - path: ../SupportingFiles
     - path: ../../ElementX/Sources/AppHooks/AppHooks.swift
-    - path: ../../ElementX/Sources/AppHooks/Hooks/TargetHook.swift
+    - path: ../../ElementX/Sources/AppHooks/Hooks/TracingHook.swift
     - path: ../../ElementX/Sources/AppHooks/Hooks/ClientBuilderHook.swift
     - path: ../../ElementX/Sources/AppHooks/Hooks/RemoteSettingsHook.swift
     - path: ../../Secrets/Secrets.swift

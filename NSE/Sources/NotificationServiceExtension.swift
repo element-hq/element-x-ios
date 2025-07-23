@@ -29,7 +29,7 @@ import UserNotifications
 // notification.
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
-    private static var targetConfiguration: Target.Configuration?
+    private static var targetConfiguration: Target.ConfigurationResult?
     private let settings: CommonSettingsProtocol = AppSettings()
     private let appHooks: AppHooks
     
@@ -53,17 +53,12 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         if Self.targetConfiguration == nil {
             Self.targetConfiguration = Target.nse.configure(logLevel: settings.logLevel,
                                                             traceLogPacks: settings.traceLogPacks,
-                                                            sentryURL: nil)
+                                                            sentryURL: nil,
+                                                            rageshakeURL: settings.bugReportRageshakeURL,
+                                                            appHooks: appHooks)
         }
         
         super.init()
-        
-        settings.bugReportRageshakeURL.publisher
-            .sink { [weak self] _ in
-                guard let self, let targetConfiguration = Self.targetConfiguration else { return }
-                appHooks.targetHook.update(targetConfiguration, with: settings)
-            }
-            .store(in: &cancellables)
     }
     
     override func didReceive(_ request: UNNotificationRequest,

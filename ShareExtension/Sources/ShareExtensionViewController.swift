@@ -10,7 +10,7 @@ import IntentsUI
 import SwiftUI
 
 class ShareExtensionViewController: UIViewController {
-    private static var targetConfiguration: Target.Configuration?
+    private static var targetConfiguration: Target.ConfigurationResult?
     private let appSettings: CommonSettingsProtocol = AppSettings()
     private var appHooks: AppHooks!
     
@@ -30,15 +30,10 @@ class ShareExtensionViewController: UIViewController {
         if Self.targetConfiguration == nil {
             Self.targetConfiguration = Target.shareExtension.configure(logLevel: appSettings.logLevel,
                                                                        traceLogPacks: appSettings.traceLogPacks,
-                                                                       sentryURL: nil)
+                                                                       sentryURL: nil,
+                                                                       rageshakeURL: appSettings.bugReportRageshakeURL,
+                                                                       appHooks: appHooks)
         }
-        
-        appSettings.bugReportRageshakeURL.publisher
-            .sink { [weak self] _ in
-                guard let self, let targetConfiguration = Self.targetConfiguration else { return }
-                appHooks.targetHook.update(targetConfiguration, with: appSettings)
-            }
-            .store(in: &cancellables)
         
         addChild(hostingController)
         view.addMatchedSubview(hostingController.view)
