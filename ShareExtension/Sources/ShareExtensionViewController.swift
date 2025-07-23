@@ -5,16 +5,19 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import IntentsUI
 import SwiftUI
 
 class ShareExtensionViewController: UIViewController {
-    private static var targetConfiguration: Target.Configuration?
+    private static var targetConfiguration: Target.ConfigurationResult?
     private let appSettings: CommonSettingsProtocol = AppSettings()
     private var appHooks: AppHooks!
     
     private let keychainController = KeychainController(service: .sessions,
                                                         accessGroup: InfoPlistReader.main.keychainAccessGroupIdentifier)
+    
+    private var cancellables: Set<AnyCancellable> = []
     
     private let hostingController = UIHostingController(rootView: ShareExtensionView())
     
@@ -27,7 +30,9 @@ class ShareExtensionViewController: UIViewController {
         if Self.targetConfiguration == nil {
             Self.targetConfiguration = Target.shareExtension.configure(logLevel: appSettings.logLevel,
                                                                        traceLogPacks: appSettings.traceLogPacks,
-                                                                       sentryURL: nil)
+                                                                       sentryURL: nil,
+                                                                       rageshakeURL: appSettings.bugReportRageshakeURL,
+                                                                       appHooks: appHooks)
         }
         
         addChild(hostingController)

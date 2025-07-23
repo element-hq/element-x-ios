@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Foundation
 import MatrixRustSDK
 
@@ -32,10 +33,14 @@ enum Target: String {
     
     /// Configures the target with logging and an appropriate runtime.
     ///
-    /// Returns a `Configuration` which should be stored to
+    /// Returns a `ConfigurationResult` which should be stored to
     ///   a) detect whether the platform is already configured.
-    ///   b) reconfigure the platform if necessary.
-    func configure(logLevel: LogLevel, traceLogPacks: Set<TraceLogPack>, sentryURL: URL?) -> Configuration {
+    ///   b) automatically reconfigure the platform as necessary.
+    func configure(logLevel: LogLevel,
+                   traceLogPacks: Set<TraceLogPack>,
+                   sentryURL: URL?,
+                   rageshakeURL: RemotePreference<RageshakeConfiguration>,
+                   appHooks: AppHooks) -> ConfigurationResult {
         let tracingConfiguration = Tracing.buildConfiguration(logLevel: logLevel,
                                                               traceLogPacks: traceLogPacks,
                                                               currentTarget: rawValue,
@@ -54,14 +59,21 @@ enum Target: String {
         
         MXLog.configure(currentTarget: rawValue)
         
-        return Configuration(tracingConfiguration: tracingConfiguration)
+        let hookCancellable = rageshakeURL.publisher
+            .sink { _ in
+                appHooks.tracingHook.update(tracingConfiguration, with: rageshakeURL)
+            }
+        
+        return ConfigurationResult(hookCancellable: hookCancellable)
     }
     
-    /// Represents the configuration that was applied by ``configure(logLevel:traceLogPacks:sentryURL:)``.
-    struct Configuration {
-        /// The configuration applied when calling ``configure(logLevel:traceLogPacks:sentryURL:)``.
-        ///
-        /// **Note:** This is immutable and won't be updated to reflect further changes.
-        let tracingConfiguration: TracingConfiguration
+    /// The result of calling ``configure(logLevel:traceLogPacks:sentryURL:)``.
+    /// This must be stored - see the docs on the configure method to learn more.
+    struct ConfigurationResult {
+        private let hookCancellable: AnyCancellable
+        
+        init(hookCancellable: AnyCancellable) {
+            self.hookCancellable = hookCancellable
+        }
     }
 }

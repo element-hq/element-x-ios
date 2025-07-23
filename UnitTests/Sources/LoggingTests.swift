@@ -10,7 +10,7 @@
 import XCTest
 
 class LoggingTests: XCTestCase {
-    static var targetConfiguration: Target.Configuration?
+    static var targetConfiguration: Target.ConfigurationResult?
     
     private enum Constants {
         static let genericFailure = "Test failed"
@@ -25,7 +25,11 @@ class LoggingTests: XCTestCase {
         XCTAssertTrue(Tracing.logFiles.isEmpty)
         
         if Self.targetConfiguration == nil {
-            Self.targetConfiguration = Target.tests.configure(logLevel: .info, traceLogPacks: [], sentryURL: nil)
+            Self.targetConfiguration = Target.tests.configure(logLevel: .info,
+                                                              traceLogPacks: [],
+                                                              sentryURL: nil,
+                                                              rageshakeURL: ServiceLocator.shared.settings.bugReportRageshakeURL,
+                                                              appHooks: AppHooks())
         }
         
         // There is something weird with Rust logging where the file writing handle doesn't
@@ -180,7 +184,11 @@ class LoggingTests: XCTestCase {
         
         // When logging that value
         if Self.targetConfiguration == nil {
-            Self.targetConfiguration = Target.tests.configure(logLevel: .info, traceLogPacks: [], sentryURL: nil)
+            Self.targetConfiguration = Target.tests.configure(logLevel: .info,
+                                                              traceLogPacks: [],
+                                                              sentryURL: nil,
+                                                              rageshakeURL: ServiceLocator.shared.settings.bugReportRageshakeURL,
+                                                              appHooks: AppHooks())
         }
         
         MXLog.info(textMessage)
