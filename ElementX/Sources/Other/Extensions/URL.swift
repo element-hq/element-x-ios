@@ -23,6 +23,13 @@ extension URL {
         
         return url
     }
+    
+    static var appGroupLogsDirectory: URL {
+        appGroupContainerDirectory
+            .appending(component: "Library", directoryHint: .isDirectory)
+            .appending(component: "Logs", directoryHint: .isDirectory)
+            .appending(component: InfoPlistReader.main.baseBundleIdentifier, directoryHint: .isDirectory)
+    }
 
     /// The base directory where all session data is stored.
     static var sessionsBaseDirectory: URL {

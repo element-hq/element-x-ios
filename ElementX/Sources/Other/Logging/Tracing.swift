@@ -17,9 +17,11 @@ enum Tracing {
         if ProcessInfo.isRunningIntegrationTests {
             "/Users/Shared"
         } else {
-            .appGroupContainerDirectory
+            .appGroupLogsDirectory
         }
     }
+    
+    static var legacyLogsDirectory: URL { .appGroupContainerDirectory }
     
     static let fileExtension = "log"
     
@@ -52,13 +54,17 @@ enum Tracing {
                      sentryDsn: sentryURL?.absoluteString)
     }
     
-    /// A list of all log file URLs, sorted chronologically. This is only public for testing purposes, within
-    /// the app please use ``copyLogs(to:)`` so that the files are name appropriates for QuickLook.
-    static var logFiles: [URL] {
+    /// A list of all log file URLs, sorted chronologically.
+    static var logFiles: [URL] { logFiles(in: logsDirectory) }
+    
+    /// Collect all of the logs in the given directory, sorting them chronologically.
+    private static func logFiles(in directory: URL) -> [URL] {
         var logFiles = [(url: URL, modificationDate: Date)]()
         
         let fileManager = FileManager.default
-        let enumerator = fileManager.enumerator(at: logsDirectory, includingPropertiesForKeys: [.contentModificationDateKey])
+        let enumerator = fileManager.enumerator(at: directory,
+                                                includingPropertiesForKeys: [.contentModificationDateKey],
+                                                options: .skipsSubdirectoryDescendants)
         
         // Find all *.log files and their modification dates.
         while let logURL = enumerator?.nextObject() as? URL {
@@ -76,6 +82,30 @@ enum Tracing {
         MXLog.info("logFiles: \(sortedFiles.map(\.lastPathComponent))")
         
         return sortedFiles
+    }
+    
+    static func migrateLogFiles() {
+        MXLog.info("Moving log files to \(logsDirectory)")
+        let fileManager = FileManager.default
+        let oldLogFiles = logFiles(in: legacyLogsDirectory)
+        
+        for oldFileURL in oldLogFiles {
+            do {
+                let newFileURL = logsDirectory.appending(component: oldFileURL.lastPathComponent)
+                try fileManager.moveItem(at: oldFileURL, to: newFileURL)
+                MXLog.info("Moved \(newFileURL.lastPathComponent)")
+            } catch {
+                MXLog.error("Failed to move \(oldFileURL.lastPathComponent): \(error.localizedDescription)")
+                
+                let nsError = error as NSError
+                if nsError.domain == NSCocoaErrorDomain, nsError.code == NSFileWriteFileExistsError {
+                    // By now there will already be some logs in the new directory, so there is likely to be
+                    // one log file that cannot be removed. As this is a one-off operation lets just delete it.
+                    MXLog.error("Attempting to delete log file \(oldFileURL.lastPathComponent)")
+                    try? fileManager.removeItem(at: oldFileURL)
+                }
+            }
+        }
     }
     
     /// Delete all log files.
