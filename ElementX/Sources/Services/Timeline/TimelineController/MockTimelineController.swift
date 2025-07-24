@@ -158,7 +158,7 @@ class MockTimelineController: TimelineControllerProtocol {
     func sendAudio(url: URL,
                    audioInfo: MatrixRustSDK.AudioInfo,
                    caption: String?,
-                   requestHandle: @MainActor (any MatrixRustSDK.SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
         if let timelineProxy {
             return await timelineProxy.sendAudio(url: url,
                                                  audioInfo: audioInfo,
@@ -172,7 +172,7 @@ class MockTimelineController: TimelineControllerProtocol {
     func sendFile(url: URL,
                   fileInfo: MatrixRustSDK.FileInfo,
                   caption: String?,
-                  requestHandle: @MainActor (any MatrixRustSDK.SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+                  requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
         if let timelineProxy {
             return await timelineProxy.sendFile(url: url,
                                                 fileInfo: fileInfo,
@@ -187,7 +187,7 @@ class MockTimelineController: TimelineControllerProtocol {
                    thumbnailURL: URL,
                    imageInfo: MatrixRustSDK.ImageInfo,
                    caption: String?,
-                   requestHandle: @MainActor (any MatrixRustSDK.SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
         if let timelineProxy {
             return await timelineProxy.sendImage(url: url,
                                                  thumbnailURL: thumbnailURL,
@@ -219,7 +219,7 @@ class MockTimelineController: TimelineControllerProtocol {
                    thumbnailURL: URL,
                    videoInfo: MatrixRustSDK.VideoInfo,
                    caption: String?,
-                   requestHandle: @MainActor (any MatrixRustSDK.SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
         if let timelineProxy {
             return await timelineProxy.sendVideo(url: url,
                                                  thumbnailURL: thumbnailURL,
@@ -234,7 +234,7 @@ class MockTimelineController: TimelineControllerProtocol {
     func sendVoiceMessage(url: URL,
                           audioInfo: MatrixRustSDK.AudioInfo,
                           waveform: [UInt16],
-                          requestHandle: @MainActor (any MatrixRustSDK.SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+                          requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
         if let timelineProxy {
             return await timelineProxy.sendVoiceMessage(url: url,
                                                         audioInfo: audioInfo,
