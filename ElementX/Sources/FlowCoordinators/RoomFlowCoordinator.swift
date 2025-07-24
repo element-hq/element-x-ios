@@ -304,7 +304,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (_, .presentMediaUploadPicker, .mediaUploadPicker(let source, _)):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
-                    fatalError()
+                    fatalError("Missing required TimelineController")
                 }
                 presentMediaUploadPickerWithSource(source, timelineController: timelineController, animated: animated)
                 
@@ -316,13 +316,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
             case (_, .presentMapNavigator(let mode), .mapNavigator):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
-                    fatalError()
+                    fatalError("Missing required TimelineController")
                 }
                 presentMapNavigator(interactionMode: mode, timelineController: timelineController, animated: animated)
 
             case (_, .presentPollForm(let mode), .pollForm):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
-                    fatalError()
+                    fatalError("Missing required TimelineController")
                 }
                 presentPollForm(mode: mode, timelineController: timelineController)
                 
@@ -396,13 +396,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     
             case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
-                    fatalError()
+                    fatalError("Missing required TimelineController")
                 }
                 presentPollForm(mode: mode, timelineController: timelineController)
                 
             case (_, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL, _)):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
-                    fatalError()
+                    fatalError("Missing required TimelineController")
                 }
                 presentMediaUploadPreviewScreen(for: fileURL, timelineController: timelineController, animated: animated)
                 
