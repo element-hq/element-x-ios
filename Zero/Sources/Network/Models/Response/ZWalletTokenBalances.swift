@@ -34,6 +34,10 @@ extension ZWalletToken {
     func meowPriceFormatted(ref: ZeroCurrency?) -> String {
         return ZeroWalletUtil.shared.meowPriceFormatted(tokenAmount: amount, refPrice: ref)
     }
+    
+    var isMeowToken: Bool {
+        return symbol.lowercased() == "MEOW".lowercased()
+    }
 }
 
 struct NextPageParams: Codable {
