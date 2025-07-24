@@ -309,7 +309,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentMediaUploadPickerWithSource(source, timelineController: timelineController, animated: animated)
                 
             case (_, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji, _)):
-                presentEmojiPicker(for: itemID, selectedEmoji: selectedEmoji)
+                guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
+                    fatalError("Missing required TimelineController")
+                }
+                presentEmojiPicker(for: itemID,
+                                   selectedEmoji: selectedEmoji,
+                                   timelineController: timelineController,
+                                   animated: animated)
                 
             case (_, .presentMessageForwarding(let forwardingItem), .messageForwarding):
                 presentMessageForwarding(with: forwardingItem)
@@ -557,8 +563,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .presentEmojiPicker(let itemID, let selectedEmojis):
-                    stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID,
-                                                              selectedEmojis: selectedEmojis))
+                    stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis),
+                                          userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .presentLocationPicker:
                     stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
@@ -656,8 +662,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                       description: description)),
                                       userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
             case .presentEmojiPicker(let itemID, let selectedEmojis):
-                stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID,
-                                                          selectedEmojis: selectedEmojis))
+                stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID, selectedEmojis: selectedEmojis),
+                                      userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
             case .presentRoomMemberDetails(let userID):
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
             case .presentMessageForwarding(let forwardingItem):
@@ -971,7 +977,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentEmojiPicker(for itemID: TimelineItemIdentifier, selectedEmoji: Set<String>) {
+    private func presentEmojiPicker(for itemID: TimelineItemIdentifier,
+                                    selectedEmoji: Set<String>,
+                                    timelineController: TimelineControllerProtocol,
+                                    animated: Bool) {
         let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: emojiProvider,
                                                             itemID: itemID, selectedEmojis: selectedEmoji)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
