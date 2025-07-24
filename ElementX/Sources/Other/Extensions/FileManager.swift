@@ -50,7 +50,7 @@ extension FileManager {
     /// - Parameter url: the file URL
     /// - Returns: the size in bytes
     func sizeForItem(at url: URL) throws -> Double {
-        let attributes = try attributesOfItem(atPath: url.path())
+        let attributes = try attributesOfItem(atPath: url.path(percentEncoded: false))
         
         guard let size = attributes[FileAttributeKey.size] as? Double else {
             throw FileManagerError.invalidFileSize
