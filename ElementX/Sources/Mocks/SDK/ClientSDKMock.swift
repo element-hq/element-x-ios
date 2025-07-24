@@ -55,9 +55,8 @@ extension ClientSDKMock {
         sessionReturnValue = configuration.session
         getUrlUrlClosure = { url in
             guard url.contains(".well-known/element/element.json") else { throw MockError.generic }
-            if let elementWellKnown = configuration.elementWellKnown {
-                guard let data = elementWellKnown.data(using: .utf8) else { fatalError() }
-                return data
+            if let elementWellKnownData = configuration.elementWellKnown?.data(using: .utf8) {
+                return elementWellKnownData
             } else {
                 throw MockError.generic
             }
