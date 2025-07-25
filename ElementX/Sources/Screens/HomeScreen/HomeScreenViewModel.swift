@@ -317,6 +317,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             applyCustomFilterToNotificationsList(tab)
         case .openMediaPreview(let mediaId, let key):
             displayFullScreenMedia(mediaId, key: key)
+        case .toggleWalletBalance(let show):
+            state.showWalletBalance = show
         case .loadMoreWalletTokens:
             loadMoreWalletTokenBalances()
         case .loadMoreWalletTransactions:
@@ -924,6 +926,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 if case .success(let walletTokenBalances) = results.0 {
                     var homeWalletContent: [HomeScreenWalletContent] = []
                     for token in walletTokenBalances.tokens {
+                        // set meow token balance amount for user
+                        if token.isMeowToken {
+                            setUserWalletBalance(token)
+                        }
                         let content = HomeScreenWalletContent(walletToken: token, meowPrice: state.meowPrice)
                         homeWalletContent.append(content)
                     }
@@ -1005,6 +1011,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 }
             }
         }
+    }
+    
+    private func setUserWalletBalance(_ token: ZWalletToken) {
+        state.walletBalance = ZeroWalletUtil.shared.meowPrice(tokenAmount: token.amount, refPrice: state.meowPrice)
     }
     
     private func extractAllRoomUsers(_ rooms: [RoomSummary]) {

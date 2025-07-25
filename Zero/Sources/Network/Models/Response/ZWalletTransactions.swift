@@ -37,6 +37,10 @@ extension WalletTransaction {
     func meowPriceFormatted(ref: ZeroCurrency?) -> String {
         return ZeroWalletUtil.shared.meowPriceFormatted(tokenAmount: amount, refPrice: ref)
     }
+    
+    var isMeowTokenTransaction: Bool {
+        return token.symbol.lowercased() == "MEOW".lowercased()
+    }
 }
 
 struct TransactionToken: Codable {

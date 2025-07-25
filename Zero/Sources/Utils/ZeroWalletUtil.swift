@@ -12,12 +12,16 @@ class ZeroWalletUtil {
     
     private init() { }
     
-    func meowPriceFormatted(tokenAmount: String?, refPrice: ZeroCurrency?) -> String {
+    func meowPrice(tokenAmount: String?, refPrice: ZeroCurrency?) -> Double {
         if let amount = Double(tokenAmount ?? "0"), amount > 0,
            let currency = refPrice, let price = currency.price {
-            return "$\((amount * price).formatToSuffix(maxFracDigits: 4))"
+            return amount * price
         } else {
-            return "-"
+            return 0
         }
+    }
+    
+    func meowPriceFormatted(tokenAmount: String?, refPrice: ZeroCurrency?) -> String {
+        return meowPrice(tokenAmount: tokenAmount, refPrice: refPrice).formatToThousandSeparatedString()
     }
 }

@@ -76,6 +76,7 @@ enum HomeScreenViewAction {
     case channelTapped(_ channel: HomeScreenChannel)
     case setNotificationFilter(_ tab: HomeNotificationsTab)
     
+    case toggleWalletBalance(show: Bool)
     case loadMoreWalletTokens
     case loadMoreWalletTransactions
     case loadMoreWalletNFTs
@@ -323,6 +324,12 @@ struct HomeScreenViewState: BindableState {
     }
         
     var claimRewardsState: ClaimRewardsState = .none
+    
+    var walletBalance: Double = 0
+    var showWalletBalance: Bool = true
+    var userWalletBalance: String {
+        showWalletBalance ? "$\(walletBalance.formatToThousandSeparatedString())" : "*****"
+    }
 }
 
 struct HomeScreenViewStateBindings {
@@ -744,7 +751,7 @@ extension HomeScreenWalletContent {
                   description: nil,
                   actionPreText: nil,
                   actionText: "\(walletToken.formattedAmount) \(walletToken.symbol.uppercased())",
-                  actionPostText: walletToken.meowPriceFormatted(ref: meowPrice))
+                  actionPostText: walletToken.isMeowToken ? walletToken.meowPriceFormatted(ref: meowPrice) : nil)
     }
     
     init(walletNFT: NFT) {
@@ -772,6 +779,6 @@ extension HomeScreenWalletContent {
                   description: nil,
                   actionPreText: nil,
                   actionText: "\(walletTransaction.formattedAmount) \(tokenSymbol)",
-                  actionPostText: walletTransaction.meowPriceFormatted(ref: meowPrice))
+                  actionPostText: walletTransaction.isMeowTokenTransaction ? walletTransaction.meowPriceFormatted(ref: meowPrice) : nil)
     }
 }

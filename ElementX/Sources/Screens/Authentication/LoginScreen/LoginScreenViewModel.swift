@@ -48,9 +48,17 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
             .weakAssign(to: \.state.homeserver, on: self)
             .store(in: &cancellables)
         
+        AppKit.instance.sessionSettlePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.startLoading(isInteractionBlocking: true)
+            }
+            .store(in: &cancellables)
+        
         AppKit.instance.sessionResponsePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] response in
+                self?.stopLoading()
                 switch response.result {
                 case let .response(value):
                     self?.loginWithWallet(token: value.stringRepresentation.replacingOccurrences(of: "\"", with: ""))

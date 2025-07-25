@@ -60,6 +60,10 @@ class WalletConnectService {
     private func disconnectAnyExistingWallet() async {
         do {
             try await AppKit.instance.cleanup()
+            if let currentSession = AppKit.instance.getSessions().first {
+                let topic = currentSession.topic
+                try await AppKit.instance.disconnect(topic: topic)
+            }
         } catch {
             print(error)
         }
@@ -75,7 +79,7 @@ class WalletConnectService {
     
     private func requestPersonalSignWithDelay() {
         Task {
-            try? await Task.sleep(for: .seconds(0.3))
+            try? await Task.sleep(for: .seconds(2))
             await requestWalletPersonalSign()
         }
     }
@@ -83,11 +87,11 @@ class WalletConnectService {
     private func requestWalletPersonalSign() async {
         do {
             guard let address = AppKit.instance.getAddress() else { return }
+            AppKit.instance.launchCurrentWallet()
             try await AppKit.instance.request(
                 .personal_sign(address: address,
                                message: "Sign with your wallet to log in to ZERO?")
             )
-            AppKit.instance.launchCurrentWallet()
         } catch {
             MXLog.debug("AppKit is not configured yet in walletConnectService")
         }
