@@ -9,19 +9,12 @@ import Foundation
 import UniformTypeIdentifiers
 import CryptoKit
 
-extension URL: @retroactive ExpressibleByStringLiteral {
-    public init(stringLiteral value: StaticString) {
-        guard let url = URL(string: "\(value)") else {
-            fatalError("The static string used to create this URL is invalid")
-        }
+// MARK: - Custom URLs
 
-        self = url
-    }
-    
+extension URL {
     static var dummayURL: URL {
         URL(string: "dummy://example.com")!
     }
-
     /// The URL of the primary app group container.
     static var appGroupContainerDirectory: URL {
         guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: InfoPlistReader.main.appGroupIdentifier) else {
@@ -35,10 +28,17 @@ extension URL: @retroactive ExpressibleByStringLiteral {
         
         return url
     }
+    
+    static var appGroupLogsDirectory: URL {
+        appGroupContainerDirectory
+            .appending(component: "Library", directoryHint: .isDirectory)
+            .appending(component: "Logs", directoryHint: .isDirectory)
+            .appending(component: InfoPlistReader.main.baseBundleIdentifier, directoryHint: .isDirectory)
+    }
 
     /// The base directory where all session data is stored.
     static var sessionsBaseDirectory: URL {
-        let applicationSupportSessionsURL = applicationSupportBaseDirectory.appendingPathComponent("Sessions", isDirectory: true)
+        let applicationSupportSessionsURL = applicationSupportBaseDirectory.appending(component: "Sessions", directoryHint: .isDirectory)
         
         try? FileManager.default.createDirectoryIfNeeded(at: applicationSupportSessionsURL)
 
@@ -48,9 +48,9 @@ extension URL: @retroactive ExpressibleByStringLiteral {
     /// The base directory where all application support data is stored.
     static var applicationSupportBaseDirectory: URL {
         var url = appGroupContainerDirectory
-            .appendingPathComponent("Library", isDirectory: true)
-            .appendingPathComponent("Application Support", isDirectory: true)
-            .appendingPathComponent(InfoPlistReader.main.baseBundleIdentifier, isDirectory: true)
+            .appending(component: "Library", directoryHint: .isDirectory)
+            .appending(component: "Application Support", directoryHint: .isDirectory)
+            .appending(component: InfoPlistReader.main.baseBundleIdentifier, directoryHint: .isDirectory)
 
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         
@@ -68,10 +68,10 @@ extension URL: @retroactive ExpressibleByStringLiteral {
     /// The base directory where all application support data is stored.
     static var sessionCachesBaseDirectory: URL {
         let url = appGroupContainerDirectory
-            .appendingPathComponent("Library", isDirectory: true)
-            .appendingPathComponent("Caches", isDirectory: true)
-            .appendingPathComponent(InfoPlistReader.main.baseBundleIdentifier, isDirectory: true)
-            .appendingPathComponent("Sessions", isDirectory: true)
+            .appending(component: "Library", directoryHint: .isDirectory)
+            .appending(component: "Caches", directoryHint: .isDirectory)
+            .appending(component: InfoPlistReader.main.baseBundleIdentifier, directoryHint: .isDirectory)
+            .appending(component: "Sessions", directoryHint: .isDirectory)
 
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         
@@ -87,7 +87,7 @@ extension URL: @retroactive ExpressibleByStringLiteral {
     /// Make sure to manually tidy up any files you place in here once you've transferred them from one bundle to another.
     static var appGroupTemporaryDirectory: URL {
         let url = appGroupContainerDirectory
-            .appendingPathComponent("tmp", isDirectory: true)
+            .appending(component: "tmp", directoryHint: .isDirectory)
 
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         
@@ -110,6 +110,45 @@ extension URL: @retroactive ExpressibleByStringLiteral {
         return nil
     }
     
+    // MARK: Mocks
+    
+    static var mockMXCAudio: URL { "mxc://matrix.org/1234567890AuDiO" }
+    static var mockMXCFile: URL { "mxc://matrix.org/1234567890FiLe" }
+    static var mockMXCImage: URL { "mxc://matrix.org/1234567890ImAgE" }
+    static var mockMXCVideo: URL { "mxc://matrix.org/1234567890ViDeO" }
+    static var mockMXCAvatar: URL { "mxc://matrix.org/1234567890AvAtAr" }
+    static var mockMXCUserAvatar: URL { "mxc://matrix.org/1234567890AvAtArUsEr" }
+}
+
+// MARK: - Helpers
+
+extension URL: @retroactive ExpressibleByStringLiteral {
+    public init(stringLiteral value: StaticString) {
+        guard let url = URL(string: "\(value)") else {
+            fatalError("The static string used to create this URL is invalid")
+        }
+        
+        self = url
+    }
+    
+    /// Sanitises the URL for use as the name of a directory.
+    func asDirectoryName() -> String {
+        absoluteString.asURLDirectoryName()
+    }
+}
+
+extension String {
+    /// Assumes that the string is a URL and sanitises it for use as the name of a directory.
+    func asURLDirectoryName() -> String {
+        replacingOccurrences(of: "https://", with: "")
+            .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+            .replacing(/[:\/\p{C}]/, with: "-")
+    }
+}
+
+// MARK: - Phishing Confirmation URL
+
+extension URL {
     static let confirmationScheme = "confirm"
     
     var requiresConfirmation: Bool {
@@ -123,15 +162,6 @@ extension URL: @retroactive ExpressibleByStringLiteral {
         }
         return ConfirmURLParameters(queryItems: queryItems)
     }
-    
-    // MARK: Mocks
-    
-    static var mockMXCAudio: URL { "mxc://matrix.org/1234567890AuDiO" }
-    static var mockMXCFile: URL { "mxc://matrix.org/1234567890FiLe" }
-    static var mockMXCImage: URL { "mxc://matrix.org/1234567890ImAgE" }
-    static var mockMXCVideo: URL { "mxc://matrix.org/1234567890ViDeO" }
-    static var mockMXCAvatar: URL { "mxc://matrix.org/1234567890AvAtAr" }
-    static var mockMXCUserAvatar: URL { "mxc://matrix.org/1234567890AvAtArUsEr" }
 }
 
 struct ConfirmURLParameters {

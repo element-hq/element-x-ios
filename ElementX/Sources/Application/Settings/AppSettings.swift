@@ -20,6 +20,7 @@ protocol CommonSettingsProtocol {
     var enableKeyShareOnInvite: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
     var threadsEnabled: Bool { get }
+    var bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> { get }
 }
 
 /// Store Element specific app settings.
@@ -57,7 +58,7 @@ final class AppSettings {
         case knockingEnabled
         case threadsEnabled
         case developerOptionsEnabled
-        case sharePosEnabled
+        case sharePosEnabledV2
         
         case zeroAccessToken
         case zeroRewardsCredit
@@ -70,7 +71,6 @@ final class AppSettings {
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
-    private static var remoteSuiteName = "\(InfoPlistReader.main.appGroupIdentifier).remote"
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
@@ -258,8 +258,7 @@ final class AppSettings {
     var pusherProfileTag: String?
         
     // MARK: - Bug report
-
-    let bugReportRageshakeURL: URL? = Secrets.rageshakeURL.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
+    
     let bugReportSentryURL: URL? = Secrets.sentryDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     let bugReportSentryRustURL: URL? = Secrets.sentryRustDSN.map { URL(string: $0)! } // swiftlint:disable:this force_unwrapping
     /// The name allocated by the bug report server
@@ -356,7 +355,7 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
     
-    @UserPreference(key: UserDefaultsKeys.sharePosEnabled, defaultValue: false, storageType: .userDefaults(store))
+    @UserPreference(key: UserDefaultsKeys.sharePosEnabledV2, defaultValue: true, storageType: .userDefaults(store))
     var sharePosEnabled
     
     #endif
@@ -382,6 +381,8 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var threadsEnabled
+    
+    let bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> = .init(Secrets.rageshakeURL.map { .url(URL(string: $0)!) } ?? .disabled) // swiftlint:disable:this force_unwrapping
     
     // MARK: - ZERO Access Token
     

@@ -18,6 +18,8 @@ class MockTimelineController: TimelineControllerProtocol {
     var incomingItems: [RoomTimelineItemProtocol] = []
     
     var roomProxy: JoinedRoomProxyProtocol?
+    var timelineProxy: TimelineProxyProtocol?
+    
     var roomID: String { roomProxy?.id ?? "MockRoomIdentifier" }
     var timelineKind: TimelineKind
     
@@ -46,9 +48,13 @@ class MockTimelineController: TimelineControllerProtocol {
         return mock
     }
     
-    init(timelineKind: TimelineKind = .live, listenForSignals: Bool = false, timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default) {
+    init(timelineKind: TimelineKind = .live,
+         listenForSignals: Bool = false,
+         timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default,
+         timelineProxy: TimelineProxyProtocol? = nil) {
         self.timelineKind = timelineKind
         self.timelineItems = timelineItems
+        self.timelineProxy = timelineProxy
         
         callbacks.send(.paginationState(paginationState))
         callbacks.send(.isLive(true))
@@ -102,11 +108,6 @@ class MockTimelineController: TimelineControllerProtocol {
     func processItemAppearance(_ itemID: TimelineItemIdentifier) async { }
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async { }
-    
-    func sendMessage(_ message: String,
-                     html: String?,
-                     inReplyToEventID: String?,
-                     intentionalMentions: IntentionalMentions) async { }
         
     func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async { }
     
@@ -147,6 +148,121 @@ class MockTimelineController: TimelineControllerProtocol {
         timelineItemsTimestamp[itemID] ?? .now
     }
     
+    // MARK: - Sending
+    
+    func sendMessage(_ message: String,
+                     html: String?,
+                     inReplyToEventID: String?,
+                     intentionalMentions: IntentionalMentions) async { }
+    
+    func sendAudio(url: URL,
+                   audioInfo: MatrixRustSDK.AudioInfo,
+                   caption: String?,
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        if let timelineProxy {
+            return await timelineProxy.sendAudio(url: url,
+                                                 audioInfo: audioInfo,
+                                                 caption: caption,
+                                                 requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+        }
+        
+        return .success(())
+    }
+    
+    func sendFile(url: URL,
+                  fileInfo: MatrixRustSDK.FileInfo,
+                  caption: String?,
+                  requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        if let timelineProxy {
+            return await timelineProxy.sendFile(url: url,
+                                                fileInfo: fileInfo,
+                                                caption: caption,
+                                                requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+        }
+        
+        return .success(())
+    }
+    
+    func sendImage(url: URL,
+                   thumbnailURL: URL,
+                   imageInfo: MatrixRustSDK.ImageInfo,
+                   caption: String?,
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        if let timelineProxy {
+            return await timelineProxy.sendImage(url: url,
+                                                 thumbnailURL: thumbnailURL,
+                                                 imageInfo: imageInfo,
+                                                 caption: caption,
+                                                 requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+        }
+        
+        return .success(())
+    }
+    
+    func sendLocation(body: String,
+                      geoURI: GeoURI,
+                      description: String?,
+                      zoomLevel: UInt8?,
+                      assetType: MatrixRustSDK.AssetType?) async -> Result<Void, TimelineControllerError> {
+        if let timelineProxy {
+            return await timelineProxy.sendLocation(body: body,
+                                                    geoURI: geoURI,
+                                                    description: description,
+                                                    zoomLevel: zoomLevel,
+                                                    assetType: assetType).mapError(TimelineControllerError.timelineProxyError)
+        }
+        
+        return .success(())
+    }
+    
+    func sendVideo(url: URL,
+                   thumbnailURL: URL,
+                   videoInfo: MatrixRustSDK.VideoInfo,
+                   caption: String?,
+                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        if let timelineProxy {
+            return await timelineProxy.sendVideo(url: url,
+                                                 thumbnailURL: thumbnailURL,
+                                                 videoInfo: videoInfo,
+                                                 caption: caption,
+                                                 requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+        }
+        
+        return .success(())
+    }
+    
+    func sendVoiceMessage(url: URL,
+                          audioInfo: MatrixRustSDK.AudioInfo,
+                          waveform: [UInt16],
+                          requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
+        if let timelineProxy {
+            return await timelineProxy.sendVoiceMessage(url: url,
+                                                        audioInfo: audioInfo,
+                                                        waveform: waveform,
+                                                        requestHandle: requestHandle).mapError(TimelineControllerError.timelineProxyError)
+        }
+        
+        return .success(())
+    }
+    
+    // MARK: - Polls
+    
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        .success(())
+    }
+    
+    func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
+        .success(())
+    }
+    
+    func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineControllerError> {
+        .success(())
+    }
+    
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineControllerError> {
+        .success(())
+    }
+        
     // MARK: - UI Test signalling
     
     /// The cancellable used for UI Tests signalling.

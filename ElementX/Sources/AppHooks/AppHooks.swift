@@ -33,20 +33,25 @@ class AppHooks: AppHooksProtocol {
         certificateValidatorHook = hook
     }
     
-    private(set) var elementWellKnownHook: ElementWellKnownHookProtocol = DefaultElementWellKnownHook()
-    func registerElementWellKnownHook(_ hook: ElementWellKnownHookProtocol) {
-        elementWellKnownHook = hook
-    }
-    
     private(set) var roomScreenHook: RoomScreenHookProtocol = DefaultRoomScreenHook()
     func registerRoomScreenHook(_ hook: RoomScreenHookProtocol) {
         roomScreenHook = hook
     }
     #endif
     
+    private(set) var tracingHook: TracingHookProtocol = DefaultTracingHook()
+    func registerTracingHook(_ hook: TracingHookProtocol) {
+        tracingHook = hook
+    }
+    
     private(set) var clientBuilderHook: ClientBuilderHookProtocol = DefaultClientBuilderHook()
     func registerClientBuilderHook(_ hook: ClientBuilderHookProtocol) {
         clientBuilderHook = hook
+    }
+    
+    private(set) var remoteSettingsHook: RemoteSettingsHookProtocol = DefaultRemoteSettingsHook()
+    func registerRemoteSettingsHook(_ hook: RemoteSettingsHookProtocol) {
+        remoteSettingsHook = hook
     }
 }
 

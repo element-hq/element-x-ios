@@ -58,7 +58,7 @@ class DeclineAndBlockScreenViewModel: DeclineAndBlockScreenViewModelType, Declin
         case .success:
             var shouldShowFailure = false
             if state.bindings.shouldReport {
-                shouldShowFailure = await clientProxy.reportRoomForIdentifier(roomID, reason: state.bindings.reportReason.isEmpty ? nil : state.bindings.reportReason).isFailure
+                shouldShowFailure = await clientProxy.reportRoomForIdentifier(roomID, reason: state.bindings.reportReason).isFailure
             }
             
             if state.bindings.shouldBlockUser {

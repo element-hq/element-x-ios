@@ -95,7 +95,7 @@ extension XCTestCase {
                                                                                timeout: TimeInterval = 10,
                                                                                message: String? = nil) -> DeferredFulfillment<P.Output> {
         var expectedOrder = transitionValues
-        let deferred = deferFulfillment<P>(publisher, timeout: timeout, message: message) { value in
+        let deferred = deferFulfillment(publisher, timeout: timeout, message: message) { value in
             let receivedValue = value[keyPath: keyPath]
             if let index = expectedOrder.firstIndex(where: { $0 == receivedValue }), index == 0 {
                 expectedOrder.remove(at: index)

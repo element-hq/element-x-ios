@@ -19,6 +19,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
+    private let targetConfiguration: Target.ConfigurationResult
     private let appMediator: AppMediator
     private let appSettings: AppSettings
     private let appDelegate: AppDelegate
@@ -75,9 +76,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         let appSettings = appHooks.appSettingsHook.configure(AppSettings())
         
-        Target.mainApp.configure(logLevel: appSettings.logLevel,
-                                 traceLogPacks: appSettings.traceLogPacks,
-                                 sentryURL: appSettings.bugReportSentryRustURL)
+        targetConfiguration = Target.mainApp.configure(logLevel: appSettings.logLevel,
+                                                       traceLogPacks: appSettings.traceLogPacks,
+                                                       sentryURL: appSettings.bugReportSentryRustURL,
+                                                       rageshakeURL: appSettings.bugReportRageshakeURL,
+                                                       appHooks: appHooks)
         
         let appName = InfoPlistReader.main.bundleDisplayName
         let appVersion = InfoPlistReader.main.bundleShortVersionString
@@ -373,7 +376,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private static func setupServiceLocator(appSettings: AppSettings, appHooks: AppHooks) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         ServiceLocator.shared.register(appSettings: appSettings)
-        ServiceLocator.shared.register(bugReportService: BugReportService(rageshakeURL: appSettings.bugReportRageshakeURL,
+        ServiceLocator.shared.register(bugReportService: BugReportService(rageshakeURLPublisher: appSettings.bugReportRageshakeURL.publisher,
                                                                           applicationID: appSettings.bugReportApplicationID,
                                                                           sdkGitSHA: sdkGitSha(),
                                                                           maxUploadSize: appSettings.bugReportMaxUploadSize,
@@ -399,12 +402,17 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         if oldVersion < Version(1, 6, 7) {
-            Tracing.deleteLogFiles()
+            Tracing.deleteLogFiles(in: Tracing.legacyLogsDirectory)
             MXLog.info("Migrating to v1.6.7, log files have been wiped")
+        }
+        
+        if oldVersion < Version(25, 7, 4) {
+            Tracing.migrateLogFiles()
+            MXLog.info("Migrating to version 25.07.4, log files have been moved.")
         }
     }
     
-    // This could be removed once the adotpion of 25.06.x is widespread.
+    // This could be removed once the adoption of 25.06.x is widespread.
     private func performSettingsToAccountDataMigration(userSession: UserSessionProtocol) {
         guard let userDefaults = UserDefaults(suiteName: InfoPlistReader.main.appGroupIdentifier) else {
             return
@@ -703,6 +711,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             tearDownUserSession()
             
             AppSettings.resetSessionSpecificSettings()
+            appHooks.remoteSettingsHook.reset(appSettings)
             
             // Reset analytics
             ServiceLocator.shared.analytics.optOut()
@@ -967,7 +976,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         switch await roomProxy.timeline.sendMessage(replyText,
                                                     html: nil,
-                                                    threadRootEventID: nil,
                                                     inReplyToEventID: nil,
                                                     intentionalMentions: .empty) {
         case .success:

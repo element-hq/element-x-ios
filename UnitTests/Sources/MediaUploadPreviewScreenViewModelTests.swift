@@ -106,28 +106,26 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
     
     private func setUpViewModel(url: URL, expectedCaption: String?) {
         timelineProxy = TimelineProxyMock(.init())
-        timelineProxy.sendAudioUrlAudioInfoCaptionThreadRootEventIDRequestHandleClosure = { [weak self] _, _, caption, _, _ in
+        timelineProxy.sendAudioUrlAudioInfoCaptionRequestHandleClosure = { [weak self] _, _, caption, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendFileUrlFileInfoCaptionThreadRootEventIDRequestHandleClosure = { [weak self] _, _, caption, _, _ in
+        timelineProxy.sendFileUrlFileInfoCaptionRequestHandleClosure = { [weak self] _, _, caption, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionThreadRootEventIDRequestHandleClosure = { [weak self] _, _, _, caption, _, _ in
+        timelineProxy.sendImageUrlThumbnailURLImageInfoCaptionRequestHandleClosure = { [weak self] _, _, _, caption, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
-        timelineProxy.sendVideoUrlThumbnailURLVideoInfoCaptionThreadRootEventIDRequestHandleClosure = { [weak self] _, _, _, caption, _, _ in
+        timelineProxy.sendVideoUrlThumbnailURLVideoInfoCaptionRequestHandleClosure = { [weak self] _, _, _, caption, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
         
-        let roomProxy = JoinedRoomProxyMock(.init())
-        roomProxy.timeline = timelineProxy
-        viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: UserIndicatorControllerMock(),
-                                                      roomProxy: roomProxy,
+        viewModel = MediaUploadPreviewScreenViewModel(timelineController: MockTimelineController(timelineProxy: timelineProxy),
+                                                      userIndicatorController: UserIndicatorControllerMock(),
                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                                       title: "Some File",
                                                       url: url,
-                                                      threadRootEventID: nil,
-                                                      shouldShowCaptionWarning: true)
+                                                      shouldShowCaptionWarning: true,
+                                                      isRoomEncrypted: true)
     }
     
     private func verifyCaption(_ caption: String?, expectedCaption: String?) -> Result<Void, TimelineProxyError> {

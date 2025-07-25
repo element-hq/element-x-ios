@@ -12,11 +12,11 @@ import SwiftUI
 typealias MediaUploadPreviewScreenViewModelType = StateStoreViewModelV2<MediaUploadPreviewScreenViewState, MediaUploadPreviewScreenViewAction>
 
 class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, MediaUploadPreviewScreenViewModelProtocol {
+    private let timelineController: TimelineControllerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let roomProxy: JoinedRoomProxyProtocol
+    
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let url: URL
-    private let threadRootEventID: String?
     
     private var processingTask: Task<Result<MediaInfo, MediaUploadingPreprocessorError>, Never>
     private var requestHandle: SendAttachmentJoinHandleProtocol?
@@ -27,18 +27,17 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(userIndicatorController: UserIndicatorControllerProtocol,
-         roomProxy: JoinedRoomProxyProtocol,
+    init(timelineController: TimelineControllerProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          title: String?,
          url: URL,
-         threadRootEventID: String?,
-         shouldShowCaptionWarning: Bool) {
+         shouldShowCaptionWarning: Bool,
+         isRoomEncrypted: Bool) {
+        self.timelineController = timelineController
         self.userIndicatorController = userIndicatorController
-        self.roomProxy = roomProxy
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.url = url
-        self.threadRootEventID = threadRootEventID
         
         // Start processing the media whilst the user is reviewing it/adding a caption.
         processingTask = Task { await mediaUploadingPreprocessor.processMedia(at: url) }
@@ -47,7 +46,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
                                                                        title: title,
 //                                                                       shouldShowCaptionWarning: shouldShowCaptionWarning,
                                                                        shouldShowCaptionWarning: false,
-                                                                       isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted))
+                                                                       isRoomEncrypted: isRoomEncrypted))
     }
     
     override func process(viewAction: MediaUploadPreviewScreenViewAction) {
@@ -62,8 +61,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
                 switch await processingTask.value {
                 case .success(let mediaInfo):
                     switch await sendAttachment(mediaInfo: mediaInfo,
-                                                caption: caption,
-                                                threadRootEventID: threadRootEventID) {
+                                                caption: caption) {
                     case .success:
                         actionsSubject.send(.dismiss)
                     case .failure(let error):
@@ -91,37 +89,33 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     // MARK: - Private
     
-    private func sendAttachment(mediaInfo: MediaInfo, caption: String?, threadRootEventID: String?) async -> Result<Void, TimelineProxyError> {
+    private func sendAttachment(mediaInfo: MediaInfo, caption: String?) async -> Result<Void, TimelineControllerError> {
         let requestHandle: ((SendAttachmentJoinHandleProtocol) -> Void) = { [weak self] handle in
             self?.requestHandle = handle
         }
         
         switch mediaInfo {
         case let .image(imageURL, thumbnailURL, imageInfo):
-            return await roomProxy.timeline.sendImage(url: imageURL,
+            return await timelineController.sendImage(url: imageURL,
                                                       thumbnailURL: thumbnailURL,
                                                       imageInfo: imageInfo,
                                                       caption: caption,
-                                                      threadRootEventID: threadRootEventID,
                                                       requestHandle: requestHandle)
         case let .video(videoURL, thumbnailURL, videoInfo):
-            return await roomProxy.timeline.sendVideo(url: videoURL,
+            return await timelineController.sendVideo(url: videoURL,
                                                       thumbnailURL: thumbnailURL,
                                                       videoInfo: videoInfo,
                                                       caption: caption,
-                                                      threadRootEventID: threadRootEventID,
                                                       requestHandle: requestHandle)
         case let .audio(audioURL, audioInfo):
-            return await roomProxy.timeline.sendAudio(url: audioURL,
+            return await timelineController.sendAudio(url: audioURL,
                                                       audioInfo: audioInfo,
                                                       caption: caption,
-                                                      threadRootEventID: threadRootEventID,
                                                       requestHandle: requestHandle)
         case let .file(fileURL, fileInfo):
-            return await roomProxy.timeline.sendFile(url: fileURL,
+            return await timelineController.sendFile(url: fileURL,
                                                      fileInfo: fileInfo,
                                                      caption: caption,
-                                                     threadRootEventID: threadRootEventID,
                                                      requestHandle: requestHandle)
         }
     }

@@ -2168,13 +2168,13 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     open var getUrlUrlReceivedUrl: String?
     open var getUrlUrlReceivedInvocations: [String] = []
 
-    var getUrlUrlUnderlyingReturnValue: String!
-    open var getUrlUrlReturnValue: String! {
+    var getUrlUrlUnderlyingReturnValue: Data!
+    open var getUrlUrlReturnValue: Data! {
         get {
             if Thread.isMainThread {
                 return getUrlUrlUnderlyingReturnValue
             } else {
-                var returnValue: String? = nil
+                var returnValue: Data? = nil
                 DispatchQueue.main.sync {
                     returnValue = getUrlUrlUnderlyingReturnValue
                 }
@@ -2192,9 +2192,9 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             }
         }
     }
-    open var getUrlUrlClosure: ((String) async throws -> String)?
+    open var getUrlUrlClosure: ((String) async throws -> Data)?
 
-    open override func getUrl(url: String) async throws -> String {
+    open override func getUrl(url: String) async throws -> Data {
         if let error = getUrlUrlThrowableError {
             throw error
         }
@@ -5108,16 +5108,16 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 
     //MARK: - urlForOidc
 
-    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdThrowableError: Error?
-    var urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingCallsCount = 0
-    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount: Int {
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesThrowableError: Error?
+    var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingCallsCount = 0
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingCallsCount
+                return urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingCallsCount
+                    returnValue = urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5125,29 +5125,29 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingCallsCount = newValue
+                urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingCallsCount = newValue
+                    urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdCalled: Bool {
-        return urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount > 0
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCalled: Bool {
+        return urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount > 0
     }
-    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdReceivedArguments: (oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?, deviceId: String?)?
-    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdReceivedInvocations: [(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?, deviceId: String?)] = []
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments: (oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?, deviceId: String?, additionalScopes: [String]?)?
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedInvocations: [(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?, deviceId: String?, additionalScopes: [String]?)] = []
 
-    var urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingReturnValue: OAuthAuthorizationData!
-    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdReturnValue: OAuthAuthorizationData! {
+    var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingReturnValue: OAuthAuthorizationData!
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReturnValue: OAuthAuthorizationData! {
         get {
             if Thread.isMainThread {
-                return urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingReturnValue
+                return urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingReturnValue
             } else {
                 var returnValue: OAuthAuthorizationData? = nil
                 DispatchQueue.main.sync {
-                    returnValue = urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingReturnValue
+                    returnValue = urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -5155,29 +5155,29 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingReturnValue = newValue
+                urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    urlForOidcOidcConfigurationPromptLoginHintDeviceIdUnderlyingReturnValue = newValue
+                    urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdClosure: ((OidcConfiguration, OidcPrompt?, String?, String?) async throws -> OAuthAuthorizationData)?
+    open var urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesClosure: ((OidcConfiguration, OidcPrompt?, String?, String?, [String]?) async throws -> OAuthAuthorizationData)?
 
-    open override func urlForOidc(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?, deviceId: String?) async throws -> OAuthAuthorizationData {
-        if let error = urlForOidcOidcConfigurationPromptLoginHintDeviceIdThrowableError {
+    open override func urlForOidc(oidcConfiguration: OidcConfiguration, prompt: OidcPrompt?, loginHint: String?, deviceId: String?, additionalScopes: [String]?) async throws -> OAuthAuthorizationData {
+        if let error = urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesThrowableError {
             throw error
         }
-        urlForOidcOidcConfigurationPromptLoginHintDeviceIdCallsCount += 1
-        urlForOidcOidcConfigurationPromptLoginHintDeviceIdReceivedArguments = (oidcConfiguration: oidcConfiguration, prompt: prompt, loginHint: loginHint, deviceId: deviceId)
+        urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesCallsCount += 1
+        urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedArguments = (oidcConfiguration: oidcConfiguration, prompt: prompt, loginHint: loginHint, deviceId: deviceId, additionalScopes: additionalScopes)
         DispatchQueue.main.async {
-            self.urlForOidcOidcConfigurationPromptLoginHintDeviceIdReceivedInvocations.append((oidcConfiguration: oidcConfiguration, prompt: prompt, loginHint: loginHint, deviceId: deviceId))
+            self.urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReceivedInvocations.append((oidcConfiguration: oidcConfiguration, prompt: prompt, loginHint: loginHint, deviceId: deviceId, additionalScopes: additionalScopes))
         }
-        if let urlForOidcOidcConfigurationPromptLoginHintDeviceIdClosure = urlForOidcOidcConfigurationPromptLoginHintDeviceIdClosure {
-            return try await urlForOidcOidcConfigurationPromptLoginHintDeviceIdClosure(oidcConfiguration, prompt, loginHint, deviceId)
+        if let urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesClosure = urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesClosure {
+            return try await urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesClosure(oidcConfiguration, prompt, loginHint, deviceId, additionalScopes)
         } else {
-            return urlForOidcOidcConfigurationPromptLoginHintDeviceIdReturnValue
+            return urlForOidcOidcConfigurationPromptLoginHintDeviceIdAdditionalScopesReturnValue
         }
     }
 
@@ -8883,6 +8883,71 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
             return supportsPasswordLoginClosure()
         } else {
             return supportsPasswordLoginReturnValue
+        }
+    }
+
+    //MARK: - supportsSsoLogin
+
+    var supportsSsoLoginUnderlyingCallsCount = 0
+    open var supportsSsoLoginCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return supportsSsoLoginUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = supportsSsoLoginUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                supportsSsoLoginUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    supportsSsoLoginUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var supportsSsoLoginCalled: Bool {
+        return supportsSsoLoginCallsCount > 0
+    }
+
+    var supportsSsoLoginUnderlyingReturnValue: Bool!
+    open var supportsSsoLoginReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return supportsSsoLoginUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = supportsSsoLoginUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                supportsSsoLoginUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    supportsSsoLoginUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var supportsSsoLoginClosure: (() -> Bool)?
+
+    open override func supportsSsoLogin() -> Bool {
+        supportsSsoLoginCallsCount += 1
+        if let supportsSsoLoginClosure = supportsSsoLoginClosure {
+            return supportsSsoLoginClosure()
+        } else {
+            return supportsSsoLoginReturnValue
         }
     }
 
@@ -15088,10 +15153,10 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         return reportRoomReasonCallsCount > 0
     }
     open var reportRoomReasonReceivedReason: String?
-    open var reportRoomReasonReceivedInvocations: [String?] = []
-    open var reportRoomReasonClosure: ((String?) async throws -> Void)?
+    open var reportRoomReasonReceivedInvocations: [String] = []
+    open var reportRoomReasonClosure: ((String) async throws -> Void)?
 
-    open override func reportRoom(reason: String?) async throws {
+    open override func reportRoom(reason: String) async throws {
         if let error = reportRoomReasonThrowableError {
             throw error
         }
@@ -19876,7 +19941,6 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
 
     //MARK: - info
 
-    open var infoThrowableError: Error?
     var infoUnderlyingCallsCount = 0
     open var infoCallsCount: Int {
         get {
@@ -19929,15 +19993,12 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
             }
         }
     }
-    open var infoClosure: (() throws -> RoomPreviewInfo)?
+    open var infoClosure: (() -> RoomPreviewInfo)?
 
-    open override func info() throws -> RoomPreviewInfo {
-        if let error = infoThrowableError {
-            throw error
-        }
+    open override func info() -> RoomPreviewInfo {
         infoCallsCount += 1
         if let infoClosure = infoClosure {
-            return try infoClosure()
+            return infoClosure()
         } else {
             return infoReturnValue
         }
@@ -23218,16 +23279,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - sendLocation
 
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsThrowableError: Error?
-    var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount = 0
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsCallsCount: Int {
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdThrowableError: Error?
+    var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdUnderlyingCallsCount = 0
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount
+                return sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount
+                    returnValue = sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -23235,31 +23296,31 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount = newValue
+                sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsUnderlyingCallsCount = newValue
+                    sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsCalled: Bool {
-        return sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsCallsCount > 0
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdCalled: Bool {
+        return sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdCallsCount > 0
     }
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsReceivedArguments: (body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?, replyParams: ReplyParameters?)?
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsReceivedInvocations: [(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?, replyParams: ReplyParameters?)] = []
-    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsClosure: ((String, String, String?, UInt8?, AssetType?, ReplyParameters?) async throws -> Void)?
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdReceivedArguments: (body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?, repliedToEventId: String?)?
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdReceivedInvocations: [(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?, repliedToEventId: String?)] = []
+    open var sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdClosure: ((String, String, String?, UInt8?, AssetType?, String?) async throws -> Void)?
 
-    open override func sendLocation(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?, replyParams: ReplyParameters?) async throws {
-        if let error = sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsThrowableError {
+    open override func sendLocation(body: String, geoUri: String, description: String?, zoomLevel: UInt8?, assetType: AssetType?, repliedToEventId: String?) async throws {
+        if let error = sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdThrowableError {
             throw error
         }
-        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsCallsCount += 1
-        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsReceivedArguments = (body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType, replyParams: replyParams)
+        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdCallsCount += 1
+        sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdReceivedArguments = (body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType, repliedToEventId: repliedToEventId)
         DispatchQueue.main.async {
-            self.sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsReceivedInvocations.append((body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType, replyParams: replyParams))
+            self.sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdReceivedInvocations.append((body: body, geoUri: geoUri, description: description, zoomLevel: zoomLevel, assetType: assetType, repliedToEventId: repliedToEventId))
         }
-        try await sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeReplyParamsClosure?(body, geoUri, description, zoomLevel, assetType, replyParams)
+        try await sendLocationBodyGeoUriDescriptionZoomLevelAssetTypeRepliedToEventIdClosure?(body, geoUri, description, zoomLevel, assetType, repliedToEventId)
     }
 
     //MARK: - sendPollResponse
@@ -23356,16 +23417,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - sendReply
 
-    open var sendReplyMsgReplyParamsThrowableError: Error?
-    var sendReplyMsgReplyParamsUnderlyingCallsCount = 0
-    open var sendReplyMsgReplyParamsCallsCount: Int {
+    open var sendReplyMsgEventIdThrowableError: Error?
+    var sendReplyMsgEventIdUnderlyingCallsCount = 0
+    open var sendReplyMsgEventIdCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendReplyMsgReplyParamsUnderlyingCallsCount
+                return sendReplyMsgEventIdUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendReplyMsgReplyParamsUnderlyingCallsCount
+                    returnValue = sendReplyMsgEventIdUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -23373,31 +23434,31 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendReplyMsgReplyParamsUnderlyingCallsCount = newValue
+                sendReplyMsgEventIdUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendReplyMsgReplyParamsUnderlyingCallsCount = newValue
+                    sendReplyMsgEventIdUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendReplyMsgReplyParamsCalled: Bool {
-        return sendReplyMsgReplyParamsCallsCount > 0
+    open var sendReplyMsgEventIdCalled: Bool {
+        return sendReplyMsgEventIdCallsCount > 0
     }
-    open var sendReplyMsgReplyParamsReceivedArguments: (msg: RoomMessageEventContentWithoutRelation, replyParams: ReplyParameters)?
-    open var sendReplyMsgReplyParamsReceivedInvocations: [(msg: RoomMessageEventContentWithoutRelation, replyParams: ReplyParameters)] = []
-    open var sendReplyMsgReplyParamsClosure: ((RoomMessageEventContentWithoutRelation, ReplyParameters) async throws -> Void)?
+    open var sendReplyMsgEventIdReceivedArguments: (msg: RoomMessageEventContentWithoutRelation, eventId: String)?
+    open var sendReplyMsgEventIdReceivedInvocations: [(msg: RoomMessageEventContentWithoutRelation, eventId: String)] = []
+    open var sendReplyMsgEventIdClosure: ((RoomMessageEventContentWithoutRelation, String) async throws -> Void)?
 
-    open override func sendReply(msg: RoomMessageEventContentWithoutRelation, replyParams: ReplyParameters) async throws {
-        if let error = sendReplyMsgReplyParamsThrowableError {
+    open override func sendReply(msg: RoomMessageEventContentWithoutRelation, eventId: String) async throws {
+        if let error = sendReplyMsgEventIdThrowableError {
             throw error
         }
-        sendReplyMsgReplyParamsCallsCount += 1
-        sendReplyMsgReplyParamsReceivedArguments = (msg: msg, replyParams: replyParams)
+        sendReplyMsgEventIdCallsCount += 1
+        sendReplyMsgEventIdReceivedArguments = (msg: msg, eventId: eventId)
         DispatchQueue.main.async {
-            self.sendReplyMsgReplyParamsReceivedInvocations.append((msg: msg, replyParams: replyParams))
+            self.sendReplyMsgEventIdReceivedInvocations.append((msg: msg, eventId: eventId))
         }
-        try await sendReplyMsgReplyParamsClosure?(msg, replyParams)
+        try await sendReplyMsgEventIdClosure?(msg, eventId)
     }
 
     //MARK: - sendVideo

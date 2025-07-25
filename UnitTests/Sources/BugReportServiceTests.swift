@@ -12,13 +12,22 @@ import Foundation
 import XCTest
 
 class BugReportServiceTests: XCTestCase {
+    var appSettings: AppSettings!
     var bugReportService: BugReportServiceProtocol!
 
     override func setUpWithError() throws {
+        AppSettings.resetAllSettings()
+        appSettings = AppSettings()
+        appSettings.bugReportRageshakeURL.reset()
+        
         let bugReportServiceMock = BugReportServiceMock()
         bugReportServiceMock.underlyingCrashedLastRun = false
         bugReportServiceMock.submitBugReportProgressListenerReturnValue = .success(SubmitBugReportResponse(reportURL: "https://www.example.com/123"))
         bugReportService = bugReportServiceMock
+    }
+    
+    override func tearDown() {
+        appSettings.bugReportRageshakeURL.reset()
     }
 
     func testInitialStateWithMockService() {
@@ -42,7 +51,8 @@ class BugReportServiceTests: XCTestCase {
     }
     
     func testInitialStateWithRealService() throws {
-        let service = BugReportService(rageshakeURL: "https://example.com/submit",
+        let urlPublisher: CurrentValueSubject<RageshakeConfiguration, Never> = .init(.url("https://example.com/submit"))
+        let service = BugReportService(rageshakeURLPublisher: urlPublisher.asCurrentValuePublisher(),
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
@@ -52,8 +62,9 @@ class BugReportServiceTests: XCTestCase {
         XCTAssertFalse(service.crashedLastRun)
     }
     
-    func testInitialStateWithRealServiceAndNoURL() throws {
-        let service = BugReportService(rageshakeURL: nil,
+    func testInitialStateWithRealServiceAndDisabled() throws {
+        let urlPublisher: CurrentValueSubject<RageshakeConfiguration, Never> = .init(.disabled)
+        let service = BugReportService(rageshakeURLPublisher: urlPublisher.asCurrentValuePublisher(),
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
@@ -64,7 +75,8 @@ class BugReportServiceTests: XCTestCase {
     }
     
     @MainActor func testSubmitBugReportWithRealService() async throws {
-        let service = BugReportService(rageshakeURL: "https://example.com/submit",
+        let urlPublisher: CurrentValueSubject<RageshakeConfiguration, Never> = .init(.url("https://example.com/submit"))
+        let service = BugReportService(rageshakeURLPublisher: urlPublisher.asCurrentValuePublisher(),
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
@@ -87,7 +99,12 @@ class BugReportServiceTests: XCTestCase {
     }
     
     @MainActor func testConfigurations() async throws {
-        let service = BugReportService(rageshakeURL: "https://example.com/submit",
+        guard case let .url(initialURL) = appSettings.bugReportRageshakeURL.publisher.value else {
+            XCTFail("Unexpected initial configuration.")
+            return
+        }
+        
+        let service = BugReportService(rageshakeURLPublisher: appSettings.bugReportRageshakeURL.publisher,
                                        applicationID: "mock_app_id",
                                        sdkGitSHA: "1234",
                                        maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
@@ -95,10 +112,10 @@ class BugReportServiceTests: XCTestCase {
                                        appHooks: AppHooks())
         XCTAssertTrue(service.isEnabled)
         
-        service.applyConfiguration(.disabled)
+        appSettings.bugReportRageshakeURL.applyRemoteValue(.disabled)
         XCTAssertFalse(service.isEnabled)
         
-        service.applyConfiguration(.url("https://bugs.server.net/submit"))
+        appSettings.bugReportRageshakeURL.applyRemoteValue(.url("https://bugs.server.net/submit"))
         XCTAssertTrue(service.isEnabled)
 
         let bugReport = BugReport(userID: "@mock:client.com",
@@ -115,31 +132,12 @@ class BugReportServiceTests: XCTestCase {
         
         XCTAssertEqual(customConfigurationResponse.reportURL, "https://bugs.server.net/123")
         
-        service.applyConfiguration(.default)
+        appSettings.bugReportRageshakeURL.reset()
         XCTAssertTrue(service.isEnabled)
         
         let defaultConfigurationResponse = try await service.submitBugReport(bugReport, progressListener: progressSubject).get()
         
-        XCTAssertEqual(defaultConfigurationResponse.reportURL, "https://example.com/123")
-    }
-    
-    func testDisabledConfigurations() {
-        let service = BugReportService(rageshakeURL: nil,
-                                       applicationID: "mock_app_id",
-                                       sdkGitSHA: "1234",
-                                       maxUploadSize: ServiceLocator.shared.settings.bugReportMaxUploadSize,
-                                       session: .mock,
-                                       appHooks: AppHooks())
-        XCTAssertFalse(service.isEnabled)
-        
-        service.applyConfiguration(.disabled)
-        XCTAssertFalse(service.isEnabled)
-        
-        service.applyConfiguration(.url("https://bugs.server.net/submit"))
-        XCTAssertTrue(service.isEnabled)
-        
-        service.applyConfiguration(.default)
-        XCTAssertFalse(service.isEnabled)
+        XCTAssertEqual(defaultConfigurationResponse.reportURL, initialURL.absoluteString.replacingOccurrences(of: "submit", with: "123"))
     }
     
     func testLogsMaxSize() {

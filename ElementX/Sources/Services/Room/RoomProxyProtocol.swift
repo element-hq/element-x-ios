@@ -101,7 +101,7 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError>
     
-    func reportRoom(reason: String?) async -> Result<Void, RoomProxyError>
+    func reportRoom(reason: String) async -> Result<Void, RoomProxyError>
 
     func leaveRoom() async -> Result<Void, RoomProxyError>
     

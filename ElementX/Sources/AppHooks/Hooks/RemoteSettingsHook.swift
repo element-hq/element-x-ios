@@ -8,15 +8,25 @@
 import Foundation
 import MatrixRustSDK
 
-protocol ElementWellKnownHookProtocol {
-    func validate(using client: ClientProtocol) async -> Result<Void, ElementWellKnownError>
+enum RemoteSettingsError: Error {
+    case elementProRequired(serverName: String)
 }
 
-struct DefaultElementWellKnownHook: ElementWellKnownHookProtocol {
+protocol RemoteSettingsHookProtocol {
+    #if IS_MAIN_APP
+    func initializeCache(using client: ClientProtocol, applyingTo appSettings: CommonSettingsProtocol) async -> Result<Void, RemoteSettingsError>
+    func updateCache(using client: ClientProtocol) async
+    func reset(_ appSettings: CommonSettingsProtocol)
+    #endif
+    func loadCache(forHomeserver homeserver: String, applyingTo appSettings: CommonSettingsProtocol)
+}
+
+struct DefaultRemoteSettingsHook: RemoteSettingsHookProtocol {
+    #if IS_MAIN_APP
     /// A best effort implementation to let Element X advertise to users when they should be using
     /// Element Pro. In an ideal world the backend would be able to validate the client's requests
     /// instead of relying on it to check a well-known file for this.
-    func validate(using client: ClientProtocol) async -> Result<Void, ElementWellKnownError> {
+    func initializeCache(using client: ClientProtocol, applyingTo appSettings: CommonSettingsProtocol) async -> Result<Void, RemoteSettingsError> {
         guard case let .success(wellKnownData) = await client.elementWellKnown() else {
             // Nothing to check, carry on as normal.
             return .success(())
@@ -36,6 +46,12 @@ struct DefaultElementWellKnownHook: ElementWellKnownHookProtocol {
             return .success(())
         }
     }
+    
+    func updateCache(using client: ClientProtocol) async { }
+    func reset(_ appSettings: any CommonSettingsProtocol) { }
+    #endif
+    
+    func loadCache(forHomeserver homeserver: String, applyingTo appSettings: CommonSettingsProtocol) { }
 }
 
 private struct ElementWellKnown: Decodable {
@@ -46,8 +62,4 @@ private struct ElementWellKnown: Decodable {
         case version
         case enforceElementPro = "enforce_element_pro"
     }
-}
-
-enum ElementWellKnownError: Error {
-    case elementProRequired(serverName: String)
 }

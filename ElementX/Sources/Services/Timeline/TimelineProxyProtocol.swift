@@ -82,40 +82,34 @@ protocol TimelineProxyProtocol {
     func sendAudio(url: URL,
                    audioInfo: AudioInfo,
                    caption: String?,
-                   threadRootEventID: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendFile(url: URL,
                   fileInfo: FileInfo,
                   caption: String?,
-                  threadRootEventID: String?,
                   requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendImage(url: URL,
                    thumbnailURL: URL,
                    imageInfo: ImageInfo,
                    caption: String?,
-                   threadRootEventID: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendLocation(body: String,
                       geoURI: GeoURI,
                       description: String?,
                       zoomLevel: UInt8?,
-                      assetType: AssetType?,
-                      threadRootEventID: String?) async -> Result<Void, TimelineProxyError>
+                      assetType: AssetType?) async -> Result<Void, TimelineProxyError>
     
     func sendVideo(url: URL,
                    thumbnailURL: URL,
                    videoInfo: VideoInfo,
                    caption: String?,
-                   threadRootEventID: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendVoiceMessage(url: URL,
                           audioInfo: AudioInfo,
                           waveform: [UInt16],
-                          threadRootEventID: String?,
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError>
@@ -125,22 +119,21 @@ protocol TimelineProxyProtocol {
     
     func sendMessage(_ message: String,
                      html: String?,
-                     threadRootEventID: String?,
                      inReplyToEventID: String?,
                      intentionalMentions: IntentionalMentions) async -> Result<Void, TimelineProxyError>
     
     func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async -> Result<Void, TimelineProxyError>
     
-    func createPoll(question: String, answers: [String], pollKind: Poll.Kind, threadRootEventID: String?) async -> Result<Void, TimelineProxyError>
+    func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError>
     
     func editPoll(original eventID: String,
                   question: String,
                   answers: [String],
                   pollKind: Poll.Kind) async -> Result<Void, TimelineProxyError>
     
-    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineProxyError>
-    
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineProxyError>
+    
+    func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineProxyError>
     
     func getLoadedReplyDetails(eventID: String) async -> Result<InReplyToDetails, TimelineProxyError>
     

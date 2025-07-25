@@ -652,7 +652,7 @@ class ClientProxy: ClientProxyProtocol {
         staticRoomSummaryProvider.roomListPublisher.value.first { $0.canonicalAlias == alias || $0.alternativeAliases.contains(alias) }
     }
     
-    func reportRoomForIdentifier(_ identifier: String, reason: String?) async -> Result<Void, ClientProxyError> {
+    func reportRoomForIdentifier(_ identifier: String, reason: String) async -> Result<Void, ClientProxyError> {
         do {
             guard let room = try client.getRoom(roomId: identifier) else {
                 MXLog.error("Failed reporting room with identifier: \(identifier), room not in local store")
@@ -1971,6 +1971,8 @@ private extension MediaPreviewConfig {
             .privateOnly
         case .off:
             .never
+        case .none:
+            .always
         }
     }
     
@@ -1980,6 +1982,8 @@ private extension MediaPreviewConfig {
             true
         case .on:
             false
+        case .none:
+            true
         }
     }
 }

@@ -81,8 +81,11 @@ targets:
     - path: ../Sources
     - path: ../SupportingFiles
     - path: ../../ElementX/Sources/AppHooks/AppHooks.swift
+    - path: ../../ElementX/Sources/AppHooks/Hooks/TracingHook.swift
     - path: ../../ElementX/Sources/AppHooks/Hooks/ClientBuilderHook.swift
-    - path: ../../ElementX/Sources/Application/AppSettings.swift
+    - path: ../../ElementX/Sources/AppHooks/Hooks/RemoteSettingsHook.swift
+    - path: ../../Secrets/Secrets.swift
+    - path: ../../ElementX/Sources/Application/Settings
     - path: ../../ElementX/Sources/Application/TargetConfiguration.swift
     - path: ../../ElementX/Sources/Generated/Assets.swift
     - path: ../../ElementX/Sources/Generated/Strings.swift
@@ -115,7 +118,6 @@ targets:
     - path: ../../ElementX/Sources/Other/SwiftUI/Views/PlaceholderAvatarImage.swift
     - path: ../../ElementX/Sources/Other/TestablePreview/TestablePreview.swift
     - path: ../../ElementX/Sources/Other/UserAgentBuilder.swift
-    - path: ../../ElementX/Sources/Other/UserPreference.swift
     - path: ../../ElementX/Sources/Services/ElementCall/ElementCallServiceConstants.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift

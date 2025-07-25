@@ -13,34 +13,19 @@ class LoggingTests: XCTestCase {
     private enum Constants {
         static let genericFailure = "Test failed"
     }
-
-    override func setUpWithError() throws {
-        Tracing.deleteLogFiles()
+    
+    override func tearDown() async throws {
+        Tracing.logsDirectoryOverride = nil
+        try reloadTracingFileWriter(configuration: .init(path: URL.appGroupLogsDirectory.path(percentEncoded: false),
+                                                         filePrefix: "console-tests",
+                                                         fileSuffix: "log",
+                                                         maxFiles: 100))
     }
     
-    func testLogging() async throws {
-        let target = "tests"
-        XCTAssertTrue(Tracing.logFiles.isEmpty)
+    func testFileLogging() throws {
+        try setupTest()
         
-        await Target.tests.configure(logLevel: .info, traceLogPacks: [], sentryURL: nil)
-        
-        // There is something weird with Rust logging where the file writing handle doesn't
-        // notice that the file it is writing to was deleted, so we can't run these checks
-        // as separate tests. So instead we need to make sure we run all the tests that
-        // write logs in this single test case after configuring the log system.
-        
-        try validateFileLogging()
-        try validateLogLevels()
-        try validateTargetName(target)
-        
-        try validateRoomSummaryContentIsRedacted()
-        try await validateTimelineContentIsRedacted()
-        try validateRustMessageContentIsRedacted()
-    }
-    
-    func validateFileLogging() throws {
         let infoLog = UUID().uuidString
-        
         MXLog.info(infoLog)
         
         guard let logFile = Tracing.logFiles.first else {
@@ -51,10 +36,12 @@ class LoggingTests: XCTestCase {
         try XCTAssertTrue(String(contentsOf: logFile).contains(infoLog))
     }
         
-    func validateLogLevels() throws {
-        let verboseLog = UUID().uuidString
+    func testLogLevels() throws {
+        try setupTest()
         
+        let verboseLog = UUID().uuidString
         MXLog.verbose(verboseLog)
+        
         guard let logFile = Tracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
@@ -62,18 +49,23 @@ class LoggingTests: XCTestCase {
         
         try XCTAssertFalse(String(contentsOf: logFile).contains(verboseLog))
     }
-        
-    func validateTargetName(_ target: String) throws {
+    
+    /// This is meant to test the `Target.tests.configure(…)`, but at this stage the test is somewhat pointless
+    /// as it is unlikely to have been called before `tearDown` has manually set the file prefix 😕.
+    func testTargetName() throws {
         MXLog.info(UUID().uuidString)
         guard let logFile = Tracing.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
         
+        let target = "tests"
         XCTAssertTrue(logFile.lastPathComponent.contains(target))
     }
     
-    func validateRoomSummaryContentIsRedacted() throws {
+    func testRoomSummaryContentIsRedacted() throws {
+        try setupTest()
+        
         // Given a room summary that contains sensitive information
         let roomName = "Private Conversation"
         let lastMessage = "Secret information"
@@ -115,7 +107,9 @@ class LoggingTests: XCTestCase {
         XCTAssertFalse(content.contains(heroName))
     }
         
-    func validateTimelineContentIsRedacted() async throws {
+    func testTimelineContentIsRedacted() async throws {
+        try setupTest()
+        
         // Given timeline items that contain text
         let textAttributedString = "TextAttributed"
         let textMessage = TextRoomTimelineItem(id: .randomEvent,
@@ -175,8 +169,6 @@ class LoggingTests: XCTestCase {
                                                               contentType: nil))
         
         // When logging that value
-        await Target.tests.configure(logLevel: .info, traceLogPacks: [], sentryURL: nil)
-        
         MXLog.info(textMessage)
         MXLog.info(noticeMessage)
         MXLog.info(emoteMessage)
@@ -213,7 +205,9 @@ class LoggingTests: XCTestCase {
         XCTAssertFalse(content.contains(fileMessage.body))
     }
         
-    func validateRustMessageContentIsRedacted() throws {
+    func testRustMessageContentIsRedacted() throws {
+        try setupTest()
+        
         // Given message content that contain text
         let textString = "TextString"
         let rustTextMessage = TextMessageContent(body: "",
@@ -278,6 +272,8 @@ class LoggingTests: XCTestCase {
     }
     
     func testLogFileSorting() async throws {
+        try setupTest(redirectTracingFileWriter: false)
+        
         // Given a collection of log files.
         XCTAssertTrue(Tracing.logFiles.isEmpty)
         
@@ -325,5 +321,27 @@ class LoggingTests: XCTestCase {
                         "console.4.log",
                         "console.3.log",
                         "console.2.log"])
+    }
+    
+    // MARK: - Helpers
+    
+    /// There is something weird with Rust logging where the file writing handle won't notice that the file it is writing
+    /// to has been deleted. So in order to run the tests that validate the file output, we must use a new directory
+    /// to start with a fresh state (as calling ``Tracing.deleteLogFiles`` would trigger the bug).
+    private func setupTest(name: String = #function, redirectTracingFileWriter: Bool = true) throws {
+        let testDirectory = URL.appGroupLogsDirectory.appending(component: name, directoryHint: .isDirectory)
+        Tracing.logsDirectoryOverride = testDirectory
+        try? FileManager.default.createDirectory(at: testDirectory, withIntermediateDirectories: true)
+        
+        // Make an assertion before redirecting the logs as it the SDK is likely to put an empty file
+        // in the directory, ready to be written to.
+        XCTAssertTrue(Tracing.logFiles.isEmpty)
+        
+        if redirectTracingFileWriter {
+            try reloadTracingFileWriter(configuration: .init(path: testDirectory.path(percentEncoded: false),
+                                                             filePrefix: "console",
+                                                             fileSuffix: "log",
+                                                             maxFiles: 100))
+        }
     }
 }
