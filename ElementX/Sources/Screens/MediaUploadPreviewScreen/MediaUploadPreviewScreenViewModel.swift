@@ -16,7 +16,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
-    private let url: URL
+    private let mediaURLs: [URL]
     
     private var processingTask: Task<Result<MediaInfo, MediaUploadingPreprocessorError>, Never>
     private var requestHandle: SendAttachmentJoinHandleProtocol?
@@ -28,7 +28,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(url: URL,
+    init(mediaURLs: [URL],
          title: String?,
          isRoomEncrypted: Bool,
          shouldShowCaptionWarning: Bool,
@@ -36,16 +36,20 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
          timelineController: TimelineControllerProtocol,
          clientProxy: ClientProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
-        self.url = url
+        self.mediaURLs = mediaURLs
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.timelineController = timelineController
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
         
-        // Start processing the media whilst the user is reviewing it/adding a caption.
-        processingTask = Self.processMedia(at: url, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
+        guard let firstMediaURL = mediaURLs.first else {
+            fatalError()
+        }
         
-        super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url,
+        // Start processing the media whilst the user is reviewing it/adding a caption.
+        processingTask = Self.processMedia(at: firstMediaURL, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
+        
+        super.init(initialViewState: MediaUploadPreviewScreenViewState(mediaURLs: mediaURLs,
                                                                        title: title,
                                                                        shouldShowCaptionWarning: shouldShowCaptionWarning,
                                                                        isRoomEncrypted: isRoomEncrypted))
@@ -159,12 +163,16 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     private func showAlert(_ alertType: MediaUploadPreviewAlertType) {
         switch alertType {
         case .maxUploadSizeUnknown:
+            guard let firstMediaURL = mediaURLs.first else {
+                fatalError()
+            }
+            
             state.bindings.alertInfo = .init(id: alertType,
                                              title: L10n.commonSomethingWentWrong,
                                              message: L10n.screenMediaUploadPreviewErrorCouldNotBeUploaded,
                                              primaryButton: .init(title: L10n.actionTryAgain) { [weak self] in
                                                  guard let self else { return }
-                                                 processingTask = Self.processMedia(at: url, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
+                                                 processingTask = Self.processMedia(at: firstMediaURL, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)
                                                  process(viewAction: .send)
                                              },
                                              secondaryButton: .init(title: L10n.actionCancel, role: .cancel) { })

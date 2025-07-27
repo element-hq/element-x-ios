@@ -23,7 +23,7 @@ struct MediaUploadPreviewScreen: View {
     
     var body: some View {
         mainContent
-            .id(context.viewState.url)
+            .id(context.viewState.mediaURLs)
             .ignoresSafeArea(edges: [.horizontal])
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composer
@@ -50,7 +50,7 @@ struct MediaUploadPreviewScreen: View {
                 .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {
-            PreviewView(fileURL: context.viewState.url,
+            PreviewView(mediaURLs: context.viewState.mediaURLs,
                         title: context.viewState.title)
         }
     }
@@ -154,7 +154,7 @@ struct MediaUploadPreviewScreen: View {
 }
 
 private struct PreviewView: UIViewControllerRepresentable {
-    let fileURL: URL
+    let mediaURLs: [URL]
     let title: String?
 
     func makeUIViewController(context: Context) -> UIViewController {
@@ -185,11 +185,11 @@ private struct PreviewView: UIViewControllerRepresentable {
         // MARK: - QLPreviewControllerDataSource
         
         func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-            1
+            view.mediaURLs.count
         }
 
         func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-            PreviewItem(previewItemURL: view.fileURL, previewItemTitle: view.title)
+            PreviewItem(previewItemURL: view.mediaURLs[index], previewItemTitle: view.title)
         }
         
         // MARK: - QLPreviewControllerDelegate
@@ -228,7 +228,7 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
     static let snapshotURL = URL.picturesDirectory
     static let testURL = Bundle.main.url(forResource: "AppIcon60x60@2x", withExtension: "png")
     
-    static let viewModel = MediaUploadPreviewScreenViewModel(url: snapshotURL,
+    static let viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: [snapshotURL],
                                                              title: "App Icon.png",
                                                              isRoomEncrypted: true,
                                                              shouldShowCaptionWarning: true,

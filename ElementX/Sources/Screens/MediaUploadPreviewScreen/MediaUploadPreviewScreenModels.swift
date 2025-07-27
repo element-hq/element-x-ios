@@ -12,7 +12,7 @@ enum MediaUploadPreviewScreenViewModelAction {
 }
 
 struct MediaUploadPreviewScreenViewState: BindableState {
-    let url: URL
+    let mediaURLs: [URL]
     let title: String?
     let shouldShowCaptionWarning: Bool
     let isRoomEncrypted: Bool

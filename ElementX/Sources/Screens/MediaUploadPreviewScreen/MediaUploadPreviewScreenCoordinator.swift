@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 
 struct MediaUploadPreviewScreenCoordinatorParameters {
-    let url: URL
+    let mediaURLs: [URL]
     let title: String?
     let isRoomEncrypted: Bool
     let shouldShowCaptionWarning: Bool
@@ -33,7 +33,7 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: MediaUploadPreviewScreenCoordinatorParameters) {
-        viewModel = MediaUploadPreviewScreenViewModel(url: parameters.url,
+        viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: parameters.mediaURLs,
                                                       title: parameters.title,
                                                       isRoomEncrypted: parameters.isRoomEncrypted,
                                                       shouldShowCaptionWarning: parameters.shouldShowCaptionWarning,

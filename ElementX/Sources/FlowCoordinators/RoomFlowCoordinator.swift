@@ -949,14 +949,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentMediaUploadPreviewScreen(for mediaURLs: [URL],
                                                  timelineController: TimelineControllerProtocol,
                                                  animated: Bool) {
-        guard let url = mediaURLs.first else {
-            fatalError()
-        }
-        
         let stackCoordinator = NavigationStackCoordinator()
+        
+        let title: String? = if mediaURLs.count == 1 {
+            mediaURLs.first?.lastPathComponent
+        } else {
+            nil
+        }
 
-        let parameters = MediaUploadPreviewScreenCoordinatorParameters(url: url,
-                                                                       title: url.lastPathComponent,
+        let parameters = MediaUploadPreviewScreenCoordinatorParameters(mediaURLs: mediaURLs,
+                                                                       title: title,
                                                                        isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                                                        shouldShowCaptionWarning: appSettings.shouldShowMediaCaptionWarning,
                                                                        mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
