@@ -23,7 +23,8 @@ struct CameraPicker: UIViewControllerRepresentable {
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let callback: (CameraPickerAction) -> Void
     
-    init(userIndicatorController: UserIndicatorControllerProtocol, callback: @escaping (CameraPickerAction) -> Void) {
+    init(userIndicatorController: UserIndicatorControllerProtocol,
+         callback: @escaping (CameraPickerAction) -> Void) {
         self.userIndicatorController = userIndicatorController
         self.callback = callback
     }

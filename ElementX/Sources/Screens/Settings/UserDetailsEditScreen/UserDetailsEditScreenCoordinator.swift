@@ -36,11 +36,11 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
             .sink { [weak self] action in
                 switch action {
                 case .displayCameraPicker:
-                    self?.displayMediaPickerWithSource(.camera)
+                    self?.displayMediaPickerWithMode(.init(source: .camera, selectionType: .single))
                 case .displayMediaPicker:
-                    self?.displayMediaPickerWithSource(.photoLibrary)
+                    self?.displayMediaPickerWithMode(.init(source: .photoLibrary, selectionType: .single))
                 case .displayFilePicker:
-                    self?.displayMediaPickerWithSource(.documents)
+                    self?.displayMediaPickerWithMode(.init(source: .documents, selectionType: .single))
                 }
             }
             .store(in: &cancellables)
@@ -52,15 +52,21 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
     
     // MARK: Private
     
-    private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
+    private func displayMediaPickerWithMode(_ mode: MediaPickerScreenMode) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source, orientationManager: parameters.orientationManager) { [weak self] action in
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(mode: mode,
+                                                                  userIndicatorController: parameters.userIndicatorController,
+                                                                  orientationManager: parameters.orientationManager) { [weak self] action in
             guard let self else { return }
             switch action {
             case .cancel:
                 parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
-            case .selectMediaAtURL(let url):
+            case .selectedMediaAtURLs(let urls):
+                guard let url = urls.first else {
+                    fatalError("Received more than one URL")
+                }
+                
                 parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
                 viewModel.didSelectMediaURL(url: url)
             }

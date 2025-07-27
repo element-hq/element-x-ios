@@ -14,7 +14,7 @@ enum TimelineInteractionHandlerAction {
     case displayEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
     case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
-    case displayMediaUploadPreviewScreen(url: URL)
+    case displayMediaUploadPreviewScreen(mediaURLs: [URL])
     case displayPollForm(mode: PollFormMode)
     
     case showActionMenu(TimelineItemActionMenuInfo)
@@ -291,7 +291,7 @@ class TimelineInteractionHandler {
                 return
             }
             
-            self.actionsSubject.send(.displayMediaUploadPreviewScreen(url: fileURL))
+            self.actionsSubject.send(.displayMediaUploadPreviewScreen(mediaURLs: [fileURL]))
         }
     }
     

@@ -57,8 +57,8 @@ extension RoomFlowCoordinator {
         case roomMemberDetails(userID: String, previousState: State)
         case userProfile(userID: String, previousState: State)
         case inviteUsersScreen(previousState: State)
-        case mediaUploadPicker(source: MediaPickerScreenSource, previousState: State)
-        case mediaUploadPreview(fileURL: URL, previousState: State)
+        case mediaUploadPicker(mode: MediaPickerScreenMode, previousState: State)
+        case mediaUploadPreview(mediaURLs: [URL], previousState: State)
         case emojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>, previousState: State)
         case mapNavigator(previousState: State)
         case messageForwarding(forwardingItem: MessageForwardingItem, previousState: State)
@@ -123,10 +123,10 @@ extension RoomFlowCoordinator {
         case presentInviteUsersScreen
         case dismissInviteUsersScreen
                 
-        case presentMediaUploadPicker(source: MediaPickerScreenSource)
+        case presentMediaUploadPicker(mode: MediaPickerScreenMode)
         case dismissMediaUploadPicker
         
-        case presentMediaUploadPreview(fileURL: URL)
+        case presentMediaUploadPreview(mediaURLs: [URL])
         case dismissMediaUploadPreview
         
         case presentEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
@@ -185,11 +185,11 @@ extension RoomFlowCoordinator {
             case (.room, .presentReportContent(let itemID, let senderID)):
                 return .reportContent(itemID: itemID, senderID: senderID, previousState: fromState)
                 
-            case (.room, .presentMediaUploadPicker(let source)):
-                return .mediaUploadPicker(source: source, previousState: fromState)
+            case (.room, .presentMediaUploadPicker(let mode)):
+                return .mediaUploadPicker(mode: mode, previousState: fromState)
             
-            case (.room, .presentMediaUploadPreview(let fileURL)):
-                return .mediaUploadPreview(fileURL: fileURL, previousState: fromState)
+            case (.room, .presentMediaUploadPreview(let mediaURLs)):
+                return .mediaUploadPreview(mediaURLs: mediaURLs, previousState: fromState)
                 
             case (.room, .presentEmojiPicker(let itemID, let selectedEmoji)):
                 return .emojiPicker(itemID: itemID, selectedEmojis: selectedEmoji, previousState: fromState)
@@ -222,11 +222,11 @@ extension RoomFlowCoordinator {
             case (.thread, .presentReportContent(let itemID, let senderID)):
                 return .reportContent(itemID: itemID, senderID: senderID, previousState: fromState)
                 
-            case (.thread, .presentMediaUploadPicker(let source)):
-                return .mediaUploadPicker(source: source, previousState: fromState)
+            case (.thread, .presentMediaUploadPicker(let mode)):
+                return .mediaUploadPicker(mode: mode, previousState: fromState)
             
-            case (.thread, .presentMediaUploadPreview(let fileURL)):
-                return .mediaUploadPreview(fileURL: fileURL, previousState: fromState)
+            case (.thread, .presentMediaUploadPreview(let mediaURLs)):
+                return .mediaUploadPreview(mediaURLs: mediaURLs, previousState: fromState)
                 
             case (.thread, .presentEmojiPicker(let itemID, let selectedEmoji)):
                 return .emojiPicker(itemID: itemID, selectedEmojis: selectedEmoji, previousState: fromState)
@@ -362,8 +362,8 @@ extension RoomFlowCoordinator {
             case (.pollsHistoryForm, .dismissPollForm):
                 return .pollsHistory
                 
-            case (.mediaUploadPicker(_, let previousMediaUploadPickerState), .presentMediaUploadPreview(let fileURL)):
-                return .mediaUploadPreview(fileURL: fileURL, previousState: previousMediaUploadPickerState)
+            case (.mediaUploadPicker(_, let previousMediaUploadPickerState), .presentMediaUploadPreview(let mediaURLs)):
+                return .mediaUploadPreview(mediaURLs: mediaURLs, previousState: previousMediaUploadPickerState)
                 
             case (_, .presentInviteUsersScreen):
                 return .inviteUsersScreen(previousState: fromState)

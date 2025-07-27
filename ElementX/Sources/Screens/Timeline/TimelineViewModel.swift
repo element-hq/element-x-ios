@@ -480,8 +480,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     actionsSubject.send(.displayPollForm(mode: mode))
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.displayReportContent(itemID: itemID, senderID: senderID))
-                case .displayMediaUploadPreviewScreen(let url):
-                    actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
+                case .displayMediaUploadPreviewScreen(let mediaURLs):
+                    actionsSubject.send(.displayMediaUploadPreviewScreen(mediaURLs: mediaURLs))
                 case .showActionMenu(let actionMenuInfo):
                     self.state.bindings.actionMenuInfo = actionMenuInfo
                 case .showDebugInfo(let debugInfo):
