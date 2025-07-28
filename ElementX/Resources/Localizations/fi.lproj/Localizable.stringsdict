@@ -109,9 +109,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d reply</string>
+			<string>%1$d vastaus</string>
 			<key>other</key>
-			<string>%1$d replies</string>
+			<string>%1$d vastausta</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>

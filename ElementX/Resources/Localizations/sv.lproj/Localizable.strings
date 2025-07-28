@@ -31,6 +31,7 @@
 "a11y_show_password" = "Visa lösenord";
 "a11y_start_call" = "Starta ett samtal";
 "a11y_time_limited_action_required" = "Time limited action required";
+"a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Användarmeny";
 "a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Visa detaljer";
@@ -457,6 +458,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "De skulle kunna gå med i rummet igen om de blev inbjudna";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Är du säker på att du vill avbanna den här medlemmen?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Avbannar %1$@";
+"screen_bug_report_a11y_screenshot" = "Screenshot";
 "screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
 "screen_create_poll_options_section_title" = "Options";
 "screen_create_poll_remove_accessibility_label" = "Remove %1$@";
@@ -485,6 +487,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Är du säker på att du vill avvisa inbjudan att gå med i det här rummet? Detta kommer också att hindra %1$@ från att kontakta dig eller bjuda in dig till rum.";
 "screen_join_room_decline_and_block_alert_title" = "Avvisa inbjudan och blockera";
 "screen_join_room_decline_and_block_button_title" = "Avvisa och blockera";
+"screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Meddelande (valfritt)";
 "screen_join_room_knock_sent_description" = "Du kommer att få en inbjudan att gå med i rummet om din begäran accepteras.";
 "screen_join_room_knock_sent_title" = "Begäran om att gå med skickad";
@@ -521,8 +524,11 @@
 "screen_media_details_uploaded_by" = "Uppladdad av";
 "screen_media_details_uploaded_on" = "Uppladdad på";
 "screen_media_upload_preview_caption_warning" = "Bildtexter kanske inte är synliga för personer som använder äldre appar.";
+"screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";
 "screen_media_upload_preview_error_failed_processing" = "Misslyckades att bearbeta media för uppladdning, vänligen pröva igen.";
 "screen_media_upload_preview_error_failed_sending" = "Misslyckades att ladda upp media, vänligen pröva igen.";
+"screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
+"screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
 "screen_pinned_timeline_empty_state_description" = "Tryck på ett meddelande och välj ”%1$@” för att inkludera det här.";
 "screen_pinned_timeline_empty_state_headline" = "Fäst viktiga meddelanden så att de lätt kan upptäckas";
 "screen_push_history_title" = "Push-historik";
@@ -978,6 +984,7 @@
 "screen_room_member_list_pending_header_title" = "Väntar";
 "screen_room_member_list_role_administrator" = "Admin";
 "screen_room_member_list_role_moderator" = "Moderator";
+"screen_room_member_list_role_owner" = "Owner";
 "screen_room_member_list_room_members_header_title" = "Rumsmedlemmar";
 "screen_room_member_list_unbanning_user" = "Avbannar %1$@";
 "screen_room_notification_settings_allow_custom" = "Tillåt anpassad inställning";

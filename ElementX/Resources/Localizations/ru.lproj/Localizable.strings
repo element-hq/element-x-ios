@@ -31,6 +31,7 @@
 "a11y_show_password" = "Показать пароль";
 "a11y_start_call" = "Начать звонок";
 "a11y_time_limited_action_required" = "Time limited action required";
+"a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Меню пользователя";
 "a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Подробнее";
@@ -457,6 +458,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "Они смогут снова войти в комнату, если их пригласят.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Вы действительно хотите разблокировать этого участника?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Разблокировка %1$@";
+"screen_bug_report_a11y_screenshot" = "Screenshot";
 "screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
 "screen_create_poll_options_section_title" = "Options";
 "screen_create_poll_remove_accessibility_label" = "Remove %1$@";
@@ -485,6 +487,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Вы действительно хотите отклонить приглашение в эту комнате? Это также предотвратит %1$@ возможность связываться с вами или приглашать вас в комнаты.";
 "screen_join_room_decline_and_block_alert_title" = "Отклонить приглашение и заблокировать";
 "screen_join_room_decline_and_block_button_title" = "Отклонить и заблокировать";
+"screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Сообщение (опционально)";
 "screen_join_room_knock_sent_description" = "Вы получите приглашение присоединиться к комнате, как только ваш запрос будет принят.";
 "screen_join_room_knock_sent_title" = "Запрос на присоединение отправлен";
@@ -521,8 +524,11 @@
 "screen_media_details_uploaded_by" = "Загружено";
 "screen_media_details_uploaded_on" = "Загружено на";
 "screen_media_upload_preview_caption_warning" = "Подпись может быть не видна пользователям старых приложений.";
+"screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";
 "screen_media_upload_preview_error_failed_processing" = "Не удалось обработать медиафайл для загрузки, попробуйте еще раз.";
 "screen_media_upload_preview_error_failed_sending" = "Не удалось загрузить медиафайлы, попробуйте еще раз.";
+"screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
+"screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
 "screen_pinned_timeline_empty_state_description" = "Нажмите на сообщение и выберите “%1$@”, чтобы добавить его сюда.";
 "screen_pinned_timeline_empty_state_headline" = "Закрепите важные сообщения, чтобы их можно было легко найти";
 "screen_push_history_title" = "История уведомлений";
@@ -978,6 +984,7 @@
 "screen_room_member_list_pending_header_title" = "В ожидании";
 "screen_room_member_list_role_administrator" = "Администратор";
 "screen_room_member_list_role_moderator" = "Модератор";
+"screen_room_member_list_role_owner" = "Owner";
 "screen_room_member_list_room_members_header_title" = "Участники комнаты";
 "screen_room_member_list_unbanning_user" = "Разблокировка %1$@";
 "screen_room_notification_settings_allow_custom" = "Разрешить пользовательские настройки";

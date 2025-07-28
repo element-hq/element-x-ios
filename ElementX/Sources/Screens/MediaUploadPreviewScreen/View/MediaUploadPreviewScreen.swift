@@ -69,7 +69,7 @@ struct MediaUploadPreviewScreen: View {
                     captionWarningButton
                 }
             }
-            .messageComposerStyle(isEncrypted: context.viewState.isRoomEncrypted)
+            .messageComposerStyle()
             
             Button {
                 context.send(viewAction: .send)

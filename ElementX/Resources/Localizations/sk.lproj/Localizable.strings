@@ -3,7 +3,7 @@
 "a11y_avatar" = "Obrázok";
 "a11y_delete" = "Vymazať";
 "a11y_edit_avatar" = "Upraviť obrázok";
-"a11y_edit_room_address_hint" = "The full address will be %1$@";
+"a11y_edit_room_address_hint" = "Celá adresa bude %1$@";
 "a11y_hide_password" = "Skryť heslo";
 "a11y_join_call" = "Pripojiť sa k hovoru";
 "a11y_jump_to_bottom" = "Prejsť na spodok";
@@ -31,6 +31,7 @@
 "a11y_show_password" = "Zobraziť heslo";
 "a11y_start_call" = "Začať hovor";
 "a11y_time_limited_action_required" = "Vyžaduje sa časovo obmedzená akcia";
+"a11y_tombstoned_room" = "Opustená miestnosť";
 "a11y_user_menu" = "Používateľské menu";
 "a11y_view_avatar" = "Zobraziť profilový obrázok";
 "a11y_view_details" = "Zobraziť podrobnosti";
@@ -457,6 +458,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "V prípade pozvania by sa mohli opäť pripojiť k miestnosti";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Naozaj chcete zrušiť zablokovanie tohto člena?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Zrušenie zákazu pre %1$@";
+"screen_bug_report_a11y_screenshot" = "Snímka obrazovky";
 "screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
 "screen_create_poll_options_section_title" = "Možnosti";
 "screen_create_poll_remove_accessibility_label" = "Odstrániť %1$@";
@@ -485,6 +487,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Ste si istí, že chcete odmietnuť pozvanie na vstup do tejto miestnosti? To tiež zabráni tomu, aby vás %1$@ kontaktoval/a alebo vás pozval/a do miestností.";
 "screen_join_room_decline_and_block_alert_title" = "Odmietnuť pozvánku a zablokovať";
 "screen_join_room_decline_and_block_button_title" = "Odmietnuť a zablokovať";
+"screen_join_room_knock_message_characters_count" = "Povolené znaky %1$d z %2$d";
 "screen_join_room_knock_message_description" = "Správa (voliteľné)";
 "screen_join_room_knock_sent_description" = "Ak bude vaša žiadosť prijatá, dostanete pozvánku na vstup do miestnosti.";
 "screen_join_room_knock_sent_title" = "Žiadosť o pripojenie bola odoslaná";
@@ -521,8 +524,11 @@
 "screen_media_details_uploaded_by" = "Nahrané používateľom";
 "screen_media_details_uploaded_on" = "Nahrané dňa";
 "screen_media_upload_preview_caption_warning" = "Titulky nemusia byť viditeľné pre ľudí používajúcich staršie aplikácie.";
+"screen_media_upload_preview_error_could_not_be_uploaded" = "Súbor sa nepodarilo nahrať.";
 "screen_media_upload_preview_error_failed_processing" = "Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova.";
 "screen_media_upload_preview_error_failed_sending" = "Nepodarilo sa nahrať médiá, skúste to prosím znova.";
+"screen_media_upload_preview_error_too_large_message" = "Maximálna povolená veľkosť súboru je %1$@.";
+"screen_media_upload_preview_error_too_large_title" = "Súbor je príliš veľký na nahratie";
 "screen_pinned_timeline_empty_state_description" = "Stlačte správu a vyberte možnosť „%1$@“, ktorú chcete zahrnúť sem.";
 "screen_pinned_timeline_empty_state_headline" = "Pripnite dôležité správy, aby sa dali ľahko nájsť";
 "screen_push_history_title" = "História push oznámení";
@@ -978,6 +984,7 @@
 "screen_room_member_list_pending_header_title" = "Čaká sa";
 "screen_room_member_list_role_administrator" = "Administrátor";
 "screen_room_member_list_role_moderator" = "Moderátor";
+"screen_room_member_list_role_owner" = "Vlastník";
 "screen_room_member_list_room_members_header_title" = "Členovia miestnosti";
 "screen_room_member_list_unbanning_user" = "Zrušenie zákazu %1$@";
 "screen_room_notification_settings_allow_custom" = "Povoliť vlastné nastavenie";

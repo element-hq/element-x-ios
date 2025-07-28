@@ -31,6 +31,7 @@
 "a11y_show_password" = "Afficher le mot de passe";
 "a11y_start_call" = "Démarrer un appel";
 "a11y_time_limited_action_required" = "Demande d'action qui expirera dans un instant";
+"a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Menu utilisateur";
 "a11y_view_avatar" = "Voir l'avatar";
 "a11y_view_details" = "Afficher les détails";
@@ -38,7 +39,7 @@
 "a11y_voice_message_record" = "Enregistrer un message vocal.";
 "a11y_voice_message_stop_recording" = "Arrêter l'enregistrement";
 "a11y.encryption_details" = "Détails du chiffrement";
-"a11y.move_the_map_to_my_location" = "Déplacer la carte vers mon position";
+"a11y.move_the_map_to_my_location" = "Déplacer la carte vers ma position";
 "a11y.other_user_avatar" = "Avatar de l'autre utilisateur";
 "a11y.room_avatar" = "Avatar du salon";
 "a11y.user_avatar" = "Avatar de l'utilisateur";
@@ -457,6 +458,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "L'utilisateur pourra à nouveau rejoindre le salon s'il est invité.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Êtes-vous sûr de vouloir débannir cet utilisateur?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Débannissement de %1$@";
+"screen_bug_report_a11y_screenshot" = "Screenshot";
 "screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
 "screen_create_poll_options_section_title" = "Options";
 "screen_create_poll_remove_accessibility_label" = "Supprimer %1$@";
@@ -485,6 +487,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Êtes-vous sûr de vouloir refuser l'invitation à rejoindre ce salon ? Cela empêchera également %1$@ de vous contacter ou de vous inviter dans les salons.";
 "screen_join_room_decline_and_block_alert_title" = "Refuser l'invitation et bloquer";
 "screen_join_room_decline_and_block_button_title" = "Refuser et bloquer";
+"screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Message (facultatif)";
 "screen_join_room_knock_sent_description" = "Vous recevrez une invitation à rejoindre le salon si votre demande est acceptée.";
 "screen_join_room_knock_sent_title" = "Demande de rejoindre le salon envoyée";
@@ -521,8 +524,11 @@
 "screen_media_details_uploaded_by" = "Envoyé par";
 "screen_media_details_uploaded_on" = "Envoyé le";
 "screen_media_upload_preview_caption_warning" = "Les légendes peuvent ne pas être visibles pour les utilisateurs d'anciennes applications.";
+"screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";
 "screen_media_upload_preview_error_failed_processing" = "Échec du traitement des médias à télécharger, veuillez réessayer.";
 "screen_media_upload_preview_error_failed_sending" = "Échec du téléchargement du média, veuillez réessayer.";
+"screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
+"screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
 "screen_pinned_timeline_empty_state_description" = "Cliquez (clic long) sur un message et choisissez « %1$@ » pour qu‘il apparaisse ici.";
 "screen_pinned_timeline_empty_state_headline" = "Épinglez les messages importants pour leur donner plus de visibilité";
 "screen_push_history_title" = "Historique des Push";
@@ -978,6 +984,7 @@
 "screen_room_member_list_pending_header_title" = "En attente";
 "screen_room_member_list_role_administrator" = "Administrateur";
 "screen_room_member_list_role_moderator" = "Modérateur";
+"screen_room_member_list_role_owner" = "Owner";
 "screen_room_member_list_room_members_header_title" = "Membres du salon";
 "screen_room_member_list_unbanning_user" = "Débannissement de %1$@";
 "screen_room_notification_settings_allow_custom" = "Autoriser les paramètres personnalisés";

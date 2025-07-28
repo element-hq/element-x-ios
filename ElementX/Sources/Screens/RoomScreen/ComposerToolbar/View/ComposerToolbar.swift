@@ -42,10 +42,25 @@ struct ComposerToolbar: View {
             }
         }
         .readFrame($frame)
+        .safeAreaInset(edge: .top) {
+            if !context.viewState.isRoomEncrypted {
+                Label {
+                    Text(L10n.commonNotEncrypted)
+                        .font(.compound.bodySM)
+                        .foregroundStyle(.compound.textSecondary)
+                } icon: {
+                    CompoundIcon(\.lockOff, size: .xSmall, relativeTo: .compound.bodyMD)
+                        .foregroundStyle(.compound.iconInfoPrimary)
+                }
+                .padding(4.0)
+            }
+        }
         .overlay(alignment: .bottom) {
-            if verticalSizeClass != .compact, !context.composerExpanded {
-                suggestionView
-                    .offset(y: -frame.height)
+            ZStack {
+                if verticalSizeClass != .compact, !context.composerExpanded {
+                    suggestionView
+                        .offset(y: -frame.height)
+                }
             }
         }
         .disabled(!context.viewState.canSend)
@@ -183,8 +198,7 @@ struct ComposerToolbar: View {
                         placeholder: placeholder,
                         composerFormattingEnabled: context.composerFormattingEnabled,
                         showResizeGrabber: context.composerFormattingEnabled,
-                        isExpanded: $context.composerExpanded,
-                        isEncrypted: context.viewState.isRoomEncrypted) {
+                        isExpanded: $context.composerExpanded) {
             sendMessage()
         } editAction: {
             context.send(viewAction: .editLastMessage)
@@ -257,12 +271,7 @@ struct ComposerToolbar: View {
     }
     
     private var composerPlaceholder: String {
-//        if context.viewState.isRoomEncrypted {
-//            return L10n.richTextEditorComposerPlaceholder
-//        } else {
-//            return L10n.richTextEditorComposerUnencryptedPlaceholder
-//        }
-        return L10n.richTextEditorComposerPlaceholder
+        L10n.richTextEditorComposerPlaceholder
     }
     
     private var composerView: WysiwygComposerView {
