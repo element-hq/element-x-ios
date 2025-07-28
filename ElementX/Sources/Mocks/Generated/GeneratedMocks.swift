@@ -2200,6 +2200,23 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingIsLiveKitRTCSupported: Bool!
     var isLiveKitRTCSupportedClosure: (() async -> Bool)?
+    var maxMediaUploadSizeCallsCount = 0
+    var maxMediaUploadSizeCalled: Bool {
+        return maxMediaUploadSizeCallsCount > 0
+    }
+
+    var maxMediaUploadSize: Result<UInt, ClientProxyError> {
+        get async {
+            maxMediaUploadSizeCallsCount += 1
+            if let maxMediaUploadSizeClosure = maxMediaUploadSizeClosure {
+                return await maxMediaUploadSizeClosure()
+            } else {
+                return underlyingMaxMediaUploadSize
+            }
+        }
+    }
+    var underlyingMaxMediaUploadSize: Result<UInt, ClientProxyError>!
+    var maxMediaUploadSizeClosure: (() async -> Result<UInt, ClientProxyError>)?
 
     //MARK: - isOnlyDeviceLeft
 
