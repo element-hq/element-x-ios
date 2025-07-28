@@ -24,7 +24,6 @@ struct MessageComposer: View {
     let composerFormattingEnabled: Bool
     let showResizeGrabber: Bool
     @Binding var isExpanded: Bool
-    let isEncrypted: Bool
     
     let sendAction: () -> Void
     let editAction: () -> Void
@@ -42,7 +41,7 @@ struct MessageComposer: View {
             }
             
             composerTextField
-                .messageComposerStyle(header: header, isEncrypted: isEncrypted)
+                .messageComposerStyle(header: header)
                 // Explicitly disable all animations to fix weirdness with the header immediately
                 // appearing whilst the text field and keyboard are still animating up to it.
                 .animation(.noAnimation, value: mode)
@@ -200,8 +199,8 @@ private struct MessageComposerHeaderLabelStyle: LabelStyle {
 // MARK: - Style
 
 extension View {
-    func messageComposerStyle(header: some View = EmptyView(), isEncrypted: Bool) -> some View {
-        modifier(MessageComposerStyleModifier(header: header, isEncrypted: isEncrypted))
+    func messageComposerStyle(header: some View = EmptyView()) -> some View {
+        modifier(MessageComposerStyleModifier(header: header))
     }
 }
 
@@ -209,7 +208,6 @@ private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
     private let composerShape = RoundedRectangle(cornerRadius: 21, style: .circular)
     
     let header: Header
-    let isEncrypted: Bool
     
     func body(content: Content) -> some View {
         VStack(alignment: .leading, spacing: -6) {
@@ -227,19 +225,6 @@ private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
                     .fill(Color.compound.bgSubtleSecondary)
                 composerShape
                     .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
-            }
-        }
-        .safeAreaInset(edge: .top) {
-            if !isEncrypted {
-                Label {
-                    Text(L10n.commonNotEncrypted)
-                        .font(.compound.bodySM)
-                        .foregroundStyle(.compound.textSecondary)
-                } icon: {
-                    CompoundIcon(\.lockOff, size: .xSmall, relativeTo: .compound.bodyMD)
-                        .foregroundStyle(.compound.iconInfoPrimary)
-                }
-                .padding(4.0)
             }
         }
     }
@@ -294,7 +279,7 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
     
     static func messageComposer(_ content: NSAttributedString = .init(string: ""),
                                 mode: ComposerMode = .default,
-                                placeholder: String = L10n.richTextEditorComposerEncryptedPlaceholder) -> MessageComposer {
+                                placeholder: String = L10n.richTextEditorComposerPlaceholder) -> MessageComposer {
         let viewModel = WysiwygComposerViewModel(minHeight: 22,
                                                  maxExpandedHeight: 250)
         viewModel.setMarkdownContent(content.string)
@@ -314,7 +299,6 @@ struct MessageComposer_Previews: PreviewProvider, TestablePreview {
                                composerFormattingEnabled: false,
                                showResizeGrabber: false,
                                isExpanded: .constant(false),
-                               isEncrypted: false,
                                sendAction: { },
                                editAction: { },
                                pasteAction: { _ in },
