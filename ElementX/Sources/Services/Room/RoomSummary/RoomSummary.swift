@@ -134,6 +134,9 @@ extension RoomSummary {
             return .tombstoned
         }
         
+        // NOTE: The check for isSpace isn't implemented yet, waiting to see
+        // whether we end up with a different type for spaces in the room list.
+        
         if isDirect, avatarURL == nil, heroes.count == 1 {
             return .heroes(heroes)
         } else {

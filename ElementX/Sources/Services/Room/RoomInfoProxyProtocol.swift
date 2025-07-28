@@ -69,6 +69,10 @@ extension BaseRoomInfoProxyProtocol {
             return .tombstoned
         }
         
+        if isSpace {
+            return .space(id: id, name: displayName, avatarURL: avatarURL)
+        }
+        
         if isDirect, avatarURL == nil, heroes.count == 1 {
             return .heroes(heroes.map(UserProfileProxy.init))
         }

@@ -11,20 +11,24 @@ struct LoadableAvatarImage: View {
     private let url: URL?
     private let name: String?
     private let contentID: String?
+    private let isSpace: Bool
     private let avatarSize: Avatars.Size
     private let mediaProvider: MediaProviderProtocol?
     private let onTap: ((URL) -> Void)?
     
     @ScaledMetric private var frameSize: CGFloat
     
-    init(url: URL?, name: String?,
+    init(url: URL?,
+         name: String?,
          contentID: String?,
+         isSpace: Bool = false,
          avatarSize: Avatars.Size,
          mediaProvider: MediaProviderProtocol?,
          onTap: ((URL) -> Void)? = nil) {
         self.url = url
         self.name = name
         self.contentID = contentID
+        self.isSpace = isSpace
         self.avatarSize = avatarSize
         self.mediaProvider = mediaProvider
         self.onTap = onTap
@@ -49,8 +53,12 @@ struct LoadableAvatarImage: View {
         avatar
             .frame(width: frameSize, height: frameSize)
             .background(Color.compound.bgCanvasDefault)
-            .clipShape(Circle())
+            .clipShape(avatarShape)
             .environment(\.shouldAutomaticallyLoadImages, true) // We always load avatars.
+    }
+    
+    private var avatarShape: some Shape {
+        isSpace ? AnyShape(RoundedRectangle(cornerRadius: frameSize / 4)) : AnyShape(Circle())
     }
     
     @ViewBuilder
