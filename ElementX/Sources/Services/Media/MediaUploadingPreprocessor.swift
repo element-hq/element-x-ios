@@ -94,6 +94,19 @@ struct MediaUploadingPreprocessor {
         static let videoThumbnailTime = 5.0 // seconds
     }
     
+    /// Processes media at the given URLs. It will generate thumbnails for images and videos, convert videos to 1080p mp4, strip GPS locations
+    /// from images and retrieve associated media information
+    /// - Parameter urls: the file URL
+    /// - Returns: a collection of results containing specific type of `MediaInfo` depending on the file type
+    /// and its associated details or any resulting error
+    func processMedia(at urls: [URL], maxUploadSize: UInt) async -> [Result<MediaInfo, MediaUploadingPreprocessorError>] {
+        var results = [Result<MediaInfo, MediaUploadingPreprocessorError>]()
+        for url in urls {
+            await results.append(processMedia(at: url, maxUploadSize: maxUploadSize))
+        }
+        return results
+    }
+    
     /// Processes media at a given URL. It will generate thumbnails for images and videos, convert videos to 1080p mp4, strip GPS locations
     /// from images and retrieve associated media information
     /// - Parameter url: the file URL
