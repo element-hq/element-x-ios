@@ -28,19 +28,19 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(timelineController: TimelineControllerProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         mediaUploadingPreprocessor: MediaUploadingPreprocessor,
+    init(url: URL,
          title: String?,
-         url: URL,
-         shouldShowCaptionWarning: Bool,
          isRoomEncrypted: Bool,
-         clientProxy: ClientProxyProtocol) {
-        self.timelineController = timelineController
-        self.userIndicatorController = userIndicatorController
-        self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
+         shouldShowCaptionWarning: Bool,
+         mediaUploadingPreprocessor: MediaUploadingPreprocessor,
+         timelineController: TimelineControllerProtocol,
+         clientProxy: ClientProxyProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.url = url
+        self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
+        self.timelineController = timelineController
         self.clientProxy = clientProxy
+        self.userIndicatorController = userIndicatorController
         
         // Start processing the media whilst the user is reviewing it/adding a caption.
         processingTask = Self.processMedia(at: url, preprocessor: mediaUploadingPreprocessor, clientProxy: clientProxy)

@@ -950,14 +950,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                  animated: Bool) {
         let stackCoordinator = NavigationStackCoordinator()
 
-        let parameters = MediaUploadPreviewScreenCoordinatorParameters(timelineController: timelineController,
-                                                                       userIndicatorController: userIndicatorController,
-                                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+        let parameters = MediaUploadPreviewScreenCoordinatorParameters(url: url,
                                                                        title: url.lastPathComponent,
-                                                                       url: url,
-                                                                       shouldShowCaptionWarning: appSettings.shouldShowMediaCaptionWarning,
                                                                        isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
-                                                                       clientProxy: userSession.clientProxy)
+                                                                       shouldShowCaptionWarning: appSettings.shouldShowMediaCaptionWarning,
+                                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+                                                                       timelineController: timelineController,
+                                                                       clientProxy: userSession.clientProxy,
+                                                                       userIndicatorController: userIndicatorController)
 
         let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters)
         
