@@ -140,7 +140,8 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: true),
                                                               title: L10n.commonPreparing,
-                                                              persistent: true))
+                                                              persistent: true),
+                                                delay: .milliseconds(100))
         
         state.shouldDisableInteraction = true
     }
