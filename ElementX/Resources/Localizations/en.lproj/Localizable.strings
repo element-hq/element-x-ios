@@ -240,6 +240,7 @@
 "common_poll_summary" = "Poll: %1$@";
 "common_poll_total_votes" = "Total votes: %1$@";
 "common_poll_undisclosed_text" = "Results will show after the poll has ended";
+"common_preparing" = "Preparing…";
 "common_privacy_policy" = "Privacy policy";
 "common_reaction" = "Reaction";
 "common_reactions" = "Reactions";

@@ -16,6 +16,7 @@ struct MediaUploadPreviewScreenCoordinatorParameters {
     let url: URL
     let shouldShowCaptionWarning: Bool
     let isRoomEncrypted: Bool
+    let clientProxy: ClientProxyProtocol
 }
 
 enum MediaUploadPreviewScreenCoordinatorAction {
@@ -38,7 +39,8 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
                                                       title: parameters.title,
                                                       url: parameters.url,
                                                       shouldShowCaptionWarning: parameters.shouldShowCaptionWarning,
-                                                      isRoomEncrypted: parameters.isRoomEncrypted)
+                                                      isRoomEncrypted: parameters.isRoomEncrypted,
+                                                      clientProxy: parameters.clientProxy)
     }
     
     func start() {

@@ -859,6 +859,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(roomProxy: roomProxy,
+                                                                                   clientProxy: userSession.clientProxy,
                                                                                    mediaProvider: userSession.mediaProvider,
                                                                                    mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                                                    navigationStackCoordinator: stackCoordinator,
@@ -955,7 +956,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                        title: url.lastPathComponent,
                                                                        url: url,
                                                                        shouldShowCaptionWarning: appSettings.shouldShowMediaCaptionWarning,
-                                                                       isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted)
+                                                                       isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
+                                                                       clientProxy: userSession.clientProxy)
 
         let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters)
         

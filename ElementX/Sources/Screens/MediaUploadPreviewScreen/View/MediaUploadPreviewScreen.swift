@@ -39,6 +39,7 @@ struct MediaUploadPreviewScreen: View {
             .presentationBackground(.background) // Fix a bug introduced by the caption warning.
             .preferredColorScheme(colorSchemeOverride)
             .onAppear(perform: focusComposerIfHardwareKeyboardConnected)
+            .alert(item: $context.alertInfo)
     }
     
     @ViewBuilder
@@ -233,7 +234,8 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
                                                              title: "App Icon.png",
                                                              url: snapshotURL,
                                                              shouldShowCaptionWarning: true,
-                                                             isRoomEncrypted: true)
+                                                             isRoomEncrypted: true,
+                                                             clientProxy: ClientProxyMock(.init()))
     static var previews: some View {
         NavigationStack {
             MediaUploadPreviewScreen(context: viewModel.context)
