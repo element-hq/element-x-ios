@@ -41,7 +41,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     private var roomNotificationUpdateMap: [String: RoomNotificationModeProxy] = [:]
     
     private var feedMediaPreFetchService: FeedMediaPreFetchService? = nil
+    
     private var isRoomUsersExtractionInProgress: Bool = false
+    private var isRoomAutoJoinInProgress: Bool = false
     
     init(userSession: UserSessionProtocol,
          selectedRoomPublisher: CurrentValuePublisher<String?, Never>,
@@ -458,8 +460,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
         
         state.rooms = rooms
+        
         applyCustomFilterToNotificationsList(.all)
         extractAllRoomUsers(matrixRoomSummaries)
+        autoJoinInvitedRooms(matrixRoomSummaries)
     }
     
     /// Check whether we can inform the user about potential migrations
@@ -1031,6 +1035,37 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 await userIds.insert(self.userSession.clientProxy.userID)
                 
                 await self.userSession.clientProxy.zeroProfiles(userIds: userIds)
+            }
+        }
+    }
+    
+    private func autoJoinInvitedRooms(_ rooms: [RoomSummary]) {
+        if !isRoomAutoJoinInProgress {
+            isRoomAutoJoinInProgress = true
+            Task.detached {
+                let roomsToBeJoined = rooms.compactMap { roomSummary in
+                    if case .invited = roomSummary.room.membership() {
+                        roomSummary.id
+                    } else {
+                        nil
+                    }
+                }
+                if !roomsToBeJoined.isEmpty {
+                    await withTaskGroup(of: Result<Void, ClientProxyError>.self) { group in
+                        for roomId in roomsToBeJoined {
+                            group.addTask {
+                                await self.userSession.clientProxy.joinRoom(roomId, via: [])
+                            }
+                        }
+                        for await item in group {
+                            if case .success = item { MXLog.debug("Successfully joined room") }
+                            else { MXLog.debug("Failed to join room") }
+                        }
+                        await MainActor.run { self.isRoomAutoJoinInProgress = false }
+                    }
+                } else {
+                    await MainActor.run { self.isRoomAutoJoinInProgress = false }
+                }
             }
         }
     }

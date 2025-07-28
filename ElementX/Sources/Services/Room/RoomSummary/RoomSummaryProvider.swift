@@ -50,9 +50,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             roomListSubject.send(rooms)
         }
     }
-    
-    private var onJoinRoomExplicitly: (String) async -> Void
-    
+        
     /// Build a new summary provider with the given parameters
     /// - Parameters:
     ///   - shouldUpdateVisibleRange: whether this summary provider should forward visible ranges
@@ -65,8 +63,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
          roomListPageSize: UInt32 = 200,
          notificationSettings: NotificationSettingsProxyProtocol,
          appSettings: AppSettings,
-         zeroUsersService: ZeroMatrixUsersService,
-         onJoinRoomExplicitly: @escaping (String) async -> Void = { _ in }) {
+         zeroUsersService: ZeroMatrixUsersService) {
         self.roomListService = roomListService
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.room_summary_provider", qos: .default)
         self.eventStringBuilder = eventStringBuilder
@@ -76,7 +73,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.appSettings = appSettings
         self.roomListPageSize = roomListPageSize
         self.zeroUsersService = zeroUsersService
-        self.onJoinRoomExplicitly = onJoinRoomExplicitly
         
         diffsPublisher
             .receive(on: serialDispatchQueue)
@@ -340,15 +336,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         semaphore.wait()
         return notificationModeProxy
-    }
-    
-    private func joinRoomIfRequired(_ room: Room) async {
-        switch room.membership() {
-        case .invited:
-            await onJoinRoomExplicitly(room.id())
-        default:
-            break
-        }
     }
     
     private func buildDiff(from diff: RoomListEntriesUpdate, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {

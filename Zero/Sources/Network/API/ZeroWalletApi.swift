@@ -157,14 +157,27 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
     }
     
     func claimRewards(walletAddress: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
-        let url = WalletEndPoints.transactions.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: walletAddress)
+        let url = WalletEndPoints.claimRewards.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: walletAddress)
         let result: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                                method: .post,
                                                                                                                appSettings: appSettings)
         switch result {
         case .success(let transaction):
+            ZeroCustomEventService.shared.walletApiEvent(parameters: [
+                "request": "claim_rewards",
+                "url": url,
+                "address": walletAddress,
+                "status": "success"
+            ])
             return .success(transaction)
         case .failure(let failure):
+            ZeroCustomEventService.shared.walletApiEvent(parameters: [
+                "request": "claim_rewards",
+                "url": url,
+                "address": walletAddress,
+                "status": "failure",
+                "error": failure.localizedDescription
+            ])
             return .failure(failure)
         }
     }
