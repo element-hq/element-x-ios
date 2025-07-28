@@ -31,6 +31,7 @@
 "a11y_show_password" = "Εμφάνιση κωδικού πρόσβασης";
 "a11y_start_call" = "Ξεκίνησε μια κλήση";
 "a11y_time_limited_action_required" = "Time limited action required";
+"a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Μενού χρήστη";
 "a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Προβολή λεπτομερειών";
@@ -457,6 +458,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "Θα μπορούν να συμμετάσχουν και πάλι στην αίθουσα αν προσκληθούν";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Σίγουρα θες να καταργήσεις τον αποκλεισμό αυτού του μέλους;";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Άρση αποκλεισμού %1$@";
+"screen_bug_report_a11y_screenshot" = "Screenshot";
 "screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
 "screen_create_poll_options_section_title" = "Επιλογές";
 "screen_create_poll_remove_accessibility_label" = "Αφαίρεση %1$@";
@@ -485,6 +487,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Είστε βέβαιοι ότι θέλετε να απορρίψετε την πρόσκληση συμμετοχής σε αυτήν την αίθουσα; Αυτό θα εμποδίσει επίσης τον χρήστη %1$@ να επικοινωνήσει μαζί σας ή να σας προσκαλέσει σε αίθουσες.";
 "screen_join_room_decline_and_block_alert_title" = "Απόρριψη πρόσκλησης και αποκλεισμός";
 "screen_join_room_decline_and_block_button_title" = "Απόρριψη και αποκλεισμός";
+"screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Μήνυμα (προαιρετικό)";
 "screen_join_room_knock_sent_description" = "Θα λάβετε πρόσκληση για να συμμετάσχετε στην αίθουσα, εάν το αίτημά σας γίνει αποδεκτό.";
 "screen_join_room_knock_sent_title" = "Το αίτημα συμμετοχής στάλθηκε";
@@ -521,8 +524,11 @@
 "screen_media_details_uploaded_by" = "Μεταφορτώθηκε από";
 "screen_media_details_uploaded_on" = "Μεταφορτώθηκε στις";
 "screen_media_upload_preview_caption_warning" = "Οι λεζάντες ενδέχεται να μην είναι ορατές σε άτομα που χρησιμοποιούν παλαιότερες εφαρμογές.";
+"screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";
 "screen_media_upload_preview_error_failed_processing" = "Αποτυχία μεταφόρτωσης μέσου, δοκίμασε ξανά.";
 "screen_media_upload_preview_error_failed_sending" = "Αποτυχία μεταφόρτωσης πολυμέσων, δοκίμασε ξανά.";
+"screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
+"screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
 "screen_pinned_timeline_empty_state_description" = "Πάτα σε ένα μήνυμα και επέλεξε «%1$@» για να συμπεριληφθεί εδώ.";
 "screen_pinned_timeline_empty_state_headline" = "Καρφίτσωσε σημαντικά μηνύματα, ώστε να μπορούν να εντοπιστούν εύκολα";
 "screen_push_history_title" = "Ιστορικό push";
@@ -978,6 +984,7 @@
 "screen_room_member_list_pending_header_title" = "Σε αναμονή";
 "screen_room_member_list_role_administrator" = "Διαχειριστής";
 "screen_room_member_list_role_moderator" = "Συντονιστής";
+"screen_room_member_list_role_owner" = "Owner";
 "screen_room_member_list_room_members_header_title" = "Μέλη της αίθουσας";
 "screen_room_member_list_unbanning_user" = "Άρση αποκλεισμού %1$@";
 "screen_room_notification_settings_allow_custom" = "Να επιτρέπεται η προσαρμοσμένη ρύθμιση";

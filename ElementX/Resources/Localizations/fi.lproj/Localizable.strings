@@ -31,6 +31,7 @@
 "a11y_show_password" = "Näytä salasana";
 "a11y_start_call" = "Aloita puhelu";
 "a11y_time_limited_action_required" = "Time limited action required";
+"a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Käyttäjävalikko";
 "a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "Näytä tiedot";
@@ -357,7 +358,7 @@
 "error_no_compatible_app_found" = "Yhteensopivaa sovellusta ei löytynyt käsittelemään tätä toimintoa.";
 "error_some_messages_have_not_been_sent" = "Joitakin viestejä ei ole lähetetty";
 "error_unknown" = "Anteeksi, tapahtui virhe";
-"event_shield_mismatched_sender" = "The sender of the event does not match the owner of the device that sent it.";
+"event_shield_mismatched_sender" = "Tapahtuman lähettäjä ei vastaa sitä lähettäneen laitteen omistajaa.";
 "event_shield_reason_authenticity_not_guaranteed" = "Tämän salatun viestin aitoutta ei voida taata tällä laitteella.";
 "event_shield_reason_previously_verified" = "Aiemmin vahvistetun käyttäjän salaama.";
 "event_shield_reason_sent_in_clear" = "Ei salattu.";
@@ -378,7 +379,7 @@
 "notification_channel_noisy" = "Äänekkäät ilmoitukset";
 "notification_channel_ringing_calls" = "Soivat puhelut";
 "notification_channel_silent" = "Hiljaiset ilmoitukset";
-"notification_fallback_content" = "You have new messages.";
+"notification_fallback_content" = "Sinulle on uusia viestejä.";
 "notification_incoming_call" = "📹 Saapuva puhelu";
 "notification_inline_reply_failed" = "** Lähetys epäonnistui - avaa huone";
 "notification_invite_body" = "Kutsui sinut keskustelemaan";
@@ -399,7 +400,7 @@
 "preference_rageshake" = "Raivostunut ravistaminen ilmoittaa virheestä";
 "rageshake_detection_dialog_content" = "Näytät ravistelevan puhelinta turhautuneena. Haluatko avata vikailmoitusnäytön?";
 "rich_text_editor_bullet_list" = "Numeroimaton luettelo päälle/pois";
-"rich_text_editor_close_formatting_options" = "Sulje muotoiluasetukset";
+"rich_text_editor_close_formatting_options" = "Peruuta ja sulje muotoiluasetukset";
 "rich_text_editor_code_block" = "Koodilohko päälle/pois";
 "rich_text_editor_composer_encrypted_placeholder" = "Salattu viesti...";
 "rich_text_editor_composer_placeholder" = "Viesti...";
@@ -410,7 +411,7 @@
 "rich_text_editor_format_bold" = "Käytä lihavoitua muotoa";
 "rich_text_editor_format_italic" = "Käytä kursiivimuotoa";
 "rich_text_editor_format_state_disabled" = "disabled";
-"rich_text_editor_format_state_off" = "off";
+"rich_text_editor_format_state_off" = "pois päältä";
 "rich_text_editor_format_state_on" = "on";
 "rich_text_editor_format_strikethrough" = "Käytä yliviivausmuotoa";
 "rich_text_editor_format_underline" = "Käytä alleviivausmuotoa";
@@ -457,6 +458,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "He voivat liittyä huoneeseen uudelleen, jos heidät kutsutaan";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Haluatko varmasti poistaa tämän jäsenen porttikiellon?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Poistetaan käyttäjän %1$@ porttikieltoa";
+"screen_bug_report_a11y_screenshot" = "Screenshot";
 "screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
 "screen_create_poll_options_section_title" = "Options";
 "screen_create_poll_remove_accessibility_label" = "Remove %1$@";
@@ -485,6 +487,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Oletko varma, että haluat kieltäytyä kutsusta liittyä tähän huoneeseen? Tämä estää myös käyttäjää %1$@ ottamasta sinuun yhteyttä tai kutsumasta sinua huoneisiin.";
 "screen_join_room_decline_and_block_alert_title" = "Hylkää kutsu ja estä";
 "screen_join_room_decline_and_block_button_title" = "Hylkää ja estä";
+"screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Viesti (valinnainen)";
 "screen_join_room_knock_sent_description" = "Saat kutsun liittyä huoneeseen, jos pyyntösi hyväksytään.";
 "screen_join_room_knock_sent_title" = "Liittymispyyntö lähetetty";
@@ -521,8 +524,11 @@
 "screen_media_details_uploaded_by" = "Lähettäjä";
 "screen_media_details_uploaded_on" = "Lähetetty";
 "screen_media_upload_preview_caption_warning" = "Kuvatekstit eivät välttämättä näy ihmisille, jotka käyttävät vanhempia sovelluksia.";
+"screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";
 "screen_media_upload_preview_error_failed_processing" = "Median käsittely epäonnistui, yritä uudelleen.";
 "screen_media_upload_preview_error_failed_sending" = "Median lähettäminen epäonnistui, yritä uudelleen.";
+"screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
+"screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
 "screen_pinned_timeline_empty_state_description" = "Paina viestiä ja valitse “%1$@” lisätäksesi sen tänne.";
 "screen_pinned_timeline_empty_state_headline" = "Kiinnitä tärkeät viestit, jotta ne löytyvät helposti.";
 "screen_push_history_title" = "Push-historia";
@@ -978,6 +984,7 @@
 "screen_room_member_list_pending_header_title" = "Kutsuttu";
 "screen_room_member_list_role_administrator" = "Ylläpitäjä";
 "screen_room_member_list_role_moderator" = "Valvoja";
+"screen_room_member_list_role_owner" = "Owner";
 "screen_room_member_list_room_members_header_title" = "Huoneen jäsenet";
 "screen_room_member_list_unbanning_user" = "Poistetaan käyttäjän %1$@ porttikieltoa";
 "screen_room_notification_settings_allow_custom" = "Salli mukautettu asetus";
