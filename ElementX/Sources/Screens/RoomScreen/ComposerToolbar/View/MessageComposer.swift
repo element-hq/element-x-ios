@@ -215,14 +215,9 @@ private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
         VStack(alignment: .leading, spacing: -6) {
             header
             
-            HStack(alignment: .top, spacing: 6) {
-                icon
-                    .scaledOffset(y: 2)
-                
-                content
-                    .tint(.compound.iconAccentTertiary)
-            }
-            .padding(.vertical, 10)
+            content
+                .tint(.compound.iconAccentTertiary)
+                .padding(.vertical, 10)
         }
         .padding(.horizontal, 12.0)
         .clipShape(composerShape)
@@ -234,13 +229,18 @@ private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
                     .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
             }
         }
-    }
-    
-    @ViewBuilder
-    private var icon: some View {
-        if !isEncrypted {
-            CompoundIcon(\.lockOff, size: .xSmall, relativeTo: .compound.bodyMD)
-                .foregroundStyle(.compound.iconInfoPrimary)
+        .safeAreaInset(edge: .top) {
+            if !isEncrypted {
+                Label {
+                    Text(L10n.commonNotEncrypted)
+                        .font(.compound.bodySM)
+                        .foregroundStyle(.compound.textSecondary)
+                } icon: {
+                    CompoundIcon(\.lockOff, size: .xSmall, relativeTo: .compound.bodyMD)
+                        .foregroundStyle(.compound.iconInfoPrimary)
+                }
+                .padding(4.0)
+            }
         }
     }
 }

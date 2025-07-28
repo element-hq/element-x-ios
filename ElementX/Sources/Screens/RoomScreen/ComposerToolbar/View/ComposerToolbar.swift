@@ -236,11 +236,7 @@ struct ComposerToolbar: View {
     }
     
     private var composerPlaceholder: String {
-        if context.viewState.isRoomEncrypted {
-            return L10n.richTextEditorComposerPlaceholder
-        } else {
-            return L10n.richTextEditorComposerUnencryptedPlaceholder
-        }
+        L10n.richTextEditorComposerPlaceholder
     }
     
     private var composerView: WysiwygComposerView {
