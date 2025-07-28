@@ -31,6 +31,7 @@
 "a11y_show_password" = "Näita salasõna";
 "a11y_start_call" = "Helista";
 "a11y_time_limited_action_required" = "Palun tee see ajapiiranguga toiming";
+"a11y_tombstoned_room" = "Lõpetatuks märgitud jututuba";
 "a11y_user_menu" = "Kasutajamenüü";
 "a11y_view_avatar" = "Vaata tunnuspilti";
 "a11y_view_details" = "Vaata üksikasju";
@@ -457,6 +458,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "Ta võib kutse saamisel liituda jututoaga uuesti";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Kas oled kindel, et soovid selle liikme suhtluskeelu eemaldada?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Eemaldame suhtluskeelu kasutajalt %1$@";
+"screen_bug_report_a11y_screenshot" = "Ekraanitõmmis";
 "screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
 "screen_create_poll_options_section_title" = "Valikud";
 "screen_create_poll_remove_accessibility_label" = "Kustuta: %1$@";
@@ -485,6 +487,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Kas sa oled kindel, et soovid keelduda kutsest sellesse jututuppa? Samaga kaob kasutajal %1$@ võimalus sinuga suhelda ja saata sulle jututubade kutseid.";
 "screen_join_room_decline_and_block_alert_title" = "Keeldu kutsest ja blokeeri";
 "screen_join_room_decline_and_block_button_title" = "Keeldu ja blokeeri";
+"screen_join_room_knock_message_characters_count" = "Lubatud tähemärke: %1$d / %2$d";
 "screen_join_room_knock_message_description" = "Selgitus (kui soovid lisada)";
 "screen_join_room_knock_sent_description" = "Kui sinu liitumispalvega ollakse nõus, siis saad kutse jututoaga liitumiseks.";
 "screen_join_room_knock_sent_title" = "Liitumispalve on saadetud";
@@ -521,8 +524,11 @@
 "screen_media_details_uploaded_by" = "Üleslaadija";
 "screen_media_details_uploaded_on" = "Üleslaaditud";
 "screen_media_upload_preview_caption_warning" = "Selgitused ja alapealkirjad ei pruugi olla nähtavad vanemate rakenduste kasutajatele.";
+"screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";
 "screen_media_upload_preview_error_failed_processing" = "Meediafaili töötlemine enne üleslaadimist ei õnnestunud. Palun proovi uuesti.";
 "screen_media_upload_preview_error_failed_sending" = "Meediafaili üleslaadimine ei õnnestunud. Palun proovi uuesti.";
+"screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
+"screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
 "screen_pinned_timeline_empty_state_description" = "Siia lisamiseks vajuta sõnumil ja vali „%1$@“.";
 "screen_pinned_timeline_empty_state_headline" = "Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile";
 "screen_push_history_title" = "Tõuketeadete ajalugu";
@@ -662,7 +668,7 @@
 "screen_change_account_provider_subtitle" = "Kasuta erinevat teenusepakkujat, milleks võib olla ka sinu oma server või töökoha hallatav server.";
 "screen_change_account_provider_title" = "Muuda teenusepakkujat";
 "screen_change_server_error_element_pro_required_action_ios" = "Rakendustepood";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_message" = "%1$@ koduserver eeldab Element Pro rakenduse kasutamist. Palun laadi ta alla rakendustepoest.";
 "screen_change_server_error_element_pro_required_title" = "Vajalik on Element Pro";
 "screen_change_server_error_invalid_homeserver" = "Me ei suutnud luuaühendust selle koduserveriga. Palun kontrolli, kas koduserveri aadress on õige. Kui aadress on õige, siis täiendavat teavet oskab sulle anda koduserveri haldaja.";
 "screen_change_server_error_invalid_well_known" = "Server pole saadaval vea tõttu well-known failis:\n%1$@";
@@ -978,6 +984,7 @@
 "screen_room_member_list_pending_header_title" = "Ootel";
 "screen_room_member_list_role_administrator" = "Peakasutaja";
 "screen_room_member_list_role_moderator" = "Moderaator";
+"screen_room_member_list_role_owner" = "Owner";
 "screen_room_member_list_room_members_header_title" = "Jututoas osalejad";
 "screen_room_member_list_unbanning_user" = "Eemaldame suhtluskeelu kasutajalt %1$@";
 "screen_room_notification_settings_allow_custom" = "Kasuta kohandatud seadistusi";

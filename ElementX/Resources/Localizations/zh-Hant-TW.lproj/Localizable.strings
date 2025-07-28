@@ -31,6 +31,7 @@
 "a11y_show_password" = "顯示密碼";
 "a11y_start_call" = "開始通話";
 "a11y_time_limited_action_required" = "Time limited action required";
+"a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "使用者選單";
 "a11y_view_avatar" = "View avatar";
 "a11y_view_details" = "檢視詳細資訊";
@@ -457,6 +458,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
+"screen_bug_report_a11y_screenshot" = "Screenshot";
 "screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
 "screen_create_poll_options_section_title" = "Options";
 "screen_create_poll_remove_accessibility_label" = "Remove %1$@";
@@ -485,6 +487,7 @@
 "screen_join_room_decline_and_block_alert_message" = "您確定要拒絕加入此聊天室的邀請嗎？這也會防止 %1$@ 聯絡您或邀請您加入聊天室。";
 "screen_join_room_decline_and_block_alert_title" = "拒絕邀請並封鎖";
 "screen_join_room_decline_and_block_button_title" = "拒絕並封鎖";
+"screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "訊息（選擇性）";
 "screen_join_room_knock_sent_description" = "若接受了您的請求，您將會收到加入聊天是的邀請。";
 "screen_join_room_knock_sent_title" = "已傳送加入請求";
@@ -521,8 +524,11 @@
 "screen_media_details_uploaded_by" = "上傳者：";
 "screen_media_details_uploaded_on" = "上傳於";
 "screen_media_upload_preview_caption_warning" = "使用舊應用程式的使用者可能看不到標題。";
+"screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";
 "screen_media_upload_preview_error_failed_processing" = "無法處理要上傳的媒體，請再試一次。";
 "screen_media_upload_preview_error_failed_sending" = "無法上傳媒體檔案，請稍後再試。";
+"screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
+"screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
 "screen_pinned_timeline_empty_state_description" = "按一下訊息，然後選擇「%1$@」以加入至此。";
 "screen_pinned_timeline_empty_state_headline" = "釘選重要訊息，如此才能輕鬆發現";
 "screen_push_history_title" = "推播通知歷史紀錄";
@@ -978,6 +984,7 @@
 "screen_room_member_list_pending_header_title" = "待定";
 "screen_room_member_list_role_administrator" = "管理員";
 "screen_room_member_list_role_moderator" = "版主";
+"screen_room_member_list_role_owner" = "Owner";
 "screen_room_member_list_room_members_header_title" = "聊天室成員";
 "screen_room_member_list_unbanning_user" = "正在解除黑名單 %1$@";
 "screen_room_notification_settings_allow_custom" = "允許自訂設定";

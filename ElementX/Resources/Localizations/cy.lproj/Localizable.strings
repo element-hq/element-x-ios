@@ -31,6 +31,7 @@
 "a11y_show_password" = "Dangos y cyfrinair";
 "a11y_start_call" = "Cychwyn galwad";
 "a11y_time_limited_action_required" = "Mae angen gweithredu â chyfyngiad amser";
+"a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Dewislen defnyddiwr";
 "a11y_view_avatar" = "Gweld afatar";
 "a11y_view_details" = "Manylion";
@@ -457,6 +458,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "Bydden nhw'n gallu ymuno â'r ystafell eto os fydd rhywun yn eu gwahodd";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Ydych chi'n siŵr eich bod chi eisiau dadwahardd yr aelod hwn?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Dad-wahardd %1$@";
+"screen_bug_report_a11y_screenshot" = "Screenshot";
 "screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
 "screen_create_poll_options_section_title" = "Dewisiadau";
 "screen_create_poll_remove_accessibility_label" = "Tynnu %1$@";
@@ -485,6 +487,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Ydych chi'n siŵr eich bod am wrthod y gwahoddiad i ymuno â'r ystafell hon? Bydd hyn hefyd yn atal %1$@ rhag cysylltu â chi neu eich gwahodd i ystafelloedd.";
 "screen_join_room_decline_and_block_alert_title" = "Gwrthod gwahoddiad a rhwystro";
 "screen_join_room_decline_and_block_button_title" = "Gwrthod a rhwystro";
+"screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Neges (dewisol)";
 "screen_join_room_knock_sent_description" = "Byddwch yn derbyn gwahoddiad i ymuno â'r ystafell os caiff eich cais ei dderbyn.";
 "screen_join_room_knock_sent_title" = "Anfonwyd y cais i ymuno";
@@ -521,8 +524,11 @@
 "screen_media_details_uploaded_by" = "Llwythwyd gan";
 "screen_media_details_uploaded_on" = "Llwythwyd i fyny ar";
 "screen_media_upload_preview_caption_warning" = "Efallai na fydd capsiynau yn weladwy i bobl sy'n defnyddio apiau hŷn.";
+"screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";
 "screen_media_upload_preview_error_failed_processing" = "Wedi methu â phrosesu cyfryngau i'w llwytho, ceisiwch eto.";
 "screen_media_upload_preview_error_failed_sending" = "Wedi methu llwytho cyfryngau, ceisiwch eto.";
+"screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
+"screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
 "screen_pinned_timeline_empty_state_description" = "Pwyswch ar neges a dewis “%1$@” i'w cynnwys yma.";
 "screen_pinned_timeline_empty_state_headline" = "Pinio negeseuon pwysig fel y mae modd eu darganfod yn hawdd";
 "screen_push_history_title" = "Hanes gwthio";
@@ -978,6 +984,7 @@
 "screen_room_member_list_pending_header_title" = "Dan ystyriaeth";
 "screen_room_member_list_role_administrator" = "Gweinyddwr";
 "screen_room_member_list_role_moderator" = "Cymedrolwr";
+"screen_room_member_list_role_owner" = "Owner";
 "screen_room_member_list_room_members_header_title" = "Aelodau'r ystafell";
 "screen_room_member_list_unbanning_user" = "Dad-wahardd %1$@";
 "screen_room_notification_settings_allow_custom" = "Caniatáu gosodiad personol";

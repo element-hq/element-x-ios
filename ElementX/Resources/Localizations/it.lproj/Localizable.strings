@@ -31,6 +31,7 @@
 "a11y_show_password" = "Mostra password";
 "a11y_start_call" = "Avvia una chiamata";
 "a11y_time_limited_action_required" = "Time limited action required";
+"a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Menu utente";
 "a11y_view_avatar" = "Visualizza avatar";
 "a11y_view_details" = "Visualizza dettagli";
@@ -457,6 +458,7 @@
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "Potranno unirsi di nuovo alla stanza se invitati";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Sei sicuro di voler sbloccare questo membro?";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Rimuovendo il ban di %1$@";
+"screen_bug_report_a11y_screenshot" = "Screenshot";
 "screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
 "screen_create_poll_options_section_title" = "Risposte";
 "screen_create_poll_remove_accessibility_label" = "Rimuovi %1$@";
@@ -485,6 +487,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Sei sicuro di voler rifiutare l'invito a entrare in questa stanza? Ciò impedirà a %1$@ di contattarti o invitarti nuovamente in una stanza.";
 "screen_join_room_decline_and_block_alert_title" = "Rifiuta invito e blocca";
 "screen_join_room_decline_and_block_button_title" = "Rifiuta e blocca";
+"screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Messaggio (opzionale)";
 "screen_join_room_knock_sent_description" = "Riceverai un invito a entrare nella stanza se la tua richiesta viene accettata.";
 "screen_join_room_knock_sent_title" = "Richiesta di accesso inviata";
@@ -521,8 +524,11 @@
 "screen_media_details_uploaded_by" = "Caricato da";
 "screen_media_details_uploaded_on" = "Caricato il";
 "screen_media_upload_preview_caption_warning" = "Le didascalie potrebbero non essere visibili agli utenti di app meno recenti.";
+"screen_media_upload_preview_error_could_not_be_uploaded" = "The file could not be uploaded.";
 "screen_media_upload_preview_error_failed_processing" = "Elaborazione del file multimediale da caricare fallita, riprova.";
 "screen_media_upload_preview_error_failed_sending" = "Caricamento del file multimediale fallito, riprova.";
+"screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
+"screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
 "screen_pinned_timeline_empty_state_description" = "Premi su un messaggio e scegli “%1$@” per includerlo qui.";
 "screen_pinned_timeline_empty_state_headline" = "Fissa i messaggi importanti così che possano essere trovati facilmente";
 "screen_push_history_title" = "Cronologia push";
@@ -978,6 +984,7 @@
 "screen_room_member_list_pending_header_title" = "In attesa";
 "screen_room_member_list_role_administrator" = "Amministratore";
 "screen_room_member_list_role_moderator" = "Moderatore";
+"screen_room_member_list_role_owner" = "Owner";
 "screen_room_member_list_room_members_header_title" = "Membri della stanza";
 "screen_room_member_list_unbanning_user" = "Riammissione di %1$@";
 "screen_room_notification_settings_allow_custom" = "Consenti impostazione personalizzata";
