@@ -28,7 +28,7 @@ struct PillViewOnBubble_Previews: PreviewProvider, TestablePreview {
                 mockMessage
                     .offset(y: -1)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .messageComposerStyle(isEncrypted: false)
+                    .messageComposerStyle()
                 
                 SendButton { }
             }
