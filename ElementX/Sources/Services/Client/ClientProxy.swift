@@ -1021,11 +1021,23 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func waitForRoomToSync(roomID: String, timeout: Duration = .seconds(10)) async {
+        MXLog.info("Wait for \(roomID)")
         let runner = ExpiringTaskRunner { [weak self] in
-            try await self?.client.awaitRoomRemoteEcho(roomId: roomID)
+            guard let self else { return }
+            
+            do {
+                _ = try await client.awaitRoomRemoteEcho(roomId: roomID)
+                MXLog.info("Wait for \(roomID) got remote echo.")
+            } catch {
+                MXLog.info("Failed waiting for remote echo in \(roomID): \(error)")
+            }
         }
         
-        _ = try? await runner.run(timeout: timeout)
+        do {
+            try await runner.run(timeout: timeout)
+        } catch {
+            MXLog.info("Wait for \(roomID) failed: \(error)")
+        }
     }
 
     private func updateIgnoredUsers() {
