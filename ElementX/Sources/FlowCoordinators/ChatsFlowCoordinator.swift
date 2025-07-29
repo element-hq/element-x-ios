@@ -20,7 +20,6 @@ enum ChatsFlowCoordinatorAction {
 
 class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
-    private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let bugReportService: BugReportServiceProtocol
     private let elementCallService: ElementCallServiceProtocol
@@ -65,7 +64,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     var statePublisher: AnyPublisher<ChatsFlowCoordinatorStateMachine.State, Never> { stateMachine.statePublisher }
     
     init(userSession: UserSessionProtocol,
-         navigationRootCoordinator: NavigationRootCoordinator,
+         navigationSplitCoordinator: NavigationSplitCoordinator,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
          elementCallService: ElementCallServiceProtocol,
@@ -78,7 +77,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
          isNewLogin: Bool) {
         stateMachine = ChatsFlowCoordinatorStateMachine()
         self.userSession = userSession
-        self.navigationRootCoordinator = navigationRootCoordinator
+        self.navigationSplitCoordinator = navigationSplitCoordinator
         self.bugReportService = bugReportService
         self.elementCallService = elementCallService
         self.timelineControllerFactory = timelineControllerFactory
@@ -87,8 +86,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         self.appHooks = appHooks
         self.analytics = analytics
         self.notificationManager = notificationManager
-        
-        navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
@@ -554,8 +551,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
-        
-        navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
     }
     
     private func presentReportRoom(for roomID: String) async {

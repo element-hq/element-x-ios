@@ -15,12 +15,11 @@ class ChatsFlowCoordinatorTests: XCTestCase {
     var clientProxy: ClientProxyMock!
     var timelineControllerFactory: TimelineControllerFactoryMock!
     var chatsFlowCoordinator: ChatsFlowCoordinator!
-    var navigationRootCoordinator: NavigationRootCoordinator!
+    var splitCoordinator: NavigationSplitCoordinator!
     var notificationManager: NotificationManagerMock!
     
     var cancellables = Set<AnyCancellable>()
     
-    var splitCoordinator: NavigationSplitCoordinator? { navigationRootCoordinator.rootCoordinator as? NavigationSplitCoordinator }
     var detailCoordinator: CoordinatorProtocol? { splitCoordinator?.detailCoordinator }
     var detailNavigationStack: NavigationStackCoordinator? { detailCoordinator as? NavigationStackCoordinator }
     
@@ -29,12 +28,12 @@ class ChatsFlowCoordinatorTests: XCTestCase {
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         timelineControllerFactory = TimelineControllerFactoryMock(.init())
         
-        navigationRootCoordinator = NavigationRootCoordinator()
+        splitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         
         notificationManager = NotificationManagerMock()
         
         chatsFlowCoordinator = ChatsFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                    navigationRootCoordinator: navigationRootCoordinator,
+                                                    navigationSplitCoordinator: splitCoordinator,
                                                     appLockService: AppLockServiceMock(),
                                                     bugReportService: BugReportServiceMock(.init()),
                                                     elementCallService: ElementCallServiceMock(.init()),
