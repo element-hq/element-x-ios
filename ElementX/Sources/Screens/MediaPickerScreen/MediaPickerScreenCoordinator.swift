@@ -35,11 +35,12 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
     private let callback: (MediaPickerScreenCoordinatorAction) -> Void
     
     init(mode: MediaPickerScreenMode,
+         appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol,
          orientationManager: OrientationManagerProtocol,
          callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
         self.userIndicatorController = userIndicatorController
-        self.mode = mode
+        self.mode = appSettings.multipleAttachmentUploadEnabled ? mode : .init(source: mode.source, selectionType: .single)
         self.orientationManager = orientationManager
         self.callback = callback
     }

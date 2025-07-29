@@ -639,7 +639,8 @@ class MockScreen: Identifiable {
                                                                          userIndicatorController: UserIndicatorControllerMock(),
                                                                          navigationStackCoordinator: navigationStackCoordinator,
                                                                          userDiscoveryService: userDiscoveryMock,
-                                                                         mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings))
+                                                                         mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+                                                                         appSettings: ServiceLocator.shared.settings)
             let coordinator = StartChatScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -654,7 +655,8 @@ class MockScreen: Identifiable {
                                                                            userIndicatorController: UserIndicatorControllerMock(),
                                                                            navigationStackCoordinator: navigationStackCoordinator,
                                                                            userDiscoveryService: userDiscoveryMock,
-                                                                           mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings)))
+                                                                           mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+                                                                           appSettings: ServiceLocator.shared.settings))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .createRoom:

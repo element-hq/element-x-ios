@@ -735,7 +735,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                               userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                               navigationStackCoordinator: startChatNavigationStackCoordinator,
                                                               userDiscoveryService: userDiscoveryService,
-                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings))
+                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+                                                              appSettings: appSettings)
         
         let coordinator = StartChatScreenCoordinator(parameters: parameters)
         coordinator.actions.sink { [weak self] action in

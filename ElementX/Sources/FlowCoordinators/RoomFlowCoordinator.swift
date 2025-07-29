@@ -865,7 +865,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                                    mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                                                    navigationStackCoordinator: stackCoordinator,
                                                                                    userIndicatorController: userIndicatorController,
-                                                                                   orientationManager: appMediator.windowManager)
+                                                                                   orientationManager: appMediator.windowManager,
+                                                                                   appSettings: appSettings)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
         
         roomDetailsEditCoordinator.actions.sink { [weak self] action in
@@ -923,6 +924,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(mode: mode,
+                                                                  appSettings: appSettings,
                                                                   userIndicatorController: userIndicatorController,
                                                                   orientationManager: appMediator.windowManager) { [weak self] action in
             guard let self else {

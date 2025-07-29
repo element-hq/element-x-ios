@@ -171,7 +171,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                              mediaProvider: parameters.userSession.mediaProvider,
                                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: parameters.appSettings),
                                                                              navigationStackCoordinator: navigationStackCoordinator,
-                                                                             userIndicatorController: parameters.userIndicatorController))
+                                                                             userIndicatorController: parameters.userIndicatorController,
+                                                                             appSettings: parameters.appSettings))
         
         navigationStackCoordinator?.push(coordinator)
     }
