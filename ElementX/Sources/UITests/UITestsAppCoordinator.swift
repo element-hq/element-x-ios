@@ -589,19 +589,19 @@ class MockScreen: Identifiable {
             let appMediator = AppMediatorMock.default
             appMediator.underlyingWindowManager = windowManager
             
-            let flowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                             navigationRootCoordinator: navigationRootCoordinator,
-                                                             appLockService: AppLockService(keychainController: KeychainControllerMock(),
-                                                                                            appSettings: ServiceLocator.shared.settings),
-                                                             bugReportService: BugReportServiceMock(.init()),
-                                                             elementCallService: ElementCallServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                                             appMediator: appMediator,
-                                                             appSettings: appSettings,
-                                                             appHooks: AppHooks(),
-                                                             analytics: ServiceLocator.shared.analytics,
-                                                             notificationManager: NotificationManagerMock(),
-                                                             isNewLogin: false)
+            let flowCoordinator = ChatsFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                       navigationRootCoordinator: navigationRootCoordinator,
+                                                       appLockService: AppLockService(keychainController: KeychainControllerMock(),
+                                                                                      appSettings: ServiceLocator.shared.settings),
+                                                       bugReportService: BugReportServiceMock(.init()),
+                                                       elementCallService: ElementCallServiceMock(.init()),
+                                                       timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                                       appMediator: appMediator,
+                                                       appSettings: appSettings,
+                                                       appHooks: AppHooks(),
+                                                       analytics: ServiceLocator.shared.analytics,
+                                                       notificationManager: NotificationManagerMock(),
+                                                       isNewLogin: false)
             
             flowCoordinator.start()
             
@@ -745,19 +745,19 @@ class MockScreen: Identifiable {
                                                         mediaProvider: MediaProviderMock(configuration: .init()),
                                                         appSettings: ServiceLocator.shared.settings)
             
-            let flowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                             navigationRootCoordinator: navigationRootCoordinator,
-                                                             appLockService: AppLockService(keychainController: KeychainControllerMock(),
-                                                                                            appSettings: ServiceLocator.shared.settings),
-                                                             bugReportService: BugReportServiceMock(.init()),
-                                                             elementCallService: ElementCallServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init(timelineController: timelineController)),
-                                                             appMediator: AppMediatorMock.default,
-                                                             appSettings: appSettings,
-                                                             appHooks: AppHooks(),
-                                                             analytics: ServiceLocator.shared.analytics,
-                                                             notificationManager: NotificationManagerMock(),
-                                                             isNewLogin: false)
+            let flowCoordinator = ChatsFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                       navigationRootCoordinator: navigationRootCoordinator,
+                                                       appLockService: AppLockService(keychainController: KeychainControllerMock(),
+                                                                                      appSettings: ServiceLocator.shared.settings),
+                                                       bugReportService: BugReportServiceMock(.init()),
+                                                       elementCallService: ElementCallServiceMock(.init()),
+                                                       timelineControllerFactory: TimelineControllerFactoryMock(.init(timelineController: timelineController)),
+                                                       appMediator: AppMediatorMock.default,
+                                                       appSettings: appSettings,
+                                                       appHooks: AppHooks(),
+                                                       analytics: ServiceLocator.shared.analytics,
+                                                       notificationManager: NotificationManagerMock(),
+                                                       isNewLogin: false)
             
             flowCoordinator.start()
             
