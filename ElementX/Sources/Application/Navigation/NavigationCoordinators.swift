@@ -449,6 +449,7 @@ private struct NavigationSplitCoordinatorView: View {
             .animation(.elementDefault, value: navigationSplitCoordinator.overlayPresentationMode)
             .animation(.elementDefault, value: navigationSplitCoordinator.overlayModule)
         }
+        .ignoresSafeArea() // Necessary when embedded in a TabView on iPadOS otherwise there's a gap at the top (as of 18.5).
     }
     
     /// The NavigationStack that will be used in compact layouts
@@ -512,7 +513,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         }
     }
     
-    // The stack's current root coordinator
+    /// The stack's current root coordinator
     var rootCoordinator: (any CoordinatorProtocol)? {
         rootModule?.coordinator
     }
@@ -533,8 +534,8 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
     
     var presentationDetents: Set<PresentationDetent> = []
     
-    // The currently presented sheet coordinator
-    // Sheets will be presented through the NavigationSplitCoordinator if provided
+    /// The currently presented sheet coordinator
+    /// Sheets will be presented through the NavigationSplitCoordinator if provided
     var sheetCoordinator: (any CoordinatorProtocol)? {
         if let navigationSplitCoordinator {
             return navigationSplitCoordinator.sheetCoordinator
@@ -558,8 +559,8 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
     }
     
     // periphery:ignore - might be useful to have
-    // The currently presented fullscreen cover coordinator
-    // Fullscreen covers will be presented through the NavigationSplitCoordinator if provided
+    /// The currently presented fullscreen cover coordinator
+    /// Fullscreen covers will be presented through the NavigationSplitCoordinator if provided
     var fullScreenCoverCoordinator: (any CoordinatorProtocol)? {
         if let navigationSplitCoordinator {
             return navigationSplitCoordinator.fullScreenCoverCoordinator
@@ -584,7 +585,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         }
     }
     
-    // The current navigation stack. Excludes the rootCoordinator
+    /// The current navigation stack. Excludes the rootCoordinator
     var stackCoordinators: [any CoordinatorProtocol] {
         stackModules.compactMap(\.coordinator)
     }
