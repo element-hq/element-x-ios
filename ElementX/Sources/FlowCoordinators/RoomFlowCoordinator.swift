@@ -465,8 +465,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 switch presentationAction {
                 case .eventFocus(let focusedEvent):
                     roomScreenCoordinator?.focusOnEvent(focusedEvent)
-                case .share(.mediaFile(_, let mediaFile)):
-                    stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: [mediaFile.url]),
+                case .share(.mediaFiles(_, let mediaFiles)):
+                    stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: mediaFiles.map(\.url)),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .share(.text(_, let text)):
                     roomScreenCoordinator?.shareText(text)
@@ -502,8 +502,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
             
         switch presentationAction {
-        case .share(.mediaFile(_, let mediaFile)):
-            stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: [mediaFile.url]),
+        case .share(.mediaFiles(_, let mediaFiles)):
+            stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: mediaFiles.map(\.url)),
                                   userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
         case .share(.text), .eventFocus:
             break // These are both handled in the coordinator's init.

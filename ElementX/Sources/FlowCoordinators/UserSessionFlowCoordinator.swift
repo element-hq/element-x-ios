@@ -1040,8 +1040,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             case .confirm(let roomID):
                 let sharePayload = switch sharePayload {
-                case .mediaFile(_, let mediaFile):
-                    ShareExtensionPayload.mediaFile(roomID: roomID, mediaFile: mediaFile)
+                case .mediaFiles(_, let mediaFiles):
+                    ShareExtensionPayload.mediaFiles(roomID: roomID, mediaFiles: mediaFiles)
                 case .text(_, let text):
                     ShareExtensionPayload.text(roomID: roomID, text: text)
                 }
