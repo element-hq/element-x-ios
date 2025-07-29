@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Compound
 import GameController
 import QuickLook
@@ -16,6 +17,7 @@ struct MediaUploadPreviewScreen: View {
     @Bindable var context: MediaUploadPreviewScreenViewModel.Context
     
     @State private var captionWarningFrame: CGRect = .zero
+    @State private var currentIndex = 0
     @FocusState private var isComposerFocussed
     
     private var title: String { ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : "" }
@@ -25,6 +27,13 @@ struct MediaUploadPreviewScreen: View {
         mainContent
             .id(context.viewState.mediaURLs)
             .ignoresSafeArea(edges: [.horizontal])
+            .safeAreaInset(edge: .top) {
+                if context.viewState.mediaURLs.count > 1 {
+                    Text("\(currentIndex + 1) / \(context.viewState.mediaURLs.count)")
+                        .font(.compound.bodySM)
+                        .foregroundColor(.compound.textSecondary)
+                }
+            }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composer
                     .padding(.horizontal, 12)
@@ -51,7 +60,8 @@ struct MediaUploadPreviewScreen: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {
             PreviewView(mediaURLs: context.viewState.mediaURLs,
-                        title: context.viewState.title)
+                        title: context.viewState.title,
+                        currentIndex: $currentIndex)
         }
     }
     
@@ -156,9 +166,10 @@ struct MediaUploadPreviewScreen: View {
 private struct PreviewView: UIViewControllerRepresentable {
     let mediaURLs: [URL]
     let title: String?
+    @Binding var currentIndex: Int
 
     func makeUIViewController(context: Context) -> UIViewController {
-        let previewController = PreviewViewController()
+        let previewController = PreviewViewController(currentIndex: $currentIndex)
         previewController.dataSource = context.coordinator
         previewController.delegate = context.coordinator
         
@@ -211,6 +222,28 @@ private class PreviewItem: NSObject, QLPreviewItem {
 }
 
 private class PreviewViewController: QLPreviewController {
+    private var cancellables: Set<AnyCancellable> = []
+    
+    init(currentIndex: Binding<Int>) {
+        super.init(nibName: nil, bundle: nil)
+        
+        // Observation of currentPreviewItem doesn't work, so use the index instead.
+        publisher(for: \.currentPreviewItemIndex)
+            .sink { index in
+                DispatchQueue.main.async {
+                    if index != Int.max { // Because reasons
+                        currentIndex.wrappedValue = index
+                    }
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
