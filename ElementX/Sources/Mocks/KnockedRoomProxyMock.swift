@@ -32,7 +32,7 @@ extension RoomInfoProxyMock {
         
         id = configuration.id
         isEncrypted = false
-        creator = nil
+        creators = nil
         displayName = configuration.name
         rawName = nil
         topic = nil

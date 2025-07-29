@@ -285,7 +285,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         let viewModel = ManageRoomMemberSheetViewModel(memberDetails: memberDetails,
                                                        permissions: .init(canKick: state.canCurrentUserKick,
                                                                           canBan: state.canCurrentUserBan,
-                                                                          ownPowerLevel: currentUserProxy?.powerLevel ?? 0),
+                                                                          ownPowerLevel: currentUserProxy?.powerLevel ?? .init(value: 0)),
                                                        roomProxy: roomProxy,
                                                        userIndicatorController: userIndicatorController,
                                                        analyticsService: analyticsService,

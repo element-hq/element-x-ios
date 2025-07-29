@@ -21,7 +21,7 @@ struct RoomMemberDetails: Identifiable, Hashable {
         
     enum Role { case administrator, moderator, user }
     let role: Role
-    let powerLevel: Int
+    let powerLevel: PowerLevelProxy
     
     func matches(searchQuery: String) -> Bool {
         guard !searchQuery.isEmpty else { return true }
@@ -47,7 +47,8 @@ extension RoomMemberDetails {
 extension RoomMemberDetails.Role {
     init(_ role: RoomMemberRole) {
         self = switch role {
-        case .administrator: .administrator
+        // TODO: Implement creator role
+        case .creator, .administrator: .administrator
         case .moderator: .moderator
         case .user: .user
         }

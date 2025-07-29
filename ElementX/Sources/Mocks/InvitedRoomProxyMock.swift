@@ -36,7 +36,7 @@ extension RoomInfoProxyMock {
         
         id = configuration.id
         isEncrypted = false
-        creator = nil
+        creators = nil
         displayName = configuration.name
         rawName = nil
         topic = nil
@@ -79,8 +79,8 @@ private extension RoomMember {
                   avatarUrl: proxy.avatarURL?.absoluteString,
                   membership: proxy.membership,
                   isNameAmbiguous: proxy.disambiguatedDisplayName != proxy.displayName,
-                  powerLevel: Int64(proxy.powerLevel),
-                  normalizedPowerLevel: Int64(proxy.powerLevel),
+                  powerLevel: proxy.powerLevel.rustPowerLevel,
+                  normalizedPowerLevel: proxy.powerLevel.rustPowerLevel,
                   isIgnored: proxy.isIgnored,
                   suggestedRoleForPowerLevel: proxy.role,
                   membershipChangeReason: proxy.membershipChangeReason)

@@ -13272,7 +13272,7 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingId = value }
     }
     var underlyingId: String!
-    var creator: String?
+    var creators: [String]?
     var displayName: String?
     var rawName: String?
     var topic: String?
@@ -13393,11 +13393,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {
         set(value) { underlyingIsIgnored = value }
     }
     var underlyingIsIgnored: Bool!
-    var powerLevel: Int {
+    var powerLevel: PowerLevelProxy {
         get { return underlyingPowerLevel }
         set(value) { underlyingPowerLevel = value }
     }
-    var underlyingPowerLevel: Int!
+    var underlyingPowerLevel: PowerLevelProxy!
     var role: RoomMemberRole {
         get { return underlyingRole }
         set(value) { underlyingRole = value }

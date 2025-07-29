@@ -16,7 +16,7 @@ struct RoomMemberProxyMockConfiguration {
     var membership: MembershipState
     var isIgnored = false
     
-    var powerLevel = 0
+    var powerLevel = PowerLevelProxy(value: 0)
     var role = RoomMemberRole.user
 }
 
@@ -52,7 +52,7 @@ extension RoomMemberProxyMock {
                                         displayName: "Me",
                                         avatarURL: .mockMXCUserAvatar,
                                         membership: .join,
-                                        powerLevel: 100,
+                                        powerLevel: .init(value: 100),
                                         role: .administrator))
     }
     
@@ -116,7 +116,7 @@ extension RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@admin:matrix.org",
                                         displayName: "Arthur",
                                         membership: .join,
-                                        powerLevel: 100,
+                                        powerLevel: .init(value: 100),
                                         role: .administrator))
     }
     
@@ -124,7 +124,7 @@ extension RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@mod:matrix.org",
                                         displayName: "Merlin",
                                         membership: .join,
-                                        powerLevel: 50,
+                                        powerLevel: .init(value: 50),
                                         role: .moderator))
     }
     
