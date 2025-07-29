@@ -39,6 +39,7 @@ struct MediaUploadPreviewScreen: View {
             .presentationBackground(.background) // Fix a bug introduced by the caption warning.
             .preferredColorScheme(colorSchemeOverride)
             .onAppear(perform: focusComposerIfHardwareKeyboardConnected)
+            .alert(item: $context.alertInfo)
     }
     
     @ViewBuilder
@@ -227,13 +228,14 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
     static let snapshotURL = URL.picturesDirectory
     static let testURL = Bundle.main.url(forResource: "AppIcon60x60@2x", withExtension: "png")
     
-    static let viewModel = MediaUploadPreviewScreenViewModel(timelineController: MockTimelineController(),
-                                                             userIndicatorController: UserIndicatorControllerMock.default,
-                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+    static let viewModel = MediaUploadPreviewScreenViewModel(url: snapshotURL,
                                                              title: "App Icon.png",
-                                                             url: snapshotURL,
+                                                             isRoomEncrypted: true,
                                                              shouldShowCaptionWarning: true,
-                                                             isRoomEncrypted: true)
+                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+                                                             timelineController: MockTimelineController(),
+                                                             clientProxy: ClientProxyMock(.init()),
+                                                             userIndicatorController: UserIndicatorControllerMock.default)
     static var previews: some View {
         NavigationStack {
             MediaUploadPreviewScreen(context: viewModel.context)

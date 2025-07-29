@@ -244,12 +244,12 @@ enum TimelineMediaPreviewItem: Equatable {
             }
         }
         
-        var fileSize: Double? {
+        var fileSize: UInt? {
             previewItemURL.flatMap { try? FileManager.default.sizeForItem(at: $0) } ?? expectedFileSize
         }
         
-        private var expectedFileSize: Double? {
-            let fileSize: UInt? = switch timelineItem {
+        private var expectedFileSize: UInt? {
+            switch timelineItem {
             case let audioItem as AudioRoomTimelineItem:
                 audioItem.content.fileSize
             case let fileItem as FileRoomTimelineItem:
@@ -261,8 +261,6 @@ enum TimelineMediaPreviewItem: Equatable {
             default:
                 nil
             }
-            
-            return fileSize.map(Double.init)
         }
         
         var caption: String? {

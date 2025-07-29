@@ -859,6 +859,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(roomProxy: roomProxy,
+                                                                                   clientProxy: userSession.clientProxy,
                                                                                    mediaProvider: userSession.mediaProvider,
                                                                                    mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                                                    navigationStackCoordinator: stackCoordinator,
@@ -949,13 +950,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                  animated: Bool) {
         let stackCoordinator = NavigationStackCoordinator()
 
-        let parameters = MediaUploadPreviewScreenCoordinatorParameters(timelineController: timelineController,
-                                                                       userIndicatorController: userIndicatorController,
-                                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+        let parameters = MediaUploadPreviewScreenCoordinatorParameters(url: url,
                                                                        title: url.lastPathComponent,
-                                                                       url: url,
+                                                                       isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
                                                                        shouldShowCaptionWarning: appSettings.shouldShowMediaCaptionWarning,
-                                                                       isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted)
+                                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+                                                                       timelineController: timelineController,
+                                                                       clientProxy: userSession.clientProxy,
+                                                                       userIndicatorController: userIndicatorController)
 
         let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters)
         

@@ -310,6 +310,17 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
+    
+    var maxMediaUploadSize: Result<UInt, ClientProxyError> {
+        get async {
+            do {
+                return try await .success(UInt(client.getMaxMediaUploadSize()))
+            } catch {
+                MXLog.error("Failed checking the max media upload size with error: \(error)")
+                return .failure(.sdkError(error))
+            }
+        }
+    }
 
     private(set) lazy var pusherNotificationClientIdentifier: String? = {
         // NOTE: The result is stored as part of the restoration token. Any changes

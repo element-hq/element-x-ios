@@ -20,6 +20,8 @@ struct ClientProxyMockConfiguration {
     
     var timelineMediaVisibility = TimelineMediaVisibility.always
     var hideInviteAvatars = false
+    
+    var maxMediaUploadSize: UInt = 100 * 1024 * 1024
 }
 
 enum ClientProxyMockError: Error {
@@ -101,5 +103,7 @@ extension ClientProxyMock {
         
         underlyingTimelineMediaVisibilityPublisher = CurrentValueSubject<TimelineMediaVisibility, Never>(configuration.timelineMediaVisibility).asCurrentValuePublisher()
         underlyingHideInviteAvatarsPublisher = CurrentValueSubject<Bool, Never>(configuration.hideInviteAvatars).asCurrentValuePublisher()
+        
+        underlyingMaxMediaUploadSize = .success(configuration.maxMediaUploadSize)
     }
 }

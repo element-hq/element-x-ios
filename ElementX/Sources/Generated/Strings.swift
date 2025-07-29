@@ -538,6 +538,8 @@ internal enum L10n {
   internal static func commonPollVotesCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_poll_votes_count", p1)
   }
+  /// Preparing…
+  internal static var commonPreparing: String { return L10n.tr("Localizable", "common_preparing") }
   /// Privacy policy
   internal static var commonPrivacyPolicy: String { return L10n.tr("Localizable", "common_privacy_policy") }
   /// Reaction

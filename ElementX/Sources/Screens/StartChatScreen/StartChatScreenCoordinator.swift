@@ -163,12 +163,17 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         Task { [weak self] in
             guard let self else { return }
             do {
-                let media = try await parameters.mediaUploadingPreprocessor.processMedia(at: url).get()
+                guard case let .success(maxUploadSize) = await parameters.userSession.clientProxy.maxMediaUploadSize else {
+                    MXLog.error("Failed to get max upload size")
+                    parameters.userIndicatorController.alertInfo = AlertInfo(id: .init())
+                    return
+                }
+                let media = try await parameters.mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize).get()
                 var parameters = createRoomParameters.value
                 parameters.avatarImageMedia = media
                 createRoomParameters.send(parameters)
             } catch {
-                parameters.userIndicatorController.alertInfo = AlertInfo(id: .init(), title: L10n.commonError, message: L10n.errorUnknown)
+                parameters.userIndicatorController.alertInfo = AlertInfo(id: .init())
             }
             hideLoadingIndicator()
         }

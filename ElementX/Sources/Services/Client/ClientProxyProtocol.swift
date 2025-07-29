@@ -130,6 +130,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var isLiveKitRTCSupported: Bool { get async }
     
+    var maxMediaUploadSize: Result<UInt, ClientProxyError> { get async }
+    
     func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError>
     
     func startSync()
