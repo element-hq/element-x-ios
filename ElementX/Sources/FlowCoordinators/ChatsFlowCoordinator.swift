@@ -11,14 +11,14 @@ import Combine
 import MatrixRustSDK
 import SwiftUI
 
-enum UserSessionFlowCoordinatorAction {
+enum ChatsFlowCoordinatorAction {
     case logout
     case clearCache
     /// Logout without a confirmation. The user forgot their PIN.
     case forceLogout
 }
 
-class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
+class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationSplitCoordinator: NavigationSplitCoordinator
@@ -30,7 +30,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let analytics: AnalyticsService
     private let notificationManager: NotificationManagerProtocol
     
-    private let stateMachine: UserSessionFlowCoordinatorStateMachine
+    private let stateMachine: ChatsFlowCoordinatorStateMachine
     
     // periphery:ignore - retaining purpose
     private var roomFlowCoordinator: RoomFlowCoordinator?
@@ -56,13 +56,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
 
     private let selectedRoomSubject = CurrentValueSubject<String?, Never>(nil)
     
-    private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
-    var actionsPublisher: AnyPublisher<UserSessionFlowCoordinatorAction, Never> {
+    private let actionsSubject: PassthroughSubject<ChatsFlowCoordinatorAction, Never> = .init()
+    var actionsPublisher: AnyPublisher<ChatsFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     /// For testing purposes.
-    var statePublisher: AnyPublisher<UserSessionFlowCoordinatorStateMachine.State, Never> { stateMachine.statePublisher }
+    var statePublisher: AnyPublisher<ChatsFlowCoordinatorStateMachine.State, Never> { stateMachine.statePublisher }
     
     init(userSession: UserSessionProtocol,
          navigationRootCoordinator: NavigationRootCoordinator,
@@ -76,7 +76,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          analytics: AnalyticsService,
          notificationManager: NotificationManagerProtocol,
          isNewLogin: Bool) {
-        stateMachine = UserSessionFlowCoordinatorStateMachine()
+        stateMachine = ChatsFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationRootCoordinator = navigationRootCoordinator
         self.bugReportService = bugReportService
@@ -94,7 +94,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         
         navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
-                
+        
         settingsFlowCoordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
                                                                             windowManager: appMediator.windowManager,
                                                                             appLockService: appLockService,
@@ -242,7 +242,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
-            let animated = (context.userInfo as? UserSessionFlowCoordinatorStateMachine.EventUserInfo)?.animated ?? true
+            let animated = (context.userInfo as? ChatsFlowCoordinatorStateMachine.EventUserInfo)?.animated ?? true
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .start, .roomList):
                 presentHomeScreen()
@@ -1067,8 +1067,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: Toasts and loading indicators
     
-    private static let loadingIndicatorIdentifier = "\(UserSessionFlowCoordinator.self)-Loading"
-    private static let failureIndicatorIdentifier = "\(UserSessionFlowCoordinator.self)-Failure"
+    private static let loadingIndicatorIdentifier = "\(ChatsFlowCoordinator.self)-Loading"
+    private static let failureIndicatorIdentifier = "\(ChatsFlowCoordinator.self)-Failure"
     
     private func showLoadingIndicator(delay: Duration? = nil) {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,

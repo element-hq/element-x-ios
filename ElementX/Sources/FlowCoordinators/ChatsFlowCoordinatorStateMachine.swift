@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import SwiftState
 
-class UserSessionFlowCoordinatorStateMachine {
+class ChatsFlowCoordinatorStateMachine {
     /// States the AppCoordinator can find itself in
     enum State: StateType {
         /// The initial state, used before the coordinator starts
@@ -138,7 +138,7 @@ class UserSessionFlowCoordinatorStateMachine {
     
     private let stateMachine: StateMachine<State, Event>
     
-    var state: UserSessionFlowCoordinatorStateMachine.State {
+    var state: ChatsFlowCoordinatorStateMachine.State {
         stateMachine.state
     }
     
