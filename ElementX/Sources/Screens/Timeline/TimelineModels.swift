@@ -63,7 +63,7 @@ enum TimelineViewAction {
     case displayReadReceipts(itemID: TimelineItemIdentifier)
     case displayThread(itemID: TimelineItemIdentifier)
     
-    case handlePasteOrDrop(provider: NSItemProvider)
+    case handlePasteOrDrop(providers: [NSItemProvider])
     case handlePollAction(TimelineViewPollAction)
     case handleAudioPlayerAction(TimelineAudioPlayerAction)
     

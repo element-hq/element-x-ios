@@ -192,8 +192,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             displayReadReceipts(for: itemID)
         case .displayThread(let itemID):
             actionsSubject.send(.displayThread(itemID: itemID))
-        case .handlePasteOrDrop(let provider):
-            timelineInteractionHandler.handlePasteOrDrop(provider)
+        case .handlePasteOrDrop(let providers):
+            timelineInteractionHandler.handlePasteOrDrop(providers)
         case .handlePollAction(let pollAction):
             handlePollAction(pollAction)
         case .handleAudioPlayerAction(let audioPlayerAction):
@@ -231,8 +231,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             editLastMessage()
         case .attach(let attachment):
             attach(attachment)
-        case .handlePasteOrDrop(let provider):
-            timelineInteractionHandler.handlePasteOrDrop(provider)
+        case .handlePasteOrDrop(let providers):
+            timelineInteractionHandler.handlePasteOrDrop(providers)
         case .composerModeChanged(mode: let mode):
             trackComposerMode(mode)
         case .composerFocusedChanged(isFocused: let isFocused):

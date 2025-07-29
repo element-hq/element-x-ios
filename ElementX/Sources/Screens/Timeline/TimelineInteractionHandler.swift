@@ -277,7 +277,7 @@ class TimelineInteractionHandler {
     
     // MARK: Pasting and dropping
     
-    func handlePasteOrDrop(_ provider: NSItemProvider) {
+    func handlePasteOrDrop(_ providers: [NSItemProvider]) {
         Task {
             let loadingIndicatorIdentifier = UUID().uuidString
             self.userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading, persistent: true))
@@ -285,13 +285,19 @@ class TimelineInteractionHandler {
                 self.userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
             }
             
-            guard let fileURL = await provider.storeData() else {
-                MXLog.error("Failed storing NSItemProvider data \(provider)")
-                self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
-                return
+            var mediaURLs = [URL]()
+            for provider in providers {
+                if let fileURL = await provider.storeData() {
+                    mediaURLs.append(fileURL)
+                } else {
+                    MXLog.error("Failed storing NSItemProvider data \(provider)")
+                    self.actionsSubject.send(.displayErrorToast(L10n.screenRoomErrorFailedProcessingMedia))
+                }
             }
             
-            self.actionsSubject.send(.displayMediaUploadPreviewScreen(mediaURLs: [fileURL]))
+            if !mediaURLs.isEmpty {
+                self.actionsSubject.send(.displayMediaUploadPreviewScreen(mediaURLs: mediaURLs))
+            }
         }
     }
     
