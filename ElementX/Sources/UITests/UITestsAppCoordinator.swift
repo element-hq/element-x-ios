@@ -582,26 +582,25 @@ class MockScreen: Identifiable {
             appSettings.hasRunIdentityConfirmationOnboarding = true
             appSettings.hasRunNotificationPermissionsOnboarding = true
             appSettings.analyticsConsentState = .optedOut
-            let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
             
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", deviceID: "MOCKCLIENT", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             
             let appMediator = AppMediatorMock.default
             appMediator.underlyingWindowManager = windowManager
             
-            let flowCoordinator = ChatsFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                       navigationRootCoordinator: navigationRootCoordinator,
-                                                       appLockService: AppLockService(keychainController: KeychainControllerMock(),
-                                                                                      appSettings: ServiceLocator.shared.settings),
-                                                       bugReportService: BugReportServiceMock(.init()),
-                                                       elementCallService: ElementCallServiceMock(.init()),
-                                                       timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                                       appMediator: appMediator,
-                                                       appSettings: appSettings,
-                                                       appHooks: AppHooks(),
-                                                       analytics: ServiceLocator.shared.analytics,
-                                                       notificationManager: NotificationManagerMock(),
-                                                       isNewLogin: false)
+            let flowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                             navigationRootCoordinator: navigationRootCoordinator,
+                                                             appLockService: AppLockService(keychainController: KeychainControllerMock(),
+                                                                                            appSettings: ServiceLocator.shared.settings),
+                                                             bugReportService: BugReportServiceMock(.init()),
+                                                             elementCallService: ElementCallServiceMock(.init()),
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                                             appMediator: appMediator,
+                                                             appSettings: appSettings,
+                                                             appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
+                                                             notificationManager: NotificationManagerMock(),
+                                                             isNewLogin: false)
             
             flowCoordinator.start()
             
@@ -729,6 +728,7 @@ class MockScreen: Identifiable {
             appSettings.hasRunNotificationPermissionsOnboarding = true
             appSettings.analyticsConsentState = .optedOut
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
+            navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
             
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
             
@@ -746,7 +746,7 @@ class MockScreen: Identifiable {
                                                         appSettings: ServiceLocator.shared.settings)
             
             let flowCoordinator = ChatsFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                       navigationRootCoordinator: navigationRootCoordinator,
+                                                       navigationSplitCoordinator: navigationSplitCoordinator,
                                                        appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                       appSettings: ServiceLocator.shared.settings),
                                                        bugReportService: BugReportServiceMock(.init()),

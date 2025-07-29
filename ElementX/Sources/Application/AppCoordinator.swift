@@ -46,7 +46,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appLockFlowCoordinator: AppLockFlowCoordinator
     // periphery:ignore - used to avoid deallocation
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
-    private var userSessionFlowCoordinator: ChatsFlowCoordinator?
+    private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
     private var softLogoutCoordinator: SoftLogoutScreenCoordinator?
     private var appDelegateObserver: AnyCancellable?
     private var userSessionObserver: AnyCancellable?
@@ -640,18 +640,18 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        let userSessionFlowCoordinator = ChatsFlowCoordinator(userSession: userSession,
-                                                              navigationRootCoordinator: navigationRootCoordinator,
-                                                              appLockService: appLockFlowCoordinator.appLockService,
-                                                              bugReportService: ServiceLocator.shared.bugReportService,
-                                                              elementCallService: elementCallService,
-                                                              timelineControllerFactory: TimelineControllerFactory(),
-                                                              appMediator: appMediator,
-                                                              appSettings: appSettings,
-                                                              appHooks: appHooks,
-                                                              analytics: ServiceLocator.shared.analytics,
-                                                              notificationManager: notificationManager,
-                                                              isNewLogin: isNewLogin)
+        let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
+                                                                    navigationRootCoordinator: navigationRootCoordinator,
+                                                                    appLockService: appLockFlowCoordinator.appLockService,
+                                                                    bugReportService: ServiceLocator.shared.bugReportService,
+                                                                    elementCallService: elementCallService,
+                                                                    timelineControllerFactory: TimelineControllerFactory(),
+                                                                    appMediator: appMediator,
+                                                                    appSettings: appSettings,
+                                                                    appHooks: appHooks,
+                                                                    analytics: ServiceLocator.shared.analytics,
+                                                                    notificationManager: notificationManager,
+                                                                    isNewLogin: isNewLogin)
         
         userSessionFlowCoordinator.actionsPublisher
             .sink { [weak self] action in
