@@ -66,6 +66,11 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         private static let loadingIndicatorIdentifier = "\(PhotoLibraryPicker.self)-Loading"
         
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+            guard !results.isEmpty else {
+                photoLibraryPicker.callback(.cancel)
+                return
+            }
+            
             picker.delegate = nil
             
             photoLibraryPicker.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
