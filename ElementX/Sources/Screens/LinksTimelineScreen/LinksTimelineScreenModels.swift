@@ -16,7 +16,7 @@ enum LinksTimelineScreenViewModelAction: Equatable {
     case openURL(URL)
     case shareURL(URL)
     case navigateToMessage(eventID: String)
-    case close
+    case dismiss
 }
 
 // MARK: View
@@ -30,7 +30,7 @@ struct LinkItem: Identifiable, Hashable {
     let eventID: String
     
     init(url: URL, sender: TimelineItemSender, timestamp: Date, eventID: String, title: String? = nil) {
-        self.id = eventID
+        id = eventID
         self.url = url
         self.title = title
         self.sender = sender
@@ -42,6 +42,7 @@ struct LinkItem: Identifiable, Hashable {
 struct LinksTimelineScreenViewState: BindableState {
     var roomTitle: String
     var links: [LinkItem] = []
+    var allLinks: [LinkItem] = []
     var isLoading = false
     var errorMessage: String?
     
@@ -56,16 +57,12 @@ struct LinksTimelineScreenViewState: BindableState {
     var bindings = LinksTimelineScreenViewStateBindings()
 }
 
-struct LinksTimelineScreenViewStateBindings {
-    var selectedSenderFilter: String? = nil
-    var availableSenders: [String] = []
-}
+struct LinksTimelineScreenViewStateBindings { }
 
 enum LinksTimelineScreenViewAction {
     case openURL(URL)
     case shareURL(URL)
     case navigateToMessage(eventID: String)
-    case filterBySender(String?)
     case retry
-    case close
-} 
+    case dismiss
+}

@@ -39,11 +39,9 @@ class LinksTimelineFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func start() {
-        let viewModel = LinksTimelineScreenViewModel(
-            roomProxy: roomProxy,
-            mediaProvider: mediaProvider,
-            userIndicatorController: userIndicatorController
-        )
+        let viewModel = LinksTimelineScreenViewModel(roomProxy: roomProxy,
+                                                     mediaProvider: mediaProvider,
+                                                     userIndicatorController: userIndicatorController)
         
         viewModel.actions
             .receive(on: DispatchQueue.main)
@@ -97,7 +95,8 @@ class LinksTimelineFlowCoordinator: FlowCoordinatorProtocol {
             // Call the callback to navigate to the specific message
             print("DEBUG: Calling onNavigateToMessage callback")
             onNavigateToMessage?(eventID)
-        case .close:
+        case .dismiss:
+            print("DEBUG: Coordinator received dismiss action")
             navigationStackCoordinator.setSheetCoordinator(nil)
         }
     }
@@ -139,4 +138,4 @@ extension UIViewController {
         
         return self
     }
-} 
+}

@@ -598,7 +598,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           entryPoint: .room))
                 case .presentMessageSearch:
                     stateMachine.tryEvent(.presentMessageSearch)
-                 }
+                }
             }
             .store(in: &cancellables)
         
@@ -1656,9 +1656,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startLinksTimelineFlow() async {
         let flowCoordinator = LinksTimelineFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
-                                                          roomProxy: roomProxy,
-                                                          mediaProvider: userSession.mediaProvider,
-                                                          userIndicatorController: userIndicatorController)
+                                                           roomProxy: roomProxy,
+                                                           mediaProvider: userSession.mediaProvider,
+                                                           userIndicatorController: userIndicatorController)
         
         flowCoordinator.completion = { [weak self] in
             self?.stateMachine.tryEvent(.dismissLinksTimeline)

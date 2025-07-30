@@ -9,42 +9,43 @@ import Compound
 import SwiftUI
 
 struct LinksTimelineScreen: View {
-    @State var context: LinksTimelineScreenViewModel.Context
+    @State var context: LinksTimelineScreenViewModelType.Context
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         mainContent
-            .navigationBarTitleDisplayMode(.inline)
             .background(.compound.bgCanvasDefault)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbar { toolbar }
     }
     
     @ViewBuilder
     private var mainContent: some View {
-        if context.viewState.shouldShowEmptyState {
-            emptyState
-        } else if context.viewState.shouldShowErrorState {
-            errorState
-        } else {
-            ScrollView {
-                LazyVStack(spacing: 0) {
-                    if !context.viewState.bindings.availableSenders.isEmpty {
-                        filterSection
-                    }
-                    
-                    ForEach(context.viewState.links) { link in
-                        LinkItemView(link: link) { action in
-                            switch action {
-                            case .openURL:
-                                context.send(viewAction: .openURL(link.url))
-                            default:
-                                break
+        VStack(spacing: 0) {
+            // Header - always show
+            headerSection
+            
+            // Content based on state
+            if context.viewState.shouldShowEmptyState {
+                emptyState
+            } else if context.viewState.shouldShowErrorState {
+                errorState
+            } else {
+                // Links list
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        ForEach(context.viewState.links) { link in
+                            LinkItemView(link: link) { action in
+                                switch action {
+                                case .openURL:
+                                    context.send(viewAction: .openURL(link.url))
+                                default:
+                                    break
+                                }
                             }
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .onAppear {
-                            print("DEBUG: LinkItemView appeared for URL: \(link.url.absoluteString), EventID: \(link.eventID)")
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .onAppear {
+                                print("DEBUG: LinkItemView appeared for URL: \(link.url.absoluteString), EventID: \(link.eventID)")
+                            }
                         }
                     }
                 }
@@ -53,108 +54,86 @@ struct LinksTimelineScreen: View {
     }
     
     @ViewBuilder
-    private var filterSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Filter by sender")
-                .font(.compound.bodyLG)
-                .foregroundColor(.compound.textSecondary)
-                .padding(.horizontal, 16)
-                .padding(.top, 16)
-            
-            Menu {
-                Button("All") {
-                    context.send(viewAction: .filterBySender(nil))
-                }
-                
-                ForEach(context.viewState.bindings.availableSenders, id: \.self) { senderID in
-                    Button(senderID) {
-                        context.send(viewAction: .filterBySender(senderID))
-                    }
-                }
-            } label: {
-                HStack {
-                    Text(context.viewState.bindings.selectedSenderFilter ?? "All")
-                        .font(.compound.bodySM)
-                        .foregroundColor(.compound.textPrimary)
-                    
-                    Spacer()
-                    
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 12))
-                        .foregroundColor(.compound.textSecondary)
-                }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(.compound.bgSubtleSecondary)
-                .cornerRadius(8)
+    private var headerSection: some View {
+        HStack {
+            Button("Hủy") {
+                print("DEBUG: Cancel button tapped")
+                dismiss()
             }
-            .padding(.horizontal, 16)
+            .font(.compound.bodyLG)
+            .foregroundColor(.compound.textSecondary)
+            .buttonStyle(PlainButtonStyle())
+            
+            Spacer()
+            
+            Text("Link")
+                .font(.compound.headingSM)
+                .foregroundColor(.compound.textPrimary)
+                .fontWeight(.semibold)
+            
+            Spacer()
+            
+            // Invisible spacer to balance the layout
+            Text("Hủy")
+                .font(.compound.bodyLG)
+                .foregroundColor(.clear)
         }
-        .padding(.bottom, 8)
+        .padding(.horizontal, 16)
+        .padding(.top, 8)
+        .padding(.bottom, 12)
+        .background(.compound.bgCanvasDefault)
     }
     
     @ViewBuilder
     private var emptyState: some View {
-        FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .gradient) {
-            VStack(spacing: 16) {
-                Image(systemName: "link")
-                    .font(.system(size: 48))
-                    .foregroundColor(.compound.iconSecondary)
-                
-                Text("No links shared yet")
-                    .font(.compound.headingLG)
-                    .foregroundColor(.compound.textPrimary)
-                
-                Text("Links shared in this room will be shown here.")
-                    .font(.compound.bodyLG)
-                    .foregroundColor(.compound.textSecondary)
-                    .multilineTextAlignment(.center)
-            }
-            .padding(16)
-        } bottomContent: { EmptyView() }
+        VStack(spacing: 16) {
+            Spacer()
+            
+            Image(systemName: "link")
+                .font(.system(size: 48))
+                .foregroundColor(.compound.iconSecondary)
+            
+            Text("Không có link nào được gửi")
+                .font(.compound.headingLG)
+                .foregroundColor(.compound.textPrimary)
+            
+            Text("Các link được gửi sẽ xuất hiện ở đây.")
+                .font(.compound.bodyLG)
+                .foregroundColor(.compound.textSecondary)
+                .multilineTextAlignment(.center)
+            
+            Spacer()
+        }
     }
     
     @ViewBuilder
     private var errorState: some View {
-        FullscreenDialog(topPadding: UIConstants.iconTopPaddingToNavigationBar, background: .gradient) {
-            VStack(spacing: 16) {
-                Image(systemName: "exclamationmark.triangle")
-                    .font(.system(size: 48))
-                    .foregroundColor(.compound.iconCriticalPrimary)
-                
-                Text(L10n.commonError)
-                    .font(.compound.headingLG)
-                    .foregroundColor(.compound.textPrimary)
-                
-                if let errorMessage = context.viewState.errorMessage {
-                    Text(errorMessage)
-                        .font(.compound.bodyLG)
-                        .foregroundColor(.compound.textSecondary)
-                        .multilineTextAlignment(.center)
-                }
-                
-                Button(L10n.actionRetry) {
-                    context.send(viewAction: .retry)
-                }
-                .buttonStyle(.compound(.primary))
-            }
-            .padding(16)
-        } bottomContent: { EmptyView() }
-    }
-    
-    @ToolbarContentBuilder
-    private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarLeading) {
-            Button(L10n.actionClose) {
-                context.send(viewAction: .close)
-            }
-        }
-        
-        ToolbarItem(placement: .principal) {
-            Text(context.viewState.roomTitle)
-                .font(.compound.headingSM)
+        VStack(spacing: 16) {
+            Spacer()
+            
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 48))
+                .foregroundColor(.compound.iconCriticalPrimary)
+            
+            Text(L10n.commonError)
+                .font(.compound.headingLG)
                 .foregroundColor(.compound.textPrimary)
+            
+            if let errorMessage = context.viewState.errorMessage {
+                Text(errorMessage)
+                    .font(.compound.bodyLG)
+                    .foregroundColor(.compound.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+            
+            Button(L10n.actionRetry) {
+                context.send(viewAction: .retry)
+            }
+            .buttonStyle(.compound(.primary))
+            
+            Spacer()
         }
+        .padding(16)
     }
 }
 
@@ -209,5 +188,3 @@ struct LinkItemView: View {
 enum LinkItemAction {
     case openURL
 }
-
- 

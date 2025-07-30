@@ -46,13 +46,12 @@ class LinksTimelineScreenViewModel: LinksTimelineScreenViewModelType, LinksTimel
         case .navigateToMessage(let eventID):
             print("DEBUG: ViewModel received navigateToMessage action with eventID: \(eventID)")
             actionsSubject.send(.navigateToMessage(eventID: eventID))
-        case .filterBySender(let senderID):
-            state.bindings.selectedSenderFilter = senderID
-            filterLinks()
+
         case .retry:
             setupTimeline()
-        case .close:
-            actionsSubject.send(.close)
+        case .dismiss:
+            print("DEBUG: ViewModel received dismiss action")
+            actionsSubject.send(.dismiss)
         }
     }
     
@@ -115,16 +114,11 @@ class LinksTimelineScreenViewModel: LinksTimelineScreenViewModelType, LinksTimel
             
             guard let firstURL = urls.first else { continue }
             
-            let linkItem = LinkItem(
-                url: firstURL,
-                sender: eventItem.sender,
-                timestamp: eventItem.timestamp,
-                eventID: eventItem.id.eventID ?? String(eventItem.id.uniqueID.value),
-                title: extractTitle(from: body, url: firstURL)
-            )
-            
-            // Debug: Print timestamp and eventID for debugging
-            print("DEBUG: Created LinkItem - URL: \(firstURL.absoluteString), EventID: \(linkItem.eventID), EventID type: \(type(of: linkItem.eventID))")
+            let linkItem = LinkItem(url: firstURL,
+                                    sender: eventItem.sender,
+                                    timestamp: eventItem.timestamp,
+                                    eventID: eventItem.id.eventID ?? String(eventItem.id.uniqueID.value),
+                                    title: extractTitle(from: body, url: firstURL))
             
             allLinks.append(linkItem)
         }
@@ -132,70 +126,11 @@ class LinksTimelineScreenViewModel: LinksTimelineScreenViewModelType, LinksTimel
         // Sort by timestamp (newest first)
         let sortedLinks = allLinks.sorted { $0.timestamp > $1.timestamp }
         
-        // Update available senders
-        let senders = Array(Set(sortedLinks.map { $0.sender.id })).sorted()
-        state.bindings.availableSenders = senders
-        
-        // Apply filter if needed
-        if let selectedSender = state.bindings.selectedSenderFilter {
-            state.links = sortedLinks.filter { $0.sender.id == selectedSender }
-        } else {
-            state.links = sortedLinks
-        }
+        // Store all links
+        state.allLinks = sortedLinks
+        state.links = sortedLinks
         
         state.isLoading = false
-    }
-    
-    private func filterLinks() {
-        guard let timelineItemProvider = timelineItemProvider else { return }
-        
-        var allLinks: [LinkItem] = []
-        
-        for item in timelineItemProvider.itemProxies {
-            guard case let .event(eventItem) = item else { continue }
-            
-            // Check if it's a text message and extract body
-            let body: String
-            switch eventItem.content {
-            case let .msgLike(messageLikeContent):
-                switch messageLikeContent.kind {
-                case let .message(messageContent):
-                    switch messageContent.msgType {
-                    case let .text(content):
-                        body = content.body
-                    case let .emote(content):
-                        body = content.body
-                    default:
-                        continue
-                    }
-                default:
-                    continue
-                }
-            default:
-                continue
-            }
-            
-            let urls = extractURLs(from: body)
-            guard let firstURL = urls.first else { continue }
-            
-            let linkItem = LinkItem(
-                url: firstURL,
-                sender: eventItem.sender,
-                timestamp: eventItem.timestamp,
-                eventID: eventItem.id.eventID ?? String(eventItem.id.uniqueID.value),
-                title: extractTitle(from: body, url: firstURL)
-            )
-            
-            allLinks.append(linkItem)
-        }
-        
-        let sortedLinks = allLinks.sorted { $0.timestamp > $1.timestamp }
-        
-        if let selectedSender = state.bindings.selectedSenderFilter {
-            state.links = sortedLinks.filter { $0.sender.id == selectedSender }
-        } else {
-            state.links = sortedLinks
-        }
     }
     
     private func extractURLs(from text: String) -> [URL] {
@@ -209,7 +144,7 @@ class LinksTimelineScreenViewModel: LinksTimelineScreenViewModelType, LinksTimel
             if url.scheme == nil {
                 let urlString = url.absoluteString
                 // Check if it looks like a domain (contains dot and no spaces)
-                if urlString.contains(".") && !urlString.contains(" ") {
+                if urlString.contains("."), !urlString.contains(" ") {
                     return URL(string: "https://" + urlString)
                 }
                 return nil
@@ -253,4 +188,4 @@ class LinksTimelineScreenViewModel: LinksTimelineScreenViewModelType, LinksTimel
 
 protocol LinksTimelineScreenViewModelProtocol: ObservableObject {
     var context: LinksTimelineScreenViewModelType.Context { get }
-} 
+}
