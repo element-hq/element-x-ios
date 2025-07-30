@@ -225,7 +225,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 0)
         
-        let sharePayload: ShareExtensionPayload = .mediaFile(roomID: "1", mediaFile: .init(url: .picturesDirectory, suggestedName: nil))
+        let sharePayload: ShareExtensionPayload = .mediaFiles(roomID: "1", mediaFiles: [.init(url: .picturesDirectory, suggestedName: nil)])
         try await process(route: .share(sharePayload))
         
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
