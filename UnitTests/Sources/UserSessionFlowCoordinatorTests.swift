@@ -246,7 +246,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         try await process(route: .settings, expectedState: .settingsScreen(roomListSelectedRoomID: nil))
         XCTAssertTrue((splitCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
         
-        let sharePayload: ShareExtensionPayload = .mediaFile(roomID: nil, mediaFile: .init(url: .picturesDirectory, suggestedName: nil))
+        let sharePayload: ShareExtensionPayload = .mediaFiles(roomID: nil, mediaFiles: [.init(url: .picturesDirectory, suggestedName: nil)])
         try await process(route: .share(sharePayload),
                           expectedState: .shareExtensionRoomList(sharePayload: sharePayload))
         
@@ -257,7 +257,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedState: .roomList(roomListSelectedRoomID: "1"))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         
-        let sharePayload: ShareExtensionPayload = .mediaFile(roomID: "2", mediaFile: .init(url: .picturesDirectory, suggestedName: nil))
+        let sharePayload: ShareExtensionPayload = .mediaFiles(roomID: "2", mediaFiles: [.init(url: .picturesDirectory, suggestedName: nil)])
         try await process(route: .share(sharePayload),
                           expectedState: .roomList(roomListSelectedRoomID: "2"))
         

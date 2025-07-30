@@ -32,8 +32,8 @@ struct RoomScreenCoordinatorParameters {
 
 enum RoomScreenCoordinatorAction {
     case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
-    case presentMediaUploadPicker(MediaPickerScreenSource)
-    case presentMediaUploadPreviewScreen(URL)
+    case presentMediaUploadPicker(mode: MediaPickerScreenMode)
+    case presentMediaUploadPreviewScreen(mediaURLs: [URL])
     case presentRoomDetails
     case presentLocationPicker
     case presentPollForm(mode: PollFormMode)
@@ -121,19 +121,19 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
                 case .displayCameraPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(.camera))
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .camera, selectionType: .multiple)))
                 case .displayMediaPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(.photoLibrary))
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .photoLibrary, selectionType: .multiple)))
                 case .displayDocumentPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(.documents))
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .documents, selectionType: .multiple)))
                 case .displayMediaPreview(let mediaPreviewViewModel):
                     roomViewModel.displayMediaPreview(mediaPreviewViewModel)
                 case .displayLocationPicker:
                     actionsSubject.send(.presentLocationPicker)
                 case .displayPollForm(let mode):
                     actionsSubject.send(.presentPollForm(mode: mode))
-                case .displayMediaUploadPreviewScreen(let url):
-                    actionsSubject.send(.presentMediaUploadPreviewScreen(url))
+                case .displayMediaUploadPreviewScreen(let mediaURLs):
+                    actionsSubject.send(.presentMediaUploadPreviewScreen(mediaURLs: mediaURLs))
                 case .displaySenderDetails(userID: let userID):
                     actionsSubject.send(.presentRoomMemberDetails(userID: userID))
                 case .displayMessageForwarding(let forwardingItem):

@@ -173,7 +173,7 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
             clientProxy.underlyingMaxMediaUploadSize = maxUploadSizeResult
         }
         
-        viewModel = MediaUploadPreviewScreenViewModel(url: url,
+        viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: [url],
                                                       title: "Some File",
                                                       isRoomEncrypted: true,
                                                       shouldShowCaptionWarning: true,

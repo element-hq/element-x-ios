@@ -55,12 +55,13 @@ struct TimelineView: View {
                     .environmentObject(timelineContext)
             }
             .onDrop(of: ["public.item", "public.file-url"], isTargeted: $dragOver) { providers -> Bool in
-                guard let provider = providers.first,
-                      provider.isSupportedForPasteOrDrop else {
+                let supportedProviders = providers.filter(\.isSupportedForPasteOrDrop)
+                
+                guard !supportedProviders.isEmpty else {
                     return false
                 }
                 
-                timelineContext.send(viewAction: .handlePasteOrDrop(provider: provider))
+                timelineContext.send(viewAction: .handlePasteOrDrop(providers: supportedProviders))
                 return true
             }
     }

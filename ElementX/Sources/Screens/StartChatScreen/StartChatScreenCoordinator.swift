@@ -15,6 +15,7 @@ struct StartChatScreenCoordinatorParameters {
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
+    let appSettings: AppSettings
 }
 
 enum StartChatScreenCoordinatorAction {
@@ -124,8 +125,8 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
                 self.createRoomParameters.send(details)
             case .openRoom(let identifier):
                 self.actionsSubject.send(.openRoom(withIdentifier: identifier))
-            case .displayMediaPickerWithSource(let source):
-                self.displayMediaPickerWithSource(source)
+            case .displayMediaPickerWithMode(let mode):
+                self.displayMediaPickerWithMode(mode)
             case .removeImage:
                 var parameters = self.createRoomParameters.value
                 parameters.avatarImageMedia = nil
@@ -139,15 +140,23 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
+    private func displayMediaPickerWithMode(_ mode: MediaPickerScreenMode) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source, orientationManager: parameters.orientationManager) { [weak self] action in
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(mode: mode,
+                                                                  appSettings: parameters.appSettings,
+                                                                  userIndicatorController: parameters.userIndicatorController,
+                                                                  orientationManager: parameters.orientationManager) { [weak self] action in
             guard let self else { return }
             switch action {
             case .cancel:
                 parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
-            case .selectMediaAtURL(let url):
+            case .selectedMediaAtURLs(let urls):
+                guard urls.count == 1,
+                      let url = urls.first else {
+                    fatalError("Received an invalid number of URLs")
+                }
+                
                 processAvatar(from: url)
             }
         }
