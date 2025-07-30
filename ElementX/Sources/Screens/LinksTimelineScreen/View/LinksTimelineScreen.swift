@@ -10,11 +10,30 @@ import SwiftUI
 
 struct LinksTimelineScreen: View {
     @State var context: LinksTimelineScreenViewModelType.Context
+    @State private var selectedSenderFilter: String? = nil
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         mainContent
             .background(.compound.bgCanvasDefault)
+    }
+    
+    // Computed properties for filtering
+    private var availableSenders: [String] {
+        let senders = Set(context.viewState.allLinks.map { $0.sender.id })
+        return Array(senders).sorted()
+    }
+    
+    private var filteredLinks: [LinkItem] {
+        if let selectedFilter = selectedSenderFilter {
+            return context.viewState.allLinks.filter { $0.sender.id == selectedFilter }
+        } else {
+            return context.viewState.allLinks
+        }
+    }
+    
+    private var shouldShowFilteredEmptyState: Bool {
+        !context.viewState.isLoading && filteredLinks.isEmpty && context.viewState.errorMessage == nil && selectedSenderFilter != nil
     }
     
     @ViewBuilder
@@ -23,8 +42,15 @@ struct LinksTimelineScreen: View {
             // Header - always show
             headerSection
             
+            // Filter section
+            if !availableSenders.isEmpty {
+                filterSection
+            }
+            
             // Content based on state
-            if context.viewState.shouldShowEmptyState {
+            if shouldShowFilteredEmptyState {
+                filteredEmptyState
+            } else if context.viewState.shouldShowEmptyState {
                 emptyState
             } else if context.viewState.shouldShowErrorState {
                 errorState
@@ -32,7 +58,9 @@ struct LinksTimelineScreen: View {
                 // Links list
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        ForEach(context.viewState.links) { link in
+
+                        
+                        ForEach(filteredLinks) { link in
                             LinkItemView(link: link) { action in
                                 switch action {
                                 case .openURL:
@@ -43,9 +71,7 @@ struct LinksTimelineScreen: View {
                             }
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
-                            .onAppear {
-                                print("DEBUG: LinkItemView appeared for URL: \(link.url.absoluteString), EventID: \(link.eventID)")
-                            }
+
                         }
                     }
                 }
@@ -57,7 +83,6 @@ struct LinksTimelineScreen: View {
     private var headerSection: some View {
         HStack {
             Button("Hủy") {
-                print("DEBUG: Cancel button tapped")
                 dismiss()
             }
             .font(.compound.bodyLG)
@@ -85,6 +110,84 @@ struct LinksTimelineScreen: View {
     }
     
     @ViewBuilder
+    private var filterSection: some View {
+        VStack(spacing: 8) {
+            HStack {
+                Text("Lọc theo người gửi")
+                    .font(.compound.bodySM)
+                    .foregroundColor(.compound.textSecondary)
+                
+                Spacer()
+                
+
+                
+                if selectedSenderFilter != nil {
+                    Button("Xóa bộ lọc") {
+                        selectedSenderFilter = nil
+                    }
+                    .font(.compound.bodyXS)
+                    .foregroundColor(.compound.textLinkExternal)
+                }
+            }
+            .padding(.horizontal, 16)
+            
+            // Dropdown picker
+            HStack {
+                Menu {
+                    Button("Tất cả") {
+                        selectedSenderFilter = nil
+                    }
+                    
+                    Divider()
+                    
+                    ForEach(availableSenders, id: \.self) { senderID in
+                        let senderName = getSenderDisplayName(for: senderID)
+                        Button(senderName) {
+                            selectedSenderFilter = senderID
+                        }
+                    }
+                } label: {
+                    HStack {
+                        Text(getSelectedFilterDisplayName())
+                            .font(.compound.bodySM)
+                            .foregroundColor(.compound.textPrimary)
+                        
+                        Spacer()
+                        
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 12))
+                            .foregroundColor(.compound.textSecondary)
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(.compound.bgSubtleSecondary)
+                    .cornerRadius(8)
+                }
+                .menuStyle(BorderlessButtonMenuStyle())
+            }
+            .padding(.horizontal, 16)
+        }
+        .padding(.vertical, 8)
+        .background(.compound.bgCanvasDefault)
+    }
+    
+    private func getSenderDisplayName(for senderID: String) -> String {
+        // Find the sender in allLinks to get display name
+        if let linkItem = context.viewState.allLinks.first(where: { $0.sender.id == senderID }) {
+            return linkItem.sender.displayName ?? linkItem.sender.id
+        }
+        return senderID
+    }
+    
+    private func getSelectedFilterDisplayName() -> String {
+        if let selectedFilter = selectedSenderFilter {
+            return getSenderDisplayName(for: selectedFilter)
+        } else {
+            return "Tất cả"
+        }
+    }
+    
+    @ViewBuilder
     private var emptyState: some View {
         VStack(spacing: 16) {
             Spacer()
@@ -101,6 +204,36 @@ struct LinksTimelineScreen: View {
                 .font(.compound.bodyLG)
                 .foregroundColor(.compound.textSecondary)
                 .multilineTextAlignment(.center)
+            
+            Spacer()
+        }
+    }
+    
+    @ViewBuilder
+    private var filteredEmptyState: some View {
+        VStack(spacing: 16) {
+            Spacer()
+            
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 48))
+                .foregroundColor(.compound.iconSecondary)
+            
+            Text("Không tìm thấy link")
+                .font(.compound.headingLG)
+                .foregroundColor(.compound.textPrimary)
+            
+            if let selectedFilter = selectedSenderFilter {
+                let senderName = getSenderDisplayName(for: selectedFilter)
+                Text("Không có link nào được gửi bởi \(senderName)")
+                    .font(.compound.bodyLG)
+                    .foregroundColor(.compound.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+            
+            Button("Xem tất cả link") {
+                selectedSenderFilter = nil
+            }
+            .buttonStyle(.compound(.primary))
             
             Spacer()
         }
@@ -166,7 +299,6 @@ struct LinkItemView: View {
                 }
                 
                 Button(action: {
-                    print("DEBUG: URL button tapped")
                     onAction(.openURL)
                 }) {
                     Text(link.url.absoluteString)

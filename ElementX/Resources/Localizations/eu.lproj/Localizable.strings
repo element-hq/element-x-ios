@@ -550,7 +550,7 @@
 "screen_room_mentions_at_room_subtitle" = "Jakinarazi gela osoari";
 "screen_room_multiple_knock_requests_view_all_button_title" = "Ikusi guztiak";
 "screen_room_pinned_banner_indicator" = "%2$@(e)tik %1$@";
-"screen_room_pinned_banner_indicator_description" = "%1$@ Pinned messages";
+"screen_room_pinned_banner_indicator_description" = "%1$@ Tin nhắn đã ghim";
 "screen_room_pinned_banner_loading_description" = "Mezua kargatzen…";
 "screen_room_pinned_banner_view_all_button_title" = "Ikusi guztia";
 "screen_room_single_knock_request_title" = "%1$@(e)k gela honetara sartu nahi du";

@@ -369,7 +369,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
         encryptionAuthenticity
             .previewDisplayName("Encryption Indicators")
         pinned
-            .previewDisplayName("Pinned messages")
+            .previewDisplayName("Tin nhắn đã ghim")
             .previewLayout(.fixed(width: 390, height: 1150))
             .padding(.bottom, 20)
     }
