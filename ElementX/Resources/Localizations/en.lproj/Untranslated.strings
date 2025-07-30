@@ -6,11 +6,11 @@
 
 // MARK: - Soft logout
 
-"soft_logout_signin_title" = "Sign in";
-"soft_logout_signin_notice" = "Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).";
-"soft_logout_signin_e2e_warning_notice" = "Sign in to recover encryption keys stored exclusively on this device. You need them to read all of your secure messages on any device.";
-"soft_logout_clear_data_title" = "Clear personal data";
-"soft_logout_clear_data_notice" = "Warning: Your personal data (including encryption keys) is still stored on this device.\n\nClear it if you’re finished using this device, or want to sign in to another account.";
-"soft_logout_clear_data_submit" = "Clear all data";
-"soft_logout_clear_data_dialog_title" = "Clear data";
-"soft_logout_clear_data_dialog_content" = "Clear all data currently stored on this device?\nSign in again to access your account data and messages.";
+"soft_logout_signin_title" = "Đăng nhập";
+"soft_logout_signin_notice" = "Quản trị viên máy chủ nhà của bạn (%1$s) đã đăng xuất tài khoản %2$s (%3$s) của bạn.";
+"soft_logout_signin_e2e_warning_notice" = "Đăng nhập để khôi phục khóa mã hóa được lưu trữ độc quyền trên thiết bị này. Bạn cần chúng để đọc tất cả tin nhắn bảo mật của mình trên bất kỳ thiết bị nào.";
+"soft_logout_clear_data_title" = "Xóa dữ liệu cá nhân";
+"soft_logout_clear_data_notice" = "Cảnh báo: Dữ liệu cá nhân của bạn (bao gồm khóa mã hóa) vẫn được lưu trữ trên thiết bị này.\n\nXóa nó nếu bạn đã hoàn thành việc sử dụng thiết bị này, hoặc muốn đăng nhập vào tài khoản khác.";
+"soft_logout_clear_data_submit" = "Xóa tất cả dữ liệu";
+"soft_logout_clear_data_dialog_title" = "Xóa dữ liệu";
+"soft_logout_clear_data_dialog_content" = "Xóa tất cả dữ liệu hiện đang được lưu trữ trên thiết bị này?\nĐăng nhập lại để truy cập dữ liệu tài khoản và tin nhắn của bạn.";
