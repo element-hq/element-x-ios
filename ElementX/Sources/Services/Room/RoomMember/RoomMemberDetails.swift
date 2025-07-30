@@ -21,7 +21,7 @@ struct RoomMemberDetails: Identifiable, Hashable {
         
     enum Role { case administrator, moderator, user }
     let role: Role
-    let powerLevel: PowerLevelProxy
+    let powerLevel: RoomPowerLevel
     
     func matches(searchQuery: String) -> Bool {
         guard !searchQuery.isEmpty else { return true }

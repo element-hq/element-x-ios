@@ -100,7 +100,7 @@ private extension ManageRoomMemberSheetViewModel {
     static func mock(canKick: Bool = true,
                      canBan: Bool = true,
                      memberIsBanned: Bool = false,
-                     powerLevel: PowerLevelProxy = .init(value: 100)) -> ManageRoomMemberSheetViewModel {
+                     powerLevel: RoomPowerLevel = .init(value: 100)) -> ManageRoomMemberSheetViewModel {
         let member = if memberIsBanned {
             RoomMemberDetails(withProxy: RoomMemberProxyMock.mockBanned[0])
         } else {

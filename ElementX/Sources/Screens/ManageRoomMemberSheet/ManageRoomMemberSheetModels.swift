@@ -86,5 +86,5 @@ enum ManageRoomMemberDetails {
 struct ManageRoomMemberPermissions {
     let canKick: Bool
     let canBan: Bool
-    let ownPowerLevel: PowerLevelProxy
+    let ownPowerLevel: RoomPowerLevel
 }

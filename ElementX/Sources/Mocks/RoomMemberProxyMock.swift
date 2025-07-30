@@ -16,7 +16,7 @@ struct RoomMemberProxyMockConfiguration {
     var membership: MembershipState
     var isIgnored = false
     
-    var powerLevel = PowerLevelProxy(value: 0)
+    var powerLevel = RoomPowerLevel(value: 0)
     var role = RoomMemberRole.user
 }
 
