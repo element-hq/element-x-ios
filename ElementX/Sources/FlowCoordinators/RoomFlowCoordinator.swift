@@ -414,6 +414,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (_, .presentInviteUsersScreen, .inviteUsersScreen):
                 presentInviteUsersScreen()
+                
+            case (_, .presentMessageSearch, .messageSearch):
+                presentMessageSearch()
                     
             default:
                 break
@@ -468,7 +471,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url),
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .share(.text(_, let text)):
-                    roomScreenCoordinator?.shareText(text)
+                    roomScreenCoordinator?.setSharedText(text)
                 case .none:
                     break
                 }
@@ -593,6 +596,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.startChildFlow(roomID: roomID,
                                                           via: [],
                                                           entryPoint: .room))
+                case .presentMessageSearch:
+                    stateMachine.tryEvent(.presentMessageSearch)
+                    
                 }
             }
             .store(in: &cancellables)
@@ -1458,6 +1464,29 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         stackCoordinator.setRootCoordinator(coordinator)
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator)
+    }
+    
+    private func presentMessageSearch() {
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = MessageSearchCoordinator(parameters: .init(roomProxy: roomProxy))
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .selectMessage(let eventID):
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                // Focus on the selected message in the timeline
+                roomScreenCoordinator?.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
+            case .dismiss:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissMessageSearch)
+        }
     }
     
     private func presentReportRoom() {

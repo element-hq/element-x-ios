@@ -1338,3 +1338,7 @@
 "screen_signout_preference_item" = "Sign out";
 "screen_signout_save_recovery_key_title" = "Have you saved your recovery key?";
 "troubleshoot_notifications_entry_point_title" = "Troubleshoot notifications";
+"screen_search_no_results" = "No results found";
+"screen_search_no_results_description" = "Try searching with different keywords";
+"screen_search_placeholder" = "Search messages";
+"screen_search_placeholder_description" = "Enter keywords to search for messages in this room";

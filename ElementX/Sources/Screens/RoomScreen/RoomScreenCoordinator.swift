@@ -43,6 +43,7 @@ enum RoomScreenCoordinatorAction {
     case presentMessageForwarding(forwardingItem: MessageForwardingItem)
     case presentCallScreen
     case presentPinnedEventsTimeline
+    case presentMessageSearch
     case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
     case presentKnockRequestsList
     case presentThread(itemID: TimelineItemIdentifier)
@@ -177,6 +178,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentRoomDetails)
                 case .displayCall:
                     actionsSubject.send(.presentCallScreen)
+                case .displaySearch:
+                    presentMessageSearch()
                 case .removeComposerFocus:
                     composerViewModel.process(timelineAction: .removeFocus)
                 case .displayKnockRequests:
@@ -200,8 +203,20 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         Task { await timelineViewModel.focusOnEvent(eventID: eventID) }
     }
     
-    func shareText(_ string: String) {
+    private func presentMessageSearch() {
+        // For now, just send the action. The parent coordinator will handle presenting the search screen
+        actionsSubject.send(.presentMessageSearch)
+    }
+    
+    public func shareText(_ string: String) {
         composerViewModel.process(timelineAction: .setMode(mode: .default)) // Make sure we're not e.g. replying.
+        composerViewModel.process(timelineAction: .setText(plainText: string, htmlText: nil))
+        composerViewModel.process(timelineAction: .setFocus)
+    }
+    
+    // Alternative method name for testing
+    public func setSharedText(_ string: String) {
+        composerViewModel.process(timelineAction: .setMode(mode: .default))
         composerViewModel.process(timelineAction: .setText(plainText: string, htmlText: nil))
         composerViewModel.process(timelineAction: .setFocus)
     }

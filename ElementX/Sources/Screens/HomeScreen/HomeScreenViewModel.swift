@@ -60,10 +60,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 
                 switch securityState.recoveryState {
                 case .disabled:
-                    state.requiresExtraAccountSetup = false  // Tắt banner recovery
+                    state.requiresExtraAccountSetup = false // Tắt banner recovery
                     state.securityBannerMode = .none
                 case .incomplete:
-                    state.requiresExtraAccountSetup = false  // Tắt banner recovery
+                    state.requiresExtraAccountSetup = false // Tắt banner recovery
                     state.securityBannerMode = .none
                 default:
                     state.securityBannerMode = .none

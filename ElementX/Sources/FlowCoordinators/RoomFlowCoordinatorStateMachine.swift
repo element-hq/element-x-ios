@@ -74,6 +74,7 @@ extension RoomFlowCoordinator {
         case securityAndPrivacy(previousState: State)
         case reportRoom(previousState: State)
         case declineAndBlockScreen
+        case messageSearch(previousState: State)
         
         /// A child flow is in progress.
         case presentingChild(childRoomID: String, previousState: State)
@@ -147,6 +148,9 @@ extension RoomFlowCoordinator {
         case presentRolesAndPermissionsScreen
         case dismissRolesAndPermissionsScreen
         
+        case presentMessageSearch
+        case dismissMessageSearch
+        
         case presentPinnedEventsTimeline
         case dismissPinnedEventsTimeline
         
@@ -205,6 +209,11 @@ extension RoomFlowCoordinator {
                 
             case (.room, .presentResolveSendFailure):
                 return .resolveSendFailure(previousState: fromState)
+                
+            case (.room, .presentMessageSearch):
+                return .messageSearch(previousState: fromState)
+            case (.messageSearch(let previousState), .dismissMessageSearch):
+                return previousState
                 
             case (.room, .presentPinnedEventsTimeline):
                 return .pinnedEventsTimeline(previousState: fromState)

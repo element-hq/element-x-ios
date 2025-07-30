@@ -184,12 +184,25 @@ struct RoomScreen: View {
         
         if !ProcessInfo.processInfo.isiOSAppOnMac {
             ToolbarItem(placement: .primaryAction) {
-                if context.viewState.shouldShowCallButton {
-                    callButton
-                        .disabled(!context.viewState.canJoinCall)
+                HStack(spacing: 8) {
+                    searchButton
+                    if context.viewState.shouldShowCallButton {
+                        callButton
+                            .disabled(!context.viewState.canJoinCall)
+                    }
                 }
             }
         }
+    }
+    
+    @ViewBuilder
+    private var searchButton: some View {
+        Button {
+            context.send(viewAction: .displaySearch)
+        } label: {
+            CompoundIcon(\.search)
+        }
+        .accessibilityLabel("Search")
     }
     
     @ViewBuilder
