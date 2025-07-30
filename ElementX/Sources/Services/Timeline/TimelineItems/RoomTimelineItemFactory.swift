@@ -577,6 +577,14 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         
         let thumbnailSource = messageContent.info?.thumbnailSource.map { MediaSourceProxy(source: $0, mimeType: messageContent.info?.thumbnailInfo?.mimetype) }
         
+        // Debug logging for file processing
+        MXLog.info("🔍 Processing file: \(messageContent.filename)")
+        MXLog.info("🔍 File MIME type: \(messageContent.info?.mimetype ?? "unknown")")
+        MXLog.info("🔍 File size: \(messageContent.info?.size ?? 0)")
+        
+        let contentType = UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename)
+        MXLog.info("🔍 File content type: \(contentType?.identifier ?? "unknown")")
+        
         return .init(filename: messageContent.filename,
                      caption: messageContent.caption,
                      formattedCaption: formattedCaption,
@@ -584,7 +592,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      source: MediaSourceProxy(source: messageContent.source, mimeType: messageContent.info?.mimetype),
                      fileSize: messageContent.info?.size.map(UInt.init),
                      thumbnailSource: thumbnailSource,
-                     contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
+                     contentType: contentType)
     }
     
     private func buildNoticeTimelineItemContent(_ messageContent: NoticeMessageContent) -> NoticeRoomTimelineItemContent {

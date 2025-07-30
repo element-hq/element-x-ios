@@ -141,8 +141,12 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         var newGroups = [MediaEventsTimelineGroup]()
         var currentItems = [RoomTimelineItemViewState]()
         
+        // Debug logging for timeline items
+        MXLog.info("🔍 Media Browser: Processing \(timelineViewState.timelineState.itemViewStates.count) timeline items")
+        MXLog.info("🔍 Media Browser: Current screen mode: \(state.bindings.screenMode)")
+        
         timelineViewState.timelineState.itemViewStates.filter { itemViewState in
-            switch itemViewState.type {
+            let shouldShow = switch itemViewState.type {
             case .image, .video:
                 state.bindings.screenMode == .media
             case .audio, .file, .voice:
@@ -152,6 +156,11 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             default:
                 false
             }
+            
+            // Debug logging for each item
+            MXLog.info("🔍 Media Browser: Item type \(itemViewState.type) - should show: \(shouldShow)")
+            
+            return shouldShow
         }.reversed().forEach { item in
             if case .separator(let item) = item.type {
                 let group = MediaEventsTimelineGroup(id: item.id.uniqueID.value,
@@ -174,6 +183,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             newGroups.append(group)
         }
 
+        MXLog.info("🔍 Media Browser: Created \(newGroups.count) groups with \(newGroups.flatMap(\.items).count) items")
+        
         state.groups = newGroups
         
         state.isBackPaginating = timelineViewState.timelineState.paginationState.backward == .paginating

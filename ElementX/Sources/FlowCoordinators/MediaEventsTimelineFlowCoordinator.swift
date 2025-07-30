@@ -64,6 +64,7 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
         
+        MXLog.info("🔍 Media Browser: Creating media timeline controller with allowedMessageTypes: [.image, .video]")
         guard case let .success(mediaTimelineController) = await timelineControllerFactory.buildMessageFilteredTimelineController(focus: .live,
                                                                                                                                   allowedMessageTypes: [.image, .video],
                                                                                                                                   presentation: .mediaFilesScreen,
@@ -74,6 +75,7 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
             return
         }
         
+        MXLog.info("🔍 Media Browser: Creating files timeline controller with allowedMessageTypes: [.file, .audio]")
         guard case let .success(filesTimelineController) = await timelineControllerFactory.buildMessageFilteredTimelineController(focus: .live,
                                                                                                                                   allowedMessageTypes: [.file, .audio],
                                                                                                                                   presentation: .mediaFilesScreen,
@@ -83,6 +85,8 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
             MXLog.error("Failed presenting media timeline")
             return
         }
+        
+        MXLog.info("🔍 Media Browser: Successfully created both timeline controllers")
         
         let parameters = MediaEventsTimelineScreenCoordinatorParameters(roomProxy: roomProxy,
                                                                         mediaTimelineController: mediaTimelineController,
