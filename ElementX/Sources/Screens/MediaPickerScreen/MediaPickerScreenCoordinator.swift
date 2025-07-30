@@ -40,9 +40,12 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
          orientationManager: OrientationManagerProtocol,
          callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
         self.userIndicatorController = userIndicatorController
-        self.mode = appSettings.multipleAttachmentUploadEnabled ? mode : .init(source: mode.source, selectionType: .single)
         self.orientationManager = orientationManager
         self.callback = callback
+        
+        // The users of the media picker chose their ideal selection type leaving
+        // the feature flag to only be checked and enforced on this level.
+        self.mode = appSettings.multipleAttachmentUploadEnabled ? mode : .init(source: mode.source, selectionType: .single)
     }
     
     func toPresentable() -> AnyView {
