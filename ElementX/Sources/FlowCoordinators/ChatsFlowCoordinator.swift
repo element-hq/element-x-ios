@@ -13,8 +13,9 @@ import SwiftUI
 
 enum ChatsFlowCoordinatorAction {
     case logout
+    case sessionVerification(SessionVerificationScreenFlow)
     case clearCache
-    /// Logout without a confirmation. The user forgot their PIN.
+    /// Logout and disable App Lock without any confirmation. The user forgot their PIN.
     case forceLogout
 }
 
@@ -36,8 +37,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
     
     private let settingsFlowCoordinator: SettingsFlowCoordinator
-    
-    private let onboardingFlowCoordinator: OnboardingFlowCoordinator
     
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
@@ -102,16 +101,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                                                                             navigationSplitCoordinator: navigationSplitCoordinator,
                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                             analytics: analytics))
-        
-        onboardingFlowCoordinator = OnboardingFlowCoordinator(userSession: userSession,
-                                                              appLockService: appLockService,
-                                                              analyticsService: analytics,
-                                                              appSettings: appSettings,
-                                                              notificationManager: notificationManager,
-                                                              navigationStackCoordinator: detailNavigationStackCoordinator,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                              windowManager: appMediator.windowManager,
-                                                              isNewLogin: isNewLogin)
         
         setupStateMachine()
         
@@ -216,15 +205,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    func attemptStartingOnboarding() {
-        MXLog.info("Attempting to start onboarding")
-        
-        if onboardingFlowCoordinator.shouldStart {
-            clearRoute(animated: false)
-            onboardingFlowCoordinator.start()
-        }
-    }
-    
     private func clearPresentedSheets(animated: Bool) async {
         if navigationSplitCoordinator.sheetCoordinator == nil {
             return
@@ -243,7 +223,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .start, .roomList):
                 presentHomeScreen()
-                attemptStartingOnboarding()
             case(.roomList(let roomListSelectedRoomID), .selectRoom(let roomID, let via, let entryPoint), .roomList):
                 if roomListSelectedRoomID == roomID,
                    !entryPoint.isEventID, // Don't reuse the existing room so the live timeline is hidden while the detached timeline is loading.
@@ -289,11 +268,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomList, .showStartChatScreen, .startChatScreen):
                 presentStartChat(animated: animated)
             case (.startChatScreen, .dismissedStartChatScreen, .roomList):
-                break
-                
-            case (.roomList, .showLogoutConfirmationScreen, .logoutConfirmationScreen):
-                presentSecureBackupLogoutConfirmationScreen()
-            case (.logoutConfirmationScreen, .dismissedLogoutConfirmationScreen, .roomList):
                 break
                 
             case (.roomList, .showRoomDirectorySearchScreen, .roomDirectorySearchScreen):
@@ -352,19 +326,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func setupObservers() {
-        userSession.sessionSecurityStatePublisher
-            .map(\.verificationState)
-            .filter { $0 != .unknown }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                
-                attemptStartingOnboarding()
-                
-                setupSessionVerificationRequestsObserver()
-            }
-            .store(in: &cancellables)
-        
         settingsFlowCoordinator.actions.sink { [weak self] action in
             guard let self else { return }
             
@@ -374,7 +335,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             case .dismissedSettings:
                 stateMachine.processEvent(.dismissedSettingsScreen)
             case .runLogoutFlow:
-                Task { await self.runLogoutFlow() }
+                actionsSubject.send(.logout)
             case .clearCache:
                 actionsSubject.send(.clearCache)
             case .forceLogout:
@@ -413,17 +374,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
-        
-        onboardingFlowCoordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .logout:
-                    logout()
-                }
-            }
-            .store(in: &cancellables)
     }
     
     private func processDecryptionError(_ info: UnableToDecryptInfo) {
@@ -453,53 +403,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                              isMatrixDotOrg: info.ownHomeserver == "matrix.org",
                              userTrustsOwnIdentity: info.userTrustsOwnIdentity,
                              wasVisibleToUser: nil)
-    }
-    
-    private func setupSessionVerificationRequestsObserver() {
-        userSession.clientProxy.sessionVerificationController?.actions
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
-                guard let self, case .receivedVerificationRequest(let details) = action else {
-                    return
-                }
-                
-                MXLog.info("Received session verification request")
-                
-                if details.senderProfile.userID == userSession.clientProxy.userID {
-                    presentSessionVerificationScreen(flow: .deviceResponder(requestDetails: details))
-                } else {
-                    presentSessionVerificationScreen(flow: .userResponder(requestDetails: details))
-                }
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func presentSessionVerificationScreen(flow: SessionVerificationScreenFlow) {
-        guard let sessionVerificationController = userSession.clientProxy.sessionVerificationController else {
-            fatalError("The sessionVerificationController should aways be valid at this point")
-        }
-        
-        let navigationStackCoordinator = NavigationStackCoordinator()
-        
-        let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
-                                                                        flow: flow,
-                                                                        appSettings: appSettings,
-                                                                        mediaProvider: userSession.mediaProvider)
-        
-        let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                switch action {
-                case .done:
-                    self?.navigationSplitCoordinator.setSheetCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationStackCoordinator.setRootCoordinator(coordinator)
-        
-        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator)
     }
     
     private func presentHomeScreen() {
@@ -543,7 +446,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentGlobalSearch:
                     presentGlobalSearch()
                 case .logout:
-                    Task { await self.runLogoutFlow() }
+                    actionsSubject.send(.logout)
                 case .presentDeclineAndBlock(let userID, let roomID):
                     stateMachine.processEvent(.presentDeclineAndBlockScreen(userID: userID, roomID: roomID))
                 }
@@ -604,55 +507,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func runLogoutFlow() async {
-        let secureBackupController = userSession.clientProxy.secureBackupController
-        
-        guard case let .success(isLastDevice) = await userSession.clientProxy.isOnlyDeviceLeft() else {
-            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init())
-            return
-        }
-        
-        guard isLastDevice else {
-            logout()
-            return
-        }
-        
-        guard secureBackupController.recoveryState.value == .enabled else {
-            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                            title: L10n.screenSignoutRecoveryDisabledTitle,
-                                                                            message: L10n.screenSignoutRecoveryDisabledSubtitle,
-                                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                                                self?.actionsSubject.send(.logout)
-                                                                            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
-                                                                                self?.settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
-                                                                            })
-            return
-        }
-        
-        guard secureBackupController.keyBackupState.value == .enabled else {
-            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                            title: L10n.screenSignoutKeyBackupDisabledTitle,
-                                                                            message: L10n.screenSignoutKeyBackupDisabledSubtitle,
-                                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                                                self?.actionsSubject.send(.logout)
-                                                                            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
-                                                                                self?.settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
-                                                                            })
-            return
-        }
-        
-        presentSecureBackupLogoutConfirmationScreen()
-    }
-    
-    private func logout() {
-        ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                        title: L10n.screenSignoutConfirmationDialogTitle,
-                                                                        message: L10n.screenSignoutConfirmationDialogContent,
-                                                                        primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                                            self?.actionsSubject.send(.logout)
-                                                                        })
-    }
-    
     // MARK: Room Flow
     
     private func startRoomFlow(roomID: String,
@@ -680,7 +534,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 // Here we assume that the app is running and the call state is already up to date
                 presentCallScreen(roomProxy: roomProxy, notifyOtherParticipants: !roomProxy.infoPublisher.value.hasRoomCall)
             case .verifyUser(let userID):
-                presentSessionVerificationScreen(flow: .userIntiator(userID: userID))
+                actionsSubject.send(.sessionVerification(.userInitiator(userID: userID)))
             case .finished:
                 stateMachine.processEvent(.deselectRoom)
             }
@@ -888,28 +742,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(sheetNavigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.finishedEncryptionResetFlow)
         }
-    }
-    
-    private func presentSecureBackupLogoutConfirmationScreen() {
-        let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
-                                                                                            appMediator: appMediator))
-        
-        coordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                
-                switch action {
-                case .cancel:
-                    navigationSplitCoordinator.setSheetCoordinator(nil)
-                case .settings:
-                    settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
-                case .logout:
-                    actionsSubject.send(.logout)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationSplitCoordinator.setSheetCoordinator(coordinator, animated: true)
     }
     
     // MARK: Global search
