@@ -33,7 +33,7 @@ protocol UserSessionStoreProtocol {
     func restoreUserSession() async -> Result<UserSessionProtocol, UserSessionStoreError>
     
     /// Creates a user session for a new client from the SDK along with the passphrase used for the data stores.
-    func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String?) async -> Result<UserSessionProtocol, UserSessionStoreError>
+    func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String) async -> Result<UserSessionProtocol, UserSessionStoreError>
     
     /// Logs out of the specified session.
     func logout(userSession: UserSessionProtocol)

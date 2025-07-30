@@ -11,15 +11,18 @@ import XCTest
 import MatrixRustSDK
 
 class RestorationTokenTests: XCTestCase {
-    func testDecodeTokenV1WithSlidingSyncProxy() throws {
+    func testDecodeTokenWithSlidingSyncProxy() throws {
         // Given an encoded restoration token that contains a session with a sliding sync proxy.
-        let originalToken = RestorationTokenV1(session: SessionV1(accessToken: "1234",
-                                                                  refreshToken: nil,
+        let originalToken = RestorationTokenV4(session: SessionV1(accessToken: "1234",
+                                                                  refreshToken: "5678",
                                                                   userId: "@user:example.com",
                                                                   deviceId: "D3V1C3",
                                                                   homeserverUrl: "https://matrix.example.com",
-                                                                  oidcData: nil,
-                                                                  slidingSyncVersion: .proxy(url: "https://sync.example.com")))
+                                                                  oidcData: "data-from-mas",
+                                                                  slidingSyncVersion: .proxy(url: "https://sync.example.com")),
+                                               sessionDirectory: .sessionsBaseDirectory.appending(component: UUID().uuidString),
+                                               passphrase: "passphrase",
+                                               pusherNotificationClientIdentifier: "pusher-identifier")
         let data = try JSONEncoder().encode(originalToken)
         
         // When decoding the data to the current restoration token format.
@@ -32,32 +35,6 @@ class RestorationTokenTests: XCTestCase {
                 XCTFail("Unexpected error thrown: \(error)")
             }
         }
-    }
-    
-    /// Honestly not sure if this test is needed or not – it is quite possible that `RestorationTokenV1` was only encoded at a time
-    /// when the sliding sync proxy was the only option. But lets keep the test for completeness of the session directory migration coverage.
-    func testDecodeFromTokenV1() throws {
-        // Given an encoded restoration token in the original format that only contains a Session from the SDK.
-        let originalToken = RestorationTokenV1(session: SessionV1(accessToken: "1234",
-                                                                  refreshToken: nil,
-                                                                  userId: "@user:example.com",
-                                                                  deviceId: "D3V1C3",
-                                                                  homeserverUrl: "https://matrix.example.com",
-                                                                  oidcData: nil,
-                                                                  slidingSyncVersion: .native))
-        let data = try JSONEncoder().encode(originalToken)
-        
-        // When decoding the data to the current restoration token format.
-        let decodedToken = try JSONDecoder().decode(RestorationToken.self, from: data)
-        
-        // Then the output should be a valid token with the expected store directories.
-        assertEqual(session: decodedToken.session, originalSession: originalToken.session)
-        XCTAssertNil(decodedToken.passphrase, "There should not be a passphrase.")
-        XCTAssertNil(decodedToken.pusherNotificationClientIdentifier, "There should not be a push notification client ID.")
-        XCTAssertEqual(decodedToken.sessionDirectories.dataDirectory, .sessionsBaseDirectory.appending(component: "@user_example.com"),
-                       "The session directory should match the original location set by the Rust SDK from our base directory.")
-        XCTAssertEqual(decodedToken.sessionDirectories.cacheDirectory, .sessionCachesBaseDirectory.appending(component: "@user_example.com"),
-                       "The cache directory should be derived from the session directory but in the caches directory.")
     }
     
     func testDecodeFromTokenV4() throws {
@@ -152,14 +129,10 @@ class RestorationTokenTests: XCTestCase {
 
 // MARK: - Token formats
 
-struct RestorationTokenV1: Equatable, Codable {
-    let session: SessionV1
-}
-
 struct RestorationTokenV4: Equatable, Codable {
     let session: SessionV1
     let sessionDirectory: URL
-    let passphrase: String?
+    let passphrase: String? // Optional but has always been encoded for sessions that use native sliding sync.
     let pusherNotificationClientIdentifier: String?
 }
 
@@ -167,7 +140,7 @@ struct RestorationTokenV5: Equatable, Codable {
     let session: SessionV1
     let sessionDirectory: URL
     let cacheDirectory: URL
-    let passphrase: String?
+    let passphrase: String? // Optional but has always been encoded for sessions that use native sliding sync.
     let pusherNotificationClientIdentifier: String?
 }
 
