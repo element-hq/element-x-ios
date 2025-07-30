@@ -99,12 +99,26 @@ struct MediaUploadingPreprocessor {
     /// - Parameter urls: the file URL
     /// - Returns: a collection of results containing specific type of `MediaInfo` depending on the file type
     /// and its associated details or any resulting error
-    func processMedia(at urls: [URL], maxUploadSize: UInt) async -> [Result<MediaInfo, MediaUploadingPreprocessorError>] {
-        var results = [Result<MediaInfo, MediaUploadingPreprocessorError>]()
-        for url in urls {
-            await results.append(processMedia(at: url, maxUploadSize: maxUploadSize))
+    func processMedia(at urls: [URL], maxUploadSize: UInt) async -> Result<[MediaInfo], MediaUploadingPreprocessorError> {
+        await withTaskGroup { taskGroup in
+            for url in urls {
+                taskGroup.addTask {
+                    await processMedia(at: url, maxUploadSize: maxUploadSize)
+                }
+            }
+            
+            var mediaInfos = [MediaInfo]()
+            for await result in taskGroup {
+                switch result {
+                case .success(let mediaInfo):
+                    mediaInfos.append(mediaInfo)
+                case .failure(let error):
+                    return .failure(error)
+                }
+            }
+            
+            return .success(mediaInfos)
         }
-        return results
     }
     
     /// Processes media at a given URL. It will generate thumbnails for images and videos, convert videos to 1080p mp4, strip GPS locations

@@ -18,7 +18,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private var mediaURLs: [URL]
     
-    private var processingTask: Task<[Result<MediaInfo, MediaUploadingPreprocessorError>], Never>
+    private var processingTask: Task<Result<[MediaInfo], MediaUploadingPreprocessorError>, Never>
     private var requestHandle: SendAttachmentJoinHandleProtocol?
     private let clientProxy: ClientProxyProtocol
     
@@ -63,11 +63,9 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
                 defer { stopLoading() }
                 
                 var shouldDismissOnCompletion = true
-                for result in await processingTask.value {
-                    var shouldStopEnumerating = false
-                    
-                    switch result {
-                    case .success(let mediaInfo):
+                switch await processingTask.value {
+                case .success(let mediaInfos):
+                    for mediaInfo in mediaInfos {
                         switch await sendAttachment(mediaInfo: mediaInfo, caption: caption) {
                         case .success:
                             caption = nil // Set the caption only on the first uploaded file.
@@ -75,20 +73,15 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
                             MXLog.error("Failed processing media to upload with error: \(error)")
                             showError(label: L10n.screenMediaUploadPreviewErrorFailedProcessing)
                         }
-                    case .failure(.maxUploadSizeUnknown):
-                        showAlert(.maxUploadSizeUnknown)
-                        shouldDismissOnCompletion = false
-                        shouldStopEnumerating = true
-                    case .failure(.maxUploadSizeExceeded(let limit)):
-                        showAlert(.maxUploadSizeExceeded(limit: limit))
-                    case .failure(let error):
-                        MXLog.error("Failed processing media to upload with error: \(error)")
-                        showError(label: L10n.screenMediaUploadPreviewErrorFailedProcessing)
                     }
-                    
-                    if shouldStopEnumerating {
-                        break
-                    }
+                case .failure(.maxUploadSizeUnknown):
+                    showAlert(.maxUploadSizeUnknown)
+                    shouldDismissOnCompletion = false
+                case .failure(.maxUploadSizeExceeded(let limit)):
+                    showAlert(.maxUploadSizeExceeded(limit: limit))
+                case .failure(let error):
+                    MXLog.error("Failed processing media to upload with error: \(error)")
+                    showError(label: L10n.screenMediaUploadPreviewErrorFailedProcessing)
                 }
                 
                 if shouldDismissOnCompletion {
@@ -109,9 +102,9 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     
     private static func processMedia(at urls: [URL],
                                      preprocessor: MediaUploadingPreprocessor,
-                                     clientProxy: ClientProxyProtocol) -> Task<[Result<MediaInfo, MediaUploadingPreprocessorError>], Never> {
+                                     clientProxy: ClientProxyProtocol) -> Task<Result<[MediaInfo], MediaUploadingPreprocessorError>, Never> {
         Task {
-            guard case let .success(maxUploadSize) = await clientProxy.maxMediaUploadSize else { return [.failure(.maxUploadSizeUnknown)] }
+            guard case let .success(maxUploadSize) = await clientProxy.maxMediaUploadSize else { return .failure(.maxUploadSizeUnknown) }
             return await preprocessor.processMedia(at: urls, maxUploadSize: maxUploadSize)
         }
     }
