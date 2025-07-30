@@ -545,8 +545,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.showStartChatScreen)
                 case .presentGlobalSearch:
                     presentGlobalSearch()
-                case .logoutWithoutConfirmation:
-                    self.actionsSubject.send(.logout)
                 case .logout:
                     Task { await self.runLogoutFlow() }
                 case .presentDeclineAndBlock(let userID, let roomID):
