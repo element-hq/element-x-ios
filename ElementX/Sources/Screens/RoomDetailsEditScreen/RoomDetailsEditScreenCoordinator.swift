@@ -76,8 +76,9 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
             case .cancel:
                 parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
             case .selectedMediaAtURLs(let urls):
-                guard let url = urls.first else {
-                    fatalError("Received more than one URL")
+                guard urls.count == 1,
+                      let url = urls.first else {
+                    fatalError("Received an invalid number of URLs")
                 }
                 
                 parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
