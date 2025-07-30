@@ -121,7 +121,8 @@ lane :integration_tests do
 end
 
 lane :config_production do
-  update_foss_secrets()
+  # update_foss_secrets() - Commented out as this action doesn't exist
+  # You can add your secrets update logic here if needed
   xcodegen(spec: "project.yml")
 end
 
@@ -137,7 +138,8 @@ lane :config_nightly do |options|
     data["include"].append({ "path" => "Variants/Nightly/nightly.yml" })
   end
 
-  update_foss_secrets()
+  # update_foss_secrets() - Commented out as this action doesn't exist
+  # You can add your secrets update logic here if needed
   
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
