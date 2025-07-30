@@ -10,26 +10,26 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum UntranslatedL10n {
-  /// Clear all data currently stored on this device?
-  /// Sign in again to access your account data and messages.
+  /// Xóa tất cả dữ liệu hiện đang được lưu trữ trên thiết bị này?
+  /// Đăng nhập lại để truy cập dữ liệu tài khoản và tin nhắn của bạn.
   internal static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }
-  /// Clear data
+  /// Xóa dữ liệu
   internal static var softLogoutClearDataDialogTitle: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_title") }
-  /// Warning: Your personal data (including encryption keys) is still stored on this device.
+  /// Cảnh báo: Dữ liệu cá nhân của bạn (bao gồm khóa mã hóa) vẫn được lưu trữ trên thiết bị này.
   /// 
-  /// Clear it if you’re finished using this device, or want to sign in to another account.
+  /// Xóa nó nếu bạn đã hoàn thành việc sử dụng thiết bị này, hoặc muốn đăng nhập vào tài khoản khác.
   internal static var softLogoutClearDataNotice: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_notice") }
-  /// Clear all data
+  /// Xóa tất cả dữ liệu
   internal static var softLogoutClearDataSubmit: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_submit") }
-  /// Clear personal data
+  /// Xóa dữ liệu cá nhân
   internal static var softLogoutClearDataTitle: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_title") }
-  /// Sign in to recover encryption keys stored exclusively on this device. You need them to read all of your secure messages on any device.
+  /// Đăng nhập để khôi phục khóa mã hóa được lưu trữ độc quyền trên thiết bị này. Bạn cần chúng để đọc tất cả tin nhắn bảo mật của mình trên bất kỳ thiết bị nào.
   internal static var softLogoutSigninE2eWarningNotice: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_signin_e2e_warning_notice") }
-  /// Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).
+  /// Quản trị viên máy chủ nhà của bạn (%1$s) đã đăng xuất tài khoản %2$s (%3$s) của bạn.
   internal static func softLogoutSigninNotice(_ p1: UnsafePointer<CChar>, _ p2: UnsafePointer<CChar>, _ p3: UnsafePointer<CChar>) -> String {
     return UntranslatedL10n.tr("Untranslated", "soft_logout_signin_notice", p1, p2, p3)
   }
-  /// Sign in
+  /// Đăng nhập
   internal static var softLogoutSigninTitle: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_signin_title") }
   /// Untranslated
   internal static var untranslated: String { return UntranslatedL10n.tr("Untranslated", "untranslated") }

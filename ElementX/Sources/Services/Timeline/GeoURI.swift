@@ -69,7 +69,7 @@ struct GeoURI: Hashable {
 private typealias RegexGeoURI = Regex<(Substring, latitude: Substring, longitude: Substring, uncertainty: Substring?)>
 
 private extension RegexGeoURI {
-    static let standard: Self = /geo:(?<latitude>-?\d+(?:\.\d+)?),(?<longitude>-?\d+(?:\.\d+)?)(?:;u=(?<uncertainty>\d+(?:\.\d+)?))?/
+    static let standard: Self = try! Regex("geo:(?<latitude>-?\\d+(?:\\.\\d+)?),(?<longitude>-?\\d+(?:\\.\\d+)?)(?:;u=(?<uncertainty>\\d+(?:\\.\\d+)?))?")
 }
 
 extension GeoURI {

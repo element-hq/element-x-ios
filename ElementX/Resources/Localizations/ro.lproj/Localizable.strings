@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade disponibil";
 "banner_set_up_recovery_content" = "Recuperați-vă identitatea criptografică și istoricul mesajelor cu o cheie de recuperare dacă ați pierdut toate dispozitivele existente.";
 "banner_set_up_recovery_title" = "Configurați recuperarea pentru a vă proteja contul";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Despre";
 "common_acceptable_use_policy" = "Politică de utilizare rezonabilă";
 "common_adding_caption" = "Adding caption";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Link";
 "rich_text_editor_a11y_add_attachment" = "Adăugați un atașament";
 "rich_text_editor_composer_caption_placeholder" = "Add a caption";
-"screen_advanced_settings_element_call_base_url" = "Adresa URL de bază Element Call";
-"screen_advanced_settings_element_call_base_url_description" = "Setați o adresă URL de bază personalizată pentru Element Call.";
+"screen_advanced_settings_element_call_base_url" = "Adresa URL de bază SevenChat Call";
+"screen_advanced_settings_element_call_base_url_description" = "Setați o adresă URL de bază personalizată pentru SevenChat Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL invalid, vă rugăm să vă asigurați că includeți protocolul (http/https) și adresa corectă.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Utilizați un alt furnizor de cont, cum ar fi propriul server privat sau un cont de serviciu.";
 "screen_change_account_provider_title" = "Schimbați furnizorul contului";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "Nu am putut accesa acest homeserver. Te rugăm să verifici că ai introdus corect adresa URL a homeserver-ului. Dacă adresa URL este corectă, contactează administratorul homeserver-ului pentru ajutor suplimentar.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync nu este disponibil din cauza unei probleme în fișierul well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
@@ -830,7 +830,7 @@
 "screen_onboarding_sign_up" = "Creați un cont";
 "screen_onboarding_welcome_message" = "Bine ați venit la cel mai rapid %1$@ din toate timpurile. Supraalimentat pentru viteză și simplitate.";
 "screen_onboarding_welcome_subtitle" = "Bun venit în %1$@. Supraalimentat, pentru viteză și simplitate.";
-"screen_onboarding_welcome_title" = "Fii în Elementul tău";
+"screen_onboarding_welcome_title" = "Fii în SevenChatul tău";
 "screen_polls_history_empty_ongoing" = "Nu s-au putut găsi sondaje în curs de desfășurare.";
 "screen_polls_history_empty_past" = "Nu s-au putut găsi sondaje anterioare.";
 "screen_polls_history_filter_ongoing" = "În desfășurare";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Adăugați emoji";
 "screen_room_timeline_beginning_of_room" = "Acesta este începutul conversației %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Acesta este începutul acestei conversații.";
-"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new SevenChat app.";
 "screen_room_timeline_less_reactions" = "Afișați mai puțin";
 "screen_room_timeline_message_copied" = "Mesaj copiat";
 "screen_room_timeline_no_permission_to_post" = "Nu aveți permisiunea de a posta în această cameră";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Toate conversatiile";
 "screen_roomlist_mark_as_read" = "Marcați ca citită";
 "screen_roomlist_mark_as_unread" = "Marcați ca necitită";
-"screen_server_confirmation_message_login_element_dot_io" = "Un server privat pentru angajații Element.";
+"screen_server_confirmation_message_login_element_dot_io" = "Un server privat pentru angajații SevenChat.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată.";
 "screen_server_confirmation_message_register" = "Aici vor trăi conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile.";
 "screen_server_confirmation_title_login" = "Sunteți pe cale să vă conectați la %1$@";

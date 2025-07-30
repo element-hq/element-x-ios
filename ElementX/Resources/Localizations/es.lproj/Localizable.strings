@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Actualización disponible";
 "banner_set_up_recovery_content" = "Recupera tu identidad criptográfica y tu historial de mensajes con una clave de recuperación si has perdido todos tus dispositivos actuales.";
 "banner_set_up_recovery_title" = "Configura la recuperación para proteger tu cuenta";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Acerca de";
 "common_acceptable_use_policy" = "Política de uso aceptable";
 "common_adding_caption" = "Añadiendo leyenda";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Enlace";
 "rich_text_editor_a11y_add_attachment" = "Adjuntar archivo";
 "rich_text_editor_composer_caption_placeholder" = "Agregar una leyenda";
-"screen_advanced_settings_element_call_base_url" = "URL base personalizada de Element Call";
-"screen_advanced_settings_element_call_base_url_description" = "Define una URL base personalizada para Element Call.";
+"screen_advanced_settings_element_call_base_url" = "URL base personalizada de SevenChat Call";
+"screen_advanced_settings_element_call_base_url_description" = "Define una URL base personalizada para SevenChat Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL no válida, asegúrate de incluir el protocolo (http/https) y la dirección correcta.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Ocultar avatares en las invitaciones a salas";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Ocultar vistas previas de multimedia en la cronología";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Usa un proveedor de cuentas diferente, como tu propio servidor privado o una cuenta de trabajo.";
 "screen_change_account_provider_title" = "Cambiar proveedor de cuentas";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "No hemos podido acceder a este servidor base. Comprueba que has introducido correctamente la dirección. Si es correcta, ponte en contacto con el administrador de tu servidor base para obtener más ayuda.";
 "screen_change_server_error_invalid_well_known" = "El servidor no está disponible debido a un problema en el archivo .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "El proveedor de cuentas seleccionado no admite sliding sync. Es necesario actualizar el servidor para usar %1$@.";
@@ -830,7 +830,7 @@
 "screen_onboarding_sign_up" = "Crear cuenta";
 "screen_onboarding_welcome_message" = "Bienvenido al %1$@ más rápido de todos los tiempos. Diseñado para la velocidad y la simplicidad.";
 "screen_onboarding_welcome_subtitle" = "Bienvenido a %1$@. Vitaminado, para mayor rapidez y sencillez.";
-"screen_onboarding_welcome_title" = "Siéntete en tu Elemento";
+"screen_onboarding_welcome_title" = "Siéntete en tu SevenChato";
 "screen_polls_history_empty_ongoing" = "No se pudo encontrar ninguna encuesta en curso.";
 "screen_polls_history_empty_past" = "No se pudo encontrar ninguna encuesta anterior.";
 "screen_polls_history_filter_ongoing" = "En curso";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Añadir emoji";
 "screen_room_timeline_beginning_of_room" = "Este es el principio de %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Este es el principio de esta conversación.";
-"screen_room_timeline_legacy_call" = "Llamada no compatible. Pregunta a la persona que llama si puede utilizar la nueva aplicación Element X.";
+"screen_room_timeline_legacy_call" = "Llamada no compatible. Pregunta a la persona que llama si puede utilizar la nueva aplicación SevenChat.";
 "screen_room_timeline_less_reactions" = "Mostrar menos";
 "screen_room_timeline_message_copied" = "Mensaje copiado";
 "screen_room_timeline_no_permission_to_post" = "No tienes permiso para publicar en esta sala";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Chats";
 "screen_roomlist_mark_as_read" = "Marcar como leído";
 "screen_roomlist_mark_as_unread" = "Marcar como no leído";
-"screen_server_confirmation_message_login_element_dot_io" = "Un servidor privado para los empleados de Element.";
+"screen_server_confirmation_message_login_element_dot_io" = "Un servidor privado para los empleados de SevenChat.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix es una red abierta para una comunicación segura y descentralizada.";
 "screen_server_confirmation_message_register" = "Aquí es donde se alojarán tus conversaciones — justo como utilizarías un proveedor de correo electrónico para guardar tus correos electrónicos.";
 "screen_server_confirmation_title_login" = "Estás a punto de iniciar sesión en %1$@";

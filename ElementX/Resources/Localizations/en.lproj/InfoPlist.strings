@@ -1,5 +1,5 @@
-"NSCameraUsageDescription" = "Để chụp ảnh hoặc quay video và gửi chúng như một tin nhắn, Element X cần quyền truy cập camera.";
+"NSCameraUsageDescription" = "Để chụp ảnh hoặc quay video và gửi chúng như một tin nhắn, SevenChat cần quyền truy cập camera.";
 "NSFaceIDUsageDescription" = "Face ID được sử dụng để truy cập ứng dụng của bạn.";
-"NSLocationWhenInUseUsageDescription" = "Cấp quyền truy cập vị trí để Element X có thể chia sẻ vị trí của bạn.";
-"NSMicrophoneUsageDescription" = "Để ghi âm và gửi tin nhắn có âm thanh, Element X cần quyền truy cập microphone.";
+"NSLocationWhenInUseUsageDescription" = "Cấp quyền truy cập vị trí để SevenChat có thể chia sẻ vị trí của bạn.";
+"NSMicrophoneUsageDescription" = "Để ghi âm và gửi tin nhắn có âm thanh, SevenChat cần quyền truy cập microphone.";
 "NSPhotoLibraryUsageDescription" = "Điều này cho phép bạn lưu hình ảnh và video vào thư viện ảnh của bạn.";

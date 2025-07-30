@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Saadaval on uuendus";
 "banner_set_up_recovery_content" = "Loo uus taastevõti, mida saad kasutada oma krüptitud sõnumite ajaloo taastamisel olukorras, kus kaotad ligipääsu oma seadmetele.";
 "banner_set_up_recovery_title" = "Seadista taastamine";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ei võimalda selles Androidi versioonis Bluetoothi heliseadmete kasutamist. Palun vali mõni muu heliseade.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call ei võimalda selles Androidi versioonis Bluetoothi heliseadmete kasutamist. Palun vali mõni muu heliseade.";
 "common_about" = "Rakenduse teave";
 "common_acceptable_use_policy" = "Vastuvõetava kasutamise põhimõtted";
 "common_adding_caption" = "Lisame selgitust";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Link";
 "rich_text_editor_a11y_add_attachment" = "Lisa manus";
 "rich_text_editor_composer_caption_placeholder" = "Selgitus või nimi, kui soovid lisada…";
-"screen_advanced_settings_element_call_base_url" = "Element Calli kohandatud teenuseaadress";
-"screen_advanced_settings_element_call_base_url_description" = "Seadista kohandatud teenuseaadress Element Calli jaoks.";
+"screen_advanced_settings_element_call_base_url" = "SevenChat Calli kohandatud teenuseaadress";
+"screen_advanced_settings_element_call_base_url_description" = "Seadista kohandatud teenuseaadress SevenChat Calli jaoks.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Vigane url. Palun vaata, et url algaks protokolliga (http/https) ning aadress ise oleks ka õige.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Peida jututubade kutsetest tunnuspildid";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Peida meedia eelvaated ajajoonel";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Kasuta erinevat teenusepakkujat, milleks võib olla ka sinu oma server või töökoha hallatav server.";
 "screen_change_account_provider_title" = "Muuda teenusepakkujat";
 "screen_change_server_error_element_pro_required_action_ios" = "Rakendustepood";
-"screen_change_server_error_element_pro_required_message" = "%1$@ koduserver eeldab Element Pro rakenduse kasutamist. Palun laadi ta alla rakendustepoest.";
-"screen_change_server_error_element_pro_required_title" = "Vajalik on Element Pro";
+"screen_change_server_error_element_pro_required_message" = "%1$@ koduserver eeldab SevenChat Pro rakenduse kasutamist. Palun laadi ta alla rakendustepoest.";
+"screen_change_server_error_element_pro_required_title" = "Vajalik on SevenChat Pro";
 "screen_change_server_error_invalid_homeserver" = "Me ei suutnud luuaühendust selle koduserveriga. Palun kontrolli, kas koduserveri aadress on õige. Kui aadress on õige, siis täiendavat teavet oskab sulle anda koduserveri haldaja.";
 "screen_change_server_error_invalid_well_known" = "Server pole saadaval vea tõttu well-known failis:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Valitud teenusepakkuja ei toeta „sliding sync“ režiimi. Rakenduse %1$@ kasutamiseks on vaja serverit uuendada.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Lisa emotikon";
 "screen_room_timeline_beginning_of_room" = "See on %1$@ jututoa algus.";
 "screen_room_timeline_beginning_of_room_no_name" = "See on antud vestluse algus.";
-"screen_room_timeline_legacy_call" = "Kõne pole nende rakenduste vahel toetatud. Palun küsi teiselt osapoolelt, kas ta oleks nõus kasutama Element X rakendust.";
+"screen_room_timeline_legacy_call" = "Kõne pole nende rakenduste vahel toetatud. Palun küsi teiselt osapoolelt, kas ta oleks nõus kasutama SevenChat rakendust.";
 "screen_room_timeline_less_reactions" = "Näita vähem";
 "screen_room_timeline_message_copied" = "Sõnum on kopeeritud";
 "screen_room_timeline_no_permission_to_post" = "Sul pole õigusi siia jututuppa kirjutada";

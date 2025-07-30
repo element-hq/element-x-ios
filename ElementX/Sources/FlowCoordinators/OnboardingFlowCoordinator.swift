@@ -128,8 +128,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private var requiresVerification: Bool {
-        // We want to make sure onboarding finishes but also every time the user becomes unverified (e.g. account reset)
-        !appSettings.hasRunIdentityConfirmationOnboarding || userSession.sessionSecurityStatePublisher.value.verificationState == .unverified
+        // Tắt màn hình identity confirmation - luôn return false
+        false
     }
     
     private var requiresAppLockSetup: Bool {
@@ -137,7 +137,8 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private var requiresAnalyticsSetup: Bool {
-        analyticsService.shouldShowAnalyticsPrompt
+        // Tắt màn hình analytics prompt - luôn return false
+        false
     }
     
     private var requiresNotificationsSetup: Bool {

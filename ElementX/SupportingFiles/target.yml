@@ -1,14 +1,14 @@
-name: ElementX
+name: SevenChat
 
 schemes:
-  ElementX:
+  SevenChat:
     analyze:
       config: Debug
     archive:
       config: Release
     build:
       targets:
-        ElementX:
+        SevenChat:
           - running
           - testing
           - profiling
@@ -32,13 +32,13 @@ schemes:
       config: Debug
       gatherCoverageData: true
       coverageTargets:
-        - ElementX
+        - SevenChat
       testPlans:
         - path: ../../UnitTests/SupportingFiles/UnitTests.xctestplan
           defaultPlan: true
 
 targets:
-  ElementX:
+  SevenChat:
     type: application
     platform: iOS
 
@@ -53,10 +53,10 @@ targets:
         CFBundleURLTypes: [
           {
             CFBundleTypeRole: Editor,
-            CFBundleURLName: "Element Call",
-            CFBundleURLSchemes: [
-              io.element.call
-            ]
+            CFBundleURLName: "SevenChat Call",
+                          CFBundleURLSchemes: [
+                io.sevenchat.call
+              ]
           },
           {
             CFBundleTypeRole: Editor,
@@ -94,7 +94,7 @@ targets:
           voip
         ]
         BGTaskSchedulerPermittedIdentifiers: [
-          io.element.elementx.background.refresh
+          io.sevenchat.sevenchat.background.refresh
         ]
         UTExportedTypeDeclarations:
         - UTTypeConformsTo: [public.text]
@@ -145,78 +145,78 @@ targets:
         OTHER_SWIFT_FLAGS:
         - "-DIS_MAIN_APP"
 
-    preBuildScripts:
-    - name: 🛠 SwiftGen
-      runOnlyWhenInstalling: false
-      basedOnDependencyAnalysis: false
-      shell: /bin/sh
-      script: |
-        export PATH="$PATH:/opt/homebrew/bin"
-        if which swiftgen >/dev/null; then
-            swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml
-        else
-            echo "warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen"
-        fi
-    - name: 🧙 Sourcery - Generate mocks
-      runOnlyWhenInstalling: false
-      basedOnDependencyAnalysis: false
-      shell: /bin/sh
-      script: |
-        export PATH="$PATH:/opt/homebrew/bin"
-        if which sourcery >/dev/null; then
-            sourcery --config Tools/Sourcery/AutoMockableConfig.yml
-        else
-            echo "warning: Sourcery not installed, run swift run tools setup-project"
-        fi
+    # preBuildScripts:
+    # - name: 🛠 SwiftGen
+    #   runOnlyWhenInstalling: false
+    #   basedOnDependencyAnalysis: false
+    #   shell: /bin/sh
+    #   script: |
+    #     export PATH="$PATH:/opt/homebrew/bin"
+    #     if which swiftgen >/dev/null; then
+    #         swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml
+    #     else
+    #         echo "warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen"
+    #     fi
+    # - name: 🧙 Sourcery - Generate mocks
+    #   runOnlyWhenInstalling: false
+    #   basedOnDependencyAnalysis: false
+    #   shell: /bin/sh
+    #   script: |
+    #     export PATH="$PATH:/opt/homebrew/bin"
+    #     if which sourcery >/dev/null; then
+    #         sourcery --config Tools/Sourcery/AutoMockableConfig.yml
+    #     else
+    #         echo "warning: Sourcery not installed, run swift run tools setup-project"
+    #     fi
 
-    - name: 🧙 Sourcery - Generate preview tests
-      runOnlyWhenInstalling: false
-      basedOnDependencyAnalysis: false
-      shell: /bin/sh
-      script: |
-        export PATH="$PATH:/opt/homebrew/bin"
-        if which sourcery >/dev/null; then
-            sourcery --config Tools/Sourcery/PreviewTestsConfig.yml
-        else
-            echo "warning: Sourcery not installed, run swift run tools setup-project"
-        fi
+    # - name: 🧙 Sourcery - Generate preview tests
+    #   runOnlyWhenInstalling: false
+    #   basedOnDependencyAnalysis: false
+    #   shell: /bin/sh
+    #   script: |
+    #     export PATH="$PATH:/opt/homebrew/bin"
+    #     if which sourcery >/dev/null; then
+    #         sourcery --config Tools/Sourcery/PreviewTestsConfig.yml
+    #     else
+    #         echo "warning: Sourcery not installed, run swift run tools setup-project"
+    #     fi
         
-    - name: 🧙 Sourcery - Generate Accessibility Tests
-      runOnlyWhenInstalling: false
-      basedOnDependencyAnalysis: false
-      shell: /bin/sh
-      script: |
-        export PATH="$PATH:/opt/homebrew/bin"
-        if which sourcery >/dev/null; then
-            sourcery --config Tools/Sourcery/TestablePreviewsDictionary.yml
-            sourcery --config Tools/Sourcery/AccessibilityTests.yml
-        else
-            echo "warning: Sourcery not installed, run swift run tools setup-project"
-        fi
+    # - name: 🧙 Sourcery - Generate Accessibility Tests
+    #   runOnlyWhenInstalling: false
+    #   basedOnDependencyAnalysis: false
+    #   shell: /bin/sh
+    #   script: |
+    #     export PATH="$PATH:/opt/homebrew/bin"
+    #     if which sourcery >/dev/null; then
+    #         sourcery --config Tools/Sourcery/TestablePreviewsDictionary.yml
+    #         sourcery --config Tools/Sourcery/AccessibilityTests.yml
+    #     else
+    #         echo "warning: Sourcery not installed, run swift run tools setup-project"
+    #     fi
 
-    postBuildScripts:
-    - name: ⚠️ SwiftLint
-      runOnlyWhenInstalling: false
-      basedOnDependencyAnalysis: false
-      shell: /bin/sh
-      script: |
-        export PATH="$PATH:/opt/homebrew/bin"
-        if which swiftlint >/dev/null; then
-            swiftlint
-        else
-            echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
-        fi
-    - name: 🧹 SwiftFormat
-      runOnlyWhenInstalling: false
-      basedOnDependencyAnalysis: false
-      shell: /bin/sh
-      script: |
-        export PATH="$PATH:/opt/homebrew/bin"
-        if which swiftformat >/dev/null; then
-            swiftformat --lint --lenient "$PROJECT_DIR"
-        else
-            echo "warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat"
-        fi
+    # postBuildScripts:
+    # - name: ⚠️ SwiftLint
+    #   runOnlyWhenInstalling: false
+    #   basedOnDependencyAnalysis: false
+    #   shell: /bin/sh
+    #   script: |
+    #     export PATH="$PATH:/opt/homebrew/bin"
+    #     if which swiftlint >/dev/null; then
+    #         swiftlint
+    #     else
+    #         echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
+    #     fi
+    # - name: 🧹 SwiftFormat
+    #   runOnlyWhenInstalling: false
+    #   basedOnDependencyAnalysis: false
+    #   shell: /bin/sh
+    #   script: |
+    #     export PATH="$PATH:/opt/homebrew/bin"
+    #     if which swiftformat >/dev/null; then
+    #         swiftformat --lint --lenient "$PROJECT_DIR"
+    #     else
+    #         echo "warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat"
+    #     fi
 
     dependencies:
     - target: NSE

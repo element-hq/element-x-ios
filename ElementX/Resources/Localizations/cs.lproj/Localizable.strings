@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade k dispozici";
 "banner_set_up_recovery_content" = "Vygenerujte nový klíč pro obnovení, který lze použít k obnovení historie šifrovaných zpráv v případě, že ztratíte přístup ke svým zařízením.";
 "banner_set_up_recovery_title" = "Nastavení obnovy";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call nepodporuje používání Bluetooth zvukových zařízení v této verzi systému Android. Vyberte jiné zvukové zařízení.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call nepodporuje používání Bluetooth zvukových zařízení v této verzi systému Android. Vyberte jiné zvukové zařízení.";
 "common_about" = "O aplikaci";
 "common_acceptable_use_policy" = "Zásady používání";
 "common_adding_caption" = "Přidání titulku";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Odkaz";
 "rich_text_editor_a11y_add_attachment" = "Přidat přílohu";
 "rich_text_editor_composer_caption_placeholder" = "Volitelný titulek...";
-"screen_advanced_settings_element_call_base_url" = "Vlastní URL pro Element Call";
-"screen_advanced_settings_element_call_base_url_description" = "Nastavte vlastní URL pro Element Call.";
+"screen_advanced_settings_element_call_base_url" = "Vlastní URL pro SevenChat Call";
+"screen_advanced_settings_element_call_base_url_description" = "Nastavte vlastní URL pro SevenChat Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatné URL, ujistěte se, že jste uvedli protokol (http/https) a správnou adresu.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Skrýt avatary v žádostech o pozvání do místnosti";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Skrýt náhledy médií na časové ose";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Použijte jiného poskytovatele účtu, například vlastní soukromý server nebo pracovní účet.";
 "screen_change_account_provider_title" = "Změnit poskytovatele účtu";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "Nepodařilo se nám připojit k tomuto domovskému serveru. Zkontrolujte prosím, zda jste správně zadali adresu URL domovského serveru. Pokud je adresa URL správná, obraťte se na správce domovského serveru, který vám poskytne další pomoc.";
 "screen_change_server_error_invalid_well_known" = "Server není k dispozici kvůli problému se souborem well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Vybraný poskytovatel účtu nepodporuje klouzavou synchronizaci. Pro použití %1$@ je nutná aktualizace serveru.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Přidat emoji";
 "screen_room_timeline_beginning_of_room" = "Toto je začátek %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Toto je začátek této konverzace.";
-"screen_room_timeline_legacy_call" = "Nepodporované volání. Zeptejte se, zda volající může používat novou aplikaci Element X.";
+"screen_room_timeline_legacy_call" = "Nepodporované volání. Zeptejte se, zda volající může používat novou aplikaci SevenChat.";
 "screen_room_timeline_less_reactions" = "Zobrazit méně";
 "screen_room_timeline_message_copied" = "Zpráva zkopírována";
 "screen_room_timeline_no_permission_to_post" = "Nemáte oprávnění zveřejňovat příspěvky v této místnosti";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Všechny chaty";
 "screen_roomlist_mark_as_read" = "Označit jako přečtené";
 "screen_roomlist_mark_as_unread" = "Označit jako nepřečtené";
-"screen_server_confirmation_message_login_element_dot_io" = "Soukromý server pro zaměstnance Elementu.";
+"screen_server_confirmation_message_login_element_dot_io" = "Soukromý server pro zaměstnance SevenChatu.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix je otevřená síť pro bezpečnou a decentralizovanou komunikaci.";
 "screen_server_confirmation_message_register" = "Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily.";
 "screen_server_confirmation_title_login" = "Chystáte se přihlásit do služby %1$@";

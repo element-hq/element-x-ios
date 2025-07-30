@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Bertsio-berritzea eskuragarri";
 "banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
 "banner_set_up_recovery_title" = "Set up recovery to protect your account";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Honi buruz";
 "common_acceptable_use_policy" = "Acceptable use policy";
 "common_adding_caption" = "Testua gehitzen";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Esteka";
 "rich_text_editor_a11y_add_attachment" = "Gehitu eranskina";
 "rich_text_editor_composer_caption_placeholder" = "Gehitu testua";
-"screen_advanced_settings_element_call_base_url" = "Custom Element Call base URL";
-"screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for Element Call.";
+"screen_advanced_settings_element_call_base_url" = "Custom SevenChat Call base URL";
+"screen_advanced_settings_element_call_base_url_description" = "Set a custom base URL for SevenChat Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Erabili beste kontu-hornitzaile bat, hala nola zure zerbitzari pribatua edo laneko kontu bat.";
 "screen_change_account_provider_title" = "Aldatu kontu-hornitzailea";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.";
 "screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the .well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Gehitu emojia";
 "screen_room_timeline_beginning_of_room" = "Hauxe da %1$@(r)en hasiera";
 "screen_room_timeline_beginning_of_room_no_name" = "Hau da elkarrizketaren hasiera.";
-"screen_room_timeline_legacy_call" = "Deia ez da bateragarria. Galdetu deika ari denari Element X aplikazio berria erabil dezakeen.";
+"screen_room_timeline_legacy_call" = "Deia ez da bateragarria. Galdetu deika ari denari SevenChat aplikazio berria erabil dezakeen.";
 "screen_room_timeline_less_reactions" = "Erakutsi gutxiago";
 "screen_room_timeline_message_copied" = "Mezua kopiatu da";
 "screen_room_timeline_no_permission_to_post" = "Ez duzu gela honetara mezuak bidaltzeko baimenik";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Txatak";
 "screen_roomlist_mark_as_read" = "Markatu irakurritzat";
 "screen_roomlist_mark_as_unread" = "Markatu irakurri gabetzat";
-"screen_server_confirmation_message_login_element_dot_io" = "Elementeko langileentzako zerbitzari pribatua.";
+"screen_server_confirmation_message_login_element_dot_io" = "SevenChateko langileentzako zerbitzari pribatua.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix komunikazio seguru eta deszentralizaturako sare irekia da.";
 "screen_server_confirmation_message_register" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";
 "screen_server_confirmation_title_login" = "%1$@(e)n saioa hastear zaude";

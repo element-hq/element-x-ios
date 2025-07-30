@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
 "banner_set_up_recovery_title" = "Set up recovery to protect your account";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Haqida";
 "common_acceptable_use_policy" = "Qabul qilinadigan foydalanish siyosati";
 "common_adding_caption" = "Adding caption";
@@ -428,7 +428,7 @@
 "rich_text_editor_a11y_add_attachment" = "Biriktirma qo'shing";
 "rich_text_editor_composer_caption_placeholder" = "Add a caption";
 "screen_advanced_settings_element_call_base_url" = "Maxsus element qo‘ng‘iroqlar bazasi URL manzili";
-"screen_advanced_settings_element_call_base_url_description" = "Element qo'ng'irog'iga maxsus asosiy url or'natish";
+"screen_advanced_settings_element_call_base_url_description" = "SevenChat qo'ng'irog'iga maxsus asosiy url or'natish";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Invalid URL, please make sure you include the protocol (http/https) and the correct address.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Shaxsiy serveringiz yoki ishchi hisob qaydnomangiz kabi boshqa hisob provayderidan foydalaning.";
 "screen_change_account_provider_title" = "Hisob provayderini o'zgartiring";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "Bu uy serveriga kira olmadik. Iltimos, uy serverining URL manzilini to'ri kiritganingizni tekshiring. Agar URL toʻgʻri boʻlsa, qoʻshimcha yordam olish uchun uy serveri administratoriga murojaat qiling.";
 "screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the .well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
@@ -830,7 +830,7 @@
 "screen_onboarding_sign_up" = "Hisob yaratish";
 "screen_onboarding_welcome_message" = "Eng tezkor %1$@ga xush kelibsiz. Tezlik va oddylik uchun super zaryadlangan.";
 "screen_onboarding_welcome_subtitle" = "%1$@ga Xush kelibsiz. Tezlik va oddylik uchun o'ta zaryadlangan.";
-"screen_onboarding_welcome_title" = "Elementingizda bo'ling";
+"screen_onboarding_welcome_title" = "SevenChatingizda bo'ling";
 "screen_polls_history_empty_ongoing" = "Can't find any ongoing polls.";
 "screen_polls_history_empty_past" = "Can't find any past polls.";
 "screen_polls_history_filter_ongoing" = "Ongoing";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Emoji qo'shmoq";
 "screen_room_timeline_beginning_of_room" = "Bu %1$@ni boshlanishi";
 "screen_room_timeline_beginning_of_room_no_name" = "Bu suhbatning boshlanishi.";
-"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new SevenChat app.";
 "screen_room_timeline_less_reactions" = "Kamroq ko'rsatish";
 "screen_room_timeline_message_copied" = "Xabar nusxalandi";
 "screen_room_timeline_no_permission_to_post" = "Sizda bu xonaga post yozishga ruxsat yo‘q";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Suhbatlar";
 "screen_roomlist_mark_as_read" = "Mark as read";
 "screen_roomlist_mark_as_unread" = "Mark as unread";
-"screen_server_confirmation_message_login_element_dot_io" = "Element xodimlari uchun shaxsiy server.";
+"screen_server_confirmation_message_login_element_dot_io" = "SevenChat xodimlari uchun shaxsiy server.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix xavfsiz, markazlashmagan aloqa uchun ochiq tarmoqdir.";
 "screen_server_confirmation_message_register" = "Bu sizning suhbatlaringiz yashaydigan joy - xuddi siz elektron pochta xabarlaringizni saqlash uchun elektron pochta provayderidan foydalanganingiz kabi.";
 "screen_server_confirmation_title_login" = "Siz tizimga kirmoqchisiz%1$@";

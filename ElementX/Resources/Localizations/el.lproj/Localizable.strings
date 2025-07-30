@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Διαθέσιμη αναβάθμιση";
 "banner_set_up_recovery_content" = "Δημιούργησε ένα νέο κλειδί ανάκτησης που μπορεί να χρησιμοποιηθεί για την επαναφορά του ιστορικού των κρυπτογραφημένων μηνυμάτων σου σε περίπτωση που χάσεις την πρόσβαση στις συσκευές σου.";
 "banner_set_up_recovery_title" = "Ρύθμιση ανάκτησης";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Το Element Call δεν υποστηρίζει τη χρήση συσκευών ήχου Bluetooth σε αυτήν την έκδοση Android. Επέλεξε μια διαφορετική συσκευή ήχου.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Το SevenChat Call δεν υποστηρίζει τη χρήση συσκευών ήχου Bluetooth σε αυτήν την έκδοση Android. Επέλεξε μια διαφορετική συσκευή ήχου.";
 "common_about" = "Σχετικά";
 "common_acceptable_use_policy" = "Πολιτική αποδεκτής χρήσης";
 "common_adding_caption" = "Η λεζάντα προστίθεται";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Σύνδεσμος";
 "rich_text_editor_a11y_add_attachment" = "Προσθήκη συνημμένου";
 "rich_text_editor_composer_caption_placeholder" = "Προαιρετική λεζάντα...";
-"screen_advanced_settings_element_call_base_url" = "Προσαρμοσμένο URL βάσης κλήσεων Element";
-"screen_advanced_settings_element_call_base_url_description" = "Όρισε μια προσαρμοσμένη διεύθυνση βάσης URL για κλήση Element.";
+"screen_advanced_settings_element_call_base_url" = "Προσαρμοσμένο URL βάσης κλήσεων SevenChat";
+"screen_advanced_settings_element_call_base_url_description" = "Όρισε μια προσαρμοσμένη διεύθυνση βάσης URL για κλήση SevenChat.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Μη έγκυρη διεύθυνση URL, βεβαιώσου ότι έχεις συμπεριλάβει το πρωτόκολλο (http/https) και τη σωστή διεύθυνση.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Απόκρυψη εικόνων προφίλ σε αιτήματα πρόσκλησης αίθουσας";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Απόκρυψη προεπισκοπήσεων πολυμέσων στο timeline";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Χρησιμοποίησε διαφορετικό πάροχο λογαριασμού, όπως τον δικό σου ιδιωτικό διακομιστή ή έναν εργασιακό λογαριασμό.";
 "screen_change_account_provider_title" = "Αλλαγή παρόχου λογαριασμού";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "Δεν μπορούσαμε να επικοινωνήσουμε με αυτόν τον οικιακό διακομιστή. Βεβαιώσου ότι έχεις εισαγάγει σωστά τη διεύθυνση URL του αρχικού διακομιστή. Εάν η διεύθυνση URL είναι σωστή, επικοινώνησε με τον διαχειριστή του κεντρικού διακομιστή για περαιτέρω βοήθεια.";
 "screen_change_server_error_invalid_well_known" = "Ο διακομιστής δεν είναι διαθέσιμος λόγω προβλήματος στο αρχείο .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Ο επιλεγμένος πάροχος λογαριασμού δεν υποστηρίζει sliding sync. Απαιτείται αναβάθμιση στο διακομιστή για χρήση του %1$@.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Προσθήκη emoji";
 "screen_room_timeline_beginning_of_room" = "Αυτή είναι η αρχή του %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Αυτή είναι η αρχή τούτης της συνομιλίας.";
-"screen_room_timeline_legacy_call" = "Μη υποστηριζόμενη κλήση. Ρώτα εάν ο καλών μπορεί να χρησιμοποιήσει τη νέα εφαρμογή Element X.";
+"screen_room_timeline_legacy_call" = "Μη υποστηριζόμενη κλήση. Ρώτα εάν ο καλών μπορεί να χρησιμοποιήσει τη νέα εφαρμογή SevenChat.";
 "screen_room_timeline_less_reactions" = "Εμφάνιση λιγότερων";
 "screen_room_timeline_message_copied" = "Το μήνυμα αντιγράφηκε";
 "screen_room_timeline_no_permission_to_post" = "Δεν έχετε δικαιώματα για να δημοσιεύσετε σε αυτήν την αίθουσα";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Συνομιλίες";
 "screen_roomlist_mark_as_read" = "Επισήμανση ως αναγνωσμένου";
 "screen_roomlist_mark_as_unread" = "Επισήμανση ως μη αναγνωσμένου";
-"screen_server_confirmation_message_login_element_dot_io" = "Ένας ιδιωτικός διακομιστής για υπαλλήλους του Element.";
+"screen_server_confirmation_message_login_element_dot_io" = "Ένας ιδιωτικός διακομιστής για υπαλλήλους του SevenChat.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Το Matrix είναι ένα ανοιχτό δίκτυο για ασφαλή, αποκεντρωμένη επικοινωνία.";
 "screen_server_confirmation_message_register" = "Εδώ θα ζουν οι συνομιλίες σου - όπως θα χρησιμοποιούσες έναν πάροχο email για να διατηρήσεις τα email σου.";
 "screen_server_confirmation_title_login" = "Πρόκειται να συνδεθείς στο %1$@";

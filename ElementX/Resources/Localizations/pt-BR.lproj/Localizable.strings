@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Atualização disponível";
 "banner_set_up_recovery_content" = "Recupere sua identidade criptográfica e o histórico de mensagens com uma chave de recuperação se você tiver perdido todos os dispositivos existentes.";
 "banner_set_up_recovery_title" = "Configure a recuperação para proteger sua conta";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "O Element Call não tem suporte a dispositivos de áudio Bluetooth nesta versão do Android. Por favor, selecione um dispositivo de áudio diferente.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "O SevenChat Call não tem suporte a dispositivos de áudio Bluetooth nesta versão do Android. Por favor, selecione um dispositivo de áudio diferente.";
 "common_about" = "Sobre";
 "common_acceptable_use_policy" = "Política de uso aceitável";
 "common_adding_caption" = "Adicionando legenda";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Link";
 "rich_text_editor_a11y_add_attachment" = "Adicionar anexo";
 "rich_text_editor_composer_caption_placeholder" = "Adicionar uma legenda";
-"screen_advanced_settings_element_call_base_url" = "URL base do Element Call personalizado";
-"screen_advanced_settings_element_call_base_url_description" = "Defina um URL base personalizado para Element Call.";
+"screen_advanced_settings_element_call_base_url" = "URL base do SevenChat Call personalizado";
+"screen_advanced_settings_element_call_base_url_description" = "Defina um URL base personalizado para SevenChat Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL inválida, por favor verifique se o protocolo (http/https) e o endereço correto estão presentes.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Oculte avatares em solicitações de convite para salas";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Ocultar visualizações de mídia na linha do tempo";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Use um provedor de conta diferente, como seu próprio servidor privado ou uma conta corporativa.";
 "screen_change_account_provider_title" = "Alterar provedor da conta";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "Não conseguimos acessar esse servidor. Verifique se você inseriu a URL do servidor corretamente. Se a URL estiver correta, entre em contato com o administrador do servidor para obter mais ajuda.";
 "screen_change_server_error_invalid_well_known" = "O servidor não está disponível devido à um problema no arquivo .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "O provedor de conta selecionado não é compatível com a sliding sync. É necessária uma atualização do servidor para que você possa usar o %1$@.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Adicionar emoji";
 "screen_room_timeline_beginning_of_room" = "Este é o início do %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Este é o início desta conversa.";
-"screen_room_timeline_legacy_call" = "Chamada não suportada. Pergunte se o chamador pode usar o novo aplicativo Element X.";
+"screen_room_timeline_legacy_call" = "Chamada não suportada. Pergunte se o chamador pode usar o novo aplicativo SevenChat.";
 "screen_room_timeline_less_reactions" = "Mostrar menos";
 "screen_room_timeline_message_copied" = "Mensagem copiada";
 "screen_room_timeline_no_permission_to_post" = "Você não tem permissão para postar nesta sala";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Conversas";
 "screen_roomlist_mark_as_read" = "Marcar como lido";
 "screen_roomlist_mark_as_unread" = "Marcar como não lido";
-"screen_server_confirmation_message_login_element_dot_io" = "Um servidor privado para funcionários do Element.";
+"screen_server_confirmation_message_login_element_dot_io" = "Um servidor privado para funcionários do SevenChat.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "A Matrix é uma rede aberta para comunicação segura e descentralizada.";
 "screen_server_confirmation_message_register" = "Aqui é onde suas conversas vão ficar — assim como você usa um provedor de e-mails para manter seus e-mails.";
 "screen_server_confirmation_title_login" = "Você está prestes a fazer login em %1$@";

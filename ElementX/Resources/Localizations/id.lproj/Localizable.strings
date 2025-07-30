@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Peningkatan tersedia";
 "banner_set_up_recovery_content" = "Buat kunci pemulihan baru yang dapat digunakan untuk memulihkan riwayat pesan terenkripsi Anda jika Anda kehilangan akses ke perangkat Anda.";
 "banner_set_up_recovery_title" = "Siapkan pemulihan";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call tidak mendukung penggunaan perangkat audio Bluetooth di versi Android ini. Silakan pilih perangkat audio yang berbeda.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call tidak mendukung penggunaan perangkat audio Bluetooth di versi Android ini. Silakan pilih perangkat audio yang berbeda.";
 "common_about" = "Tentang";
 "common_acceptable_use_policy" = "Kebijakan penggunaan wajar";
 "common_adding_caption" = "Menambahkan keterangan";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Tautan";
 "rich_text_editor_a11y_add_attachment" = "Tambahkan lampiran";
 "rich_text_editor_composer_caption_placeholder" = "Keterangan opsional...";
-"screen_advanced_settings_element_call_base_url" = "URL dasar Element Call khusus";
-"screen_advanced_settings_element_call_base_url_description" = "Tetapkan URL dasar khusus untuk Element Call.";
+"screen_advanced_settings_element_call_base_url" = "URL dasar SevenChat Call khusus";
+"screen_advanced_settings_element_call_base_url_description" = "Tetapkan URL dasar khusus untuk SevenChat Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL tidak valid, pastikan Anda menyertakan protokol (http/https) dan alamat yang benar.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Sembunyikan avatar dalam permintaan undangan ruangan";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Sembunyikan pratinjau media pada lini masa";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Gunakan penyedia akun yang berbeda, seperti server pribadi Anda sendiri atau akun kerja.";
 "screen_change_account_provider_title" = "Ubah penyedia akun";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "Kami tidak dapat menjangkau server ini. Periksa apakah Anda telah memasukkan URL homeserver dengan benar. Jika URL sudah benar, hubungi administrator homeserver Anda untuk bantuan lebih lanjut.";
 "screen_change_server_error_invalid_well_known" = "Server tidak tersedia karena ada masalah dalam berkas .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Penyedia akun yang dipilih tidak mendukung sinkronisasi geser. Peningkatan server diperlukan untuk digunakan %1$@.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Tambahkan emoji";
 "screen_room_timeline_beginning_of_room" = "Ini adalah awal dari %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Ini adalah awal dari percakapan ini.";
-"screen_room_timeline_legacy_call" = "Panggilan tidak didukung. Tanyakan apakah penelepon dapat menggunakan aplikasi Element X yang baru.";
+"screen_room_timeline_legacy_call" = "Panggilan tidak didukung. Tanyakan apakah penelepon dapat menggunakan aplikasi SevenChat yang baru.";
 "screen_room_timeline_less_reactions" = "Tampilkan lebih sedikit";
 "screen_room_timeline_message_copied" = "Pesan disalin";
 "screen_room_timeline_no_permission_to_post" = "Anda tidak memiliki izin untuk mengirim di ruangan ini";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Semua Obrolan";
 "screen_roomlist_mark_as_read" = "Tandai sebagai dibaca";
 "screen_roomlist_mark_as_unread" = "Tandai sebagai belum dibaca";
-"screen_server_confirmation_message_login_element_dot_io" = "Server pribadi untuk karyawan Element.";
+"screen_server_confirmation_message_login_element_dot_io" = "Server pribadi untuk karyawan SevenChat.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix adalah jaringan terbuka untuk komunikasi yang aman dan terdesentralisasi.";
 "screen_server_confirmation_message_register" = "Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda.";
 "screen_server_confirmation_title_login" = "Anda akan masuk ke %1$@";

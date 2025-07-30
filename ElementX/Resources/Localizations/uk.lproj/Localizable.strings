@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Доступне оновлення";
 "banner_set_up_recovery_content" = "Відновіть свою криптографічну ідентичність та історію повідомлень за допомогою ключа відновлення, якщо ви втратили всі наявні пристрої.";
 "banner_set_up_recovery_title" = "Налаштуйте відновлення для захисту свого облікового запису";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call не підтримує використання аудіопристроїв Bluetooth у цій версії Android. Виберіть інший аудіопристрій.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call не підтримує використання аудіопристроїв Bluetooth у цій версії Android. Виберіть інший аудіопристрій.";
 "common_about" = "Відомості";
 "common_acceptable_use_policy" = "Політика прийнятного використання";
 "common_adding_caption" = "Додавання підпису";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Посилання";
 "rich_text_editor_a11y_add_attachment" = "Додати вкладення";
 "rich_text_editor_composer_caption_placeholder" = "Необов'язковий підпис...";
-"screen_advanced_settings_element_call_base_url" = "Користувацька URL-адреса Element Call";
-"screen_advanced_settings_element_call_base_url_description" = "Встановіть URL-адресу для Element Call.";
+"screen_advanced_settings_element_call_base_url" = "Користувацька URL-адреса SevenChat Call";
+"screen_advanced_settings_element_call_base_url_description" = "Встановіть URL-адресу для SevenChat Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Неправильна URL-адреса. Переконайтеся, що ви вказали протокол (http/https) та правильну адресу.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Сховати аватари у запитах на запрошення до кімнат";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Сховати попередній перегляд медіа у стрічці";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Використати іншого провайдера облікових записів, наприклад, власний приватний сервер або робочий обліковий запис.";
 "screen_change_account_provider_title" = "Змінити провайдера облікового запису";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "Не вдалося під'єднатися до цього домашнього сервера. Перевірте правильність введеної URL-адреси домашнього сервера. Якщо URL-адреса правильна, зверніться по додаткову допомогу до адміністратора домашнього сервера.";
 "screen_change_server_error_invalid_well_known" = "Сервер недоступний через помилку у файлі well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Вибраний постачальник облікових записів не підтримує sliding sync. Щоб користуватися %1$@ необхідно оновити сервер.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Додати смайлики";
 "screen_room_timeline_beginning_of_room" = "Це початок %1$@";
 "screen_room_timeline_beginning_of_room_no_name" = "Це початок цієї розмови.";
-"screen_room_timeline_legacy_call" = "Непідтримуваний виклик. Запитайте, чи може абонент використовувати новий застосунок Element X.";
+"screen_room_timeline_legacy_call" = "Непідтримуваний виклик. Запитайте, чи може абонент використовувати новий застосунок SevenChat.";
 "screen_room_timeline_less_reactions" = "Показувати менше";
 "screen_room_timeline_message_copied" = "Повідомлення скопійовано";
 "screen_room_timeline_no_permission_to_post" = "У вас немає дозволу на публікацію в цій кімнаті";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Бесіди";
 "screen_roomlist_mark_as_read" = "Позначити прочитаним";
 "screen_roomlist_mark_as_unread" = "Позначити непрочитаним";
-"screen_server_confirmation_message_login_element_dot_io" = "Приватний сервер для співробітників Element.";
+"screen_server_confirmation_message_login_element_dot_io" = "Приватний сервер для співробітників SevenChat.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix — це відкрита мережа для безпечної, децентралізованої комунікації.";
 "screen_server_confirmation_message_register" = "Тут розміщуватимуться ваші розмови — так само як у поштовій скриньці для зберігання своїх електронних листів.";
 "screen_server_confirmation_title_login" = "Ви збираєтесь увійти в %1$@";

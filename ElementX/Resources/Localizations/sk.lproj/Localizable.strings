@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Aktualizácia je k dispozícii";
 "banner_set_up_recovery_content" = "Vytvorte nový kľúč na obnovenie, ktorý môžete použiť na obnovenie vašej histórie šifrovaných správ v prípade straty prístupu k vašim zariadeniam.";
 "banner_set_up_recovery_title" = "Nastaviť obnovenie";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call nepodporuje používanie zvukových zariadení Bluetooth v tejto verzii systému Android. Vyberte iné zvukové zariadenie.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call nepodporuje používanie zvukových zariadení Bluetooth v tejto verzii systému Android. Vyberte iné zvukové zariadenie.";
 "common_about" = "O aplikácii";
 "common_acceptable_use_policy" = "Zásady prijateľného používania";
 "common_adding_caption" = "Pridáva sa titulok";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Odkaz";
 "rich_text_editor_a11y_add_attachment" = "Pridať prílohu";
 "rich_text_editor_composer_caption_placeholder" = "Voliteľný titulok…";
-"screen_advanced_settings_element_call_base_url" = "Vlastná Element Call základná URL adresa";
-"screen_advanced_settings_element_call_base_url_description" = "Nastaviť vlastnú základnú URL adresu pre Element Call.";
+"screen_advanced_settings_element_call_base_url" = "Vlastná SevenChat Call základná URL adresa";
+"screen_advanced_settings_element_call_base_url_description" = "Nastaviť vlastnú základnú URL adresu pre SevenChat Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Neplatná adresa URL, uistite sa, že ste uviedli protokol (http/https) a správnu adresu.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Skrytie profilové obrázky v žiadostiach o pozvánku do miestnosti";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Skryť ukážky médií na časovej osi";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Použite iného poskytovateľa účtu, ako napríklad vlastný súkromný server alebo pracovný účet.";
 "screen_change_account_provider_title" = "Zmeniť poskytovateľa účtu";
 "screen_change_server_error_element_pro_required_action_ios" = "Obchod s aplikáciami";
-"screen_change_server_error_element_pro_required_message" = "Aplikácia Element Pro je potrebná na %1$@ Stiahnite si ju z obchodu.";
-"screen_change_server_error_element_pro_required_title" = "Vyžaduje sa Element Pro";
+"screen_change_server_error_element_pro_required_message" = "Aplikácia SevenChat Pro je potrebná na %1$@ Stiahnite si ju z obchodu.";
+"screen_change_server_error_element_pro_required_title" = "Vyžaduje sa SevenChat Pro";
 "screen_change_server_error_invalid_homeserver" = "Nemohli sme sa spojiť s týmto domovským serverom. Skontrolujte prosím, či ste zadali URL adresu domovského servera správne. Ak je adresa URL správna, kontaktujte svoj domovský server pre ďalšiu pomoc.";
 "screen_change_server_error_invalid_well_known" = "Server nie je k dispozícii kvôli problému v známom súbore:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Vybraný poskytovateľ účtu nepodporuje kĺzavú synchronizáciu. Na používanie aplikácie %1$@ je potrebná aktualizácia servera,";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Pridať emoji";
 "screen_room_timeline_beginning_of_room" = "Toto je začiatok %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Toto je začiatok tejto konverzácie.";
-"screen_room_timeline_legacy_call" = "Nepodporovaný hovor. Opýtajte sa, či volajúci môže použiť novú aplikáciu Element X.";
+"screen_room_timeline_legacy_call" = "Nepodporovaný hovor. Opýtajte sa, či volajúci môže použiť novú aplikáciu SevenChat.";
 "screen_room_timeline_less_reactions" = "Zobraziť menej";
 "screen_room_timeline_message_copied" = "Správa skopírovaná";
 "screen_room_timeline_no_permission_to_post" = "Nemáte povolenie uverejňovať príspevky v tejto miestnosti";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Všetky konverzácie";
 "screen_roomlist_mark_as_read" = "Označiť ako prečítané";
 "screen_roomlist_mark_as_unread" = "Označiť ako neprečítané";
-"screen_server_confirmation_message_login_element_dot_io" = "Súkromný server pre zamestnancov spoločnosti Element.";
+"screen_server_confirmation_message_login_element_dot_io" = "Súkromný server pre zamestnancov spoločnosti SevenChat.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix je otvorená sieť pre bezpečnú a decentralizovanú komunikáciu.";
 "screen_server_confirmation_message_register" = "Tu budú žiť vaše konverzácie - podobne ako používate poskytovateľa e-mailových služieb na uchovávanie e-mailov.";
 "screen_server_confirmation_title_login" = "Chystáte sa prihlásiť do %1$@";

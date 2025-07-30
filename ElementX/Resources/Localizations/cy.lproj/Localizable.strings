@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Uwchraddiad ar gael";
 "banner_set_up_recovery_content" = "Adferwch eich hunaniaeth cryptograffig a hanes negeseuon gydag allwedd adfer os ydych wedi colli eich holl ddyfeisiau presennol.";
 "banner_set_up_recovery_title" = "Gosodwch adferiad i ddiogelu eich cyfrif";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Nid yw Element Call yn cefnogi defnyddio dyfeisiau sain Bluetooth yn y fersiwn Android hon. Dewiswch ddyfais sain wahanol.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Nid yw SevenChat Call yn cefnogi defnyddio dyfeisiau sain Bluetooth yn y fersiwn Android hon. Dewiswch ddyfais sain wahanol.";
 "common_about" = "Ynghylch";
 "common_acceptable_use_policy" = "Polisi defnydd derbyniol";
 "common_adding_caption" = "Ychwanegu capsiwn";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Dolen";
 "rich_text_editor_a11y_add_attachment" = "Ychwanegu atodiad";
 "rich_text_editor_composer_caption_placeholder" = "Ychwanegu capsiwn";
-"screen_advanced_settings_element_call_base_url" = "URL sylfaen Galwad Element Cyfaddas";
-"screen_advanced_settings_element_call_base_url_description" = "Gosod URL sylfaen cyfaddas ar gyfer Galwad Element.";
+"screen_advanced_settings_element_call_base_url" = "URL sylfaen Galwad SevenChat Cyfaddas";
+"screen_advanced_settings_element_call_base_url_description" = "Gosod URL sylfaen cyfaddas ar gyfer Galwad SevenChat.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL annilys, gwnewch yn siŵr eich bod yn cynnwys y protocol (http/https) a'r cyfeiriad cywir.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Cuddio afatarau yn y ceisiadau gwahoddiad i ystafell";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Cuddio rhagolygon cyfryngau yn y llinell amser";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Defnyddiwch ddarparwr cyfrif gwahanol, fel eich gweinydd preifat eich hun neu gyfrif gwaith.";
 "screen_change_account_provider_title" = "Newid darparwr cyfrif";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "Doedd dim modd i ni gyrraedd y gweinydd cartref hwn. Gwiriwch eich bod wedi rhoi URL y gweinydd cartref yn gywir. Os yw'r URL yn gywir, cysylltwch â gweinyddwr eich gweinydd cartref am ragor o help.";
 "screen_change_server_error_invalid_well_known" = "Dyw cydweddu llithrig ddim ar gael oherwydd problem yn y ffeil .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Dyw'r darparwr cyfrif hwn ddim yn cefnogi cydweddu llithro. Mae angen uwchraddio'r gweinydd i ddefnyddio %1$@.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Ychwanegu emoji";
 "screen_room_timeline_beginning_of_room" = "Dyma ddechrau %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Dyma ddechrau'r sgwrs hon.";
-"screen_room_timeline_legacy_call" = "Galwad heb ei chefnogi. Gofynnwch a all y galwr ddefnyddio'r ap Element X newydd.";
+"screen_room_timeline_legacy_call" = "Galwad heb ei chefnogi. Gofynnwch a all y galwr ddefnyddio'r ap SevenChat newydd.";
 "screen_room_timeline_less_reactions" = "Dangos llai";
 "screen_room_timeline_message_copied" = "Neges wedi'i chopïo";
 "screen_room_timeline_no_permission_to_post" = "Does gennych chi ddim caniatâd i bostio i'r ystafell hon";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Sgyrsiau";
 "screen_roomlist_mark_as_read" = "Marcio fel wedi'i ddarllen";
 "screen_roomlist_mark_as_unread" = "Marcio fel heb ei ddarllen";
-"screen_server_confirmation_message_login_element_dot_io" = "Gweinydd preifat ar gyfer gweithwyr Element.";
+"screen_server_confirmation_message_login_element_dot_io" = "Gweinydd preifat ar gyfer gweithwyr SevenChat.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Mae Matrix yn rhwydwaith agored ar gyfer cyfathrebu diogel, datganoledig.";
 "screen_server_confirmation_message_register" = "Dyma lle bydd eich sgyrsiau'n byw - yn union fel y byddech chi'n defnyddio darparwr e-bost i gadw'ch e-byst.";
 "screen_server_confirmation_title_login" = "Rydych ar fin mewngofnodi i %1$@";

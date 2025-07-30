@@ -10,7 +10,7 @@ import Foundation
 
 private enum SuggestionTriggerRegex {
     /// Matches any string of characters after an @ or # that is not a whitespace
-    static let atOrHash = /[@#]\S*/
+    static let atOrHash = try! NSRegularExpression(pattern: "[@#]\\S*")
     
     static let at: Character = "@"
     static let hash: Character = "#"
@@ -117,10 +117,11 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
     }
     
     private func detectTriggerInText(_ text: String, selectedRange: NSRange) -> SuggestionTrigger? {
-        let matches = text.matches(of: SuggestionTriggerRegex.atOrHash)
+        let range = NSRange(location: 0, length: text.utf16.count)
+        let matches = SuggestionTriggerRegex.atOrHash.matches(in: text, range: range)
         let match = matches.first { matchResult in
-            let lowerBound = matchResult.range.lowerBound.utf16Offset(in: matchResult.base)
-            let upperBound = matchResult.range.upperBound.utf16Offset(in: matchResult.base)
+            let lowerBound = matchResult.range.location
+            let upperBound = matchResult.range.location + matchResult.range.length
             return selectedRange.location >= lowerBound
                 && selectedRange.location <= upperBound
                 && selectedRange.length <= upperBound - lowerBound
@@ -130,14 +131,15 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
             return nil
         }
 
-        var suggestionText = String(text[match.range])
+        let matchRange = Range(match.range, in: text)!
+        var suggestionText = String(text[matchRange])
         let firstChar = suggestionText.removeFirst()
         
         switch firstChar {
         case SuggestionTriggerRegex.at:
-            return .init(type: .user, text: suggestionText, range: NSRange(match.range, in: text))
+            return .init(type: .user, text: suggestionText, range: match.range)
         case SuggestionTriggerRegex.hash:
-            return .init(type: .room, text: suggestionText, range: NSRange(match.range, in: text))
+            return .init(type: .room, text: suggestionText, range: match.range)
         default:
             return nil
         }

@@ -1,7 +1,7 @@
 ---
-name: ElementX
+name: SevenChat
 attributes:
-  ORGANIZATIONNAME: Element
+  ORGANIZATIONNAME: SevenChat
 
 fileGroups:
 - project.yml
@@ -15,7 +15,7 @@ options:
     macOS: '14.6'
   groupOrdering:
   - order:
-    - ElementX
+    - SevenChat
     - NSE
     - ShareExtension
     - UnitTests
@@ -26,7 +26,7 @@ options:
     - DevelopmentAssets
     - Secrets
     - Tools
-  - pattern: ElementX
+  - pattern: SevenChat
     order:
     - Sources
     - Resources
@@ -41,12 +41,12 @@ options:
     - Other
     - UITests
     - AccessibilityTests
-  postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
+  # postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
 
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: true
   ENABLE_BITCODE: false
-  APP_NAME: ElementX
+  APP_NAME: SevenChat
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: "$(DEVELOPMENT_TEAM).$(BASE_BUNDLE_IDENTIFIER)"
   MARKETING_VERSION: 25.08.0
   CURRENT_PROJECT_VERSION: 1

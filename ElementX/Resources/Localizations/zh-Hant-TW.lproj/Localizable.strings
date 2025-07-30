@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "可升級";
 "banner_set_up_recovery_content" = "若您遺失了所有現有裝置，則請使用復原金鑰以救援您的密碼學身份與訊息歷史紀錄。";
 "banner_set_up_recovery_title" = "設定備援以保護您的帳號";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "關於";
 "common_acceptable_use_policy" = "可接受使用政策";
 "common_adding_caption" = "新增標題";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "連結";
 "rich_text_editor_a11y_add_attachment" = "新增附件";
 "rich_text_editor_composer_caption_placeholder" = "新增標題";
-"screen_advanced_settings_element_call_base_url" = "自訂 Element 通話基礎 URL";
-"screen_advanced_settings_element_call_base_url_description" = "設定 Element 通話的自訂基礎 URL。";
+"screen_advanced_settings_element_call_base_url" = "自訂 SevenChat 通話基礎 URL";
+"screen_advanced_settings_element_call_base_url_description" = "設定 SevenChat 通話的自訂基礎 URL。";
 "screen_advanced_settings_element_call_base_url_validation_error" = "無效的 URL，請確定包含了協定 (http/https) 與正確的地址。";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "在聊天室邀請請求中隱藏大頭貼";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "在時間軸中隱藏媒體預覽";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "使用不同的帳戶提供者，例如您自己的伺服器或工作帳號。";
 "screen_change_account_provider_title" = "更改帳號提供者";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "我們無法連線至此家伺服器。請檢查您是否已正確輸入家伺服器 URL。若 URL 正確，請聯絡您家伺服器的管理員以取得進一步協助。";
 "screen_change_server_error_invalid_well_known" = "因為 well-known 檔案的問題，伺服器不可用：\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "選定的帳號提供者不支援 sliding sync。必須升級伺服器才能使用 %1$@。";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "新增表情符號";
 "screen_room_timeline_beginning_of_room" = "這是 %1$@ 的開頭。";
 "screen_room_timeline_beginning_of_room_no_name" = "這是此對話的開頭。";
-"screen_room_timeline_legacy_call" = "不支援的通話。詢問通話者是否可以使用新的 Element X 應用程式。";
+"screen_room_timeline_legacy_call" = "不支援的通話。詢問通話者是否可以使用新的 SevenChat 應用程式。";
 "screen_room_timeline_less_reactions" = "較少";
 "screen_room_timeline_message_copied" = "訊息已複製";
 "screen_room_timeline_no_permission_to_post" = "您沒有權限在此聊天室傳送訊息";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "所有聊天室";
 "screen_roomlist_mark_as_read" = "標為已讀";
 "screen_roomlist_mark_as_unread" = "標為未讀";
-"screen_server_confirmation_message_login_element_dot_io" = "供 Element 員工使用的私人伺服器。";
+"screen_server_confirmation_message_login_element_dot_io" = "供 SevenChat 員工使用的私人伺服器。";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix 是一個開放網路，為了安全且去中心化的通訊而生。";
 "screen_server_confirmation_message_register" = "您的所有對話將保存於此，就如同您的電子郵件供應商會保存您的電子郵件一樣。";
 "screen_server_confirmation_title_login" = "您即將登入 %1$@";
