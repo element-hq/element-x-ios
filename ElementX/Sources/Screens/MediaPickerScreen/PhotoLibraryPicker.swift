@@ -81,11 +81,19 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
             }
             
             Task {
-                var selectedURLs = [URL]()
-                for result in results {
-                    if let url = await processResult(result) {
-                        selectedURLs.append(url)
+                let selectedURLs = await withTaskGroup { taskGroup in
+                    for result in results {
+                        taskGroup.addTask { await self.processResult(result) }
                     }
+                    
+                    var selectedURLs = [URL]()
+                    for await url in taskGroup {
+                        if let url {
+                            selectedURLs.append(url)
+                        }
+                    }
+                    
+                    return selectedURLs
                 }
                 
                 photoLibraryPicker.callback(.selectedMediaAtURLs(selectedURLs))
