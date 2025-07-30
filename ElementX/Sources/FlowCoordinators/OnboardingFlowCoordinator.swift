@@ -10,6 +10,8 @@ import Foundation
 import SwiftState
 
 enum OnboardingFlowCoordinatorAction {
+    case requestPresentation(animated: Bool)
+    case dismiss
     case logout
 }
 
@@ -19,7 +21,6 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let analyticsService: AnalyticsService
     private let appSettings: AppSettings
     private let notificationManager: NotificationManagerProtocol
-    private let rootNavigationStackCoordinator: NavigationStackCoordinator
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let windowManager: WindowManagerProtocol
     private let isNewLogin: Bool
@@ -74,8 +75,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         self.windowManager = windowManager
         self.isNewLogin = isNewLogin
         
-        rootNavigationStackCoordinator = navigationStackCoordinator
-        self.navigationStackCoordinator = NavigationStackCoordinator()
+        self.navigationStackCoordinator = navigationStackCoordinator
         
         stateMachine = .init(state: .initial)
         
@@ -112,7 +112,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             fatalError("This flow coordinator shouldn't have been started")
         }
         
-        rootNavigationStackCoordinator.setFullScreenCoverCoordinator(navigationStackCoordinator, animated: !isNewLogin)
+        actionsSubject.send(.requestPresentation(animated: !isNewLogin))
 
         stateMachine.tryEvent(.next)
     }
@@ -224,7 +224,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             case (_, _, .notificationPermissions):
                 presentNotificationPermissionsScreen()
             case (_, _, .finished):
-                rootNavigationStackCoordinator.setFullScreenCoverCoordinator(nil)
+                actionsSubject.send(.dismiss)
                 stateMachine.tryState(.initial)
             case (.finished, _, .initial):
                 break

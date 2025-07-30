@@ -110,11 +110,6 @@ class ChatsFlowCoordinatorStateMachine {
         case showStartChatScreen
         /// Start chat has been dismissed
         case dismissedStartChatScreen
-                
-        /// Logout has been requested and this is the last session
-        case showLogoutConfirmationScreen
-        /// Logout has been cancelled
-        case dismissedLogoutConfirmationScreen
         
         /// Request presentation of the room directory search screen.
         case showRoomDirectorySearchScreen
@@ -185,11 +180,6 @@ class ChatsFlowCoordinatorStateMachine {
             case (.roomList(let roomListSelectedRoomID), .showStartChatScreen):
                 return .startChatScreen(roomListSelectedRoomID: roomListSelectedRoomID)
             case (.startChatScreen(let roomListSelectedRoomID), .dismissedStartChatScreen):
-                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
-                            
-            case (.roomList(let roomListSelectedRoomID), .showLogoutConfirmationScreen):
-                return .logoutConfirmationScreen(roomListSelectedRoomID: roomListSelectedRoomID)
-            case (.logoutConfirmationScreen(let roomListSelectedRoomID), .dismissedLogoutConfirmationScreen):
                 return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                 
             case (.roomList(let roomListSelectedRoomID), .showRoomDirectorySearchScreen):
