@@ -137,7 +137,9 @@ extension String {
     func asURLDirectoryName() -> String {
         replacingOccurrences(of: "https://", with: "")
             .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
-            .replacing(/[:\/\p{C}]/, with: "-")
+            .replacingOccurrences(of: ":", with: "-")
+            .replacingOccurrences(of: "/", with: "-")
+            .replacingOccurrences(of: "\\", with: "-")
     }
 }
 

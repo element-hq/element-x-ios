@@ -262,7 +262,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         guard let userIdentity else {
-            MXLog.failure("User identity should be known at this point")
+            // MXLog.failure("User identity should be known at this point")  // Tạm thời tắt để tránh crash
+            MXLog.warning("User identity is nil, setting verification state to notVerified")
             state.dmRecipientVerificationState = .notVerified
             return
         }

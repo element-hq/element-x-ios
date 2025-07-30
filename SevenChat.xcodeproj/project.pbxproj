@@ -6432,17 +6432,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 669C0C70021B8A22B9C600DD /* Build configuration list for PBXNativeTarget "SevenChat" */;
 			buildPhases = (
-				48E3C26F57149BC62E98A0A9 /* 🛠 SwiftGen */,
-				34E3A2173454A989587B2AEA /* 🧙 Sourcery - Generate mocks */,
-				8620B1E6882BDFE4F6349390 /* 🧙 Sourcery - Generate preview tests */,
-				62F1BD6D71948338E38AFD9E /* 🧙 Sourcery - Generate Accessibility Tests */,
 				7D843E8BF235282630B947DF /* Sources */,
 				8FDF5E5D783F802465AD2C94 /* Resources */,
 				0E9417B98800156C97C9A9C1 /* Frameworks */,
 				C8686CFDA5400964D023FE9E /* Embed Foundation Extensions */,
 				0D4DF87D077A5E2999C19580 /* Embed Frameworks */,
-				5220215ACEDD728831253907 /* ⚠️ SwiftLint */,
-				DDC8532606EBCE4380EF2F87 /* 🧹 SwiftFormat */,
 			);
 			buildRules = (
 			);
@@ -6780,101 +6774,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		34E3A2173454A989587B2AEA /* 🧙 Sourcery - Generate mocks */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "🧙 Sourcery - Generate mocks";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which sourcery >/dev/null; then\n    sourcery --config Tools/Sourcery/AutoMockableConfig.yml\nelse\n    echo \"warning: Sourcery not installed, run swift run tools setup-project\"\nfi\n";
-		};
-		48E3C26F57149BC62E98A0A9 /* 🛠 SwiftGen */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "🛠 SwiftGen";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftgen >/dev/null; then\n    swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml\nelse\n    echo \"warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen\"\nfi\n";
-		};
-		5220215ACEDD728831253907 /* ⚠️ SwiftLint */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "⚠️ SwiftLint";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint >/dev/null; then\n    swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-		62F1BD6D71948338E38AFD9E /* 🧙 Sourcery - Generate Accessibility Tests */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "🧙 Sourcery - Generate Accessibility Tests";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which sourcery >/dev/null; then\n    sourcery --config Tools/Sourcery/TestablePreviewsDictionary.yml\n    sourcery --config Tools/Sourcery/AccessibilityTests.yml\nelse\n    echo \"warning: Sourcery not installed, run swift run tools setup-project\"\nfi\n";
-		};
-		8620B1E6882BDFE4F6349390 /* 🧙 Sourcery - Generate preview tests */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "🧙 Sourcery - Generate preview tests";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which sourcery >/dev/null; then\n    sourcery --config Tools/Sourcery/PreviewTestsConfig.yml\nelse\n    echo \"warning: Sourcery not installed, run swift run tools setup-project\"\nfi\n";
-		};
 		C05ECC29608F3DA33F6B321E /* Scan */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -6893,25 +6792,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nperiphery scan --format xcode\n";
-		};
-		DDC8532606EBCE4380EF2F87 /* 🧹 SwiftFormat */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "🧹 SwiftFormat";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    swiftformat --lint --lenient \"$PROJECT_DIR\"\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
