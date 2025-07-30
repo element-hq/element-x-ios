@@ -460,15 +460,15 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let parameters = CreateRoomParameters(name: name,
                                                   topic: topic,
-                                                  isEncrypted: false, // Tắt mã hóa tự động cho tất cả phòng
+                                                  isEncrypted: false, // Vô hiệu hóa mã hóa tự động
                                                   isDirect: false,
-                                                  visibility: .public, // Luôn sử dụng public để tránh auto-encryption
-                                                  preset: .publicChat, // Luôn sử dụng publicChat preset để tránh auto-encryption
+                                                  visibility: isRoomPrivate ? .private : .public, // Tôn trọng lựa chọn của người dùng
+                                                  preset: isRoomPrivate ? .privateChat : .publicChat, // Sử dụng preset phù hợp
                                                   invite: userIDs,
                                                   avatar: avatarURL?.absoluteString,
                                                   powerLevelContentOverride: isKnockingOnly ? Self.knockingRoomCreationPowerLevelOverrides : Self.roomCreationPowerLevelOverrides,
                                                   joinRuleOverride: isKnockingOnly ? .knock : nil,
-                                                  historyVisibilityOverride: .shared, // Luôn sử dụng shared để tránh auto-encryption
+                                                  historyVisibilityOverride: isRoomPrivate ? .invited : .shared, // Sử dụng history visibility phù hợp
                                                   // This is an FFI naming mistake, what is required is the `aliasLocalPart` not the whole alias
                                                   canonicalAlias: aliasLocalPart)
             let roomID = try await client.createRoom(request: parameters)

@@ -47,13 +47,13 @@ struct MessageSearchScreen: View {
                 .font(.system(size: 16, weight: .medium))
             
             TextField("Tìm kiếm tin nhắn trong phòng này", text: Binding(get: { context.viewState.bindings.searchQuery },
-                                                                    set: { newValue in
-                                                                        context.send(viewAction: .searchQueryChanged(newValue))
-                                                                    }))
-                                                                    .textFieldStyle(.plain)
-                                                                    .autocorrectionDisabled()
-                                                                    .autocapitalization(.none)
-                                                                    .font(.compound.bodyMD)
+                                                                         set: { newValue in
+                                                                             context.send(viewAction: .searchQueryChanged(newValue))
+                                                                         }))
+                                                                         .textFieldStyle(.plain)
+                                                                         .autocorrectionDisabled()
+                                                                         .autocapitalization(.none)
+                                                                         .font(.compound.bodyMD)
             
             if !context.viewState.bindings.searchQuery.isEmpty {
                 Button {
