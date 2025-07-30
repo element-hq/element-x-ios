@@ -207,7 +207,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         if Calendar.current.isDate(date, equalTo: .now, toGranularity: .month) {
             L10n.commonDateThisMonth
         } else {
-            date.formatted(.dateTime.month(.wide).year())
+            date.formatted(.dateTime.month(.wide).year().locale(Locale(identifier: "vi_VN")))
         }
     }
 }

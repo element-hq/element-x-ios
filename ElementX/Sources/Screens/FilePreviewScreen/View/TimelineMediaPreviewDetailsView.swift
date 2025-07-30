@@ -60,7 +60,7 @@ struct TimelineMediaPreviewDetailsView: View {
             }
             
             DetailsRow(title: L10n.screenMediaDetailsUploadedOn) {
-                Text(item.timestamp.formatted(date: .abbreviated, time: .shortened))
+                Text(item.timestamp.formatted(.dateTime.day().month().year().hour().minute().locale(Locale(identifier: "vi_VN"))))
                     .font(.compound.bodyMD)
                     .foregroundStyle(.compound.textPrimary)
             }

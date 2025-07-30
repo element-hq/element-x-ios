@@ -11,7 +11,7 @@ struct SeparatorRoomTimelineView: View {
     let timelineItem: SeparatorRoomTimelineItem
     
     var body: some View {
-        Text(timelineItem.timestamp.formatted(date: .complete, time: .omitted))
+        Text(timelineItem.timestamp.formatted(.dateTime.day().month().year().locale(Locale(identifier: "vi_VN"))))
             .font(.compound.bodySMSemibold)
             .foregroundColor(.compound.textPrimary)
             .frame(maxWidth: .infinity)

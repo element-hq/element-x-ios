@@ -245,7 +245,7 @@ private struct HeaderView: View {
                 Text(mediaItem.sender.displayName ?? mediaItem.sender.id)
                     .font(.compound.bodySMSemibold)
                     .foregroundStyle(.compound.textPrimary)
-                Text(mediaItem.timestamp.formatted(date: .abbreviated, time: .omitted))
+                Text(mediaItem.timestamp.formatted(.dateTime.day().month().year().locale(Locale(identifier: "vi_VN"))))
                     .font(.compound.bodyXS)
                     .foregroundStyle(.compound.textPrimary)
                     .textCase(.uppercase)

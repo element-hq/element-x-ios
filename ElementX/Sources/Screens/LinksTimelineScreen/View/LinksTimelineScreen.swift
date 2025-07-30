@@ -149,7 +149,7 @@ struct LinkItemView: View {
                         .font(.compound.bodySM)
                         .foregroundColor(.compound.textSecondary)
                     
-                    Text(link.timestamp.formatted(date: .abbreviated, time: .shortened))
+                    Text(link.timestamp.formatted(.dateTime.day().month().year().hour().minute().locale(Locale(identifier: "vi_VN"))))
                         .font(.compound.bodyXS)
                         .foregroundColor(.compound.textDisabled)
                 }

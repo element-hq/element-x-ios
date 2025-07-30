@@ -14,28 +14,28 @@ extension Date {
         
         if calendar.isDateInToday(self) {
             // Just the time if it was today.
-            return formatted(date: .omitted, time: .shortened)
+            return formatted(.dateTime.hour().minute().locale(Locale(identifier: "vi_VN")))
         } else if calendar.isDateInYesterday(self) {
             // Simply "Yesterday" if it was yesterday.
             guard let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) else { fatalError() }
-            return yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence))
+            return yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence).locale(Locale(identifier: "vi_VN")))
         } else if let sixDaysAgo = calendar.date(byAdding: .day, value: -6, to: calendar.startOfDay(for: .now)),
                   sixDaysAgo <= self {
             // The named day if it was in the last 6 days.
-            return formatted(.dateTime.weekday(.wide))
+            return formatted(.dateTime.weekday(.wide).locale(Locale(identifier: "vi_VN")))
         } else if let oneYearAgo = calendar.date(byAdding: .year, value: -1, to: .now),
                   oneYearAgo <= self {
             // The day and month if it was in the past year
-            return formatted(.dateTime.day().month())
+            return formatted(.dateTime.day().month().locale(Locale(identifier: "vi_VN")))
         } else {
             // The day, month and year if it is any older.
-            return formatted(.dateTime.year().day().month())
+            return formatted(.dateTime.year().day().month().locale(Locale(identifier: "vi_VN")))
         }
     }
     
     /// The date formatted as just the time, for use in timeline items specifically.
     func formattedTime() -> String {
-        formatted(date: .omitted, time: .shortened)
+        formatted(.dateTime.hour().minute().locale(Locale(identifier: "vi_VN")))
     }
     
     /// A fixed date used for mocks, previews etc.
