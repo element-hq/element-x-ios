@@ -20,7 +20,7 @@ struct LinksTimelineScreen: View {
     
     // Computed properties for filtering
     private var availableSenders: [String] {
-        let senders = Set(context.viewState.allLinks.map { $0.sender.id })
+        let senders = Set(context.viewState.allLinks.map(\.sender.id))
         return Array(senders).sorted()
     }
     
@@ -58,8 +58,6 @@ struct LinksTimelineScreen: View {
                 // Links list
                 ScrollView {
                     LazyVStack(spacing: 0) {
-
-                        
                         ForEach(filteredLinks) { link in
                             LinkItemView(link: link) { action in
                                 switch action {
@@ -71,7 +69,6 @@ struct LinksTimelineScreen: View {
                             }
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
-
                         }
                     }
                 }
@@ -118,8 +115,6 @@ struct LinksTimelineScreen: View {
                     .foregroundColor(.compound.textSecondary)
                 
                 Spacer()
-                
-
                 
                 if selectedSenderFilter != nil {
                     Button("Xóa bộ lọc") {
