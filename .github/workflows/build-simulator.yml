@@ -1,0 +1,159 @@
+name: Build Simulator App
+
+on:
+  workflow_dispatch:
+    inputs:
+      device:
+        description: 'Target device'
+        required: true
+        default: 'iPhone 16'
+        type: choice
+        options:
+        - iPhone 16
+        - iPhone 16 Pro
+        - iPhone SE (3rd generation)
+        - iPad (10th generation)
+      configuration:
+        description: 'Build configuration'
+        required: true
+        default: 'Debug'
+        type: choice
+        options:
+        - Debug
+        - Release
+  
+  push:
+    branches: [ main, develop ]
+  
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-simulator:
+    name: Build for Simulator
+    runs-on: macos-15
+    
+    concurrency:
+      group: ${{ format('simulator-build-{0}', github.ref) }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout code
+        uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 #v1.2.3
+
+      - name: Cache Ruby gems
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Setup environment
+        run: source ci_scripts/ci_common.sh && setup_github_actions_environment
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Generate Xcode project
+        run: bundle exec fastlane config_production
+
+      - name: Setup Simulator
+        run: |
+          DEVICE="${{ github.event.inputs.device || 'iPhone 16' }}"
+          echo "Setting up simulator for: $DEVICE"
+          
+          # Map device names to simulator identifiers
+          case "$DEVICE" in
+            "iPhone 16")
+              DEVICE_ID="com.apple.CoreSimulator.SimDeviceType.iPhone-16"
+              DEVICE_NAME="iPhone 16"
+              ;;
+            "iPhone 16 Pro")
+              DEVICE_ID="com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro"
+              DEVICE_NAME="iPhone 16 Pro"
+              ;;
+            "iPhone SE (3rd generation)")
+              DEVICE_ID="com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
+              DEVICE_NAME="iPhone SE (3rd generation)"
+              ;;
+            "iPad (10th generation)")
+              DEVICE_ID="com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation"
+              DEVICE_NAME="iPad (10th generation)"
+              ;;
+            *)
+              echo "Unknown device: $DEVICE"
+              exit 1
+              ;;
+          esac
+          
+          # Create simulator if it doesn't exist
+          if ! xcrun simctl list devices | grep -q "$DEVICE_NAME"; then
+            echo "Creating $DEVICE_NAME simulator..."
+            xcrun simctl create "$DEVICE_NAME" "$DEVICE_ID" "com.apple.CoreSimulator.SimRuntime.iOS-18-4"
+          else
+            echo "$DEVICE_NAME simulator already exists"
+          fi
+          
+          # Boot simulator
+          echo "Booting $DEVICE_NAME simulator..."
+          xcrun simctl boot "$DEVICE_NAME" || true
+
+      - name: Build App
+        run: |
+          DEVICE="${{ github.event.inputs.device || 'iPhone 16' }}"
+          CONFIG="${{ github.event.inputs.configuration || 'Debug' }}"
+          
+          echo "Building $CONFIG configuration for $DEVICE..."
+          
+          xcodebuild -project ElementX.xcodeproj \
+            -scheme ElementX \
+            -destination "platform=iOS Simulator,name=$DEVICE,OS=18.5" \
+            -configuration $CONFIG \
+            -derivedDataPath ./DerivedData \
+            -showBuildTimingSummary \
+            build
+
+      - name: Verify App Bundle
+        run: |
+          CONFIG="${{ github.event.inputs.configuration || 'Debug' }}"
+          APP_PATH="DerivedData/Build/Products/$CONFIG-iphonesimulator/ElementX.app"
+          
+          if [ -d "$APP_PATH" ]; then
+            echo "✅ App bundle created successfully at: $APP_PATH"
+            echo "App size: $(du -sh "$APP_PATH" | cut -f1)"
+            echo "App contents:"
+            ls -la "$APP_PATH"
+          else
+            echo "❌ App bundle not found at: $APP_PATH"
+            exit 1
+          fi
+
+      - name: Archive App Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: ElementX-${{ github.event.inputs.device || 'iPhone-16' }}-${{ github.event.inputs.configuration || 'Debug' }}
+          path: DerivedData/Build/Products/*-iphonesimulator/ElementX.app
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Build Summary
+        run: |
+          DEVICE="${{ github.event.inputs.device || 'iPhone 16' }}"
+          CONFIG="${{ github.event.inputs.configuration || 'Debug' }}"
+          APP_PATH="DerivedData/Build/Products/$CONFIG-iphonesimulator/ElementX.app"
+          APP_SIZE=$(du -sh "$APP_PATH" | cut -f1)
+          
+          echo "## Simulator Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Device:** $DEVICE" >> $GITHUB_STEP_SUMMARY
+          echo "- **Configuration:** $CONFIG" >> $GITHUB_STEP_SUMMARY
+          echo "- **App Size:** $APP_SIZE" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **✅ Build completed successfully!**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### How to use the app bundle:" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download the artifact from the Actions tab" >> $GITHUB_STEP_SUMMARY
+          echo "2. Extract the ElementX.app folder" >> $GITHUB_STEP_SUMMARY
+          echo "3. Drag and drop into iOS Simulator or use:" >> $GITHUB_STEP_SUMMARY
+          echo "   \`xcrun simctl install booted /path/to/ElementX.app\`" >> $GITHUB_STEP_SUMMARY 
