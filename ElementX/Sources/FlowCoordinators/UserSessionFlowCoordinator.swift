@@ -81,8 +81,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                               isNewLogin: isNewLogin)
         
         navigationTabCoordinator.setTabs([
-            .init(coordinator: chatsSplitCoordinator, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid),
-            .init(coordinator: BlankFormCoordinator(), title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
+            .init(coordinator: chatsSplitCoordinator, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
+            // .init(coordinator: BlankFormCoordinator(), title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
         ])
         
         setupObservers()

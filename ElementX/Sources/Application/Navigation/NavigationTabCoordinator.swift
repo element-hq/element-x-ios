@@ -15,6 +15,7 @@ import SwiftUI
         let title: String
         let icon: KeyPath<CompoundIcons, Image>
         let selectedIcon: KeyPath<CompoundIcons, Image>
+        var dismissalCallback: (() -> Void)?
     }
     
     // MARK: Tabs
@@ -56,7 +57,10 @@ import SwiftUI
         transaction.disablesAnimations = !animated
         
         withTransaction(transaction) {
-            tabModules = tabs.map { TabModule(module: .init($0.coordinator), title: $0.title, icon: $0.icon, selectedIcon: $0.selectedIcon) }
+            tabModules = tabs.map { TabModule(module: .init($0.coordinator, dismissalCallback: $0.dismissalCallback),
+                                              title: $0.title,
+                                              icon: $0.icon,
+                                              selectedIcon: $0.selectedIcon) }
         }
     }
     
@@ -199,6 +203,7 @@ private struct NavigationTabCoordinatorView: View {
                     }
                     .tag(module.id)
                     .id(module.id)
+                    .toolbar(.hidden, for: .tabBar)
             }
         }
         .sheet(item: $navigationTabCoordinator.sheetModule) { module in
