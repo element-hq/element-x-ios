@@ -86,8 +86,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var homeserver: String { get }
     
-    var slidingSyncVersion: SlidingSyncVersion { get }
-    
     var canDeactivateAccount: Bool { get }
     
     var userIDServerName: String? { get }
