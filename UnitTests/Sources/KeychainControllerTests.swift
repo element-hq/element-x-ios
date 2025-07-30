@@ -127,13 +127,16 @@ class KeychainControllerTests: XCTestCase {
         XCTAssertTrue(underlyingKeychain.allKeys().isEmpty, "The keychain should be empty to begin with.")
         
         do {
-            let unsupportedToken = RestorationTokenV1(session: SessionV1(accessToken: "1234",
+            let unsupportedToken = RestorationTokenV4(session: SessionV1(accessToken: "1234",
                                                                          refreshToken: nil,
                                                                          userId: "@test:example.com",
                                                                          deviceId: "D3V1C3",
                                                                          homeserverUrl: "https://matrix.example.com",
                                                                          oidcData: nil,
-                                                                         slidingSyncVersion: .proxy(url: "https://sync.example.com")))
+                                                                         slidingSyncVersion: .proxy(url: "https://sync.example.com")),
+                                                      sessionDirectory: .sessionsBaseDirectory.appending(component: UUID().uuidString),
+                                                      passphrase: "passphrase",
+                                                      pusherNotificationClientIdentifier: "pusherClientID")
             let tokenData = try JSONEncoder().encode(unsupportedToken)
             try underlyingKeychain.set(tokenData, key: "@test:example.com")
             XCTAssertEqual(underlyingKeychain.allKeys().count, 1)

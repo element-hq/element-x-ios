@@ -18943,8 +18943,8 @@ class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sendable {
     var userSessionForSessionDirectoriesPassphraseCalled: Bool {
         return userSessionForSessionDirectoriesPassphraseCallsCount > 0
     }
-    var userSessionForSessionDirectoriesPassphraseReceivedArguments: (client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String?)?
-    var userSessionForSessionDirectoriesPassphraseReceivedInvocations: [(client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String?)] = []
+    var userSessionForSessionDirectoriesPassphraseReceivedArguments: (client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String)?
+    var userSessionForSessionDirectoriesPassphraseReceivedInvocations: [(client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String)] = []
 
     var userSessionForSessionDirectoriesPassphraseUnderlyingReturnValue: Result<UserSessionProtocol, UserSessionStoreError>!
     var userSessionForSessionDirectoriesPassphraseReturnValue: Result<UserSessionProtocol, UserSessionStoreError>! {
@@ -18970,9 +18970,9 @@ class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sendable {
             }
         }
     }
-    var userSessionForSessionDirectoriesPassphraseClosure: ((ClientProtocol, SessionDirectories, String?) async -> Result<UserSessionProtocol, UserSessionStoreError>)?
+    var userSessionForSessionDirectoriesPassphraseClosure: ((ClientProtocol, SessionDirectories, String) async -> Result<UserSessionProtocol, UserSessionStoreError>)?
 
-    func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String?) async -> Result<UserSessionProtocol, UserSessionStoreError> {
+    func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String) async -> Result<UserSessionProtocol, UserSessionStoreError> {
         userSessionForSessionDirectoriesPassphraseCallsCount += 1
         userSessionForSessionDirectoriesPassphraseReceivedArguments = (client: client, sessionDirectories: sessionDirectories, passphrase: passphrase)
         DispatchQueue.main.async {

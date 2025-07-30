@@ -15,7 +15,7 @@ enum RestorationTokenError: Error {
 struct RestorationToken: Equatable {
     let session: MatrixRustSDK.Session
     let sessionDirectories: SessionDirectories
-    let passphrase: String?
+    let passphrase: String
     let pusherNotificationClientIdentifier: String?
     
     enum CodingKeys: CodingKey {
@@ -32,22 +32,18 @@ extension RestorationToken: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         let session = try container.decode(Session.self, forKey: .session)
-        let dataDirectory = try container.decodeIfPresent(URL.self, forKey: .sessionDirectory)
+        let dataDirectory = try container.decode(URL.self, forKey: .sessionDirectory)
         let cacheDirectory = try container.decodeIfPresent(URL.self, forKey: .cacheDirectory)
         
-        let sessionDirectories = if let dataDirectory {
-            if let cacheDirectory {
-                SessionDirectories(dataDirectory: dataDirectory, cacheDirectory: cacheDirectory)
-            } else {
-                SessionDirectories(dataDirectory: dataDirectory)
-            }
+        let sessionDirectories = if let cacheDirectory {
+            SessionDirectories(dataDirectory: dataDirectory, cacheDirectory: cacheDirectory)
         } else {
-            SessionDirectories(userID: session.userId)
+            SessionDirectories(dataDirectory: dataDirectory)
         }
         
         self = try .init(session: session,
                          sessionDirectories: sessionDirectories,
-                         passphrase: container.decodeIfPresent(String.self, forKey: .passphrase),
+                         passphrase: container.decode(String.self, forKey: .passphrase),
                          pusherNotificationClientIdentifier: container.decodeIfPresent(String.self, forKey: .pusherNotificationClientIdentifier))
     }
     
