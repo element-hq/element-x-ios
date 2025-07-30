@@ -530,7 +530,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Tải lên media thất bại, vui lòng thử lại.";
 "screen_media_upload_preview_error_too_large_message" = "Kích thước tệp tối đa cho phép là %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "Tệp quá lớn để tải lên";
-"screen_pinned_timeline_empty_state_description" = "Nhấn vào tin nhắn và chọn "%1$@" để bao gồm ở đây.";
+"screen_pinned_timeline_empty_state_description" = "Nhấn vào tin nhắn và chọn \"%1$@\" để bao gồm ở đây.";
 "screen_pinned_timeline_empty_state_headline" = "Ghim tin nhắn quan trọng để có thể dễ dàng tìm thấy";
 "screen_push_history_title" = "Lịch sử push";
 "screen_report_room_leave_failed_alert_message" = "Báo cáo của bạn đã được gửi thành công, nhưng chúng tôi gặp vấn đề khi cố gắng rời khỏi phòng. Vui lòng thử lại.";
@@ -695,7 +695,7 @@
 "screen_create_new_recovery_key_list_item_1" = "Mở %1$@ trên thiết bị desktop";
 "screen_create_new_recovery_key_list_item_2" = "Đăng nhập vào tài khoản lại";
 "screen_create_new_recovery_key_list_item_3" = "Khi được yêu cầu xác minh thiết bị, chọn %1$@";
-"screen_create_new_recovery_key_list_item_3_reset_all" = ""Đặt lại tất cả"";
+"screen_create_new_recovery_key_list_item_3_reset_all" = "\"Đặt lại tất cả\"";
 "screen_create_new_recovery_key_list_item_4" = "Làm theo hướng dẫn để tạo khóa khôi phục mới";
 "screen_create_new_recovery_key_list_item_5" = "Lưu khóa khôi phục mới trong trình quản lý mật khẩu hoặc ghi chú mã hóa";
 "screen_create_new_recovery_key_title" = "Đặt lại mã hóa cho tài khoản bằng thiết bị khác";
@@ -866,7 +866,7 @@
 "screen_qr_code_login_initial_state_item_1" = "Mở %1$@ trên thiết bị desktop";
 "screen_qr_code_login_initial_state_item_2" = "Nhấp vào avatar của bạn";
 "screen_qr_code_login_initial_state_item_3" = "Chọn %1$@";
-"screen_qr_code_login_initial_state_item_3_action" = ""Liên kết thiết bị mới"";
+"screen_qr_code_login_initial_state_item_3_action" = "\"Liên kết thiết bị mới\"";
 "screen_qr_code_login_initial_state_item_4" = "Quét mã QR bằng thiết bị này";
 "screen_qr_code_login_initial_state_subtitle" = "Chỉ khả dụng nếu nhà cung cấp tài khoản hỗ trợ.";
 "screen_qr_code_login_initial_state_title" = "Mở %1$@ trên thiết bị khác để lấy mã QR";
