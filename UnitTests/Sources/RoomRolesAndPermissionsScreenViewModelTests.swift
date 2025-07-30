@@ -55,7 +55,7 @@ class RoomRolesAndPermissionsScreenViewModelTests: XCTestCase {
         
         XCTAssertTrue(roomProxy.updatePowerLevelsForUsersCalled)
         XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.first?.powerLevel,
-                       RoomMemberDetails.Role.moderator.rustPowerLevel)
+                       RoomMemberDetails.Role.moderator.powerLevelValue)
     }
     
     func testDemoteToMember() async throws {
@@ -70,7 +70,7 @@ class RoomRolesAndPermissionsScreenViewModelTests: XCTestCase {
         
         XCTAssertTrue(roomProxy.updatePowerLevelsForUsersCalled)
         XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.first?.powerLevel,
-                       RoomMemberDetails.Role.user.rustPowerLevel)
+                       RoomMemberDetails.Role.user.powerLevelValue)
     }
     
     private func setupViewModel(members: [RoomMemberProxyMock]) {

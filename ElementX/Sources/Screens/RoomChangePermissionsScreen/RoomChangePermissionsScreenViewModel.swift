@@ -62,7 +62,7 @@ class RoomChangePermissionsScreenViewModel: RoomChangePermissionsScreenViewModel
         var changes = RoomPowerLevelChanges()
         let changedSettings = state.bindings.settings.filter { state.currentPermissions[keyPath: $0.keyPath] != $0.value }
         for setting in changedSettings {
-            changes[keyPath: setting.rustKeyPath] = setting.value.rustPowerLevel
+            changes[keyPath: setting.rustKeyPath] = setting.value.powerLevelValue
         }
         
         switch await roomProxy.applyPowerLevelChanges(changes) {

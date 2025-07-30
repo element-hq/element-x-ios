@@ -95,7 +95,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         // Note: Ignore the first value as the publisher is backed by a current value subject.
         let infoTask = Task { await roomProxy.infoPublisher.dropFirst().values.first { _ in true } }
         
-        switch await roomProxy.updatePowerLevelsForUsers([(userID: roomProxy.ownUserID, powerLevel: role.rustPowerLevel)]) {
+        switch await roomProxy.updatePowerLevelsForUsers([(userID: roomProxy.ownUserID, powerLevel: role.powerLevelValue)]) {
         case .success:
             _ = await infoTask.value
             await roomProxy.updateMembers()

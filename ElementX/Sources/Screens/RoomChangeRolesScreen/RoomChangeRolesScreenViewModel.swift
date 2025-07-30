@@ -86,7 +86,8 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
             let memberDetails = RoomMemberDetails(withProxy: member)
             
             switch member.role {
-            case .administrator:
+            // TODO: Create a owner list
+            case .administrator, .creator:
                 administrators.append(memberDetails)
             case .moderator:
                 moderators.append(memberDetails)
@@ -139,7 +140,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
             hideSavingIndicator()
         }
         
-        let promotingUpdates = state.membersToPromote.map { ($0.id, state.mode.rustPowerLevel) }
+        let promotingUpdates = state.membersToPromote.map { ($0.id, state.mode.powerLevelValue) }
         let demotingUpdates = state.membersToDemote.map { ($0.id, Int64(0)) }
         
         // A task we can await until the room's info gets modified with the new power levels.

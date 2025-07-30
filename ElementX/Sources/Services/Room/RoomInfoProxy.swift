@@ -12,7 +12,7 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
     let roomInfo: RoomInfo
     
     var id: String { roomInfo.id }
-    var creator: String? { roomInfo.creator }
+    var creators: [String] { roomInfo.creators ?? [] }
     var displayName: String? { roomInfo.displayName }
     var rawName: String? { roomInfo.rawName }
     var topic: String? { roomInfo.topic }

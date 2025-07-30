@@ -26,7 +26,7 @@ protocol BaseRoomInfoProxyProtocol {
 // sourcery: AutoMockable
 protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var id: String { get }
-    var creator: String? { get }
+    var creators: [String] { get }
     var displayName: String? { get }
     var rawName: String? { get }
     var topic: String? { get }

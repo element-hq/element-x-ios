@@ -71,22 +71,27 @@ struct RoomPermissions {
 extension RoomPermissions {
     /// Create permissions from the room's power levels.
     init(powerLevels: RoomPowerLevelsValues) {
-        ban = RoomMemberDetails.Role(rustPowerLevel: powerLevels.ban)
-        invite = RoomMemberDetails.Role(rustPowerLevel: powerLevels.invite)
-        kick = RoomMemberDetails.Role(rustPowerLevel: powerLevels.kick)
-        redact = RoomMemberDetails.Role(rustPowerLevel: powerLevels.redact)
-        eventsDefault = RoomMemberDetails.Role(rustPowerLevel: powerLevels.eventsDefault)
-        stateDefault = RoomMemberDetails.Role(rustPowerLevel: powerLevels.stateDefault)
-        usersDefault = RoomMemberDetails.Role(rustPowerLevel: powerLevels.usersDefault)
-        roomName = RoomMemberDetails.Role(rustPowerLevel: powerLevels.roomName)
-        roomAvatar = RoomMemberDetails.Role(rustPowerLevel: powerLevels.roomAvatar)
-        roomTopic = RoomMemberDetails.Role(rustPowerLevel: powerLevels.roomTopic)
+        ban = RoomMemberDetails.Role(powerLevelValue: powerLevels.ban)
+        invite = RoomMemberDetails.Role(powerLevelValue: powerLevels.invite)
+        kick = RoomMemberDetails.Role(powerLevelValue: powerLevels.kick)
+        redact = RoomMemberDetails.Role(powerLevelValue: powerLevels.redact)
+        eventsDefault = RoomMemberDetails.Role(powerLevelValue: powerLevels.eventsDefault)
+        stateDefault = RoomMemberDetails.Role(powerLevelValue: powerLevels.stateDefault)
+        usersDefault = RoomMemberDetails.Role(powerLevelValue: powerLevels.usersDefault)
+        roomName = RoomMemberDetails.Role(powerLevelValue: powerLevels.roomName)
+        roomAvatar = RoomMemberDetails.Role(powerLevelValue: powerLevels.roomAvatar)
+        roomTopic = RoomMemberDetails.Role(powerLevelValue: powerLevels.roomTopic)
     }
 }
 
 extension RoomMemberDetails.Role {
-    init(rustPowerLevel: Int64) {
-        self.init(suggestedRoleForPowerLevel(powerLevel: rustPowerLevel))
+    init(powerLevelValue: Int64) {
+        do {
+            try self.init(suggestedRoleForPowerLevel(powerLevel: .value(value: powerLevelValue)))
+        } catch {
+            MXLog.error("Falied to convert power level value to role: \(error)")
+            self.init(.user)
+        }
     }
     
     var rustRole: RoomMemberRole {
@@ -100,7 +105,20 @@ extension RoomMemberDetails.Role {
         }
     }
     
-    var rustPowerLevel: Int64 {
-        suggestedPowerLevelForRole(role: rustRole)
+    /// To be used when setting the power level of a user to get the suggested equivalent power level value for that specific role
+    /// NOTE: Do not use for comparison, use the true power level instead.
+    var powerLevelValue: Int64 {
+        do {
+            switch try suggestedPowerLevelForRole(role: rustRole) {
+            case .infinite:
+                // Would be better if the SDK would return this, maybe a `suggestedPowerLevelValueForRole` function would solve the problem
+                return 150
+            case .value(let value):
+                return value
+            }
+        } catch {
+            MXLog.error("Falied to convert role to power level value: \(error)")
+            return 0
+        }
     }
 }

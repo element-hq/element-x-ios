@@ -74,7 +74,7 @@ struct ManageRoomMemberSheetView: View {
 struct ManageRoomMemberSheetView_Previews: PreviewProvider, TestablePreview {
     static let allActionsViewModel = ManageRoomMemberSheetViewModel.mock()
     
-    static let allActionsDisabledViewModel = ManageRoomMemberSheetViewModel.mock(powerLevel: 0)
+    static let allActionsDisabledViewModel = ManageRoomMemberSheetViewModel.mock(powerLevel: .init(value: 0))
     
     static let kickOnlyViewModel = ManageRoomMemberSheetViewModel.mock(canBan: false)
     
@@ -100,7 +100,7 @@ private extension ManageRoomMemberSheetViewModel {
     static func mock(canKick: Bool = true,
                      canBan: Bool = true,
                      memberIsBanned: Bool = false,
-                     powerLevel: Int = 100) -> ManageRoomMemberSheetViewModel {
+                     powerLevel: RoomPowerLevel = .init(value: 100)) -> ManageRoomMemberSheetViewModel {
         let member = if memberIsBanned {
             RoomMemberDetails(withProxy: RoomMemberProxyMock.mockBanned[0])
         } else {

@@ -23,7 +23,7 @@ protocol RoomMemberProxyProtocol: AnyObject {
     
     var isIgnored: Bool { get }
     
-    var powerLevel: Int { get }
+    var powerLevel: RoomPowerLevel { get }
     
     var role: RoomMemberRole { get }
 }
