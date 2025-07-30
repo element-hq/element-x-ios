@@ -39,7 +39,7 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         case .single:
             1
         case .multiple:
-            5
+            10
         }
         
         let pickerViewController = PHPickerViewController(configuration: configuration)

@@ -70,7 +70,7 @@ struct DocumentPicker: UIViewControllerRepresentable {
             }
             
             var selectedURLs = [URL]()
-            for url in urls.prefix(5) {
+            for url in urls.prefix(10) {
                 do {
                     _ = url.startAccessingSecurityScopedResource()
                     let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: url)
