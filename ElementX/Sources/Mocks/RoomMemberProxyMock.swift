@@ -120,6 +120,14 @@ extension RoomMemberProxyMock {
                                         role: .administrator))
     }
     
+    static var mockCreator: RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@creator:matrix.org",
+                                        displayName: "God",
+                                        membership: .join,
+                                        powerLevel: .infinite,
+                                        role: .creator))
+    }
+    
     static var mockModerator: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@mod:matrix.org",
                                         displayName: "Merlin",

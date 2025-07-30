@@ -64,7 +64,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         case .demoteMember(let member):
             demoteMember(member)
         case .save:
-            if state.mode == .administrator, !state.membersToPromote.isEmpty {
+            if state.mode.isAdminOrHigher, !state.membersToPromote.isEmpty {
                 showPromotionWarning()
             } else {
                 Task { await save() }

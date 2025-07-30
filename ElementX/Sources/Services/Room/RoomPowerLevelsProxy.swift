@@ -9,13 +9,15 @@ import MatrixRustSDK
 
 struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
     private let powerLevels: RoomPowerLevels
+    private let creators: [String]
     
-    init?(_ powerLevels: RoomPowerLevels?) {
+    init?(_ powerLevels: RoomPowerLevels?, creators: [String]) {
         guard let powerLevels else {
             return nil
         }
         
         self.powerLevels = powerLevels
+        self.creators = creators
     }
     
     var values: RoomPowerLevelsValues {
@@ -28,7 +30,15 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
     
     func suggestedRole(forUser userID: String) -> RoomMemberRole {
         do {
+            guard !creators.contains(userID) else {
+                return .creator
+            }
+            
             let powerLevelValue = powerLevels.userPowerLevels()[userID] ?? values.usersDefault
+            // Also this sould probably be handled through the SDK
+            guard powerLevelValue < 150 else {
+                return .creator
+            }
             return try suggestedRoleForPowerLevel(powerLevel: .value(value: powerLevelValue))
         } catch {
             MXLog.error("Falied to get suggested role for user: \(error)")

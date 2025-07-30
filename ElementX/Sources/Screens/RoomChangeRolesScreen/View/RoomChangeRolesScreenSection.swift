@@ -24,7 +24,7 @@ struct RoomChangeRolesScreenSection: View {
                                              isSelected: isMemberSelected(member)) {
                         context.send(viewAction: .toggleMember(member))
                     }
-                    .disabled(member.role == .administrator)
+                    .disabled(member.role.isAdminOrHigher)
                 }
             } header: {
                 Text(title)
@@ -40,6 +40,6 @@ struct RoomChangeRolesScreenSection: View {
     
     private func isMemberSelected(_ member: RoomMemberDetails) -> Bool {
         // We always show administrators as selected, even on the moderators screen.
-        member.role == .administrator || context.viewState.isMemberSelected(member)
+        member.role.isAdminOrHigher || context.viewState.isMemberSelected(member)
     }
 }

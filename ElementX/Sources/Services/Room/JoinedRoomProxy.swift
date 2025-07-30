@@ -556,7 +556,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func powerLevels() async -> Result<RoomPowerLevelsProxyProtocol?, RoomProxyError> {
         do {
-            return try await .success(RoomPowerLevelsProxy(room.getPowerLevels()))
+            return try await .success(RoomPowerLevelsProxy(room.getPowerLevels(), creators: infoSubject.value.creators))
         } catch {
             MXLog.error("Failed building the current power level settings: \(error)")
             return .failure(.sdkError(error))

@@ -86,6 +86,12 @@ extension RoomPermissions {
 
 extension RoomMemberDetails.Role {
     init(powerLevelValue: Int64) {
+        // Also this is not great, and should be handled by a `suggestedRoleForPowerLevelValue` function from the SDK
+        guard powerLevelValue < 150 else {
+            self.init(.creator)
+            return
+        }
+        
         do {
             try self.init(suggestedRoleForPowerLevel(powerLevel: .value(value: powerLevelValue)))
         } catch {
@@ -96,6 +102,8 @@ extension RoomMemberDetails.Role {
     
     var rustRole: RoomMemberRole {
         switch self {
+        case .creator:
+            .creator
         case .administrator:
             .administrator
         case .moderator:
@@ -108,10 +116,15 @@ extension RoomMemberDetails.Role {
     /// To be used when setting the power level of a user to get the suggested equivalent power level value for that specific role
     /// NOTE: Do not use for comparison, use the true power level instead.
     var powerLevelValue: Int64 {
+        guard self != .creator else {
+            // Would be better if the SDK would return this, maybe a `suggestedPowerLevelValueForRole` function would solve the problem
+            return 150
+        }
+        
         do {
             switch try suggestedPowerLevelForRole(role: rustRole) {
             case .infinite:
-                // Would be better if the SDK would return this, maybe a `suggestedPowerLevelValueForRole` function would solve the problem
+                // As above
                 return 150
             case .value(let value):
                 return value

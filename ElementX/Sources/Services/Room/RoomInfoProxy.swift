@@ -52,7 +52,7 @@ struct RoomInfoProxy: RoomInfoProxyProtocol {
     var joinRule: JoinRule? { roomInfo.joinRule }
     var historyVisibility: RoomHistoryVisibility { roomInfo.historyVisibility }
     
-    var powerLevels: RoomPowerLevelsProxyProtocol? { RoomPowerLevelsProxy(roomInfo.powerLevels) }
+    var powerLevels: RoomPowerLevelsProxyProtocol? { RoomPowerLevelsProxy(roomInfo.powerLevels, creators: creators) }
 }
 
 struct RoomPreviewInfoProxy: BaseRoomInfoProxyProtocol {

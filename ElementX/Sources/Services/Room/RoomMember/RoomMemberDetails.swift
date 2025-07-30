@@ -19,7 +19,7 @@ struct RoomMemberDetails: Identifiable, Hashable {
     var isBanned: Bool
     var isActive: Bool
         
-    enum Role { case administrator, moderator, user }
+    enum Role { case creator, administrator, moderator, user }
     let role: Role
     let powerLevel: RoomPowerLevel
     
@@ -47,10 +47,30 @@ extension RoomMemberDetails {
 extension RoomMemberDetails.Role {
     init(_ role: RoomMemberRole) {
         self = switch role {
-        // TODO: Implement creator role
-        case .creator, .administrator: .administrator
+        case .creator: .creator
+        case .administrator: .administrator
         case .moderator: .moderator
         case .user: .user
+        }
+    }
+    
+    var isAdminOrHigher: Bool {
+        switch self {
+        case .administrator, .creator:
+            return true
+        case .moderator, .user:
+            return false
+        }
+    }
+}
+
+extension RoomMemberRole {
+    var isAdminOrHigher: Bool {
+        switch self {
+        case .administrator, .creator:
+            return true
+        case .moderator, .user:
+            return false
         }
     }
 }

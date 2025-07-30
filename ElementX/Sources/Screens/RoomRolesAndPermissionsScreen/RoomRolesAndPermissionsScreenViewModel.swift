@@ -84,7 +84,8 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
     // MARK: - Members
     
     private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
-        state.administratorCount = members.filter { $0.role == .administrator && $0.isActive }.count
+        // TODO: Will probably be changed when we implement the owners list
+        state.administratorCount = members.filter { $0.role.isAdminOrHigher && $0.isActive }.count
         state.moderatorCount = members.filter { $0.role == .moderator && $0.isActive }.count
     }
     
