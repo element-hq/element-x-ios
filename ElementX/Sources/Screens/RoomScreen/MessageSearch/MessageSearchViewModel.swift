@@ -6,8 +6,8 @@
 //
 
 import Combine
-import SwiftUI
 import MatrixRustSDK
+import SwiftUI
 
 typealias MessageSearchViewModelType = StateStoreViewModel<MessageSearchViewState, MessageSearchViewAction>
 
@@ -110,17 +110,14 @@ class MessageSearchViewModel: MessageSearchViewModelType {
             
             // Search in content or sender name
             if content.localizedCaseInsensitiveContains(query) ||
-               (sender.displayName?.localizedCaseInsensitiveContains(query) ?? false) ||
-               sender.id.localizedCaseInsensitiveContains(query) {
-                
-                let result = MessageSearchResult(
-                    id: eventItem.id.uniqueID.value,
-                    eventID: eventItem.id.eventID ?? "",
-                    sender: sender.displayName ?? sender.id,
-                    content: content,
-                    timestamp: eventItem.timestamp,
-                    roomID: roomProxy.id
-                )
+                (sender.displayName?.localizedCaseInsensitiveContains(query) ?? false) ||
+                sender.id.localizedCaseInsensitiveContains(query) {
+                let result = MessageSearchResult(id: eventItem.id.uniqueID.value,
+                                                 eventID: eventItem.id.eventID ?? "",
+                                                 sender: sender.displayName ?? sender.id,
+                                                 content: content,
+                                                 timestamp: eventItem.timestamp,
+                                                 roomID: roomProxy.id)
                 
                 searchResults.append(result)
             }
@@ -131,4 +128,4 @@ class MessageSearchViewModel: MessageSearchViewModelType {
         
         return searchResults
     }
-} 
+}

@@ -28,7 +28,7 @@ final class MessageSearchCoordinator: CoordinatorProtocol {
     
     init(parameters: MessageSearchCoordinatorParameters) {
         self.parameters = parameters
-        self.viewModel = MessageSearchViewModel(roomProxy: parameters.roomProxy)
+        viewModel = MessageSearchViewModel(roomProxy: parameters.roomProxy)
         
         viewModel.actionsPublisher
             .sink { [weak self] (action: MessageSearchViewModelAction) in
@@ -57,4 +57,4 @@ final class MessageSearchCoordinator: CoordinatorProtocol {
     }
     
     private var cancellables = Set<AnyCancellable>()
-} 
+}

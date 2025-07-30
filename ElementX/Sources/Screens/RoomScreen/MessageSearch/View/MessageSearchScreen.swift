@@ -19,9 +19,9 @@ struct MessageSearchScreen: View {
                 
                 if context.viewState.isLoading {
                     loadingView
-                } else if context.viewState.searchResults.isEmpty && context.viewState.hasSearched {
+                } else if context.viewState.searchResults.isEmpty, context.viewState.hasSearched {
                     emptyResultsView
-                } else if context.viewState.searchResults.isEmpty && !context.viewState.hasSearched {
+                } else if context.viewState.searchResults.isEmpty, !context.viewState.hasSearched {
                     placeholderView
                 } else {
                     searchResultsList
@@ -46,16 +46,14 @@ struct MessageSearchScreen: View {
                 .foregroundColor(.compound.textSecondary)
                 .font(.system(size: 16, weight: .medium))
             
-            TextField("Search messages in this room", text: Binding(
-                get: { context.viewState.bindings.searchQuery },
-                set: { newValue in
-                    context.send(viewAction: .searchQueryChanged(newValue))
-                }
-            ))
-            .textFieldStyle(.plain)
-            .autocorrectionDisabled()
-            .autocapitalization(.none)
-            .font(.compound.bodyMD)
+            TextField("Search messages in this room", text: Binding(get: { context.viewState.bindings.searchQuery },
+                                                                    set: { newValue in
+                                                                        context.send(viewAction: .searchQueryChanged(newValue))
+                                                                    }))
+                                                                    .textFieldStyle(.plain)
+                                                                    .autocorrectionDisabled()
+                                                                    .autocapitalization(.none)
+                                                                    .font(.compound.bodyMD)
             
             if !context.viewState.bindings.searchQuery.isEmpty {
                 Button {
@@ -156,10 +154,8 @@ struct MessageSearchScreen: View {
             }
             
             List(context.viewState.searchResults) { result in
-                MessageSearchResultRow(
-                    result: result,
-                    searchQuery: context.viewState.bindings.searchQuery
-                ) {
+                MessageSearchResultRow(result: result,
+                                       searchQuery: context.viewState.bindings.searchQuery) {
                     context.send(viewAction: .selectMessage(eventID: result.eventID))
                 }
             }
@@ -255,4 +251,4 @@ struct MessageSearchScreen_Previews: PreviewProvider {
         let roomProxy = JoinedRoomProxyMock(.init(id: "test_room"))
         return MessageSearchViewModel(roomProxy: roomProxy)
     }
-} 
+}

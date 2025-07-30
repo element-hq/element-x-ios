@@ -208,14 +208,14 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         actionsSubject.send(.presentMessageSearch)
     }
     
-    public func shareText(_ string: String) {
+    func shareText(_ string: String) {
         composerViewModel.process(timelineAction: .setMode(mode: .default)) // Make sure we're not e.g. replying.
         composerViewModel.process(timelineAction: .setText(plainText: string, htmlText: nil))
         composerViewModel.process(timelineAction: .setFocus)
     }
     
     // Alternative method name for testing
-    public func setSharedText(_ string: String) {
+    func setSharedText(_ string: String) {
         composerViewModel.process(timelineAction: .setMode(mode: .default))
         composerViewModel.process(timelineAction: .setText(plainText: string, htmlText: nil))
         composerViewModel.process(timelineAction: .setFocus)

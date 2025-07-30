@@ -39,4 +39,4 @@ struct MessageSearchResult: Identifiable, Equatable {
     let content: String
     let timestamp: Date
     let roomID: String
-} 
+}

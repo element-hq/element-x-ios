@@ -598,8 +598,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           entryPoint: .room))
                 case .presentMessageSearch:
                     stateMachine.tryEvent(.presentMessageSearch)
-                    
-                }
+                 }
             }
             .store(in: &cancellables)
         
