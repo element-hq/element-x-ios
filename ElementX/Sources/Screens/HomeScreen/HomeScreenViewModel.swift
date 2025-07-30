@@ -133,10 +133,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         setupRoomListSubscriptions()
         
         updateRooms()
-        
-        Task {
-            await checkSlidingSyncMigration()
-        }
     }
     
     // MARK: - Public
@@ -316,24 +312,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         state.rooms = rooms
-    }
-    
-    /// Check whether we can inform the user about potential migrations
-    /// or have him logout as his proxy is no longer available
-    private func checkSlidingSyncMigration() async {
-        guard userSession.clientProxy.needsSlidingSyncMigration else {
-            return
-        }
-        
-        // The proxy is no longer supported so a logout is needed.
-        // Delay setting the alert otherwise it automatically gets dismissed. Same as the crashed last run one
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.state.bindings.alertInfo = AlertInfo(id: UUID(),
-                                                      title: L10n.bannerMigrateToNativeSlidingSyncAppForceLogoutTitle(InfoPlistReader.main.bundleDisplayName),
-                                                      primaryButton: .init(title: L10n.bannerMigrateToNativeSlidingSyncAction) { [weak self] in
-                                                          self?.actionsSubject.send(.logoutWithoutConfirmation)
-                                                      })
-        }
     }
     
     private func markRoomAsFavourite(_ roomID: String, isFavourite: Bool) async {

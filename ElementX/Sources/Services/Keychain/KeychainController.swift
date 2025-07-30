@@ -54,8 +54,12 @@ class KeychainController: KeychainControllerProtocol {
             guard let tokenData = try restorationTokenKeychain.getData(username) else {
                 return nil
             }
-
+            
             return try JSONDecoder().decode(RestorationToken.self, from: tokenData)
+        } catch RestorationTokenError.slidingSyncProxyNotSupported {
+            MXLog.error("Unsupported user restore token (contains sliding sync proxy). Deleting token.")
+            removeRestorationTokenForUsername(username)
+            return nil
         } catch {
             MXLog.error("Failed retrieving user restore token")
             return nil
@@ -112,8 +116,7 @@ class KeychainController: KeychainControllerProtocol {
         let restorationToken = RestorationToken(session: session,
                                                 sessionDirectories: oldToken.sessionDirectories,
                                                 passphrase: oldToken.passphrase,
-                                                pusherNotificationClientIdentifier: oldToken.pusherNotificationClientIdentifier,
-                                                slidingSyncProxyURLString: oldToken.slidingSyncProxyURLString)
+                                                pusherNotificationClientIdentifier: oldToken.pusherNotificationClientIdentifier)
         setRestorationToken(restorationToken, forUsername: session.userId)
     }
     

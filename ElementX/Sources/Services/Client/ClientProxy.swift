@@ -150,7 +150,6 @@ class ClientProxy: ClientProxyProtocol {
     private let sendQueueStatusSubject = CurrentValueSubject<Bool, Never>(false)
     
     init(client: ClientProtocol,
-         needsSlidingSyncMigration: Bool,
          networkMonitor: NetworkMonitorProtocol,
          appSettings: AppSettings) async throws {
         self.client = client
@@ -164,8 +163,6 @@ class ClientProxy: ClientProxyProtocol {
         notificationSettings = await NotificationSettingsProxy(notificationSettings: client.getNotificationSettings())
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
-        
-        self.needsSlidingSyncMigration = needsSlidingSyncMigration
         
         let configuredAppService = try await ClientProxyServices(client: client,
                                                                  actionsSubject: actionsSubject,
@@ -271,7 +268,6 @@ class ClientProxy: ClientProxyProtocol {
         client.homeserver()
     }
     
-    let needsSlidingSyncMigration: Bool
     var slidingSyncVersion: SlidingSyncVersion {
         client.slidingSyncVersion()
     }
@@ -341,11 +337,6 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     func startSync() {
-        guard !needsSlidingSyncMigration else {
-            MXLog.warning("Ignoring request, this client needs to be migrated to native sliding sync.")
-            return
-        }
-        
         guard !hasEncounteredAuthError else {
             MXLog.warning("Ignoring request, this client has an unknown token.")
             return

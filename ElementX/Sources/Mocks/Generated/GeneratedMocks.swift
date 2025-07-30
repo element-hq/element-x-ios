@@ -2093,11 +2093,6 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingHomeserver = value }
     }
     var underlyingHomeserver: String!
-    var needsSlidingSyncMigration: Bool {
-        get { return underlyingNeedsSlidingSyncMigration }
-        set(value) { underlyingNeedsSlidingSyncMigration = value }
-    }
-    var underlyingNeedsSlidingSyncMigration: Bool!
     var slidingSyncVersion: SlidingSyncVersion {
         get { return underlyingSlidingSyncVersion }
         set(value) { underlyingSlidingSyncVersion = value }

@@ -11,6 +11,31 @@ import XCTest
 import MatrixRustSDK
 
 class RestorationTokenTests: XCTestCase {
+    func testDecodeTokenV1WithSlidingSyncProxy() throws {
+        // Given an encoded restoration token that contains a session with a sliding sync proxy.
+        let originalToken = RestorationTokenV1(session: SessionV1(accessToken: "1234",
+                                                                  refreshToken: nil,
+                                                                  userId: "@user:example.com",
+                                                                  deviceId: "D3V1C3",
+                                                                  homeserverUrl: "https://matrix.example.com",
+                                                                  oidcData: nil,
+                                                                  slidingSyncVersion: .proxy(url: "https://sync.example.com")))
+        let data = try JSONEncoder().encode(originalToken)
+        
+        // When decoding the data to the current restoration token format.
+        XCTAssertThrowsError(try JSONDecoder().decode(RestorationToken.self, from: data)) { error in
+            // Then an error should be thrown as it is no longer supported.
+            switch error {
+            case RestorationTokenError.slidingSyncProxyNotSupported:
+                break
+            default:
+                XCTFail("Unexpected error thrown: \(error)")
+            }
+        }
+    }
+    
+    /// Honestly not sure if this test is needed or not – it is quite possible that `RestorationTokenV1` was only encoded at a time
+    /// when the sliding sync proxy was the only option. But lets keep the test for completeness of the session directory migration coverage.
     func testDecodeFromTokenV1() throws {
         // Given an encoded restoration token in the original format that only contains a Session from the SDK.
         let originalToken = RestorationTokenV1(session: SessionV1(accessToken: "1234",
@@ -19,7 +44,7 @@ class RestorationTokenTests: XCTestCase {
                                                                   deviceId: "D3V1C3",
                                                                   homeserverUrl: "https://matrix.example.com",
                                                                   oidcData: nil,
-                                                                  slidingSyncVersion: .proxy(url: "https://sync.example.com")))
+                                                                  slidingSyncVersion: .native))
         let data = try JSONEncoder().encode(originalToken)
         
         // When decoding the data to the current restoration token format.
@@ -33,10 +58,6 @@ class RestorationTokenTests: XCTestCase {
                        "The session directory should match the original location set by the Rust SDK from our base directory.")
         XCTAssertEqual(decodedToken.sessionDirectories.cacheDirectory, .sessionCachesBaseDirectory.appending(component: "@user_example.com"),
                        "The cache directory should be derived from the session directory but in the caches directory.")
-        
-        XCTAssertEqual(decodedToken.slidingSyncProxyURLString, "https://sync.example.com",
-                       "The original sliding sync URL should be preserved in order to trigger the migration prompt.")
-        XCTAssertTrue(decodedToken.needsSlidingSyncMigration, "The migration flag should be set to true.")
     }
     
     func testDecodeFromTokenV4() throws {
@@ -48,7 +69,7 @@ class RestorationTokenTests: XCTestCase {
                                                                   deviceId: "D3V1C3",
                                                                   homeserverUrl: "https://matrix.example.com",
                                                                   oidcData: "data-from-mas",
-                                                                  slidingSyncVersion: .proxy(url: "https://sync.example.com")),
+                                                                  slidingSyncVersion: .native),
                                                sessionDirectory: .sessionsBaseDirectory.appending(component: sessionDirectoryName),
                                                passphrase: "passphrase",
                                                pusherNotificationClientIdentifier: "pusher-identifier")
@@ -66,10 +87,6 @@ class RestorationTokenTests: XCTestCase {
                        "The session directory should not be changed.")
         XCTAssertEqual(decodedToken.sessionDirectories.cacheDirectory, .sessionCachesBaseDirectory.appending(component: sessionDirectoryName),
                        "The cache directory should be derived from the session directory but in the caches directory.")
-        
-        XCTAssertEqual(decodedToken.slidingSyncProxyURLString, "https://sync.example.com",
-                       "The original sliding sync URL should be preserved in order to trigger the migration prompt.")
-        XCTAssertTrue(decodedToken.needsSlidingSyncMigration, "The migration flag should be set to true.")
     }
     
     func testDecodeFromTokenV5() throws {
@@ -100,9 +117,6 @@ class RestorationTokenTests: XCTestCase {
                        "The session directory should not be changed.")
         XCTAssertEqual(decodedToken.sessionDirectories.cacheDirectory, originalToken.cacheDirectory,
                        "The cache directory should not be changed.")
-        
-        XCTAssertNil(decodedToken.slidingSyncProxyURLString, "No sliding sync proxy URL should be decoded for native sliding sync.")
-        XCTAssertFalse(decodedToken.needsSlidingSyncMigration, "The migration flag should not be set.")
     }
     
     func testDecodeFromCurrentToken() throws {
@@ -116,8 +130,7 @@ class RestorationTokenTests: XCTestCase {
                                                               slidingSyncVersion: .native),
                                              sessionDirectories: .init(),
                                              passphrase: "passphrase",
-                                             pusherNotificationClientIdentifier: "pusher-identifier",
-                                             slidingSyncProxyURLString: nil)
+                                             pusherNotificationClientIdentifier: "pusher-identifier")
         let data = try JSONEncoder().encode(originalToken)
         
         // When decoding the data.

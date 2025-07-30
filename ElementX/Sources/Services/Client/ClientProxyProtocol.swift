@@ -86,9 +86,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var homeserver: String { get }
     
-    // TODO: This is a temporary value, in the future we should throw a migration error
-    // when decoding a session that contains a sliding sync proxy URL instead of restoring it.
-    var needsSlidingSyncMigration: Bool { get }
     var slidingSyncVersion: SlidingSyncVersion { get }
     
     var canDeactivateAccount: Bool { get }
