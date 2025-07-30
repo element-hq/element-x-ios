@@ -1,4 +1,4 @@
-project: ElementX.xcodeproj
+project: SevenChat.xcodeproj
 schemes:
 - ElementX
 - UnitTests

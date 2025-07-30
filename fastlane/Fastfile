@@ -216,7 +216,7 @@ end
 
 lane :prepare_next_release do
   target_file_path = "../project.yml"
-  xcode_project_file_path = "../ElementX.xcodeproj"
+  xcode_project_file_path = "../SevenChat.xcodeproj"
 
   data = YAML.load_file target_file_path
   current_version = data["settings"]["MARKETING_VERSION"]

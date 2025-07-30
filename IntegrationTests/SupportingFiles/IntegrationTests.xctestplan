@@ -12,7 +12,7 @@
     "codeCoverage" : {
       "targets" : [
         {
-          "containerPath" : "container:ElementX.xcodeproj",
+          "containerPath" : "container:SevenChat.xcodeproj",
           "identifier" : "C0FAEB81CFD9776CD78CE489",
           "name" : "ElementX"
         }
@@ -33,7 +33,7 @@
       }
     ],
     "targetForVariableExpansion" : {
-      "containerPath" : "container:ElementX.xcodeproj",
+      "containerPath" : "container:SevenChat.xcodeproj",
       "identifier" : "D3DB351B7FBE0F49649171FC",
       "name" : "IntegrationTests"
     }
@@ -41,7 +41,7 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:ElementX.xcodeproj",
+        "containerPath" : "container:SevenChat.xcodeproj",
         "identifier" : "D3DB351B7FBE0F49649171FC",
         "name" : "IntegrationTests"
       }

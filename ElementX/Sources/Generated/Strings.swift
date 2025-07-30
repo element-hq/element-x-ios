@@ -10,73 +10,73 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum L10n {
-  /// Add reaction: %1$@
+  /// Thêm phản ứng: %1$@
   internal static func a11yAddReaction(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_add_reaction", String(describing: p1))
   }
   /// Avatar
   internal static var a11yAvatar: String { return L10n.tr("Localizable", "a11y_avatar") }
-  /// Delete
+  /// Xóa
   internal static var a11yDelete: String { return L10n.tr("Localizable", "a11y_delete") }
   /// Plural format key: "%#@COUNT@"
   internal static func a11yDigitsEntered(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_digits_entered", p1)
   }
-  /// Edit avatar
+  /// Chỉnh sửa avatar
   internal static var a11yEditAvatar: String { return L10n.tr("Localizable", "a11y_edit_avatar") }
-  /// The full address will be %1$@
+  /// Địa chỉ đầy đủ sẽ là %1$@
   internal static func a11yEditRoomAddressHint(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_edit_room_address_hint", String(describing: p1))
   }
-  /// Hide password
+  /// Ẩn mật khẩu
   internal static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
-  /// Join call
+  /// Tham gia cuộc gọi
   internal static var a11yJoinCall: String { return L10n.tr("Localizable", "a11y_join_call") }
-  /// Jump to bottom
+  /// Nhảy xuống dưới
   internal static var a11yJumpToBottom: String { return L10n.tr("Localizable", "a11y_jump_to_bottom") }
-  /// Mentions only
+  /// Chỉ nhắc đến
   internal static var a11yNotificationsMentionsOnly: String { return L10n.tr("Localizable", "a11y_notifications_mentions_only") }
-  /// Muted
+  /// Đã tắt tiếng
   internal static var a11yNotificationsMuted: String { return L10n.tr("Localizable", "a11y_notifications_muted") }
-  /// New mentions
+  /// Nhắc đến mới
   internal static var a11yNotificationsNewMentions: String { return L10n.tr("Localizable", "a11y_notifications_new_mentions") }
-  /// New messages
+  /// Tin nhắn mới
   internal static var a11yNotificationsNewMessages: String { return L10n.tr("Localizable", "a11y_notifications_new_messages") }
-  /// Ongoing call
+  /// Cuộc gọi đang diễn ra
   internal static var a11yNotificationsOngoingCall: String { return L10n.tr("Localizable", "a11y_notifications_ongoing_call") }
-  /// Page %1$d
+  /// Trang %1$d
   internal static func a11yPageN(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_page_n", p1)
   }
-  /// Pause
+  /// Tạm dừng
   internal static var a11yPause: String { return L10n.tr("Localizable", "a11y_pause") }
-  /// Voice message, duration: %1$@, current position: %2$@
+  /// Tin nhắn thoại, thời lượng: %1$@, vị trí hiện tại: %2$@
   internal static func a11yPausedVoiceMessage(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "a11y_paused_voice_message", String(describing: p1), String(describing: p2))
   }
-  /// PIN field
+  /// Trường PIN
   internal static var a11yPinField: String { return L10n.tr("Localizable", "a11y_pin_field") }
-  /// Play
+  /// Phát
   internal static var a11yPlay: String { return L10n.tr("Localizable", "a11y_play") }
-  /// Poll
+  /// Bình chọn
   internal static var a11yPoll: String { return L10n.tr("Localizable", "a11y_poll") }
-  /// Ended poll
+  /// Kết thúc bình chọn
   internal static var a11yPollEnd: String { return L10n.tr("Localizable", "a11y_poll_end") }
   /// Plural format key: "%#@COUNT@"
   internal static func a11yPollsPercentOfTotal(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_polls_percent_of_total", p1)
   }
-  /// Will remove previous selection
+  /// Sẽ xóa lựa chọn trước đó
   internal static var a11yPollsWillRemoveSelection: String { return L10n.tr("Localizable", "a11y_polls_will_remove_selection") }
-  /// This is the winning answer
+  /// Đây là câu trả lời thắng cuộc
   internal static var a11yPollsWinningAnswer: String { return L10n.tr("Localizable", "a11y_polls_winning_answer") }
-  /// React with %1$@
+  /// Phản ứng bằng %1$@
   internal static func a11yReactWith(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_react_with", String(describing: p1))
   }
-  /// React with other emojis
+  /// Phản ứng bằng emoji khác
   internal static var a11yReactWithOtherEmojis: String { return L10n.tr("Localizable", "a11y_react_with_other_emojis") }
-  /// Read by %1$@ and %2$@
+  /// Đã đọc bởi %1$@ và %2$@
   internal static func a11yReadReceiptsMultiple(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "a11y_read_receipts_multiple", String(describing: p1), String(describing: p2))
   }
@@ -84,391 +84,391 @@ internal enum L10n {
   internal static func a11yReadReceiptsMultipleWithOthers(_ p1: Int) -> String {
     return L10n.tr("Localizable", "a11y_read_receipts_multiple_with_others", p1)
   }
-  /// Read by %1$@
+  /// Đã đọc bởi %1$@
   internal static func a11yReadReceiptsSingle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_read_receipts_single", String(describing: p1))
   }
-  /// Tap to show all
+  /// Chạm để hiển thị tất cả
   internal static var a11yReadReceiptsTapToShowAll: String { return L10n.tr("Localizable", "a11y_read_receipts_tap_to_show_all") }
-  /// Remove reaction: %1$@
+  /// Xóa phản ứng: %1$@
   internal static func a11yRemoveReaction(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_remove_reaction", String(describing: p1))
   }
-  /// Remove reaction with %1$@
+  /// Xóa phản ứng bằng %1$@
   internal static func a11yRemoveReactionWith(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_remove_reaction_with", String(describing: p1))
   }
-  /// Send files
+  /// Gửi tệp
   internal static var a11ySendFiles: String { return L10n.tr("Localizable", "a11y_send_files") }
-  /// Show password
+  /// Hiển thị mật khẩu
   internal static var a11yShowPassword: String { return L10n.tr("Localizable", "a11y_show_password") }
-  /// Start a call
+  /// Bắt đầu cuộc gọi
   internal static var a11yStartCall: String { return L10n.tr("Localizable", "a11y_start_call") }
-  /// Time limited action required
+  /// Cần hành động trong thời gian giới hạn
   internal static var a11yTimeLimitedActionRequired: String { return L10n.tr("Localizable", "a11y_time_limited_action_required") }
-  /// Tombstoned room
+  /// Phòng đã bị hủy
   internal static var a11yTombstonedRoom: String { return L10n.tr("Localizable", "a11y_tombstoned_room") }
-  /// User menu
+  /// Menu người dùng
   internal static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
-  /// View avatar
+  /// Xem avatar
   internal static var a11yViewAvatar: String { return L10n.tr("Localizable", "a11y_view_avatar") }
-  /// View details
+  /// Xem chi tiết
   internal static var a11yViewDetails: String { return L10n.tr("Localizable", "a11y_view_details") }
-  /// Voice message, duration: %1$@
+  /// Tin nhắn thoại, thời lượng: %1$@
   internal static func a11yVoiceMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_voice_message", String(describing: p1))
   }
-  /// Record voice message.
+  /// Ghi âm tin nhắn thoại.
   internal static var a11yVoiceMessageRecord: String { return L10n.tr("Localizable", "a11y_voice_message_record") }
-  /// Stop recording
+  /// Dừng ghi âm
   internal static var a11yVoiceMessageStopRecording: String { return L10n.tr("Localizable", "a11y_voice_message_stop_recording") }
-  /// Accept
+  /// Chấp nhận
   internal static var actionAccept: String { return L10n.tr("Localizable", "action_accept") }
-  /// Add caption
+  /// Thêm chú thích
   internal static var actionAddCaption: String { return L10n.tr("Localizable", "action_add_caption") }
-  /// Add to timeline
+  /// Thêm vào dòng thời gian
   internal static var actionAddToTimeline: String { return L10n.tr("Localizable", "action_add_to_timeline") }
-  /// Back
+  /// Quay lại
   internal static var actionBack: String { return L10n.tr("Localizable", "action_back") }
-  /// Call
+  /// Gọi
   internal static var actionCall: String { return L10n.tr("Localizable", "action_call") }
-  /// Cancel
+  /// Hủy
   internal static var actionCancel: String { return L10n.tr("Localizable", "action_cancel") }
-  /// Cancel for now
+  /// Hủy bây giờ
   internal static var actionCancelForNow: String { return L10n.tr("Localizable", "action_cancel_for_now") }
-  /// Choose photo
+  /// Chọn ảnh
   internal static var actionChoosePhoto: String { return L10n.tr("Localizable", "action_choose_photo") }
-  /// Clear
+  /// Xóa
   internal static var actionClear: String { return L10n.tr("Localizable", "action_clear") }
-  /// Close
+  /// Đóng
   internal static var actionClose: String { return L10n.tr("Localizable", "action_close") }
-  /// Complete verification
+  /// Hoàn thành xác minh
   internal static var actionCompleteVerification: String { return L10n.tr("Localizable", "action_complete_verification") }
-  /// Confirm
+  /// Xác nhận
   internal static var actionConfirm: String { return L10n.tr("Localizable", "action_confirm") }
-  /// Confirm password
+  /// Xác nhận mật khẩu
   internal static var actionConfirmPassword: String { return L10n.tr("Localizable", "action_confirm_password") }
-  /// Continue
+  /// Tiếp tục
   internal static var actionContinue: String { return L10n.tr("Localizable", "action_continue") }
-  /// Copy
+  /// Sao chép
   internal static var actionCopy: String { return L10n.tr("Localizable", "action_copy") }
-  /// Copy caption
+  /// Sao chép chú thích
   internal static var actionCopyCaption: String { return L10n.tr("Localizable", "action_copy_caption") }
-  /// Copy link
+  /// Sao chép liên kết
   internal static var actionCopyLink: String { return L10n.tr("Localizable", "action_copy_link") }
-  /// Copy link to message
+  /// Sao chép liên kết đến tin nhắn
   internal static var actionCopyLinkToMessage: String { return L10n.tr("Localizable", "action_copy_link_to_message") }
-  /// Copy text
+  /// Sao chép văn bản
   internal static var actionCopyText: String { return L10n.tr("Localizable", "action_copy_text") }
-  /// Create
+  /// Tạo
   internal static var actionCreate: String { return L10n.tr("Localizable", "action_create") }
-  /// Create a room
+  /// Tạo phòng
   internal static var actionCreateARoom: String { return L10n.tr("Localizable", "action_create_a_room") }
-  /// Deactivate
+  /// Vô hiệu hóa
   internal static var actionDeactivate: String { return L10n.tr("Localizable", "action_deactivate") }
-  /// Deactivate account
+  /// Vô hiệu hóa tài khoản
   internal static var actionDeactivateAccount: String { return L10n.tr("Localizable", "action_deactivate_account") }
-  /// Decline
+  /// Từ chối
   internal static var actionDecline: String { return L10n.tr("Localizable", "action_decline") }
-  /// Decline and block
+  /// Từ chối và chặn
   internal static var actionDeclineAndBlock: String { return L10n.tr("Localizable", "action_decline_and_block") }
-  /// Delete Poll
+  /// Xóa bình chọn
   internal static var actionDeletePoll: String { return L10n.tr("Localizable", "action_delete_poll") }
-  /// Disable
+  /// Tắt
   internal static var actionDisable: String { return L10n.tr("Localizable", "action_disable") }
-  /// Discard
+  /// Bỏ
   internal static var actionDiscard: String { return L10n.tr("Localizable", "action_discard") }
-  /// Dismiss
+  /// Loại bỏ
   internal static var actionDismiss: String { return L10n.tr("Localizable", "action_dismiss") }
-  /// Done
+  /// Xong
   internal static var actionDone: String { return L10n.tr("Localizable", "action_done") }
-  /// Edit
+  /// Chỉnh sửa
   internal static var actionEdit: String { return L10n.tr("Localizable", "action_edit") }
-  /// Edit caption
+  /// Chỉnh sửa chú thích
   internal static var actionEditCaption: String { return L10n.tr("Localizable", "action_edit_caption") }
-  /// Edit poll
+  /// Chỉnh sửa bình chọn
   internal static var actionEditPoll: String { return L10n.tr("Localizable", "action_edit_poll") }
-  /// Enable
+  /// Bật
   internal static var actionEnable: String { return L10n.tr("Localizable", "action_enable") }
-  /// End poll
+  /// Kết thúc bình chọn
   internal static var actionEndPoll: String { return L10n.tr("Localizable", "action_end_poll") }
-  /// Enter PIN
+  /// Nhập PIN
   internal static var actionEnterPin: String { return L10n.tr("Localizable", "action_enter_pin") }
-  /// Forgot password?
+  /// Quên mật khẩu?
   internal static var actionForgotPassword: String { return L10n.tr("Localizable", "action_forgot_password") }
-  /// Forward
+  /// Chuyển tiếp
   internal static var actionForward: String { return L10n.tr("Localizable", "action_forward") }
-  /// Go back
+  /// Quay lại
   internal static var actionGoBack: String { return L10n.tr("Localizable", "action_go_back") }
-  /// Ignore
+  /// Bỏ qua
   internal static var actionIgnore: String { return L10n.tr("Localizable", "action_ignore") }
-  /// Invite
+  /// Mời
   internal static var actionInvite: String { return L10n.tr("Localizable", "action_invite") }
-  /// Invite people
+  /// Mời mọi người
   internal static var actionInviteFriends: String { return L10n.tr("Localizable", "action_invite_friends") }
-  /// Invite people to %1$@
+  /// Mời mọi người đến %1$@
   internal static func actionInviteFriendsToApp(_ p1: Any) -> String {
     return L10n.tr("Localizable", "action_invite_friends_to_app", String(describing: p1))
   }
-  /// Invite people to %1$@
+  /// Mời mọi người đến %1$@
   internal static func actionInvitePeopleToApp(_ p1: Any) -> String {
     return L10n.tr("Localizable", "action_invite_people_to_app", String(describing: p1))
   }
-  /// Invites
+  /// Danh sách lời mời
   internal static var actionInvitesList: String { return L10n.tr("Localizable", "action_invites_list") }
-  /// Join
+  /// Tham gia
   internal static var actionJoin: String { return L10n.tr("Localizable", "action_join") }
-  /// Learn more
+  /// Tìm hiểu thêm
   internal static var actionLearnMore: String { return L10n.tr("Localizable", "action_learn_more") }
-  /// Leave
+  /// Rời
   internal static var actionLeave: String { return L10n.tr("Localizable", "action_leave") }
-  /// Leave conversation
+  /// Rời cuộc trò chuyện
   internal static var actionLeaveConversation: String { return L10n.tr("Localizable", "action_leave_conversation") }
-  /// Leave room
+  /// Rời phòng
   internal static var actionLeaveRoom: String { return L10n.tr("Localizable", "action_leave_room") }
-  /// Load more
+  /// Tải thêm
   internal static var actionLoadMore: String { return L10n.tr("Localizable", "action_load_more") }
-  /// Manage account
+  /// Quản lý tài khoản
   internal static var actionManageAccount: String { return L10n.tr("Localizable", "action_manage_account") }
-  /// Manage devices
+  /// Quản lý thiết bị
   internal static var actionManageDevices: String { return L10n.tr("Localizable", "action_manage_devices") }
-  /// Message
+  /// Tin nhắn
   internal static var actionMessage: String { return L10n.tr("Localizable", "action_message") }
-  /// Next
+  /// Tiếp theo
   internal static var actionNext: String { return L10n.tr("Localizable", "action_next") }
-  /// No
+  /// Không
   internal static var actionNo: String { return L10n.tr("Localizable", "action_no") }
-  /// Not now
+  /// Không phải bây giờ
   internal static var actionNotNow: String { return L10n.tr("Localizable", "action_not_now") }
   /// OK
   internal static var actionOk: String { return L10n.tr("Localizable", "action_ok") }
-  /// Settings
+  /// Cài đặt
   internal static var actionOpenSettings: String { return L10n.tr("Localizable", "action_open_settings") }
-  /// Open with
+  /// Mở bằng
   internal static var actionOpenWith: String { return L10n.tr("Localizable", "action_open_with") }
-  /// Pin
+  /// Ghim
   internal static var actionPin: String { return L10n.tr("Localizable", "action_pin") }
-  /// Quick reply
+  /// Trả lời nhanh
   internal static var actionQuickReply: String { return L10n.tr("Localizable", "action_quick_reply") }
-  /// Quote
+  /// Trích dẫn
   internal static var actionQuote: String { return L10n.tr("Localizable", "action_quote") }
-  /// React
+  /// Phản ứng
   internal static var actionReact: String { return L10n.tr("Localizable", "action_react") }
-  /// Reject
+  /// Từ chối
   internal static var actionReject: String { return L10n.tr("Localizable", "action_reject") }
-  /// Remove
+  /// Xóa
   internal static var actionRemove: String { return L10n.tr("Localizable", "action_remove") }
-  /// Remove caption
+  /// Xóa chú thích
   internal static var actionRemoveCaption: String { return L10n.tr("Localizable", "action_remove_caption") }
-  /// Remove message
+  /// Xóa tin nhắn
   internal static var actionRemoveMessage: String { return L10n.tr("Localizable", "action_remove_message") }
-  /// Reply
+  /// Trả lời
   internal static var actionReply: String { return L10n.tr("Localizable", "action_reply") }
-  /// Reply in thread
+  /// Trả lời trong chuỗi
   internal static var actionReplyInThread: String { return L10n.tr("Localizable", "action_reply_in_thread") }
-  /// Report
+  /// Báo cáo
   internal static var actionReport: String { return L10n.tr("Localizable", "action_report") }
-  /// Report bug
+  /// Báo cáo lỗi
   internal static var actionReportBug: String { return L10n.tr("Localizable", "action_report_bug") }
-  /// Report content
+  /// Báo cáo nội dung
   internal static var actionReportContent: String { return L10n.tr("Localizable", "action_report_content") }
-  /// Report conversation
+  /// Báo cáo cuộc trò chuyện
   internal static var actionReportDm: String { return L10n.tr("Localizable", "action_report_dm") }
-  /// Report room
+  /// Báo cáo phòng
   internal static var actionReportRoom: String { return L10n.tr("Localizable", "action_report_room") }
-  /// Reset
+  /// Đặt lại
   internal static var actionReset: String { return L10n.tr("Localizable", "action_reset") }
-  /// Reset identity
+  /// Đặt lại danh tính
   internal static var actionResetIdentity: String { return L10n.tr("Localizable", "action_reset_identity") }
-  /// Retry
+  /// Thử lại
   internal static var actionRetry: String { return L10n.tr("Localizable", "action_retry") }
-  /// Retry decryption
+  /// Thử giải mã lại
   internal static var actionRetryDecryption: String { return L10n.tr("Localizable", "action_retry_decryption") }
-  /// Save
+  /// Lưu
   internal static var actionSave: String { return L10n.tr("Localizable", "action_save") }
-  /// Search
+  /// Tìm kiếm
   internal static var actionSearch: String { return L10n.tr("Localizable", "action_search") }
-  /// Send
+  /// Gửi
   internal static var actionSend: String { return L10n.tr("Localizable", "action_send") }
-  /// Send message
+  /// Gửi tin nhắn
   internal static var actionSendMessage: String { return L10n.tr("Localizable", "action_send_message") }
-  /// Share
+  /// Chia sẻ
   internal static var actionShare: String { return L10n.tr("Localizable", "action_share") }
-  /// Share link
+  /// Chia sẻ liên kết
   internal static var actionShareLink: String { return L10n.tr("Localizable", "action_share_link") }
-  /// Show
+  /// Hiển thị
   internal static var actionShow: String { return L10n.tr("Localizable", "action_show") }
-  /// Sign in again
+  /// Đăng nhập lại
   internal static var actionSignInAgain: String { return L10n.tr("Localizable", "action_sign_in_again") }
-  /// Sign out
+  /// Đăng xuất
   internal static var actionSignout: String { return L10n.tr("Localizable", "action_signout") }
-  /// Sign out anyway
+  /// Đăng xuất dù sao
   internal static var actionSignoutAnyway: String { return L10n.tr("Localizable", "action_signout_anyway") }
-  /// Skip
+  /// Bỏ qua
   internal static var actionSkip: String { return L10n.tr("Localizable", "action_skip") }
-  /// Start
+  /// Bắt đầu
   internal static var actionStart: String { return L10n.tr("Localizable", "action_start") }
-  /// Start chat
+  /// Bắt đầu trò chuyện
   internal static var actionStartChat: String { return L10n.tr("Localizable", "action_start_chat") }
-  /// Start verification
+  /// Bắt đầu xác minh
   internal static var actionStartVerification: String { return L10n.tr("Localizable", "action_start_verification") }
-  /// Tap to load map
+  /// Chạm để tải bản đồ
   internal static var actionStaticMapLoad: String { return L10n.tr("Localizable", "action_static_map_load") }
-  /// Take photo
+  /// Chụp ảnh
   internal static var actionTakePhoto: String { return L10n.tr("Localizable", "action_take_photo") }
-  /// Tap for options
+  /// Chạm để xem tùy chọn
   internal static var actionTapForOptions: String { return L10n.tr("Localizable", "action_tap_for_options") }
-  /// Try again
+  /// Thử lại
   internal static var actionTryAgain: String { return L10n.tr("Localizable", "action_try_again") }
-  /// Unpin
+  /// Bỏ ghim
   internal static var actionUnpin: String { return L10n.tr("Localizable", "action_unpin") }
-  /// View in timeline
+  /// Xem trong dòng thời gian
   internal static var actionViewInTimeline: String { return L10n.tr("Localizable", "action_view_in_timeline") }
-  /// View source
+  /// Xem nguồn
   internal static var actionViewSource: String { return L10n.tr("Localizable", "action_view_source") }
-  /// Yes
+  /// Có
   internal static var actionYes: String { return L10n.tr("Localizable", "action_yes") }
-  /// Yes, try again
+  /// Có, thử lại
   internal static var actionYesTryAgain: String { return L10n.tr("Localizable", "action_yes_try_again") }
-  /// Log Out & Upgrade
+  /// Đăng xuất & nâng cấp
   internal static var bannerMigrateToNativeSlidingSyncAction: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_action") }
-  /// %1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.
+  /// %1$@ không còn hỗ trợ giao thức cũ. Vui lòng đăng xuất và đăng nhập lại để tiếp tục sử dụng ứng dụng.
   internal static func bannerMigrateToNativeSlidingSyncAppForceLogoutTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_app_force_logout_title", String(describing: p1))
   }
-  /// Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.
+  /// Máy chủ của bạn giờ hỗ trợ giao thức mới, nhanh hơn. Đăng xuất và đăng nhập lại để nâng cấp ngay. Làm điều này bây giờ sẽ giúp bạn tránh bị buộc đăng xuất khi giao thức cũ bị loại bỏ sau này.
   internal static var bannerMigrateToNativeSlidingSyncDescription: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_description") }
-  /// Your homeserver no longer supports the old protocol. Please log out and log back in to continue using the app.
+  /// Homeserver của bạn không còn hỗ trợ giao thức cũ. Vui lòng đăng xuất và đăng nhập lại để tiếp tục sử dụng ứng dụng.
   internal static var bannerMigrateToNativeSlidingSyncForceLogoutTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_force_logout_title") }
-  /// Upgrade available
+  /// Có bản nâng cấp
   internal static var bannerMigrateToNativeSlidingSyncTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_title") }
-  /// Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.
+  /// Khôi phục danh tính mã hóa và lịch sử tin nhắn bằng khóa khôi phục nếu bạn đã mất tất cả thiết bị hiện có.
   internal static var bannerSetUpRecoveryContent: String { return L10n.tr("Localizable", "banner_set_up_recovery_content") }
-  /// Set up recovery
+  /// Thiết lập khôi phục
   internal static var bannerSetUpRecoverySubmit: String { return L10n.tr("Localizable", "banner_set_up_recovery_submit") }
-  /// Set up recovery to protect your account
+  /// Thiết lập khôi phục để bảo vệ tài khoản
   internal static var bannerSetUpRecoveryTitle: String { return L10n.tr("Localizable", "banner_set_up_recovery_title") }
-  /// Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.
+  /// Element Call không hỗ trợ sử dụng thiết bị âm thanh Bluetooth trong phiên bản Android này. Vui lòng chọn thiết bị âm thanh khác.
   internal static var callInvalidAudioDeviceBluetoothDevicesDisabled: String { return L10n.tr("Localizable", "call_invalid_audio_device_bluetooth_devices_disabled") }
-  /// About
+  /// Giới thiệu
   internal static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
-  /// Acceptable use policy
+  /// Chính sách sử dụng chấp nhận được
   internal static var commonAcceptableUsePolicy: String { return L10n.tr("Localizable", "common_acceptable_use_policy") }
-  /// Adding caption
+  /// Đang thêm chú thích
   internal static var commonAddingCaption: String { return L10n.tr("Localizable", "common_adding_caption") }
-  /// Advanced settings
+  /// Cài đặt nâng cao
   internal static var commonAdvancedSettings: String { return L10n.tr("Localizable", "common_advanced_settings") }
-  /// an image
+  /// một hình ảnh
   internal static var commonAnImage: String { return L10n.tr("Localizable", "common_an_image") }
-  /// Analytics
+  /// Phân tích
   internal static var commonAnalytics: String { return L10n.tr("Localizable", "common_analytics") }
-  /// Appearance
+  /// Giao diện
   internal static var commonAppearance: String { return L10n.tr("Localizable", "common_appearance") }
-  /// Audio
+  /// Âm thanh
   internal static var commonAudio: String { return L10n.tr("Localizable", "common_audio") }
-  /// Blocked users
+  /// Người dùng bị chặn
   internal static var commonBlockedUsers: String { return L10n.tr("Localizable", "common_blocked_users") }
-  /// Bubbles
+  /// Bong bóng
   internal static var commonBubbles: String { return L10n.tr("Localizable", "common_bubbles") }
-  /// Call started
+  /// Cuộc gọi đã bắt đầu
   internal static var commonCallStarted: String { return L10n.tr("Localizable", "common_call_started") }
-  /// Chat backup
+  /// Sao lưu trò chuyện
   internal static var commonChatBackup: String { return L10n.tr("Localizable", "common_chat_backup") }
-  /// Copied to clipboard
+  /// Đã sao chép vào clipboard
   internal static var commonCopiedToClipboard: String { return L10n.tr("Localizable", "common_copied_to_clipboard") }
-  /// Copyright
+  /// Bản quyền
   internal static var commonCopyright: String { return L10n.tr("Localizable", "common_copyright") }
-  /// Creating room…
+  /// Đang tạo phòng…
   internal static var commonCreatingRoom: String { return L10n.tr("Localizable", "common_creating_room") }
-  /// Request canceled
+  /// Yêu cầu đã hủy
   internal static var commonCurrentUserCanceledKnock: String { return L10n.tr("Localizable", "common_current_user_canceled_knock") }
-  /// Left room
+  /// Đã rời phòng
   internal static var commonCurrentUserLeftRoom: String { return L10n.tr("Localizable", "common_current_user_left_room") }
-  /// Invite declined
+  /// Lời mời đã từ chối
   internal static var commonCurrentUserRejectedInvite: String { return L10n.tr("Localizable", "common_current_user_rejected_invite") }
-  /// Dark
+  /// Tối
   internal static var commonDark: String { return L10n.tr("Localizable", "common_dark") }
-  /// %1$@ at %2$@
+  /// %1$@ lúc %2$@
   internal static func commonDateDateAtTime(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "common_date_date_at_time", String(describing: p1), String(describing: p2))
   }
-  /// This month
+  /// Tháng này
   internal static var commonDateThisMonth: String { return L10n.tr("Localizable", "common_date_this_month") }
-  /// Decryption error
+  /// Lỗi giải mã
   internal static var commonDecryptionError: String { return L10n.tr("Localizable", "common_decryption_error") }
-  /// Developer options
+  /// Tùy chọn nhà phát triển
   internal static var commonDeveloperOptions: String { return L10n.tr("Localizable", "common_developer_options") }
-  /// Device ID
+  /// ID thiết bị
   internal static var commonDeviceId: String { return L10n.tr("Localizable", "common_device_id") }
-  /// Direct chat
+  /// Trò chuyện trực tiếp
   internal static var commonDirectChat: String { return L10n.tr("Localizable", "common_direct_chat") }
-  /// Do not show this again
+  /// Không hiển thị lại
   internal static var commonDoNotShowThisAgain: String { return L10n.tr("Localizable", "common_do_not_show_this_again") }
-  /// Download failed
+  /// Tải xuống thất bại
   internal static var commonDownloadFailed: String { return L10n.tr("Localizable", "common_download_failed") }
-  /// Downloading
+  /// Đang tải xuống
   internal static var commonDownloading: String { return L10n.tr("Localizable", "common_downloading") }
-  /// (edited)
+  /// (đã chỉnh sửa)
   internal static var commonEditedSuffix: String { return L10n.tr("Localizable", "common_edited_suffix") }
-  /// Editing
+  /// Đang chỉnh sửa
   internal static var commonEditing: String { return L10n.tr("Localizable", "common_editing") }
-  /// Editing caption
+  /// Đang chỉnh sửa chú thích
   internal static var commonEditingCaption: String { return L10n.tr("Localizable", "common_editing_caption") }
   /// * %1$@ %2$@
   internal static func commonEmote(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "common_emote", String(describing: p1), String(describing: p2))
   }
-  /// Empty file
+  /// Tệp trống
   internal static var commonEmptyFile: String { return L10n.tr("Localizable", "common_empty_file") }
-  /// Encryption
+  /// Mã hóa
   internal static var commonEncryption: String { return L10n.tr("Localizable", "common_encryption") }
-  /// Encryption enabled
+  /// Đã bật mã hóa
   internal static var commonEncryptionEnabled: String { return L10n.tr("Localizable", "common_encryption_enabled") }
-  /// Enter your PIN
+  /// Nhập PIN của bạn
   internal static var commonEnterYourPin: String { return L10n.tr("Localizable", "common_enter_your_pin") }
-  /// Error
+  /// Lỗi
   internal static var commonError: String { return L10n.tr("Localizable", "common_error") }
-  /// Everyone
+  /// Mọi người
   internal static var commonEveryone: String { return L10n.tr("Localizable", "common_everyone") }
   /// Face ID
   internal static var commonFaceIdIos: String { return L10n.tr("Localizable", "common_face_id_ios") }
-  /// Failed
+  /// Thất bại
   internal static var commonFailed: String { return L10n.tr("Localizable", "common_failed") }
-  /// Favourite
+  /// Yêu thích
   internal static var commonFavourite: String { return L10n.tr("Localizable", "common_favourite") }
-  /// Favourited
+  /// Đã yêu thích
   internal static var commonFavourited: String { return L10n.tr("Localizable", "common_favourited") }
-  /// File
+  /// Tệp
   internal static var commonFile: String { return L10n.tr("Localizable", "common_file") }
-  /// File deleted
+  /// Tệp đã xóa
   internal static var commonFileDeleted: String { return L10n.tr("Localizable", "common_file_deleted") }
-  /// File saved
+  /// Tệp đã lưu
   internal static var commonFileSaved: String { return L10n.tr("Localizable", "common_file_saved") }
-  /// Forward message
+  /// Chuyển tiếp tin nhắn
   internal static var commonForwardMessage: String { return L10n.tr("Localizable", "common_forward_message") }
-  /// Frequently used
+  /// Sử dụng thường xuyên
   internal static var commonFrequentlyUsed: String { return L10n.tr("Localizable", "common_frequently_used") }
   /// GIF
   internal static var commonGif: String { return L10n.tr("Localizable", "common_gif") }
-  /// Image
+  /// Hình ảnh
   internal static var commonImage: String { return L10n.tr("Localizable", "common_image") }
-  /// In reply to %1$@
+  /// Trả lời %1$@
   internal static func commonInReplyTo(_ p1: Any) -> String {
     return L10n.tr("Localizable", "common_in_reply_to", String(describing: p1))
   }
-  /// This Matrix ID can't be found, so the invite might not be received.
+  /// Không tìm thấy Matrix ID này, nên lời mời có thể không được nhận.
   internal static var commonInviteUnknownProfile: String { return L10n.tr("Localizable", "common_invite_unknown_profile") }
-  /// Leaving room
+  /// Đang rời phòng
   internal static var commonLeavingRoom: String { return L10n.tr("Localizable", "common_leaving_room") }
-  /// Light
+  /// Sáng
   internal static var commonLight: String { return L10n.tr("Localizable", "common_light") }
-  /// Line copied to clipboard
+  /// Dòng đã sao chép vào clipboard
   internal static var commonLineCopiedToClipboard: String { return L10n.tr("Localizable", "common_line_copied_to_clipboard") }
-  /// Link copied to clipboard
+  /// Liên kết đã sao chép vào clipboard
   internal static var commonLinkCopiedToClipboard: String { return L10n.tr("Localizable", "common_link_copied_to_clipboard") }
-  /// Loading…
+  /// Đang tải…
   internal static var commonLoading: String { return L10n.tr("Localizable", "common_loading") }
-  /// Loading more…
+  /// Đang tải thêm…
   internal static var commonLoadingMore: String { return L10n.tr("Localizable", "common_loading_more") }
   /// Plural format key: "%#@COUNT@"
   internal static func commonManyMembers(_ p1: Int) -> String {
@@ -478,227 +478,227 @@ internal enum L10n {
   internal static func commonMemberCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_member_count", p1)
   }
-  /// Message
+  /// Tin nhắn
   internal static var commonMessage: String { return L10n.tr("Localizable", "common_message") }
-  /// Message actions
+  /// Hành động tin nhắn
   internal static var commonMessageActions: String { return L10n.tr("Localizable", "common_message_actions") }
-  /// Message layout
+  /// Bố cục tin nhắn
   internal static var commonMessageLayout: String { return L10n.tr("Localizable", "common_message_layout") }
-  /// Message removed
+  /// Tin nhắn đã xóa
   internal static var commonMessageRemoved: String { return L10n.tr("Localizable", "common_message_removed") }
-  /// Modern
+  /// Hiện đại
   internal static var commonModern: String { return L10n.tr("Localizable", "common_modern") }
-  /// Mute
+  /// Tắt tiếng
   internal static var commonMute: String { return L10n.tr("Localizable", "common_mute") }
   /// %1$@ (%2$@)
   internal static func commonNameAndId(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "common_name_and_id", String(describing: p1), String(describing: p2))
   }
-  /// No results
+  /// Không có kết quả
   internal static var commonNoResults: String { return L10n.tr("Localizable", "common_no_results") }
-  /// No room name
+  /// Không có tên phòng
   internal static var commonNoRoomName: String { return L10n.tr("Localizable", "common_no_room_name") }
-  /// Not encrypted
+  /// Chưa mã hóa
   internal static var commonNotEncrypted: String { return L10n.tr("Localizable", "common_not_encrypted") }
-  /// Offline
+  /// Ngoại tuyến
   internal static var commonOffline: String { return L10n.tr("Localizable", "common_offline") }
-  /// Open source licenses
+  /// Giấy phép mã nguồn mở
   internal static var commonOpenSourceLicenses: String { return L10n.tr("Localizable", "common_open_source_licenses") }
   /// Optic ID
   internal static var commonOpticIdIos: String { return L10n.tr("Localizable", "common_optic_id_ios") }
-  /// or
+  /// hoặc
   internal static var commonOr: String { return L10n.tr("Localizable", "common_or") }
-  /// Password
+  /// Mật khẩu
   internal static var commonPassword: String { return L10n.tr("Localizable", "common_password") }
-  /// People
+  /// Mọi người
   internal static var commonPeople: String { return L10n.tr("Localizable", "common_people") }
-  /// Permalink
+  /// Liên kết cố định
   internal static var commonPermalink: String { return L10n.tr("Localizable", "common_permalink") }
-  /// Permission
+  /// Quyền
   internal static var commonPermission: String { return L10n.tr("Localizable", "common_permission") }
-  /// Pinned
+  /// Đã ghim
   internal static var commonPinned: String { return L10n.tr("Localizable", "common_pinned") }
-  /// Please check your internet connection
+  /// Vui lòng kiểm tra kết nối internet
   internal static var commonPleaseCheckInternetConnection: String { return L10n.tr("Localizable", "common_please_check_internet_connection") }
-  /// Please wait…
+  /// Vui lòng chờ…
   internal static var commonPleaseWait: String { return L10n.tr("Localizable", "common_please_wait") }
-  /// Are you sure you want to end this poll?
+  /// Bạn có chắc chắn muốn kết thúc cuộc bình chọn này?
   internal static var commonPollEndConfirmation: String { return L10n.tr("Localizable", "common_poll_end_confirmation") }
-  /// Poll: %1$@
+  /// Bình chọn: %1$@
   internal static func commonPollSummary(_ p1: Any) -> String {
     return L10n.tr("Localizable", "common_poll_summary", String(describing: p1))
   }
-  /// Total votes: %1$@
+  /// Tổng số phiếu: %1$@
   internal static func commonPollTotalVotes(_ p1: Any) -> String {
     return L10n.tr("Localizable", "common_poll_total_votes", String(describing: p1))
   }
-  /// Results will show after the poll has ended
+  /// Kết quả sẽ hiển thị sau khi kết thúc bình chọn
   internal static var commonPollUndisclosedText: String { return L10n.tr("Localizable", "common_poll_undisclosed_text") }
   /// Plural format key: "%#@COUNT@"
   internal static func commonPollVotesCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_poll_votes_count", p1)
   }
-  /// Preparing…
+  /// Đang chuẩn bị…
   internal static var commonPreparing: String { return L10n.tr("Localizable", "common_preparing") }
-  /// Privacy policy
+  /// Chính sách riêng tư
   internal static var commonPrivacyPolicy: String { return L10n.tr("Localizable", "common_privacy_policy") }
-  /// Reaction
+  /// Phản ứng
   internal static var commonReaction: String { return L10n.tr("Localizable", "common_reaction") }
-  /// Reactions
+  /// Phản ứng
   internal static var commonReactions: String { return L10n.tr("Localizable", "common_reactions") }
-  /// Reason
+  /// Lý do
   internal static var commonReason: String { return L10n.tr("Localizable", "common_reason") }
-  /// Recovery key
+  /// Khóa khôi phục
   internal static var commonRecoveryKey: String { return L10n.tr("Localizable", "common_recovery_key") }
-  /// Refreshing…
+  /// Đang làm mới…
   internal static var commonRefreshing: String { return L10n.tr("Localizable", "common_refreshing") }
   /// Plural format key: "%#@COUNT@"
   internal static func commonReplies(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_replies", p1)
   }
-  /// Replying to %1$@
+  /// Đang trả lời %1$@
   internal static func commonReplyingTo(_ p1: Any) -> String {
     return L10n.tr("Localizable", "common_replying_to", String(describing: p1))
   }
-  /// Report a bug
+  /// Báo cáo lỗi
   internal static var commonReportABug: String { return L10n.tr("Localizable", "common_report_a_bug") }
-  /// Report a problem
+  /// Báo cáo vấn đề
   internal static var commonReportAProblem: String { return L10n.tr("Localizable", "common_report_a_problem") }
-  /// Report submitted
+  /// Báo cáo đã gửi
   internal static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
-  /// Rich text editor
+  /// Trình soạn thảo văn bản phong phú
   internal static var commonRichTextEditor: String { return L10n.tr("Localizable", "common_rich_text_editor") }
-  /// Room
+  /// Phòng
   internal static var commonRoom: String { return L10n.tr("Localizable", "common_room") }
-  /// Room name
+  /// Tên phòng
   internal static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
-  /// e.g. your project name
+  /// ví dụ: tên dự án của bạn
   internal static var commonRoomNamePlaceholder: String { return L10n.tr("Localizable", "common_room_name_placeholder") }
-  /// Saved changes
+  /// Đã lưu thay đổi
   internal static var commonSavedChanges: String { return L10n.tr("Localizable", "common_saved_changes") }
-  /// Saving
+  /// Đang lưu
   internal static var commonSaving: String { return L10n.tr("Localizable", "common_saving") }
-  /// Screen lock
+  /// Khóa màn hình
   internal static var commonScreenLock: String { return L10n.tr("Localizable", "common_screen_lock") }
-  /// Search for someone
+  /// Tìm kiếm ai đó
   internal static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
-  /// Search results
+  /// Kết quả tìm kiếm
   internal static var commonSearchResults: String { return L10n.tr("Localizable", "common_search_results") }
-  /// Security
+  /// Bảo mật
   internal static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
-  /// Seen by
+  /// Đã xem bởi
   internal static var commonSeenBy: String { return L10n.tr("Localizable", "common_seen_by") }
-  /// Send to
+  /// Gửi đến
   internal static var commonSendTo: String { return L10n.tr("Localizable", "common_send_to") }
-  /// Sending…
+  /// Đang gửi…
   internal static var commonSending: String { return L10n.tr("Localizable", "common_sending") }
-  /// Sending failed
+  /// Gửi thất bại
   internal static var commonSendingFailed: String { return L10n.tr("Localizable", "common_sending_failed") }
-  /// Sent
+  /// Đã gửi
   internal static var commonSent: String { return L10n.tr("Localizable", "common_sent") }
   /// . 
   internal static var commonSentenceDelimiter: String { return L10n.tr("Localizable", "common_sentence_delimiter") }
-  /// Server not supported
+  /// Máy chủ không được hỗ trợ
   internal static var commonServerNotSupported: String { return L10n.tr("Localizable", "common_server_not_supported") }
-  /// Server URL
+  /// URL máy chủ
   internal static var commonServerUrl: String { return L10n.tr("Localizable", "common_server_url") }
-  /// Settings
+  /// Cài đặt
   internal static var commonSettings: String { return L10n.tr("Localizable", "common_settings") }
-  /// Shared location
+  /// Vị trí đã chia sẻ
   internal static var commonSharedLocation: String { return L10n.tr("Localizable", "common_shared_location") }
-  /// Signing out
+  /// Đang đăng xuất
   internal static var commonSigningOut: String { return L10n.tr("Localizable", "common_signing_out") }
-  /// Something went wrong
+  /// Có gì đó không ổn
   internal static var commonSomethingWentWrong: String { return L10n.tr("Localizable", "common_something_went_wrong") }
-  /// We encountered an issue. Please try again.
+  /// Chúng tôi gặp vấn đề. Vui lòng thử lại.
   internal static var commonSomethingWentWrongMessage: String { return L10n.tr("Localizable", "common_something_went_wrong_message") }
-  /// Starting chat…
+  /// Đang bắt đầu trò chuyện…
   internal static var commonStartingChat: String { return L10n.tr("Localizable", "common_starting_chat") }
   /// Sticker
   internal static var commonSticker: String { return L10n.tr("Localizable", "common_sticker") }
-  /// Success
+  /// Thành công
   internal static var commonSuccess: String { return L10n.tr("Localizable", "common_success") }
-  /// Suggestions
+  /// Gợi ý
   internal static var commonSuggestions: String { return L10n.tr("Localizable", "common_suggestions") }
-  /// Syncing
+  /// Đang đồng bộ
   internal static var commonSyncing: String { return L10n.tr("Localizable", "common_syncing") }
-  /// System
+  /// Hệ thống
   internal static var commonSystem: String { return L10n.tr("Localizable", "common_system") }
-  /// Text
+  /// Văn bản
   internal static var commonText: String { return L10n.tr("Localizable", "common_text") }
-  /// Third-party notices
+  /// Thông báo bên thứ ba
   internal static var commonThirdPartyNotices: String { return L10n.tr("Localizable", "common_third_party_notices") }
-  /// Thread
+  /// Chuỗi
   internal static var commonThread: String { return L10n.tr("Localizable", "common_thread") }
-  /// Topic
+  /// Chủ đề
   internal static var commonTopic: String { return L10n.tr("Localizable", "common_topic") }
-  /// What is this room about?
+  /// Phòng này về gì?
   internal static var commonTopicPlaceholder: String { return L10n.tr("Localizable", "common_topic_placeholder") }
   /// Touch ID
   internal static var commonTouchIdIos: String { return L10n.tr("Localizable", "common_touch_id_ios") }
-  /// Unable to decrypt
+  /// Không thể giải mã
   internal static var commonUnableToDecrypt: String { return L10n.tr("Localizable", "common_unable_to_decrypt") }
-  /// Sent from an insecure device
+  /// Gửi từ thiết bị không an toàn
   internal static var commonUnableToDecryptInsecureDevice: String { return L10n.tr("Localizable", "common_unable_to_decrypt_insecure_device") }
-  /// You don't have access to this message
+  /// Bạn không có quyền truy cập tin nhắn này
   internal static var commonUnableToDecryptNoAccess: String { return L10n.tr("Localizable", "common_unable_to_decrypt_no_access") }
-  /// Sender's verified identity was reset
+  /// Danh tính đã xác minh của người gửi đã được đặt lại
   internal static var commonUnableToDecryptVerificationViolation: String { return L10n.tr("Localizable", "common_unable_to_decrypt_verification_violation") }
-  /// Invites couldn't be sent to one or more users.
+  /// Không thể gửi lời mời đến một hoặc nhiều người dùng.
   internal static var commonUnableToInviteMessage: String { return L10n.tr("Localizable", "common_unable_to_invite_message") }
-  /// Unable to send invite(s)
+  /// Không thể gửi lời mời
   internal static var commonUnableToInviteTitle: String { return L10n.tr("Localizable", "common_unable_to_invite_title") }
-  /// Unlock
+  /// Mở khóa
   internal static var commonUnlock: String { return L10n.tr("Localizable", "common_unlock") }
-  /// Unmute
+  /// Bật tiếng
   internal static var commonUnmute: String { return L10n.tr("Localizable", "common_unmute") }
-  /// Unsupported call
+  /// Cuộc gọi không được hỗ trợ
   internal static var commonUnsupportedCall: String { return L10n.tr("Localizable", "common_unsupported_call") }
-  /// Unsupported event
+  /// Sự kiện không được hỗ trợ
   internal static var commonUnsupportedEvent: String { return L10n.tr("Localizable", "common_unsupported_event") }
-  /// Username
+  /// Tên người dùng
   internal static var commonUsername: String { return L10n.tr("Localizable", "common_username") }
-  /// Verification cancelled
+  /// Xác minh đã hủy
   internal static var commonVerificationCancelled: String { return L10n.tr("Localizable", "common_verification_cancelled") }
-  /// Verification complete
+  /// Xác minh hoàn thành
   internal static var commonVerificationComplete: String { return L10n.tr("Localizable", "common_verification_complete") }
-  /// Verification failed
+  /// Xác minh thất bại
   internal static var commonVerificationFailed: String { return L10n.tr("Localizable", "common_verification_failed") }
-  /// Verified
+  /// Đã xác minh
   internal static var commonVerified: String { return L10n.tr("Localizable", "common_verified") }
-  /// Verify device
+  /// Xác minh thiết bị
   internal static var commonVerifyDevice: String { return L10n.tr("Localizable", "common_verify_device") }
-  /// Verify identity
+  /// Xác minh danh tính
   internal static var commonVerifyIdentity: String { return L10n.tr("Localizable", "common_verify_identity") }
-  /// Verify user
+  /// Xác minh người dùng
   internal static var commonVerifyUser: String { return L10n.tr("Localizable", "common_verify_user") }
   /// Video
   internal static var commonVideo: String { return L10n.tr("Localizable", "common_video") }
-  /// Voice message
+  /// Tin nhắn thoại
   internal static var commonVoiceMessage: String { return L10n.tr("Localizable", "common_voice_message") }
-  /// Waiting…
+  /// Đang chờ…
   internal static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
-  /// Waiting for this message
+  /// Đang chờ tin nhắn này
   internal static var commonWaitingForDecryptionKey: String { return L10n.tr("Localizable", "common_waiting_for_decryption_key") }
-  /// You
+  /// Bạn
   internal static var commonYou: String { return L10n.tr("Localizable", "common_you") }
-  /// Confirm your recovery key to maintain access to your key storage and message history.
+  /// Xác nhận khóa khôi phục để duy trì quyền truy cập vào kho lưu trữ khóa và lịch sử tin nhắn.
   internal static var confirmRecoveryKeyBannerMessage: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_message") }
-  /// Enter your recovery key
+  /// Nhập khóa khôi phục
   internal static var confirmRecoveryKeyBannerPrimaryButtonTitle: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_primary_button_title") }
-  /// Forgot your recovery key?
+  /// Quên khóa khôi phục?
   internal static var confirmRecoveryKeyBannerSecondaryButtonTitle: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_secondary_button_title") }
-  /// Your key storage is out of sync
+  /// Kho lưu trữ khóa không đồng bộ
   internal static var confirmRecoveryKeyBannerTitle: String { return L10n.tr("Localizable", "confirm_recovery_key_banner_title") }
-  /// %1$@ crashed the last time it was used. Would you like to share a crash report with us?
+  /// %1$@ đã gặp sự cố lần cuối sử dụng. Bạn có muốn chia sẻ báo cáo sự cố với chúng tôi?
   internal static func crashDetectionDialogContent(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crash_detection_dialog_content", String(describing: p1))
   }
-  /// %1$@'s identity was reset. %2$@
+  /// Danh tính của %1$@ đã được đặt lại. %2$@
   internal static func cryptoIdentityChangePinViolation(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation", String(describing: p1), String(describing: p2))
   }
-  /// %1$@’s %2$@ identity was reset. %3$@
+  /// Danh tính %2$@ của %1$@ đã được đặt lại. %3$@
   internal static func cryptoIdentityChangePinViolationNew(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation_new", String(describing: p1), String(describing: p2), String(describing: p3))
   }
@@ -706,161 +706,161 @@ internal enum L10n {
   internal static func cryptoIdentityChangePinViolationNewUserId(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_pin_violation_new_user_id", String(describing: p1))
   }
-  /// %1$@’s identity was reset.
+  /// Danh tính của %1$@ đã được đặt lại.
   internal static func cryptoIdentityChangeProfilePinViolation(_ p1: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_profile_pin_violation", String(describing: p1))
   }
-  /// %1$@’s %2$@ identity was reset. %3$@
+  /// Danh tính %2$@ của %1$@ đã được đặt lại. %3$@
   internal static func cryptoIdentityChangeVerificationViolationNew(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "crypto_identity_change_verification_violation_new", String(describing: p1), String(describing: p2), String(describing: p3))
   }
-  /// Withdraw verification
+  /// Rút xác minh
   internal static var cryptoIdentityChangeWithdrawVerificationAction: String { return L10n.tr("Localizable", "crypto_identity_change_withdraw_verification_action") }
-  /// The link %1$@ is taking you to another site %2$@
+  /// Liên kết %1$@ đang đưa bạn đến trang khác %2$@
   /// 
-  /// Are you sure you want to continue?
+  /// Bạn có chắc chắn muốn tiếp tục?
   internal static func dialogConfirmLinkMessage(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "dialog_confirm_link_message", String(describing: p1), String(describing: p2))
   }
-  /// Double-check this link
+  /// Kiểm tra lại liên kết này
   internal static var dialogConfirmLinkTitle: String { return L10n.tr("Localizable", "dialog_confirm_link_title") }
-  /// In order to let the application use the camera, please grant the permission in the system settings.
+  /// Để cho phép ứng dụng sử dụng camera, vui lòng cấp quyền trong cài đặt hệ thống.
   internal static var dialogPermissionCamera: String { return L10n.tr("Localizable", "dialog_permission_camera") }
-  /// Please grant the permission in the system settings.
+  /// Vui lòng cấp quyền trong cài đặt hệ thống.
   internal static var dialogPermissionGeneric: String { return L10n.tr("Localizable", "dialog_permission_generic") }
-  /// Grant access in Settings -> Location.
+  /// Cấp quyền truy cập trong Cài đặt -> Vị trí.
   internal static var dialogPermissionLocationDescriptionIos: String { return L10n.tr("Localizable", "dialog_permission_location_description_ios") }
-  /// %1$@ does not have access to your location.
+  /// %1$@ không có quyền truy cập vào vị trí của bạn.
   internal static func dialogPermissionLocationTitleIos(_ p1: Any) -> String {
     return L10n.tr("Localizable", "dialog_permission_location_title_ios", String(describing: p1))
   }
-  /// In order to let the application use the microphone, please grant the permission in the system settings.
+  /// Để cho phép ứng dụng sử dụng microphone, vui lòng cấp quyền trong cài đặt hệ thống.
   internal static var dialogPermissionMicrophone: String { return L10n.tr("Localizable", "dialog_permission_microphone") }
-  /// Grant access so you can record and send messages with audio.
+  /// Cấp quyền truy cập để bạn có thể ghi âm và gửi tin nhắn có âm thanh.
   internal static var dialogPermissionMicrophoneDescriptionIos: String { return L10n.tr("Localizable", "dialog_permission_microphone_description_ios") }
-  /// %1$@ needs permission to access your microphone.
+  /// %1$@ cần quyền truy cập microphone.
   internal static func dialogPermissionMicrophoneTitleIos(_ p1: Any) -> String {
     return L10n.tr("Localizable", "dialog_permission_microphone_title_ios", String(describing: p1))
   }
-  /// In order to let the application display notifications, please grant the permission in the system settings.
+  /// Để cho phép ứng dụng hiển thị thông báo, vui lòng cấp quyền trong cài đặt hệ thống.
   internal static var dialogPermissionNotification: String { return L10n.tr("Localizable", "dialog_permission_notification") }
-  /// %1$@ does not have access to your photo library.
+  /// %1$@ không có quyền truy cập vào thư viện ảnh của bạn.
   internal static func dialogPermissionPhotoLibraryTitleIos(_ p1: Any) -> String {
     return L10n.tr("Localizable", "dialog_permission_photo_library_title_ios", String(describing: p1))
   }
-  /// Room reported
+  /// Phòng đã báo cáo
   internal static var dialogRoomReported: String { return L10n.tr("Localizable", "dialog_room_reported") }
-  /// Reported and left room
+  /// Đã báo cáo và rời phòng
   internal static var dialogRoomReportedAndLeft: String { return L10n.tr("Localizable", "dialog_room_reported_and_left") }
-  /// Confirmation
+  /// Xác nhận
   internal static var dialogTitleConfirmation: String { return L10n.tr("Localizable", "dialog_title_confirmation") }
-  /// Error
+  /// Lỗi
   internal static var dialogTitleError: String { return L10n.tr("Localizable", "dialog_title_error") }
-  /// Success
+  /// Thành công
   internal static var dialogTitleSuccess: String { return L10n.tr("Localizable", "dialog_title_success") }
-  /// Warning
+  /// Cảnh báo
   internal static var dialogTitleWarning: String { return L10n.tr("Localizable", "dialog_title_warning") }
-  /// Your changes won’t be saved
+  /// Các thay đổi sẽ không được lưu
   internal static var dialogUnsavedChangesDescriptionIos: String { return L10n.tr("Localizable", "dialog_unsaved_changes_description_ios") }
-  /// Save changes?
+  /// Lưu thay đổi?
   internal static var dialogUnsavedChangesTitle: String { return L10n.tr("Localizable", "dialog_unsaved_changes_title") }
-  /// Activities
+  /// Hoạt động
   internal static var emojiPickerCategoryActivity: String { return L10n.tr("Localizable", "emoji_picker_category_activity") }
-  /// Flags
+  /// Cờ
   internal static var emojiPickerCategoryFlags: String { return L10n.tr("Localizable", "emoji_picker_category_flags") }
-  /// Food & Drink
+  /// Thức ăn & đồ uống
   internal static var emojiPickerCategoryFoods: String { return L10n.tr("Localizable", "emoji_picker_category_foods") }
-  /// Animals & Nature
+  /// Động vật & thiên nhiên
   internal static var emojiPickerCategoryNature: String { return L10n.tr("Localizable", "emoji_picker_category_nature") }
-  /// Objects
+  /// Đồ vật
   internal static var emojiPickerCategoryObjects: String { return L10n.tr("Localizable", "emoji_picker_category_objects") }
-  /// Smileys & People
+  /// Mặt cười & con người
   internal static var emojiPickerCategoryPeople: String { return L10n.tr("Localizable", "emoji_picker_category_people") }
-  /// Travel & Places
+  /// Du lịch & địa điểm
   internal static var emojiPickerCategoryPlaces: String { return L10n.tr("Localizable", "emoji_picker_category_places") }
-  /// Symbols
+  /// Ký hiệu
   internal static var emojiPickerCategorySymbols: String { return L10n.tr("Localizable", "emoji_picker_category_symbols") }
-  /// Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation.
+  /// Homeserver của bạn cần được nâng cấp để hỗ trợ Dịch vụ Xác thực Matrix và tạo tài khoản.
   internal static var errorAccountCreationNotPossible: String { return L10n.tr("Localizable", "error_account_creation_not_possible") }
-  /// Failed creating the permalink
+  /// Tạo liên kết cố định thất bại
   internal static var errorFailedCreatingThePermalink: String { return L10n.tr("Localizable", "error_failed_creating_the_permalink") }
-  /// %1$@ could not load the map. Please try again later.
+  /// %1$@ không thể tải bản đồ. Vui lòng thử lại sau.
   internal static func errorFailedLoadingMap(_ p1: Any) -> String {
     return L10n.tr("Localizable", "error_failed_loading_map", String(describing: p1))
   }
-  /// Failed loading messages
+  /// Tải tin nhắn thất bại
   internal static var errorFailedLoadingMessages: String { return L10n.tr("Localizable", "error_failed_loading_messages") }
-  /// %1$@ could not access your location. Please try again later.
+  /// %1$@ không thể truy cập vị trí của bạn. Vui lòng thử lại sau.
   internal static func errorFailedLocatingUser(_ p1: Any) -> String {
     return L10n.tr("Localizable", "error_failed_locating_user", String(describing: p1))
   }
-  /// Failed to upload your voice message.
+  /// Tải lên tin nhắn thoại thất bại.
   internal static var errorFailedUploadingVoiceMessage: String { return L10n.tr("Localizable", "error_failed_uploading_voice_message") }
-  /// The room no longer exists or the invite is no longer valid.
+  /// Phòng không còn tồn tại hoặc lời mời không còn hợp lệ.
   internal static var errorInvalidInvite: String { return L10n.tr("Localizable", "error_invalid_invite") }
-  /// Message not found
+  /// Không tìm thấy tin nhắn
   internal static var errorMessageNotFound: String { return L10n.tr("Localizable", "error_message_not_found") }
-  /// This may be due to network or server issues.
+  /// Điều này có thể do vấn đề mạng hoặc máy chủ.
   internal static var errorNetworkOrServerIssue: String { return L10n.tr("Localizable", "error_network_or_server_issue") }
-  /// No compatible app was found to handle this action.
+  /// Không tìm thấy ứng dụng tương thích để xử lý hành động này.
   internal static var errorNoCompatibleAppFound: String { return L10n.tr("Localizable", "error_no_compatible_app_found") }
-  /// This room address already exists. Please try editing the room address field or change the room name
+  /// Địa chỉ phòng này đã tồn tại. Vui lòng thử chỉnh sửa trường địa chỉ phòng hoặc thay đổi tên phòng
   internal static var errorRoomAddressAlreadyExists: String { return L10n.tr("Localizable", "error_room_address_already_exists") }
-  /// Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _
+  /// Một số ký tự không được phép. Chỉ hỗ trợ chữ cái, chữ số và các ký hiệu sau ! $ & ' ( ) * + / ; = ? @ [ ] - . _
   internal static var errorRoomAddressInvalidSymbols: String { return L10n.tr("Localizable", "error_room_address_invalid_symbols") }
-  /// Some messages have not been sent
+  /// Một số tin nhắn chưa được gửi
   internal static var errorSomeMessagesHaveNotBeenSent: String { return L10n.tr("Localizable", "error_some_messages_have_not_been_sent") }
-  /// Sorry, an error occurred
+  /// Xin lỗi, đã xảy ra lỗi
   internal static var errorUnknown: String { return L10n.tr("Localizable", "error_unknown") }
-  /// The sender of the event does not match the owner of the device that sent it.
+  /// Người gửi sự kiện không khớp với chủ sở hữu thiết bị đã gửi.
   internal static var eventShieldMismatchedSender: String { return L10n.tr("Localizable", "event_shield_mismatched_sender") }
-  /// The authenticity of this encrypted message can't be guaranteed on this device.
+  /// Tính xác thực của tin nhắn mã hóa này không thể được đảm bảo trên thiết bị này.
   internal static var eventShieldReasonAuthenticityNotGuaranteed: String { return L10n.tr("Localizable", "event_shield_reason_authenticity_not_guaranteed") }
-  /// Encrypted by a previously-verified user.
+  /// Được mã hóa bởi người dùng đã xác minh trước đó.
   internal static var eventShieldReasonPreviouslyVerified: String { return L10n.tr("Localizable", "event_shield_reason_previously_verified") }
-  /// Not encrypted.
+  /// Không được mã hóa.
   internal static var eventShieldReasonSentInClear: String { return L10n.tr("Localizable", "event_shield_reason_sent_in_clear") }
-  /// Encrypted by an unknown or deleted device.
+  /// Được mã hóa bởi thiết bị không xác định hoặc đã xóa.
   internal static var eventShieldReasonUnknownDevice: String { return L10n.tr("Localizable", "event_shield_reason_unknown_device") }
-  /// Encrypted by a device not verified by its owner.
+  /// Được mã hóa bởi thiết bị chưa được chủ sở hữu xác minh.
   internal static var eventShieldReasonUnsignedDevice: String { return L10n.tr("Localizable", "event_shield_reason_unsigned_device") }
-  /// Encrypted by an unverified user.
+  /// Được mã hóa bởi người dùng chưa xác minh.
   internal static var eventShieldReasonUnverifiedIdentity: String { return L10n.tr("Localizable", "event_shield_reason_unverified_identity") }
-  /// To ensure you never miss an important call, please change your settings to allow full-screen notifications when your phone is locked.
+  /// Để đảm bảo bạn không bao giờ bỏ lỡ cuộc gọi quan trọng, vui lòng thay đổi cài đặt để cho phép thông báo toàn màn hình khi điện thoại bị khóa.
   internal static var fullScreenIntentBannerMessage: String { return L10n.tr("Localizable", "full_screen_intent_banner_message") }
-  /// Enhance your call experience
+  /// Nâng cao trải nghiệm cuộc gọi
   internal static var fullScreenIntentBannerTitle: String { return L10n.tr("Localizable", "full_screen_intent_banner_title") }
-  /// 🔐️ Join me on %1$@
+  /// 🔐️ Tham gia cùng tôi trên %1$@
   internal static func inviteFriendsRichTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "invite_friends_rich_title", String(describing: p1))
   }
-  /// Hey, talk to me on %1$@: %2$@
+  /// Này, trò chuyện với tôi trên %1$@: %2$@
   internal static func inviteFriendsText(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "invite_friends_text", String(describing: p1), String(describing: p2))
   }
-  /// Are you sure that you want to leave this conversation? This conversation is not public and you won't be able to rejoin without an invite.
+  /// Bạn có chắc chắn muốn rời cuộc trò chuyện này? Cuộc trò chuyện này không công khai và bạn sẽ không thể tham gia lại nếu không có lời mời.
   internal static var leaveConversationAlertSubtitle: String { return L10n.tr("Localizable", "leave_conversation_alert_subtitle") }
-  /// Are you sure that you want to leave this room? You're the only person here. If you leave, no one will be able to join in the future, including you.
+  /// Bạn có chắc chắn muốn rời phòng này? Bạn là người duy nhất ở đây. Nếu bạn rời đi, không ai có thể tham gia trong tương lai, kể cả bạn.
   internal static var leaveRoomAlertEmptySubtitle: String { return L10n.tr("Localizable", "leave_room_alert_empty_subtitle") }
-  /// Are you sure that you want to leave this room? This room is not public and you won't be able to rejoin without an invite.
+  /// Bạn có chắc chắn muốn rời phòng này? Phòng này không công khai và bạn sẽ không thể tham gia lại nếu không có lời mời.
   internal static var leaveRoomAlertPrivateSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_private_subtitle") }
-  /// Are you sure that you want to leave the room?
+  /// Bạn có chắc chắn muốn rời phòng?
   internal static var leaveRoomAlertSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_subtitle") }
   /// %1$@ iOS
   internal static func loginInitialDeviceNameIos(_ p1: Any) -> String {
     return L10n.tr("Localizable", "login_initial_device_name_ios", String(describing: p1))
   }
-  /// Notification
+  /// Thông báo
   internal static var notification: String { return L10n.tr("Localizable", "Notification") }
-  /// Call
+  /// Cuộc gọi
   internal static var notificationChannelCall: String { return L10n.tr("Localizable", "notification_channel_call") }
-  /// Listening for events
+  /// Đang lắng nghe sự kiện
   internal static var notificationChannelListeningForEvents: String { return L10n.tr("Localizable", "notification_channel_listening_for_events") }
-  /// Noisy notifications
+  /// Thông báo có tiếng
   internal static var notificationChannelNoisy: String { return L10n.tr("Localizable", "notification_channel_noisy") }
-  /// Ringing calls
+  /// Cuộc gọi đang đổ chuông
   internal static var notificationChannelRingingCalls: String { return L10n.tr("Localizable", "notification_channel_ringing_calls") }
-  /// Silent notifications
+  /// Thông báo im lặng
   internal static var notificationChannelSilent: String { return L10n.tr("Localizable", "notification_channel_silent") }
   /// Plural format key: "%#@COUNT@"
   internal static func notificationCompatSummaryLineForRoom(_ p1: Int) -> String {
@@ -870,57 +870,57 @@ internal enum L10n {
   internal static func notificationCompatSummaryTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "notification_compat_summary_title", p1)
   }
-  /// You have new messages.
+  /// Bạn có tin nhắn mới.
   internal static var notificationFallbackContent: String { return L10n.tr("Localizable", "notification_fallback_content") }
-  /// 📹 Incoming call
+  /// 📹 Cuộc gọi đến
   internal static var notificationIncomingCall: String { return L10n.tr("Localizable", "notification_incoming_call") }
-  /// ** Failed to send - please open room
+  /// ** Gửi thất bại - vui lòng mở phòng
   internal static var notificationInlineReplyFailed: String { return L10n.tr("Localizable", "notification_inline_reply_failed") }
-  /// Join
+  /// Tham gia
   internal static var notificationInvitationActionJoin: String { return L10n.tr("Localizable", "notification_invitation_action_join") }
-  /// Reject
+  /// Từ chối
   internal static var notificationInvitationActionReject: String { return L10n.tr("Localizable", "notification_invitation_action_reject") }
   /// Plural format key: "%#@COUNT@"
   internal static func notificationInvitations(_ p1: Int) -> String {
     return L10n.tr("Localizable", "notification_invitations", p1)
   }
-  /// Invited you to chat
+  /// Mời bạn trò chuyện
   internal static var notificationInviteBody: String { return L10n.tr("Localizable", "notification_invite_body") }
-  /// %1$@ invited you to chat
+  /// %1$@ mời bạn trò chuyện
   internal static func notificationInviteBodyWithSender(_ p1: Any) -> String {
     return L10n.tr("Localizable", "notification_invite_body_with_sender", String(describing: p1))
   }
-  /// Mentioned you: %1$@
+  /// Nhắc đến bạn: %1$@
   internal static func notificationMentionedYouBody(_ p1: Any) -> String {
     return L10n.tr("Localizable", "notification_mentioned_you_body", String(describing: p1))
   }
-  /// New Messages
+  /// Tin nhắn mới
   internal static var notificationNewMessages: String { return L10n.tr("Localizable", "notification_new_messages") }
   /// Plural format key: "%#@COUNT@"
   internal static func notificationNewMessagesForRoom(_ p1: Int) -> String {
     return L10n.tr("Localizable", "notification_new_messages_for_room", p1)
   }
-  /// Reacted with %1$@
+  /// Phản ứng bằng %1$@
   internal static func notificationReactionBody(_ p1: Any) -> String {
     return L10n.tr("Localizable", "notification_reaction_body", String(describing: p1))
   }
-  /// Mark as read
+  /// Đánh dấu đã đọc
   internal static var notificationRoomActionMarkAsRead: String { return L10n.tr("Localizable", "notification_room_action_mark_as_read") }
-  /// Quick reply
+  /// Trả lời nhanh
   internal static var notificationRoomActionQuickReply: String { return L10n.tr("Localizable", "notification_room_action_quick_reply") }
-  /// Invited you to join the room
+  /// Mời bạn tham gia phòng
   internal static var notificationRoomInviteBody: String { return L10n.tr("Localizable", "notification_room_invite_body") }
-  /// %1$@ invited you to join the room
+  /// %1$@ mời bạn tham gia phòng
   internal static func notificationRoomInviteBodyWithSender(_ p1: Any) -> String {
     return L10n.tr("Localizable", "notification_room_invite_body_with_sender", String(describing: p1))
   }
-  /// Me
+  /// Tôi
   internal static var notificationSenderMe: String { return L10n.tr("Localizable", "notification_sender_me") }
-  /// %1$@ mentioned or replied
+  /// %1$@ đã nhắc đến hoặc trả lời
   internal static func notificationSenderMentionReply(_ p1: Any) -> String {
     return L10n.tr("Localizable", "notification_sender_mention_reply", String(describing: p1))
   }
-  /// You are viewing the notification! Click me!
+  /// Bạn đang xem thông báo! Nhấp vào tôi!
   internal static var notificationTestPushNotificationContent: String { return L10n.tr("Localizable", "notification_test_push_notification_content") }
   /// %1$@: %2$@
   internal static func notificationTickerTextDm(_ p1: Any, _ p2: Any) -> String {
@@ -934,15 +934,15 @@ internal enum L10n {
   internal static func notificationUnreadNotifiedMessages(_ p1: Int) -> String {
     return L10n.tr("Localizable", "notification_unread_notified_messages", p1)
   }
-  /// %1$@ and %2$@
+  /// %1$@ và %2$@
   internal static func notificationUnreadNotifiedMessagesAndInvitation(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "notification_unread_notified_messages_and_invitation", String(describing: p1), String(describing: p2))
   }
-  /// %1$@ in %2$@
+  /// %1$@ trong %2$@
   internal static func notificationUnreadNotifiedMessagesInRoom(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "notification_unread_notified_messages_in_room", String(describing: p1), String(describing: p2))
   }
-  /// %1$@ in %2$@ and %3$@
+  /// %1$@ trong %2$@ và %3$@
   internal static func notificationUnreadNotifiedMessagesInRoomAndInvitation(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "notification_unread_notified_messages_in_room_and_invitation", String(describing: p1), String(describing: p2), String(describing: p3))
   }
@@ -950,215 +950,215 @@ internal enum L10n {
   internal static func notificationUnreadNotifiedMessagesInRoomRooms(_ p1: Int) -> String {
     return L10n.tr("Localizable", "notification_unread_notified_messages_in_room_rooms", p1)
   }
-  /// Rageshake to report bug
+  /// Rageshake để báo cáo lỗi
   internal static var preferenceRageshake: String { return L10n.tr("Localizable", "preference_rageshake") }
-  /// You seem to be shaking the phone in frustration. Would you like to open the bug report screen?
+  /// Có vẻ như bạn đang lắc điện thoại vì bực bội. Bạn có muốn mở màn hình báo cáo lỗi?
   internal static var rageshakeDetectionDialogContent: String { return L10n.tr("Localizable", "rageshake_detection_dialog_content") }
-  /// Add attachment
+  /// Thêm tệp đính kèm
   internal static var richTextEditorA11yAddAttachment: String { return L10n.tr("Localizable", "rich_text_editor_a11y_add_attachment") }
-  /// Toggle bullet list
+  /// Bật/tắt danh sách đầu dòng
   internal static var richTextEditorBulletList: String { return L10n.tr("Localizable", "rich_text_editor_bullet_list") }
-  /// Cancel and close text formatting
+  /// Hủy và đóng định dạng văn bản
   internal static var richTextEditorCloseFormattingOptions: String { return L10n.tr("Localizable", "rich_text_editor_close_formatting_options") }
-  /// Toggle code block
+  /// Bật/tắt khối mã
   internal static var richTextEditorCodeBlock: String { return L10n.tr("Localizable", "rich_text_editor_code_block") }
-  /// Add a caption
+  /// Thêm chú thích
   internal static var richTextEditorComposerCaptionPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_caption_placeholder") }
-  /// Encrypted message…
+  /// Tin nhắn mã hóa…
   internal static var richTextEditorComposerEncryptedPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_encrypted_placeholder") }
-  /// Message…
+  /// Tin nhắn…
   internal static var richTextEditorComposerPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_placeholder") }
-  /// Unencrypted message…
+  /// Tin nhắn không mã hóa…
   internal static var richTextEditorComposerUnencryptedPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_composer_unencrypted_placeholder") }
-  /// Create a link
+  /// Tạo liên kết
   internal static var richTextEditorCreateLink: String { return L10n.tr("Localizable", "rich_text_editor_create_link") }
-  /// Edit link
+  /// Chỉnh sửa liên kết
   internal static var richTextEditorEditLink: String { return L10n.tr("Localizable", "rich_text_editor_edit_link") }
-  /// %1$@, state: %2$@
+  /// %1$@, trạng thái: %2$@
   internal static func richTextEditorFormatAction(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "rich_text_editor_format_action", String(describing: p1), String(describing: p2))
   }
-  /// Apply bold format
+  /// Áp dụng định dạng đậm
   internal static var richTextEditorFormatBold: String { return L10n.tr("Localizable", "rich_text_editor_format_bold") }
-  /// Apply italic format
+  /// Áp dụng định dạng nghiêng
   internal static var richTextEditorFormatItalic: String { return L10n.tr("Localizable", "rich_text_editor_format_italic") }
-  /// disabled
+  /// đã tắt
   internal static var richTextEditorFormatStateDisabled: String { return L10n.tr("Localizable", "rich_text_editor_format_state_disabled") }
-  /// off
+  /// tắt
   internal static var richTextEditorFormatStateOff: String { return L10n.tr("Localizable", "rich_text_editor_format_state_off") }
-  /// on
+  /// bật
   internal static var richTextEditorFormatStateOn: String { return L10n.tr("Localizable", "rich_text_editor_format_state_on") }
-  /// Apply strikethrough format
+  /// Áp dụng định dạng gạch ngang
   internal static var richTextEditorFormatStrikethrough: String { return L10n.tr("Localizable", "rich_text_editor_format_strikethrough") }
-  /// Apply underline format
+  /// Áp dụng định dạng gạch chân
   internal static var richTextEditorFormatUnderline: String { return L10n.tr("Localizable", "rich_text_editor_format_underline") }
-  /// Toggle full screen mode
+  /// Bật/tắt chế độ toàn màn hình
   internal static var richTextEditorFullScreenToggle: String { return L10n.tr("Localizable", "rich_text_editor_full_screen_toggle") }
-  /// Indent
+  /// Thụt lề
   internal static var richTextEditorIndent: String { return L10n.tr("Localizable", "rich_text_editor_indent") }
-  /// Apply inline code format
+  /// Áp dụng định dạng mã nội tuyến
   internal static var richTextEditorInlineCode: String { return L10n.tr("Localizable", "rich_text_editor_inline_code") }
-  /// Set link
+  /// Đặt liên kết
   internal static var richTextEditorLink: String { return L10n.tr("Localizable", "rich_text_editor_link") }
-  /// Toggle numbered list
+  /// Bật/tắt danh sách đánh số
   internal static var richTextEditorNumberedList: String { return L10n.tr("Localizable", "rich_text_editor_numbered_list") }
-  /// Open compose options
+  /// Mở tùy chọn soạn thảo
   internal static var richTextEditorOpenComposeOptions: String { return L10n.tr("Localizable", "rich_text_editor_open_compose_options") }
-  /// Toggle quote
+  /// Bật/tắt trích dẫn
   internal static var richTextEditorQuote: String { return L10n.tr("Localizable", "rich_text_editor_quote") }
-  /// Remove link
+  /// Xóa liên kết
   internal static var richTextEditorRemoveLink: String { return L10n.tr("Localizable", "rich_text_editor_remove_link") }
-  /// Unindent
+  /// Bỏ thụt lề
   internal static var richTextEditorUnindent: String { return L10n.tr("Localizable", "rich_text_editor_unindent") }
-  /// Link
+  /// Liên kết
   internal static var richTextEditorUrlPlaceholder: String { return L10n.tr("Localizable", "rich_text_editor_url_placeholder") }
-  /// Change account provider
+  /// Thay đổi nhà cung cấp tài khoản
   internal static var screenAccountProviderChange: String { return L10n.tr("Localizable", "screen_account_provider_change") }
-  /// Homeserver address
+  /// Địa chỉ Homeserver
   internal static var screenAccountProviderFormHint: String { return L10n.tr("Localizable", "screen_account_provider_form_hint") }
-  /// Enter a search term or a domain address.
+  /// Nhập từ khóa tìm kiếm hoặc địa chỉ domain.
   internal static var screenAccountProviderFormNotice: String { return L10n.tr("Localizable", "screen_account_provider_form_notice") }
-  /// Search for a company, community, or private server.
+  /// Tìm kiếm công ty, cộng đồng hoặc máy chủ riêng.
   internal static var screenAccountProviderFormSubtitle: String { return L10n.tr("Localizable", "screen_account_provider_form_subtitle") }
-  /// Find an account provider
+  /// Tìm nhà cung cấp tài khoản
   internal static var screenAccountProviderFormTitle: String { return L10n.tr("Localizable", "screen_account_provider_form_title") }
-  /// This is where your conversations will live — just like you would use an email provider to keep your emails.
+  /// Đây là nơi các cuộc trò chuyện sẽ diễn ra — giống như bạn sử dụng nhà cung cấp email để giữ email.
   internal static var screenAccountProviderSigninSubtitle: String { return L10n.tr("Localizable", "screen_account_provider_signin_subtitle") }
-  /// You’re about to sign in to %@
+  /// Bạn sắp đăng nhập vào %@
   internal static func screenAccountProviderSigninTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_account_provider_signin_title", String(describing: p1))
   }
-  /// This is where your conversations will live — just like you would use an email provider to keep your emails.
+  /// Đây là nơi các cuộc trò chuyện sẽ diễn ra — giống như bạn sử dụng nhà cung cấp email để giữ email.
   internal static var screenAccountProviderSignupSubtitle: String { return L10n.tr("Localizable", "screen_account_provider_signup_subtitle") }
-  /// You’re about to create an account on %@
+  /// Bạn sắp tạo tài khoản trên %@
   internal static func screenAccountProviderSignupTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_account_provider_signup_title", String(describing: p1))
   }
-  /// Developer mode
+  /// Chế độ nhà phát triển
   internal static var screenAdvancedSettingsDeveloperMode: String { return L10n.tr("Localizable", "screen_advanced_settings_developer_mode") }
-  /// Enable to have access to features and functionality for developers.
+  /// Bật để có quyền truy cập vào các tính năng và chức năng dành cho nhà phát triển.
   internal static var screenAdvancedSettingsDeveloperModeDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_developer_mode_description") }
-  /// Custom Element Call base URL
+  /// URL cơ sở Element Call tùy chỉnh
   internal static var screenAdvancedSettingsElementCallBaseUrl: String { return L10n.tr("Localizable", "screen_advanced_settings_element_call_base_url") }
-  /// Set a custom base URL for Element Call.
+  /// Đặt URL cơ sở tùy chỉnh cho Element Call.
   internal static var screenAdvancedSettingsElementCallBaseUrlDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_element_call_base_url_description") }
-  /// Invalid URL, please make sure you include the protocol (http/https) and the correct address.
+  /// URL không hợp lệ, vui lòng đảm bảo bạn bao gồm giao thức (http/https) và địa chỉ chính xác.
   internal static var screenAdvancedSettingsElementCallBaseUrlValidationError: String { return L10n.tr("Localizable", "screen_advanced_settings_element_call_base_url_validation_error") }
-  /// Hide avatars in room invite requests
+  /// Ẩn avatar trong yêu cầu mời phòng
   internal static var screenAdvancedSettingsHideInviteAvatarsToggleTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_hide_invite_avatars_toggle_title") }
-  /// Hide media previews in timeline
+  /// Ẩn xem trước media trong dòng thời gian
   internal static var screenAdvancedSettingsHideTimelineMediaToggleTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_hide_timeline_media_toggle_title") }
-  /// Upload photos and videos faster and reduce data usage
+  /// Tải lên ảnh và video nhanh hơn và giảm sử dụng dữ liệu
   internal static var screenAdvancedSettingsMediaCompressionDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_media_compression_description") }
-  /// Optimise media quality
+  /// Tối ưu hóa chất lượng media
   internal static var screenAdvancedSettingsMediaCompressionTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_media_compression_title") }
-  /// Moderation and Safety
+  /// Kiểm duyệt và an toàn
   internal static var screenAdvancedSettingsModerationAndSafetySectionTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_moderation_and_safety_section_title") }
-  /// Disable the rich text editor to type Markdown manually.
+  /// Tắt trình soạn thảo văn bản phong phú để nhập Markdown thủ công.
   internal static var screenAdvancedSettingsRichTextEditorDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_rich_text_editor_description") }
-  /// Read receipts
+  /// Xác nhận đã đọc
   internal static var screenAdvancedSettingsSendReadReceipts: String { return L10n.tr("Localizable", "screen_advanced_settings_send_read_receipts") }
-  /// If turned off, your read receipts won't be sent to anyone. You will still receive read receipts from other users.
+  /// Nếu tắt, xác nhận đã đọc của bạn sẽ không được gửi cho ai. Bạn vẫn sẽ nhận được xác nhận đã đọc từ người dùng khác.
   internal static var screenAdvancedSettingsSendReadReceiptsDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_send_read_receipts_description") }
-  /// Share presence
+  /// Chia sẻ trạng thái
   internal static var screenAdvancedSettingsSharePresence: String { return L10n.tr("Localizable", "screen_advanced_settings_share_presence") }
-  /// If turned off, you won’t be able to send or receive read receipts or typing notifications.
+  /// Nếu tắt, bạn sẽ không thể gửi hoặc nhận xác nhận đã đọc hoặc thông báo đang gõ.
   internal static var screenAdvancedSettingsSharePresenceDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_share_presence_description") }
-  /// Always hide
+  /// Luôn ẩn
   internal static var screenAdvancedSettingsShowMediaTimelineAlwaysHide: String { return L10n.tr("Localizable", "screen_advanced_settings_show_media_timeline_always_hide") }
-  /// Always show
+  /// Luôn hiển thị
   internal static var screenAdvancedSettingsShowMediaTimelineAlwaysShow: String { return L10n.tr("Localizable", "screen_advanced_settings_show_media_timeline_always_show") }
-  /// In private rooms
+  /// Trong phòng riêng tư
   internal static var screenAdvancedSettingsShowMediaTimelinePrivateRooms: String { return L10n.tr("Localizable", "screen_advanced_settings_show_media_timeline_private_rooms") }
-  /// A hidden media can always be shown by tapping on it
+  /// Media bị ẩn luôn có thể hiển thị bằng cách chạm vào
   internal static var screenAdvancedSettingsShowMediaTimelineSubtitle: String { return L10n.tr("Localizable", "screen_advanced_settings_show_media_timeline_subtitle") }
-  /// Show media in timeline
+  /// Hiển thị media trong dòng thời gian
   internal static var screenAdvancedSettingsShowMediaTimelineTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_show_media_timeline_title") }
-  /// Enable option to view message source in the timeline.
+  /// Bật tùy chọn xem nguồn tin nhắn trong dòng thời gian.
   internal static var screenAdvancedSettingsViewSourceDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_view_source_description") }
-  /// We won't record or profile any personal data
+  /// Chúng tôi sẽ không ghi lại hoặc lập hồ sơ bất kỳ dữ liệu cá nhân nào
   internal static var screenAnalyticsPromptDataUsage: String { return L10n.tr("Localizable", "screen_analytics_prompt_data_usage") }
-  /// Share anonymous usage data to help us identify issues.
+  /// Chia sẻ dữ liệu sử dụng ẩn danh để giúp chúng tôi xác định vấn đề.
   internal static var screenAnalyticsPromptHelpUsImprove: String { return L10n.tr("Localizable", "screen_analytics_prompt_help_us_improve") }
-  /// You can read all our terms %1$@.
+  /// Bạn có thể đọc tất cả điều khoản của chúng tôi %1$@.
   internal static func screenAnalyticsPromptReadTerms(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_analytics_prompt_read_terms", String(describing: p1))
   }
-  /// here
+  /// tại đây
   internal static var screenAnalyticsPromptReadTermsContentLink: String { return L10n.tr("Localizable", "screen_analytics_prompt_read_terms_content_link") }
-  /// You can turn this off anytime
+  /// Bạn có thể tắt điều này bất cứ lúc nào
   internal static var screenAnalyticsPromptSettings: String { return L10n.tr("Localizable", "screen_analytics_prompt_settings") }
-  /// We won't share your data with third parties
+  /// Chúng tôi sẽ không chia sẻ dữ liệu của bạn với bên thứ ba
   internal static var screenAnalyticsPromptThirdPartySharing: String { return L10n.tr("Localizable", "screen_analytics_prompt_third_party_sharing") }
-  /// Help improve %1$@
+  /// Giúp cải thiện %1$@
   internal static func screenAnalyticsPromptTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_analytics_prompt_title", String(describing: p1))
   }
-  /// Share anonymous usage data to help us identify issues.
+  /// Chia sẻ dữ liệu sử dụng ẩn danh để giúp chúng tôi xác định vấn đề.
   internal static var screenAnalyticsSettingsHelpUsImprove: String { return L10n.tr("Localizable", "screen_analytics_settings_help_us_improve") }
-  /// You can read all our terms %1$@.
+  /// Bạn có thể đọc tất cả điều khoản của chúng tôi %1$@.
   internal static func screenAnalyticsSettingsReadTerms(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_analytics_settings_read_terms", String(describing: p1))
   }
-  /// here
+  /// tại đây
   internal static var screenAnalyticsSettingsReadTermsContentLink: String { return L10n.tr("Localizable", "screen_analytics_settings_read_terms_content_link") }
-  /// Share analytics data
+  /// Chia sẻ dữ liệu phân tích
   internal static var screenAnalyticsSettingsShareData: String { return L10n.tr("Localizable", "screen_analytics_settings_share_data") }
-  /// biometric authentication
+  /// xác thực sinh trắc học
   internal static var screenAppLockBiometricAuthentication: String { return L10n.tr("Localizable", "screen_app_lock_biometric_authentication") }
-  /// biometric unlock
+  /// mở khóa sinh trắc học
   internal static var screenAppLockBiometricUnlock: String { return L10n.tr("Localizable", "screen_app_lock_biometric_unlock") }
-  /// Authentication is needed to access your app
+  /// Cần xác thực để truy cập ứng dụng
   internal static var screenAppLockBiometricUnlockReasonIos: String { return L10n.tr("Localizable", "screen_app_lock_biometric_unlock_reason_ios") }
-  /// Forgot PIN?
+  /// Quên PIN?
   internal static var screenAppLockForgotPin: String { return L10n.tr("Localizable", "screen_app_lock_forgot_pin") }
-  /// Change PIN code
+  /// Đổi mã PIN
   internal static var screenAppLockSettingsChangePin: String { return L10n.tr("Localizable", "screen_app_lock_settings_change_pin") }
-  /// Allow biometric unlock
+  /// Cho phép mở khóa sinh trắc học
   internal static var screenAppLockSettingsEnableBiometricUnlock: String { return L10n.tr("Localizable", "screen_app_lock_settings_enable_biometric_unlock") }
-  /// Allow Face ID
+  /// Cho phép Face ID
   internal static var screenAppLockSettingsEnableFaceIdIos: String { return L10n.tr("Localizable", "screen_app_lock_settings_enable_face_id_ios") }
-  /// Allow Optic ID
+  /// Cho phép Optic ID
   internal static var screenAppLockSettingsEnableOpticIdIos: String { return L10n.tr("Localizable", "screen_app_lock_settings_enable_optic_id_ios") }
-  /// Allow Touch ID
+  /// Cho phép Touch ID
   internal static var screenAppLockSettingsEnableTouchIdIos: String { return L10n.tr("Localizable", "screen_app_lock_settings_enable_touch_id_ios") }
-  /// Remove PIN
+  /// Xóa PIN
   internal static var screenAppLockSettingsRemovePin: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin") }
-  /// Are you sure you want to remove PIN?
+  /// Bạn có chắc chắn muốn xóa PIN?
   internal static var screenAppLockSettingsRemovePinAlertMessage: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin_alert_message") }
-  /// Remove PIN?
+  /// Xóa PIN?
   internal static var screenAppLockSettingsRemovePinAlertTitle: String { return L10n.tr("Localizable", "screen_app_lock_settings_remove_pin_alert_title") }
-  /// Allow %1$@
+  /// Cho phép %1$@
   internal static func screenAppLockSetupBiometricUnlockAllowTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_app_lock_setup_biometric_unlock_allow_title", String(describing: p1))
   }
-  /// I’d rather use PIN
+  /// Tôi muốn sử dụng PIN
   internal static var screenAppLockSetupBiometricUnlockSkip: String { return L10n.tr("Localizable", "screen_app_lock_setup_biometric_unlock_skip") }
-  /// Save yourself some time and use %1$@ to unlock the app each time
+  /// Tiết kiệm thời gian và sử dụng %1$@ để mở khóa ứng dụng mỗi lần
   internal static func screenAppLockSetupBiometricUnlockSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_app_lock_setup_biometric_unlock_subtitle", String(describing: p1))
   }
-  /// Choose PIN
+  /// Chọn PIN
   internal static var screenAppLockSetupChoosePin: String { return L10n.tr("Localizable", "screen_app_lock_setup_choose_pin") }
-  /// Confirm PIN
+  /// Xác nhận PIN
   internal static var screenAppLockSetupConfirmPin: String { return L10n.tr("Localizable", "screen_app_lock_setup_confirm_pin") }
-  /// Lock %1$@ to add extra security to your chats.
+  /// Khóa %1$@ để thêm bảo mật cho cuộc trò chuyện.
   /// 
-  /// Choose something memorable. If you forget this PIN, you will be logged out of the app.
+  /// Chọn thứ gì đó dễ nhớ. Nếu bạn quên PIN này, bạn sẽ bị đăng xuất khỏi ứng dụng.
   internal static func screenAppLockSetupPinContext(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_app_lock_setup_pin_context", String(describing: p1))
   }
-  /// You cannot choose this as your PIN code for security reasons
+  /// Bạn không thể chọn điều này làm mã PIN vì lý do bảo mật
   internal static var screenAppLockSetupPinForbiddenDialogContent: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_forbidden_dialog_content") }
-  /// Choose a different PIN
+  /// Chọn PIN khác
   internal static var screenAppLockSetupPinForbiddenDialogTitle: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_forbidden_dialog_title") }
-  /// Please enter the same PIN twice
+  /// Vui lòng nhập cùng một PIN hai lần
   internal static var screenAppLockSetupPinMismatchDialogContent: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_mismatch_dialog_content") }
-  /// PINs don't match
+  /// PIN không khớp
   internal static var screenAppLockSetupPinMismatchDialogTitle: String { return L10n.tr("Localizable", "screen_app_lock_setup_pin_mismatch_dialog_title") }
-  /// You’ll need to re-login and create a new PIN to proceed
+  /// Bạn sẽ cần đăng nhập lại và tạo PIN mới để tiếp tục
   internal static var screenAppLockSignoutAlertMessage: String { return L10n.tr("Localizable", "screen_app_lock_signout_alert_message") }
-  /// You are being signed out
+  /// Bạn đang bị đăng xuất
   internal static var screenAppLockSignoutAlertTitle: String { return L10n.tr("Localizable", "screen_app_lock_signout_alert_title") }
   /// Plural format key: "%#@COUNT@"
   internal static func screenAppLockSubtitle(_ p1: Int) -> String {
@@ -1168,210 +1168,210 @@ internal enum L10n {
   internal static func screenAppLockSubtitleWrongPin(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_app_lock_subtitle_wrong_pin", p1)
   }
-  /// You have no blocked users
+  /// Bạn không có người dùng bị chặn
   internal static var screenBlockedUsersEmpty: String { return L10n.tr("Localizable", "screen_blocked_users_empty") }
-  /// Unblock
+  /// Bỏ chặn
   internal static var screenBlockedUsersUnblockAlertAction: String { return L10n.tr("Localizable", "screen_blocked_users_unblock_alert_action") }
-  /// You'll be able to see all messages from them again.
+  /// Bạn sẽ có thể thấy lại tất cả tin nhắn từ họ.
   internal static var screenBlockedUsersUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_blocked_users_unblock_alert_description") }
-  /// Unblock user
+  /// Bỏ chặn người dùng
   internal static var screenBlockedUsersUnblockAlertTitle: String { return L10n.tr("Localizable", "screen_blocked_users_unblock_alert_title") }
-  /// Unblocking…
+  /// Đang bỏ chặn…
   internal static var screenBlockedUsersUnblocking: String { return L10n.tr("Localizable", "screen_blocked_users_unblocking") }
-  /// Send invite
+  /// Gửi lời mời
   internal static var screenBottomSheetCreateDmConfirmationButtonTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_confirmation_button_title") }
-  /// Would you like to start a chat with %1$@?
+  /// Bạn có muốn bắt đầu trò chuyện với %1$@?
   internal static func screenBottomSheetCreateDmMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_message", String(describing: p1))
   }
-  /// Send invite?
+  /// Gửi lời mời?
   internal static var screenBottomSheetCreateDmTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_title") }
-  /// Ban from room
+  /// Cấm khỏi phòng
   internal static var screenBottomSheetManageRoomMemberBan: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_ban") }
-  /// Ban
+  /// Cấm
   internal static var screenBottomSheetManageRoomMemberBanMemberConfirmationAction: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action") }
-  /// They won’t be able to join this room again if invited.
+  /// Họ sẽ không thể tham gia phòng này lại nếu được mời.
   internal static var screenBottomSheetManageRoomMemberBanMemberConfirmationDescription: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description") }
-  /// Are you sure you want to ban this member?
+  /// Bạn có chắc chắn muốn cấm thành viên này?
   internal static var screenBottomSheetManageRoomMemberBanMemberConfirmationTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title") }
-  /// Banning %1$@
+  /// Đang cấm %1$@
   internal static func screenBottomSheetManageRoomMemberBanningUser(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_banning_user", String(describing: p1))
   }
-  /// Remove
+  /// Xóa
   internal static var screenBottomSheetManageRoomMemberKickMemberConfirmationAction: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action") }
-  /// They will be able to join this room again if invited.
+  /// Họ sẽ có thể tham gia phòng này lại nếu được mời.
   internal static var screenBottomSheetManageRoomMemberKickMemberConfirmationDescription: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description") }
-  /// Are you sure you want to remove this member?
+  /// Bạn có chắc chắn muốn xóa thành viên này?
   internal static var screenBottomSheetManageRoomMemberKickMemberConfirmationTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title") }
-  /// View profile
+  /// Xem hồ sơ
   internal static var screenBottomSheetManageRoomMemberMemberUserInfo: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_member_user_info") }
-  /// Remove from room
+  /// Xóa khỏi phòng
   internal static var screenBottomSheetManageRoomMemberRemove: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_remove") }
-  /// Remove member and ban from joining in the future?
+  /// Xóa thành viên và cấm tham gia trong tương lai?
   internal static var screenBottomSheetManageRoomMemberRemoveConfirmationTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_remove_confirmation_title") }
-  /// Removing %1$@…
+  /// Đang xóa %1$@…
   internal static func screenBottomSheetManageRoomMemberRemovingUser(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_removing_user", String(describing: p1))
   }
-  /// Unban from room
+  /// Bỏ cấm khỏi phòng
   internal static var screenBottomSheetManageRoomMemberUnban: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unban") }
-  /// Unban
+  /// Bỏ cấm
   internal static var screenBottomSheetManageRoomMemberUnbanMemberConfirmationAction: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action") }
-  /// They would be able to join the room again if invited
+  /// Họ sẽ có thể tham gia phòng lại nếu được mời
   internal static var screenBottomSheetManageRoomMemberUnbanMemberConfirmationDescription: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unban_member_confirmation_description") }
-  /// Are you sure you want to unban this member?
+  /// Bạn có chắc chắn muốn bỏ cấm thành viên này?
   internal static var screenBottomSheetManageRoomMemberUnbanMemberConfirmationTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title") }
-  /// Unbanning %1$@
+  /// Đang bỏ cấm %1$@
   internal static func screenBottomSheetManageRoomMemberUnbanningUser(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_unbanning_user", String(describing: p1))
   }
-  /// Screenshot
+  /// Ảnh chụp màn hình
   internal static var screenBugReportA11yScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_a11y_screenshot") }
-  /// Attach screenshot
+  /// Đính kèm ảnh chụp màn hình
   internal static var screenBugReportAttachScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_attach_screenshot") }
-  /// You may contact me if you have any follow up questions.
+  /// Bạn có thể liên hệ với tôi nếu có câu hỏi nào khác.
   internal static var screenBugReportContactMe: String { return L10n.tr("Localizable", "screen_bug_report_contact_me") }
-  /// Contact me
+  /// Liên hệ với tôi
   internal static var screenBugReportContactMeTitle: String { return L10n.tr("Localizable", "screen_bug_report_contact_me_title") }
-  /// Edit screenshot
+  /// Chỉnh sửa ảnh chụp màn hình
   internal static var screenBugReportEditScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_edit_screenshot") }
-  /// Please describe the problem. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.
+  /// Vui lòng mô tả vấn đề. Bạn đã làm gì? Bạn mong đợi điều gì xảy ra? Điều gì thực sự đã xảy ra. Vui lòng cung cấp càng nhiều chi tiết càng tốt.
   internal static var screenBugReportEditorDescription: String { return L10n.tr("Localizable", "screen_bug_report_editor_description") }
-  /// Describe the problem…
+  /// Mô tả vấn đề…
   internal static var screenBugReportEditorPlaceholder: String { return L10n.tr("Localizable", "screen_bug_report_editor_placeholder") }
-  /// If possible, please write the description in English.
+  /// Nếu có thể, vui lòng viết mô tả bằng tiếng Anh.
   internal static var screenBugReportEditorSupporting: String { return L10n.tr("Localizable", "screen_bug_report_editor_supporting") }
-  /// The description is too short, please provide more details about what happened. Thanks!
+  /// Mô tả quá ngắn, vui lòng cung cấp thêm chi tiết về những gì đã xảy ra. Cảm ơn!
   internal static var screenBugReportErrorDescriptionTooShort: String { return L10n.tr("Localizable", "screen_bug_report_error_description_too_short") }
-  /// Send crash logs
+  /// Gửi nhật ký sự cố
   internal static var screenBugReportIncludeCrashLogs: String { return L10n.tr("Localizable", "screen_bug_report_include_crash_logs") }
-  /// Allow logs
+  /// Cho phép nhật ký
   internal static var screenBugReportIncludeLogs: String { return L10n.tr("Localizable", "screen_bug_report_include_logs") }
-  /// Your logs are excessively large so cannot be included in this report, please send them to us another way.
+  /// Nhật ký của bạn quá lớn nên không thể đưa vào báo cáo này, vui lòng gửi chúng cho chúng tôi theo cách khác.
   internal static var screenBugReportIncludeLogsError: String { return L10n.tr("Localizable", "screen_bug_report_include_logs_error") }
-  /// Send screenshot
+  /// Gửi ảnh chụp màn hình
   internal static var screenBugReportIncludeScreenshot: String { return L10n.tr("Localizable", "screen_bug_report_include_screenshot") }
-  /// Logs will be included with your message to make sure that everything is working properly. To send your message without logs, turn off this setting.
+  /// Nhật ký sẽ được đưa vào tin nhắn để đảm bảo mọi thứ hoạt động đúng cách. Để gửi tin nhắn mà không có nhật ký, hãy tắt cài đặt này.
   internal static var screenBugReportLogsDescription: String { return L10n.tr("Localizable", "screen_bug_report_logs_description") }
-  /// %1$@ crashed the last time it was used. Would you like to share a crash report with us?
+  /// %1$@ đã gặp sự cố lần cuối sử dụng. Bạn có muốn chia sẻ báo cáo sự cố với chúng tôi?
   internal static func screenBugReportRashLogsAlertTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bug_report_rash_logs_alert_title", String(describing: p1))
   }
-  /// View logs
+  /// Xem nhật ký
   internal static var screenBugReportViewLogs: String { return L10n.tr("Localizable", "screen_bug_report_view_logs") }
-  /// Matrix.org is a large, free server on the public Matrix network for secure, decentralised communication, run by the Matrix.org Foundation.
+  /// Matrix.org là máy chủ lớn, miễn phí trên mạng Matrix công cộng cho giao tiếp bảo mật, phi tập trung, được điều hành bởi Matrix.org Foundation.
   internal static var screenChangeAccountProviderMatrixOrgSubtitle: String { return L10n.tr("Localizable", "screen_change_account_provider_matrix_org_subtitle") }
-  /// Other
+  /// Khác
   internal static var screenChangeAccountProviderOther: String { return L10n.tr("Localizable", "screen_change_account_provider_other") }
-  /// Use a different account provider, such as your own private server or a work account.
+  /// Sử dụng nhà cung cấp tài khoản khác, chẳng hạn như máy chủ riêng hoặc tài khoản công việc.
   internal static var screenChangeAccountProviderSubtitle: String { return L10n.tr("Localizable", "screen_change_account_provider_subtitle") }
-  /// Change account provider
+  /// Thay đổi nhà cung cấp tài khoản
   internal static var screenChangeAccountProviderTitle: String { return L10n.tr("Localizable", "screen_change_account_provider_title") }
   /// App Store
   internal static var screenChangeServerErrorElementProRequiredActionIos: String { return L10n.tr("Localizable", "screen_change_server_error_element_pro_required_action_ios") }
-  /// The Element Pro app is required on %1$@. Please download it from the store.
+  /// Ứng dụng Element Pro được yêu cầu trên %1$@. Vui lòng tải xuống từ cửa hàng.
   internal static func screenChangeServerErrorElementProRequiredMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_element_pro_required_message", String(describing: p1))
   }
-  /// Element Pro required
+  /// Yêu cầu Element Pro
   internal static var screenChangeServerErrorElementProRequiredTitle: String { return L10n.tr("Localizable", "screen_change_server_error_element_pro_required_title") }
-  /// We couldn't reach this homeserver. Please check that you have entered the homeserver URL correctly. If the URL is correct, contact your homeserver administrator for further help.
+  /// Chúng tôi không thể kết nối đến homeserver này. Vui lòng kiểm tra bạn đã nhập URL homeserver chính xác. Nếu URL đúng, liên hệ quản trị viên homeserver để được trợ giúp thêm.
   internal static var screenChangeServerErrorInvalidHomeserver: String { return L10n.tr("Localizable", "screen_change_server_error_invalid_homeserver") }
-  /// Server isn't available due to an issue in the .well-known file:
+  /// Máy chủ không khả dụng do vấn đề trong tệp .well-known:
   /// %1$@
   internal static func screenChangeServerErrorInvalidWellKnown(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_invalid_well_known", String(describing: p1))
   }
-  /// The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.
+  /// Nhà cung cấp tài khoản đã chọn không hỗ trợ sliding sync. Cần nâng cấp máy chủ để sử dụng %1$@.
   internal static func screenChangeServerErrorNoSlidingSyncMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_no_sliding_sync_message", String(describing: p1))
   }
-  /// %1$@ is not allowed to connect to %2$@.
+  /// %1$@ không được phép kết nối đến %2$@.
   internal static func screenChangeServerErrorUnauthorizedHomeserver(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_unauthorized_homeserver", String(describing: p1), String(describing: p2))
   }
-  /// This app has been configured to allow: %1$@.
+  /// Ứng dụng này đã được cấu hình để cho phép: %1$@.
   internal static func screenChangeServerErrorUnauthorizedHomeserverContent(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_unauthorized_homeserver_content", String(describing: p1))
   }
-  /// Account provider %1$@ not allowed.
+  /// Nhà cung cấp tài khoản %1$@ không được phép.
   internal static func screenChangeServerErrorUnauthorizedHomeserverTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_change_server_error_unauthorized_homeserver_title", String(describing: p1))
   }
-  /// Homeserver URL
+  /// URL Homeserver
   internal static var screenChangeServerFormHeader: String { return L10n.tr("Localizable", "screen_change_server_form_header") }
-  /// Enter a domain address.
+  /// Nhập địa chỉ domain.
   internal static var screenChangeServerFormNotice: String { return L10n.tr("Localizable", "screen_change_server_form_notice") }
-  /// What is the address of your server?
+  /// Địa chỉ máy chủ của bạn là gì?
   internal static var screenChangeServerSubtitle: String { return L10n.tr("Localizable", "screen_change_server_subtitle") }
-  /// Select your server
+  /// Chọn máy chủ của bạn
   internal static var screenChangeServerTitle: String { return L10n.tr("Localizable", "screen_change_server_title") }
-  /// Delete key storage
+  /// Xóa kho lưu trữ khóa
   internal static var screenChatBackupKeyBackupActionDisable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_disable") }
-  /// Turn on backup
+  /// Bật sao lưu
   internal static var screenChatBackupKeyBackupActionEnable: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_action_enable") }
-  /// Store your cryptographic identity and message keys securely on the server. This will allow you to view your message history on any new devices. %1$@.
+  /// Lưu trữ danh tính mã hóa và khóa tin nhắn một cách an toàn trên máy chủ. Điều này sẽ cho phép bạn xem lịch sử tin nhắn trên bất kỳ thiết bị mới nào. %1$@.
   internal static func screenChatBackupKeyBackupDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_chat_backup_key_backup_description", String(describing: p1))
   }
-  /// Key storage
+  /// Kho lưu trữ khóa
   internal static var screenChatBackupKeyBackupTitle: String { return L10n.tr("Localizable", "screen_chat_backup_key_backup_title") }
-  /// Key storage must be turned on to set up recovery.
+  /// Kho lưu trữ khóa phải được bật để thiết lập khôi phục.
   internal static var screenChatBackupKeyStorageDisabledError: String { return L10n.tr("Localizable", "screen_chat_backup_key_storage_disabled_error") }
-  /// Upload keys from this device
+  /// Tải lên khóa từ thiết bị này
   internal static var screenChatBackupKeyStorageToggleDescription: String { return L10n.tr("Localizable", "screen_chat_backup_key_storage_toggle_description") }
-  /// Allow key storage
+  /// Cho phép lưu trữ khóa
   internal static var screenChatBackupKeyStorageToggleTitle: String { return L10n.tr("Localizable", "screen_chat_backup_key_storage_toggle_title") }
-  /// Change recovery key
+  /// Thay đổi khóa khôi phục
   internal static var screenChatBackupRecoveryActionChange: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_change") }
-  /// Recover your cryptographic identity and message history with a recovery key if you’ve lost all your existing devices.
+  /// Khôi phục danh tính mã hóa và lịch sử tin nhắn bằng khóa khôi phục nếu bạn mất tất cả thiết bị hiện có.
   internal static var screenChatBackupRecoveryActionChangeDescription: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_change_description") }
-  /// Enter recovery key
+  /// Nhập khóa khôi phục
   internal static var screenChatBackupRecoveryActionConfirm: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_confirm") }
-  /// Your key storage is currently out of sync.
+  /// Kho lưu trữ khóa của bạn hiện không đồng bộ.
   internal static var screenChatBackupRecoveryActionConfirmDescription: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_confirm_description") }
-  /// Set up recovery
+  /// Thiết lập khôi phục
   internal static var screenChatBackupRecoveryActionSetup: String { return L10n.tr("Localizable", "screen_chat_backup_recovery_action_setup") }
-  /// Get access to your encrypted messages if you lose all your devices or are signed out of %1$@ everywhere.
+  /// Có quyền truy cập vào tin nhắn mã hóa nếu bạn mất tất cả thiết bị hoặc bị đăng xuất khỏi %1$@ ở mọi nơi.
   internal static func screenChatBackupRecoveryActionSetupDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_chat_backup_recovery_action_setup_description", String(describing: p1))
   }
-  /// Create account
+  /// Tạo tài khoản
   internal static var screenCreateAccountTitle: String { return L10n.tr("Localizable", "screen_create_account_title") }
-  /// Open %1$@ in a desktop device
+  /// Mở %1$@ trên thiết bị desktop
   internal static func screenCreateNewRecoveryKeyListItem1(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_1", String(describing: p1))
   }
-  /// Sign into your account again
+  /// Đăng nhập vào tài khoản lại
   internal static var screenCreateNewRecoveryKeyListItem2: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_2") }
-  /// When asked to verify your device, select %1$@
+  /// Khi được yêu cầu xác minh thiết bị, chọn %1$@
   internal static func screenCreateNewRecoveryKeyListItem3(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_3", String(describing: p1))
   }
-  /// “Reset all”
+  /// "Đặt lại tất cả"
   internal static var screenCreateNewRecoveryKeyListItem3ResetAll: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_3_reset_all") }
-  /// Follow the instructions to create a new recovery key
+  /// Làm theo hướng dẫn để tạo khóa khôi phục mới
   internal static var screenCreateNewRecoveryKeyListItem4: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_4") }
-  /// Save your new recovery key in a password manager or encrypted note
+  /// Lưu khóa khôi phục mới trong trình quản lý mật khẩu hoặc ghi chú mã hóa
   internal static var screenCreateNewRecoveryKeyListItem5: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_list_item_5") }
-  /// Reset the encryption for your account using another device
+  /// Đặt lại mã hóa cho tài khoản bằng thiết bị khác
   internal static var screenCreateNewRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_create_new_recovery_key_title") }
-  /// Add option
+  /// Thêm tùy chọn
   internal static var screenCreatePollAddOptionBtn: String { return L10n.tr("Localizable", "screen_create_poll_add_option_btn") }
-  /// Show results only after poll ends
+  /// Chỉ hiển thị kết quả sau khi kết thúc bình chọn
   internal static var screenCreatePollAnonymousDesc: String { return L10n.tr("Localizable", "screen_create_poll_anonymous_desc") }
-  /// Hide votes
+  /// Ẩn phiếu bầu
   internal static var screenCreatePollAnonymousHeadline: String { return L10n.tr("Localizable", "screen_create_poll_anonymous_headline") }
-  /// Option %1$d
+  /// Tùy chọn %1$d
   internal static func screenCreatePollAnswerHint(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_create_poll_answer_hint", p1)
   }
-  /// Your changes won’t be saved
+  /// Các thay đổi sẽ không được lưu
   internal static var screenCreatePollCancelConfirmationContentIos: String { return L10n.tr("Localizable", "screen_create_poll_cancel_confirmation_content_ios") }
-  /// Cancel Poll
+  /// Hủy bình chọn
   internal static var screenCreatePollCancelConfirmationTitleIos: String { return L10n.tr("Localizable", "screen_create_poll_cancel_confirmation_title_ios") }
-  /// Delete option %1$@
+  /// Xóa tùy chọn %1$@
   internal static func screenCreatePollDeleteOptionA11y(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_create_poll_delete_option_a11y", String(describing: p1))
   }
@@ -1379,1042 +1379,1050 @@ internal enum L10n {
   internal static func screenCreatePollOptionAccessibilityLabel(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_create_poll_option_accessibility_label", String(describing: p1), String(describing: p2))
   }
-  /// Options
+  /// Tùy chọn
   internal static var screenCreatePollOptionsSectionTitle: String { return L10n.tr("Localizable", "screen_create_poll_options_section_title") }
-  /// Question or topic
+  /// Câu hỏi hoặc chủ đề
   internal static var screenCreatePollQuestionDesc: String { return L10n.tr("Localizable", "screen_create_poll_question_desc") }
-  /// What is the poll about?
+  /// Cuộc bình chọn về điều gì?
   internal static var screenCreatePollQuestionHint: String { return L10n.tr("Localizable", "screen_create_poll_question_hint") }
-  /// Remove %1$@
+  /// Xóa %1$@
   internal static func screenCreatePollRemoveAccessibilityLabel(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_create_poll_remove_accessibility_label", String(describing: p1))
   }
-  /// Settings
+  /// Cài đặt
   internal static var screenCreatePollSettingsSectionTitle: String { return L10n.tr("Localizable", "screen_create_poll_settings_section_title") }
-  /// Create Poll
+  /// Tạo bình chọn
   internal static var screenCreatePollTitle: String { return L10n.tr("Localizable", "screen_create_poll_title") }
-  /// New room
+  /// Phòng mới
   internal static var screenCreateRoomActionCreateRoom: String { return L10n.tr("Localizable", "screen_create_room_action_create_room") }
-  /// Invite people
+  /// Mời mọi người
   internal static var screenCreateRoomAddPeopleTitle: String { return L10n.tr("Localizable", "screen_create_room_add_people_title") }
-  /// An error occurred when creating the room
+  /// Đã xảy ra lỗi khi tạo phòng
   internal static var screenCreateRoomErrorCreatingRoom: String { return L10n.tr("Localizable", "screen_create_room_error_creating_room") }
-  /// Only people invited can access this room. All messages are end-to-end encrypted.
+  /// Chỉ những người được mời mới có thể truy cập phòng này. Tất cả tin nhắn đều được mã hóa đầu cuối.
   internal static var screenCreateRoomPrivateOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_private_option_description") }
-  /// Private room
+  /// Phòng riêng tư
   internal static var screenCreateRoomPrivateOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_private_option_title") }
-  /// Anyone can find this room.
-  /// You can change this anytime in room settings.
+  /// Bất kỳ ai cũng có thể tìm thấy phòng này.
+  /// Bạn có thể thay đổi điều này bất cứ lúc nào trong cài đặt phòng.
   internal static var screenCreateRoomPublicOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_public_option_description") }
-  /// Public room
+  /// Phòng công cộng
   internal static var screenCreateRoomPublicOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_public_option_title") }
-  /// Anyone can join this room
+  /// Bất kỳ ai cũng có thể tham gia phòng này
   internal static var screenCreateRoomRoomAccessSectionAnyoneOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_anyone_option_description") }
-  /// Anyone
+  /// Bất kỳ ai
   internal static var screenCreateRoomRoomAccessSectionAnyoneOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_anyone_option_title") }
-  /// Room Access
+  /// Quyền truy cập phòng
   internal static var screenCreateRoomRoomAccessSectionHeader: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_header") }
-  /// Anyone can ask to join the room but an administrator or a moderator will have to accept the request
+  /// Bất kỳ ai cũng có thể xin tham gia phòng nhưng quản trị viên hoặc điều hành viên sẽ phải chấp nhận yêu cầu
   internal static var screenCreateRoomRoomAccessSectionKnockingOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_option_description") }
-  /// Ask to join
+  /// Xin tham gia
   internal static var screenCreateRoomRoomAccessSectionKnockingOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_access_section_knocking_option_title") }
-  /// In order for this room to be visible in the public room directory, you will need a room address.
+  /// Để phòng này hiển thị trong thư mục phòng công cộng, bạn sẽ cần một địa chỉ phòng.
   internal static var screenCreateRoomRoomAddressSectionFooter: String { return L10n.tr("Localizable", "screen_create_room_room_address_section_footer") }
-  /// Room address
+  /// Địa chỉ phòng
   internal static var screenCreateRoomRoomAddressSectionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_address_section_title") }
-  /// Room name
+  /// Tên phòng
   internal static var screenCreateRoomRoomNameLabel: String { return L10n.tr("Localizable", "screen_create_room_room_name_label") }
-  /// Room visibility
+  /// Khả năng hiển thị phòng
   internal static var screenCreateRoomRoomVisibilitySectionTitle: String { return L10n.tr("Localizable", "screen_create_room_room_visibility_section_title") }
-  /// Create a room
+  /// Tạo phòng
   internal static var screenCreateRoomTitle: String { return L10n.tr("Localizable", "screen_create_room_title") }
-  /// Topic (optional)
+  /// Chủ đề (tùy chọn)
   internal static var screenCreateRoomTopicLabel: String { return L10n.tr("Localizable", "screen_create_room_topic_label") }
-  /// Please confirm that you want to deactivate your account. This action cannot be undone.
+  /// Vui lòng xác nhận rằng bạn muốn vô hiệu hóa tài khoản. Hành động này không thể hoàn tác.
   internal static var screenDeactivateAccountConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_deactivate_account_confirmation_dialog_content") }
-  /// Delete all my messages
+  /// Xóa tất cả tin nhắn của tôi
   internal static var screenDeactivateAccountDeleteAllMessages: String { return L10n.tr("Localizable", "screen_deactivate_account_delete_all_messages") }
-  /// Warning: Future users may see incomplete conversations.
+  /// Cảnh báo: Người dùng tương lai có thể thấy cuộc trò chuyện không đầy đủ.
   internal static var screenDeactivateAccountDeleteAllMessagesNotice: String { return L10n.tr("Localizable", "screen_deactivate_account_delete_all_messages_notice") }
-  /// Deactivating your account is %1$@, it will:
+  /// Vô hiệu hóa tài khoản là %1$@, nó sẽ:
   internal static func screenDeactivateAccountDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_deactivate_account_description", String(describing: p1))
   }
-  /// irreversible
+  /// không thể đảo ngược
   internal static var screenDeactivateAccountDescriptionBoldPart: String { return L10n.tr("Localizable", "screen_deactivate_account_description_bold_part") }
-  /// %1$@ your account (you can't log back in, and your ID can't be reused).
+  /// %1$@ tài khoản của bạn (bạn không thể đăng nhập lại và ID của bạn không thể tái sử dụng).
   internal static func screenDeactivateAccountListItem1(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_deactivate_account_list_item_1", String(describing: p1))
   }
-  /// Permanently disable
+  /// Vô hiệu hóa vĩnh viễn
   internal static var screenDeactivateAccountListItem1BoldPart: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_1_bold_part") }
-  /// Remove you from all chat rooms.
+  /// Xóa bạn khỏi tất cả phòng trò chuyện.
   internal static var screenDeactivateAccountListItem2: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_2") }
-  /// Delete your account information from our identity server.
+  /// Xóa thông tin tài khoản khỏi máy chủ nhận dạng.
   internal static var screenDeactivateAccountListItem3: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_3") }
-  /// Your messages will still be visible to registered users but won’t be available to new or unregistered users if you choose to delete them.
+  /// Tin nhắn của bạn vẫn sẽ hiển thị với người dùng đã đăng ký nhưng sẽ không có sẵn cho người dùng mới hoặc chưa đăng ký nếu bạn chọn xóa chúng.
   internal static var screenDeactivateAccountListItem4: String { return L10n.tr("Localizable", "screen_deactivate_account_list_item_4") }
-  /// Deactivate account
+  /// Vô hiệu hóa tài khoản
   internal static var screenDeactivateAccountTitle: String { return L10n.tr("Localizable", "screen_deactivate_account_title") }
-  /// You will not see any messages or room invites from this user
+  /// Bạn sẽ không thấy bất kỳ tin nhắn hoặc lời mời phòng nào từ người dùng này
   internal static var screenDeclineAndBlockBlockUserOptionDescription: String { return L10n.tr("Localizable", "screen_decline_and_block_block_user_option_description") }
-  /// Block user
+  /// Chặn người dùng
   internal static var screenDeclineAndBlockBlockUserOptionTitle: String { return L10n.tr("Localizable", "screen_decline_and_block_block_user_option_title") }
-  /// Report this room to your account provider.
+  /// Báo cáo phòng này cho nhà cung cấp tài khoản.
   internal static var screenDeclineAndBlockReportUserOptionDescription: String { return L10n.tr("Localizable", "screen_decline_and_block_report_user_option_description") }
-  /// Describe the reason to report…
+  /// Mô tả lý do báo cáo…
   internal static var screenDeclineAndBlockReportUserReasonPlaceholder: String { return L10n.tr("Localizable", "screen_decline_and_block_report_user_reason_placeholder") }
-  /// Decline and block
+  /// Từ chối và chặn
   internal static var screenDeclineAndBlockTitle: String { return L10n.tr("Localizable", "screen_decline_and_block_title") }
-  /// Block
+  /// Chặn
   internal static var screenDmDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_dm_details_block_alert_action") }
-  /// Blocked users won't be able to send you messages and all their messages will be hidden. You can unblock them anytime.
+  /// Người dùng bị chặn sẽ không thể gửi tin nhắn cho bạn và tất cả tin nhắn của họ sẽ bị ẩn. Bạn có thể bỏ chặn họ bất cứ lúc nào.
   internal static var screenDmDetailsBlockAlertDescription: String { return L10n.tr("Localizable", "screen_dm_details_block_alert_description") }
-  /// Block user
+  /// Chặn người dùng
   internal static var screenDmDetailsBlockUser: String { return L10n.tr("Localizable", "screen_dm_details_block_user") }
-  /// Unblock
+  /// Bỏ chặn
   internal static var screenDmDetailsUnblockAlertAction: String { return L10n.tr("Localizable", "screen_dm_details_unblock_alert_action") }
-  /// You'll be able to see all messages from them again.
+  /// Bạn sẽ có thể thấy lại tất cả tin nhắn từ họ.
   internal static var screenDmDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_dm_details_unblock_alert_description") }
-  /// Unblock user
+  /// Bỏ chặn người dùng
   internal static var screenDmDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_dm_details_unblock_user") }
-  /// Are you sure you want to delete this poll?
+  /// Bạn có chắc chắn muốn xóa cuộc bình chọn này?
   internal static var screenEditPollDeleteConfirmation: String { return L10n.tr("Localizable", "screen_edit_poll_delete_confirmation") }
-  /// Delete Poll
+  /// Xóa bình chọn
   internal static var screenEditPollDeleteConfirmationTitle: String { return L10n.tr("Localizable", "screen_edit_poll_delete_confirmation_title") }
-  /// Edit poll
+  /// Chỉnh sửa bình chọn
   internal static var screenEditPollTitle: String { return L10n.tr("Localizable", "screen_edit_poll_title") }
-  /// Display name
+  /// Tên hiển thị
   internal static var screenEditProfileDisplayName: String { return L10n.tr("Localizable", "screen_edit_profile_display_name") }
-  /// Your display name
+  /// Tên hiển thị của bạn
   internal static var screenEditProfileDisplayNamePlaceholder: String { return L10n.tr("Localizable", "screen_edit_profile_display_name_placeholder") }
-  /// An unknown error was encountered and the information couldn't be changed.
+  /// Gặp lỗi không xác định và thông tin không thể thay đổi.
   internal static var screenEditProfileError: String { return L10n.tr("Localizable", "screen_edit_profile_error") }
-  /// Unable to update profile
+  /// Không thể cập nhật hồ sơ
   internal static var screenEditProfileErrorTitle: String { return L10n.tr("Localizable", "screen_edit_profile_error_title") }
-  /// Edit profile
+  /// Chỉnh sửa hồ sơ
   internal static var screenEditProfileTitle: String { return L10n.tr("Localizable", "screen_edit_profile_title") }
-  /// Updating profile…
+  /// Đang cập nhật hồ sơ…
   internal static var screenEditProfileUpdatingDetails: String { return L10n.tr("Localizable", "screen_edit_profile_updating_details") }
-  /// You’ll need a room address in order to make it visible in the directory.
+  /// Bạn sẽ cần một địa chỉ phòng để làm cho nó hiển thị trong thư mục.
   internal static var screenEditRoomAddressRoomAddressSectionFooter: String { return L10n.tr("Localizable", "screen_edit_room_address_room_address_section_footer") }
-  /// Room address
+  /// Địa chỉ phòng
   internal static var screenEditRoomAddressTitle: String { return L10n.tr("Localizable", "screen_edit_room_address_title") }
-  /// Continue reset
+  /// Tiếp tục đặt lại
   internal static var screenEncryptionResetActionContinueReset: String { return L10n.tr("Localizable", "screen_encryption_reset_action_continue_reset") }
-  /// Your account details, contacts, preferences, and chat list will be kept
+  /// Chi tiết tài khoản, danh bạ, tùy chọn và danh sách trò chuyện sẽ được giữ
   internal static var screenEncryptionResetBullet1: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_1") }
-  /// You will lose any message history that’s stored only on the server
+  /// Bạn sẽ mất lịch sử tin nhắn chỉ được lưu trữ trên máy chủ
   internal static var screenEncryptionResetBullet2: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_2") }
-  /// You will need to verify all your existing devices and contacts again
+  /// Bạn sẽ cần xác minh lại tất cả thiết bị và liên hệ hiện có
   internal static var screenEncryptionResetBullet3: String { return L10n.tr("Localizable", "screen_encryption_reset_bullet_3") }
-  /// Only reset your identity if you don’t have access to another signed-in device and you’ve lost your recovery key.
+  /// Chỉ đặt lại danh tính nếu bạn không có quyền truy cập vào thiết bị đã đăng nhập khác và đã mất khóa khôi phục.
   internal static var screenEncryptionResetFooter: String { return L10n.tr("Localizable", "screen_encryption_reset_footer") }
-  /// Can't confirm? You’ll need to reset your identity.
+  /// Không thể xác nhận? Bạn sẽ cần đặt lại danh tính.
   internal static var screenEncryptionResetTitle: String { return L10n.tr("Localizable", "screen_encryption_reset_title") }
-  /// Chats
+  /// Cuộc trò chuyện
   internal static var screenHomeTabChats: String { return L10n.tr("Localizable", "screen_home_tab_chats") }
-  /// Spaces
+  /// Không gian
   internal static var screenHomeTabSpaces: String { return L10n.tr("Localizable", "screen_home_tab_spaces") }
-  /// Can't confirm?
+  /// Không thể xác nhận?
   internal static var screenIdentityConfirmationCannotConfirm: String { return L10n.tr("Localizable", "screen_identity_confirmation_cannot_confirm") }
-  /// Create a new recovery key
+  /// Tạo khóa khôi phục mới
   internal static var screenIdentityConfirmationCreateNewRecoveryKey: String { return L10n.tr("Localizable", "screen_identity_confirmation_create_new_recovery_key") }
-  /// Verify this device to set up secure messaging.
+  /// Xác minh thiết bị này để thiết lập nhắn tin bảo mật.
   internal static var screenIdentityConfirmationSubtitle: String { return L10n.tr("Localizable", "screen_identity_confirmation_subtitle") }
-  /// Confirm your identity
+  /// Xác nhận danh tính của bạn
   internal static var screenIdentityConfirmationTitle: String { return L10n.tr("Localizable", "screen_identity_confirmation_title") }
-  /// Use another device
+  /// Sử dụng thiết bị khác
   internal static var screenIdentityConfirmationUseAnotherDevice: String { return L10n.tr("Localizable", "screen_identity_confirmation_use_another_device") }
-  /// Use recovery key
+  /// Sử dụng khóa khôi phục
   internal static var screenIdentityConfirmationUseRecoveryKey: String { return L10n.tr("Localizable", "screen_identity_confirmation_use_recovery_key") }
-  /// Now you can read or send messages securely, and anyone you chat with can also trust this device.
+  /// Giờ bạn có thể đọc hoặc gửi tin nhắn một cách an toàn, và bất kỳ ai bạn trò chuyện cũng có thể tin tưởng thiết bị này.
   internal static var screenIdentityConfirmedSubtitle: String { return L10n.tr("Localizable", "screen_identity_confirmed_subtitle") }
-  /// Device verified
+  /// Thiết bị đã xác minh
   internal static var screenIdentityConfirmedTitle: String { return L10n.tr("Localizable", "screen_identity_confirmed_title") }
-  /// Use another device
+  /// Sử dụng thiết bị khác
   internal static var screenIdentityUseAnotherDevice: String { return L10n.tr("Localizable", "screen_identity_use_another_device") }
-  /// Waiting on other device…
+  /// Đang chờ thiết bị khác…
   internal static var screenIdentityWaitingOnOtherDevice: String { return L10n.tr("Localizable", "screen_identity_waiting_on_other_device") }
-  /// Are you sure you want to decline the invitation to join %1$@?
+  /// Bạn có chắc chắn muốn từ chối lời mời tham gia %1$@?
   internal static func screenInvitesDeclineChatMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_decline_chat_message", String(describing: p1))
   }
-  /// Decline invite
+  /// Từ chối lời mời
   internal static var screenInvitesDeclineChatTitle: String { return L10n.tr("Localizable", "screen_invites_decline_chat_title") }
-  /// Are you sure you want to decline this private chat with %1$@?
+  /// Bạn có chắc chắn muốn từ chối cuộc trò chuyện riêng này với %1$@?
   internal static func screenInvitesDeclineDirectChatMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_decline_direct_chat_message", String(describing: p1))
   }
-  /// Decline chat
+  /// Từ chối trò chuyện
   internal static var screenInvitesDeclineDirectChatTitle: String { return L10n.tr("Localizable", "screen_invites_decline_direct_chat_title") }
-  /// No Invites
+  /// Không có lời mời
   internal static var screenInvitesEmptyList: String { return L10n.tr("Localizable", "screen_invites_empty_list") }
-  /// %1$@ (%2$@) invited you
+  /// %1$@ (%2$@) đã mời bạn
   internal static func screenInvitesInvitedYou(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_invited_you", String(describing: p1), String(describing: p2))
   }
-  /// You were banned from this room by %1$@.
+  /// Bạn đã bị cấm khỏi phòng này bởi %1$@.
   internal static func screenJoinRoomBanByMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_join_room_ban_by_message", String(describing: p1))
   }
-  /// You were banned from this room
+  /// Bạn đã bị cấm khỏi phòng này
   internal static var screenJoinRoomBanMessage: String { return L10n.tr("Localizable", "screen_join_room_ban_message") }
-  /// Reason: %1$@.
+  /// Lý do: %1$@.
   internal static func screenJoinRoomBanReason(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_join_room_ban_reason", String(describing: p1))
   }
-  /// Cancel request
+  /// Hủy yêu cầu
   internal static var screenJoinRoomCancelKnockAction: String { return L10n.tr("Localizable", "screen_join_room_cancel_knock_action") }
-  /// Yes, cancel
+  /// Có, hủy
   internal static var screenJoinRoomCancelKnockAlertConfirmation: String { return L10n.tr("Localizable", "screen_join_room_cancel_knock_alert_confirmation") }
-  /// Are you sure that you want to cancel your request to join this room?
+  /// Bạn có chắc chắn muốn hủy yêu cầu tham gia phòng này?
   internal static var screenJoinRoomCancelKnockAlertDescription: String { return L10n.tr("Localizable", "screen_join_room_cancel_knock_alert_description") }
-  /// Cancel request to join
+  /// Hủy yêu cầu tham gia
   internal static var screenJoinRoomCancelKnockAlertTitle: String { return L10n.tr("Localizable", "screen_join_room_cancel_knock_alert_title") }
-  /// Yes, decline & block
+  /// Có, từ chối & chặn
   internal static var screenJoinRoomDeclineAndBlockAlertConfirmation: String { return L10n.tr("Localizable", "screen_join_room_decline_and_block_alert_confirmation") }
-  /// Are you sure you want to decline the invite to join this room? This will also prevent %1$@ from contacting you or inviting you to rooms.
+  /// Bạn có chắc chắn muốn từ chối lời mời tham gia phòng này? Điều này cũng sẽ ngăn %1$@ liên hệ với bạn hoặc mời bạn vào phòng.
   internal static func screenJoinRoomDeclineAndBlockAlertMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_join_room_decline_and_block_alert_message", String(describing: p1))
   }
-  /// Decline invite & block
+  /// Từ chối lời mời & chặn
   internal static var screenJoinRoomDeclineAndBlockAlertTitle: String { return L10n.tr("Localizable", "screen_join_room_decline_and_block_alert_title") }
-  /// Decline and block
+  /// Từ chối và chặn
   internal static var screenJoinRoomDeclineAndBlockButtonTitle: String { return L10n.tr("Localizable", "screen_join_room_decline_and_block_button_title") }
-  /// Joining the room failed.
+  /// Tham gia phòng thất bại.
   internal static var screenJoinRoomFailMessage: String { return L10n.tr("Localizable", "screen_join_room_fail_message") }
-  /// This room is either invite-only or there might be restrictions to access at space level.
+  /// Phòng này chỉ được mời hoặc có thể có hạn chế truy cập ở cấp không gian.
   internal static var screenJoinRoomFailReason: String { return L10n.tr("Localizable", "screen_join_room_fail_reason") }
-  /// Forget this room
+  /// Quên phòng này
   internal static var screenJoinRoomForgetAction: String { return L10n.tr("Localizable", "screen_join_room_forget_action") }
-  /// You need an invite in order to join this room
+  /// Bạn cần lời mời để tham gia phòng này
   internal static var screenJoinRoomInviteRequiredMessage: String { return L10n.tr("Localizable", "screen_join_room_invite_required_message") }
-  /// Join room
+  /// Tham gia phòng
   internal static var screenJoinRoomJoinAction: String { return L10n.tr("Localizable", "screen_join_room_join_action") }
-  /// You may need to be invited or be a member of a space in order to join.
+  /// Bạn có thể cần được mời hoặc là thành viên của không gian để tham gia.
   internal static var screenJoinRoomJoinRestrictedMessage: String { return L10n.tr("Localizable", "screen_join_room_join_restricted_message") }
-  /// Send request to join
+  /// Gửi yêu cầu tham gia
   internal static var screenJoinRoomKnockAction: String { return L10n.tr("Localizable", "screen_join_room_knock_action") }
-  /// Allowed characters %1$d of %2$d
+  /// Ký tự cho phép %1$d trong %2$d
   internal static func screenJoinRoomKnockMessageCharactersCount(_ p1: Int, _ p2: Int) -> String {
     return L10n.tr("Localizable", "screen_join_room_knock_message_characters_count", p1, p2)
   }
-  /// Message (optional)
+  /// Tin nhắn (tùy chọn)
   internal static var screenJoinRoomKnockMessageDescription: String { return L10n.tr("Localizable", "screen_join_room_knock_message_description") }
-  /// You will receive an invite to join the room if your request is accepted.
+  /// Bạn sẽ nhận được lời mời tham gia phòng nếu yêu cầu được chấp nhận.
   internal static var screenJoinRoomKnockSentDescription: String { return L10n.tr("Localizable", "screen_join_room_knock_sent_description") }
-  /// Request to join sent
+  /// Yêu cầu tham gia đã gửi
   internal static var screenJoinRoomKnockSentTitle: String { return L10n.tr("Localizable", "screen_join_room_knock_sent_title") }
-  /// We could not display the room preview. This may be due to network or server issues.
+  /// Chúng tôi không thể hiển thị xem trước phòng. Điều này có thể do vấn đề mạng hoặc máy chủ.
   internal static var screenJoinRoomLoadingAlertMessage: String { return L10n.tr("Localizable", "screen_join_room_loading_alert_message") }
-  /// We couldn’t display this room preview
+  /// Chúng tôi không thể hiển thị xem trước phòng này
   internal static var screenJoinRoomLoadingAlertTitle: String { return L10n.tr("Localizable", "screen_join_room_loading_alert_title") }
-  /// %1$@ does not support spaces yet. You can access spaces on web.
+  /// %1$@ chưa hỗ trợ không gian. Bạn có thể truy cập không gian trên web.
   internal static func screenJoinRoomSpaceNotSupportedDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_join_room_space_not_supported_description", String(describing: p1))
   }
-  /// Spaces are not supported yet
+  /// Không gian chưa được hỗ trợ
   internal static var screenJoinRoomSpaceNotSupportedTitle: String { return L10n.tr("Localizable", "screen_join_room_space_not_supported_title") }
-  /// Click the button below and a room administrator will be notified. You’ll be able to join the conversation once approved.
+  /// Nhấp nút bên dưới và quản trị viên phòng sẽ được thông báo. Bạn sẽ có thể tham gia cuộc trò chuyện khi được phê duyệt.
   internal static var screenJoinRoomSubtitleKnock: String { return L10n.tr("Localizable", "screen_join_room_subtitle_knock") }
-  /// You must be a member of this room to view the message history.
+  /// Bạn phải là thành viên của phòng này để xem lịch sử tin nhắn.
   internal static var screenJoinRoomSubtitleNoPreview: String { return L10n.tr("Localizable", "screen_join_room_subtitle_no_preview") }
-  /// Want to join this room?
+  /// Muốn tham gia phòng này?
   internal static var screenJoinRoomTitleKnock: String { return L10n.tr("Localizable", "screen_join_room_title_knock") }
-  /// Preview is not available
+  /// Xem trước không khả dụng
   internal static var screenJoinRoomTitleNoPreview: String { return L10n.tr("Localizable", "screen_join_room_title_no_preview") }
-  /// Turn off
+  /// Tắt
   internal static var screenKeyBackupDisableConfirmationActionTurnOff: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_action_turn_off") }
-  /// You will lose your encrypted messages if you are signed out of all devices.
+  /// Bạn sẽ mất tin nhắn mã hóa nếu bị đăng xuất khỏi tất cả thiết bị.
   internal static var screenKeyBackupDisableConfirmationDescription: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_description") }
-  /// Are you sure you want to turn off backup?
+  /// Bạn có chắc chắn muốn tắt sao lưu?
   internal static var screenKeyBackupDisableConfirmationTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_confirmation_title") }
-  /// Deleting key storage will remove your cryptographic identity and message keys from the server and turn off the following security features:
+  /// Xóa kho lưu trữ khóa sẽ xóa danh tính mã hóa và khóa tin nhắn khỏi máy chủ và tắt các tính năng bảo mật sau:
   internal static var screenKeyBackupDisableDescription: String { return L10n.tr("Localizable", "screen_key_backup_disable_description") }
-  /// You will not have encrypted message history on new devices
+  /// Bạn sẽ không có lịch sử tin nhắn mã hóa trên thiết bị mới
   internal static var screenKeyBackupDisableDescriptionPoint1: String { return L10n.tr("Localizable", "screen_key_backup_disable_description_point_1") }
-  /// You will lose access to your encrypted messages if you are signed out of %1$@ everywhere
+  /// Bạn sẽ mất quyền truy cập vào tin nhắn mã hóa nếu bị đăng xuất khỏi %1$@ ở mọi nơi
   internal static func screenKeyBackupDisableDescriptionPoint2(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_key_backup_disable_description_point_2", String(describing: p1))
   }
-  /// Are you sure you want to turn off key storage and delete it?
+  /// Bạn có chắc chắn muốn tắt kho lưu trữ khóa và xóa nó?
   internal static var screenKeyBackupDisableTitle: String { return L10n.tr("Localizable", "screen_key_backup_disable_title") }
-  /// Yes, accept all
+  /// Có, chấp nhận tất cả
   internal static var screenKnockRequestsListAcceptAllAlertConfirmButtonTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_alert_confirm_button_title") }
-  /// Are you sure you want to accept all requests to join?
+  /// Bạn có chắc chắn muốn chấp nhận tất cả yêu cầu tham gia?
   internal static var screenKnockRequestsListAcceptAllAlertDescription: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_alert_description") }
-  /// Accept all requests
+  /// Chấp nhận tất cả yêu cầu
   internal static var screenKnockRequestsListAcceptAllAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_alert_title") }
-  /// Accept all
+  /// Chấp nhận tất cả
   internal static var screenKnockRequestsListAcceptAllButtonTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_button_title") }
-  /// We couldn’t accept all requests. Would you like to try again?
+  /// Chúng tôi không thể chấp nhận tất cả yêu cầu. Bạn có muốn thử lại?
   internal static var screenKnockRequestsListAcceptAllFailedAlertDescription: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_failed_alert_description") }
-  /// Failed to accept all requests
+  /// Chấp nhận tất cả yêu cầu thất bại
   internal static var screenKnockRequestsListAcceptAllFailedAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_failed_alert_title") }
-  /// Accepting all requests to join
+  /// Đang chấp nhận tất cả yêu cầu tham gia
   internal static var screenKnockRequestsListAcceptAllLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_all_loading_title") }
-  /// We couldn’t accept this request. Would you like to try again?
+  /// Chúng tôi không thể chấp nhận yêu cầu này. Bạn có muốn thử lại?
   internal static var screenKnockRequestsListAcceptFailedAlertDescription: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_failed_alert_description") }
-  /// Failed to accept request
+  /// Chấp nhận yêu cầu thất bại
   internal static var screenKnockRequestsListAcceptFailedAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_failed_alert_title") }
-  /// Accepting request to join
+  /// Đang chấp nhận yêu cầu tham gia
   internal static var screenKnockRequestsListAcceptLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_accept_loading_title") }
-  /// Yes, decline and ban
+  /// Có, từ chối và cấm
   internal static var screenKnockRequestsListBanAlertConfirmButtonTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_ban_alert_confirm_button_title") }
-  /// Are you sure you want to decline and ban %1$@? This user won’t be able to request access to join this room again.
+  /// Bạn có chắc chắn muốn từ chối và cấm %1$@? Người dùng này sẽ không thể yêu cầu quyền truy cập tham gia phòng này lại.
   internal static func screenKnockRequestsListBanAlertDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_knock_requests_list_ban_alert_description", String(describing: p1))
   }
-  /// Decline and ban from accessing
+  /// Từ chối và cấm truy cập
   internal static var screenKnockRequestsListBanAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_ban_alert_title") }
-  /// Declining and banning access
+  /// Đang từ chối và cấm truy cập
   internal static var screenKnockRequestsListBanLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_ban_loading_title") }
-  /// Yes, decline
+  /// Có, từ chối
   internal static var screenKnockRequestsListDeclineAlertConfirmButtonTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_alert_confirm_button_title") }
-  /// Are you sure you want to decline %1$@ request to join this room?
+  /// Bạn có chắc chắn muốn từ chối yêu cầu tham gia phòng này của %1$@?
   internal static func screenKnockRequestsListDeclineAlertDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_knock_requests_list_decline_alert_description", String(describing: p1))
   }
-  /// Decline access
+  /// Từ chối truy cập
   internal static var screenKnockRequestsListDeclineAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_alert_title") }
-  /// Decline and ban
+  /// Từ chối và cấm
   internal static var screenKnockRequestsListDeclineAndBanActionTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_and_ban_action_title") }
-  /// We couldn’t decline this request. Would you like to try again?
+  /// Chúng tôi không thể từ chối yêu cầu này. Bạn có muốn thử lại?
   internal static var screenKnockRequestsListDeclineFailedAlertDescription: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_failed_alert_description") }
-  /// Failed to decline request
+  /// Từ chối yêu cầu thất bại
   internal static var screenKnockRequestsListDeclineFailedAlertTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_failed_alert_title") }
-  /// Declining request to join
+  /// Đang từ chối yêu cầu tham gia
   internal static var screenKnockRequestsListDeclineLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_decline_loading_title") }
-  /// When somebody will ask to join the room, you’ll be able to see their request here.
+  /// Khi ai đó yêu cầu tham gia phòng, bạn sẽ có thể thấy yêu cầu của họ ở đây.
   internal static var screenKnockRequestsListEmptyStateDescription: String { return L10n.tr("Localizable", "screen_knock_requests_list_empty_state_description") }
-  /// No pending request to join
+  /// Không có yêu cầu tham gia đang chờ
   internal static var screenKnockRequestsListEmptyStateTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_empty_state_title") }
-  /// Loading requests to join…
+  /// Đang tải yêu cầu tham gia…
   internal static var screenKnockRequestsListInitialLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_initial_loading_title") }
-  /// Requests to join
+  /// Yêu cầu tham gia
   internal static var screenKnockRequestsListTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_title") }
-  /// This account has been deactivated.
+  /// Liên kết được chia sẻ trong phòng này sẽ hiển thị ở đây.
+  internal static var screenLinksTimelineEmptyDescription: String { return L10n.tr("Localizable", "screen_links_timeline_empty_description") }
+  /// Chưa có liên kết nào được chia sẻ
+  internal static var screenLinksTimelineEmptyTitle: String { return L10n.tr("Localizable", "screen_links_timeline_empty_title") }
+  /// Lọc theo người gửi
+  internal static var screenLinksTimelineFilterBySender: String { return L10n.tr("Localizable", "screen_links_timeline_filter_by_sender") }
+  /// Liên kết
+  internal static var screenLinksTimelineTitle: String { return L10n.tr("Localizable", "screen_links_timeline_title") }
+  /// Tài khoản này đã bị vô hiệu hóa.
   internal static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
-  /// Incorrect username and/or password
+  /// Tên người dùng và/hoặc mật khẩu không chính xác
   internal static var screenLoginErrorInvalidCredentials: String { return L10n.tr("Localizable", "screen_login_error_invalid_credentials") }
-  /// This is not a valid user identifier. Expected format: ‘@user:homeserver.org’
+  /// Đây không phải là định danh người dùng hợp lệ. Định dạng mong đợi: '@user:homeserver.org'
   internal static var screenLoginErrorInvalidUserId: String { return L10n.tr("Localizable", "screen_login_error_invalid_user_id") }
-  /// This server is configured to use refresh tokens. These aren't supported when using password based login.
+  /// Máy chủ này được cấu hình để sử dụng token làm mới. Điều này không được hỗ trợ khi sử dụng đăng nhập bằng mật khẩu.
   internal static var screenLoginErrorRefreshTokens: String { return L10n.tr("Localizable", "screen_login_error_refresh_tokens") }
-  /// The selected homeserver doesn't support password or OIDC login. Please contact your admin or choose another homeserver.
+  /// Homeserver đã chọn không hỗ trợ đăng nhập bằng mật khẩu hoặc OIDC. Vui lòng liên hệ quản trị viên hoặc chọn homeserver khác.
   internal static var screenLoginErrorUnsupportedAuthentication: String { return L10n.tr("Localizable", "screen_login_error_unsupported_authentication") }
-  /// Enter your details
+  /// Nhập chi tiết của bạn
   internal static var screenLoginFormHeader: String { return L10n.tr("Localizable", "screen_login_form_header") }
-  /// Matrix is an open network for secure, decentralised communication.
+  /// Matrix là mạng mở cho giao tiếp bảo mật, phi tập trung.
   internal static var screenLoginSubtitle: String { return L10n.tr("Localizable", "screen_login_subtitle") }
-  /// Welcome back!
+  /// Chào mừng bạn trở lại!
   internal static var screenLoginTitle: String { return L10n.tr("Localizable", "screen_login_title") }
-  /// Sign in to %1$@
+  /// Đăng nhập vào %1$@
   internal static func screenLoginTitleWithHomeserver(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_login_title_with_homeserver", String(describing: p1))
   }
-  /// This file will be removed from the room and members won’t have access to it.
+  /// Tệp này sẽ bị xóa khỏi phòng và thành viên sẽ không có quyền truy cập.
   internal static var screenMediaBrowserDeleteConfirmationSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_delete_confirmation_subtitle") }
-  /// Delete file?
+  /// Xóa tệp?
   internal static var screenMediaBrowserDeleteConfirmationTitle: String { return L10n.tr("Localizable", "screen_media_browser_delete_confirmation_title") }
-  /// Check your internet connection and try again.
+  /// Kiểm tra kết nối internet và thử lại.
   internal static var screenMediaBrowserDownloadErrorMessage: String { return L10n.tr("Localizable", "screen_media_browser_download_error_message") }
-  /// Documents, audio files, and voice messages uploaded to this room will be shown here.
+  /// Tài liệu, tệp âm thanh và tin nhắn thoại được tải lên phòng này sẽ hiển thị ở đây.
   internal static var screenMediaBrowserFilesEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_files_empty_state_subtitle") }
-  /// No files uploaded yet
+  /// Chưa có tệp nào được tải lên
   internal static var screenMediaBrowserFilesEmptyStateTitle: String { return L10n.tr("Localizable", "screen_media_browser_files_empty_state_title") }
-  /// Loading files…
+  /// Đang tải tệp…
   internal static var screenMediaBrowserListLoadingFiles: String { return L10n.tr("Localizable", "screen_media_browser_list_loading_files") }
-  /// Loading media…
+  /// Đang tải media…
   internal static var screenMediaBrowserListLoadingMedia: String { return L10n.tr("Localizable", "screen_media_browser_list_loading_media") }
-  /// Files
+  /// Tệp
   internal static var screenMediaBrowserListModeFiles: String { return L10n.tr("Localizable", "screen_media_browser_list_mode_files") }
   /// Media
   internal static var screenMediaBrowserListModeMedia: String { return L10n.tr("Localizable", "screen_media_browser_list_mode_media") }
-  /// Images and videos uploaded to this room will be shown here.
+  /// Hình ảnh và video được tải lên phòng này sẽ hiển thị ở đây.
   internal static var screenMediaBrowserMediaEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_media_browser_media_empty_state_subtitle") }
-  /// No media uploaded yet
+  /// Chưa có media nào được tải lên
   internal static var screenMediaBrowserMediaEmptyStateTitle: String { return L10n.tr("Localizable", "screen_media_browser_media_empty_state_title") }
-  /// Media and files
+  /// Media và tệp
   internal static var screenMediaBrowserTitle: String { return L10n.tr("Localizable", "screen_media_browser_title") }
-  /// File format
+  /// Định dạng tệp
   internal static var screenMediaDetailsFileFormat: String { return L10n.tr("Localizable", "screen_media_details_file_format") }
-  /// File name
+  /// Tên tệp
   internal static var screenMediaDetailsFilename: String { return L10n.tr("Localizable", "screen_media_details_filename") }
-  /// No more files to show
+  /// Không còn tệp nào để hiển thị
   internal static var screenMediaDetailsNoMoreFilesToShow: String { return L10n.tr("Localizable", "screen_media_details_no_more_files_to_show") }
-  /// No more media to show
+  /// Không còn media nào để hiển thị
   internal static var screenMediaDetailsNoMoreMediaToShow: String { return L10n.tr("Localizable", "screen_media_details_no_more_media_to_show") }
-  /// Uploaded by
+  /// Tải lên bởi
   internal static var screenMediaDetailsUploadedBy: String { return L10n.tr("Localizable", "screen_media_details_uploaded_by") }
-  /// Uploaded on
+  /// Tải lên vào
   internal static var screenMediaDetailsUploadedOn: String { return L10n.tr("Localizable", "screen_media_details_uploaded_on") }
-  /// Failed selecting media, please try again.
+  /// Chọn media thất bại, vui lòng thử lại.
   internal static var screenMediaPickerErrorFailedSelection: String { return L10n.tr("Localizable", "screen_media_picker_error_failed_selection") }
-  /// Captions might not be visible to people using older apps.
+  /// Chú thích có thể không hiển thị với những người sử dụng ứng dụng cũ.
   internal static var screenMediaUploadPreviewCaptionWarning: String { return L10n.tr("Localizable", "screen_media_upload_preview_caption_warning") }
-  /// The file could not be uploaded.
+  /// Tệp không thể tải lên.
   internal static var screenMediaUploadPreviewErrorCouldNotBeUploaded: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_could_not_be_uploaded") }
-  /// Failed processing media to upload, please try again.
+  /// Xử lý media để tải lên thất bại, vui lòng thử lại.
   internal static var screenMediaUploadPreviewErrorFailedProcessing: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_failed_processing") }
-  /// Failed uploading media, please try again.
+  /// Tải lên media thất bại, vui lòng thử lại.
   internal static var screenMediaUploadPreviewErrorFailedSending: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_failed_sending") }
-  /// The maximum file size allowed is %1$@.
+  /// Kích thước tệp tối đa cho phép là %1$@.
   internal static func screenMediaUploadPreviewErrorTooLargeMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_media_upload_preview_error_too_large_message", String(describing: p1))
   }
-  /// The file is too large to upload
+  /// Tệp quá lớn để tải lên
   internal static var screenMediaUploadPreviewErrorTooLargeTitle: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_too_large_title") }
-  /// This is a one time process, thanks for waiting.
+  /// Đây là quá trình một lần, cảm ơn bạn đã chờ đợi.
   internal static var screenMigrationMessage: String { return L10n.tr("Localizable", "screen_migration_message") }
-  /// Setting up your account.
+  /// Đang thiết lập tài khoản của bạn.
   internal static var screenMigrationTitle: String { return L10n.tr("Localizable", "screen_migration_title") }
-  /// You can change your settings later.
+  /// Bạn có thể thay đổi cài đặt sau.
   internal static var screenNotificationOptinSubtitle: String { return L10n.tr("Localizable", "screen_notification_optin_subtitle") }
-  /// Allow notifications and never miss a message
+  /// Cho phép thông báo và không bao giờ bỏ lỡ tin nhắn
   internal static var screenNotificationOptinTitle: String { return L10n.tr("Localizable", "screen_notification_optin_title") }
-  /// Additional settings
+  /// Cài đặt bổ sung
   internal static var screenNotificationSettingsAdditionalSettingsSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_additional_settings_section_title") }
-  /// Audio and video calls
+  /// Cuộc gọi âm thanh và video
   internal static var screenNotificationSettingsCallsLabel: String { return L10n.tr("Localizable", "screen_notification_settings_calls_label") }
-  /// Configuration mismatch
+  /// Cấu hình không khớp
   internal static var screenNotificationSettingsConfigurationMismatch: String { return L10n.tr("Localizable", "screen_notification_settings_configuration_mismatch") }
-  /// We’ve simplified Notifications Settings to make options easier to find. Some custom settings you’ve chosen in the past are not shown here, but they’re still active.
+  /// Chúng tôi đã đơn giản hóa cài đặt thông báo để tùy chọn dễ tìm hơn. Một số cài đặt tùy chỉnh bạn đã chọn trước đây không hiển thị ở đây, nhưng vẫn đang hoạt động.
   /// 
-  /// If you proceed, some of your settings may change.
+  /// Nếu bạn tiếp tục, một số cài đặt có thể thay đổi.
   internal static var screenNotificationSettingsConfigurationMismatchDescription: String { return L10n.tr("Localizable", "screen_notification_settings_configuration_mismatch_description") }
-  /// Direct chats
+  /// Trò chuyện trực tiếp
   internal static var screenNotificationSettingsDirectChats: String { return L10n.tr("Localizable", "screen_notification_settings_direct_chats") }
-  /// Custom setting per chat
+  /// Cài đặt tùy chỉnh cho từng cuộc trò chuyện
   internal static var screenNotificationSettingsEditCustomSettingsSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_edit_custom_settings_section_title") }
-  /// An error occurred while updating the notification setting.
+  /// Đã xảy ra lỗi khi cập nhật cài đặt thông báo.
   internal static var screenNotificationSettingsEditFailedUpdatingDefaultMode: String { return L10n.tr("Localizable", "screen_notification_settings_edit_failed_updating_default_mode") }
-  /// All messages
+  /// Tất cả tin nhắn
   internal static var screenNotificationSettingsEditModeAllMessages: String { return L10n.tr("Localizable", "screen_notification_settings_edit_mode_all_messages") }
-  /// Mentions and Keywords only
+  /// Chỉ nhắc đến và từ khóa
   internal static var screenNotificationSettingsEditModeMentionsAndKeywords: String { return L10n.tr("Localizable", "screen_notification_settings_edit_mode_mentions_and_keywords") }
-  /// On direct chats, notify me for
+  /// Trong trò chuyện trực tiếp, thông báo cho tôi khi có
   internal static var screenNotificationSettingsEditScreenDirectSectionHeader: String { return L10n.tr("Localizable", "screen_notification_settings_edit_screen_direct_section_header") }
-  /// On group chats, notify me for
+  /// Trong trò chuyện nhóm, thông báo cho tôi khi có
   internal static var screenNotificationSettingsEditScreenGroupSectionHeader: String { return L10n.tr("Localizable", "screen_notification_settings_edit_screen_group_section_header") }
-  /// Enable notifications on this device
+  /// Bật thông báo trên thiết bị này
   internal static var screenNotificationSettingsEnableNotifications: String { return L10n.tr("Localizable", "screen_notification_settings_enable_notifications") }
-  /// The configuration has not been corrected, please try again.
+  /// Cấu hình chưa được sửa, vui lòng thử lại.
   internal static var screenNotificationSettingsFailedFixingConfiguration: String { return L10n.tr("Localizable", "screen_notification_settings_failed_fixing_configuration") }
-  /// Group chats
+  /// Trò chuyện nhóm
   internal static var screenNotificationSettingsGroupChats: String { return L10n.tr("Localizable", "screen_notification_settings_group_chats") }
-  /// Invitations
+  /// Lời mời
   internal static var screenNotificationSettingsInviteForMeLabel: String { return L10n.tr("Localizable", "screen_notification_settings_invite_for_me_label") }
-  /// Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms.
+  /// Homeserver của bạn không hỗ trợ tùy chọn này trong phòng mã hóa, bạn có thể không được thông báo trong một số phòng.
   internal static var screenNotificationSettingsMentionsOnlyDisclaimer: String { return L10n.tr("Localizable", "screen_notification_settings_mentions_only_disclaimer") }
-  /// Mentions
+  /// Nhắc đến
   internal static var screenNotificationSettingsMentionsSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_mentions_section_title") }
-  /// All
+  /// Tất cả
   internal static var screenNotificationSettingsModeAll: String { return L10n.tr("Localizable", "screen_notification_settings_mode_all") }
-  /// Mentions
+  /// Nhắc đến
   internal static var screenNotificationSettingsModeMentions: String { return L10n.tr("Localizable", "screen_notification_settings_mode_mentions") }
-  /// Notify me for
+  /// Thông báo cho tôi khi có
   internal static var screenNotificationSettingsNotificationSectionTitle: String { return L10n.tr("Localizable", "screen_notification_settings_notification_section_title") }
-  /// Notify me on @room
+  /// Thông báo cho tôi về @room
   internal static var screenNotificationSettingsRoomMentionLabel: String { return L10n.tr("Localizable", "screen_notification_settings_room_mention_label") }
-  /// To receive notifications, please change your %1$@.
+  /// Để nhận thông báo, vui lòng thay đổi %1$@.
   internal static func screenNotificationSettingsSystemNotificationsActionRequired(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_notification_settings_system_notifications_action_required", String(describing: p1))
   }
-  /// system settings
+  /// cài đặt hệ thống
   internal static var screenNotificationSettingsSystemNotificationsActionRequiredContentLink: String { return L10n.tr("Localizable", "screen_notification_settings_system_notifications_action_required_content_link") }
-  /// System notifications turned off
+  /// Thông báo hệ thống đã tắt
   internal static var screenNotificationSettingsSystemNotificationsTurnedOff: String { return L10n.tr("Localizable", "screen_notification_settings_system_notifications_turned_off") }
-  /// Notifications
+  /// Thông báo
   internal static var screenNotificationSettingsTitle: String { return L10n.tr("Localizable", "screen_notification_settings_title") }
-  /// Version %1$@
+  /// Phiên bản %1$@
   internal static func screenOnboardingAppVersion(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_app_version", String(describing: p1))
   }
-  /// Sign in manually
+  /// Đăng nhập thủ công
   internal static var screenOnboardingSignInManually: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_manually") }
-  /// Sign in to %1$@
+  /// Đăng nhập vào %1$@
   internal static func screenOnboardingSignInTo(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_sign_in_to", String(describing: p1))
   }
-  /// Sign in with QR code
+  /// Đăng nhập bằng mã QR
   internal static var screenOnboardingSignInWithQrCode: String { return L10n.tr("Localizable", "screen_onboarding_sign_in_with_qr_code") }
-  /// Create account
+  /// Tạo tài khoản
   internal static var screenOnboardingSignUp: String { return L10n.tr("Localizable", "screen_onboarding_sign_up") }
-  /// Welcome to the fastest %1$@ ever. Supercharged for speed and simplicity.
+  /// Chào mừng đến với %1$@ nhanh nhất từ trước đến nay. Siêu mạnh cho tốc độ và sự đơn giản.
   internal static func screenOnboardingWelcomeMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_welcome_message", String(describing: p1))
   }
-  /// Welcome to %1$@. Supercharged, for speed and simplicity.
+  /// Chào mừng đến với %1$@. Siêu mạnh, cho tốc độ và sự đơn giản.
   internal static func screenOnboardingWelcomeSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_onboarding_welcome_subtitle", String(describing: p1))
   }
-  /// Be in your element
+  /// Hãy là chính mình
   internal static var screenOnboardingWelcomeTitle: String { return L10n.tr("Localizable", "screen_onboarding_welcome_title") }
-  /// Press on a message and choose “%1$@” to include here.
+  /// Nhấn vào tin nhắn và chọn "%1$@" để bao gồm ở đây.
   internal static func screenPinnedTimelineEmptyStateDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_pinned_timeline_empty_state_description", String(describing: p1))
   }
-  /// Pin important messages so that they can be easily discovered
+  /// Ghim tin nhắn quan trọng để có thể dễ dàng tìm thấy
   internal static var screenPinnedTimelineEmptyStateHeadline: String { return L10n.tr("Localizable", "screen_pinned_timeline_empty_state_headline") }
   /// Plural format key: "%#@COUNT@"
   internal static func screenPinnedTimelineScreenTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_pinned_timeline_screen_title", p1)
   }
-  /// Pinned messages
+  /// Tin nhắn đã ghim
   internal static var screenPinnedTimelineScreenTitleEmpty: String { return L10n.tr("Localizable", "screen_pinned_timeline_screen_title_empty") }
-  /// Can't find any ongoing polls.
+  /// Không tìm thấy cuộc bình chọn nào đang diễn ra.
   internal static var screenPollsHistoryEmptyOngoing: String { return L10n.tr("Localizable", "screen_polls_history_empty_ongoing") }
-  /// Can't find any past polls.
+  /// Không tìm thấy cuộc bình chọn nào đã kết thúc.
   internal static var screenPollsHistoryEmptyPast: String { return L10n.tr("Localizable", "screen_polls_history_empty_past") }
-  /// Ongoing
+  /// Đang diễn ra
   internal static var screenPollsHistoryFilterOngoing: String { return L10n.tr("Localizable", "screen_polls_history_filter_ongoing") }
-  /// Past
+  /// Đã kết thúc
   internal static var screenPollsHistoryFilterPast: String { return L10n.tr("Localizable", "screen_polls_history_filter_past") }
-  /// Polls
+  /// Bình chọn
   internal static var screenPollsHistoryTitle: String { return L10n.tr("Localizable", "screen_polls_history_title") }
-  /// Push history
+  /// Lịch sử push
   internal static var screenPushHistoryTitle: String { return L10n.tr("Localizable", "screen_push_history_title") }
-  /// Establishing a secure connection
+  /// Đang thiết lập kết nối an toàn
   internal static var screenQrCodeLoginConnectingSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_connecting_subtitle") }
-  /// A secure connection could not be made to the new device. Your existing devices are still safe and you don't need to worry about them.
+  /// Không thể tạo kết nối an toàn đến thiết bị mới. Các thiết bị hiện có của bạn vẫn an toàn và bạn không cần lo lắng về chúng.
   internal static var screenQrCodeLoginConnectionNoteSecureStateDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_description") }
-  /// What now?
+  /// Giờ phải làm gì?
   internal static var screenQrCodeLoginConnectionNoteSecureStateListHeader: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_list_header") }
-  /// Try signing in again with a QR code in case this was a network problem
+  /// Thử đăng nhập lại bằng mã QR phòng trường hợp đây là vấn đề mạng
   internal static var screenQrCodeLoginConnectionNoteSecureStateListItem1: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_list_item_1") }
-  /// If you encounter the same problem, try a different wifi network or use your mobile data instead of wifi
+  /// Nếu gặp vấn đề tương tự, thử mạng wifi khác hoặc sử dụng dữ liệu di động thay vì wifi
   internal static var screenQrCodeLoginConnectionNoteSecureStateListItem2: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_list_item_2") }
-  /// If that doesn’t work, sign in manually
+  /// Nếu không được, hãy đăng nhập thủ công
   internal static var screenQrCodeLoginConnectionNoteSecureStateListItem3: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_list_item_3") }
-  /// Connection not secure
+  /// Kết nối không an toàn
   internal static var screenQrCodeLoginConnectionNoteSecureStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_connection_note_secure_state_title") }
-  /// You’ll be asked to enter the two digits shown on this device.
+  /// Bạn sẽ được yêu cầu nhập hai chữ số hiển thị trên thiết bị này.
   internal static var screenQrCodeLoginDeviceCodeSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_subtitle") }
-  /// Enter the number below on your other device
+  /// Nhập số bên dưới trên thiết bị khác
   internal static var screenQrCodeLoginDeviceCodeTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_code_title") }
-  /// Sign in to your other device and then try again, or use another device that’s already signed in.
+  /// Đăng nhập vào thiết bị khác và thử lại, hoặc sử dụng thiết bị khác đã đăng nhập.
   internal static var screenQrCodeLoginDeviceNotSignedInScanStateDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_device_not_signed_in_scan_state_description") }
-  /// Other device not signed in
+  /// Thiết bị khác chưa đăng nhập
   internal static var screenQrCodeLoginDeviceNotSignedInScanStateSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_device_not_signed_in_scan_state_subtitle") }
-  /// The sign in was cancelled on the other device.
+  /// Đăng nhập đã bị hủy trên thiết bị khác.
   internal static var screenQrCodeLoginErrorCancelledSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_cancelled_subtitle") }
-  /// Sign in request cancelled
+  /// Yêu cầu đăng nhập đã hủy
   internal static var screenQrCodeLoginErrorCancelledTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_cancelled_title") }
-  /// The sign in was declined on the other device.
+  /// Đăng nhập đã bị từ chối trên thiết bị khác.
   internal static var screenQrCodeLoginErrorDeclinedSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_declined_subtitle") }
-  /// Sign in declined
+  /// Đăng nhập bị từ chối
   internal static var screenQrCodeLoginErrorDeclinedTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_declined_title") }
-  /// Sign in expired. Please try again.
+  /// Đăng nhập đã hết hạn. Vui lòng thử lại.
   internal static var screenQrCodeLoginErrorExpiredSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_expired_subtitle") }
-  /// The sign in was not completed in time
+  /// Đăng nhập không hoàn thành kịp thời
   internal static var screenQrCodeLoginErrorExpiredTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_expired_title") }
-  /// Your other device does not support signing in to %@ with a QR code.
+  /// Thiết bị khác không hỗ trợ đăng nhập vào %@ bằng mã QR.
   /// 
-  /// Try signing in manually, or scan the QR code with another device.
+  /// Thử đăng nhập thủ công hoặc quét mã QR bằng thiết bị khác.
   internal static func screenQrCodeLoginErrorLinkingNotSuportedSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_qr_code_login_error_linking_not_suported_subtitle", String(describing: p1))
   }
-  /// QR code not supported
+  /// Mã QR không được hỗ trợ
   internal static var screenQrCodeLoginErrorLinkingNotSuportedTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_error_linking_not_suported_title") }
-  /// Your account provider does not support %1$@.
+  /// Nhà cung cấp tài khoản không hỗ trợ %1$@.
   internal static func screenQrCodeLoginErrorSlidingSyncNotSupportedSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_qr_code_login_error_sliding_sync_not_supported_subtitle", String(describing: p1))
   }
-  /// %1$@ not supported
+  /// %1$@ không được hỗ trợ
   internal static func screenQrCodeLoginErrorSlidingSyncNotSupportedTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_qr_code_login_error_sliding_sync_not_supported_title", String(describing: p1))
   }
-  /// Ready to scan
+  /// Sẵn sàng quét
   internal static var screenQrCodeLoginInitialStateButtonTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_button_title") }
-  /// Open %1$@ on a desktop device
+  /// Mở %1$@ trên thiết bị desktop
   internal static func screenQrCodeLoginInitialStateItem1(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_1", String(describing: p1))
   }
-  /// Click on your avatar
+  /// Nhấp vào avatar của bạn
   internal static var screenQrCodeLoginInitialStateItem2: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_2") }
-  /// Select %1$@
+  /// Chọn %1$@
   internal static func screenQrCodeLoginInitialStateItem3(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_3", String(describing: p1))
   }
-  /// “Link new device”
+  /// "Liên kết thiết bị mới"
   internal static var screenQrCodeLoginInitialStateItem3Action: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_3_action") }
-  /// Scan the QR code with this device
+  /// Quét mã QR bằng thiết bị này
   internal static var screenQrCodeLoginInitialStateItem4: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_item_4") }
-  /// Only available if your account provider supports it.
+  /// Chỉ khả dụng nếu nhà cung cấp tài khoản hỗ trợ.
   internal static var screenQrCodeLoginInitialStateSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_initial_state_subtitle") }
-  /// Open %1$@ on another device to get the QR code
+  /// Mở %1$@ trên thiết bị khác để lấy mã QR
   internal static func screenQrCodeLoginInitialStateTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_qr_code_login_initial_state_title", String(describing: p1))
   }
-  /// Use the QR code shown on the other device.
+  /// Sử dụng mã QR hiển thị trên thiết bị khác.
   internal static var screenQrCodeLoginInvalidScanStateDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_invalid_scan_state_description") }
-  /// Try again
+  /// Thử lại
   internal static var screenQrCodeLoginInvalidScanStateRetryButton: String { return L10n.tr("Localizable", "screen_qr_code_login_invalid_scan_state_retry_button") }
-  /// Wrong QR code
+  /// Mã QR sai
   internal static var screenQrCodeLoginInvalidScanStateSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_invalid_scan_state_subtitle") }
-  /// Go to camera settings
+  /// Đi đến cài đặt camera
   internal static var screenQrCodeLoginNoCameraPermissionButton: String { return L10n.tr("Localizable", "screen_qr_code_login_no_camera_permission_button") }
-  /// You need to give permission for %1$@ to use your device’s camera in order to continue.
+  /// Bạn cần cấp quyền cho %1$@ sử dụng camera thiết bị để tiếp tục.
   internal static func screenQrCodeLoginNoCameraPermissionStateDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_qr_code_login_no_camera_permission_state_description", String(describing: p1))
   }
-  /// Allow camera access to scan the QR code
+  /// Cho phép truy cập camera để quét mã QR
   internal static var screenQrCodeLoginNoCameraPermissionStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_no_camera_permission_state_title") }
-  /// Scan the QR code
+  /// Quét mã QR
   internal static var screenQrCodeLoginScanningStateTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_scanning_state_title") }
-  /// Start over
+  /// Bắt đầu lại
   internal static var screenQrCodeLoginStartOverButton: String { return L10n.tr("Localizable", "screen_qr_code_login_start_over_button") }
-  /// An unexpected error occurred. Please try again.
+  /// Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.
   internal static var screenQrCodeLoginUnknownErrorDescription: String { return L10n.tr("Localizable", "screen_qr_code_login_unknown_error_description") }
-  /// Waiting for your other device
+  /// Đang chờ thiết bị khác
   internal static var screenQrCodeLoginVerifyCodeLoading: String { return L10n.tr("Localizable", "screen_qr_code_login_verify_code_loading") }
-  /// Your account provider may ask for the following code to verify the sign in.
+  /// Nhà cung cấp tài khoản có thể yêu cầu mã sau để xác minh đăng nhập.
   internal static var screenQrCodeLoginVerifyCodeSubtitle: String { return L10n.tr("Localizable", "screen_qr_code_login_verify_code_subtitle") }
-  /// Your verification code
+  /// Mã xác minh của bạn
   internal static var screenQrCodeLoginVerifyCodeTitle: String { return L10n.tr("Localizable", "screen_qr_code_login_verify_code_title") }
-  /// Get a new recovery key if you've lost your existing one. After changing your recovery key, your old one will no longer work.
+  /// Tạo khóa khôi phục mới nếu bạn đã mất khóa hiện có. Sau khi thay đổi khóa khôi phục, khóa cũ sẽ không còn hoạt động.
   internal static var screenRecoveryKeyChangeDescription: String { return L10n.tr("Localizable", "screen_recovery_key_change_description") }
-  /// Generate a new recovery key
+  /// Tạo khóa khôi phục mới
   internal static var screenRecoveryKeyChangeGenerateKey: String { return L10n.tr("Localizable", "screen_recovery_key_change_generate_key") }
-  /// Do not share this with anyone!
+  /// Không chia sẻ điều này với bất kỳ ai!
   internal static var screenRecoveryKeyChangeGenerateKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_change_generate_key_description") }
-  /// Recovery key changed
+  /// Đã thay đổi khóa khôi phục
   internal static var screenRecoveryKeyChangeSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_change_success") }
-  /// Change recovery key?
+  /// Thay đổi khóa khôi phục?
   internal static var screenRecoveryKeyChangeTitle: String { return L10n.tr("Localizable", "screen_recovery_key_change_title") }
-  /// Create new recovery key
+  /// Tạo khóa khôi phục mới
   internal static var screenRecoveryKeyConfirmCreateNewRecoveryKey: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_create_new_recovery_key") }
-  /// Make sure nobody can see this screen!
+  /// Đảm bảo không ai có thể thấy màn hình này!
   internal static var screenRecoveryKeyConfirmDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_description") }
-  /// Please try again to confirm access to your key storage.
+  /// Vui lòng thử lại để xác nhận quyền truy cập vào kho lưu trữ khóa.
   internal static var screenRecoveryKeyConfirmErrorContent: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_content") }
-  /// Incorrect recovery key
+  /// Khóa khôi phục không chính xác
   internal static var screenRecoveryKeyConfirmErrorTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_error_title") }
-  /// If you have a security key or security phrase, this will work too.
+  /// Nếu bạn có khóa bảo mật hoặc cụm từ bảo mật, điều này cũng sẽ hoạt động.
   internal static var screenRecoveryKeyConfirmKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_description") }
-  /// Enter…
+  /// Nhập…
   internal static var screenRecoveryKeyConfirmKeyPlaceholder: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_key_placeholder") }
-  /// Lost your recovery key?
+  /// Mất khóa khôi phục?
   internal static var screenRecoveryKeyConfirmLostRecoveryKey: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_lost_recovery_key") }
-  /// Recovery key confirmed
+  /// Đã xác nhận khóa khôi phục
   internal static var screenRecoveryKeyConfirmSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_success") }
-  /// Enter your recovery key
+  /// Nhập khóa khôi phục
   internal static var screenRecoveryKeyConfirmTitle: String { return L10n.tr("Localizable", "screen_recovery_key_confirm_title") }
-  /// Copied recovery key
+  /// Đã sao chép khóa khôi phục
   internal static var screenRecoveryKeyCopiedToClipboard: String { return L10n.tr("Localizable", "screen_recovery_key_copied_to_clipboard") }
-  /// Generating…
+  /// Đang tạo…
   internal static var screenRecoveryKeyGeneratingKey: String { return L10n.tr("Localizable", "screen_recovery_key_generating_key") }
-  /// Save recovery key
+  /// Lưu khóa khôi phục
   internal static var screenRecoveryKeySaveAction: String { return L10n.tr("Localizable", "screen_recovery_key_save_action") }
-  /// Write down this recovery key somewhere safe, like a password manager, encrypted note, or a physical safe.
+  /// Viết khóa khôi phục này vào nơi an toàn, như trình quản lý mật khẩu, ghi chú mã hóa hoặc két sắt vật lý.
   internal static var screenRecoveryKeySaveDescription: String { return L10n.tr("Localizable", "screen_recovery_key_save_description") }
-  /// Tap to copy recovery key
+  /// Chạm để sao chép khóa khôi phục
   internal static var screenRecoveryKeySaveKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_save_key_description") }
-  /// Save your recovery key somewhere safe
+  /// Lưu khóa khôi phục ở nơi an toàn
   internal static var screenRecoveryKeySaveTitle: String { return L10n.tr("Localizable", "screen_recovery_key_save_title") }
-  /// You will not be able to access your new recovery key after this step.
+  /// Bạn sẽ không thể truy cập khóa khôi phục mới sau bước này.
   internal static var screenRecoveryKeySetupConfirmationDescription: String { return L10n.tr("Localizable", "screen_recovery_key_setup_confirmation_description") }
-  /// Have you saved your recovery key?
+  /// Bạn đã lưu khóa khôi phục chưa?
   internal static var screenRecoveryKeySetupConfirmationTitle: String { return L10n.tr("Localizable", "screen_recovery_key_setup_confirmation_title") }
-  /// Your key storage is protected by a recovery key. If you need a new recovery key after setup, you can recreate it by selecting ‘Change recovery key’.
+  /// Kho lưu trữ khóa được bảo vệ bằng khóa khôi phục. Nếu cần khóa khôi phục mới sau khi thiết lập, bạn có thể tạo lại bằng cách chọn 'Thay đổi khóa khôi phục'.
   internal static var screenRecoveryKeySetupDescription: String { return L10n.tr("Localizable", "screen_recovery_key_setup_description") }
-  /// Generate your recovery key
+  /// Tạo khóa khôi phục
   internal static var screenRecoveryKeySetupGenerateKey: String { return L10n.tr("Localizable", "screen_recovery_key_setup_generate_key") }
-  /// Do not share this with anyone!
+  /// Không chia sẻ điều này với bất kỳ ai!
   internal static var screenRecoveryKeySetupGenerateKeyDescription: String { return L10n.tr("Localizable", "screen_recovery_key_setup_generate_key_description") }
-  /// Recovery setup successful
+  /// Thiết lập khôi phục thành công
   internal static var screenRecoveryKeySetupSuccess: String { return L10n.tr("Localizable", "screen_recovery_key_setup_success") }
-  /// Set up recovery
+  /// Thiết lập khôi phục
   internal static var screenRecoveryKeySetupTitle: String { return L10n.tr("Localizable", "screen_recovery_key_setup_title") }
-  /// Block user
+  /// Chặn người dùng
   internal static var screenReportContentBlockUser: String { return L10n.tr("Localizable", "screen_report_content_block_user") }
-  /// Check if you want to hide all current and future messages from this user
+  /// Đánh dấu nếu bạn muốn ẩn tất cả tin nhắn hiện tại và tương lai từ người dùng này
   internal static var screenReportContentBlockUserHint: String { return L10n.tr("Localizable", "screen_report_content_block_user_hint") }
-  /// This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages.
+  /// Tin nhắn này sẽ được báo cáo cho quản trị viên homeserver. Họ sẽ không thể đọc bất kỳ tin nhắn mã hóa nào.
   internal static var screenReportContentExplanation: String { return L10n.tr("Localizable", "screen_report_content_explanation") }
-  /// Reason for reporting this content
+  /// Lý do báo cáo nội dung này
   internal static var screenReportContentHint: String { return L10n.tr("Localizable", "screen_report_content_hint") }
-  /// Your report was submitted successfully, but we encountered an issue while trying to leave the room. Please try again.
+  /// Báo cáo của bạn đã được gửi thành công, nhưng chúng tôi gặp vấn đề khi cố gắng rời khỏi phòng. Vui lòng thử lại.
   internal static var screenReportRoomLeaveFailedAlertMessage: String { return L10n.tr("Localizable", "screen_report_room_leave_failed_alert_message") }
-  /// Unable to Leave Room
+  /// Không thể rời phòng
   internal static var screenReportRoomLeaveFailedAlertTitle: String { return L10n.tr("Localizable", "screen_report_room_leave_failed_alert_title") }
-  /// Report this room to your admin. If the messages are encrypted, your admin will not be able to read them.
+  /// Báo cáo phòng này cho quản trị viên. Nếu tin nhắn được mã hóa, quản trị viên sẽ không thể đọc chúng.
   internal static var screenReportRoomReasonFooter: String { return L10n.tr("Localizable", "screen_report_room_reason_footer") }
-  /// Describe the reason to report…
+  /// Mô tả lý do báo cáo…
   internal static var screenReportRoomReasonPlaceholder: String { return L10n.tr("Localizable", "screen_report_room_reason_placeholder") }
-  /// Report room
+  /// Báo cáo phòng
   internal static var screenReportRoomTitle: String { return L10n.tr("Localizable", "screen_report_room_title") }
-  /// Yes, reset now
+  /// Có, đặt lại ngay
   internal static var screenResetEncryptionConfirmationAlertAction: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_action") }
-  /// This process is irreversible.
+  /// Quá trình này không thể đảo ngược.
   internal static var screenResetEncryptionConfirmationAlertSubtitle: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_subtitle") }
-  /// Are you sure you want to reset your identity?
+  /// Bạn có chắc chắn muốn đặt lại danh tính?
   internal static var screenResetEncryptionConfirmationAlertTitle: String { return L10n.tr("Localizable", "screen_reset_encryption_confirmation_alert_title") }
-  /// An unknown error happened. Please check your account password is correct and try again.
+  /// Đã xảy ra lỗi không xác định. Vui lòng kiểm tra mật khẩu tài khoản và thử lại.
   internal static var screenResetEncryptionPasswordError: String { return L10n.tr("Localizable", "screen_reset_encryption_password_error") }
-  /// Enter…
+  /// Nhập…
   internal static var screenResetEncryptionPasswordPlaceholder: String { return L10n.tr("Localizable", "screen_reset_encryption_password_placeholder") }
-  /// Confirm that you want to reset your identity.
+  /// Xác nhận rằng bạn muốn đặt lại danh tính.
   internal static var screenResetEncryptionPasswordSubtitle: String { return L10n.tr("Localizable", "screen_reset_encryption_password_subtitle") }
-  /// Enter your account password to continue
+  /// Nhập mật khẩu tài khoản để tiếp tục
   internal static var screenResetEncryptionPasswordTitle: String { return L10n.tr("Localizable", "screen_reset_encryption_password_title") }
-  /// You're about to go to your %1$@ account to reset your identity. Afterwards you'll be taken back to the app.
+  /// Bạn sắp đi đến tài khoản %1$@ để đặt lại danh tính. Sau đó bạn sẽ được đưa trở lại ứng dụng.
   internal static func screenResetIdentityConfirmationSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_reset_identity_confirmation_subtitle", String(describing: p1))
   }
-  /// Can't confirm? Go to your account to reset your identity.
+  /// Không thể xác nhận? Đi đến tài khoản để đặt lại danh tính.
   internal static var screenResetIdentityConfirmationTitle: String { return L10n.tr("Localizable", "screen_reset_identity_confirmation_title") }
-  /// Withdraw verification and send
+  /// Rút xác minh và gửi
   internal static var screenResolveSendFailureChangedIdentityPrimaryButtonTitle: String { return L10n.tr("Localizable", "screen_resolve_send_failure_changed_identity_primary_button_title") }
-  /// You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$@.
+  /// Bạn có thể rút xác minh và gửi tin nhắn này, hoặc hủy bây giờ và thử lại sau khi xác minh lại %1$@.
   internal static func screenResolveSendFailureChangedIdentitySubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_resolve_send_failure_changed_identity_subtitle", String(describing: p1))
   }
-  /// Your message was not sent because %1$@’s verified identity was reset
+  /// Tin nhắn của bạn không được gửi vì danh tính đã xác minh của %1$@ đã được đặt lại
   internal static func screenResolveSendFailureChangedIdentityTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_resolve_send_failure_changed_identity_title", String(describing: p1))
   }
-  /// Send message anyway
+  /// Gửi tin nhắn
   internal static var screenResolveSendFailureUnsignedDevicePrimaryButtonTitle: String { return L10n.tr("Localizable", "screen_resolve_send_failure_unsigned_device_primary_button_title") }
-  /// %1$@ is using one or more unverified devices. You can send the message anyway, or you can cancel for now and try again later after %2$@ has verified all their devices.
+  /// %1$@ đang sử dụng một hoặc nhiều thiết bị chưa xác minh. Bạn có thể gửi tin nhắn, hoặc hủy bây giờ và thử lại sau khi %2$@ đã xác minh tất cả thiết bị.
   internal static func screenResolveSendFailureUnsignedDeviceSubtitle(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_resolve_send_failure_unsigned_device_subtitle", String(describing: p1), String(describing: p2))
   }
-  /// Your message was not sent because %1$@ has not verified all devices
+  /// Tin nhắn của bạn không được gửi vì %1$@ chưa xác minh tất cả thiết bị
   internal static func screenResolveSendFailureUnsignedDeviceTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_resolve_send_failure_unsigned_device_title", String(describing: p1))
   }
-  /// One or more of your devices are unverified. You can send the message anyway, or you can cancel for now and try again later after you have verified all of your devices.
+  /// Một hoặc nhiều thiết bị của bạn chưa được xác minh. Bạn có thể gửi tin nhắn, hoặc hủy bây giờ và thử lại sau khi bạn đã xác minh tất cả thiết bị.
   internal static var screenResolveSendFailureYouUnsignedDeviceSubtitle: String { return L10n.tr("Localizable", "screen_resolve_send_failure_you_unsigned_device_subtitle") }
-  /// Your message was not sent because you have not verified one or more of your devices
+  /// Tin nhắn của bạn không được gửi vì bạn chưa xác minh một hoặc nhiều thiết bị
   internal static var screenResolveSendFailureYouUnsignedDeviceTitle: String { return L10n.tr("Localizable", "screen_resolve_send_failure_you_unsigned_device_title") }
-  /// Failed to resolve room alias.
+  /// Giải quyết bí danh phòng thất bại.
   internal static var screenRoomAliasResolverResolveAliasFailure: String { return L10n.tr("Localizable", "screen_room_alias_resolver_resolve_alias_failure") }
   /// Camera
   internal static var screenRoomAttachmentSourceCamera: String { return L10n.tr("Localizable", "screen_room_attachment_source_camera") }
-  /// Take photo
+  /// Chụp ảnh
   internal static var screenRoomAttachmentSourceCameraPhoto: String { return L10n.tr("Localizable", "screen_room_attachment_source_camera_photo") }
-  /// Record video
+  /// Quay video
   internal static var screenRoomAttachmentSourceCameraVideo: String { return L10n.tr("Localizable", "screen_room_attachment_source_camera_video") }
-  /// Attachment
+  /// Tệp đính kèm
   internal static var screenRoomAttachmentSourceFiles: String { return L10n.tr("Localizable", "screen_room_attachment_source_files") }
-  /// Photo & Video Library
+  /// Thư viện ảnh & video
   internal static var screenRoomAttachmentSourceGallery: String { return L10n.tr("Localizable", "screen_room_attachment_source_gallery") }
-  /// Location
+  /// Vị trí
   internal static var screenRoomAttachmentSourceLocation: String { return L10n.tr("Localizable", "screen_room_attachment_source_location") }
-  /// Poll
+  /// Bình chọn
   internal static var screenRoomAttachmentSourcePoll: String { return L10n.tr("Localizable", "screen_room_attachment_source_poll") }
-  /// Text Formatting
+  /// Định dạng văn bản
   internal static var screenRoomAttachmentTextFormatting: String { return L10n.tr("Localizable", "screen_room_attachment_text_formatting") }
-  /// Admins only
+  /// Chỉ quản trị viên
   internal static var screenRoomChangePermissionsAdministrators: String { return L10n.tr("Localizable", "screen_room_change_permissions_administrators") }
-  /// Ban people
+  /// Cấm mọi người
   internal static var screenRoomChangePermissionsBanPeople: String { return L10n.tr("Localizable", "screen_room_change_permissions_ban_people") }
-  /// Remove messages
+  /// Xóa tin nhắn
   internal static var screenRoomChangePermissionsDeleteMessages: String { return L10n.tr("Localizable", "screen_room_change_permissions_delete_messages") }
-  /// Everyone
+  /// Mọi người
   internal static var screenRoomChangePermissionsEveryone: String { return L10n.tr("Localizable", "screen_room_change_permissions_everyone") }
-  /// Invite people and accept requests to join
+  /// Mời mọi người và chấp nhận yêu cầu tham gia
   internal static var screenRoomChangePermissionsInvitePeople: String { return L10n.tr("Localizable", "screen_room_change_permissions_invite_people") }
-  /// Member moderation
+  /// Kiểm duyệt thành viên
   internal static var screenRoomChangePermissionsMemberModeration: String { return L10n.tr("Localizable", "screen_room_change_permissions_member_moderation") }
-  /// Messages and content
+  /// Tin nhắn và nội dung
   internal static var screenRoomChangePermissionsMessagesAndContent: String { return L10n.tr("Localizable", "screen_room_change_permissions_messages_and_content") }
-  /// Admins and moderators
+  /// Quản trị viên và điều hành viên
   internal static var screenRoomChangePermissionsModerators: String { return L10n.tr("Localizable", "screen_room_change_permissions_moderators") }
-  /// Remove people and decline requests to join
+  /// Xóa mọi người và từ chối yêu cầu tham gia
   internal static var screenRoomChangePermissionsRemovePeople: String { return L10n.tr("Localizable", "screen_room_change_permissions_remove_people") }
-  /// Change room avatar
+  /// Thay đổi avatar phòng
   internal static var screenRoomChangePermissionsRoomAvatar: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_avatar") }
-  /// Room details
+  /// Chi tiết phòng
   internal static var screenRoomChangePermissionsRoomDetails: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_details") }
-  /// Change room name
+  /// Thay đổi tên phòng
   internal static var screenRoomChangePermissionsRoomName: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_name") }
-  /// Change room topic
+  /// Thay đổi chủ đề phòng
   internal static var screenRoomChangePermissionsRoomTopic: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_topic") }
-  /// Send messages
+  /// Gửi tin nhắn
   internal static var screenRoomChangePermissionsSendMessages: String { return L10n.tr("Localizable", "screen_room_change_permissions_send_messages") }
-  /// Edit Admins
+  /// Chỉnh sửa quản trị viên
   internal static var screenRoomChangeRoleAdministratorsTitle: String { return L10n.tr("Localizable", "screen_room_change_role_administrators_title") }
-  /// You will not be able to undo this action. You are promoting the user to have the same power level as you.
+  /// Bạn sẽ không thể hoàn tác hành động này. Bạn đang thăng cấp người dùng lên cùng mức quyền lực với bạn.
   internal static var screenRoomChangeRoleConfirmAddAdminDescription: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_add_admin_description") }
-  /// Add Admin?
+  /// Thêm quản trị viên?
   internal static var screenRoomChangeRoleConfirmAddAdminTitle: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_add_admin_title") }
-  /// Demote
+  /// Hạ cấp
   internal static var screenRoomChangeRoleConfirmDemoteSelfAction: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_demote_self_action") }
-  /// You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.
+  /// Bạn sẽ không thể hoàn tác thay đổi này vì bạn đang hạ cấp chính mình, nếu bạn là người dùng có đặc quyền cuối cùng trong phòng sẽ không thể lấy lại đặc quyền.
   internal static var screenRoomChangeRoleConfirmDemoteSelfDescription: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_demote_self_description") }
-  /// Demote yourself?
+  /// Hạ cấp bản thân?
   internal static var screenRoomChangeRoleConfirmDemoteSelfTitle: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_demote_self_title") }
-  /// %1$@ (Pending)
+  /// %1$@ (Đang chờ)
   internal static func screenRoomChangeRoleInvitedMemberName(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_change_role_invited_member_name", String(describing: p1))
   }
-  /// Admins automatically have moderator privileges
+  /// Quản trị viên tự động có đặc quyền điều hành viên
   internal static var screenRoomChangeRoleModeratorsAdminSectionFooter: String { return L10n.tr("Localizable", "screen_room_change_role_moderators_admin_section_footer") }
-  /// Edit Moderators
+  /// Chỉnh sửa điều hành viên
   internal static var screenRoomChangeRoleModeratorsTitle: String { return L10n.tr("Localizable", "screen_room_change_role_moderators_title") }
-  /// Admins
+  /// Quản trị viên
   internal static var screenRoomChangeRoleSectionAdministrators: String { return L10n.tr("Localizable", "screen_room_change_role_section_administrators") }
-  /// Moderators
+  /// Điều hành viên
   internal static var screenRoomChangeRoleSectionModerators: String { return L10n.tr("Localizable", "screen_room_change_role_section_moderators") }
-  /// Members
+  /// Thành viên
   internal static var screenRoomChangeRoleSectionUsers: String { return L10n.tr("Localizable", "screen_room_change_role_section_users") }
-  /// You have unsaved changes.
+  /// Bạn có những thay đổi chưa lưu.
   internal static var screenRoomChangeRoleUnsavedChangesDescription: String { return L10n.tr("Localizable", "screen_room_change_role_unsaved_changes_description") }
-  /// Save changes?
+  /// Lưu thay đổi?
   internal static var screenRoomChangeRoleUnsavedChangesTitle: String { return L10n.tr("Localizable", "screen_room_change_role_unsaved_changes_title") }
-  /// Add topic
+  /// Thêm chủ đề
   internal static var screenRoomDetailsAddTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_add_topic_title") }
-  /// Already a member
+  /// Đã là thành viên
   internal static var screenRoomDetailsAlreadyAMember: String { return L10n.tr("Localizable", "screen_room_details_already_a_member") }
-  /// Already invited
+  /// Đã được mời
   internal static var screenRoomDetailsAlreadyInvited: String { return L10n.tr("Localizable", "screen_room_details_already_invited") }
-  /// Encrypted
+  /// Đã mã hóa
   internal static var screenRoomDetailsBadgeEncrypted: String { return L10n.tr("Localizable", "screen_room_details_badge_encrypted") }
-  /// Not encrypted
+  /// Chưa mã hóa
   internal static var screenRoomDetailsBadgeNotEncrypted: String { return L10n.tr("Localizable", "screen_room_details_badge_not_encrypted") }
-  /// Public room
+  /// Phòng công cộng
   internal static var screenRoomDetailsBadgePublic: String { return L10n.tr("Localizable", "screen_room_details_badge_public") }
-  /// Edit Room
+  /// Chỉnh sửa phòng
   internal static var screenRoomDetailsEditRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_edit_room_title") }
-  /// There was an unknown error and the information couldn't be changed.
+  /// Có lỗi không xác định và thông tin không thể thay đổi.
   internal static var screenRoomDetailsEditionError: String { return L10n.tr("Localizable", "screen_room_details_edition_error") }
-  /// Unable to update room
+  /// Không thể cập nhật phòng
   internal static var screenRoomDetailsEditionErrorTitle: String { return L10n.tr("Localizable", "screen_room_details_edition_error_title") }
-  /// Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.
+  /// Tin nhắn được bảo mật bằng khóa. Chỉ bạn và người nhận có khóa duy nhất để mở khóa.
   internal static var screenRoomDetailsEncryptionEnabledSubtitle: String { return L10n.tr("Localizable", "screen_room_details_encryption_enabled_subtitle") }
-  /// Message encryption enabled
+  /// Đã bật mã hóa tin nhắn
   internal static var screenRoomDetailsEncryptionEnabledTitle: String { return L10n.tr("Localizable", "screen_room_details_encryption_enabled_title") }
-  /// An error occurred when loading notification settings.
+  /// Đã xảy ra lỗi khi tải cài đặt thông báo.
   internal static var screenRoomDetailsErrorLoadingNotificationSettings: String { return L10n.tr("Localizable", "screen_room_details_error_loading_notification_settings") }
-  /// Failed muting this room, please try again.
+  /// Tắt tiếng phòng này thất bại, vui lòng thử lại.
   internal static var screenRoomDetailsErrorMuting: String { return L10n.tr("Localizable", "screen_room_details_error_muting") }
-  /// Failed unmuting this room, please try again.
+  /// Bật tiếng phòng này thất bại, vui lòng thử lại.
   internal static var screenRoomDetailsErrorUnmuting: String { return L10n.tr("Localizable", "screen_room_details_error_unmuting") }
-  /// Invite people
+  /// Mời mọi người
   internal static var screenRoomDetailsInvitePeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_invite_people_title") }
-  /// Leave conversation
+  /// Rời cuộc trò chuyện
   internal static var screenRoomDetailsLeaveConversationTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_conversation_title") }
-  /// Leave room
+  /// Rời phòng
   internal static var screenRoomDetailsLeaveRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_leave_room_title") }
-  /// Media and files
+  /// Media và tệp
   internal static var screenRoomDetailsMediaGalleryTitle: String { return L10n.tr("Localizable", "screen_room_details_media_gallery_title") }
-  /// Custom
+  /// Tùy chỉnh
   internal static var screenRoomDetailsNotificationModeCustom: String { return L10n.tr("Localizable", "screen_room_details_notification_mode_custom") }
-  /// Default
+  /// Mặc định
   internal static var screenRoomDetailsNotificationModeDefault: String { return L10n.tr("Localizable", "screen_room_details_notification_mode_default") }
-  /// Notifications
+  /// Thông báo
   internal static var screenRoomDetailsNotificationTitle: String { return L10n.tr("Localizable", "screen_room_details_notification_title") }
-  /// Pinned messages
+  /// Tin nhắn đã ghim
   internal static var screenRoomDetailsPinnedEventsRowTitle: String { return L10n.tr("Localizable", "screen_room_details_pinned_events_row_title") }
-  /// Profile
+  /// Hồ sơ
   internal static var screenRoomDetailsProfileRowTitle: String { return L10n.tr("Localizable", "screen_room_details_profile_row_title") }
-  /// Requests to join
+  /// Yêu cầu tham gia
   internal static var screenRoomDetailsRequestsToJoinTitle: String { return L10n.tr("Localizable", "screen_room_details_requests_to_join_title") }
-  /// Roles and permissions
+  /// Vai trò và quyền hạn
   internal static var screenRoomDetailsRolesAndPermissions: String { return L10n.tr("Localizable", "screen_room_details_roles_and_permissions") }
-  /// Room name
+  /// Tên phòng
   internal static var screenRoomDetailsRoomNameLabel: String { return L10n.tr("Localizable", "screen_room_details_room_name_label") }
-  /// Security & privacy
+  /// Bảo mật & riêng tư
   internal static var screenRoomDetailsSecurityAndPrivacyTitle: String { return L10n.tr("Localizable", "screen_room_details_security_and_privacy_title") }
-  /// Security
+  /// Bảo mật
   internal static var screenRoomDetailsSecurityTitle: String { return L10n.tr("Localizable", "screen_room_details_security_title") }
-  /// Share room
+  /// Chia sẻ phòng
   internal static var screenRoomDetailsShareRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_share_room_title") }
-  /// Room info
+  /// Thông tin phòng
   internal static var screenRoomDetailsTitle: String { return L10n.tr("Localizable", "screen_room_details_title") }
-  /// Topic
+  /// Chủ đề
   internal static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
-  /// Updating room…
+  /// Đang cập nhật phòng…
   internal static var screenRoomDetailsUpdatingRoom: String { return L10n.tr("Localizable", "screen_room_details_updating_room") }
-  /// Failed loading
+  /// Tải thất bại
   internal static var screenRoomDirectorySearchLoadingError: String { return L10n.tr("Localizable", "screen_room_directory_search_loading_error") }
-  /// Room directory
+  /// Thư mục phòng
   internal static var screenRoomDirectorySearchTitle: String { return L10n.tr("Localizable", "screen_room_directory_search_title") }
-  /// Message history is currently unavailable.
+  /// Lịch sử tin nhắn hiện không khả dụng.
   internal static var screenRoomEncryptedHistoryBanner: String { return L10n.tr("Localizable", "screen_room_encrypted_history_banner") }
-  /// Message history is unavailable in this room. Verify this device to see your message history.
+  /// Lịch sử tin nhắn không khả dụng trong phòng này. Xác minh thiết bị này để xem lịch sử tin nhắn.
   internal static var screenRoomEncryptedHistoryBannerUnverified: String { return L10n.tr("Localizable", "screen_room_encrypted_history_banner_unverified") }
-  /// Failed processing media to upload, please try again.
+  /// Xử lý media để tải lên thất bại, vui lòng thử lại.
   internal static var screenRoomErrorFailedProcessingMedia: String { return L10n.tr("Localizable", "screen_room_error_failed_processing_media") }
-  /// Could not retrieve user details
+  /// Không thể lấy chi tiết người dùng
   internal static var screenRoomErrorFailedRetrievingUserDetails: String { return L10n.tr("Localizable", "screen_room_error_failed_retrieving_user_details") }
-  /// Message in %1$@
+  /// Tin nhắn trong %1$@
   internal static func screenRoomEventPill(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_event_pill", String(describing: p1))
   }
-  /// Expand
+  /// Mở rộng
   internal static var screenRoomGroupedStateEventsExpand: String { return L10n.tr("Localizable", "screen_room_grouped_state_events_expand") }
-  /// Reduce
+  /// Thu gọn
   internal static var screenRoomGroupedStateEventsReduce: String { return L10n.tr("Localizable", "screen_room_grouped_state_events_reduce") }
-  /// Would you like to invite them back?
+  /// Bạn có muốn mời họ trở lại?
   internal static var screenRoomInviteAgainAlertMessage: String { return L10n.tr("Localizable", "screen_room_invite_again_alert_message") }
-  /// You are alone in this chat
+  /// Bạn đang một mình trong cuộc trò chuyện này
   internal static var screenRoomInviteAgainAlertTitle: String { return L10n.tr("Localizable", "screen_room_invite_again_alert_title") }
-  /// Block
+  /// Chặn
   internal static var screenRoomMemberDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_room_member_details_block_alert_action") }
-  /// Blocked users won't be able to send you messages and all their messages will be hidden. You can unblock them anytime.
+  /// Người dùng bị chặn sẽ không thể gửi tin nhắn cho bạn và tất cả tin nhắn của họ sẽ bị ẩn. Bạn có thể bỏ chặn họ bất cứ lúc nào.
   internal static var screenRoomMemberDetailsBlockAlertDescription: String { return L10n.tr("Localizable", "screen_room_member_details_block_alert_description") }
-  /// Block user
+  /// Chặn người dùng
   internal static var screenRoomMemberDetailsBlockUser: String { return L10n.tr("Localizable", "screen_room_member_details_block_user") }
-  /// Profile
+  /// Hồ sơ
   internal static var screenRoomMemberDetailsTitle: String { return L10n.tr("Localizable", "screen_room_member_details_title") }
-  /// Unblock
+  /// Bỏ chặn
   internal static var screenRoomMemberDetailsUnblockAlertAction: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_alert_action") }
-  /// You'll be able to see all messages from them again.
+  /// Bạn sẽ có thể thấy lại tất cả tin nhắn từ họ.
   internal static var screenRoomMemberDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_alert_description") }
-  /// Unblock user
+  /// Bỏ chặn người dùng
   internal static var screenRoomMemberDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_user") }
-  /// Use the web app to verify this user.
+  /// Sử dụng ứng dụng web để xác minh người dùng này.
   internal static var screenRoomMemberDetailsVerifyButtonSubtitle: String { return L10n.tr("Localizable", "screen_room_member_details_verify_button_subtitle") }
-  /// Verify %1$@
+  /// Xác minh %1$@
   internal static func screenRoomMemberDetailsVerifyButtonTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_member_details_verify_button_title", String(describing: p1))
   }
-  /// There are no banned users in this room.
+  /// Không có người dùng bị cấm trong phòng này.
   internal static var screenRoomMemberListBannedEmpty: String { return L10n.tr("Localizable", "screen_room_member_list_banned_empty") }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomMemberListHeaderTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_member_list_header_title", p1)
   }
-  /// Ban from room
+  /// Cấm khỏi phòng
   internal static var screenRoomMemberListManageMemberRemoveConfirmationBan: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_remove_confirmation_ban") }
-  /// Only remove member
+  /// Chỉ xóa thành viên
   internal static var screenRoomMemberListManageMemberRemoveConfirmationKick: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_remove_confirmation_kick") }
-  /// Unban
+  /// Bỏ cấm
   internal static var screenRoomMemberListManageMemberUnbanAction: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_unban_action") }
-  /// They will be able to join this room again if invited.
+  /// Họ sẽ có thể tham gia phòng này lại nếu được mời.
   internal static var screenRoomMemberListManageMemberUnbanMessage: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_unban_message") }
-  /// Unban user
+  /// Bỏ cấm người dùng
   internal static var screenRoomMemberListManageMemberUnbanTitle: String { return L10n.tr("Localizable", "screen_room_member_list_manage_member_unban_title") }
-  /// Banned
+  /// Bị cấm
   internal static var screenRoomMemberListModeBanned: String { return L10n.tr("Localizable", "screen_room_member_list_mode_banned") }
-  /// Members
+  /// Thành viên
   internal static var screenRoomMemberListModeMembers: String { return L10n.tr("Localizable", "screen_room_member_list_mode_members") }
-  /// Pending
+  /// Đang chờ
   internal static var screenRoomMemberListPendingHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_pending_header_title") }
-  /// Admin
+  /// Quản trị viên
   internal static var screenRoomMemberListRoleAdministrator: String { return L10n.tr("Localizable", "screen_room_member_list_role_administrator") }
-  /// Moderator
+  /// Điều hành viên
   internal static var screenRoomMemberListRoleModerator: String { return L10n.tr("Localizable", "screen_room_member_list_role_moderator") }
-  /// Owner
+  /// Chủ sở hữu
   internal static var screenRoomMemberListRoleOwner: String { return L10n.tr("Localizable", "screen_room_member_list_role_owner") }
-  /// Room members
+  /// Thành viên phòng
   internal static var screenRoomMemberListRoomMembersHeaderTitle: String { return L10n.tr("Localizable", "screen_room_member_list_room_members_header_title") }
-  /// Unbanning %1$@
+  /// Đang bỏ cấm %1$@
   internal static func screenRoomMemberListUnbanningUser(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_member_list_unbanning_user", String(describing: p1))
   }
-  /// Notify the whole room
+  /// Thông báo toàn bộ phòng
   internal static var screenRoomMentionsAtRoomSubtitle: String { return L10n.tr("Localizable", "screen_room_mentions_at_room_subtitle") }
-  /// Everyone
+  /// Mọi người
   internal static var screenRoomMentionsAtRoomTitle: String { return L10n.tr("Localizable", "screen_room_mentions_at_room_title") }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomMultipleKnockRequestsTitle(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_multiple_knock_requests_title", p1)
   }
-  /// View all
+  /// Xem tất cả
   internal static var screenRoomMultipleKnockRequestsViewAllButtonTitle: String { return L10n.tr("Localizable", "screen_room_multiple_knock_requests_view_all_button_title") }
-  /// Allow custom setting
+  /// Cho phép cài đặt tùy chỉnh
   internal static var screenRoomNotificationSettingsAllowCustom: String { return L10n.tr("Localizable", "screen_room_notification_settings_allow_custom") }
-  /// Turning this on will override your default setting
+  /// Bật tính năng này sẽ ghi đè cài đặt mặc định
   internal static var screenRoomNotificationSettingsAllowCustomFootnote: String { return L10n.tr("Localizable", "screen_room_notification_settings_allow_custom_footnote") }
-  /// Notify me in this chat for
+  /// Thông báo cho tôi trong cuộc trò chuyện này khi có
   internal static var screenRoomNotificationSettingsCustomSettingsTitle: String { return L10n.tr("Localizable", "screen_room_notification_settings_custom_settings_title") }
-  /// You can change it in your %1$@.
+  /// Bạn có thể thay đổi trong %1$@.
   internal static func screenRoomNotificationSettingsDefaultSettingFootnote(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_notification_settings_default_setting_footnote", String(describing: p1))
   }
-  /// global settings
+  /// cài đặt toàn cục
   internal static var screenRoomNotificationSettingsDefaultSettingFootnoteContentLink: String { return L10n.tr("Localizable", "screen_room_notification_settings_default_setting_footnote_content_link") }
-  /// Default setting
+  /// Cài đặt mặc định
   internal static var screenRoomNotificationSettingsDefaultSettingTitle: String { return L10n.tr("Localizable", "screen_room_notification_settings_default_setting_title") }
-  /// Remove custom setting
+  /// Xóa cài đặt tùy chỉnh
   internal static var screenRoomNotificationSettingsEditRemoveSetting: String { return L10n.tr("Localizable", "screen_room_notification_settings_edit_remove_setting") }
-  /// An error occurred while loading notification settings.
+  /// Đã xảy ra lỗi khi tải cài đặt thông báo.
   internal static var screenRoomNotificationSettingsErrorLoadingSettings: String { return L10n.tr("Localizable", "screen_room_notification_settings_error_loading_settings") }
-  /// Failed restoring the default mode, please try again.
+  /// Khôi phục chế độ mặc định thất bại, vui lòng thử lại.
   internal static var screenRoomNotificationSettingsErrorRestoringDefault: String { return L10n.tr("Localizable", "screen_room_notification_settings_error_restoring_default") }
-  /// Failed setting the mode, please try again.
+  /// Đặt chế độ thất bại, vui lòng thử lại.
   internal static var screenRoomNotificationSettingsErrorSettingMode: String { return L10n.tr("Localizable", "screen_room_notification_settings_error_setting_mode") }
-  /// Your homeserver does not support this option in encrypted rooms, you won't get notified in this room.
+  /// Homeserver của bạn không hỗ trợ tùy chọn này trong phòng mã hóa, bạn sẽ không được thông báo trong phòng này.
   internal static var screenRoomNotificationSettingsMentionsOnlyDisclaimer: String { return L10n.tr("Localizable", "screen_room_notification_settings_mentions_only_disclaimer") }
-  /// All messages
+  /// Tất cả tin nhắn
   internal static var screenRoomNotificationSettingsModeAllMessages: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_all_messages") }
-  /// Mentions and Keywords only
+  /// Chỉ nhắc đến và từ khóa
   internal static var screenRoomNotificationSettingsModeMentionsAndKeywords: String { return L10n.tr("Localizable", "screen_room_notification_settings_mode_mentions_and_keywords") }
-  /// In this room, notify me for
+  /// Trong phòng này, thông báo cho tôi khi có
   internal static var screenRoomNotificationSettingsRoomCustomSettingsTitle: String { return L10n.tr("Localizable", "screen_room_notification_settings_room_custom_settings_title") }
-  /// %1$@ of %2$@
+  /// %1$@ trong %2$@
   internal static func screenRoomPinnedBannerIndicator(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_room_pinned_banner_indicator", String(describing: p1), String(describing: p2))
   }
-  /// %1$@ Pinned messages
+  /// %1$@ Tin nhắn đã ghim
   internal static func screenRoomPinnedBannerIndicatorDescription(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_pinned_banner_indicator_description", String(describing: p1))
   }
-  /// Loading message…
+  /// Đang tải tin nhắn…
   internal static var screenRoomPinnedBannerLoadingDescription: String { return L10n.tr("Localizable", "screen_room_pinned_banner_loading_description") }
-  /// View All
+  /// Xem tất cả
   internal static var screenRoomPinnedBannerViewAllButtonTitle: String { return L10n.tr("Localizable", "screen_room_pinned_banner_view_all_button_title") }
-  /// Send again
+  /// Gửi lại
   internal static var screenRoomRetrySendMenuSendAgainAction: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_send_again_action") }
-  /// Your message failed to send
+  /// Tin nhắn của bạn gửi thất bại
   internal static var screenRoomRetrySendMenuTitle: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_title") }
-  /// Admins
+  /// Quản trị viên
   internal static var screenRoomRolesAndPermissionsAdmins: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_admins") }
-  /// Change my role
+  /// Thay đổi vai trò của tôi
   internal static var screenRoomRolesAndPermissionsChangeMyRole: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_change_my_role") }
-  /// Demote to member
+  /// Hạ cấp xuống thành viên
   internal static var screenRoomRolesAndPermissionsChangeRoleDemoteToMember: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_change_role_demote_to_member") }
-  /// Demote to moderator
+  /// Hạ cấp xuống điều hành viên
   internal static var screenRoomRolesAndPermissionsChangeRoleDemoteToModerator: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_change_role_demote_to_moderator") }
-  /// Member moderation
+  /// Kiểm duyệt thành viên
   internal static var screenRoomRolesAndPermissionsMemberModeration: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_member_moderation") }
-  /// Messages and content
+  /// Tin nhắn và nội dung
   internal static var screenRoomRolesAndPermissionsMessagesAndContent: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_messages_and_content") }
-  /// Moderators
+  /// Điều hành viên
   internal static var screenRoomRolesAndPermissionsModerators: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_moderators") }
-  /// Permissions
+  /// Quyền hạn
   internal static var screenRoomRolesAndPermissionsPermissionsHeader: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_permissions_header") }
-  /// Reset permissions
+  /// Đặt lại quyền hạn
   internal static var screenRoomRolesAndPermissionsReset: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_reset") }
-  /// Once you reset permissions, you will lose the current settings.
+  /// Khi bạn đặt lại quyền hạn, bạn sẽ mất cài đặt hiện tại.
   internal static var screenRoomRolesAndPermissionsResetConfirmDescription: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_reset_confirm_description") }
-  /// Reset permissions?
+  /// Đặt lại quyền hạn?
   internal static var screenRoomRolesAndPermissionsResetConfirmTitle: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_reset_confirm_title") }
-  /// Roles
+  /// Vai trò
   internal static var screenRoomRolesAndPermissionsRolesHeader: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_roles_header") }
-  /// Room details
+  /// Chi tiết phòng
   internal static var screenRoomRolesAndPermissionsRoomDetails: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_room_details") }
-  /// Roles and permissions
+  /// Vai trò và quyền hạn
   internal static var screenRoomRolesAndPermissionsTitle: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_title") }
-  /// Accept
+  /// Chấp nhận
   internal static var screenRoomSingleKnockRequestAcceptButtonTitle: String { return L10n.tr("Localizable", "screen_room_single_knock_request_accept_button_title") }
-  /// %1$@ wants to join this room
+  /// %1$@ muốn tham gia phòng này
   internal static func screenRoomSingleKnockRequestTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_single_knock_request_title", String(describing: p1))
   }
-  /// View
+  /// Xem
   internal static var screenRoomSingleKnockRequestViewButtonTitle: String { return L10n.tr("Localizable", "screen_room_single_knock_request_view_button_title") }
-  /// Add a reaction
+  /// Thêm phản ứng
   internal static var screenRoomTimelineAddReaction: String { return L10n.tr("Localizable", "screen_room_timeline_add_reaction") }
-  /// This is the beginning of %1$@.
+  /// Đây là khởi đầu của %1$@.
   internal static func screenRoomTimelineBeginningOfRoom(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_timeline_beginning_of_room", String(describing: p1))
   }
-  /// This is the beginning of this conversation.
+  /// Đây là khởi đầu của cuộc trò chuyện này.
   internal static var screenRoomTimelineBeginningOfRoomNoName: String { return L10n.tr("Localizable", "screen_room_timeline_beginning_of_room_no_name") }
-  /// Unsupported call. Ask if the caller can use the new Element X app.
+  /// Cuộc gọi không được hỗ trợ. Hỏi người gọi xem có thể sử dụng ứng dụng Element X mới không.
   internal static var screenRoomTimelineLegacyCall: String { return L10n.tr("Localizable", "screen_room_timeline_legacy_call") }
-  /// Show less
+  /// Hiển thị ít hơn
   internal static var screenRoomTimelineLessReactions: String { return L10n.tr("Localizable", "screen_room_timeline_less_reactions") }
-  /// Message copied
+  /// Đã sao chép tin nhắn
   internal static var screenRoomTimelineMessageCopied: String { return L10n.tr("Localizable", "screen_room_timeline_message_copied") }
-  /// You do not have permission to post to this room
+  /// Bạn không có quyền đăng trong phòng này
   internal static var screenRoomTimelineNoPermissionToPost: String { return L10n.tr("Localizable", "screen_room_timeline_no_permission_to_post") }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomTimelineReactionA11y(_ p1: Int) -> String {
@@ -2424,37 +2432,37 @@ internal enum L10n {
   internal static func screenRoomTimelineReactionIncludingYouA11y(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_timeline_reaction_including_you_a11y", p1)
   }
-  /// You reacted with %1$@
+  /// Bạn đã phản ứng bằng %1$@
   internal static func screenRoomTimelineReactionYouA11y(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_timeline_reaction_you_a11y", String(describing: p1))
   }
-  /// Show less
+  /// Hiển thị ít hơn
   internal static var screenRoomTimelineReactionsShowLess: String { return L10n.tr("Localizable", "screen_room_timeline_reactions_show_less") }
-  /// Show more
+  /// Hiển thị thêm
   internal static var screenRoomTimelineReactionsShowMore: String { return L10n.tr("Localizable", "screen_room_timeline_reactions_show_more") }
-  /// Show reactions summary
+  /// Hiển thị tóm tắt phản ứng
   internal static var screenRoomTimelineReactionsShowReactionsSummary: String { return L10n.tr("Localizable", "screen_room_timeline_reactions_show_reactions_summary") }
-  /// New
+  /// Mới
   internal static var screenRoomTimelineReadMarkerTitle: String { return L10n.tr("Localizable", "screen_room_timeline_read_marker_title") }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomTimelineStateChanges(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_timeline_state_changes", p1)
   }
-  /// Jump to new room
+  /// Chuyển đến phòng mới
   internal static var screenRoomTimelineTombstonedRoomAction: String { return L10n.tr("Localizable", "screen_room_timeline_tombstoned_room_action") }
-  /// This room has been replaced and is no longer active
+  /// Phòng này đã được thay thế và không còn hoạt động
   internal static var screenRoomTimelineTombstonedRoomMessage: String { return L10n.tr("Localizable", "screen_room_timeline_tombstoned_room_message") }
-  /// See old messages
+  /// Xem tin nhắn cũ
   internal static var screenRoomTimelineUpgradedRoomAction: String { return L10n.tr("Localizable", "screen_room_timeline_upgraded_room_action") }
-  /// This room is a continuation of another room
+  /// Phòng này là sự tiếp nối của phòng khác
   internal static var screenRoomTimelineUpgradedRoomMessage: String { return L10n.tr("Localizable", "screen_room_timeline_upgraded_room_message") }
-  /// Chat
+  /// Trò chuyện
   internal static var screenRoomTitle: String { return L10n.tr("Localizable", "screen_room_title") }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomTypingManyMembers(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_typing_many_members", p1)
   }
-  /// %1$@, %2$@ and 
+  /// %1$@, %2$@ và 
   internal static func screenRoomTypingManyMembersFirstComponentIos(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_room_typing_many_members_first_component_ios", String(describing: p1), String(describing: p2))
   }
@@ -2462,724 +2470,734 @@ internal enum L10n {
   internal static func screenRoomTypingNotification(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_room_typing_notification", p1)
   }
-  ///  are typing…
+  ///  đang gõ…
   internal static var screenRoomTypingNotificationPluralIos: String { return L10n.tr("Localizable", "screen_room_typing_notification_plural_ios") }
-  ///  is typing…
+  ///  đang gõ…
   internal static var screenRoomTypingNotificationSingularIos: String { return L10n.tr("Localizable", "screen_room_typing_notification_singular_ios") }
-  /// %1$@ and %2$@
+  /// %1$@ và %2$@
   internal static func screenRoomTypingTwoMembers(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_room_typing_two_members", String(describing: p1), String(describing: p2))
   }
-  /// Hold to record
+  /// Giữ để ghi âm
   internal static var screenRoomVoiceMessageTooltip: String { return L10n.tr("Localizable", "screen_room_voice_message_tooltip") }
-  /// Create a new conversation or room
+  /// Tạo cuộc trò chuyện hoặc phòng mới
   internal static var screenRoomlistA11yCreateMessage: String { return L10n.tr("Localizable", "screen_roomlist_a11y_create_message") }
-  /// Clear filters
+  /// Xóa bộ lọc
   internal static var screenRoomlistClearFilters: String { return L10n.tr("Localizable", "screen_roomlist_clear_filters") }
-  /// Get started by messaging someone.
+  /// Bắt đầu bằng cách nhắn tin với ai đó.
   internal static var screenRoomlistEmptyMessage: String { return L10n.tr("Localizable", "screen_roomlist_empty_message") }
-  /// No chats yet.
+  /// Chưa có cuộc trò chuyện.
   internal static var screenRoomlistEmptyTitle: String { return L10n.tr("Localizable", "screen_roomlist_empty_title") }
-  /// Favourites
+  /// Yêu thích
   internal static var screenRoomlistFilterFavourites: String { return L10n.tr("Localizable", "screen_roomlist_filter_favourites") }
-  /// You can add a chat to your favourites in the chat settings.
-  /// For now, you can deselect filters in order to see your other chats
+  /// Bạn có thể thêm cuộc trò chuyện vào mục yêu thích trong cài đặt trò chuyện.
+  /// Bây giờ, bạn có thể bỏ chọn bộ lọc để xem các cuộc trò chuyện khác
   internal static var screenRoomlistFilterFavouritesEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_favourites_empty_state_subtitle") }
-  /// You don’t have favourite chats yet
+  /// Bạn chưa có cuộc trò chuyện yêu thích
   internal static var screenRoomlistFilterFavouritesEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_favourites_empty_state_title") }
-  /// Invites
+  /// Lời mời
   internal static var screenRoomlistFilterInvites: String { return L10n.tr("Localizable", "screen_roomlist_filter_invites") }
-  /// You don't have any pending invites.
+  /// Bạn không có lời mời đang chờ.
   internal static var screenRoomlistFilterInvitesEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_invites_empty_state_title") }
-  /// Low Priority
+  /// Mức độ ưu tiên thấp
   internal static var screenRoomlistFilterLowPriority: String { return L10n.tr("Localizable", "screen_roomlist_filter_low_priority") }
-  /// You can deselect filters in order to see your other chats
+  /// Bạn có thể bỏ chọn bộ lọc để xem các cuộc trò chuyện khác
   internal static var screenRoomlistFilterMixedEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_mixed_empty_state_subtitle") }
-  /// You don’t have chats for this selection
+  /// Bạn không có cuộc trò chuyện cho lựa chọn này
   internal static var screenRoomlistFilterMixedEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_mixed_empty_state_title") }
-  /// People
+  /// Mọi người
   internal static var screenRoomlistFilterPeople: String { return L10n.tr("Localizable", "screen_roomlist_filter_people") }
-  /// You don’t have any DMs yet
+  /// Bạn chưa có tin nhắn trực tiếp nào
   internal static var screenRoomlistFilterPeopleEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_people_empty_state_title") }
-  /// Rooms
+  /// Phòng
   internal static var screenRoomlistFilterRooms: String { return L10n.tr("Localizable", "screen_roomlist_filter_rooms") }
-  /// You’re not in any room yet
+  /// Bạn chưa ở trong phòng nào
   internal static var screenRoomlistFilterRoomsEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_rooms_empty_state_title") }
-  /// Unreads
+  /// Chưa đọc
   internal static var screenRoomlistFilterUnreads: String { return L10n.tr("Localizable", "screen_roomlist_filter_unreads") }
-  /// Congrats!
-  /// You don’t have any unread messages!
+  /// Chúc mừng!
+  /// Bạn không có tin nhắn chưa đọc!
   internal static var screenRoomlistFilterUnreadsEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_unreads_empty_state_title") }
-  /// Request to join sent
+  /// Yêu cầu tham gia đã gửi
   internal static var screenRoomlistKnockEventSentDescription: String { return L10n.tr("Localizable", "screen_roomlist_knock_event_sent_description") }
-  /// Chats
+  /// Cuộc trò chuyện
   internal static var screenRoomlistMainSpaceTitle: String { return L10n.tr("Localizable", "screen_roomlist_main_space_title") }
-  /// Mark as read
+  /// Đánh dấu đã đọc
   internal static var screenRoomlistMarkAsRead: String { return L10n.tr("Localizable", "screen_roomlist_mark_as_read") }
-  /// Mark as unread
+  /// Đánh dấu chưa đọc
   internal static var screenRoomlistMarkAsUnread: String { return L10n.tr("Localizable", "screen_roomlist_mark_as_unread") }
-  /// This room has been upgraded
+  /// Phòng này đã được nâng cấp
   internal static var screenRoomlistTombstonedRoomDescription: String { return L10n.tr("Localizable", "screen_roomlist_tombstoned_room_description") }
-  /// Add room address
+  /// Không tìm thấy kết quả
+  internal static var screenSearchNoResults: String { return L10n.tr("Localizable", "screen_search_no_results") }
+  /// Thử tìm kiếm với từ khóa khác
+  internal static var screenSearchNoResultsDescription: String { return L10n.tr("Localizable", "screen_search_no_results_description") }
+  /// Tìm kiếm tin nhắn
+  internal static var screenSearchPlaceholder: String { return L10n.tr("Localizable", "screen_search_placeholder") }
+  /// Nhập từ khóa để tìm kiếm tin nhắn trong phòng này
+  internal static var screenSearchPlaceholderDescription: String { return L10n.tr("Localizable", "screen_search_placeholder_description") }
+  /// Đang tìm kiếm tin nhắn...
+  internal static var screenSearchSearchingMessages: String { return L10n.tr("Localizable", "screen_search_searching_messages") }
+  /// Thêm địa chỉ phòng
   internal static var screenSecurityAndPrivacyAddRoomAddressAction: String { return L10n.tr("Localizable", "screen_security_and_privacy_add_room_address_action") }
-  /// Anyone can ask to join the room but an administrator or moderator will have to accept the request.
+  /// Bất kỳ ai cũng có thể xin tham gia phòng nhưng quản trị viên hoặc điều hành viên sẽ phải chấp nhận yêu cầu.
   internal static var screenSecurityAndPrivacyAskToJoinOptionDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_ask_to_join_option_description") }
-  /// Ask to join
+  /// Xin tham gia
   internal static var screenSecurityAndPrivacyAskToJoinOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_ask_to_join_option_title") }
-  /// Yes, enable encryption
+  /// Có, bật mã hóa
   internal static var screenSecurityAndPrivacyEnableEncryptionAlertConfirmButtonTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_enable_encryption_alert_confirm_button_title") }
-  /// Once enabled, encryption for a room cannot be disabled, Message history will only be visible for room members since they were invited or since they joined the room.
-  /// No one besides the room members will be able to read messages. This may prevent bots and bridges to work correctly.
-  /// We do not recommend enabling encryption for rooms that anyone can find and join.
+  /// Khi đã bật, mã hóa cho phòng không thể tắt. Lịch sử tin nhắn sẽ chỉ hiển thị cho thành viên phòng kể từ khi họ được mời hoặc kể từ khi họ tham gia phòng.
+  /// Không ai ngoài thành viên phòng có thể đọc tin nhắn. Điều này có thể ngăn bot và cầu nối hoạt động đúng cách.
+  /// Chúng tôi không khuyến nghị bật mã hóa cho phòng mà bất kỳ ai cũng có thể tìm thấy và tham gia.
   internal static var screenSecurityAndPrivacyEnableEncryptionAlertDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_enable_encryption_alert_description") }
-  /// Enable encryption?
+  /// Bật mã hóa?
   internal static var screenSecurityAndPrivacyEnableEncryptionAlertTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_enable_encryption_alert_title") }
-  /// Once enabled, encryption cannot be disabled.
+  /// Khi đã bật, mã hóa không thể tắt.
   internal static var screenSecurityAndPrivacyEncryptionSectionFooter: String { return L10n.tr("Localizable", "screen_security_and_privacy_encryption_section_footer") }
-  /// Encryption
+  /// Mã hóa
   internal static var screenSecurityAndPrivacyEncryptionSectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_encryption_section_header") }
-  /// Enable end-to-end encryption
+  /// Bật mã hóa đầu cuối
   internal static var screenSecurityAndPrivacyEncryptionToggleTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_encryption_toggle_title") }
-  /// Anyone can find and join
+  /// Bất kỳ ai cũng có thể tìm thấy và tham gia
   internal static var screenSecurityAndPrivacyRoomAccessAnyoneOptionDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_anyone_option_description") }
-  /// Anyone
+  /// Bất kỳ ai
   internal static var screenSecurityAndPrivacyRoomAccessAnyoneOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_anyone_option_title") }
-  /// People can only join if they are invited
+  /// Mọi người chỉ có thể tham gia nếu được mời
   internal static var screenSecurityAndPrivacyRoomAccessInviteOnlyOptionDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_invite_only_option_description") }
-  /// Invite only
+  /// Chỉ mời
   internal static var screenSecurityAndPrivacyRoomAccessInviteOnlyOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_invite_only_option_title") }
-  /// Room access
+  /// Quyền truy cập phòng
   internal static var screenSecurityAndPrivacyRoomAccessSectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_section_header") }
-  /// Spaces are not currently supported
+  /// Không gian hiện không được hỗ trợ
   internal static var screenSecurityAndPrivacyRoomAccessSpaceMembersOptionDescription: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_space_members_option_description") }
-  /// Space members
+  /// Thành viên không gian
   internal static var screenSecurityAndPrivacyRoomAccessSpaceMembersOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_access_space_members_option_title") }
-  /// You’ll need a room address in order to make it visible in the room directory.
+  /// Bạn sẽ cần một địa chỉ phòng để làm cho nó hiển thị trong thư mục phòng.
   internal static var screenSecurityAndPrivacyRoomAddressSectionFooter: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_address_section_footer") }
-  /// Room address
+  /// Địa chỉ phòng
   internal static var screenSecurityAndPrivacyRoomAddressSectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_address_section_header") }
-  /// Allow for this room to be found by searching %1$@ public room directory
+  /// Cho phép phòng này được tìm thấy bằng cách tìm kiếm thư mục phòng công cộng %1$@
   internal static func screenSecurityAndPrivacyRoomDirectoryVisibilitySectionFooter(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_security_and_privacy_room_directory_visibility_section_footer", String(describing: p1))
   }
-  /// Visible in public room directory
+  /// Hiển thị trong thư mục phòng công cộng
   internal static var screenSecurityAndPrivacyRoomDirectoryVisibilityToggleTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_directory_visibility_toggle_title") }
-  /// Anyone
+  /// Bất kỳ ai
   internal static var screenSecurityAndPrivacyRoomHistoryAnyoneOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_anyone_option_title") }
-  /// Who can read history
+  /// Ai có thể đọc lịch sử
   internal static var screenSecurityAndPrivacyRoomHistorySectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_section_header") }
-  /// Members only since they were invited
+  /// Chỉ thành viên kể từ khi được mời
   internal static var screenSecurityAndPrivacyRoomHistorySinceInviteOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_since_invite_option_title") }
-  /// Members only since selecting this option
+  /// Chỉ thành viên kể từ khi chọn tùy chọn này
   internal static var screenSecurityAndPrivacyRoomHistorySinceSelectingOptionTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_history_since_selecting_option_title") }
-  /// Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.
-  /// You can choose to publish your room in your homeserver public room directory.
+  /// Địa chỉ phòng là cách để tìm và truy cập phòng. Điều này cũng đảm bảo bạn có thể dễ dàng chia sẻ phòng với người khác.
+  /// Bạn có thể chọn xuất bản phòng trong thư mục phòng công cộng của homeserver.
   internal static var screenSecurityAndPrivacyRoomPublishingSectionFooter: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_publishing_section_footer") }
-  /// Room publishing
+  /// Xuất bản phòng
   internal static var screenSecurityAndPrivacyRoomPublishingSectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_publishing_section_header") }
-  /// Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.
-  /// The address is also required to make the room visible in %1$@ public room directory.
+  /// Địa chỉ phòng là cách để tìm và truy cập phòng. Điều này cũng đảm bảo bạn có thể dễ dàng chia sẻ phòng với người khác.
+  /// Địa chỉ cũng cần thiết để làm cho phòng hiển thị trong thư mục phòng công cộng %1$@.
   internal static func screenSecurityAndPrivacyRoomVisibilitySectionFooter(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_security_and_privacy_room_visibility_section_footer", String(describing: p1))
   }
-  /// Room visibility
+  /// Khả năng hiển thị phòng
   internal static var screenSecurityAndPrivacyRoomVisibilitySectionHeader: String { return L10n.tr("Localizable", "screen_security_and_privacy_room_visibility_section_header") }
-  /// Security & privacy
+  /// Bảo mật & riêng tư
   internal static var screenSecurityAndPrivacyTitle: String { return L10n.tr("Localizable", "screen_security_and_privacy_title") }
-  /// Change account provider
+  /// Thay đổi nhà cung cấp tài khoản
   internal static var screenServerConfirmationChangeServer: String { return L10n.tr("Localizable", "screen_server_confirmation_change_server") }
-  /// A private server for Element employees.
+  /// Máy chủ riêng cho nhân viên Element.
   internal static var screenServerConfirmationMessageLoginElementDotIo: String { return L10n.tr("Localizable", "screen_server_confirmation_message_login_element_dot_io") }
-  /// Matrix is an open network for secure, decentralised communication.
+  /// Matrix là mạng mở cho giao tiếp bảo mật, phi tập trung.
   internal static var screenServerConfirmationMessageLoginMatrixDotOrg: String { return L10n.tr("Localizable", "screen_server_confirmation_message_login_matrix_dot_org") }
-  /// This is where your conversations will live — just like you would use an email provider to keep your emails.
+  /// Đây là nơi các cuộc trò chuyện sẽ diễn ra — giống như bạn sử dụng nhà cung cấp email để giữ email.
   internal static var screenServerConfirmationMessageRegister: String { return L10n.tr("Localizable", "screen_server_confirmation_message_register") }
-  /// You’re about to sign in to %1$@
+  /// Bạn sắp đăng nhập vào %1$@
   internal static func screenServerConfirmationTitleLogin(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_server_confirmation_title_login", String(describing: p1))
   }
-  /// Choose account provider
+  /// Chọn nhà cung cấp tài khoản
   internal static var screenServerConfirmationTitlePickerMode: String { return L10n.tr("Localizable", "screen_server_confirmation_title_picker_mode") }
-  /// You’re about to create an account on %1$@
+  /// Bạn sắp tạo tài khoản trên %1$@
   internal static func screenServerConfirmationTitleRegister(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_server_confirmation_title_register", String(describing: p1))
   }
-  /// Something doesn’t seem right. Either the request timed out or the request was denied.
+  /// Có gì đó không đúng. Yêu cầu đã hết thời gian hoặc bị từ chối.
   internal static var screenSessionVerificationCancelledSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_cancelled_subtitle") }
-  /// Confirm that the emojis below match those shown on your other session.
+  /// Xác nhận rằng các emoji bên dưới khớp với những emoji hiển thị trên phiên khác.
   internal static var screenSessionVerificationCompareEmojisSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_emojis_subtitle") }
-  /// Compare emojis
+  /// So sánh emoji
   internal static var screenSessionVerificationCompareEmojisTitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_emojis_title") }
-  /// Confirm that the emojis below match those shown on the other user’s device.
+  /// Xác nhận rằng các emoji bên dưới khớp với những emoji hiển thị trên thiết bị của người dùng khác.
   internal static var screenSessionVerificationCompareEmojisUserSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_emojis_user_subtitle") }
-  /// Confirm that the numbers below match those shown on your other session.
+  /// Xác nhận rằng các số bên dưới khớp với những số hiển thị trên phiên khác.
   internal static var screenSessionVerificationCompareNumbersSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_numbers_subtitle") }
-  /// Compare numbers
+  /// So sánh số
   internal static var screenSessionVerificationCompareNumbersTitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_numbers_title") }
-  /// Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.
+  /// Phiên mới của bạn đã được xác minh. Nó có quyền truy cập vào tin nhắn mã hóa và người dùng khác sẽ thấy nó đáng tin cậy.
   internal static var screenSessionVerificationCompleteSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_complete_subtitle") }
-  /// Now you can trust the identity of this user when sending or receiving messages.
+  /// Giờ bạn có thể tin tưởng danh tính của người dùng này khi gửi hoặc nhận tin nhắn.
   internal static var screenSessionVerificationCompleteUserSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_complete_user_subtitle") }
-  /// Enter recovery key
+  /// Nhập khóa khôi phục
   internal static var screenSessionVerificationEnterRecoveryKey: String { return L10n.tr("Localizable", "screen_session_verification_enter_recovery_key") }
-  /// Either the request timed out, the request was denied, or there was a verification mismatch.
+  /// Yêu cầu đã hết thời gian, bị từ chối hoặc có sự không khớp trong xác minh.
   internal static var screenSessionVerificationFailedSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_failed_subtitle") }
-  /// Prove it’s you in order to access your encrypted message history.
+  /// Chứng minh đó là bạn để truy cập lịch sử tin nhắn mã hóa.
   internal static var screenSessionVerificationOpenExistingSessionSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_open_existing_session_subtitle") }
-  /// Open an existing session
+  /// Mở phiên hiện có
   internal static var screenSessionVerificationOpenExistingSessionTitle: String { return L10n.tr("Localizable", "screen_session_verification_open_existing_session_title") }
-  /// Retry verification
+  /// Thử lại xác minh
   internal static var screenSessionVerificationPositiveButtonCanceled: String { return L10n.tr("Localizable", "screen_session_verification_positive_button_canceled") }
-  /// I am ready
+  /// Tôi đã sẵn sàng
   internal static var screenSessionVerificationPositiveButtonInitial: String { return L10n.tr("Localizable", "screen_session_verification_positive_button_initial") }
-  /// Waiting to match…
+  /// Đang chờ khớp…
   internal static var screenSessionVerificationPositiveButtonVerifyingOngoing: String { return L10n.tr("Localizable", "screen_session_verification_positive_button_verifying_ongoing") }
-  /// Compare a unique set of emojis.
+  /// So sánh bộ emoji duy nhất.
   internal static var screenSessionVerificationReadySubtitle: String { return L10n.tr("Localizable", "screen_session_verification_ready_subtitle") }
-  /// Compare the unique emoji, ensuring they appear in the same order.
+  /// So sánh emoji duy nhất, đảm bảo chúng xuất hiện theo cùng thứ tự.
   internal static var screenSessionVerificationRequestAcceptedSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_request_accepted_subtitle") }
-  /// Signed in
+  /// Đã đăng nhập
   internal static var screenSessionVerificationRequestDetailsTimestamp: String { return L10n.tr("Localizable", "screen_session_verification_request_details_timestamp") }
-  /// Either the request timed out, the request was denied, or there was a verification mismatch.
+  /// Yêu cầu đã hết thời gian, bị từ chối hoặc có sự không khớp trong xác minh.
   internal static var screenSessionVerificationRequestFailureSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_request_failure_subtitle") }
-  /// Verification failed
+  /// Xác minh thất bại
   internal static var screenSessionVerificationRequestFailureTitle: String { return L10n.tr("Localizable", "screen_session_verification_request_failure_title") }
-  /// Only continue if you initiated this verification.
+  /// Chỉ tiếp tục nếu bạn đã khởi tạo xác minh này.
   internal static var screenSessionVerificationRequestFooter: String { return L10n.tr("Localizable", "screen_session_verification_request_footer") }
-  /// Verify the other device to keep your message history secure.
+  /// Xác minh thiết bị khác để giữ lịch sử tin nhắn an toàn.
   internal static var screenSessionVerificationRequestSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_request_subtitle") }
-  /// Now you can read or send messages securely on your other device.
+  /// Giờ bạn có thể đọc hoặc gửi tin nhắn an toàn trên thiết bị khác.
   internal static var screenSessionVerificationRequestSuccessSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_request_success_subtitle") }
-  /// Device verified
+  /// Thiết bị đã xác minh
   internal static var screenSessionVerificationRequestSuccessTitle: String { return L10n.tr("Localizable", "screen_session_verification_request_success_title") }
-  /// Verification requested
+  /// Đã yêu cầu xác minh
   internal static var screenSessionVerificationRequestTitle: String { return L10n.tr("Localizable", "screen_session_verification_request_title") }
-  /// They don’t match
+  /// Chúng không khớp
   internal static var screenSessionVerificationTheyDontMatch: String { return L10n.tr("Localizable", "screen_session_verification_they_dont_match") }
-  /// They match
+  /// Chúng khớp
   internal static var screenSessionVerificationTheyMatch: String { return L10n.tr("Localizable", "screen_session_verification_they_match") }
-  /// Make sure you have the app open in the other device before starting verification from here.
+  /// Đảm bảo bạn đã mở ứng dụng trên thiết bị khác trước khi bắt đầu xác minh từ đây.
   internal static var screenSessionVerificationUseAnotherDeviceSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_use_another_device_subtitle") }
-  /// Open the app on another verified device
+  /// Mở ứng dụng trên thiết bị đã xác minh khác
   internal static var screenSessionVerificationUseAnotherDeviceTitle: String { return L10n.tr("Localizable", "screen_session_verification_use_another_device_title") }
-  /// For extra security, verify this user by comparing a set of emojis on your devices. Do this by using a trusted way to communicate.
+  /// Để tăng cường bảo mật, xác minh người dùng này bằng cách so sánh bộ emoji trên thiết bị. Thực hiện điều này bằng cách sử dụng phương thức giao tiếp đáng tin cậy.
   internal static var screenSessionVerificationUserInitiatorSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_user_initiator_subtitle") }
-  /// Verify this user?
+  /// Xác minh người dùng này?
   internal static var screenSessionVerificationUserInitiatorTitle: String { return L10n.tr("Localizable", "screen_session_verification_user_initiator_title") }
-  /// For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.
+  /// Để tăng cường bảo mật, người dùng khác muốn xác minh danh tính của bạn. Bạn sẽ được hiển thị bộ emoji để so sánh.
   internal static var screenSessionVerificationUserResponderSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_user_responder_subtitle") }
-  /// You should see a popup on the other device. Start the verification from there now.
+  /// Bạn sẽ thấy popup trên thiết bị khác. Bắt đầu xác minh từ đó ngay.
   internal static var screenSessionVerificationWaitingAnotherDeviceSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_another_device_subtitle") }
-  /// Start verification on the other device
+  /// Bắt đầu xác minh trên thiết bị khác
   internal static var screenSessionVerificationWaitingAnotherDeviceTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_another_device_title") }
-  /// Waiting for the other device
+  /// Đang chờ thiết bị khác
   internal static var screenSessionVerificationWaitingOtherDeviceTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_other_device_title") }
-  /// Waiting for the other user
+  /// Đang chờ người dùng khác
   internal static var screenSessionVerificationWaitingOtherUserTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_other_user_title") }
-  /// Once accepted you’ll be able to continue with the verification.
+  /// Khi được chấp nhận, bạn sẽ có thể tiếp tục xác minh.
   internal static var screenSessionVerificationWaitingSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_subtitle") }
-  /// Accept the request to start the verification process in your other session to continue.
+  /// Chấp nhận yêu cầu để bắt đầu quá trình xác minh trong phiên khác để tiếp tục.
   internal static var screenSessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_subtitle") }
-  /// Waiting to accept request
+  /// Đang chờ chấp nhận yêu cầu
   internal static var screenSessionVerificationWaitingToAcceptTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_to_accept_title") }
-  /// Share location
+  /// Chia sẻ vị trí
   internal static var screenShareLocationTitle: String { return L10n.tr("Localizable", "screen_share_location_title") }
-  /// Share my location
+  /// Chia sẻ vị trí của tôi
   internal static var screenShareMyLocationAction: String { return L10n.tr("Localizable", "screen_share_my_location_action") }
-  /// Open in Apple Maps
+  /// Mở trong Apple Maps
   internal static var screenShareOpenAppleMaps: String { return L10n.tr("Localizable", "screen_share_open_apple_maps") }
-  /// Open in Google Maps
+  /// Mở trong Google Maps
   internal static var screenShareOpenGoogleMaps: String { return L10n.tr("Localizable", "screen_share_open_google_maps") }
-  /// Open in OpenStreetMap
+  /// Mở trong OpenStreetMap
   internal static var screenShareOpenOsmMaps: String { return L10n.tr("Localizable", "screen_share_open_osm_maps") }
-  /// Share this location
+  /// Chia sẻ vị trí này
   internal static var screenShareThisLocationAction: String { return L10n.tr("Localizable", "screen_share_this_location_action") }
-  /// You’ve changed your password on another session
+  /// Bạn đã thay đổi mật khẩu trên phiên khác
   internal static var screenSignedOutReason1: String { return L10n.tr("Localizable", "screen_signed_out_reason_1") }
-  /// You have deleted the session from another session
+  /// Bạn đã xóa phiên từ phiên khác
   internal static var screenSignedOutReason2: String { return L10n.tr("Localizable", "screen_signed_out_reason_2") }
-  /// Your server’s administrator has invalidated your access
+  /// Quản trị viên máy chủ đã vô hiệu hóa quyền truy cập của bạn
   internal static var screenSignedOutReason3: String { return L10n.tr("Localizable", "screen_signed_out_reason_3") }
-  /// You might have been signed out for one of the reasons listed below. Please sign in again to continue using %@.
+  /// Bạn có thể đã bị đăng xuất vì một trong những lý do được liệt kê bên dưới. Vui lòng đăng nhập lại để tiếp tục sử dụng %@.
   internal static func screenSignedOutSubtitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_signed_out_subtitle", String(describing: p1))
   }
-  /// You’re signed out
+  /// Bạn đã bị đăng xuất
   internal static var screenSignedOutTitle: String { return L10n.tr("Localizable", "screen_signed_out_title") }
-  /// Are you sure you want to sign out?
+  /// Bạn có chắc chắn muốn đăng xuất?
   internal static var screenSignoutConfirmationDialogContent: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_content") }
-  /// Sign out
+  /// Đăng xuất
   internal static var screenSignoutConfirmationDialogSubmit: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_submit") }
-  /// Sign out
+  /// Đăng xuất
   internal static var screenSignoutConfirmationDialogTitle: String { return L10n.tr("Localizable", "screen_signout_confirmation_dialog_title") }
-  /// Signing out…
+  /// Đang đăng xuất…
   internal static var screenSignoutInProgressDialogContent: String { return L10n.tr("Localizable", "screen_signout_in_progress_dialog_content") }
-  /// You are about to sign out of your last session. If you sign out now, you will lose access to your encrypted messages.
+  /// Bạn sắp đăng xuất khỏi phiên cuối cùng. Nếu đăng xuất ngay, bạn sẽ mất quyền truy cập vào tin nhắn mã hóa.
   internal static var screenSignoutKeyBackupDisabledSubtitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_disabled_subtitle") }
-  /// You have turned off backup
+  /// Bạn đã tắt sao lưu
   internal static var screenSignoutKeyBackupDisabledTitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_disabled_title") }
-  /// Your keys were still being backed up when you went offline. Reconnect so that your keys can be backed up before signing out.
+  /// Khóa của bạn vẫn đang được sao lưu khi bạn ngoại tuyến. Kết nối lại để khóa có thể được sao lưu trước khi đăng xuất.
   internal static var screenSignoutKeyBackupOfflineSubtitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_offline_subtitle") }
-  /// Your keys are still being backed up
+  /// Khóa của bạn vẫn đang được sao lưu
   internal static var screenSignoutKeyBackupOfflineTitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_offline_title") }
-  /// Please wait for this to complete before signing out.
+  /// Vui lòng chờ hoàn thành trước khi đăng xuất.
   internal static var screenSignoutKeyBackupOngoingSubtitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_ongoing_subtitle") }
-  /// Your keys are still being backed up
+  /// Khóa của bạn vẫn đang được sao lưu
   internal static var screenSignoutKeyBackupOngoingTitle: String { return L10n.tr("Localizable", "screen_signout_key_backup_ongoing_title") }
-  /// Sign out
+  /// Đăng xuất
   internal static var screenSignoutPreferenceItem: String { return L10n.tr("Localizable", "screen_signout_preference_item") }
-  /// You are about to sign out of your last session. If you sign out now, you'll lose access to your encrypted messages.
+  /// Bạn sắp đăng xuất khỏi phiên cuối cùng. Nếu đăng xuất ngay, bạn sẽ mất quyền truy cập vào tin nhắn mã hóa.
   internal static var screenSignoutRecoveryDisabledSubtitle: String { return L10n.tr("Localizable", "screen_signout_recovery_disabled_subtitle") }
-  /// Recovery not set up
+  /// Chưa thiết lập khôi phục
   internal static var screenSignoutRecoveryDisabledTitle: String { return L10n.tr("Localizable", "screen_signout_recovery_disabled_title") }
-  /// You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages.
+  /// Bạn sắp đăng xuất khỏi phiên cuối cùng. Nếu đăng xuất ngay, bạn có thể mất quyền truy cập vào tin nhắn mã hóa.
   internal static var screenSignoutSaveRecoveryKeySubtitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_subtitle") }
-  /// Have you saved your recovery key?
+  /// Bạn đã lưu khóa khôi phục chưa?
   internal static var screenSignoutSaveRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_title") }
-  /// An error occurred when trying to start a chat
+  /// Đã xảy ra lỗi khi cố gắng bắt đầu trò chuyện
   internal static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
-  /// Join room by address
+  /// Tham gia phòng theo địa chỉ
   internal static var screenStartChatJoinRoomByAddressAction: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_action") }
-  /// Not a valid address
+  /// Địa chỉ không hợp lệ
   internal static var screenStartChatJoinRoomByAddressInvalidAddress: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_invalid_address") }
-  /// Enter...
+  /// Nhập...
   internal static var screenStartChatJoinRoomByAddressPlaceholder: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_placeholder") }
-  /// Matching room found
+  /// Tìm thấy phòng khớp
   internal static var screenStartChatJoinRoomByAddressRoomFound: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_room_found") }
-  /// Room not found
+  /// Không tìm thấy phòng
   internal static var screenStartChatJoinRoomByAddressRoomNotFound: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_room_not_found") }
-  /// e.g. #room-name:matrix.org
+  /// ví dụ: #room-name:sevenchat.space
   internal static var screenStartChatJoinRoomByAddressSupportingText: String { return L10n.tr("Localizable", "screen_start_chat_join_room_by_address_supporting_text") }
-  /// Message not sent because %1$@’s verified identity was reset.
+  /// Tin nhắn không được gửi vì danh tính đã xác minh của %1$@ đã được đặt lại.
   internal static func screenTimelineItemMenuSendFailureChangedIdentity(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_changed_identity", String(describing: p1))
   }
-  /// Message not sent because %1$@ has not verified all devices.
+  /// Tin nhắn không được gửi vì %1$@ chưa xác minh tất cả thiết bị.
   internal static func screenTimelineItemMenuSendFailureUnsignedDevice(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_unsigned_device", String(describing: p1))
   }
-  /// Message not sent because you have not verified one or more of your devices.
+  /// Tin nhắn không được gửi vì bạn chưa xác minh một hoặc nhiều thiết bị.
   internal static var screenTimelineItemMenuSendFailureYouUnsignedDevice: String { return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_you_unsigned_device") }
-  /// Location
+  /// Vị trí
   internal static var screenViewLocationTitle: String { return L10n.tr("Localizable", "screen_view_location_title") }
-  /// Calls, polls, search and more will be added later this year.
+  /// Cuộc gọi, bình chọn, tìm kiếm và nhiều tính năng khác sẽ được thêm vào cuối năm nay.
   internal static var screenWelcomeBullet1: String { return L10n.tr("Localizable", "screen_welcome_bullet_1") }
-  /// Message history for encrypted rooms isn’t available yet.
+  /// Lịch sử tin nhắn cho phòng mã hóa chưa khả dụng.
   internal static var screenWelcomeBullet2: String { return L10n.tr("Localizable", "screen_welcome_bullet_2") }
-  /// We’d love to hear from you, let us know what you think via the settings page.
+  /// Chúng tôi rất muốn nghe từ bạn, hãy cho chúng tôi biết suy nghĩ qua trang cài đặt.
   internal static var screenWelcomeBullet3: String { return L10n.tr("Localizable", "screen_welcome_bullet_3") }
-  /// Let's go!
+  /// Bắt đầu thôi!
   internal static var screenWelcomeButton: String { return L10n.tr("Localizable", "screen_welcome_button") }
-  /// Here’s what you need to know:
+  /// Đây là những gì bạn cần biết:
   internal static var screenWelcomeSubtitle: String { return L10n.tr("Localizable", "screen_welcome_subtitle") }
-  /// Welcome to %1$@!
+  /// Chào mừng đến với %1$@!
   internal static func screenWelcomeTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_welcome_title", String(describing: p1))
   }
-  /// Looks like you’re using a new device. Verify with another device to access your encrypted messages.
+  /// Có vẻ như bạn đang sử dụng thiết bị mới. Xác minh với thiết bị khác để truy cập tin nhắn mã hóa.
   internal static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
-  /// Verify it’s you
+  /// Xác minh đó là bạn
   internal static var sessionVerificationBannerTitle: String { return L10n.tr("Localizable", "session_verification_banner_title") }
   /// Rageshake
   internal static var settingsRageshake: String { return L10n.tr("Localizable", "settings_rageshake") }
-  /// Detection threshold
+  /// Ngưỡng phát hiện
   internal static var settingsRageshakeDetectionThreshold: String { return L10n.tr("Localizable", "settings_rageshake_detection_threshold") }
-  /// Version: %1$@ (%2$@)
+  /// Phiên bản: %1$@ (%2$@)
   internal static func settingsVersionNumber(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "settings_version_number", String(describing: p1), String(describing: p2))
   }
-  /// (avatar was changed too)
+  /// (avatar cũng đã thay đổi)
   internal static var stateEventAvatarChangedToo: String { return L10n.tr("Localizable", "state_event_avatar_changed_too") }
-  /// %1$@ changed their avatar
+  /// %1$@ đã thay đổi avatar
   internal static func stateEventAvatarUrlChanged(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_avatar_url_changed", String(describing: p1))
   }
-  /// You changed your avatar
+  /// Bạn đã thay đổi avatar
   internal static var stateEventAvatarUrlChangedByYou: String { return L10n.tr("Localizable", "state_event_avatar_url_changed_by_you") }
-  /// %1$@ was demoted to member
+  /// %1$@ đã bị hạ cấp xuống thành viên
   internal static func stateEventDemotedToMember(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_demoted_to_member", String(describing: p1))
   }
-  /// %1$@ was demoted to moderator
+  /// %1$@ đã bị hạ cấp xuống điều hành viên
   internal static func stateEventDemotedToModerator(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_demoted_to_moderator", String(describing: p1))
   }
-  /// %1$@ changed their display name from %2$@ to %3$@
+  /// %1$@ đã thay đổi tên hiển thị từ %2$@ thành %3$@
   internal static func stateEventDisplayNameChangedFrom(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "state_event_display_name_changed_from", String(describing: p1), String(describing: p2), String(describing: p3))
   }
-  /// You changed your display name from %1$@ to %2$@
+  /// Bạn đã thay đổi tên hiển thị từ %1$@ thành %2$@
   internal static func stateEventDisplayNameChangedFromByYou(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_display_name_changed_from_by_you", String(describing: p1), String(describing: p2))
   }
-  /// %1$@ removed their display name (it was %2$@)
+  /// %1$@ đã xóa tên hiển thị (trước đó là %2$@)
   internal static func stateEventDisplayNameRemoved(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_display_name_removed", String(describing: p1), String(describing: p2))
   }
-  /// You removed your display name (it was %1$@)
+  /// Bạn đã xóa tên hiển thị (trước đó là %1$@)
   internal static func stateEventDisplayNameRemovedByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_display_name_removed_by_you", String(describing: p1))
   }
-  /// %1$@ set their display name to %2$@
+  /// %1$@ đã đặt tên hiển thị thành %2$@
   internal static func stateEventDisplayNameSet(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_display_name_set", String(describing: p1), String(describing: p2))
   }
-  /// You set your display name to %1$@
+  /// Bạn đã đặt tên hiển thị thành %1$@
   internal static func stateEventDisplayNameSetByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_display_name_set_by_you", String(describing: p1))
   }
-  /// %1$@ was promoted to admin
+  /// %1$@ đã được thăng cấp lên quản trị viên
   internal static func stateEventPromotedToAdministrator(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_promoted_to_administrator", String(describing: p1))
   }
-  /// %1$@ was promoted to moderator
+  /// %1$@ đã được thăng cấp lên điều hành viên
   internal static func stateEventPromotedToModerator(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_promoted_to_moderator", String(describing: p1))
   }
-  /// %1$@ changed the room avatar
+  /// %1$@ đã thay đổi avatar phòng
   internal static func stateEventRoomAvatarChanged(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_avatar_changed", String(describing: p1))
   }
-  /// You changed the room avatar
+  /// Bạn đã thay đổi avatar phòng
   internal static var stateEventRoomAvatarChangedByYou: String { return L10n.tr("Localizable", "state_event_room_avatar_changed_by_you") }
-  /// %1$@ removed the room avatar
+  /// %1$@ đã xóa avatar phòng
   internal static func stateEventRoomAvatarRemoved(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_avatar_removed", String(describing: p1))
   }
-  /// You removed the room avatar
+  /// Bạn đã xóa avatar phòng
   internal static var stateEventRoomAvatarRemovedByYou: String { return L10n.tr("Localizable", "state_event_room_avatar_removed_by_you") }
-  /// %1$@ banned %2$@
+  /// %1$@ đã cấm %2$@
   internal static func stateEventRoomBan(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_ban", String(describing: p1), String(describing: p2))
   }
-  /// You banned %1$@
+  /// Bạn đã cấm %1$@
   internal static func stateEventRoomBanByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_ban_by_you", String(describing: p1))
   }
-  /// You banned %1$@: %2$@
+  /// Bạn đã cấm %1$@: %2$@
   internal static func stateEventRoomBanByYouWithReason(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_ban_by_you_with_reason", String(describing: p1), String(describing: p2))
   }
-  /// %1$@ banned %2$@: %3$@
+  /// %1$@ đã cấm %2$@: %3$@
   internal static func stateEventRoomBanWithReason(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_ban_with_reason", String(describing: p1), String(describing: p2), String(describing: p3))
   }
-  /// %1$@ created the room
+  /// %1$@ đã tạo phòng
   internal static func stateEventRoomCreated(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_created", String(describing: p1))
   }
-  /// You created the room
+  /// Bạn đã tạo phòng
   internal static var stateEventRoomCreatedByYou: String { return L10n.tr("Localizable", "state_event_room_created_by_you") }
-  /// %1$@ invited %2$@
+  /// %1$@ đã mời %2$@
   internal static func stateEventRoomInvite(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_invite", String(describing: p1), String(describing: p2))
   }
-  /// %1$@ accepted the invite
+  /// %1$@ đã chấp nhận lời mời
   internal static func stateEventRoomInviteAccepted(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_invite_accepted", String(describing: p1))
   }
-  /// You accepted the invite
+  /// Bạn đã chấp nhận lời mời
   internal static var stateEventRoomInviteAcceptedByYou: String { return L10n.tr("Localizable", "state_event_room_invite_accepted_by_you") }
-  /// You invited %1$@
+  /// Bạn đã mời %1$@
   internal static func stateEventRoomInviteByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_invite_by_you", String(describing: p1))
   }
-  /// %1$@ invited you
+  /// %1$@ đã mời bạn
   internal static func stateEventRoomInviteYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_invite_you", String(describing: p1))
   }
-  /// %1$@ joined the room
+  /// %1$@ đã tham gia phòng
   internal static func stateEventRoomJoin(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_join", String(describing: p1))
   }
-  /// You joined the room
+  /// Bạn đã tham gia phòng
   internal static var stateEventRoomJoinByYou: String { return L10n.tr("Localizable", "state_event_room_join_by_you") }
-  /// %1$@ is requesting to join
+  /// %1$@ đang yêu cầu tham gia
   internal static func stateEventRoomKnock(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock", String(describing: p1))
   }
-  /// %1$@ granted access to %2$@
+  /// %1$@ đã cấp quyền truy cập cho %2$@
   internal static func stateEventRoomKnockAccepted(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock_accepted", String(describing: p1), String(describing: p2))
   }
-  /// You allowed %1$@ to join
+  /// Bạn đã cho phép %1$@ tham gia
   internal static func stateEventRoomKnockAcceptedByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock_accepted_by_you", String(describing: p1))
   }
-  /// You requested to join
+  /// Bạn đã yêu cầu tham gia
   internal static var stateEventRoomKnockByYou: String { return L10n.tr("Localizable", "state_event_room_knock_by_you") }
-  /// %1$@ rejected %2$@'s request to join
+  /// %1$@ đã từ chối yêu cầu tham gia của %2$@
   internal static func stateEventRoomKnockDenied(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock_denied", String(describing: p1), String(describing: p2))
   }
-  /// You rejected %1$@'s request to join
+  /// Bạn đã từ chối yêu cầu tham gia của %1$@
   internal static func stateEventRoomKnockDeniedByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock_denied_by_you", String(describing: p1))
   }
-  /// %1$@ rejected your request to join
+  /// %1$@ đã từ chối yêu cầu tham gia của bạn
   internal static func stateEventRoomKnockDeniedYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock_denied_you", String(describing: p1))
   }
-  /// %1$@ is no longer interested in joining
+  /// %1$@ không còn muốn tham gia nữa
   internal static func stateEventRoomKnockRetracted(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_knock_retracted", String(describing: p1))
   }
-  /// You cancelled your request to join
+  /// Bạn đã hủy yêu cầu tham gia
   internal static var stateEventRoomKnockRetractedByYou: String { return L10n.tr("Localizable", "state_event_room_knock_retracted_by_you") }
-  /// %1$@ left the room
+  /// %1$@ đã rời phòng
   internal static func stateEventRoomLeave(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_leave", String(describing: p1))
   }
-  /// You left the room
+  /// Bạn đã rời phòng
   internal static var stateEventRoomLeaveByYou: String { return L10n.tr("Localizable", "state_event_room_leave_by_you") }
-  /// %1$@ changed the room name to: %2$@
+  /// %1$@ đã thay đổi tên phòng thành: %2$@
   internal static func stateEventRoomNameChanged(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_name_changed", String(describing: p1), String(describing: p2))
   }
-  /// You changed the room name to: %1$@
+  /// Bạn đã thay đổi tên phòng thành: %1$@
   internal static func stateEventRoomNameChangedByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_name_changed_by_you", String(describing: p1))
   }
-  /// %1$@ removed the room name
+  /// %1$@ đã xóa tên phòng
   internal static func stateEventRoomNameRemoved(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_name_removed", String(describing: p1))
   }
-  /// You removed the room name
+  /// Bạn đã xóa tên phòng
   internal static var stateEventRoomNameRemovedByYou: String { return L10n.tr("Localizable", "state_event_room_name_removed_by_you") }
-  /// %1$@ made no changes
+  /// %1$@ không thay đổi gì
   internal static func stateEventRoomNone(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_none", String(describing: p1))
   }
-  /// You made no changes
+  /// Bạn không thay đổi gì
   internal static var stateEventRoomNoneByYou: String { return L10n.tr("Localizable", "state_event_room_none_by_you") }
-  /// %1$@ changed the pinned messages
+  /// %1$@ đã thay đổi tin nhắn đã ghim
   internal static func stateEventRoomPinnedEventsChanged(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_pinned_events_changed", String(describing: p1))
   }
-  /// You changed the pinned messages
+  /// Bạn đã thay đổi tin nhắn đã ghim
   internal static var stateEventRoomPinnedEventsChangedByYou: String { return L10n.tr("Localizable", "state_event_room_pinned_events_changed_by_you") }
-  /// %1$@ pinned a message
+  /// %1$@ đã ghim tin nhắn
   internal static func stateEventRoomPinnedEventsPinned(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_pinned_events_pinned", String(describing: p1))
   }
-  /// You pinned a message
+  /// Bạn đã ghim tin nhắn
   internal static var stateEventRoomPinnedEventsPinnedByYou: String { return L10n.tr("Localizable", "state_event_room_pinned_events_pinned_by_you") }
-  /// %1$@ unpinned a message
+  /// %1$@ đã bỏ ghim tin nhắn
   internal static func stateEventRoomPinnedEventsUnpinned(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_pinned_events_unpinned", String(describing: p1))
   }
-  /// You unpinned a message
+  /// Bạn đã bỏ ghim tin nhắn
   internal static var stateEventRoomPinnedEventsUnpinnedByYou: String { return L10n.tr("Localizable", "state_event_room_pinned_events_unpinned_by_you") }
-  /// %1$@ rejected the invitation
+  /// %1$@ đã từ chối lời mời
   internal static func stateEventRoomReject(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_reject", String(describing: p1))
   }
-  /// You rejected the invitation
+  /// Bạn đã từ chối lời mời
   internal static var stateEventRoomRejectByYou: String { return L10n.tr("Localizable", "state_event_room_reject_by_you") }
-  /// %1$@ removed %2$@
+  /// %1$@ đã xóa %2$@
   internal static func stateEventRoomRemove(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_remove", String(describing: p1), String(describing: p2))
   }
-  /// You removed %1$@
+  /// Bạn đã xóa %1$@
   internal static func stateEventRoomRemoveByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_remove_by_you", String(describing: p1))
   }
-  /// You removed %1$@: %2$@
+  /// Bạn đã xóa %1$@: %2$@
   internal static func stateEventRoomRemoveByYouWithReason(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_remove_by_you_with_reason", String(describing: p1), String(describing: p2))
   }
-  /// %1$@ removed %2$@: %3$@
+  /// %1$@ đã xóa %2$@: %3$@
   internal static func stateEventRoomRemoveWithReason(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_remove_with_reason", String(describing: p1), String(describing: p2), String(describing: p3))
   }
-  /// %1$@ sent an invitation to %2$@ to join the room
+  /// %1$@ đã gửi lời mời cho %2$@ tham gia phòng
   internal static func stateEventRoomThirdPartyInvite(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_third_party_invite", String(describing: p1), String(describing: p2))
   }
-  /// You sent an invitation to %1$@ to join the room
+  /// Bạn đã gửi lời mời cho %1$@ tham gia phòng
   internal static func stateEventRoomThirdPartyInviteByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_third_party_invite_by_you", String(describing: p1))
   }
-  /// %1$@ revoked the invitation for %2$@ to join the room
+  /// %1$@ đã thu hồi lời mời cho %2$@ tham gia phòng
   internal static func stateEventRoomThirdPartyRevokedInvite(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_third_party_revoked_invite", String(describing: p1), String(describing: p2))
   }
-  /// You revoked the invitation for %1$@ to join the room
+  /// Bạn đã thu hồi lời mời cho %1$@ tham gia phòng
   internal static func stateEventRoomThirdPartyRevokedInviteByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_third_party_revoked_invite_by_you", String(describing: p1))
   }
-  /// %1$@ changed the topic to: %2$@
+  /// %1$@ đã thay đổi chủ đề thành: %2$@
   internal static func stateEventRoomTopicChanged(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_topic_changed", String(describing: p1), String(describing: p2))
   }
-  /// You changed the topic to: %1$@
+  /// Bạn đã thay đổi chủ đề thành: %1$@
   internal static func stateEventRoomTopicChangedByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_topic_changed_by_you", String(describing: p1))
   }
-  /// %1$@ removed the room topic
+  /// %1$@ đã xóa chủ đề phòng
   internal static func stateEventRoomTopicRemoved(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_topic_removed", String(describing: p1))
   }
-  /// You removed the room topic
+  /// Bạn đã xóa chủ đề phòng
   internal static var stateEventRoomTopicRemovedByYou: String { return L10n.tr("Localizable", "state_event_room_topic_removed_by_you") }
-  /// %1$@ unbanned %2$@
+  /// %1$@ đã bỏ cấm %2$@
   internal static func stateEventRoomUnban(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_unban", String(describing: p1), String(describing: p2))
   }
-  /// You unbanned %1$@
+  /// Bạn đã bỏ cấm %1$@
   internal static func stateEventRoomUnbanByYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_unban_by_you", String(describing: p1))
   }
-  /// %1$@ made an unknown change to their membership
+  /// %1$@ đã thực hiện thay đổi không xác định đối với tư cách thành viên
   internal static func stateEventRoomUnknownMembershipChange(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_unknown_membership_change", String(describing: p1))
   }
-  /// en
+  /// vi
   internal static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
   /// en
   internal static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
-  /// Historical messages are not available on this device
+  /// Tin nhắn lịch sử không khả dụng trên thiết bị này
   internal static var timelineDecryptionFailureHistoricalEventNoKeyBackup: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_no_key_backup") }
-  /// You need to verify this device for access to historical messages
+  /// Bạn cần xác minh thiết bị này để truy cập tin nhắn lịch sử
   internal static var timelineDecryptionFailureHistoricalEventUnverifiedDevice: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_unverified_device") }
-  /// You don't have access to this message
+  /// Bạn không có quyền truy cập tin nhắn này
   internal static var timelineDecryptionFailureHistoricalEventUserNotJoined: String { return L10n.tr("Localizable", "timeline_decryption_failure_historical_event_user_not_joined") }
-  /// Unable to decrypt message
+  /// Không thể giải mã tin nhắn
   internal static var timelineDecryptionFailureUnableToDecrypt: String { return L10n.tr("Localizable", "timeline_decryption_failure_unable_to_decrypt") }
-  /// This message was blocked either because you did not verify your device or because the sender needs to verify your identity.
+  /// Tin nhắn này đã bị chặn vì bạn không xác minh thiết bị hoặc người gửi cần xác minh danh tính của bạn.
   internal static var timelineDecryptionFailureWithheldUnverified: String { return L10n.tr("Localizable", "timeline_decryption_failure_withheld_unverified") }
-  /// Push history
+  /// Lịch sử push
   internal static var troubleshootNotificationsEntryPointPushHistoryTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_entry_point_push_history_title") }
-  /// Troubleshoot
+  /// Khắc phục sự cố
   internal static var troubleshootNotificationsEntryPointSection: String { return L10n.tr("Localizable", "troubleshoot_notifications_entry_point_section") }
-  /// Troubleshoot notifications
+  /// Khắc phục sự cố thông báo
   internal static var troubleshootNotificationsEntryPointTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_entry_point_title") }
-  /// Run tests
+  /// Chạy thử nghiệm
   internal static var troubleshootNotificationsScreenAction: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_action") }
-  /// Run tests again
+  /// Chạy thử nghiệm lại
   internal static var troubleshootNotificationsScreenActionAgain: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_action_again") }
-  /// Some tests failed. Please check the details.
+  /// Một số thử nghiệm thất bại. Vui lòng kiểm tra chi tiết.
   internal static var troubleshootNotificationsScreenFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_failure") }
-  /// Run the tests to detect any issue in your configuration that may make notifications not behave as expected.
+  /// Chạy thử nghiệm để phát hiện vấn đề trong cấu hình có thể khiến thông báo không hoạt động như mong đợi.
   internal static var troubleshootNotificationsScreenNotice: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_notice") }
-  /// Attempt to fix
+  /// Cố gắng sửa
   internal static var troubleshootNotificationsScreenQuickFixAction: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_quick_fix_action") }
-  /// All tests passed successfully.
+  /// Tất cả thử nghiệm đã thành công.
   internal static var troubleshootNotificationsScreenSuccess: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_success") }
-  /// Troubleshoot notifications
+  /// Khắc phục sự cố thông báo
   internal static var troubleshootNotificationsScreenTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_title") }
-  /// Some tests require your attention. Please check the details.
+  /// Một số thử nghiệm cần sự chú ý của bạn. Vui lòng kiểm tra chi tiết.
   internal static var troubleshootNotificationsScreenWaiting: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_waiting") }
-  /// Check that the application can show notifications.
+  /// Kiểm tra ứng dụng có thể hiển thị thông báo.
   internal static var troubleshootNotificationsTestCheckPermissionDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_check_permission_description") }
-  /// Check permissions
+  /// Kiểm tra quyền
   internal static var troubleshootNotificationsTestCheckPermissionTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_check_permission_title") }
-  /// Get the name of the current provider.
+  /// Lấy tên nhà cung cấp hiện tại.
   internal static var troubleshootNotificationsTestCurrentPushProviderDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_description") }
-  /// No push providers selected.
+  /// Không có nhà cung cấp push được chọn.
   internal static var troubleshootNotificationsTestCurrentPushProviderFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_failure") }
-  /// Current push provider: %1$@.
+  /// Nhà cung cấp push hiện tại: %1$@.
   internal static func troubleshootNotificationsTestCurrentPushProviderSuccess(_ p1: Any) -> String {
     return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_success", String(describing: p1))
   }
-  /// Current push provider
+  /// Nhà cung cấp push hiện tại
   internal static var troubleshootNotificationsTestCurrentPushProviderTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_title") }
-  /// Ensure that the application supports at least one push provider.
+  /// Đảm bảo ứng dụng hỗ trợ ít nhất một nhà cung cấp push.
   internal static var troubleshootNotificationsTestDetectPushProviderDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_detect_push_provider_description") }
-  /// No push provider support found.
+  /// Không tìm thấy hỗ trợ nhà cung cấp push.
   internal static var troubleshootNotificationsTestDetectPushProviderFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_detect_push_provider_failure") }
   /// Plural format key: "%#@COUNT@"
   internal static func troubleshootNotificationsTestDetectPushProviderSuccess(_ p1: Int) -> String {
     return L10n.tr("Localizable", "troubleshoot_notifications_test_detect_push_provider_success", p1)
   }
-  /// The application was built with support for: %1$@
+  /// Ứng dụng được xây dựng với hỗ trợ cho: %1$@
   internal static func troubleshootNotificationsTestDetectPushProviderSuccess2(_ p1: Any) -> String {
     return L10n.tr("Localizable", "troubleshoot_notifications_test_detect_push_provider_success_2", String(describing: p1))
   }
-  /// Push provider support
+  /// Hỗ trợ nhà cung cấp push
   internal static var troubleshootNotificationsTestDetectPushProviderTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_detect_push_provider_title") }
-  /// Check that the application can display notification.
+  /// Kiểm tra ứng dụng có thể hiển thị thông báo.
   internal static var troubleshootNotificationsTestDisplayNotificationDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_display_notification_description") }
-  /// The notification has not been clicked.
+  /// Thông báo chưa được nhấp.
   internal static var troubleshootNotificationsTestDisplayNotificationFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_display_notification_failure") }
-  /// Cannot display the notification.
+  /// Không thể hiển thị thông báo.
   internal static var troubleshootNotificationsTestDisplayNotificationPermissionFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_display_notification_permission_failure") }
-  /// The notification has been clicked!
+  /// Thông báo đã được nhấp!
   internal static var troubleshootNotificationsTestDisplayNotificationSuccess: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_display_notification_success") }
-  /// Display notification
+  /// Hiển thị thông báo
   internal static var troubleshootNotificationsTestDisplayNotificationTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_display_notification_title") }
-  /// Please click on the notification to continue the test.
+  /// Vui lòng nhấp vào thông báo để tiếp tục thử nghiệm.
   internal static var troubleshootNotificationsTestDisplayNotificationWaiting: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_display_notification_waiting") }
-  /// Ensure that Firebase is available.
+  /// Đảm bảo Firebase khả dụng.
   internal static var troubleshootNotificationsTestFirebaseAvailabilityDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_availability_description") }
-  /// Firebase is not available.
+  /// Firebase không khả dụng.
   internal static var troubleshootNotificationsTestFirebaseAvailabilityFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_availability_failure") }
-  /// Firebase is available.
+  /// Firebase khả dụng.
   internal static var troubleshootNotificationsTestFirebaseAvailabilitySuccess: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_availability_success") }
-  /// Check Firebase
+  /// Kiểm tra Firebase
   internal static var troubleshootNotificationsTestFirebaseAvailabilityTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_availability_title") }
-  /// Ensure that Firebase token is available.
+  /// Đảm bảo token Firebase khả dụng.
   internal static var troubleshootNotificationsTestFirebaseTokenDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_token_description") }
-  /// Firebase token is not known.
+  /// Token Firebase không xác định.
   internal static var troubleshootNotificationsTestFirebaseTokenFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_token_failure") }
-  /// Firebase token: %1$@.
+  /// Token Firebase: %1$@.
   internal static func troubleshootNotificationsTestFirebaseTokenSuccess(_ p1: Any) -> String {
     return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_token_success", String(describing: p1))
   }
-  /// Check Firebase token
+  /// Kiểm tra token Firebase
   internal static var troubleshootNotificationsTestFirebaseTokenTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_firebase_token_title") }
-  /// Ensure that the application is receiving push.
+  /// Đảm bảo ứng dụng đang nhận push.
   internal static var troubleshootNotificationsTestPushLoopBackDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_description") }
-  /// Error: pusher has rejected the request.
+  /// Lỗi: pusher đã từ chối yêu cầu.
   internal static var troubleshootNotificationsTestPushLoopBackFailure1: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_failure_1") }
-  /// Error: %1$@.
+  /// Lỗi: %1$@.
   internal static func troubleshootNotificationsTestPushLoopBackFailure2(_ p1: Any) -> String {
     return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_failure_2", String(describing: p1))
   }
-  /// Error, cannot test push.
+  /// Lỗi, không thể thử nghiệm push.
   internal static var troubleshootNotificationsTestPushLoopBackFailure3: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_failure_3") }
-  /// Error, timeout waiting for push.
+  /// Lỗi, hết thời gian chờ push.
   internal static var troubleshootNotificationsTestPushLoopBackFailure4: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_failure_4") }
-  /// Push loop back took %1$d ms.
+  /// Push loop back mất %1$d ms.
   internal static func troubleshootNotificationsTestPushLoopBackSuccess(_ p1: Int) -> String {
     return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_success", p1)
   }
-  /// Test Push loop back
+  /// Thử nghiệm Push loop back
   internal static var troubleshootNotificationsTestPushLoopBackTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_push_loop_back_title") }
-  /// Ensure that UnifiedPush distributors are available.
+  /// Đảm bảo bộ phân phối UnifiedPush khả dụng.
   internal static var troubleshootNotificationsTestUnifiedPushDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_description") }
-  /// No push distributors found.
+  /// Không tìm thấy bộ phân phối push.
   internal static var troubleshootNotificationsTestUnifiedPushFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_failure") }
   /// Plural format key: "%#@COUNT@"
   internal static func troubleshootNotificationsTestUnifiedPushSuccess(_ p1: Int) -> String {
     return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_success", p1)
   }
-  /// Check UnifiedPush
+  /// Kiểm tra UnifiedPush
   internal static var troubleshootNotificationsTestUnifiedPushTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_unified_push_title") }
 
   internal enum A11y {
-    /// Encryption details
+    /// Chi tiết mã hóa
     internal static var encryptionDetails: String { return L10n.tr("Localizable", "a11y.encryption_details") }
-    /// Move the map to my location
+    /// Di chuyển bản đồ đến vị trí của tôi
     internal static var moveTheMapToMyLocation: String { return L10n.tr("Localizable", "a11y.move_the_map_to_my_location") }
-    /// Other user's avatar
+    /// Avatar của người dùng khác
     internal static var otherUserAvatar: String { return L10n.tr("Localizable", "a11y.other_user_avatar") }
-    /// Room avatar
+    /// Avatar phòng
     internal static var roomAvatar: String { return L10n.tr("Localizable", "a11y.room_avatar") }
-    /// User avatar
+    /// Avatar người dùng
     internal static var userAvatar: String { return L10n.tr("Localizable", "a11y.user_avatar") }
-    /// Your avatar
+    /// Avatar của bạn
     internal static var yourAvatar: String { return L10n.tr("Localizable", "a11y.your_avatar") }
   }
 
   internal enum Action {
-    /// Open context menu
+    /// Mở menu ngữ cảnh
     internal static var openContextMenu: String { return L10n.tr("Localizable", "action.open_context_menu") }
-    /// Send edited message
+    /// Gửi tin nhắn đã chỉnh sửa
     internal static var sendEditedMessage: String { return L10n.tr("Localizable", "action.send_edited_message") }
-    /// Send voice message
+    /// Gửi tin nhắn thoại
     internal static var sendVoiceMessage: String { return L10n.tr("Localizable", "action.send_voice_message") }
-    /// View
+    /// Xem
     internal static var view: String { return L10n.tr("Localizable", "action.view") }
   }
 }

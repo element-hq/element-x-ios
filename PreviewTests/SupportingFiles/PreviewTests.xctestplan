@@ -44,7 +44,7 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:ElementX.xcodeproj",
+        "containerPath" : "container:SevenChat.xcodeproj",
         "identifier" : "7A17BE29BAC81ADBAC6349D9",
         "name" : "PreviewTests"
       }
