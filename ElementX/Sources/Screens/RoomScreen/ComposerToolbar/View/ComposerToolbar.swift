@@ -181,8 +181,8 @@ struct ComposerToolbar: View {
             sendMessage()
         } editAction: {
             context.send(viewAction: .editLastMessage)
-        } pasteAction: { provider in
-            context.send(viewAction: .handlePasteOrDrop(providers: [provider]))
+        } pasteAction: { providers in
+            context.send(viewAction: .handlePasteOrDrop(providers: providers))
         } cancellationAction: {
             switch context.viewState.composerMode {
             case .edit:
