@@ -153,6 +153,11 @@ struct RoomDetailsScreen: View {
                     kind: .navigationLink {
                         context.send(viewAction: .processTapMediaEvents)
                     })
+            
+            ListRow(label: .default(title: "Links", icon: \.link),
+                    kind: .navigationLink {
+                        context.send(viewAction: .processTapLinksTimeline)
+                    })
         }
     }
     

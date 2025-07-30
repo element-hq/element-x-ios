@@ -24,6 +24,7 @@ enum RoomDetailsScreenViewModelAction: Equatable {
     case startCall
     case displayPinnedEventsTimeline
     case displayMediaEventsTimeline
+    case displayLinksTimeline
     case displayKnockingRequests
     case displaySecurityAndPrivacy
     case displayReportRoom
@@ -220,6 +221,7 @@ enum RoomDetailsScreenViewAction {
     case processTapCall
     case processTapPinnedEvents
     case processTapMediaEvents
+    case processTapLinksTimeline
     case processTapRequestsToJoin
     case processTapReport
 }

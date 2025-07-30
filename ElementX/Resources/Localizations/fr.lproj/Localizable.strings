@@ -794,6 +794,10 @@
 "screen_media_browser_media_empty_state_subtitle" = "Les images et vidéos envoyées dans ce salon seront affichées ici.";
 "screen_media_browser_media_empty_state_title" = "Aucun média n'a encore été envoyé dans ce salon";
 "screen_media_browser_title" = "Médias et fichiers";
+"screen_links_timeline_title" = "Liens";
+"screen_links_timeline_empty_title" = "Aucun lien partagé pour le moment";
+"screen_links_timeline_empty_description" = "Les liens partagés dans ce salon seront affichés ici.";
+"screen_links_timeline_filter_by_sender" = "Filtrer par expéditeur";
 "screen_media_picker_error_failed_selection" = "Échec de la sélection du média, veuillez réessayer.";
 "screen_migration_message" = "Il s’agit d’une opération ponctuelle, merci d’attendre quelques instants.";
 "screen_migration_title" = "Configuration de votre compte.";

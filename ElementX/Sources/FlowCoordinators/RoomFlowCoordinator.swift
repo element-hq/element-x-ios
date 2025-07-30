@@ -796,6 +796,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentKnockRequestsListScreen)
             case .presentMediaEventsTimeline:
                 stateMachine.tryEvent(.presentMediaEventsTimeline)
+            case .presentLinksTimeline:
+                Task { [weak self] in
+                    await self?.startLinksTimelineFlow()
+                }
             case .presentSecurityAndPrivacyScreen:
                 stateMachine.tryEvent(.presentSecurityAndPrivacyScreen)
             case .presentRecipientDetails(let userID):
@@ -1646,6 +1650,24 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         mediaEventsTimelineFlowCoordinator = flowCoordinator
+        
+        flowCoordinator.start()
+    }
+    
+    private func startLinksTimelineFlow() async {
+        let flowCoordinator = LinksTimelineFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
+                                                          roomProxy: roomProxy,
+                                                          mediaProvider: userSession.mediaProvider,
+                                                          userIndicatorController: userIndicatorController)
+        
+        flowCoordinator.completion = { [weak self] in
+            self?.stateMachine.tryEvent(.dismissLinksTimeline)
+        }
+        
+        flowCoordinator.onNavigateToMessage = { [weak self] eventID in
+            print("DEBUG: RoomFlowCoordinator received onNavigateToMessage callback with eventID: \(eventID)")
+            self?.stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false))))
+        }
         
         flowCoordinator.start()
     }

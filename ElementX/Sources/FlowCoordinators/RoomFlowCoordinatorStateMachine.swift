@@ -71,6 +71,7 @@ extension RoomFlowCoordinator {
         case resolveSendFailure(previousState: State)
         case knockRequestsList(previousState: State)
         case mediaEventsTimeline(previousState: State)
+        case linksTimeline(previousState: State)
         case securityAndPrivacy(previousState: State)
         case reportRoom(previousState: State)
         case declineAndBlockScreen
@@ -165,6 +166,9 @@ extension RoomFlowCoordinator {
         
         case presentMediaEventsTimeline
         case dismissMediaEventsTimeline
+        
+        case presentLinksTimeline
+        case dismissLinksTimeline
         
         case presentSecurityAndPrivacyScreen
         case dismissSecurityAndPrivacyScreen
@@ -312,6 +316,11 @@ extension RoomFlowCoordinator {
             case (.roomDetails, .presentMediaEventsTimeline):
                 return .mediaEventsTimeline(previousState: fromState)
             case (.mediaEventsTimeline(let previousState), .dismissMediaEventsTimeline):
+                return previousState
+                
+            case (.roomDetails, .presentLinksTimeline):
+                return .linksTimeline(previousState: fromState)
+            case (.linksTimeline(let previousState), .dismissLinksTimeline):
                 return previousState
                 
             case (.roomDetails, .presentSecurityAndPrivacyScreen):

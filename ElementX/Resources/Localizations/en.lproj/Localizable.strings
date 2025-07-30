@@ -795,6 +795,10 @@
 "screen_media_browser_media_empty_state_subtitle" = "Images and videos uploaded to this room will be shown here.";
 "screen_media_browser_media_empty_state_title" = "No media uploaded yet";
 "screen_media_browser_title" = "Media and files";
+"screen_links_timeline_title" = "Links";
+"screen_links_timeline_empty_title" = "No links shared yet";
+"screen_links_timeline_empty_description" = "Links shared in this room will be shown here.";
+"screen_links_timeline_filter_by_sender" = "Filter by sender";
 "screen_media_picker_error_failed_selection" = "Failed selecting media, please try again.";
 "screen_migration_message" = "This is a one time process, thanks for waiting.";
 "screen_migration_title" = "Setting up your account.";

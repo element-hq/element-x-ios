@@ -161,6 +161,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             actionsSubject.send(.displayPinnedEventsTimeline)
         case .processTapMediaEvents:
             actionsSubject.send(.displayMediaEventsTimeline)
+        case .processTapLinksTimeline:
+            actionsSubject.send(.displayLinksTimeline)
         case .processTapRequestsToJoin:
             actionsSubject.send(.displayKnockingRequests)
         case .processTapSecurityAndPrivacy:
