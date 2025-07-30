@@ -41,7 +41,7 @@ options:
     - Other
     - UITests
     - AccessibilityTests
-  postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
+  # postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
 
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: true

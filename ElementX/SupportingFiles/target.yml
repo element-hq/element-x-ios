@@ -1,14 +1,14 @@
-name: ElementX
+name: SevenChat
 
 schemes:
-  ElementX:
+  SevenChat:
     analyze:
       config: Debug
     archive:
       config: Release
     build:
       targets:
-        ElementX:
+        SevenChat:
           - running
           - testing
           - profiling
@@ -32,13 +32,13 @@ schemes:
       config: Debug
       gatherCoverageData: true
       coverageTargets:
-        - ElementX
+        - SevenChat
       testPlans:
         - path: ../../UnitTests/SupportingFiles/UnitTests.xctestplan
           defaultPlan: true
 
 targets:
-  ElementX:
+  SevenChat:
     type: application
     platform: iOS
 
@@ -53,10 +53,10 @@ targets:
         CFBundleURLTypes: [
           {
             CFBundleTypeRole: Editor,
-            CFBundleURLName: "Element Call",
-            CFBundleURLSchemes: [
-              io.element.call
-            ]
+            CFBundleURLName: "SevenChat Call",
+                          CFBundleURLSchemes: [
+                io.sevenchat.call
+              ]
           },
           {
             CFBundleTypeRole: Editor,
@@ -94,7 +94,7 @@ targets:
           voip
         ]
         BGTaskSchedulerPermittedIdentifiers: [
-          io.element.elementx.background.refresh
+          io.sevenchat.sevenchat.background.refresh
         ]
         UTExportedTypeDeclarations:
         - UTTypeConformsTo: [public.text]

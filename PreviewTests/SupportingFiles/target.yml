@@ -19,7 +19,7 @@ schemes:
       disableMainThreadChecker: false
       gatherCoverageData: true
       coverageTargets:
-        - ElementX
+        - SevenChat
       testPlans:
         - path: PreviewTests.xctestplan
           defaultPlan: true
@@ -30,7 +30,7 @@ targets:
     platform: iOS
     
     dependencies:
-    - target: ElementX
+    - target: SevenChat
     - package: MatrixRustSDK
     - package: SnapshotTesting
 
