@@ -268,10 +268,6 @@ class ClientProxy: ClientProxyProtocol {
         client.homeserver()
     }
     
-    var slidingSyncVersion: SlidingSyncVersion {
-        client.slidingSyncVersion()
-    }
-    
     var canDeactivateAccount: Bool {
         client.canDeactivateAccount()
     }

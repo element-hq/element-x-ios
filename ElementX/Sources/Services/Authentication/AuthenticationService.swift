@@ -54,8 +54,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
             let client = try await makeClient(homeserverAddress: homeserverAddress)
             let loginDetails = await client.homeserverLoginDetails()
             
-            MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
-            
             homeserver.loginMode = if loginDetails.supportsOidcLogin() {
                 .oidc(supportsCreatePrompt: loginDetails.supportedOidcPrompts().contains(.create))
             } else if loginDetails.supportsPasswordLogin() {
@@ -182,7 +180,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
             try await client.loginWithQrCode(qrCodeData: qrData,
                                              oidcConfiguration: appSettings.oidcConfiguration.rustValue,
                                              progressListener: listener)
-            MXLog.info("Sliding sync: \(client.slidingSyncVersion())")
             return await userSession(for: client)
         } catch let error as HumanQrLoginError {
             MXLog.error("QRCode login error: \(error)")
