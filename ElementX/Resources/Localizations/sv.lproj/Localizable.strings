@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Uppgradering tillgänglig";
 "banner_set_up_recovery_content" = "Skapa en ny återställningsnyckel som kan användas för att återställa din krypterade meddelandehistorik om du förlorar åtkomst till dina enheter.";
 "banner_set_up_recovery_title" = "Ställ in återställning";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Om";
 "common_acceptable_use_policy" = "Policy för godtagbar användning";
 "common_adding_caption" = "Lägga till bildtext";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Länk";
 "rich_text_editor_a11y_add_attachment" = "Lägg till bilaga";
 "rich_text_editor_composer_caption_placeholder" = "Lägg till en bildtext";
-"screen_advanced_settings_element_call_base_url" = "Anpassad bas-URL för Element Call";
-"screen_advanced_settings_element_call_base_url_description" = "Ange en anpassad bas-URL för Element Call.";
+"screen_advanced_settings_element_call_base_url" = "Anpassad bas-URL för SevenChat Call";
+"screen_advanced_settings_element_call_base_url_description" = "Ange en anpassad bas-URL för SevenChat Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Ogiltig URL, se till att du inkluderar protokollet (http/https) och rätt adress.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Dölj avatarer i förfrågningar om rumsinbjudningar";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Dölj förhandsgranskningar av media i tidslinjen";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Använd en annan kontoleverantör, till exempel din egen privata server eller ett jobbkonto.";
 "screen_change_account_provider_title" = "Byt kontoleverantör";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "Vi kunde inte nå den här hemservern. Kontrollera att du har angett hemserverns URL korrekt. Om URL:en är korrekt kontaktar du administratören för hemservern för ytterligare hjälp.";
 "screen_change_server_error_invalid_well_known" = "Sliding Sync är inte tillgängligt på grund av ett problem i .well-known-filen:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Den valda kontoleverantören stöder inte sliding sync. En uppgradering till servern behövs för att använda %1$@.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Lägg till emoji";
 "screen_room_timeline_beginning_of_room" = "Det här är början på %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Detta är början på det här samtalet.";
-"screen_room_timeline_legacy_call" = "Samtalet stöds inte. Fråga om den som ringer kan använda den nya Element X-appen.";
+"screen_room_timeline_legacy_call" = "Samtalet stöds inte. Fråga om den som ringer kan använda den nya SevenChat-appen.";
 "screen_room_timeline_less_reactions" = "Visa mindre";
 "screen_room_timeline_message_copied" = "Meddelande kopierat";
 "screen_room_timeline_no_permission_to_post" = "Du är inte behörig att göra inlägg i det här rummet";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Alla chattar";
 "screen_roomlist_mark_as_read" = "Markera som läst";
 "screen_roomlist_mark_as_unread" = "Markera som oläst";
-"screen_server_confirmation_message_login_element_dot_io" = "En privat server för Element-anställda.";
+"screen_server_confirmation_message_login_element_dot_io" = "En privat server för SevenChat-anställda.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix är ett öppet nätverk för säker, decentraliserad kommunikation.";
 "screen_server_confirmation_message_register" = "Det är här dina konversationer kommer att sparas - precis som du skulle använda en e-postleverantör för att spara dina e-brev.";
 "screen_server_confirmation_title_login" = "Du är på väg att logga in på %1$@";

@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Yükseltme mevcut";
 "banner_set_up_recovery_content" = "Mevcut tüm cihazlarınızı kaybettiyseniz şifreleme kimliğinizi ve mesaj geçmişinizi bir kurtarma anahtarıyla kurtarın.";
 "banner_set_up_recovery_title" = "Hesabınızı korumak için kurtarmayı ayarlayın";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Hakkında";
 "common_acceptable_use_policy" = "Kabul edilebilir kullanım politikası";
 "common_adding_caption" = "Açıklama ekleme";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Bağlantı";
 "rich_text_editor_a11y_add_attachment" = "Ek ekle";
 "rich_text_editor_composer_caption_placeholder" = "Açıklama ekle";
-"screen_advanced_settings_element_call_base_url" = "Özel Element Call temel URL'si";
-"screen_advanced_settings_element_call_base_url_description" = "Element Call için özel bir temel URL ayarlayın.";
+"screen_advanced_settings_element_call_base_url" = "Özel SevenChat Call temel URL'si";
+"screen_advanced_settings_element_call_base_url_description" = "SevenChat Call için özel bir temel URL ayarlayın.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Geçersiz URL, lütfen protokolü (http/https) ve doğru adresi eklediğinizden emin olun.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Kendi özel sunucunuz veya iş hesabınız gibi farklı bir hesap sağlayıcı kullanın.";
 "screen_change_account_provider_title" = "Hesap sağlayıcısını değiştir";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "Bu ana sunucuya ulaşamadık. Lütfen ana sunucu URL'sini doğru girip girmediğinizi kontrol edin. URL doğruysa, daha fazla yardım için ana sunucu yöneticinize başvurun.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync, iyi bilinen dosyadaki bir sorun nedeniyle kullanılamıyor:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Emoji ekle";
 "screen_room_timeline_beginning_of_room" = "Bu, %1$@ odasının başlangıcıdır.";
 "screen_room_timeline_beginning_of_room_no_name" = "Bu konuşmanın başlangıcıdır.";
-"screen_room_timeline_legacy_call" = "Desteklenmeyen çağrı. Arayanın yeni Element X uygulamasını kullanıp kullanamayacağını sorun.";
+"screen_room_timeline_legacy_call" = "Desteklenmeyen çağrı. Arayanın yeni SevenChat uygulamasını kullanıp kullanamayacağını sorun.";
 "screen_room_timeline_less_reactions" = "Daha az göster";
 "screen_room_timeline_message_copied" = "Mesaj kopyalandı";
 "screen_room_timeline_no_permission_to_post" = "Bu odada gönderi yapma izniniz yok";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Sohbetler";
 "screen_roomlist_mark_as_read" = "Okundu olarak işaretle";
 "screen_roomlist_mark_as_unread" = "Okunmamış olarak işaretle";
-"screen_server_confirmation_message_login_element_dot_io" = "Element çalışanları için özel bir sunucu.";
+"screen_server_confirmation_message_login_element_dot_io" = "SevenChat çalışanları için özel bir sunucu.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix, güvenli, merkezi olmayan iletişim için açık bir ağdır.";
 "screen_server_confirmation_message_register" = "Konuşmalarınızın saklanacağı yer burasıdır - tıpkı e-postalarınızı saklamak için bir e-posta sağlayıcısı kullandığınız gibi.";
 "screen_server_confirmation_title_login" = "%1$@ sunucusunda oturum açmak üzeresiniz";

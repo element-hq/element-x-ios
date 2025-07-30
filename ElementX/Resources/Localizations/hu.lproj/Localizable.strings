@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Frissítés érhető el";
 "banner_set_up_recovery_content" = "Hozzon létre egy új helyreállítási kulcsot, amellyel visszaállíthatja a titkosított üzenetek előzményeit, ha elveszíti az eszközökhöz való hozzáférést.";
 "banner_set_up_recovery_title" = "Helyreállítás beállítása a fiókja védelméhez";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Az Element Call nem támogatja a Bluetooth hangeszközök használatát ebben az Android-verzióban. Válasszon másik hangeszközt.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "Az SevenChat Call nem támogatja a Bluetooth hangeszközök használatát ebben az Android-verzióban. Válasszon másik hangeszközt.";
 "common_about" = "Névjegy";
 "common_acceptable_use_policy" = "Elfogadható használatra vonatkozó szabályzat";
 "common_adding_caption" = "Felirat hozzáadása";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Hivatkozás";
 "rich_text_editor_a11y_add_attachment" = "Melléklet hozzáadása";
 "rich_text_editor_composer_caption_placeholder" = "Felirat hozzáadása…";
-"screen_advanced_settings_element_call_base_url" = "Egyéni Element Call alapwebcím";
-"screen_advanced_settings_element_call_base_url_description" = "Egyéni alapwebcím beállítása az Element Callhoz.";
+"screen_advanced_settings_element_call_base_url" = "Egyéni SevenChat Call alapwebcím";
+"screen_advanced_settings_element_call_base_url_description" = "Egyéni alapwebcím beállítása az SevenChat Callhoz.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Érvénytelen webcím, győződjön meg arról, hogy szerepel-e benne a protokoll (http/https), és hogy helyes-e a cím.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Profilképek elrejtése a szobameghívókban";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Médiaelőnézetek elrejtése az idővonalon";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Másik fiókszolgáltató, például a saját privát kiszolgáló vagy egy munkahelyi fiók használata.";
 "screen_change_account_provider_title" = "Fiókszolgáltató módosítása";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "Az Element Pro alkalmazás szükséges a következőn: %1$@. Töltse le az áruházból.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro szükséges";
+"screen_change_server_error_element_pro_required_message" = "Az SevenChat Pro alkalmazás szükséges a következőn: %1$@. Töltse le az áruházból.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro szükséges";
 "screen_change_server_error_invalid_homeserver" = "Nem sikerült elérni ezt a Matrix-kiszolgálót. Ellenőrizze, hogy helyesen adta-e meg a Matrix-kiszolgáló webcímét. Ha a webcím helyes, akkor további segítségért lépjen kapcsolatba a Matrix-kiszolgáló adminisztrátorával.";
 "screen_change_server_error_invalid_well_known" = "A kiszolgáló a well-known fájl problémája miatt nem érhető el:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "A kiválasztott fiókszolgáltató nem támogatja a csúszóablakos szinkronizálást. Az %1$@ használatához kiszolgálófrissítés szükséges.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Emodzsi hozzáadása";
 "screen_room_timeline_beginning_of_room" = "Ez a(z) %1$@ kezdete.";
 "screen_room_timeline_beginning_of_room_no_name" = "Ez a beszélgetés kezdete.";
-"screen_room_timeline_legacy_call" = "Nem támogatott hívás. Kérdezze meg, hogy a hívó fél tudja-e használni az új Element X alkalmazást.";
+"screen_room_timeline_legacy_call" = "Nem támogatott hívás. Kérdezze meg, hogy a hívó fél tudja-e használni az új SevenChat alkalmazást.";
 "screen_room_timeline_less_reactions" = "Kevesebb megjelenítése";
 "screen_room_timeline_message_copied" = "Üzenet másolva";
 "screen_room_timeline_no_permission_to_post" = "Nincs jogosultsága arra, hogy bejegyzést tegyen közzé ebben a szobában";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Összes csevegés";
 "screen_roomlist_mark_as_read" = "Megjelölés olvasottként";
 "screen_roomlist_mark_as_unread" = "Megjelölés olvasatlanként";
-"screen_server_confirmation_message_login_element_dot_io" = "Egy privát kiszolgáló az Element alkalmazottai számára.";
+"screen_server_confirmation_message_login_element_dot_io" = "Egy privát kiszolgáló az SevenChat alkalmazottai számára.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "A Matrix egy nyitott hálózat a biztonságos, decentralizált kommunikációhoz.";
 "screen_server_confirmation_message_register" = "Itt lesznek a beszélgetései – ahogyan egy e-mail-szolgáltatást is használna a levelei kezeléséhez.";
 "screen_server_confirmation_title_login" = "Hamarosan bejelentkezik ebbe: %1$@";

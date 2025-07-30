@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Opgradering tilgængelig";
 "banner_set_up_recovery_content" = "Gendan din kryptografiske identitet og meddelelseshistorik med en gendannelsesnøgle, hvis du har mistet alle dine eksisterende enheder.";
 "banner_set_up_recovery_title" = "Konfigurer gendannelse for at beskytte din konto";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call understøtter desværre ikke brug af Bluetooth-lydenheder i denne Android-version. Vælg venligst en anden lydenhed.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call understøtter desværre ikke brug af Bluetooth-lydenheder i denne Android-version. Vælg venligst en anden lydenhed.";
 "common_about" = "Om";
 "common_acceptable_use_policy" = "Politik for acceptabel brug";
 "common_adding_caption" = "Tilføjelse af billedtekst";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Link";
 "rich_text_editor_a11y_add_attachment" = "Tilføj vedhæftet fil";
 "rich_text_editor_composer_caption_placeholder" = "Tilføj en billedtekst";
-"screen_advanced_settings_element_call_base_url" = "Brugerdefineret URL til opkaldsbase for Element";
-"screen_advanced_settings_element_call_base_url_description" = "Angiv en brugerdefineret basis-URL til Element Call.";
+"screen_advanced_settings_element_call_base_url" = "Brugerdefineret URL til opkaldsbase for SevenChat";
+"screen_advanced_settings_element_call_base_url_description" = "Angiv en brugerdefineret basis-URL til SevenChat Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Ugyldig URL, sørg for at inkludere protokollen (http/https) og den korrekte adresse.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Skjul avatarer i ruminvitationsanmodninger";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Skjul forhåndsvisning af medier i tidslinjen";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Brug en anden kontoudbyder, f.eks. din egen private server eller en arbejdskonto.";
 "screen_change_account_provider_title" = "Skift kontoudbyder";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "Vi kunne ikke nå denne hjemmeserver. Kontroller, at du har indtastet hjemmeserverens URL korrekt. Hvis URL-adressen er korrekt, skal du kontakte administratoren på din hjemmeserver for at få yderligere hjælp.";
 "screen_change_server_error_invalid_well_known" = "Serveren er ikke tilgængelig på grund af et problem i .well-known-filen: \n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Den valgte kontoudbyder understøtter ikke sliding sync. En opgradering af serveren er nødvendig for at bruge %1$@.";
@@ -830,7 +830,7 @@
 "screen_onboarding_sign_up" = "Opret konto";
 "screen_onboarding_welcome_message" = "Velkommen til den hurtigste %1$@ nogensinde. Supercharged til hastighed og enkelhed.";
 "screen_onboarding_welcome_subtitle" = "Velkommen til %1$@. Ladet med hastighed og enkelhed.";
-"screen_onboarding_welcome_title" = "Vær i dit rette Element";
+"screen_onboarding_welcome_title" = "Vær i dit rette SevenChat";
 "screen_polls_history_empty_ongoing" = "Kan ikke finde nogen igangværende afstemninger.";
 "screen_polls_history_empty_past" = "Kan ikke finde nogen tidligere afstemninger.";
 "screen_polls_history_filter_ongoing" = "Igangværende";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Tilføj emoji";
 "screen_room_timeline_beginning_of_room" = "Dette er begyndelsen på %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Dette er begyndelsen på denne samtale.";
-"screen_room_timeline_legacy_call" = "Ikke-understøttet opkald. Spørg, om den, der ringer op, kan bruge den nye Element X-app.";
+"screen_room_timeline_legacy_call" = "Ikke-understøttet opkald. Spørg, om den, der ringer op, kan bruge den nye SevenChat-app.";
 "screen_room_timeline_less_reactions" = "Vis mindre";
 "screen_room_timeline_message_copied" = "Beskeden er kopieret";
 "screen_room_timeline_no_permission_to_post" = "Du har ikke tilladelse til at slå noget op i dette rum";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Samtaler";
 "screen_roomlist_mark_as_read" = "Marker som læst";
 "screen_roomlist_mark_as_unread" = "Marker som ulæst";
-"screen_server_confirmation_message_login_element_dot_io" = "En privat server til Element-medarbejdere.";
+"screen_server_confirmation_message_login_element_dot_io" = "En privat server til SevenChat-medarbejdere.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix er et åbent netværk for sikker, decentraliseret kommunikation.";
 "screen_server_confirmation_message_register" = "Det er her, dine samtaler vil bo - ligesom du ville bruge en e-mail-udbyder til at opbevare dine e-mails.";
 "screen_server_confirmation_title_login" = "Du er ved at logge ind på %1$@";

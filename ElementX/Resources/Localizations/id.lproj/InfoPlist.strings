@@ -1,5 +1,5 @@
-"NSCameraUsageDescription" = "Untuk mengambil gambar atau video dan mengirimkannya sebagai pesan, Element X memerlukan akses ke kamera.";
+"NSCameraUsageDescription" = "Untuk mengambil gambar atau video dan mengirimkannya sebagai pesan, SevenChat memerlukan akses ke kamera.";
 "NSFaceIDUsageDescription" = "Face ID digunakan untuk mengakses aplikasi Anda.";
-"NSLocationWhenInUseUsageDescription" = "Berikan akses lokasi supaya Element X dapat berbagi lokasi Anda.";
-"NSMicrophoneUsageDescription" = "Untuk merekam dan mengirim pesan dengan audio, Element X perlu mengakses mikrofon.";
+"NSLocationWhenInUseUsageDescription" = "Berikan akses lokasi supaya SevenChat dapat berbagi lokasi Anda.";
+"NSMicrophoneUsageDescription" = "Untuk merekam dan mengirim pesan dengan audio, SevenChat perlu mengakses mikrofon.";
 "NSPhotoLibraryUsageDescription" = "Ini memungkinkan Anda menyimpan gambar dan video ke perpustakaan foto Anda.";

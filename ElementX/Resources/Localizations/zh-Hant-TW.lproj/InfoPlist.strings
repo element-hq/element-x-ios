@@ -1,5 +1,5 @@
-"NSCameraUsageDescription" = "要拍攝照片或影片並將其作為訊息傳送，Element X 需要相機權限。";
+"NSCameraUsageDescription" = "要拍攝照片或影片並將其作為訊息傳送，SevenChat 需要相機權限。";
 "NSFaceIDUsageDescription" = "Face ID 用於存取您的應用程式。";
-"NSLocationWhenInUseUsageDescription" = "授予位置權限，如此 Element X 才能分享您的位置。";
-"NSMicrophoneUsageDescription" = "要錄製並傳送包含音訊的訊息，Element X 需要麥克風權限。";
+"NSLocationWhenInUseUsageDescription" = "授予位置權限，如此 SevenChat 才能分享您的位置。";
+"NSMicrophoneUsageDescription" = "要錄製並傳送包含音訊的訊息，SevenChat 需要麥克風權限。";
 "NSPhotoLibraryUsageDescription" = "這讓您可以將圖片與影片儲存至媒體庫中。";

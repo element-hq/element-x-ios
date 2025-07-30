@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "ارتقا موجود است";
 "banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
 "banner_set_up_recovery_title" = "برپایی بازیابی";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "درباره";
 "common_acceptable_use_policy" = "سیاست استفادهٔ پذیرفتنی";
 "common_adding_caption" = "افزودن عنوان";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "استفاده از فراهم کنندهٔ حسابی دیگر چون کارساز خصوصی خوتان یا حسابی کاری.";
 "screen_change_account_provider_title" = "تغییر فراهم کنندهٔ حساب";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "ما نتوانستیم به این سرور خانگی برسیم. لطفاً بررسی کنید که URL سرور اصلی را به درستی وارد کرده اید. اگر URL صحیح است، برای کمک بیشتر با مدیر سرور خانگی خود تماس بگیرید.";
 "screen_change_server_error_invalid_well_known" = "Server isn't available due to an issue in the .well-known file:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "افزودن شکلک";
 "screen_room_timeline_beginning_of_room" = "آغاز %1$@ است.";
 "screen_room_timeline_beginning_of_room_no_name" = "این، آغاز گفت‌وگوست.";
-"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new SevenChat app.";
 "screen_room_timeline_less_reactions" = "نمایش کم‌تر";
 "screen_room_timeline_message_copied" = "پیام رونوشت شد";
 "screen_room_timeline_no_permission_to_post" = "اجازهٔ فرستادن به این اتاق را ندارید";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "گپ‌ها";
 "screen_roomlist_mark_as_read" = "علامت‌گذاری به عنوان خوانده شده";
 "screen_roomlist_mark_as_unread" = "نشان به ناخوانده";
-"screen_server_confirmation_message_login_element_dot_io" = "یک سرور خصوصی برای کارمندان Element.";
+"screen_server_confirmation_message_login_element_dot_io" = "یک سرور خصوصی برای کارمندان SevenChat.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "ماتریکس شبکه‌ای بار برای ارتباطات نامتمرکز و امن است.";
 "screen_server_confirmation_message_register" = "جایی که گفت‌وگوهایتان خواهند زیست — درست مثل استفاده‌تان از فراهم کنندهٔ رایانامه‌ای برای نگه داشتن رایانامه‌هایتان.";
 "screen_server_confirmation_title_login" = "دارید به %1$@ وارد می‌شوید";

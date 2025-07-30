@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Có nâng cấp";
 "banner_set_up_recovery_content" = "Khôi phục danh tính mật mã và lịch sử tin nhắn của bạn bằng khóa khôi phục nếu bạn đã mất tất cả các thiết bị hiện có.";
 "banner_set_up_recovery_title" = "Thiết lập khôi phục để bảo vệ tài khoản của bạn";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call không hỗ trợ sử dụng thiết bị âm thanh Bluetooth trong phiên bản Android này. Vui lòng chọn thiết bị âm thanh khác.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call không hỗ trợ sử dụng thiết bị âm thanh Bluetooth trong phiên bản Android này. Vui lòng chọn thiết bị âm thanh khác.";
 "common_about" = "Giới thiệu";
 "common_acceptable_use_policy" = "Chính sách sử dụng chấp nhận được";
 "common_adding_caption" = "Đang thêm chú thích";
@@ -428,8 +428,8 @@
 "rich_text_editor_url_placeholder" = "Liên kết";
 "rich_text_editor_a11y_add_attachment" = "Thêm tệp đính kèm";
 "rich_text_editor_composer_caption_placeholder" = "Thêm chú thích";
-"screen_advanced_settings_element_call_base_url" = "URL cơ sở Element Call tùy chỉnh";
-"screen_advanced_settings_element_call_base_url_description" = "Đặt URL cơ sở tùy chỉnh cho Element Call.";
+"screen_advanced_settings_element_call_base_url" = "URL cơ sở SevenChat Call tùy chỉnh";
+"screen_advanced_settings_element_call_base_url_description" = "Đặt URL cơ sở tùy chỉnh cho SevenChat Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL không hợp lệ, vui lòng đảm bảo bạn bao gồm giao thức (http/https) và địa chỉ chính xác.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Ẩn avatar trong yêu cầu mời phòng";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Ẩn xem trước media trong dòng thời gian";
@@ -669,8 +669,8 @@
 "screen_change_account_provider_subtitle" = "Sử dụng nhà cung cấp tài khoản khác, chẳng hạn như máy chủ riêng hoặc tài khoản công việc.";
 "screen_change_account_provider_title" = "Thay đổi nhà cung cấp tài khoản";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "Ứng dụng Element Pro được yêu cầu trên %1$@. Vui lòng tải xuống từ cửa hàng.";
-"screen_change_server_error_element_pro_required_title" = "Yêu cầu Element Pro";
+"screen_change_server_error_element_pro_required_message" = "Ứng dụng SevenChat Pro được yêu cầu trên %1$@. Vui lòng tải xuống từ cửa hàng.";
+"screen_change_server_error_element_pro_required_title" = "Yêu cầu SevenChat Pro";
 "screen_change_server_error_invalid_homeserver" = "Chúng tôi không thể kết nối đến homeserver này. Vui lòng kiểm tra bạn đã nhập URL homeserver chính xác. Nếu URL đúng, liên hệ quản trị viên homeserver để được trợ giúp thêm.";
 "screen_change_server_error_invalid_well_known" = "Máy chủ không khả dụng do vấn đề trong tệp .well-known:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Nhà cung cấp tài khoản đã chọn không hỗ trợ sliding sync. Cần nâng cấp máy chủ để sử dụng %1$@.";
@@ -1019,7 +1019,7 @@
 "screen_room_timeline_add_reaction" = "Thêm phản ứng";
 "screen_room_timeline_beginning_of_room" = "Đây là khởi đầu của %1$@.";
 "screen_room_timeline_beginning_of_room_no_name" = "Đây là khởi đầu của cuộc trò chuyện này.";
-"screen_room_timeline_legacy_call" = "Cuộc gọi không được hỗ trợ. Hỏi người gọi xem có thể sử dụng ứng dụng Element X mới không.";
+"screen_room_timeline_legacy_call" = "Cuộc gọi không được hỗ trợ. Hỏi người gọi xem có thể sử dụng ứng dụng SevenChat mới không.";
 "screen_room_timeline_less_reactions" = "Hiển thị ít hơn";
 "screen_room_timeline_message_copied" = "Đã sao chép tin nhắn";
 "screen_room_timeline_no_permission_to_post" = "Bạn không có quyền đăng trong phòng này";
@@ -1050,7 +1050,7 @@
 "screen_roomlist_main_space_title" = "Cuộc trò chuyện";
 "screen_roomlist_mark_as_read" = "Đánh dấu đã đọc";
 "screen_roomlist_mark_as_unread" = "Đánh dấu chưa đọc";
-"screen_server_confirmation_message_login_element_dot_io" = "Máy chủ riêng cho nhân viên Element.";
+"screen_server_confirmation_message_login_element_dot_io" = "Máy chủ riêng cho nhân viên SevenChat.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix là mạng mở cho giao tiếp bảo mật, phi tập trung.";
 "screen_server_confirmation_message_register" = "Đây là nơi các cuộc trò chuyện sẽ diễn ra — giống như bạn sử dụng nhà cung cấp email để giữ email.";
 "screen_server_confirmation_title_login" = "Bạn sắp đăng nhập vào %1$@";

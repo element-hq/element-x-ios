@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Päivitys saatavilla";
 "banner_set_up_recovery_content" = "Palauta kryptografinen identiteettisi ja viestihistoriasi palautusavaimella, mikäli menetät pääsyn kaikkiin laitteisiisi.";
 "banner_set_up_recovery_title" = "Ota palautus käyttöön tilisi suojaamiseksi";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "Tietoa";
 "common_acceptable_use_policy" = "Hyväksyttävän käytön käytäntö";
 "common_adding_caption" = "Lisätään kuvatekstiä";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Linkki";
 "rich_text_editor_a11y_add_attachment" = "Lisää liite";
 "rich_text_editor_composer_caption_placeholder" = "Lisää kuvateksti";
-"screen_advanced_settings_element_call_base_url" = "Mukautettu Element Call URL-osoite";
-"screen_advanced_settings_element_call_base_url_description" = "Aseta mukautettu URL-osoite Element Callille.";
+"screen_advanced_settings_element_call_base_url" = "Mukautettu SevenChat Call URL-osoite";
+"screen_advanced_settings_element_call_base_url_description" = "Aseta mukautettu URL-osoite SevenChat Callille.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Virheellinen URL-osoite. Varmista, että sisällytät protokollan (http/https) ja oikean osoitteen.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Piilota huoneiden avatarit kutsuista";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Piilota median esikatselu aikajanalla";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "Käytä toista palveluntarjoajaa, kuten omaa yksityistä palvelintasi tai työpaikkaasi.";
 "screen_change_account_provider_title" = "Vaihda palveluntarjoajaa";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "Kotipalvelimeen ei saatu yhteyttä. Varmista, että olet syöttänyt osoitteen oikein. Jos osoite on oikein, ota yhteyttä palvelimesi ylläpitäjään.";
 "screen_change_server_error_invalid_well_known" = "Palvelin ei ole saatavilla .well-known tiedostossa olevan ongelman vuoksi:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "Valitsemasi palveluntarjoaja ei tue sliding syncia. Palvelimen päivitys tarvitaan %1$@ -sovelluksen käyttämiseen.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "Lisää emoji";
 "screen_room_timeline_beginning_of_room" = "Tämä on huoneen %1$@ alku.";
 "screen_room_timeline_beginning_of_room_no_name" = "Tämä on tämän keskustelun alku.";
-"screen_room_timeline_legacy_call" = "Puhelu, jota ei tueta. Kysy, voiko soittaja käyttää uutta Element X -sovellusta.";
+"screen_room_timeline_legacy_call" = "Puhelu, jota ei tueta. Kysy, voiko soittaja käyttää uutta SevenChat -sovellusta.";
 "screen_room_timeline_less_reactions" = "Näytä vähemmän";
 "screen_room_timeline_message_copied" = "Viesti kopioitu";
 "screen_room_timeline_no_permission_to_post" = "Sinulla ei ole oikeutta kirjoittaa tässä huoneessa";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "Keskustelut";
 "screen_roomlist_mark_as_read" = "Merkitse luetuksi";
 "screen_roomlist_mark_as_unread" = "Merkitse lukemattomaksi";
-"screen_server_confirmation_message_login_element_dot_io" = "Yksityinen palvelin Elementin työntekijöille.";
+"screen_server_confirmation_message_login_element_dot_io" = "Yksityinen palvelin SevenChatin työntekijöille.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix on avoin verkko turvallista, hajautettua viestintää varten.";
 "screen_server_confirmation_message_register" = "Keskustelusi asuvat täällä — aivan kuten aivan kuten käyttäisit sähköpostipalveluntarjoajaa sähköpostiesi säilyttämiseen.";
 "screen_server_confirmation_title_login" = "Olet kirjautumassa sisään %1$@-palvelimelle";

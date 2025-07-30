@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
 "banner_set_up_recovery_title" = "Set up recovery to protect your account";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "بمتعلق";
 "common_acceptable_use_policy" = "قابل قبول استعمال کی سیاست";
 "common_adding_caption" = "Adding caption";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "ایک مختلف کھاتہ فراہم کنندہ استعمال کریں، جیسے آپ کا اپنا نجی خادم یا کام کا کھاتہ۔";
 "screen_change_account_provider_title" = "اکاؤنٹ فراہم کنندہ بدلیں";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "ہم اس منزلی خادم تک نہیں پہنچ سکے۔ برائے مہربانی پڑتال کریں کہ آپ نے ہوم سرور کا عنوان صحیح طریقے سے درج کیا ہے۔ اگر عنوان درست ہے تو مزید مدد کے لیے اپنے منزلی خادم کے منتظم سے رابطہ کریں۔";
 "screen_change_server_error_invalid_well_known" = "مشہور فائل میں کسی مسئلے کی وجہ سے سلائیڈنگ سنک دستیاب نہیں ہے:\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "رمزِ تعبیری شامل کریں";
 "screen_room_timeline_beginning_of_room" = "یہ %1$@ کا آغاز ہے";
 "screen_room_timeline_beginning_of_room_no_name" = "یہ اس گفتگو کا آغاز ہے";
-"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new SevenChat app.";
 "screen_room_timeline_less_reactions" = "کم دکھائیں";
 "screen_room_timeline_message_copied" = "پیغام نقل کردہ";
 "screen_room_timeline_no_permission_to_post" = "آپ کو اس کمرے میں پوسٹ کرنے کی اجازت نہیں ہے";

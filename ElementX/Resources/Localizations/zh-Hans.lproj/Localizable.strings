@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "有可用升级";
 "banner_set_up_recovery_content" = "生成新的恢复密钥，该密钥可用于在您无法访问设备时恢复加密的消息历史记录。";
 "banner_set_up_recovery_title" = "设置恢复";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "关于";
 "common_acceptable_use_policy" = "可接受的使用政策";
 "common_adding_caption" = "添加标题";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "链接";
 "rich_text_editor_a11y_add_attachment" = "添加附件";
 "rich_text_editor_composer_caption_placeholder" = "可选的标题……";
-"screen_advanced_settings_element_call_base_url" = "自定义 Element Call URL";
-"screen_advanced_settings_element_call_base_url_description" = "为 Element 通话设置根 URL。";
+"screen_advanced_settings_element_call_base_url" = "自定义 SevenChat Call URL";
+"screen_advanced_settings_element_call_base_url_description" = "为 SevenChat 通话设置根 URL。";
 "screen_advanced_settings_element_call_base_url_validation_error" = "URL 无效，请确保包含协议（http/https）和正确的地址。";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "使用其他账户提供商，例如您自己的私人服务器或工作账户。";
 "screen_change_account_provider_title" = "更改账户提供方";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "我们无法访问此服务器。请检查您输入的服务器网址是否正确。如果 URL 正确，请联系您的服务器管理员寻求进一步帮助。";
 "screen_change_server_error_invalid_well_known" = "由于 Well Known 文件中的问题，Sliding Sync 不可用：\n%1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
@@ -830,7 +830,7 @@
 "screen_onboarding_sign_up" = "创建账户";
 "screen_onboarding_welcome_message" = "欢迎使用 %1$@，快而简约的消息应用。";
 "screen_onboarding_welcome_subtitle" = "欢迎使用 %1$@，速度与简洁的极致。";
-"screen_onboarding_welcome_title" = "融入您的 Element";
+"screen_onboarding_welcome_title" = "融入您的 SevenChat";
 "screen_polls_history_empty_ongoing" = "无法找到正在进行的投票。";
 "screen_polls_history_empty_past" = "无法找到历史投票";
 "screen_polls_history_filter_ongoing" = "正在进行";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "添加表情符号";
 "screen_room_timeline_beginning_of_room" = "这是 %1$@ 聊天室的开始。";
 "screen_room_timeline_beginning_of_room_no_name" = "这是本对话的开始。";
-"screen_room_timeline_legacy_call" = "不支持的呼叫。询问呼叫者是否可以使用新的 Element X 应用程序。";
+"screen_room_timeline_legacy_call" = "不支持的呼叫。询问呼叫者是否可以使用新的 SevenChat 应用程序。";
 "screen_room_timeline_less_reactions" = "折叠";
 "screen_room_timeline_message_copied" = "消息已复制";
 "screen_room_timeline_no_permission_to_post" = "您无权在此聊天室发言";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "全部聊天";
 "screen_roomlist_mark_as_read" = "标记为已读";
 "screen_roomlist_mark_as_unread" = "标记为未读";
-"screen_server_confirmation_message_login_element_dot_io" = "专为 Element 员工提供的私人服务器。";
+"screen_server_confirmation_message_login_element_dot_io" = "专为 SevenChat 员工提供的私人服务器。";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix 是一个用于安全、去中心化通信的开放网络。";
 "screen_server_confirmation_message_register" = "这是您的对话将存在的地方，就像您使用电子邮件提供方来保存电子邮件一样。";
 "screen_server_confirmation_title_login" = "即将登录 %1$@";

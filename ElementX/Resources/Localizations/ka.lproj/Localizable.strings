@@ -157,7 +157,7 @@
 "banner_migrate_to_native_sliding_sync_title" = "Upgrade available";
 "banner_set_up_recovery_content" = "Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.";
 "banner_set_up_recovery_title" = "Set up recovery to protect your account";
-"call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
+"call_invalid_audio_device_bluetooth_devices_disabled" = "SevenChat Call does not support using Bluetooth audio devices in this Android version. Please select a different audio device.";
 "common_about" = "შესახებ";
 "common_acceptable_use_policy" = "მისაღები გამოყენების პოლიტიკა";
 "common_adding_caption" = "Adding caption";
@@ -427,8 +427,8 @@
 "rich_text_editor_url_placeholder" = "Ბმული";
 "rich_text_editor_a11y_add_attachment" = "დაამატეთ დანართი";
 "rich_text_editor_composer_caption_placeholder" = "Add a caption";
-"screen_advanced_settings_element_call_base_url" = "მორგებული Element-ის ზარის საბაზისო URL";
-"screen_advanced_settings_element_call_base_url_description" = "დააყენეთ საბაზისო URL Element-ის ზარებისათვის.";
+"screen_advanced_settings_element_call_base_url" = "მორგებული SevenChat-ის ზარის საბაზისო URL";
+"screen_advanced_settings_element_call_base_url_description" = "დააყენეთ საბაზისო URL SevenChat-ის ზარებისათვის.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "არასწორი URL, გთხოვთ, დარწმუნდეთ, რომ შეიტანეთ პროტოკოლი (http/https) და სწორი მისამართი.";
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
@@ -668,8 +668,8 @@
 "screen_change_account_provider_subtitle" = "გამოიყენეთ სხვა ანგარიშის პროვაიდერი, როგორიცაა თქვენი პირადი სერვერი ან სამუშაო ანგარიში.";
 "screen_change_account_provider_title" = "შეცვალეთ ანგარიშის მომწოდებელი";
 "screen_change_server_error_element_pro_required_action_ios" = "App Store";
-"screen_change_server_error_element_pro_required_message" = "The Element Pro app is required on %1$@. Please download it from the store.";
-"screen_change_server_error_element_pro_required_title" = "Element Pro required";
+"screen_change_server_error_element_pro_required_message" = "The SevenChat Pro app is required on %1$@. Please download it from the store.";
+"screen_change_server_error_element_pro_required_title" = "SevenChat Pro required";
 "screen_change_server_error_invalid_homeserver" = "ჩვენ ვერ მივაღწიეთ ამ სახლის სერვერს. გთხოვთ, შეამოწმოთ, რომ სწორად შეიყვანეთ სახლის სერვერის URL. თუ URL სწორია, დაუკავშირდით თქვენი სახლის სერვერის ადმინისტრატორს დამატებითი დახმარებისთვის.";
 "screen_change_server_error_invalid_well_known" = "Sliding sync არ არის ხელმისაწვდომი well-known ფაილში პრობლემის გამო: %1$@";
 "screen_change_server_error_no_sliding_sync_message" = "The selected account provider does not support sliding sync. An upgrade to the server is needed to use %1$@.";
@@ -1018,7 +1018,7 @@
 "screen_room_timeline_add_reaction" = "ემოჯის დამატება";
 "screen_room_timeline_beginning_of_room" = "ეს არის %1$@-ს დასაწყისი.";
 "screen_room_timeline_beginning_of_room_no_name" = "ეს არის ამ საუბრის დასაწყისი.";
-"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new Element X app.";
+"screen_room_timeline_legacy_call" = "Unsupported call. Ask if the caller can use the new SevenChat app.";
 "screen_room_timeline_less_reactions" = "ნაკლების ჩვენება";
 "screen_room_timeline_message_copied" = "შეტყობინება დაკოპირდა";
 "screen_room_timeline_no_permission_to_post" = "თქვენ არ გაქვთ ამ ოთახში გამოქვეყნების ნებართვა";
@@ -1049,7 +1049,7 @@
 "screen_roomlist_main_space_title" = "ჩატები";
 "screen_roomlist_mark_as_read" = "წაკითხულად მონიშვნა";
 "screen_roomlist_mark_as_unread" = "წაუკითხავად მონიშვნა";
-"screen_server_confirmation_message_login_element_dot_io" = "კერძო სერვერი Element-ის თანამშრომლებისთვის.";
+"screen_server_confirmation_message_login_element_dot_io" = "კერძო სერვერი SevenChat-ის თანამშრომლებისთვის.";
 "screen_server_confirmation_message_login_matrix_dot_org" = "Matrix არის ღია ქსელი უსაფრთხო, დეცენტრალიზებული კომუნიკაციისთვის.";
 "screen_server_confirmation_message_register" = "აქ იქნება თქვენი საუბრები - ისევე, როგორც თქვენ ელ. ფოსტაში ინახება თქვენი ელ.წერილები.";
 "screen_server_confirmation_title_login" = "თქვენ აპირებთ შესვლას %1$@-ში";

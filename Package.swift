@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Element Swift",
+    name: "SevenChat Swift",
     platforms: [
         .macOS(.v14)
     ],

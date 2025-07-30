@@ -1,5 +1,5 @@
-"NSCameraUsageDescription" = "Per catturare foto o video e inviarli come messaggio, Element X deve accedere alla fotocamera.";
+"NSCameraUsageDescription" = "Per catturare foto o video e inviarli come messaggio, SevenChat deve accedere alla fotocamera.";
 "NSFaceIDUsageDescription" = "Face ID viene utilizzato per accedere alla tua app.";
-"NSLocationWhenInUseUsageDescription" = "Concedi l'accesso alla localizzazione in modo che Element X possa condividere la tua posizione.";
-"NSMicrophoneUsageDescription" = "Per registrare e inviare messaggi audio, Element X deve accedere al microfono.";
+"NSLocationWhenInUseUsageDescription" = "Concedi l'accesso alla localizzazione in modo che SevenChat possa condividere la tua posizione.";
+"NSMicrophoneUsageDescription" = "Per registrare e inviare messaggi audio, SevenChat deve accedere al microfono.";
 "NSPhotoLibraryUsageDescription" = "Consente di salvare foto e video nella tua libreria.";
