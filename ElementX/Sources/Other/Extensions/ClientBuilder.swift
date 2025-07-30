@@ -37,21 +37,17 @@ extension ClientBuilder {
         }
         
         if setupEncryption {
+            // Tắt tất cả các cài đặt mã hóa tự động
             builder = builder
-                .autoEnableCrossSigning(autoEnableCrossSigning: true)
-                .backupDownloadStrategy(backupDownloadStrategy: .afterDecryptionFailure)
-                .enableShareHistoryOnInvite(enableShareHistoryOnInvite: enableKeyShareOnInvite)
-                .autoEnableBackups(autoEnableBackups: true)
+                .autoEnableCrossSigning(autoEnableCrossSigning: false) // Tắt cross-signing tự động
+                .backupDownloadStrategy(backupDownloadStrategy: .afterDecryptionFailure) // Giữ nguyên giá trị gốc
+                .enableShareHistoryOnInvite(enableShareHistoryOnInvite: false) // Tắt share history
+                .autoEnableBackups(autoEnableBackups: false) // Tắt backup tự động
                 
-            if enableOnlySignedDeviceIsolationMode {
-                builder = builder
-                    .roomKeyRecipientStrategy(strategy: .identityBasedStrategy)
-                    .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .crossSignedOrLegacy))
-            } else {
-                builder = builder
-                    .roomKeyRecipientStrategy(strategy: .errorOnVerifiedUserProblem)
-                    .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .untrusted))
-            }
+            // Sử dụng cài đặt ít nghiêm ngặt nhất
+            builder = builder
+                .roomKeyRecipientStrategy(strategy: .errorOnVerifiedUserProblem)
+                .decryptionSettings(decryptionSettings: .init(senderDeviceTrustRequirement: .untrusted))
         }
         
         if let httpProxy {

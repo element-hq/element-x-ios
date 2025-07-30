@@ -27,7 +27,8 @@ struct AuthenticationClientFactory: AuthenticationClientFactoryProtocol {
                     appSettings: AppSettings,
                     appHooks: AppHooks) async throws -> ClientProtocol {
         try await ClientBuilder
-            .baseBuilder(httpProxy: appSettings.websiteURL.globalProxy,
+            .baseBuilder(setupEncryption: false, // Tắt mã hóa tự động
+                         httpProxy: appSettings.websiteURL.globalProxy,
                          slidingSync: .discover,
                          sessionDelegate: clientSessionDelegate,
                          appHooks: appHooks,

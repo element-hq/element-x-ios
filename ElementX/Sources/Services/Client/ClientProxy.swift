@@ -432,7 +432,7 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let parameters = CreateRoomParameters(name: nil,
                                                   topic: nil,
-                                                  isEncrypted: true,
+                                                  isEncrypted: false, // Vô hiệu hóa mã hóa tự động cho DM
                                                   isDirect: true,
                                                   visibility: .private,
                                                   preset: .trustedPrivateChat,
@@ -460,15 +460,15 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let parameters = CreateRoomParameters(name: name,
                                                   topic: topic,
-                                                  isEncrypted: isRoomPrivate,
+                                                  isEncrypted: false, // Tắt mã hóa tự động cho tất cả phòng
                                                   isDirect: false,
-                                                  visibility: isRoomPrivate ? .private : .public,
-                                                  preset: isRoomPrivate ? .privateChat : .publicChat,
+                                                  visibility: .public, // Luôn sử dụng public để tránh auto-encryption
+                                                  preset: .publicChat, // Luôn sử dụng publicChat preset để tránh auto-encryption
                                                   invite: userIDs,
                                                   avatar: avatarURL?.absoluteString,
                                                   powerLevelContentOverride: isKnockingOnly ? Self.knockingRoomCreationPowerLevelOverrides : Self.roomCreationPowerLevelOverrides,
                                                   joinRuleOverride: isKnockingOnly ? .knock : nil,
-                                                  historyVisibilityOverride: isRoomPrivate ? .invited : nil,
+                                                  historyVisibilityOverride: .shared, // Luôn sử dụng shared để tránh auto-encryption
                                                   // This is an FFI naming mistake, what is required is the `aliasLocalPart` not the whole alias
                                                   canonicalAlias: aliasLocalPart)
             let roomID = try await client.createRoom(request: parameters)

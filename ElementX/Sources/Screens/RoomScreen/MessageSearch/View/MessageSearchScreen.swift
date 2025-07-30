@@ -27,11 +27,11 @@ struct MessageSearchScreen: View {
                     searchResultsList
                 }
             }
-            .navigationTitle(L10n.actionSearch)
+            .navigationTitle("Tìm kiếm")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(L10n.actionCancel) {
+                    Button("Hủy") {
                         context.send(viewAction: .dismiss)
                     }
                 }
@@ -46,7 +46,7 @@ struct MessageSearchScreen: View {
                 .foregroundColor(.compound.textSecondary)
                 .font(.system(size: 16, weight: .medium))
             
-            TextField("Search messages in this room", text: Binding(get: { context.viewState.bindings.searchQuery },
+            TextField("Tìm kiếm tin nhắn trong phòng này", text: Binding(get: { context.viewState.bindings.searchQuery },
                                                                     set: { newValue in
                                                                         context.send(viewAction: .searchQueryChanged(newValue))
                                                                     }))
@@ -84,7 +84,7 @@ struct MessageSearchScreen: View {
             ProgressView()
                 .progressViewStyle(.circular)
                 .tint(.compound.textPrimary)
-            Text("Searching messages...")
+            Text("Đang tìm kiếm tin nhắn...")
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textSecondary)
                 .padding(.top, 8)
@@ -101,12 +101,12 @@ struct MessageSearchScreen: View {
                 .foregroundColor(.compound.textSecondary)
                 .padding(.bottom, 16)
             
-            Text("No messages found")
+            Text("Không tìm thấy tin nhắn")
                 .font(.compound.headingMDBold)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
             
-            Text("Try searching with different keywords or check your spelling")
+            Text("Thử tìm kiếm với từ khóa khác hoặc kiểm tra chính tả")
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textSecondary)
                 .multilineTextAlignment(.center)
@@ -124,12 +124,12 @@ struct MessageSearchScreen: View {
                 .foregroundColor(.compound.textSecondary)
                 .padding(.bottom, 16)
             
-            Text("Search messages")
+            Text("Tìm kiếm tin nhắn")
                 .font(.compound.headingMDBold)
                 .foregroundColor(.compound.textPrimary)
                 .padding(.bottom, 8)
             
-            Text("Type to search for messages, mentions, or specific content in this room")
+            Text("Nhập để tìm kiếm tin nhắn, đề cập hoặc nội dung cụ thể trong phòng này")
                 .font(.compound.bodyMD)
                 .foregroundColor(.compound.textSecondary)
                 .multilineTextAlignment(.center)
@@ -143,7 +143,7 @@ struct MessageSearchScreen: View {
         VStack(spacing: 0) {
             if !context.viewState.searchResults.isEmpty {
                 HStack {
-                    Text("\(context.viewState.searchResults.count) result\(context.viewState.searchResults.count == 1 ? "" : "s")")
+                    Text("\(context.viewState.searchResults.count) kết quả")
                         .font(.compound.bodySM)
                         .foregroundColor(.compound.textSecondary)
                         .padding(.horizontal, 16)

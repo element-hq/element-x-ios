@@ -120,7 +120,8 @@ class UserSessionStore: UserSessionStoreProtocol {
         appHooks.remoteSettingsHook.loadCache(forHomeserver: homeserverURL, applyingTo: appSettings)
         
         let builder = ClientBuilder
-            .baseBuilder(httpProxy: URL(string: homeserverURL)?.globalProxy,
+            .baseBuilder(setupEncryption: false, // Tắt mã hóa tự động
+                         httpProxy: URL(string: homeserverURL)?.globalProxy,
                          slidingSync: .restored,
                          sessionDelegate: keychainController,
                          appHooks: appHooks,
