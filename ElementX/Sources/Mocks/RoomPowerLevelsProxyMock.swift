@@ -18,6 +18,7 @@ struct RoomPowerLevelsProxyMockConfiguration {
     var canUserTriggerRoomNotification = false
     var canUserPin = true
     var canUserJoinCall = true
+    var canUserEditRoomsAndPermissions = true
 }
 
 extension RoomPowerLevelsProxyMock {
@@ -25,9 +26,7 @@ extension RoomPowerLevelsProxyMock {
         self.init()
         
         underlyingValues = RoomPowerLevelsValues.mock
-        
-        suggestedRoleForUserReturnValue = .administrator
-        
+                
         canOwnUserSendMessageReturnValue = configuration.canUserSendMessage
         canOwnUserSendStateEventReturnValue = configuration.canUserSendState
         canOwnUserInviteReturnValue = configuration.canUserInvite
@@ -38,6 +37,7 @@ extension RoomPowerLevelsProxyMock {
         canOwnUserTriggerRoomNotificationReturnValue = configuration.canUserTriggerRoomNotification
         canOwnUserPinOrUnpinReturnValue = configuration.canUserPin
         canOwnUserJoinCallReturnValue = configuration.canUserJoinCall
+        canOwnUserEditRolesAndPermissionsReturnValue = configuration.canUserEditRoomsAndPermissions
         
         canUserUserIDSendMessageReturnValue = .success(configuration.canUserSendMessage)
         canUserUserIDSendStateEventReturnValue = .success(configuration.canUserSendState)

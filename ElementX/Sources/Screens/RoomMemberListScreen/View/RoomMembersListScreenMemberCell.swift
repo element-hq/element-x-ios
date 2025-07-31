@@ -55,6 +55,8 @@ struct RoomMembersListScreenMemberCell: View {
     
     var role: String? {
         switch listEntry.member.role {
+        case .creator, .owner:
+            L10n.screenRoomMemberListRoleOwner
         case .administrator:
             L10n.screenRoomMemberListRoleAdministrator
         case .moderator:

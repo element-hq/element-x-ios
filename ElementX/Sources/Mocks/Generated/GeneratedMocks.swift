@@ -13435,76 +13435,6 @@ class RoomPowerLevelsProxyMock: RoomPowerLevelsProxyProtocol, @unchecked Sendabl
     var underlyingValues: RoomPowerLevelsValues!
     var userPowerLevels: [String: Int64] = [:]
 
-    //MARK: - suggestedRole
-
-    var suggestedRoleForUserUnderlyingCallsCount = 0
-    var suggestedRoleForUserCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return suggestedRoleForUserUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = suggestedRoleForUserUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                suggestedRoleForUserUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    suggestedRoleForUserUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var suggestedRoleForUserCalled: Bool {
-        return suggestedRoleForUserCallsCount > 0
-    }
-    var suggestedRoleForUserReceivedUserID: String?
-    var suggestedRoleForUserReceivedInvocations: [String] = []
-
-    var suggestedRoleForUserUnderlyingReturnValue: RoomMemberRole!
-    var suggestedRoleForUserReturnValue: RoomMemberRole! {
-        get {
-            if Thread.isMainThread {
-                return suggestedRoleForUserUnderlyingReturnValue
-            } else {
-                var returnValue: RoomMemberRole? = nil
-                DispatchQueue.main.sync {
-                    returnValue = suggestedRoleForUserUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                suggestedRoleForUserUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    suggestedRoleForUserUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var suggestedRoleForUserClosure: ((String) -> RoomMemberRole)?
-
-    func suggestedRole(forUser userID: String) -> RoomMemberRole {
-        suggestedRoleForUserCallsCount += 1
-        suggestedRoleForUserReceivedUserID = userID
-        DispatchQueue.main.async {
-            self.suggestedRoleForUserReceivedInvocations.append(userID)
-        }
-        if let suggestedRoleForUserClosure = suggestedRoleForUserClosure {
-            return suggestedRoleForUserClosure(userID)
-        } else {
-            return suggestedRoleForUserReturnValue
-        }
-    }
     //MARK: - canOwnUser
 
     var canOwnUserSendMessageUnderlyingCallsCount = 0
@@ -14155,6 +14085,70 @@ class RoomPowerLevelsProxyMock: RoomPowerLevelsProxyProtocol, @unchecked Sendabl
             return canOwnUserJoinCallClosure()
         } else {
             return canOwnUserJoinCallReturnValue
+        }
+    }
+    //MARK: - canOwnUserEditRolesAndPermissions
+
+    var canOwnUserEditRolesAndPermissionsUnderlyingCallsCount = 0
+    var canOwnUserEditRolesAndPermissionsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return canOwnUserEditRolesAndPermissionsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canOwnUserEditRolesAndPermissionsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canOwnUserEditRolesAndPermissionsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canOwnUserEditRolesAndPermissionsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var canOwnUserEditRolesAndPermissionsCalled: Bool {
+        return canOwnUserEditRolesAndPermissionsCallsCount > 0
+    }
+
+    var canOwnUserEditRolesAndPermissionsUnderlyingReturnValue: Bool!
+    var canOwnUserEditRolesAndPermissionsReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return canOwnUserEditRolesAndPermissionsUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canOwnUserEditRolesAndPermissionsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canOwnUserEditRolesAndPermissionsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canOwnUserEditRolesAndPermissionsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var canOwnUserEditRolesAndPermissionsClosure: (() -> Bool)?
+
+    func canOwnUserEditRolesAndPermissions() -> Bool {
+        canOwnUserEditRolesAndPermissionsCallsCount += 1
+        if let canOwnUserEditRolesAndPermissionsClosure = canOwnUserEditRolesAndPermissionsClosure {
+            return canOwnUserEditRolesAndPermissionsClosure()
+        } else {
+            return canOwnUserEditRolesAndPermissionsReturnValue
         }
     }
     //MARK: - canUser

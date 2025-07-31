@@ -26,16 +26,6 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
         powerLevels.userPowerLevels()
     }
     
-    func suggestedRole(forUser userID: String) -> RoomMemberRole {
-        do {
-            let powerLevelValue = powerLevels.userPowerLevels()[userID] ?? values.usersDefault
-            return try suggestedRoleForPowerLevel(powerLevel: .value(value: powerLevelValue))
-        } catch {
-            MXLog.error("Falied to get suggested role for user: \(error)")
-            return .user
-        }
-    }
-    
     func canOwnUser(sendMessage messageType: MessageLikeEventType) -> Bool {
         powerLevels.canOwnUserSendMessage(message: messageType)
     }
@@ -74,6 +64,10 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
     
     func canOwnUserJoinCall() -> Bool {
         powerLevels.canOwnUserSendState(stateEvent: .callMember)
+    }
+    
+    func canOwnUserEditRolesAndPermissions() -> Bool {
+        powerLevels.canOwnUserSendState(stateEvent: .roomPowerLevels)
     }
     
     func canUser(userID: String, sendMessage messageType: MessageLikeEventType) -> Result<Bool, RoomProxyError> {
