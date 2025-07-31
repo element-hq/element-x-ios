@@ -87,7 +87,7 @@ struct HomeWalletContent: View {
         .onPreferenceChange(ScrollOffsetKey.self) { value in
             scrollOffset = value
             withAnimation(.easeInOut(duration: 0.3)) {
-                isCompactMode = scrollOffset < -60
+                isCompactMode = scrollOffset < -30
             }
         }
     }
