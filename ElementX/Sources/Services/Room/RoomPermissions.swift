@@ -88,15 +88,24 @@ extension RoomMemberDetails.Role {
     init(powerLevelValue: Int64) {
         // Also this is not great, and should be handled by a `suggestedRoleForPowerLevelValue` function from the SDK
         guard powerLevelValue < 150 else {
-            self.init(.creator)
+            self = .owner
             return
         }
         
         do {
-            try self.init(suggestedRoleForPowerLevel(powerLevel: .value(value: powerLevelValue)))
+            switch try suggestedRoleForPowerLevel(powerLevel: .value(value: powerLevelValue)) {
+            case .administrator:
+                self = .administrator
+            case .creator:
+                fatalError("Impossible")
+            case .moderator:
+                self = .moderator
+            case .user:
+                self = .user
+            }
         } catch {
             MXLog.error("Falied to convert power level value to role: \(error)")
-            self.init(.user)
+            self = .user
         }
     }
     
@@ -104,7 +113,7 @@ extension RoomMemberDetails.Role {
         switch self {
         case .creator:
             .creator
-        case .administrator:
+        case .administrator, .owner:
             .administrator
         case .moderator:
             .moderator
@@ -116,7 +125,7 @@ extension RoomMemberDetails.Role {
     /// To be used when setting the power level of a user to get the suggested equivalent power level value for that specific role
     /// NOTE: Do not use for comparison, use the true power level instead.
     var powerLevelValue: Int64 {
-        guard self != .creator else {
+        guard self != .owner else {
             // Would be better if the SDK would return this, maybe a `suggestedPowerLevelValueForRole` function would solve the problem
             return 150
         }
@@ -124,8 +133,7 @@ extension RoomMemberDetails.Role {
         do {
             switch try suggestedPowerLevelForRole(role: rustRole) {
             case .infinite:
-                // As above
-                return 150
+                fatalError("Impossible")
             case .value(let value):
                 return value
             }

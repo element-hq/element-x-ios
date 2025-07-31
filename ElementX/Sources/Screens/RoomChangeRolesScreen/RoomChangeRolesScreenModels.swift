@@ -35,7 +35,7 @@ struct RoomChangeRolesScreenViewState: BindableState {
     /// The screen's title.
     var title: String {
         switch mode {
-        case .creator, .administrator:
+        case .creator, .owner, .administrator:
             // TODO: Handle the creator permissions change
             L10n.screenRoomChangeRoleAdministratorsTitle
         case .moderator:

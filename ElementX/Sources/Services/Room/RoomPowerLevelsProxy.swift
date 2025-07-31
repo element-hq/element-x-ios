@@ -9,15 +9,13 @@ import MatrixRustSDK
 
 struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
     private let powerLevels: RoomPowerLevels
-    private let creators: [String]
     
-    init?(_ powerLevels: RoomPowerLevels?, creators: [String]) {
+    init?(_ powerLevels: RoomPowerLevels?) {
         guard let powerLevels else {
             return nil
         }
         
         self.powerLevels = powerLevels
-        self.creators = creators
     }
     
     var values: RoomPowerLevelsValues {
@@ -26,24 +24,6 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
     
     var userPowerLevels: [String: Int64] {
         powerLevels.userPowerLevels()
-    }
-    
-    func suggestedRole(forUser userID: String) -> RoomMemberRole {
-        do {
-            guard !creators.contains(userID) else {
-                return .creator
-            }
-            
-            let powerLevelValue = powerLevels.userPowerLevels()[userID] ?? values.usersDefault
-            // Also this sould probably be handled through the SDK
-            guard powerLevelValue < 150 else {
-                return .creator
-            }
-            return try suggestedRoleForPowerLevel(powerLevel: .value(value: powerLevelValue))
-        } catch {
-            MXLog.error("Falied to get suggested role for user: \(error)")
-            return .user
-        }
     }
     
     func canOwnUser(sendMessage messageType: MessageLikeEventType) -> Bool {
@@ -84,6 +64,10 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
     
     func canOwnUserJoinCall() -> Bool {
         powerLevels.canOwnUserSendState(stateEvent: .callMember)
+    }
+    
+    func canOwnUserEditRolesAndPermissions() -> Bool {
+        powerLevels.canOwnUserSendState(stateEvent: .roomPowerLevels)
     }
     
     func canUser(userID: String, sendMessage messageType: MessageLikeEventType) -> Result<Bool, RoomProxyError> {

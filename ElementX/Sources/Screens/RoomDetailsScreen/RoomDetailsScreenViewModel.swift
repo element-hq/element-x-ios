@@ -232,7 +232,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.canKickUsers = powerLevels.canOwnUserKick()
             state.canBanUsers = powerLevels.canOwnUserBan()
             state.canJoinCall = powerLevels.canOwnUserJoinCall()
-            state.canEditRolesOrPermissions = powerLevels.suggestedRole(forUser: roomProxy.ownUserID).isAdminOrHigher
+            state.canEditRolesOrPermissions = powerLevels.canOwnUserEditRolesAndPermissions()
         }
     }
     

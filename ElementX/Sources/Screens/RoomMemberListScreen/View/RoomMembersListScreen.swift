@@ -169,6 +169,7 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
             .mockCharlie,
             mockAdmin,
             .mockCreator,
+            .mockOwner,
             .mockModerator
         ]
         
