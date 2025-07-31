@@ -83,6 +83,15 @@ extension RoomMemberDetails.Role {
             return false
         }
     }
+    
+    var isOwner: Bool {
+        switch self {
+        case .creator, .owner:
+            return true
+        case .administrator, .moderator, .user:
+            return false
+        }
+    }
 }
 
 extension RoomMemberRole {

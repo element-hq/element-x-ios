@@ -58,3 +58,14 @@ extension [RoomMemberProxyProtocol] {
         }
     }
 }
+
+extension RoomMemberProxyProtocol {
+    var isOwner: Bool {
+        switch powerLevel {
+        case .infinite:
+            return true
+        case .value(let value):
+            return value >= 150
+        }
+    }
+}

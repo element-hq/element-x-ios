@@ -342,15 +342,33 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 return
             }
             
-            if !(roomProxy.infoPublisher.value.isPrivate ?? true) {
-                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: .public)
-            } else {
-                state.bindings.leaveRoomAlertItem = if roomProxy.infoPublisher.value.joinedMembersCount > 1 {
-                    LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: .private)
-                } else {
-                    LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: .empty)
+            guard roomProxy.infoPublisher.value.joinedMembersCount > 1 else {
+                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID,
+                                                                       isDM: roomProxy.isDirectOneToOneRoom,
+                                                                       state: roomProxy.infoPublisher.value.isPrivate ?? true ? .empty : .public)
+                return
+            }
+            
+            if !roomProxy.isDirectOneToOneRoom {
+                if case let .success(ownMember) = await roomProxy.getMember(userID: roomProxy.ownUserID),
+                   ownMember.isOwner {
+                    await roomProxy.updateMembers()
+                    var isLastOwner = true
+                    for member in roomProxy.membersPublisher.value where member.userID != roomProxy.ownUserID {
+                        if member.isOwner {
+                            isLastOwner = false
+                            break
+                        }
+                    }
+                    
+                    if isLastOwner {
+                        // TODO: Present an alert that sends to the RoomRoleChangeScreen
+                        return
+                    }
                 }
             }
+            
+            state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: roomProxy.infoPublisher.value.isPrivate ?? true ? .private : .public)
         }
     }
     
