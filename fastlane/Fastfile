@@ -329,3 +329,120 @@ private_lane :create_simulator_if_necessary do |options|
     sh("xcrun simctl create '#{simulator_name}' #{simulator_type} #{simulator_runtime}")
   end
 end
+
+lane :setup_certificates do
+  # Setup certificates and provisioning profiles
+  match(
+    type: "appstore",
+    app_identifier: "io.sevenchat.sevenchat",
+    readonly: true
+  )
+end
+
+lane :build_for_appstore do |options|
+  # Setup certificates first
+  setup_certificates
+  
+  # Build app for App Store
+  gym(
+    scheme: "SevenChat",
+    configuration: "Release",
+    export_method: "app-store",
+    export_options: {
+      method: "app-store",
+      uploadBitcode: false,
+      uploadSymbols: true,
+      compileBitcode: false
+    },
+    output_directory: "builds",
+    output_name: "SevenChat.ipa",
+    clean: true,
+    include_bitcode: false,
+    include_symbols: true
+  )
+end
+
+lane :build_for_development do |options|
+  # Setup certificates for development
+  match(
+    type: "development",
+    app_identifier: "io.sevenchat.sevenchat",
+    readonly: true
+  )
+  
+  # Build app for development
+  gym(
+    scheme: "SevenChat",
+    configuration: "Debug",
+    export_method: "development",
+    export_options: {
+      method: "development",
+      uploadBitcode: false,
+      uploadSymbols: true,
+      compileBitcode: false
+    },
+    output_directory: "builds",
+    output_name: "SevenChat-Development.ipa",
+    clean: true,
+    include_bitcode: false,
+    include_symbols: true
+  )
+end
+
+lane :build_for_adhoc do |options|
+  # Setup certificates for adhoc
+  match(
+    type: "adhoc",
+    app_identifier: "io.sevenchat.sevenchat",
+    readonly: true
+  )
+  
+  # Build app for adhoc distribution
+  gym(
+    scheme: "SevenChat",
+    configuration: "Release",
+    export_method: "ad-hoc",
+    export_options: {
+      method: "ad-hoc",
+      uploadBitcode: false,
+      uploadSymbols: true,
+      compileBitcode: false
+    },
+    output_directory: "builds",
+    output_name: "SevenChat-AdHoc.ipa",
+    clean: true,
+    include_bitcode: false,
+    include_symbols: true
+  )
+end
+
+lane :upload_to_appstore do |options|
+  # Upload to App Store Connect
+  deliver(
+    app_identifier: "io.sevenchat.sevenchat",
+    ipa: "builds/SevenChat.ipa",
+    skip_screenshots: true,
+    skip_metadata: true,
+    force: true,
+    submit_for_review: false,
+    automatic_release: false
+  )
+end
+
+lane :upload_to_testflight do |options|
+  # Build for App Store first
+  build_for_appstore
+  
+  # Upload to TestFlight
+  pilot(
+    app_identifier: "io.sevenchat.sevenchat",
+    ipa: "builds/SevenChat.ipa",
+    skip_waiting_for_build_processing: true
+  )
+end
+
+lane :release_to_appstore do |options|
+  # Complete release process
+  build_for_appstore
+  upload_to_appstore
+end

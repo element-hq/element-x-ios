@@ -1,0 +1,8 @@
+# Ignore everything by default
+*
+
+# But not these files...
+!.gitignore
+!README.md
+!certs/
+!profiles/ 

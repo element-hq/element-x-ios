@@ -1,0 +1,12 @@
+# The bundle identifier of your app
+app_identifier("io.sevenchat.sevenchat")
+
+# Your Apple ID
+apple_id("senven.co77@gmail.com")
+
+# Team ID (nếu có nhiều team)
+# team_id("TEAM_ID")
+
+# It's recommended to store your Apple ID and App Store Connect team ID in environment variables
+# apple_id(ENV["APPLE_ID"])
+# team_id(ENV["TEAM_ID"]) 
