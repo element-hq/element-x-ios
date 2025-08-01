@@ -137,7 +137,6 @@ extension JoinedRoomProxyMock {
         widgetDriver.startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationReturnValue = .success(url)
         
         elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
-        sendCallNotificationIfNeededReturnValue = .success(())
         
         matrixToPermalinkReturnValue = .success(.homeDirectory)
         matrixToEventPermalinkReturnValue = .success(.homeDirectory)

@@ -186,7 +186,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
         case .call(let roomID):
-            Task { await presentCallScreen(roomID: roomID, notifyOtherParticipants: false) }
+            Task { await presentCallScreen(roomID: roomID) }
         case .genericCallLink(let url):
             presentCallScreen(genericCallLink: url)
         case .settings, .chatBackupSettings:
@@ -531,8 +531,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             
             switch action {
             case .presentCallScreen(let roomProxy):
-                // Here we assume that the app is running and the call state is already up to date
-                presentCallScreen(roomProxy: roomProxy, notifyOtherParticipants: !roomProxy.infoPublisher.value.hasRoomCall)
+                presentCallScreen(roomProxy: roomProxy)
             case .verifyUser(let userID):
                 actionsSubject.send(.sessionVerification(.userInitiator(userID: userID)))
             case .finished:
@@ -614,23 +613,22 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         presentCallScreen(configuration: .init(genericCallLink: url))
     }
     
-    private func presentCallScreen(roomID: String, notifyOtherParticipants: Bool) async {
+    private func presentCallScreen(roomID: String) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             return
         }
         
-        presentCallScreen(roomProxy: roomProxy, notifyOtherParticipants: notifyOtherParticipants)
+        presentCallScreen(roomProxy: roomProxy)
     }
     
-    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol, notifyOtherParticipants: Bool) {
+    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol) {
         let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         presentCallScreen(configuration: .init(roomProxy: roomProxy,
                                                clientProxy: userSession.clientProxy,
                                                clientID: InfoPlistReader.main.bundleIdentifier,
                                                elementCallBaseURL: appSettings.elementCallBaseURL,
                                                elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
-                                               colorScheme: colorScheme,
-                                               notifyOtherParticipants: notifyOtherParticipants))
+                                               colorScheme: colorScheme))
     }
     
     private var callScreenPictureInPictureController: AVPictureInPictureController?
@@ -833,7 +831,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 navigationSplitCoordinator.setSheetCoordinator(nil)
                 stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
             case .startCall(let roomID):
-                Task { await self.presentCallScreen(roomID: roomID, notifyOtherParticipants: false) }
+                Task { await self.presentCallScreen(roomID: roomID) }
             case .dismiss:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }
