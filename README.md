@@ -9,7 +9,7 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=element-x-ios&metric=bugs)](https://sonarcloud.io/summary/new_code?id=element-x-ios)
 
-# Element X iOS
+# SevenChat iOS
 
 Element X iOS is the next-generation [Matrix](https://matrix.org/) client provided by [Element](https://element.io/).
 
