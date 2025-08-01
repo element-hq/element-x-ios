@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "dc273bd1fbb08c41ab517574b39c23ef667718c9",
-        "version" : "0.13.1"
+        "revision" : "5cfbd1b1d7fb5c3333dd9a8a43130e875a8ec56b",
+        "version" : "0.14.0"
       }
     },
     {
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/matrix-rust-components-swift",
       "state" : {
-        "revision" : "98e28f3ad2b54525f6abb17ab8e2ad49e6bf3614",
-        "version" : "25.7.29"
+        "revision" : "7e51369bc9407e15295bfa94b96703063c7b7156",
+        "version" : "25.8.1"
       }
     },
     {
