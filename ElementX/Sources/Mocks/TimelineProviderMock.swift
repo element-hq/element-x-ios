@@ -33,14 +33,11 @@ class AutoUpdatingTimelineItemProviderMock: TimelineItemProvider {
             for _ in 0...100 {
                 try? await Task.sleep(for: .seconds(1))
                 
-                let diff = TimelineDiffSDKMock()
-                diff.changeReturnValue = .append
-                
                 let timelineItem = TimelineItemSDKMock()
                 timelineItem.asEventReturnValue = EventTimelineItem.mockMessage
                 timelineItem.uniqueIdReturnValue = .init(id: UUID().uuidString)
                 
-                diff.appendReturnValue = [timelineItem]
+                let diff = TimelineDiff.append(values: [timelineItem])
                 
                 await Self.timelineListener?.onUpdate(diff: [diff])
             }
