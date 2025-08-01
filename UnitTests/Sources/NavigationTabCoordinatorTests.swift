@@ -11,7 +11,8 @@ import XCTest
 
 @MainActor
 class NavigationTabCoordinatorTests: XCTestCase {
-    private var navigationTabCoordinator: NavigationTabCoordinator!
+    enum TestTab { case tab, chats, spaces }
+    private var navigationTabCoordinator: NavigationTabCoordinator<TestTab>!
     
     override func setUp() {
         navigationTabCoordinator = NavigationTabCoordinator()
@@ -21,21 +22,21 @@ class NavigationTabCoordinatorTests: XCTestCase {
         XCTAssertTrue(navigationTabCoordinator.tabCoordinators.isEmpty)
         
         let someCoordinator = SomeTestCoordinator()
-        navigationTabCoordinator.setTabs([.init(coordinator: someCoordinator, title: "Whatever", icon: \.help, selectedIcon: \.helpSolid)])
+        navigationTabCoordinator.setTabs([.init(coordinator: someCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
         assertCoordinatorsEqual(navigationTabCoordinator.tabCoordinators, [someCoordinator])
         
         let chatsCoordinator = SomeTestCoordinator()
         let spacesCoordinator = SomeTestCoordinator()
         navigationTabCoordinator.setTabs([
-            .init(coordinator: chatsCoordinator, title: "Chats", icon: \.chat, selectedIcon: \.chatSolid),
-            .init(coordinator: spacesCoordinator, title: "Spaces", icon: \.space, selectedIcon: \.spaceSolid)
+            .init(coordinator: chatsCoordinator, details: .init(tag: .chats, title: "Chats", icon: \.chat, selectedIcon: \.chatSolid)),
+            .init(coordinator: spacesCoordinator, details: .init(tag: .spaces, title: "Spaces", icon: \.space, selectedIcon: \.spaceSolid))
         ])
         assertCoordinatorsEqual(navigationTabCoordinator.tabCoordinators, [chatsCoordinator, spacesCoordinator])
     }
     
     func testSingleSheet() {
         let tabCoordinator = SomeTestCoordinator()
-        navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, title: "Tab", icon: \.help, selectedIcon: \.helpSolid)])
+        navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
         
         let coordinator = SomeTestCoordinator()
         navigationTabCoordinator.setSheetCoordinator(coordinator)
@@ -51,7 +52,7 @@ class NavigationTabCoordinatorTests: XCTestCase {
     
     func testMultipleSheets() {
         let tabCoordinator = SomeTestCoordinator()
-        navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, title: "Tab", icon: \.help, selectedIcon: \.helpSolid)])
+        navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
         
         let sheetCoordinator = SomeTestCoordinator()
         navigationTabCoordinator.setSheetCoordinator(sheetCoordinator)
@@ -66,6 +67,22 @@ class NavigationTabCoordinatorTests: XCTestCase {
         assertCoordinatorsEqual(someOtherSheetCoordinator, navigationTabCoordinator.sheetCoordinator)
     }
     
+    func testFullScreenCover() {
+        let tabCoordinator = SomeTestCoordinator()
+        navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
+        
+        let coordinator = SomeTestCoordinator()
+        navigationTabCoordinator.setFullScreenCoverCoordinator(coordinator)
+        
+        assertCoordinatorsEqual(navigationTabCoordinator.tabCoordinators, [tabCoordinator])
+        assertCoordinatorsEqual(coordinator, navigationTabCoordinator.fullScreenCoverCoordinator)
+        
+        navigationTabCoordinator.setFullScreenCoverCoordinator(nil)
+        
+        assertCoordinatorsEqual(navigationTabCoordinator.tabCoordinators, [tabCoordinator])
+        XCTAssertNil(navigationTabCoordinator.fullScreenCoverCoordinator)
+    }
+    
     func testTabDismissalCallbacks() {
         let chatsCoordinator = SomeTestCoordinator()
         let spacesCoordinator = SomeTestCoordinator()
@@ -74,12 +91,12 @@ class NavigationTabCoordinatorTests: XCTestCase {
         expectation.expectedFulfillmentCount = 2
         
         navigationTabCoordinator.setTabs([
-            .init(coordinator: chatsCoordinator, title: "Chats", icon: \.chat, selectedIcon: \.chatSolid) { expectation.fulfill() },
-            .init(coordinator: spacesCoordinator, title: "Spaces", icon: \.space, selectedIcon: \.spaceSolid) { expectation.fulfill() }
+            .init(coordinator: chatsCoordinator, details: .init(tag: .chats, title: "Chats", icon: \.chat, selectedIcon: \.chatSolid)) { expectation.fulfill() },
+            .init(coordinator: spacesCoordinator, details: .init(tag: .spaces, title: "Spaces", icon: \.space, selectedIcon: \.spaceSolid)) { expectation.fulfill() }
         ])
         assertCoordinatorsEqual(navigationTabCoordinator.tabCoordinators, [chatsCoordinator, spacesCoordinator])
         
-        navigationTabCoordinator.setTabs([.init(coordinator: SomeTestCoordinator(), title: "Whatever", icon: \.help, selectedIcon: \.helpSolid)])
+        navigationTabCoordinator.setTabs([.init(coordinator: SomeTestCoordinator(), details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
         waitForExpectations(timeout: 1.0)
     }
     
@@ -91,6 +108,17 @@ class NavigationTabCoordinatorTests: XCTestCase {
         }
         
         navigationTabCoordinator.setSheetCoordinator(nil)
+        waitForExpectations(timeout: 1.0)
+    }
+    
+    func testFullScreenCoverDismissalCallback() {
+        let coordinator = SomeTestCoordinator()
+        let expectation = expectation(description: "Wait for callback")
+        navigationTabCoordinator.setFullScreenCoverCoordinator(coordinator) {
+            expectation.fulfill()
+        }
+        
+        navigationTabCoordinator.setFullScreenCoverCoordinator(nil)
         waitForExpectations(timeout: 1.0)
     }
     
