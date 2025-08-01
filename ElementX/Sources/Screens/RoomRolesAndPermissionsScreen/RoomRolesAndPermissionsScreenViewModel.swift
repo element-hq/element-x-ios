@@ -14,6 +14,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
     private let roomProxy: JoinedRoomProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
+    private var ownUser: RoomMemberDetails?
     
     private var actionsSubject: PassthroughSubject<RoomRolesAndPermissionsScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<RoomRolesAndPermissionsScreenViewModelAction, Never> {
@@ -84,9 +85,13 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
     // MARK: - Members
     
     private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
-        // TODO: Will probably be changed when we implement the owners list
-        state.administratorCount = members.filter { $0.role.isAdminOrHigher && $0.isActive }.count
+        state.administratorsAndOwnersCount = members.filter { $0.role.isAdminOrHigher && $0.isActive }.count
+        state.administratorCount = members.filter { $0.role == .administrator && $0.isActive }.count
         state.moderatorCount = members.filter { $0.role == .moderator && $0.isActive }.count
+        if let ownUser = members.first(where: { $0.userID == roomProxy.ownUserID }) {
+            state.roles = [.administrators(ownUserRole: .init(ownUser.role, powerLevel: ownUser.powerLevel)),
+                           .moderators]
+        }
     }
     
     private func updateOwnRole(_ role: RoomMemberDetails.Role) async {
@@ -142,7 +147,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         
         hideSavingIndicator()
     }
-    
+        
     // MARK: Loading indicator
     
     private static let savingIndicatorID = "RolesAndPermissionsSaving"

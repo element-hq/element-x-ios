@@ -10,10 +10,22 @@ import SwiftUI
 
 struct RoomChangeRolesScreenSection: View {
     let members: [RoomMemberDetails]
-    let title: String
-    var isAdministratorsSection = false
+    let role: RoomMemberDetails.Role
     
     let context: RoomChangeRolesScreenViewModel.Context
+    
+    var title: String {
+        switch role {
+        case .creator, .owner:
+            "Owners"
+        case .administrator:
+            L10n.screenRoomChangeRoleSectionAdministrators
+        case .moderator:
+            L10n.screenRoomChangeRoleSectionModerators
+        case .user:
+            L10n.screenRoomChangeRoleSectionUsers
+        }
+    }
     
     var body: some View {
         if !members.isEmpty {
@@ -21,25 +33,20 @@ struct RoomChangeRolesScreenSection: View {
                 ForEach(members, id: \.id) { member in
                     RoomChangeRolesScreenRow(member: member,
                                              mediaProvider: context.mediaProvider,
-                                             isSelected: isMemberSelected(member)) {
+                                             isSelected: context.viewState.isMemberSelected(member)) {
                         context.send(viewAction: .toggleMember(member))
                     }
-                    .disabled(member.role.isAdminOrHigher)
+                    .disabled(context.viewState.isMemberDisabled(member))
                 }
             } header: {
                 Text(title)
                     .compoundListSectionHeader()
             } footer: {
-                if isAdministratorsSection, context.viewState.mode == .moderator {
+                if role == .administrator, context.viewState.mode == .moderator {
                     Text(L10n.screenRoomChangeRoleModeratorsAdminSectionFooter)
                         .compoundListSectionFooter()
                 }
             }
         }
-    }
-    
-    private func isMemberSelected(_ member: RoomMemberDetails) -> Bool {
-        // We always show administrators as selected, even on the moderators screen.
-        member.role.isAdminOrHigher || context.viewState.isMemberSelected(member)
     }
 }

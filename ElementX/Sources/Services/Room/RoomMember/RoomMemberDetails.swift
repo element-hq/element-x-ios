@@ -19,17 +19,17 @@ struct RoomMemberDetails: Identifiable, Hashable {
     var isBanned: Bool
     var isActive: Bool
         
-    enum Role {
-        /// Creator of the room, PL infinite
-        case creator
-        /// Same power of an admin, but they can also upgrade the room, PL 150 onwards
-        case owner
-        /// Able to edit room settings and perform any action aside from room upgrading PL 100...149
-        case administrator
-        /// Able to perform room moderation actions PL 50...99
-        case moderator
+    enum Role: Comparable {
         /// Default role PL 0...49
         case user
+        /// Able to perform room moderation actions PL 50...99
+        case moderator
+        /// Able to edit room settings and perform any action aside from room upgrading PL 100...149
+        case administrator
+        /// Same power of an admin, but they can also upgrade the room, PL 150 onwards
+        case owner
+        /// Creator of the room, PL infinite
+        case creator
     }
 
     let role: Role

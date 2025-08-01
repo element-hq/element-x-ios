@@ -20,22 +20,16 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(mode: RoomMemberDetails.Role,
+    init(mode: RoomChangeRolesMode,
          roomProxy: JoinedRoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
-        guard mode != .user else { fatalError("Invalid screen configuration: \(mode)") }
-        
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
         
-        super.init(initialViewState: RoomChangeRolesScreenViewState(mode: mode,
-                                                                    administrators: [],
-                                                                    moderators: [],
-                                                                    users: [],
-                                                                    bindings: .init()),
+        super.init(initialViewState: RoomChangeRolesScreenViewState(mode: mode),
                    mediaProvider: mediaProvider)
         
         roomProxy.membersPublisher
@@ -64,7 +58,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         case .demoteMember(let member):
             demoteMember(member)
         case .save:
-            if state.mode.isAdminOrHigher, !state.membersToPromote.isEmpty {
+            if state.mode.promotingRole.isAdminOrHigher, !state.membersToPromote.isEmpty {
                 showPromotionWarning()
             } else {
                 Task { await save() }
@@ -77,6 +71,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
     // MARK: - Private
     
     private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
+        var owners = [RoomMemberDetails]()
         var administrators = [RoomMemberDetails]()
         var moderators = [RoomMemberDetails]()
         var users = [RoomMemberDetails]()
@@ -85,9 +80,10 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
             guard member.isActive else { continue }
             let memberDetails = RoomMemberDetails(withProxy: member)
             
-            switch member.role {
-            // TODO: Create a owner list
-            case .administrator, .creator:
+            switch memberDetails.role {
+            case .creator, .owner:
+                owners.append(memberDetails)
+            case .administrator:
                 administrators.append(memberDetails)
             case .moderator:
                 moderators.append(memberDetails)
@@ -96,6 +92,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
             }
         }
         
+        state.owners = owners
         state.administrators = administrators
         state.moderators = moderators
         state.users = users
@@ -107,9 +104,9 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         } else if state.membersToDemote.contains(member) {
             state.membersToDemote.remove(member)
             state.lastPromotedMember = member
-        } else if member.role == state.mode {
+        } else if member.role >= state.mode.promotingRole, member.role <= state.mode.maxDemotableRole {
             state.membersToDemote.insert(member)
-        } else {
+        } else if member.role < state.mode.promotingRole {
             state.membersToPromote.insert(member)
             state.lastPromotedMember = member
         }
@@ -140,7 +137,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
             hideSavingIndicator()
         }
         
-        let promotingUpdates = state.membersToPromote.map { ($0.id, state.mode.powerLevelValue) }
+        let promotingUpdates = state.membersToPromote.map { ($0.id, state.mode.promotingRole.powerLevelValue) }
         let demotingUpdates = state.membersToDemote.map { ($0.id, Int64(0)) }
         
         // A task we can await until the room's info gets modified with the new power levels.
@@ -191,7 +188,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
     
     private func trackChanges(promotionCount: Int, demotionCount: Int) {
         for _ in 0..<promotionCount {
-            analytics.trackRoomModeration(action: .ChangeMemberRole, role: state.mode)
+            analytics.trackRoomModeration(action: .ChangeMemberRole, role: state.mode.promotingRole)
         }
         
         for _ in 0..<demotionCount {

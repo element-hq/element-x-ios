@@ -26,21 +26,9 @@ struct RoomRolesAndPermissionsScreen: View {
     
     private var rolesSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdmins,
-                                    icon: \.admin),
-                    details: administratorDetails,
-                    kind: .navigationLink {
-                        context.send(viewAction: .editRoles(.administrators))
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
-            
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsModerators,
-                                    icon: \.chatProblem),
-                    details: moderatorDetails,
-                    kind: .navigationLink {
-                        context.send(viewAction: .editRoles(.moderators))
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
+            ForEach(context.viewState.roles, id: \.self) { role in
+                listRow(for: role)
+            }
             
             ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
                                     icon: \.edit),
@@ -50,6 +38,47 @@ struct RoomRolesAndPermissionsScreen: View {
         } header: {
             Text(L10n.screenRoomRolesAndPermissionsRolesHeader)
                 .compoundListSectionHeader()
+        }
+    }
+    
+    @ViewBuilder
+    private func listRow(for role: RoomRolesAndPermissionsScreenRole) -> some View {
+        switch role {
+        case .administrators(let ownUserRole):
+            switch ownUserRole {
+            case .creator:
+                ListRow(label: .default(title: "Admin or owners",
+                                        icon: \.admin),
+                        details: administratorDetails,
+                        kind: .navigationLink {
+                            context.send(viewAction: .editRoles(role))
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
+            default:
+                ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdmins,
+                                        icon: \.admin),
+                        details: administratorDetails,
+                        kind: .navigationLink {
+                            context.send(viewAction: .editRoles(role))
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
+            }
+        case .moderators:
+            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsModerators,
+                                    icon: \.chatProblem),
+                    details: moderatorDetails,
+                    kind: .navigationLink {
+                        context.send(viewAction: .editRoles(.moderators))
+                    })
+                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
+        }
+    }
+    
+    private var administratorOrOwnersDetails: ListRowDetails<Image> {
+        if let administratorCount = context.viewState.administratorsAndOwnersCount {
+            .title("\(administratorCount)")
+        } else {
+            .isWaiting(true)
         }
     }
     
