@@ -223,7 +223,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
                     .toolbar(module.details.barVisibility, for: .tabBar)
             }
         }
-        .introspect(.tabView, on: .iOS(.v18), customize: configureAppearance)
+        .introspect(.tabView, on: .supportedVersions, customize: configureAppearance)
         .sheet(item: $navigationTabCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()
                 .id(module.id)
