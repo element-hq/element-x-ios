@@ -76,7 +76,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         }
         
         async let useEncryption = (try? room.latestEncryptionState() == .encrypted) ?? false
-        async let direct = room.isDirect()
+        async let isDirect = room.isDirect()
         let widgetSettings: WidgetSettings
         
         do {
@@ -100,7 +100,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
                                                                                 sentryDsn: analyticsConfiguration?.sentryDSN,
                                                                                 sentryEnvironment: nil,
                                                                                 controlledMediaDevices: !ProcessInfo.processInfo.isiOSAppOnMac,
-                                                                                sendNotificationType: direct ? .ring : .notification))
+                                                                                sendNotificationType: isDirect ? .ring : .notification))
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)
