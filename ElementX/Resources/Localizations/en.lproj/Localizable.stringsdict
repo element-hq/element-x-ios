@@ -253,7 +253,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Pinned message</string>
+			<string>%1$d Tin nhắn đã ghim</string>
 			<key>other</key>
 			<string>%1$d Tin nhắn đã ghim</string>
 		</dict>
