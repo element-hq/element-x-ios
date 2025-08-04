@@ -1155,18 +1155,19 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentFeedDetailsScreen(_ post: HomeScreenPost,
                                           feedProtocol: FeedProtocol?,
-                                          showSheetCoodinator: Bool = false) {
+                                          childStackCoordinator: NavigationStackCoordinator? = nil) {
+        let stackCoordinator = childStackCoordinator ?? NavigationStackCoordinator()
         let parameters = FeedDetailsScreenCoordinatorParameters(userSession: userSession,
                                                                 feedProtocol: feedProtocol,
                                                                 feedItem: post,
-                                                                isFeedDetailsRefreshable: true)
+                                                                isFeedDetailsRefreshable: childStackCoordinator == nil)
         let coordinator = FeedDetailsScreenCoordinator(parameters: parameters)
         coordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
                 case .replyTapped(let reply):
-                    presentFeedDetailsScreen(reply, feedProtocol: feedProtocol, showSheetCoodinator: true)
+                    presentFeedDetailsScreen(reply, feedProtocol: feedProtocol, childStackCoordinator: stackCoordinator)
                 case .attachMedia(let attachMediaProtocol):
                     presentMediaUploadPickerWithSource(attachMediaProtocol,
                                                        stackCoordinator: NavigationStackCoordinator(),
@@ -1176,12 +1177,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
-        sidebarNavigationStackCoordinator.push(coordinator)
-//        if showSheetCoodinator {
-//            navigationSplitCoordinator.setSheetCoordinator(coordinator)
-//        } else {
-//            navigationSplitCoordinator.setDetailCoordinator(coordinator)
-//        }
+//        sidebarNavigationStackCoordinator.push(coordinator)
+        if let childStackCoordinator {
+            childStackCoordinator.push(coordinator)
+        } else {
+            stackCoordinator.setRootCoordinator(coordinator)
+            navigationSplitCoordinator.setSheetCoordinator(stackCoordinator)
+        }
     }
     
     private func presentCreateFeedScreen(_ feedProtocol: FeedProtocol) {

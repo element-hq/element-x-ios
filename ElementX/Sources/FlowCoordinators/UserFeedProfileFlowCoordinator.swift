@@ -95,11 +95,11 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .feedTapped(let feed):
-                    navigationStackCoordinator.setSheetCoordinator(nil)
                     if fromHomeFlow {
+                        navigationStackCoordinator.setSheetCoordinator(nil)
                         actionsSubject.send(.presentFeedDetails(feed: feed))
                     } else {
-                        presentFeedDetailsScreen(feed, feedProtocol: feedProtocol)
+                        presentFeedDetailsScreen(feed, feedProtocol: feedProtocol, stackCoordinator: stackCoordinator)
                     }
                 case .openDirectChat(let roomId):
                     navigationStackCoordinator.setSheetCoordinator(nil)
@@ -117,8 +117,8 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentFeedDetailsScreen(_ post: HomeScreenPost,
                                           feedProtocol: FeedProtocol?,
-                                          isChildFeed: Bool = false) {
-        let stackCoordinator = NavigationStackCoordinator()
+                                          isChildFeed: Bool = false,
+                                          stackCoordinator: NavigationStackCoordinator) {
         let parameters = FeedDetailsScreenCoordinatorParameters(userSession: userSession,
                                                                 feedProtocol: feedProtocol,
                                                                 feedItem: post,
@@ -129,7 +129,7 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .replyTapped(let reply):
-                    presentFeedDetailsScreen(reply, feedProtocol: feedProtocol, isChildFeed: true)
+                    presentFeedDetailsScreen(reply, feedProtocol: feedProtocol, isChildFeed: true, stackCoordinator: stackCoordinator)
                 case .attachMedia(let attachMediaProtocol):
                     presentMediaUploadPickerWithSource(attachMediaProtocol, stackCoordinator: stackCoordinator)
                 case .openPostUserProfile( _):
@@ -137,14 +137,7 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
-        stackCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.push(stackCoordinator) { [weak self] in
-            if !isChildFeed {
-                Task {
-                    await self?.presentUserFeedProfileScreen()
-                }
-            }
-        }
+        stackCoordinator.push(coordinator)
     }
     
     private func presentMediaUploadPickerWithSource(_ attachMediaProtocol: FeedMediaSelectedProtocol,

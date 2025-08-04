@@ -58,16 +58,16 @@ struct ZeroProSubcriptionScreenView: View {
                     }
                     .padding(.top, 12)
                     
-//                    HorizontalDivider()
-//                        .padding(.vertical, 24)
-//                    
-//                    if context.viewState.isZeroProSubscriber {
-//                        manageZeroProSubscription
-//                    } else {
-//                        if context.viewState.canPurchaseSubscription {
-//                            subscribeToZeroProButton
-//                        }
-//                    }
+                    HorizontalDivider()
+                        .padding(.vertical, 24)
+                    
+                    if context.viewState.isZeroProSubscriber {
+                        manageZeroProSubscription
+                    } else {
+                        if context.viewState.canPurchaseSubscription {
+                            subscribeToZeroProButton
+                        }
+                    }
                 }
                 .frame(maxWidth: .infinity)
             }))
@@ -156,12 +156,12 @@ private struct ZeroSubscriptionModalView : View {
                     
                     Spacer()
                     
-                    Text("$\(ZeroContants.ZERO_PRO_SUBSCRIPTION_USD) / month")
+                    Text("$\(ZeroContants.ZERO_PRO_SUBSCRIPTION_USD.formatToThousandSeparatedString()) / month")
                         .font(.compound.bodyMD)
                         .foregroundColor(.compound.textPrimary)
                 }
                 
-                Text("$\(ZeroContants.ZERO_PRO_SUBSCRIPTION_USD * 12) per year, billed monthly")
+                Text("$\((ZeroContants.ZERO_PRO_SUBSCRIPTION_USD * 12).formatToThousandSeparatedString()) per year, billed monthly")
                     .font(.compound.bodySM)
                     .foregroundColor(.compound.textSecondary)
             }

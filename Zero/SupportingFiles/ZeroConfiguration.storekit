@@ -20,7 +20,7 @@
     "_applicationInternalID" : "6476882926",
     "_developerTeamID" : "UDZQVRDAAC",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 773786678.39975703,
+    "_lastSynchronizedDate" : 776021096.16064501,
     "_storeKitErrors" : [
       {
         "current" : null,
@@ -84,7 +84,7 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "0.99",
+          "displayPrice" : "14.99",
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "6748364919",

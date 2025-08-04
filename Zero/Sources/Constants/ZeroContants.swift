@@ -9,7 +9,7 @@ enum ZeroContants {
     static let ZERO_APP_STORE_APP_ID = "6476882926"
     
     static let accountProvider: String = ZeroContants.appServer.matrixHomeServerUrl.replacingOccurrences(of: "https://", with: "")
-    static let ZERO_PRO_SUBSCRIPTION_USD: Int = 13
+    static let ZERO_PRO_SUBSCRIPTION_USD: Double = 14.99
 }
 
 protocol AppServer {
