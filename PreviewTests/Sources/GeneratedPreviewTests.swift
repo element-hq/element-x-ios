@@ -875,6 +875,12 @@ extension PreviewTests {
         }
     }
 
+    func testSpaceListScreen() async throws {
+        for (index, preview) in SpaceListScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testSplashScreen() async throws {
         for (index, preview) in SplashScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

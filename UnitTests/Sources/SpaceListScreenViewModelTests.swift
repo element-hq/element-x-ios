@@ -1,0 +1,52 @@
+//
+// Copyright 2022-2024 New Vector Ltd.
+//
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+// Please see LICENSE files in the repository root for full details.
+//
+
+import XCTest
+
+@testable import ElementX
+
+@MainActor
+class SpaceListScreenViewModelTests: XCTestCase {
+    var viewModel: SpaceListScreenViewModelProtocol!
+    
+    var context: SpaceListScreenViewModelType.Context {
+        viewModel.context
+    }
+    
+    override func setUpWithError() throws {
+        viewModel = SpaceListScreenViewModel()
+    }
+
+    func testInitialState() {
+        XCTAssertFalse(context.composerText.isEmpty)
+        XCTAssertEqual(context.viewState.counter, 0)
+    }
+
+    func testTextField() async throws {
+        context.composerText = "123"
+        context.send(viewAction: .textChanged)
+        XCTAssertEqual(context.composerText, "123")
+    }
+    
+    func testCounter() async throws {
+        var deferred = deferFulfillment(context.observe(\.viewState.counter)) { $0 == 1 }
+        context.send(viewAction: .incrementCounter)
+        try await deferred.fulfill()
+        XCTAssertEqual(context.viewState.counter, 1)
+        
+        deferred = deferFulfillment(context.observe(\.viewState.counter)) { $0 == 3 }
+        context.send(viewAction: .incrementCounter)
+        context.send(viewAction: .incrementCounter)
+        try await deferred.fulfill()
+        XCTAssertEqual(context.viewState.counter, 3)
+        
+        deferred = deferFulfillment(context.observe(\.viewState.counter)) { $0 == 2 }
+        context.send(viewAction: .decrementCounter)
+        try await deferred.fulfill()
+        XCTAssertEqual(context.viewState.counter, 2)
+    }
+}
