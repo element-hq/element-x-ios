@@ -16,37 +16,18 @@ class SpaceListScreenViewModelTests: XCTestCase {
     var context: SpaceListScreenViewModelType.Context {
         viewModel.context
     }
-    
-    override func setUpWithError() throws {
-        viewModel = SpaceListScreenViewModel()
-    }
 
     func testInitialState() {
-        XCTAssertFalse(context.composerText.isEmpty)
-        XCTAssertEqual(context.viewState.counter, 0)
-    }
-
-    func testTextField() async throws {
-        context.composerText = "123"
-        context.send(viewAction: .textChanged)
-        XCTAssertEqual(context.composerText, "123")
+        setupViewModel()
+        XCTAssertTrue(context.viewState.rooms.isEmpty)
+        XCTAssertEqual(context.viewState.joinedRoomsCount, 0)
     }
     
-    func testCounter() async throws {
-        var deferred = deferFulfillment(context.observe(\.viewState.counter)) { $0 == 1 }
-        context.send(viewAction: .incrementCounter)
-        try await deferred.fulfill()
-        XCTAssertEqual(context.viewState.counter, 1)
-        
-        deferred = deferFulfillment(context.observe(\.viewState.counter)) { $0 == 3 }
-        context.send(viewAction: .incrementCounter)
-        context.send(viewAction: .incrementCounter)
-        try await deferred.fulfill()
-        XCTAssertEqual(context.viewState.counter, 3)
-        
-        deferred = deferFulfillment(context.observe(\.viewState.counter)) { $0 == 2 }
-        context.send(viewAction: .decrementCounter)
-        try await deferred.fulfill()
-        XCTAssertEqual(context.viewState.counter, 2)
+    // MARK: - Helpers
+    
+    private func setupViewModel() {
+        let clientProxy = ClientProxyMock(.init())
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        viewModel = SpaceListScreenViewModel(userSession: userSession)
     }
 }
