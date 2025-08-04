@@ -362,7 +362,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     }
                     
                     if isLastOwner {
-                        // TODO: Present an alert that sends to the RoomRoleChangeScreen
+                        state.bindings.alertInfo = .init(id: UUID(),
+                                                         title: "Transfer",
+                                                         message: "Ownership",
+                                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                                         secondaryButton: .init(title: "Choose", role: .destructive, action: { [weak self] in self?.actionsSubject.send(.transferOwnership(roomIdentifier: roomID)) }))
                         return
                     }
                 }

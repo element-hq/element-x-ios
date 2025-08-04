@@ -189,7 +189,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             }
             
             if isLastOwner {
-                // TODO: Present an alert that sends to the RoomRoleChangeScreen
+                state.bindings.alertInfo = .init(id: .lastOwner,
+                                                 title: "Transfer",
+                                                 message: "Ownership",
+                                                 primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                                 secondaryButton: .init(title: "Choose", role: .destructive, action: { [weak self] in self?.actionsSubject.send(.transferOwnership) }))
                 return
             }
         }

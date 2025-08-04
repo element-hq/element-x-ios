@@ -49,7 +49,7 @@ struct RoomRolesAndPermissionsScreen: View {
             case .creator:
                 ListRow(label: .default(title: "Admin or owners",
                                         icon: \.admin),
-                        details: administratorDetails,
+                        details: administratorOrOwnersDetails,
                         kind: .navigationLink {
                             context.send(viewAction: .editRoles(role))
                         })

@@ -24,6 +24,7 @@ enum HomeScreenCoordinatorAction {
     case presentReportRoom(roomIdentifier: String)
     case presentDeclineAndBlock(userID: String, roomID: String)
     case roomLeft(roomIdentifier: String)
+    case transferOwnership(roomIdentifier: String)
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentSecureBackupSettings
@@ -86,6 +87,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.logout)
                 case .presentDeclineAndBlock(let userID, let roomID):
                     actionsSubject.send(.presentDeclineAndBlock(userID: userID, roomID: roomID))
+                case .transferOwnership(let roomIdentifier):
+                    actionsSubject.send(.transferOwnership(roomIdentifier: roomIdentifier))
                 }
             }
             .store(in: &cancellables)

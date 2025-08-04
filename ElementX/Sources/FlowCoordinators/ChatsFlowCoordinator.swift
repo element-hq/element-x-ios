@@ -202,6 +202,12 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             }
         case .accountProvisioningLink:
             break // We always ignore this flow when logged in.
+        case .transferOwnership(let roomID):
+            if stateMachine.state.roomListSelectedRoomID == roomID {
+                roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+            } else {
+                stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .transferOwnership))
+            }
         }
     }
     
@@ -232,6 +238,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                     case .roomDetails: .roomDetails(roomID: roomID)
                     case .eventID(let eventID): .event(eventID: eventID, roomID: roomID, via: via) // ignored.
                     case .share(let payload): .share(payload)
+                    case .transferOwnership: .transferOwnership(roomID: roomID)
                     }
                     roomFlowCoordinator.handleAppRoute(route, animated: animated)
                 } else {
@@ -449,6 +456,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                     actionsSubject.send(.logout)
                 case .presentDeclineAndBlock(let userID, let roomID):
                     stateMachine.processEvent(.presentDeclineAndBlockScreen(userID: userID, roomID: roomID))
+                case .transferOwnership(let roomIdentifier):
+                    handleAppRoute(.transferOwnership(roomID: roomIdentifier), animated: true)
                 }
             }
             .store(in: &cancellables)
@@ -555,6 +564,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: animated)
         case .share(let payload):
             coordinator.handleAppRoute(.share(payload), animated: animated)
+        case .transferOwnership:
+            coordinator.handleAppRoute(.transferOwnership(roomID: roomID), animated: animated)
         }
                 
         Task {
