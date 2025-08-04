@@ -106,10 +106,6 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
-        if credentials.restorationToken.passphrase != nil {
-            MXLog.info("Restoring client with encrypted store.")
-        }
-        
         guard credentials.restorationToken.sessionDirectories.isNonTransientUserDataValid() else {
             MXLog.error("Failed restoring login, missing non-transient user data")
             return .failure(.failedRestoringLogin)

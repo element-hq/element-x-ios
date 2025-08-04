@@ -107,7 +107,6 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
         }
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
     private func buildDiff(from diff: TimelineDiff, on itemProxies: [TimelineItemProxy]) -> CollectionDifference<TimelineItemProxy>? {
         var changes = [CollectionDifference<TimelineItemProxy>.Change]()
         
