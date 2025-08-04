@@ -58,11 +58,16 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         case .demoteMember(let member):
             demoteMember(member)
         case .save:
-            if state.mode.promotingRole.isAdminOrHigher, !state.membersToPromote.isEmpty {
-                showPromotionWarning()
-            } else {
-                Task { await save() }
+            if !state.membersToPromote.isEmpty {
+                if state.mode.promotingRole == .administrator {
+                    showPromotionWarning()
+                    return
+                } else if state.mode.promotingRole == .owner {
+                    showTransferOwnershipWarning()
+                    return
+                }
             }
+            Task { await save() }
         case .cancel:
             confirmDiscardChanges()
         }
@@ -125,6 +130,16 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
                                       title: L10n.screenRoomChangeRoleConfirmAddAdminTitle,
                                       message: L10n.screenRoomChangeRoleConfirmAddAdminDescription,
                                       primaryButton: .init(title: L10n.actionContinue) {
+                                          Task { await self.save() }
+                                      },
+                                      secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+    }
+    
+    private func showTransferOwnershipWarning() {
+        context.alertInfo = AlertInfo(id: .transferOwnershipWarning,
+                                      title: L10n.screenRoomChangeRoleConfirmChangeOwnersTitle,
+                                      message: L10n.screenRoomChangeRoleConfirmChangeOwnersDescription,
+                                      primaryButton: .init(title: L10n.actionContinue, role: .destructive) {
                                           Task { await self.save() }
                                       },
                                       secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))

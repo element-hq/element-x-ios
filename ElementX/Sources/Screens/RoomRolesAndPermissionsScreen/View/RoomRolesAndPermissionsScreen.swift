@@ -47,7 +47,7 @@ struct RoomRolesAndPermissionsScreen: View {
         case .administrators(let ownUserRole):
             switch ownUserRole {
             case .creator:
-                ListRow(label: .default(title: "Admin or owners",
+                ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdminsAndOwners,
                                         icon: \.admin),
                         details: administratorOrOwnersDetails,
                         kind: .navigationLink {

@@ -19,7 +19,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
     }
 
     func testInitialStateAdministrators() {
-        setupViewModel(mode: .administrator)
+        setupViewModel(mode: .administrator(ownUserRole: .administrator))
         XCTAssertEqual(context.viewState.membersToPromote, [])
         XCTAssertEqual(context.viewState.membersToDemote, [])
         XCTAssertEqual(context.viewState.administrators, context.viewState.visibleAdministrators)
@@ -167,7 +167,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
     
     func testSavePromotedAdministrator() async throws {
         // Given the change roles view model for administrators.
-        setupViewModel(mode: .administrator)
+        setupViewModel(mode: .administrator(ownUserRole: .administrator))
         XCTAssertNil(context.alertInfo)
         
         guard let firstUser = context.viewState.users.first(where: { !context.viewState.isMemberSelected($0) }) else {
@@ -192,7 +192,7 @@ class RoomChangeRolesScreenViewModelTests: XCTestCase {
         XCTAssertEqual(roomProxy.updatePowerLevelsForUsersReceivedUpdates?.contains { $0.userID == firstUser.id && $0.powerLevel == 100 }, true)
     }
     
-    private func setupViewModel(mode: RoomMemberDetails.Role) {
+    private func setupViewModel(mode: RoomChangeRolesMode) {
         roomProxy = JoinedRoomProxyMock(.init(members: .allMembersAsAdmin))
         viewModel = RoomChangeRolesScreenViewModel(mode: mode,
                                                    roomProxy: roomProxy,

@@ -40,7 +40,7 @@ struct RoomChangeRolesScreenViewState: BindableState {
         case .creator:
             "" // The screen can't be configured with this role.
         case .owner:
-            "Choose Owner"
+            L10n.screenRoomChangeRoleOwnersTitle
         case .administrator:
             L10n.screenRoomChangeRoleAdministratorsTitle
         case .moderator:
@@ -105,6 +105,8 @@ struct RoomChangeRolesScreenViewStateBindings {
 enum RoomChangeRolesScreenAlertType {
     /// A warning that a particular promotion can't be undone.
     case promotionWarning
+    /// A warning that ownership transfer is final when the room is left.
+    case transferOwnershipWarning
     /// A confirmation that the user would like to discard any unsaved changes.
     case discardChanges
     /// The generic error message.

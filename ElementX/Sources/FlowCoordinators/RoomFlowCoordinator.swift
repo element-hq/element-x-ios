@@ -198,8 +198,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             break // These are converted to a room ID route one level above.
         case .accountProvisioningLink, .roomList, .userProfile, .call, .genericCallLink, .settings, .chatBackupSettings:
             break // These routes can't be handled.
-        case .transferOwnership:
-            guard roomID == roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
+        case .transferOwnership(let roomID):
+            guard self.roomID == roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
             
             Task {
                 if roomProxy == nil {

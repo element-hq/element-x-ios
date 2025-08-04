@@ -17,7 +17,7 @@ struct RoomChangeRolesScreenSection: View {
     var title: String {
         switch role {
         case .creator, .owner:
-            "Owners"
+            L10n.screenRoomRolesAndPermissionsOwners
         case .administrator:
             L10n.screenRoomChangeRoleSectionAdministrators
         case .moderator:
@@ -43,6 +43,9 @@ struct RoomChangeRolesScreenSection: View {
                     .compoundListSectionHeader()
             } footer: {
                 if role == .administrator, context.viewState.mode == .moderator {
+                    Text(L10n.screenRoomChangeRoleModeratorsAdminSectionFooter)
+                        .compoundListSectionFooter()
+                } else if role.isOwner, context.viewState.mode == .administrator(ownUserRole: .creator) {
                     Text(L10n.screenRoomChangeRoleModeratorsAdminSectionFooter)
                         .compoundListSectionFooter()
                 }

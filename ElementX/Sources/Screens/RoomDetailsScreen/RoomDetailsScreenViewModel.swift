@@ -190,10 +190,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             
             if isLastOwner {
                 state.bindings.alertInfo = .init(id: .lastOwner,
-                                                 title: "Transfer",
-                                                 message: "Ownership",
+                                                 title: L10n.leaveRoomAlertSelectNewOwnerTitle,
+                                                 message: L10n.leaveRoomAlertSelectNewOwnerSubtitle,
                                                  primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                                 secondaryButton: .init(title: "Choose", role: .destructive, action: { [weak self] in self?.actionsSubject.send(.transferOwnership) }))
+                                                 secondaryButton: .init(title: L10n.leaveRoomAlertSelectNewOwnerAction, role: .destructive, action: { [weak self] in self?.actionsSubject.send(.transferOwnership) }))
                 return
             }
         }
