@@ -99,6 +99,9 @@ class TimelineTableViewController: UIViewController {
         }
     }
     
+    /// The previously focused event ID to detect when we need to scroll to a different event
+    private var previouslyFocusedEventID: String?
+    
     /// Whether or not the current timeline is live or built around an event ID.
     var isLive = true {
         didSet {
@@ -357,12 +360,24 @@ class TimelineTableViewController: UIViewController {
         
         dataSource.apply(snapshot, animatingDifferences: animated)
         
-        if let focussedEvent, focussedEvent.appearance != .hasAppeared {
-            scrollToItem(eventID: focussedEvent.eventID, animated: focussedEvent.appearance == .animated)
-        } else if let layout {
-            restoreLayout(layout)
-        } else if isSwitchingTimelines {
-            scrollToNewestItem(animated: false)
+        if let focussedEvent {
+            // Check if this is a new focused event or if we should force scroll
+            let shouldScrollToFocusedEvent = focussedEvent.appearance != .hasAppeared || 
+                                           previouslyFocusedEventID != focussedEvent.eventID
+            
+            if shouldScrollToFocusedEvent {
+                scrollToItem(eventID: focussedEvent.eventID, animated: focussedEvent.appearance == .animated)
+                previouslyFocusedEventID = focussedEvent.eventID
+            }
+        } else {
+            // Clear the previously focused event ID when there's no focused event
+            previouslyFocusedEventID = nil
+            
+            if let layout {
+                restoreLayout(layout)
+            } else if isSwitchingTimelines {
+                scrollToNewestItem(animated: false)
+            }
         }
         
         if isSwitchingTimelines {

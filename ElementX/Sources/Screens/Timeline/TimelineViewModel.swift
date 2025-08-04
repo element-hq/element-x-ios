@@ -252,6 +252,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     
     func focusOnEvent(eventID: String) async {
         if state.timelineState.hasLoadedItem(with: eventID) {
+            // Always set the focussed event with animated appearance to ensure scroll
+            // even if it was previously focused
             state.timelineState.focussedEvent = .init(eventID: eventID, appearance: .animated)
             return
         }
