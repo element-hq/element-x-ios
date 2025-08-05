@@ -9,22 +9,35 @@ import Compound
 import SwiftUI
 
 /// Class responsible for displaying an arbitrary number of coordinators within the tab bar.
-@Observable class NavigationTabCoordinator: CoordinatorProtocol, CustomStringConvertible {
+@Observable class NavigationTabCoordinator<Tag: Hashable>: CoordinatorProtocol, CustomStringConvertible {
     struct Tab {
         let coordinator: CoordinatorProtocol
+        let details: TabDetails
+        var dismissalCallback: (() -> Void)?
+    }
+    
+    @Observable class TabDetails {
+        /// A unique tab that identifies the tab for selection.
+        let tag: Tag
         let title: String
         let icon: KeyPath<CompoundIcons, Image>
         let selectedIcon: KeyPath<CompoundIcons, Image>
-        var dismissalCallback: (() -> Void)?
+        var badgeCount = 0
+        var barVisibility: Visibility = .automatic
+        
+        init(tag: Tag, title: String, icon: KeyPath<CompoundIcons, Image>, selectedIcon: KeyPath<CompoundIcons, Image>) {
+            self.tag = tag
+            self.title = title
+            self.icon = icon
+            self.selectedIcon = selectedIcon
+        }
     }
     
     // MARK: Tabs
     
     fileprivate struct TabModule: Identifiable {
         let module: NavigationModule
-        let title: String
-        let icon: KeyPath<CompoundIcons, Image>
-        let selectedIcon: KeyPath<CompoundIcons, Image>
+        let details: TabDetails
         
         var id: ObjectIdentifier { module.id }
         @MainActor var coordinator: CoordinatorProtocol? { module.coordinator }
@@ -57,12 +70,14 @@ import SwiftUI
         transaction.disablesAnimations = !animated
         
         withTransaction(transaction) {
-            tabModules = tabs.map { TabModule(module: .init($0.coordinator, dismissalCallback: $0.dismissalCallback),
-                                              title: $0.title,
-                                              icon: $0.icon,
-                                              selectedIcon: $0.selectedIcon) }
+            tabModules = tabs.map { TabModule(module: .init($0.coordinator, dismissalCallback: $0.dismissalCallback), details: $0.details) }
         }
+        
+        selectedTab = tabModules.first?.details.tag
     }
+    
+    /// The currently selected tab's tag.
+    var selectedTab: Tag?
     
     // MARK: Sheets
     
@@ -186,26 +201,29 @@ import SwiftUI
     }
 }
 
-private struct NavigationTabCoordinatorView: View {
-    @Bindable var navigationTabCoordinator: NavigationTabCoordinator
-    @State private var selectedTab: ObjectIdentifier?
+private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
+    @Bindable var navigationTabCoordinator: NavigationTabCoordinator<Tag>
+    
+    @State private var standardAppearance = UITabBarAppearance()
     
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $navigationTabCoordinator.selectedTab) {
             ForEach(navigationTabCoordinator.tabModules) { module in
                 module.coordinator?.toPresentable()
+                    .id(module.id)
                     .tabItem {
                         Label {
-                            Text(module.title)
+                            Text(module.details.title)
                         } icon: {
-                            CompoundIcon(module.id == selectedTab ? module.selectedIcon : module.icon)
+                            CompoundIcon(module.details.tag == navigationTabCoordinator.selectedTab ? module.details.selectedIcon : module.details.icon)
                         }
                     }
-                    .tag(module.id)
-                    .id(module.id)
-                    .toolbar(.hidden, for: .tabBar)
+                    .tag(module.details.tag)
+                    .badge(module.details.badgeCount)
+                    .toolbar(module.details.barVisibility, for: .tabBar)
             }
         }
+        .introspect(.tabView, on: .supportedVersions, customize: configureAppearance)
         .sheet(item: $navigationTabCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()
                 .id(module.id)
@@ -214,5 +232,11 @@ private struct NavigationTabCoordinatorView: View {
             module.coordinator?.toPresentable()
                 .id(module.id)
         }
+    }
+    
+    private func configureAppearance(_ tabBarController: UITabBarController) {
+        standardAppearance.configureWithDefaultBackground()
+        standardAppearance.stackedLayoutAppearance.normal.badgeBackgroundColor = .compound.iconAccentPrimary
+        tabBarController.tabBar.standardAppearance = standardAppearance
     }
 }

@@ -9188,7 +9188,7 @@
 			repositoryURL = "https://github.com/element-hq/compound-ios";
 			requirement = {
 				kind = revision;
-				revision = afc59afb1b1e4f4960e2f2a15e52d4e2e33fc889;
+				revision = 8d7ca2e413026735b724044847ff1ae3b40563f0;
 			};
 		};
 		F76A08D0EA29A07A54F4EB4D /* XCRemoteSwiftPackageReference "swift-collections" */ = {

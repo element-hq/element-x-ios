@@ -18,15 +18,19 @@ enum UserSessionFlowCoordinatorAction {
 }
 
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
+    enum HomeTab: Hashable { case chats, spaces }
+    
     private let userSession: UserSessionProtocol
     private let navigationRootCoordinator: NavigationRootCoordinator
-    private let navigationTabCoordinator: NavigationTabCoordinator
+    private let navigationTabCoordinator: NavigationTabCoordinator<HomeTab>
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
     
     private let onboardingFlowCoordinator: OnboardingFlowCoordinator
     private let onboardingStackCoordinator: NavigationStackCoordinator
     private let chatsFlowCoordinator: ChatsFlowCoordinator
+    private let chatsTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
+    private let spacesTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
     
     private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<UserSessionFlowCoordinatorAction, Never> {
@@ -68,6 +72,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     analytics: analytics,
                                                     notificationManager: notificationManager,
                                                     isNewLogin: isNewLogin)
+        chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
+        chatsTabDetails.barVisibility = .hidden
+        spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
         
         onboardingStackCoordinator = NavigationStackCoordinator()
         onboardingFlowCoordinator = OnboardingFlowCoordinator(userSession: userSession,
@@ -81,8 +88,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                               isNewLogin: isNewLogin)
         
         navigationTabCoordinator.setTabs([
-            .init(coordinator: chatsSplitCoordinator, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
-            // .init(coordinator: BlankFormCoordinator(), title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
+            .init(coordinator: chatsSplitCoordinator, details: chatsTabDetails),
+            .init(coordinator: BlankFormCoordinator(), details: spacesTabDetails)
         ])
         
         setupObservers()
@@ -103,17 +110,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         // There aren't any routes that directly target this flow yet, so pass them directly to the
         // chats flow coordinator.
-        #warning("This should switch tabs to make sure the route is visible.")
         chatsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+        navigationTabCoordinator.selectedTab = .chats
     }
     
     func clearRoute(animated: Bool) {
         chatsFlowCoordinator.clearRoute(animated: animated)
     }
     
-    #warning("This should use a publisher, combining it with the active tab.")
     func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
-        chatsFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID)
+        guard navigationTabCoordinator.selectedTab == .chats else { return false }
+        return chatsFlowCoordinator.isDisplayingRoomScreen(withRoomID: roomID)
     }
     
     // MARK: - Private
