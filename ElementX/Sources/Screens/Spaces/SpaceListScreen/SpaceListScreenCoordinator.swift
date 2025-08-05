@@ -12,6 +12,7 @@ import SwiftUI
 
 struct SpaceListScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
+    let spaceServiceProxy: SpaceServiceProxyProtocol
 }
 
 enum SpaceListScreenCoordinatorAction {
@@ -32,7 +33,8 @@ final class SpaceListScreenCoordinator: CoordinatorProtocol {
     init(parameters: SpaceListScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = SpaceListScreenViewModel(userSession: parameters.userSession)
+        viewModel = SpaceListScreenViewModel(userSession: parameters.userSession,
+                                             spaceServiceProxy: parameters.spaceServiceProxy)
     }
     
     func start() {

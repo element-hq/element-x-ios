@@ -19,7 +19,7 @@ class SpaceListScreenViewModelTests: XCTestCase {
 
     func testInitialState() {
         setupViewModel()
-        XCTAssertTrue(context.viewState.rooms.isEmpty)
+        XCTAssertEqual(context.viewState.rooms.count, 3)
         XCTAssertEqual(context.viewState.joinedRoomsCount, 0)
     }
     
@@ -28,6 +28,14 @@ class SpaceListScreenViewModelTests: XCTestCase {
     private func setupViewModel() {
         let clientProxy = ClientProxyMock(.init())
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        viewModel = SpaceListScreenViewModel(userSession: userSession)
+        
+        let joinedSpaces = [
+            SpaceRoomProxyMock(.init(isSpace: true)),
+            SpaceRoomProxyMock(.init(isSpace: true)),
+            SpaceRoomProxyMock(.init(isSpace: true))
+        ]
+        
+        viewModel = SpaceListScreenViewModel(userSession: userSession,
+                                             spaceServiceProxy: SpaceServiceProxyMock(.init(joinedSpaces: joinedSpaces)))
     }
 }

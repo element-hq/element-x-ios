@@ -15,6 +15,7 @@ enum SpaceExplorerFlowCoordinatorAction: Equatable {
 
 class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
+    private let spaceServiceProxy: SpaceServiceProxyProtocol
     
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
@@ -46,6 +47,8 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
          navigationSplitCoordinator: NavigationSplitCoordinator,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
+        spaceServiceProxy = userSession.clientProxy.spaceService()
+        
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.userIndicatorController = userIndicatorController
         
@@ -87,7 +90,7 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentSpaceList() {
-        let parameters = SpaceListScreenCoordinatorParameters(userSession: userSession)
+        let parameters = SpaceListScreenCoordinatorParameters(userSession: userSession, spaceServiceProxy: spaceServiceProxy)
         let coordinator = SpaceListScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }

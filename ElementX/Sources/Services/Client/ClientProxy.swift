@@ -766,6 +766,12 @@ class ClientProxy: ClientProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    // MARK: Spaces
+    
+    func spaceService() async -> SpaceServiceProxyProtocol {
+        await SpaceServiceProxy(spaceService: client.spacesService())
+    }
         
     // MARK: Ignored users
     

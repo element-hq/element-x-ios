@@ -11,14 +11,18 @@ import SwiftUI
 typealias SpaceListScreenViewModelType = StateStoreViewModelV2<SpaceListScreenViewState, SpaceListScreenViewAction>
 
 class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenViewModelProtocol {
+    private let spaceServiceProxy: SpaceServiceProxyProtocol
+    
     private let actionsSubject: PassthroughSubject<SpaceListScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SpaceListScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(userSession: UserSessionProtocol) {
+    init(userSession: UserSessionProtocol, spaceServiceProxy: SpaceServiceProxyProtocol) {
+        self.spaceServiceProxy = spaceServiceProxy
+        
         super.init(initialViewState: SpaceListScreenViewState(userID: userSession.clientProxy.userID,
-                                                              rooms: [],
+                                                              rooms: spaceServiceProxy.joinedSpaces(),
                                                               joinedRoomsCount: 0,
                                                               bindings: .init()),
                    mediaProvider: userSession.mediaProvider)

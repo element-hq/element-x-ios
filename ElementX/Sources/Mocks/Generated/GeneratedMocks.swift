@@ -4314,6 +4314,70 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return fetchMediaPreviewConfigurationReturnValue
         }
     }
+    //MARK: - spaceService
+
+    var spaceServiceUnderlyingCallsCount = 0
+    var spaceServiceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return spaceServiceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceServiceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceServiceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceServiceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var spaceServiceCalled: Bool {
+        return spaceServiceCallsCount > 0
+    }
+
+    var spaceServiceUnderlyingReturnValue: SpaceServiceProxyProtocol!
+    var spaceServiceReturnValue: SpaceServiceProxyProtocol! {
+        get {
+            if Thread.isMainThread {
+                return spaceServiceUnderlyingReturnValue
+            } else {
+                var returnValue: SpaceServiceProxyProtocol? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceServiceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceServiceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceServiceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var spaceServiceClosure: (() async -> SpaceServiceProxyProtocol)?
+
+    func spaceService() async -> SpaceServiceProxyProtocol {
+        spaceServiceCallsCount += 1
+        if let spaceServiceClosure = spaceServiceClosure {
+            return await spaceServiceClosure()
+        } else {
+            return spaceServiceReturnValue
+        }
+    }
     //MARK: - ignoreUser
 
     var ignoreUserUnderlyingCallsCount = 0
@@ -15834,6 +15898,9 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         }
     }
 }
+class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
+
+}
 class SpaceRoomProxyMock: SpaceRoomProxyProtocol, @unchecked Sendable {
     var id: String {
         get { return underlyingId }
@@ -15864,6 +15931,143 @@ class SpaceRoomProxyMock: SpaceRoomProxyProtocol, @unchecked Sendable {
     var underlyingGuestCanJoin: Bool!
     var state: Membership?
 
+}
+class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
+
+    //MARK: - joinedSpaces
+
+    var joinedSpacesUnderlyingCallsCount = 0
+    var joinedSpacesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return joinedSpacesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinedSpacesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinedSpacesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinedSpacesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var joinedSpacesCalled: Bool {
+        return joinedSpacesCallsCount > 0
+    }
+
+    var joinedSpacesUnderlyingReturnValue: [SpaceRoomProxyProtocol]!
+    var joinedSpacesReturnValue: [SpaceRoomProxyProtocol]! {
+        get {
+            if Thread.isMainThread {
+                return joinedSpacesUnderlyingReturnValue
+            } else {
+                var returnValue: [SpaceRoomProxyProtocol]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinedSpacesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinedSpacesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinedSpacesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var joinedSpacesClosure: (() -> [SpaceRoomProxyProtocol])?
+
+    func joinedSpaces() -> [SpaceRoomProxyProtocol] {
+        joinedSpacesCallsCount += 1
+        if let joinedSpacesClosure = joinedSpacesClosure {
+            return joinedSpacesClosure()
+        } else {
+            return joinedSpacesReturnValue
+        }
+    }
+    //MARK: - spaceRoomList
+
+    var spaceRoomListForUnderlyingCallsCount = 0
+    var spaceRoomListForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return spaceRoomListForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceRoomListForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceRoomListForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceRoomListForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var spaceRoomListForCalled: Bool {
+        return spaceRoomListForCallsCount > 0
+    }
+    var spaceRoomListForReceivedSpaceID: String?
+    var spaceRoomListForReceivedInvocations: [String] = []
+
+    var spaceRoomListForUnderlyingReturnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>!
+    var spaceRoomListForReturnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return spaceRoomListForUnderlyingReturnValue
+            } else {
+                var returnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceRoomListForUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceRoomListForUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceRoomListForUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var spaceRoomListForClosure: ((String) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>)?
+
+    func spaceRoomList(for spaceID: String) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError> {
+        spaceRoomListForCallsCount += 1
+        spaceRoomListForReceivedSpaceID = spaceID
+        DispatchQueue.main.async {
+            self.spaceRoomListForReceivedInvocations.append(spaceID)
+        }
+        if let spaceRoomListForClosure = spaceRoomListForClosure {
+            return await spaceRoomListForClosure(spaceID)
+        } else {
+            return spaceRoomListForReturnValue
+        }
+    }
 }
 class StaticRoomSummaryProviderMock: StaticRoomSummaryProviderProtocol, @unchecked Sendable {
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
