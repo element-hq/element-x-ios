@@ -4319,6 +4319,70 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return fetchMediaPreviewConfigurationReturnValue
         }
     }
+    //MARK: - spaceService
+
+    var spaceServiceUnderlyingCallsCount = 0
+    var spaceServiceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return spaceServiceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceServiceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceServiceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceServiceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var spaceServiceCalled: Bool {
+        return spaceServiceCallsCount > 0
+    }
+
+    var spaceServiceUnderlyingReturnValue: SpaceServiceProxyProtocol!
+    var spaceServiceReturnValue: SpaceServiceProxyProtocol! {
+        get {
+            if Thread.isMainThread {
+                return spaceServiceUnderlyingReturnValue
+            } else {
+                var returnValue: SpaceServiceProxyProtocol? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceServiceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceServiceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceServiceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var spaceServiceClosure: (() -> SpaceServiceProxyProtocol)?
+
+    func spaceService() -> SpaceServiceProxyProtocol {
+        spaceServiceCallsCount += 1
+        if let spaceServiceClosure = spaceServiceClosure {
+            return spaceServiceClosure()
+        } else {
+            return spaceServiceReturnValue
+        }
+    }
     //MARK: - ignoreUser
 
     var ignoreUserUnderlyingCallsCount = 0
@@ -15850,11 +15914,11 @@ class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
         set(value) { underlyingSpaceRoomsPublisher = value }
     }
     var underlyingSpaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never>!
-    var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListProxyPaginationState, Never> {
+    var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never> {
         get { return underlyingPaginationStatePublisher }
         set(value) { underlyingPaginationStatePublisher = value }
     }
-    var underlyingPaginationStatePublisher: CurrentValuePublisher<SpaceRoomListProxyPaginationState, Never>!
+    var underlyingPaginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never>!
 
     //MARK: - paginate
 
