@@ -47,11 +47,7 @@ final class NSEUserSession {
          appHooks: AppHooks,
          appSettings: CommonSettingsProtocol) async throws {
         sessionDirectories = credentials.restorationToken.sessionDirectories
-        
         userID = credentials.userID
-        if credentials.restorationToken.passphrase != nil {
-            MXLog.info("Restoring client with encrypted store.")
-        }
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
         let clientBuilder = ClientBuilder
