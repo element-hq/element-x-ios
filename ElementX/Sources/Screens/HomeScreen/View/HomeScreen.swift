@@ -40,7 +40,7 @@ struct HomeScreen: View {
                 LoadableAvatarImage(url: context.viewState.userAvatarURL,
                                     name: context.viewState.userDisplayName,
                                     contentID: context.viewState.userID,
-                                    avatarSize: .user(on: .home),
+                                    avatarSize: .user(on: .chats),
                                     mediaProvider: context.mediaProvider)
                     .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
                     .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)

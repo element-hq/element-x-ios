@@ -15834,6 +15834,173 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         }
     }
 }
+class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
+    var spaceRoom: SpaceRoomProxyProtocol {
+        get { return underlyingSpaceRoom }
+        set(value) { underlyingSpaceRoom = value }
+    }
+    var underlyingSpaceRoom: SpaceRoomProxyProtocol!
+    var spaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
+        get { return underlyingSpaceRoomsPublisher }
+        set(value) { underlyingSpaceRoomsPublisher = value }
+    }
+    var underlyingSpaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never>!
+    var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListProxyPaginationState, Never> {
+        get { return underlyingPaginationStatePublisher }
+        set(value) { underlyingPaginationStatePublisher = value }
+    }
+    var underlyingPaginationStatePublisher: CurrentValuePublisher<SpaceRoomListProxyPaginationState, Never>!
+
+    //MARK: - paginate
+
+    var paginateUnderlyingCallsCount = 0
+    var paginateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return paginateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginateUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var paginateCalled: Bool {
+        return paginateCallsCount > 0
+    }
+    var paginateClosure: (() async -> Void)?
+
+    func paginate() async {
+        paginateCallsCount += 1
+        await paginateClosure?()
+    }
+}
+class SpaceRoomProxyMock: SpaceRoomProxyProtocol, @unchecked Sendable {
+    var id: String {
+        get { return underlyingId }
+        set(value) { underlyingId = value }
+    }
+    var underlyingId: String!
+    var name: String?
+    var avatarURL: URL?
+    var isSpace: Bool {
+        get { return underlyingIsSpace }
+        set(value) { underlyingIsSpace = value }
+    }
+    var underlyingIsSpace: Bool!
+    var childrenCount: Int {
+        get { return underlyingChildrenCount }
+        set(value) { underlyingChildrenCount = value }
+    }
+    var underlyingChildrenCount: Int!
+    var joinedMembersCount: Int {
+        get { return underlyingJoinedMembersCount }
+        set(value) { underlyingJoinedMembersCount = value }
+    }
+    var underlyingJoinedMembersCount: Int!
+    var heroes: [UserProfileProxy] = []
+    var topic: String?
+    var canonicalAlias: String?
+    var joinRule: JoinRule?
+    var worldReadable: Bool?
+    var guestCanJoin: Bool {
+        get { return underlyingGuestCanJoin }
+        set(value) { underlyingGuestCanJoin = value }
+    }
+    var underlyingGuestCanJoin: Bool!
+    var state: Membership?
+
+}
+class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
+    var joinedSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
+        get { return underlyingJoinedSpacesPublisher }
+        set(value) { underlyingJoinedSpacesPublisher = value }
+    }
+    var underlyingJoinedSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never>!
+
+    //MARK: - spaceRoomList
+
+    var spaceRoomListForUnderlyingCallsCount = 0
+    var spaceRoomListForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return spaceRoomListForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceRoomListForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceRoomListForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceRoomListForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var spaceRoomListForCalled: Bool {
+        return spaceRoomListForCallsCount > 0
+    }
+    var spaceRoomListForReceivedSpaceRoom: SpaceRoomProxyProtocol?
+    var spaceRoomListForReceivedInvocations: [SpaceRoomProxyProtocol] = []
+
+    var spaceRoomListForUnderlyingReturnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>!
+    var spaceRoomListForReturnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return spaceRoomListForUnderlyingReturnValue
+            } else {
+                var returnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceRoomListForUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceRoomListForUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceRoomListForUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var spaceRoomListForClosure: ((SpaceRoomProxyProtocol) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>)?
+
+    func spaceRoomList(for spaceRoom: SpaceRoomProxyProtocol) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError> {
+        spaceRoomListForCallsCount += 1
+        spaceRoomListForReceivedSpaceRoom = spaceRoom
+        DispatchQueue.main.async {
+            self.spaceRoomListForReceivedInvocations.append(spaceRoom)
+        }
+        if let spaceRoomListForClosure = spaceRoomListForClosure {
+            return await spaceRoomListForClosure(spaceRoom)
+        } else {
+            return spaceRoomListForReturnValue
+        }
+    }
+}
 class StaticRoomSummaryProviderMock: StaticRoomSummaryProviderProtocol, @unchecked Sendable {
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
         get { return underlyingRoomListPublisher }

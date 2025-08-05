@@ -15,6 +15,7 @@ struct SpaceListScreen: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 header
+                spaces
             }
         }
         .navigationTitle(L10n.screenSpaceListTitle)
@@ -56,6 +57,16 @@ struct SpaceListScreen: View {
         }
     }
     
+    var spaces: some View {
+        ForEach(context.viewState.joinedSpaces, id: \.id) { spaceRoom in
+            SpaceRoomCell(spaceRoom: spaceRoom,
+                          isSelected: false,
+                          mediaProvider: context.mediaProvider) { action in
+                context.send(viewAction: .spaceAction(action))
+            }
+        }
+    }
+    
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
@@ -65,7 +76,7 @@ struct SpaceListScreen: View {
                 LoadableAvatarImage(url: context.viewState.userAvatarURL,
                                     name: context.viewState.userDisplayName,
                                     contentID: context.viewState.userID,
-                                    avatarSize: .user(on: .home),
+                                    avatarSize: .user(on: .spaces),
                                     mediaProvider: context.mediaProvider)
                     .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
                     .compositingGroup()
@@ -94,7 +105,56 @@ struct SpaceListScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(counterValue: Int = 0) -> SpaceListScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        let viewModel = SpaceListScreenViewModel(userSession: userSession)
+        let spaceService = SpaceServiceProxyMock(
+            .init(
+                joinedSpaces: [
+                    SpaceRoomProxyMock(.init(id: "space1",
+                                             name: "The Foundation",
+                                             isSpace: true,
+                                             childrenCount: 1,
+                                             joinedMembersCount: 500,
+                                             state: .joined)),
+                    SpaceRoomProxyMock(.init(id: "space2",
+                                             name: "The Second Foundation",
+                                             isSpace: true,
+                                             childrenCount: 1,
+                                             joinedMembersCount: 100,
+                                             state: .joined)),
+                    SpaceRoomProxyMock(.init(id: "space3",
+                                             name: "The Galactic Empire",
+                                             isSpace: true,
+                                             childrenCount: 25000,
+                                             joinedMembersCount: 1_000_000_000,
+                                             state: .joined)),
+                    SpaceRoomProxyMock(.init(id: "space4",
+                                             name: "The Korellians",
+                                             isSpace: true,
+                                             childrenCount: 27,
+                                             joinedMembersCount: 2_000_000,
+                                             state: .joined)),
+                    SpaceRoomProxyMock(.init(id: "space5",
+                                             name: "The Luminists",
+                                             isSpace: true,
+                                             childrenCount: 1,
+                                             joinedMembersCount: 100_000,
+                                             state: .joined)),
+                    SpaceRoomProxyMock(.init(id: "space6",
+                                             name: "The Anacreons",
+                                             isSpace: true,
+                                             childrenCount: 25,
+                                             joinedMembersCount: 400_000,
+                                             state: .joined)),
+                    SpaceRoomProxyMock(.init(id: "space7",
+                                             name: "The Thespians",
+                                             isSpace: true,
+                                             childrenCount: 15,
+                                             joinedMembersCount: 300_000,
+                                             state: .joined))
+                ]
+            )
+        )
+        let viewModel = SpaceListScreenViewModel(userSession: userSession,
+                                                 spaceServiceProxy: spaceService)
         
         return viewModel
     }
