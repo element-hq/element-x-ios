@@ -73,6 +73,8 @@ struct HomeWalletTabsContentView : View {
                     mediaProvider: context.mediaProvider,
                     onTap: { _ in }
                 )
+            case .staking:
+                EmptyView()
             }
         }
     }

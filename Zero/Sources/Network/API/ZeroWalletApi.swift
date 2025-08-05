@@ -188,13 +188,16 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         private static let hostURL = ZeroContants.appServer.zeroRootUrl
         
         static let initializeWalletEndPoint = "\(hostURL)thirdweb/initialize-wallet"
+        
         static let tokenBalances = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/tokens"
         static let nfts = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/nfts"
         static let transactions = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/transactions"
+        
         static let transferToken = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/transactions/transfer-token"
         static let transferNft = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/transactions/transfer-nft"
         static let transactionReceipt = "\(hostURL)api/wallet/transaction/\(WalletApiConstants.trasaction_hash_path_parameter)/receipt"
         static let searchRecipients = "\(hostURL)api/wallet/search-recipients"
+        
         static let claimRewards = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/claim-rewards"
     }
     

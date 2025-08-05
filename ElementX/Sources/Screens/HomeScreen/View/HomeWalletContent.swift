@@ -12,6 +12,7 @@ enum HomeWalletTab: CaseIterable {
     case token
     case transaction
     case account
+    case staking
 }
 
 enum WalletAction: String, CaseIterable {
@@ -114,13 +115,14 @@ struct HomeWalletContent: View {
     @ViewBuilder
     private var walletTabsView: some View {
         ZStack(alignment: .trailing) {
-            SimpleTabButtonsView(tabs: [HomeWalletTab.token, HomeWalletTab.transaction],
+            SimpleTabButtonsView(tabs: [HomeWalletTab.token, HomeWalletTab.staking, HomeWalletTab.transaction],
                                  selectedTab: selectedTab,
                                  tabTitle: { tab in
                 switch tab {
                 case .token: return "Tokens"
                 case .transaction: return "Transactions"
                 case .account: return "Accounts"
+                case .staking: return "Staking"
                 }
             },
                                  onTabSelected: { tab in

@@ -10,9 +10,7 @@ import SwiftUI
 
 struct ConfirmTransactionView: View {
     @ObservedObject var context: TransferTokenViewModel.Context
-    
-    @State var transferAmount: String = ""
-    
+        
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(alignment: .leading) {
@@ -25,7 +23,7 @@ struct ConfirmTransactionView: View {
                                      userName: currentUser.displayName,
                                      userAddress: displayFormattedAddress(currentUser.publicWalletAddress))
                         
-                        AssetInfoView(tokenAsset: token, amount: $transferAmount, isSenderSideInfo: true, iconUrl: token.logo)
+                        AssetInfoView(tokenAsset: token, amount: $context.transferAmount, isSenderSideInfo: true, iconUrl: token.logo)
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 12)
@@ -37,7 +35,7 @@ struct ConfirmTransactionView: View {
                                      userName: recipient.displayName,
                                      userAddress: displayFormattedAddress(recipient.publicAddress))
                         
-                        AssetInfoView(tokenAsset: token, amount: $transferAmount, isSenderSideInfo: false, iconUrl: token.logo)
+                        AssetInfoView(tokenAsset: token, amount: $context.transferAmount, isSenderSideInfo: false, iconUrl: token.logo)
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 12)
@@ -49,7 +47,7 @@ struct ConfirmTransactionView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding()
             
-            if !transferAmount.isEmpty {
+            if context.viewState.canMakeTransaction {
                 VStack {
                     Text("Review the above before confirming.\nOnce made, your transaction is irreversible.")
                         .font(.zero.bodySM)
@@ -57,7 +55,7 @@ struct ConfirmTransactionView: View {
                         .multilineTextAlignment(.center)
                     
                     SwipeToConfirmButton(onConfirm: {
-                        context.send(viewAction: .onTransactionConfirmed(amount: transferAmount))
+                        context.send(viewAction: .onTransactionConfirmed)
                     })
                     .padding(.vertical, 12)
                 }
