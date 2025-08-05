@@ -74,6 +74,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     isNewLogin: isNewLogin)
         chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
         chatsTabDetails.barVisibility = .hidden
+        
+        // This is just temporary, it needs a flow coordinator to properly handle (amongst other things) navigation/split views.
+        let spaceListScreenCoordinator = SpaceListScreenCoordinator(parameters: .init(userSession: userSession))
+        let spacesNavigationCoordinator = NavigationStackCoordinator()
+        spacesNavigationCoordinator.setRootCoordinator(spaceListScreenCoordinator)
         spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
         
         onboardingStackCoordinator = NavigationStackCoordinator()
@@ -89,7 +94,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationTabCoordinator.setTabs([
             .init(coordinator: chatsSplitCoordinator, details: chatsTabDetails),
-            .init(coordinator: BlankFormCoordinator(), details: spacesTabDetails)
+            .init(coordinator: spacesNavigationCoordinator, details: spacesTabDetails)
         ])
         
         setupObservers()

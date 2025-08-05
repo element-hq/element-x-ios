@@ -583,6 +583,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "SoftLogoutScreen_Previews")
     }
 
+    func testSpaceListScreen() async throws {
+        try await performAccessibilityAudit(named: "SpaceListScreen_Previews")
+    }
+
     func testSplashScreen() async throws {
         try await performAccessibilityAudit(named: "SplashScreen_Previews")
     }
