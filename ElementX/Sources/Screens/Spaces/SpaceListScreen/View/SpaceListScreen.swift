@@ -15,6 +15,7 @@ struct SpaceListScreen: View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 header
+                spaces
             }
         }
         .navigationTitle(L10n.screenSpaceListTitle)
@@ -53,6 +54,16 @@ struct SpaceListScreen: View {
             Rectangle()
                 .fill(Color.compound.borderDisabled)
                 .frame(height: 1 / UIScreen.main.scale)
+        }
+    }
+    
+    var spaces: some View {
+        ForEach(context.viewState.rooms, id: \.id) { spaceRoom in
+            SpaceRoomCell(spaceRoom: spaceRoom,
+                          isSelected: false,
+                          mediaProvider: context.mediaProvider) { _ in
+                #warning("Implement me!")
+            }
         }
     }
     

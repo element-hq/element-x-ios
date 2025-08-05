@@ -16,7 +16,7 @@ struct SpaceListScreenViewState: BindableState {
     var userDisplayName: String?
     var userAvatarURL: URL?
     
-    var rooms: [HomeScreenRoom]
+    var rooms: [SpaceRoomProxyProtocol]
     var joinedRoomsCount: Int
     
     var bindings: SpaceListScreenViewStateBindings

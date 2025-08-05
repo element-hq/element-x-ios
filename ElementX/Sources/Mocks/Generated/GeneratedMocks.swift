@@ -15834,6 +15834,37 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         }
     }
 }
+class SpaceRoomProxyMock: SpaceRoomProxyProtocol, @unchecked Sendable {
+    var id: String {
+        get { return underlyingId }
+        set(value) { underlyingId = value }
+    }
+    var underlyingId: String!
+    var name: String?
+    var avatarURL: URL?
+    var isSpace: Bool {
+        get { return underlyingIsSpace }
+        set(value) { underlyingIsSpace = value }
+    }
+    var underlyingIsSpace: Bool!
+    var joinedMembersCount: Int {
+        get { return underlyingJoinedMembersCount }
+        set(value) { underlyingJoinedMembersCount = value }
+    }
+    var underlyingJoinedMembersCount: Int!
+    var heroes: [UserProfileProxy] = []
+    var topic: String?
+    var canonicalAlias: String?
+    var joinRule: JoinRule?
+    var worldReadable: Bool?
+    var guestCanJoin: Bool {
+        get { return underlyingGuestCanJoin }
+        set(value) { underlyingGuestCanJoin = value }
+    }
+    var underlyingGuestCanJoin: Bool!
+    var state: Membership?
+
+}
 class StaticRoomSummaryProviderMock: StaticRoomSummaryProviderProtocol, @unchecked Sendable {
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {
         get { return underlyingRoomListPublisher }
