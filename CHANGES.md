@@ -1,3 +1,13 @@
+## Changes in 25.08.2 (2025-08-05)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix filtering of non spaces by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4384
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.08.1...release/25.08.2
+
 ## Changes in 25.08.1 (2025-08-05)
 
 ### What's Changed
