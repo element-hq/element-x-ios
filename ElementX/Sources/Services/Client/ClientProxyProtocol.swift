@@ -199,6 +199,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     @discardableResult func clearCaches() async -> Result<Void, ClientProxyError>
     
     func fetchMediaPreviewConfiguration() async -> Result<MediaPreviewConfig?, ClientProxyError>
+    
+    // MARK: - Spaces
+    
+    func spaceService() -> SpaceServiceProxyProtocol
 
     // MARK: - Ignored users
     

@@ -15,6 +15,7 @@ enum SpaceExplorerFlowCoordinatorAction: Equatable {
 
 class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
+    private let spaceServiceProxy: SpaceServiceProxyProtocol
     
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
@@ -46,6 +47,8 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
          navigationSplitCoordinator: NavigationSplitCoordinator,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
+        spaceServiceProxy = userSession.clientProxy.spaceService()
+        
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.userIndicatorController = userIndicatorController
         
@@ -87,20 +90,49 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentSpaceList() {
-        // Temporarily using the mock until the SDK is updated.
-        let parameters = SpaceListScreenCoordinatorParameters(userSession: userSession, spaceServiceProxy: SpaceServiceProxyMock(.init()))
+        let parameters = SpaceListScreenCoordinatorParameters(userSession: userSession, spaceServiceProxy: spaceServiceProxy)
         let coordinator = SpaceListScreenCoordinator(parameters: parameters)
-        coordinator.actionsPublisher.sink { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .showSettings:
-                actionsSubject.send(.showSettings)
-            case .selectSpace:
-                break
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .selectSpace(let spaceRoom):
+                    #warning("Put this in the state machine")
+                    Task {
+                        guard case let .success(spaceRoomListProxy) = await self.spaceServiceProxy.spaceRoomList(for: spaceRoom) else {
+                            return
+                        }
+                        self.presentSpace(spaceRoomListProxy: spaceRoomListProxy)
+                    }
+                case .showSettings:
+                    actionsSubject.send(.showSettings)
+                }
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
         
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
+    }
+    
+    private func presentSpace(spaceRoomListProxy: SpaceRoomListProxyProtocol) {
+        let parameters = SpaceScreenCoordinatorParameters(spaceRoomListProxy: spaceRoomListProxy,
+                                                          mediaProvider: userSession.mediaProvider)
+        let coordinator = SpaceScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .selectSpace(let spaceRoom):
+                    #warning("And this too…")
+                    Task {
+                        guard case let .success(spaceRoomListProxy) = await self.spaceServiceProxy.spaceRoomList(for: spaceRoom) else {
+                            return
+                        }
+                        self.presentSpace(spaceRoomListProxy: spaceRoomListProxy)
+                    }
+                }
+            }
+            .store(in: &cancellables)
+        
+        sidebarNavigationStackCoordinator.push(coordinator)
     }
 }
