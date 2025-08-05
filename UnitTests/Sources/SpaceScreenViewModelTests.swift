@@ -9,12 +9,13 @@ import Combine
 import XCTest
 
 @testable import ElementX
+import MatrixRustSDK
 
 @MainActor
 class SpaceScreenViewModelTests: XCTestCase {
     var spaceRoomListProxy: SpaceRoomListProxyMock!
     let mockSpaceRooms = [SpaceRoomProxyProtocol].mockSpaceList
-    var paginationStateSubject: CurrentValueSubject<SpaceRoomListProxyPaginationState, Never> = .init(.idle(endReached: true))
+    var paginationStateSubject: CurrentValueSubject<SpaceRoomListPaginationState, Never> = .init(.idle(endReached: true))
     
     var viewModel: SpaceScreenViewModelProtocol!
     

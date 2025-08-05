@@ -78,6 +78,20 @@ extension SDKListener: RoomListLoadingStateListener where T == RoomListLoadingSt
     func onUpdate(state: RoomListLoadingState) { onUpdateClosure(state) }
 }
 
+// MARK: Spaces
+
+extension SDKListener: SpaceServiceJoinedSpacesListener where T == [SpaceListUpdate] {
+    func onUpdate(rooms: [SpaceListUpdate]) { onUpdateClosure(rooms) }
+}
+
+extension SDKListener: SpaceRoomListEntriesListener where T == [SpaceListUpdate] {
+    func onUpdate(roomUpdates: [SpaceListUpdate]) { onUpdateClosure(roomUpdates) }
+}
+
+extension SDKListener: SpaceRoomListPaginationStateListener where T == SpaceRoomListPaginationState {
+    func onUpdate(paginationState: SpaceRoomListPaginationState) { onUpdateClosure(paginationState) }
+}
+
 // MARK: Room
 
 extension SDKListener: RoomInfoListener where T == RoomInfo {

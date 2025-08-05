@@ -8,18 +8,12 @@
 import Combine
 import MatrixRustSDK
 
-// Temporary until the SDK is updated.
-enum SpaceRoomListProxyPaginationState: Equatable {
-    case idle(endReached: Bool)
-    case loading
-}
-
 // sourcery: AutoMockable
 protocol SpaceRoomListProxyProtocol {
     var spaceRoom: SpaceRoomProxyProtocol { get }
     
     var spaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> { get }
-    var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListProxyPaginationState, Never> { get }
+    var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never> { get }
     
     func paginate() async
 }
