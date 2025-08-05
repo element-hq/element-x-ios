@@ -105,56 +105,9 @@ struct SpaceListScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel(counterValue: Int = 0) -> SpaceListScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        let spaceService = SpaceServiceProxyMock(
-            .init(
-                joinedSpaces: [
-                    SpaceRoomProxyMock(.init(id: "space1",
-                                             name: "The Foundation",
-                                             isSpace: true,
-                                             childrenCount: 1,
-                                             joinedMembersCount: 500,
-                                             state: .joined)),
-                    SpaceRoomProxyMock(.init(id: "space2",
-                                             name: "The Second Foundation",
-                                             isSpace: true,
-                                             childrenCount: 1,
-                                             joinedMembersCount: 100,
-                                             state: .joined)),
-                    SpaceRoomProxyMock(.init(id: "space3",
-                                             name: "The Galactic Empire",
-                                             isSpace: true,
-                                             childrenCount: 25000,
-                                             joinedMembersCount: 1_000_000_000,
-                                             state: .joined)),
-                    SpaceRoomProxyMock(.init(id: "space4",
-                                             name: "The Korellians",
-                                             isSpace: true,
-                                             childrenCount: 27,
-                                             joinedMembersCount: 2_000_000,
-                                             state: .joined)),
-                    SpaceRoomProxyMock(.init(id: "space5",
-                                             name: "The Luminists",
-                                             isSpace: true,
-                                             childrenCount: 1,
-                                             joinedMembersCount: 100_000,
-                                             state: .joined)),
-                    SpaceRoomProxyMock(.init(id: "space6",
-                                             name: "The Anacreons",
-                                             isSpace: true,
-                                             childrenCount: 25,
-                                             joinedMembersCount: 400_000,
-                                             state: .joined)),
-                    SpaceRoomProxyMock(.init(id: "space7",
-                                             name: "The Thespians",
-                                             isSpace: true,
-                                             childrenCount: 15,
-                                             joinedMembersCount: 300_000,
-                                             state: .joined))
-                ]
-            )
-        )
-        let viewModel = SpaceListScreenViewModel(userSession: userSession,
-                                                 spaceServiceProxy: spaceService)
+        let spaceService = SpaceServiceProxyMock(.init(joinedSpaces: .mockJoinedSpaces))
+        
+        let viewModel = SpaceListScreenViewModel(userSession: userSession, spaceServiceProxy: spaceService)
         
         return viewModel
     }

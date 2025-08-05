@@ -11,13 +11,15 @@ import MatrixRustSDK
 extension SpaceRoomListProxyMock {
     struct Configuration {
         var spaceRoomProxy: SpaceRoomProxyProtocol
-        var spaceRooms: [SpaceRoomProxyProtocol] = []
+        var initialSpaceRooms: [SpaceRoomProxyProtocol] = []
     }
     
     convenience init(_ configuration: Configuration) {
         self.init()
         
         spaceRoom = configuration.spaceRoomProxy
-        spaceRoomsPublisher = .init(configuration.spaceRooms)
+        spaceRoomsPublisher = .init(configuration.initialSpaceRooms)
+        paginateClosure = { }
+        paginationStatePublisher = .init(.idle(endReached: true))
     }
 }
