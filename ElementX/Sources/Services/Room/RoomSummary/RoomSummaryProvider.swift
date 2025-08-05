@@ -121,14 +121,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .none)
         case let .search(query):
             let filters: [RoomListEntriesDynamicFilterKind] = if appSettings.fuzzyRoomListSearchEnabled {
-                [.fuzzyMatchRoomName(pattern: query), .nonLeft, .deduplicateVersions]
+                [.fuzzyMatchRoomName(pattern: query), .nonLeft, .nonSpace, .deduplicateVersions]
             } else {
-                [.normalizedMatchRoomName(pattern: query), .nonLeft, .deduplicateVersions]
+                [.normalizedMatchRoomName(pattern: query), .nonLeft, .nonSpace, .deduplicateVersions]
             }
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: filters))
         case let .all(filters):
             var filters = filters.map(\.rustFilter)
-            filters.append(contentsOf: [.nonLeft, .deduplicateVersions])
+            filters.append(contentsOf: [.nonLeft, .nonSpace, .deduplicateVersions])
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: filters))
         }
     }
