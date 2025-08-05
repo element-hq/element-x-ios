@@ -59,8 +59,9 @@ enum Avatars {
 }
 
 enum UserAvatarSizeOnScreen {
+    case chats
+    case spaces
     case timeline
-    case home
     case settings
     case roomDetails
     case dmDetails
@@ -82,13 +83,13 @@ enum UserAvatarSizeOnScreen {
 
     var value: CGFloat {
         switch self {
-        case .readReceipt:
-            return 16
-        case .readReceiptSheet:
+        case .chats, .spaces:
             return 32
         case .timeline:
             return 32
-        case .home:
+        case .readReceipt:
+            return 16
+        case .readReceiptSheet:
             return 32
         case .completionSuggestions:
             return 32
@@ -127,8 +128,9 @@ enum UserAvatarSizeOnScreen {
 }
 
 enum RoomAvatarSizeOnScreen {
+    case chats
+    case spaces
     case timeline
-    case home
     case messageForwarding
     case globalSearch
     case roomSelection
@@ -140,10 +142,12 @@ enum RoomAvatarSizeOnScreen {
 
     var value: CGFloat {
         switch self {
-        case .notificationSettings:
-            return 30
+        case .chats, .spaces:
+            return 52
         case .timeline:
             return 32
+        case .notificationSettings:
+            return 30
         case .roomDirectorySearch:
             return 32
         case .completionSuggestions:
@@ -154,8 +158,6 @@ enum RoomAvatarSizeOnScreen {
             return 36
         case .roomSelection:
             return 36
-        case .home:
-            return 52
         case .details:
             return 96
         case .joinRoom:

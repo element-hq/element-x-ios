@@ -65,7 +65,7 @@ struct SpaceListScreen: View {
                 LoadableAvatarImage(url: context.viewState.userAvatarURL,
                                     name: context.viewState.userDisplayName,
                                     contentID: context.viewState.userID,
-                                    avatarSize: .user(on: .home),
+                                    avatarSize: .user(on: .spaces),
                                     mediaProvider: context.mediaProvider)
                     .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
                     .compositingGroup()
