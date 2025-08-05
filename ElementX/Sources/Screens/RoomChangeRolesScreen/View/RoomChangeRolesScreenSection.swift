@@ -46,7 +46,7 @@ struct RoomChangeRolesScreenSection: View {
                     Text(L10n.screenRoomChangeRoleModeratorsAdminSectionFooter)
                         .compoundListSectionFooter()
                 } else if role.isOwner, context.viewState.mode == .administrator(ownUserRole: .creator) {
-                    Text(L10n.screenRoomChangeRoleModeratorsAdminSectionFooter)
+                    Text(L10n.screenRoomChangeRoleModeratorsOwnerSectionFooter)
                         .compoundListSectionFooter()
                 }
             }
