@@ -189,7 +189,7 @@ struct HomeWalletTabContentCell : View {
                             .padding(.vertical, 1)
                         
                         if let actionPostText = content.actionPostText {
-                            Text(actionPostText)
+                            Text("$\(actionPostText)")
                                 .font(.zero.bodySM)
                                 .foregroundColor(.zero.bgAccentRest)
                                 .lineLimit(1)

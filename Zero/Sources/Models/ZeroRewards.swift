@@ -95,6 +95,7 @@ extension Double {
         numberFormatter.numberStyle = .decimal
         numberFormatter.maximumFractionDigits = 2
         numberFormatter.minimumFractionDigits = 0
+        numberFormatter.roundingMode = .up
         
         return numberFormatter.string(from: NSNumber(value: self)) ?? String(self)
     }
@@ -113,6 +114,7 @@ extension Double {
         numberFormatter.numberStyle = .decimal
         numberFormatter.maximumFractionDigits = maxFracDigits
         numberFormatter.minimumFractionDigits = 0
+        numberFormatter.roundingMode = .up
         
         if let formattedValue = numberFormatter.string(from: NSNumber(value: value)) {
             return "\(formattedValue)\(suffixes[index])"

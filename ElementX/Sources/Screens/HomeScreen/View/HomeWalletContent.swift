@@ -47,8 +47,9 @@ struct HomeWalletContent: View {
                 walletTabsView
                 
                 ScrollView {
-                    offsetReader
-                        .frame(height: 0)
+                    /// DISABLING CARD VIEW SWITCHING FOR NOW BECAUSE OF JACKY VIEW SWITCHING ISSUE
+//                    offsetReader
+//                        .frame(height: 0)
                     
                     HomeWalletTabsContentView(context: context, selectedWalletTab: selectedTab)
                 }

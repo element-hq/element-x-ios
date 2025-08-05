@@ -1466,7 +1466,6 @@ class ClientProxy: ClientProxyProtocol {
             let result = try await zeroApiProxy.walletsApi.claimRewards(walletAddress: userWalletAddress)
             switch result {
             case .success(let transaction):
-                _ = await getUserRewards()
                 return .success(transaction.transactionHash)
             case .failure(let error):
                 return .failure(.zeroError(error))
