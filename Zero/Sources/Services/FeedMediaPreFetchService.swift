@@ -41,6 +41,21 @@ final class FeedMediaPreFetchService {
             _ = await (following, all)
         }
     }
+    
+    func forceRefreshHomeFeedMedia(following: Bool) {
+        Task.detached { [weak self] in
+            guard let self else { return }
+            if following {
+                loadedFollowingPostsCount = 0
+                async let following: () = self.loadHomePostsPage(following: true, currentCount: 0)
+                _ = await (following)
+            } else {
+                loadedAllPostsCount = 0
+                async let all: () = self.loadHomePostsPage(following: false, currentCount: 0)
+                _ = await (all)
+            }
+        }
+    }
 
     func loadHomePostsPage(following: Bool, currentCount: Int) async {
         let loadedCount = following ? loadedFollowingPostsCount : loadedAllPostsCount
@@ -62,7 +77,10 @@ final class FeedMediaPreFetchService {
         await loadPostsMedia(posts)
     }
     
-    func loadFeedRepliesPage(postId: String, currentCount: Int) async {
+    func loadFeedRepliesPage(postId: String, currentCount: Int, isForceRefresh: Bool = false) async {
+        if isForceRefresh {
+            loadedFeedRepliesCount = 0
+        }
         if loadedFeedRepliesCount - currentCount > FEED_LOAD_OFFSET { return }
 
         let result = await clientProxy.fetchFeedReplies(feedId: postId,
@@ -75,7 +93,10 @@ final class FeedMediaPreFetchService {
         await loadPostsMedia(posts)
     }
     
-    func loadUserFeedsNextPage(userId: String, currentCount: Int) async {
+    func loadUserFeedsNextPage(userId: String, currentCount: Int, isForceRefresh: Bool = false) async {
+        if isForceRefresh {
+            loadedFeedRepliesCount = 0
+        }
         if loadedUserFeedsCount - currentCount > FEED_LOAD_OFFSET { return }
 
         let result = await clientProxy.fetchUserFeeds(userId: userId,

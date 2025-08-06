@@ -694,6 +694,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 state.postListMode = .posts
                 isFetchPostsInProgress = false
                 
+                if isForceRefresh {
+                    self.feedMediaPreFetchService?.forceRefreshHomeFeedMedia(following: followingOnly)
+                }
+                
                 await loadPostContentConcurrently(for: state.posts, followingPosts: followingOnly)
             }
         case .failure(let error):
@@ -1134,7 +1138,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 switch result {
                 case .success(let transactionHash):
                     state.claimRewardsState = .success(transactionHash)
-                    _ = await userSession.clientProxy.getUserRewards(shouldCheckRewardsIntiamtion: false)
+                    loadUserRewards()
+                    fetchWalletData(silentRefresh: true)
                 case .failure(_):
                     state.claimRewardsState = .failure
                 }

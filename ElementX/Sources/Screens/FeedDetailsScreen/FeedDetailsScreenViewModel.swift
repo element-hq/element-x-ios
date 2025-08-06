@@ -139,7 +139,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                     state.feedReplies = feedReplies.uniqued(on: \.id)
                     state.repliesListMode = .replies
                     
-                    await loadPostContentConcurrently(for: state.feedReplies)
+                    await loadPostContentConcurrently(for: state.feedReplies, isForceRefresh: isForceRefresh)
                 }
             case .failure(let error):
                 MXLog.error("Failed to fetch zero post replies: \(error)")
@@ -238,9 +238,10 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         }
     }
     
-    private func loadPostContentConcurrently(for posts: [HomeScreenPost]) async {
+    private func loadPostContentConcurrently(for posts: [HomeScreenPost], isForceRefresh: Bool) async {
         async let nextPagePostsTask: () =  feedMediaPreFetchService?.loadFeedRepliesPage(postId: state.bindings.feed.id,
-                                                                                         currentCount: posts.count) ?? ()
+                                                                                         currentCount: posts.count,
+                                                                                         isForceRefresh: isForceRefresh) ?? ()
         async let linkPreviewTask: () = loadPostLinkPreviews(for: posts)
         _ = await (nextPagePostsTask, linkPreviewTask)
     }
