@@ -8,6 +8,7 @@
 import Combine
 import Compound
 import MatrixRustSDK
+import SwiftState
 import SwiftUI
 
 enum UserSessionFlowCoordinatorAction {
@@ -33,12 +34,25 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let spaceExplorerFlowCoordinator: SpaceExplorerFlowCoordinator
     private let spacesTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
     
+    enum State: StateType {
+        /// The state machine hasn't started.
+        case initial
+        /// The root screen for this flow.
+        case tabBar
+    }
+    
+    enum Event: EventType {
+        /// The flow is being started.
+        case start
+    }
+    
+    private let stateMachine: StateMachine<State, Event>
+    private var cancellables: Set<AnyCancellable> = []
+    
     private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<UserSessionFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-    
-    private var cancellables: Set<AnyCancellable> = []
     
     init(userSession: UserSessionProtocol,
          navigationRootCoordinator: NavigationRootCoordinator,
@@ -98,16 +112,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .init(coordinator: spacesSplitCoordinator, details: spacesTabDetails)
         ])
         
+        stateMachine = .init(state: .initial)
+        configureStateMachine()
+        
         setupObservers()
     }
     
     func start() {
-        #warning("This flow still needs a state machine.")
-        
-        chatsFlowCoordinator.start()
-        spaceExplorerFlowCoordinator.start()
-        
-        attemptStartingOnboarding()
+        stateMachine.tryEvent(.start)
     }
     
     func stop() {
@@ -131,6 +143,20 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     // MARK: - Private
+    
+    private func configureStateMachine() {
+        stateMachine.addRoutes(event: .start, transitions: [.initial => .tabBar]) { [weak self] _ in
+            guard let self else { return }
+            
+            chatsFlowCoordinator.start()
+            spaceExplorerFlowCoordinator.start()
+            attemptStartingOnboarding()
+        }
+        
+        stateMachine.addErrorHandler { context in
+            fatalError("Unexpected transition: \(context)")
+        }
+    }
     
     private func setupObservers() {
         chatsFlowCoordinator.actionsPublisher
