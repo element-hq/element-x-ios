@@ -68,6 +68,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     init(userSession: UserSessionProtocol,
+         isNewLogin: Bool,
          navigationRootCoordinator: NavigationRootCoordinator,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
@@ -78,7 +79,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          appHooks: AppHooks,
          analytics: AnalyticsService,
          notificationManager: NotificationManagerProtocol,
-         isNewLogin: Bool) {
+         stateMachineFactory: StateMachineFactoryProtocol) {
         self.userSession = userSession
         self.navigationRootCoordinator = navigationRootCoordinator
         self.appLockService = appLockService
@@ -92,6 +93,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         let chatsSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         chatsFlowCoordinator = ChatsFlowCoordinator(userSession: userSession,
+                                                    isNewLogin: isNewLogin,
                                                     navigationSplitCoordinator: chatsSplitCoordinator,
                                                     appLockService: appLockService,
                                                     bugReportService: bugReportService,
@@ -102,7 +104,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     appHooks: appHooks,
                                                     analytics: analytics,
                                                     notificationManager: notificationManager,
-                                                    isNewLogin: isNewLogin)
+                                                    stateMachineFactory: stateMachineFactory)
         chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
         chatsTabDetails.barVisibility = .hidden
         
@@ -128,7 +130,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .init(coordinator: spacesSplitCoordinator, details: spacesTabDetails)
         ])
         
-        stateMachine = .init(state: .initial)
+        stateMachine = stateMachineFactory.makeUserSessionFlowStateMachine(state: .initial)
         configureStateMachine()
         
         setupObservers()
@@ -155,12 +157,19 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
              .roomDetails, .roomMemberDetails, .userProfile,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
              .call, .genericCallLink, .share, .transferOwnership:
+            clearRoute(animated: animated) // Make sure the presented route is visible.
             chatsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             navigationTabCoordinator.selectedTab = .chats
         }
     }
     
     func clearRoute(animated: Bool) {
+        switch stateMachine.state {
+        case .initial, .tabBar:
+            break
+        case .settingsScreen:
+            navigationTabCoordinator.setSheetCoordinator(nil, animated: animated)
+        }
         chatsFlowCoordinator.clearRoute(animated: animated)
     }
     

@@ -128,11 +128,6 @@ class ChatsFlowCoordinatorStateMachine {
         stateMachine.state
     }
     
-    var stateSubject = PassthroughSubject<State, Never>()
-    var statePublisher: AnyPublisher<State, Never> {
-        stateSubject.eraseToAnyPublisher()
-    }
-    
     init() {
         stateMachine = StateMachine(state: .initial)
         configure()
@@ -204,10 +199,6 @@ class ChatsFlowCoordinatorStateMachine {
             } else {
                 MXLog.info("Transitioning from \(context.fromState)` to `\(context.toState)`")
             }
-        }
-        
-        addTransitionHandler { [weak self] context in
-            self?.stateSubject.send(context.toState)
         }
     }
     

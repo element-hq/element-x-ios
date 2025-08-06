@@ -56,10 +56,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    /// For testing purposes.
-    var statePublisher: AnyPublisher<ChatsFlowCoordinatorStateMachine.State, Never> { stateMachine.statePublisher }
-    
     init(userSession: UserSessionProtocol,
+         isNewLogin: Bool,
          navigationSplitCoordinator: NavigationSplitCoordinator,
          appLockService: AppLockServiceProtocol,
          bugReportService: BugReportServiceProtocol,
@@ -70,8 +68,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
          appHooks: AppHooks,
          analytics: AnalyticsService,
          notificationManager: NotificationManagerProtocol,
-         isNewLogin: Bool) {
-        stateMachine = ChatsFlowCoordinatorStateMachine()
+         stateMachineFactory: StateMachineFactoryProtocol) {
+        stateMachine = stateMachineFactory.makeChatsFlowStateMachine()
         self.userSession = userSession
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.bugReportService = bugReportService
