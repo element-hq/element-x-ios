@@ -25,6 +25,8 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
+        guard mode != .user || mode != .creator else { fatalError("Invalid screen configuration: \(mode)") }
+
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
@@ -60,7 +62,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
             demoteMember(member)
         case .save:
             if !state.membersToPromote.isEmpty {
-                if state.mode == .administrator {
+                if state.mode == .administrator, state.ownRole == .administrator {
                     showPromotionWarning()
                     return
                 } else if state.mode == .owner {

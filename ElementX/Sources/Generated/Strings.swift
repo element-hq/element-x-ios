@@ -542,6 +542,14 @@ internal enum L10n {
   internal static var commonPreparing: String { return L10n.tr("Localizable", "common_preparing") }
   /// Privacy policy
   internal static var commonPrivacyPolicy: String { return L10n.tr("Localizable", "common_privacy_policy") }
+  /// Private room
+  internal static var commonPrivateRoom: String { return L10n.tr("Localizable", "common_private_room") }
+  /// Private space
+  internal static var commonPrivateSpace: String { return L10n.tr("Localizable", "common_private_space") }
+  /// Public room
+  internal static var commonPublicRoom: String { return L10n.tr("Localizable", "common_public_room") }
+  /// Public space
+  internal static var commonPublicSpace: String { return L10n.tr("Localizable", "common_public_space") }
   /// Reaction
   internal static var commonReaction: String { return L10n.tr("Localizable", "common_reaction") }
   /// Reactions
@@ -2150,6 +2158,8 @@ internal enum L10n {
   internal static var screenRoomChangePermissionsRoomTopic: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_topic") }
   /// Send messages
   internal static var screenRoomChangePermissionsSendMessages: String { return L10n.tr("Localizable", "screen_room_change_permissions_send_messages") }
+  /// Edit Admins or Owners
+  internal static var screenRoomChangeRoleAdministratorsOrOwnersTitle: String { return L10n.tr("Localizable", "screen_room_change_role_administrators_or_owners_title") }
   /// Edit Admins
   internal static var screenRoomChangeRoleAdministratorsTitle: String { return L10n.tr("Localizable", "screen_room_change_role_administrators_title") }
   /// You will not be able to undo this action. You are promoting the user to have the same power level as you.

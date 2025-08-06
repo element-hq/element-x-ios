@@ -127,14 +127,3 @@ extension RoomRole {
         }
     }
 }
-
-extension RoomMemberRole {
-    var isAdminOrHigher: Bool {
-        switch self {
-        case .administrator, .creator:
-            return true
-        case .moderator, .user:
-            return false
-        }
-    }
-}

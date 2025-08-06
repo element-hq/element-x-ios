@@ -183,20 +183,7 @@ extension Array where Element == RoomMemberProxyMock {
         .mockModerator
     ]
     
-    static let allMembersAsCreator: [RoomMemberProxyMock] = [
-        .mockAdmin,
-        .mockAlice,
-        .mockBob,
-        .mockCharlie,
-        .mockDan,
-        .mockInvited,
-        .mockIgnored,
-        .mockModerator,
-        .mockCreator,
-        .mockMeCreator,
-        .mockOwner
-    ]
-    
+    /// This also includes the creator and the owner role.
     static let allMembersAsAdminV2: [RoomMemberProxyMock] = [
         .mockMeAdmin,
         .mockAlice,
@@ -209,5 +196,19 @@ extension Array where Element == RoomMemberProxyMock {
         .mockModerator,
         .mockOwner,
         .mockCreator
+    ]
+    
+    static let allMembersAsCreator: [RoomMemberProxyMock] = [
+        .mockAdmin,
+        .mockAlice,
+        .mockBob,
+        .mockCharlie,
+        .mockDan,
+        .mockInvited,
+        .mockIgnored,
+        .mockModerator,
+        .mockCreator,
+        .mockMeCreator,
+        .mockOwner
     ]
 }

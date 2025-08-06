@@ -13,14 +13,14 @@ struct RoomChangeRolesScreenSelectedItem: View {
     let dismissAction: (() -> Void)?
     
     var body: some View {
-        if let dismissAction {
-            mainContent
-                .accessibilityAction(named: L10n.actionDismiss) {
-                    dismissAction()
+        mainContent
+            .accessibilityActions {
+                if let dismissAction {
+                    Button(L10n.actionDismiss) {
+                        dismissAction()
+                    }
                 }
-        } else {
-            mainContent
-        }
+            }
     }
     
     // MARK: - Private

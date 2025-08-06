@@ -227,7 +227,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .complete:
-                // When discarding changes is finalised, either use an event or remove this action.
                 navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }

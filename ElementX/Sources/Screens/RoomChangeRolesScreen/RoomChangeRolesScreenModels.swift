@@ -44,7 +44,12 @@ struct RoomChangeRolesScreenViewState: BindableState {
         case .owner:
             L10n.screenRoomChangeRoleOwnersTitle
         case .administrator:
-            L10n.screenRoomChangeRoleAdministratorsTitle
+            switch ownRole {
+            case .creator:
+                L10n.screenRoomChangeRoleAdministratorsOrOwnersTitle
+            default:
+                L10n.screenRoomChangeRoleAdministratorsTitle
+            }
         case .moderator:
             L10n.screenRoomChangeRoleModeratorsTitle
         case .user:
