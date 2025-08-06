@@ -41,6 +41,14 @@ extension WalletTransaction {
     var isMeowTokenTransaction: Bool {
         return token.symbol.lowercased() == "MEOW".lowercased()
     }
+    
+    var isVMeowTokenTransaction: Bool {
+        return token.symbol.lowercased() == "vMEOW".lowercased()
+    }
+    
+    var isClaimableTokenTransaction: Bool {
+        isMeowTokenTransaction || isVMeowTokenTransaction
+    }
 }
 
 struct TransactionToken: Codable {

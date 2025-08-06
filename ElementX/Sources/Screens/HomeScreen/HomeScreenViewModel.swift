@@ -1020,7 +1020,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func setUserWalletBalance(_ tokens: [ZWalletToken]) {
-        let totalAmount = tokens.filter { $0.isMeowToken }
+        let totalAmount = tokens.filter { $0.isClaimableToken }
             .reduce(Decimal(0)) { partialResult, token in
                 guard let amountDecimal = Decimal(string: token.amount) else {
                     return partialResult

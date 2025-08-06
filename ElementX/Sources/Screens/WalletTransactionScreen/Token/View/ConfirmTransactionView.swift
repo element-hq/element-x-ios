@@ -149,9 +149,9 @@ private struct AssetInfoView: View {
                         }
                         .onChange(of: amount) { _, newValue in
                             let enteredAmount = Double(newValue) ?? 0
-                            let maxAccount = Double(tokenAsset.formattedAmount) ?? 0
+                            let maxAccount = Double(tokenAsset.amount) ?? 0
                             if enteredAmount > maxAccount {
-                                amount = tokenAsset.formattedAmount
+                                amount = tokenAsset.amount
                             }
                         }
                         .toolbar {
@@ -165,9 +165,9 @@ private struct AssetInfoView: View {
                     
                     Spacer()
                     
-                    if amount != tokenAsset.formattedAmount {
+                    if amount != tokenAsset.amount {
                         Button {
-                            amount = tokenAsset.formattedAmount
+                            amount = tokenAsset.amount
                         } label: {
                             Text("Use Max")
                                 .font(.zero.bodySMSemibold)
@@ -201,7 +201,7 @@ private struct AssetInfoView: View {
             if let tokenMaxAmmount = Double(tokenAsset.amount),
                let userAmount = Double(newValue) {
                 if userAmount > tokenMaxAmmount {
-                    amount = tokenAsset.formattedAmount
+                    amount = tokenAsset.amount
                 } else {
                     let diff = tokenMaxAmmount - userAmount
                     balance = String(format: "%.2f", diff)

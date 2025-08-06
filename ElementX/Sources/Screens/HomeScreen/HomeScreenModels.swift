@@ -751,7 +751,7 @@ extension HomeScreenWalletContent {
                   description: nil,
                   actionPreText: nil,
                   actionText: "\(walletToken.formattedAmount) \(walletToken.symbol.uppercased())",
-                  actionPostText: walletToken.isMeowToken ? walletToken.meowPriceFormatted(ref: meowPrice) : nil)
+                  actionPostText: walletToken.isClaimableToken ? walletToken.meowPriceFormatted(ref: meowPrice) : nil)
     }
     
     init(walletNFT: NFT) {
@@ -779,6 +779,6 @@ extension HomeScreenWalletContent {
                   description: nil,
                   actionPreText: nil,
                   actionText: "\(walletTransaction.formattedAmount) \(tokenSymbol)",
-                  actionPostText: walletTransaction.isMeowTokenTransaction ? walletTransaction.meowPriceFormatted(ref: meowPrice) : nil)
+                  actionPostText: walletTransaction.isClaimableTokenTransaction ? walletTransaction.meowPriceFormatted(ref: meowPrice) : nil)
     }
 }

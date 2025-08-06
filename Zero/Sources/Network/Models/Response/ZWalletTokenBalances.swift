@@ -38,6 +38,14 @@ extension ZWalletToken {
     var isMeowToken: Bool {
         return symbol.lowercased() == "MEOW".lowercased()
     }
+    
+    var isVMeowToken: Bool {
+        return symbol.lowercased() == "vMEOW".lowercased()
+    }
+    
+    var isClaimableToken: Bool {
+        isMeowToken || isVMeowToken
+    }
 }
 
 struct NextPageParams: Codable {
