@@ -9,10 +9,9 @@ import Combine
 import SwiftUI
 
 enum SettingsFlowCoordinatorAction {
-    case presentedSettings
-    case dismissedSettings
-    case runLogoutFlow
+    case dismiss
     case clearCache
+    case runLogoutFlow
     /// Logout without a confirmation. The user forgot their PIN.
     case forceLogout
 }
@@ -25,17 +24,14 @@ struct SettingsFlowCoordinatorParameters {
     let notificationSettings: NotificationSettingsProxyProtocol
     let secureBackupController: SecureBackupControllerProtocol
     let appSettings: AppSettings
-    let navigationSplitCoordinator: NavigationSplitCoordinator
+    let navigationStackCoordinator: NavigationStackCoordinator
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
 }
 
 class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private let parameters: SettingsFlowCoordinatorParameters
-    
-    private var navigationStackCoordinator: NavigationStackCoordinator!
-    
-    private var cancellables = Set<AnyCancellable>()
+    private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
     
     // periphery:ignore - retaining purpose
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
@@ -43,6 +39,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
     // periphery:ignore - retaining purpose
     private var encryptionSettingsFlowCoordinator: EncryptionSettingsFlowCoordinator?
+    
+    private var cancellables = Set<AnyCancellable>()
     
     private let actionsSubject: PassthroughSubject<SettingsFlowCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<SettingsFlowCoordinatorAction, Never> {
@@ -62,15 +60,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         case .settings:
             presentSettingsScreen(animated: animated)
         case .chatBackupSettings:
-            if navigationStackCoordinator == nil {
-                presentSettingsScreen(animated: animated)
-            }
-            
-            // The navigation stack doesn't like it if the root and the push happen
-            // on the same loop run
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                self.startEncryptionSettingsFlow(animated: animated)
-            }
+            startEncryptionSettingsFlow(animated: animated)
         default:
             break
         }
@@ -83,8 +73,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func presentSettingsScreen(animated: Bool) {
-        navigationStackCoordinator = NavigationStackCoordinator()
-        
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: parameters.userSession,
                                                                                     appSettings: parameters.appSettings,
                                                                                     isBugReportServiceEnabled: parameters.bugReportService.isEnabled))
@@ -95,14 +83,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .dismiss:
-                    parameters.navigationSplitCoordinator.setSheetCoordinator(nil)
+                    actionsSubject.send(.dismiss)
                 case .logout:
-                    parameters.navigationSplitCoordinator.setSheetCoordinator(nil)
-                    
-                    // The settings sheet needs to be dismissed before the alert can be shown
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        self.actionsSubject.send(.runLogoutFlow)
-                    }
+                    actionsSubject.send(.runLogoutFlow)
                 case .secureBackup:
                     startEncryptionSettingsFlow(animated: true)
                 case .userDetails:
@@ -136,15 +119,6 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator, animated: animated)
-        
-        parameters.navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
-            guard let self else { return }
-            
-            navigationStackCoordinator = nil
-            actionsSubject.send(.dismissedSettings)
-        }
-        
-        actionsSubject.send(.presentedSettings)
     }
     
     private func startEncryptionSettingsFlow(animated: Bool) {
@@ -174,13 +148,13 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                              userIndicatorController: parameters.userIndicatorController,
                                                                              appSettings: parameters.appSettings))
         
-        navigationStackCoordinator?.push(coordinator)
+        navigationStackCoordinator.push(coordinator)
     }
     
     private func presentAnalyticsScreen() {
         let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: parameters.appSettings,
                                                                                analytics: parameters.analytics))
-        navigationStackCoordinator?.push(coordinator)
+        navigationStackCoordinator.push(coordinator)
     }
     
     private func presentAppLockSetupFlow() {

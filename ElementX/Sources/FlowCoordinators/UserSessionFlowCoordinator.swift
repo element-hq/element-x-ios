@@ -24,8 +24,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationTabCoordinator: NavigationTabCoordinator<HomeTab>
+    private let appLockService: AppLockServiceProtocol
+    private let bugReportService: BugReportServiceProtocol
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
+    private let analytics: AnalyticsService
     
     private let onboardingFlowCoordinator: OnboardingFlowCoordinator
     private let onboardingStackCoordinator: NavigationStackCoordinator
@@ -34,16 +37,26 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let spaceExplorerFlowCoordinator: SpaceExplorerFlowCoordinator
     private let spacesTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
     
+    // periphery:ignore - retaining purpose
+    private var settingsFlowCoordinator: SettingsFlowCoordinator?
+    
     enum State: StateType {
         /// The state machine hasn't started.
         case initial
         /// The root screen for this flow.
         case tabBar
+        /// Showing the settings screen.
+        case settingsScreen
     }
     
     enum Event: EventType {
         /// The flow is being started.
         case start
+        
+        /// Request presentation of the settings screen.
+        case showSettingsScreen
+        /// The settings screen has been dismissed.
+        case dismissedSettingsScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -68,8 +81,11 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          isNewLogin: Bool) {
         self.userSession = userSession
         self.navigationRootCoordinator = navigationRootCoordinator
+        self.appLockService = appLockService
+        self.bugReportService = bugReportService
         self.appMediator = appMediator
         self.appSettings = appSettings
+        self.analytics = analytics
         
         navigationTabCoordinator = NavigationTabCoordinator()
         navigationRootCoordinator.setRootCoordinator(navigationTabCoordinator)
@@ -127,10 +143,21 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
-        // There aren't any routes that directly target this flow yet, so pass them directly to the
-        // chats flow coordinator.
-        chatsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-        navigationTabCoordinator.selectedTab = .chats
+        switch appRoute {
+        case .accountProvisioningLink:
+            break // We always ignore this flow when logged in.
+        case .settings, .chatBackupSettings:
+            if stateMachine.state != .settingsScreen {
+                stateMachine.tryEvent(.showSettingsScreen)
+            }
+            settingsFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+        case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
+             .roomDetails, .roomMemberDetails, .userProfile,
+             .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
+             .call, .genericCallLink, .share, .transferOwnership:
+            chatsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            navigationTabCoordinator.selectedTab = .chats
+        }
     }
     
     func clearRoute(animated: Bool) {
@@ -153,6 +180,13 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             attemptStartingOnboarding()
         }
         
+        stateMachine.addRoutes(event: .showSettingsScreen, transitions: [.tabBar => .settingsScreen]) { [weak self] _ in
+            self?.startSettingsFlow()
+        }
+        stateMachine.addRoutes(event: .dismissedSettingsScreen, transitions: [.settingsScreen => .tabBar]) { [weak self] _ in
+            self?.settingsFlowCoordinator = nil
+        }
+        
         stateMachine.addErrorHandler { context in
             fatalError("Unexpected transition: \(context)")
         }
@@ -163,14 +197,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
-                case .logout:
-                    Task { await self.runLogoutFlow() }
+                case .showSettings:
+                    handleAppRoute(.settings, animated: true)
+                case .showChatBackupSettings:
+                    handleAppRoute(.chatBackupSettings, animated: true)
                 case .sessionVerification(let flow):
                     presentSessionVerificationScreen(flow: flow)
-                case .clearCache:
-                    actionsSubject.send(.clearCache)
-                case .forceLogout:
-                    actionsSubject.send(.forceLogout)
+                case .logout:
+                    Task { await self.runLogoutFlow() }
                 }
             }
             .store(in: &cancellables)
@@ -180,7 +214,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .showSettings:
-                    break
+                    stateMachine.tryEvent(.showSettingsScreen)
                 }
             }
             .store(in: &cancellables)
@@ -221,6 +255,51 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         if onboardingFlowCoordinator.shouldStart {
             clearRoute(animated: false)
             onboardingFlowCoordinator.start()
+        }
+    }
+    
+    // MARK: - Settings
+    
+    private func startSettingsFlow() {
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let coordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                    windowManager: appMediator.windowManager,
+                                                                    appLockService: appLockService,
+                                                                    bugReportService: bugReportService,
+                                                                    notificationSettings: userSession.clientProxy.notificationSettings,
+                                                                    secureBackupController: userSession.clientProxy.secureBackupController,
+                                                                    appSettings: appSettings,
+                                                                    navigationStackCoordinator: navigationStackCoordinator,
+                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                    analytics: analytics))
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .dismiss:
+                navigationTabCoordinator.setSheetCoordinator(nil)
+            case .clearCache:
+                actionsSubject.send(.clearCache)
+            case .runLogoutFlow:
+                Task {
+                    self.navigationTabCoordinator.setSheetCoordinator(nil)
+                    
+                    // The sheet needs to be dismissed before the alert can be shown
+                    try await Task.sleep(for: .milliseconds(100))
+                    await self.runLogoutFlow()
+                }
+            case .forceLogout:
+                actionsSubject.send(.forceLogout)
+            }
+        }
+        .store(in: &cancellables)
+        
+        settingsFlowCoordinator = coordinator
+        coordinator.handleAppRoute(.settings, animated: false)
+        
+        navigationTabCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedSettingsScreen)
         }
     }
     

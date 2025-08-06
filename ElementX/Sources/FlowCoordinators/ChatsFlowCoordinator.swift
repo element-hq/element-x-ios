@@ -12,11 +12,10 @@ import MatrixRustSDK
 import SwiftUI
 
 enum ChatsFlowCoordinatorAction {
-    case logout
+    case showSettings
+    case showChatBackupSettings
     case sessionVerification(SessionVerificationScreenFlow)
-    case clearCache
-    /// Logout and disable App Lock without any confirmation. The user forgot their PIN.
-    case forceLogout
+    case logout
 }
 
 class ChatsFlowCoordinator: FlowCoordinatorProtocol {
@@ -35,8 +34,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var roomFlowCoordinator: RoomFlowCoordinator?
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
-    
-    private let settingsFlowCoordinator: SettingsFlowCoordinator
     
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
@@ -88,22 +85,9 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
-        
         navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
         
-        settingsFlowCoordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
-                                                                            windowManager: appMediator.windowManager,
-                                                                            appLockService: appLockService,
-                                                                            bugReportService: bugReportService,
-                                                                            notificationSettings: userSession.clientProxy.notificationSettings,
-                                                                            secureBackupController: userSession.clientProxy.secureBackupController,
-                                                                            appSettings: appSettings,
-                                                                            navigationSplitCoordinator: navigationSplitCoordinator,
-                                                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                            analytics: analytics))
-        
         setupStateMachine()
-        
         setupObservers()
     }
     
@@ -189,8 +173,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             Task { await presentCallScreen(roomID: roomID) }
         case .genericCallLink(let url):
             presentCallScreen(genericCallLink: url)
-        case .settings, .chatBackupSettings:
-            settingsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
         case .share(let payload):
             if let roomID = payload.roomID {
                 stateMachine.processEvent(.selectRoom(roomID: roomID,
@@ -200,14 +182,14 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.processEvent(.showShareExtensionRoomList(sharePayload: payload), userInfo: .init(animated: animated))
             }
-        case .accountProvisioningLink:
-            break // We always ignore this flow when logged in.
         case .transferOwnership(let roomID):
             if stateMachine.state.roomListSelectedRoomID == roomID {
                 roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
             } else {
                 stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .transferOwnership))
             }
+        case .accountProvisioningLink, .settings, .chatBackupSettings:
+            break // These routes cannot be handled.
         }
     }
     
@@ -247,11 +229,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 hideCallScreenOverlay() // Turn any active call into a PiP so that navigation from a notification is visible to the user.
             case(.roomList, .deselectRoom, .roomList):
                 dismissRoomFlow(animated: animated)
-                                
-            case (.roomList, .showSettingsScreen, .settingsScreen):
-                break
-            case (.settingsScreen, .dismissedSettingsScreen, .roomList):
-                break
                 
             case (.roomList, .feedbackScreen, .feedbackScreen):
                 bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(sidebarNavigationStackCoordinator),
@@ -333,24 +310,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func setupObservers() {
-        settingsFlowCoordinator.actions.sink { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .presentedSettings:
-                stateMachine.processEvent(.showSettingsScreen)
-            case .dismissedSettings:
-                stateMachine.processEvent(.dismissedSettingsScreen)
-            case .runLogoutFlow:
-                actionsSubject.send(.logout)
-            case .clearCache:
-                actionsSubject.send(.clearCache)
-            case .forceLogout:
-                actionsSubject.send(.forceLogout)
-            }
-        }
-        .store(in: &cancellables)
-        
         userSession.clientProxy.actionsPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
@@ -439,11 +398,11 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                         clearRoute(animated: true)
                     }
                 case .presentSettingsScreen:
-                    settingsFlowCoordinator.handleAppRoute(.settings, animated: true)
+                    actionsSubject.send(.showSettings)
                 case .presentFeedbackScreen:
                     stateMachine.processEvent(.feedbackScreen)
                 case .presentSecureBackupSettings:
-                    settingsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
+                    actionsSubject.send(.showChatBackupSettings)
                 case .presentRecoveryKeyScreen:
                     stateMachine.processEvent(.showRecoveryKeyScreen)
                 case .presentEncryptionResetScreen:
