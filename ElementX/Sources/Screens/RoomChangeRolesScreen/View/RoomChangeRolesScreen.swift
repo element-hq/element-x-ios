@@ -109,10 +109,10 @@ struct RoomChangeRolesScreen: View {
 // MARK: - Previews
 
 struct RoomChangeRolesScreen_Previews: PreviewProvider, TestablePreview {
-    static let ownerViewModel = makeViewModel(mode: .owner)
-    static let administratorOrOwnerViewModel = makeViewModel(mode: .administrator(ownUserRole: .creator))
-    static let administratorViewModel = makeViewModel(mode: .administrator(ownUserRole: .administrator))
-    static let moderatorViewModel = makeViewModel(mode: .moderator)
+    static let ownerViewModel = makeViewModel(mode: .owner, ownRole: .creator)
+    static let administratorOrOwnerViewModel = makeViewModel(mode: .administrator, ownRole: .creator)
+    static let administratorViewModel = makeViewModel(mode: .administrator, ownRole: .administrator)
+    static let moderatorViewModel = makeViewModel(mode: .moderator, ownRole: .administrator)
     
     static var previews: some View {
         NavigationStack {
@@ -136,11 +136,18 @@ struct RoomChangeRolesScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Moderators")
     }
     
-    static func makeViewModel(mode: RoomChangeRolesMode) -> RoomChangeRolesScreenViewModel {
-        RoomChangeRolesScreenViewModel(mode: mode,
-                                       roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsCreator)),
-                                       mediaProvider: MediaProviderMock(configuration: .init()),
-                                       userIndicatorController: UserIndicatorControllerMock(),
-                                       analytics: ServiceLocator.shared.analytics)
+    static func makeViewModel(mode: RoomRole, ownRole: RoomRole) -> RoomChangeRolesScreenViewModel {
+        let members: [RoomMemberProxyMock] = switch ownRole {
+        case .creator:
+            .allMembersAsCreator
+        default:
+            .allMembersAsAdminV2
+        }
+        
+        return RoomChangeRolesScreenViewModel(mode: mode,
+                                              roomProxy: JoinedRoomProxyMock(.init(members: members)),
+                                              mediaProvider: MediaProviderMock(configuration: .init()),
+                                              userIndicatorController: UserIndicatorControllerMock(),
+                                              analytics: ServiceLocator.shared.analytics)
     }
 }

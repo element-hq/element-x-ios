@@ -26,44 +26,24 @@ struct RoomRolesAndPermissionsScreen: View {
     
     private var rolesSection: some View {
         Section {
-            ForEach(context.viewState.roles, id: \.self) { role in
-                listRow(for: role)
-            }
-            
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
-                                    icon: \.edit),
-                    kind: .button {
-                        context.send(viewAction: .editOwnUserRole)
-                    })
-        } header: {
-            Text(L10n.screenRoomRolesAndPermissionsRolesHeader)
-                .compoundListSectionHeader()
-        }
-    }
-    
-    @ViewBuilder
-    private func listRow(for role: RoomRolesAndPermissionsScreenRole) -> some View {
-        switch role {
-        case .administrators(let ownUserRole):
-            switch ownUserRole {
-            case .creator:
+            if context.viewState.ownRole == .creator {
                 ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdminsAndOwners,
                                         icon: \.admin),
                         details: administratorOrOwnersDetails,
                         kind: .navigationLink {
-                            context.send(viewAction: .editRoles(role))
+                            context.send(viewAction: .editRoles(.administrators))
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
-            default:
+            } else {
                 ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdmins,
                                         icon: \.admin),
                         details: administratorDetails,
                         kind: .navigationLink {
-                            context.send(viewAction: .editRoles(role))
+                            context.send(viewAction: .editRoles(.administrators))
                         })
                         .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
             }
-        case .moderators:
+            
             ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsModerators,
                                     icon: \.chatProblem),
                     details: moderatorDetails,
@@ -71,6 +51,17 @@ struct RoomRolesAndPermissionsScreen: View {
                         context.send(viewAction: .editRoles(.moderators))
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
+            
+            if context.viewState.ownRole != .creator {
+                ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
+                                        icon: \.edit),
+                        kind: .button {
+                            context.send(viewAction: .editOwnUserRole)
+                        })
+            }
+        } header: {
+            Text(L10n.screenRoomRolesAndPermissionsRolesHeader)
+                .compoundListSectionHeader()
         }
     }
     

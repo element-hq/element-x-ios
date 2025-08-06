@@ -14,7 +14,9 @@ enum RoomChangeRolesScreenViewModelAction {
 
 struct RoomChangeRolesScreenViewState: BindableState {
     /// The screen's current mode (which role we are promoting/demoting users to/from.
-    let mode: RoomChangeRolesMode
+    let mode: RoomRole
+    /// The current user's role.
+    var ownRole: RoomRole
     /// All of the room's members who are currently owners or creators.
     var owners: [RoomMemberDetails] = []
     /// All of the room's members who are currently admins.
@@ -36,7 +38,7 @@ struct RoomChangeRolesScreenViewState: BindableState {
     
     /// The screen's title.
     var title: String {
-        switch mode.promotingRole {
+        switch mode {
         case .creator:
             "" // The screen can't be configured with this role.
         case .owner:
@@ -88,11 +90,31 @@ struct RoomChangeRolesScreenViewState: BindableState {
     /// Whether or not a specific member has this screen's role.
     func isMemberSelected(_ member: RoomMemberDetails) -> Bool {
         guard !membersToDemote.contains(member) else { return false }
-        return member.role >= mode.promotingRole || membersToPromote.contains(member)
+        return member.role >= mode || membersToPromote.contains(member)
     }
     
     func isMemberDisabled(_ member: RoomMemberDetails) -> Bool {
-        member.role > mode.maxDemotableRole
+        member.role > maxDemotableRole
+    }
+    
+    var maxDemotableRole: RoomRole {
+        switch mode {
+        case .owner:
+            return .owner
+        case .administrator:
+            switch ownRole {
+            case .owner:
+                return .administrator
+            case .creator:
+                return .owner
+            default:
+                return .moderator
+            }
+        case .moderator:
+            return .moderator
+        default:
+            return .user
+        }
     }
 }
 
@@ -122,50 +144,4 @@ enum RoomChangeRolesScreenViewAction {
     case save
     /// Discard any changes and hide the screen.
     case cancel
-}
-
-enum RoomChangeRolesMode: Equatable {
-    case owner
-    case administrator(ownUserRole: RoomMemberDetails.Role)
-    case moderator
-    
-    /// Role you can promote a user to
-    var promotingRole: RoomMemberDetails.Role {
-        switch self {
-        case .owner:
-            return .owner
-        case .administrator:
-            return .administrator
-        case .moderator:
-            return .moderator
-        }
-    }
-    
-    /// Max role that can be demoted to user
-    var maxDemotableRole: RoomMemberDetails.Role {
-        switch self {
-        case .owner:
-            return .owner
-        case .administrator(let ownUserRole):
-            switch ownUserRole {
-            case .creator:
-                return .owner
-            case .owner:
-                return .administrator
-            default:
-                return .moderator
-            }
-        case .moderator:
-            return .moderator
-        }
-    }
-    
-    init(from role: RoomRolesAndPermissionsScreenRole) {
-        switch role {
-        case .administrators(let ownUserRole):
-            self = .administrator(ownUserRole: ownUserRole)
-        case .moderators:
-            self = .moderator
-        }
-    }
 }

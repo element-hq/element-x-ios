@@ -351,11 +351,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             
             if !roomProxy.isDirectOneToOneRoom {
                 if case let .success(ownMember) = await roomProxy.getMember(userID: roomProxy.ownUserID),
-                   ownMember.isOwner {
+                   ownMember.role.isOwner {
                     await roomProxy.updateMembers()
                     var isLastOwner = true
                     for member in roomProxy.membersPublisher.value where member.userID != roomProxy.ownUserID {
-                        if member.isOwner {
+                        if member.role.isOwner {
                             isLastOwner = false
                             break
                         }

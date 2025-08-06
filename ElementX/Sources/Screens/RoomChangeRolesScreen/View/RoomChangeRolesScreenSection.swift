@@ -10,7 +10,7 @@ import SwiftUI
 
 struct RoomChangeRolesScreenSection: View {
     let members: [RoomMemberDetails]
-    let role: RoomMemberDetails.Role
+    let role: RoomRole
     
     let context: RoomChangeRolesScreenViewModel.Context
     

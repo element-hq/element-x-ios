@@ -36,6 +36,4 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
     var isIgnored: Bool { member.isIgnored }
     
     var powerLevel: RoomPowerLevel { .init(rustPowerLevel: member.powerLevel) }
-    
-    var role: RoomMemberRole { member.suggestedRoleForPowerLevel }
 }

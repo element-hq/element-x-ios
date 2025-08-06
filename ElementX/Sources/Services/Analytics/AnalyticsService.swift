@@ -211,7 +211,7 @@ extension AnalyticsService {
     }
     
     /// Track a room moderation action.
-    func trackRoomModeration(action: AnalyticsEvent.RoomModeration.Action, role: RoomMemberDetails.Role?) {
+    func trackRoomModeration(action: AnalyticsEvent.RoomModeration.Action, role: RoomRole?) {
         let role = role.map(AnalyticsEvent.RoomModeration.Role.init)
         capture(event: AnalyticsEvent.RoomModeration(action: action, role: role))
     }

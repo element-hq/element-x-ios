@@ -25,7 +25,8 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
-        super.init(initialViewState: RoomRolesAndPermissionsScreenViewState(permissions: initialPermissions))
+        super.init(initialViewState: RoomRolesAndPermissionsScreenViewState(ownRole: roomProxy.membersPublisher.value.first(where: { $0.userID == roomProxy.ownUserID })?.role ?? .administrator,
+                                                                            permissions: initialPermissions))
         
         // Automatically update the admin/moderator counts.
         roomProxy.membersPublisher
@@ -81,7 +82,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
                                                  secondaryButton: .init(title: L10n.actionCancel, role: .cancel) { })
         }
     }
-    
+
     // MARK: - Members
     
     private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
@@ -89,12 +90,11 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         state.administratorCount = members.filter { $0.role == .administrator && $0.isActive }.count
         state.moderatorCount = members.filter { $0.role == .moderator && $0.isActive }.count
         if let ownUser = members.first(where: { $0.userID == roomProxy.ownUserID }) {
-            state.roles = [.administrators(ownUserRole: .init(ownUser.role, powerLevel: ownUser.powerLevel)),
-                           .moderators]
+            state.ownRole = ownUser.role
         }
     }
     
-    private func updateOwnRole(_ role: RoomMemberDetails.Role) async {
+    private func updateOwnRole(_ role: RoomRole) async {
         showSavingIndicator()
         
         // A task we can await until the room's info gets modified with the new power levels.

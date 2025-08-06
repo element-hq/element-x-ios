@@ -82,7 +82,7 @@ private extension RoomMember {
                   powerLevel: proxy.powerLevel.rustPowerLevel,
                   normalizedPowerLevel: proxy.powerLevel.rustPowerLevel,
                   isIgnored: proxy.isIgnored,
-                  suggestedRoleForPowerLevel: proxy.role,
+                  suggestedRoleForPowerLevel: proxy.role.rustRole,
                   membershipChangeReason: proxy.membershipChangeReason)
     }
 }
