@@ -44,11 +44,17 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var globalSearchScreenCoordinator: GlobalSearchScreenCoordinator?
     
+    // periphery:ignore - used to avoid deallocation
+    private var userFeedProfileFlowCoordinator: UserFeedProfileFlowCoordinator?
+    
+    // periphery:ignore - used to avoid deallocation
+    private var zeroWalletTransactionsFlowCoordinator: ZeroWalletTransactionsFlowCoordinator?
+    
     private var cancellables = Set<AnyCancellable>()
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
-
+    
     private let selectedRoomSubject = CurrentValueSubject<String?, Never>(nil)
     
     private let actionsSubject: PassthroughSubject<ChatsFlowCoordinatorAction, Never> = .init()
@@ -94,7 +100,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func stop() { }
-
+    
     func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
         stateMachine.isDisplayingRoomScreen(withRoomID: roomID)
     }
@@ -110,7 +116,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     func clearRoute(animated: Bool) {
         roomFlowCoordinator?.clearRoute(animated: animated)
     }
-
+    
     // MARK: - Private
     
     func asyncHandleAppRoute(_ appRoute: AppRoute, animated: Bool) async {
@@ -256,7 +262,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 presentRoomDirectorySearch()
             case (.roomDirectorySearchScreen, .dismissedRoomDirectorySearchScreen, .roomList):
                 dismissRoomDirectorySearch()
-            
+                
             case (_, .showUserProfileScreen(let userID), .userProfileScreen):
                 presentUserProfileScreen(userID: userID, animated: animated)
             case (.userProfileScreen, .dismissedUserProfileScreen, .roomList):
@@ -415,6 +421,14 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.processEvent(.presentDeclineAndBlockScreen(userID: userID, roomID: roomID))
                 case .transferOwnership(let roomIdentifier):
                     handleAppRoute(.transferOwnership(roomID: roomIdentifier), animated: true)
+                case .presentCreateFeedScreen(let feedProtocol):
+                    presentCreateFeedScreen(feedProtocol)
+                case .postTapped(let post, let feedProtocol):
+                    presentFeedDetailsScreen(post, feedProtocol: feedProtocol)
+                case .openPostUserProfile(let profile, let feedProtocol):
+                    startUserProfileWithFeedFlow(userID: nil, profile: profile, feedProtocol: feedProtocol)
+                case .startWalletTransaction(let walletTransactionProtocol, let type, let meowPrice):
+                    startZeroWalletTransactionsFlow(walletTransactionProtocol, type: type, meowPrice: meowPrice)
                 }
             }
             .store(in: &cancellables)
@@ -524,7 +538,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         case .transferOwnership:
             coordinator.handleAppRoute(.transferOwnership(roomID: roomID), animated: animated)
         }
-                
+        
         Task {
             let _ = await userSession.clientProxy.trackRecentlyVisitedRoom(roomID)
             
@@ -542,7 +556,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentStartChat(animated: Bool) {
         let startChatNavigationStackCoordinator = NavigationStackCoordinator()
-
+        
         let userDiscoveryService = UserDiscoveryService(clientProxy: userSession.clientProxy)
         let parameters = StartChatScreenCoordinatorParameters(orientationManager: appMediator.windowManager,
                                                               userSession: userSession,
@@ -567,14 +581,14 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
-
+        
         startChatNavigationStackCoordinator.setRootCoordinator(coordinator)
-
+        
         navigationSplitCoordinator.setSheetCoordinator(startChatNavigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedStartChatScreen)
         }
     }
-        
+    
     // MARK: Calls
     
     private func presentCallScreen(genericCallLink url: URL) {
@@ -662,7 +676,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         let sheetNavigationStackCoordinator = NavigationStackCoordinator()
         let parameters = SecureBackupRecoveryKeyScreenCoordinatorParameters(secureBackupController: userSession.clientProxy.secureBackupController,
                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                            isModallyPresented: true)
+                                                                            isModallyPresented: true,
+                                                                            isForceKeyReset: false)
         
         let coordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: parameters)
         coordinator.actions.sink { [weak self] action in
@@ -737,7 +752,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         let hostingController = UIHostingController(rootView: coordinator.toPresentable())
         hostingController.view.backgroundColor = .clear
         appMediator.windowManager.globalSearchWindow.rootViewController = hostingController
-
+        
         appMediator.windowManager.showGlobalSearch()
     }
     
@@ -880,5 +895,201 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                                                                                     type: .toast,
                                                                                     title: L10n.errorUnknown,
                                                                                     iconName: "xmark"))
+    }
+    
+    private func presentFeedDetailsScreen(_ post: HomeScreenPost,
+                                          feedProtocol: FeedProtocol?,
+                                          childStackCoordinator: NavigationStackCoordinator? = nil) {
+        let stackCoordinator = childStackCoordinator ?? NavigationStackCoordinator()
+        let parameters = FeedDetailsScreenCoordinatorParameters(userSession: userSession,
+                                                                feedProtocol: feedProtocol,
+                                                                feedItem: post,
+                                                                isFeedDetailsRefreshable: childStackCoordinator == nil)
+        let coordinator = FeedDetailsScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .replyTapped(let reply):
+                    presentFeedDetailsScreen(reply, feedProtocol: feedProtocol, childStackCoordinator: stackCoordinator)
+                case .attachMedia(let attachMediaProtocol):
+                    presentMediaUploadPickerWithSource(attachMediaProtocol,
+                                                       stackCoordinator: NavigationStackCoordinator(),
+                                                       fromFeedDetails: true)
+                case .openPostUserProfile(let profile):
+                    startUserProfileWithFeedFlow(userID: nil, profile: profile, feedProtocol: feedProtocol)
+                }
+            }
+            .store(in: &cancellables)
+        //        sidebarNavigationStackCoordinator.push(coordinator)
+        if let childStackCoordinator {
+            childStackCoordinator.push(coordinator)
+        } else {
+            stackCoordinator.setRootCoordinator(coordinator)
+            navigationSplitCoordinator.setSheetCoordinator(stackCoordinator)
+        }
+    }
+    
+    private func presentCreateFeedScreen(_ feedProtocol: FeedProtocol) {
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = CreateFeedScreenCoordinator(parameters: .init(userSession: userSession,
+                                                                        feedProtocol: feedProtocol,
+                                                                        fromUserProfileFlow: false))
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .newPostCreated, .dismissPost:
+                    self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                case .attachMedia(let attachMediaProtocol):
+                    presentMediaUploadPickerWithSource(attachMediaProtocol, stackCoordinator: stackCoordinator, fromFeedDetails: false)
+                }
+            }
+            .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator)
+    }
+    
+    private func presentMediaUploadPickerWithSource(_ attachMediaProtocol: FeedMediaSelectedProtocol,
+                                                    stackCoordinator: NavigationStackCoordinator,
+                                                    fromFeedDetails: Bool) {
+        
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(
+            mode: .init(source: .photoLibrary, selectionType: .single),
+            appSettings: appSettings,
+            userIndicatorController: ServiceLocator.shared.userIndicatorController,
+            orientationManager: appMediator.windowManager,
+        ) { [weak self] action in
+            guard let self else {
+                return
+            }
+            switch action {
+            case .cancel:
+                if fromFeedDetails {
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                } else {
+                    stackCoordinator.pop()
+                }
+                stackCoordinator.pop()
+            case .selectedMediaAtURLs(let urls):
+                if let url = urls.first {
+                    attachMediaProtocol.onMediaSelected(media: url)
+                    if fromFeedDetails {
+                        navigationSplitCoordinator.setSheetCoordinator(nil)
+                    } else {
+                        stackCoordinator.pop()
+                    }
+                }
+            }
+        }
+        if fromFeedDetails {
+            stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
+            navigationSplitCoordinator.setSheetCoordinator(stackCoordinator)
+        } else {
+            stackCoordinator.push(mediaPickerCoordinator)
+        }
+    }
+    
+    private func startUserProfileWithFeedFlow(userID: String?, profile: ZPostUserProfile?, feedProtocol: FeedProtocol?) {
+        guard let userId = userID ?? profile?.userId.toMatrixUserIdFormat(ZeroContants.appServer.matrixHomeServerPostfix) else {
+            return
+        }
+        let flowCoordinator = UserFeedProfileFlowCoordinator(navigationStackCoordinator: detailNavigationStackCoordinator,
+                                                             userSession: userSession,
+                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                             appMediator: appMediator,
+                                                             fromHomeFlow: true,
+                                                             userId: userId,
+                                                             userFeedProfile: profile,
+                                                             feedProtocol: feedProtocol)
+        flowCoordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .finished:
+                stateMachine.processEvent(.dismissedUserProfileScreen)
+            case .presentMatrixProfile:
+                presentMatrixProfileScreen(userID: userId, animated: true)
+            case .presentFeedDetails(let feed):
+                presentFeedDetailsScreen(feed, feedProtocol: feedProtocol)
+            case .openDirectChat(let roomId):
+                stateMachine.processEvent(.selectRoom(roomID: roomId, via: [], entryPoint: .room))
+            }
+        }
+        .store(in: &cancellables)
+        
+        userFeedProfileFlowCoordinator = flowCoordinator
+        flowCoordinator.start()
+    }
+    
+    private func presentMatrixProfileScreen(userID: String, animated: Bool) {
+        clearRoute(animated: true)
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let parameters = UserProfileScreenCoordinatorParameters(userID: userID,
+                                                                isPresentedModally: true,
+                                                                clientProxy: userSession.clientProxy,
+                                                                mediaProvider: userSession.mediaProvider,
+                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                analytics: analytics)
+        let coordinator = UserProfileScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .openDirectChat(let roomID):
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
+            case .startCall(let roomID):
+                Task { await self.presentCallScreen(roomID: roomID) }
+            case .dismiss:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.setRootCoordinator(coordinator, animated: false)
+        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: animated) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedUserProfileScreen)
+        }
+    }
+    
+    private func startZeroWalletTransactionsFlow(_ walletTransactionProtocol: WalletTransactionProtocol,
+                                                 type: WalletTransactionType,
+                                                 meowPrice: ZeroCurrency?) {
+        let flowCoordinator = ZeroWalletTransactionsFlowCoordinator(rootStackCoordinator: detailNavigationStackCoordinator,
+                                                                    userSession: userSession,
+                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                    appMediator: appMediator,
+                                                                    transactionType: type,
+                                                                    meowPrice: meowPrice)
+        flowCoordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .transactionCompleted:
+                walletTransactionProtocol.onTransactionCompleted()
+            case .finished:
+                detailNavigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        zeroWalletTransactionsFlowCoordinator = flowCoordinator
+        flowCoordinator.start()
+    }
+    
+    func runDeleteAccountFlow() {
+        showLoadingIndicator()
+        Task {
+            let deleteAccountResult = await userSession.clientProxy.deleteUserAccount()
+            switch deleteAccountResult {
+            case .success:
+                self.hideLoadingIndicator()
+                self.actionsSubject.send(.logout)
+            case .failure:
+                showFailureIndicator()
+            }
+        }
     }
 }

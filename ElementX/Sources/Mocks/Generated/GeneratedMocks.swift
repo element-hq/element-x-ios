@@ -2194,6 +2194,19 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var maxMediaUploadSizeCalled: Bool {
         return maxMediaUploadSizeCallsCount > 0
     }
+
+    var maxMediaUploadSize: Result<UInt, ClientProxyError> {
+        get async {
+            maxMediaUploadSizeCallsCount += 1
+            if let maxMediaUploadSizeClosure = maxMediaUploadSizeClosure {
+                return await maxMediaUploadSizeClosure()
+            } else {
+                return underlyingMaxMediaUploadSize
+            }
+        }
+    }
+    var underlyingMaxMediaUploadSize: Result<UInt, ClientProxyError>!
+    var maxMediaUploadSizeClosure: (() async -> Result<UInt, ClientProxyError>)?
     var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> {
         get { return underlyingUserRewardsPublisher }
         set(value) { underlyingUserRewardsPublisher = value }
@@ -2224,19 +2237,6 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingHomeRoomSummariesUsersPublisher = value }
     }
     var underlyingHomeRoomSummariesUsersPublisher: CurrentValuePublisher<[ZMatrixUser], Never>!
-
-    var maxMediaUploadSize: Result<UInt, ClientProxyError> {
-        get async {
-            maxMediaUploadSizeCallsCount += 1
-            if let maxMediaUploadSizeClosure = maxMediaUploadSizeClosure {
-                return await maxMediaUploadSizeClosure()
-            } else {
-                return underlyingMaxMediaUploadSize
-            }
-        }
-    }
-    var underlyingMaxMediaUploadSize: Result<UInt, ClientProxyError>!
-    var maxMediaUploadSizeClosure: (() async -> Result<UInt, ClientProxyError>)?
 
     //MARK: - isOnlyDeviceLeft
 
@@ -16066,12 +16066,6 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {
         set(value) { underlyingPowerLevel = value }
     }
     var underlyingPowerLevel: RoomPowerLevel!
-    var underlyingPowerLevel: Int!
-    var role: RoomMemberRole {
-        get { return underlyingRole }
-        set(value) { underlyingRole = value }
-    }
-    var underlyingRole: RoomMemberRole!
     var primaryZeroId: String?
     var isZeroProSubscriber: Bool {
         get { return underlyingIsZeroProSubscriber }

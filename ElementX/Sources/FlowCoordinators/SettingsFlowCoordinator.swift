@@ -127,7 +127,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentZeroProSubSettings()
                 case .claimRewards:
                     actionsSubject.send(.claimUserRewards)
-                    parameters.navigationSplitCoordinator.setSheetCoordinator(nil)
+                    parameters.navigationStackCoordinator.setSheetCoordinator(nil)
                 }
             }
             .store(in: &cancellables)
@@ -233,7 +233,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .clearCache:
                     actionsSubject.send(.clearCache)
                 case .deleteAccount:
-                    parameters.navigationSplitCoordinator.setSheetCoordinator(nil)
+                    parameters.navigationStackCoordinator.setSheetCoordinator(nil)
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         self.showDeleteZeroAccountConfirmation()

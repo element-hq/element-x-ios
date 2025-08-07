@@ -40,6 +40,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     // periphery:ignore - retaining purpose
     private var settingsFlowCoordinator: SettingsFlowCoordinator?
     
+    private var userRewardsProtcol: UserRewardsProtocol? = nil
+    
     enum State: StateType {
         /// The state machine hasn't started.
         case initial
@@ -61,19 +63,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: StateMachine<State, Event>
     private var cancellables: Set<AnyCancellable> = []
-    // periphery:ignore - used to avoid deallocation
-    private var userFeedProfileFlowCoordinator: UserFeedProfileFlowCoordinator?
-    
-    // periphery:ignore - used to avoid deallocation
-    private var zeroWalletTransactionsFlowCoordinator: ZeroWalletTransactionsFlowCoordinator?
-    
     
     private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<UserSessionFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var userRewardsProtcol: UserRewardsProtocol? = nil
     init(userSession: UserSessionProtocol,
          isNewLogin: Bool,
          navigationRootCoordinator: NavigationRootCoordinator,
@@ -161,9 +156,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             settingsFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
-             .roomDetails, .roomMemberDetails, .userProfile,
-             .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
-             .call, .genericCallLink, .share, .transferOwnership:
+                .roomDetails, .roomMemberDetails, .userProfile,
+                .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
+                .call, .genericCallLink, .share, .transferOwnership:
             clearRoute(animated: animated) // Make sure the presented route is visible.
             chatsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             navigationTabCoordinator.selectedTab = .chats
@@ -276,11 +271,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     func attemptStartingOnboarding() {
         MXLog.info("Attempting to start onboarding")
-        
-        if onboardingFlowCoordinator.shouldStart {
-            clearRoute(animated: false)
-            onboardingFlowCoordinator.start()
-        }
+        checkAndProceed(execute: {
+            if self.onboardingFlowCoordinator.shouldStart {
+                self.clearRoute(animated: false)
+                self.onboardingFlowCoordinator.start()
+            }
+        })
     }
     
     // MARK: - Settings
@@ -316,6 +312,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
             case .forceLogout:
                 actionsSubject.send(.forceLogout)
+            case .runDeleteAccountFlow:
+                chatsFlowCoordinator.runDeleteAccountFlow()
+            case .claimUserRewards:
+                userRewardsProtcol?.claimUserRewards()
             }
         }
         .store(in: &cancellables)
@@ -397,10 +397,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             title: L10n.screenSignoutRecoveryDisabledTitle,
                                                                             message: L10n.screenSignoutRecoveryDisabledSubtitle,
                                                                             primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                                                self?.actionsSubject.send(.logout)
-                                                                            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
-                                                                                self?.chatsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
-                                                                            })
+                self?.actionsSubject.send(.logout)
+            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
+                self?.chatsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
+            })
             return
         }
         
@@ -409,10 +409,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                             title: L10n.screenSignoutKeyBackupDisabledTitle,
                                                                             message: L10n.screenSignoutKeyBackupDisabledSubtitle,
                                                                             primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                                                self?.actionsSubject.send(.logout)
-                                                                            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
-                                                                                self?.chatsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
-                                                                            })
+                self?.actionsSubject.send(.logout)
+            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
+                self?.chatsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
+            })
             return
         }
         
@@ -424,8 +424,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                         title: L10n.screenSignoutConfirmationDialogTitle,
                                                                         message: L10n.screenSignoutConfirmationDialogContent,
                                                                         primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                                            self?.actionsSubject.send(.logout)
-                                                                        })
+            self?.actionsSubject.send(.logout)
+        })
     }
     
     private func presentSecureBackupLogoutConfirmationScreen() {
@@ -449,5 +449,47 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         navigationTabCoordinator.setSheetCoordinator(coordinator, animated: true)
+    }
+    
+    private var isProfileCheckInProgress = false
+    private func checkAndProceed(execute: @escaping () -> Void) {
+        if !isProfileCheckInProgress {
+            isProfileCheckInProgress = true
+            Task {
+                defer {
+                    self.isProfileCheckInProgress = false
+                    // hideLoadingIndicator()
+                }
+                // showLoadingIndicator()
+                let hasPendingSignup = await userSession.clientProxy.isProfileCompletionRequired()
+                if hasPendingSignup {
+                    presentCompleteProfileScreen(execute)
+                } else {
+                    execute()
+                }
+            }
+        }
+    }
+    
+    private func presentCompleteProfileScreen(_ execute: @escaping () -> Void) {
+        let inviteCode = CreateAccountHelper.shared.inviteCode
+        let parameters = CompleteProfileScreenParameters(clientProxy: userSession.clientProxy,
+                                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                         mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+                                                         orientationManager: appMediator.windowManager,
+                                                         appSettings: appSettings,
+                                                         inviteCode: inviteCode)
+        let coordinator = CompleteProfileScreenCoordinator(parameters: parameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .profileUpdated:
+                    navigationTabCoordinator.setFullScreenCoverCoordinator(nil)
+                    execute()
+                }
+            }
+            .store(in: &cancellables)
+        navigationTabCoordinator.setFullScreenCoverCoordinator(coordinator)
     }
 }

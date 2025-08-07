@@ -278,33 +278,33 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     // MARK: - Private
     
     private func handleTappedOnSenderDetails(sender: TimelineItemSender) {
-        let memberDetails: ManageRoomMemberDetails = if let memberProxy = roomProxy.membersPublisher.value.first(where: { $0.userID == sender.id }) {
-            .memberDetails(roomMember: .init(withProxy: memberProxy))
-        } else {
-            .loadingMemberDetails(sender: sender)
-        }
-        
-        let viewModel = ManageRoomMemberSheetViewModel(memberDetails: memberDetails,
-                                                       permissions: .init(canKick: state.canCurrentUserKick,
-                                                                          canBan: state.canCurrentUserBan,
-                                                                          ownPowerLevel: currentUserProxy?.powerLevel ?? .init(value: 0)),
-                                                       roomProxy: roomProxy,
-                                                       userIndicatorController: userIndicatorController,
-                                                       analyticsService: analyticsService,
-                                                       mediaProvider: mediaProvider)
-        
-        viewModel.actions.sink { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .dismiss(let shouldShowDetails):
-                state.bindings.manageMemberViewModel = nil
-                if shouldShowDetails {
-                    actionsSubject.send(.displaySenderDetails(userID: sender.id))
-                }
-            }
-        }
-        .store(in: &cancellables)
-        state.bindings.manageMemberViewModel = viewModel
+//        let memberDetails: ManageRoomMemberDetails = if let memberProxy = roomProxy.membersPublisher.value.first(where: { $0.userID == sender.id }) {
+//            .memberDetails(roomMember: .init(withProxy: memberProxy))
+//        } else {
+//            .loadingMemberDetails(sender: sender)
+//        }
+//        
+//        let viewModel = ManageRoomMemberSheetViewModel(memberDetails: memberDetails,
+//                                                       permissions: .init(canKick: state.canCurrentUserKick,
+//                                                                          canBan: state.canCurrentUserBan,
+//                                                                          ownPowerLevel: currentUserProxy?.powerLevel ?? .init(value: 0)),
+//                                                       roomProxy: roomProxy,
+//                                                       userIndicatorController: userIndicatorController,
+//                                                       analyticsService: analyticsService,
+//                                                       mediaProvider: mediaProvider)
+//        
+//        viewModel.actions.sink { [weak self] action in
+//            guard let self else { return }
+//            switch action {
+//            case .dismiss(let shouldShowDetails):
+//                state.bindings.manageMemberViewModel = nil
+//                if shouldShowDetails {
+//                    actionsSubject.send(.displaySenderDetails(userID: sender.id))
+//                }
+//            }
+//        }
+//        .store(in: &cancellables)
+//        state.bindings.manageMemberViewModel = viewModel
         actionsSubject.send(.displaySenderDetails(userID: sender.id))
     }
     

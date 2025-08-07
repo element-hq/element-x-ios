@@ -13,6 +13,7 @@ struct CompleteProfileScreenParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let orientationManager: OrientationManagerProtocol
+    let appSettings: AppSettings
     weak var navigationCoordinator: NavigationSplitCoordinator?
     let inviteCode: String
 }
@@ -44,9 +45,9 @@ final class CompleteProfileScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .displayCameraPicker:
-                    self.displayMediaPickerWithSource(.camera)
+                    self.presentMediaUploadPickerWithMode(.init(source: .camera, selectionType: .single))
                 case .displayMediaPicker:
-                    self.displayMediaPickerWithSource(.photoLibrary)
+                    self.presentMediaUploadPickerWithMode(.init(source: .photoLibrary, selectionType: .single))
                 case .profileUpdated:
                     actionsSubject.send(.profileUpdated)
                 }
@@ -60,20 +61,26 @@ final class CompleteProfileScreenCoordinator: CoordinatorProtocol {
     
     // MARK: Private
     
-    private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
+    private func presentMediaUploadPickerWithMode(_ mode: MediaPickerScreenMode) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source, orientationManager: parameters.orientationManager) { [weak self] action in
-            guard let self else { return }
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(mode: mode,
+                                                                  appSettings: parameters.appSettings,
+                                                                  userIndicatorController: parameters.userIndicatorController,
+                                                                  orientationManager: parameters.orientationManager) { [weak self] action in
+            guard let self else {
+                return
+            }
             switch action {
             case .cancel:
                 parameters.navigationCoordinator?.setSheetCoordinator(nil)
-            case .selectMediaAtURL(let url):
-                parameters.navigationCoordinator?.setSheetCoordinator(nil)
-                viewModel.didSelectMediaURL(url: url)
+            case .selectedMediaAtURLs(let urls):
+                if let url = urls.first {
+                    parameters.navigationCoordinator?.setSheetCoordinator(nil)
+                    viewModel.didSelectMediaURL(url: url)
+                }
             }
         }
-        
         stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
         parameters.navigationCoordinator?.setSheetCoordinator(stackCoordinator)
     }

@@ -43,7 +43,7 @@ struct RoomRolesAndPermissionsScreen: View {
                         .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
             
             if context.viewState.ownRole != .creator {
-                ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
+                ZeroListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
                                         icon: \.edit),
                         kind: .button {
                             context.send(viewAction: .editOwnUserRole)

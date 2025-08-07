@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -1144,7 +1144,6 @@
 		18E9A73E2C9829970082DDA4 /* UserPropertiesExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66AFD800AF033D8B0D11191A /* UserPropertiesExt.swift */; };
 		18E9A73F2C9829970082DDA4 /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E5E9C044BEB7C70B1378E91 /* UserSession.swift */; };
 		18E9A7402C9829970082DDA4 /* UserSessionFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99FDEEB71173C4C6FA2734C /* UserSessionFlowCoordinator.swift */; };
-		18E9A7412C9829970082DDA4 /* UserSessionFlowCoordinatorStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8774CF614849664B5B3C2A1 /* UserSessionFlowCoordinatorStateMachine.swift */; };
 		18E9A7422C9829970082DDA4 /* UserSessionMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4469F6AE311BDC439B3A5EC /* UserSessionMock.swift */; };
 		18E9A7432C9829970082DDA4 /* UserSessionProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4134FEFE4EB55759017408 /* UserSessionProtocol.swift */; };
 		18E9A7442C9829970082DDA4 /* UserSessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E8BDC092D817B68CD9040C5 /* UserSessionStore.swift */; };
@@ -1723,6 +1722,18 @@
 		785613C0C092B532198EB3BB /* TimelineStartRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44ECC9D66400727DFFEE12E8 /* TimelineStartRoomTimelineView.swift */; };
 		7856DE3EA4580AE0329986EB /* ComposerDraftServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E600B315B920B9687F8EE1B /* ComposerDraftServiceMock.swift */; };
 		78A3D84BA47DAC69B4D0A34C /* CollapsibleRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFBF273BC2BFB9F3EEFA988B /* CollapsibleRoomTimelineView.swift */; };
+		790181642E453BC70083B4BB /* NavigationTabCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C39B1D3FC8CF41D6C3B054F /* NavigationTabCoordinator.swift */; };
+		790181652E453BDA0083B4BB /* ChatsFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B3BF242C93CD32C4C3E08D /* ChatsFlowCoordinator.swift */; };
+		790181662E453BE80083B4BB /* SpaceExplorerFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4EF5724C0F894911AF7811 /* SpaceExplorerFlowCoordinator.swift */; };
+		790181672E453C1C0083B4BB /* StateMachineFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC73285743189AE4498A51DD /* StateMachineFactory.swift */; };
+		790181682E453C2D0083B4BB /* RoomPowerLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E247E29C7A0E421DB839D7 /* RoomPowerLevel.swift */; };
+		790181692E453C580083B4BB /* RoomRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578AF9CE60816069536C0953 /* RoomRole.swift */; };
+		7901816A2E453D5A0083B4BB /* ChatsFlowCoordinatorStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 566FB9DA81607C2739D8C6A0 /* ChatsFlowCoordinatorStateMachine.swift */; };
+		7901816B2E453D9F0083B4BB /* SpaceListScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2FE435D42E942721ECDA42 /* SpaceListScreenCoordinator.swift */; };
+		7901816C2E453DBE0083B4BB /* SpaceListScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893DD588E4D220261A172C30 /* SpaceListScreenViewModelProtocol.swift */; };
+		7901816D2E453DCB0083B4BB /* SpaceListScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB180B67B452302260AF44B /* SpaceListScreenViewModel.swift */; };
+		7901816E2E453DEB0083B4BB /* SpaceListScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAC770857E525B51E277D8C /* SpaceListScreenModels.swift */; };
+		7901816F2E453E130083B4BB /* SpaceListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F52DA8CCCABA0998C8AA273C /* SpaceListScreen.swift */; };
 		7902C42B2E3176D90002F0A5 /* ZeroWalletUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7902C42A2E3176D40002F0A5 /* ZeroWalletUtil.swift */; };
 		7902C42C2E3176D90002F0A5 /* ZeroWalletUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7902C42A2E3176D40002F0A5 /* ZeroWalletUtil.swift */; };
 		790393712D4CD63E0022E293 /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790393702D4CD63A0022E293 /* HomeTabView.swift */; };
@@ -1937,7 +1948,6 @@
 		7995C3B92D89649B00E4D98E /* PhishingDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB07F03461023BC39C730922 /* PhishingDetector.swift */; };
 		7995C3BA2D8964C400E4D98E /* PillUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C537DE821FED94D23467B6C4 /* PillUtilities.swift */; };
 		7995C3BB2D89650100E4D98E /* CharacterSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F8C01DEEA83903D45069BBD /* CharacterSet.swift */; };
-		7995C3BC2D89655700E4D98E /* ListRowTrailingSectionSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61652CF85F5600921644 /* ListRowTrailingSectionSpacing.swift */; };
 		7996162B2E09EDBC008E73C4 /* RoomPowerLevelsProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = E944F717FC10A428D027074D /* RoomPowerLevelsProxyMock.swift */; };
 		7996162C2E09EDE1008E73C4 /* RoomPowerLevelProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D635709C1D6D37C225AD40E /* RoomPowerLevelProxyProtocol.swift */; };
 		7996162D2E09EDF8008E73C4 /* RoomPowerLevelsProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFFA5E881D281810AB428EA3 /* RoomPowerLevelsProxy.swift */; };
@@ -2081,6 +2091,7 @@
 		79FC2A472DCA8F7C00D14182 /* ZPostMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC2A452DCA8F7700D14182 /* ZPostMedia.swift */; };
 		79FC2A492DCAA7AE00D14182 /* LinkPreviewUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC2A482DCAA79F00D14182 /* LinkPreviewUtil.swift */; };
 		79FC2A4A2DCAA7AE00D14182 /* LinkPreviewUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79FC2A482DCAA79F00D14182 /* LinkPreviewUtil.swift */; };
+		79FC83FF2E4564F4007954C9 /* ListRowTrailingSectionSpacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AF61652CF85F5600921644 /* ListRowTrailingSectionSpacing.swift */; };
 		79FCB1A32DA5BA0900669122 /* ReportRoomScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 292EEE1F71DCC205C45728F7 /* ReportRoomScreenCoordinator.swift */; };
 		79FCB1A42DA5BA1200669122 /* ReportRoomScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FCAE847556719BBE7A0882 /* ReportRoomScreenModels.swift */; };
 		79FCB1A52DA5BA1600669122 /* ReportRoomScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FDB0B87D925AE830E32621 /* ReportRoomScreenViewModel.swift */; };
@@ -9346,7 +9357,6 @@
 				79F31B232E02BE5A0043E100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				790AB7AF2E1D316300555B1F /* XCRemoteSwiftPackageReference "StoreKitPlus" */,
 			);
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -10098,6 +10108,7 @@
 				79621A4C2DA78E040006C391 /* ManageRoomMemberSheetModels.swift in Sources */,
 				185454C32CFDE681003CA957 /* CreateAccountScreenViewModel.swift in Sources */,
 				18E9A4742C9829970082DDA4 /* AuthenticationFlowCoordinator.swift in Sources */,
+				7901816C2E453DBE0083B4BB /* SpaceListScreenViewModelProtocol.swift in Sources */,
 				18E9A4752C9829970082DDA4 /* AuthenticationService.swift in Sources */,
 				18E9A4762C9829970082DDA4 /* AuthenticationServiceProtocol.swift in Sources */,
 				18E9A47A2C9829970082DDA4 /* ZMatrixSession.swift in Sources */,
@@ -10122,6 +10133,7 @@
 				18E9A48A2C9829970082DDA4 /* BlockedUsersScreenViewModelProtocol.swift in Sources */,
 				18E9A48C2C9829970082DDA4 /* BlurHashDecode.swift in Sources */,
 				18E9A48D2C9829970082DDA4 /* BlurHashEncode.swift in Sources */,
+				7901816D2E453DCB0083B4BB /* SpaceListScreenViewModel.swift in Sources */,
 				18E9A48E2C9829970082DDA4 /* BugReportFlowCoordinator.swift in Sources */,
 				18C454082CF09A4700F25539 /* KnockRequestsListScreenViewModel.swift in Sources */,
 				18E9A48F2C9829970082DDA4 /* BugReportHook.swift in Sources */,
@@ -10284,6 +10296,7 @@
 				18E9A4FC2C9829970082DDA4 /* EncryptionResetScreenCoordinator.swift in Sources */,
 				18793DE82CF5052F00F1C85D /* KnockRequestsBannerView.swift in Sources */,
 				18E9A4FD2C9829970082DDA4 /* EncryptionResetScreenModels.swift in Sources */,
+				7901816F2E453E130083B4BB /* SpaceListScreen.swift in Sources */,
 				18E9A4FE2C9829970082DDA4 /* EncryptionResetScreenViewModel.swift in Sources */,
 				18E9A4FF2C9829970082DDA4 /* EncryptionResetScreenViewModelProtocol.swift in Sources */,
 				18E9A5002C9829970082DDA4 /* EstimatedWaveformView.swift in Sources */,
@@ -10408,6 +10421,7 @@
 				18D5D9B72CEB749B00107940 /* UserRewardsSettingsScreenViewModelProtocol.swift in Sources */,
 				18E9A54F2C9829970082DDA4 /* LABiometryType.swift in Sources */,
 				18E9A5502C9829970082DDA4 /* LAContextMock.swift in Sources */,
+				790181682E453C2D0083B4BB /* RoomPowerLevel.swift in Sources */,
 				18E9A5512C9829970082DDA4 /* Label.swift in Sources */,
 				1868A8902CA2181200DC382D /* ZeroFonts.swift in Sources */,
 				18E9A5522C9829970082DDA4 /* LayoutDirection.swift in Sources */,
@@ -10438,7 +10452,9 @@
 				18E9A5662C9829970082DDA4 /* LoginMode.swift in Sources */,
 				18E9A5672C9829970082DDA4 /* LoginScreen.swift in Sources */,
 				18D467AC2D109BFE00861AA6 /* VoiceMessageRoomPlaybackView.swift in Sources */,
+				7901816A2E453D5A0083B4BB /* ChatsFlowCoordinatorStateMachine.swift in Sources */,
 				18E9A5682C9829970082DDA4 /* LoginScreenCoordinator.swift in Sources */,
+				790181642E453BC70083B4BB /* NavigationTabCoordinator.swift in Sources */,
 				18E9A5692C9829970082DDA4 /* LoginScreenModels.swift in Sources */,
 				18E9A56A2C9829970082DDA4 /* LoginScreenViewModel.swift in Sources */,
 				79C6BB252D47B6E700FC3CBF /* RoomPreviewProxyProtocol.swift in Sources */,
@@ -10483,6 +10499,7 @@
 				18E9A58E2C9829970082DDA4 /* MenuSheetLabelStyle.swift in Sources */,
 				799E1D1A2DBBA85B00E3D512 /* ZeroMetaDataApi.swift in Sources */,
 				18E9A58F2C9829970082DDA4 /* MessageComposer.swift in Sources */,
+				790181672E453C1C0083B4BB /* StateMachineFactory.swift in Sources */,
 				18E9A5902C9829970082DDA4 /* MessageComposerTextField.swift in Sources */,
 				18E9A5912C9829970082DDA4 /* MessageForwardingScreen.swift in Sources */,
 				79F31B222E02BB140043E100 /* RemoteConfigManager.swift in Sources */,
@@ -10591,6 +10608,7 @@
 				185454ED2CFFAD09003CA957 /* ZInviter.swift in Sources */,
 				7909225B2E1E674300833940 /* ZWalletRecipients.swift in Sources */,
 				79FCB1A42DA5BA1200669122 /* ReportRoomScreenModels.swift in Sources */,
+				7901816B2E453D9F0083B4BB /* SpaceListScreenCoordinator.swift in Sources */,
 				799616392E0EA06B008E73C4 /* ZWalletTokenBalances.swift in Sources */,
 				7975DBDC2D561F2400D5EB12 /* BannedRoomProxy.swift in Sources */,
 				79B2A7902E28FAA000A76430 /* ClaimedEarningsSheetView.swift in Sources */,
@@ -10650,6 +10668,7 @@
 				18E9A6042C9829970082DDA4 /* ReadReceipt.swift in Sources */,
 				18E9A6052C9829970082DDA4 /* ReadReceiptCell.swift in Sources */,
 				790922612E1F264C00833940 /* ConfirmTransactionView.swift in Sources */,
+				790181662E453BE80083B4BB /* SpaceExplorerFlowCoordinator.swift in Sources */,
 				18E9A6062C9829970082DDA4 /* ReadReceiptsSummaryView.swift in Sources */,
 				79C6F7222DF82440003CEBB9 /* AdvancedSettingsScreenCoordinator.swift in Sources */,
 				18E9A6072C9829970082DDA4 /* ReadableFrameModifier.swift in Sources */,
@@ -10690,6 +10709,7 @@
 				18E9A6242C9829970082DDA4 /* RoomDetails.swift in Sources */,
 				18DFC5C82CD954EF00462FE1 /* EncryptionResetFlowCoordinator.swift in Sources */,
 				18E9A6252C9829970082DDA4 /* RoomDetailsEditScreen.swift in Sources */,
+				790181652E453BDA0083B4BB /* ChatsFlowCoordinator.swift in Sources */,
 				79C6F7252DF8244E003CEBB9 /* AdvancedSettingsScreen.swift in Sources */,
 				79EF67102E2FB13E00D86B0F /* AuthenticationClientFactory.swift in Sources */,
 				79FCB1A32DA5BA0900669122 /* ReportRoomScreenCoordinator.swift in Sources */,
@@ -10806,6 +10826,7 @@
 				18E9A6792C9829970082DDA4 /* ZeroAttachmentApi.swift in Sources */,
 				18E9A67B2C9829970082DDA4 /* RoomTimelineItemFactory.swift in Sources */,
 				18E9A67C2C9829970082DDA4 /* RoomTimelineItemFactoryProtocol.swift in Sources */,
+				790181692E453C580083B4BB /* RoomRole.swift in Sources */,
 				18AF615A2CF85B7100921644 /* ZeroListRowLabelStyle.swift in Sources */,
 				18E9A67D2C9829970082DDA4 /* RoomTimelineItemFixtures.swift in Sources */,
 				18FFCED72CEC8F7E002F2647 /* RoomSelectionScreen.swift in Sources */,
@@ -11007,6 +11028,7 @@
 				18E9A7142C9829970082DDA4 /* UIDevice.swift in Sources */,
 				18E9A7152C9829970082DDA4 /* UIFont+AttributedStringBuilder.m in Sources */,
 				18E9A7162C9829970082DDA4 /* UITestsAppCoordinator.swift in Sources */,
+				7901816E2E453DEB0083B4BB /* SpaceListScreenModels.swift in Sources */,
 				18E9A7172C9829970082DDA4 /* UITestsNotificationCenter.swift in Sources */,
 				79FCB1A52DA5BA1600669122 /* ReportRoomScreenViewModel.swift in Sources */,
 				18E9A7182C9829970082DDA4 /* UITestsScreenIdentifier.swift in Sources */,
@@ -11062,7 +11084,6 @@
 				18E9A73E2C9829970082DDA4 /* UserPropertiesExt.swift in Sources */,
 				18E9A73F2C9829970082DDA4 /* UserSession.swift in Sources */,
 				18E9A7402C9829970082DDA4 /* UserSessionFlowCoordinator.swift in Sources */,
-				18E9A7412C9829970082DDA4 /* UserSessionFlowCoordinatorStateMachine.swift in Sources */,
 				18E9A7422C9829970082DDA4 /* UserSessionMock.swift in Sources */,
 				18E9A7432C9829970082DDA4 /* UserSessionProtocol.swift in Sources */,
 				18E9A7442C9829970082DDA4 /* UserSessionStore.swift in Sources */,
@@ -12210,6 +12231,7 @@
 				C4FE0E11A907C8999F92D5A8 /* TimelineStartRoomTimelineItem.swift in Sources */,
 				790922502E1DCC2600833940 /* TransferTokenCoordinator.swift in Sources */,
 				785613C0C092B532198EB3BB /* TimelineStartRoomTimelineView.swift in Sources */,
+				79FC83FF2E4564F4007954C9 /* ListRowTrailingSectionSpacing.swift in Sources */,
 				F2D5C0E1351DA7BD16867629 /* TimelineStyle.swift in Sources */,
 				7A0D335D38ECA095A575B4F7 /* TimelineStyler.swift in Sources */,
 				6583A95947E78767736CB51A /* TimelineTableViewController.swift in Sources */,
@@ -12608,7 +12630,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.18.2;
+				MARKETING_VERSION = 0.18.4;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
@@ -12644,7 +12666,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.18.2;
+				MARKETING_VERSION = 0.18.4;
 				OTHER_SWIFT_FLAGS = "-DIS_MAIN_APP";
 				PILLS_UT_TYPE_IDENTIFIER = "$(BASE_BUNDLE_IDENTIFIER).pills";
 				PRODUCTION_APP_NAME = ZERO;
