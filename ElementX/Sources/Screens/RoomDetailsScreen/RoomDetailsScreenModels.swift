@@ -27,6 +27,7 @@ enum RoomDetailsScreenViewModelAction: Equatable {
     case displayKnockingRequests
     case displaySecurityAndPrivacy
     case displayReportRoom
+    case transferOwnership
 }
 
 // MARK: View
@@ -288,6 +289,8 @@ enum RoomDetailsScreenErrorType: Hashable {
     case alert
     /// Leaving room has failed..
     case unknown
+    /// Last owner
+    case lastOwner
 }
 
 enum RoomDetailsScreenPinnedEventsActionState {

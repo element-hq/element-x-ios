@@ -8,7 +8,7 @@
 import AnalyticsEvents
 
 extension AnalyticsEvent.RoomModeration.Role {
-    init(role: RoomMemberDetails.Role) {
+    init(role: RoomRole) {
         switch role {
         case .administrator, .creator, .owner:
             // This probably needs to be updates

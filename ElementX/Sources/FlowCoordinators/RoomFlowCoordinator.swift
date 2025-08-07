@@ -37,6 +37,8 @@ enum RoomFlowCoordinatorEntryPoint: Hashable {
     case roomDetails
     /// An external media share request
     case share(ShareExtensionPayload)
+    /// The flow to change the the owner of the room
+    case transferOwnership
     
     var isEventID: Bool {
         guard case .eventID = self else { return false }
@@ -196,7 +198,42 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             break // These are converted to a room ID route one level above.
         case .accountProvisioningLink, .roomList, .userProfile, .call, .genericCallLink, .settings, .chatBackupSettings:
             break // These routes can't be handled.
+        case .transferOwnership(let roomID):
+            guard self.roomID == roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
+            
+            Task {
+                if roomProxy == nil {
+                    guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+                        return
+                    }
+                    
+                    await storeAndSubscribeToRoomProxy(roomProxy)
+                }
+                
+                presentTransferOwnershipScreen()
+            }
         }
+    }
+    
+    private func presentTransferOwnershipScreen() {
+        let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: .owner,
+                                                                    roomProxy: roomProxy,
+                                                                    mediaProvider: userSession.mediaProvider,
+                                                                    userIndicatorController: userIndicatorController,
+                                                                    analytics: analytics)
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = RoomChangeRolesScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .complete:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator, animated: true)
     }
     
     private func presentCallScreen(roomID: String) async {
@@ -798,6 +835,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
             case .presentReportRoomScreen:
                 stateMachine.tryEvent(.presentReportRoomScreen)
+            case .transferOwnership:
+                presentTransferOwnershipScreen()
             }
         }
         .store(in: &cancellables)
@@ -1555,6 +1594,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: true)
         case .share(let payload):
             coordinator.handleAppRoute(.share(payload), animated: true)
+        case .transferOwnership:
+            coordinator.handleAppRoute(.transferOwnership(roomID: roomID), animated: true)
         }
     }
     

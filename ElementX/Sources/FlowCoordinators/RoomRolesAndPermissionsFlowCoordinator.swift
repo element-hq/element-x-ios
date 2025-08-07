@@ -107,7 +107,13 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine.addRoutes(event: .changeRoles, transitions: [.rolesAndPermissionsScreen => .changingRoles]) { [weak self] context in
             guard let role = context.userInfo as? RoomRolesAndPermissionsScreenRole else { fatalError("Expected a role") }
-            self?.presentChangeRolesScreen(role: role)
+            let mode: RoomRole = switch role {
+            case .administrators:
+                .administrator
+            case .moderators:
+                .moderator
+            }
+            self?.presentChangeRolesScreen(mode: mode)
         }
         stateMachine.addRoutes(event: .finishedChangingRoles, transitions: [.changingRoles => .rolesAndPermissionsScreen])
         
@@ -150,12 +156,7 @@ class RoomRolesAndPermissionsFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentChangeRolesScreen(role: RoomRolesAndPermissionsScreenRole) {
-        let mode = switch role {
-        case .administrators: RoomMemberDetails.Role.administrator
-        case .moderators: RoomMemberDetails.Role.moderator
-        }
-        
+    private func presentChangeRolesScreen(mode: RoomRole) {
         let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: mode,
                                                                     roomProxy: roomProxy,
                                                                     mediaProvider: mediaProvider,

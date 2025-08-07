@@ -13334,11 +13334,6 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {
         set(value) { underlyingPowerLevel = value }
     }
     var underlyingPowerLevel: RoomPowerLevel!
-    var role: RoomMemberRole {
-        get { return underlyingRole }
-        set(value) { underlyingRole = value }
-    }
-    var underlyingRole: RoomMemberRole!
 
 }
 class RoomMembershipDetailsProxyMock: RoomMembershipDetailsProxyProtocol, @unchecked Sendable {

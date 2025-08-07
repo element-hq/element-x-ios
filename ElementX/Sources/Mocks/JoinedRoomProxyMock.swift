@@ -89,7 +89,7 @@ extension JoinedRoomProxyMock {
             guard case .success(let member) = await self?.getMember(userID: userID) else {
                 return .failure(.sdkError(RoomProxyMockError.generic))
             }
-            return .success(member.role)
+            return .success(member.role.rustRole)
         }
         updatePowerLevelsForUsersReturnValue = .success(())
         

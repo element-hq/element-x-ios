@@ -26,13 +26,23 @@ struct RoomRolesAndPermissionsScreen: View {
     
     private var rolesSection: some View {
         Section {
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdmins,
-                                    icon: \.admin),
-                    details: administratorDetails,
-                    kind: .navigationLink {
-                        context.send(viewAction: .editRoles(.administrators))
-                    })
-                    .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
+            if context.viewState.ownRole == .creator {
+                ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdminsAndOwners,
+                                        icon: \.admin),
+                        details: administratorOrOwnersDetails,
+                        kind: .navigationLink {
+                            context.send(viewAction: .editRoles(.administrators))
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
+            } else {
+                ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsAdmins,
+                                        icon: \.admin),
+                        details: administratorDetails,
+                        kind: .navigationLink {
+                            context.send(viewAction: .editRoles(.administrators))
+                        })
+                        .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.administrators)
+            }
             
             ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsModerators,
                                     icon: \.chatProblem),
@@ -42,14 +52,24 @@ struct RoomRolesAndPermissionsScreen: View {
                     })
                     .accessibilityIdentifier(A11yIdentifiers.roomRolesAndPermissionsScreen.moderators)
             
-            ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
-                                    icon: \.edit),
-                    kind: .button {
-                        context.send(viewAction: .editOwnUserRole)
-                    })
+            if context.viewState.ownRole != .creator {
+                ListRow(label: .default(title: L10n.screenRoomRolesAndPermissionsChangeMyRole,
+                                        icon: \.edit),
+                        kind: .button {
+                            context.send(viewAction: .editOwnUserRole)
+                        })
+            }
         } header: {
             Text(L10n.screenRoomRolesAndPermissionsRolesHeader)
                 .compoundListSectionHeader()
+        }
+    }
+    
+    private var administratorOrOwnersDetails: ListRowDetails<Image> {
+        if let administratorCount = context.viewState.administratorsAndOwnersCount {
+            .title("\(administratorCount)")
+        } else {
+            .isWaiting(true)
         }
     }
     
@@ -121,9 +141,20 @@ struct RoomRolesAndPermissionsScreen_Previews: PreviewProvider, TestablePreview 
                                                                   roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsAdmin)),
                                                                   userIndicatorController: UserIndicatorControllerMock(),
                                                                   analytics: ServiceLocator.shared.analytics)
+    
+    static let creatorViewModel = RoomRolesAndPermissionsScreenViewModel(initialPermissions: RoomPermissions(powerLevels: .mock),
+                                                                         roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsCreator)),
+                                                                         userIndicatorController: UserIndicatorControllerMock(),
+                                                                         analytics: ServiceLocator.shared.analytics)
     static var previews: some View {
         NavigationStack {
             RoomRolesAndPermissionsScreen(context: viewModel.context)
         }
+        .previewDisplayName("Admin")
+        
+        NavigationStack {
+            RoomRolesAndPermissionsScreen(context: creatorViewModel.context)
+        }
+        .previewDisplayName("Creator")
     }
 }

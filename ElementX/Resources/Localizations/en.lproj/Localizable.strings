@@ -242,6 +242,10 @@
 "common_poll_undisclosed_text" = "Results will show after the poll has ended";
 "common_preparing" = "Preparing…";
 "common_privacy_policy" = "Privacy policy";
+"common_private_room" = "Private room";
+"common_private_space" = "Private space";
+"common_public_room" = "Public room";
+"common_public_space" = "Public space";
 "common_reaction" = "Reaction";
 "common_reactions" = "Reactions";
 "common_reason" = "Reason";
@@ -556,6 +560,7 @@
 "screen_room_pinned_banner_view_all_button_title" = "View All";
 "screen_room_single_knock_request_title" = "%1$@ wants to join this room";
 "screen_room_single_knock_request_view_button_title" = "View";
+"screen_room_change_role_administrators_or_owners_title" = "Edit Admins or Owners";
 "screen_room_details_pinned_events_row_title" = "Pinned messages";
 "screen_room_details_profile_row_title" = "Profile";
 "screen_room_details_requests_to_join_title" = "Requests to join";
@@ -714,7 +719,6 @@
 "screen_create_room_action_create_room" = "New room";
 "screen_create_room_error_creating_room" = "An error occurred when creating the room";
 "screen_create_room_private_option_description" = "Only people invited can access this room. All messages are end-to-end encrypted.";
-"screen_create_room_private_option_title" = "Private room";
 "screen_create_room_public_option_description" = "Anyone can find this room.\nYou can change this anytime in room settings.";
 "screen_create_room_topic_label" = "Topic (optional)";
 "screen_deactivate_account_confirmation_dialog_content" = "Please confirm that you want to deactivate your account. This action cannot be undone.";
@@ -952,7 +956,6 @@
 "screen_room_details_already_invited" = "Already invited";
 "screen_room_details_badge_encrypted" = "Encrypted";
 "screen_room_details_badge_not_encrypted" = "Not encrypted";
-"screen_room_details_badge_public" = "Public room";
 "screen_room_details_edit_room_title" = "Edit Room";
 "screen_room_details_edition_error" = "There was an unknown error and the information couldn't be changed.";
 "screen_room_details_edition_error_title" = "Unable to update room";
@@ -1295,6 +1298,7 @@
 "screen_create_account_title" = "Create account";
 "screen_create_poll_cancel_confirmation_content_ios" = "Your changes won’t be saved";
 "screen_create_room_add_people_title" = "Invite people";
+"screen_create_room_private_option_title" = "Private room";
 "screen_create_room_public_option_title" = "Public room";
 "screen_create_room_room_name_label" = "Room name";
 "screen_create_room_title" = "Create a room";
@@ -1324,6 +1328,7 @@
 "screen_room_change_role_section_moderators" = "Moderators";
 "screen_room_change_role_section_users" = "Members";
 "screen_room_change_role_unsaved_changes_title" = "Save changes?";
+"screen_room_details_badge_public" = "Public room";
 "screen_room_details_invite_people_title" = "Invite people";
 "screen_room_details_leave_conversation_title" = "Leave conversation";
 "screen_room_details_leave_room_title" = "Leave room";

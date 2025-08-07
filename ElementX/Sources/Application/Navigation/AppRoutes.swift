@@ -48,6 +48,8 @@ enum AppRoute: Hashable {
     case chatBackupSettings
     /// An external share request e.g. from the ShareExtension
     case share(ShareExtensionPayload)
+    /// The change roles screen of a room with the transfer ownership setting
+    case transferOwnership(roomID: String)
     
     /// Whether or not the route should be handled by the authentication flow.
     var isAuthenticationRoute: Bool {

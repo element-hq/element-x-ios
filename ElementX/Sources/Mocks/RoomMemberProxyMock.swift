@@ -17,7 +17,6 @@ struct RoomMemberProxyMockConfiguration {
     var isIgnored = false
     
     var powerLevel = RoomPowerLevel(value: 0)
-    var role = RoomMemberRole.user
 }
 
 extension RoomMemberProxyMock {
@@ -36,7 +35,6 @@ extension RoomMemberProxyMock {
         isIgnored = configuration.isIgnored
         
         powerLevel = configuration.powerLevel
-        role = configuration.role
     }
 
     // Mocks
@@ -52,8 +50,15 @@ extension RoomMemberProxyMock {
                                         displayName: "Me",
                                         avatarURL: .mockMXCUserAvatar,
                                         membership: .join,
-                                        powerLevel: .init(value: 100),
-                                        role: .administrator))
+                                        powerLevel: .init(value: 100)))
+    }
+    
+    static var mockMeCreator: RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "@me:matrix.org",
+                                        displayName: "Me",
+                                        avatarURL: .mockMXCUserAvatar,
+                                        membership: .join,
+                                        powerLevel: .infinite))
     }
     
     static var mockAlice: RoomMemberProxyMock {
@@ -116,32 +121,28 @@ extension RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@admin:matrix.org",
                                         displayName: "Arthur",
                                         membership: .join,
-                                        powerLevel: .init(value: 100),
-                                        role: .administrator))
+                                        powerLevel: .init(value: 100)))
     }
     
     static var mockCreator: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@creator:matrix.org",
                                         displayName: "God",
                                         membership: .join,
-                                        powerLevel: .infinite,
-                                        role: .creator))
+                                        powerLevel: .infinite))
     }
     
     static var mockOwner: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@owner:matrix.org",
                                         displayName: "Guinevere",
                                         membership: .join,
-                                        powerLevel: .value(150),
-                                        role: .administrator))
+                                        powerLevel: .value(150)))
     }
     
     static var mockModerator: RoomMemberProxyMock {
         RoomMemberProxyMock(with: .init(userID: "@mod:matrix.org",
                                         displayName: "Merlin",
                                         membership: .join,
-                                        powerLevel: .init(value: 50),
-                                        role: .moderator))
+                                        powerLevel: .init(value: 50)))
     }
     
     static var mockBanned: [RoomMemberProxyMock] {
@@ -180,5 +181,34 @@ extension Array where Element == RoomMemberProxyMock {
         .mockIgnored,
         .mockAdmin,
         .mockModerator
+    ]
+    
+    /// This also includes the creator and the owner role.
+    static let allMembersAsAdminV2: [RoomMemberProxyMock] = [
+        .mockMeAdmin,
+        .mockAlice,
+        .mockBob,
+        .mockCharlie,
+        .mockDan,
+        .mockInvited,
+        .mockIgnored,
+        .mockAdmin,
+        .mockModerator,
+        .mockOwner,
+        .mockCreator
+    ]
+    
+    static let allMembersAsCreator: [RoomMemberProxyMock] = [
+        .mockAdmin,
+        .mockAlice,
+        .mockBob,
+        .mockCharlie,
+        .mockDan,
+        .mockInvited,
+        .mockIgnored,
+        .mockModerator,
+        .mockCreator,
+        .mockMeCreator,
+        .mockOwner
     ]
 }

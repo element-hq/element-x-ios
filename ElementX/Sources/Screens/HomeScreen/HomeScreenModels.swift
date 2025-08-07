@@ -15,6 +15,7 @@ enum HomeScreenViewModelAction: Equatable {
     case presentReportRoom(roomIdentifier: String)
     case presentDeclineAndBlock(userID: String, roomID: String)
     case roomLeft(roomIdentifier: String)
+    case transferOwnership(roomIdentifier: String)
     case presentSecureBackupSettings
     case presentRecoveryKeyScreen
     case presentEncryptionResetScreen
