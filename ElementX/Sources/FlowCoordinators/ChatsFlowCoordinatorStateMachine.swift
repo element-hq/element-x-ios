@@ -21,9 +21,6 @@ class ChatsFlowCoordinatorStateMachine {
         /// Showing the feedback screen.
         case feedbackScreen(roomListSelectedRoomID: String?)
         
-        /// Showing the settings screen
-        case settingsScreen(roomListSelectedRoomID: String?)
-        
         /// Showing the recovery key screen.
         case recoveryKeyScreen(roomListSelectedRoomID: String?)
         
@@ -56,7 +53,6 @@ class ChatsFlowCoordinatorStateMachine {
                 nil
             case .roomList(let roomListSelectedRoomID),
                  .feedbackScreen(let roomListSelectedRoomID),
-                 .settingsScreen(let roomListSelectedRoomID),
                  .recoveryKeyScreen(let roomListSelectedRoomID),
                  .encryptionResetFlow(let roomListSelectedRoomID),
                  .startChatScreen(let roomListSelectedRoomID),
@@ -85,11 +81,6 @@ class ChatsFlowCoordinatorStateMachine {
         case selectRoom(roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint)
         /// The room screen has been dismissed
         case deselectRoom
-        
-        /// Request presentation of the settings screen
-        case showSettingsScreen
-        /// The settings screen has been dismissed
-        case dismissedSettingsScreen
         
         /// Request presentation of the feedback screen
         case feedbackScreen
@@ -137,11 +128,6 @@ class ChatsFlowCoordinatorStateMachine {
         stateMachine.state
     }
     
-    var stateSubject = PassthroughSubject<State, Never>()
-    var statePublisher: AnyPublisher<State, Never> {
-        stateSubject.eraseToAnyPublisher()
-    }
-    
     init() {
         stateMachine = StateMachine(state: .initial)
         configure()
@@ -156,11 +142,6 @@ class ChatsFlowCoordinatorStateMachine {
                 return .roomList(roomListSelectedRoomID: roomID)
             case (.roomList, .deselectRoom):
                 return .roomList(roomListSelectedRoomID: nil)
-
-            case (.roomList(let roomListSelectedRoomID), .showSettingsScreen):
-                return .settingsScreen(roomListSelectedRoomID: roomListSelectedRoomID)
-            case (.settingsScreen(let roomListSelectedRoomID), .dismissedSettingsScreen):
-                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                 
             case (.roomList(let roomListSelectedRoomID), .feedbackScreen):
                 return .feedbackScreen(roomListSelectedRoomID: roomListSelectedRoomID)
@@ -218,10 +199,6 @@ class ChatsFlowCoordinatorStateMachine {
             } else {
                 MXLog.info("Transitioning from \(context.fromState)` to `\(context.toState)`")
             }
-        }
-        
-        addTransitionHandler { [weak self] context in
-            self?.stateSubject.send(context.toState)
         }
     }
     

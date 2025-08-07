@@ -589,6 +589,7 @@ class MockScreen: Identifiable {
             appMediator.underlyingWindowManager = windowManager
             
             let flowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                             isNewLogin: false,
                                                              navigationRootCoordinator: navigationRootCoordinator,
                                                              appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                             appSettings: ServiceLocator.shared.settings),
@@ -600,7 +601,7 @@ class MockScreen: Identifiable {
                                                              appHooks: AppHooks(),
                                                              analytics: ServiceLocator.shared.analytics,
                                                              notificationManager: NotificationManagerMock(),
-                                                             isNewLogin: false)
+                                                             stateMachineFactory: StateMachineFactory())
             
             flowCoordinator.start()
             
@@ -746,6 +747,7 @@ class MockScreen: Identifiable {
                                                         appSettings: ServiceLocator.shared.settings)
             
             let flowCoordinator = ChatsFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                       isNewLogin: false,
                                                        navigationSplitCoordinator: navigationSplitCoordinator,
                                                        appLockService: AppLockService(keychainController: KeychainControllerMock(),
                                                                                       appSettings: ServiceLocator.shared.settings),
@@ -757,7 +759,7 @@ class MockScreen: Identifiable {
                                                        appHooks: AppHooks(),
                                                        analytics: ServiceLocator.shared.analytics,
                                                        notificationManager: NotificationManagerMock(),
-                                                       isNewLogin: false)
+                                                       stateMachineFactory: StateMachineFactory())
             
             flowCoordinator.start()
             
