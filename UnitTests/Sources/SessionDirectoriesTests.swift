@@ -12,18 +12,6 @@ import XCTest
 class SessionDirectoriesTests: XCTestCase {
     let fileManager = FileManager.default
     
-    func testInitWithUserID() {
-        // Given only a user ID.
-        let userID = "@user:matrix.org"
-        
-        // When creating the session directories using this.
-        let sessionDirectories = SessionDirectories(userID: userID)
-        
-        // Then the directories should be generated in the correct location, using an escaped version of the user ID
-        XCTAssertEqual(sessionDirectories.dataDirectory, .sessionsBaseDirectory.appending(component: "@user_matrix.org"))
-        XCTAssertEqual(sessionDirectories.cacheDirectory, .sessionCachesBaseDirectory.appending(component: "@user_matrix.org"))
-    }
-    
     func testInitWithDataDirectory() {
         // Given only a session directory without a caches directory.
         let sessionDirectoryName = UUID().uuidString

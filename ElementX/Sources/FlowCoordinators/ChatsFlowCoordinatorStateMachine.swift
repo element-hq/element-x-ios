@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import SwiftState
 
-class UserSessionFlowCoordinatorStateMachine {
+class ChatsFlowCoordinatorStateMachine {
     /// States the AppCoordinator can find itself in
     enum State: StateType {
         /// The initial state, used before the coordinator starts
@@ -20,9 +20,6 @@ class UserSessionFlowCoordinatorStateMachine {
                 
         /// Showing the feedback screen.
         case feedbackScreen(roomListSelectedRoomID: String?)
-        
-        /// Showing the settings screen
-        case settingsScreen(roomListSelectedRoomID: String?)
         
         /// Showing the recovery key screen.
         case recoveryKeyScreen(roomListSelectedRoomID: String?)
@@ -56,7 +53,6 @@ class UserSessionFlowCoordinatorStateMachine {
                 nil
             case .roomList(let roomListSelectedRoomID),
                  .feedbackScreen(let roomListSelectedRoomID),
-                 .settingsScreen(let roomListSelectedRoomID),
                  .recoveryKeyScreen(let roomListSelectedRoomID),
                  .encryptionResetFlow(let roomListSelectedRoomID),
                  .startChatScreen(let roomListSelectedRoomID),
@@ -86,11 +82,6 @@ class UserSessionFlowCoordinatorStateMachine {
         /// The room screen has been dismissed
         case deselectRoom
         
-        /// Request presentation of the settings screen
-        case showSettingsScreen
-        /// The settings screen has been dismissed
-        case dismissedSettingsScreen
-        
         /// Request presentation of the feedback screen
         case feedbackScreen
         /// The feedback screen has been dismissed
@@ -110,11 +101,6 @@ class UserSessionFlowCoordinatorStateMachine {
         case showStartChatScreen
         /// Start chat has been dismissed
         case dismissedStartChatScreen
-                
-        /// Logout has been requested and this is the last session
-        case showLogoutConfirmationScreen
-        /// Logout has been cancelled
-        case dismissedLogoutConfirmationScreen
         
         /// Request presentation of the room directory search screen.
         case showRoomDirectorySearchScreen
@@ -138,13 +124,8 @@ class UserSessionFlowCoordinatorStateMachine {
     
     private let stateMachine: StateMachine<State, Event>
     
-    var state: UserSessionFlowCoordinatorStateMachine.State {
+    var state: ChatsFlowCoordinatorStateMachine.State {
         stateMachine.state
-    }
-    
-    var stateSubject = PassthroughSubject<State, Never>()
-    var statePublisher: AnyPublisher<State, Never> {
-        stateSubject.eraseToAnyPublisher()
     }
     
     init() {
@@ -161,11 +142,6 @@ class UserSessionFlowCoordinatorStateMachine {
                 return .roomList(roomListSelectedRoomID: roomID)
             case (.roomList, .deselectRoom):
                 return .roomList(roomListSelectedRoomID: nil)
-
-            case (.roomList(let roomListSelectedRoomID), .showSettingsScreen):
-                return .settingsScreen(roomListSelectedRoomID: roomListSelectedRoomID)
-            case (.settingsScreen(let roomListSelectedRoomID), .dismissedSettingsScreen):
-                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                 
             case (.roomList(let roomListSelectedRoomID), .feedbackScreen):
                 return .feedbackScreen(roomListSelectedRoomID: roomListSelectedRoomID)
@@ -185,11 +161,6 @@ class UserSessionFlowCoordinatorStateMachine {
             case (.roomList(let roomListSelectedRoomID), .showStartChatScreen):
                 return .startChatScreen(roomListSelectedRoomID: roomListSelectedRoomID)
             case (.startChatScreen(let roomListSelectedRoomID), .dismissedStartChatScreen):
-                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
-                            
-            case (.roomList(let roomListSelectedRoomID), .showLogoutConfirmationScreen):
-                return .logoutConfirmationScreen(roomListSelectedRoomID: roomListSelectedRoomID)
-            case (.logoutConfirmationScreen(let roomListSelectedRoomID), .dismissedLogoutConfirmationScreen):
                 return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                 
             case (.roomList(let roomListSelectedRoomID), .showRoomDirectorySearchScreen):
@@ -228,10 +199,6 @@ class UserSessionFlowCoordinatorStateMachine {
             } else {
                 MXLog.info("Transitioning from \(context.fromState)` to `\(context.toState)`")
             }
-        }
-        
-        addTransitionHandler { [weak self] context in
-            self?.stateSubject.send(context.toState)
         }
     }
     

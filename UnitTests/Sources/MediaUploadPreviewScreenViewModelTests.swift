@@ -12,6 +12,7 @@ import XCTest
 @MainActor
 class MediaUploadPreviewScreenViewModelTests: XCTestCase {
     var timelineProxy: TimelineProxyMock!
+    var clientProxy: ClientProxyMock!
     var viewModel: MediaUploadPreviewScreenViewModel!
     var context: MediaUploadPreviewScreenViewModel.Context { viewModel.context }
     
@@ -89,6 +90,54 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
         try await send()
     }
     
+    func testUploadWithUnknownMaxUploadSize() async throws {
+        // Given an upload screen that is unable to fetch the max upload size.
+        setUpViewModel(url: imageURL, expectedCaption: nil, maxUploadSizeResult: .failure(.sdkError(ClientProxyMockError.generic)))
+        XCTAssertFalse(context.viewState.shouldDisableInteraction)
+        XCTAssertNil(context.alertInfo)
+        
+        // When attempting to send the media.
+        let deferredAlert = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
+        context.send(viewAction: .send)
+        
+        XCTAssertTrue(context.viewState.shouldDisableInteraction, "The interaction should be disabled while sending.")
+        
+        // Then alert should be shown to tell the user it failed.
+        try await deferredAlert.fulfill()
+        
+        XCTAssertFalse(context.viewState.shouldDisableInteraction)
+        XCTAssertEqual(context.alertInfo?.id, .maxUploadSizeUnknown)
+        
+        // When trying with the max upload size now available.
+        let deferredDismiss = deferFulfillment(viewModel.actions) { $0 == .dismiss }
+        clientProxy.underlyingMaxMediaUploadSize = .success(100 * 1024 * 1024)
+        context.alertInfo?.primaryButton.action?()
+        
+        XCTAssertTrue(context.viewState.shouldDisableInteraction, "The interaction should be disabled while retrying.")
+        
+        // Then the file should upload successfully.
+        try await deferredDismiss.fulfill()
+    }
+    
+    func testUploadExceedingMaxUploadSize() async throws {
+        // Given an upload screen with a really small max upload size.
+        setUpViewModel(url: imageURL, expectedCaption: nil, maxUploadSizeResult: .success(100))
+        XCTAssertFalse(context.viewState.shouldDisableInteraction)
+        XCTAssertNil(context.alertInfo)
+        
+        // When attempting to send an image that is larger the limit.
+        let deferredAlert = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
+        context.send(viewAction: .send)
+        
+        XCTAssertTrue(context.viewState.shouldDisableInteraction, "The interaction should be disabled while sending.")
+        
+        // Then an alert should be shown to inform the user of the max upload size.
+        try await deferredAlert.fulfill()
+        
+        XCTAssertFalse(context.viewState.shouldDisableInteraction)
+        XCTAssertEqual(context.alertInfo?.id, .maxUploadSizeExceeded(limit: 100))
+    }
+    
     // MARK: - Helpers
     
     private var audioURL: URL { assertResourceURL(filename: "test_audio.mp3") }
@@ -104,7 +153,7 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
         return url
     }
     
-    private func setUpViewModel(url: URL, expectedCaption: String?) {
+    private func setUpViewModel(url: URL, expectedCaption: String?, maxUploadSizeResult: Result<UInt, ClientProxyError>? = nil) {
         timelineProxy = TimelineProxyMock(.init())
         timelineProxy.sendAudioUrlAudioInfoCaptionRequestHandleClosure = { [weak self] _, _, caption, _ in
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
@@ -119,13 +168,19 @@ class MediaUploadPreviewScreenViewModelTests: XCTestCase {
             self?.verifyCaption(caption, expectedCaption: expectedCaption) ?? .failure(.sdkError(TestError.unknown))
         }
         
-        viewModel = MediaUploadPreviewScreenViewModel(timelineController: MockTimelineController(timelineProxy: timelineProxy),
-                                                      userIndicatorController: UserIndicatorControllerMock(),
-                                                      mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+        clientProxy = ClientProxyMock(.init())
+        if let maxUploadSizeResult {
+            clientProxy.underlyingMaxMediaUploadSize = maxUploadSizeResult
+        }
+        
+        viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: [url],
                                                       title: "Some File",
-                                                      url: url,
+                                                      isRoomEncrypted: true,
                                                       shouldShowCaptionWarning: true,
-                                                      isRoomEncrypted: true)
+                                                      mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+                                                      timelineController: MockTimelineController(timelineProxy: timelineProxy),
+                                                      clientProxy: clientProxy,
+                                                      userIndicatorController: UserIndicatorControllerMock())
     }
     
     private func verifyCaption(_ caption: String?, expectedCaption: String?) -> Result<Void, TimelineProxyError> {

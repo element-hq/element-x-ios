@@ -8,18 +8,15 @@
 import Foundation
 import MatrixRustSDK
 
+enum RestorationTokenError: Error {
+    case slidingSyncProxyNotSupported
+}
+
 struct RestorationToken: Equatable {
     let session: MatrixRustSDK.Session
     let sessionDirectories: SessionDirectories
-    let passphrase: String?
+    let passphrase: String
     let pusherNotificationClientIdentifier: String?
-    
-    /// The sliding sync proxy URL that was previously encoded in the Session.
-    /// This is temporary to help make a nicer user migration flow. In the future
-    /// we will throw when decoding sessions with a sliding sync proxy URL.
-    let slidingSyncProxyURLString: String?
-    /// Whether the token is for a session that is using the now unsupported sliding sync proxy.
-    var needsSlidingSyncMigration: Bool { slidingSyncProxyURLString != nil }
     
     enum CodingKeys: CodingKey {
         case session
@@ -34,30 +31,25 @@ extension RestorationToken: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        let sessionWrapper = try container.decode(SessionWrapper.self, forKey: .session)
-        let dataDirectory = try container.decodeIfPresent(URL.self, forKey: .sessionDirectory)
+        let session = try container.decode(Session.self, forKey: .session)
+        let dataDirectory = try container.decode(URL.self, forKey: .sessionDirectory)
         let cacheDirectory = try container.decodeIfPresent(URL.self, forKey: .cacheDirectory)
         
-        let sessionDirectories = if let dataDirectory {
-            if let cacheDirectory {
-                SessionDirectories(dataDirectory: dataDirectory, cacheDirectory: cacheDirectory)
-            } else {
-                SessionDirectories(dataDirectory: dataDirectory)
-            }
+        let sessionDirectories = if let cacheDirectory {
+            SessionDirectories(dataDirectory: dataDirectory, cacheDirectory: cacheDirectory)
         } else {
-            SessionDirectories(userID: sessionWrapper.session.userId)
+            SessionDirectories(dataDirectory: dataDirectory)
         }
         
-        self = try .init(session: sessionWrapper.session,
+        self = try .init(session: session,
                          sessionDirectories: sessionDirectories,
-                         passphrase: container.decodeIfPresent(String.self, forKey: .passphrase),
-                         pusherNotificationClientIdentifier: container.decodeIfPresent(String.self, forKey: .pusherNotificationClientIdentifier),
-                         slidingSyncProxyURLString: sessionWrapper.slidingSyncProxyURLString)
+                         passphrase: container.decode(String.self, forKey: .passphrase),
+                         pusherNotificationClientIdentifier: container.decodeIfPresent(String.self, forKey: .pusherNotificationClientIdentifier))
     }
     
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(SessionWrapper(session: session, slidingSyncProxyURLString: slidingSyncProxyURLString), forKey: .session)
+        try container.encode(session, forKey: .session)
         try container.encode(sessionDirectories.dataDirectory, forKey: .sessionDirectory)
         try container.encode(sessionDirectories.cacheDirectory, forKey: .cacheDirectory)
         try container.encode(passphrase, forKey: .passphrase)
@@ -65,33 +57,20 @@ extension RestorationToken: Codable {
     }
 }
 
-/// Temporary struct to smooth the forced migration by keeping a user session.
-/// In the future we can remove this and throw a migration error when the URL
-/// is decoded to a non-nil value.
-private struct SessionWrapper {
-    let session: MatrixRustSDK.Session
-    let slidingSyncProxyURLString: String?
-}
-
-extension SessionWrapper: Codable {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: MatrixRustSDK.Session.CodingKeys.self)
-        session = try Session(from: decoder)
-        
-        // TODO: In the future we should decode this in the Session and throw a migration error if it contains a value.
-        slidingSyncProxyURLString = try container.decodeIfPresent(String.self, forKey: .slidingSyncProxy)
-    }
-    
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: MatrixRustSDK.Session.CodingKeys.self)
-        try session.encode(to: encoder)
-        try container.encode(slidingSyncProxyURLString, forKey: .slidingSyncProxy)
-    }
-}
-
 extension MatrixRustSDK.Session: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // The SDK no longer supports sliding sync proxies. We must bail here otherwise the
+        // session would be restored using native sliding sync, but if the proxy was still
+        // active its sync loop would be stealing keys away from us.
+        //
+        // Note: As tempting as it is to use container.contains(.slidingSyncProxy), that will always
+        // return true as our coding keys have resulted in the key being encoded with a nil value 🤦‍♂️.
+        if (try? container.decodeIfPresent(String.self, forKey: .slidingSyncProxy)) != nil {
+            throw RestorationTokenError.slidingSyncProxyNotSupported
+        }
+        
         self = try .init(accessToken: container.decode(String.self, forKey: .accessToken),
                          refreshToken: container.decodeIfPresent(String.self, forKey: .refreshToken),
                          userId: container.decode(String.self, forKey: .userId),

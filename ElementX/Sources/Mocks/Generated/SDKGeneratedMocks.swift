@@ -991,6 +991,48 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         await enableAllSendQueuesEnableClosure?(enable)
     }
 
+    //MARK: - enableSendQueueUploadProgress
+
+    var enableSendQueueUploadProgressEnableUnderlyingCallsCount = 0
+    open var enableSendQueueUploadProgressEnableCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return enableSendQueueUploadProgressEnableUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = enableSendQueueUploadProgressEnableUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                enableSendQueueUploadProgressEnableUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    enableSendQueueUploadProgressEnableUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var enableSendQueueUploadProgressEnableCalled: Bool {
+        return enableSendQueueUploadProgressEnableCallsCount > 0
+    }
+    open var enableSendQueueUploadProgressEnableReceivedEnable: Bool?
+    open var enableSendQueueUploadProgressEnableReceivedInvocations: [Bool] = []
+    open var enableSendQueueUploadProgressEnableClosure: ((Bool) -> Void)?
+
+    open override func enableSendQueueUploadProgress(enable: Bool) {
+        enableSendQueueUploadProgressEnableCallsCount += 1
+        enableSendQueueUploadProgressEnableReceivedEnable = enable
+        DispatchQueue.main.async {
+            self.enableSendQueueUploadProgressEnableReceivedInvocations.append(enable)
+        }
+        enableSendQueueUploadProgressEnableClosure?(enable)
+    }
+
     //MARK: - encryption
 
     var encryptionUnderlyingCallsCount = 0
@@ -12507,6 +12549,81 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
+    //MARK: - fetchThreadSubscription
+
+    open var fetchThreadSubscriptionThreadRootEventIdThrowableError: Error?
+    var fetchThreadSubscriptionThreadRootEventIdUnderlyingCallsCount = 0
+    open var fetchThreadSubscriptionThreadRootEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchThreadSubscriptionThreadRootEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchThreadSubscriptionThreadRootEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchThreadSubscriptionThreadRootEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchThreadSubscriptionThreadRootEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var fetchThreadSubscriptionThreadRootEventIdCalled: Bool {
+        return fetchThreadSubscriptionThreadRootEventIdCallsCount > 0
+    }
+    open var fetchThreadSubscriptionThreadRootEventIdReceivedThreadRootEventId: String?
+    open var fetchThreadSubscriptionThreadRootEventIdReceivedInvocations: [String] = []
+
+    var fetchThreadSubscriptionThreadRootEventIdUnderlyingReturnValue: ThreadStatus?
+    open var fetchThreadSubscriptionThreadRootEventIdReturnValue: ThreadStatus? {
+        get {
+            if Thread.isMainThread {
+                return fetchThreadSubscriptionThreadRootEventIdUnderlyingReturnValue
+            } else {
+                var returnValue: ThreadStatus?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchThreadSubscriptionThreadRootEventIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchThreadSubscriptionThreadRootEventIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchThreadSubscriptionThreadRootEventIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var fetchThreadSubscriptionThreadRootEventIdClosure: ((String) async throws -> ThreadStatus?)?
+
+    open override func fetchThreadSubscription(threadRootEventId: String) async throws -> ThreadStatus? {
+        if let error = fetchThreadSubscriptionThreadRootEventIdThrowableError {
+            throw error
+        }
+        fetchThreadSubscriptionThreadRootEventIdCallsCount += 1
+        fetchThreadSubscriptionThreadRootEventIdReceivedThreadRootEventId = threadRootEventId
+        DispatchQueue.main.async {
+            self.fetchThreadSubscriptionThreadRootEventIdReceivedInvocations.append(threadRootEventId)
+        }
+        if let fetchThreadSubscriptionThreadRootEventIdClosure = fetchThreadSubscriptionThreadRootEventIdClosure {
+            return try await fetchThreadSubscriptionThreadRootEventIdClosure(threadRootEventId)
+        } else {
+            return fetchThreadSubscriptionThreadRootEventIdReturnValue
+        }
+    }
+
     //MARK: - forget
 
     open var forgetThrowableError: Error?
@@ -15421,121 +15538,6 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         try await saveComposerDraftDraftThreadRootClosure?(draft, threadRoot)
     }
 
-    //MARK: - sendCallNotification
-
-    open var sendCallNotificationCallIdApplicationNotifyTypeMentionsThrowableError: Error?
-    var sendCallNotificationCallIdApplicationNotifyTypeMentionsUnderlyingCallsCount = 0
-    open var sendCallNotificationCallIdApplicationNotifyTypeMentionsCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return sendCallNotificationCallIdApplicationNotifyTypeMentionsUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sendCallNotificationCallIdApplicationNotifyTypeMentionsUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sendCallNotificationCallIdApplicationNotifyTypeMentionsUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sendCallNotificationCallIdApplicationNotifyTypeMentionsUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var sendCallNotificationCallIdApplicationNotifyTypeMentionsCalled: Bool {
-        return sendCallNotificationCallIdApplicationNotifyTypeMentionsCallsCount > 0
-    }
-    open var sendCallNotificationCallIdApplicationNotifyTypeMentionsReceivedArguments: (callId: String, application: RtcApplicationType, notifyType: NotifyType, mentions: Mentions)?
-    open var sendCallNotificationCallIdApplicationNotifyTypeMentionsReceivedInvocations: [(callId: String, application: RtcApplicationType, notifyType: NotifyType, mentions: Mentions)] = []
-    open var sendCallNotificationCallIdApplicationNotifyTypeMentionsClosure: ((String, RtcApplicationType, NotifyType, Mentions) async throws -> Void)?
-
-    open override func sendCallNotification(callId: String, application: RtcApplicationType, notifyType: NotifyType, mentions: Mentions) async throws {
-        if let error = sendCallNotificationCallIdApplicationNotifyTypeMentionsThrowableError {
-            throw error
-        }
-        sendCallNotificationCallIdApplicationNotifyTypeMentionsCallsCount += 1
-        sendCallNotificationCallIdApplicationNotifyTypeMentionsReceivedArguments = (callId: callId, application: application, notifyType: notifyType, mentions: mentions)
-        DispatchQueue.main.async {
-            self.sendCallNotificationCallIdApplicationNotifyTypeMentionsReceivedInvocations.append((callId: callId, application: application, notifyType: notifyType, mentions: mentions))
-        }
-        try await sendCallNotificationCallIdApplicationNotifyTypeMentionsClosure?(callId, application, notifyType, mentions)
-    }
-
-    //MARK: - sendCallNotificationIfNeeded
-
-    open var sendCallNotificationIfNeededThrowableError: Error?
-    var sendCallNotificationIfNeededUnderlyingCallsCount = 0
-    open var sendCallNotificationIfNeededCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return sendCallNotificationIfNeededUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sendCallNotificationIfNeededUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sendCallNotificationIfNeededUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sendCallNotificationIfNeededUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var sendCallNotificationIfNeededCalled: Bool {
-        return sendCallNotificationIfNeededCallsCount > 0
-    }
-
-    var sendCallNotificationIfNeededUnderlyingReturnValue: Bool!
-    open var sendCallNotificationIfNeededReturnValue: Bool! {
-        get {
-            if Thread.isMainThread {
-                return sendCallNotificationIfNeededUnderlyingReturnValue
-            } else {
-                var returnValue: Bool? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sendCallNotificationIfNeededUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sendCallNotificationIfNeededUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sendCallNotificationIfNeededUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var sendCallNotificationIfNeededClosure: (() async throws -> Bool)?
-
-    open override func sendCallNotificationIfNeeded() async throws -> Bool {
-        if let error = sendCallNotificationIfNeededThrowableError {
-            throw error
-        }
-        sendCallNotificationIfNeededCallsCount += 1
-        if let sendCallNotificationIfNeededClosure = sendCallNotificationIfNeededClosure {
-            return try await sendCallNotificationIfNeededClosure()
-        } else {
-            return sendCallNotificationIfNeededReturnValue
-        }
-    }
-
     //MARK: - sendLiveLocation
 
     open var sendLiveLocationGeoUriThrowableError: Error?
@@ -15764,6 +15766,52 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             self.setNameNameReceivedInvocations.append(name)
         }
         try await setNameNameClosure?(name)
+    }
+
+    //MARK: - setThreadSubscription
+
+    open var setThreadSubscriptionThreadRootEventIdSubscribedThrowableError: Error?
+    var setThreadSubscriptionThreadRootEventIdSubscribedUnderlyingCallsCount = 0
+    open var setThreadSubscriptionThreadRootEventIdSubscribedCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setThreadSubscriptionThreadRootEventIdSubscribedUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setThreadSubscriptionThreadRootEventIdSubscribedUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setThreadSubscriptionThreadRootEventIdSubscribedUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setThreadSubscriptionThreadRootEventIdSubscribedUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var setThreadSubscriptionThreadRootEventIdSubscribedCalled: Bool {
+        return setThreadSubscriptionThreadRootEventIdSubscribedCallsCount > 0
+    }
+    open var setThreadSubscriptionThreadRootEventIdSubscribedReceivedArguments: (threadRootEventId: String, subscribed: Bool)?
+    open var setThreadSubscriptionThreadRootEventIdSubscribedReceivedInvocations: [(threadRootEventId: String, subscribed: Bool)] = []
+    open var setThreadSubscriptionThreadRootEventIdSubscribedClosure: ((String, Bool) async throws -> Void)?
+
+    open override func setThreadSubscription(threadRootEventId: String, subscribed: Bool) async throws {
+        if let error = setThreadSubscriptionThreadRootEventIdSubscribedThrowableError {
+            throw error
+        }
+        setThreadSubscriptionThreadRootEventIdSubscribedCallsCount += 1
+        setThreadSubscriptionThreadRootEventIdSubscribedReceivedArguments = (threadRootEventId: threadRootEventId, subscribed: subscribed)
+        DispatchQueue.main.async {
+            self.setThreadSubscriptionThreadRootEventIdSubscribedReceivedInvocations.append((threadRootEventId: threadRootEventId, subscribed: subscribed))
+        }
+        try await setThreadSubscriptionThreadRootEventIdSubscribedClosure?(threadRootEventId, subscribed)
     }
 
     //MARK: - setTopic
@@ -23804,602 +23852,6 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
             return try await unpinEventEventIdClosure(eventId)
         } else {
             return unpinEventEventIdReturnValue
-        }
-    }
-}
-open class TimelineDiffSDKMock: MatrixRustSDK.TimelineDiff, @unchecked Sendable {
-    init() {
-        super.init(noPointer: .init())
-    }
-
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
-    }
-
-    fileprivate var pointer: UnsafeMutableRawPointer!
-
-    //MARK: - append
-
-    var appendUnderlyingCallsCount = 0
-    open var appendCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return appendUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = appendUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                appendUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    appendUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var appendCalled: Bool {
-        return appendCallsCount > 0
-    }
-
-    var appendUnderlyingReturnValue: [TimelineItem]?
-    open var appendReturnValue: [TimelineItem]? {
-        get {
-            if Thread.isMainThread {
-                return appendUnderlyingReturnValue
-            } else {
-                var returnValue: [TimelineItem]?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = appendUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                appendUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    appendUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var appendClosure: (() -> [TimelineItem]?)?
-
-    open override func append() -> [TimelineItem]? {
-        appendCallsCount += 1
-        if let appendClosure = appendClosure {
-            return appendClosure()
-        } else {
-            return appendReturnValue
-        }
-    }
-
-    //MARK: - change
-
-    var changeUnderlyingCallsCount = 0
-    open var changeCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return changeUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = changeUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                changeUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    changeUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var changeCalled: Bool {
-        return changeCallsCount > 0
-    }
-
-    var changeUnderlyingReturnValue: TimelineChange!
-    open var changeReturnValue: TimelineChange! {
-        get {
-            if Thread.isMainThread {
-                return changeUnderlyingReturnValue
-            } else {
-                var returnValue: TimelineChange? = nil
-                DispatchQueue.main.sync {
-                    returnValue = changeUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                changeUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    changeUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var changeClosure: (() -> TimelineChange)?
-
-    open override func change() -> TimelineChange {
-        changeCallsCount += 1
-        if let changeClosure = changeClosure {
-            return changeClosure()
-        } else {
-            return changeReturnValue
-        }
-    }
-
-    //MARK: - insert
-
-    var insertUnderlyingCallsCount = 0
-    open var insertCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return insertUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = insertUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                insertUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    insertUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var insertCalled: Bool {
-        return insertCallsCount > 0
-    }
-
-    var insertUnderlyingReturnValue: InsertData?
-    open var insertReturnValue: InsertData? {
-        get {
-            if Thread.isMainThread {
-                return insertUnderlyingReturnValue
-            } else {
-                var returnValue: InsertData?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = insertUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                insertUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    insertUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var insertClosure: (() -> InsertData?)?
-
-    open override func insert() -> InsertData? {
-        insertCallsCount += 1
-        if let insertClosure = insertClosure {
-            return insertClosure()
-        } else {
-            return insertReturnValue
-        }
-    }
-
-    //MARK: - pushBack
-
-    var pushBackUnderlyingCallsCount = 0
-    open var pushBackCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return pushBackUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = pushBackUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                pushBackUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    pushBackUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var pushBackCalled: Bool {
-        return pushBackCallsCount > 0
-    }
-
-    var pushBackUnderlyingReturnValue: TimelineItem?
-    open var pushBackReturnValue: TimelineItem? {
-        get {
-            if Thread.isMainThread {
-                return pushBackUnderlyingReturnValue
-            } else {
-                var returnValue: TimelineItem?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = pushBackUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                pushBackUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    pushBackUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var pushBackClosure: (() -> TimelineItem?)?
-
-    open override func pushBack() -> TimelineItem? {
-        pushBackCallsCount += 1
-        if let pushBackClosure = pushBackClosure {
-            return pushBackClosure()
-        } else {
-            return pushBackReturnValue
-        }
-    }
-
-    //MARK: - pushFront
-
-    var pushFrontUnderlyingCallsCount = 0
-    open var pushFrontCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return pushFrontUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = pushFrontUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                pushFrontUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    pushFrontUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var pushFrontCalled: Bool {
-        return pushFrontCallsCount > 0
-    }
-
-    var pushFrontUnderlyingReturnValue: TimelineItem?
-    open var pushFrontReturnValue: TimelineItem? {
-        get {
-            if Thread.isMainThread {
-                return pushFrontUnderlyingReturnValue
-            } else {
-                var returnValue: TimelineItem?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = pushFrontUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                pushFrontUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    pushFrontUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var pushFrontClosure: (() -> TimelineItem?)?
-
-    open override func pushFront() -> TimelineItem? {
-        pushFrontCallsCount += 1
-        if let pushFrontClosure = pushFrontClosure {
-            return pushFrontClosure()
-        } else {
-            return pushFrontReturnValue
-        }
-    }
-
-    //MARK: - remove
-
-    var removeUnderlyingCallsCount = 0
-    open var removeCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return removeUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = removeUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                removeUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    removeUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var removeCalled: Bool {
-        return removeCallsCount > 0
-    }
-
-    var removeUnderlyingReturnValue: UInt32?
-    open var removeReturnValue: UInt32? {
-        get {
-            if Thread.isMainThread {
-                return removeUnderlyingReturnValue
-            } else {
-                var returnValue: UInt32?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = removeUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                removeUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    removeUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var removeClosure: (() -> UInt32?)?
-
-    open override func remove() -> UInt32? {
-        removeCallsCount += 1
-        if let removeClosure = removeClosure {
-            return removeClosure()
-        } else {
-            return removeReturnValue
-        }
-    }
-
-    //MARK: - reset
-
-    var resetUnderlyingCallsCount = 0
-    open var resetCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return resetUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = resetUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                resetUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    resetUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var resetCalled: Bool {
-        return resetCallsCount > 0
-    }
-
-    var resetUnderlyingReturnValue: [TimelineItem]?
-    open var resetReturnValue: [TimelineItem]? {
-        get {
-            if Thread.isMainThread {
-                return resetUnderlyingReturnValue
-            } else {
-                var returnValue: [TimelineItem]?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = resetUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                resetUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    resetUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var resetClosure: (() -> [TimelineItem]?)?
-
-    open override func reset() -> [TimelineItem]? {
-        resetCallsCount += 1
-        if let resetClosure = resetClosure {
-            return resetClosure()
-        } else {
-            return resetReturnValue
-        }
-    }
-
-    //MARK: - set
-
-    var setUnderlyingCallsCount = 0
-    open var setCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return setUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = setUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                setUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    setUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var setCalled: Bool {
-        return setCallsCount > 0
-    }
-
-    var setUnderlyingReturnValue: SetData?
-    open var setReturnValue: SetData? {
-        get {
-            if Thread.isMainThread {
-                return setUnderlyingReturnValue
-            } else {
-                var returnValue: SetData?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = setUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                setUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    setUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var setClosure: (() -> SetData?)?
-
-    open override func set() -> SetData? {
-        setCallsCount += 1
-        if let setClosure = setClosure {
-            return setClosure()
-        } else {
-            return setReturnValue
-        }
-    }
-
-    //MARK: - truncate
-
-    var truncateUnderlyingCallsCount = 0
-    open var truncateCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return truncateUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = truncateUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                truncateUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    truncateUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var truncateCalled: Bool {
-        return truncateCallsCount > 0
-    }
-
-    var truncateUnderlyingReturnValue: UInt32?
-    open var truncateReturnValue: UInt32? {
-        get {
-            if Thread.isMainThread {
-                return truncateUnderlyingReturnValue
-            } else {
-                var returnValue: UInt32?? = nil
-                DispatchQueue.main.sync {
-                    returnValue = truncateUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                truncateUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    truncateUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var truncateClosure: (() -> UInt32?)?
-
-    open override func truncate() -> UInt32? {
-        truncateCallsCount += 1
-        if let truncateClosure = truncateClosure {
-            return truncateClosure()
-        } else {
-            return truncateReturnValue
         }
     }
 }

@@ -189,7 +189,6 @@ class ClientProxy: ClientProxyProtocol {
     private var roomNotificationModeUpdateProtocol: RoomNotificationModeUpdatedProtocol? = nil
     
     init(client: ClientProtocol,
-         needsSlidingSyncMigration: Bool,
          networkMonitor: NetworkMonitorProtocol,
          appSettings: AppSettings) async throws {
         self.client = client
@@ -205,8 +204,6 @@ class ClientProxy: ClientProxyProtocol {
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
         zeroApiProxy = ZeroApiProxy(client: client, appSettings: appSettings)
-        
-        self.needsSlidingSyncMigration = needsSlidingSyncMigration
         
         let configuredAppService = try await ClientProxyServices(client: client,
                                                                  actionsSubject: actionsSubject,
@@ -318,11 +315,6 @@ class ClientProxy: ClientProxyProtocol {
         client.homeserver()
     }
     
-    let needsSlidingSyncMigration: Bool
-    var slidingSyncVersion: SlidingSyncVersion {
-        client.slidingSyncVersion()
-    }
-    
     var canDeactivateAccount: Bool {
         client.canDeactivateAccount()
     }
@@ -357,6 +349,17 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
+    
+    var maxMediaUploadSize: Result<UInt, ClientProxyError> {
+        get async {
+            do {
+                return try await .success(UInt(client.getMaxMediaUploadSize()))
+            } catch {
+                MXLog.error("Failed checking the max media upload size with error: \(error)")
+                return .failure(.sdkError(error))
+            }
+        }
+    }
 
     private(set) lazy var pusherNotificationClientIdentifier: String? = {
         // NOTE: The result is stored as part of the restoration token. Any changes
@@ -377,11 +380,6 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     func startSync() {
-        guard !needsSlidingSyncMigration else {
-            MXLog.warning("Ignoring request, this client needs to be migrated to native sliding sync.")
-            return
-        }
-        
         guard !hasEncounteredAuthError else {
             MXLog.warning("Ignoring request, this client has an unknown token.")
             return

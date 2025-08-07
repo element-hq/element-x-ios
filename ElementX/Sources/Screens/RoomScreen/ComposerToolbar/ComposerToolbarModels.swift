@@ -27,7 +27,7 @@ enum ComposerToolbarViewModelAction {
     case editLastMessage
     case attach(ComposerAttachmentType)
 
-    case handlePasteOrDrop(provider: NSItemProvider)
+    case handlePasteOrDrop(providers: [NSItemProvider])
 
     case composerModeChanged(mode: ComposerMode)
     case composerFocusedChanged(isFocused: Bool)
@@ -46,7 +46,7 @@ enum ComposerToolbarViewAction {
     case cancelReply
     case cancelEdit
     case attach(ComposerAttachmentType)
-    case handlePasteOrDrop(provider: NSItemProvider)
+    case handlePasteOrDrop(providers: [NSItemProvider])
     case enableTextFormatting
     case composerAction(action: ComposerAction)
     case selectedSuggestion(_ suggestion: SuggestionItem)

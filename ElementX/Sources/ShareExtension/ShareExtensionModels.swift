@@ -12,12 +12,12 @@ enum ShareExtensionConstants {
 }
 
 enum ShareExtensionPayload: Hashable, Codable {
-    case mediaFile(roomID: String?, mediaFile: ShareExtensionMediaFile)
+    case mediaFiles(roomID: String?, mediaFiles: [ShareExtensionMediaFile])
     case text(roomID: String?, text: String)
     
     var roomID: String? {
         switch self {
-        case .mediaFile(let roomID, _),
+        case .mediaFiles(let roomID, _),
              .text(let roomID, _):
             roomID
         }
@@ -27,14 +27,16 @@ enum ShareExtensionPayload: Hashable, Codable {
     /// system's `temporaryDirectory` returning a modified payload with updated file URLs.
     func withDefaultTemporaryDirectory() throws -> Self {
         switch self {
-        case .mediaFile(let roomID, let mediaFile):
-            let path = mediaFile.url.path.replacing(URL.appGroupTemporaryDirectory.path, with: "").trimmingPrefix("/")
-            let newURL = URL.temporaryDirectory.appending(path: path)
-            
-            try? FileManager.default.removeItem(at: newURL)
-            try FileManager.default.moveItem(at: mediaFile.url, to: newURL)
-            
-            return .mediaFile(roomID: roomID, mediaFile: mediaFile.replacingURL(with: newURL))
+        case .mediaFiles(let roomID, let mediaFiles):
+            return try .mediaFiles(roomID: roomID, mediaFiles: mediaFiles.map { mediaFile in
+                let path = mediaFile.url.path.replacing(URL.appGroupTemporaryDirectory.path, with: "").trimmingPrefix("/")
+                let newURL = URL.temporaryDirectory.appending(path: path)
+                
+                try? FileManager.default.removeItem(at: newURL)
+                try FileManager.default.moveItem(at: mediaFile.url, to: newURL)
+                
+                return mediaFile.replacingURL(with: newURL)
+            })
         case .text:
             return self
         }

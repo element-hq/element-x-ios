@@ -24,6 +24,8 @@ class RoomSummaryTests: XCTestCase {
             XCTAssertEqual(avatarURL, roomDetails.avatarURL)
         case .heroes:
             XCTFail("A room shouldn't use the heroes for its avatar.")
+        case .space:
+            XCTFail("A room shouldn't use a space avatar.")
         case .tombstoned:
             XCTFail("A room shouldn't use the tombstone for its avatar.")
         }
@@ -39,6 +41,8 @@ class RoomSummaryTests: XCTestCase {
             XCTAssertEqual(avatarURL, roomDetails.avatarURL)
         case .heroes:
             XCTFail("A DM with an avatar set shouldn't use the heroes instead.")
+        case .space:
+            XCTFail("A DM shouldn't use a space avatar.")
         case .tombstoned:
             XCTFail("A room shouldn't use the tombstone for its avatar.")
         }
@@ -52,6 +56,8 @@ class RoomSummaryTests: XCTestCase {
             XCTFail("A DM without an avatar should defer to the hero for the correct placeholder tint colour.")
         case .heroes(let heroes):
             XCTAssertEqual(heroes, self.heroes)
+        case .space:
+            XCTFail("A DM shouldn't use a space avatar.")
         case .tombstoned:
             XCTFail("A room shouldn't use the tombstone for its avatar.")
         }

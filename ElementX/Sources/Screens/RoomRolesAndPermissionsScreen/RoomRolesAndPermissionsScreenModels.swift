@@ -17,12 +17,16 @@ enum RoomRolesAndPermissionsScreenViewModelAction {
 }
 
 struct RoomRolesAndPermissionsScreenViewState: BindableState {
+    var ownRole: RoomRole
+    
+    var administratorsAndOwnersCount: Int?
     /// The number of administrators in the room.
     var administratorCount: Int?
     /// The number of moderators in the room.
     var moderatorCount: Int?
     /// The permissions of the room when loaded.
     var permissions: RoomPermissions?
+        
     var bindings = RoomRolesAndPermissionsScreenViewStateBindings()
 }
 
@@ -46,7 +50,7 @@ enum RoomRolesAndPermissionsScreenViewAction {
     case reset
 }
 
-enum RoomRolesAndPermissionsScreenRole {
+enum RoomRolesAndPermissionsScreenRole: Hashable {
     case administrators
     case moderators
 }

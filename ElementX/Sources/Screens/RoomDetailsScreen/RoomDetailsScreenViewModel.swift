@@ -131,13 +131,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         case .processTapInvite:
             actionsSubject.send(.requestInvitePeoplePresentation)
         case .processTapLeave:
-            guard state.joinedMembersCount > 1 else {
-                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id, isDM: roomProxy.isDirectOneToOneRoom, state: .empty)
-                return
-            }
-            state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id,
-                                                                   isDM: roomProxy.isDirectOneToOneRoom,
-                                                                   state: roomProxy.infoPublisher.value.isPrivate ?? true ? .private : .public)
+            processTapToLeave()
         case .confirmLeave:
             Task { await leaveRoom() }
         case .processTapIgnore:
@@ -188,6 +182,38 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     }
     
     // MARK: - Private
+    
+    private func processTapToLeave() {
+        guard state.joinedMembersCount > 1 else {
+            state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id,
+                                                                   isDM: roomProxy.isDirectOneToOneRoom,
+                                                                   state: roomProxy.infoPublisher.value.isPrivate ?? true ? .empty : .public)
+            return
+        }
+        
+        if !roomProxy.isDirectOneToOneRoom, state.accountOwner?.role.isOwner == true {
+            var isLastOwner = true
+            for member in roomProxy.membersPublisher.value where member.userID != roomProxy.ownUserID {
+                if member.role.isOwner {
+                    isLastOwner = false
+                    break
+                }
+            }
+            
+            if isLastOwner {
+                state.bindings.alertInfo = .init(id: .lastOwner,
+                                                 title: L10n.leaveRoomAlertSelectNewOwnerTitle,
+                                                 message: L10n.leaveRoomAlertSelectNewOwnerSubtitle,
+                                                 primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                                 secondaryButton: .init(title: L10n.leaveRoomAlertSelectNewOwnerAction, role: .destructive, action: { [weak self] in self?.actionsSubject.send(.transferOwnership) }))
+                return
+            }
+        }
+        
+        state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomProxy.id,
+                                                               isDM: roomProxy.isDirectOneToOneRoom,
+                                                               state: roomProxy.infoPublisher.value.isPrivate ?? true ? .private : .public)
+    }
     
     private func processAvatarTap(_ url: URL) {
         if roomProxy.isDirectRoom || roomProxy.hasOnlyOneMember  {
@@ -256,16 +282,11 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             state.canKickUsers = powerLevels.canOwnUserKick()
             state.canBanUsers = powerLevels.canOwnUserBan()
             state.canJoinCall = powerLevels.canOwnUserJoinCall()
-            state.canEditRolesOrPermissions = powerLevels.suggestedRole(forUser: roomProxy.ownUserID) == .administrator
+            state.canEditRolesOrPermissions = powerLevels.canOwnUserEditRolesAndPermissions()
         }
     }
     
     private func fetchMembersIfNeeded() async {
-        // We need to fetch members just in 1-to-1 chat to get the member object for the other person
-        guard roomProxy.isDirectOneToOneRoom else {
-            return
-        }
-        
         roomProxy.membersPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self, ownUserID = roomProxy.ownUserID] members in
@@ -273,6 +294,10 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                 
                 if let accountOwner = members.first(where: { $0.userID == ownUserID }) {
                     self.state.accountOwner = .init(withProxy: accountOwner)
+                }
+                
+                guard roomProxy.isDirectOneToOneRoom else {
+                    return
                 }
                 
                 if let dmRecipient = members.first(where: { $0.userID != ownUserID }) {

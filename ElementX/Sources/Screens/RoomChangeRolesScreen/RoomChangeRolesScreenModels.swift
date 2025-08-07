@@ -14,15 +14,19 @@ enum RoomChangeRolesScreenViewModelAction {
 
 struct RoomChangeRolesScreenViewState: BindableState {
     /// The screen's current mode (which role we are promoting/demoting users to/from.
-    let mode: RoomMemberDetails.Role
+    let mode: RoomRole
+    /// The current user's role.
+    var ownRole: RoomRole
+    /// All of the room's members who are currently owners or creators.
+    var owners: [RoomMemberDetails] = []
     /// All of the room's members who are currently admins.
-    var administrators: [RoomMemberDetails]
+    var administrators: [RoomMemberDetails] = []
     /// All of the room's members who are currently moderators.
-    var moderators: [RoomMemberDetails]
+    var moderators: [RoomMemberDetails] = []
     /// All of the room's members who are currently neither an admin or moderator.
-    var users: [RoomMemberDetails]
+    var users: [RoomMemberDetails] = []
     
-    var bindings: RoomChangeRolesScreenViewStateBindings
+    var bindings = RoomChangeRolesScreenViewStateBindings()
     
     /// The members selected for promotion to the current role.
     var membersToPromote: Set<RoomMemberDetails> = []
@@ -35,13 +39,26 @@ struct RoomChangeRolesScreenViewState: BindableState {
     /// The screen's title.
     var title: String {
         switch mode {
+        case .creator:
+            "" // The screen can't be configured with this role.
+        case .owner:
+            L10n.screenRoomChangeRoleOwnersTitle
         case .administrator:
-            L10n.screenRoomChangeRoleAdministratorsTitle
+            switch ownRole {
+            case .creator:
+                L10n.screenRoomChangeRoleAdministratorsOrOwnersTitle
+            default:
+                L10n.screenRoomChangeRoleAdministratorsTitle
+            }
         case .moderator:
             L10n.screenRoomChangeRoleModeratorsTitle
         case .user:
             "" // The screen can't be configured with this role.
         }
+    }
+    
+    var visibleOwners: [RoomMemberDetails] {
+        owners.filter { $0.matches(searchQuery: bindings.searchQuery) }
     }
     
     /// The visible admins in the screen (after searching).
@@ -61,7 +78,8 @@ struct RoomChangeRolesScreenViewState: BindableState {
     
     /// All of the members who will gain/keep this screen's role after saving any changes.
     var membersWithRole: [RoomMemberDetails] {
-        administrators.filter(isMemberSelected) + moderators.filter(isMemberSelected) + users.filter(isMemberSelected)
+        let members = owners + administrators + moderators + users
+        return members.filter(isMemberSelected)
     }
     
     /// Whether or not any changes have been made to the members.
@@ -77,7 +95,31 @@ struct RoomChangeRolesScreenViewState: BindableState {
     /// Whether or not a specific member has this screen's role.
     func isMemberSelected(_ member: RoomMemberDetails) -> Bool {
         guard !membersToDemote.contains(member) else { return false }
-        return member.role == mode || membersToPromote.contains(member)
+        return member.role >= mode || membersToPromote.contains(member)
+    }
+    
+    func isMemberDisabled(_ member: RoomMemberDetails) -> Bool {
+        member.role > maxDemotableRole
+    }
+    
+    var maxDemotableRole: RoomRole {
+        switch mode {
+        case .owner:
+            return .owner
+        case .administrator:
+            switch ownRole {
+            case .owner:
+                return .administrator
+            case .creator:
+                return .owner
+            default:
+                return .moderator
+            }
+        case .moderator:
+            return .moderator
+        default:
+            return .user
+        }
     }
 }
 
@@ -90,6 +132,8 @@ struct RoomChangeRolesScreenViewStateBindings {
 enum RoomChangeRolesScreenAlertType {
     /// A warning that a particular promotion can't be undone.
     case promotionWarning
+    /// A warning that ownership transfer is final when the room is left.
+    case transferOwnershipWarning
     /// A confirmation that the user would like to discard any unsaved changes.
     case discardChanges
     /// The generic error message.

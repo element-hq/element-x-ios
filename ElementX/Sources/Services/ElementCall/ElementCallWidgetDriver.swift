@@ -75,30 +75,32 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
             return .failure(.roomInvalid)
         }
         
-        let useEncryption = await (try? room.latestEncryptionState() == .encrypted) ?? false
+        async let useEncryption = (try? room.latestEncryptionState() == .encrypted) ?? false
+        async let isDirect = room.isDirect()
         let widgetSettings: WidgetSettings
         
         do {
-            widgetSettings = try newVirtualElementCallWidget(props: .init(elementCallUrl: baseURL.absoluteString,
-                                                                          widgetId: widgetID,
-                                                                          parentUrl: nil,
-                                                                          header: .appBar,
-                                                                          hideHeader: true,
-                                                                          preload: nil,
-                                                                          fontScale: nil,
-                                                                          appPrompt: false,
-                                                                          confineToRoom: true,
-                                                                          font: nil,
-                                                                          encryption: useEncryption ? .perParticipantKeys : .unencrypted,
-                                                                          intent: .startCall,
-                                                                          hideScreensharing: false,
-                                                                          posthogUserId: nil,
-                                                                          posthogApiHost: analyticsConfiguration?.posthogAPIHost,
-                                                                          posthogApiKey: analyticsConfiguration?.posthogAPIKey,
-                                                                          rageshakeSubmitUrl: rageshakeURL,
-                                                                          sentryDsn: analyticsConfiguration?.sentryDSN,
-                                                                          sentryEnvironment: nil,
-                                                                          controlledMediaDevices: !ProcessInfo.processInfo.isiOSAppOnMac))
+            widgetSettings = try await newVirtualElementCallWidget(props: .init(elementCallUrl: baseURL.absoluteString,
+                                                                                widgetId: widgetID,
+                                                                                parentUrl: nil,
+                                                                                header: .appBar,
+                                                                                hideHeader: true,
+                                                                                preload: nil,
+                                                                                fontScale: nil,
+                                                                                appPrompt: false,
+                                                                                confineToRoom: true,
+                                                                                font: nil,
+                                                                                encryption: useEncryption ? .perParticipantKeys : .unencrypted,
+                                                                                intent: .startCall,
+                                                                                hideScreensharing: false,
+                                                                                posthogUserId: nil,
+                                                                                posthogApiHost: analyticsConfiguration?.posthogAPIHost,
+                                                                                posthogApiKey: analyticsConfiguration?.posthogAPIKey,
+                                                                                rageshakeSubmitUrl: rageshakeURL,
+                                                                                sentryDsn: analyticsConfiguration?.sentryDSN,
+                                                                                sentryEnvironment: nil,
+                                                                                controlledMediaDevices: !ProcessInfo.processInfo.isiOSAppOnMac,
+                                                                                sendNotificationType: isDirect ? .ring : .notification))
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)

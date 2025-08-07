@@ -26,7 +26,7 @@ protocol BaseRoomInfoProxyProtocol {
 // sourcery: AutoMockable
 protocol RoomInfoProxyProtocol: BaseRoomInfoProxyProtocol {
     var id: String { get }
-    var creator: String? { get }
+    var creators: [String] { get }
     var displayName: String? { get }
     var rawName: String? { get }
     var topic: String? { get }
@@ -68,6 +68,10 @@ extension BaseRoomInfoProxyProtocol {
     var avatar: RoomAvatar {
         guard successor == nil else {
             return .tombstoned
+        }
+        
+        if isSpace {
+            return .space(id: id, name: displayName, avatarURL: avatarURL)
         }
         
         if isDirect, avatarURL == nil, heroes.count == 1 {

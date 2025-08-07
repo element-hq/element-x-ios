@@ -192,8 +192,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             displayReadReceipts(for: itemID)
         case .displayThread(let itemID):
             actionsSubject.send(.displayThread(itemID: itemID))
-        case .handlePasteOrDrop(let provider):
-            timelineInteractionHandler.handlePasteOrDrop(provider)
+        case .handlePasteOrDrop(let providers):
+            timelineInteractionHandler.handlePasteOrDrop(providers)
         case .handlePollAction(let pollAction):
             handlePollAction(pollAction)
         case .handleAudioPlayerAction(let audioPlayerAction):
@@ -233,8 +233,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             editLastMessage()
         case .attach(let attachment):
             attach(attachment)
-        case .handlePasteOrDrop(let provider):
-            timelineInteractionHandler.handlePasteOrDrop(provider)
+        case .handlePasteOrDrop(let providers):
+            timelineInteractionHandler.handlePasteOrDrop(providers)
         case .composerModeChanged(mode: let mode):
             trackComposerMode(mode)
         case .composerFocusedChanged(isFocused: let isFocused):
@@ -278,33 +278,33 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     // MARK: - Private
     
     private func handleTappedOnSenderDetails(sender: TimelineItemSender) {
-//        let memberDetails: ManageRoomMemberDetails = if let memberProxy = roomProxy.membersPublisher.value.first(where: { $0.userID == sender.id }) {
-//            .memberDetails(roomMember: .init(withProxy: memberProxy))
-//        } else {
-//            .loadingMemberDetails(sender: sender)
-//        }
-//        
-//        let viewModel = ManageRoomMemberSheetViewModel(memberDetails: memberDetails,
-//                                                       permissions: .init(canKick: state.canCurrentUserKick,
-//                                                                          canBan: state.canCurrentUserBan,
-//                                                                          ownPowerLevel: currentUserProxy?.powerLevel ?? 0),
-//                                                       roomProxy: roomProxy,
-//                                                       userIndicatorController: userIndicatorController,
-//                                                       analyticsService: analyticsService,
-//                                                       mediaProvider: mediaProvider)
-//        
-//        viewModel.actions.sink { [weak self] action in
-//            guard let self else { return }
-//            switch action {
-//            case .dismiss(let shouldShowDetails):
-//                state.bindings.manageMemberViewModel = nil
-//                if shouldShowDetails {
-//                    actionsSubject.send(.displaySenderDetails(userID: sender.id))
-//                }
-//            }
-//        }
-//        .store(in: &cancellables)
-//        state.bindings.manageMemberViewModel = viewModel
+        let memberDetails: ManageRoomMemberDetails = if let memberProxy = roomProxy.membersPublisher.value.first(where: { $0.userID == sender.id }) {
+            .memberDetails(roomMember: .init(withProxy: memberProxy))
+        } else {
+            .loadingMemberDetails(sender: sender)
+        }
+        
+        let viewModel = ManageRoomMemberSheetViewModel(memberDetails: memberDetails,
+                                                       permissions: .init(canKick: state.canCurrentUserKick,
+                                                                          canBan: state.canCurrentUserBan,
+                                                                          ownPowerLevel: currentUserProxy?.powerLevel ?? .init(value: 0)),
+                                                       roomProxy: roomProxy,
+                                                       userIndicatorController: userIndicatorController,
+                                                       analyticsService: analyticsService,
+                                                       mediaProvider: mediaProvider)
+        
+        viewModel.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss(let shouldShowDetails):
+                state.bindings.manageMemberViewModel = nil
+                if shouldShowDetails {
+                    actionsSubject.send(.displaySenderDetails(userID: sender.id))
+                }
+            }
+        }
+        .store(in: &cancellables)
+        state.bindings.manageMemberViewModel = viewModel
         actionsSubject.send(.displaySenderDetails(userID: sender.id))
     }
     
@@ -483,8 +483,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     actionsSubject.send(.displayPollForm(mode: mode))
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.displayReportContent(itemID: itemID, senderID: senderID))
-                case .displayMediaUploadPreviewScreen(let url):
-                    actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
+                case .displayMediaUploadPreviewScreen(let mediaURLs):
+                    actionsSubject.send(.displayMediaUploadPreviewScreen(mediaURLs: mediaURLs))
                 case .showActionMenu(let actionMenuInfo):
                     self.state.bindings.actionMenuInfo = actionMenuInfo
                 case .showDebugInfo(let debugInfo):

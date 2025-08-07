@@ -107,14 +107,11 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
         }
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
     private func buildDiff(from diff: TimelineDiff, on itemProxies: [TimelineItemProxy]) -> CollectionDifference<TimelineItemProxy>? {
         var changes = [CollectionDifference<TimelineItemProxy>.Change]()
         
-        switch diff.change() {
-        case .append:
-            guard let items = diff.append() else { fatalError() }
-
+        switch diff {
+        case .append(let items):
             for (index, item) in items.enumerated() {
                 let itemProxy = TimelineItemProxy(item: item)
                 
@@ -128,11 +125,9 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             for (index, itemProxy) in itemProxies.enumerated() {
                 changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
             }
-        case .insert:
-            guard let update = diff.insert() else { fatalError() }
-
-            let itemProxy = TimelineItemProxy(item: update.item)
-            changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
+        case .insert(let index, let item):
+            let itemProxy = TimelineItemProxy(item: item)
+            changes.append(.insert(offset: Int(index), element: itemProxy, associatedWith: nil))
         case .popBack:
             guard let itemProxy = itemProxies.last else { fatalError() }
 
@@ -141,9 +136,7 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             guard let itemProxy = itemProxies.first else { fatalError() }
 
             changes.append(.remove(offset: 0, element: itemProxy, associatedWith: nil))
-        case .pushBack:
-            guard let item = diff.pushBack() else { fatalError() }
-            
+        case .pushBack(let item):
             let itemProxy = TimelineItemProxy(item: item)
             
             if itemProxy.isMembershipChange {
@@ -151,20 +144,15 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             }
             
             changes.append(.insert(offset: Int(itemProxies.count), element: itemProxy, associatedWith: nil))
-        case .pushFront:
-            guard let item = diff.pushFront() else { fatalError() }
-
+        case .pushFront(let item):
             let itemProxy = TimelineItemProxy(item: item)
+            
             changes.append(.insert(offset: 0, element: itemProxy, associatedWith: nil))
-        case .remove:
-            guard let index = diff.remove() else { fatalError() }
-
+        case .remove(let index):
             let itemProxy = itemProxies[Int(index)]
-
+            
             changes.append(.remove(offset: Int(index), element: itemProxy, associatedWith: nil))
-        case .reset:
-            guard let items = diff.reset() else { fatalError() }
-
+        case .reset(let items):
             for (index, itemProxy) in itemProxies.enumerated() {
                 changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
             }
@@ -172,12 +160,10 @@ class TimelineItemProvider: TimelineItemProviderProtocol {
             for (index, timelineItem) in items.enumerated() {
                 changes.append(.insert(offset: index, element: TimelineItemProxy(item: timelineItem), associatedWith: nil))
             }
-        case .set:
-            guard let update = diff.set() else { fatalError() }
-
-            let itemProxy = TimelineItemProxy(item: update.item)
-            changes.append(.remove(offset: Int(update.index), element: itemProxy, associatedWith: nil))
-            changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
+        case .set(let index, let item):
+            let itemProxy = TimelineItemProxy(item: item)
+            changes.append(.remove(offset: Int(index), element: itemProxy, associatedWith: nil))
+            changes.append(.insert(offset: Int(index), element: itemProxy, associatedWith: nil))
         case .truncate:
             break
         }
@@ -223,26 +209,17 @@ private extension Array where Element == TimelineDiff {
 
 extension TimelineDiff: @retroactive CustomDebugStringConvertible {
     public var debugDescription: String {
-        switch change() {
-        case .append:
-            guard let update = append() else {
-                fatalError()
-            }
-            return "Append(\(update.count))"
+        switch self {
+        case .append(let items):
+            return "Append(\(items.count))"
         case .clear:
             return "Clear"
         case .insert:
             return "Insert"
-        case .set:
-            guard let update = set() else {
-                fatalError()
-            }
-            return "Set(\(update.index))"
-        case .remove:
-            guard let update = remove() else {
-                fatalError()
-            }
-            return "Remove(\(update)"
+        case .set(let index, _):
+            return "Set(\(index))"
+        case .remove(let index):
+            return "Remove(\(index)"
         case .pushBack:
             return "PushBack"
         case .pushFront:
@@ -251,16 +228,10 @@ extension TimelineDiff: @retroactive CustomDebugStringConvertible {
             return "PopBack"
         case .popFront:
             return "PopFront"
-        case .truncate:
-            guard let update = truncate() else {
-                fatalError()
-            }
-            return "Truncate(\(update))"
-        case .reset:
-            guard let update = reset() else {
-                fatalError()
-            }
-            return "Reset(\(update.count)@\(update.startIndex)-\(update.endIndex))"
+        case .truncate(let length):
+            return "Truncate(\(length))"
+        case .reset(let items):
+            return "Reset(\(items.count)@\(items.startIndex)-\(items.endIndex))"
         }
     }
 }

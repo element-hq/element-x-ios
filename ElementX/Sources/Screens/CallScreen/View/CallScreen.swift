@@ -321,7 +321,6 @@ struct CallScreen_Previews: PreviewProvider {
         clientProxy.deviceID = "call-device-id"
         
         let roomProxy = JoinedRoomProxyMock()
-        roomProxy.sendCallNotificationIfNeededReturnValue = .success(())
         
         let widgetDriver = ElementCallWidgetDriverMock()
         widgetDriver.underlyingMessagePublisher = .init()
@@ -336,8 +335,7 @@ struct CallScreen_Previews: PreviewProvider {
                                                         clientID: "io.element.elementx",
                                                         elementCallBaseURL: "https://call.element.io",
                                                         elementCallBaseURLOverride: nil,
-                                                        colorScheme: .light,
-                                                        notifyOtherParticipants: false),
+                                                        colorScheme: .light),
                                    allowPictureInPicture: false,
                                    appHooks: AppHooks(),
                                    appSettings: ServiceLocator.shared.settings,

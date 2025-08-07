@@ -10,7 +10,7 @@ import SwiftUI
 import WysiwygComposer
 
 typealias GenericKeyHandler = (_ key: UIKeyboardHIDUsage) -> Void
-typealias PasteHandler = (NSItemProvider) -> Void
+typealias PasteHandler = ([NSItemProvider]) -> Void
 
 struct MessageComposer: View {
     @Binding var plainComposerText: NSAttributedString

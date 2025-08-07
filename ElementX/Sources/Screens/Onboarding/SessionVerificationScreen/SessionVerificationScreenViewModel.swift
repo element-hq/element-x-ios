@@ -178,7 +178,7 @@ class SessionVerificationScreenViewModel: SessionVerificationViewModelType, Sess
         switch flow {
         case .deviceInitiator:
             return await sessionVerificationControllerProxy.requestDeviceVerification()
-        case .userIntiator(let userID):
+        case .userInitiator(let userID):
             return await sessionVerificationControllerProxy.requestUserVerification(userID)
         default:
             fatalError("Incorrect API usage.")

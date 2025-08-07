@@ -11,6 +11,7 @@ import XCTest
 @testable import ElementX
 
 final class MediaUploadingPreprocessorTests: XCTestCase {
+    let maxUploadSize: UInt = 100 * 1024 * 1024
     var appSettings: AppSettings!
     var mediaUploadingPreprocessor: MediaUploadingPreprocessor!
     
@@ -32,7 +33,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
             return
         }
         
-        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .audio(audioURL, audioInfo) = result else {
             XCTFail("Failed processing asset")
             return
@@ -55,7 +56,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
             return
         }
         
-        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .video(videoURL, thumbnailURL, videoInfo) = result else {
             XCTFail("Failed processing asset")
             return
@@ -92,7 +93,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
         
-        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .video(optimizedVideoURL, _, optimizedVideoInfo) = optimizedResult else {
             XCTFail("Failed processing asset")
             return
@@ -118,7 +119,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
             return
         }
         
-        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .video(videoURL, thumbnailURL, videoInfo) = result else {
             XCTFail("Failed processing asset")
             return
@@ -155,7 +156,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
         
-        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .video(optimizedVideoURL, _, optimizedVideoInfo) = optimizedResult else {
             XCTFail("Failed processing asset")
             return
@@ -178,7 +179,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
             return
         }
         
-        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(convertedImageURL, thumbnailURL, imageInfo) = result else {
             XCTFail("Failed processing asset")
             return
@@ -202,7 +203,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
         
-        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(optimizedImageURL, thumbnailURL, optimizedImageInfo) = optimizedResult else {
             XCTFail("Failed processing asset")
             return
@@ -224,7 +225,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
             return
         }
         
-        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(convertedImageURL, thumbnailURL, imageInfo) = result else {
             XCTFail("Failed processing asset")
             return
@@ -248,7 +249,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
         
-        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(optimizedImageURL, thumbnailURL, optimizedImageInfo) = optimizedResult else {
             XCTFail("Failed processing asset")
             return
@@ -270,7 +271,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
             return
         }
         
-        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(convertedImageURL, _, imageInfo) = result else {
             XCTFail("Failed processing asset")
             return
@@ -296,7 +297,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
         
-        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(optimizedImageURL, _, optimizedImageInfo) = optimizedResult else {
             XCTFail("Failed processing asset")
             return
@@ -321,7 +322,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
             return
         }
         
-        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(convertedImageURL, thumbnailURL, imageInfo) = result else {
             XCTFail("Failed processing asset")
             return
@@ -349,7 +350,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
         
-        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(optimizedImageURL, thumbnailURL, optimizedImageInfo) = optimizedResult else {
             XCTFail("Failed processing asset")
             return
@@ -379,7 +380,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
             return
         }
         
-        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(convertedImageURL, _, imageInfo) = result else {
             XCTFail("Failed processing asset")
             return
@@ -405,7 +406,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
         
-        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(optimizedImageURL, _, optimizedImageInfo) = optimizedResult else {
             XCTFail("Failed processing asset")
             return
@@ -429,7 +430,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
             return
         }
         
-        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(result) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(convertedImageURL, thumbnailURL, imageInfo) = result else {
             XCTFail("Failed processing asset")
             return
@@ -449,7 +450,7 @@ final class MediaUploadingPreprocessorTests: XCTestCase {
         // Repeat with optimised media setting
         appSettings.optimizeMediaUploads = true
         
-        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url),
+        guard case let .success(optimizedResult) = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize),
               case let .image(optimizedImageURL, thumbnailURL, optimizedImageInfo) = optimizedResult else {
             XCTFail("Failed processing asset")
             return

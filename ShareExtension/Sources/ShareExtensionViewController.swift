@@ -63,23 +63,32 @@ class ShareExtensionViewController: UIViewController {
     // MARK: - Private
     
     private func prepareSharePayload() async -> ShareExtensionPayload? {
-        guard let extensionItem = extensionContext?.inputItems.first as? NSExtensionItem,
-              let itemProvider = extensionItem.attachments?.first else {
+        guard let extensionContext,
+              let extensionItem = extensionContext.inputItems.first as? NSExtensionItem,
+              let itemProviders = extensionItem.attachments else {
             return nil
         }
         
-        let roomID = (extensionContext?.intent as? INSendMessageIntent)?.conversationIdentifier
+        let roomID = (extensionContext.intent as? INSendMessageIntent)?.conversationIdentifier
         
-        if let fileURL = await itemProvider.storeData(withinAppGroupContainer: true) {
-            return .mediaFile(roomID: roomID, mediaFile: .init(url: fileURL, suggestedName: fileURL.lastPathComponent))
-        } else if let url = await itemProvider.loadTransferable(type: URL.self) {
-            return .text(roomID: roomID, text: url.absoluteString)
-        } else if let string = await itemProvider.loadString() {
-            return .text(roomID: roomID, text: string)
-        } else {
-            MXLog.error("Failed loading NSItemProvider data: \(itemProvider)")
-            return nil
+        var mediaFiles = [ShareExtensionMediaFile]()
+        for itemProvider in itemProviders {
+            if let fileURL = await itemProvider.storeData(withinAppGroupContainer: true) {
+                mediaFiles.append(.init(url: fileURL, suggestedName: fileURL.lastPathComponent))
+            } else if let url = await itemProvider.loadTransferable(type: URL.self) {
+                return .text(roomID: roomID, text: url.absoluteString)
+            } else if let string = await itemProvider.loadString() {
+                return .text(roomID: roomID, text: string)
+            } else {
+                MXLog.error("Failed loading NSItemProvider data: \(itemProvider)")
+            }
         }
+        
+        if !mediaFiles.isEmpty {
+            return .mediaFiles(roomID: roomID, mediaFiles: mediaFiles)
+        }
+        
+        return nil
     }
     
     private func openMainApp(payload: ShareExtensionPayload) async {

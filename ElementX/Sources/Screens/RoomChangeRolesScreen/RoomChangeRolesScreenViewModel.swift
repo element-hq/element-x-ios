@@ -20,22 +20,19 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(mode: RoomMemberDetails.Role,
+    init(mode: RoomRole,
          roomProxy: JoinedRoomProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
-        guard mode != .user else { fatalError("Invalid screen configuration: \(mode)") }
-        
+        guard mode != .user || mode != .creator else { fatalError("Invalid screen configuration: \(mode)") }
+
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
         
         super.init(initialViewState: RoomChangeRolesScreenViewState(mode: mode,
-                                                                    administrators: [],
-                                                                    moderators: [],
-                                                                    users: [],
-                                                                    bindings: .init()),
+                                                                    ownRole: roomProxy.membersPublisher.value.first { $0.userID == roomProxy.id }?.role ?? .administrator),
                    mediaProvider: mediaProvider)
         
         roomProxy.membersPublisher
@@ -64,11 +61,16 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         case .demoteMember(let member):
             demoteMember(member)
         case .save:
-            if state.mode == .administrator, !state.membersToPromote.isEmpty {
-                showPromotionWarning()
-            } else {
-                Task { await save() }
+            if !state.membersToPromote.isEmpty {
+                if state.mode == .administrator, state.ownRole == .administrator {
+                    showPromotionWarning()
+                    return
+                } else if state.mode == .owner {
+                    showTransferOwnershipWarning()
+                    return
+                }
             }
+            Task { await save() }
         case .cancel:
             confirmDiscardChanges()
         }
@@ -77,15 +79,22 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
     // MARK: - Private
     
     private func updateMembers(_ members: [RoomMemberProxyProtocol]) {
+        var owners = [RoomMemberDetails]()
         var administrators = [RoomMemberDetails]()
         var moderators = [RoomMemberDetails]()
         var users = [RoomMemberDetails]()
         
         for member in members.sorted() {
+            if member.userID == roomProxy.ownUserID {
+                state.ownRole = member.role
+            }
+            
             guard member.isActive else { continue }
             let memberDetails = RoomMemberDetails(withProxy: member)
             
-            switch member.role {
+            switch memberDetails.role {
+            case .creator, .owner:
+                owners.append(memberDetails)
             case .administrator:
                 administrators.append(memberDetails)
             case .moderator:
@@ -95,6 +104,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
             }
         }
         
+        state.owners = owners
         state.administrators = administrators
         state.moderators = moderators
         state.users = users
@@ -106,9 +116,9 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
         } else if state.membersToDemote.contains(member) {
             state.membersToDemote.remove(member)
             state.lastPromotedMember = member
-        } else if member.role == state.mode {
+        } else if member.role >= state.mode, member.role <= state.maxDemotableRole {
             state.membersToDemote.insert(member)
-        } else {
+        } else if member.role < state.mode {
             state.membersToPromote.insert(member)
             state.lastPromotedMember = member
         }
@@ -132,6 +142,16 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
                                       secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
     }
     
+    private func showTransferOwnershipWarning() {
+        context.alertInfo = AlertInfo(id: .transferOwnershipWarning,
+                                      title: L10n.screenRoomChangeRoleConfirmChangeOwnersTitle,
+                                      message: L10n.screenRoomChangeRoleConfirmChangeOwnersDescription,
+                                      primaryButton: .init(title: L10n.actionContinue, role: .destructive) {
+                                          Task { await self.save() }
+                                      },
+                                      secondaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil))
+    }
+    
     private func save() async {
         showSavingIndicator()
         
@@ -139,7 +159,7 @@ class RoomChangeRolesScreenViewModel: RoomChangeRolesScreenViewModelType, RoomCh
             hideSavingIndicator()
         }
         
-        let promotingUpdates = state.membersToPromote.map { ($0.id, state.mode.rustPowerLevel) }
+        let promotingUpdates = state.membersToPromote.map { ($0.id, state.mode.powerLevelValue) }
         let demotingUpdates = state.membersToDemote.map { ($0.id, Int64(0)) }
         
         // A task we can await until the room's info gets modified with the new power levels.

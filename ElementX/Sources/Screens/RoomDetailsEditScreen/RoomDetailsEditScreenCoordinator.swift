@@ -10,11 +10,13 @@ import SwiftUI
 
 struct RoomDetailsEditScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
+    let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userIndicatorController: UserIndicatorControllerProtocol
     let orientationManager: OrientationManagerProtocol
+    let appSettings: AppSettings
 }
 
 enum RoomDetailsEditScreenCoordinatorAction {
@@ -35,6 +37,7 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = RoomDetailsEditScreenViewModel(roomProxy: parameters.roomProxy,
+                                                   clientProxy: parameters.clientProxy,
                                                    mediaProvider: parameters.mediaProvider,
                                                    mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
                                                    userIndicatorController: parameters.userIndicatorController)
@@ -47,9 +50,9 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
                 case .cancel, .saveFinished:
                     self?.actionsSubject.send(.dismiss)
                 case .displayCameraPicker:
-                    self?.displayMediaPickerWithSource(.camera)
+                    self?.displayMediaPickerWithMode(.init(source: .camera, selectionType: .single))
                 case .displayMediaPicker:
-                    self?.displayMediaPickerWithSource(.photoLibrary)
+                    self?.displayMediaPickerWithMode(.init(source: .photoLibrary, selectionType: .single))
                 }
             }
             .store(in: &cancellables)
@@ -61,17 +64,23 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
     
     // MARK: Private
     
-    private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
+    private func displayMediaPickerWithMode(_ mode: MediaPickerScreenMode) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController,
-                                                                  source: source,
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(mode: mode,
+                                                                  appSettings: parameters.appSettings,
+                                                                  userIndicatorController: parameters.userIndicatorController,
                                                                   orientationManager: parameters.orientationManager) { [weak self] action in
             guard let self else { return }
             switch action {
             case .cancel:
                 parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
-            case .selectMediaAtURL(let url):
+            case .selectedMediaAtURLs(let urls):
+                guard urls.count == 1,
+                      let url = urls.first else {
+                    fatalError("Received an invalid number of URLs")
+                }
+                
                 parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
                 viewModel.didSelectMediaUrl(url: url)
             }

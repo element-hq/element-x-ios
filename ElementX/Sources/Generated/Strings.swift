@@ -538,8 +538,18 @@ internal enum L10n {
   internal static func commonPollVotesCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_poll_votes_count", p1)
   }
+  /// Preparing…
+  internal static var commonPreparing: String { return L10n.tr("Localizable", "common_preparing") }
   /// Privacy policy
   internal static var commonPrivacyPolicy: String { return L10n.tr("Localizable", "common_privacy_policy") }
+  /// Private room
+  internal static var commonPrivateRoom: String { return L10n.tr("Localizable", "common_private_room") }
+  /// Private space
+  internal static var commonPrivateSpace: String { return L10n.tr("Localizable", "common_private_space") }
+  /// Public room
+  internal static var commonPublicRoom: String { return L10n.tr("Localizable", "common_public_room") }
+  /// Public space
+  internal static var commonPublicSpace: String { return L10n.tr("Localizable", "common_public_space") }
   /// Reaction
   internal static var commonReaction: String { return L10n.tr("Localizable", "common_reaction") }
   /// Reactions
@@ -572,6 +582,10 @@ internal enum L10n {
   internal static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
   /// e.g. your project name
   internal static var commonRoomNamePlaceholder: String { return L10n.tr("Localizable", "common_room_name_placeholder") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func commonRooms(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "common_rooms", p1)
+  }
   /// Saved changes
   internal static var commonSavedChanges: String { return L10n.tr("Localizable", "common_saved_changes") }
   /// Saving
@@ -610,6 +624,10 @@ internal enum L10n {
   internal static var commonSomethingWentWrong: String { return L10n.tr("Localizable", "common_something_went_wrong") }
   /// We encountered an issue. Please try again.
   internal static var commonSomethingWentWrongMessage: String { return L10n.tr("Localizable", "common_something_went_wrong_message") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func commonSpaces(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "common_spaces", p1)
+  }
   /// Starting chat…
   internal static var commonStartingChat: String { return L10n.tr("Localizable", "common_starting_chat") }
   /// Sticker
@@ -842,6 +860,12 @@ internal enum L10n {
   internal static var leaveRoomAlertEmptySubtitle: String { return L10n.tr("Localizable", "leave_room_alert_empty_subtitle") }
   /// Are you sure that you want to leave this room? This room is not public and you won't be able to rejoin without an invite.
   internal static var leaveRoomAlertPrivateSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_private_subtitle") }
+  /// Choose owners
+  internal static var leaveRoomAlertSelectNewOwnerAction: String { return L10n.tr("Localizable", "leave_room_alert_select_new_owner_action") }
+  /// You're the only owner of this room. You need to transfer ownership to someone else before you leave the room.
+  internal static var leaveRoomAlertSelectNewOwnerSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_select_new_owner_subtitle") }
+  /// Transfer ownership
+  internal static var leaveRoomAlertSelectNewOwnerTitle: String { return L10n.tr("Localizable", "leave_room_alert_select_new_owner_title") }
   /// Are you sure that you want to leave the room?
   internal static var leaveRoomAlertSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_subtitle") }
   /// %1$@ iOS
@@ -2134,12 +2158,18 @@ internal enum L10n {
   internal static var screenRoomChangePermissionsRoomTopic: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_topic") }
   /// Send messages
   internal static var screenRoomChangePermissionsSendMessages: String { return L10n.tr("Localizable", "screen_room_change_permissions_send_messages") }
+  /// Edit Admins or Owners
+  internal static var screenRoomChangeRoleAdministratorsOrOwnersTitle: String { return L10n.tr("Localizable", "screen_room_change_role_administrators_or_owners_title") }
   /// Edit Admins
   internal static var screenRoomChangeRoleAdministratorsTitle: String { return L10n.tr("Localizable", "screen_room_change_role_administrators_title") }
   /// You will not be able to undo this action. You are promoting the user to have the same power level as you.
   internal static var screenRoomChangeRoleConfirmAddAdminDescription: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_add_admin_description") }
   /// Add Admin?
   internal static var screenRoomChangeRoleConfirmAddAdminTitle: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_add_admin_title") }
+  /// You will not be able to undo this action. You are transferring the ownership to the selected users. Once you leave this will be permanent.
+  internal static var screenRoomChangeRoleConfirmChangeOwnersDescription: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_change_owners_description") }
+  /// Transfer ownership?
+  internal static var screenRoomChangeRoleConfirmChangeOwnersTitle: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_change_owners_title") }
   /// Demote
   internal static var screenRoomChangeRoleConfirmDemoteSelfAction: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_demote_self_action") }
   /// You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.
@@ -2152,8 +2182,12 @@ internal enum L10n {
   }
   /// Admins automatically have moderator privileges
   internal static var screenRoomChangeRoleModeratorsAdminSectionFooter: String { return L10n.tr("Localizable", "screen_room_change_role_moderators_admin_section_footer") }
+  /// Owners automatically have admin privileges.
+  internal static var screenRoomChangeRoleModeratorsOwnerSectionFooter: String { return L10n.tr("Localizable", "screen_room_change_role_moderators_owner_section_footer") }
   /// Edit Moderators
   internal static var screenRoomChangeRoleModeratorsTitle: String { return L10n.tr("Localizable", "screen_room_change_role_moderators_title") }
+  /// Choose Owners
+  internal static var screenRoomChangeRoleOwnersTitle: String { return L10n.tr("Localizable", "screen_room_change_role_owners_title") }
   /// Admins
   internal static var screenRoomChangeRoleSectionAdministrators: String { return L10n.tr("Localizable", "screen_room_change_role_section_administrators") }
   /// Moderators
@@ -2364,6 +2398,8 @@ internal enum L10n {
   internal static var screenRoomRetrySendMenuTitle: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_title") }
   /// Admins
   internal static var screenRoomRolesAndPermissionsAdmins: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_admins") }
+  /// Admins and owners
+  internal static var screenRoomRolesAndPermissionsAdminsAndOwners: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_admins_and_owners") }
   /// Change my role
   internal static var screenRoomRolesAndPermissionsChangeMyRole: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_change_my_role") }
   /// Demote to member
@@ -2376,6 +2412,8 @@ internal enum L10n {
   internal static var screenRoomRolesAndPermissionsMessagesAndContent: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_messages_and_content") }
   /// Moderators
   internal static var screenRoomRolesAndPermissionsModerators: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_moderators") }
+  /// Owners
+  internal static var screenRoomRolesAndPermissionsOwners: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_owners") }
   /// Permissions
   internal static var screenRoomRolesAndPermissionsPermissionsHeader: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_permissions_header") }
   /// Reset permissions
@@ -2734,6 +2772,14 @@ internal enum L10n {
   internal static var screenSignoutSaveRecoveryKeySubtitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_subtitle") }
   /// Have you saved your recovery key?
   internal static var screenSignoutSaveRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_title") }
+  /// Spaces you have created or joined.
+  internal static var screenSpaceListDescription: String { return L10n.tr("Localizable", "screen_space_list_description") }
+  /// %1$@ • %2$@
+  internal static func screenSpaceListDetails(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "screen_space_list_details", String(describing: p1), String(describing: p2))
+  }
+  /// Spaces
+  internal static var screenSpaceListTitle: String { return L10n.tr("Localizable", "screen_space_list_title") }
   /// An error occurred when trying to start a chat
   internal static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
   /// Join room by address

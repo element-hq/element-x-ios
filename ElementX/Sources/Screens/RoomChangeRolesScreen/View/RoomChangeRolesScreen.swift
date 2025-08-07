@@ -45,15 +45,18 @@ struct RoomChangeRolesScreen: View {
                     }
                 }
                 
+                RoomChangeRolesScreenSection(members: context.viewState.visibleOwners,
+                                             role: .owner,
+                                             context: context)
+                
                 RoomChangeRolesScreenSection(members: context.viewState.visibleAdministrators,
-                                             title: L10n.screenRoomChangeRoleSectionAdministrators,
-                                             isAdministratorsSection: true,
+                                             role: .administrator,
                                              context: context)
                 RoomChangeRolesScreenSection(members: context.viewState.visibleModerators,
-                                             title: L10n.screenRoomChangeRoleSectionModerators,
+                                             role: .moderator,
                                              context: context)
                 RoomChangeRolesScreenSection(members: context.viewState.visibleUsers,
-                                             title: L10n.screenRoomChangeRoleSectionUsers,
+                                             role: .user,
                                              context: context)
             }
         }
@@ -65,10 +68,12 @@ struct RoomChangeRolesScreen: View {
             ScrollViewReader { scrollView in
                 HStack(spacing: 16) {
                     ForEach(context.viewState.membersWithRole, id: \.id) { member in
-                        RoomChangeRolesScreenSelectedItem(member: member, mediaProvider: context.mediaProvider) {
+                        let dismissAction = context.viewState.isMemberDisabled(member) ? nil : {
                             context.send(viewAction: .demoteMember(member))
                         }
-                        .frame(width: cellWidth)
+                        RoomChangeRolesScreenSelectedItem(member: member, mediaProvider: context.mediaProvider,
+                                                          dismissAction: dismissAction)
+                            .frame(width: cellWidth)
                     }
                 }
                 .onChange(of: context.viewState.lastPromotedMember) { _, newValue in
@@ -104,10 +109,22 @@ struct RoomChangeRolesScreen: View {
 // MARK: - Previews
 
 struct RoomChangeRolesScreen_Previews: PreviewProvider, TestablePreview {
-    static let administratorViewModel = makeViewModel(mode: .administrator)
-    static let moderatorViewModel = makeViewModel(mode: .moderator)
+    static let ownerViewModel = makeViewModel(mode: .owner, ownRole: .creator)
+    static let administratorOrOwnerViewModel = makeViewModel(mode: .administrator, ownRole: .creator)
+    static let administratorViewModel = makeViewModel(mode: .administrator, ownRole: .administrator)
+    static let moderatorViewModel = makeViewModel(mode: .moderator, ownRole: .administrator)
     
     static var previews: some View {
+        NavigationStack {
+            RoomChangeRolesScreen(context: ownerViewModel.context)
+        }
+        .previewDisplayName("Owners")
+        
+        NavigationStack {
+            RoomChangeRolesScreen(context: administratorOrOwnerViewModel.context)
+        }
+        .previewDisplayName("Administrator or Owners")
+        
         NavigationStack {
             RoomChangeRolesScreen(context: administratorViewModel.context)
         }
@@ -119,11 +136,18 @@ struct RoomChangeRolesScreen_Previews: PreviewProvider, TestablePreview {
         .previewDisplayName("Moderators")
     }
     
-    static func makeViewModel(mode: RoomMemberDetails.Role) -> RoomChangeRolesScreenViewModel {
-        RoomChangeRolesScreenViewModel(mode: mode,
-                                       roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsAdmin)),
-                                       mediaProvider: MediaProviderMock(configuration: .init()),
-                                       userIndicatorController: UserIndicatorControllerMock(),
-                                       analytics: ServiceLocator.shared.analytics)
+    static func makeViewModel(mode: RoomRole, ownRole: RoomRole) -> RoomChangeRolesScreenViewModel {
+        let members: [RoomMemberProxyMock] = switch ownRole {
+        case .creator:
+            .allMembersAsCreator
+        default:
+            .allMembersAsAdminV2
+        }
+        
+        return RoomChangeRolesScreenViewModel(mode: mode,
+                                              roomProxy: JoinedRoomProxyMock(.init(members: members)),
+                                              mediaProvider: MediaProviderMock(configuration: .init()),
+                                              userIndicatorController: UserIndicatorControllerMock(),
+                                              analytics: ServiceLocator.shared.analytics)
     }
 }

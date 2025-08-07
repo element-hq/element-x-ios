@@ -7,31 +7,45 @@
 
 import SwiftUI
 
+struct MediaPickerScreenMode: Hashable {
+    let source: MediaPickerScreenSource
+    let selectionType: MediaPickerScreenSelectionType
+}
+
 enum MediaPickerScreenSource {
     case camera
     case photoLibrary
     case documents
 }
 
+enum MediaPickerScreenSelectionType {
+    case single
+    case multiple
+}
+
 enum MediaPickerScreenCoordinatorAction {
-    case selectMediaAtURL(URL)
+    case selectedMediaAtURLs([URL])
     case cancel
 }
 
 class MediaPickerScreenCoordinator: CoordinatorProtocol {
     private let orientationManager: OrientationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
-    private let source: MediaPickerScreenSource
+    private let mode: MediaPickerScreenMode
     private let callback: (MediaPickerScreenCoordinatorAction) -> Void
     
-    init(userIndicatorController: UserIndicatorControllerProtocol,
-         source: MediaPickerScreenSource,
+    init(mode: MediaPickerScreenMode,
+         appSettings: AppSettings,
+         userIndicatorController: UserIndicatorControllerProtocol,
          orientationManager: OrientationManagerProtocol,
          callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
         self.userIndicatorController = userIndicatorController
-        self.source = source
         self.orientationManager = orientationManager
         self.callback = callback
+        
+        // The users of the media picker chose their ideal selection type leaving
+        // the feature flag to only be checked and enforced on this level.
+        self.mode = appSettings.multipleAttachmentUploadEnabled ? mode : .init(source: mode.source, selectionType: .single)
     }
     
     func toPresentable() -> AnyView {
@@ -39,51 +53,47 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        guard source == .camera else {
-            return
+        if mode.source == .camera {
+            orientationManager.setOrientation(.portrait)
+            orientationManager.lockOrientation(.portrait)
         }
-        
-        orientationManager.setOrientation(.portrait)
-        orientationManager.lockOrientation(.portrait)
     }
     
     func stop() {
-        guard source == .camera else {
-            return
+        if mode.source == .camera {
+            orientationManager.lockOrientation(.all)
         }
-        
-        orientationManager.lockOrientation(.all)
     }
     
     @ViewBuilder
     private var mediaPicker: some View {
-        switch source {
+        switch mode.source {
         case .camera:
             cameraPicker
         case .photoLibrary:
-            PhotoLibraryPicker(userIndicatorController: userIndicatorController) { [weak self] action in
+            PhotoLibraryPicker(selectionType: mode.selectionType, userIndicatorController: userIndicatorController) { [weak self] action in
                 switch action {
                 case .cancel:
                     self?.callback(.cancel)
                 case .error(let error):
                     MXLog.error("Failed selecting media from the photo library with error: \(error)")
                     self?.showError()
-                case .selectFile(let url):
-                    self?.callback(.selectMediaAtURL(url))
+                case .selectedMediaAtURLs(let urls):
+                    self?.callback(.selectedMediaAtURLs(urls))
                 }
             }
         case .documents:
             // The document picker automatically dismisses everything on selection
             // Strongly retain self in the callback to forward actions correctly
-            DocumentPicker(userIndicatorController: userIndicatorController) { action in
+            DocumentPicker(selectionType: mode.selectionType, userIndicatorController: userIndicatorController) { action in
                 switch action {
                 case .cancel:
                     self.callback(.cancel)
                 case .error(let error):
                     MXLog.error("Failed selecting media from the document picker with error: \(error)")
                     self.showError()
-                case .selectFile(let url):
-                    self.callback(.selectMediaAtURL(url))
+                case .selectedMediaAtURLs(let urls):
+                    self.callback(.selectedMediaAtURLs(urls))
                 }
             }
         }
@@ -98,7 +108,7 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
                 MXLog.error("Failed selecting media from the camera picker with error: \(error)")
                 self?.showError()
             case .selectFile(let url):
-                self?.callback(.selectMediaAtURL(url))
+                self?.callback(.selectedMediaAtURLs([url]))
             }
         }
         .background(.black, ignoresSafeAreaEdges: .bottom)

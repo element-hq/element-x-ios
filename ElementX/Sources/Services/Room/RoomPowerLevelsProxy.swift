@@ -26,11 +26,6 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
         powerLevels.userPowerLevels()
     }
     
-    func suggestedRole(forUser userID: String) -> RoomMemberRole {
-        let powerLevel = powerLevels.userPowerLevels()[userID] ?? values.usersDefault
-        return suggestedRoleForPowerLevel(powerLevel: powerLevel)
-    }
-    
     func canOwnUser(sendMessage messageType: MessageLikeEventType) -> Bool {
         powerLevels.canOwnUserSendMessage(message: messageType)
     }
@@ -69,6 +64,10 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
     
     func canOwnUserJoinCall() -> Bool {
         powerLevels.canOwnUserSendState(stateEvent: .callMember)
+    }
+    
+    func canOwnUserEditRolesAndPermissions() -> Bool {
+        powerLevels.canOwnUserSendState(stateEvent: .roomPowerLevels)
     }
     
     func canUser(userID: String, sendMessage messageType: MessageLikeEventType) -> Result<Bool, RoomProxyError> {

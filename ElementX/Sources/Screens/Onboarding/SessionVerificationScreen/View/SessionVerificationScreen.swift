@@ -43,7 +43,7 @@ struct SessionVerificationScreen: View {
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
             switch context.viewState.flow {
-            case .userIntiator, .userResponder:
+            case .userInitiator, .userResponder:
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
                 }
@@ -91,7 +91,7 @@ struct SessionVerificationScreen: View {
                 SessionVerificationRequestDetailsView(details: details,
                                                       isUserVerification: true,
                                                       mediaProvider: context.mediaProvider)
-            case .userIntiator:
+            case .userInitiator:
                 Button(L10n.actionLearnMore) {
                     UIApplication.shared.open(context.viewState.learnMoreURL)
                 }
@@ -129,7 +129,7 @@ struct SessionVerificationScreen: View {
         switch context.viewState.verificationState {
         case .initial:
             switch context.viewState.flow {
-            case .deviceInitiator, .userIntiator:
+            case .deviceInitiator, .userInitiator:
                 Button(L10n.actionStartVerification) {
                     context.send(viewAction: .requestVerification)
                 }
@@ -152,7 +152,7 @@ struct SessionVerificationScreen: View {
             }
         case .cancelled:
             switch context.viewState.flow {
-            case .deviceInitiator, .userIntiator:
+            case .deviceInitiator, .userInitiator:
                 Button(L10n.actionRetry) {
                     context.send(viewAction: .restart)
                 }
@@ -214,7 +214,7 @@ struct SessionVerification_Previews: PreviewProvider, TestablePreview {
         sessionVerificationScreen(state: .initial, flow: .deviceInitiator)
             .previewDisplayName("Initial - Device Initiator")
         
-        sessionVerificationScreen(state: .initial, flow: .userIntiator(userID: "@bob:matrix.org"))
+        sessionVerificationScreen(state: .initial, flow: .userInitiator(userID: "@bob:matrix.org"))
             .previewDisplayName("Initial - User Initiator")
         
         let details = SessionVerificationRequestDetails(senderProfile: UserProfileProxy(userID: "@bob:matrix.org",

@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Compound
 import GameController
 import QuickLook
@@ -16,6 +17,7 @@ struct MediaUploadPreviewScreen: View {
     @Bindable var context: MediaUploadPreviewScreenViewModel.Context
     
     @State private var captionWarningFrame: CGRect = .zero
+    @State private var currentIndex = 0
     @FocusState private var isComposerFocussed
     
     private var title: String { ProcessInfo.processInfo.isiOSAppOnMac ? context.viewState.title ?? "" : "" }
@@ -23,8 +25,15 @@ struct MediaUploadPreviewScreen: View {
     
     var body: some View {
         mainContent
-            .id(context.viewState.url)
+            .id(context.viewState.mediaURLs)
             .ignoresSafeArea(edges: [.horizontal])
+            .safeAreaInset(edge: .top) {
+                if context.viewState.mediaURLs.count > 1 {
+                    Text("\(currentIndex + 1) / \(context.viewState.mediaURLs.count)")
+                        .font(.compound.bodySM)
+                        .foregroundColor(.compound.textSecondary)
+                }
+            }
             .safeAreaInset(edge: .bottom, spacing: 0) {
                 composer
                     .padding(.horizontal, 12)
@@ -39,6 +48,7 @@ struct MediaUploadPreviewScreen: View {
             .presentationBackground(.background) // Fix a bug introduced by the caption warning.
             .preferredColorScheme(colorSchemeOverride)
             .onAppear(perform: focusComposerIfHardwareKeyboardConnected)
+            .alert(item: $context.alertInfo)
     }
     
     @ViewBuilder
@@ -49,8 +59,9 @@ struct MediaUploadPreviewScreen: View {
                 .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {
-            PreviewView(fileURL: context.viewState.url,
-                        title: context.viewState.title)
+            PreviewView(mediaURLs: context.viewState.mediaURLs,
+                        title: context.viewState.title,
+                        currentIndex: $currentIndex)
         }
     }
     
@@ -162,11 +173,12 @@ struct MediaUploadPreviewScreen: View {
 }
 
 private struct PreviewView: UIViewControllerRepresentable {
-    let fileURL: URL
+    let mediaURLs: [URL]
     let title: String?
+    @Binding var currentIndex: Int
 
     func makeUIViewController(context: Context) -> UIViewController {
-        let previewController = PreviewViewController()
+        let previewController = PreviewViewController(currentIndex: $currentIndex)
         previewController.dataSource = context.coordinator
         previewController.delegate = context.coordinator
         
@@ -193,11 +205,11 @@ private struct PreviewView: UIViewControllerRepresentable {
         // MARK: - QLPreviewControllerDataSource
         
         func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-            1
+            view.mediaURLs.count
         }
 
         func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-            PreviewItem(previewItemURL: view.fileURL, previewItemTitle: view.title)
+            PreviewItem(previewItemURL: view.mediaURLs[index], previewItemTitle: view.title)
         }
         
         // MARK: - QLPreviewControllerDelegate
@@ -219,6 +231,28 @@ private class PreviewItem: NSObject, QLPreviewItem {
 }
 
 private class PreviewViewController: QLPreviewController {
+    private var cancellables: Set<AnyCancellable> = []
+    
+    init(currentIndex: Binding<Int>) {
+        super.init(nibName: nil, bundle: nil)
+        
+        // Observation of currentPreviewItem doesn't work, so use the index instead.
+        publisher(for: \.currentPreviewItemIndex)
+            .sink { index in
+                DispatchQueue.main.async {
+                    if index != Int.max { // Because reasons
+                        currentIndex.wrappedValue = index
+                    }
+                }
+            }
+            .store(in: &cancellables)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
@@ -236,13 +270,14 @@ struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
     static let snapshotURL = URL.picturesDirectory
     static let testURL = Bundle.main.url(forResource: "AppIcon60x60@2x", withExtension: "png")
     
-    static let viewModel = MediaUploadPreviewScreenViewModel(timelineController: MockTimelineController(),
-                                                             userIndicatorController: UserIndicatorControllerMock.default,
-                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+    static let viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: [snapshotURL],
                                                              title: "App Icon.png",
-                                                             url: snapshotURL,
+                                                             isRoomEncrypted: true,
                                                              shouldShowCaptionWarning: true,
-                                                             isRoomEncrypted: true)
+                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+                                                             timelineController: MockTimelineController(),
+                                                             clientProxy: ClientProxyMock(.init()),
+                                                             userIndicatorController: UserIndicatorControllerMock.default)
     static var previews: some View {
         NavigationStack {
             MediaUploadPreviewScreen(context: viewModel.context)
