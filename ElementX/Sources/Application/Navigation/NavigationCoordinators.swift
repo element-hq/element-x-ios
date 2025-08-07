@@ -27,7 +27,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
                 logPresentationChange("Set sidebar", sidebarModule)
                 sidebarModule.coordinator?.start()
                 if let observableCoordinator = sidebarModule.coordinator as? NavigationStackCoordinator {
-                    sidebarStackModuleCancellable = observableCoordinator.$stackModules.sink { [weak self] _ in
+                    sidebarStackModuleCancellable = Publishers.CombineLatest(observableCoordinator.$rootModule, observableCoordinator.$stackModules).sink { [weak self] _ in
                         self?.objectWillChange.send()
                     }
                 }
