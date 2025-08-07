@@ -10,27 +10,19 @@ import SwiftUI
 
 /// Class responsible for displaying 2 coordinators side by side and collapsing them
 /// into a single navigation stack on compact layouts
-class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomStringConvertible {
+@Observable class NavigationSplitCoordinator: CoordinatorProtocol, CustomStringConvertible {
     fileprivate let placeholderModule: NavigationModule
-    
-    var sidebarStackModuleCancellable: AnyCancellable?
 
-    @Published fileprivate var sidebarModule: NavigationModule? {
+    fileprivate var sidebarModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove sidebar", oldValue)
                 oldValue.tearDown()
-                sidebarStackModuleCancellable = nil
             }
             
             if let sidebarModule {
                 logPresentationChange("Set sidebar", sidebarModule)
                 sidebarModule.coordinator?.start()
-                if let observableCoordinator = sidebarModule.coordinator as? NavigationStackCoordinator {
-                    sidebarStackModuleCancellable = Publishers.CombineLatest(observableCoordinator.$rootModule, observableCoordinator.$stackModules).sink { [weak self] _ in
-                        self?.objectWillChange.send()
-                    }
-                }
             }
         }
     }
@@ -39,25 +31,17 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
     var sidebarCoordinator: (any CoordinatorProtocol)? {
         sidebarModule?.coordinator
     }
-
-    var detailCoordinatorCancellable: AnyCancellable?
     
-    @Published fileprivate var detailModule: NavigationModule? {
+    fileprivate var detailModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove detail", oldValue)
                 oldValue.tearDown()
-                detailCoordinatorCancellable = nil
             }
             
             if let detailModule {
                 logPresentationChange("Set detail", detailModule)
                 detailModule.coordinator?.start()
-                if let observableCoordinator = detailModule.coordinator as? NavigationStackCoordinator {
-                    detailCoordinatorCancellable = Publishers.CombineLatest(observableCoordinator.$rootModule, observableCoordinator.$stackModules).sink { [weak self] _ in
-                        self?.objectWillChange.send()
-                    }
-                }
             }
         }
     }
@@ -67,7 +51,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         detailModule?.coordinator
     }
     
-    @Published fileprivate var sheetModule: NavigationModule? {
+    fileprivate var sheetModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove sheet", oldValue)
@@ -86,7 +70,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         sheetModule?.coordinator
     }
     
-    @Published fileprivate var fullScreenCoverModule: NavigationModule? {
+    fileprivate var fullScreenCoverModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove fullscreen cover", oldValue)
@@ -106,7 +90,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         fullScreenCoverModule?.coordinator
     }
     
-    @Published fileprivate var overlayModule: NavigationModule? {
+    fileprivate var overlayModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove overlay", oldValue)
@@ -126,7 +110,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
     }
     
     enum OverlayPresentationMode { case fullScreen, minimized }
-    @Published fileprivate var overlayPresentationMode: OverlayPresentationMode = .minimized
+    fileprivate var overlayPresentationMode: OverlayPresentationMode = .minimized
     
     fileprivate var compactLayoutRootModule: NavigationModule? {
         if let sidebarNavigationStackCoordinator = sidebarModule?.coordinator as? NavigationStackCoordinator {
@@ -145,18 +129,12 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
 
     var compactLayoutStackModules: [NavigationModule] {
         get {
-            compactLayoutStackModulesBinding.wrappedValue
+            getCompactStackModules()
         }
         set {
-            compactLayoutStackModulesBinding.wrappedValue = newValue
+            setCompactStackModules(newValue)
         }
     }
-
-    fileprivate lazy var compactLayoutStackModulesBinding: Binding<[NavigationModule]> = Binding(get: { [weak self] in
-        self?.getCompactStackModules() ?? []
-    }, set: { [weak self] newValue in
-        self?.setCompactStackModules(newValue)
-    })
 
     private func getCompactStackModules() -> [NavigationModule] {
         // Start building the new compact layout navigation stack
@@ -415,7 +393,7 @@ private struct NavigationSplitCoordinatorView: View {
     
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
-    @ObservedObject var navigationSplitCoordinator: NavigationSplitCoordinator
+    @Bindable var navigationSplitCoordinator: NavigationSplitCoordinator
     
     var body: some View {
         Group {
@@ -454,7 +432,7 @@ private struct NavigationSplitCoordinatorView: View {
     
     /// The NavigationStack that will be used in compact layouts
     var navigationStack: some View {
-        NavigationStack(path: navigationSplitCoordinator.compactLayoutStackModulesBinding) {
+        NavigationStack(path: $navigationSplitCoordinator.compactLayoutStackModules) {
             navigationSplitCoordinator.compactLayoutRootModule?.coordinator?.toPresentable()
                 .id(navigationSplitCoordinator.compactLayoutRootModule?.id) // Is a nil ID ok?
                 .navigationDestination(for: NavigationModule.self) { module in
@@ -496,10 +474,10 @@ private struct NavigationSplitCoordinatorView: View {
 // MARK: - NavigationStackCoordinator
 
 /// Class responsible for displaying a normal "NavigationController" style hierarchy
-class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomStringConvertible {
+@Observable class NavigationStackCoordinator: CoordinatorProtocol, CustomStringConvertible {
     private(set) weak var navigationSplitCoordinator: NavigationSplitCoordinator?
     
-    @Published fileprivate var rootModule: NavigationModule? {
+    fileprivate var rootModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove root", oldValue)
@@ -518,7 +496,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         rootModule?.coordinator
     }
     
-    @Published fileprivate var sheetModule: NavigationModule? {
+    fileprivate var sheetModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove sheet", oldValue)
@@ -544,7 +522,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         return sheetModule?.coordinator
     }
     
-    @Published fileprivate var fullScreenCoverModule: NavigationModule? {
+    fileprivate var fullScreenCoverModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove fullscreen cover", oldValue)
@@ -569,7 +547,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         return fullScreenCoverModule?.coordinator
     }
     
-    @Published fileprivate var stackModules = [NavigationModule]() {
+    fileprivate var stackModules = [NavigationModule]() {
         didSet {
             let diffs = stackModules.difference(from: oldValue)
             diffs.forEach { change in
@@ -763,7 +741,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
 }
 
 private struct NavigationStackCoordinatorView: View {
-    @ObservedObject var navigationStackCoordinator: NavigationStackCoordinator
+    @Bindable var navigationStackCoordinator: NavigationStackCoordinator
     
     var body: some View {
         NavigationStack(path: $navigationStackCoordinator.stackModules) {

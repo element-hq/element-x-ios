@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomStringConvertible {
-    @Published fileprivate var rootModule: NavigationModule? {
+@Observable class NavigationRootCoordinator: CoordinatorProtocol, CustomStringConvertible {
+    fileprivate var rootModule: NavigationModule? {
         didSet {
             if let oldValue {
                 oldValue.tearDown()
@@ -26,7 +26,7 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
         rootModule?.coordinator
     }
     
-    @Published fileprivate var sheetModule: NavigationModule? {
+    fileprivate var sheetModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove sheet", oldValue)
@@ -47,7 +47,7 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
         sheetModule?.coordinator
     }
     
-    @Published fileprivate var overlayModule: NavigationModule? {
+    fileprivate var overlayModule: NavigationModule? {
         didSet {
             if let oldValue {
                 logPresentationChange("Remove overlay", oldValue)
@@ -152,7 +152,7 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
 }
 
 private struct NavigationRootCoordinatorView: View {
-    @ObservedObject var rootCoordinator: NavigationRootCoordinator
+    @Bindable var rootCoordinator: NavigationRootCoordinator
     
     var body: some View {
         ZStack {
