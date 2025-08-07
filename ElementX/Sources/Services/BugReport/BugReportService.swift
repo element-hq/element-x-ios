@@ -91,6 +91,10 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             bugReport.githubLabels.append("Nightly")
         }
         
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            bugReport.githubLabels.append("macOS")
+        }
+        
         for label in bugReport.githubLabels {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))
         }
@@ -191,7 +195,12 @@ class BugReportService: NSObject, BugReportServiceProtocol {
     }
 
     private var os: String {
-        "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
+        if ProcessInfo.processInfo.isiOSAppOnMac {
+            // The other APIs report macOS's equivalent iOS version, so lets use the right one to get the macOS version.
+            "macOS \(ProcessInfo.processInfo.operatingSystemVersionString)"
+        } else {
+            "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
+        }
     }
 
     private func zipFiles(_ logFiles: [URL]) async -> Logs {
