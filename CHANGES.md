@@ -1,3 +1,13 @@
+## Changes in 25.08.3 (2025-08-07)
+
+### What's Changed
+
+✨ Features
+* Last Owner should edit admins, and not leave when is last by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4372
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.08.2...release/25.08.3
+
 ## Changes in 25.08.2 (2025-08-05)
 
 ### What's Changed
