@@ -760,6 +760,5 @@ private struct NavigationStackCoordinatorView: View {
             module.coordinator?.toPresentable()
                 .id(module.id)
         }
-        .animation(.elementDefault, value: navigationStackCoordinator.rootModule)
     }
 }

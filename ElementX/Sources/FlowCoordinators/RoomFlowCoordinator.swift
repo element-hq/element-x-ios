@@ -525,7 +525,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         roomScreenCoordinator = coordinator
         
         if !isChildFlow {
-            let animated = UIDevice.current.userInterfaceIdiom == .phone ? animated : false
             navigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self] in
                 self?.stateMachine.tryEvent(.dismissFlow)
             }
