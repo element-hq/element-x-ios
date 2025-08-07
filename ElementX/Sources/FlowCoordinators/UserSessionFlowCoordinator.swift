@@ -30,6 +30,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     private let onboardingStackCoordinator: NavigationStackCoordinator
     private let chatsFlowCoordinator: ChatsFlowCoordinator
     private let chatsTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
+    private let spaceExplorerFlowCoordinator: SpaceExplorerFlowCoordinator
     private let spacesTabDetails: NavigationTabCoordinator<HomeTab>.TabDetails
     
     private let actionsSubject: PassthroughSubject<UserSessionFlowCoordinatorAction, Never> = .init()
@@ -75,10 +76,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
         chatsTabDetails.barVisibility = .hidden
         
-        // This is just temporary, it needs a flow coordinator to properly handle (amongst other things) navigation/split views.
-        let spaceListScreenCoordinator = SpaceListScreenCoordinator(parameters: .init(userSession: userSession))
-        let spacesNavigationCoordinator = NavigationStackCoordinator()
-        spacesNavigationCoordinator.setRootCoordinator(spaceListScreenCoordinator)
+        let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
+        spaceExplorerFlowCoordinator = SpaceExplorerFlowCoordinator(userSession: userSession,
+                                                                    navigationSplitCoordinator: spacesSplitCoordinator,
+                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
         spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
         
         onboardingStackCoordinator = NavigationStackCoordinator()
@@ -94,7 +95,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationTabCoordinator.setTabs([
             .init(coordinator: chatsSplitCoordinator, details: chatsTabDetails),
-            .init(coordinator: spacesNavigationCoordinator, details: spacesTabDetails)
+            .init(coordinator: spacesSplitCoordinator, details: spacesTabDetails)
         ])
         
         setupObservers()
@@ -104,6 +105,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         #warning("This flow still needs a state machine.")
         
         chatsFlowCoordinator.start()
+        spaceExplorerFlowCoordinator.start()
         
         attemptStartingOnboarding()
     }
@@ -143,6 +145,16 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     actionsSubject.send(.clearCache)
                 case .forceLogout:
                     actionsSubject.send(.forceLogout)
+                }
+            }
+            .store(in: &cancellables)
+        
+        spaceExplorerFlowCoordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .showSettings:
+                    break
                 }
             }
             .store(in: &cancellables)
