@@ -25,7 +25,7 @@ class RoomRolesAndPermissionsScreenViewModel: RoomRolesAndPermissionsScreenViewM
         self.roomProxy = roomProxy
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
-        super.init(initialViewState: RoomRolesAndPermissionsScreenViewState(ownRole: roomProxy.membersPublisher.value.first(where: { $0.userID == roomProxy.ownUserID })?.role ?? .administrator,
+        super.init(initialViewState: RoomRolesAndPermissionsScreenViewState(ownRole: roomProxy.membersPublisher.value.first { $0.userID == roomProxy.ownUserID }?.role ?? .administrator,
                                                                             permissions: initialPermissions))
         
         // Automatically update the admin/moderator counts.

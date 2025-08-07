@@ -129,6 +129,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         fatalError("This flow coordinator expect a route")
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         guard stateMachine.state != .complete else {
             fatalError("This flow coordinator is `finished` ☠️")
