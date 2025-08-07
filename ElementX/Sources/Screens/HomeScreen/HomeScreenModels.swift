@@ -269,6 +269,7 @@ struct HomeScreenViewState: BindableState {
     }
     
     var userRewards = ZeroRewards.empty()
+    var claimableUserRewards = ZeroRewards.empty()
     var showNewUserRewardsIntimation = false
     
     var bindings = HomeScreenViewStateBindings()
@@ -742,16 +743,22 @@ extension HomeScreenPostMediaInfo {
 
 extension HomeScreenWalletContent {
     init (walletToken: ZWalletToken, meowPrice: ZeroCurrency?) {
+        let priceDifference: String? = if let diff = meowPrice?.diff {
+            diff > 0 ? "+\(diff)%" : "-\(abs(diff))%"
+        } else {
+            nil
+        }
         self.init(id: walletToken.tokenAddress,
                   icon: walletToken.logo,
                   header: nil,
                   transactionAction: nil,
                   transactionAddress: nil,
                   title: walletToken.name,
-                  description: nil,
+                  description: "\(walletToken.formattedAmount) \(walletToken.symbol.uppercased())",
                   actionPreText: nil,
-                  actionText: "\(walletToken.formattedAmount) \(walletToken.symbol.uppercased())",
-                  actionPostText: walletToken.isClaimableToken ? walletToken.meowPriceFormatted(ref: meowPrice) : nil)
+                  actionText: walletToken.isClaimableToken ? "$\(walletToken.meowPriceFormatted(ref: meowPrice))" : "",
+                  actionPostText: walletToken.isClaimableToken ? priceDifference : nil
+        )
     }
     
     init(walletNFT: NFT) {
@@ -779,6 +786,6 @@ extension HomeScreenWalletContent {
                   description: nil,
                   actionPreText: nil,
                   actionText: "\(walletTransaction.formattedAmount) \(tokenSymbol)",
-                  actionPostText: walletTransaction.isClaimableTokenTransaction ? walletTransaction.meowPriceFormatted(ref: meowPrice) : nil)
+                  actionPostText: walletTransaction.isClaimableTokenTransaction ? "$\(walletTransaction.meowPriceFormatted(ref: meowPrice))" : nil)
     }
 }
