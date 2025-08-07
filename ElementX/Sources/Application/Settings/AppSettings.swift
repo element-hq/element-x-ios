@@ -238,7 +238,15 @@ final class AppSettings {
         #endif
     }
     
-    private(set) var pushGatewayBaseURL: URL = "https://matrix.org"
+    private(set) var pushGatewayBaseURL: URL = {
+        // Allow override via environment variable
+        if let envURL = ProcessInfo.processInfo.environment["PUSH_GATEWAY_URL"],
+           let url = URL(string: envURL) {
+            return url
+        }
+        return URL(string: "https://sevenchat.space")!
+    }()
+    
     var pushGatewayNotifyEndpoint: URL { pushGatewayBaseURL.appending(path: "_matrix/push/v1/notify") }
     
     @UserPreference(key: UserDefaultsKeys.enableNotifications, defaultValue: true, storageType: .userDefaults(store))

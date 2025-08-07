@@ -1,9 +1,9 @@
-git_url("https://github.com/seven-gitt/sevenchat-certificates.git") # Thay YOUR_USERNAME bằng username GitHub của bạn
+git_url("https://github.com/YOUR_USERNAME/sevenchat-certificates.git") # Thay YOUR_USERNAME bằng username GitHub của bạn
 storage_mode("git")
 
 type("adhoc") # The default type, can be: appstore, adhoc, development, enterprise
 
 app_identifier(["io.sevenchat.sevenchat"])
-username("senven.co77@gmail.com")
+username("truongjj123@gmail.com")
 
 # For all available options run `fastlane match --help` 

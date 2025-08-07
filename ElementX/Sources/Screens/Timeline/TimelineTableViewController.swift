@@ -362,8 +362,8 @@ class TimelineTableViewController: UIViewController {
         
         if let focussedEvent {
             // Check if this is a new focused event or if we should force scroll
-            let shouldScrollToFocusedEvent = focussedEvent.appearance != .hasAppeared || 
-                                           previouslyFocusedEventID != focussedEvent.eventID
+            let shouldScrollToFocusedEvent = focussedEvent.appearance != .hasAppeared ||
+                previouslyFocusedEventID != focussedEvent.eventID
             
             if shouldScrollToFocusedEvent {
                 scrollToItem(eventID: focussedEvent.eventID, animated: focussedEvent.appearance == .animated)

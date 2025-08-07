@@ -51,6 +51,7 @@ settings:
   MARKETING_VERSION: 25.08.0
   CURRENT_PROJECT_VERSION: 1
   SUPPORTS_MACCATALYST: false
+  APS_ENVIRONMENT: production
 
 include:
 - path: app.yml

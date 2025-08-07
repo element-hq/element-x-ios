@@ -110,7 +110,7 @@ targets:
     entitlements:
       path: ElementX.entitlements
       properties:
-        aps-environment: development
+        aps-environment: $(APS_ENVIRONMENT)
         com.apple.developer.associated-domains:
         - applinks:element.io
         - applinks:app.element.io
@@ -142,6 +142,7 @@ targets:
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         PILLS_UT_TYPE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER).pills
         DEVELOPMENT_ASSET_PATHS: DevelopmentAssets/Media
+        APS_ENVIRONMENT: $(APS_ENVIRONMENT)
         OTHER_SWIFT_FLAGS:
         - "-DIS_MAIN_APP"
 
