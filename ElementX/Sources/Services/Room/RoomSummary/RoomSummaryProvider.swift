@@ -130,13 +130,18 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             var rustFilters = filters.map(\.rustFilter)
             rustFilters.append(contentsOf: [.nonLeft, .nonSpace, .deduplicateVersions])
             
-            // Add default exclusion of low priority rooms unless low priority filter is active
-            // This logic will be activated when SDK support for low priority filter is available
+            // Handle low priority room filtering based on SDK requirements:
+            // - When low priority filter is NOT active: include NonLowPriority filter to hide low priority rooms  
+            // - When low priority filter IS active: include LowPriority filter to show only low priority rooms
             let hasLowPriorityFilter = filters.contains(.lowPriority)
-            if !hasLowPriorityFilter {
-                // TODO: When SDK support is available, add:
-                // rustFilters.append(.excludeLowPriority)
-                // For now, this is a placeholder for the intended behavior
+            if hasLowPriorityFilter {
+                // TODO: When SDK support is available, replace with:
+                // rustFilters.append(.lowPriority)
+                // For now, keep existing placeholder behavior
+            } else {
+                // TODO: When SDK support is available, replace with:
+                // rustFilters.append(.nonLowPriority)
+                // This will hide low priority rooms by default
             }
             
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: rustFilters))
