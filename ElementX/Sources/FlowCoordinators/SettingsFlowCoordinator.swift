@@ -127,7 +127,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentZeroProSubSettings()
                 case .claimRewards:
                     actionsSubject.send(.claimUserRewards)
-                    parameters.navigationStackCoordinator.setSheetCoordinator(nil)
+                    parameters.navigationStackCoordinator.pop()
                 }
             }
             .store(in: &cancellables)

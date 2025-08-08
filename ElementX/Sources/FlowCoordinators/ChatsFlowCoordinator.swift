@@ -12,7 +12,7 @@ import MatrixRustSDK
 import SwiftUI
 
 enum ChatsFlowCoordinatorAction {
-    case showSettings
+    case showSettings(UserRewardsProtocol)
     case showChatBackupSettings
     case sessionVerification(SessionVerificationScreenFlow)
     case logout
@@ -401,8 +401,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                        roomListSelectedRoomID == roomID {
                         clearRoute(animated: true)
                     }
-                case .presentSettingsScreen:
-                    actionsSubject.send(.showSettings)
+                case .presentSettingsScreen(let userRewardsProtocol):
+                    actionsSubject.send(.showSettings(userRewardsProtocol))
                 case .presentFeedbackScreen:
                     stateMachine.processEvent(.feedbackScreen)
                 case .presentSecureBackupSettings:

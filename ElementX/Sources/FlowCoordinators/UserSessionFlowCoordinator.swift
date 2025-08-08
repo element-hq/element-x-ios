@@ -208,7 +208,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
-                case .showSettings:
+                case .showSettings(let userRewardsProtocol):
+                    self.userRewardsProtcol = userRewardsProtocol
                     handleAppRoute(.settings, animated: true)
                 case .showChatBackupSettings:
                     handleAppRoute(.chatBackupSettings, animated: true)
