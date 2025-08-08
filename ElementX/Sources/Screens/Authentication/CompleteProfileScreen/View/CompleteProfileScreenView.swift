@@ -15,16 +15,25 @@ struct CompleteProfileScreen: View {
     @FocusState private var isDisplayNameFocused: Bool
     
     var body: some View {
-        Form {
-            avatar
+        VStack {
+            Text("Complete Profile")
+                .font(.compound.bodyMDSemibold)
             
-            nameSection
+            VStack {
+                avatar
+                
+                nameSection
+                
+                submitButton
+            }
+            .padding(.horizontal, 32)
+            .padding(.vertical, 64)
             
-            submitButton
+            Spacer()
         }
-        .zeroList()
-        .navigationTitle("Complete Profile")
-        .navigationBarTitleDisplayMode(.inline)
+        .confirmationDialog("", isPresented: $context.showMediaSheet) {
+            mediaActionSheet
+        }
         .navigationBarBackButtonHidden(true)
     }
     
@@ -37,17 +46,12 @@ struct CompleteProfileScreen: View {
                                    name: nil,
                                    contentID: nil,
                                    avatarSize: .user(on: .editUserDetails),
-                                   mediaProvider: context.mediaProvider)
+                                   mediaProvider: context.mediaProvider,
+                                   onTap: { context.send(viewAction: .presentMediaSource) })
                 .overlay(alignment: .bottomTrailing) {
                     avatarOverlayIcon
                 }
-                .confirmationDialog("", isPresented: $context.showMediaSheet) {
-                    mediaActionSheet
-                }
         }
-        .buttonStyle(.plain)
-        .frame(maxWidth: .infinity)
-        .listRowBackground(Color.clear)
     }
     
     private var nameSection: some View {
@@ -72,13 +76,14 @@ struct CompleteProfileScreen: View {
     }
     
     private var submitButton: some View {
-        ZeroStyledButton(buttonText: "Create account",
-                         buttonImageAsset: Asset.Images.btnCreateAccount,
-                         action: submit,
-                         enabled: context.viewState.canSubmit)
-            .padding(.top, 32)
-            .frame(maxWidth: .infinity)
-            .listRowBackground(Color.clear)
+        Button {
+            submit()
+        } label: {
+            Text("Continue")
+        }
+        .buttonStyle(.compound(.primary))
+        .disabled(!context.viewState.canSubmit)
+        .padding(.vertical, 24)
     }
     
     private var avatarOverlayIcon: some View {

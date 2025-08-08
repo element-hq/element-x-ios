@@ -58,7 +58,13 @@ class ZeroCreateAccountApi: ZeroCreateAccountApiProtocol {
     }
     
     func finaliseCreateAccount(request: ZFinaliseCreateAccount) async throws -> Result<ZInviter, Error> {
-        let finaliseResult: Result<ZInviter, Error> = try await APIManager.shared.authorisedRequest(CreateAccountEndPoints.finaliseSignupEndPoint, method: .post, appSettings: appSettings, parameters: request.toDictionary())
+        let parameters = [
+            "inviteCode" : request.inviteCode,
+            "name" : request.name,
+            "userId" : request.userId,
+            "profileImage" : request.profileImage ?? ""
+        ]
+        let finaliseResult: Result<ZInviter, Error> = try await APIManager.shared.authorisedRequest(CreateAccountEndPoints.finaliseSignupEndPoint, method: .post, appSettings: appSettings, parameters: parameters)
         switch finaliseResult {
         case .success(let inviter):
             return .success(inviter)

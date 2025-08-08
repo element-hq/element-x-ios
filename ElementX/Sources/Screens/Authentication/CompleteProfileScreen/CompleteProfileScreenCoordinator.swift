@@ -14,7 +14,7 @@ struct CompleteProfileScreenParameters {
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let orientationManager: OrientationManagerProtocol
     let appSettings: AppSettings
-    weak var navigationCoordinator: NavigationSplitCoordinator?
+    weak var navigationCoordinator: NavigationStackCoordinator?
     let inviteCode: String
 }
 

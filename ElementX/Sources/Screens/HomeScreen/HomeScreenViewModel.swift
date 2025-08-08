@@ -1102,7 +1102,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     }
                 }
                 if let user = directUser {
-                    result[room.id] = user.subscriptions.zeroPro
+                    result[room.id] = user.subscriptions?.zeroPro ?? false
                 }
             }
 

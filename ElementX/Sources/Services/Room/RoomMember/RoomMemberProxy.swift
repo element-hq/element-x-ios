@@ -45,5 +45,5 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
     
     var primaryZeroId: String? { zeroMember?.primaryZID }
     
-    var isZeroProSubscriber: Bool { zeroMember?.subscriptions.zeroPro ?? false }
+    var isZeroProSubscriber: Bool { zeroMember?.subscriptions?.zeroPro ?? false }
 }

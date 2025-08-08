@@ -452,32 +452,38 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private var isProfileCheckInProgress = false
+    private var isProfileCompletionFlowActive = false
+    
     private func checkAndProceed(execute: @escaping () -> Void) {
-        if !isProfileCheckInProgress {
-            isProfileCheckInProgress = true
-            Task {
-                defer {
-                    self.isProfileCheckInProgress = false
-                    // hideLoadingIndicator()
-                }
-                // showLoadingIndicator()
-                let hasPendingSignup = await userSession.clientProxy.isProfileCompletionRequired()
-                if hasPendingSignup {
-                    presentCompleteProfileScreen(execute)
-                } else {
+        // Don't run if we're checking OR already showing the completion UI
+        guard !isProfileCheckInProgress, !isProfileCompletionFlowActive else { return }
+        
+        isProfileCheckInProgress = true
+        Task {
+            defer { self.isProfileCheckInProgress = false }
+            
+            let hasPendingSignup = await userSession.clientProxy.isProfileCompletionRequired()
+            if hasPendingSignup {
+                isProfileCompletionFlowActive = true
+                presentCompleteProfileScreen {
+                    self.isProfileCompletionFlowActive = false
                     execute()
                 }
+            } else {
+                execute()
             }
         }
     }
     
     private func presentCompleteProfileScreen(_ execute: @escaping () -> Void) {
         let inviteCode = CreateAccountHelper.shared.inviteCode
+        let stackCoordinator = NavigationStackCoordinator()
         let parameters = CompleteProfileScreenParameters(clientProxy: userSession.clientProxy,
                                                          userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
                                                          orientationManager: appMediator.windowManager,
                                                          appSettings: appSettings,
+                                                         navigationCoordinator: stackCoordinator,
                                                          inviteCode: inviteCode)
         let coordinator = CompleteProfileScreenCoordinator(parameters: parameters)
         coordinator.actions
@@ -490,6 +496,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 }
             }
             .store(in: &cancellables)
-        navigationTabCoordinator.setFullScreenCoverCoordinator(coordinator)
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationTabCoordinator.setFullScreenCoverCoordinator(stackCoordinator)
     }
 }
