@@ -15,7 +15,7 @@ enum SpaceExplorerFlowCoordinatorAction: Equatable {
 
 class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
-    private let spaceServiceProxy: SpaceServiceProxyProtocol
+    private let spaceServiceProxy: Task<SpaceServiceProxyProtocol, Never>
     
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
@@ -47,7 +47,7 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
          navigationSplitCoordinator: NavigationSplitCoordinator,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.userSession = userSession
-        spaceServiceProxy = userSession.clientProxy.spaceService()
+        spaceServiceProxy = Task { await userSession.clientProxy.spaceService() }
         
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.userIndicatorController = userIndicatorController
@@ -81,7 +81,7 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     
     private func configureStateMachine() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .spaceList]) { [weak self] _ in
-            self?.presentSpaceList()
+            Task { await self?.presentSpaceList() }
         }
         
         stateMachine.addErrorHandler { context in
@@ -89,8 +89,8 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentSpaceList() {
-        let parameters = SpaceListScreenCoordinatorParameters(userSession: userSession, spaceServiceProxy: spaceServiceProxy)
+    private func presentSpaceList() async {
+        let parameters = await SpaceListScreenCoordinatorParameters(userSession: userSession, spaceServiceProxy: spaceServiceProxy.value)
         let coordinator = SpaceListScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
