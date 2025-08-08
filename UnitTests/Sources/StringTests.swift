@@ -102,4 +102,23 @@ class StringTests: XCTestCase {
         XCTAssertEqual(input4.replacingHtmlBreaksOccurrences(), expectedOutput4)
         XCTAssertEqual(input5.replacingHtmlBreaksOccurrences(), expectedOutput5)
     }
+    
+    func testCanBeConvertedToAsciiOnlyTrueForAsciiStrings() {
+        // ASCII strings return true
+        XCTAssertTrue("hello".canBeConverted(to: .ascii))
+        XCTAssertTrue("abc123".canBeConverted(to: .ascii))
+        XCTAssertTrue("".canBeConverted(to: .ascii))
+        XCTAssertTrue(" ".canBeConverted(to: .ascii))
+        
+        // Non-ASCII strings always return false
+        XCTAssertFalse("café".canBeConverted(to: .ascii))
+        XCTAssertFalse("naïve".canBeConverted(to: .ascii))
+        XCTAssertFalse("résumé".canBeConverted(to: .ascii))
+        XCTAssertFalse("Привет".canBeConverted(to: .ascii))
+        XCTAssertFalse("🚀".canBeConverted(to: .ascii))
+        XCTAssertFalse("こんにちは".canBeConverted(to: .ascii))
+        XCTAssertFalse("Ａ".canBeConverted(to: .ascii)) // fullwidth A
+        XCTAssertFalse("１２３".canBeConverted(to: .ascii)) // fullwidth 123
+        XCTAssertFalse("e\u{0301}".canBeConverted(to: .ascii)) // combining é
+    }
 }
