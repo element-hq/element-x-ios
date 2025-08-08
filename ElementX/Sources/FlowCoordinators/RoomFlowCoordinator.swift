@@ -133,6 +133,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         fatalError("This flow coordinator expect a route")
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
         guard stateMachine.state != .complete else {
             fatalError("This flow coordinator is `finished` ☠️")
@@ -348,8 +349,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
                     fatalError("Missing required TimelineController")
                 }
-                presentMediaUploadPickerWithMode(mode, timelineController: timelineController, animated: animated)
-                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+                    self.presentMediaUploadPickerWithMode(mode, timelineController: timelineController, animated: animated)
+                })
             case (_, .presentEmojiPicker, .emojiPicker(let itemID, let selectedEmoji, _)):
                 guard let timelineController = (context.userInfo as? EventUserInfo)?.timelineController else {
                     fatalError("Missing required TimelineController")
@@ -529,7 +531,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         roomScreenCoordinator = coordinator
         
         if !isChildFlow {
-            let animated = UIDevice.current.userInterfaceIdiom == .phone ? animated : false
             navigationStackCoordinator.setRootCoordinator(coordinator, animated: animated) { [weak self] in
                 self?.stateMachine.tryEvent(.dismissFlow)
             }

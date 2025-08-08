@@ -515,7 +515,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                                          title: L10n.leaveRoomAlertSelectNewOwnerTitle,
                                                          message: L10n.leaveRoomAlertSelectNewOwnerSubtitle,
                                                          primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                                         secondaryButton: .init(title: L10n.leaveRoomAlertSelectNewOwnerAction, role: .destructive, action: { [weak self] in self?.actionsSubject.send(.transferOwnership(roomIdentifier: roomID)) }))
+                                                         secondaryButton: .init(title: L10n.leaveRoomAlertSelectNewOwnerAction, role: .destructive) { [weak self] in
+                                                             self?.actionsSubject.send(.transferOwnership(roomIdentifier: roomID))
+                                                         })
                         return
                     }
                 }

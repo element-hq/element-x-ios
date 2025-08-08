@@ -205,7 +205,9 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
                                                  title: L10n.leaveRoomAlertSelectNewOwnerTitle,
                                                  message: L10n.leaveRoomAlertSelectNewOwnerSubtitle,
                                                  primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
-                                                 secondaryButton: .init(title: L10n.leaveRoomAlertSelectNewOwnerAction, role: .destructive, action: { [weak self] in self?.actionsSubject.send(.transferOwnership) }))
+                                                 secondaryButton: .init(title: L10n.leaveRoomAlertSelectNewOwnerAction, role: .destructive) { [weak self] in
+                                                     self?.actionsSubject.send(.transferOwnership)
+                                                 })
                 return
             }
         }
