@@ -23,6 +23,8 @@ struct RoomListFilterView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         RoomListFilterView(filter: .people, isActive: .constant(false))
         RoomListFilterView(filter: .people, isActive: .constant(true))
+        RoomListFilterView(filter: .lowPriority, isActive: .constant(false))
+        RoomListFilterView(filter: .lowPriority, isActive: .constant(true))
     }
 }
 

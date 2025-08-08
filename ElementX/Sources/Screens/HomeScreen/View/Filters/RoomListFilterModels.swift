@@ -74,8 +74,10 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         case .invites:
             return .invite
         case .lowPriority:
-            // TODO: SDK filter not yet exposed - will cause compilation errors as expected
-            return .all(filters: [.lowPriority, .joined])
+            // TODO: Replace with actual SDK filter when available
+            // For now, return a placeholder that won't cause immediate compilation errors
+            // This will need to be updated to .all(filters: [.lowPriority, .joined]) when SDK support is ready
+            return .all(filters: [.joined])
         }
     }
 }

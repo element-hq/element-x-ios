@@ -127,9 +127,19 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             }
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: filters))
         case let .all(filters):
-            var filters = filters.map(\.rustFilter)
-            filters.append(contentsOf: [.nonLeft, .nonSpace, .deduplicateVersions])
-            _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: filters))
+            var rustFilters = filters.map(\.rustFilter)
+            rustFilters.append(contentsOf: [.nonLeft, .nonSpace, .deduplicateVersions])
+            
+            // Add default exclusion of low priority rooms unless low priority filter is active
+            // This logic will be activated when SDK support for low priority filter is available
+            let hasLowPriorityFilter = filters.contains(.lowPriority)
+            if !hasLowPriorityFilter {
+                // TODO: When SDK support is available, add:
+                // rustFilters.append(.excludeLowPriority)
+                // For now, this is a placeholder for the intended behavior
+            }
+            
+            _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: rustFilters))
         }
     }
     
