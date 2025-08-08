@@ -131,7 +131,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         isFetchFeedsInProgress = true
         
         Task {
-            defer { isFetchFeedsInProgress = false } // Ensure flag is reset when the task completes
+//            defer { isFetchFeedsInProgress = false } // Ensure flag is reset when the task completes
             
 //            state.userFeedsListMode = state.userFeeds.isEmpty ? .empty : .feeds
             let skipItems = isForceRefresh ? 0 : state.userFeeds.count
@@ -144,6 +144,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 if hasNoFeeds {
                     state.userFeedsListMode = state.userFeeds.isEmpty ? .empty : .feeds
                     state.canLoadMoreFeeds = false
+                    isFetchFeedsInProgress = false
                 } else {
                     var userFeeds: [HomeScreenPost] = isForceRefresh ? [] : state.userFeeds
                     for feed in feeds {
@@ -154,12 +155,14 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                     }
                     state.userFeeds = userFeeds.uniqued(on: \.id)
                     state.userFeedsListMode = .feeds
+                    isFetchFeedsInProgress = false
                     
                     await loadPostContentConcurrently(for: state.userFeeds, isForceRefresh: isForceRefresh)
                 }
             case .failure(let error):
                 MXLog.error("Failed to fetch zero post replies: \(error)")
                 state.userFeedsListMode = state.userFeeds.isEmpty ? .empty : .feeds
+                isFetchFeedsInProgress = false
                 switch error {
                 case .postsLimitReached:
                     state.canLoadMoreFeeds = false

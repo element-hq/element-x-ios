@@ -34,4 +34,5 @@ protocol RoomPowerLevelsProxyProtocol {
     func canUserTriggerRoomNotification(userID: String) -> Result<Bool, RoomProxyError>
     func canUserPinOrUnpin(userID: String) -> Result<Bool, RoomProxyError>
     func canUserJoinCall(userID: String) -> Result<Bool, RoomProxyError>
+    func canUserLeaveRoom(userID: String) -> Bool
 }

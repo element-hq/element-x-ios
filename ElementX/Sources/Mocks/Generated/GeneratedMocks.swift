@@ -17520,6 +17520,76 @@ class RoomPowerLevelsProxyMock: RoomPowerLevelsProxyProtocol, @unchecked Sendabl
             return canUserJoinCallUserIDReturnValue
         }
     }
+    //MARK: - canUserLeaveRoom
+
+    var canUserLeaveRoomUserIDUnderlyingCallsCount = 0
+    var canUserLeaveRoomUserIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return canUserLeaveRoomUserIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canUserLeaveRoomUserIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canUserLeaveRoomUserIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canUserLeaveRoomUserIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var canUserLeaveRoomUserIDCalled: Bool {
+        return canUserLeaveRoomUserIDCallsCount > 0
+    }
+    var canUserLeaveRoomUserIDReceivedUserID: String?
+    var canUserLeaveRoomUserIDReceivedInvocations: [String] = []
+
+    var canUserLeaveRoomUserIDUnderlyingReturnValue: Bool!
+    var canUserLeaveRoomUserIDReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return canUserLeaveRoomUserIDUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canUserLeaveRoomUserIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canUserLeaveRoomUserIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canUserLeaveRoomUserIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var canUserLeaveRoomUserIDClosure: ((String) -> Bool)?
+
+    func canUserLeaveRoom(userID: String) -> Bool {
+        canUserLeaveRoomUserIDCallsCount += 1
+        canUserLeaveRoomUserIDReceivedUserID = userID
+        DispatchQueue.main.async {
+            self.canUserLeaveRoomUserIDReceivedInvocations.append(userID)
+        }
+        if let canUserLeaveRoomUserIDClosure = canUserLeaveRoomUserIDClosure {
+            return canUserLeaveRoomUserIDClosure(userID)
+        } else {
+            return canUserLeaveRoomUserIDReturnValue
+        }
+    }
 }
 class RoomPreviewProxyMock: RoomPreviewProxyProtocol, @unchecked Sendable {
     var info: RoomPreviewInfoProxy {

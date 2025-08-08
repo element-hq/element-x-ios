@@ -95,12 +95,13 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 switch action {
                 case .feedTapped(let feed):
-                    if fromHomeFlow {
-                        navigationStackCoordinator.setSheetCoordinator(nil)
-                        actionsSubject.send(.presentFeedDetails(feed: feed))
-                    } else {
-                        presentFeedDetailsScreen(feed, feedProtocol: feedProtocol, stackCoordinator: stackCoordinator)
-                    }
+//                    if fromHomeFlow {
+//                        navigationStackCoordinator.setSheetCoordinator(nil)
+//                        actionsSubject.send(.presentFeedDetails(feed: feed))
+//                    } else {
+//                        presentFeedDetailsScreen(feed, feedProtocol: feedProtocol, stackCoordinator: stackCoordinator)
+//                    }
+                    presentFeedDetailsScreen(feed, feedProtocol: feedProtocol, stackCoordinator: stackCoordinator)
                 case .openDirectChat(let roomId):
                     navigationStackCoordinator.setSheetCoordinator(nil)
                     actionsSubject.send(.openDirectChat(roomId))

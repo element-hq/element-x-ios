@@ -59,6 +59,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEditRolesOrPermissions = false
     var canKickUsers = false
     var canBanUsers = false
+    var canLeaveRoom = true
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     var canJoinCall = false
     var pinnedEventsActionState = RoomDetailsScreenPinnedEventsActionState.loading
@@ -83,6 +84,10 @@ struct RoomDetailsScreenViewState: BindableState {
     
     var hasTopicSection: Bool {
         topic != nil || canEditRoomTopic
+    }
+    
+    var canUserLeaveRoom: Bool {
+        canLeaveRoom && !isAChannel && dmRecipientInfo == nil
     }
 
     var bindings: RoomDetailsScreenViewStateBindings

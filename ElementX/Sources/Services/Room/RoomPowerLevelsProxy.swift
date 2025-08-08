@@ -159,4 +159,9 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
             return .failure(.sdkError(error))
         }
     }
+    
+    func canUserLeaveRoom(userID: String) -> Bool {
+        // Admin power level starts from 100 and goes to 150, owner/creators are above 150
+        (powerLevels.userPowerLevels()[userID] ?? 0) < 100
+    }
 }

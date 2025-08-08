@@ -926,7 +926,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             childStackCoordinator.push(coordinator)
         } else {
             stackCoordinator.setRootCoordinator(coordinator)
-            navigationSplitCoordinator.setSheetCoordinator(stackCoordinator)
+            navigationSplitCoordinator.setDetailCoordinator(stackCoordinator)
         }
     }
     
