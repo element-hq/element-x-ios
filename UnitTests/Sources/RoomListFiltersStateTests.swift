@@ -26,7 +26,7 @@ final class RoomListFiltersStateTests: XCTestCase {
         state.activateFilter(.unreads)
         XCTAssertTrue(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [.unreads])
-        XCTAssertEqual(state.availableFilters, [.people, .rooms, .favourites])
+        XCTAssertEqual(state.availableFilters, [.people, .rooms, .favourites, .lowPriority])
         state.deactivateFilter(.unreads)
         XCTAssertFalse(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [])
@@ -37,7 +37,7 @@ final class RoomListFiltersStateTests: XCTestCase {
         state.activateFilter(.people)
         XCTAssertTrue(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [.people])
-        XCTAssertEqual(state.availableFilters, [.unreads, .favourites])
+        XCTAssertEqual(state.availableFilters, [.unreads, .favourites, .lowPriority])
         
         state.deactivateFilter(.people)
         XCTAssertFalse(state.isFiltering)
@@ -47,12 +47,12 @@ final class RoomListFiltersStateTests: XCTestCase {
         state.activateFilter(.rooms)
         XCTAssertTrue(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [.rooms])
-        XCTAssertEqual(state.availableFilters, [.unreads, .favourites])
+        XCTAssertEqual(state.availableFilters, [.unreads, .favourites, .lowPriority])
         
         state.activateFilter(.unreads)
         XCTAssertTrue(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [.rooms, .unreads])
-        XCTAssertEqual(state.availableFilters, [.favourites])
+        XCTAssertEqual(state.availableFilters, [.favourites, .lowPriority])
     }
     
     func testClearFilters() {
@@ -85,14 +85,48 @@ final class RoomListFiltersStateTests: XCTestCase {
         
         state.activateFilter(.rooms)
         XCTAssertEqual(state.activeFilters, [.rooms])
-        XCTAssertEqual(state.availableFilters, [.unreads, .favourites])
+        XCTAssertEqual(state.availableFilters, [.unreads, .favourites, .lowPriority])
 
         state.activateFilter(.unreads)
         XCTAssertEqual(state.activeFilters, [.rooms, .unreads])
-        XCTAssertEqual(state.availableFilters, [.favourites])
+        XCTAssertEqual(state.availableFilters, [.favourites, .lowPriority])
         
         state.deactivateFilter(.unreads)
         XCTAssertEqual(state.activeFilters, [.rooms])
-        XCTAssertEqual(state.availableFilters, [.unreads, .favourites])
+        XCTAssertEqual(state.availableFilters, [.unreads, .favourites, .lowPriority])
+    }
+    
+    func testLowPriorityFilterIncompatibility() {
+        // Test that low priority cannot be combined with favourites
+        state.activateFilter(.lowPriority)
+        XCTAssertTrue(state.isFiltering)
+        XCTAssertEqual(state.activeFilters, [.lowPriority])
+        XCTAssertEqual(state.availableFilters, [.unreads, .people, .rooms])
+        
+        // Test that low priority cannot be combined with invites
+        state.deactivateFilter(.lowPriority)
+        state.activateFilter(.invites)
+        XCTAssertTrue(state.isFiltering)
+        XCTAssertEqual(state.activeFilters, [.invites])
+        XCTAssertEqual(state.availableFilters, [])
+        
+        // Test that favourites cannot be combined with low priority
+        state.deactivateFilter(.invites)
+        state.activateFilter(.favourites)
+        XCTAssertTrue(state.isFiltering)
+        XCTAssertEqual(state.activeFilters, [.favourites])
+        XCTAssertEqual(state.availableFilters, [.unreads, .people, .rooms])
+    }
+    
+    func testLowPriorityFilterCompatibility() {
+        // Test that low priority can be combined with other compatible filters
+        state.activateFilter(.lowPriority)
+        state.activateFilter(.unreads)
+        XCTAssertEqual(state.activeFilters, [.lowPriority, .unreads])
+        XCTAssertEqual(state.availableFilters, [.people, .rooms])
+        
+        state.activateFilter(.people)
+        XCTAssertEqual(state.activeFilters, [.lowPriority, .unreads, .people])
+        XCTAssertEqual(state.availableFilters, [])
     }
 }

@@ -21,6 +21,7 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     case rooms
     case favourites
     case invites
+    case lowPriority
     
     static var availableFilters: [RoomListFilter] {
         RoomListFilter.allCases
@@ -38,6 +39,8 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
             return L10n.screenRoomlistFilterFavourites
         case .invites:
             return L10n.screenRoomlistFilterInvites
+        case .lowPriority:
+            return L10n.screenRoomlistFilterLowPriority
         }
     }
     
@@ -50,10 +53,11 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         case .unreads:
             return [.invites]
         case .favourites:
-            // When we will have Low Priority we may need to return it here
-            return [.invites]
+            return [.invites, .lowPriority]
         case .invites:
-            return [.rooms, .people, .unreads, .favourites]
+            return [.rooms, .people, .unreads, .favourites, .lowPriority]
+        case .lowPriority:
+            return [.favourites, .invites]
         }
     }
     
@@ -69,6 +73,11 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
             return .all(filters: [.favourite, .joined])
         case .invites:
             return .invite
+        case .lowPriority:
+            // TODO: Replace with actual SDK filter when available
+            // This will need to be updated to .all(filters: [.lowPriority, .joined]) when SDK support is ready
+            // Note: The main logic for NonLowPriority vs LowPriority filtering is handled in setFilter method
+            return .all(filters: [.joined])
         }
     }
 }

@@ -89,5 +89,7 @@ struct RoomListFiltersView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         RoomListFiltersView(state: .constant(.init()))
         RoomListFiltersView(state: .constant(.init(activeFilters: [.rooms, .favourites])))
+        RoomListFiltersView(state: .constant(.init(activeFilters: [.lowPriority])))
+        RoomListFiltersView(state: .constant(.init(activeFilters: [.unreads, .lowPriority])))
     }
 }
