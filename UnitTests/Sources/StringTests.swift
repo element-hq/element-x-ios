@@ -103,22 +103,19 @@ class StringTests: XCTestCase {
         XCTAssertEqual(input5.replacingHtmlBreaksOccurrences(), expectedOutput5)
     }
     
-    func testCanBeConvertedToAsciiOnlyTrueForAsciiStrings() {
-        // ASCII strings return true
-        XCTAssertTrue("hello".canBeConverted(to: .ascii))
-        XCTAssertTrue("abc123".canBeConverted(to: .ascii))
-        XCTAssertTrue("".canBeConverted(to: .ascii))
-        XCTAssertTrue(" ".canBeConverted(to: .ascii))
+    func testAsciifiedMethod() {
+        // ASCII strings return themselves unchanged
+        XCTAssertEqual("hello".asciified(), "hello")
+        XCTAssertEqual("abc123".asciified(), "abc123")
+        XCTAssertEqual("".asciified(), "")
+        XCTAssertEqual(" ".asciified(), " ")
         
-        // Non-ASCII strings always return false
-        XCTAssertFalse("café".canBeConverted(to: .ascii))
-        XCTAssertFalse("naïve".canBeConverted(to: .ascii))
-        XCTAssertFalse("résumé".canBeConverted(to: .ascii))
-        XCTAssertFalse("Привет".canBeConverted(to: .ascii))
-        XCTAssertFalse("🚀".canBeConverted(to: .ascii))
-        XCTAssertFalse("こんにちは".canBeConverted(to: .ascii))
-        XCTAssertFalse("Ａ".canBeConverted(to: .ascii)) // fullwidth A
-        XCTAssertFalse("１２３".canBeConverted(to: .ascii)) // fullwidth 123
-        XCTAssertFalse("e\u{0301}".canBeConverted(to: .ascii)) // combining é
+        // Non-ASCII strings get converted or stripped
+        XCTAssertEqual("café".asciified(), "cafe")
+        XCTAssertEqual("naïve".asciified(), "naive")
+        XCTAssertEqual("résumé".asciified(), "resume")
+        XCTAssertEqual("🚀".asciified(), "")
+        XCTAssertEqual("Heartbreak Hotel 🏩".asciified(), "Heartbreak Hotel")
+        XCTAssertEqual("1️⃣2️⃣3️⃣".asciified(), "123")
     }
 }
