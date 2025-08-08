@@ -32,9 +32,6 @@ extension String {
         guard !isASCII else {
             return self
         }
-        guard !canBeConverted(to: .ascii) else {
-            return nil
-        }
         let mutableString = NSMutableString(string: self)
         guard CFStringTransform(mutableString, nil, "Any-Latin; Latin-ASCII; [:^ASCII:] Remove" as CFString, false) else {
             return nil
