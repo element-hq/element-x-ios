@@ -690,6 +690,18 @@ internal enum L10n {
   internal static var commonVerifyUser: String { return L10n.tr("Localizable", "common_verify_user") }
   /// Video
   internal static var commonVideo: String { return L10n.tr("Localizable", "common_video") }
+  /// High quality
+  internal static var commonVideoQualityHigh: String { return L10n.tr("Localizable", "common_video_quality_high") }
+  /// Best quality but larger file size
+  internal static var commonVideoQualityHighDescription: String { return L10n.tr("Localizable", "common_video_quality_high_description") }
+  /// Low quality
+  internal static var commonVideoQualityLow: String { return L10n.tr("Localizable", "common_video_quality_low") }
+  /// Fastest upload speed and smallest file size
+  internal static var commonVideoQualityLowDescription: String { return L10n.tr("Localizable", "common_video_quality_low_description") }
+  /// Standard quality
+  internal static var commonVideoQualityStandard: String { return L10n.tr("Localizable", "common_video_quality_standard") }
+  /// Balance of quality and upload speed
+  internal static var commonVideoQualityStandardDescription: String { return L10n.tr("Localizable", "common_video_quality_standard_description") }
   /// Voice message
   internal static var commonVoiceMessage: String { return L10n.tr("Localizable", "common_voice_message") }
   /// Waiting…
@@ -740,6 +752,16 @@ internal enum L10n {
   }
   /// Double-check this link
   internal static var dialogConfirmLinkTitle: String { return L10n.tr("Localizable", "dialog_confirm_link_title") }
+  /// Select the default quality of videos you upload.
+  internal static var dialogDefaultVideoQualitySelectorSubtitle: String { return L10n.tr("Localizable", "dialog_default_video_quality_selector_subtitle") }
+  /// Video upload quality
+  internal static var dialogDefaultVideoQualitySelectorTitle: String { return L10n.tr("Localizable", "dialog_default_video_quality_selector_title") }
+  /// The max file size allowed is: %1$@
+  internal static func dialogFileTooLargeToUploadSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "dialog_file_too_large_to_upload_subtitle", String(describing: p1))
+  }
+  /// The file size is too large to upload
+  internal static var dialogFileTooLargeToUploadTitle: String { return L10n.tr("Localizable", "dialog_file_too_large_to_upload_title") }
   /// In order to let the application use the camera, please grant the permission in the system settings.
   internal static var dialogPermissionCamera: String { return L10n.tr("Localizable", "dialog_permission_camera") }
   /// Please grant the permission in the system settings.
@@ -780,6 +802,14 @@ internal enum L10n {
   internal static var dialogUnsavedChangesDescriptionIos: String { return L10n.tr("Localizable", "dialog_unsaved_changes_description_ios") }
   /// Save changes?
   internal static var dialogUnsavedChangesTitle: String { return L10n.tr("Localizable", "dialog_unsaved_changes_title") }
+  /// The max file size allowed is: %1$@
+  internal static func dialogVideoQualitySelectorSubtitleFileSize(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "dialog_video_quality_selector_subtitle_file_size", String(describing: p1))
+  }
+  /// Select the quality of the video you want to upload.
+  internal static var dialogVideoQualitySelectorSubtitleNoFileSize: String { return L10n.tr("Localizable", "dialog_video_quality_selector_subtitle_no_file_size") }
+  /// Select video upload quality
+  internal static var dialogVideoQualitySelectorTitle: String { return L10n.tr("Localizable", "dialog_video_quality_selector_title") }
   /// Activities
   internal static var emojiPickerCategoryActivity: String { return L10n.tr("Localizable", "emoji_picker_category_activity") }
   /// Flags
@@ -1076,6 +1106,22 @@ internal enum L10n {
   internal static var screenAdvancedSettingsMediaCompressionTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_media_compression_title") }
   /// Moderation and Safety
   internal static var screenAdvancedSettingsModerationAndSafetySectionTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_moderation_and_safety_section_title") }
+  /// Automatically optimise images for faster uploads and smaller file sizes.
+  internal static var screenAdvancedSettingsOptimiseImageUploadQualityDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_optimise_image_upload_quality_description") }
+  /// Optimise image upload quality
+  internal static var screenAdvancedSettingsOptimiseImageUploadQualityTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_optimise_image_upload_quality_title") }
+  /// %1$@. Tap here to change.
+  internal static func screenAdvancedSettingsOptimiseVideoUploadQualityDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_advanced_settings_optimise_video_upload_quality_description", String(describing: p1))
+  }
+  /// High (1080p)
+  internal static var screenAdvancedSettingsOptimiseVideoUploadQualityHigh: String { return L10n.tr("Localizable", "screen_advanced_settings_optimise_video_upload_quality_high") }
+  /// Low (480p)
+  internal static var screenAdvancedSettingsOptimiseVideoUploadQualityLow: String { return L10n.tr("Localizable", "screen_advanced_settings_optimise_video_upload_quality_low") }
+  /// Standard (720p)
+  internal static var screenAdvancedSettingsOptimiseVideoUploadQualityStandard: String { return L10n.tr("Localizable", "screen_advanced_settings_optimise_video_upload_quality_standard") }
+  /// Video upload quality
+  internal static var screenAdvancedSettingsOptimiseVideoUploadQualityTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_optimise_video_upload_quality_title") }
   /// Disable the rich text editor to type Markdown manually.
   internal static var screenAdvancedSettingsRichTextEditorDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_rich_text_editor_description") }
   /// Read receipts
@@ -1776,6 +1822,8 @@ internal enum L10n {
   internal static var screenMediaPickerErrorFailedSelection: String { return L10n.tr("Localizable", "screen_media_picker_error_failed_selection") }
   /// Captions might not be visible to people using older apps.
   internal static var screenMediaUploadPreviewCaptionWarning: String { return L10n.tr("Localizable", "screen_media_upload_preview_caption_warning") }
+  /// Tap to change the video upload quality
+  internal static var screenMediaUploadPreviewChangeVideoQualityPrompt: String { return L10n.tr("Localizable", "screen_media_upload_preview_change_video_quality_prompt") }
   /// The file could not be uploaded.
   internal static var screenMediaUploadPreviewErrorCouldNotBeUploaded: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_could_not_be_uploaded") }
   /// Failed processing media to upload, please try again.
@@ -1788,6 +1836,10 @@ internal enum L10n {
   }
   /// The file is too large to upload
   internal static var screenMediaUploadPreviewErrorTooLargeTitle: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_too_large_title") }
+  /// Optimise image quality
+  internal static var screenMediaUploadPreviewOptimizeImageQualityTitle: String { return L10n.tr("Localizable", "screen_media_upload_preview_optimize_image_quality_title") }
+  /// Processing...
+  internal static var screenMediaUploadPreviewProcessing: String { return L10n.tr("Localizable", "screen_media_upload_preview_processing") }
   /// This is a one time process, thanks for waiting.
   internal static var screenMigrationMessage: String { return L10n.tr("Localizable", "screen_migration_message") }
   /// Setting up your account.
@@ -2806,20 +2858,6 @@ internal enum L10n {
   internal static var screenTimelineItemMenuSendFailureYouUnsignedDevice: String { return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_you_unsigned_device") }
   /// Location
   internal static var screenViewLocationTitle: String { return L10n.tr("Localizable", "screen_view_location_title") }
-  /// Calls, polls, search and more will be added later this year.
-  internal static var screenWelcomeBullet1: String { return L10n.tr("Localizable", "screen_welcome_bullet_1") }
-  /// Message history for encrypted rooms isn’t available yet.
-  internal static var screenWelcomeBullet2: String { return L10n.tr("Localizable", "screen_welcome_bullet_2") }
-  /// We’d love to hear from you, let us know what you think via the settings page.
-  internal static var screenWelcomeBullet3: String { return L10n.tr("Localizable", "screen_welcome_bullet_3") }
-  /// Let's go!
-  internal static var screenWelcomeButton: String { return L10n.tr("Localizable", "screen_welcome_button") }
-  /// Here’s what you need to know:
-  internal static var screenWelcomeSubtitle: String { return L10n.tr("Localizable", "screen_welcome_subtitle") }
-  /// Welcome to %1$@!
-  internal static func screenWelcomeTitle(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_welcome_title", String(describing: p1))
-  }
   /// Looks like you’re using a new device. Verify with another device to access your encrypted messages.
   internal static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
   /// Verify it’s you
