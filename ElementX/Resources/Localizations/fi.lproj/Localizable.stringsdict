@@ -77,9 +77,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d jäsen</string>
+			<string>%1$d Jäsen</string>
 			<key>other</key>
-			<string>%1$d jäsentä</string>
+			<string>%1$d Jäsentä</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Room</string>
+			<string>%1$d Huone</string>
 			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>%1$d Huonetta</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -141,9 +141,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Space</string>
+			<string>%1$d Tila</string>
 			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>%1$d Tilaa</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
