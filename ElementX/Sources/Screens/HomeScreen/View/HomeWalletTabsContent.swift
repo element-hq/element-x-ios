@@ -74,7 +74,11 @@ struct HomeWalletTabsContentView : View {
                     onTap: { _ in }
                 )
             case .staking:
-                EmptyView()
+                HomeWalletStakingContent(
+                    stakingItems: context.viewState.visibleWalletStakings,
+                    mediaProvider: context.mediaProvider,
+                    onTap: { _ in }
+                )
             }
         }
     }

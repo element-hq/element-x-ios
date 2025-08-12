@@ -1476,9 +1476,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func getTotalStaked(address: String) async -> Result<String, ClientProxyError> {
+    func getTotalStaked(poolAddress: String) async -> Result<String, ClientProxyError> {
         do {
-            let result = try await zeroApiProxy.stakingApi.getTotalStaked(address: address)
+            let result = try await zeroApiProxy.stakingApi.getTotalStaked(poolAddress: poolAddress)
             switch result {
             case .success(let totalStaked):
                 return .success(totalStaked)
@@ -1491,9 +1491,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func getStakingConfig(address: String) async -> Result<ZStackingConfig, ClientProxyError> {
+    func getStakingConfig(poolAddress: String) async -> Result<ZStackingConfig, ClientProxyError> {
         do {
-            let result = try await zeroApiProxy.stakingApi.getStakingConfig(address: address)
+            let result = try await zeroApiProxy.stakingApi.getStakingConfig(poolAddress: poolAddress)
             switch result {
             case .success(let config):
                 return .success(config)
@@ -1506,9 +1506,10 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func getStakerStatusInfo(address: String, userWalletAddress: String) async -> Result<ZStakingStatus, ClientProxyError> {
+    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingStatus, ClientProxyError> {
         do {
-            let result = try await zeroApiProxy.stakingApi.getStakerStatusInfo(address: address, userWalletAddress: userWalletAddress)
+            let result = try await zeroApiProxy.stakingApi.getStakerStatusInfo(userWalletAddress: userWalletAddress,
+                                                                               poolAddress: poolAddress)
             switch result {
             case .success(let status):
                 return .success(status)
@@ -1521,9 +1522,10 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func getUserRewardsInfo(address: String, userWalletAddress: String) async -> Result<ZStakingUserRewardsInfo, ClientProxyError> {
+    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingUserRewardsInfo, ClientProxyError> {
         do {
-            let result = try await zeroApiProxy.stakingApi.getUserRewardsInfo(address: address, userWalletAddress: userWalletAddress)
+            let result = try await zeroApiProxy.stakingApi.getStakeRewardsInfo(userWalletAddress: userWalletAddress,
+                                                                               poolAddress: poolAddress)
             switch result {
             case .success(let rewardsInfo):
                 return .success(rewardsInfo)

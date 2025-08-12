@@ -922,16 +922,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         if let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
             state.walletContentListMode = silentRefresh ? state.walletContentListMode : .skeletons
             Task {
-                async let balances = userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: nil)
-//                async let nfts = userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress, nextPage: nil)
-                async let transactions = userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress, nextPage: nil)
                 async let meowPrice = userSession.clientProxy.getZeroMeowPrice()
+                async let tokens = userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: nil)
+                async let transactions = userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress, nextPage: nil)
+                //                async let nfts = userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress, nextPage: nil)
                 
-                let results = await (balances, transactions, meowPrice)
-                if case .success(let meowPrice) = results.2 {
+                let results = await (meowPrice, tokens, transactions)
+                if case .success(let meowPrice) = results.0 {
                     state.meowPrice = meowPrice
                 }
-                if case .success(let walletTokenBalances) = results.0 {
+                if case .success(let walletTokenBalances) = results.1 {
                     var homeWalletContent: [HomeScreenWalletContent] = []
                     // set meow token balance amount for user
                     setUserWalletBalance(walletTokenBalances.tokens)
@@ -941,6 +941,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     }
                     state.walletTokens = homeWalletContent.uniqued(on: \.id)
                     state.walletTokenNextPageParams = walletTokenBalances.nextPageParams
+                    
+                    // fetch stake data
+                    fetchStakingData(walletTokenBalances.tokens, userWalletAddress: walletAddress)
                 }
 //                if case .success(let walletNFTs) = results.1 {
 //                    var homeWalletContent: [HomeScreenWalletContent] = []
@@ -951,7 +954,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
 //                    state.walletNFTs = homeWalletContent.uniqued(on: \.id)
 //                    state.walletNFTsNextPageParams = walletNFTs.nextPageParams
 //                }
-                if case .success(let walletTransactions) = results.1 {
+                if case .success(let walletTransactions) = results.2 {
                     var homeWalletContent: [HomeScreenWalletContent] = []
                     for transaction in walletTransactions.transactions {
                         let content = HomeScreenWalletContent(walletTransaction: transaction, meowPrice: state.meowPrice)
@@ -1028,6 +1031,51 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 return partialResult + amountDecimal
             }
         state.walletBalance = ZeroWalletUtil.shared.meowPrice(tokenAmount: totalAmount.description, refPrice: state.meowPrice)
+    }
+    
+    private func viewWalletTransactionDetails(_ walletTransactionId: String) {
+        Task {
+            let userIndicatorID = UUID().uuidString
+            defer {
+                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+            }
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                                  title: L10n.commonLoading,
+                                                                  persistent: true))
+            if case .success(let receipt) = await userSession.clientProxy.getTransactionReceipt(transactionHash: walletTransactionId),
+               let link = URL(string: receipt.blockExplorerUrl) {
+                await UIApplication.shared.open(link)
+            }
+        }
+    }
+    
+    private func fetchStakingData(_ tokens: [ZWalletToken], userWalletAddress: String) {
+        /// NEED TO FIGURE OUT FROM WHERE TO GET THIS POOL ADDRESS
+        let poolAddress = "0xfbDC0647F0652dB9eC56c7f09B7dD3192324AD6a"
+        if let meowToken = tokens.first(where: { $0.isMeowToken }) {
+            Task.detached {
+                async let totalStaked = self.userSession.clientProxy.getTotalStaked(poolAddress: poolAddress)
+                async let config = self.userSession.clientProxy.getStakingConfig(poolAddress: poolAddress)
+                async let stakerStatus = self.userSession.clientProxy.getStakerStatusInfo(userWalletAddress: userWalletAddress,
+                                                                                          poolAddress: poolAddress)
+                async let stakeRewards = self.userSession.clientProxy.getStakeRewardsInfo(userWalletAddress: userWalletAddress,
+                                                                                          poolAddress: poolAddress)
+                let results = await (totalStaked, config, stakerStatus, stakeRewards)
+                await MainActor.run {
+                    if case .success(let totalStaked) = results.0,
+                       case .success(let stakingConfig) = results.1,
+                       case .success(let stakerStatus) = results.2,
+                       case .success(let stakeRewards) = results.3 {
+                        self.state.walletStakings = [
+                            HomeScreenWalletStakingContent(meowPrice: self.state.meowPrice, token: meowToken, poolAddress: poolAddress,
+                                                    totalStaked: totalStaked, stakingConfig: stakingConfig, stakerStatus: stakerStatus,
+                                                    stakeRewards: stakeRewards)
+                        ]
+                    }
+                }
+            }
+        }
     }
     
     private func extractAllRoomUsers(_ rooms: [RoomSummary]) {
@@ -1112,42 +1160,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
-    private func viewWalletTransactionDetails(_ walletTransactionId: String) {
-        Task {
-            let userIndicatorID = UUID().uuidString
-            defer {
-                userIndicatorController.retractIndicatorWithId(userIndicatorID)
-            }
-            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
-                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                                  title: L10n.commonLoading,
-                                                                  persistent: true))
-            if case .success(let receipt) = await userSession.clientProxy.getTransactionReceipt(transactionHash: walletTransactionId),
-               let link = URL(string: receipt.blockExplorerUrl) {
-                await UIApplication.shared.open(link)
-            }
-        }
-    }
-    
-    func claimUserRewards() {
-        if let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
-            state.claimRewardsState = .claiming
-            state.bindings.showEarningsClaimedSheet = true
-            state.claimableUserRewards = state.userRewards
-            Task {
-                let result = await userSession.clientProxy.claimRewards(userWalletAddress: walletAddress)
-                switch result {
-                case .success(let transactionHash):
-                    state.claimRewardsState = .success(transactionHash)
-                    loadUserRewards()
-                    fetchWalletData(silentRefresh: true)
-                case .failure(_):
-                    state.claimRewardsState = .failure
-                }
-            }
-        }
-    }
-    
     // MARK: Zero Protcol Functions
     
     func onFeedUpdated(_ feedId: String) {
@@ -1179,5 +1191,24 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     func onTransactionCompleted() {
         fetchWalletData(silentRefresh: true)
+    }
+    
+    func claimUserRewards() {
+        if let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
+            state.claimRewardsState = .claiming
+            state.bindings.showEarningsClaimedSheet = true
+            state.claimableUserRewards = state.userRewards
+            Task {
+                let result = await userSession.clientProxy.claimRewards(userWalletAddress: walletAddress)
+                switch result {
+                case .success(let transactionHash):
+                    state.claimRewardsState = .success(transactionHash)
+                    loadUserRewards()
+                    fetchWalletData(silentRefresh: true)
+                case .failure(_):
+                    state.claimRewardsState = .failure
+                }
+            }
+        }
     }
 }

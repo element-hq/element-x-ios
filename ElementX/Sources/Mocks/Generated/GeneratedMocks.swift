@@ -7553,15 +7553,15 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     //MARK: - getTotalStaked
 
-    var getTotalStakedAddressUnderlyingCallsCount = 0
-    var getTotalStakedAddressCallsCount: Int {
+    var getTotalStakedPoolAddressUnderlyingCallsCount = 0
+    var getTotalStakedPoolAddressCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getTotalStakedAddressUnderlyingCallsCount
+                return getTotalStakedPoolAddressUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getTotalStakedAddressUnderlyingCallsCount
+                    returnValue = getTotalStakedPoolAddressUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7569,29 +7569,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getTotalStakedAddressUnderlyingCallsCount = newValue
+                getTotalStakedPoolAddressUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getTotalStakedAddressUnderlyingCallsCount = newValue
+                    getTotalStakedPoolAddressUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var getTotalStakedAddressCalled: Bool {
-        return getTotalStakedAddressCallsCount > 0
+    var getTotalStakedPoolAddressCalled: Bool {
+        return getTotalStakedPoolAddressCallsCount > 0
     }
-    var getTotalStakedAddressReceivedAddress: String?
-    var getTotalStakedAddressReceivedInvocations: [String] = []
+    var getTotalStakedPoolAddressReceivedPoolAddress: String?
+    var getTotalStakedPoolAddressReceivedInvocations: [String] = []
 
-    var getTotalStakedAddressUnderlyingReturnValue: Result<String, ClientProxyError>!
-    var getTotalStakedAddressReturnValue: Result<String, ClientProxyError>! {
+    var getTotalStakedPoolAddressUnderlyingReturnValue: Result<String, ClientProxyError>!
+    var getTotalStakedPoolAddressReturnValue: Result<String, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return getTotalStakedAddressUnderlyingReturnValue
+                return getTotalStakedPoolAddressUnderlyingReturnValue
             } else {
                 var returnValue: Result<String, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getTotalStakedAddressUnderlyingReturnValue
+                    returnValue = getTotalStakedPoolAddressUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7599,39 +7599,39 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getTotalStakedAddressUnderlyingReturnValue = newValue
+                getTotalStakedPoolAddressUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getTotalStakedAddressUnderlyingReturnValue = newValue
+                    getTotalStakedPoolAddressUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var getTotalStakedAddressClosure: ((String) async -> Result<String, ClientProxyError>)?
+    var getTotalStakedPoolAddressClosure: ((String) async -> Result<String, ClientProxyError>)?
 
-    func getTotalStaked(address: String) async -> Result<String, ClientProxyError> {
-        getTotalStakedAddressCallsCount += 1
-        getTotalStakedAddressReceivedAddress = address
+    func getTotalStaked(poolAddress: String) async -> Result<String, ClientProxyError> {
+        getTotalStakedPoolAddressCallsCount += 1
+        getTotalStakedPoolAddressReceivedPoolAddress = poolAddress
         DispatchQueue.main.async {
-            self.getTotalStakedAddressReceivedInvocations.append(address)
+            self.getTotalStakedPoolAddressReceivedInvocations.append(poolAddress)
         }
-        if let getTotalStakedAddressClosure = getTotalStakedAddressClosure {
-            return await getTotalStakedAddressClosure(address)
+        if let getTotalStakedPoolAddressClosure = getTotalStakedPoolAddressClosure {
+            return await getTotalStakedPoolAddressClosure(poolAddress)
         } else {
-            return getTotalStakedAddressReturnValue
+            return getTotalStakedPoolAddressReturnValue
         }
     }
     //MARK: - getStakingConfig
 
-    var getStakingConfigAddressUnderlyingCallsCount = 0
-    var getStakingConfigAddressCallsCount: Int {
+    var getStakingConfigPoolAddressUnderlyingCallsCount = 0
+    var getStakingConfigPoolAddressCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getStakingConfigAddressUnderlyingCallsCount
+                return getStakingConfigPoolAddressUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getStakingConfigAddressUnderlyingCallsCount
+                    returnValue = getStakingConfigPoolAddressUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7639,29 +7639,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getStakingConfigAddressUnderlyingCallsCount = newValue
+                getStakingConfigPoolAddressUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getStakingConfigAddressUnderlyingCallsCount = newValue
+                    getStakingConfigPoolAddressUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var getStakingConfigAddressCalled: Bool {
-        return getStakingConfigAddressCallsCount > 0
+    var getStakingConfigPoolAddressCalled: Bool {
+        return getStakingConfigPoolAddressCallsCount > 0
     }
-    var getStakingConfigAddressReceivedAddress: String?
-    var getStakingConfigAddressReceivedInvocations: [String] = []
+    var getStakingConfigPoolAddressReceivedPoolAddress: String?
+    var getStakingConfigPoolAddressReceivedInvocations: [String] = []
 
-    var getStakingConfigAddressUnderlyingReturnValue: Result<ZStackingConfig, ClientProxyError>!
-    var getStakingConfigAddressReturnValue: Result<ZStackingConfig, ClientProxyError>! {
+    var getStakingConfigPoolAddressUnderlyingReturnValue: Result<ZStackingConfig, ClientProxyError>!
+    var getStakingConfigPoolAddressReturnValue: Result<ZStackingConfig, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return getStakingConfigAddressUnderlyingReturnValue
+                return getStakingConfigPoolAddressUnderlyingReturnValue
             } else {
                 var returnValue: Result<ZStackingConfig, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getStakingConfigAddressUnderlyingReturnValue
+                    returnValue = getStakingConfigPoolAddressUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7669,39 +7669,39 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getStakingConfigAddressUnderlyingReturnValue = newValue
+                getStakingConfigPoolAddressUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getStakingConfigAddressUnderlyingReturnValue = newValue
+                    getStakingConfigPoolAddressUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var getStakingConfigAddressClosure: ((String) async -> Result<ZStackingConfig, ClientProxyError>)?
+    var getStakingConfigPoolAddressClosure: ((String) async -> Result<ZStackingConfig, ClientProxyError>)?
 
-    func getStakingConfig(address: String) async -> Result<ZStackingConfig, ClientProxyError> {
-        getStakingConfigAddressCallsCount += 1
-        getStakingConfigAddressReceivedAddress = address
+    func getStakingConfig(poolAddress: String) async -> Result<ZStackingConfig, ClientProxyError> {
+        getStakingConfigPoolAddressCallsCount += 1
+        getStakingConfigPoolAddressReceivedPoolAddress = poolAddress
         DispatchQueue.main.async {
-            self.getStakingConfigAddressReceivedInvocations.append(address)
+            self.getStakingConfigPoolAddressReceivedInvocations.append(poolAddress)
         }
-        if let getStakingConfigAddressClosure = getStakingConfigAddressClosure {
-            return await getStakingConfigAddressClosure(address)
+        if let getStakingConfigPoolAddressClosure = getStakingConfigPoolAddressClosure {
+            return await getStakingConfigPoolAddressClosure(poolAddress)
         } else {
-            return getStakingConfigAddressReturnValue
+            return getStakingConfigPoolAddressReturnValue
         }
     }
     //MARK: - getStakerStatusInfo
 
-    var getStakerStatusInfoAddressUserWalletAddressUnderlyingCallsCount = 0
-    var getStakerStatusInfoAddressUserWalletAddressCallsCount: Int {
+    var getStakerStatusInfoUserWalletAddressPoolAddressUnderlyingCallsCount = 0
+    var getStakerStatusInfoUserWalletAddressPoolAddressCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getStakerStatusInfoAddressUserWalletAddressUnderlyingCallsCount
+                return getStakerStatusInfoUserWalletAddressPoolAddressUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getStakerStatusInfoAddressUserWalletAddressUnderlyingCallsCount
+                    returnValue = getStakerStatusInfoUserWalletAddressPoolAddressUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7709,29 +7709,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getStakerStatusInfoAddressUserWalletAddressUnderlyingCallsCount = newValue
+                getStakerStatusInfoUserWalletAddressPoolAddressUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getStakerStatusInfoAddressUserWalletAddressUnderlyingCallsCount = newValue
+                    getStakerStatusInfoUserWalletAddressPoolAddressUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var getStakerStatusInfoAddressUserWalletAddressCalled: Bool {
-        return getStakerStatusInfoAddressUserWalletAddressCallsCount > 0
+    var getStakerStatusInfoUserWalletAddressPoolAddressCalled: Bool {
+        return getStakerStatusInfoUserWalletAddressPoolAddressCallsCount > 0
     }
-    var getStakerStatusInfoAddressUserWalletAddressReceivedArguments: (address: String, userWalletAddress: String)?
-    var getStakerStatusInfoAddressUserWalletAddressReceivedInvocations: [(address: String, userWalletAddress: String)] = []
+    var getStakerStatusInfoUserWalletAddressPoolAddressReceivedArguments: (userWalletAddress: String, poolAddress: String)?
+    var getStakerStatusInfoUserWalletAddressPoolAddressReceivedInvocations: [(userWalletAddress: String, poolAddress: String)] = []
 
-    var getStakerStatusInfoAddressUserWalletAddressUnderlyingReturnValue: Result<ZStakingStatus, ClientProxyError>!
-    var getStakerStatusInfoAddressUserWalletAddressReturnValue: Result<ZStakingStatus, ClientProxyError>! {
+    var getStakerStatusInfoUserWalletAddressPoolAddressUnderlyingReturnValue: Result<ZStakingStatus, ClientProxyError>!
+    var getStakerStatusInfoUserWalletAddressPoolAddressReturnValue: Result<ZStakingStatus, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return getStakerStatusInfoAddressUserWalletAddressUnderlyingReturnValue
+                return getStakerStatusInfoUserWalletAddressPoolAddressUnderlyingReturnValue
             } else {
                 var returnValue: Result<ZStakingStatus, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getStakerStatusInfoAddressUserWalletAddressUnderlyingReturnValue
+                    returnValue = getStakerStatusInfoUserWalletAddressPoolAddressUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7739,39 +7739,39 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getStakerStatusInfoAddressUserWalletAddressUnderlyingReturnValue = newValue
+                getStakerStatusInfoUserWalletAddressPoolAddressUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getStakerStatusInfoAddressUserWalletAddressUnderlyingReturnValue = newValue
+                    getStakerStatusInfoUserWalletAddressPoolAddressUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var getStakerStatusInfoAddressUserWalletAddressClosure: ((String, String) async -> Result<ZStakingStatus, ClientProxyError>)?
+    var getStakerStatusInfoUserWalletAddressPoolAddressClosure: ((String, String) async -> Result<ZStakingStatus, ClientProxyError>)?
 
-    func getStakerStatusInfo(address: String, userWalletAddress: String) async -> Result<ZStakingStatus, ClientProxyError> {
-        getStakerStatusInfoAddressUserWalletAddressCallsCount += 1
-        getStakerStatusInfoAddressUserWalletAddressReceivedArguments = (address: address, userWalletAddress: userWalletAddress)
+    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingStatus, ClientProxyError> {
+        getStakerStatusInfoUserWalletAddressPoolAddressCallsCount += 1
+        getStakerStatusInfoUserWalletAddressPoolAddressReceivedArguments = (userWalletAddress: userWalletAddress, poolAddress: poolAddress)
         DispatchQueue.main.async {
-            self.getStakerStatusInfoAddressUserWalletAddressReceivedInvocations.append((address: address, userWalletAddress: userWalletAddress))
+            self.getStakerStatusInfoUserWalletAddressPoolAddressReceivedInvocations.append((userWalletAddress: userWalletAddress, poolAddress: poolAddress))
         }
-        if let getStakerStatusInfoAddressUserWalletAddressClosure = getStakerStatusInfoAddressUserWalletAddressClosure {
-            return await getStakerStatusInfoAddressUserWalletAddressClosure(address, userWalletAddress)
+        if let getStakerStatusInfoUserWalletAddressPoolAddressClosure = getStakerStatusInfoUserWalletAddressPoolAddressClosure {
+            return await getStakerStatusInfoUserWalletAddressPoolAddressClosure(userWalletAddress, poolAddress)
         } else {
-            return getStakerStatusInfoAddressUserWalletAddressReturnValue
+            return getStakerStatusInfoUserWalletAddressPoolAddressReturnValue
         }
     }
-    //MARK: - getUserRewardsInfo
+    //MARK: - getStakeRewardsInfo
 
-    var getUserRewardsInfoAddressUserWalletAddressUnderlyingCallsCount = 0
-    var getUserRewardsInfoAddressUserWalletAddressCallsCount: Int {
+    var getStakeRewardsInfoUserWalletAddressPoolAddressUnderlyingCallsCount = 0
+    var getStakeRewardsInfoUserWalletAddressPoolAddressCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getUserRewardsInfoAddressUserWalletAddressUnderlyingCallsCount
+                return getStakeRewardsInfoUserWalletAddressPoolAddressUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getUserRewardsInfoAddressUserWalletAddressUnderlyingCallsCount
+                    returnValue = getStakeRewardsInfoUserWalletAddressPoolAddressUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7779,29 +7779,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getUserRewardsInfoAddressUserWalletAddressUnderlyingCallsCount = newValue
+                getStakeRewardsInfoUserWalletAddressPoolAddressUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getUserRewardsInfoAddressUserWalletAddressUnderlyingCallsCount = newValue
+                    getStakeRewardsInfoUserWalletAddressPoolAddressUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var getUserRewardsInfoAddressUserWalletAddressCalled: Bool {
-        return getUserRewardsInfoAddressUserWalletAddressCallsCount > 0
+    var getStakeRewardsInfoUserWalletAddressPoolAddressCalled: Bool {
+        return getStakeRewardsInfoUserWalletAddressPoolAddressCallsCount > 0
     }
-    var getUserRewardsInfoAddressUserWalletAddressReceivedArguments: (address: String, userWalletAddress: String)?
-    var getUserRewardsInfoAddressUserWalletAddressReceivedInvocations: [(address: String, userWalletAddress: String)] = []
+    var getStakeRewardsInfoUserWalletAddressPoolAddressReceivedArguments: (userWalletAddress: String, poolAddress: String)?
+    var getStakeRewardsInfoUserWalletAddressPoolAddressReceivedInvocations: [(userWalletAddress: String, poolAddress: String)] = []
 
-    var getUserRewardsInfoAddressUserWalletAddressUnderlyingReturnValue: Result<ZStakingUserRewardsInfo, ClientProxyError>!
-    var getUserRewardsInfoAddressUserWalletAddressReturnValue: Result<ZStakingUserRewardsInfo, ClientProxyError>! {
+    var getStakeRewardsInfoUserWalletAddressPoolAddressUnderlyingReturnValue: Result<ZStakingUserRewardsInfo, ClientProxyError>!
+    var getStakeRewardsInfoUserWalletAddressPoolAddressReturnValue: Result<ZStakingUserRewardsInfo, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return getUserRewardsInfoAddressUserWalletAddressUnderlyingReturnValue
+                return getStakeRewardsInfoUserWalletAddressPoolAddressUnderlyingReturnValue
             } else {
                 var returnValue: Result<ZStakingUserRewardsInfo, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getUserRewardsInfoAddressUserWalletAddressUnderlyingReturnValue
+                    returnValue = getStakeRewardsInfoUserWalletAddressPoolAddressUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7809,26 +7809,26 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getUserRewardsInfoAddressUserWalletAddressUnderlyingReturnValue = newValue
+                getStakeRewardsInfoUserWalletAddressPoolAddressUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getUserRewardsInfoAddressUserWalletAddressUnderlyingReturnValue = newValue
+                    getStakeRewardsInfoUserWalletAddressPoolAddressUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var getUserRewardsInfoAddressUserWalletAddressClosure: ((String, String) async -> Result<ZStakingUserRewardsInfo, ClientProxyError>)?
+    var getStakeRewardsInfoUserWalletAddressPoolAddressClosure: ((String, String) async -> Result<ZStakingUserRewardsInfo, ClientProxyError>)?
 
-    func getUserRewardsInfo(address: String, userWalletAddress: String) async -> Result<ZStakingUserRewardsInfo, ClientProxyError> {
-        getUserRewardsInfoAddressUserWalletAddressCallsCount += 1
-        getUserRewardsInfoAddressUserWalletAddressReceivedArguments = (address: address, userWalletAddress: userWalletAddress)
+    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingUserRewardsInfo, ClientProxyError> {
+        getStakeRewardsInfoUserWalletAddressPoolAddressCallsCount += 1
+        getStakeRewardsInfoUserWalletAddressPoolAddressReceivedArguments = (userWalletAddress: userWalletAddress, poolAddress: poolAddress)
         DispatchQueue.main.async {
-            self.getUserRewardsInfoAddressUserWalletAddressReceivedInvocations.append((address: address, userWalletAddress: userWalletAddress))
+            self.getStakeRewardsInfoUserWalletAddressPoolAddressReceivedInvocations.append((userWalletAddress: userWalletAddress, poolAddress: poolAddress))
         }
-        if let getUserRewardsInfoAddressUserWalletAddressClosure = getUserRewardsInfoAddressUserWalletAddressClosure {
-            return await getUserRewardsInfoAddressUserWalletAddressClosure(address, userWalletAddress)
+        if let getStakeRewardsInfoUserWalletAddressPoolAddressClosure = getStakeRewardsInfoUserWalletAddressPoolAddressClosure {
+            return await getStakeRewardsInfoUserWalletAddressPoolAddressClosure(userWalletAddress, poolAddress)
         } else {
-            return getUserRewardsInfoAddressUserWalletAddressReturnValue
+            return getStakeRewardsInfoUserWalletAddressPoolAddressReturnValue
         }
     }
     //MARK: - getLinkPreviewMetaData

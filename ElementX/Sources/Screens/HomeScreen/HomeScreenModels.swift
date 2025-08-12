@@ -196,6 +196,7 @@ struct HomeScreenViewState: BindableState {
     var walletTokens: [HomeScreenWalletContent] = []
     var walletTransactions: [HomeScreenWalletContent] = []
     var walletNFTs: [HomeScreenWalletContent] = []
+    var walletStakings: [HomeScreenWalletStakingContent] = []
     
     var walletTokenNextPageParams: NextPageParams? = nil
     var walletNFTsNextPageParams: NextPageParams? = nil
@@ -266,6 +267,14 @@ struct HomeScreenViewState: BindableState {
             return placeholderWalletContent
         }
         return walletNFTs
+    }
+    var visibleWalletStakings: [HomeScreenWalletStakingContent] {
+        if walletContentListMode == .skeletons {
+            return (1...20).map { _ in
+                HomeScreenWalletStakingContent.placeholder()
+            }
+        }
+        return walletStakings
     }
     
     var userRewards = ZeroRewards.empty()
@@ -538,6 +547,42 @@ struct HomeScreenWalletContent: Identifiable, Equatable {
     }
 }
 
+struct HomeScreenWalletStakingContent: Identifiable, Equatable {
+    let id: String
+    
+    let poolAddress: String
+    let poolIcon: String?
+    let poolName: String
+    
+    let tokenAddress: String
+    let tokenAmount: String
+    let tokenIcon: String?
+    
+    let totalStakedAmount: Double
+    let totalStakedAmountFormatted: String
+    let myStakeAmount: Double
+    let myStateAmountFormatted: String
+    
+//    let stakeConfig: ZStackingConfig?
+//    let stakerStatus: ZStakingStatus?
+//    let stakeRewards: ZStakingUserRewardsInfo?
+    
+    static func placeholder() -> HomeScreenWalletStakingContent {
+        .init(id: UUID().uuidString,
+              poolAddress: "",
+              poolIcon: nil,
+              poolName: "placeholder pool",
+              tokenAddress: "",
+              tokenAmount: "",
+              tokenIcon: nil,
+              totalStakedAmount: 0,
+              totalStakedAmountFormatted: "",
+              myStakeAmount: 0,
+              myStateAmountFormatted: "")
+    }
+    
+}
+
 extension HomeScreenRoom {
     init(summary: RoomSummary, hideUnreadMessagesBadge: Bool, seenInvites: Set<String> = []) {
         let roomID = summary.id
@@ -787,5 +832,28 @@ extension HomeScreenWalletContent {
                   actionPreText: nil,
                   actionText: "\(walletTransaction.formattedAmount) \(tokenSymbol)",
                   actionPostText: walletTransaction.isClaimableTokenTransaction ? "$\(walletTransaction.meowPriceFormatted(ref: meowPrice))" : nil)
+    }
+}
+
+extension HomeScreenWalletStakingContent {
+    init(meowPrice: ZeroCurrency?, token: ZWalletToken, poolAddress: String, totalStaked: String,
+         stakingConfig: ZStackingConfig, stakerStatus: ZStakingStatus, stakeRewards: ZStakingUserRewardsInfo) {
+        let totalStakedAmount = ZeroWalletUtil.shared.meowPrice(tokenAmount: ZeroRewards.parseCredits(credits: totalStaked,
+                                                                                                      decimals: 18),
+                                                                refPrice: meowPrice)
+        let myStakeAmount = ZeroWalletUtil.shared.meowPrice(tokenAmount: ZeroRewards.parseCredits(credits: stakerStatus.amountStaked,
+                                                                                                  decimals: 18),
+                                                            refPrice: meowPrice)
+        self.init(id: poolAddress,
+                  poolAddress: poolAddress,
+                  poolIcon: token.logo,
+                  poolName: "\(token.name.uppercased()) Pool",
+                  tokenAddress: token.tokenAddress,
+                  tokenAmount: token.amount,
+                  tokenIcon: token.logo,
+                  totalStakedAmount: totalStakedAmount,
+                  totalStakedAmountFormatted: "$\(totalStakedAmount.formatToSuffix())",
+                  myStakeAmount: myStakeAmount,
+                  myStateAmountFormatted: "$\(myStakeAmount.formatToSuffix())")
     }
 }

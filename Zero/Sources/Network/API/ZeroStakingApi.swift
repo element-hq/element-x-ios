@@ -9,13 +9,13 @@ import Alamofire
 
 protocol ZeroStakingApiProtocol {
     
-    func getTotalStaked(address: String) async throws -> Result<String, Error>
+    func getTotalStaked(poolAddress: String) async throws -> Result<String, Error>
     
-    func getStakingConfig(address: String) async throws -> Result<ZStackingConfig, Error>
+    func getStakingConfig(poolAddress: String) async throws -> Result<ZStackingConfig, Error>
     
-    func getStakerStatusInfo(address: String, userWalletAddress: String) async throws -> Result<ZStakingStatus, Error>
+    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String) async throws -> Result<ZStakingStatus, Error>
     
-    func getUserRewardsInfo(address: String, userWalletAddress: String) async throws -> Result<ZStakingUserRewardsInfo, Error>
+    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String) async throws -> Result<ZStakingUserRewardsInfo, Error>
 }
 
 class ZeroStakingApi : ZeroStakingApiProtocol {
@@ -25,8 +25,8 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         self.appSettings = appSettings
     }
     
-    func getTotalStaked(address: String) async throws -> Result<String, any Error> {
-        let url = StakingEndPoints.totalStaked.replacingOccurrences(of: StakingApiConstants.address_path_parameter, with: address)
+    func getTotalStaked(poolAddress: String) async throws -> Result<String, any Error> {
+        let url = StakingEndPoints.totalStaked.replacingOccurrences(of: StakingApiConstants.stake_pool_address, with: poolAddress)
         let result: Result<String, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                           method: .get,
                                                                                           appSettings: appSettings)
@@ -38,8 +38,8 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         }
     }
     
-    func getStakingConfig(address: String) async throws -> Result<ZStackingConfig, any Error> {
-        let url = StakingEndPoints.config.replacingOccurrences(of: StakingApiConstants.address_path_parameter, with: address)
+    func getStakingConfig(poolAddress: String) async throws -> Result<ZStackingConfig, any Error> {
+        let url = StakingEndPoints.config.replacingOccurrences(of: StakingApiConstants.stake_pool_address, with: poolAddress)
         let result: Result<ZStackingConfig, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                    method: .get,
                                                                                                    appSettings: appSettings)
@@ -51,10 +51,10 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         }
     }
     
-    func getStakerStatusInfo(address: String, userWalletAddress: String) async throws -> Result<ZStakingStatus, any Error> {
+    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String) async throws -> Result<ZStakingStatus, any Error> {
         let url = StakingEndPoints.stakers
-            .replacingOccurrences(of: StakingApiConstants.address_path_parameter, with: address)
             .replacingOccurrences(of: StakingApiConstants.stake_user_address, with: userWalletAddress)
+            .replacingOccurrences(of: StakingApiConstants.stake_pool_address, with: poolAddress)
         let result: Result<ZStakingStatus, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                   method: .get,
                                                                                                   appSettings: appSettings)
@@ -66,10 +66,10 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         }
     }
     
-    func getUserRewardsInfo(address: String, userWalletAddress: String) async throws -> Result<ZStakingUserRewardsInfo, any Error> {
+    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String) async throws -> Result<ZStakingUserRewardsInfo, any Error> {
         let url = StakingEndPoints.rewards
-            .replacingOccurrences(of: StakingApiConstants.address_path_parameter, with: address)
             .replacingOccurrences(of: StakingApiConstants.stake_user_address, with: userWalletAddress)
+            .replacingOccurrences(of: StakingApiConstants.stake_pool_address, with: poolAddress)
         let result: Result<ZStakingUserRewardsInfo, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                            method: .get,
                                                                                                            appSettings: appSettings)
@@ -86,14 +86,14 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
     private enum StakingEndPoints {
         private static let hostURL = ZeroContants.appServer.zeroRootUrl
         
-        static let totalStaked = "\(hostURL)api/staking/\(StakingApiConstants.address_path_parameter)/total-staked"
-        static let config = "\(hostURL)api/staking/\(StakingApiConstants.address_path_parameter)/config"
-        static let stakers = "\(hostURL)api/staking/\(StakingApiConstants.address_path_parameter)/stakers/\(StakingApiConstants.stake_user_address)"
-        static let rewards = "\(hostURL)api/staking/\(StakingApiConstants.address_path_parameter)/rewards/\(StakingApiConstants.stake_user_address)"
+        static let totalStaked = "\(hostURL)api/staking/\(StakingApiConstants.stake_pool_address)/total-staked"
+        static let config = "\(hostURL)api/staking/\(StakingApiConstants.stake_pool_address)/config"
+        static let stakers = "\(hostURL)api/staking/\(StakingApiConstants.stake_user_address)/stakers/\(StakingApiConstants.stake_pool_address)"
+        static let rewards = "\(hostURL)api/staking/\(StakingApiConstants.stake_user_address)/rewards/\(StakingApiConstants.stake_pool_address)"
     }
     
     private enum StakingApiConstants {
-        static let address_path_parameter = "{address}"
         static let stake_user_address = "{user_address}"
+        static let stake_pool_address = "{pool_address}"
     }
 }

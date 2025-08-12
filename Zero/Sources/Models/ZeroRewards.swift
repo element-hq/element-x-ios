@@ -37,7 +37,7 @@ public struct ZeroRewards: Codable, Equatable {
         return legacyEarnings + dailyEarnings + referralEarnings
     }
     
-    private static func parseCredits(credits: String, decimals: Int) -> Double {
+    static func parseCredits(credits: String, decimals: Int) -> Double {
         let delimiter = credits.count - decimals
         if delimiter < 0 { return 0 }
         let value = String(credits.prefix(delimiter)) + "." + (credits.substr(delimiter, 2) ?? "0")

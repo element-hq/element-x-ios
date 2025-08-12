@@ -339,13 +339,13 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     // MARK: - ZERO STAKING
     
-    func getTotalStaked(address: String) async -> Result<String, ClientProxyError>
+    func getTotalStaked(poolAddress: String) async -> Result<String, ClientProxyError>
     
-    func getStakingConfig(address: String) async -> Result<ZStackingConfig, ClientProxyError>
+    func getStakingConfig(poolAddress: String) async -> Result<ZStackingConfig, ClientProxyError>
     
-    func getStakerStatusInfo(address: String, userWalletAddress: String) async -> Result<ZStakingStatus, ClientProxyError>
+    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingStatus, ClientProxyError>
     
-    func getUserRewardsInfo(address: String, userWalletAddress: String) async -> Result<ZStakingUserRewardsInfo, ClientProxyError>
+    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingUserRewardsInfo, ClientProxyError>
     
     // MARK: - ZERO METADATA
     

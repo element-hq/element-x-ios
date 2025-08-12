@@ -2051,6 +2051,8 @@
 		79C9BA8D2E27E1E000A16384 /* UserWalletQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */; };
 		79C9BA8E2E27E1E000A16384 /* UserWalletQRCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */; };
 		79D57E9AE03A2DC689D14EA2 /* UserSessionStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB9BA2F30EB8C33226D8FF1 /* UserSessionStoreMock.swift */; };
+		79DB42A42E4BDDEC00F6E809 /* HomeWalletStakingContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB42A32E4BDDE400F6E809 /* HomeWalletStakingContent.swift */; };
+		79DB42A52E4BDDEC00F6E809 /* HomeWalletStakingContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DB42A32E4BDDE400F6E809 /* HomeWalletStakingContent.swift */; };
 		79E1E7F02DFB6C8700195CF0 /* HomeTabBottomSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E1E7EF2DFB6C7F00195CF0 /* HomeTabBottomSpace.swift */; };
 		79E1E7F12DFB6C8700195CF0 /* HomeTabBottomSpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E1E7EF2DFB6C7F00195CF0 /* HomeTabBottomSpace.swift */; };
 		79E1E7F32DFC2D6200195CF0 /* HomeContentEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E1E7F22DFC2D5B00195CF0 /* HomeContentEmptyView.swift */; };
@@ -3731,6 +3733,7 @@
 		79C25B582E25AACE00936A5D /* PostImageViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostImageViewer.swift; sourceTree = "<group>"; };
 		79C25B5B2E25AB2500936A5D /* PostVideoPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVideoPlayer.swift; sourceTree = "<group>"; };
 		79C9BA8C2E27E1D900A16384 /* UserWalletQRCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWalletQRCode.swift; sourceTree = "<group>"; };
+		79DB42A32E4BDDE400F6E809 /* HomeWalletStakingContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWalletStakingContent.swift; sourceTree = "<group>"; };
 		79E1E7EF2DFB6C7F00195CF0 /* HomeTabBottomSpace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBottomSpace.swift; sourceTree = "<group>"; };
 		79E1E7F22DFC2D5B00195CF0 /* HomeContentEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeContentEmptyView.swift; sourceTree = "<group>"; };
 		79F31B202E02BB0C0043E100 /* RemoteConfigManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigManager.swift; sourceTree = "<group>"; };
@@ -6228,6 +6231,7 @@
 				79E1E7EF2DFB6C7F00195CF0 /* HomeTabBottomSpace.swift */,
 				790393702D4CD63A0022E293 /* HomeTabView.swift */,
 				7996162E2E0B2702008E73C4 /* HomeWalletContent.swift */,
+				79DB42A32E4BDDE400F6E809 /* HomeWalletStakingContent.swift */,
 				799616342E0C7A25008E73C4 /* HomeWalletTabsContent.swift */,
 				037A5661B26EC6BE068188D7 /* Filters */,
 			);
@@ -10396,6 +10400,7 @@
 				79621A4D2DA78E080006C391 /* ManageRoomMemberSheetViewModel.swift in Sources */,
 				18E9A5782C9829970082DDA4 /* MatrixEntityRegex.swift in Sources */,
 				18E9A5792C9829970082DDA4 /* MatrixUserShareLink.swift in Sources */,
+				79DB42A42E4BDDEC00F6E809 /* HomeWalletStakingContent.swift in Sources */,
 				18E9A57A2C9829970082DDA4 /* MediaFileHandleProxy.swift in Sources */,
 				18E9A57B2C9829970082DDA4 /* MediaLoader.swift in Sources */,
 				18E9A57C2C9829970082DDA4 /* MediaLoaderProtocol.swift in Sources */,
@@ -12203,6 +12208,7 @@
 				793899CC2DEF994200980991 /* ReferAFriendSettingsScreenViewModelProtocol.swift in Sources */,
 				9E838A62918E47BC72D6640D /* UserIndicatorPresenter.swift in Sources */,
 				F7BC744FFA7FE248FAE7F570 /* UserIndicatorToastView.swift in Sources */,
+				79DB42A52E4BDDEC00F6E809 /* HomeWalletStakingContent.swift in Sources */,
 				E3291AD16D7A5CB14781819C /* UserNotificationCenterProtocol.swift in Sources */,
 				2932570AA418974979D16DED /* UserPreference.swift in Sources */,
 				80DEA2A4B20F9E279EAE6B2B /* UserProfile+Mock.swift in Sources */,
