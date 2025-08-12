@@ -54,7 +54,7 @@ struct ClaimedEarningsSheetView: View {
     var secondaryButtonText: String {
         return switch state {
         case .success:
-            "View Transaction"
+            "View"
         default:
             "Try Again"
         }
@@ -129,9 +129,14 @@ struct ClaimedEarningsSheetView: View {
                 
                 Spacer()
                 
-                HStack {
-                    secondaryActionButton
-                    closeButton
+                switch state {
+                case .success, .failure:
+                    HStack {
+                        secondaryActionButton
+                        closeButton
+                    }
+                default:
+                    EmptyView()
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

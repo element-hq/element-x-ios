@@ -84,10 +84,10 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         let parameters = nextPageParams?.toDictionary() ?? [:]
         let url = WalletEndPoints.transactions.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: walletAddress)
         let transactionsResult: Result<ZWalletTransactions, Error> = try await APIManager.shared.authorisedRequest(url,
-                                                                                                   method: .get,
-                                                                                                   appSettings: appSettings,
-                                                                                                   parameters: parameters,
-                                                                                                   encoding: URLEncoding.queryString)
+                                                                                                                   method: .get,
+                                                                                                                   appSettings: appSettings,
+                                                                                                                   parameters: parameters,
+                                                                                                                   encoding: URLEncoding.queryString)
         switch transactionsResult {
         case .success(let transactions):
             return .success(transactions)
@@ -101,9 +101,9 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
             .toDictionary()
         let url = WalletEndPoints.transferToken.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: senderWalletAddress)
         let transactionResult: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
-                                                                                                               method: .post,
-                                                                                                               appSettings: appSettings,
-                                                                                                               parameters: parameters)
+                                                                                                                         method: .post,
+                                                                                                                         appSettings: appSettings,
+                                                                                                                         parameters: parameters)
         switch transactionResult {
         case .success(let transaction):
             return .success(transaction)
@@ -117,9 +117,9 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
             .toDictionary()
         let url = WalletEndPoints.transferNft.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: senderWalletAddress)
         let transactionResult: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
-                                                                                                               method: .post,
-                                                                                                               appSettings: appSettings,
-                                                                                                               parameters: parameters)
+                                                                                                                         method: .post,
+                                                                                                                         appSettings: appSettings,
+                                                                                                                         parameters: parameters)
         switch transactionResult {
         case .success(let transaction):
             return .success(transaction)
@@ -144,10 +144,10 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
     func searchRecipients(query: String) async throws -> Result<[WalletRecipient], any Error> {
         let parameters = ["query": query]
         let result: Result<ZWalletRecipients, Error> = try await APIManager.shared.authorisedRequest(WalletEndPoints.searchRecipients,
-                                                                   method: .get,
-                                                                   appSettings: appSettings,
-                                                                   parameters: parameters,
-                                                                   encoding: URLEncoding.queryString)
+                                                                                                     method: .get,
+                                                                                                     appSettings: appSettings,
+                                                                                                     parameters: parameters,
+                                                                                                     encoding: URLEncoding.queryString)
         switch result {
         case .success(let response):
             return .success(response.recipients)
@@ -159,8 +159,8 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
     func claimRewards(walletAddress: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
         let url = WalletEndPoints.claimRewards.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: walletAddress)
         let result: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
-                                                                                                               method: .post,
-                                                                                                               appSettings: appSettings)
+                                                                                                              method: .post,
+                                                                                                              appSettings: appSettings)
         switch result {
         case .success(let transaction):
             ZeroCustomEventService.shared.walletApiEvent(parameters: [

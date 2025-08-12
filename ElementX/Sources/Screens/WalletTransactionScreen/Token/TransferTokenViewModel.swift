@@ -132,6 +132,7 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
         if let currentUserAddress = state.currentUser?.publicWalletAddress,
            let recipient = state.transferRecipient,
            let token = state.tokenAsset {
+            state.tokenAmount = amount
             Task {
                 setFlowState(.inProgress)
                 let result = await clientProxy.transferToken(senderWalletAddress: currentUserAddress,
@@ -145,7 +146,7 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
                     getTransactionReceipt(transaction.transactionHash)
                 case .failure(let failure):
                     MXLog.error("Failed to transfer token: \(failure)")
-                    showError(error: failure.localizedDescription)
+                    setFlowState(.failure)
                 }
             }
         }

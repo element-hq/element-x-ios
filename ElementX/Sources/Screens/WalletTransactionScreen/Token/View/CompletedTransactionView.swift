@@ -10,6 +10,7 @@ import SwiftUI
 
 struct CompletedTransactionView: View {
     @ObservedObject var context: TransferTokenViewModel.Context
+    let isSuccess: Bool
     
     var body: some View {
         VStack {
@@ -97,48 +98,79 @@ struct CompletedTransactionView: View {
                 
                 Spacer()
                 
-                VStack {
-                    Image(systemName: "checkmark.circle")
-                        .font(.system(size: 32, weight: .semibold))
-                        .foregroundColor(.zero.bgAccentRest)
-                    
-                    Text("Transaction Succeeded")
-                        .font(.compound.bodyMDSemibold)
-                        .foregroundStyle(.zero.bgAccentRest)
-                    
-                    Text(currentDateTimeFormatted)
-                        .font(.zero.bodySM)
-                        .foregroundStyle(.compound.textSecondary)
-                    
-                    HStack(spacing: 12) {
-                        Button(action: { context.send(viewAction: .transactionCompleted) }) {
-                            Text("Close")
-                                .font(.compound.bodyMDSemibold)
-                                .foregroundColor(.black)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(.zero.bgAccentRest)
-                                )
-                        }
+                if isSuccess {
+                    VStack {
+                        Image(systemName: "checkmark.circle")
+                            .font(.system(size: 32, weight: .semibold))
+                            .foregroundColor(.zero.bgAccentRest)
                         
-                        Button(action: {
-                            context.send(viewAction: .viewTransaction)
-                        }) {
-                            Text("View on ZScan")
-                                .font(.compound.bodyMDSemibold)
-                                .foregroundColor(.zero.bgAccentRest)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(.zero.bgAccentRest.opacity(0.15))
-                                        .stroke(.zero.bgAccentRest)
-                                )
+                        Text("Transaction Succeeded")
+                            .font(.compound.bodyMDSemibold)
+                            .foregroundStyle(.zero.bgAccentRest)
+                        
+                        Text(currentDateTimeFormatted)
+                            .font(.zero.bodySM)
+                            .foregroundStyle(.compound.textSecondary)
+                        
+                        HStack(spacing: 12) {
+                            Button(action: { context.send(viewAction: .transactionCompleted) }) {
+                                Text("Close")
+                                    .font(.compound.bodyMDSemibold)
+                                    .foregroundColor(.black)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(.zero.bgAccentRest)
+                                    )
+                            }
+                            
+                            Button(action: {
+                                context.send(viewAction: .viewTransaction)
+                            }) {
+                                Text("View on ZScan")
+                                    .font(.compound.bodyMDSemibold)
+                                    .foregroundColor(.zero.bgAccentRest)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(.zero.bgAccentRest.opacity(0.15))
+                                            .stroke(.zero.bgAccentRest)
+                                    )
+                            }
                         }
+                        .padding(.vertical, 12)
                     }
-                    .padding(.vertical, 12)
+                } else {
+                    VStack {
+                        Image(systemName: "xmark.circle")
+                            .font(.system(size: 32, weight: .semibold))
+                            .foregroundColor(.compound.iconCriticalPrimary)
+                        
+                        Text("Transaction Failed")
+                            .font(.compound.bodyMDSemibold)
+                            .foregroundStyle(.compound.textCriticalPrimary)
+                        
+                        Text(currentDateTimeFormatted)
+                            .font(.zero.bodySM)
+                            .foregroundStyle(.compound.textSecondary)
+                        
+                        HStack(spacing: 12) {
+                            Button(action: { context.send(viewAction: .transactionCompleted) }) {
+                                Text("Close")
+                                    .font(.compound.bodyMDSemibold)
+                                    .foregroundColor(.black)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .fill(.zero.bgAccentRest)
+                                    )
+                            }
+                        }
+                        .padding(.vertical, 12)
+                    }
                 }
             }
         }

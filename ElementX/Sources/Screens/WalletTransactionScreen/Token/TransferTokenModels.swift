@@ -41,7 +41,7 @@ struct TransferTokenViewState: BindableState {
     
     var showTopBarBackButton: Bool {
         switch transferTokenFlowState {
-        case .recipient, .inProgress, .completed:
+        case .recipient, .inProgress, .completed, .failure:
             return false
         default:
             return true
@@ -119,4 +119,5 @@ enum TransferTokenFlowState {
     case confirmation
     case inProgress
     case completed
+    case failure
 }

@@ -694,6 +694,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 state.postListMode = .posts
                 isFetchPostsInProgress = false
                 
+                if isForceRefresh {
+                    self.feedMediaPreFetchService?.forceRefreshHomeFeedMedia(following: followingOnly)
+                }
+                
                 await loadPostContentConcurrently(for: state.posts, followingPosts: followingOnly)
             }
         case .failure(let error):
@@ -929,11 +933,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 }
                 if case .success(let walletTokenBalances) = results.0 {
                     var homeWalletContent: [HomeScreenWalletContent] = []
+                    // set meow token balance amount for user
+                    setUserWalletBalance(walletTokenBalances.tokens)
                     for token in walletTokenBalances.tokens {
-                        // set meow token balance amount for user
-                        if token.isMeowToken {
-                            setUserWalletBalance(token)
-                        }
                         let content = HomeScreenWalletContent(walletToken: token, meowPrice: state.meowPrice)
                         homeWalletContent.append(content)
                     }
@@ -1017,8 +1019,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
-    private func setUserWalletBalance(_ token: ZWalletToken) {
-        state.walletBalance = ZeroWalletUtil.shared.meowPrice(tokenAmount: token.amount, refPrice: state.meowPrice)
+    private func setUserWalletBalance(_ tokens: [ZWalletToken]) {
+        let totalAmount = tokens.filter { $0.isClaimableToken }
+            .reduce(Decimal(0)) { partialResult, token in
+                guard let amountDecimal = Decimal(string: token.amount) else {
+                    return partialResult
+                }
+                return partialResult + amountDecimal
+            }
+        state.walletBalance = ZeroWalletUtil.shared.meowPrice(tokenAmount: totalAmount.description, refPrice: state.meowPrice)
     }
     
     private func extractAllRoomUsers(_ rooms: [RoomSummary]) {
@@ -1124,11 +1133,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         if let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
             state.claimRewardsState = .claiming
             state.bindings.showEarningsClaimedSheet = true
+            state.claimableUserRewards = state.userRewards
             Task {
                 let result = await userSession.clientProxy.claimRewards(userWalletAddress: walletAddress)
                 switch result {
                 case .success(let transactionHash):
                     state.claimRewardsState = .success(transactionHash)
+                    loadUserRewards()
+                    fetchWalletData(silentRefresh: true)
                 case .failure(_):
                     state.claimRewardsState = .failure
                 }

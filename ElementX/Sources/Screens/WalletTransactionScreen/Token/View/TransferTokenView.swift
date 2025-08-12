@@ -16,6 +16,7 @@ struct TransferTokenView: View {
         switch context.viewState.transferTokenFlowState {
         case .asset: "Select Asset"
         case .completed: "Sent"
+        case .failure: "Failed"
         default: "Send"
         }
     }
@@ -63,8 +64,8 @@ struct TransferTokenView: View {
                     )
             }
             
-            if flowState == .completed {
-                CompletedTransactionView(context: context)
+            if flowState == .completed || flowState == .failure {
+                CompletedTransactionView(context: context, isSuccess: flowState == .completed)
                     .transition(.move(edge: .trailing))
             }
         }
@@ -96,7 +97,7 @@ struct TransferTokenView: View {
             }
         }
         
-        if flowState == .completed {
+        if flowState == .completed || flowState == .failure {
             ToolbarItem(placement: .primaryAction) {
                 CompoundIcon(\.close)
                     .frame(width: 32, height: 32)
