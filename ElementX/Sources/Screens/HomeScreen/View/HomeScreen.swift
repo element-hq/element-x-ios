@@ -120,6 +120,15 @@ struct HomeScreen: View {
             .presentationDetents([.height(400)])
             .presentationDragIndicator(.hidden)
         }
+        .sheet(isPresented: $context.showStakePoolSheet) {
+            if let stakePool = context.viewState.selectedStakePool {
+                StakePoolSheetView(selectedPool: stakePool)
+                    .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
+            } else {
+                EmptyView()
+            }
+        }
     }
     
     // MARK: - Private

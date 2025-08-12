@@ -337,6 +337,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func claimRewards(userWalletAddress: String) async -> Result<String, ClientProxyError>
     
+    func getTokenInfo(tokenAddress: String) async -> Result<ZWalletTokenInfo, ClientProxyError>
+    
+    func getTokenBalance(tokenAddress: String) async -> Result<ZWalletTokenBalance, ClientProxyError>
+    
     // MARK: - ZERO STAKING
     
     func getTotalStaked(poolAddress: String) async -> Result<String, ClientProxyError>
@@ -346,6 +350,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func getStakerStatusInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingStatus, ClientProxyError>
     
     func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingUserRewardsInfo, ClientProxyError>
+    
+    func getStakingToken(poolAddress: String) async -> Result<ZWalletStakingToken, ClientProxyError>
+    
+    func getRewardsToken(poolAddress: String) async -> Result<ZWalletStakingRewardsToken, ClientProxyError>
     
     // MARK: - ZERO METADATA
     

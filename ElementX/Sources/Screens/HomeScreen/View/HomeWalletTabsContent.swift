@@ -77,7 +77,9 @@ struct HomeWalletTabsContentView : View {
                 HomeWalletStakingContent(
                     stakingItems: context.viewState.visibleWalletStakings,
                     mediaProvider: context.mediaProvider,
-                    onTap: { _ in }
+                    onTap: { stakePool in
+                        context.send(viewAction: .onStakePoolSelected(stakePool))
+                    }
                 )
             }
         }

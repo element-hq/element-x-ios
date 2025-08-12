@@ -25,6 +25,10 @@ protocol ZeroWalletApiProtocol {
     func searchRecipients(query: String) async throws -> Result<[WalletRecipient], Error>
     
     func claimRewards(walletAddress: String) async throws -> Result<ZWalletTransactionResponse, Error>
+    
+    func getTokenInfo(tokenAddress: String) async throws -> Result<ZWalletTokenInfo, Error>
+    
+    func getTokenBalance(tokenAddress: String) async throws -> Result<ZWalletTokenBalance, Error>
 }
 
 class ZeroWalletApi: ZeroWalletApiProtocol {
@@ -182,6 +186,34 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         }
     }
     
+    func getTokenInfo(tokenAddress: String) async throws -> Result<ZWalletTokenInfo, any Error> {
+        let url = WalletEndPoints.tokenInfo
+            .replacingOccurrences(of: WalletApiConstants.token_address_path_parameter, with: tokenAddress)
+        let result: Result<ZWalletTokenInfo, Error> = try await APIManager.shared.authorisedRequest(url,
+                                                                                                    method: .get,
+                                                                                                    appSettings: appSettings)
+        switch result {
+        case .success(let info):
+            return .success(info)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func getTokenBalance(tokenAddress: String) async throws -> Result<ZWalletTokenBalance, any Error> {
+        let url = WalletEndPoints.tokenBalance
+            .replacingOccurrences(of: WalletApiConstants.token_address_path_parameter, with: tokenAddress)
+        let result: Result<ZWalletTokenBalance, Error> = try await APIManager.shared.authorisedRequest(url,
+                                                                                                    method: .get,
+                                                                                                    appSettings: appSettings)
+        switch result {
+        case .success(let balance):
+            return .success(balance)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum WalletEndPoints {
@@ -199,10 +231,14 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         static let searchRecipients = "\(hostURL)api/wallet/search-recipients"
         
         static let claimRewards = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/claim-rewards"
+        
+        static let tokenInfo = "\(hostURL)api/tokens/\(WalletApiConstants.token_address_path_parameter)/info"
+        static let tokenBalance = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/token/\(WalletApiConstants.token_address_path_parameter)/balance"
     }
     
     private enum WalletApiConstants {
         static let address_path_parameter = "{address}"
         static let trasaction_hash_path_parameter = "{transaction_hash}"
+        static let token_address_path_parameter = "{token_address}"
     }
 }

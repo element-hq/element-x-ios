@@ -340,6 +340,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 state.claimRewardsState = .none
                 state.bindings.showEarningsClaimedSheet = false
             }
+        case .onStakePoolSelected(let stakePool):
+            fetchStakeDataOfPool(stakePool)
         }
     }
     
@@ -1075,6 +1077,52 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     }
                 }
             }
+        }
+    }
+    
+    private func fetchStakeDataOfPool(_ pool: HomeScreenWalletStakingContent) {
+        Task {
+            let userIndicatorID = UUID().uuidString
+            defer { userIndicatorController.retractIndicatorWithId(userIndicatorID) }
+            
+            userIndicatorController.submitIndicator(
+                UserIndicator(
+                    id: userIndicatorID,
+                    type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                    title: L10n.commonLoading,
+                    persistent: true
+                )
+            )
+            
+            func fetchTokenData(tokenAddress: String) async -> (ZWalletTokenInfo?, ZWalletTokenBalance?) {
+                async let tokenInfo = userSession.clientProxy.getTokenInfo(tokenAddress: tokenAddress)
+                async let tokenBalance = userSession.clientProxy.getTokenBalance(tokenAddress: tokenAddress)
+                return (try? await tokenInfo.get(), try? await tokenBalance.get())
+            }
+            
+            async let stakingTokenResult = userSession.clientProxy.getStakingToken(poolAddress: pool.poolAddress)
+            async let rewardTokenResult = userSession.clientProxy.getRewardsToken(poolAddress: pool.poolAddress)
+            
+            var stakeTokenInfo: ZWalletTokenInfo?
+            var stakeTokenBalance: ZWalletTokenBalance?
+            var rewardTokenInfo: ZWalletTokenInfo?
+            var rewardTokenBalance: ZWalletTokenBalance?
+            
+            let (stakingTokenResponse, rewardTokenResponse) = await (stakingTokenResult, rewardTokenResult)
+            if case .success(let stakingToken) = stakingTokenResponse {
+                (stakeTokenInfo, stakeTokenBalance) = await fetchTokenData(tokenAddress: stakingToken.stakingTokenAddress)
+            }
+            if case .success(let rewardsToken) = rewardTokenResponse {
+                (rewardTokenInfo, rewardTokenBalance) = await fetchTokenData(tokenAddress: rewardsToken.rewardsTokenAddress)
+            }
+            state.selectedStakePool = .init(
+                pool: pool,
+                stakeToken: stakeTokenInfo,
+                stakeTokenBalance: stakeTokenBalance,
+                rewardToken: rewardTokenInfo,
+                rewardTokenBalance: rewardTokenBalance
+            )
+            state.bindings.showStakePoolSheet = true
         }
     }
     
