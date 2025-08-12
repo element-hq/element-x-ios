@@ -7188,15 +7188,15 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 
     //MARK: - threadsEnabled
 
-    var threadsEnabledEnabledUnderlyingCallsCount = 0
-    open var threadsEnabledEnabledCallsCount: Int {
+    var threadsEnabledEnabledThreadSubscriptionsUnderlyingCallsCount = 0
+    open var threadsEnabledEnabledThreadSubscriptionsCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return threadsEnabledEnabledUnderlyingCallsCount
+                return threadsEnabledEnabledThreadSubscriptionsUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = threadsEnabledEnabledUnderlyingCallsCount
+                    returnValue = threadsEnabledEnabledThreadSubscriptionsUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7204,29 +7204,29 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
         set {
             if Thread.isMainThread {
-                threadsEnabledEnabledUnderlyingCallsCount = newValue
+                threadsEnabledEnabledThreadSubscriptionsUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    threadsEnabledEnabledUnderlyingCallsCount = newValue
+                    threadsEnabledEnabledThreadSubscriptionsUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var threadsEnabledEnabledCalled: Bool {
-        return threadsEnabledEnabledCallsCount > 0
+    open var threadsEnabledEnabledThreadSubscriptionsCalled: Bool {
+        return threadsEnabledEnabledThreadSubscriptionsCallsCount > 0
     }
-    open var threadsEnabledEnabledReceivedEnabled: Bool?
-    open var threadsEnabledEnabledReceivedInvocations: [Bool] = []
+    open var threadsEnabledEnabledThreadSubscriptionsReceivedArguments: (enabled: Bool, threadSubscriptions: Bool)?
+    open var threadsEnabledEnabledThreadSubscriptionsReceivedInvocations: [(enabled: Bool, threadSubscriptions: Bool)] = []
 
-    var threadsEnabledEnabledUnderlyingReturnValue: ClientBuilder!
-    open var threadsEnabledEnabledReturnValue: ClientBuilder! {
+    var threadsEnabledEnabledThreadSubscriptionsUnderlyingReturnValue: ClientBuilder!
+    open var threadsEnabledEnabledThreadSubscriptionsReturnValue: ClientBuilder! {
         get {
             if Thread.isMainThread {
-                return threadsEnabledEnabledUnderlyingReturnValue
+                return threadsEnabledEnabledThreadSubscriptionsUnderlyingReturnValue
             } else {
                 var returnValue: ClientBuilder? = nil
                 DispatchQueue.main.sync {
-                    returnValue = threadsEnabledEnabledUnderlyingReturnValue
+                    returnValue = threadsEnabledEnabledThreadSubscriptionsUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7234,26 +7234,26 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
         set {
             if Thread.isMainThread {
-                threadsEnabledEnabledUnderlyingReturnValue = newValue
+                threadsEnabledEnabledThreadSubscriptionsUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    threadsEnabledEnabledUnderlyingReturnValue = newValue
+                    threadsEnabledEnabledThreadSubscriptionsUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var threadsEnabledEnabledClosure: ((Bool) -> ClientBuilder)?
+    open var threadsEnabledEnabledThreadSubscriptionsClosure: ((Bool, Bool) -> ClientBuilder)?
 
-    open override func threadsEnabled(enabled: Bool) -> ClientBuilder {
-        threadsEnabledEnabledCallsCount += 1
-        threadsEnabledEnabledReceivedEnabled = enabled
+    open override func threadsEnabled(enabled: Bool, threadSubscriptions: Bool) -> ClientBuilder {
+        threadsEnabledEnabledThreadSubscriptionsCallsCount += 1
+        threadsEnabledEnabledThreadSubscriptionsReceivedArguments = (enabled: enabled, threadSubscriptions: threadSubscriptions)
         DispatchQueue.main.async {
-            self.threadsEnabledEnabledReceivedInvocations.append(enabled)
+            self.threadsEnabledEnabledThreadSubscriptionsReceivedInvocations.append((enabled: enabled, threadSubscriptions: threadSubscriptions))
         }
-        if let threadsEnabledEnabledClosure = threadsEnabledEnabledClosure {
-            return threadsEnabledEnabledClosure(enabled)
+        if let threadsEnabledEnabledThreadSubscriptionsClosure = threadsEnabledEnabledThreadSubscriptionsClosure {
+            return threadsEnabledEnabledThreadSubscriptionsClosure(enabled, threadSubscriptions)
         } else {
-            return threadsEnabledEnabledReturnValue
+            return threadsEnabledEnabledThreadSubscriptionsReturnValue
         }
     }
 
@@ -12582,13 +12582,13 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     open var fetchThreadSubscriptionThreadRootEventIdReceivedThreadRootEventId: String?
     open var fetchThreadSubscriptionThreadRootEventIdReceivedInvocations: [String] = []
 
-    var fetchThreadSubscriptionThreadRootEventIdUnderlyingReturnValue: ThreadStatus?
-    open var fetchThreadSubscriptionThreadRootEventIdReturnValue: ThreadStatus? {
+    var fetchThreadSubscriptionThreadRootEventIdUnderlyingReturnValue: ThreadSubscription?
+    open var fetchThreadSubscriptionThreadRootEventIdReturnValue: ThreadSubscription? {
         get {
             if Thread.isMainThread {
                 return fetchThreadSubscriptionThreadRootEventIdUnderlyingReturnValue
             } else {
-                var returnValue: ThreadStatus?? = nil
+                var returnValue: ThreadSubscription?? = nil
                 DispatchQueue.main.sync {
                     returnValue = fetchThreadSubscriptionThreadRootEventIdUnderlyingReturnValue
                 }
@@ -12606,9 +12606,9 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             }
         }
     }
-    open var fetchThreadSubscriptionThreadRootEventIdClosure: ((String) async throws -> ThreadStatus?)?
+    open var fetchThreadSubscriptionThreadRootEventIdClosure: ((String) async throws -> ThreadSubscription?)?
 
-    open override func fetchThreadSubscription(threadRootEventId: String) async throws -> ThreadStatus? {
+    open override func fetchThreadSubscription(threadRootEventId: String) async throws -> ThreadSubscription? {
         if let error = fetchThreadSubscriptionThreadRootEventIdThrowableError {
             throw error
         }
