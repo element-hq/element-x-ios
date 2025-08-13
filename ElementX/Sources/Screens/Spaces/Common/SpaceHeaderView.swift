@@ -62,6 +62,7 @@ struct SpaceHeaderView: View {
             CompoundIcon(spaceDetailsVisibilityIcon, size: .small, relativeTo: .compound.bodyLG)
                 .foregroundStyle(.compound.iconTertiary)
         }
+        .fixedSize(horizontal: false, vertical: true)
     }
     
     var spaceDetailsVisibilityTitle: String {
