@@ -76,9 +76,22 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
 
     func register(with deviceToken: Data) async -> Bool {
         guard let userSession else {
+            MXLog.error("[NotificationManager] No user session available for device token registration")
             return false
         }
-        return await setPusher(with: deviceToken, clientProxy: userSession.clientProxy)
+        
+        MXLog.info("[NotificationManager] Starting device token registration...")
+        MXLog.info("[NotificationManager] Device token size: \(deviceToken.count) bytes")
+        
+        let result = await setPusher(with: deviceToken, clientProxy: userSession.clientProxy)
+        
+        if result {
+            MXLog.info("[NotificationManager] Device token registration successful")
+        } else {
+            MXLog.error("[NotificationManager] Device token registration failed")
+        }
+        
+        return result
     }
 
     func setUserSession(_ userSession: UserSessionProtocol?) {
@@ -153,12 +166,16 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
 
     private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) async -> Bool {
         do {
+            // Convert device token to hex string (APNS format)
+            let hexString = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+            MXLog.info("[NotificationManager] Device token hex: \(hexString)")
+            
             let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
-                                                          alert: APSAlert(locKey: "Notification",
-                                                                          locArgs: [])),
+                                                          alert: APSAlert(locKey: "SevenChat",
+                                                                          locArgs: ["Bạn có tin nhắn mới"])),
                                              pusherNotificationClientIdentifier: clientProxy.pusherNotificationClientIdentifier)
 
-            let configuration = try await PusherConfiguration(identifiers: .init(pushkey: deviceToken.base64EncodedString(),
+            let configuration = try await PusherConfiguration(identifiers: .init(pushkey: hexString,
                                                                                  appId: appSettings.pusherAppID),
                                                               kind: .http(data: .init(url: appSettings.pushGatewayNotifyEndpoint.absoluteString,
                                                                                       format: .eventIdOnly,
@@ -167,6 +184,9 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                                                               deviceDisplayName: UIDevice.current.name,
                                                               profileTag: pusherProfileTag(),
                                                               lang: Bundle.app.preferredLocalizations.first ?? "en")
+            
+            MXLog.info("[NotificationManager] Pusher config - pushkey: \(hexString), appId: \(appSettings.pusherAppID), url: \(appSettings.pushGatewayNotifyEndpoint.absoluteString)")
+            
             try await clientProxy.setPusher(with: configuration)
             MXLog.info("[NotificationManager] set pusher succeeded")
             return true

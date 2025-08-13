@@ -231,11 +231,8 @@ final class AppSettings {
     // MARK: - Notifications
     
     var pusherAppID: String {
-        #if DEBUG
-        InfoPlistReader.main.baseBundleIdentifier + ".ios.dev"
-        #else
-        InfoPlistReader.main.baseBundleIdentifier + ".ios.prod"
-        #endif
+        // Use the same bundle ID for both debug and production to match server configuration
+        InfoPlistReader.main.baseBundleIdentifier
     }
     
     private(set) var pushGatewayBaseURL: URL = {
@@ -244,6 +241,7 @@ final class AppSettings {
            let url = URL(string: envURL) {
             return url
         }
+        // Use the matrix-push-adapter endpoint on the server
         return URL(string: "https://sevenchat.space")!
     }()
     

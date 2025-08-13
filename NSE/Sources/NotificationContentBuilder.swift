@@ -81,8 +81,8 @@ struct NotificationContentBuilder {
     // MARK: - Private
     
     private func processEmpty(_ notificationContent: inout UNMutableNotificationContent) {
-        notificationContent.title = InfoPlistReader(bundle: .app).bundleDisplayName
-        notificationContent.body = L10n.notification
+        notificationContent.title = "SevenChat"
+        notificationContent.body = "Bạn có tin nhắn mới"
         notificationContent.categoryIdentifier = NotificationConstants.Category.message
     }
 
@@ -111,13 +111,21 @@ struct NotificationContentBuilder {
     private func processMessageLike(notificationContent: inout UNMutableNotificationContent,
                                     notificationItem: NotificationItemProxyProtocol,
                                     mediaProvider: MediaProviderProtocol) async {
-        notificationContent.title = notificationItem.senderDisplayName ?? notificationItem.roomDisplayName
-        if notificationContent.title != notificationItem.roomDisplayName {
-            notificationContent.subtitle = notificationItem.roomDisplayName
+        // Set title to "SevenChat" for consistent branding
+        notificationContent.title = "SevenChat"
+        
+        // Set subtitle to show sender and room info
+        let senderName = notificationItem.senderDisplayName ?? notificationItem.senderID
+        let roomName = notificationItem.roomDisplayName
+        if senderName != roomName {
+            notificationContent.subtitle = "\(senderName) in \(roomName)"
+        } else {
+            notificationContent.subtitle = senderName
         }
+        
         notificationContent.categoryIdentifier = NotificationConstants.Category.message
         
-        let senderName = if let displayName = notificationItem.senderDisplayName {
+        let displayNameForIcon = if let displayName = notificationItem.senderDisplayName {
             notificationItem.hasMention ? L10n.notificationSenderMentionReply(displayName) : displayName
         } else {
             notificationItem.roomDisplayName
@@ -125,7 +133,7 @@ struct NotificationContentBuilder {
         
         await addSenderIcon(notificationContent: &notificationContent,
                             senderID: notificationItem.senderID,
-                            senderName: senderName,
+                            senderName: displayNameForIcon,
                             icon: icon(for: notificationItem),
                             mediaProvider: mediaProvider)
     }

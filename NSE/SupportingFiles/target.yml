@@ -59,7 +59,6 @@ targets:
     entitlements:
       path: NSE.entitlements
       properties:
-        com.apple.developer.usernotifications.filtering: true
         com.apple.security.application-groups:
         - $(APP_GROUP_IDENTIFIER)
         keychain-access-groups:
@@ -75,6 +74,7 @@ targets:
         DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         APS_ENVIRONMENT: $(APS_ENVIRONMENT)
+        CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION: YES
         OTHER_SWIFT_FLAGS:
         - "-DIS_NSE"
 
