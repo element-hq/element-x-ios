@@ -1086,10 +1086,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     private func fetchStakeDataOfPool(_ pool: HomeScreenWalletStakingContent, silentRefresh: Bool = false) {
         Task {
+            let userIndicatorID = UUID().uuidString
             if !silentRefresh {
-                let userIndicatorID = UUID().uuidString
-                defer { userIndicatorController.retractIndicatorWithId(userIndicatorID) }
-                
                 userIndicatorController.submitIndicator(
                     UserIndicator(
                         id: userIndicatorID,
@@ -1129,7 +1127,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 rewardToken: rewardTokenInfo,
                 rewardTokenBalance: rewardTokenBalance
             )
-            state.bindings.showStakePoolSheet = true
+            userIndicatorController.retractIndicatorWithId(userIndicatorID)
+            if !silentRefresh {
+                state.bindings.stakePoolViewState = .details
+                state.bindings.showStakePoolSheet = true
+            }
         }
     }
     
@@ -1139,30 +1141,21 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         let stakeAmount = Double(amount) ?? 0
         guard stakeAmount > 0 else { return }
         
-        let actualStakeAmount = stakeAmount * pow(10.0, Double(token.decimals))
+        let actualStakeAmount = toSmallestUnit(amount: stakeAmount, decimals: token.decimals)
         
         Task {
-            let userIndicatorID = UUID().uuidString
-            defer { userIndicatorController.retractIndicatorWithId(userIndicatorID) }
-            
-            userIndicatorController.submitIndicator(
-                UserIndicator(
-                    id: userIndicatorID,
-                    type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                    title: L10n.commonLoading,
-                    persistent: true
-                )
-            )
-            
+            state.bindings.stakePoolViewState = .inProgress
             let result = await userSession.clientProxy.stakeAmount(walletAddress: selectedPool.pool.userWalletAddress,
                                                                    poolAddress: selectedPool.pool.poolAddress,
                                                                    tokenAddress: token.address,
-                                                                   amount: actualStakeAmount.description)
+                                                                   amount: actualStakeAmount)
             switch result {
             case .success(_):
-                fetchStakeDataOfPool(selectedPool.pool)
-            case .failure(let failure):
-                displayError(message: failure.localizedDescription)
+                state.bindings.stakePoolViewState = .success
+                fetchWalletData(silentRefresh: true)
+                fetchStakeDataOfPool(selectedPool.pool, silentRefresh: true)
+            case .failure(let error):
+                state.bindings.stakePoolViewState = .failure
             }
         }
     }
@@ -1173,31 +1166,26 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         let unstakeAmount = Double(amount) ?? 0
         guard unstakeAmount > 0 else { return }
         
-        let actualUnstakeAmount = unstakeAmount * pow(10.0, Double(token.decimals))
+        let actualUnstakeAmount = toSmallestUnit(amount: unstakeAmount, decimals: token.decimals)
         
         Task {
-            let userIndicatorID = UUID().uuidString
-            defer { userIndicatorController.retractIndicatorWithId(userIndicatorID) }
-            
-            userIndicatorController.submitIndicator(
-                UserIndicator(
-                    id: userIndicatorID,
-                    type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                    title: L10n.commonLoading,
-                    persistent: true
-                )
-            )
-            
+            state.bindings.stakePoolViewState = .inProgress
             let result = await userSession.clientProxy.unstakeAmount(walletAddress: selectedPool.pool.userWalletAddress,
                                                                    poolAddress: selectedPool.pool.poolAddress,
-                                                                   amount: actualUnstakeAmount.description)
+                                                                   amount: actualUnstakeAmount)
             switch result {
             case .success(_):
+                state.bindings.stakePoolViewState = .success
                 fetchWalletData(silentRefresh: true)
-            case .failure(let failure):
-                displayError(message: failure.localizedDescription)
+            case .failure(let error):
+                state.bindings.stakePoolViewState = .failure
             }
         }
+    }
+    
+    private func toSmallestUnit(amount: Double, decimals: Int) -> String {
+        let decimalValue = Decimal(amount) * pow(Decimal(10), decimals)
+        return NSDecimalNumber(decimal: decimalValue).stringValue
     }
     
     private func extractAllRoomUsers(_ rooms: [RoomSummary]) {

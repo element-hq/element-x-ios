@@ -119,7 +119,7 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
     
     func stakeAmount(userWalletAddress: String, poolAddress: String, amount: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
         let url = StakingEndPoints.stakeAmount
-            .replacingOccurrences(of: StakingApiConstants.stake_pool_address, with: userWalletAddress)
+            .replacingOccurrences(of: StakingApiConstants.stake_user_address, with: userWalletAddress)
         let parameters = [
             "amount": amount,
             "poolAddress": poolAddress
@@ -138,7 +138,7 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
     
     func unstakeAmount(userWalletAddress: String, poolAddress: String, amount: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
         let url = StakingEndPoints.unstakeAmount
-            .replacingOccurrences(of: StakingApiConstants.stake_pool_address, with: userWalletAddress)
+            .replacingOccurrences(of: StakingApiConstants.stake_user_address, with: userWalletAddress)
         let parameters = [
             "amount": amount,
             "poolAddress": poolAddress

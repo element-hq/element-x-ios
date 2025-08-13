@@ -8,18 +8,15 @@
 import Compound
 import SwiftUI
 
-private enum StakePoolViewState {
-    case details
-    case staking
-    case unstaking
-}
-
 struct StakePoolSheetView : View {
     let selectedPool: SelectedHomeWalletStakePool
+    @Binding var state: StakePoolViewState
     let onStakeAmount: (String) -> Void
     let onUnstakeAmount: (String) -> Void
+    let onDismissSheet: () -> Void
     
-    @State private var state: StakePoolViewState = .details
+    @State private var isUserStakingAmount: Bool = false
+    @State private var transactionAmount: String = ""
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -44,17 +41,46 @@ struct StakePoolSheetView : View {
                     }
                 },
                                      onStakeAmount: { amount in
+                    transactionAmount = amount
                     if state == .unstaking {
                         onUnstakeAmount(amount)
+                        isUserStakingAmount = false
                     } else {
                         onStakeAmount(amount)
+                        isUserStakingAmount = true
                     }
                 })
+            case .inProgress:
+                TransactionInProgressView(
+                    color: .zero.bgAccentRest,
+                    message: getTransactionInProgressMessage(selectedPool: selectedPool,
+                                                             isUserStakingAmount: isUserStakingAmount,
+                                                             amount: transactionAmount),
+                    subMessage: "Please wait...",
+                    backgroundColor: Color.compound.bgCanvasDefault
+                )
+            case .success, .failure:
+                TransactionSuccessOrFailureView(isSuccessful: state == .success,
+                                                selectedPool: selectedPool,
+                                                hasUserStaked: isUserStakingAmount,
+                                                transactionAmount: transactionAmount,
+                                                onDismiss: onDismissSheet)
             }
         }
         .padding(.horizontal, 24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+    }
+    
+    private func getTransactionInProgressMessage(selectedPool: SelectedHomeWalletStakePool,
+                                                 isUserStakingAmount: Bool,
+                                                 amount: String) -> String {
+        let stakeTokenName = selectedPool.stakeToken?.symbol.uppercased() ?? ""
+        if isUserStakingAmount {
+            return "Staking \(amount) \(stakeTokenName)".trim()
+        } else {
+            return "Unstaking \(amount) \(stakeTokenName)".trim()
+        }
     }
 }
 
@@ -381,6 +407,83 @@ private struct PoolStakeUnstakeView : View {
                 onStakeAmount(inputAmount)
             })
             .padding(.vertical, 12)
+        }
+        
+        Spacer()
+    }
+}
+
+private struct TransactionSuccessOrFailureView : View {
+    let isSuccessful: Bool
+    let selectedPool: SelectedHomeWalletStakePool
+    let hasUserStaked: Bool
+    let transactionAmount: String
+    let onDismiss: () -> Void
+    
+    var body: some View {
+        let stakeTokenName = selectedPool.stakeToken?.symbol.uppercased() ?? ""
+        let rewardTokenName = selectedPool.rewardToken?.symbol.uppercased() ?? ""
+        
+        HStack {
+            Spacer()
+            
+            Button {
+                onDismiss()
+            } label: {
+                CompoundIcon(\.close)
+            }
+        }
+        .padding(.top, 24)
+        
+        Spacer()
+        
+        HStack {
+            Spacer()
+            VStack {
+                HStack {
+                    ZStack(alignment: .bottomTrailing) {
+                        WalletTokenImage(url: selectedPool.pool.poolIcon)
+                        
+                        Image(asset: Asset.Images.iconZChain)
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text(selectedPool.pool.poolName)
+                            .font(.zero.bodyLG)
+                            .foregroundColor(.compound.textPrimary)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                        
+                        Text("Reward: \(rewardTokenName)")
+                            .font(.zero.bodyMD)
+                            .foregroundColor(.compound.textSecondary)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                    }
+                }
+                
+                let message: () -> String = {
+                    if isSuccessful {
+                        if hasUserStaked {
+                            "You have successfully staked \(transactionAmount) \(stakeTokenName) without lock.".trim()
+                        } else {
+                            "You have successfully unstaked \(transactionAmount) \(stakeTokenName), and claimed your pool rewards.".trim()
+                        }
+                    } else {
+                        if hasUserStaked {
+                            "Failed to stake \(transactionAmount) \(stakeTokenName) without lock.".trim()
+                        } else {
+                            "Failed to unstake \(transactionAmount) \(stakeTokenName), and claimed your pool rewards.".trim()
+                        }
+                    }
+                }
+                Text(message())
+                    .font(.zero.bodyLG)
+                    .foregroundStyle(isSuccessful ? .zero.bgAccentRest : .compound.textCriticalPrimary)
+                    .padding(.vertical, 12)
+                    .multilineTextAlignment(.center)
+            }
+            Spacer()
         }
         
         Spacer()

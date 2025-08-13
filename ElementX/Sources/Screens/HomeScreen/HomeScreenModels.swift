@@ -181,6 +181,15 @@ enum ClaimRewardsState {
     case failure
 }
 
+enum StakePoolViewState {
+    case details
+    case staking
+    case unstaking
+    case inProgress
+    case success
+    case failure
+}
+
 struct HomeScreenViewState: BindableState {
     let userID: String
     var userDisplayName: String?
@@ -361,6 +370,8 @@ struct HomeScreenViewStateBindings {
     
     var showEarningsClaimedSheet: Bool = false
     var showStakePoolSheet: Bool = false
+    
+    var stakePoolViewState: StakePoolViewState = .details
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {
