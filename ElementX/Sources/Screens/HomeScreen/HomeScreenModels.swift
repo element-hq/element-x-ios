@@ -85,6 +85,8 @@ enum HomeScreenViewAction {
     case claimRewards(trigger: Bool)
     
     case onStakePoolSelected(HomeScreenWalletStakingContent)
+    case stakeAmount(String)
+    case unstakeAmount(String)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -569,10 +571,6 @@ struct HomeScreenWalletStakingContent: Identifiable, Equatable {
     let totalStakedAmountFormatted: String
     let myStakeAmount: Double
     let myStateAmountFormatted: String
-    
-//    let stakeConfig: ZStackingConfig?
-//    let stakerStatus: ZStakingStatus?
-//    let stakeRewards: ZStakingUserRewardsInfo?
     
     static func placeholder() -> HomeScreenWalletStakingContent {
         .init(id: UUID().uuidString,

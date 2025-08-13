@@ -123,8 +123,12 @@ struct HomeScreen: View {
         .sheet(isPresented: $context.showStakePoolSheet) {
             if let stakePool = context.viewState.selectedStakePool {
                 StakePoolSheetView(selectedPool: stakePool,
-                                   onStakeAmount: { _ in },
-                                   onUnstakeAmount: { _ in })
+                                   onStakeAmount: { amount in
+                    context.send(viewAction: .stakeAmount(amount))
+                },
+                                   onUnstakeAmount: { amount in
+                    context.send(viewAction: .unstakeAmount(amount))
+                })
                 .presentationDetents([.medium])
                 .presentationDragIndicator(.visible)
             } else {

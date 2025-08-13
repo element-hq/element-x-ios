@@ -8111,6 +8111,146 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return getRewardsTokenPoolAddressReturnValue
         }
     }
+    //MARK: - stakeAmount
+
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountUnderlyingCallsCount = 0
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return stakeAmountWalletAddressPoolAddressTokenAddressAmountUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = stakeAmountWalletAddressPoolAddressTokenAddressAmountUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                stakeAmountWalletAddressPoolAddressTokenAddressAmountUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    stakeAmountWalletAddressPoolAddressTokenAddressAmountUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountCalled: Bool {
+        return stakeAmountWalletAddressPoolAddressTokenAddressAmountCallsCount > 0
+    }
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountReceivedArguments: (walletAddress: String, poolAddress: String, tokenAddress: String, amount: String)?
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountReceivedInvocations: [(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String)] = []
+
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>!
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return stakeAmountWalletAddressPoolAddressTokenAddressAmountUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactionReceipt, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = stakeAmountWalletAddressPoolAddressTokenAddressAmountUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                stakeAmountWalletAddressPoolAddressTokenAddressAmountUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    stakeAmountWalletAddressPoolAddressTokenAddressAmountUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountClosure: ((String, String, String, String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
+
+    func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+        stakeAmountWalletAddressPoolAddressTokenAddressAmountCallsCount += 1
+        stakeAmountWalletAddressPoolAddressTokenAddressAmountReceivedArguments = (walletAddress: walletAddress, poolAddress: poolAddress, tokenAddress: tokenAddress, amount: amount)
+        DispatchQueue.main.async {
+            self.stakeAmountWalletAddressPoolAddressTokenAddressAmountReceivedInvocations.append((walletAddress: walletAddress, poolAddress: poolAddress, tokenAddress: tokenAddress, amount: amount))
+        }
+        if let stakeAmountWalletAddressPoolAddressTokenAddressAmountClosure = stakeAmountWalletAddressPoolAddressTokenAddressAmountClosure {
+            return await stakeAmountWalletAddressPoolAddressTokenAddressAmountClosure(walletAddress, poolAddress, tokenAddress, amount)
+        } else {
+            return stakeAmountWalletAddressPoolAddressTokenAddressAmountReturnValue
+        }
+    }
+    //MARK: - unstakeAmount
+
+    var unstakeAmountWalletAddressPoolAddressAmountUnderlyingCallsCount = 0
+    var unstakeAmountWalletAddressPoolAddressAmountCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return unstakeAmountWalletAddressPoolAddressAmountUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unstakeAmountWalletAddressPoolAddressAmountUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unstakeAmountWalletAddressPoolAddressAmountUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unstakeAmountWalletAddressPoolAddressAmountUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var unstakeAmountWalletAddressPoolAddressAmountCalled: Bool {
+        return unstakeAmountWalletAddressPoolAddressAmountCallsCount > 0
+    }
+    var unstakeAmountWalletAddressPoolAddressAmountReceivedArguments: (walletAddress: String, poolAddress: String, amount: String)?
+    var unstakeAmountWalletAddressPoolAddressAmountReceivedInvocations: [(walletAddress: String, poolAddress: String, amount: String)] = []
+
+    var unstakeAmountWalletAddressPoolAddressAmountUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>!
+    var unstakeAmountWalletAddressPoolAddressAmountReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return unstakeAmountWalletAddressPoolAddressAmountUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactionReceipt, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = unstakeAmountWalletAddressPoolAddressAmountUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                unstakeAmountWalletAddressPoolAddressAmountUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    unstakeAmountWalletAddressPoolAddressAmountUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var unstakeAmountWalletAddressPoolAddressAmountClosure: ((String, String, String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
+
+    func unstakeAmount(walletAddress: String, poolAddress: String, amount: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+        unstakeAmountWalletAddressPoolAddressAmountCallsCount += 1
+        unstakeAmountWalletAddressPoolAddressAmountReceivedArguments = (walletAddress: walletAddress, poolAddress: poolAddress, amount: amount)
+        DispatchQueue.main.async {
+            self.unstakeAmountWalletAddressPoolAddressAmountReceivedInvocations.append((walletAddress: walletAddress, poolAddress: poolAddress, amount: amount))
+        }
+        if let unstakeAmountWalletAddressPoolAddressAmountClosure = unstakeAmountWalletAddressPoolAddressAmountClosure {
+            return await unstakeAmountWalletAddressPoolAddressAmountClosure(walletAddress, poolAddress, amount)
+        } else {
+            return unstakeAmountWalletAddressPoolAddressAmountReturnValue
+        }
+    }
     //MARK: - getLinkPreviewMetaData
 
     var getLinkPreviewMetaDataUrlUnderlyingCallsCount = 0

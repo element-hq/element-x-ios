@@ -29,6 +29,10 @@ protocol ZeroWalletApiProtocol {
     func getTokenInfo(tokenAddress: String) async throws -> Result<ZWalletTokenInfo, Error>
     
     func getTokenBalance(walletAddress: String, tokenAddress: String) async throws -> Result<ZWalletTokenBalance, Error>
+    
+    func approveERC20(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String) async throws -> Result<ZWalletTransactionResponse, Error>
+    
+    func verifyERC20Approval(walletAddress: String, poolAddress: String, tokenAddress: String) async throws -> Result<Void, Error>
 }
 
 class ZeroWalletApi: ZeroWalletApiProtocol {
@@ -215,6 +219,42 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         }
     }
     
+    func approveERC20(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
+        let url = WalletEndPoints.approveERC20
+            .replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: walletAddress)
+        let parameters = [
+            "amount": amount,
+            "spenderAddress": poolAddress,
+            "tokenAddress": tokenAddress
+        ]
+        let transactionResult: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
+                                                                                                                         method: .post,
+                                                                                                                         appSettings: appSettings,
+                                                                                                                         parameters: parameters)
+        switch transactionResult {
+        case .success(let transaction):
+            return .success(transaction)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func verifyERC20Approval(walletAddress: String, poolAddress: String, tokenAddress: String) async throws -> Result<Void, any Error> {
+        let url = WalletEndPoints.verifyERC20Approval
+            .replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: walletAddress)
+            .replacingOccurrences(of: WalletApiConstants.token_address_path_parameter, with: tokenAddress)
+            .replacingOccurrences(of: WalletApiConstants.pool_address_path_parameter, with: poolAddress)
+        let result: Result<ZWalletStakingApprovalResponse, Error> = try await APIManager.shared.authorisedRequest(url,
+                                                                                                                         method: .get,
+                                                                                                                         appSettings: appSettings)
+        switch result {
+        case .success(let allowance):
+            return .success(())
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum WalletEndPoints {
@@ -235,11 +275,15 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         
         static let tokenInfo = "\(hostURL)api/tokens/\(WalletApiConstants.token_address_path_parameter)/info"
         static let tokenBalance = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/token/\(WalletApiConstants.token_address_path_parameter)/balance"
+        
+        static let approveERC20 = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/transactions/approve-erc20"
+        static let verifyERC20Approval = "\(hostURL)api/wallet/\(WalletApiConstants.address_path_parameter)/token/\(WalletApiConstants.token_address_path_parameter)/approval/\(WalletApiConstants.pool_address_path_parameter)"
     }
     
     private enum WalletApiConstants {
         static let address_path_parameter = "{address}"
         static let trasaction_hash_path_parameter = "{transaction_hash}"
         static let token_address_path_parameter = "{token_address}"
+        static let pool_address_path_parameter = "{pool_address}"
     }
 }

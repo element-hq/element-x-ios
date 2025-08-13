@@ -1929,6 +1929,8 @@
 		798BF3072137833FBD3F4C96 /* TimelineDeliveryStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F91544AC136BF6477BDAB8 /* TimelineDeliveryStatusView.swift */; };
 		798C78842D79394E00C1272F /* ElementTextFieldStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7673F2B0B038FAB2A8D16AD /* ElementTextFieldStyle.swift */; };
 		798C78852D79397700C1272F /* JoinRoomByAddressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A13364350970987B93F6018 /* JoinRoomByAddressView.swift */; };
+		798D991C2E4C9A5600164028 /* ZWalletStakingApprovalResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798D991B2E4C9A4C00164028 /* ZWalletStakingApprovalResponse.swift */; };
+		798D991D2E4C9A5600164028 /* ZWalletStakingApprovalResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798D991B2E4C9A4C00164028 /* ZWalletStakingApprovalResponse.swift */; };
 		7994E5652DD52B46005F7039 /* YoutubeLinkMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7994E5642DD52B3F005F7039 /* YoutubeLinkMetaData.swift */; };
 		7994E5662DD52B46005F7039 /* YoutubeLinkMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7994E5642DD52B3F005F7039 /* YoutubeLinkMetaData.swift */; };
 		79959F8E45C3749997482A7F /* TimelineItemBubbledStylerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A459AE4B6566B2FA99E86B2 /* TimelineItemBubbledStylerView.swift */; };
@@ -3708,6 +3710,7 @@
 		798457572D5FDEF50039623F /* ZPostMeowAmountResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZPostMeowAmountResponse.swift; sourceTree = "<group>"; };
 		7984575A2D60846F0039623F /* HomeScreenPostFooterItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostFooterItem.swift; sourceTree = "<group>"; };
 		7984575D2D60849D0039623F /* HomeScreenPostMeowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenPostMeowButton.swift; sourceTree = "<group>"; };
+		798D991B2E4C9A4C00164028 /* ZWalletStakingApprovalResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletStakingApprovalResponse.swift; sourceTree = "<group>"; };
 		7994E5642DD52B3F005F7039 /* YoutubeLinkMetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeLinkMetaData.swift; sourceTree = "<group>"; };
 		7996162E2E0B2702008E73C4 /* HomeWalletContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWalletContent.swift; sourceTree = "<group>"; };
 		799616312E0B36B4008E73C4 /* SimpleTabButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTabButtonsView.swift; sourceTree = "<group>"; };
@@ -5018,6 +5021,7 @@
 				184D6FD52C7D9261006266D8 /* ZSSOToken.swift */,
 				7996163A2E0EA30C008E73C4 /* ZWalletNFTs.swift */,
 				7909225A2E1E673E00833940 /* ZWalletRecipients.swift */,
+				798D991B2E4C9A4C00164028 /* ZWalletStakingApprovalResponse.swift */,
 				79DB42A92E4BF0CC00F6E809 /* ZWalletStakingRewardsToken.swift */,
 				79DB42A62E4BF0A500F6E809 /* ZWalletStakingToken.swift */,
 				79DB42AF2E4BF19900F6E809 /* ZWalletTokenBalance.swift */,
@@ -10782,6 +10786,7 @@
 				18D467A72D109B9700861AA6 /* ImageMediaEventsTimelineView.swift in Sources */,
 				18D5D9A52CEB56FE00107940 /* ZRewards.swift in Sources */,
 				18E9A6852C9829970082DDA4 /* RoundedCornerShape.swift in Sources */,
+				798D991C2E4C9A5600164028 /* ZWalletStakingApprovalResponse.swift in Sources */,
 				18D5D9A72CEB577300107940 /* ZeroRewardApi.swift in Sources */,
 				18525CF82CF5E7D50055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift in Sources */,
 				18E9A6882C9829970082DDA4 /* SDKGeneratedMocks.swift in Sources */,
@@ -12244,6 +12249,7 @@
 				80DEA2A4B20F9E279EAE6B2B /* UserProfile+Mock.swift in Sources */,
 				790AB79E2E1BE15200555B1F /* ZeroProSubcriptionScreenViewModel.swift in Sources */,
 				ED90A59F068FD0CA27E602ED /* UserProfileListRow.swift in Sources */,
+				798D991D2E4C9A5600164028 /* ZWalletStakingApprovalResponse.swift in Sources */,
 				185454DF2CFF0E74003CA957 /* CompleteProfileScreenModels.swift in Sources */,
 				E21FE4C5B614F311C0955859 /* UserProfileProxy.swift in Sources */,
 				1A3B073568D1DC8F76F1F3A0 /* UserProfileScreen.swift in Sources */,
