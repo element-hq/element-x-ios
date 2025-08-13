@@ -92,7 +92,5 @@ struct RoomListFiltersView_Previews: PreviewProvider, TestablePreview {
                                                    appSettings: ServiceLocator.shared.settings)))
         RoomListFiltersView(state: .constant(.init(activeFilters: [.lowPriority],
                                                    appSettings: ServiceLocator.shared.settings)))
-        RoomListFiltersView(state: .constant(.init(activeFilters: [.unreads, .lowPriority],
-                                                   appSettings: ServiceLocator.shared.settings)))
     }
 }

@@ -10,49 +10,58 @@ import XCTest
 @testable import ElementX
 
 final class RoomListFiltersStateTests: XCTestCase {
+    var appSettings: AppSettings!
+    
     var state: RoomListFiltersState!
+    var allCasesWithoutLowPriority = RoomListFilter.allCases.filter { $0 != .lowPriority }
     
     override func setUp() {
-        state = RoomListFiltersState()
+        AppSettings.resetAllSettings()
+        appSettings = AppSettings()
+        state = RoomListFiltersState(appSettings: appSettings)
+    }
+    
+    override func tearDown() {
+        AppSettings.resetAllSettings()
     }
     
     func testInitialState() {
         XCTAssertFalse(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.availableFilters, allCasesWithoutLowPriority)
     }
     
     func testSetAndUnsetFilters() {
         state.activateFilter(.unreads)
         XCTAssertTrue(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [.unreads])
-        XCTAssertEqual(state.availableFilters, [.people, .rooms, .favourites, .lowPriority])
+        XCTAssertEqual(state.availableFilters, [.people, .rooms, .favourites])
         state.deactivateFilter(.unreads)
         XCTAssertFalse(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.availableFilters, allCasesWithoutLowPriority)
     }
     
     func testMutuallyExclusiveFilters() {
         state.activateFilter(.people)
         XCTAssertTrue(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [.people])
-        XCTAssertEqual(state.availableFilters, [.unreads, .favourites, .lowPriority])
+        XCTAssertEqual(state.availableFilters, [.unreads, .favourites])
         
         state.deactivateFilter(.people)
         XCTAssertFalse(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.availableFilters, allCasesWithoutLowPriority)
         
         state.activateFilter(.rooms)
         XCTAssertTrue(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [.rooms])
-        XCTAssertEqual(state.availableFilters, [.unreads, .favourites, .lowPriority])
+        XCTAssertEqual(state.availableFilters, [.unreads, .favourites])
         
         state.activateFilter(.unreads)
         XCTAssertTrue(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [.rooms, .unreads])
-        XCTAssertEqual(state.availableFilters, [.favourites, .lowPriority])
+        XCTAssertEqual(state.availableFilters, [.favourites])
     }
     
     func testClearFilters() {
@@ -71,7 +80,7 @@ final class RoomListFiltersStateTests: XCTestCase {
         state.clearFilters()
         XCTAssertFalse(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.availableFilters, allCasesWithoutLowPriority)
     }
     
     func testOrder() {
@@ -81,52 +90,39 @@ final class RoomListFiltersStateTests: XCTestCase {
 
         state.deactivateFilter(.favourites)
         XCTAssertEqual(state.activeFilters, [])
-        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
+        XCTAssertEqual(state.availableFilters, allCasesWithoutLowPriority)
         
         state.activateFilter(.rooms)
         XCTAssertEqual(state.activeFilters, [.rooms])
-        XCTAssertEqual(state.availableFilters, [.unreads, .favourites, .lowPriority])
+        XCTAssertEqual(state.availableFilters, [.unreads, .favourites])
 
         state.activateFilter(.unreads)
         XCTAssertEqual(state.activeFilters, [.rooms, .unreads])
-        XCTAssertEqual(state.availableFilters, [.favourites, .lowPriority])
+        XCTAssertEqual(state.availableFilters, [.favourites])
         
         state.deactivateFilter(.unreads)
         XCTAssertEqual(state.activeFilters, [.rooms])
-        XCTAssertEqual(state.availableFilters, [.unreads, .favourites, .lowPriority])
+        XCTAssertEqual(state.availableFilters, [.unreads, .favourites])
     }
     
-    func testLowPriorityFilterIncompatibility() {
-        // Test that low priority cannot be combined with favourites
+    // MARK: Low Priority feature flag
+    
+    // Don't forget to add .lowPriority into the mix above when enabling the feature.
+    func testWithLowPriorityFeature() {
+        enableLowPriorityFeature()
+        XCTAssertFalse(state.isFiltering)
+        XCTAssertEqual(state.activeFilters, [])
+        XCTAssertEqual(state.availableFilters, RoomListFilter.allCases)
+        
         state.activateFilter(.lowPriority)
-        XCTAssertTrue(state.isFiltering)
         XCTAssertEqual(state.activeFilters, [.lowPriority])
         XCTAssertEqual(state.availableFilters, [.unreads, .people, .rooms])
-        
-        // Test that low priority cannot be combined with invites
-        state.deactivateFilter(.lowPriority)
-        state.activateFilter(.invites)
-        XCTAssertTrue(state.isFiltering)
-        XCTAssertEqual(state.activeFilters, [.invites])
-        XCTAssertEqual(state.availableFilters, [])
-        
-        // Test that favourites cannot be combined with low priority
-        state.deactivateFilter(.invites)
-        state.activateFilter(.favourites)
-        XCTAssertTrue(state.isFiltering)
-        XCTAssertEqual(state.activeFilters, [.favourites])
-        XCTAssertEqual(state.availableFilters, [.unreads, .people, .rooms])
     }
     
-    func testLowPriorityFilterCompatibility() {
-        // Test that low priority can be combined with other compatible filters
-        state.activateFilter(.lowPriority)
-        state.activateFilter(.unreads)
-        XCTAssertEqual(state.activeFilters, [.lowPriority, .unreads])
-        XCTAssertEqual(state.availableFilters, [.people, .rooms])
-        
-        state.activateFilter(.people)
-        XCTAssertEqual(state.activeFilters, [.lowPriority, .unreads, .people])
-        XCTAssertEqual(state.availableFilters, [])
+    // MARK: - Helpers
+    
+    private func enableLowPriorityFeature() {
+        appSettings.lowPriorityFilterEnabled = true
+        state = RoomListFiltersState(appSettings: appSettings)
     }
 }
