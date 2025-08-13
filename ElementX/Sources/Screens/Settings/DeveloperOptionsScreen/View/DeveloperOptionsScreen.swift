@@ -50,6 +50,10 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.fuzzyRoomListSearchEnabled) {
                     Text("Fuzzy searching")
                 }
+                
+                Toggle(isOn: $context.lowPriorityFilterEnabled) {
+                    Text("Low priority filter")
+                }
             }
             
             Section("Timeline") {

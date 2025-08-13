@@ -74,23 +74,27 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         case .invites:
             return .invite
         case .lowPriority:
-            // TODO: Replace with actual SDK filter when available
-            // This will need to be updated to .all(filters: [.lowPriority, .joined]) when SDK support is ready
-            // Note: The main logic for NonLowPriority vs LowPriority filtering is handled in setFilter method
-            return .all(filters: [.joined])
+            // Note: When not activated, the setFilter method automatically applies the .nonLowPriority filter.
+            return .all(filters: [.lowPriority, .joined])
         }
     }
 }
 
 struct RoomListFiltersState {
     private(set) var activeFilters: OrderedSet<RoomListFilter>
+    private let appSettings: AppSettings
     
-    init(activeFilters: OrderedSet<RoomListFilter> = []) {
+    init(activeFilters: OrderedSet<RoomListFilter> = [], appSettings: AppSettings) {
         self.activeFilters = .init(activeFilters)
+        self.appSettings = appSettings
     }
     
     var availableFilters: [RoomListFilter] {
         var availableFilters = OrderedSet(RoomListFilter.availableFilters)
+        
+        if !appSettings.lowPriorityFilterEnabled {
+            availableFilters.remove(.lowPriority)
+        }
         
         for filter in activeFilters {
             availableFilters.remove(filter)
