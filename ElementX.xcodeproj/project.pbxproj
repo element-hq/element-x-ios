@@ -7101,13 +7101,13 @@
 		79AB3A8B2E252BAD00E94E54 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				79DB42B22E4BF85800F6E809 /* StakePoolSheetView.swift */,
 				79B2A78E2E28FA9900A76430 /* ClaimedEarningsSheetView.swift */,
 				79C25B582E25AACE00936A5D /* PostImageViewer.swift */,
 				79C25B5B2E25AB2500936A5D /* PostVideoPlayer.swift */,
 				79AB3A952E252CE900E94E54 /* PostLinkPreview.swift */,
 				79AB3A8F2E252BDF00E94E54 /* RefreshButton.swift */,
 				79AB3A8C2E252BBB00E94E54 /* PostMediaPreview.swift */,
+				79DB42B22E4BF85800F6E809 /* StakePoolSheetView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";

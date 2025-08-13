@@ -339,7 +339,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func getTokenInfo(tokenAddress: String) async -> Result<ZWalletTokenInfo, ClientProxyError>
     
-    func getTokenBalance(tokenAddress: String) async -> Result<ZWalletTokenBalance, ClientProxyError>
+    func getTokenBalance(userWalletAddress: String, tokenAddress: String) async -> Result<ZWalletTokenBalance, ClientProxyError>
     
     // MARK: - ZERO STAKING
     

@@ -28,7 +28,7 @@ protocol ZeroWalletApiProtocol {
     
     func getTokenInfo(tokenAddress: String) async throws -> Result<ZWalletTokenInfo, Error>
     
-    func getTokenBalance(tokenAddress: String) async throws -> Result<ZWalletTokenBalance, Error>
+    func getTokenBalance(walletAddress: String, tokenAddress: String) async throws -> Result<ZWalletTokenBalance, Error>
 }
 
 class ZeroWalletApi: ZeroWalletApiProtocol {
@@ -200,8 +200,9 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         }
     }
     
-    func getTokenBalance(tokenAddress: String) async throws -> Result<ZWalletTokenBalance, any Error> {
+    func getTokenBalance(walletAddress: String, tokenAddress: String) async throws -> Result<ZWalletTokenBalance, any Error> {
         let url = WalletEndPoints.tokenBalance
+            .replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: walletAddress)
             .replacingOccurrences(of: WalletApiConstants.token_address_path_parameter, with: tokenAddress)
         let result: Result<ZWalletTokenBalance, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                     method: .get,

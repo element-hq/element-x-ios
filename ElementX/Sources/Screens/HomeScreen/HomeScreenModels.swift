@@ -555,6 +555,7 @@ struct HomeScreenWalletContent: Identifiable, Equatable {
 
 struct HomeScreenWalletStakingContent: Identifiable, Equatable {
     let id: String
+    let userWalletAddress: String
     
     let poolAddress: String
     let poolIcon: String?
@@ -575,6 +576,7 @@ struct HomeScreenWalletStakingContent: Identifiable, Equatable {
     
     static func placeholder() -> HomeScreenWalletStakingContent {
         .init(id: UUID().uuidString,
+              userWalletAddress: "",
               poolAddress: "",
               poolIcon: nil,
               poolName: "placeholder pool",
@@ -603,9 +605,20 @@ extension SelectedHomeWalletStakePool {
             .formatToSuffix()
     }
     
-    var myStakedTokens: String {
+    var myStakedTokens: Double {
         ZeroRewards.parseCredits(credits: pool.tokenAmount, decimals: stakeToken?.decimals ?? 18)
-            .formatToSuffix()
+    }
+    
+    var myStakedTokensFormatted: String {
+        myStakedTokens.formatToSuffix()
+    }
+    
+    var totalAvailableTokenBalance: Double {
+        ZeroRewards.parseCredits(credits: stakeTokenBalance?.balance ?? "0", decimals: stakeToken?.decimals ?? 18)
+    }
+    
+    var totalAvailableTokenBalanceFormatted: String {
+        totalAvailableTokenBalance.formatToSuffix()
     }
 }
 
@@ -862,8 +875,9 @@ extension HomeScreenWalletContent {
 }
 
 extension HomeScreenWalletStakingContent {
-    init(meowPrice: ZeroCurrency?, token: ZWalletToken, poolAddress: String, totalStaked: String,
-         stakingConfig: ZStackingConfig, stakerStatus: ZStakingStatus, stakeRewards: ZStakingUserRewardsInfo) {
+    init(meowPrice: ZeroCurrency?, token: ZWalletToken, userWalletAddress: String,
+         poolAddress: String, totalStaked: String, stakingConfig: ZStackingConfig,
+         stakerStatus: ZStakingStatus, stakeRewards: ZStakingUserRewardsInfo) {
         let totalStakedAmount = ZeroWalletUtil.shared.meowPrice(tokenAmount: ZeroRewards.parseCredits(credits: totalStaked,
                                                                                                       decimals: 18),
                                                                 refPrice: meowPrice)
@@ -871,6 +885,7 @@ extension HomeScreenWalletStakingContent {
                                                                                                   decimals: 18),
                                                             refPrice: meowPrice)
         self.init(id: poolAddress,
+                  userWalletAddress: userWalletAddress,
                   poolAddress: poolAddress,
                   poolIcon: token.logo,
                   poolName: "\(token.name.uppercased()) Pool",

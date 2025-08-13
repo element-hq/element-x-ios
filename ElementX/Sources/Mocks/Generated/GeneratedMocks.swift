@@ -7623,15 +7623,15 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     //MARK: - getTokenBalance
 
-    var getTokenBalanceTokenAddressUnderlyingCallsCount = 0
-    var getTokenBalanceTokenAddressCallsCount: Int {
+    var getTokenBalanceUserWalletAddressTokenAddressUnderlyingCallsCount = 0
+    var getTokenBalanceUserWalletAddressTokenAddressCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getTokenBalanceTokenAddressUnderlyingCallsCount
+                return getTokenBalanceUserWalletAddressTokenAddressUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getTokenBalanceTokenAddressUnderlyingCallsCount
+                    returnValue = getTokenBalanceUserWalletAddressTokenAddressUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -7639,29 +7639,29 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getTokenBalanceTokenAddressUnderlyingCallsCount = newValue
+                getTokenBalanceUserWalletAddressTokenAddressUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getTokenBalanceTokenAddressUnderlyingCallsCount = newValue
+                    getTokenBalanceUserWalletAddressTokenAddressUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var getTokenBalanceTokenAddressCalled: Bool {
-        return getTokenBalanceTokenAddressCallsCount > 0
+    var getTokenBalanceUserWalletAddressTokenAddressCalled: Bool {
+        return getTokenBalanceUserWalletAddressTokenAddressCallsCount > 0
     }
-    var getTokenBalanceTokenAddressReceivedTokenAddress: String?
-    var getTokenBalanceTokenAddressReceivedInvocations: [String] = []
+    var getTokenBalanceUserWalletAddressTokenAddressReceivedArguments: (userWalletAddress: String, tokenAddress: String)?
+    var getTokenBalanceUserWalletAddressTokenAddressReceivedInvocations: [(userWalletAddress: String, tokenAddress: String)] = []
 
-    var getTokenBalanceTokenAddressUnderlyingReturnValue: Result<ZWalletTokenBalance, ClientProxyError>!
-    var getTokenBalanceTokenAddressReturnValue: Result<ZWalletTokenBalance, ClientProxyError>! {
+    var getTokenBalanceUserWalletAddressTokenAddressUnderlyingReturnValue: Result<ZWalletTokenBalance, ClientProxyError>!
+    var getTokenBalanceUserWalletAddressTokenAddressReturnValue: Result<ZWalletTokenBalance, ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return getTokenBalanceTokenAddressUnderlyingReturnValue
+                return getTokenBalanceUserWalletAddressTokenAddressUnderlyingReturnValue
             } else {
                 var returnValue: Result<ZWalletTokenBalance, ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getTokenBalanceTokenAddressUnderlyingReturnValue
+                    returnValue = getTokenBalanceUserWalletAddressTokenAddressUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -7669,26 +7669,26 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getTokenBalanceTokenAddressUnderlyingReturnValue = newValue
+                getTokenBalanceUserWalletAddressTokenAddressUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getTokenBalanceTokenAddressUnderlyingReturnValue = newValue
+                    getTokenBalanceUserWalletAddressTokenAddressUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var getTokenBalanceTokenAddressClosure: ((String) async -> Result<ZWalletTokenBalance, ClientProxyError>)?
+    var getTokenBalanceUserWalletAddressTokenAddressClosure: ((String, String) async -> Result<ZWalletTokenBalance, ClientProxyError>)?
 
-    func getTokenBalance(tokenAddress: String) async -> Result<ZWalletTokenBalance, ClientProxyError> {
-        getTokenBalanceTokenAddressCallsCount += 1
-        getTokenBalanceTokenAddressReceivedTokenAddress = tokenAddress
+    func getTokenBalance(userWalletAddress: String, tokenAddress: String) async -> Result<ZWalletTokenBalance, ClientProxyError> {
+        getTokenBalanceUserWalletAddressTokenAddressCallsCount += 1
+        getTokenBalanceUserWalletAddressTokenAddressReceivedArguments = (userWalletAddress: userWalletAddress, tokenAddress: tokenAddress)
         DispatchQueue.main.async {
-            self.getTokenBalanceTokenAddressReceivedInvocations.append(tokenAddress)
+            self.getTokenBalanceUserWalletAddressTokenAddressReceivedInvocations.append((userWalletAddress: userWalletAddress, tokenAddress: tokenAddress))
         }
-        if let getTokenBalanceTokenAddressClosure = getTokenBalanceTokenAddressClosure {
-            return await getTokenBalanceTokenAddressClosure(tokenAddress)
+        if let getTokenBalanceUserWalletAddressTokenAddressClosure = getTokenBalanceUserWalletAddressTokenAddressClosure {
+            return await getTokenBalanceUserWalletAddressTokenAddressClosure(userWalletAddress, tokenAddress)
         } else {
-            return getTokenBalanceTokenAddressReturnValue
+            return getTokenBalanceUserWalletAddressTokenAddressReturnValue
         }
     }
     //MARK: - getTotalStaked

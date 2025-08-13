@@ -1553,9 +1553,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func getTokenBalance(tokenAddress: String) async -> Result<ZWalletTokenBalance, ClientProxyError> {
+    func getTokenBalance(userWalletAddress: String, tokenAddress: String) async -> Result<ZWalletTokenBalance, ClientProxyError> {
         do {
-            let result = try await zeroApiProxy.walletsApi.getTokenBalance(tokenAddress: tokenAddress)
+            let result = try await zeroApiProxy.walletsApi.getTokenBalance(walletAddress: userWalletAddress, tokenAddress: tokenAddress)
             switch result {
             case .success(let tokenBalance):
                 return .success(tokenBalance)

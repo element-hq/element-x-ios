@@ -1070,9 +1070,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                        case .success(let stakerStatus) = results.2,
                        case .success(let stakeRewards) = results.3 {
                         self.state.walletStakings = [
-                            HomeScreenWalletStakingContent(meowPrice: self.state.meowPrice, token: meowToken, poolAddress: poolAddress,
-                                                    totalStaked: totalStaked, stakingConfig: stakingConfig, stakerStatus: stakerStatus,
-                                                    stakeRewards: stakeRewards)
+                            HomeScreenWalletStakingContent(meowPrice: self.state.meowPrice, token: meowToken, userWalletAddress: userWalletAddress,
+                                                           poolAddress: poolAddress, totalStaked: totalStaked, stakingConfig: stakingConfig,
+                                                           stakerStatus: stakerStatus, stakeRewards: stakeRewards)
                         ]
                     }
                 }
@@ -1096,7 +1096,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             
             func fetchTokenData(tokenAddress: String) async -> (ZWalletTokenInfo?, ZWalletTokenBalance?) {
                 async let tokenInfo = userSession.clientProxy.getTokenInfo(tokenAddress: tokenAddress)
-                async let tokenBalance = userSession.clientProxy.getTokenBalance(tokenAddress: tokenAddress)
+                async let tokenBalance = userSession.clientProxy.getTokenBalance(userWalletAddress: pool.userWalletAddress,
+                                                                                 tokenAddress: tokenAddress)
                 return (try? await tokenInfo.get(), try? await tokenBalance.get())
             }
             
