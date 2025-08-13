@@ -9,7 +9,7 @@ import Combine
 import MatrixRustSDK
 
 // Temporary until the SDK is updated.
-enum SpaceRoomListProxyPaginationState {
+enum SpaceRoomListProxyPaginationState: Equatable {
     case idle(endReached: Bool)
     case loading
 }
