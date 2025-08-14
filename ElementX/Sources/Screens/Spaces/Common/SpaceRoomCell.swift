@@ -136,8 +136,7 @@ struct SpaceRoomCellButtonStyle: ButtonStyle {
 struct SpaceRoomCell_Previews: PreviewProvider, TestablePreview {
     static let mediaProvider = MediaProviderMock(configuration: .init())
     
-    static let spaces = makeSpaceRooms(isSpace: true)
-    static let rooms = makeSpaceRooms(isSpace: false)
+    static let spaces = [SpaceRoomProxyProtocol].mockSpaceList
     
     static var previews: some View {
         VStack(spacing: 0) {
@@ -146,34 +145,6 @@ struct SpaceRoomCell_Previews: PreviewProvider, TestablePreview {
                               isSelected: false,
                               mediaProvider: mediaProvider) { _ in }
             }
-            ForEach(rooms, id: \.id) { room in
-                SpaceRoomCell(spaceRoom: room,
-                              isSelected: false,
-                              mediaProvider: mediaProvider) { _ in }
-            }
         }
-    }
-    
-    static func makeSpaceRooms(isSpace: Bool) -> [SpaceRoomProxyMock] {
-        let name = isSpace ? "Space" : "Room"
-        
-        return [
-            SpaceRoomProxyMock(.init(id: "!space1:matrix.org",
-                                     name: "Company \(name)",
-                                     isSpace: isSpace)),
-            SpaceRoomProxyMock(.init(id: "!space2:matrix.org",
-                                     name: "Public \(name)",
-                                     avatarURL: .mockMXCAvatar,
-                                     isSpace: isSpace,
-                                     joinedMembersCount: 78,
-                                     topic: "Discussion on specific topic goes here.",
-                                     joinRule: .public)),
-            SpaceRoomProxyMock(.init(id: "!space3:matrix.org",
-                                     name: "Joined \(name)",
-                                     isSpace: isSpace,
-                                     joinedMembersCount: 123,
-                                     topic: "Discussion on specific topic goes here.",
-                                     state: .joined))
-        ]
     }
 }

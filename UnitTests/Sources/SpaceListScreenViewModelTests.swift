@@ -27,15 +27,19 @@ class SpaceListScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.joinedRoomsCount, 0)
     }
     
-    func testJoinedSpacesSubscription() {
+    func testJoinedSpacesSubscription() async throws {
         setupViewModel()
         
+        var deferred = deferFulfillment(context.observe(\.viewState.joinedSpaces)) { $0.count == 0 }
         joinedSpacesSubject.send([])
+        try await deferred.fulfill()
         XCTAssertEqual(context.viewState.joinedSpaces.count, 0)
         
+        deferred = deferFulfillment(context.observe(\.viewState.joinedSpaces)) { $0.count == 1 }
         joinedSpacesSubject.send([
             SpaceRoomProxyMock(.init(isSpace: true))
         ])
+        try await deferred.fulfill()
         XCTAssertEqual(context.viewState.joinedSpaces.count, 1)
     }
     

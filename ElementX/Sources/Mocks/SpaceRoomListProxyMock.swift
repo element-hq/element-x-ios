@@ -5,19 +5,43 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Foundation
 import MatrixRustSDK
 
 extension SpaceRoomListProxyMock {
-    struct Configuration {
+    class Configuration {
         var spaceRoomProxy: SpaceRoomProxyProtocol
-        var spaceRooms: [SpaceRoomProxyProtocol] = []
+        var initialSpaceRooms: [SpaceRoomProxyProtocol]
+        var paginationStateSubject: CurrentValueSubject<SpaceRoomListProxyPaginationState, Never>
+        var paginationResponses: [[SpaceRoomProxyProtocol]]
+        
+        init(spaceRoomProxy: SpaceRoomProxyProtocol,
+             initialSpaceRooms: [SpaceRoomProxyProtocol] = [],
+             paginationStateSubject: CurrentValueSubject<SpaceRoomListProxyPaginationState, Never> = .init(.idle(endReached: true)),
+             paginationResponses: [[SpaceRoomProxyProtocol]] = []) {
+            self.spaceRoomProxy = spaceRoomProxy
+            self.initialSpaceRooms = initialSpaceRooms
+            self.paginationStateSubject = paginationStateSubject
+            self.paginationResponses = paginationResponses
+        }
     }
     
     convenience init(_ configuration: Configuration) {
         self.init()
         
+        let spaceRoomsSubject: CurrentValueSubject<[SpaceRoomProxyProtocol], Never> = .init(configuration.initialSpaceRooms)
+        
         spaceRoom = configuration.spaceRoomProxy
-        spaceRoomsPublisher = .init(configuration.spaceRooms)
+        spaceRoomsPublisher = spaceRoomsSubject.asCurrentValuePublisher()
+        paginationStatePublisher = configuration.paginationStateSubject.asCurrentValuePublisher()
+        
+        paginateClosure = {
+            configuration.paginationStateSubject.send(.loading)
+            try? await Task.sleep(for: .milliseconds(100))
+            let newRooms = configuration.paginationResponses.removeFirst()
+            spaceRoomsSubject.send(spaceRoomsSubject.value + newRooms)
+            configuration.paginationStateSubject.send(.idle(endReached: configuration.paginationResponses.isEmpty))
+        }
     }
 }

@@ -71,6 +71,7 @@ enum UserAvatarSizeOnScreen {
     case readReceipt
     case readReceiptSheet
     case editUserDetails
+    case spaceHeader
     case completionSuggestions
     case blockedUsers
     case knockingUsersBannerStack
@@ -91,6 +92,8 @@ enum UserAvatarSizeOnScreen {
             return 16
         case .readReceiptSheet:
             return 32
+        case .spaceHeader:
+            return 20
         case .completionSuggestions:
             return 32
         case .blockedUsers:
