@@ -70,6 +70,7 @@ struct SpaceHeaderView: View {
         case .public:
             L10n.commonPublicSpace
         case .restricted(let rules), .knockRestricted(let rules):
+            // FIXME: Get this from the rule (falling back to a passed in parent??)
             "<Parent name> space"
         case .invite, .knock, .private, .custom, .none:
             L10n.commonPrivateSpace
