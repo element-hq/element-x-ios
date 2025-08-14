@@ -28,6 +28,7 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
                    mediaProvider: userSession.mediaProvider)
         
         spaceServiceProxy.joinedSpacesPublisher
+            .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.joinedSpaces, on: self)
             .store(in: &cancellables)
         

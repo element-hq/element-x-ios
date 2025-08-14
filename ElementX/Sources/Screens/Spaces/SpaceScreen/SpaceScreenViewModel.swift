@@ -23,10 +23,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         
         spaceRoomList.spaceRoomsPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] rooms in
-                self?.state.rooms = rooms
-            }
-            // .weakAssign(to: \.state.rooms, on: self)
+            .weakAssign(to: \.state.rooms, on: self)
             .store(in: &cancellables)
         
         spaceRoomList.paginationStatePublisher

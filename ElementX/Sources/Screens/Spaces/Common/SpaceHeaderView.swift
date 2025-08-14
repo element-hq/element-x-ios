@@ -41,6 +41,7 @@ struct SpaceHeaderView: View {
                     .lineLimit(2)
             }
         }
+        .fixedSize(horizontal: false, vertical: true)
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 16)
         .padding(.top, 32)
@@ -62,7 +63,6 @@ struct SpaceHeaderView: View {
             CompoundIcon(spaceDetailsVisibilityIcon, size: .small, relativeTo: .compound.bodyLG)
                 .foregroundStyle(.compound.iconTertiary)
         }
-        .fixedSize(horizontal: false, vertical: true)
     }
     
     var spaceDetailsVisibilityTitle: String {
@@ -183,7 +183,12 @@ struct SpaceHeaderView_Previews: PreviewProvider, TestablePreview {
                                      childrenCount: 30,
                                      joinedMembersCount: 123,
                                      heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
-                                     topic: "Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in. Sem amet enim habitant nibh augue mauris. Interdum mauris ultrices tincidunt proin morbi erat aenean risus nibh. Diam amet sit fermentum vulputate faucibus.",
+                                     topic: ["Description of the space goes right here.",
+                                             "Lorem ipsum dolor sit amet consectetur.",
+                                             "Leo viverra morbi habitant in.",
+                                             "Sem amet enim habitant nibh augue mauris.",
+                                             "Interdum mauris ultrices tincidunt proin morbi erat aenean risus nibh.",
+                                             "Diam amet sit fermentum vulputate faucibus."].joined(separator: " "),
                                      joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
         ]
     }
