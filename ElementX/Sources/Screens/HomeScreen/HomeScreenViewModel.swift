@@ -233,8 +233,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             if state.bindings.isSearchFieldFocused {
                 roomSummaryProvider?.setFilter(.search(query: state.bindings.searchQuery))
             } else {
-                // Apply active filters - the low priority exclusion logic will be handled
-                // at the SDK level when the low priority filter is implemented
                 roomSummaryProvider?.setFilter(.all(filters: state.bindings.filtersState.activeFilters.set))
             }
         }
