@@ -62,7 +62,6 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
             Task {
                 defer { stopLoading() }
                 
-                var shouldDismissOnCompletion = true
                 switch await processingTask.value {
                 case .success(let mediaInfos):
                     for mediaInfo in mediaInfos {
@@ -70,22 +69,19 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
                         case .success:
                             caption = nil // Set the caption only on the first uploaded file.
                         case .failure(let error):
-                            MXLog.error("Failed processing media to upload with error: \(error)")
-                            showError(label: L10n.screenMediaUploadPreviewErrorFailedProcessing)
+                            MXLog.error("Failed sending media with error: \(error)")
+                            showError(label: L10n.screenMediaUploadPreviewErrorFailedSending)
                         }
                     }
+                    
+                    actionsSubject.send(.dismiss)
                 case .failure(.maxUploadSizeUnknown):
                     showAlert(.maxUploadSizeUnknown)
-                    shouldDismissOnCompletion = false
                 case .failure(.maxUploadSizeExceeded(let limit)):
                     showAlert(.maxUploadSizeExceeded(limit: limit))
                 case .failure(let error):
                     MXLog.error("Failed processing media to upload with error: \(error)")
                     showError(label: L10n.screenMediaUploadPreviewErrorFailedProcessing)
-                }
-                
-                if shouldDismissOnCompletion {
-                    actionsSubject.send(.dismiss)
                 }
             }
         case .cancel:
