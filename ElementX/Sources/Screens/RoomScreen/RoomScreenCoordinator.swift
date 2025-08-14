@@ -46,7 +46,7 @@ enum RoomScreenCoordinatorAction {
     case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
     case presentKnockRequestsList
     case presentThread(itemID: TimelineItemIdentifier)
-    case presentRoom(roomID: String)
+    case presentRoom(roomID: String, via: [String])
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -148,8 +148,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     composerViewModel.process(timelineAction: action)
                 case .hasScrolled(direction: let direction):
                     roomViewModel.timelineHasScrolled(direction: direction)
-                case .displayRoom(let roomID):
-                    actionsSubject.send(.presentRoom(roomID: roomID))
+                case .displayRoom(let roomID, let via):
+                    actionsSubject.send(.presentRoom(roomID: roomID, via: via))
                 case .viewInRoomTimeline:
                     fatalError("The action: \(action) should not be sent to this coordinator")
                 }
@@ -181,8 +181,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     composerViewModel.process(timelineAction: .removeFocus)
                 case .displayKnockRequests:
                     actionsSubject.send(.presentKnockRequestsList)
-                case .displayRoom(let roomID):
-                    actionsSubject.send(.presentRoom(roomID: roomID))
+                case .displayRoom(let roomID, let via):
+                    actionsSubject.send(.presentRoom(roomID: roomID, via: via))
                 }
             }
             .store(in: &cancellables)

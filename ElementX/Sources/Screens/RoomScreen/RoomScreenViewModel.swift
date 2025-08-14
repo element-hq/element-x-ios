@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Algorithms
 import Combine
 import Foundation
 import MatrixRustSDK
@@ -117,7 +118,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actionsSubject.send(.displayKnockRequests)
         case .displaySuccessorRoom:
             guard let successorID = roomProxy.infoPublisher.value.successor?.roomId else { return }
-            actionsSubject.send(.displayRoom(roomID: successorID))
+            let serverNames = roomProxy.knownServerNames(maxCount: 50) // Limit to the same number used by ClientProxy.resolveRoomAlias(_:)
+            actionsSubject.send(.displayRoom(roomID: successorID, via: Array(serverNames)))
         }
     }
     

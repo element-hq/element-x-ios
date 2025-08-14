@@ -627,9 +627,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentKnockRequestsListScreen)
                 case .presentThread(let itemID):
                     stateMachine.tryEvent(.presentThread(itemID: itemID))
-                case .presentRoom(roomID: let roomID):
+                case .presentRoom(let roomID, let via):
                     stateMachine.tryEvent(.startChildFlow(roomID: roomID,
-                                                          via: [],
+                                                          via: via,
                                                           entryPoint: .room))
                 }
             }
