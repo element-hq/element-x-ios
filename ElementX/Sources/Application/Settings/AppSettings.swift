@@ -55,6 +55,7 @@ final class AppSettings {
         // Feature flags
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
+        case lowPriorityFilterEnabled
         case enableOnlySignedDeviceIsolationMode
         case enableKeyShareOnInvite
         case knockingEnabled
@@ -344,6 +345,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var fuzzyRoomListSearchEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.lowPriorityFilterEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var lowPriorityFilterEnabled
     
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled

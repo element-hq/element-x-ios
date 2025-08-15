@@ -87,7 +87,10 @@ struct RoomListFiltersView: View {
 
 struct RoomListFiltersView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        RoomListFiltersView(state: .constant(.init()))
-        RoomListFiltersView(state: .constant(.init(activeFilters: [.rooms, .favourites])))
+        RoomListFiltersView(state: .constant(.init(appSettings: ServiceLocator.shared.settings)))
+        RoomListFiltersView(state: .constant(.init(activeFilters: [.rooms, .favourites],
+                                                   appSettings: ServiceLocator.shared.settings)))
+        RoomListFiltersView(state: .constant(.init(activeFilters: [.lowPriority],
+                                                   appSettings: ServiceLocator.shared.settings)))
     }
 }
