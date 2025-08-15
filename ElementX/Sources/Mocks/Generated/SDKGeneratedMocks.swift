@@ -3972,6 +3972,75 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - serverVendorInfo
+
+    open var serverVendorInfoThrowableError: Error?
+    var serverVendorInfoUnderlyingCallsCount = 0
+    open var serverVendorInfoCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return serverVendorInfoUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = serverVendorInfoUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                serverVendorInfoUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    serverVendorInfoUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var serverVendorInfoCalled: Bool {
+        return serverVendorInfoCallsCount > 0
+    }
+
+    var serverVendorInfoUnderlyingReturnValue: ServerVendorInfo!
+    open var serverVendorInfoReturnValue: ServerVendorInfo! {
+        get {
+            if Thread.isMainThread {
+                return serverVendorInfoUnderlyingReturnValue
+            } else {
+                var returnValue: ServerVendorInfo? = nil
+                DispatchQueue.main.sync {
+                    returnValue = serverVendorInfoUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                serverVendorInfoUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    serverVendorInfoUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var serverVendorInfoClosure: (() async throws -> ServerVendorInfo)?
+
+    open override func serverVendorInfo() async throws -> ServerVendorInfo {
+        if let error = serverVendorInfoThrowableError {
+            throw error
+        }
+        serverVendorInfoCallsCount += 1
+        if let serverVendorInfoClosure = serverVendorInfoClosure {
+            return try await serverVendorInfoClosure()
+        } else {
+            return serverVendorInfoReturnValue
+        }
+    }
+
     //MARK: - session
 
     open var sessionThrowableError: Error?
@@ -23027,16 +23096,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - sendAudio
 
-    open var sendAudioParamsAudioInfoProgressWatcherThrowableError: Error?
-    var sendAudioParamsAudioInfoProgressWatcherUnderlyingCallsCount = 0
-    open var sendAudioParamsAudioInfoProgressWatcherCallsCount: Int {
+    open var sendAudioParamsAudioInfoThrowableError: Error?
+    var sendAudioParamsAudioInfoUnderlyingCallsCount = 0
+    open var sendAudioParamsAudioInfoCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendAudioParamsAudioInfoProgressWatcherUnderlyingCallsCount
+                return sendAudioParamsAudioInfoUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendAudioParamsAudioInfoProgressWatcherUnderlyingCallsCount
+                    returnValue = sendAudioParamsAudioInfoUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -23044,29 +23113,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendAudioParamsAudioInfoProgressWatcherUnderlyingCallsCount = newValue
+                sendAudioParamsAudioInfoUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendAudioParamsAudioInfoProgressWatcherUnderlyingCallsCount = newValue
+                    sendAudioParamsAudioInfoUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendAudioParamsAudioInfoProgressWatcherCalled: Bool {
-        return sendAudioParamsAudioInfoProgressWatcherCallsCount > 0
+    open var sendAudioParamsAudioInfoCalled: Bool {
+        return sendAudioParamsAudioInfoCallsCount > 0
     }
-    open var sendAudioParamsAudioInfoProgressWatcherReceivedArguments: (params: UploadParameters, audioInfo: AudioInfo, progressWatcher: ProgressWatcher?)?
-    open var sendAudioParamsAudioInfoProgressWatcherReceivedInvocations: [(params: UploadParameters, audioInfo: AudioInfo, progressWatcher: ProgressWatcher?)] = []
+    open var sendAudioParamsAudioInfoReceivedArguments: (params: UploadParameters, audioInfo: AudioInfo)?
+    open var sendAudioParamsAudioInfoReceivedInvocations: [(params: UploadParameters, audioInfo: AudioInfo)] = []
 
-    var sendAudioParamsAudioInfoProgressWatcherUnderlyingReturnValue: SendAttachmentJoinHandle!
-    open var sendAudioParamsAudioInfoProgressWatcherReturnValue: SendAttachmentJoinHandle! {
+    var sendAudioParamsAudioInfoUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendAudioParamsAudioInfoReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
-                return sendAudioParamsAudioInfoProgressWatcherUnderlyingReturnValue
+                return sendAudioParamsAudioInfoUnderlyingReturnValue
             } else {
                 var returnValue: SendAttachmentJoinHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendAudioParamsAudioInfoProgressWatcherUnderlyingReturnValue
+                    returnValue = sendAudioParamsAudioInfoUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -23074,44 +23143,44 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendAudioParamsAudioInfoProgressWatcherUnderlyingReturnValue = newValue
+                sendAudioParamsAudioInfoUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendAudioParamsAudioInfoProgressWatcherUnderlyingReturnValue = newValue
+                    sendAudioParamsAudioInfoUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var sendAudioParamsAudioInfoProgressWatcherClosure: ((UploadParameters, AudioInfo, ProgressWatcher?) throws -> SendAttachmentJoinHandle)?
+    open var sendAudioParamsAudioInfoClosure: ((UploadParameters, AudioInfo) throws -> SendAttachmentJoinHandle)?
 
-    open override func sendAudio(params: UploadParameters, audioInfo: AudioInfo, progressWatcher: ProgressWatcher?) throws -> SendAttachmentJoinHandle {
-        if let error = sendAudioParamsAudioInfoProgressWatcherThrowableError {
+    open override func sendAudio(params: UploadParameters, audioInfo: AudioInfo) throws -> SendAttachmentJoinHandle {
+        if let error = sendAudioParamsAudioInfoThrowableError {
             throw error
         }
-        sendAudioParamsAudioInfoProgressWatcherCallsCount += 1
-        sendAudioParamsAudioInfoProgressWatcherReceivedArguments = (params: params, audioInfo: audioInfo, progressWatcher: progressWatcher)
+        sendAudioParamsAudioInfoCallsCount += 1
+        sendAudioParamsAudioInfoReceivedArguments = (params: params, audioInfo: audioInfo)
         DispatchQueue.main.async {
-            self.sendAudioParamsAudioInfoProgressWatcherReceivedInvocations.append((params: params, audioInfo: audioInfo, progressWatcher: progressWatcher))
+            self.sendAudioParamsAudioInfoReceivedInvocations.append((params: params, audioInfo: audioInfo))
         }
-        if let sendAudioParamsAudioInfoProgressWatcherClosure = sendAudioParamsAudioInfoProgressWatcherClosure {
-            return try sendAudioParamsAudioInfoProgressWatcherClosure(params, audioInfo, progressWatcher)
+        if let sendAudioParamsAudioInfoClosure = sendAudioParamsAudioInfoClosure {
+            return try sendAudioParamsAudioInfoClosure(params, audioInfo)
         } else {
-            return sendAudioParamsAudioInfoProgressWatcherReturnValue
+            return sendAudioParamsAudioInfoReturnValue
         }
     }
 
     //MARK: - sendFile
 
-    open var sendFileParamsFileInfoProgressWatcherThrowableError: Error?
-    var sendFileParamsFileInfoProgressWatcherUnderlyingCallsCount = 0
-    open var sendFileParamsFileInfoProgressWatcherCallsCount: Int {
+    open var sendFileParamsFileInfoThrowableError: Error?
+    var sendFileParamsFileInfoUnderlyingCallsCount = 0
+    open var sendFileParamsFileInfoCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendFileParamsFileInfoProgressWatcherUnderlyingCallsCount
+                return sendFileParamsFileInfoUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendFileParamsFileInfoProgressWatcherUnderlyingCallsCount
+                    returnValue = sendFileParamsFileInfoUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -23119,29 +23188,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendFileParamsFileInfoProgressWatcherUnderlyingCallsCount = newValue
+                sendFileParamsFileInfoUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendFileParamsFileInfoProgressWatcherUnderlyingCallsCount = newValue
+                    sendFileParamsFileInfoUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendFileParamsFileInfoProgressWatcherCalled: Bool {
-        return sendFileParamsFileInfoProgressWatcherCallsCount > 0
+    open var sendFileParamsFileInfoCalled: Bool {
+        return sendFileParamsFileInfoCallsCount > 0
     }
-    open var sendFileParamsFileInfoProgressWatcherReceivedArguments: (params: UploadParameters, fileInfo: FileInfo, progressWatcher: ProgressWatcher?)?
-    open var sendFileParamsFileInfoProgressWatcherReceivedInvocations: [(params: UploadParameters, fileInfo: FileInfo, progressWatcher: ProgressWatcher?)] = []
+    open var sendFileParamsFileInfoReceivedArguments: (params: UploadParameters, fileInfo: FileInfo)?
+    open var sendFileParamsFileInfoReceivedInvocations: [(params: UploadParameters, fileInfo: FileInfo)] = []
 
-    var sendFileParamsFileInfoProgressWatcherUnderlyingReturnValue: SendAttachmentJoinHandle!
-    open var sendFileParamsFileInfoProgressWatcherReturnValue: SendAttachmentJoinHandle! {
+    var sendFileParamsFileInfoUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendFileParamsFileInfoReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
-                return sendFileParamsFileInfoProgressWatcherUnderlyingReturnValue
+                return sendFileParamsFileInfoUnderlyingReturnValue
             } else {
                 var returnValue: SendAttachmentJoinHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendFileParamsFileInfoProgressWatcherUnderlyingReturnValue
+                    returnValue = sendFileParamsFileInfoUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -23149,29 +23218,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendFileParamsFileInfoProgressWatcherUnderlyingReturnValue = newValue
+                sendFileParamsFileInfoUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendFileParamsFileInfoProgressWatcherUnderlyingReturnValue = newValue
+                    sendFileParamsFileInfoUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var sendFileParamsFileInfoProgressWatcherClosure: ((UploadParameters, FileInfo, ProgressWatcher?) throws -> SendAttachmentJoinHandle)?
+    open var sendFileParamsFileInfoClosure: ((UploadParameters, FileInfo) throws -> SendAttachmentJoinHandle)?
 
-    open override func sendFile(params: UploadParameters, fileInfo: FileInfo, progressWatcher: ProgressWatcher?) throws -> SendAttachmentJoinHandle {
-        if let error = sendFileParamsFileInfoProgressWatcherThrowableError {
+    open override func sendFile(params: UploadParameters, fileInfo: FileInfo) throws -> SendAttachmentJoinHandle {
+        if let error = sendFileParamsFileInfoThrowableError {
             throw error
         }
-        sendFileParamsFileInfoProgressWatcherCallsCount += 1
-        sendFileParamsFileInfoProgressWatcherReceivedArguments = (params: params, fileInfo: fileInfo, progressWatcher: progressWatcher)
+        sendFileParamsFileInfoCallsCount += 1
+        sendFileParamsFileInfoReceivedArguments = (params: params, fileInfo: fileInfo)
         DispatchQueue.main.async {
-            self.sendFileParamsFileInfoProgressWatcherReceivedInvocations.append((params: params, fileInfo: fileInfo, progressWatcher: progressWatcher))
+            self.sendFileParamsFileInfoReceivedInvocations.append((params: params, fileInfo: fileInfo))
         }
-        if let sendFileParamsFileInfoProgressWatcherClosure = sendFileParamsFileInfoProgressWatcherClosure {
-            return try sendFileParamsFileInfoProgressWatcherClosure(params, fileInfo, progressWatcher)
+        if let sendFileParamsFileInfoClosure = sendFileParamsFileInfoClosure {
+            return try sendFileParamsFileInfoClosure(params, fileInfo)
         } else {
-            return sendFileParamsFileInfoProgressWatcherReturnValue
+            return sendFileParamsFileInfoReturnValue
         }
     }
 
@@ -23252,16 +23321,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - sendImage
 
-    open var sendImageParamsThumbnailPathImageInfoProgressWatcherThrowableError: Error?
-    var sendImageParamsThumbnailPathImageInfoProgressWatcherUnderlyingCallsCount = 0
-    open var sendImageParamsThumbnailPathImageInfoProgressWatcherCallsCount: Int {
+    open var sendImageParamsThumbnailSourceImageInfoThrowableError: Error?
+    var sendImageParamsThumbnailSourceImageInfoUnderlyingCallsCount = 0
+    open var sendImageParamsThumbnailSourceImageInfoCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendImageParamsThumbnailPathImageInfoProgressWatcherUnderlyingCallsCount
+                return sendImageParamsThumbnailSourceImageInfoUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendImageParamsThumbnailPathImageInfoProgressWatcherUnderlyingCallsCount
+                    returnValue = sendImageParamsThumbnailSourceImageInfoUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -23269,29 +23338,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendImageParamsThumbnailPathImageInfoProgressWatcherUnderlyingCallsCount = newValue
+                sendImageParamsThumbnailSourceImageInfoUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendImageParamsThumbnailPathImageInfoProgressWatcherUnderlyingCallsCount = newValue
+                    sendImageParamsThumbnailSourceImageInfoUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendImageParamsThumbnailPathImageInfoProgressWatcherCalled: Bool {
-        return sendImageParamsThumbnailPathImageInfoProgressWatcherCallsCount > 0
+    open var sendImageParamsThumbnailSourceImageInfoCalled: Bool {
+        return sendImageParamsThumbnailSourceImageInfoCallsCount > 0
     }
-    open var sendImageParamsThumbnailPathImageInfoProgressWatcherReceivedArguments: (params: UploadParameters, thumbnailPath: String?, imageInfo: ImageInfo, progressWatcher: ProgressWatcher?)?
-    open var sendImageParamsThumbnailPathImageInfoProgressWatcherReceivedInvocations: [(params: UploadParameters, thumbnailPath: String?, imageInfo: ImageInfo, progressWatcher: ProgressWatcher?)] = []
+    open var sendImageParamsThumbnailSourceImageInfoReceivedArguments: (params: UploadParameters, thumbnailSource: UploadSource?, imageInfo: ImageInfo)?
+    open var sendImageParamsThumbnailSourceImageInfoReceivedInvocations: [(params: UploadParameters, thumbnailSource: UploadSource?, imageInfo: ImageInfo)] = []
 
-    var sendImageParamsThumbnailPathImageInfoProgressWatcherUnderlyingReturnValue: SendAttachmentJoinHandle!
-    open var sendImageParamsThumbnailPathImageInfoProgressWatcherReturnValue: SendAttachmentJoinHandle! {
+    var sendImageParamsThumbnailSourceImageInfoUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendImageParamsThumbnailSourceImageInfoReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
-                return sendImageParamsThumbnailPathImageInfoProgressWatcherUnderlyingReturnValue
+                return sendImageParamsThumbnailSourceImageInfoUnderlyingReturnValue
             } else {
                 var returnValue: SendAttachmentJoinHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendImageParamsThumbnailPathImageInfoProgressWatcherUnderlyingReturnValue
+                    returnValue = sendImageParamsThumbnailSourceImageInfoUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -23299,29 +23368,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendImageParamsThumbnailPathImageInfoProgressWatcherUnderlyingReturnValue = newValue
+                sendImageParamsThumbnailSourceImageInfoUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendImageParamsThumbnailPathImageInfoProgressWatcherUnderlyingReturnValue = newValue
+                    sendImageParamsThumbnailSourceImageInfoUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var sendImageParamsThumbnailPathImageInfoProgressWatcherClosure: ((UploadParameters, String?, ImageInfo, ProgressWatcher?) throws -> SendAttachmentJoinHandle)?
+    open var sendImageParamsThumbnailSourceImageInfoClosure: ((UploadParameters, UploadSource?, ImageInfo) throws -> SendAttachmentJoinHandle)?
 
-    open override func sendImage(params: UploadParameters, thumbnailPath: String?, imageInfo: ImageInfo, progressWatcher: ProgressWatcher?) throws -> SendAttachmentJoinHandle {
-        if let error = sendImageParamsThumbnailPathImageInfoProgressWatcherThrowableError {
+    open override func sendImage(params: UploadParameters, thumbnailSource: UploadSource?, imageInfo: ImageInfo) throws -> SendAttachmentJoinHandle {
+        if let error = sendImageParamsThumbnailSourceImageInfoThrowableError {
             throw error
         }
-        sendImageParamsThumbnailPathImageInfoProgressWatcherCallsCount += 1
-        sendImageParamsThumbnailPathImageInfoProgressWatcherReceivedArguments = (params: params, thumbnailPath: thumbnailPath, imageInfo: imageInfo, progressWatcher: progressWatcher)
+        sendImageParamsThumbnailSourceImageInfoCallsCount += 1
+        sendImageParamsThumbnailSourceImageInfoReceivedArguments = (params: params, thumbnailSource: thumbnailSource, imageInfo: imageInfo)
         DispatchQueue.main.async {
-            self.sendImageParamsThumbnailPathImageInfoProgressWatcherReceivedInvocations.append((params: params, thumbnailPath: thumbnailPath, imageInfo: imageInfo, progressWatcher: progressWatcher))
+            self.sendImageParamsThumbnailSourceImageInfoReceivedInvocations.append((params: params, thumbnailSource: thumbnailSource, imageInfo: imageInfo))
         }
-        if let sendImageParamsThumbnailPathImageInfoProgressWatcherClosure = sendImageParamsThumbnailPathImageInfoProgressWatcherClosure {
-            return try sendImageParamsThumbnailPathImageInfoProgressWatcherClosure(params, thumbnailPath, imageInfo, progressWatcher)
+        if let sendImageParamsThumbnailSourceImageInfoClosure = sendImageParamsThumbnailSourceImageInfoClosure {
+            return try sendImageParamsThumbnailSourceImageInfoClosure(params, thumbnailSource, imageInfo)
         } else {
-            return sendImageParamsThumbnailPathImageInfoProgressWatcherReturnValue
+            return sendImageParamsThumbnailSourceImageInfoReturnValue
         }
     }
 
@@ -23511,16 +23580,16 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     //MARK: - sendVideo
 
-    open var sendVideoParamsThumbnailPathVideoInfoProgressWatcherThrowableError: Error?
-    var sendVideoParamsThumbnailPathVideoInfoProgressWatcherUnderlyingCallsCount = 0
-    open var sendVideoParamsThumbnailPathVideoInfoProgressWatcherCallsCount: Int {
+    open var sendVideoParamsThumbnailSourceVideoInfoThrowableError: Error?
+    var sendVideoParamsThumbnailSourceVideoInfoUnderlyingCallsCount = 0
+    open var sendVideoParamsThumbnailSourceVideoInfoCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendVideoParamsThumbnailPathVideoInfoProgressWatcherUnderlyingCallsCount
+                return sendVideoParamsThumbnailSourceVideoInfoUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVideoParamsThumbnailPathVideoInfoProgressWatcherUnderlyingCallsCount
+                    returnValue = sendVideoParamsThumbnailSourceVideoInfoUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -23528,29 +23597,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendVideoParamsThumbnailPathVideoInfoProgressWatcherUnderlyingCallsCount = newValue
+                sendVideoParamsThumbnailSourceVideoInfoUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVideoParamsThumbnailPathVideoInfoProgressWatcherUnderlyingCallsCount = newValue
+                    sendVideoParamsThumbnailSourceVideoInfoUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendVideoParamsThumbnailPathVideoInfoProgressWatcherCalled: Bool {
-        return sendVideoParamsThumbnailPathVideoInfoProgressWatcherCallsCount > 0
+    open var sendVideoParamsThumbnailSourceVideoInfoCalled: Bool {
+        return sendVideoParamsThumbnailSourceVideoInfoCallsCount > 0
     }
-    open var sendVideoParamsThumbnailPathVideoInfoProgressWatcherReceivedArguments: (params: UploadParameters, thumbnailPath: String?, videoInfo: VideoInfo, progressWatcher: ProgressWatcher?)?
-    open var sendVideoParamsThumbnailPathVideoInfoProgressWatcherReceivedInvocations: [(params: UploadParameters, thumbnailPath: String?, videoInfo: VideoInfo, progressWatcher: ProgressWatcher?)] = []
+    open var sendVideoParamsThumbnailSourceVideoInfoReceivedArguments: (params: UploadParameters, thumbnailSource: UploadSource?, videoInfo: VideoInfo)?
+    open var sendVideoParamsThumbnailSourceVideoInfoReceivedInvocations: [(params: UploadParameters, thumbnailSource: UploadSource?, videoInfo: VideoInfo)] = []
 
-    var sendVideoParamsThumbnailPathVideoInfoProgressWatcherUnderlyingReturnValue: SendAttachmentJoinHandle!
-    open var sendVideoParamsThumbnailPathVideoInfoProgressWatcherReturnValue: SendAttachmentJoinHandle! {
+    var sendVideoParamsThumbnailSourceVideoInfoUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendVideoParamsThumbnailSourceVideoInfoReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
-                return sendVideoParamsThumbnailPathVideoInfoProgressWatcherUnderlyingReturnValue
+                return sendVideoParamsThumbnailSourceVideoInfoUnderlyingReturnValue
             } else {
                 var returnValue: SendAttachmentJoinHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVideoParamsThumbnailPathVideoInfoProgressWatcherUnderlyingReturnValue
+                    returnValue = sendVideoParamsThumbnailSourceVideoInfoUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -23558,44 +23627,44 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendVideoParamsThumbnailPathVideoInfoProgressWatcherUnderlyingReturnValue = newValue
+                sendVideoParamsThumbnailSourceVideoInfoUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVideoParamsThumbnailPathVideoInfoProgressWatcherUnderlyingReturnValue = newValue
+                    sendVideoParamsThumbnailSourceVideoInfoUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var sendVideoParamsThumbnailPathVideoInfoProgressWatcherClosure: ((UploadParameters, String?, VideoInfo, ProgressWatcher?) throws -> SendAttachmentJoinHandle)?
+    open var sendVideoParamsThumbnailSourceVideoInfoClosure: ((UploadParameters, UploadSource?, VideoInfo) throws -> SendAttachmentJoinHandle)?
 
-    open override func sendVideo(params: UploadParameters, thumbnailPath: String?, videoInfo: VideoInfo, progressWatcher: ProgressWatcher?) throws -> SendAttachmentJoinHandle {
-        if let error = sendVideoParamsThumbnailPathVideoInfoProgressWatcherThrowableError {
+    open override func sendVideo(params: UploadParameters, thumbnailSource: UploadSource?, videoInfo: VideoInfo) throws -> SendAttachmentJoinHandle {
+        if let error = sendVideoParamsThumbnailSourceVideoInfoThrowableError {
             throw error
         }
-        sendVideoParamsThumbnailPathVideoInfoProgressWatcherCallsCount += 1
-        sendVideoParamsThumbnailPathVideoInfoProgressWatcherReceivedArguments = (params: params, thumbnailPath: thumbnailPath, videoInfo: videoInfo, progressWatcher: progressWatcher)
+        sendVideoParamsThumbnailSourceVideoInfoCallsCount += 1
+        sendVideoParamsThumbnailSourceVideoInfoReceivedArguments = (params: params, thumbnailSource: thumbnailSource, videoInfo: videoInfo)
         DispatchQueue.main.async {
-            self.sendVideoParamsThumbnailPathVideoInfoProgressWatcherReceivedInvocations.append((params: params, thumbnailPath: thumbnailPath, videoInfo: videoInfo, progressWatcher: progressWatcher))
+            self.sendVideoParamsThumbnailSourceVideoInfoReceivedInvocations.append((params: params, thumbnailSource: thumbnailSource, videoInfo: videoInfo))
         }
-        if let sendVideoParamsThumbnailPathVideoInfoProgressWatcherClosure = sendVideoParamsThumbnailPathVideoInfoProgressWatcherClosure {
-            return try sendVideoParamsThumbnailPathVideoInfoProgressWatcherClosure(params, thumbnailPath, videoInfo, progressWatcher)
+        if let sendVideoParamsThumbnailSourceVideoInfoClosure = sendVideoParamsThumbnailSourceVideoInfoClosure {
+            return try sendVideoParamsThumbnailSourceVideoInfoClosure(params, thumbnailSource, videoInfo)
         } else {
-            return sendVideoParamsThumbnailPathVideoInfoProgressWatcherReturnValue
+            return sendVideoParamsThumbnailSourceVideoInfoReturnValue
         }
     }
 
     //MARK: - sendVoiceMessage
 
-    open var sendVoiceMessageParamsAudioInfoWaveformProgressWatcherThrowableError: Error?
-    var sendVoiceMessageParamsAudioInfoWaveformProgressWatcherUnderlyingCallsCount = 0
-    open var sendVoiceMessageParamsAudioInfoWaveformProgressWatcherCallsCount: Int {
+    open var sendVoiceMessageParamsAudioInfoWaveformThrowableError: Error?
+    var sendVoiceMessageParamsAudioInfoWaveformUnderlyingCallsCount = 0
+    open var sendVoiceMessageParamsAudioInfoWaveformCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return sendVoiceMessageParamsAudioInfoWaveformProgressWatcherUnderlyingCallsCount
+                return sendVoiceMessageParamsAudioInfoWaveformUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVoiceMessageParamsAudioInfoWaveformProgressWatcherUnderlyingCallsCount
+                    returnValue = sendVoiceMessageParamsAudioInfoWaveformUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -23603,29 +23672,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendVoiceMessageParamsAudioInfoWaveformProgressWatcherUnderlyingCallsCount = newValue
+                sendVoiceMessageParamsAudioInfoWaveformUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVoiceMessageParamsAudioInfoWaveformProgressWatcherUnderlyingCallsCount = newValue
+                    sendVoiceMessageParamsAudioInfoWaveformUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    open var sendVoiceMessageParamsAudioInfoWaveformProgressWatcherCalled: Bool {
-        return sendVoiceMessageParamsAudioInfoWaveformProgressWatcherCallsCount > 0
+    open var sendVoiceMessageParamsAudioInfoWaveformCalled: Bool {
+        return sendVoiceMessageParamsAudioInfoWaveformCallsCount > 0
     }
-    open var sendVoiceMessageParamsAudioInfoWaveformProgressWatcherReceivedArguments: (params: UploadParameters, audioInfo: AudioInfo, waveform: [UInt16], progressWatcher: ProgressWatcher?)?
-    open var sendVoiceMessageParamsAudioInfoWaveformProgressWatcherReceivedInvocations: [(params: UploadParameters, audioInfo: AudioInfo, waveform: [UInt16], progressWatcher: ProgressWatcher?)] = []
+    open var sendVoiceMessageParamsAudioInfoWaveformReceivedArguments: (params: UploadParameters, audioInfo: AudioInfo, waveform: [UInt16])?
+    open var sendVoiceMessageParamsAudioInfoWaveformReceivedInvocations: [(params: UploadParameters, audioInfo: AudioInfo, waveform: [UInt16])] = []
 
-    var sendVoiceMessageParamsAudioInfoWaveformProgressWatcherUnderlyingReturnValue: SendAttachmentJoinHandle!
-    open var sendVoiceMessageParamsAudioInfoWaveformProgressWatcherReturnValue: SendAttachmentJoinHandle! {
+    var sendVoiceMessageParamsAudioInfoWaveformUnderlyingReturnValue: SendAttachmentJoinHandle!
+    open var sendVoiceMessageParamsAudioInfoWaveformReturnValue: SendAttachmentJoinHandle! {
         get {
             if Thread.isMainThread {
-                return sendVoiceMessageParamsAudioInfoWaveformProgressWatcherUnderlyingReturnValue
+                return sendVoiceMessageParamsAudioInfoWaveformUnderlyingReturnValue
             } else {
                 var returnValue: SendAttachmentJoinHandle? = nil
                 DispatchQueue.main.sync {
-                    returnValue = sendVoiceMessageParamsAudioInfoWaveformProgressWatcherUnderlyingReturnValue
+                    returnValue = sendVoiceMessageParamsAudioInfoWaveformUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -23633,29 +23702,29 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                sendVoiceMessageParamsAudioInfoWaveformProgressWatcherUnderlyingReturnValue = newValue
+                sendVoiceMessageParamsAudioInfoWaveformUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    sendVoiceMessageParamsAudioInfoWaveformProgressWatcherUnderlyingReturnValue = newValue
+                    sendVoiceMessageParamsAudioInfoWaveformUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    open var sendVoiceMessageParamsAudioInfoWaveformProgressWatcherClosure: ((UploadParameters, AudioInfo, [UInt16], ProgressWatcher?) throws -> SendAttachmentJoinHandle)?
+    open var sendVoiceMessageParamsAudioInfoWaveformClosure: ((UploadParameters, AudioInfo, [UInt16]) throws -> SendAttachmentJoinHandle)?
 
-    open override func sendVoiceMessage(params: UploadParameters, audioInfo: AudioInfo, waveform: [UInt16], progressWatcher: ProgressWatcher?) throws -> SendAttachmentJoinHandle {
-        if let error = sendVoiceMessageParamsAudioInfoWaveformProgressWatcherThrowableError {
+    open override func sendVoiceMessage(params: UploadParameters, audioInfo: AudioInfo, waveform: [UInt16]) throws -> SendAttachmentJoinHandle {
+        if let error = sendVoiceMessageParamsAudioInfoWaveformThrowableError {
             throw error
         }
-        sendVoiceMessageParamsAudioInfoWaveformProgressWatcherCallsCount += 1
-        sendVoiceMessageParamsAudioInfoWaveformProgressWatcherReceivedArguments = (params: params, audioInfo: audioInfo, waveform: waveform, progressWatcher: progressWatcher)
+        sendVoiceMessageParamsAudioInfoWaveformCallsCount += 1
+        sendVoiceMessageParamsAudioInfoWaveformReceivedArguments = (params: params, audioInfo: audioInfo, waveform: waveform)
         DispatchQueue.main.async {
-            self.sendVoiceMessageParamsAudioInfoWaveformProgressWatcherReceivedInvocations.append((params: params, audioInfo: audioInfo, waveform: waveform, progressWatcher: progressWatcher))
+            self.sendVoiceMessageParamsAudioInfoWaveformReceivedInvocations.append((params: params, audioInfo: audioInfo, waveform: waveform))
         }
-        if let sendVoiceMessageParamsAudioInfoWaveformProgressWatcherClosure = sendVoiceMessageParamsAudioInfoWaveformProgressWatcherClosure {
-            return try sendVoiceMessageParamsAudioInfoWaveformProgressWatcherClosure(params, audioInfo, waveform, progressWatcher)
+        if let sendVoiceMessageParamsAudioInfoWaveformClosure = sendVoiceMessageParamsAudioInfoWaveformClosure {
+            return try sendVoiceMessageParamsAudioInfoWaveformClosure(params, audioInfo, waveform)
         } else {
-            return sendVoiceMessageParamsAudioInfoWaveformProgressWatcherReturnValue
+            return sendVoiceMessageParamsAudioInfoWaveformReturnValue
         }
     }
 
