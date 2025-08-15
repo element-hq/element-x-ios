@@ -5,7 +5,6 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import Algorithms
 import Combine
 import Foundation
 import MatrixRustSDK
