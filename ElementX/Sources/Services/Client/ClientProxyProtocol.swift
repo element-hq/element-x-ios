@@ -248,7 +248,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func roomNotificationModeUpdated(roomId: String, notificationMode: RoomNotificationModeProxy)
     
-    // MARK: - Zero Rewards
+    // MARK: - ZERO REWARDS
     
     var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> { get }
     var showNewUserRewardsIntimationPublisher: CurrentValuePublisher<Bool, Never> { get }
@@ -259,13 +259,13 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func dismissRewardsIntimation()
     
-    // MARK: - Zero Messenger Invite
+    // MARK: - ZERO MESSENGER INVITE
     
     var messengerInvitePublisher: CurrentValuePublisher<ZeroMessengerInvite, Never> { get }
     
     @discardableResult func loadZeroMessengerInvite() async -> Result<Void, ClientProxyError>
     
-    // MARK: - Zero Create Account Profile
+    // MARK: - ZERO CREATE ACCOUNT
     
     func isProfileCompletionRequired() async -> Bool
     
@@ -273,7 +273,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func deleteUserAccount() async -> Result<Void, ClientProxyError>
     
-    // MARK: - Zero User Profile
+    // MARK: - ZERO USER
     
     var directMemberZeroProfilePublisher: CurrentValuePublisher<ZMatrixUser?, Never> { get }
     var zeroCurrentUserPublisher: CurrentValuePublisher<ZCurrentUser, Never> { get }
@@ -287,7 +287,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func fetchZCurrentUser()
     
-    // MARK: - Zero Feed
+    // MARK: - ZERO FEED
     
     func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>
     
@@ -299,7 +299,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func postNewFeed(channelZId: String, content: String, replyToPost: String?, mediaFile: URL?) async -> Result<Void, ClientProxyError>
     
-    // MARK: - Zero Feed User
+    // MARK: - ZERO FEED USER
     
     func fetchFeedUserProfile(userZId: String) async -> Result<ZPostUserProfile, ClientProxyError>
     
@@ -311,13 +311,13 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func unFollowFeedUser(userId: String) async -> Result<Void, ClientProxyError>
     
-    // MARK: - Zero Channels
+    // MARK: - ZERO CHANNEL
     
     func fetchUserZIds() async -> Result<[String], ClientProxyError>
     
     func joinChannel(roomAliasOrId: String) async -> Result<String, ClientProxyError>
     
-    // MARK: - Zero Wallets
+    // MARK: - ZERO WALLET
     
     func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError>
     
@@ -337,7 +337,29 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func claimRewards(userWalletAddress: String) async -> Result<String, ClientProxyError>
     
-    // MARK: - Zero MetaData
+    func getTokenInfo(tokenAddress: String) async -> Result<ZWalletTokenInfo, ClientProxyError>
+    
+    func getTokenBalance(userWalletAddress: String, tokenAddress: String) async -> Result<ZWalletTokenBalance, ClientProxyError>
+    
+    // MARK: - ZERO STAKING
+    
+    func getTotalStaked(poolAddress: String) async -> Result<String, ClientProxyError>
+    
+    func getStakingConfig(poolAddress: String) async -> Result<ZStackingConfig, ClientProxyError>
+    
+    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingStatus, ClientProxyError>
+    
+    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingUserRewardsInfo, ClientProxyError>
+    
+    func getStakingToken(poolAddress: String) async -> Result<ZWalletStakingToken, ClientProxyError>
+    
+    func getRewardsToken(poolAddress: String) async -> Result<ZWalletStakingRewardsToken, ClientProxyError>
+    
+    func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
+    
+    func unstakeAmount(walletAddress: String, poolAddress: String, amount: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
+    
+    // MARK: - ZERO METADATA
     
     func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError>
     

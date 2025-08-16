@@ -19,7 +19,6 @@ struct TransferTokenViewState: BindableState {
     var userAvatarURL: URL?
     var transferRecipient: WalletRecipient?
     var tokenAsset: ZWalletToken?
-    var tokenAmount: String?
     
     var meowPrice: ZeroCurrency?
     
@@ -48,11 +47,20 @@ struct TransferTokenViewState: BindableState {
             return true
         }
     }
+    
+    var canMakeTransaction: Bool {
+        transferRecipient != nil &&
+        tokenAsset != nil &&
+        !bindings.transferAmount.isEmpty &&
+        (Double(bindings.transferAmount) ?? 0) > 0
+    }
 }
 
 struct TransferTokenBindings {
     var alertInfo: AlertInfo<UUID>?
     var searchRecipientQuery = ""
+    
+    var transferAmount: String = ""
 }
 
 enum TransferTokenViewModelAction {
@@ -65,7 +73,7 @@ enum TransferTokenViewAction {
     case onRecipientSelected(WalletRecipient)
     case loadMoreTokenAssets
     case onTokenAssetSelected(HomeScreenWalletContent)
-    case onTransactionConfirmed(amount: String)
+    case onTransactionConfirmed
     case viewTransaction
     
     case transactionCompleted

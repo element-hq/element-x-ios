@@ -1476,6 +1476,194 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func getTotalStaked(poolAddress: String) async -> Result<String, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.stakingApi.getTotalStaked(poolAddress: poolAddress)
+            switch result {
+            case .success(let totalStaked):
+                return .success(totalStaked)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to get total staked, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func getStakingConfig(poolAddress: String) async -> Result<ZStackingConfig, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.stakingApi.getStakingConfig(poolAddress: poolAddress)
+            switch result {
+            case .success(let config):
+                return .success(config)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to get staking config, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func getStakerStatusInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingStatus, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.stakingApi.getStakerStatusInfo(userWalletAddress: userWalletAddress,
+                                                                               poolAddress: poolAddress)
+            switch result {
+            case .success(let status):
+                return .success(status)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to get staker status info, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func getStakeRewardsInfo(userWalletAddress: String, poolAddress: String) async -> Result<ZStakingUserRewardsInfo, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.stakingApi.getStakeRewardsInfo(userWalletAddress: userWalletAddress,
+                                                                               poolAddress: poolAddress)
+            switch result {
+            case .success(let rewardsInfo):
+                return .success(rewardsInfo)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to get stake user rewards info, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func getTokenInfo(tokenAddress: String) async -> Result<ZWalletTokenInfo, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.getTokenInfo(tokenAddress: tokenAddress)
+            switch result {
+            case .success(let tokenInfo):
+                return .success(tokenInfo)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to get token info, of token: \(tokenAddress), with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func getTokenBalance(userWalletAddress: String, tokenAddress: String) async -> Result<ZWalletTokenBalance, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.walletsApi.getTokenBalance(walletAddress: userWalletAddress, tokenAddress: tokenAddress)
+            switch result {
+            case .success(let tokenBalance):
+                return .success(tokenBalance)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to get token balance, of token: \(tokenAddress), with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func getStakingToken(poolAddress: String) async -> Result<ZWalletStakingToken, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.stakingApi.getStakingToken(poolAddress: poolAddress)
+            switch result {
+            case .success(let token):
+                return .success(token)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to get staking token, of pool: \(poolAddress), with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func getRewardsToken(poolAddress: String) async -> Result<ZWalletStakingRewardsToken, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.stakingApi.getRewardsToken(poolAddress: poolAddress)
+            switch result {
+            case .success(let token):
+                return .success(token)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to get reward token, of pool: \(poolAddress), with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+        do {
+            // 1. Send approval request
+            let approveResult = try await zeroApiProxy.walletsApi.approveERC20(
+                walletAddress: walletAddress,
+                poolAddress: poolAddress,
+                tokenAddress: tokenAddress,
+                amount: amount
+            )
+            
+            let transaction = try approveResult.get()
+            
+            // 2. Verify approval transaction
+            let _ = try await zeroApiProxy.walletsApi.getTransactionReceipt(
+                transactionHash: transaction.transactionHash
+            ).get()
+            
+            // 3. Verify approval request
+            try await zeroApiProxy.walletsApi.verifyERC20Approval(
+                walletAddress: walletAddress,
+                poolAddress: poolAddress,
+                tokenAddress: tokenAddress
+            ).get()
+            
+            // 4. Stake amount
+            let stakeTransaction = try await zeroApiProxy.stakingApi.stakeAmount(
+                userWalletAddress: walletAddress,
+                poolAddress: poolAddress,
+                amount: amount
+            ).get()
+            
+            // 5. Get final transaction receipt
+            let finalReceipt = try await zeroApiProxy.walletsApi.getTransactionReceipt(
+                transactionHash: stakeTransaction.transactionHash
+            ).get()
+            
+            return .success(finalReceipt)
+        } catch {
+            MXLog.error("Failed to stake amount, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func unstakeAmount(walletAddress: String, poolAddress: String, amount: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.stakingApi.unstakeAmount(userWalletAddress: walletAddress,
+                                                                         poolAddress: poolAddress,
+                                                                         amount: amount)
+            switch result {
+            case .success(let transaction):
+                let receiptResult = try await zeroApiProxy.walletsApi.getTransactionReceipt(transactionHash: transaction.transactionHash)
+                switch receiptResult {
+                case .success(let receipt):
+                    return .success(receipt)
+                case .failure(let error):
+                    return .failure(.zeroError(error))
+                }
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to unstake amount, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.metaDataApi.getLinkPreview(url: url)

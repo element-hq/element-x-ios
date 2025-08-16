@@ -20,6 +20,7 @@ protocol ZeroApiProxyProtocol {
     var chatApi: ZeroChatApiProtocol { get }
     var metaDataApi: ZeroMetaDataApiProtocol { get }
     var postUserApi: ZeroPostUserApiProtocol { get }
+    var stakingApi: ZeroStakingApiProtocol { get }
 }
 
 class ZeroApiProxy: ZeroApiProxyProtocol {
@@ -36,6 +37,7 @@ class ZeroApiProxy: ZeroApiProxyProtocol {
     let chatApi: ZeroChatApiProtocol
     let metaDataApi: ZeroMetaDataApiProtocol
     let postUserApi: ZeroPostUserApiProtocol
+    let stakingApi: ZeroStakingApiProtocol
     
     init(client: ClientProtocol, appSettings: AppSettings) {
         /// Configure Zero Utlils, Services and APIs
@@ -52,5 +54,6 @@ class ZeroApiProxy: ZeroApiProxyProtocol {
         chatApi = ZeroChatApi(appSettings: appSettings)
         metaDataApi = ZeroMetaDataApi(appSettings: appSettings)
         postUserApi = ZeroPostUserApi(appSettings: appSettings)
+        stakingApi = ZeroStakingApi(appSettings: appSettings)
     }
 }

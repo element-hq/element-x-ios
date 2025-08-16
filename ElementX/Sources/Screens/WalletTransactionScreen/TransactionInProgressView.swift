@@ -12,6 +12,9 @@ struct TransactionInProgressView: View {
     var color: Color = .blue
     
     var message: String?
+    var subMessage: String = "Just a moment..."
+    
+    var backgroundColor: Color = Color.zero.bgCanvasDefault
     
     @State private var rotation: Angle = .degrees(0)
     @State private var animateWave = false
@@ -45,7 +48,7 @@ struct TransactionInProgressView: View {
                         .font(.compound.bodyLGSemibold)
                         .foregroundColor(color)
                     
-                    Text("Just a moment...")
+                    Text(subMessage)
                         .font(.compound.bodyMD)
                         .foregroundColor(.compound.textSecondary)
                 }
@@ -53,7 +56,7 @@ struct TransactionInProgressView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.zero.bgCanvasDefault.ignoresSafeArea())
+        .background(backgroundColor.ignoresSafeArea())
         .padding()
     }
 }

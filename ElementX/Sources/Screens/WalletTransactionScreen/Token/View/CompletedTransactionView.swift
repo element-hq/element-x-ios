@@ -16,8 +16,7 @@ struct CompletedTransactionView: View {
         VStack {
             if let currentUser = context.viewState.currentUser,
                let recipient = context.viewState.transferRecipient,
-               let token = context.viewState.tokenAsset,
-               let amount = context.viewState.tokenAmount {
+               let token = context.viewState.tokenAsset {
                 
                 Spacer()
                 
@@ -40,7 +39,7 @@ struct CompletedTransactionView: View {
                     )
                     
                     HStack {
-                        Text(amount)
+                        Text(context.transferAmount)
                             .font(.compound.headingMDBold)
                             .foregroundStyle(.compound.textPrimary)
                             .shadow(color: .white.opacity(0.5), radius: 4)
@@ -51,7 +50,7 @@ struct CompletedTransactionView: View {
                     }
                     .padding(.top, 12)
                     
-                    Text(ZeroWalletUtil.shared.meowPriceFormatted(tokenAmount: amount, refPrice: context.viewState.meowPrice))
+                    Text(ZeroWalletUtil.shared.meowPriceFormatted(tokenAmount: context.transferAmount, refPrice: context.viewState.meowPrice))
                         .font(.compound.bodyLGSemibold)
                         .foregroundStyle(.compound.textSecondary)
                         .padding(.top, 4)

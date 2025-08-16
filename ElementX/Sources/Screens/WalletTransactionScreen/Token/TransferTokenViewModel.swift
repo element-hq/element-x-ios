@@ -72,8 +72,8 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
         case .onTokenAssetSelected(let asset):
             state.tokenAsset = _walletTokenAssets.first { $0.tokenAddress == asset.id }
             setFlowState(.confirmation)
-        case .onTransactionConfirmed(let amount):
-            performTokenTransaction(amount)
+        case .onTransactionConfirmed:
+            performTokenTransaction()
         case .transactionCompleted:
             actionsSubject.send(.finished)
         case .viewTransaction:
@@ -128,16 +128,15 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
         }
     }
     
-    private func performTokenTransaction(_ amount: String) {
+    private func performTokenTransaction() {
         if let currentUserAddress = state.currentUser?.publicWalletAddress,
            let recipient = state.transferRecipient,
            let token = state.tokenAsset {
-            state.tokenAmount = amount
             Task {
                 setFlowState(.inProgress)
                 let result = await clientProxy.transferToken(senderWalletAddress: currentUserAddress,
                                                              recipientWalletAddress: recipient.publicAddress,
-                                                             amount: amount,
+                                                             amount:  state.bindings.transferAmount,
                                                              tokenAddress: token.tokenAddress)
                 switch result {
                 case .success(let transaction):

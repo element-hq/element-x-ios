@@ -83,6 +83,10 @@ enum HomeScreenViewAction {
     case startWalletTransaction(WalletTransactionType)
     case viewTransactionDetails(transactionId: String)
     case claimRewards(trigger: Bool)
+    
+    case onStakePoolSelected(HomeScreenWalletStakingContent)
+    case stakeAmount(String)
+    case unstakeAmount(String)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -177,6 +181,15 @@ enum ClaimRewardsState {
     case failure
 }
 
+enum StakePoolViewState {
+    case details
+    case staking
+    case unstaking
+    case inProgress
+    case success
+    case failure
+}
+
 struct HomeScreenViewState: BindableState {
     let userID: String
     var userDisplayName: String?
@@ -196,6 +209,7 @@ struct HomeScreenViewState: BindableState {
     var walletTokens: [HomeScreenWalletContent] = []
     var walletTransactions: [HomeScreenWalletContent] = []
     var walletNFTs: [HomeScreenWalletContent] = []
+    var walletStakings: [HomeScreenWalletStakingContent] = []
     
     var walletTokenNextPageParams: NextPageParams? = nil
     var walletNFTsNextPageParams: NextPageParams? = nil
@@ -267,6 +281,14 @@ struct HomeScreenViewState: BindableState {
         }
         return walletNFTs
     }
+    var visibleWalletStakings: [HomeScreenWalletStakingContent] {
+        if walletContentListMode == .skeletons {
+            return (1...20).map { _ in
+                HomeScreenWalletStakingContent.placeholder()
+            }
+        }
+        return walletStakings
+    }
     
     var userRewards = ZeroRewards.empty()
     var claimableUserRewards = ZeroRewards.empty()
@@ -331,6 +353,8 @@ struct HomeScreenViewState: BindableState {
     var userWalletBalance: String {
         showWalletBalance ? "$\(walletBalance.formatToThousandSeparatedString())" : "*****"
     }
+    
+    var selectedStakePool: SelectedHomeWalletStakePool?
 }
 
 struct HomeScreenViewStateBindings {
@@ -343,7 +367,11 @@ struct HomeScreenViewStateBindings {
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: URL?
+    
     var showEarningsClaimedSheet: Bool = false
+    var showStakePoolSheet: Bool = false
+    
+    var stakePoolViewState: StakePoolViewState = .details
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {
@@ -535,6 +563,71 @@ struct HomeScreenWalletContent: Identifiable, Equatable {
               actionPreText: nil,
               actionText: "placeholder action text",
               actionPostText: "placeholder action post text")
+    }
+}
+
+struct HomeScreenWalletStakingContent: Identifiable, Equatable {
+    let id: String
+    let userWalletAddress: String
+    
+    let poolAddress: String
+    let poolIcon: String?
+    let poolName: String
+    
+    let tokenAddress: String
+    let tokenAmount: String
+    let tokenIcon: String?
+    
+    let totalStakedAmount: Double
+    let totalStakedAmountFormatted: String
+    let myStakeAmount: Double
+    let myStateAmountFormatted: String
+    
+    static func placeholder() -> HomeScreenWalletStakingContent {
+        .init(id: UUID().uuidString,
+              userWalletAddress: "",
+              poolAddress: "",
+              poolIcon: nil,
+              poolName: "placeholder pool",
+              tokenAddress: "",
+              tokenAmount: "",
+              tokenIcon: nil,
+              totalStakedAmount: 0,
+              totalStakedAmountFormatted: "",
+              myStakeAmount: 0,
+              myStateAmountFormatted: "")
+    }
+    
+}
+
+struct SelectedHomeWalletStakePool {
+    let pool: HomeScreenWalletStakingContent
+    let stakeToken: ZWalletTokenInfo?
+    let stakeTokenBalance: ZWalletTokenBalance?
+    let rewardToken: ZWalletTokenInfo?
+    let rewardTokenBalance: ZWalletTokenBalance?
+}
+
+extension SelectedHomeWalletStakePool {
+    var claimableRewardValue: String {
+        ZeroRewards.parseCredits(credits: rewardTokenBalance?.balance ?? "0", decimals: rewardToken?.decimals ?? 18)
+            .formatToSuffix()
+    }
+    
+    var myStakedTokens: Double {
+        ZeroRewards.parseCredits(credits: pool.tokenAmount, decimals: stakeToken?.decimals ?? 18)
+    }
+    
+    var myStakedTokensFormatted: String {
+        myStakedTokens.formatToSuffix()
+    }
+    
+    var totalAvailableTokenBalance: Double {
+        ZeroRewards.parseCredits(credits: stakeTokenBalance?.balance ?? "0", decimals: stakeToken?.decimals ?? 18)
+    }
+    
+    var totalAvailableTokenBalanceFormatted: String {
+        totalAvailableTokenBalance.formatToSuffix()
     }
 }
 
@@ -787,5 +880,30 @@ extension HomeScreenWalletContent {
                   actionPreText: nil,
                   actionText: "\(walletTransaction.formattedAmount) \(tokenSymbol)",
                   actionPostText: walletTransaction.isClaimableTokenTransaction ? "$\(walletTransaction.meowPriceFormatted(ref: meowPrice))" : nil)
+    }
+}
+
+extension HomeScreenWalletStakingContent {
+    init(meowPrice: ZeroCurrency?, token: ZWalletToken, userWalletAddress: String,
+         poolAddress: String, totalStaked: String, stakingConfig: ZStackingConfig,
+         stakerStatus: ZStakingStatus, stakeRewards: ZStakingUserRewardsInfo) {
+        let totalStakedAmount = ZeroWalletUtil.shared.meowPrice(tokenAmount: ZeroRewards.parseCredits(credits: totalStaked,
+                                                                                                      decimals: 18),
+                                                                refPrice: meowPrice)
+        let myStakeAmount = ZeroWalletUtil.shared.meowPrice(tokenAmount: ZeroRewards.parseCredits(credits: stakerStatus.amountStaked,
+                                                                                                  decimals: 18),
+                                                            refPrice: meowPrice)
+        self.init(id: poolAddress,
+                  userWalletAddress: userWalletAddress,
+                  poolAddress: poolAddress,
+                  poolIcon: token.logo,
+                  poolName: "\(token.name.uppercased()) Pool",
+                  tokenAddress: token.tokenAddress,
+                  tokenAmount: stakerStatus.amountStaked,
+                  tokenIcon: token.logo,
+                  totalStakedAmount: totalStakedAmount,
+                  totalStakedAmountFormatted: "$\(totalStakedAmount.formatToSuffix())",
+                  myStakeAmount: myStakeAmount,
+                  myStateAmountFormatted: "$\(myStakeAmount.formatToSuffix())")
     }
 }

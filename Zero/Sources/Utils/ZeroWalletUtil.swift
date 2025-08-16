@@ -21,6 +21,14 @@ class ZeroWalletUtil {
         }
     }
     
+    func meowPrice(tokenAmount: Double, refPrice: ZeroCurrency?) -> Double {
+        if let currency = refPrice, let price = currency.price {
+            return tokenAmount * price
+        } else {
+            return 0
+        }
+    }
+    
     func meowPriceFormatted(tokenAmount: String?, refPrice: ZeroCurrency?) -> String {
         return meowPrice(tokenAmount: tokenAmount, refPrice: refPrice).formatToThousandSeparatedString()
     }
