@@ -28,7 +28,7 @@ enum TimelineViewModelAction {
     case composer(action: TimelineComposerAction)
     case hasScrolled(direction: ScrollDirection)
     case viewInRoomTimeline(eventID: String)
-    case displayRoom(roomID: String)
+    case displayRoom(roomID: String, via: [String])
 }
 
 enum TimelineViewPollAction {

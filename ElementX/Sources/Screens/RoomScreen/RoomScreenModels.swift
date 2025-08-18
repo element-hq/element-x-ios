@@ -15,7 +15,7 @@ enum RoomScreenViewModelAction: Equatable {
     case displayCall
     case removeComposerFocus
     case displayKnockRequests
-    case displayRoom(roomID: String)
+    case displayRoom(roomID: String, via: [String])
 }
 
 enum RoomScreenViewAction {

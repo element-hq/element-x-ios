@@ -156,23 +156,35 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             settingsFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
-                .roomDetails, .roomMemberDetails, .userProfile,
-                .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
-                .call, .genericCallLink, .share, .transferOwnership:
-            clearRoute(animated: animated) // Make sure the presented route is visible.
+             .roomDetails, .roomMemberDetails, .userProfile,
+             .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
+             .call, .genericCallLink, .share, .transferOwnership:
+            clearPresentedSheets(animated: animated) // Make sure the presented route is visible.
             chatsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-            navigationTabCoordinator.selectedTab = .chats
+            if navigationTabCoordinator.selectedTab != .chats {
+                navigationTabCoordinator.selectedTab = .chats
+            }
         }
     }
     
     func clearRoute(animated: Bool) {
+        clearPresentedSheets(animated: animated)
+        chatsFlowCoordinator.clearRoute(animated: animated)
+    }
+    
+    // Clearing routes is more complicated than it first seems. When passing routes
+    // to the chats flow we can't clear all routes as e.g. childRoom/childEvent etc
+    // expect to push into the existing stack. But we do need to hide any sheets that
+    // might cover up the presented route. BUT! We probably shouldn't dismiss onboarding
+    // or verification flows until they're complete… This needs more thought before we
+    // codify it all into the state machine.
+    private func clearPresentedSheets(animated: Bool) {
         switch stateMachine.state {
         case .initial, .tabBar:
             break
         case .settingsScreen:
             navigationTabCoordinator.setSheetCoordinator(nil, animated: animated)
         }
-        chatsFlowCoordinator.clearRoute(animated: animated)
     }
     
     func isDisplayingRoomScreen(withRoomID roomID: String) -> Bool {
@@ -270,7 +282,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Onboarding
     
-    func attemptStartingOnboarding() {
+    private func attemptStartingOnboarding() {
         MXLog.info("Attempting to start onboarding")
         checkAndProceed(execute: {
             if self.onboardingFlowCoordinator.shouldStart {

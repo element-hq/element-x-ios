@@ -214,7 +214,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             guard let predecessorID = roomProxy.predecessorRoom?.roomId else {
                 fatalError("Predecessor room should exist if this action is triggered.")
             }
-            actionsSubject.send(.displayRoom(roomID: predecessorID))
+            let serverNames = roomProxy.knownServerNames(maxCount: 50) // Limit to the same number used by ClientProxy.resolveRoomAlias(_:)
+            actionsSubject.send(.displayRoom(roomID: predecessorID, via: Array(serverNames)))
         case .fetchLinkPreviewIfApplicable(let item):
             fetchAndUpdatedLinkPreview(for: item)
         }

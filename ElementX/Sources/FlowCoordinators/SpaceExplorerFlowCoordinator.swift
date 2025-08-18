@@ -87,13 +87,16 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentSpaceList() {
-        let parameters = SpaceListScreenCoordinatorParameters(userSession: userSession)
+        // Temporarily using the mock until the SDK is updated.
+        let parameters = SpaceListScreenCoordinatorParameters(userSession: userSession, spaceServiceProxy: SpaceServiceProxyMock(.init()))
         let coordinator = SpaceListScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
             case .showSettings:
                 actionsSubject.send(.showSettings)
+            case .selectSpace:
+                break
             }
         }
         .store(in: &cancellables)

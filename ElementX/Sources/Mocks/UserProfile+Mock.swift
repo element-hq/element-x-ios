@@ -25,6 +25,10 @@ extension UserProfileProxy {
         .init(userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil)
     }
     
+    static var mockDan: UserProfileProxy {
+        .init(userID: "@dan:matrix.org", displayName: "Dan", avatarURL: .mockMXCUserAvatar)
+    }
+    
     static var mockVerbose: UserProfileProxy {
         .init(userID: "@charlie:matrix.org", displayName: "Charlie is the best display name", avatarURL: nil)
     }

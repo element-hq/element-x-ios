@@ -60,7 +60,6 @@ final class AppSettings {
         case knockingEnabled
         case threadsEnabled
         case developerOptionsEnabled
-        case sharePosEnabledV2
         case multipleAttachmentUploadEnabled
         
         case zeroAccessToken
@@ -357,9 +356,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.sharePosEnabledV2, defaultValue: true, storageType: .userDefaults(store))
-    var sharePosEnabled
     
     #endif
     

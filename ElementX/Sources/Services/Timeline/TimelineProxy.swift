@@ -249,10 +249,8 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                               caption: caption,
                                                               formattedCaption: nil, // Rust will build this from the caption's markdown.
                                                               mentions: nil,
-                                                              inReplyTo: nil,
-                                                              useSendQueue: true),
-                                                audioInfo: audioInfo,
-                                                progressWatcher: nil)
+                                                              inReplyTo: nil),
+                                                audioInfo: audioInfo)
             
             await requestHandle(handle)
             
@@ -278,10 +276,8 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                              caption: caption,
                                                              formattedCaption: nil, // Rust will build this from the caption's markdown.
                                                              mentions: nil,
-                                                             inReplyTo: nil,
-                                                             useSendQueue: true),
-                                               fileInfo: fileInfo,
-                                               progressWatcher: nil)
+                                                             inReplyTo: nil),
+                                               fileInfo: fileInfo)
             
             await requestHandle(handle)
             
@@ -308,11 +304,9 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                               caption: caption,
                                                               formattedCaption: nil, // Rust will build this from the caption's markdown.
                                                               mentions: nil,
-                                                              inReplyTo: nil,
-                                                              useSendQueue: true),
-                                                thumbnailPath: thumbnailURL.path(percentEncoded: false),
-                                                imageInfo: imageInfo,
-                                                progressWatcher: nil)
+                                                              inReplyTo: nil),
+                                                thumbnailSource: .file(filename: thumbnailURL.path(percentEncoded: false)),
+                                                imageInfo: imageInfo)
             
             await requestHandle(handle)
             
@@ -362,11 +356,9 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                               caption: caption,
                                                               formattedCaption: nil,
                                                               mentions: nil,
-                                                              inReplyTo: nil,
-                                                              useSendQueue: true),
-                                                thumbnailPath: thumbnailURL.path(percentEncoded: false),
-                                                videoInfo: videoInfo,
-                                                progressWatcher: nil)
+                                                              inReplyTo: nil),
+                                                thumbnailSource: .file(filename: thumbnailURL.path(percentEncoded: false)),
+                                                videoInfo: videoInfo)
             
             await requestHandle(handle)
             
@@ -392,11 +384,9 @@ final class TimelineProxy: TimelineProxyProtocol {
                                                                      caption: nil,
                                                                      formattedCaption: nil,
                                                                      mentions: nil,
-                                                                     inReplyTo: nil,
-                                                                     useSendQueue: true),
+                                                                     inReplyTo: nil),
                                                        audioInfo: audioInfo,
-                                                       waveform: waveform,
-                                                       progressWatcher: nil)
+                                                       waveform: waveform)
             
             await requestHandle(handle)
             
