@@ -89,12 +89,12 @@ final class CompletionSuggestionService: CompletionSuggestionServiceProtocol {
                 return .init(suggestionType: .user(.init(id: member.userID, displayName: member.displayName, avatarURL: member.avatarURL)), range: suggestionTrigger.range, rawSuggestionText: suggestionTrigger.text)
             }
         
-        if canMentionAllUsers,
-           !roomProxy.isDirectOneToOneRoom,
-           Self.shouldIncludeMember(userID: PillUtilities.atRoom, displayName: PillUtilities.everyone, searchText: suggestionTrigger.text) {
-            membersSuggestion
-                .insert(SuggestionItem(suggestionType: .allUsers(roomProxy.details.avatar), range: suggestionTrigger.range, rawSuggestionText: suggestionTrigger.text), at: 0)
-        }
+//        if canMentionAllUsers,
+//           !roomProxy.isDirectOneToOneRoom,
+//           Self.shouldIncludeMember(userID: PillUtilities.atRoom, displayName: PillUtilities.everyone, searchText: suggestionTrigger.text) {
+//            membersSuggestion
+//                .insert(SuggestionItem(suggestionType: .allUsers(roomProxy.details.avatar), range: suggestionTrigger.range, rawSuggestionText: suggestionTrigger.text), at: 0)
+//        }
         
         return membersSuggestion
     }

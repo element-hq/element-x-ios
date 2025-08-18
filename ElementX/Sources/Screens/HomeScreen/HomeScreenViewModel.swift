@@ -464,7 +464,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             rooms = rooms.filter { !$0.isAChannel }
         }
         
-        state.rooms = rooms
+        state.rooms = rooms.uniqued(on: { $0.id })
         
         applyCustomFilterToNotificationsList(.all)
         extractAllRoomUsers(matrixRoomSummaries)
