@@ -146,6 +146,7 @@
 "action_view_source" = "Gweld ffynhonnell";
 "action_yes" = "Iawn";
 "action_yes_try_again" = "Iawn, ceisiwch eto";
+"action.finish" = "Finish";
 "action.open_context_menu" = "Agor y ddewislen gyd-destun";
 "action.send_edited_message" = "Anfon neges wedi'i golygu";
 "action.send_voice_message" = "Anfon neges llais";
@@ -278,6 +279,7 @@
 "common_signing_out" = "Allgofnodi";
 "common_something_went_wrong" = "Aeth rhywbeth o'i le";
 "common_something_went_wrong_message" = "Wedi canfod mater. Ceisiwch eto.";
+"common_space" = "Space";
 "common_starting_chat" = "Dechrau sgwrs…";
 "common_sticker" = "Sticer";
 "common_success" = "Llwyddiant";
@@ -504,6 +506,8 @@
 "screen_decline_and_block_title" = "Gwrthod a rhwystro";
 "screen_edit_room_address_room_address_section_footer" = "Bydd angen cyfeiriad ystafell arnoch i'w wneud yn weladwy yn y cyfeiriadur.";
 "screen_edit_room_address_title" = "Cyfeiriad yr ystafell";
+"screen_invite_users_already_a_member" = "Eisoes yn aelod";
+"screen_invite_users_already_invited" = "Wedi gwahodd yn barod";
 "screen_join_room_cancel_knock_action" = "Diddymu cais";
 "screen_join_room_cancel_knock_alert_confirmation" = "Iawn, diddymu";
 "screen_join_room_cancel_knock_alert_description" = "Ydych chi'n siŵr eich bod am ddiddymu'ch cais i ymuno â'r ystafell hon?";
@@ -975,8 +979,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "Mae gennych newidiadau heb eu cadw.";
 "screen_room_details_add_topic_title" = "Ychwanegu pwnc";
-"screen_room_details_already_a_member" = "Eisoes yn aelod";
-"screen_room_details_already_invited" = "Wedi gwahodd yn barod";
 "screen_room_details_badge_encrypted" = "Wedi'i amgryptio";
 "screen_room_details_badge_not_encrypted" = "Heb ei amgryptio";
 "screen_room_details_edit_room_title" = "Ystafell Golygu";
@@ -1075,6 +1077,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Does gennych chi ddim hoff sgyrsiau eto";
 "screen_roomlist_filter_invites_empty_state_title" = "Does gennych chi ddim gwahoddiadau yn aros.";
 "screen_roomlist_filter_low_priority" = "Blaenoriaeth Isel";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Gallwch ddad-ddewis hidlwyr er mwyn gweld eich sgyrsiau eraill";
 "screen_roomlist_filter_mixed_empty_state_title" = "Does gennych chi ddim sgyrsiau ar gyfer y dewis hwn";
 "screen_roomlist_filter_people_empty_state_title" = "Does gennych chi ddim unrhyw DMs eto";

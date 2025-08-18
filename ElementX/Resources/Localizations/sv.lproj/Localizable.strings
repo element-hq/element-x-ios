@@ -146,6 +146,7 @@
 "action_view_source" = "Visa källkod";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, försök igen";
+"action.finish" = "Finish";
 "action.open_context_menu" = "Öppna kontextmenyn";
 "action.send_edited_message" = "Skicka redigerat message";
 "action.send_voice_message" = "Skicka röstmeddelande";
@@ -278,6 +279,7 @@
 "common_signing_out" = "Loggar ut";
 "common_something_went_wrong" = "Något gick fel";
 "common_something_went_wrong_message" = "Vi stötte på ett problem. Vänligen försök igen.";
+"common_space" = "Space";
 "common_starting_chat" = "Startar chatt …";
 "common_sticker" = "Dekal";
 "common_success" = "Lyckades";
@@ -504,6 +506,8 @@
 "screen_decline_and_block_title" = "Avvisa och blockera";
 "screen_edit_room_address_room_address_section_footer" = "Du behöver en rumsadress för att göra den synlig i katalogen.";
 "screen_edit_room_address_title" = "Rumsadress";
+"screen_invite_users_already_a_member" = "Redan medlem";
+"screen_invite_users_already_invited" = "Redan inbjuden";
 "screen_join_room_cancel_knock_action" = "Avbryt begäran";
 "screen_join_room_cancel_knock_alert_confirmation" = "Ja, avbryt";
 "screen_join_room_cancel_knock_alert_description" = "Är du säker på att du vill avbryta din begäran om att gå med i det här rummet?";
@@ -975,8 +979,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "Du har osparade ändringar.";
 "screen_room_details_add_topic_title" = "Lägg till ämne";
-"screen_room_details_already_a_member" = "Redan medlem";
-"screen_room_details_already_invited" = "Redan inbjuden";
 "screen_room_details_badge_encrypted" = "Krypterat";
 "screen_room_details_badge_not_encrypted" = "Inte krypterat";
 "screen_room_details_edit_room_title" = "Redigera rummet";
@@ -1075,6 +1077,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Du har inga favoritchattar än";
 "screen_roomlist_filter_invites_empty_state_title" = "Du har inga väntande inbjudningar.";
 "screen_roomlist_filter_low_priority" = "Låg prioritet";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Du kan avmarkera filter för att se dina andra chattar";
 "screen_roomlist_filter_mixed_empty_state_title" = "Du har inga chattar för det här valet";
 "screen_roomlist_filter_people_empty_state_title" = "Du har inga DM:er än";

@@ -146,6 +146,7 @@
 "action_view_source" = "Tampilkan sumber";
 "action_yes" = "Ya";
 "action_yes_try_again" = "Ya, coba lagi";
+"action.finish" = "Finish";
 "action.open_context_menu" = "Open context menu";
 "action.send_edited_message" = "Send edited message";
 "action.send_voice_message" = "Send voice message";
@@ -278,6 +279,7 @@
 "common_signing_out" = "Mengeluarkan dari akun";
 "common_something_went_wrong" = "Ada yang salah";
 "common_something_went_wrong_message" = "Kami mengalami masalah. Silakan coba lagi.";
+"common_space" = "Space";
 "common_starting_chat" = "Memulai obrolan...";
 "common_sticker" = "Stiker";
 "common_success" = "Berhasil";
@@ -504,6 +506,8 @@
 "screen_decline_and_block_title" = "Tolak dan blokir";
 "screen_edit_room_address_room_address_section_footer" = "Anda akan memerlukan alamat ruangan untuk membuatnya terlihat dalam direktori.";
 "screen_edit_room_address_title" = "Alamat ruangan";
+"screen_invite_users_already_a_member" = "Sudah menjadi anggota";
+"screen_invite_users_already_invited" = "Sudah diundang";
 "screen_join_room_cancel_knock_action" = "Batalkan permintaan";
 "screen_join_room_cancel_knock_alert_confirmation" = "Ya, batalkan";
 "screen_join_room_cancel_knock_alert_description" = "Apakah Anda yakin ingin membatalkan permintaan Anda untuk bergabung dengan ruangan ini?";
@@ -975,8 +979,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "Anda memiliki perubahan yang belum disimpan.";
 "screen_room_details_add_topic_title" = "Tambahkan topik";
-"screen_room_details_already_a_member" = "Sudah menjadi anggota";
-"screen_room_details_already_invited" = "Sudah diundang";
 "screen_room_details_badge_encrypted" = "Terenkripsi";
 "screen_room_details_badge_not_encrypted" = "Tidak terenkripsi";
 "screen_room_details_edit_room_title" = "Sunting Ruangan";
@@ -1075,6 +1077,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Anda belum memiliki percakapan favorit";
 "screen_roomlist_filter_invites_empty_state_title" = "Anda tidak memiliki undangan yang tertunda.";
 "screen_roomlist_filter_low_priority" = "Prioritas Rendah";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Anda dapat membatalkan pilihan saringan untuk melihat percakapan Anda yang lain";
 "screen_roomlist_filter_mixed_empty_state_title" = "Anda tidak memiliki percakapan untuk pemilihan ini";
 "screen_roomlist_filter_people_empty_state_title" = "Anda belum memiliki percakapan langsung";

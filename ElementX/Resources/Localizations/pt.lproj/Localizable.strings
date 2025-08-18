@@ -146,6 +146,7 @@
 "action_view_source" = "Ver fonte";
 "action_yes" = "Sim";
 "action_yes_try_again" = "Sim, tentar novamente";
+"action.finish" = "Finish";
 "action.open_context_menu" = "Abrir menu de contexto";
 "action.send_edited_message" = "Enviar mensagem editada";
 "action.send_voice_message" = "Enviar mensagem de voz";
@@ -278,6 +279,7 @@
 "common_signing_out" = "A terminar sessão";
 "common_something_went_wrong" = "Algo correu mal";
 "common_something_went_wrong_message" = "Encontrámos um erro. Por favor, tenta novamente.";
+"common_space" = "Space";
 "common_starting_chat" = "A iniciar conversa…";
 "common_sticker" = "Autocolante";
 "common_success" = "Sucesso";
@@ -504,6 +506,8 @@
 "screen_decline_and_block_title" = "Rejeitar e bloquear";
 "screen_edit_room_address_room_address_section_footer" = "É necessário um endereço para tornar a sala visível no diretório.";
 "screen_edit_room_address_title" = "Endereço da sala";
+"screen_invite_users_already_a_member" = "Já é participante";
+"screen_invite_users_already_invited" = "Já foi convidado";
 "screen_join_room_cancel_knock_action" = "Cancelar pedido";
 "screen_join_room_cancel_knock_alert_confirmation" = "Sim, cancelar";
 "screen_join_room_cancel_knock_alert_description" = "Tens a certeza de que queres cancelar o teu pedido de entrada nesta sala?";
@@ -975,8 +979,6 @@
 "screen_room_change_role_owners_title" = "Escolher donos";
 "screen_room_change_role_unsaved_changes_description" = "Tens alterações por guardar.";
 "screen_room_details_add_topic_title" = "Adicionar descrição";
-"screen_room_details_already_a_member" = "Já é participante";
-"screen_room_details_already_invited" = "Já foi convidado";
 "screen_room_details_badge_encrypted" = "Cifrada";
 "screen_room_details_badge_not_encrypted" = "Não cifrada";
 "screen_room_details_edit_room_title" = "Editar sala";
@@ -1075,6 +1077,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Ainda não tens nenhuma conversa favorita";
 "screen_roomlist_filter_invites_empty_state_title" = "Não tens nenhum convite pendente.";
 "screen_roomlist_filter_low_priority" = "Prioridade baixa";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Podes anular a seleção dos filtros para veres as tuas outras conversas";
 "screen_roomlist_filter_mixed_empty_state_title" = "Não tens nenhuma conversa selecionada";
 "screen_roomlist_filter_people_empty_state_title" = "Ainda não tens nenhuma MD (mensagem direta)";

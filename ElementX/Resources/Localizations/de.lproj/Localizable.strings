@@ -146,6 +146,7 @@
 "action_view_source" = "Quellcode anzeigen";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, versuchen Sie es noch einmal";
+"action.finish" = "Finish";
 "action.open_context_menu" = "Kontextmenü öffnen";
 "action.send_edited_message" = "Bearbeitete Nachricht senden";
 "action.send_voice_message" = "Sprachnachricht senden";
@@ -278,6 +279,7 @@
 "common_signing_out" = "Abmelden";
 "common_something_went_wrong" = "Es ist ein Fehler aufgetreten.";
 "common_something_went_wrong_message" = "Wir sind auf ein Problem gestoßen. Bitte versuchen Sie es erneut.";
+"common_space" = "Space";
 "common_starting_chat" = "Chat wird gestartet...";
 "common_sticker" = "Sticker";
 "common_success" = "Erfolg";
@@ -504,6 +506,8 @@
 "screen_decline_and_block_title" = "Ablehnen und blockieren";
 "screen_edit_room_address_room_address_section_footer" = "Sie brauchen eine Chatroomadresse, so dass sie im Verzeichnis sichtbar gemacht werden kann.";
 "screen_edit_room_address_title" = "Chatroomadresse";
+"screen_invite_users_already_a_member" = "Bereits Mitglied";
+"screen_invite_users_already_invited" = "Bereits eingeladen";
 "screen_join_room_cancel_knock_action" = "Anfrage abbrechen";
 "screen_join_room_cancel_knock_alert_confirmation" = "Ja, abbrechen";
 "screen_join_room_cancel_knock_alert_description" = "Möchten Sie Ihre Beitrittsanfrage für diesen Chatroom wirklich stornieren?";
@@ -975,8 +979,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "Sie haben ungespeicherte Änderungen.";
 "screen_room_details_add_topic_title" = "Thema hinzufügen";
-"screen_room_details_already_a_member" = "Bereits Mitglied";
-"screen_room_details_already_invited" = "Bereits eingeladen";
 "screen_room_details_badge_encrypted" = "Verschlüsselt";
 "screen_room_details_badge_not_encrypted" = "Nicht verschlüsselt";
 "screen_room_details_edit_room_title" = "Raum bearbeiten";
@@ -1075,6 +1077,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Sie haben noch keine Chatrooms als Favorit markiert";
 "screen_roomlist_filter_invites_empty_state_title" = "Sie haben keine ausstehenden Einladungen.";
 "screen_roomlist_filter_low_priority" = "Niedrige Priorität";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Wähle Filter ab, um Deine Chats zu sehen.";
 "screen_roomlist_filter_mixed_empty_state_title" = "Diese Chats entsprechen diesen Kriterien nicht.";
 "screen_roomlist_filter_people_empty_state_title" = "Sie haben noch keine Direktnachrichten";

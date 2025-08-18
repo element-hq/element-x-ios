@@ -1,5 +1,5 @@
 "Notification" = "Уведомление";
-"a11y_add_reaction" = "Add reaction: %1$@";
+"a11y_add_reaction" = "Добавить реакцию:%1$@";
 "a11y_avatar" = "Аватар";
 "a11y_delete" = "Удалить";
 "a11y_edit_avatar" = "Edit avatar";
@@ -9,9 +9,9 @@
 "a11y_jump_to_bottom" = "Перейти вниз";
 "a11y_notifications_mentions_only" = "Только упоминания";
 "a11y_notifications_muted" = "Звук отключен";
-"a11y_notifications_new_mentions" = "New mentions";
-"a11y_notifications_new_messages" = "New messages";
-"a11y_notifications_ongoing_call" = "Ongoing call";
+"a11y_notifications_new_mentions" = "Новые упоминания";
+"a11y_notifications_new_messages" = "Новые сообшения";
+"a11y_notifications_ongoing_call" = "Текущий вызов";
 "a11y_page_n" = "Страница %1$d";
 "a11y_pause" = "Приостановить";
 "a11y_paused_voice_message" = "Голосовое сообщение, длительность: %1$@, текущая позиция: %2$@";
@@ -38,7 +38,7 @@
 "a11y_voice_message" = "Голосовое сообщение, продолжительность: %1$@";
 "a11y_voice_message_record" = "Записать голосовое сообщение.";
 "a11y_voice_message_stop_recording" = "Остановить запись";
-"a11y.encryption_details" = "Encryption details";
+"a11y.encryption_details" = "Сведения о шифровании";
 "a11y.move_the_map_to_my_location" = "Move the map to my location";
 "a11y.other_user_avatar" = "Other user's avatar";
 "a11y.room_avatar" = "Room avatar";
@@ -146,6 +146,7 @@
 "action_view_source" = "Показать источник";
 "action_yes" = "Да";
 "action_yes_try_again" = "Да, попробуйте еще раз";
+"action.finish" = "Finish";
 "action.open_context_menu" = "Open context menu";
 "action.send_edited_message" = "Send edited message";
 "action.send_voice_message" = "Send voice message";
@@ -278,6 +279,7 @@
 "common_signing_out" = "Выход…";
 "common_something_went_wrong" = "Что-то пошло не так";
 "common_something_went_wrong_message" = "Мы столкнулись с проблемой. Пожалуйста, попробуйте еще раз.";
+"common_space" = "Space";
 "common_starting_chat" = "Чат запускается…";
 "common_sticker" = "Стикер";
 "common_success" = "Успешно";
@@ -353,7 +355,7 @@
 "dialog_unsaved_changes_title" = "Сохранить изменения?";
 "dialog_video_quality_selector_subtitle_file_size" = "The max file size allowed is: %1$@";
 "dialog_video_quality_selector_subtitle_no_file_size" = "Select the quality of the video you want to upload.";
-"dialog_video_quality_selector_title" = "Select video upload quality";
+"dialog_video_quality_selector_title" = "Выберите качество загружаемого видео";
 "emoji_picker_category_activity" = "Деятельность";
 "emoji_picker_category_flags" = "Флаги";
 "emoji_picker_category_foods" = "Еда и напитки";
@@ -504,6 +506,8 @@
 "screen_decline_and_block_title" = "Отклонить и заблокировать";
 "screen_edit_room_address_room_address_section_footer" = "Вам понадобится адрес комнаты, чтобы сделать ее видимой в каталоге.";
 "screen_edit_room_address_title" = "Адрес комнаты";
+"screen_invite_users_already_a_member" = "Уже зарегистрирован";
+"screen_invite_users_already_invited" = "Уже приглашены";
 "screen_join_room_cancel_knock_action" = "Отменить запрос";
 "screen_join_room_cancel_knock_alert_confirmation" = "Да, отменить";
 "screen_join_room_cancel_knock_alert_description" = "Вы действительно хотите отменить заявку на вступление в эту комнату?";
@@ -975,8 +979,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "У вас есть несохраненные изменения.";
 "screen_room_details_add_topic_title" = "Добавить тему";
-"screen_room_details_already_a_member" = "Уже зарегистрирован";
-"screen_room_details_already_invited" = "Уже приглашены";
 "screen_room_details_badge_encrypted" = "Зашифровано";
 "screen_room_details_badge_not_encrypted" = "Шифрования нет";
 "screen_room_details_edit_room_title" = "Редактировать комнату";
@@ -1075,6 +1077,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "У вас пока нет избранных чатов";
 "screen_roomlist_filter_invites_empty_state_title" = "У вас нет отложенных приглашений.";
 "screen_roomlist_filter_low_priority" = "Низкий приоритет";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Вы можете убрать фильтры, чтобы увидеть другие ваши чаты.";
 "screen_roomlist_filter_mixed_empty_state_title" = "У вас нет чатов для этой подборки";
 "screen_roomlist_filter_people_empty_state_title" = "У вас пока нет личных сообщений";

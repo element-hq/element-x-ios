@@ -146,6 +146,7 @@
 "action_view_source" = "Vedeți sursă";
 "action_yes" = "Da";
 "action_yes_try_again" = "Yes, try again";
+"action.finish" = "Finish";
 "action.open_context_menu" = "Open context menu";
 "action.send_edited_message" = "Send edited message";
 "action.send_voice_message" = "Send voice message";
@@ -278,6 +279,7 @@
 "common_signing_out" = "Deconectare în curs";
 "common_something_went_wrong" = "Ceva nu a mers bine";
 "common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_space" = "Space";
 "common_starting_chat" = "Se începe conversația…";
 "common_sticker" = "Autocolant";
 "common_success" = "Succes";
@@ -504,6 +506,8 @@
 "screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
 "screen_edit_room_address_title" = "Room address";
+"screen_invite_users_already_a_member" = "Deja membru";
+"screen_invite_users_already_invited" = "Deja invitat";
 "screen_join_room_cancel_knock_action" = "Anulați solicitarea";
 "screen_join_room_cancel_knock_alert_confirmation" = "Da, anulați";
 "screen_join_room_cancel_knock_alert_description" = "Sunteți sigur că doriți să anulați solicitarea de a vă alătura acestei camere?";
@@ -975,8 +979,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "Aveți modificări nesalvate.";
 "screen_room_details_add_topic_title" = "Adăugare subiect";
-"screen_room_details_already_a_member" = "Deja membru";
-"screen_room_details_already_invited" = "Deja invitat";
 "screen_room_details_badge_encrypted" = "Criptat";
 "screen_room_details_badge_not_encrypted" = "Necriptat";
 "screen_room_details_edit_room_title" = "Editați camera";
@@ -1075,6 +1077,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Încă nu aveți conversații preferate";
 "screen_roomlist_filter_invites_empty_state_title" = "Nu aveți invitații în așteptare.";
 "screen_roomlist_filter_low_priority" = "Prioritate scăzută";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Puteți deselecta filtrele pentru a vedea celelalte chat-uri";
 "screen_roomlist_filter_mixed_empty_state_title" = "Nu aveți chat-uri pentru această selecție";
 "screen_roomlist_filter_people_empty_state_title" = "Încă nu aveți DM-uri";

@@ -146,6 +146,7 @@
 "action_view_source" = "Ver fuente";
 "action_yes" = "Sí";
 "action_yes_try_again" = "Sí, intentar de nuevo";
+"action.finish" = "Finish";
 "action.open_context_menu" = "Open context menu";
 "action.send_edited_message" = "Send edited message";
 "action.send_voice_message" = "Send voice message";
@@ -278,6 +279,7 @@
 "common_signing_out" = "Cerrando sesión";
 "common_something_went_wrong" = "Algo salió mal";
 "common_something_went_wrong_message" = "Hemos encontrado un problema. Inténtalo de nuevo.";
+"common_space" = "Space";
 "common_starting_chat" = "Iniciando chat…";
 "common_sticker" = "Sticker";
 "common_success" = "Terminado";
@@ -504,6 +506,8 @@
 "screen_decline_and_block_title" = "Rechazar y bloquear";
 "screen_edit_room_address_room_address_section_footer" = "Necesitarás una dirección de sala para que sea visible en el directorio.";
 "screen_edit_room_address_title" = "Dirección de la sala";
+"screen_invite_users_already_a_member" = "Ya eres miembro";
+"screen_invite_users_already_invited" = "Ya estás invitado";
 "screen_join_room_cancel_knock_action" = "Cancelar solicitud";
 "screen_join_room_cancel_knock_alert_confirmation" = "Sí, cancelar";
 "screen_join_room_cancel_knock_alert_description" = "¿Estás seguro de que deseas cancelar tu solicitud de unión a esta sala?";
@@ -975,8 +979,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "Tienes cambios sin guardar.";
 "screen_room_details_add_topic_title" = "Añadir tema";
-"screen_room_details_already_a_member" = "Ya eres miembro";
-"screen_room_details_already_invited" = "Ya estás invitado";
 "screen_room_details_badge_encrypted" = "Cifrada";
 "screen_room_details_badge_not_encrypted" = "No cifrada";
 "screen_room_details_edit_room_title" = "Editar sala";
@@ -1075,6 +1077,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Aún no tienes chats favoritos";
 "screen_roomlist_filter_invites_empty_state_title" = "No tienes ninguna invitación pendiente.";
 "screen_roomlist_filter_low_priority" = "Prioridad baja";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Puedes deseleccionar filtros para ver tus otros chats.";
 "screen_roomlist_filter_mixed_empty_state_title" = "No tienes chats para esta selección";
 "screen_roomlist_filter_people_empty_state_title" = "Todavía no tienes ningún mensaje directo";

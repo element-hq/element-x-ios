@@ -146,6 +146,7 @@
 "action_view_source" = "Zobraziť zdroj";
 "action_yes" = "Áno";
 "action_yes_try_again" = "Áno, skúsiť to znova";
+"action.finish" = "Finish";
 "action.open_context_menu" = "Otvoriť kontextovú ponuku";
 "action.send_edited_message" = "Odoslať upravenú správa";
 "action.send_voice_message" = "Odoslať hlasovú správu";
@@ -278,6 +279,7 @@
 "common_signing_out" = "Odhlasovanie";
 "common_something_went_wrong" = "Niečo sa pokazilo";
 "common_something_went_wrong_message" = "Vyskytol sa problém. Skúste to prosím znova.";
+"common_space" = "Space";
 "common_starting_chat" = "Spustenie konverzácie...";
 "common_sticker" = "Nálepka";
 "common_success" = "Úspech";
@@ -504,6 +506,8 @@
 "screen_decline_and_block_title" = "Odmietnuť a zablokovať";
 "screen_edit_room_address_room_address_section_footer" = "Budete potrebovať adresu miestnosti, aby bola viditeľná v adresári.";
 "screen_edit_room_address_title" = "Adresa miestnosti";
+"screen_invite_users_already_a_member" = "Už ste členom";
+"screen_invite_users_already_invited" = "Už ste pozvaní";
 "screen_join_room_cancel_knock_action" = "Zrušiť žiadosť";
 "screen_join_room_cancel_knock_alert_confirmation" = "Áno, zrušiť";
 "screen_join_room_cancel_knock_alert_description" = "Ste si istí, že chcete zrušiť svoju žiadosť o vstup do tejto miestnosti?";
@@ -975,8 +979,6 @@
 "screen_room_change_role_owners_title" = "Vybrať vlastníkov";
 "screen_room_change_role_unsaved_changes_description" = "Máte neuložené zmeny.";
 "screen_room_details_add_topic_title" = "Pridať tému";
-"screen_room_details_already_a_member" = "Už ste členom";
-"screen_room_details_already_invited" = "Už ste pozvaní";
 "screen_room_details_badge_encrypted" = "Zašifrované";
 "screen_room_details_badge_not_encrypted" = "Nešifrované";
 "screen_room_details_edit_room_title" = "Upraviť miestnosť";
@@ -1075,6 +1077,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Zatiaľ nemáte obľúbené konverzácie";
 "screen_roomlist_filter_invites_empty_state_title" = "Nemáte žiadne čakajúce pozvánky.";
 "screen_roomlist_filter_low_priority" = "Nízka priorita";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Môžete zrušiť výber filtrov, aby ste videli svoje ostatné konverzácie";
 "screen_roomlist_filter_mixed_empty_state_title" = "Nemáte konverzácie pre tento výber";
 "screen_roomlist_filter_people_empty_state_title" = "Zatiaľ nemáte žiadne priame správy";

@@ -146,6 +146,7 @@
 "action_view_source" = "View source";
 "action_yes" = "Yes";
 "action_yes_try_again" = "Yes, try again";
+"action.finish" = "Finish";
 "action.open_context_menu" = "Open context menu";
 "action.send_edited_message" = "Send edited message";
 "action.send_voice_message" = "Send voice message";
@@ -505,6 +506,8 @@
 "screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
 "screen_edit_room_address_title" = "Room address";
+"screen_invite_users_already_a_member" = "Already a member";
+"screen_invite_users_already_invited" = "Already invited";
 "screen_join_room_cancel_knock_action" = "Cancel request";
 "screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
 "screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
@@ -976,8 +979,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
 "screen_room_details_add_topic_title" = "Add topic";
-"screen_room_details_already_a_member" = "Already a member";
-"screen_room_details_already_invited" = "Already invited";
 "screen_room_details_badge_encrypted" = "Encrypted";
 "screen_room_details_badge_not_encrypted" = "Not encrypted";
 "screen_room_details_edit_room_title" = "Edit Room";

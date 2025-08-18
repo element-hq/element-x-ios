@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d digit entered</string>
+			<string>%1$d ta raqam kiritildi</string>
 			<key>other</key>
-			<string>%1$d digits entered</string>
+			<string>%1$d ta raqam kiritildi</string>
 		</dict>
 	</dict>
 	<key>a11y_polls_percent_of_total</key>
@@ -253,9 +253,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You have %1$d attempt to unlock</string>
+			<string>Sizda %1$d ta ochishga urinish mavjud</string>
 			<key>other</key>
-			<string>You have %1$d attempts to unlock</string>
+			<string>Sizda %1$d ta ochishga urinish mavjud</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -269,9 +269,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Wrong PIN. You have %1$d more chance</string>
+			<string>Notoʻgʻri PIN. Sizda yana %1$d ta imkoniyat bor</string>
 			<key>other</key>
-			<string>Wrong PIN. You have %1$d more chances</string>
+			<string>Notoʻgʻri PIN. Sizda yana %1$d ta imkoniyat bor</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>

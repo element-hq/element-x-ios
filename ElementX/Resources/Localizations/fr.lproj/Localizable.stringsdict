@@ -77,9 +77,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d membre</string>
+			<string>%1$d Membre</string>
 			<key>other</key>
-			<string>%1$d membres</string>
+			<string>%1$d Membres</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Room</string>
+			<string>%1$d Salon</string>
 			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>%1$d Salons</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -141,9 +141,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Space</string>
+			<string>%1$d Espace</string>
 			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>%1$d Espaces</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>

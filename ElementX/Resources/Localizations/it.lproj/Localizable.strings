@@ -146,6 +146,7 @@
 "action_view_source" = "Vedi codice sorgente";
 "action_yes" = "Sì";
 "action_yes_try_again" = "Sì, riprova";
+"action.finish" = "Finish";
 "action.open_context_menu" = "Open context menu";
 "action.send_edited_message" = "Send edited message";
 "action.send_voice_message" = "Send voice message";
@@ -278,6 +279,7 @@
 "common_signing_out" = "Disconnessione";
 "common_something_went_wrong" = "Qualcosa è andato storto";
 "common_something_went_wrong_message" = "Abbiamo riscontrato un problema. Per favore riprova.";
+"common_space" = "Space";
 "common_starting_chat" = "Avvio della conversazione...";
 "common_sticker" = "Adesivo";
 "common_success" = "Operazione riuscita";
@@ -504,6 +506,8 @@
 "screen_decline_and_block_title" = "Rifiuta e blocca";
 "screen_edit_room_address_room_address_section_footer" = "Avrai bisogno di un indirizzo della stanza per renderla visibile nell'elenco.";
 "screen_edit_room_address_title" = "Indirizzo della stanza";
+"screen_invite_users_already_a_member" = "Già membro";
+"screen_invite_users_already_invited" = "Già invitato";
 "screen_join_room_cancel_knock_action" = "Cancella richiesta";
 "screen_join_room_cancel_knock_alert_confirmation" = "Sì, annulla";
 "screen_join_room_cancel_knock_alert_description" = "Sei sicuro di voler annullare la tua richiesta di accesso a questa stanza?";
@@ -975,8 +979,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "Hai delle modifiche non salvate.";
 "screen_room_details_add_topic_title" = "Aggiungi argomento";
-"screen_room_details_already_a_member" = "Già membro";
-"screen_room_details_already_invited" = "Già invitato";
 "screen_room_details_badge_encrypted" = "Cifrata";
 "screen_room_details_badge_not_encrypted" = "Non cifrata";
 "screen_room_details_edit_room_title" = "Modifica stanza";
@@ -1075,6 +1077,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Non hai ancora conversazioni preferite";
 "screen_roomlist_filter_invites_empty_state_title" = "Non hai nessun invito in sospeso.";
 "screen_roomlist_filter_low_priority" = "Bassa priorità";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Puoi deselezionare i filtri per vedere le altre conversazioni.";
 "screen_roomlist_filter_mixed_empty_state_title" = "Non hai conversazioni per questa selezione";
 "screen_roomlist_filter_people_empty_state_title" = "Non hai ancora nessuna conversazione diretta";

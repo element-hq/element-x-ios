@@ -139,9 +139,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Room</string>
-			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>%1$d кімната</string>
+			<key>few</key>
+			<string>%1$d кімнати</string>
+			<key>many</key>
+			<string>%1$d кімнат</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -155,9 +157,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Space</string>
-			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>%1$d простір</string>
+			<key>few</key>
+			<string>%1$d простори</string>
+			<key>many</key>
+			<string>%1$d просторів</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>

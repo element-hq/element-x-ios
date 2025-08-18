@@ -146,6 +146,7 @@
 "action_view_source" = "دیدن منبع";
 "action_yes" = "بله";
 "action_yes_try_again" = "بله. تلاش دوباره";
+"action.finish" = "Finish";
 "action.open_context_menu" = "گشودن فهرست بافتاری";
 "action.send_edited_message" = "فرستادن پیام ویراسته";
 "action.send_voice_message" = "فرستادن پیام صوتی";
@@ -278,6 +279,7 @@
 "common_signing_out" = "خارج شدن";
 "common_something_went_wrong" = "چیزی اشتباه پیش رفت";
 "common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_space" = "Space";
 "common_starting_chat" = "آغازیدن گپ…";
 "common_sticker" = "عکس برگردان";
 "common_success" = "موفّقیت";
@@ -504,6 +506,8 @@
 "screen_decline_and_block_title" = "رد و انسداد";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
 "screen_edit_room_address_title" = "نشانی اتاق";
+"screen_invite_users_already_a_member" = "از پیش عضو است";
+"screen_invite_users_already_invited" = "از پیش دعوت شده";
 "screen_join_room_cancel_knock_action" = "لغو درخواست";
 "screen_join_room_cancel_knock_alert_confirmation" = "بله. لغو";
 "screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
@@ -975,8 +979,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "تغییراتی ذخیره نشده دارید.";
 "screen_room_details_add_topic_title" = "افزودن موضوع";
-"screen_room_details_already_a_member" = "از پیش عضو است";
-"screen_room_details_already_invited" = "از پیش دعوت شده";
 "screen_room_details_badge_encrypted" = "رمز شده";
 "screen_room_details_badge_not_encrypted" = "رمزنگاری نشده";
 "screen_room_details_edit_room_title" = "ویرایش اتاق";
@@ -1075,6 +1077,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "هنوز هیچ گپ مورد علاقه‌ای ندارید";
 "screen_roomlist_filter_invites_empty_state_title" = "هیچ دعوت منتظری ندارید.";
 "screen_roomlist_filter_low_priority" = "اولویت کم";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "می توانید پالایه‌ها را برای دیدن دیگر گپ‌هایتان بردارید";
 "screen_roomlist_filter_mixed_empty_state_title" = "هیچ گپی برای این گزینش ندارید";
 "screen_roomlist_filter_people_empty_state_title" = "هنوز هیچ پیام مستقیمی ندارید";
