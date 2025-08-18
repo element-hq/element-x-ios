@@ -28,7 +28,7 @@ struct HomeScreenPostCell: View {
                         LoadableAvatarImage(url: post.senderInfo.avatarURL,
                                             name: nil,
                                             contentID: post.senderInfo.userID,
-                                            avatarSize: .user(on: .home),
+                                            avatarSize: .user(on: .chats),
                                             mediaProvider: mediaProvider,
                                             onTap: { _ in
                             if let postSenderProfile = post.senderProfile {
@@ -52,7 +52,7 @@ struct HomeScreenPostCell: View {
                     LoadableAvatarImage(url: post.senderInfo.avatarURL,
                                         name: nil,
                                         contentID: post.senderInfo.userID,
-                                        avatarSize: .user(on: .home),
+                                        avatarSize: .user(on: .chats),
                                         mediaProvider: mediaProvider,
                                         onTap: { _ in
                         if let postSenderProfile = post.senderProfile {

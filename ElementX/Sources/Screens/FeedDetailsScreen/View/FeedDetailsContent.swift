@@ -132,7 +132,7 @@ struct FeedDetailsContent: View {
                 LoadableAvatarImage(url: context.viewState.userAvatarURL,
                                     name: nil,
                                     contentID: context.viewState.userID,
-                                    avatarSize: .user(on: .home),
+                                    avatarSize: .user(on: .chats),
                                     mediaProvider: context.mediaProvider)
                 
                 TextField("Post your reply", text: $context.myPostReply,  axis: .vertical)
@@ -249,7 +249,7 @@ struct FeedDetailsSection: View {
                 LoadableAvatarImage(url: post.senderInfo.avatarURL,
                                     name: nil,
                                     contentID: post.senderInfo.userID,
-                                    avatarSize: .user(on: .home),
+                                    avatarSize: .user(on: .chats),
                                     mediaProvider: context.mediaProvider,
                                     onTap: { _ in
                     if let postSenderProfile = post.senderProfile {

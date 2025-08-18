@@ -1913,6 +1913,19 @@
 		7968A43A2D540A4700E9056A /* FeedDetailsScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7968A4382D540A4000E9056A /* FeedDetailsScreenView.swift */; };
 		7968A43C2D553AFF00E9056A /* FeedDetailsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7968A43B2D553AF800E9056A /* FeedDetailsContent.swift */; };
 		7968A43D2D553AFF00E9056A /* FeedDetailsContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7968A43B2D553AF800E9056A /* FeedDetailsContent.swift */; };
+		796CD4342E535FE1000D6078 /* SpaceServiceProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57DB49B8426AA721BF85D83 /* SpaceServiceProxyProtocol.swift */; };
+		796CD4352E535FEC000D6078 /* SpaceRoomProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01F2E9FD8FF95AB89A345E6 /* SpaceRoomProxyProtocol.swift */; };
+		796CD4362E535FEF000D6078 /* SpaceRoomListProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EACD4855BDAD0799FD86B7B5 /* SpaceRoomListProxyProtocol.swift */; };
+		796CD4372E536021000D6078 /* SpaceHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3AAC314A877DBDB6EBE1170 /* SpaceHeaderView.swift */; };
+		796CD4382E536056000D6078 /* SpaceRoomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E7B059E84E7E374D3322A2 /* SpaceRoomCell.swift */; };
+		796CD4392E5360A2000D6078 /* SpaceRoomProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF771312D208C8002A2F05C4 /* SpaceRoomProxyMock.swift */; };
+		796CD43A2E5360D9000D6078 /* SpaceServiceProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF36FC3DE25B20B7FA91F1FD /* SpaceServiceProxyMock.swift */; };
+		796CD43B2E5360DE000D6078 /* SpaceRoomListProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DB2A5FF1E68BA580A20D405 /* SpaceRoomListProxyMock.swift */; };
+		796CD43C2E536103000D6078 /* SpaceScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 646B50583A2CE6DA67F7739A /* SpaceScreen.swift */; };
+		796CD43D2E536128000D6078 /* SpaceScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459A3921046977CBF4F3C359 /* SpaceScreenViewModelProtocol.swift */; };
+		796CD43E2E53612C000D6078 /* SpaceScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8349149254469E24483FB0 /* SpaceScreenViewModel.swift */; };
+		796CD43F2E53612F000D6078 /* SpaceScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C11397904D19CFF0E3689F0E /* SpaceScreenModels.swift */; };
+		796CD4402E536133000D6078 /* SpaceScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094F6B21835890B470DF540C /* SpaceScreenCoordinator.swift */; };
 		79741C1953269FF1A211D246 /* RoomPollsHistoryScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E14FF533D25A0692F7CEB0 /* RoomPollsHistoryScreenViewModel.swift */; };
 		7975DBDB2D561EC900D5EB12 /* BannedRoomProxyMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD7E851E2BA8C5A8D284B2A /* BannedRoomProxyMock.swift */; };
 		7975DBDC2D561F2400D5EB12 /* BannedRoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30F45308428A4D9FFDB2FB8 /* BannedRoomProxy.swift */; };
@@ -3086,7 +3099,6 @@
 		18326FD72CA53E6D00389CB2 /* ZeroColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroColors.swift; sourceTree = "<group>"; };
 		18486B87745B1811E7FBD3D2 /* AnalyticsPromptScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPromptScreenModels.swift; sourceTree = "<group>"; };
 		184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorationTimelineItemProtocol.swift; sourceTree = "<group>"; };
-		18B223FA339BF53085328DEE /* SpaceScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceScreenViewModelTests.swift; sourceTree = "<group>"; };
 		184D6FC72C7D86D6006266D8 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		184D6FCC2C7D8AC2006266D8 /* ZeroAuthApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroAuthApi.swift; sourceTree = "<group>"; };
 		184D6FD12C7D8C8D006266D8 /* ZMatrixSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZMatrixSession.swift; sourceTree = "<group>"; };
@@ -3149,6 +3161,7 @@
 		18AF615F2CF85E9E00921644 /* ZeroListInlinePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroListInlinePicker.swift; sourceTree = "<group>"; };
 		18AF61622CF85F1900921644 /* ZeroListRowAccessory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroListRowAccessory.swift; sourceTree = "<group>"; };
 		18AF61652CF85F5600921644 /* ListRowTrailingSectionSpacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowTrailingSectionSpacing.swift; sourceTree = "<group>"; };
+		18B223FA339BF53085328DEE /* SpaceScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceScreenViewModelTests.swift; sourceTree = "<group>"; };
 		18BF59CE2CA4A4FF006D7BAB /* ZeroLaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ZeroLaunchScreen.storyboard; sourceTree = "<group>"; };
 		18C852FF2D11A12E009AF206 /* WalletConnectService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectService.swift; sourceTree = "<group>"; };
 		18CB801D2C7F2CE2003BC289 /* ZeroLoginScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZeroLoginScreen.swift; sourceTree = "<group>"; };
@@ -10204,6 +10217,7 @@
 				18E9A4872C9829970082DDA4 /* BlockedUsersScreenCoordinator.swift in Sources */,
 				18E9A4882C9829970082DDA4 /* BlockedUsersScreenModels.swift in Sources */,
 				18E9A4892C9829970082DDA4 /* BlockedUsersScreenViewModel.swift in Sources */,
+				796CD43B2E5360DE000D6078 /* SpaceRoomListProxyMock.swift in Sources */,
 				7968A43C2D553AFF00E9056A /* FeedDetailsContent.swift in Sources */,
 				18E9A48A2C9829970082DDA4 /* BlockedUsersScreenViewModelProtocol.swift in Sources */,
 				18E9A48C2C9829970082DDA4 /* BlurHashDecode.swift in Sources */,
@@ -10244,6 +10258,7 @@
 				18E9A4A52C9829970082DDA4 /* ClientBuilder.swift in Sources */,
 				18E9A4A62C9829970082DDA4 /* ClientBuilderHook.swift in Sources */,
 				18E9A4A72C9829970082DDA4 /* ZAttachmentUploadInfo.swift in Sources */,
+				796CD4372E536021000D6078 /* SpaceHeaderView.swift in Sources */,
 				18E9A4A92C9829970082DDA4 /* ClientProxy.swift in Sources */,
 				18E9A4AA2C9829970082DDA4 /* ClientProxyMock.swift in Sources */,
 				7905F9AB2D676AB400C3A203 /* HomeChannelsContent.swift in Sources */,
@@ -10329,6 +10344,7 @@
 				7903938C2D53A2440022E293 /* TimelineMediaPreviewController.swift in Sources */,
 				18E9A4E72C9829970082DDA4 /* EmojiPickerScreenCoordinator.swift in Sources */,
 				18E9A4E82C9829970082DDA4 /* EmojiPickerScreenHeaderView.swift in Sources */,
+				796CD43A2E5360D9000D6078 /* SpaceServiceProxyMock.swift in Sources */,
 				79AB3A902E252BE300E94E54 /* RefreshButton.swift in Sources */,
 				79B04C422DE07F6500A98D3E /* UserFeedProfileFlowCoordinator.swift in Sources */,
 				79AB3A962E252CF200E94E54 /* PostLinkPreview.swift in Sources */,
@@ -10380,6 +10396,7 @@
 				18D467AA2D109BA300861AA6 /* VoiceMessageMediaEventsTimelineView.swift in Sources */,
 				18E9A5022C9829970082DDA4 /* ZSessionDataResponse.swift in Sources */,
 				18E9A5032C9829970082DDA4 /* EventBasedTimelineItemProtocol.swift in Sources */,
+				796CD43D2E536128000D6078 /* SpaceScreenViewModelProtocol.swift in Sources */,
 				79C9BA8D2E27E1E000A16384 /* UserWalletQRCode.swift in Sources */,
 				18D467B12D10A0AC00861AA6 /* SecurityAndPrivacyScreenCoordinator.swift in Sources */,
 				18E9A5052C9829970082DDA4 /* ExpiringTaskRunner.swift in Sources */,
@@ -10420,6 +10437,7 @@
 				7996162B2E09EDBC008E73C4 /* RoomPowerLevelsProxyMock.swift in Sources */,
 				18E9A51D2C9829970082DDA4 /* HomeScreenContent.swift in Sources */,
 				18E9A51E2C9829970082DDA4 /* HomeScreenCoordinator.swift in Sources */,
+				796CD4402E536133000D6078 /* SpaceScreenCoordinator.swift in Sources */,
 				79C25B5C2E25AB2D00936A5D /* PostVideoPlayer.swift in Sources */,
 				790393842D53A1180022E293 /* TimelineControllerFactoryProtocol.swift in Sources */,
 				18E9A51F2C9829970082DDA4 /* HomeScreenEmptyStateView.swift in Sources */,
@@ -10464,6 +10482,7 @@
 				18E9A5382C9829970082DDA4 /* InfoPlistReader.swift in Sources */,
 				18E9A5392C9829970082DDA4 /* IntentionalMentions.swift in Sources */,
 				18E9A53A2C9829970082DDA4 /* InteractiveQuickLook.swift in Sources */,
+				796CD43F2E53612F000D6078 /* SpaceScreenModels.swift in Sources */,
 				7944A7682D589F5800B75DAC /* CreateFeedScreenViewModelProtocol.swift in Sources */,
 				18E9A53B2C9829970082DDA4 /* InviteUsersScreen.swift in Sources */,
 				18E9A53C2C9829970082DDA4 /* InviteUsersScreenCoordinator.swift in Sources */,
@@ -10552,6 +10571,7 @@
 				18E9A57B2C9829970082DDA4 /* MediaLoader.swift in Sources */,
 				18E9A57C2C9829970082DDA4 /* MediaLoaderProtocol.swift in Sources */,
 				18525D022CF5E7FF0055C5E8 /* InviteFriendSettingsScreenCoordinator.swift in Sources */,
+				796CD43C2E536103000D6078 /* SpaceScreen.swift in Sources */,
 				18E9A57D2C9829970082DDA4 /* MediaPickerScreenCoordinator.swift in Sources */,
 				18659CBD2CFB257C000EF0A6 /* ZNonceResponse.swift in Sources */,
 				18E9A57F2C9829970082DDA4 /* MediaPlayerProvider.swift in Sources */,
@@ -10571,6 +10591,7 @@
 				18E9A58C2C9829970082DDA4 /* MentionBuilder.swift in Sources */,
 				790393712D4CD63E0022E293 /* HomeTabView.swift in Sources */,
 				18E9A58D2C9829970082DDA4 /* MentionSuggestionItemView.swift in Sources */,
+				796CD4342E535FE1000D6078 /* SpaceServiceProxyProtocol.swift in Sources */,
 				18E9A58E2C9829970082DDA4 /* MenuSheetLabelStyle.swift in Sources */,
 				799E1D1A2DBBA85B00E3D512 /* ZeroMetaDataApi.swift in Sources */,
 				18E9A58F2C9829970082DDA4 /* MessageComposer.swift in Sources */,
@@ -10739,6 +10760,7 @@
 				18E9A6002C9829970082DDA4 /* QRCodeScannerView.swift in Sources */,
 				18E9A6012C9829970082DDA4 /* ReactionsSummaryView.swift in Sources */,
 				18E9A6022C9829970082DDA4 /* ReadMarkerRoomTimelineItem.swift in Sources */,
+				796CD4382E536056000D6078 /* SpaceRoomCell.swift in Sources */,
 				18E9A6032C9829970082DDA4 /* ReadMarkerRoomTimelineView.swift in Sources */,
 				18E9A6042C9829970082DDA4 /* ReadReceipt.swift in Sources */,
 				18E9A6052C9829970082DDA4 /* ReadReceiptCell.swift in Sources */,
@@ -10747,6 +10769,8 @@
 				18E9A6062C9829970082DDA4 /* ReadReceiptsSummaryView.swift in Sources */,
 				79C6F7222DF82440003CEBB9 /* AdvancedSettingsScreenCoordinator.swift in Sources */,
 				18E9A6072C9829970082DDA4 /* ReadableFrameModifier.swift in Sources */,
+				796CD4352E535FEC000D6078 /* SpaceRoomProxyProtocol.swift in Sources */,
+				796CD4362E535FEF000D6078 /* SpaceRoomListProxyProtocol.swift in Sources */,
 				795A0C862D77EBA5000928B7 /* ZeroApiProxy.swift in Sources */,
 				18E9A6082C9829970082DDA4 /* RedactedRoomTimelineItem.swift in Sources */,
 				18AF61642CF85F1900921644 /* ZeroListRowAccessory.swift in Sources */,
@@ -10973,6 +10997,7 @@
 				18D467A62D109B9300861AA6 /* FileMediaEventsTimelineView.swift in Sources */,
 				792441702DCC9B8700CD45B9 /* FeedMediaSelectedProtocol.swift in Sources */,
 				182258E42CCC3D5B00BBEDC0 /* BigIcon.swift in Sources */,
+				796CD43E2E53612C000D6078 /* SpaceScreenViewModel.swift in Sources */,
 				18E9A6B02C9829970082DDA4 /* ServerSelectionScreenCoordinator.swift in Sources */,
 				18E9A6B12C9829970082DDA4 /* ServerSelectionScreenModels.swift in Sources */,
 				18E9A6B22C9829970082DDA4 /* ServerSelectionScreenViewModel.swift in Sources */,
@@ -11027,6 +11052,7 @@
 				7996162D2E09EDF8008E73C4 /* RoomPowerLevelsProxy.swift in Sources */,
 				79C6F7242DF8244A003CEBB9 /* AdvancedSettingsScreenViewModelProtocol.swift in Sources */,
 				18D467B22D10A0B000861AA6 /* SecurityAndPrivacyScreenModels.swift in Sources */,
+				796CD4392E5360A2000D6078 /* SpaceRoomProxyMock.swift in Sources */,
 				18E9A6DC2C9829970082DDA4 /* StickerRoomTimelineView.swift in Sources */,
 				18E9A6DD2C9829970082DDA4 /* String.swift in Sources */,
 				18E9A6DE2C9829970082DDA4 /* Strings+SAS.swift in Sources */,
