@@ -1662,6 +1662,28 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func claimStakeRewards(walletAddress: String, poolAddress: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.stakingApi.claimStakeRewards(userWalletAddress: walletAddress,
+                                                                             poolAddress: poolAddress)
+            switch result {
+            case .success(let transaction):
+                let receiptResult = try await zeroApiProxy.walletsApi.getTransactionReceipt(transactionHash: transaction.transactionHash)
+                switch receiptResult {
+                case .success(let receipt):
+                    return .success(receipt)
+                case .failure(let error):
+                    return .failure(.zeroError(error))
+                }
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to claim stake rewards, with error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.metaDataApi.getLinkPreview(url: url)

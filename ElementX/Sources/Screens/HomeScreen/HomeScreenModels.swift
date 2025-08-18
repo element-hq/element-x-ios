@@ -85,6 +85,7 @@ enum HomeScreenViewAction {
     case claimRewards(trigger: Bool)
     
     case onStakePoolSelected(HomeScreenWalletStakingContent)
+    case claimStakeRewards
     case stakeAmount(String)
     case unstakeAmount(String)
 }

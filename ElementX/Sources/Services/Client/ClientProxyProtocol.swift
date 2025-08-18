@@ -356,6 +356,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func unstakeAmount(walletAddress: String, poolAddress: String, amount: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
     
+    func claimStakeRewards(walletAddress: String, poolAddress: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
+    
     // MARK: - ZERO METADATA
     
     func getLinkPreviewMetaData(url: String) async -> Result<ZLinkPreview, ClientProxyError>

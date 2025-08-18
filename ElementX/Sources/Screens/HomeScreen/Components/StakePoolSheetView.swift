@@ -14,6 +14,7 @@ struct StakePoolSheetView : View {
     let onStakeAmount: (String) -> Void
     let onUnstakeAmount: (String) -> Void
     let onDismissSheet: () -> Void
+    let onClaimStakeRewards: () -> Void
     
     @State private var isUserStakingAmount: Bool = false
     @State private var transactionAmount: String = ""
@@ -31,7 +32,7 @@ struct StakePoolSheetView : View {
                     withAnimation(.easeInOut(duration: 0.3)) {
                         state = .unstaking
                     }
-                })
+                }, onClaimStakeRewards: { onClaimStakeRewards() })
             case .staking, .unstaking:
                 PoolStakeUnstakeView(selectedPool: selectedPool,
                                      state: state,
@@ -88,11 +89,14 @@ private struct StakePoolDetailsView : View {
     let selectedPool: SelectedHomeWalletStakePool
     let onStakePool: () -> Void
     let onUnstakePool: () -> Void
+    let onClaimStakeRewards: () -> Void
     
     var body: some View {
         let stakeTokenName = selectedPool.stakeToken?.symbol.uppercased() ?? ""
         let rewardTokenName = selectedPool.rewardToken?.symbol.uppercased() ?? ""
-        let rewardTokenBalance = selectedPool.claimableRewardValue
+        let rewardTokenBalance = "0"
+//        let rewardTokenBalance = selectedPool.claimableRewardValue
+        let hasUnclaimedRewards = false
         
         Text("Pool Details")
             .font(.compound.bodyMDSemibold)
@@ -129,9 +133,20 @@ private struct StakePoolDetailsView : View {
         
         HStack {
             VStack(alignment: .leading) {
-                Text("Claimable Rewards \(rewardTokenName)")
-                    .font(.zero.bodyMD)
-                    .foregroundColor(.compound.textSecondary)
+                HStack {
+                    Text("Claimable Rewards \(rewardTokenName)")
+                        .font(.zero.bodyMD)
+                        .foregroundColor(.compound.textSecondary)
+                    
+                    Spacer()
+                    
+                    if hasUnclaimedRewards {
+                        ClaimEarningsButton(
+                            text: "Claim Rewards",
+                            onTap: { onClaimStakeRewards() }
+                        )
+                    }
+                }
                 
                 Text(rewardTokenBalance)
                     .font(.compound.headingMDBold)

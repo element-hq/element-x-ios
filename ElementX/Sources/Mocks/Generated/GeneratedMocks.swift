@@ -8258,6 +8258,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return unstakeAmountWalletAddressPoolAddressAmountReturnValue
         }
     }
+    //MARK: - claimStakeRewards
+
+    var claimStakeRewardsWalletAddressPoolAddressUnderlyingCallsCount = 0
+    var claimStakeRewardsWalletAddressPoolAddressCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return claimStakeRewardsWalletAddressPoolAddressUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = claimStakeRewardsWalletAddressPoolAddressUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                claimStakeRewardsWalletAddressPoolAddressUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    claimStakeRewardsWalletAddressPoolAddressUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var claimStakeRewardsWalletAddressPoolAddressCalled: Bool {
+        return claimStakeRewardsWalletAddressPoolAddressCallsCount > 0
+    }
+    var claimStakeRewardsWalletAddressPoolAddressReceivedArguments: (walletAddress: String, poolAddress: String)?
+    var claimStakeRewardsWalletAddressPoolAddressReceivedInvocations: [(walletAddress: String, poolAddress: String)] = []
+
+    var claimStakeRewardsWalletAddressPoolAddressUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>!
+    var claimStakeRewardsWalletAddressPoolAddressReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return claimStakeRewardsWalletAddressPoolAddressUnderlyingReturnValue
+            } else {
+                var returnValue: Result<ZWalletTransactionReceipt, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = claimStakeRewardsWalletAddressPoolAddressUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                claimStakeRewardsWalletAddressPoolAddressUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    claimStakeRewardsWalletAddressPoolAddressUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var claimStakeRewardsWalletAddressPoolAddressClosure: ((String, String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
+
+    func claimStakeRewards(walletAddress: String, poolAddress: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+        claimStakeRewardsWalletAddressPoolAddressCallsCount += 1
+        claimStakeRewardsWalletAddressPoolAddressReceivedArguments = (walletAddress: walletAddress, poolAddress: poolAddress)
+        DispatchQueue.main.async {
+            self.claimStakeRewardsWalletAddressPoolAddressReceivedInvocations.append((walletAddress: walletAddress, poolAddress: poolAddress))
+        }
+        if let claimStakeRewardsWalletAddressPoolAddressClosure = claimStakeRewardsWalletAddressPoolAddressClosure {
+            return await claimStakeRewardsWalletAddressPoolAddressClosure(walletAddress, poolAddress)
+        } else {
+            return claimStakeRewardsWalletAddressPoolAddressReturnValue
+        }
+    }
     //MARK: - getLinkPreviewMetaData
 
     var getLinkPreviewMetaDataUrlUnderlyingCallsCount = 0

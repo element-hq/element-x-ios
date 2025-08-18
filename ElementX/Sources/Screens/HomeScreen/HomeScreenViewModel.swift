@@ -339,6 +339,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             }
         case .onStakePoolSelected(let stakePool):
             fetchStakeDataOfPool(stakePool)
+        case .claimStakeRewards:
+            claimStakeRewards()
         case .stakeAmount(let amount):
             stakeAmount(amount)
         case .unstakeAmount(let amount):
@@ -1134,6 +1136,33 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             if !silentRefresh {
                 state.bindings.stakePoolViewState = .details
                 state.bindings.showStakePoolSheet = true
+            }
+        }
+    }
+    
+    private func claimStakeRewards() {
+        guard let selectedPool = state.selectedStakePool else { return }
+        Task {
+            let userIndicatorID = UUID().uuidString
+            defer {
+                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+            }
+            userIndicatorController.submitIndicator(
+                UserIndicator(
+                    id: userIndicatorID,
+                    type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                    title: L10n.commonLoading,
+                    persistent: true
+                )
+            )
+            let result = await userSession.clientProxy.claimStakeRewards(walletAddress: selectedPool.pool.userWalletAddress,
+                                                                         poolAddress: selectedPool.pool.poolAddress)
+            switch result {
+            case .success(_):
+//                fetchWalletData(silentRefresh: true)
+                fetchStakeDataOfPool(selectedPool.pool, silentRefresh: true)
+            case .failure(let error):
+                state.bindings.stakePoolViewState = .failure
             }
         }
     }

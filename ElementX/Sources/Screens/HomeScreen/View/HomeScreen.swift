@@ -132,6 +132,8 @@ struct HomeScreen: View {
                 },
                                    onDismissSheet: {
                     context.showStakePoolSheet = false
+                }, onClaimStakeRewards: {
+                    context.send(viewAction: .claimStakeRewards)
                 })
                 .presentationDetents([.medium])
                 .presentationDragIndicator(.visible)

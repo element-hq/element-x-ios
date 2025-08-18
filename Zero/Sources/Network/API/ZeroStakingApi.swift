@@ -24,6 +24,8 @@ protocol ZeroStakingApiProtocol {
     func stakeAmount(userWalletAddress: String, poolAddress: String, amount: String) async throws -> Result<ZWalletTransactionResponse, Error>
     
     func unstakeAmount(userWalletAddress: String, poolAddress: String, amount: String) async throws -> Result<ZWalletTransactionResponse, Error>
+    
+    func claimStakeRewards(userWalletAddress: String, poolAddress: String) async throws -> Result<ZWalletTransactionResponse, Error>
 }
 
 class ZeroStakingApi : ZeroStakingApiProtocol {
@@ -155,6 +157,24 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         }
     }
     
+    func claimStakeRewards(userWalletAddress: String, poolAddress: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
+        let url = StakingEndPoints.claimStakeRewards
+            .replacingOccurrences(of: StakingApiConstants.stake_user_address, with: userWalletAddress)
+        let parameters = [
+            "poolAddress": poolAddress
+        ]
+        let transactionResult: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
+                                                                                                                         method: .post,
+                                                                                                                         appSettings: appSettings,
+                                                                                                                         parameters: parameters)
+        switch transactionResult {
+        case .success(let transaction):
+            return .success(transaction)
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
     // MARK: - Constants
     
     private enum StakingEndPoints {
@@ -169,6 +189,8 @@ class ZeroStakingApi : ZeroStakingApiProtocol {
         
         static let stakeAmount = "\(hostURL)api/wallet/\(StakingApiConstants.stake_user_address)/transactions/stake"
         static let unstakeAmount = "\(hostURL)api/wallet/\(StakingApiConstants.stake_user_address)/transactions/unstake"
+        
+        static let claimStakeRewards = "\(hostURL)api/wallet/\(StakingApiConstants.stake_user_address)/transactions/claim-staking-rewards"
     }
     
     private enum StakingApiConstants {
