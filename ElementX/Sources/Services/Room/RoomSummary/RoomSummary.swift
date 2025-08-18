@@ -136,15 +136,20 @@ extension RoomSummary {
     
     // This doesn't have to work properly for DM invites, the heroes are always empty
     var avatar: RoomAvatar {
-        //guard !isTombstoned else {
-        //    return .tombstoned
-        //}
-        // 
-        //if isDirect, avatarURL == nil, heroes.count == 1 {
-        //    return .heroes(heroes)
-        //} else {
-        //    return .room(id: id, name: name, avatarURL: avatarURL)
-        //}
-        .room(id: id, name: name, avatarURL: avatarURL)
+//        guard !isTombstoned else {
+//            return .tombstoned
+//        }
+//        
+//        // NOTE: The check for isSpace isn't implemented yet, waiting to see
+//        // whether we end up with a different type for spaces in the room list.
+//        //
+//        // Don't forget to add a test when you remove this comment 😄
+//        
+//        if isDirect, avatarURL == nil, heroes.count == 1 {
+//            return .heroes(heroes)
+//        } else {
+//            return .room(id: id, name: name, avatarURL: avatarURL)
+//        }
+        return .room(id: id, name: name, avatarURL: avatarURL)
     }
 }

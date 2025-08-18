@@ -26,11 +26,6 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
         powerLevels.userPowerLevels()
     }
     
-    func suggestedRole(forUser userID: String) -> RoomMemberRole {
-        let powerLevel = powerLevels.userPowerLevels()[userID] ?? values.usersDefault
-        return suggestedRoleForPowerLevel(powerLevel: powerLevel)
-    }
-    
     func canOwnUser(sendMessage messageType: MessageLikeEventType) -> Bool {
         powerLevels.canOwnUserSendMessage(message: messageType)
     }
@@ -69,6 +64,10 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
     
     func canOwnUserJoinCall() -> Bool {
         powerLevels.canOwnUserSendState(stateEvent: .callMember)
+    }
+    
+    func canOwnUserEditRolesAndPermissions() -> Bool {
+        powerLevels.canOwnUserSendState(stateEvent: .roomPowerLevels)
     }
     
     func canUser(userID: String, sendMessage messageType: MessageLikeEventType) -> Result<Bool, RoomProxyError> {
@@ -159,5 +158,10 @@ struct RoomPowerLevelsProxy: RoomPowerLevelsProxyProtocol {
             MXLog.error("Failed checking if the user can trigger room notification with error: \(error)")
             return .failure(.sdkError(error))
         }
+    }
+    
+    func canUserLeaveRoom(userID: String) -> Bool {
+        // Admin power level starts from 100 and goes to 150, owner/creators are above 150
+        (powerLevels.userPowerLevels()[userID] ?? 0) < 100
     }
 }

@@ -125,7 +125,7 @@ struct RecipientInfoCell: View {
                     url: URL(string: recipient.profileImage ?? ""),
                     name: recipient.name,
                     contentID: recipient.id,
-                    avatarSize: .user(on: .home),
+                    avatarSize: .user(on: .chats),
                     mediaProvider: mediaProvider,
                     onTap: { _ in }
                 )

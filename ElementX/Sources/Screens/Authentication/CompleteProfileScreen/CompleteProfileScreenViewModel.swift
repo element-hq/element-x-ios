@@ -55,8 +55,12 @@ class CompleteProfileScreenViewModel: CompleteProfileScreenViewModelType, Comple
                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                                   title: L10n.commonLoading,
                                                                   persistent: true))
-            
-            let mediaResult = await mediaUploadingPreprocessor.processMedia(at: url)
+            guard case let .success(maxUploadSize) = await clientProxy.maxMediaUploadSize else {
+                MXLog.error("Failed to get max upload size")
+                userIndicatorController.alertInfo = .init(id: .init())
+                return
+            }
+            let mediaResult = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize)
             
             switch mediaResult {
             case .success(.image):

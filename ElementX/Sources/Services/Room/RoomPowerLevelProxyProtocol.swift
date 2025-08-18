@@ -11,9 +11,7 @@ import MatrixRustSDK
 protocol RoomPowerLevelsProxyProtocol {
     var values: RoomPowerLevelsValues { get }
     var userPowerLevels: [String: Int64] { get }
-    
-    func suggestedRole(forUser userID: String) -> RoomMemberRole
-    
+        
     func canOwnUser(sendMessage messageType: MessageLikeEventType) -> Bool
     func canOwnUser(sendStateEvent event: StateEventType) -> Bool
     func canOwnUserInvite() -> Bool
@@ -24,6 +22,7 @@ protocol RoomPowerLevelsProxyProtocol {
     func canOwnUserTriggerRoomNotification() -> Bool
     func canOwnUserPinOrUnpin() -> Bool
     func canOwnUserJoinCall() -> Bool
+    func canOwnUserEditRolesAndPermissions() -> Bool
     
     func canUser(userID: String, sendMessage messageType: MessageLikeEventType) -> Result<Bool, RoomProxyError>
     func canUser(userID: String, sendStateEvent event: StateEventType) -> Result<Bool, RoomProxyError>
@@ -35,4 +34,5 @@ protocol RoomPowerLevelsProxyProtocol {
     func canUserTriggerRoomNotification(userID: String) -> Result<Bool, RoomProxyError>
     func canUserPinOrUnpin(userID: String) -> Result<Bool, RoomProxyError>
     func canUserJoinCall(userID: String) -> Result<Bool, RoomProxyError>
+    func canUserLeaveRoom(userID: String) -> Bool
 }

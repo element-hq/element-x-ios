@@ -25,7 +25,7 @@ extension ClientBuilder {
             .enableOidcRefreshLock()
             .setSessionDelegate(sessionDelegate: sessionDelegate)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent())
-            .threadsEnabled(enabled: threadsEnabled)
+            .threadsEnabled(enabled: threadsEnabled, threadSubscriptions: threadsEnabled)
             .requestConfig(config: .init(retryLimit: 0,
                                          timeout: requestTimeout,
                                          maxConcurrentRequests: nil,

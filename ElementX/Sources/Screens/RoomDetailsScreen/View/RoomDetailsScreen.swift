@@ -33,8 +33,7 @@ struct RoomDetailsScreen: View {
 //                ignoreUserSection(user: recipient)
 //            }
             
-            if context.viewState.dmRecipientInfo.isNil,
-               !context.viewState.isAChannel {
+            if context.viewState.canUserLeaveRoom {
                 leaveRoomSection
             }
         }

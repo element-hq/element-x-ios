@@ -116,7 +116,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         isFetchRepliesInProgress = true
         
         Task {
-            defer { isFetchRepliesInProgress = false } // Ensure flag is reset when the task completes
+//            defer { isFetchRepliesInProgress = false } // Ensure flag is reset when the task completes
             
             state.repliesListMode = state.feedReplies.isEmpty ? .skeletons : .replies
             let skipItems = isForceRefresh ? 0 : state.feedReplies.count
@@ -128,6 +128,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 if hasNoReplies {
                     state.repliesListMode = state.feedReplies.isEmpty ? .empty : .replies
                     state.canLoadMoreReplies = false
+                    isFetchRepliesInProgress = false
                 } else {
                     var feedReplies: [HomeScreenPost] = isForceRefresh ? [] : state.feedReplies
                     for reply in replies {
@@ -138,12 +139,14 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                     }
                     state.feedReplies = feedReplies.uniqued(on: \.id)
                     state.repliesListMode = .replies
+                    isFetchRepliesInProgress = false
                     
                     await loadPostContentConcurrently(for: state.feedReplies, isForceRefresh: isForceRefresh)
                 }
             case .failure(let error):
                 MXLog.error("Failed to fetch zero post replies: \(error)")
                 state.repliesListMode = state.feedReplies.isEmpty ? .empty : .replies
+                isFetchRepliesInProgress = false
                 switch error {
                 case .postsLimitReached:
                     state.canLoadMoreReplies = false

@@ -80,11 +80,11 @@ struct HomeScreenRoomList: View {
                             }
                         }
                         
-                        Button(role: .destructive) {
-                            context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
-                        } label: {
-                            Label(L10n.actionLeaveRoom, icon: \.leave)
-                        }
+//                        Button(role: .destructive) {
+//                            context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
+//                        } label: {
+//                            Label(L10n.actionLeaveRoom, icon: \.leave)
+//                        }
                     }
             }
         }

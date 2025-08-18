@@ -16,6 +16,7 @@ enum HomeScreenViewModelAction {
     case presentReportRoom(roomIdentifier: String)
     case presentDeclineAndBlock(userID: String, roomID: String)
     case roomLeft(roomIdentifier: String)
+    case transferOwnership(roomIdentifier: String)
     case presentSecureBackupSettings
     case presentRecoveryKeyScreen
     case presentEncryptionResetScreen
@@ -24,7 +25,6 @@ enum HomeScreenViewModelAction {
     case presentStartChatScreen
     case presentCreateFeedScreen(feedProtocol: FeedProtocol)
     case presentGlobalSearch
-    case logoutWithoutConfirmation
     case logout
     case postTapped(_ post: HomeScreenPost, feedProtocol: FeedProtocol)
     case openPostUserProfile(_ profile: ZPostUserProfile, feedProtocol: FeedProtocol)

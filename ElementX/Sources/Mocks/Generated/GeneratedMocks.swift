@@ -2093,16 +2093,6 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingHomeserver = value }
     }
     var underlyingHomeserver: String!
-    var needsSlidingSyncMigration: Bool {
-        get { return underlyingNeedsSlidingSyncMigration }
-        set(value) { underlyingNeedsSlidingSyncMigration = value }
-    }
-    var underlyingNeedsSlidingSyncMigration: Bool!
-    var slidingSyncVersion: SlidingSyncVersion {
-        get { return underlyingSlidingSyncVersion }
-        set(value) { underlyingSlidingSyncVersion = value }
-    }
-    var underlyingSlidingSyncVersion: SlidingSyncVersion!
     var canDeactivateAccount: Bool {
         get { return underlyingCanDeactivateAccount }
         set(value) { underlyingCanDeactivateAccount = value }
@@ -2200,6 +2190,23 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingIsLiveKitRTCSupported: Bool!
     var isLiveKitRTCSupportedClosure: (() async -> Bool)?
+    var maxMediaUploadSizeCallsCount = 0
+    var maxMediaUploadSizeCalled: Bool {
+        return maxMediaUploadSizeCallsCount > 0
+    }
+
+    var maxMediaUploadSize: Result<UInt, ClientProxyError> {
+        get async {
+            maxMediaUploadSizeCallsCount += 1
+            if let maxMediaUploadSizeClosure = maxMediaUploadSizeClosure {
+                return await maxMediaUploadSizeClosure()
+            } else {
+                return underlyingMaxMediaUploadSize
+            }
+        }
+    }
+    var underlyingMaxMediaUploadSize: Result<UInt, ClientProxyError>!
+    var maxMediaUploadSizeClosure: (() async -> Result<UInt, ClientProxyError>)?
     var userRewardsPublisher: CurrentValuePublisher<ZeroRewards, Never> {
         get { return underlyingUserRewardsPublisher }
         set(value) { underlyingUserRewardsPublisher = value }
@@ -12519,70 +12526,6 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return elementCallWidgetDriverDeviceIDReturnValue
         }
     }
-    //MARK: - sendCallNotificationIfNeeded
-
-    var sendCallNotificationIfNeededUnderlyingCallsCount = 0
-    var sendCallNotificationIfNeededCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return sendCallNotificationIfNeededUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sendCallNotificationIfNeededUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sendCallNotificationIfNeededUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sendCallNotificationIfNeededUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var sendCallNotificationIfNeededCalled: Bool {
-        return sendCallNotificationIfNeededCallsCount > 0
-    }
-
-    var sendCallNotificationIfNeededUnderlyingReturnValue: Result<Void, RoomProxyError>!
-    var sendCallNotificationIfNeededReturnValue: Result<Void, RoomProxyError>! {
-        get {
-            if Thread.isMainThread {
-                return sendCallNotificationIfNeededUnderlyingReturnValue
-            } else {
-                var returnValue: Result<Void, RoomProxyError>? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sendCallNotificationIfNeededUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sendCallNotificationIfNeededUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sendCallNotificationIfNeededUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var sendCallNotificationIfNeededClosure: (() async -> Result<Void, RoomProxyError>)?
-
-    func sendCallNotificationIfNeeded() async -> Result<Void, RoomProxyError> {
-        sendCallNotificationIfNeededCallsCount += 1
-        if let sendCallNotificationIfNeededClosure = sendCallNotificationIfNeededClosure {
-            return await sendCallNotificationIfNeededClosure()
-        } else {
-            return sendCallNotificationIfNeededReturnValue
-        }
-    }
     //MARK: - matrixToPermalink
 
     var matrixToPermalinkUnderlyingCallsCount = 0
@@ -16692,7 +16635,7 @@ class RoomInfoProxyMock: RoomInfoProxyProtocol, @unchecked Sendable {
         set(value) { underlyingId = value }
     }
     var underlyingId: String!
-    var creator: String?
+    var creators: [String] = []
     var displayName: String?
     var rawName: String?
     var topic: String?
@@ -16818,16 +16761,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol, @unchecked Sendable {
         set(value) { underlyingIsIgnored = value }
     }
     var underlyingIsIgnored: Bool!
-    var powerLevel: Int {
+    var powerLevel: RoomPowerLevel {
         get { return underlyingPowerLevel }
         set(value) { underlyingPowerLevel = value }
     }
-    var underlyingPowerLevel: Int!
-    var role: RoomMemberRole {
-        get { return underlyingRole }
-        set(value) { underlyingRole = value }
-    }
-    var underlyingRole: RoomMemberRole!
+    var underlyingPowerLevel: RoomPowerLevel!
     var primaryZeroId: String?
     var isZeroProSubscriber: Bool {
         get { return underlyingIsZeroProSubscriber }
@@ -16866,76 +16804,6 @@ class RoomPowerLevelsProxyMock: RoomPowerLevelsProxyProtocol, @unchecked Sendabl
     var underlyingValues: RoomPowerLevelsValues!
     var userPowerLevels: [String: Int64] = [:]
 
-    //MARK: - suggestedRole
-
-    var suggestedRoleForUserUnderlyingCallsCount = 0
-    var suggestedRoleForUserCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return suggestedRoleForUserUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = suggestedRoleForUserUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                suggestedRoleForUserUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    suggestedRoleForUserUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    var suggestedRoleForUserCalled: Bool {
-        return suggestedRoleForUserCallsCount > 0
-    }
-    var suggestedRoleForUserReceivedUserID: String?
-    var suggestedRoleForUserReceivedInvocations: [String] = []
-
-    var suggestedRoleForUserUnderlyingReturnValue: RoomMemberRole!
-    var suggestedRoleForUserReturnValue: RoomMemberRole! {
-        get {
-            if Thread.isMainThread {
-                return suggestedRoleForUserUnderlyingReturnValue
-            } else {
-                var returnValue: RoomMemberRole? = nil
-                DispatchQueue.main.sync {
-                    returnValue = suggestedRoleForUserUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                suggestedRoleForUserUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    suggestedRoleForUserUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    var suggestedRoleForUserClosure: ((String) -> RoomMemberRole)?
-
-    func suggestedRole(forUser userID: String) -> RoomMemberRole {
-        suggestedRoleForUserCallsCount += 1
-        suggestedRoleForUserReceivedUserID = userID
-        DispatchQueue.main.async {
-            self.suggestedRoleForUserReceivedInvocations.append(userID)
-        }
-        if let suggestedRoleForUserClosure = suggestedRoleForUserClosure {
-            return suggestedRoleForUserClosure(userID)
-        } else {
-            return suggestedRoleForUserReturnValue
-        }
-    }
     //MARK: - canOwnUser
 
     var canOwnUserSendMessageUnderlyingCallsCount = 0
@@ -17586,6 +17454,70 @@ class RoomPowerLevelsProxyMock: RoomPowerLevelsProxyProtocol, @unchecked Sendabl
             return canOwnUserJoinCallClosure()
         } else {
             return canOwnUserJoinCallReturnValue
+        }
+    }
+    //MARK: - canOwnUserEditRolesAndPermissions
+
+    var canOwnUserEditRolesAndPermissionsUnderlyingCallsCount = 0
+    var canOwnUserEditRolesAndPermissionsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return canOwnUserEditRolesAndPermissionsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canOwnUserEditRolesAndPermissionsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canOwnUserEditRolesAndPermissionsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canOwnUserEditRolesAndPermissionsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var canOwnUserEditRolesAndPermissionsCalled: Bool {
+        return canOwnUserEditRolesAndPermissionsCallsCount > 0
+    }
+
+    var canOwnUserEditRolesAndPermissionsUnderlyingReturnValue: Bool!
+    var canOwnUserEditRolesAndPermissionsReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return canOwnUserEditRolesAndPermissionsUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canOwnUserEditRolesAndPermissionsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canOwnUserEditRolesAndPermissionsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canOwnUserEditRolesAndPermissionsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var canOwnUserEditRolesAndPermissionsClosure: (() -> Bool)?
+
+    func canOwnUserEditRolesAndPermissions() -> Bool {
+        canOwnUserEditRolesAndPermissionsCallsCount += 1
+        if let canOwnUserEditRolesAndPermissionsClosure = canOwnUserEditRolesAndPermissionsClosure {
+            return canOwnUserEditRolesAndPermissionsClosure()
+        } else {
+            return canOwnUserEditRolesAndPermissionsReturnValue
         }
     }
     //MARK: - canUser
@@ -18286,6 +18218,76 @@ class RoomPowerLevelsProxyMock: RoomPowerLevelsProxyProtocol, @unchecked Sendabl
             return canUserJoinCallUserIDClosure(userID)
         } else {
             return canUserJoinCallUserIDReturnValue
+        }
+    }
+    //MARK: - canUserLeaveRoom
+
+    var canUserLeaveRoomUserIDUnderlyingCallsCount = 0
+    var canUserLeaveRoomUserIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return canUserLeaveRoomUserIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canUserLeaveRoomUserIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canUserLeaveRoomUserIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canUserLeaveRoomUserIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var canUserLeaveRoomUserIDCalled: Bool {
+        return canUserLeaveRoomUserIDCallsCount > 0
+    }
+    var canUserLeaveRoomUserIDReceivedUserID: String?
+    var canUserLeaveRoomUserIDReceivedInvocations: [String] = []
+
+    var canUserLeaveRoomUserIDUnderlyingReturnValue: Bool!
+    var canUserLeaveRoomUserIDReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return canUserLeaveRoomUserIDUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canUserLeaveRoomUserIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canUserLeaveRoomUserIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canUserLeaveRoomUserIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var canUserLeaveRoomUserIDClosure: ((String) -> Bool)?
+
+    func canUserLeaveRoom(userID: String) -> Bool {
+        canUserLeaveRoomUserIDCallsCount += 1
+        canUserLeaveRoomUserIDReceivedUserID = userID
+        DispatchQueue.main.async {
+            self.canUserLeaveRoomUserIDReceivedInvocations.append(userID)
+        }
+        if let canUserLeaveRoomUserIDClosure = canUserLeaveRoomUserIDClosure {
+            return canUserLeaveRoomUserIDClosure(userID)
+        } else {
+            return canUserLeaveRoomUserIDReturnValue
         }
     }
 }
@@ -19337,6 +19339,173 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
             return await cancelVerificationClosure()
         } else {
             return cancelVerificationReturnValue
+        }
+    }
+}
+class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
+    var spaceRoom: SpaceRoomProxyProtocol {
+        get { return underlyingSpaceRoom }
+        set(value) { underlyingSpaceRoom = value }
+    }
+    var underlyingSpaceRoom: SpaceRoomProxyProtocol!
+    var spaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
+        get { return underlyingSpaceRoomsPublisher }
+        set(value) { underlyingSpaceRoomsPublisher = value }
+    }
+    var underlyingSpaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never>!
+    var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListProxyPaginationState, Never> {
+        get { return underlyingPaginationStatePublisher }
+        set(value) { underlyingPaginationStatePublisher = value }
+    }
+    var underlyingPaginationStatePublisher: CurrentValuePublisher<SpaceRoomListProxyPaginationState, Never>!
+
+    //MARK: - paginate
+
+    var paginateUnderlyingCallsCount = 0
+    var paginateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return paginateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginateUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var paginateCalled: Bool {
+        return paginateCallsCount > 0
+    }
+    var paginateClosure: (() async -> Void)?
+
+    func paginate() async {
+        paginateCallsCount += 1
+        await paginateClosure?()
+    }
+}
+class SpaceRoomProxyMock: SpaceRoomProxyProtocol, @unchecked Sendable {
+    var id: String {
+        get { return underlyingId }
+        set(value) { underlyingId = value }
+    }
+    var underlyingId: String!
+    var name: String?
+    var avatarURL: URL?
+    var isSpace: Bool {
+        get { return underlyingIsSpace }
+        set(value) { underlyingIsSpace = value }
+    }
+    var underlyingIsSpace: Bool!
+    var childrenCount: Int {
+        get { return underlyingChildrenCount }
+        set(value) { underlyingChildrenCount = value }
+    }
+    var underlyingChildrenCount: Int!
+    var joinedMembersCount: Int {
+        get { return underlyingJoinedMembersCount }
+        set(value) { underlyingJoinedMembersCount = value }
+    }
+    var underlyingJoinedMembersCount: Int!
+    var heroes: [UserProfileProxy] = []
+    var topic: String?
+    var canonicalAlias: String?
+    var joinRule: JoinRule?
+    var worldReadable: Bool?
+    var guestCanJoin: Bool {
+        get { return underlyingGuestCanJoin }
+        set(value) { underlyingGuestCanJoin = value }
+    }
+    var underlyingGuestCanJoin: Bool!
+    var state: Membership?
+
+}
+class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
+    var joinedSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
+        get { return underlyingJoinedSpacesPublisher }
+        set(value) { underlyingJoinedSpacesPublisher = value }
+    }
+    var underlyingJoinedSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never>!
+
+    //MARK: - spaceRoomList
+
+    var spaceRoomListForUnderlyingCallsCount = 0
+    var spaceRoomListForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return spaceRoomListForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceRoomListForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceRoomListForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceRoomListForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var spaceRoomListForCalled: Bool {
+        return spaceRoomListForCallsCount > 0
+    }
+    var spaceRoomListForReceivedSpaceRoom: SpaceRoomProxyProtocol?
+    var spaceRoomListForReceivedInvocations: [SpaceRoomProxyProtocol] = []
+
+    var spaceRoomListForUnderlyingReturnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>!
+    var spaceRoomListForReturnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return spaceRoomListForUnderlyingReturnValue
+            } else {
+                var returnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceRoomListForUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceRoomListForUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceRoomListForUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var spaceRoomListForClosure: ((SpaceRoomProxyProtocol) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>)?
+
+    func spaceRoomList(for spaceRoom: SpaceRoomProxyProtocol) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError> {
+        spaceRoomListForCallsCount += 1
+        spaceRoomListForReceivedSpaceRoom = spaceRoom
+        DispatchQueue.main.async {
+            self.spaceRoomListForReceivedInvocations.append(spaceRoom)
+        }
+        if let spaceRoomListForClosure = spaceRoomListForClosure {
+            return await spaceRoomListForClosure(spaceRoom)
+        } else {
+            return spaceRoomListForReturnValue
         }
     }
 }
@@ -22444,8 +22613,8 @@ class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sendable {
     var userSessionForSessionDirectoriesPassphraseCalled: Bool {
         return userSessionForSessionDirectoriesPassphraseCallsCount > 0
     }
-    var userSessionForSessionDirectoriesPassphraseReceivedArguments: (client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String?)?
-    var userSessionForSessionDirectoriesPassphraseReceivedInvocations: [(client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String?)] = []
+    var userSessionForSessionDirectoriesPassphraseReceivedArguments: (client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String)?
+    var userSessionForSessionDirectoriesPassphraseReceivedInvocations: [(client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String)] = []
 
     var userSessionForSessionDirectoriesPassphraseUnderlyingReturnValue: Result<UserSessionProtocol, UserSessionStoreError>!
     var userSessionForSessionDirectoriesPassphraseReturnValue: Result<UserSessionProtocol, UserSessionStoreError>! {
@@ -22471,9 +22640,9 @@ class UserSessionStoreMock: UserSessionStoreProtocol, @unchecked Sendable {
             }
         }
     }
-    var userSessionForSessionDirectoriesPassphraseClosure: ((ClientProtocol, SessionDirectories, String?) async -> Result<UserSessionProtocol, UserSessionStoreError>)?
+    var userSessionForSessionDirectoriesPassphraseClosure: ((ClientProtocol, SessionDirectories, String) async -> Result<UserSessionProtocol, UserSessionStoreError>)?
 
-    func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String?) async -> Result<UserSessionProtocol, UserSessionStoreError> {
+    func userSession(for client: ClientProtocol, sessionDirectories: SessionDirectories, passphrase: String) async -> Result<UserSessionProtocol, UserSessionStoreError> {
         userSessionForSessionDirectoriesPassphraseCallsCount += 1
         userSessionForSessionDirectoriesPassphraseReceivedArguments = (client: client, sessionDirectories: sessionDirectories, passphrase: passphrase)
         DispatchQueue.main.async {

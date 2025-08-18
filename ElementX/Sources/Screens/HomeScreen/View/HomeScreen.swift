@@ -165,7 +165,7 @@ struct HomeScreen: View {
                     LoadableAvatarImage(url: context.viewState.userAvatarURL,
                                         name: context.viewState.userDisplayName,
                                         contentID: context.viewState.userID,
-                                        avatarSize: .user(on: .home),
+                                        avatarSize: .user(on: .chats),
                                         mediaProvider: context.mediaProvider,
                                         onTap: { _ in
                         context.send(viewAction: .showSettings)

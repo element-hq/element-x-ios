@@ -217,8 +217,8 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
         case .attach(let attachment):
             state.bindings.composerFocused = false
             actionsSubject.send(.attach(attachment))
-        case .handlePasteOrDrop(let provider):
-            actionsSubject.send(.handlePasteOrDrop(provider: provider))
+        case .handlePasteOrDrop(let providers):
+            actionsSubject.send(.handlePasteOrDrop(providers: providers))
         case .enableTextFormatting:
             state.bindings.composerFormattingEnabled = true
             state.bindings.composerFocused = true

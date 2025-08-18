@@ -19,7 +19,7 @@ struct SecureBackupScreen: View {
             if context.viewState.recoveryState == .incomplete {
                 recoveryKeySection
             } else {
-                keyBackupSection
+//                keyBackupSection
                 
                 // Don't show recovery options until key backup is enabled
                 if context.viewState.keyBackupState != .unknown {
@@ -79,12 +79,22 @@ struct SecureBackupScreen: View {
         Section {
             switch context.viewState.recoveryState {
             case .enabled:
-                ZeroListRow(label: .default(title: L10n.screenChatBackupRecoveryActionChange,
-                                            description: L10n.screenChatBackupRecoveryActionChangeDescription,
-                                            icon: \.key,
-                                            iconAlignment: .top),
-                            kind: .navigationLink { context.send(viewAction: .recoveryKey) })
-                    .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
+                ZeroListRow(kind: .custom({
+                    HStack {
+                        Spacer()
+                        CompoundIcon(\.checkCircleSolid)
+                            .foregroundStyle(.zero.bgAccentRest)
+                        Text("Your backup key is verified.")
+                        Spacer()
+                    }
+                }))
+                
+//                ZeroListRow(label: .default(title: L10n.screenChatBackupRecoveryActionChange,
+//                                            description: L10n.screenChatBackupRecoveryActionChangeDescription,
+//                                            icon: \.key,
+//                                            iconAlignment: .top),
+//                            kind: .navigationLink { context.send(viewAction: .recoveryKey) })
+//                    .accessibilityIdentifier(A11yIdentifiers.secureBackupScreen.recoveryKey)
             case .disabled:
                 ZeroListRow(label: .default(title: L10n.screenChatBackupRecoveryActionSetup,
                                             description: L10n.screenChatBackupRecoveryActionChangeDescription,
@@ -109,8 +119,8 @@ struct SecureBackupScreen: View {
                 ZeroListRow(label: .plain(title: L10n.commonLoading), details: .isWaiting(true), kind: .label)
             }
         } footer: {
-            recoveryKeySectionFooter
-                .compoundListSectionFooter()
+//            recoveryKeySectionFooter
+//                .compoundListSectionFooter()
         }
     }
     

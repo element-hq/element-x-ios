@@ -643,6 +643,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
+                                                                    isNewLogin: isNewLogin,
                                                                     navigationRootCoordinator: navigationRootCoordinator,
                                                                     appLockService: appLockFlowCoordinator.appLockService,
                                                                     bugReportService: ServiceLocator.shared.bugReportService,
@@ -653,7 +654,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                                     appHooks: appHooks,
                                                                     analytics: ServiceLocator.shared.analytics,
                                                                     notificationManager: notificationManager,
-                                                                    isNewLogin: isNewLogin)
+                                                                    stateMachineFactory: StateMachineFactory())
         
         userSessionFlowCoordinator.actionsPublisher
             .sink { [weak self] action in

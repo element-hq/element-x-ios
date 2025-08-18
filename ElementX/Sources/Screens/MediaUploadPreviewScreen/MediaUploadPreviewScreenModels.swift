@@ -12,7 +12,7 @@ enum MediaUploadPreviewScreenViewModelAction {
 }
 
 struct MediaUploadPreviewScreenViewState: BindableState {
-    let url: URL
+    let mediaURLs: [URL]
     let title: String?
     let shouldShowCaptionWarning: Bool
     let isRoomEncrypted: Bool
@@ -27,6 +27,12 @@ struct MediaUploadPreviewScreenBindings: BindableState {
     var selectedRange = NSRange(location: 0, length: 0)
     
     var isPresentingMediaCaptionWarning = false
+    var alertInfo: AlertInfo<MediaUploadPreviewAlertType>?
+}
+
+enum MediaUploadPreviewAlertType: Hashable {
+    case maxUploadSizeUnknown
+    case maxUploadSizeExceeded(limit: UInt)
 }
 
 enum MediaUploadPreviewScreenViewAction {

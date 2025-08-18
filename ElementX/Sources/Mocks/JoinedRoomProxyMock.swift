@@ -89,7 +89,7 @@ extension JoinedRoomProxyMock {
             guard case .success(let member) = await self?.getMember(userID: userID) else {
                 return .failure(.sdkError(RoomProxyMockError.generic))
             }
-            return .success(member.role)
+            return .success(member.role.rustRole)
         }
         updatePowerLevelsForUsersReturnValue = .success(())
         
@@ -116,12 +116,8 @@ extension JoinedRoomProxyMock {
             self?.membersPublisher.value.first { $0.userID == configuration.ownUserID }?.role ?? .user != .user
         }
         
-        powerLevelsProxyMock.suggestedRoleForUserClosure = { [weak self] userID in
-            guard let member = self?.membersPublisher.value.first(where: { $0.userID == userID }) else {
-                return .user
-            }
-            
-            return member.role
+        powerLevelsProxyMock.canOwnUserEditRolesAndPermissionsClosure = { [weak self] in
+            self?.membersPublisher.value.first { $0.userID == configuration.ownUserID }?.role.isAdminOrHigher ?? false
         }
         
         powerLevelsReturnValue = .success(powerLevelsProxyMock)
@@ -141,7 +137,6 @@ extension JoinedRoomProxyMock {
         widgetDriver.startBaseURLClientIDColorSchemeRageshakeURLAnalyticsConfigurationReturnValue = .success(url)
         
         elementCallWidgetDriverDeviceIDReturnValue = widgetDriver
-        sendCallNotificationIfNeededReturnValue = .success(())
         
         matrixToPermalinkReturnValue = .success(.homeDirectory)
         matrixToEventPermalinkReturnValue = .success(.homeDirectory)
@@ -165,7 +160,7 @@ extension RoomInfoProxyMock {
         
         id = configuration.id
         isEncrypted = configuration.isEncrypted
-        creator = nil
+        creators = []
         displayName = configuration.name
         rawName = configuration.name
         topic = configuration.topic

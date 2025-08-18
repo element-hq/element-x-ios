@@ -13,6 +13,7 @@ typealias RoomDetailsEditScreenViewModelType = StateStoreViewModel<RoomDetailsEd
 class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDetailsEditScreenViewModelProtocol {
     private let actionsSubject: PassthroughSubject<RoomDetailsEditScreenViewModelAction, Never> = .init()
     private let roomProxy: JoinedRoomProxyProtocol
+    private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     
@@ -21,10 +22,12 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     }
     
     init(roomProxy: JoinedRoomProxyProtocol,
+         clientProxy: ClientProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
+        self.clientProxy = clientProxy
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.userIndicatorController = userIndicatorController
         
@@ -72,15 +75,18 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     func didSelectMediaUrl(url: URL) {
         Task {
             let userIndicatorID = UUID().uuidString
-            defer {
-                userIndicatorController.retractIndicatorWithId(userIndicatorID)
-            }
+            defer { userIndicatorController.retractIndicatorWithId(userIndicatorID) }
             userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                                   title: L10n.commonLoading,
                                                                   persistent: true))
             
-            let mediaResult = await mediaUploadingPreprocessor.processMedia(at: url)
+            guard case let .success(maxUploadSize) = await clientProxy.maxMediaUploadSize else {
+                MXLog.error("Failed to get max upload size")
+                userIndicatorController.alertInfo = .init(id: .init())
+                return
+            }
+            let mediaResult = await mediaUploadingPreprocessor.processMedia(at: url, maxUploadSize: maxUploadSize)
             
             switch mediaResult {
             case .success(.image):

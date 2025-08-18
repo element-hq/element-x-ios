@@ -14,16 +14,18 @@ struct OverridableAvatarImage: View {
     private let contentID: String?
     private let avatarSize: Avatars.Size
     private let mediaProvider: MediaProviderProtocol?
+    private let onTap: (() -> Void)?
     
     @ScaledMetric private var frameSize: CGFloat
     
-    init(overrideURL: URL?, url: URL?, name: String?, contentID: String?, avatarSize: Avatars.Size, mediaProvider: MediaProviderProtocol?) {
+    init(overrideURL: URL?, url: URL?, name: String?, contentID: String?, avatarSize: Avatars.Size, mediaProvider: MediaProviderProtocol?, onTap: (() -> Void)? = nil) {
         self.overrideURL = overrideURL
         self.url = url
         self.name = name
         self.contentID = contentID
         self.avatarSize = avatarSize
         self.mediaProvider = mediaProvider
+        self.onTap = onTap
         
         _frameSize = ScaledMetric(wrappedValue: avatarSize.value)
     }
@@ -44,7 +46,8 @@ struct OverridableAvatarImage: View {
                                 name: name,
                                 contentID: contentID,
                                 avatarSize: avatarSize,
-                                mediaProvider: mediaProvider)
+                                mediaProvider: mediaProvider,
+                                onTap: { _ in onTap?() })
         }
     }
 }

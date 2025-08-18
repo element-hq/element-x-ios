@@ -27,6 +27,7 @@ enum RoomDetailsScreenViewModelAction: Equatable {
     case displayKnockingRequests
     case displaySecurityAndPrivacy
     case displayReportRoom
+    case transferOwnership
 }
 
 // MARK: View
@@ -58,6 +59,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEditRolesOrPermissions = false
     var canKickUsers = false
     var canBanUsers = false
+    var canLeaveRoom = true
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
     var canJoinCall = false
     var pinnedEventsActionState = RoomDetailsScreenPinnedEventsActionState.loading
@@ -82,6 +84,10 @@ struct RoomDetailsScreenViewState: BindableState {
     
     var hasTopicSection: Bool {
         topic != nil || canEditRoomTopic
+    }
+    
+    var canUserLeaveRoom: Bool {
+        canLeaveRoom && !isAChannel && dmRecipientInfo == nil
     }
 
     var bindings: RoomDetailsScreenViewStateBindings
@@ -292,6 +298,8 @@ enum RoomDetailsScreenErrorType: Hashable {
     case alert
     /// Leaving room has failed..
     case unknown
+    /// Last owner
+    case lastOwner
 }
 
 enum RoomDetailsScreenPinnedEventsActionState {

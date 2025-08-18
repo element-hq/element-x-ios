@@ -53,11 +53,11 @@ targets:
           NSExtensionAttributes:
             IntentsSupported: [INSendMessageIntent]
             NSExtensionActivationRule:
-              NSExtensionActivationSupportsFileWithMaxCount: 1
-              NSExtensionActivationSupportsImageWithMaxCount: 1
-              NSExtensionActivationSupportsMovieWithMaxCount: 1
+              NSExtensionActivationSupportsFileWithMaxCount: 10
+              NSExtensionActivationSupportsImageWithMaxCount: 10
+              NSExtensionActivationSupportsMovieWithMaxCount: 10
               NSExtensionActivationSupportsText: true
-              NSExtensionActivationSupportsWebURLWithMaxCount: 1
+              NSExtensionActivationSupportsWebURLWithMaxCount: 10
 
     entitlements:
       path: ShareExtension.entitlements

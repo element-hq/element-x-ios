@@ -16,11 +16,13 @@ import SwiftUI
 protocol CommonSettingsProtocol {
     var logLevel: LogLevel { get }
     var traceLogPacks: Set<TraceLogPack> { get }
+    var bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> { get }
+    
     var enableOnlySignedDeviceIsolationMode: Bool { get }
     var enableKeyShareOnInvite: Bool { get }
-    var hideQuietNotificationAlerts: Bool { get }
     var threadsEnabled: Bool { get }
-    var bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> { get }
+    var hideQuietNotificationAlerts: Bool { get }
+    var multipleAttachmentUploadEnabled: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -58,7 +60,7 @@ final class AppSettings {
         case knockingEnabled
         case threadsEnabled
         case developerOptionsEnabled
-        case sharePosEnabledV2
+        case multipleAttachmentUploadEnabled
         
         case zeroAccessToken
         case zeroRewardsCredit
@@ -74,6 +76,16 @@ final class AppSettings {
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
+    
+    /// Whether or not the app is a development build that isn't in production.
+    static var isDevelopmentBuild: Bool = {
+        #if DEBUG
+        true
+        #else
+        let apps = ["io.element.elementx.nightly", "io.element.elementx.pr"]
+        return apps.contains(InfoPlistReader.main.baseBundleIdentifier)
+        #endif
+    }()
     
     #if IS_MAIN_APP
         
@@ -139,16 +151,6 @@ final class AppSettings {
     }
     
     // MARK: - Application
-    
-    /// Whether or not the app is a development build that isn't in production.
-    static var isDevelopmentBuild: Bool = {
-        #if DEBUG
-        true
-        #else
-        let apps = ["io.element.elementx.nightly", "io.element.elementx.pr"]
-        return apps.contains(InfoPlistReader.main.baseBundleIdentifier)
-        #endif
-    }()
     
     /// The last known version of the app that was launched on this device, which is
     /// used to detect when migrations should be run. When `nil` the app may have been
@@ -355,9 +357,6 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
     
-    @UserPreference(key: UserDefaultsKeys.sharePosEnabledV2, defaultValue: true, storageType: .userDefaults(store))
-    var sharePosEnabled
-    
     #endif
     
     // MARK: - Shared
@@ -368,6 +367,8 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.traceLogPacks, defaultValue: [], storageType: .userDefaults(store))
     var traceLogPacks: Set<TraceLogPack>
     
+    let bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> = .init(Secrets.rageshakeURL.map { .url(URL(string: $0)!) } ?? .disabled) // swiftlint:disable:this force_unwrapping
+    
     /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
     @UserPreference(key: UserDefaultsKeys.enableOnlySignedDeviceIsolationMode, defaultValue: false, storageType: .userDefaults(store))
     var enableOnlySignedDeviceIsolationMode
@@ -376,13 +377,14 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.enableKeyShareOnInvite, defaultValue: false, storageType: .userDefaults(store))
     var enableKeyShareOnInvite
 
-    @UserPreference(key: UserDefaultsKeys.hideQuietNotificationAlerts, defaultValue: false, storageType: .userDefaults(store))
-    var hideQuietNotificationAlerts
-    
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var threadsEnabled
     
-    let bugReportRageshakeURL: RemotePreference<RageshakeConfiguration> = .init(Secrets.rageshakeURL.map { .url(URL(string: $0)!) } ?? .disabled) // swiftlint:disable:this force_unwrapping
+    @UserPreference(key: UserDefaultsKeys.hideQuietNotificationAlerts, defaultValue: false, storageType: .userDefaults(store))
+    var hideQuietNotificationAlerts
+    
+    @UserPreference(key: UserDefaultsKeys.multipleAttachmentUploadEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    var multipleAttachmentUploadEnabled
     
     // MARK: - ZERO Access Token
     

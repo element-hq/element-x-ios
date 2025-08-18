@@ -20,7 +20,7 @@ struct UserProfileProxy: Equatable, Hashable {
         self.displayName = displayName
         self.avatarURL = avatarURL
         primaryZeroId = zeroUserProfile?.primaryZID
-        isZeroProSubscriber = zeroUserProfile?.subscriptions.zeroPro ?? false
+        isZeroProSubscriber = zeroUserProfile?.subscriptions?.zeroPro ?? false
     }
     
     init(member: RoomMemberDetails) {
@@ -75,7 +75,7 @@ struct UserProfileProxy: Equatable, Hashable {
         displayName = sdkUserProfile.displayName
         avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
         primaryZeroId = zeroUserProfile?.primaryZIdOrWalletAddress ?? ""
-        isZeroProSubscriber = zeroUserProfile?.subscriptions.zeroPro ?? false
+        isZeroProSubscriber = zeroUserProfile?.subscriptions?.zeroPro ?? false
     }
     
     init(zeroUserProfile: ZMatrixUser) {
@@ -83,7 +83,7 @@ struct UserProfileProxy: Equatable, Hashable {
         displayName = zeroUserProfile.displayName
         avatarURL = zeroUserProfile.profileImageURL
         primaryZeroId = zeroUserProfile.primaryZIdOrWalletAddress ?? ""
-        isZeroProSubscriber = zeroUserProfile.subscriptions.zeroPro
+        isZeroProSubscriber = zeroUserProfile.subscriptions?.zeroPro ?? false
     }
     
     /// A user is meant to be "verified" when the GET profile returns back either the display name or the avatar

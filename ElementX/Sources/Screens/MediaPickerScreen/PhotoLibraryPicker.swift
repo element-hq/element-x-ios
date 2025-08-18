@@ -9,7 +9,7 @@ import PhotosUI
 import SwiftUI
 
 enum PhotoLibraryPickerAction {
-    case selectFile(URL)
+    case selectedMediaAtURLs([URL])
     case cancel
     case error(PhotoLibraryPickerError)
 }
@@ -20,17 +20,27 @@ enum PhotoLibraryPickerError: Error {
 }
 
 struct PhotoLibraryPicker: UIViewControllerRepresentable {
+    private let selectionType: MediaPickerScreenSelectionType
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let callback: (PhotoLibraryPickerAction) -> Void
     
-    init(userIndicatorController: UserIndicatorControllerProtocol, callback: @escaping (PhotoLibraryPickerAction) -> Void) {
+    init(selectionType: MediaPickerScreenSelectionType,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         callback: @escaping (PhotoLibraryPickerAction) -> Void) {
+        self.selectionType = selectionType
         self.userIndicatorController = userIndicatorController
         self.callback = callback
     }
 
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var configuration = PHPickerConfiguration(photoLibrary: .shared())
-        configuration.selectionLimit = 1
+        
+        configuration.selectionLimit = switch selectionType {
+        case .single:
+            1
+        case .multiple:
+            10
+        }
         
         let pickerViewController = PHPickerViewController(configuration: configuration)
         pickerViewController.delegate = context.coordinator
@@ -56,38 +66,73 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         private static let loadingIndicatorIdentifier = "\(PhotoLibraryPicker.self)-Loading"
         
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            guard let provider = results.first?.itemProvider,
-                  let contentType = provider.preferredContentType else {
+            guard !results.isEmpty else {
                 photoLibraryPicker.callback(.cancel)
                 return
             }
             
             picker.delegate = nil
             
-            photoLibraryPicker.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier, type: .modal, title: L10n.commonLoading))
+            photoLibraryPicker.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                                     type: .modal,
+                                                                                     title: L10n.commonLoading))
             defer {
                 photoLibraryPicker.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
             }
             
-            provider.loadFileRepresentation(forTypeIdentifier: contentType.type.identifier) { [weak self] url, error in
-                guard let url else {
-                    Task { @MainActor in
-                        self?.photoLibraryPicker.callback(.error(.failedLoadingFileRepresentation(error)))
+            Task {
+                let selectedURLs = await withTaskGroup { taskGroup in
+                    for result in results {
+                        taskGroup.addTask { await self.processResult(result) }
                     }
-                    return
+                    
+                    var selectedURLs = [URL]()
+                    for await url in taskGroup {
+                        if let url {
+                            selectedURLs.append(url)
+                        }
+                    }
+                    
+                    return selectedURLs
                 }
                 
-                do {
-                    _ = url.startAccessingSecurityScopedResource()
-                    let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: url)
-                    url.stopAccessingSecurityScopedResource()
-                    
-                    Task { @MainActor in
-                        self?.photoLibraryPicker.callback(.selectFile(newURL))
+                photoLibraryPicker.callback(.selectedMediaAtURLs(selectedURLs))
+            }
+        }
+        
+        // MARK: - Private
+        
+        func processResult(_ result: PHPickerResult) async -> URL? {
+            let provider = result.itemProvider
+            
+            guard let contentType = provider.preferredContentType else {
+                return nil
+            }
+            
+            return await withCheckedContinuation { continuation in
+                provider.loadFileRepresentation(forTypeIdentifier: contentType.type.identifier) { [weak self] url, error in
+                    guard let url else {
+                        Task { @MainActor in
+                            self?.photoLibraryPicker.callback(.error(.failedLoadingFileRepresentation(error)))
+                        }
+                        
+                        continuation.resume(returning: nil)
+                        return
                     }
-                } catch {
-                    Task { @MainActor in
-                        self?.photoLibraryPicker.callback(.error(.failedCopyingFile))
+                    
+                    do {
+                        _ = url.startAccessingSecurityScopedResource()
+                        let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: url)
+                        url.stopAccessingSecurityScopedResource()
+                        
+                        Task { @MainActor in
+                            continuation.resume(returning: newURL)
+                        }
+                    } catch {
+                        Task { @MainActor in
+                            self?.photoLibraryPicker.callback(.error(.failedCopyingFile))
+                            continuation.resume(returning: nil)
+                        }
                     }
                 }
             }

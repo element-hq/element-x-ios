@@ -16,12 +16,12 @@ enum SessionVerificationScreenCoordinatorAction {
 enum SessionVerificationScreenFlow {
     case deviceInitiator
     case deviceResponder(requestDetails: SessionVerificationRequestDetails)
-    case userIntiator(userID: String)
+    case userInitiator(userID: String)
     case userResponder(requestDetails: SessionVerificationRequestDetails)
     
     var isResponder: Bool {
         switch self {
-        case .deviceInitiator, .userIntiator:
+        case .deviceInitiator, .userInitiator:
             false
         case .deviceResponder, .userResponder:
             true

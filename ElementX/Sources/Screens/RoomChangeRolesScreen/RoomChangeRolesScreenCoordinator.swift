@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 
 struct RoomChangeRolesScreenCoordinatorParameters {
-    let mode: RoomMemberDetails.Role
+    let mode: RoomRole
     let roomProxy: JoinedRoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol

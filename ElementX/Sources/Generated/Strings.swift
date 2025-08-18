@@ -538,8 +538,18 @@ internal enum L10n {
   internal static func commonPollVotesCount(_ p1: Int) -> String {
     return L10n.tr("Localizable", "common_poll_votes_count", p1)
   }
+  /// Preparing…
+  internal static var commonPreparing: String { return L10n.tr("Localizable", "common_preparing") }
   /// Privacy policy
   internal static var commonPrivacyPolicy: String { return L10n.tr("Localizable", "common_privacy_policy") }
+  /// Private room
+  internal static var commonPrivateRoom: String { return L10n.tr("Localizable", "common_private_room") }
+  /// Private space
+  internal static var commonPrivateSpace: String { return L10n.tr("Localizable", "common_private_space") }
+  /// Public room
+  internal static var commonPublicRoom: String { return L10n.tr("Localizable", "common_public_room") }
+  /// Public space
+  internal static var commonPublicSpace: String { return L10n.tr("Localizable", "common_public_space") }
   /// Reaction
   internal static var commonReaction: String { return L10n.tr("Localizable", "common_reaction") }
   /// Reactions
@@ -572,6 +582,10 @@ internal enum L10n {
   internal static var commonRoomName: String { return L10n.tr("Localizable", "common_room_name") }
   /// e.g. your project name
   internal static var commonRoomNamePlaceholder: String { return L10n.tr("Localizable", "common_room_name_placeholder") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func commonRooms(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "common_rooms", p1)
+  }
   /// Saved changes
   internal static var commonSavedChanges: String { return L10n.tr("Localizable", "common_saved_changes") }
   /// Saving
@@ -610,6 +624,12 @@ internal enum L10n {
   internal static var commonSomethingWentWrong: String { return L10n.tr("Localizable", "common_something_went_wrong") }
   /// We encountered an issue. Please try again.
   internal static var commonSomethingWentWrongMessage: String { return L10n.tr("Localizable", "common_something_went_wrong_message") }
+  /// Space
+  internal static var commonSpace: String { return L10n.tr("Localizable", "common_space") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func commonSpaces(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "common_spaces", p1)
+  }
   /// Starting chat…
   internal static var commonStartingChat: String { return L10n.tr("Localizable", "common_starting_chat") }
   /// Sticker
@@ -672,6 +692,18 @@ internal enum L10n {
   internal static var commonVerifyUser: String { return L10n.tr("Localizable", "common_verify_user") }
   /// Video
   internal static var commonVideo: String { return L10n.tr("Localizable", "common_video") }
+  /// High quality
+  internal static var commonVideoQualityHigh: String { return L10n.tr("Localizable", "common_video_quality_high") }
+  /// Best quality but larger file size
+  internal static var commonVideoQualityHighDescription: String { return L10n.tr("Localizable", "common_video_quality_high_description") }
+  /// Low quality
+  internal static var commonVideoQualityLow: String { return L10n.tr("Localizable", "common_video_quality_low") }
+  /// Fastest upload speed and smallest file size
+  internal static var commonVideoQualityLowDescription: String { return L10n.tr("Localizable", "common_video_quality_low_description") }
+  /// Standard quality
+  internal static var commonVideoQualityStandard: String { return L10n.tr("Localizable", "common_video_quality_standard") }
+  /// Balance of quality and upload speed
+  internal static var commonVideoQualityStandardDescription: String { return L10n.tr("Localizable", "common_video_quality_standard_description") }
   /// Voice message
   internal static var commonVoiceMessage: String { return L10n.tr("Localizable", "common_voice_message") }
   /// Waiting…
@@ -722,6 +754,16 @@ internal enum L10n {
   }
   /// Double-check this link
   internal static var dialogConfirmLinkTitle: String { return L10n.tr("Localizable", "dialog_confirm_link_title") }
+  /// Select the default quality of videos you upload.
+  internal static var dialogDefaultVideoQualitySelectorSubtitle: String { return L10n.tr("Localizable", "dialog_default_video_quality_selector_subtitle") }
+  /// Video upload quality
+  internal static var dialogDefaultVideoQualitySelectorTitle: String { return L10n.tr("Localizable", "dialog_default_video_quality_selector_title") }
+  /// The max file size allowed is: %1$@
+  internal static func dialogFileTooLargeToUploadSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "dialog_file_too_large_to_upload_subtitle", String(describing: p1))
+  }
+  /// The file size is too large to upload
+  internal static var dialogFileTooLargeToUploadTitle: String { return L10n.tr("Localizable", "dialog_file_too_large_to_upload_title") }
   /// In order to let the application use the camera, please grant the permission in the system settings.
   internal static var dialogPermissionCamera: String { return L10n.tr("Localizable", "dialog_permission_camera") }
   /// Please grant the permission in the system settings.
@@ -762,6 +804,14 @@ internal enum L10n {
   internal static var dialogUnsavedChangesDescriptionIos: String { return L10n.tr("Localizable", "dialog_unsaved_changes_description_ios") }
   /// Save changes?
   internal static var dialogUnsavedChangesTitle: String { return L10n.tr("Localizable", "dialog_unsaved_changes_title") }
+  /// The max file size allowed is: %1$@
+  internal static func dialogVideoQualitySelectorSubtitleFileSize(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "dialog_video_quality_selector_subtitle_file_size", String(describing: p1))
+  }
+  /// Select the quality of the video you want to upload.
+  internal static var dialogVideoQualitySelectorSubtitleNoFileSize: String { return L10n.tr("Localizable", "dialog_video_quality_selector_subtitle_no_file_size") }
+  /// Select video upload quality
+  internal static var dialogVideoQualitySelectorTitle: String { return L10n.tr("Localizable", "dialog_video_quality_selector_title") }
   /// Activities
   internal static var emojiPickerCategoryActivity: String { return L10n.tr("Localizable", "emoji_picker_category_activity") }
   /// Flags
@@ -842,6 +892,12 @@ internal enum L10n {
   internal static var leaveRoomAlertEmptySubtitle: String { return L10n.tr("Localizable", "leave_room_alert_empty_subtitle") }
   /// Are you sure that you want to leave this room? This room is not public and you won't be able to rejoin without an invite.
   internal static var leaveRoomAlertPrivateSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_private_subtitle") }
+  /// Choose owners
+  internal static var leaveRoomAlertSelectNewOwnerAction: String { return L10n.tr("Localizable", "leave_room_alert_select_new_owner_action") }
+  /// You're the only owner of this room. You need to transfer ownership to someone else before you leave the room.
+  internal static var leaveRoomAlertSelectNewOwnerSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_select_new_owner_subtitle") }
+  /// Transfer ownership
+  internal static var leaveRoomAlertSelectNewOwnerTitle: String { return L10n.tr("Localizable", "leave_room_alert_select_new_owner_title") }
   /// Are you sure that you want to leave the room?
   internal static var leaveRoomAlertSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_subtitle") }
   /// %1$@ iOS
@@ -1052,6 +1108,22 @@ internal enum L10n {
   internal static var screenAdvancedSettingsMediaCompressionTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_media_compression_title") }
   /// Moderation and Safety
   internal static var screenAdvancedSettingsModerationAndSafetySectionTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_moderation_and_safety_section_title") }
+  /// Automatically optimise images for faster uploads and smaller file sizes.
+  internal static var screenAdvancedSettingsOptimiseImageUploadQualityDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_optimise_image_upload_quality_description") }
+  /// Optimise image upload quality
+  internal static var screenAdvancedSettingsOptimiseImageUploadQualityTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_optimise_image_upload_quality_title") }
+  /// %1$@. Tap here to change.
+  internal static func screenAdvancedSettingsOptimiseVideoUploadQualityDescription(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_advanced_settings_optimise_video_upload_quality_description", String(describing: p1))
+  }
+  /// High (1080p)
+  internal static var screenAdvancedSettingsOptimiseVideoUploadQualityHigh: String { return L10n.tr("Localizable", "screen_advanced_settings_optimise_video_upload_quality_high") }
+  /// Low (480p)
+  internal static var screenAdvancedSettingsOptimiseVideoUploadQualityLow: String { return L10n.tr("Localizable", "screen_advanced_settings_optimise_video_upload_quality_low") }
+  /// Standard (720p)
+  internal static var screenAdvancedSettingsOptimiseVideoUploadQualityStandard: String { return L10n.tr("Localizable", "screen_advanced_settings_optimise_video_upload_quality_standard") }
+  /// Video upload quality
+  internal static var screenAdvancedSettingsOptimiseVideoUploadQualityTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_optimise_video_upload_quality_title") }
   /// Disable the rich text editor to type Markdown manually.
   internal static var screenAdvancedSettingsRichTextEditorDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_rich_text_editor_description") }
   /// Read receipts
@@ -1752,6 +1824,8 @@ internal enum L10n {
   internal static var screenMediaPickerErrorFailedSelection: String { return L10n.tr("Localizable", "screen_media_picker_error_failed_selection") }
   /// Captions might not be visible to people using older apps.
   internal static var screenMediaUploadPreviewCaptionWarning: String { return L10n.tr("Localizable", "screen_media_upload_preview_caption_warning") }
+  /// Tap to change the video upload quality
+  internal static var screenMediaUploadPreviewChangeVideoQualityPrompt: String { return L10n.tr("Localizable", "screen_media_upload_preview_change_video_quality_prompt") }
   /// The file could not be uploaded.
   internal static var screenMediaUploadPreviewErrorCouldNotBeUploaded: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_could_not_be_uploaded") }
   /// Failed processing media to upload, please try again.
@@ -1764,6 +1838,10 @@ internal enum L10n {
   }
   /// The file is too large to upload
   internal static var screenMediaUploadPreviewErrorTooLargeTitle: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_too_large_title") }
+  /// Optimise image quality
+  internal static var screenMediaUploadPreviewOptimizeImageQualityTitle: String { return L10n.tr("Localizable", "screen_media_upload_preview_optimize_image_quality_title") }
+  /// Processing...
+  internal static var screenMediaUploadPreviewProcessing: String { return L10n.tr("Localizable", "screen_media_upload_preview_processing") }
   /// This is a one time process, thanks for waiting.
   internal static var screenMigrationMessage: String { return L10n.tr("Localizable", "screen_migration_message") }
   /// Setting up your account.
@@ -2134,12 +2212,18 @@ internal enum L10n {
   internal static var screenRoomChangePermissionsRoomTopic: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_topic") }
   /// Send messages
   internal static var screenRoomChangePermissionsSendMessages: String { return L10n.tr("Localizable", "screen_room_change_permissions_send_messages") }
+  /// Edit Admins or Owners
+  internal static var screenRoomChangeRoleAdministratorsOrOwnersTitle: String { return L10n.tr("Localizable", "screen_room_change_role_administrators_or_owners_title") }
   /// Edit Admins
   internal static var screenRoomChangeRoleAdministratorsTitle: String { return L10n.tr("Localizable", "screen_room_change_role_administrators_title") }
   /// You will not be able to undo this action. You are promoting the user to have the same power level as you.
   internal static var screenRoomChangeRoleConfirmAddAdminDescription: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_add_admin_description") }
   /// Add Admin?
   internal static var screenRoomChangeRoleConfirmAddAdminTitle: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_add_admin_title") }
+  /// You will not be able to undo this action. You are transferring the ownership to the selected users. Once you leave this will be permanent.
+  internal static var screenRoomChangeRoleConfirmChangeOwnersDescription: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_change_owners_description") }
+  /// Transfer ownership?
+  internal static var screenRoomChangeRoleConfirmChangeOwnersTitle: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_change_owners_title") }
   /// Demote
   internal static var screenRoomChangeRoleConfirmDemoteSelfAction: String { return L10n.tr("Localizable", "screen_room_change_role_confirm_demote_self_action") }
   /// You will not be able to undo this change as you are demoting yourself, if you are the last privileged user in the room it will be impossible to regain privileges.
@@ -2152,8 +2236,12 @@ internal enum L10n {
   }
   /// Admins automatically have moderator privileges
   internal static var screenRoomChangeRoleModeratorsAdminSectionFooter: String { return L10n.tr("Localizable", "screen_room_change_role_moderators_admin_section_footer") }
+  /// Owners automatically have admin privileges.
+  internal static var screenRoomChangeRoleModeratorsOwnerSectionFooter: String { return L10n.tr("Localizable", "screen_room_change_role_moderators_owner_section_footer") }
   /// Edit Moderators
   internal static var screenRoomChangeRoleModeratorsTitle: String { return L10n.tr("Localizable", "screen_room_change_role_moderators_title") }
+  /// Choose Owners
+  internal static var screenRoomChangeRoleOwnersTitle: String { return L10n.tr("Localizable", "screen_room_change_role_owners_title") }
   /// Admins
   internal static var screenRoomChangeRoleSectionAdministrators: String { return L10n.tr("Localizable", "screen_room_change_role_section_administrators") }
   /// Moderators
@@ -2364,6 +2452,8 @@ internal enum L10n {
   internal static var screenRoomRetrySendMenuTitle: String { return L10n.tr("Localizable", "screen_room_retry_send_menu_title") }
   /// Admins
   internal static var screenRoomRolesAndPermissionsAdmins: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_admins") }
+  /// Admins and owners
+  internal static var screenRoomRolesAndPermissionsAdminsAndOwners: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_admins_and_owners") }
   /// Change my role
   internal static var screenRoomRolesAndPermissionsChangeMyRole: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_change_my_role") }
   /// Demote to member
@@ -2376,6 +2466,8 @@ internal enum L10n {
   internal static var screenRoomRolesAndPermissionsMessagesAndContent: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_messages_and_content") }
   /// Moderators
   internal static var screenRoomRolesAndPermissionsModerators: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_moderators") }
+  /// Owners
+  internal static var screenRoomRolesAndPermissionsOwners: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_owners") }
   /// Permissions
   internal static var screenRoomRolesAndPermissionsPermissionsHeader: String { return L10n.tr("Localizable", "screen_room_roles_and_permissions_permissions_header") }
   /// Reset permissions
@@ -2491,6 +2583,8 @@ internal enum L10n {
   internal static var screenRoomlistFilterInvitesEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_invites_empty_state_title") }
   /// Low Priority
   internal static var screenRoomlistFilterLowPriority: String { return L10n.tr("Localizable", "screen_roomlist_filter_low_priority") }
+  /// You don’t have any low priority chats yet
+  internal static var screenRoomlistFilterLowPriorityEmptyStateTitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_low_priority_empty_state_title") }
   /// You can deselect filters in order to see your other chats
   internal static var screenRoomlistFilterMixedEmptyStateSubtitle: String { return L10n.tr("Localizable", "screen_roomlist_filter_mixed_empty_state_subtitle") }
   /// You don’t have chats for this selection
@@ -2734,6 +2828,14 @@ internal enum L10n {
   internal static var screenSignoutSaveRecoveryKeySubtitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_subtitle") }
   /// Have you saved your recovery key?
   internal static var screenSignoutSaveRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_title") }
+  /// Spaces you have created or joined.
+  internal static var screenSpaceListDescription: String { return L10n.tr("Localizable", "screen_space_list_description") }
+  /// %1$@ • %2$@
+  internal static func screenSpaceListDetails(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "screen_space_list_details", String(describing: p1), String(describing: p2))
+  }
+  /// Spaces
+  internal static var screenSpaceListTitle: String { return L10n.tr("Localizable", "screen_space_list_title") }
   /// An error occurred when trying to start a chat
   internal static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
   /// Join room by address
@@ -2760,20 +2862,6 @@ internal enum L10n {
   internal static var screenTimelineItemMenuSendFailureYouUnsignedDevice: String { return L10n.tr("Localizable", "screen_timeline_item_menu_send_failure_you_unsigned_device") }
   /// Location
   internal static var screenViewLocationTitle: String { return L10n.tr("Localizable", "screen_view_location_title") }
-  /// Calls, polls, search and more will be added later this year.
-  internal static var screenWelcomeBullet1: String { return L10n.tr("Localizable", "screen_welcome_bullet_1") }
-  /// Message history for encrypted rooms isn’t available yet.
-  internal static var screenWelcomeBullet2: String { return L10n.tr("Localizable", "screen_welcome_bullet_2") }
-  /// We’d love to hear from you, let us know what you think via the settings page.
-  internal static var screenWelcomeBullet3: String { return L10n.tr("Localizable", "screen_welcome_bullet_3") }
-  /// Let's go!
-  internal static var screenWelcomeButton: String { return L10n.tr("Localizable", "screen_welcome_button") }
-  /// Here’s what you need to know:
-  internal static var screenWelcomeSubtitle: String { return L10n.tr("Localizable", "screen_welcome_subtitle") }
-  /// Welcome to %1$@!
-  internal static func screenWelcomeTitle(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_welcome_title", String(describing: p1))
-  }
   /// Looks like you’re using a new device. Verify with another device to access your encrypted messages.
   internal static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
   /// Verify it’s you

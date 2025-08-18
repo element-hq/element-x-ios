@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Algorithms
 import Combine
 import Foundation
 import MatrixRustSDK
@@ -170,7 +171,6 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     // MARK: - Element Call
     
     func elementCallWidgetDriver(deviceID: String) -> ElementCallWidgetDriverProtocol
-    func sendCallNotificationIfNeeded() async -> Result<Void, RoomProxyError>
     
     // MARK: - Permalinks
     
@@ -210,5 +210,14 @@ extension JoinedRoomProxyProtocol {
     func members() async -> [RoomMemberProxyProtocol]? {
         await updateMembers()
         return membersPublisher.value
+    }
+    
+    // This is a horrible workaround for not having any server names available when using tombstone links with v12 room IDs.
+    func knownServerNames(maxCount: Int) -> any Sequence<String> {
+        membersPublisher.value
+            .prefix(1000) // No need to go crazy here…
+            .compactMap { $0.userID.split(separator: ":").last.map(String.init) }
+            .uniqued()
+            .prefix(maxCount)
     }
 }

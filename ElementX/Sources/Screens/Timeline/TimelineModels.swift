@@ -18,7 +18,7 @@ enum TimelineViewModelAction {
     case displayDocumentPicker
     case displayLocationPicker
     case displayPollForm(mode: PollFormMode)
-    case displayMediaUploadPreviewScreen(url: URL)
+    case displayMediaUploadPreviewScreen(mediaURLs: [URL])
     case displaySenderDetails(userID: String)
     case displayMessageForwarding(forwardingItem: MessageForwardingItem)
     case displayMediaPreview(TimelineMediaPreviewViewModel)
@@ -28,7 +28,7 @@ enum TimelineViewModelAction {
     case composer(action: TimelineComposerAction)
     case hasScrolled(direction: ScrollDirection)
     case viewInRoomTimeline(eventID: String)
-    case displayRoom(roomID: String)
+    case displayRoom(roomID: String, via: [String])
 }
 
 enum TimelineViewPollAction {
@@ -63,7 +63,7 @@ enum TimelineViewAction {
     case displayReadReceipts(itemID: TimelineItemIdentifier)
     case displayThread(itemID: TimelineItemIdentifier)
     
-    case handlePasteOrDrop(provider: NSItemProvider)
+    case handlePasteOrDrop(providers: [NSItemProvider])
     case handlePollAction(TimelineViewPollAction)
     case handleAudioPlayerAction(TimelineAudioPlayerAction)
     

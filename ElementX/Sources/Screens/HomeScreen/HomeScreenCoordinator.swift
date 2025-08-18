@@ -24,6 +24,7 @@ enum HomeScreenCoordinatorAction {
     case presentReportRoom(roomIdentifier: String)
     case presentDeclineAndBlock(userID: String, roomID: String)
     case roomLeft(roomIdentifier: String)
+    case transferOwnership(roomIdentifier: String)
     case presentSettingsScreen(UserRewardsProtocol)
     case presentFeedbackScreen
     case presentSecureBackupSettings
@@ -32,7 +33,6 @@ enum HomeScreenCoordinatorAction {
     case presentStartChatScreen
     case presentCreateFeedScreen(FeedProtocol)
     case presentGlobalSearch
-    case logoutWithoutConfirmation
     case logout
     case postTapped(_ post: HomeScreenPost, FeedProtocol)
     case openPostUserProfile(_ profile: ZPostUserProfile, FeedProtocol)
@@ -89,12 +89,12 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentCreateFeedScreen(feedProtocol))
                 case .presentGlobalSearch:
                     actionsSubject.send(.presentGlobalSearch)
-                case .logoutWithoutConfirmation:
-                    actionsSubject.send(.logoutWithoutConfirmation)
                 case .logout:
                     actionsSubject.send(.logout)
                 case .presentDeclineAndBlock(let userID, let roomID):
                     actionsSubject.send(.presentDeclineAndBlock(userID: userID, roomID: roomID))
+                case .transferOwnership(let roomIdentifier):
+                    actionsSubject.send(.transferOwnership(roomIdentifier: roomIdentifier))
                 case .postTapped(let post, let feedProtocol):
                     actionsSubject.send(.postTapped(post, feedProtocol))
                 case .openPostUserProfile(let profile, let feedProtocol):

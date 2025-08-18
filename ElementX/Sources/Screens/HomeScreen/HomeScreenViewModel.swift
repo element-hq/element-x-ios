@@ -193,9 +193,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         
         fetchZeroHomeScreenData()
         
-        Task {
-            await checkSlidingSyncMigration()
-        }
     }
     
     // MARK: - Public
@@ -472,24 +469,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         autoJoinInvitedRooms(matrixRoomSummaries)
     }
     
-    /// Check whether we can inform the user about potential migrations
-    /// or have him logout as his proxy is no longer available
-    private func checkSlidingSyncMigration() async {
-        guard userSession.clientProxy.needsSlidingSyncMigration else {
-            return
-        }
-        
-        // The proxy is no longer supported so a logout is needed.
-        // Delay setting the alert otherwise it automatically gets dismissed. Same as the crashed last run one
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.state.bindings.alertInfo = AlertInfo(id: UUID(),
-                                                      title: L10n.bannerMigrateToNativeSlidingSyncAppForceLogoutTitle(InfoPlistReader.main.bundleDisplayName),
-                                                      primaryButton: .init(title: L10n.bannerMigrateToNativeSlidingSyncAction) { [weak self] in
-                self?.actionsSubject.send(.logoutWithoutConfirmation)
-            })
-        }
-    }
-    
     private func markRoomAsFavourite(_ roomID: String, isFavourite: Bool) async {
         guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
             MXLog.error("Failed retrieving room for identifier: \(roomID)")
@@ -518,15 +497,39 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 return
             }
             
-            if !(roomProxy.infoPublisher.value.isPrivate ?? true) {
-                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: .public)
-            } else {
-                state.bindings.leaveRoomAlertItem = if roomProxy.infoPublisher.value.joinedMembersCount > 1 {
-                    LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: .private)
-                } else {
-                    LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: .empty)
+            guard roomProxy.infoPublisher.value.joinedMembersCount > 1 else {
+                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID,
+                                                                       isDM: roomProxy.isDirectOneToOneRoom,
+                                                                       state: roomProxy.infoPublisher.value.isPrivate ?? true ? .empty : .public)
+                return
+            }
+            
+            if !roomProxy.isDirectOneToOneRoom {
+                if case let .success(ownMember) = await roomProxy.getMember(userID: roomProxy.ownUserID),
+                   ownMember.role.isOwner {
+                    await roomProxy.updateMembers()
+                    var isLastOwner = true
+                    for member in roomProxy.membersPublisher.value where member.userID != roomProxy.ownUserID {
+                        if member.role.isOwner {
+                            isLastOwner = false
+                            break
+                        }
+                    }
+                    
+                    if isLastOwner {
+                        state.bindings.alertInfo = .init(id: UUID(),
+                                                         title: L10n.leaveRoomAlertSelectNewOwnerTitle,
+                                                         message: L10n.leaveRoomAlertSelectNewOwnerSubtitle,
+                                                         primaryButton: .init(title: L10n.actionCancel, role: .cancel, action: nil),
+                                                         secondaryButton: .init(title: L10n.leaveRoomAlertSelectNewOwnerAction, role: .destructive) { [weak self] in
+                                                             self?.actionsSubject.send(.transferOwnership(roomIdentifier: roomID))
+                                                         })
+                        return
+                    }
                 }
             }
+            
+            state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(roomID: roomID, isDM: roomProxy.isDirectOneToOneRoom, state: roomProxy.infoPublisher.value.isPrivate ?? true ? .private : .public)
         }
     }
     
@@ -1259,7 +1262,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     }
                 }
                 if let user = directUser {
-                    result[room.id] = user.subscriptions.zeroPro
+                    result[room.id] = user.subscriptions?.zeroPro ?? false
                 }
             }
 

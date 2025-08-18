@@ -9,13 +9,14 @@ import Combine
 import SwiftUI
 
 struct MediaUploadPreviewScreenCoordinatorParameters {
-    let timelineController: TimelineControllerProtocol
-    let userIndicatorController: UserIndicatorControllerProtocol
-    let mediaUploadingPreprocessor: MediaUploadingPreprocessor
+    let mediaURLs: [URL]
     let title: String?
-    let url: URL
-    let shouldShowCaptionWarning: Bool
     let isRoomEncrypted: Bool
+    let shouldShowCaptionWarning: Bool
+    let mediaUploadingPreprocessor: MediaUploadingPreprocessor
+    let timelineController: TimelineControllerProtocol
+    let clientProxy: ClientProxyProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum MediaUploadPreviewScreenCoordinatorAction {
@@ -32,13 +33,14 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: MediaUploadPreviewScreenCoordinatorParameters) {
-        viewModel = MediaUploadPreviewScreenViewModel(timelineController: parameters.timelineController,
-                                                      userIndicatorController: parameters.userIndicatorController,
-                                                      mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
+        viewModel = MediaUploadPreviewScreenViewModel(mediaURLs: parameters.mediaURLs,
                                                       title: parameters.title,
-                                                      url: parameters.url,
+                                                      isRoomEncrypted: parameters.isRoomEncrypted,
                                                       shouldShowCaptionWarning: parameters.shouldShowCaptionWarning,
-                                                      isRoomEncrypted: parameters.isRoomEncrypted)
+                                                      mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
+                                                      timelineController: parameters.timelineController,
+                                                      clientProxy: parameters.clientProxy,
+                                                      userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {

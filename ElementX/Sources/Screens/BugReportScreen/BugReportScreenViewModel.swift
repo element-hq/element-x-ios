@@ -72,7 +72,7 @@ class BugReportScreenViewModel: BugReportScreenViewModelType, BugReportScreenVie
     private static func validate(_ logFiles: [URL]) -> Bool {
         for fileURL in logFiles {
             if let size = try? FileManager.default.sizeForItem(at: fileURL),
-               size > Double(1024 * 1024 * 1024) { // Consider anything over 1GB to be excessive.
+               size > 1024 * 1024 * 1024 { // Consider anything over 1GB to be excessive.
                 return false
             }
         }
