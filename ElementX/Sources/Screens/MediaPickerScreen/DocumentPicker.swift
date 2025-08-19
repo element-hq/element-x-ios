@@ -40,7 +40,9 @@ struct DocumentPicker: UIViewControllerRepresentable {
         return documentPicker
     }
     
-    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) { }
+    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {
+        uiViewController.view.tintColor = .compound.textActionAccent
+    }
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
