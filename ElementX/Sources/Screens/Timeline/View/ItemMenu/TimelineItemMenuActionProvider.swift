@@ -66,11 +66,11 @@ struct TimelineItemMenuActionProvider {
         
         if item.isEditable, canCurrentUserSendMessage {
             if item.supportsMediaCaption {
-//                if item.hasMediaCaption {
-//                    actions.append(.editCaption)
-//                } else {
-//                    actions.append(.addCaption)
-//                }
+                if item.hasMediaCaption {
+                    actions.append(.editCaption)
+                } else {
+                    actions.append(.addCaption)
+                }
             }
             else if item is PollRoomTimelineItem {
                 // actions.append(.editPoll)
@@ -90,11 +90,11 @@ struct TimelineItemMenuActionProvider {
         if item.isCopyable {
             actions.append(.copy)
         } else if item.hasMediaCaption {
-            //actions.append(.copyCaption)
+            actions.append(.copyCaption)
         }
         
         if item.isEditable, item.hasMediaCaption {
-            //actions.append(.removeCaption)
+            actions.append(.removeCaption)
         }
         
 //        if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = item.id.eventID {
