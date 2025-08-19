@@ -48,7 +48,9 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         return pickerViewController
     }
     
-    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) { }
+    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {
+        uiViewController.view.tintColor = .compound.textActionAccent
+    }
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
