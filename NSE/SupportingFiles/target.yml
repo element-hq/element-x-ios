@@ -41,6 +41,7 @@ targets:
       - package: DTCoreText
       - package: LRUCache
       - package: Version
+      - package: SwiftSoup
 
     info:
       path: Info.plist
