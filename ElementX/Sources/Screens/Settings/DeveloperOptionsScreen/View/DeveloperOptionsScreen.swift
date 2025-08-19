@@ -36,6 +36,10 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.threadsEnabled) {
                     Text("Threads")
                 }
+                
+                Toggle(isOn: $context.nextGenHTMLParserEnabled) {
+                    Text("Next gen HTML parsing")
+                }
             }
             
             Section("Room List") {

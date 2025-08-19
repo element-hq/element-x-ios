@@ -60,6 +60,7 @@ final class AppSettings {
         case knockingEnabled
         case threadsEnabled
         case developerOptionsEnabled
+        case nextGenHTMLParserEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -352,6 +353,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.nextGenHTMLParserEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    var nextGenHTMLParserEnabled
     
     #endif
     
