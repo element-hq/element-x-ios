@@ -61,6 +61,7 @@ final class AppSettings {
         case threadsEnabled
         case spacesEnabled
         case developerOptionsEnabled
+        case nextGenHTMLParserEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -345,7 +346,7 @@ final class AppSettings {
                                                                    darkStyleID: "dea61faf-292b-4774-9660-58fcef89a7f3")
     
     // MARK: - Presence
-
+    
     @UserPreference(key: UserDefaultsKeys.sharePresence, defaultValue: true, storageType: .userDefaults(store))
     var sharePresence
     
@@ -363,7 +364,7 @@ final class AppSettings {
     /// Configuration to enable only signed device isolation mode for  crypto. In this mode only devices signed by their owner will be considered in e2ee rooms.
     @UserPreference(key: UserDefaultsKeys.enableOnlySignedDeviceIsolationMode, defaultValue: false, storageType: .userDefaults(store))
     var enableOnlySignedDeviceIsolationMode
-
+    
     /// Configuration to enable encrypted history sharing on invite, and accepting keys from inviters.
     @UserPreference(key: UserDefaultsKeys.enableKeyShareOnInvite, defaultValue: false, storageType: .userDefaults(store))
     var enableKeyShareOnInvite
@@ -376,6 +377,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.spacesEnabled, defaultValue: false, storageType: .userDefaults(store))
     var spacesEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.nextGenHTMLParserEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    var nextGenHTMLParserEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled

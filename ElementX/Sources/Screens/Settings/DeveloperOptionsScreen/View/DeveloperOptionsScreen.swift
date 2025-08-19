@@ -36,8 +36,13 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.threadsEnabled) {
                     Text("Threads")
                 }
+
                 Toggle(isOn: $context.spacesEnabled) {
                     Text("Spaces")
+                }
+                
+                Toggle(isOn: $context.nextGenHTMLParserEnabled) {
+                    Text("Next gen HTML parsing")
                 }
             }
             
