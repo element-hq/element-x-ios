@@ -29,23 +29,19 @@ enum MediaPickerScreenCoordinatorAction {
 }
 
 class MediaPickerScreenCoordinator: CoordinatorProtocol {
-    private let orientationManager: OrientationManagerProtocol
-    private let userIndicatorController: UserIndicatorControllerProtocol
     private let mode: MediaPickerScreenMode
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    private let orientationManager: OrientationManagerProtocol
     private let callback: (MediaPickerScreenCoordinatorAction) -> Void
     
     init(mode: MediaPickerScreenMode,
-         appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol,
          orientationManager: OrientationManagerProtocol,
          callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
+        self.mode = mode
         self.userIndicatorController = userIndicatorController
         self.orientationManager = orientationManager
         self.callback = callback
-        
-        // The users of the media picker chose their ideal selection type leaving
-        // the feature flag to only be checked and enforced on this level.
-        self.mode = appSettings.multipleAttachmentUploadEnabled ? mode : .init(source: mode.source, selectionType: .single)
     }
     
     func toPresentable() -> AnyView {

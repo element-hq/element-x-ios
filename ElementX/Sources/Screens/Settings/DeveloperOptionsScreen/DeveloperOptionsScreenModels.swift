@@ -43,7 +43,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var enableKeyShareOnInvite: Bool { get set }
     var threadsEnabled: Bool { get set }
     var hideQuietNotificationAlerts: Bool { get set }
-    var multipleAttachmentUploadEnabled: Bool { get set }
     
     var hideUnreadMessagesBadge: Bool { get set }
     var elementCallBaseURLOverride: URL? { get set }
