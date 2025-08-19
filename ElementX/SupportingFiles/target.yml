@@ -248,6 +248,7 @@ targets:
     - package: Emojibase
     - package: WysiwygComposer
     - package: SwiftOGG
+    - package: SwiftSoup
     - package: DSWaveformImage
       product: DSWaveformImageViews
 
