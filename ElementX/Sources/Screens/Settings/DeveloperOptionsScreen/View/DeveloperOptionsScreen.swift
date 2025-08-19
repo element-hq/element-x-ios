@@ -51,13 +51,7 @@ struct DeveloperOptionsScreen: View {
                     Text("Fuzzy searching")
                 }
             }
-            
-            Section("Timeline") {
-                Toggle(isOn: $context.multipleAttachmentUploadEnabled) {
-                    Text("Allow selecting multiple attachments for upload")
-                }
-            }
-            
+                        
             Section("Join rules") {
                 Toggle(isOn: $context.knockingEnabled) {
                     Text("Knocking")

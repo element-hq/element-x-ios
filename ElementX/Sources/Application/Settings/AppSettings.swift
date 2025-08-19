@@ -22,7 +22,6 @@ protocol CommonSettingsProtocol {
     var enableKeyShareOnInvite: Bool { get }
     var threadsEnabled: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
-    var multipleAttachmentUploadEnabled: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -60,7 +59,6 @@ final class AppSettings {
         case knockingEnabled
         case threadsEnabled
         case developerOptionsEnabled
-        case multipleAttachmentUploadEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -376,9 +374,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.hideQuietNotificationAlerts, defaultValue: false, storageType: .userDefaults(store))
     var hideQuietNotificationAlerts
-    
-    @UserPreference(key: UserDefaultsKeys.multipleAttachmentUploadEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
-    var multipleAttachmentUploadEnabled
 }
 
 extension AppSettings: CommonSettingsProtocol { }
