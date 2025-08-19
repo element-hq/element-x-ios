@@ -120,13 +120,6 @@ struct DeveloperOptionsScreen: View {
                         .frame(maxWidth: .infinity)
                         .alignmentGuide(.listRowSeparatorLeading) { _ in 0 } // Fix separator alignment
                 }
-                
-                Button {
-                    fatalError("This crash is a test.")
-                } label: {
-                    Text("💥")
-                        .frame(maxWidth: .infinity)
-                }
             }
 
             Section {
