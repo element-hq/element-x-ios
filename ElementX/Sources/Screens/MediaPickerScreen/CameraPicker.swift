@@ -34,6 +34,7 @@ struct CameraPicker: UIViewControllerRepresentable {
         imagePicker.sourceType = .camera
         imagePicker.allowsEditing = false
         imagePicker.delegate = context.coordinator
+        imagePicker.videoQuality = .typeHigh
         
         if let mediaTypes = UIImagePickerController.availableMediaTypes(for: .camera) {
             imagePicker.mediaTypes = mediaTypes
