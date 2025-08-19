@@ -75,7 +75,8 @@ struct RoomDetailsScreenViewState: BindableState {
     }
     
     var canSeeSecurityAndPrivacy: Bool {
-        knockingEnabled && dmRecipientInfo == nil && canEditRolesOrPermissions
+        // knockingEnabled && dmRecipientInfo == nil && canEditRolesOrPermissions
+        dmRecipientInfo == nil && canEditRolesOrPermissions
     }
     
     var canEdit: Bool {
@@ -100,9 +101,9 @@ struct RoomDetailsScreenViewState: BindableState {
 //        if !ProcessInfo.processInfo.isiOSAppOnMac, canJoinCall {
 //            shortcuts.append(.call)
 //        }
-//        if dmRecipientInfo == nil, canInviteUsers {
-//            shortcuts.append(.invite)
-//        }
+        if dmRecipientInfo == nil, canInviteUsers {
+            shortcuts.append(.invite)
+        }
 //        if let permalink = dmRecipientInfo?.member.permalink {
 //            shortcuts.append(.share(link: permalink))
 //        } else if let permalink {
