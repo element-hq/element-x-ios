@@ -355,6 +355,7 @@ struct HomeScreenViewState: BindableState {
         showWalletBalance ? "$\(walletBalance.formatToThousandSeparatedString())" : "*****"
     }
     
+    var meowToken: ZWalletToken?
     var selectedStakePool: SelectedHomeWalletStakePool?
 }
 
@@ -583,6 +584,7 @@ struct HomeScreenWalletStakingContent: Identifiable, Equatable {
     let totalStakedAmountFormatted: String
     let myStakeAmount: Double
     let myStateAmountFormatted: String
+    let pendingRewards: Double
     
     static func placeholder() -> HomeScreenWalletStakingContent {
         .init(id: UUID().uuidString,
@@ -596,7 +598,8 @@ struct HomeScreenWalletStakingContent: Identifiable, Equatable {
               totalStakedAmount: 0,
               totalStakedAmountFormatted: "",
               myStakeAmount: 0,
-              myStateAmountFormatted: "")
+              myStateAmountFormatted: "",
+              pendingRewards: 0)
     }
     
 }
@@ -894,6 +897,7 @@ extension HomeScreenWalletStakingContent {
         let myStakeAmount = ZeroWalletUtil.shared.meowPrice(tokenAmount: ZeroRewards.parseCredits(credits: stakerStatus.amountStaked,
                                                                                                   decimals: 18),
                                                             refPrice: meowPrice)
+        let pendingRewards = ZeroRewards.parseCredits(credits: stakeRewards.pendingRewards, decimals: 18)
         self.init(id: poolAddress,
                   userWalletAddress: userWalletAddress,
                   poolAddress: poolAddress,
@@ -905,6 +909,7 @@ extension HomeScreenWalletStakingContent {
                   totalStakedAmount: totalStakedAmount,
                   totalStakedAmountFormatted: "$\(totalStakedAmount.formatToSuffix())",
                   myStakeAmount: myStakeAmount,
-                  myStateAmountFormatted: "$\(myStakeAmount.formatToSuffix())")
+                  myStateAmountFormatted: "$\(myStakeAmount.formatToSuffix())",
+                  pendingRewards: pendingRewards)
     }
 }

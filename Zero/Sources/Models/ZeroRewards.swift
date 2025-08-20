@@ -38,10 +38,21 @@ public struct ZeroRewards: Codable, Equatable {
     }
     
     static func parseCredits(credits: String, decimals: Int) -> Double {
-        let delimiter = credits.count - decimals
+        // Pad with leading zeros if length < 18
+        let mCredits: String
+        if credits.count < 18 {
+            let zeros = String(repeating: "0", count: 18 - credits.count)
+            mCredits = zeros + credits
+        } else {
+            mCredits = credits
+        }
+        
+        let delimiter = mCredits.count - decimals
         if delimiter < 0 { return 0 }
-        let value = String(credits.prefix(delimiter)) + "." + (credits.substr(delimiter, 2) ?? "0")
-        return (try? Double(value)) ?? 0.0
+        let prefixPart = String(mCredits.prefix(delimiter))
+        let suffixPart = mCredits.dropFirst(delimiter).prefix(2)
+        let value = prefixPart + "." + suffixPart
+        return Double(value) ?? 0.0
     }
 }
 

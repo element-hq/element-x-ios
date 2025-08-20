@@ -954,7 +954,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     state.walletTokenNextPageParams = walletTokenBalances.nextPageParams
                     
                     // fetch stake data
-                    fetchStakingData(walletTokenBalances.tokens, userWalletAddress: walletAddress)
+                    if let meowToken = walletTokenBalances.tokens.first(where: { $0.isMeowToken }) {
+                        state.meowToken = meowToken
+                        fetchStakingData(meowToken, userWalletAddress: walletAddress)
+                    }
                 }
 //                if case .success(let walletNFTs) = results.1 {
 //                    var homeWalletContent: [HomeScreenWalletContent] = []
@@ -1061,28 +1064,27 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
     }
     
-    private func fetchStakingData(_ tokens: [ZWalletToken], userWalletAddress: String) {
-        /// NEED TO FIGURE OUT FROM WHERE TO GET THIS POOL ADDRESS
-        let poolAddress = "0xfbDC0647F0652dB9eC56c7f09B7dD3192324AD6a"
-        if let meowToken = tokens.first(where: { $0.isMeowToken }) {
-            Task.detached {
-                async let totalStaked = self.userSession.clientProxy.getTotalStaked(poolAddress: poolAddress)
-                async let config = self.userSession.clientProxy.getStakingConfig(poolAddress: poolAddress)
-                async let stakerStatus = self.userSession.clientProxy.getStakerStatusInfo(userWalletAddress: userWalletAddress,
-                                                                                          poolAddress: poolAddress)
-                async let stakeRewards = self.userSession.clientProxy.getStakeRewardsInfo(userWalletAddress: userWalletAddress,
-                                                                                          poolAddress: poolAddress)
-                let results = await (totalStaked, config, stakerStatus, stakeRewards)
-                await MainActor.run {
-                    if case .success(let totalStaked) = results.0,
-                       case .success(let stakingConfig) = results.1,
-                       case .success(let stakerStatus) = results.2,
-                       case .success(let stakeRewards) = results.3 {
-                        self.state.walletStakings = [
-                            HomeScreenWalletStakingContent(meowPrice: self.state.meowPrice, token: meowToken, userWalletAddress: userWalletAddress,
-                                                           poolAddress: poolAddress, totalStaked: totalStaked, stakingConfig: stakingConfig,
-                                                           stakerStatus: stakerStatus, stakeRewards: stakeRewards)
-                        ]
+    private func fetchStakingData(_ token: ZWalletToken, userWalletAddress: String, refreshAllData: Bool = false) {
+        let poolAddress = ZeroContants.ZERO_WALLET_MEOW_POOL_ADDRESS
+        Task.detached {
+            async let totalStaked = self.userSession.clientProxy.getTotalStaked(poolAddress: poolAddress)
+            async let config = self.userSession.clientProxy.getStakingConfig(poolAddress: poolAddress)
+            async let stakerStatus = self.userSession.clientProxy.getStakerStatusInfo(userWalletAddress: userWalletAddress,
+                                                                                      poolAddress: poolAddress)
+            async let stakeRewards = self.userSession.clientProxy.getStakeRewardsInfo(userWalletAddress: userWalletAddress,
+                                                                                      poolAddress: poolAddress)
+            let results = await (totalStaked, config, stakerStatus, stakeRewards)
+            await MainActor.run {
+                if case .success(let totalStaked) = results.0,
+                   case .success(let stakingConfig) = results.1,
+                   case .success(let stakerStatus) = results.2,
+                   case .success(let stakeRewards) = results.3 {
+                    let pool = HomeScreenWalletStakingContent(meowPrice: self.state.meowPrice, token: token, userWalletAddress: userWalletAddress,
+                                                              poolAddress: poolAddress, totalStaked: totalStaked, stakingConfig: stakingConfig,
+                                                              stakerStatus: stakerStatus, stakeRewards: stakeRewards)
+                    self.state.walletStakings = [pool]
+                    if refreshAllData {
+                        self.fetchStakeDataOfPool(pool, silentRefresh: refreshAllData)
                     }
                 }
             }
@@ -1159,10 +1161,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                                                          poolAddress: selectedPool.pool.poolAddress)
             switch result {
             case .success(_):
-//                fetchWalletData(silentRefresh: true)
-                fetchStakeDataOfPool(selectedPool.pool, silentRefresh: true)
+                if let token = state.meowToken {
+                    fetchStakingData(token, userWalletAddress: selectedPool.pool.userWalletAddress, refreshAllData: true)
+                }
             case .failure(let error):
-                state.bindings.stakePoolViewState = .failure
+                displayError(message: error.localizedDescription)
             }
         }
     }
