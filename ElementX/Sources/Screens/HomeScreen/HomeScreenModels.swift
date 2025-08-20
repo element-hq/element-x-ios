@@ -355,7 +355,6 @@ struct HomeScreenViewState: BindableState {
         showWalletBalance ? "$\(walletBalance.formatToThousandSeparatedString())" : "*****"
     }
     
-    var meowToken: ZWalletToken?
     var selectedStakePool: SelectedHomeWalletStakePool?
 }
 
@@ -576,7 +575,6 @@ struct HomeScreenWalletStakingContent: Identifiable, Equatable {
     let poolIcon: String?
     let poolName: String
     
-    let tokenAddress: String
     let tokenAmount: String
     let tokenIcon: String?
     
@@ -592,7 +590,6 @@ struct HomeScreenWalletStakingContent: Identifiable, Equatable {
               poolAddress: "",
               poolIcon: nil,
               poolName: "placeholder pool",
-              tokenAddress: "",
               tokenAmount: "",
               tokenIcon: nil,
               totalStakedAmount: 0,
@@ -888,7 +885,7 @@ extension HomeScreenWalletContent {
 }
 
 extension HomeScreenWalletStakingContent {
-    init(meowPrice: ZeroCurrency?, token: ZWalletToken, userWalletAddress: String,
+    init(meowPrice: ZeroCurrency?, userWalletAddress: String,
          poolAddress: String, totalStaked: String, stakingConfig: ZStackingConfig,
          stakerStatus: ZStakingStatus, stakeRewards: ZStakingUserRewardsInfo) {
         let totalStakedAmount = ZeroWalletUtil.shared.meowPrice(tokenAmount: ZeroRewards.parseCredits(credits: totalStaked,
@@ -901,11 +898,10 @@ extension HomeScreenWalletStakingContent {
         self.init(id: poolAddress,
                   userWalletAddress: userWalletAddress,
                   poolAddress: poolAddress,
-                  poolIcon: token.logo,
-                  poolName: "\(token.name.uppercased()) Pool",
-                  tokenAddress: token.tokenAddress,
+                  poolIcon: ZeroContants.ZERO_WALLET_MEOW_IMAGE_URL,
+                  poolName: ZeroContants.ZERO_WALLET_MEOW_POOL_NAME,
                   tokenAmount: stakerStatus.amountStaked,
-                  tokenIcon: token.logo,
+                  tokenIcon: ZeroContants.ZERO_WALLET_MEOW_IMAGE_URL,
                   totalStakedAmount: totalStakedAmount,
                   totalStakedAmountFormatted: "$\(totalStakedAmount.formatToSuffix())",
                   myStakeAmount: myStakeAmount,

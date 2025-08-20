@@ -17,29 +17,30 @@ struct SimpleTabButtonsView<Tab: Hashable>: View {
     
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            HStack {
-                ForEach(tabs, id: \.self) { tab in
-                    Button(action: {
-                        onTabSelected(tab)
-                    }) {
-                        VStack(spacing: 0) {
-                            Text(tabTitle(tab))
-                                .font(.compound.bodyMDSemibold)
-                                .foregroundStyle(tab == selectedTab ? .compound.textPrimary : .compound.textSecondary)
-                            
-                            Rectangle()
-                                .fill(tab == selectedTab ? Color.zero.bgAccentRest : .clear)
-                                .frame(width: 90, height: 2)
-                                .cornerRadius(1.5)
-                                .padding(.top, 8)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(tabs, id: \.self) { tab in
+                        Button(action: {
+                            onTabSelected(tab)
+                        }) {
+                            VStack(spacing: 0) {
+                                Text(tabTitle(tab))
+                                    .font(.compound.bodyMDSemibold)
+                                    .foregroundStyle(tab == selectedTab ? .compound.textPrimary : .compound.textSecondary)
+                                
+                                Rectangle()
+                                    .fill(tab == selectedTab ? Color.zero.bgAccentRest : .clear)
+                                    .frame(width: 90, height: 2)
+                                    .cornerRadius(1.5)
+                                    .padding(.top, 8)
+                            }
+                            .padding(.all, showDivider ? 0 : 8)
                         }
-                        .padding(.all, showDivider ? 0 : 8)
                     }
+                    
+                    Spacer()
                 }
-                
-                Spacer()
             }
-            .frame(maxWidth: .infinity)
             
             if showDivider {
                 HorizontalDivider()

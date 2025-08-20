@@ -4,13 +4,19 @@ enum ZeroContants {
     /// Change app environment here and respective values will be applied everywhere .i.e. `DevServer()` or `ProdServer()`
     static let appServer: AppServer = ProdServer()
     
-    static let ZERO_CHANNEL_PREFIX = "0://"
-    static let ZERO_WALLET_ADDRESS_PREFIX = "0x"
-    static let ZERO_APP_STORE_APP_ID = "6476882926"
-    static let ZERO_WALLET_MEOW_POOL_ADDRESS = "0xfbDC0647F0652dB9eC56c7f09B7dD3192324AD6a"
-    
     static let accountProvider: String = ZeroContants.appServer.matrixHomeServerUrl.replacingOccurrences(of: "https://", with: "")
+    static let ZERO_APP_STORE_APP_ID = "6476882926"
+    
+    static let ZERO_CHANNEL_PREFIX = "0://"
+    
+    static let ZERO_WALLET_ADDRESS_PREFIX = "0x"
+    
     static let ZERO_PRO_SUBSCRIPTION_USD: Double = 14.99
+    
+    /// Staking Constants
+    static let ZERO_WALLET_MEOW_POOL_ADDRESS = "0xfbDC0647F0652dB9eC56c7f09B7dD3192324AD6a"
+    static let ZERO_WALLET_MEOW_IMAGE_URL = "https://zos.zero.tech/tokens/meow.png"
+    static let ZERO_WALLET_MEOW_POOL_NAME = "MEOW Pool"
 }
 
 protocol AppServer {
