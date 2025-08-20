@@ -80,6 +80,7 @@
 "action_enable" = "Aktivera";
 "action_end_poll" = "Avsluta omröstning";
 "action_enter_pin" = "Ange PIN-kod";
+"action_finish" = "Finish";
 "action_forgot_password" = "Glömt lösenordet?";
 "action_forward" = "Vidarebefordra";
 "action_go_back" = "Gå tillbaka";
@@ -102,6 +103,7 @@
 "action_no" = "Nej";
 "action_not_now" = "Inte nu";
 "action_ok" = "OK";
+"action_open_context_menu" = "Öppna kontextmenyn";
 "action_open_settings" = "Inställningar";
 "action_open_with" = "Öppna med";
 "action_pin" = "Fäst";
@@ -126,7 +128,9 @@
 "action_save" = "Spara";
 "action_search" = "Sök";
 "action_send" = "Skicka";
+"action_send_edited_message" = "Skicka redigerat message";
 "action_send_message" = "Skicka meddelande";
+"action_send_voice_message" = "Skicka röstmeddelande";
 "action_share" = "Dela";
 "action_share_link" = "Dela länk";
 "action_show" = "Visa";
@@ -146,9 +150,6 @@
 "action_view_source" = "Visa källkod";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, försök igen";
-"action.open_context_menu" = "Öppna kontextmenyn";
-"action.send_edited_message" = "Skicka redigerat message";
-"action.send_voice_message" = "Skicka röstmeddelande";
 "action.view" = "Visa";
 "banner_migrate_to_native_sliding_sync_action" = "Logga ut och uppgradera";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ stöder inte längre det gamla protokollet. Logga ut och logga in igen för att fortsätta använda appen.";
@@ -164,6 +165,8 @@
 "common_advanced_settings" = "Avancerade inställningar";
 "common_an_image" = "en bild";
 "common_analytics" = "Analysdata";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Utseende";
 "common_audio" = "Ljud";
 "common_blocked_users" = "Blockerade användare";
@@ -278,6 +281,7 @@
 "common_signing_out" = "Loggar ut";
 "common_something_went_wrong" = "Något gick fel";
 "common_something_went_wrong_message" = "Vi stötte på ett problem. Vänligen försök igen.";
+"common_space" = "Space";
 "common_starting_chat" = "Startar chatt …";
 "common_sticker" = "Dekal";
 "common_success" = "Lyckades";
@@ -504,6 +508,8 @@
 "screen_decline_and_block_title" = "Avvisa och blockera";
 "screen_edit_room_address_room_address_section_footer" = "Du behöver en rumsadress för att göra den synlig i katalogen.";
 "screen_edit_room_address_title" = "Rumsadress";
+"screen_invite_users_already_a_member" = "Redan medlem";
+"screen_invite_users_already_invited" = "Redan inbjuden";
 "screen_join_room_cancel_knock_action" = "Avbryt begäran";
 "screen_join_room_cancel_knock_alert_confirmation" = "Ja, avbryt";
 "screen_join_room_cancel_knock_alert_description" = "Är du säker på att du vill avbryta din begäran om att gå med i det här rummet?";
@@ -975,8 +981,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "Du har osparade ändringar.";
 "screen_room_details_add_topic_title" = "Lägg till ämne";
-"screen_room_details_already_a_member" = "Redan medlem";
-"screen_room_details_already_invited" = "Redan inbjuden";
 "screen_room_details_badge_encrypted" = "Krypterat";
 "screen_room_details_badge_not_encrypted" = "Inte krypterat";
 "screen_room_details_edit_room_title" = "Redigera rummet";
@@ -1075,6 +1079,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Du har inga favoritchattar än";
 "screen_roomlist_filter_invites_empty_state_title" = "Du har inga väntande inbjudningar.";
 "screen_roomlist_filter_low_priority" = "Låg prioritet";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Du kan avmarkera filter för att se dina andra chattar";
 "screen_roomlist_filter_mixed_empty_state_title" = "Du har inga chattar för det här valet";
 "screen_roomlist_filter_people_empty_state_title" = "Du har inga DM:er än";

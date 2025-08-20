@@ -80,6 +80,7 @@
 "action_enable" = "Attiva";
 "action_end_poll" = "Termina sondaggio";
 "action_enter_pin" = "Inserisci PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "Password dimenticata?";
 "action_forward" = "Inoltra";
 "action_go_back" = "Indietro";
@@ -102,6 +103,7 @@
 "action_no" = "No";
 "action_not_now" = "Non ora";
 "action_ok" = "OK";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "Impostazioni";
 "action_open_with" = "Apri con";
 "action_pin" = "Fissa";
@@ -126,7 +128,9 @@
 "action_save" = "Salva";
 "action_search" = "Ricerca";
 "action_send" = "Invia";
+"action_send_edited_message" = "Send edited message";
 "action_send_message" = "Invia messaggio";
+"action_send_voice_message" = "Send voice message";
 "action_share" = "Condividi";
 "action_share_link" = "Condividi collegamento";
 "action_show" = "Mostra";
@@ -146,9 +150,6 @@
 "action_view_source" = "Vedi codice sorgente";
 "action_yes" = "Sì";
 "action_yes_try_again" = "Sì, riprova";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Send edited message";
-"action.send_voice_message" = "Send voice message";
 "action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Esci e aggiorna";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ non supporta più il vecchio protocollo. Esci e accedi nuovamente per continuare a utilizzare l'app.";
@@ -164,6 +165,8 @@
 "common_advanced_settings" = "Impostazioni avanzate";
 "common_an_image" = "un'immagine";
 "common_analytics" = "Statistiche di utilizzo";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Aspetto";
 "common_audio" = "Audio";
 "common_blocked_users" = "Utenti bloccati";
@@ -278,6 +281,7 @@
 "common_signing_out" = "Disconnessione";
 "common_something_went_wrong" = "Qualcosa è andato storto";
 "common_something_went_wrong_message" = "Abbiamo riscontrato un problema. Per favore riprova.";
+"common_space" = "Space";
 "common_starting_chat" = "Avvio della conversazione...";
 "common_sticker" = "Adesivo";
 "common_success" = "Operazione riuscita";
@@ -504,6 +508,8 @@
 "screen_decline_and_block_title" = "Rifiuta e blocca";
 "screen_edit_room_address_room_address_section_footer" = "Avrai bisogno di un indirizzo della stanza per renderla visibile nell'elenco.";
 "screen_edit_room_address_title" = "Indirizzo della stanza";
+"screen_invite_users_already_a_member" = "Già membro";
+"screen_invite_users_already_invited" = "Già invitato";
 "screen_join_room_cancel_knock_action" = "Cancella richiesta";
 "screen_join_room_cancel_knock_alert_confirmation" = "Sì, annulla";
 "screen_join_room_cancel_knock_alert_description" = "Sei sicuro di voler annullare la tua richiesta di accesso a questa stanza?";
@@ -975,8 +981,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "Hai delle modifiche non salvate.";
 "screen_room_details_add_topic_title" = "Aggiungi argomento";
-"screen_room_details_already_a_member" = "Già membro";
-"screen_room_details_already_invited" = "Già invitato";
 "screen_room_details_badge_encrypted" = "Cifrata";
 "screen_room_details_badge_not_encrypted" = "Non cifrata";
 "screen_room_details_edit_room_title" = "Modifica stanza";
@@ -1075,6 +1079,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Non hai ancora conversazioni preferite";
 "screen_roomlist_filter_invites_empty_state_title" = "Non hai nessun invito in sospeso.";
 "screen_roomlist_filter_low_priority" = "Bassa priorità";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Puoi deselezionare i filtri per vedere le altre conversazioni.";
 "screen_roomlist_filter_mixed_empty_state_title" = "Non hai conversazioni per questa selezione";
 "screen_roomlist_filter_people_empty_state_title" = "Non hai ancora nessuna conversazione diretta";

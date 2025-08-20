@@ -194,6 +194,8 @@ internal enum L10n {
   internal static var actionEndPoll: String { return L10n.tr("Localizable", "action_end_poll") }
   /// Enter PIN
   internal static var actionEnterPin: String { return L10n.tr("Localizable", "action_enter_pin") }
+  /// Finish
+  internal static var actionFinish: String { return L10n.tr("Localizable", "action_finish") }
   /// Forgot password?
   internal static var actionForgotPassword: String { return L10n.tr("Localizable", "action_forgot_password") }
   /// Forward
@@ -242,6 +244,8 @@ internal enum L10n {
   internal static var actionNotNow: String { return L10n.tr("Localizable", "action_not_now") }
   /// OK
   internal static var actionOk: String { return L10n.tr("Localizable", "action_ok") }
+  /// Open context menu
+  internal static var actionOpenContextMenu: String { return L10n.tr("Localizable", "action_open_context_menu") }
   /// Settings
   internal static var actionOpenSettings: String { return L10n.tr("Localizable", "action_open_settings") }
   /// Open with
@@ -290,8 +294,12 @@ internal enum L10n {
   internal static var actionSearch: String { return L10n.tr("Localizable", "action_search") }
   /// Send
   internal static var actionSend: String { return L10n.tr("Localizable", "action_send") }
+  /// Send edited message
+  internal static var actionSendEditedMessage: String { return L10n.tr("Localizable", "action_send_edited_message") }
   /// Send message
   internal static var actionSendMessage: String { return L10n.tr("Localizable", "action_send_message") }
+  /// Send voice message
+  internal static var actionSendVoiceMessage: String { return L10n.tr("Localizable", "action_send_voice_message") }
   /// Share
   internal static var actionShare: String { return L10n.tr("Localizable", "action_share") }
   /// Share link
@@ -362,6 +370,10 @@ internal enum L10n {
   internal static var commonAnImage: String { return L10n.tr("Localizable", "common_an_image") }
   /// Analytics
   internal static var commonAnalytics: String { return L10n.tr("Localizable", "common_analytics") }
+  /// You left the room
+  internal static var commonAndroidShortcutsRemoveReasonLeftRoom: String { return L10n.tr("Localizable", "common_android_shortcuts_remove_reason_left_room") }
+  /// You were logged out of the session
+  internal static var commonAndroidShortcutsRemoveReasonSessionLoggedOut: String { return L10n.tr("Localizable", "common_android_shortcuts_remove_reason_session_logged_out") }
   /// Appearance
   internal static var commonAppearance: String { return L10n.tr("Localizable", "common_appearance") }
   /// Audio
@@ -1606,6 +1618,10 @@ internal enum L10n {
   internal static var screenIdentityUseAnotherDevice: String { return L10n.tr("Localizable", "screen_identity_use_another_device") }
   /// Waiting on other device…
   internal static var screenIdentityWaitingOnOtherDevice: String { return L10n.tr("Localizable", "screen_identity_waiting_on_other_device") }
+  /// Already a member
+  internal static var screenInviteUsersAlreadyAMember: String { return L10n.tr("Localizable", "screen_invite_users_already_a_member") }
+  /// Already invited
+  internal static var screenInviteUsersAlreadyInvited: String { return L10n.tr("Localizable", "screen_invite_users_already_invited") }
   /// Are you sure you want to decline the invitation to join %1$@?
   internal static func screenInvitesDeclineChatMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_decline_chat_message", String(describing: p1))
@@ -2254,10 +2270,6 @@ internal enum L10n {
   internal static var screenRoomChangeRoleUnsavedChangesTitle: String { return L10n.tr("Localizable", "screen_room_change_role_unsaved_changes_title") }
   /// Add topic
   internal static var screenRoomDetailsAddTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_add_topic_title") }
-  /// Already a member
-  internal static var screenRoomDetailsAlreadyAMember: String { return L10n.tr("Localizable", "screen_room_details_already_a_member") }
-  /// Already invited
-  internal static var screenRoomDetailsAlreadyInvited: String { return L10n.tr("Localizable", "screen_room_details_already_invited") }
   /// Encrypted
   internal static var screenRoomDetailsBadgeEncrypted: String { return L10n.tr("Localizable", "screen_room_details_badge_encrypted") }
   /// Not encrypted
@@ -3259,12 +3271,6 @@ internal enum L10n {
   }
 
   internal enum Action {
-    /// Open context menu
-    internal static var openContextMenu: String { return L10n.tr("Localizable", "action.open_context_menu") }
-    /// Send edited message
-    internal static var sendEditedMessage: String { return L10n.tr("Localizable", "action.send_edited_message") }
-    /// Send voice message
-    internal static var sendVoiceMessage: String { return L10n.tr("Localizable", "action.send_voice_message") }
     /// View
     internal static var view: String { return L10n.tr("Localizable", "action.view") }
   }

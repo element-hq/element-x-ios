@@ -80,6 +80,7 @@
 "action_enable" = "Włącz";
 "action_end_poll" = "Zakończ ankietę";
 "action_enter_pin" = "Wprowadź PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "Nie pamiętasz hasła?";
 "action_forward" = "Przekaż dalej";
 "action_go_back" = "Wróć";
@@ -102,6 +103,7 @@
 "action_no" = "Nie";
 "action_not_now" = "Nie teraz";
 "action_ok" = "Ok";
+"action_open_context_menu" = "Otwórz menu kontekstowe";
 "action_open_settings" = "Ustawienia";
 "action_open_with" = "Otwórz za pomocą";
 "action_pin" = "Przypnij";
@@ -126,7 +128,9 @@
 "action_save" = "Zapisz";
 "action_search" = "Szukaj";
 "action_send" = "Wyślij";
+"action_send_edited_message" = "Wyślij edytowaną wiadomość";
 "action_send_message" = "Wyślij wiadomość";
+"action_send_voice_message" = "Wyślij wiadomość głosową";
 "action_share" = "Udostępnij";
 "action_share_link" = "Udostępnij link";
 "action_show" = "Pokaż";
@@ -146,9 +150,6 @@
 "action_view_source" = "Wyświetl źródło";
 "action_yes" = "Tak";
 "action_yes_try_again" = "Tak, spróbuj ponownie";
-"action.open_context_menu" = "Otwórz menu kontekstowe";
-"action.send_edited_message" = "Wyślij edytowaną wiadomość";
-"action.send_voice_message" = "Wyślij wiadomość głosową";
 "action.view" = "Wyświetl";
 "banner_migrate_to_native_sliding_sync_action" = "Wyloguj się i zaktualizuj";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ już nie wspiera starego protokołu. Zaloguj się ponownie, aby dalej korzystać z aplikacji.";
@@ -164,6 +165,8 @@
 "common_advanced_settings" = "Ustawienia zaawansowane";
 "common_an_image" = "obraz";
 "common_analytics" = "Dane analityczne";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Wygląd";
 "common_audio" = "Dźwięk";
 "common_blocked_users" = "Zablokowani użytkownicy";
@@ -278,6 +281,7 @@
 "common_signing_out" = "Wylogowywanie";
 "common_something_went_wrong" = "Coś poszło nie tak";
 "common_something_went_wrong_message" = "Napotkaliśmy problem. Spróbuj ponownie.";
+"common_space" = "Space";
 "common_starting_chat" = "Rozpoczynanie czatu…";
 "common_sticker" = "Naklejka";
 "common_success" = "Sukces";
@@ -504,6 +508,8 @@
 "screen_decline_and_block_title" = "Odrzuć i zablokuj";
 "screen_edit_room_address_room_address_section_footer" = "Aby pokój był widoczny w katalogu, potrzebny jest adres pokoju.";
 "screen_edit_room_address_title" = "Adres pokoju";
+"screen_invite_users_already_a_member" = "Jest już członkiem";
+"screen_invite_users_already_invited" = "Już zaproszony";
 "screen_join_room_cancel_knock_action" = "Anuluj prośbę";
 "screen_join_room_cancel_knock_alert_confirmation" = "Tak, anuluj";
 "screen_join_room_cancel_knock_alert_description" = "Czy na pewno chcesz anulować prośbę o dołączenie do tego pokoju?";
@@ -975,8 +981,6 @@
 "screen_room_change_role_owners_title" = "Wybierz właścicieli";
 "screen_room_change_role_unsaved_changes_description" = "Masz niezapisane zmiany.";
 "screen_room_details_add_topic_title" = "Dodaj temat";
-"screen_room_details_already_a_member" = "Jest już członkiem";
-"screen_room_details_already_invited" = "Już zaproszony";
 "screen_room_details_badge_encrypted" = "Szyfrowany";
 "screen_room_details_badge_not_encrypted" = "Nieszyfrowany";
 "screen_room_details_edit_room_title" = "Edytuj pokój";
@@ -1075,6 +1079,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Nie masz jeszcze ulubionych czatów";
 "screen_roomlist_filter_invites_empty_state_title" = "Nie masz żadnych oczekujących zaproszeń.";
 "screen_roomlist_filter_low_priority" = "Niski priorytet";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Wyczyść filtry, aby zobaczyć pozostałe czaty";
 "screen_roomlist_filter_mixed_empty_state_title" = "Brak czatów dla podanych kryteriów";
 "screen_roomlist_filter_people_empty_state_title" = "Nie masz jeszcze żadnych PW";

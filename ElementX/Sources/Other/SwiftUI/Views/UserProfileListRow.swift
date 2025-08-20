@@ -51,9 +51,9 @@ private extension MembershipState {
     var localizedDescription: String? {
         switch self {
         case .join:
-            return L10n.screenRoomDetailsAlreadyAMember
+            return L10n.screenInviteUsersAlreadyAMember
         case .invite:
-            return L10n.screenRoomDetailsAlreadyInvited
+            return L10n.screenInviteUsersAlreadyInvited
         default:
             return nil
         }
