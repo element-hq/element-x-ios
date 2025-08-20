@@ -44,6 +44,7 @@ class NotificationHandler {
         
         // Copy over the unread information to the notification badge
         notificationContent.badge = notificationContent.unreadCount as NSNumber?
+        MXLog.info("\(tag) New badge value: \(notificationContent.badge?.stringValue ?? "nil")")
         
         guard let notificationItemProxy = await userSession.notificationItemProxy(roomID: roomID, eventID: eventID) else {
             MXLog.error("\(tag) Failed retrieving notification item")
@@ -82,6 +83,7 @@ class NotificationHandler {
         
         let content = UNMutableNotificationContent()
         content.badge = notificationContent.unreadCount as NSNumber?
+        MXLog.info("\(tag) New badge value: \(content.badge?.stringValue ?? "nil")")
         
         contentHandler(content)
     }
