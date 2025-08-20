@@ -113,7 +113,7 @@ struct HomeScreenViewState: BindableState {
         return rooms
     }
         
-    var bindings = HomeScreenViewStateBindings()
+    var bindings: HomeScreenViewStateBindings
     
     var placeholderRooms: [HomeScreenRoom] {
         (1...10).map { _ in
@@ -136,7 +136,7 @@ struct HomeScreenViewState: BindableState {
 }
 
 struct HomeScreenViewStateBindings {
-    var filtersState = RoomListFiltersState()
+    var filtersState: RoomListFiltersState
     var searchQuery = ""
     var isSearchFieldFocused = false
     

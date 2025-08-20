@@ -19,13 +19,6 @@ struct RoomListFilterView: View {
     }
 }
 
-struct RoomListFilterView_Previews: PreviewProvider, TestablePreview {
-    static var previews: some View {
-        RoomListFilterView(filter: .people, isActive: .constant(false))
-        RoomListFilterView(filter: .people, isActive: .constant(true))
-    }
-}
-
 private struct FilterToggleStyle: ToggleStyle {
     private func strokeColor(isOn: Bool) -> Color {
         isOn ? .compound.bgActionPrimaryRest : .compound.borderInteractiveSecondary
@@ -57,5 +50,14 @@ private struct FilterToggleStyle: ToggleStyle {
             .onTapGesture {
                 configuration.isOn.toggle()
             }
+    }
+}
+
+// MARK: - Previews
+
+struct RoomListFilterView_Previews: PreviewProvider, TestablePreview {
+    static var previews: some View {
+        RoomListFilterView(filter: .people, isActive: .constant(false))
+        RoomListFilterView(filter: .people, isActive: .constant(true))
     }
 }
