@@ -80,6 +80,7 @@
 "action_enable" = "Activer";
 "action_end_poll" = "Terminer le sondage";
 "action_enter_pin" = "Saisir le code PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "Mot de passe oublié ?";
 "action_forward" = "Transférer";
 "action_go_back" = "Retour";
@@ -102,6 +103,7 @@
 "action_no" = "Non";
 "action_not_now" = "Pas maintenant";
 "action_ok" = "OK";
+"action_open_context_menu" = "Ouvrir le menu contextuel";
 "action_open_settings" = "Ouvrir les paramètres";
 "action_open_with" = "Ouvrir avec";
 "action_pin" = "Épingler";
@@ -126,7 +128,9 @@
 "action_save" = "Enregistrer";
 "action_search" = "Rechercher";
 "action_send" = "Envoyer";
+"action_send_edited_message" = "Envoyer les modifications";
 "action_send_message" = "Envoyer un message";
+"action_send_voice_message" = "Envoyer un message vocal";
 "action_share" = "Partager";
 "action_share_link" = "Partager le lien";
 "action_show" = "Afficher";
@@ -146,10 +150,6 @@
 "action_view_source" = "Afficher la source";
 "action_yes" = "Oui";
 "action_yes_try_again" = "Oui, réessayez";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Ouvrir le menu contextuel";
-"action.send_edited_message" = "Envoyer les modifications";
-"action.send_voice_message" = "Envoyer un message vocal";
 "action.view" = "Voir";
 "banner_migrate_to_native_sliding_sync_action" = "Déconnecter et mettre à niveau";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ne prend plus en charge l'ancien protocole. Veuillez vous déconnecter puis vous reconnecter pour continuer à utiliser l'application.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Paramètres avancés";
 "common_an_image" = "une image";
 "common_analytics" = "Statistiques d’utilisation";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Apparence";
 "common_audio" = "Audio";
 "common_blocked_users" = "Utilisateurs bloqués";

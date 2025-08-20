@@ -80,6 +80,7 @@
 "action_enable" = "Engedélyezés";
 "action_end_poll" = "Szavazás lezárása";
 "action_enter_pin" = "Adja meg a PIN-kódot";
+"action_finish" = "Befejezés";
 "action_forgot_password" = "Elfelejtette a jelszót?";
 "action_forward" = "Tovább";
 "action_go_back" = "Visszalépés";
@@ -102,6 +103,7 @@
 "action_no" = "Nem";
 "action_not_now" = "Most nem";
 "action_ok" = "Rendben";
+"action_open_context_menu" = "Helyi menü megnyitása";
 "action_open_settings" = "Beállítások megnyitása";
 "action_open_with" = "Megnyitás a következővel";
 "action_pin" = "Kitűzés";
@@ -126,7 +128,9 @@
 "action_save" = "Mentés";
 "action_search" = "Keresés";
 "action_send" = "Küldés";
+"action_send_edited_message" = "Szerkesztett üzenet küldése";
 "action_send_message" = "Üzenet küldése";
+"action_send_voice_message" = "Hangüzenet küldése";
 "action_share" = "Megosztás";
 "action_share_link" = "Hivatkozás megosztása";
 "action_show" = "Megjelenítés";
@@ -146,10 +150,6 @@
 "action_view_source" = "Forrás megtekintése";
 "action_yes" = "Igen";
 "action_yes_try_again" = "Igen, újrapróbálkozás";
-"action.finish" = "Befejezés";
-"action.open_context_menu" = "Helyi menü megnyitása";
-"action.send_edited_message" = "Szerkesztett üzenet küldése";
-"action.send_voice_message" = "Hangüzenet küldése";
 "action.view" = "Megtekintés";
 "banner_migrate_to_native_sliding_sync_action" = "Kijelentkezés és frissítés";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ már nem támogatja a régi protokollt. Kérjük, jelentkezzen ki és jelentkezzen be újra az alkalmazás használatának folytatásához.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Speciális beállítások";
 "common_an_image" = "egy kép";
 "common_analytics" = "Elemzések";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Megjelenítés";
 "common_audio" = "Hang";
 "common_blocked_users" = "Letiltott felhasználók";

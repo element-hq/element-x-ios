@@ -80,6 +80,7 @@
 "action_enable" = "Povoliť";
 "action_end_poll" = "Ukončiť anketu";
 "action_enter_pin" = "Zadajte PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "Zabudnuté heslo?";
 "action_forward" = "Preposlať";
 "action_go_back" = "Ísť späť";
@@ -102,6 +103,7 @@
 "action_no" = "Nie";
 "action_not_now" = "Teraz nie";
 "action_ok" = "OK";
+"action_open_context_menu" = "Otvoriť kontextovú ponuku";
 "action_open_settings" = "Otvoriť nastavenia";
 "action_open_with" = "Otvoriť pomocou";
 "action_pin" = "Pripnúť";
@@ -126,7 +128,9 @@
 "action_save" = "Uložiť";
 "action_search" = "Hľadať";
 "action_send" = "Odoslať";
+"action_send_edited_message" = "Odoslať upravenú správa";
 "action_send_message" = "Odoslať správu";
+"action_send_voice_message" = "Odoslať hlasovú správu";
 "action_share" = "Zdieľať";
 "action_share_link" = "Zdieľať odkaz";
 "action_show" = "Zobraziť";
@@ -146,10 +150,6 @@
 "action_view_source" = "Zobraziť zdroj";
 "action_yes" = "Áno";
 "action_yes_try_again" = "Áno, skúsiť to znova";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Otvoriť kontextovú ponuku";
-"action.send_edited_message" = "Odoslať upravenú správa";
-"action.send_voice_message" = "Odoslať hlasovú správu";
 "action.view" = "Zobraziť";
 "banner_migrate_to_native_sliding_sync_action" = "Odhlásiť sa a aktualizovať";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ už nepodporuje starý protokol. Odhláste sa a znova prihláste, aby ste mohli pokračovať v používaní aplikácie.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Pokročilé nastavenia";
 "common_an_image" = "obrázok";
 "common_analytics" = "Analytika";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Vzhľad";
 "common_audio" = "Zvuk";
 "common_blocked_users" = "Blokovaní používatelia";

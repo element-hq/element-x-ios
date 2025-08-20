@@ -80,6 +80,7 @@
 "action_enable" = "به کار انداختن";
 "action_end_poll" = "پایان نظرسنجی";
 "action_enter_pin" = "ورود پین";
+"action_finish" = "Finish";
 "action_forgot_password" = "گذرواژه را فراموش کردید؟";
 "action_forward" = "پیشروی";
 "action_go_back" = "پس‌روی";
@@ -102,6 +103,7 @@
 "action_no" = "نه";
 "action_not_now" = "الآن نه";
 "action_ok" = "قبول";
+"action_open_context_menu" = "گشودن فهرست بافتاری";
 "action_open_settings" = "تنظیمات";
 "action_open_with" = "گشودن با";
 "action_pin" = "سنجاق";
@@ -126,7 +128,9 @@
 "action_save" = "ذخیره";
 "action_search" = "جست‌وجو";
 "action_send" = "فرستادن";
+"action_send_edited_message" = "فرستادن پیام ویراسته";
 "action_send_message" = "فرستادن پیام";
+"action_send_voice_message" = "فرستادن پیام صوتی";
 "action_share" = "هم‌رسانی";
 "action_share_link" = "هم‌رسانی پیوند";
 "action_show" = "نمایش";
@@ -146,10 +150,6 @@
 "action_view_source" = "دیدن منبع";
 "action_yes" = "بله";
 "action_yes_try_again" = "بله. تلاش دوباره";
-"action.finish" = "Finish";
-"action.open_context_menu" = "گشودن فهرست بافتاری";
-"action.send_edited_message" = "فرستادن پیام ویراسته";
-"action.send_voice_message" = "فرستادن پیام صوتی";
 "action.view" = "نما";
 "banner_migrate_to_native_sliding_sync_action" = "خروج و ارتقا";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "‏%1$@ دیگر از شیوه‌نامهٔ قدیمی پشتیبانی نمی‌کند. لطفاً برای ادامهٔ استفاده از کاره، خارج شده و دوباره وارد شوید.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "تنظیمات پیش‌رفته";
 "common_an_image" = "an image";
 "common_analytics" = "تجزیه و تحلیل";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "ظاهر";
 "common_audio" = "صدا";
 "common_blocked_users" = "کاربران مسدود";

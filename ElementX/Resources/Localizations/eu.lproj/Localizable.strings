@@ -80,6 +80,7 @@
 "action_enable" = "Gaitu";
 "action_end_poll" = "Amaitu inkesta";
 "action_enter_pin" = "Sartu PINa";
+"action_finish" = "Amaitu";
 "action_forgot_password" = "Pasahitza ahaztu duzu?";
 "action_forward" = "Birbidali";
 "action_go_back" = "Joan atzera";
@@ -102,6 +103,7 @@
 "action_no" = "Ez";
 "action_not_now" = "Orain ez";
 "action_ok" = "Ados";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "Ezarpenak";
 "action_open_with" = "Ireki honekin…";
 "action_pin" = "Finkatu";
@@ -126,7 +128,9 @@
 "action_save" = "Gorde";
 "action_search" = "Bilatu";
 "action_send" = "Bidali";
+"action_send_edited_message" = "Bidali editatutako mezua";
 "action_send_message" = "Bidali mezua";
+"action_send_voice_message" = "Bidali ahots-mezua";
 "action_share" = "Partekatu";
 "action_share_link" = "Partekatu esteka";
 "action_show" = "Erakutsi";
@@ -146,10 +150,6 @@
 "action_view_source" = "Ikusi iturburua";
 "action_yes" = "Bai";
 "action_yes_try_again" = "Bai, saiatu berriro";
-"action.finish" = "Amaitu";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Bidali editatutako mezua";
-"action.send_voice_message" = "Bidali ahots-mezua";
 "action.view" = "Ikusi";
 "banner_migrate_to_native_sliding_sync_action" = "Amaitu saioa eta bertsio-berritu";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@(e)k ez da bateragarria lehengo protokoloarekin. Amaitu saioa eta hasi berriro aplikazioa erabiltzen jarraitzeko.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Ezarpen aurreratuak";
 "common_an_image" = "irudia";
 "common_analytics" = "Estatistikak";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Itxura";
 "common_audio" = "Audioa";
 "common_blocked_users" = "Blokeatutako erabiltzaileak";

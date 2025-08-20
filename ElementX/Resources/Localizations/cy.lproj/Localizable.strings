@@ -80,6 +80,7 @@
 "action_enable" = "Galluogi";
 "action_end_poll" = "Gorffen pleidlais";
 "action_enter_pin" = "Rhoi'r PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "Wedi anghofio'ch cyfrinair?";
 "action_forward" = "Ymlaen";
 "action_go_back" = "Mynd nôl";
@@ -102,6 +103,7 @@
 "action_no" = "Na";
 "action_not_now" = "Nid nawr";
 "action_ok" = "Iawn";
+"action_open_context_menu" = "Agor y ddewislen gyd-destun";
 "action_open_settings" = "Gosodiadau";
 "action_open_with" = "Agor gyda";
 "action_pin" = "Pinio";
@@ -126,7 +128,9 @@
 "action_save" = "Cadw";
 "action_search" = "Chwilio";
 "action_send" = "Anfon";
+"action_send_edited_message" = "Anfon neges wedi'i golygu";
 "action_send_message" = "Anfonwch neges";
+"action_send_voice_message" = "Anfon neges llais";
 "action_share" = "Rhannu";
 "action_share_link" = "Rhannwch ddolen";
 "action_show" = "Dangos";
@@ -146,10 +150,6 @@
 "action_view_source" = "Gweld ffynhonnell";
 "action_yes" = "Iawn";
 "action_yes_try_again" = "Iawn, ceisiwch eto";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Agor y ddewislen gyd-destun";
-"action.send_edited_message" = "Anfon neges wedi'i golygu";
-"action.send_voice_message" = "Anfon neges llais";
 "action.view" = "Golwg";
 "banner_migrate_to_native_sliding_sync_action" = "Allgofnodi ac Uwchraddio";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "Nid yw %1$@ bellach yn cefnogi'r hen brotocol. Allgofnodwch a mewngofnodi'n ôl i barhau i ddefnyddio'r ap.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Gosodiadau uwch";
 "common_an_image" = "delwedd";
 "common_analytics" = "Dadansoddeg";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Gwedd";
 "common_audio" = "Sain";
 "common_blocked_users" = "Defnyddwyr wedi'u rhwystro";

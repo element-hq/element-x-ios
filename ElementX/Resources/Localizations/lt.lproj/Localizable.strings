@@ -80,6 +80,7 @@
 "action_enable" = "Įjungti";
 "action_end_poll" = "End poll";
 "action_enter_pin" = "Enter PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "Pamiršote slaptažodį?";
 "action_forward" = "Forward";
 "action_go_back" = "Go back";
@@ -102,6 +103,7 @@
 "action_no" = "Ne";
 "action_not_now" = "Ne dabar";
 "action_ok" = "Gerai";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "Settings";
 "action_open_with" = "Open with";
 "action_pin" = "Pin";
@@ -126,7 +128,9 @@
 "action_save" = "Išsaugoti";
 "action_search" = "Ieškoti";
 "action_send" = "Siųsti";
+"action_send_edited_message" = "Send edited message";
 "action_send_message" = "Siųsti žinutę";
+"action_send_voice_message" = "Send voice message";
 "action_share" = "Dalintis";
 "action_share_link" = "Bendrinti nuorodą";
 "action_show" = "Show";
@@ -146,10 +150,6 @@
 "action_view_source" = "Peržiūrėti šaltinį";
 "action_yes" = "Taip";
 "action_yes_try_again" = "Yes, try again";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Send edited message";
-"action.send_voice_message" = "Send voice message";
 "action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Advanced settings";
 "common_an_image" = "an image";
 "common_analytics" = "Analitika";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Appearance";
 "common_audio" = "Garsas";
 "common_blocked_users" = "Blocked users";

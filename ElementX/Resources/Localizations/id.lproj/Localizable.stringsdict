@@ -69,7 +69,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d anggota</string>
+			<string>%1$d Anggota</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>

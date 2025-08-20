@@ -80,6 +80,7 @@
 "action_enable" = "Увімкнути";
 "action_end_poll" = "Завершити опитування";
 "action_enter_pin" = "Введіть PIN-код";
+"action_finish" = "Завершити";
 "action_forgot_password" = "Забули пароль?";
 "action_forward" = "Переслати";
 "action_go_back" = "Повернутися";
@@ -102,6 +103,7 @@
 "action_no" = "Ні";
 "action_not_now" = "Не зараз";
 "action_ok" = "Гаразд";
+"action_open_context_menu" = "Відкрити контекстне меню";
 "action_open_settings" = "Налаштування";
 "action_open_with" = "Відкрити за допомогою";
 "action_pin" = "Закріпити";
@@ -126,7 +128,9 @@
 "action_save" = "Зберегти";
 "action_search" = "Шукати";
 "action_send" = "Надіслати";
+"action_send_edited_message" = "Надіслати змінене повідомлення";
 "action_send_message" = "Надіслати повідомлення";
+"action_send_voice_message" = "Надіслати голосове повідомлення";
 "action_share" = "Поділитися";
 "action_share_link" = "Поділитися посиланням";
 "action_show" = "Показати";
@@ -146,10 +150,6 @@
 "action_view_source" = "Переглянути джерело";
 "action_yes" = "Так";
 "action_yes_try_again" = "Так, повторити спробу";
-"action.finish" = "Завершити";
-"action.open_context_menu" = "Відкрити контекстне меню";
-"action.send_edited_message" = "Надіслати змінене повідомлення";
-"action.send_voice_message" = "Надіслати голосове повідомлення";
 "action.view" = "Переглянути";
 "banner_migrate_to_native_sliding_sync_action" = "Вийти та оновити";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ більше не підтримує старий протокол. Вийдіть і знов увійдіть, щоб продовжити користуватися застосунком.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Додаткові налаштування";
 "common_an_image" = "зображення";
 "common_analytics" = "Аналітика";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Тема";
 "common_audio" = "Аудіо";
 "common_blocked_users" = "Заблоковані користувачі";

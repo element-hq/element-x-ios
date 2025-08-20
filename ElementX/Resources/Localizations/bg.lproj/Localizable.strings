@@ -80,6 +80,7 @@
 "action_enable" = "Активиране";
 "action_end_poll" = "Приключване на анкетата";
 "action_enter_pin" = "Въведете PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "Забравена парола?";
 "action_forward" = "Препращане";
 "action_go_back" = "Go back";
@@ -102,6 +103,7 @@
 "action_no" = "Не";
 "action_not_now" = "Не сега";
 "action_ok" = "Добре";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "Настройки";
 "action_open_with" = "Отваряне с";
 "action_pin" = "Закачане";
@@ -126,7 +128,9 @@
 "action_save" = "Запазване";
 "action_search" = "Търсене";
 "action_send" = "Изпращане";
+"action_send_edited_message" = "Send edited message";
 "action_send_message" = "Изпращане на съобщение";
+"action_send_voice_message" = "Send voice message";
 "action_share" = "Споделяне";
 "action_share_link" = "Споделяне на връзката";
 "action_show" = "Показване";
@@ -146,10 +150,6 @@
 "action_view_source" = "Преглед на източника";
 "action_yes" = "Да";
 "action_yes_try_again" = "Да, опитай отново";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Send edited message";
-"action.send_voice_message" = "Send voice message";
 "action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Разширени настройки";
 "common_an_image" = "an image";
 "common_analytics" = "Статистика";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Облик";
 "common_audio" = "Аудио";
 "common_blocked_users" = "Блокирани потребители";

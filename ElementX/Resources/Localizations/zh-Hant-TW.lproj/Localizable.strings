@@ -80,6 +80,7 @@
 "action_enable" = "啟用";
 "action_end_poll" = "結束投票";
 "action_enter_pin" = "輸入 PIN 碼";
+"action_finish" = "Finish";
 "action_forgot_password" = "忘記密碼？";
 "action_forward" = "轉寄";
 "action_go_back" = "返回";
@@ -102,6 +103,7 @@
 "action_no" = "否";
 "action_not_now" = "以後再說";
 "action_ok" = "OK";
+"action_open_context_menu" = "開啟情境選單";
 "action_open_settings" = "開啟設定";
 "action_open_with" = "用其他方式開啟";
 "action_pin" = "釘選";
@@ -126,7 +128,9 @@
 "action_save" = "儲存";
 "action_search" = "搜尋";
 "action_send" = "傳送";
+"action_send_edited_message" = "傳送已編輯的訊息";
 "action_send_message" = "傳送訊息";
+"action_send_voice_message" = "傳送語音訊息";
 "action_share" = "分享";
 "action_share_link" = "分享連結";
 "action_show" = "顯示";
@@ -146,10 +150,6 @@
 "action_view_source" = "檢視來源";
 "action_yes" = "是";
 "action_yes_try_again" = "是的，再試一次";
-"action.finish" = "Finish";
-"action.open_context_menu" = "開啟情境選單";
-"action.send_edited_message" = "傳送已編輯的訊息";
-"action.send_voice_message" = "傳送語音訊息";
 "action.view" = "檢視";
 "banner_migrate_to_native_sliding_sync_action" = "登出並升級";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ 不再支援舊版通訊協定。請登出並重新登入以繼續使用應用程式。";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "進階設定";
 "common_an_image" = "影像";
 "common_analytics" = "分析";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "外觀";
 "common_audio" = "音訊";
 "common_blocked_users" = "封鎖的使用者";

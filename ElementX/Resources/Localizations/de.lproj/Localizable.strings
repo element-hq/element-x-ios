@@ -80,6 +80,7 @@
 "action_enable" = "Aktivieren";
 "action_end_poll" = "Umfrage beenden";
 "action_enter_pin" = "PIN eingeben";
+"action_finish" = "Finish";
 "action_forgot_password" = "Passwort vergessen?";
 "action_forward" = "Weiterleiten";
 "action_go_back" = "Zurück";
@@ -102,6 +103,7 @@
 "action_no" = "Nein";
 "action_not_now" = "Später";
 "action_ok" = "Ok";
+"action_open_context_menu" = "Kontextmenü öffnen";
 "action_open_settings" = "Einstellungen öffnen";
 "action_open_with" = "Öffnen mit";
 "action_pin" = "Fixieren";
@@ -126,7 +128,9 @@
 "action_save" = "Speichern";
 "action_search" = "Suchen";
 "action_send" = "Senden";
+"action_send_edited_message" = "Bearbeitete Nachricht senden";
 "action_send_message" = "Nachricht senden";
+"action_send_voice_message" = "Sprachnachricht senden";
 "action_share" = "Teilen";
 "action_share_link" = "Link teilen";
 "action_show" = "Zeige";
@@ -146,10 +150,6 @@
 "action_view_source" = "Quellcode anzeigen";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, versuchen Sie es noch einmal";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Kontextmenü öffnen";
-"action.send_edited_message" = "Bearbeitete Nachricht senden";
-"action.send_voice_message" = "Sprachnachricht senden";
 "action.view" = "Ansicht";
 "banner_migrate_to_native_sliding_sync_action" = "Abmelden und aktualisieren";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ unterstützt das alte Protokoll nicht mehr. Bitte melden Sie sich ab und wieder an, um die App weiter nutzen zu können.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Erweiterte Einstellungen";
 "common_an_image" = "ein Bild";
 "common_analytics" = "Analysedaten";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Erscheinungsbild";
 "common_audio" = "Audio";
 "common_blocked_users" = "Blockierte Nutzer";

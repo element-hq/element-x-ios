@@ -80,6 +80,7 @@
 "action_enable" = "Aktifkan";
 "action_end_poll" = "Akhiri pemungutan suara";
 "action_enter_pin" = "Masukkan PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "Lupa kata sandi?";
 "action_forward" = "Teruskan";
 "action_go_back" = "Kembali";
@@ -102,6 +103,7 @@
 "action_no" = "Tidak";
 "action_not_now" = "Jangan sekarang";
 "action_ok" = "Oke";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "Pengaturan";
 "action_open_with" = "Buka dengan";
 "action_pin" = "Sematkan";
@@ -109,9 +111,9 @@
 "action_quote" = "Kutip";
 "action_react" = "Bereaksi";
 "action_reject" = "Tolak";
-"action_remove" = "Hapus";
-"action_remove_caption" = "Hapus keterangan";
-"action_remove_message" = "Hapus pesan";
+"action_remove" = "Hilangkan";
+"action_remove_caption" = "Hilangkan keterangan";
+"action_remove_message" = "Hilangkan pesan";
 "action_reply" = "Balas";
 "action_reply_in_thread" = "Balas dalam utas";
 "action_report" = "Laporkan";
@@ -126,7 +128,9 @@
 "action_save" = "Simpan";
 "action_search" = "Cari";
 "action_send" = "Kirim";
+"action_send_edited_message" = "Kirim pesan tersunting";
 "action_send_message" = "Kirim pesan";
+"action_send_voice_message" = "Send voice message";
 "action_share" = "Bagikan";
 "action_share_link" = "Bagikan tautan";
 "action_show" = "Tampilkan";
@@ -146,10 +150,6 @@
 "action_view_source" = "Tampilkan sumber";
 "action_yes" = "Ya";
 "action_yes_try_again" = "Ya, coba lagi";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Send edited message";
-"action.send_voice_message" = "Send voice message";
 "action.view" = "Lihat";
 "banner_migrate_to_native_sliding_sync_action" = "Keluar & Tingkatkan";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ tidak lagi mendukung protokol lama. Silakan keluar dan masuk kembali untuk terus menggunakan aplikasi.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Pengaturan tingkat lanjut";
 "common_an_image" = "sebuah gambar";
 "common_analytics" = "Analitik";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Penampilan";
 "common_audio" = "Audio";
 "common_blocked_users" = "Pengguna yang diblokir";
@@ -956,7 +958,7 @@
 "screen_room_attachment_text_formatting" = "Pemformatan Teks";
 "screen_room_change_permissions_administrators" = "Hanya admin";
 "screen_room_change_permissions_ban_people" = "Cekal orang-orang";
-"screen_room_change_permissions_delete_messages" = "Hapus pesan";
+"screen_room_change_permissions_delete_messages" = "Hilangkan pesan";
 "screen_room_change_permissions_invite_people" = "Undang orang-orang dan terima permintaan untuk bergabung";
 "screen_room_change_permissions_moderators" = "Admin dan moderator";
 "screen_room_change_permissions_remove_people" = "Keluarkan orang-orang dan tolak permintaan untuk bergabung";

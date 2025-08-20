@@ -80,6 +80,7 @@
 "action_enable" = "Включить";
 "action_end_poll" = "Завершить опрос";
 "action_enter_pin" = "Введите PIN-код";
+"action_finish" = "Finish";
 "action_forgot_password" = "Забыли пароль?";
 "action_forward" = "Переслать";
 "action_go_back" = "Вернуться";
@@ -102,6 +103,7 @@
 "action_no" = "Нет";
 "action_not_now" = "Не сейчас";
 "action_ok" = "Ок";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "Открыть настройки";
 "action_open_with" = "Открыть с помощью";
 "action_pin" = "Закрепить";
@@ -126,7 +128,9 @@
 "action_save" = "Сохранить";
 "action_search" = "Поиск";
 "action_send" = "Отправить";
+"action_send_edited_message" = "Send edited message";
 "action_send_message" = "Отправить сообщение";
+"action_send_voice_message" = "Send voice message";
 "action_share" = "Поделиться";
 "action_share_link" = "Поделиться ссылкой";
 "action_show" = "Показать";
@@ -146,10 +150,6 @@
 "action_view_source" = "Показать источник";
 "action_yes" = "Да";
 "action_yes_try_again" = "Да, попробуйте еще раз";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Send edited message";
-"action.send_voice_message" = "Send voice message";
 "action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Выйти и обновить";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ больше не поддерживает старый протокол. Пожалуйста, выйдите из системы и войдите снова, чтобы продолжить использование приложения.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Дополнительные настройки";
 "common_an_image" = "an image";
 "common_analytics" = "Аналитика";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Внешний вид";
 "common_audio" = "Аудио";
 "common_blocked_users" = "Заблокированные пользователи";

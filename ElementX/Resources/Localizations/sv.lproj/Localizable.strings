@@ -80,6 +80,7 @@
 "action_enable" = "Aktivera";
 "action_end_poll" = "Avsluta omröstning";
 "action_enter_pin" = "Ange PIN-kod";
+"action_finish" = "Finish";
 "action_forgot_password" = "Glömt lösenordet?";
 "action_forward" = "Vidarebefordra";
 "action_go_back" = "Gå tillbaka";
@@ -102,6 +103,7 @@
 "action_no" = "Nej";
 "action_not_now" = "Inte nu";
 "action_ok" = "OK";
+"action_open_context_menu" = "Öppna kontextmenyn";
 "action_open_settings" = "Inställningar";
 "action_open_with" = "Öppna med";
 "action_pin" = "Fäst";
@@ -126,7 +128,9 @@
 "action_save" = "Spara";
 "action_search" = "Sök";
 "action_send" = "Skicka";
+"action_send_edited_message" = "Skicka redigerat message";
 "action_send_message" = "Skicka meddelande";
+"action_send_voice_message" = "Skicka röstmeddelande";
 "action_share" = "Dela";
 "action_share_link" = "Dela länk";
 "action_show" = "Visa";
@@ -146,10 +150,6 @@
 "action_view_source" = "Visa källkod";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, försök igen";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Öppna kontextmenyn";
-"action.send_edited_message" = "Skicka redigerat message";
-"action.send_voice_message" = "Skicka röstmeddelande";
 "action.view" = "Visa";
 "banner_migrate_to_native_sliding_sync_action" = "Logga ut och uppgradera";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ stöder inte längre det gamla protokollet. Logga ut och logga in igen för att fortsätta använda appen.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Avancerade inställningar";
 "common_an_image" = "en bild";
 "common_analytics" = "Analysdata";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Utseende";
 "common_audio" = "Ljud";
 "common_blocked_users" = "Blockerade användare";

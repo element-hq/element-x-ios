@@ -80,6 +80,7 @@
 "action_enable" = "ჩართვა";
 "action_end_poll" = "გამოკითხვის დასრულება";
 "action_enter_pin" = "შეიყვანეთ PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "დაგავიწყდათ პაროლი?";
 "action_forward" = "გადაგზავნა";
 "action_go_back" = "დაბრუნება";
@@ -102,6 +103,7 @@
 "action_no" = "არა";
 "action_not_now" = "ახლა არა";
 "action_ok" = "OK";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "პარამეტრები";
 "action_open_with" = "გახსნა პროგრამით:";
 "action_pin" = "Pin";
@@ -126,7 +128,9 @@
 "action_save" = "შენახვა";
 "action_search" = "ძიება";
 "action_send" = "გაგზავნა";
+"action_send_edited_message" = "Send edited message";
 "action_send_message" = "შეტყობინების გაგზავნა";
+"action_send_voice_message" = "Send voice message";
 "action_share" = "გაზიარება";
 "action_share_link" = "ბმულის გაზიარება";
 "action_show" = "Show";
@@ -146,10 +150,6 @@
 "action_view_source" = "წყაროს ნახვა";
 "action_yes" = "დიახ";
 "action_yes_try_again" = "Yes, try again";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Send edited message";
-"action.send_voice_message" = "Send voice message";
 "action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "გაფართოებული პარამეტრები";
 "common_an_image" = "an image";
 "common_analytics" = "ანალიტიკა";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "გარეგნობა";
 "common_audio" = "აუდიო";
 "common_blocked_users" = "დაბლოკილი მომხმარებლები";

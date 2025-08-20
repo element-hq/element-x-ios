@@ -80,6 +80,7 @@
 "action_enable" = "Aktiver";
 "action_end_poll" = "Avslutt avstemning";
 "action_enter_pin" = "Skriv inn PIN-koden";
+"action_finish" = "Finish";
 "action_forgot_password" = "Glemt passordet?";
 "action_forward" = "Videresend";
 "action_go_back" = "Gå tilbake";
@@ -102,6 +103,7 @@
 "action_no" = "Nei";
 "action_not_now" = "Ikke nå";
 "action_ok" = "OK";
+"action_open_context_menu" = "Åpne kontekstmenyen";
 "action_open_settings" = "Innstillinger";
 "action_open_with" = "Åpne med";
 "action_pin" = "Fest";
@@ -126,7 +128,9 @@
 "action_save" = "Lagre";
 "action_search" = "Søke";
 "action_send" = "Sende";
+"action_send_edited_message" = "Send redigert melding";
 "action_send_message" = "Send melding";
+"action_send_voice_message" = "Send talemelding";
 "action_share" = "Dele";
 "action_share_link" = "Dele lenke";
 "action_show" = "Vis";
@@ -146,10 +150,6 @@
 "action_view_source" = "Vis kilde";
 "action_yes" = "Ja";
 "action_yes_try_again" = "Ja, prøv igjen";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Åpne kontekstmenyen";
-"action.send_edited_message" = "Send redigert melding";
-"action.send_voice_message" = "Send talemelding";
 "action.view" = "Vis";
 "banner_migrate_to_native_sliding_sync_action" = "Logg ut og oppgrader";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ støtter ikke lenger den gamle protokollen. Logg ut og logg inn igjen for å fortsette å bruke appen.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Avanserte innstillinger";
 "common_an_image" = "et bilde";
 "common_analytics" = "Analyse";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Utseende";
 "common_audio" = "Lyd";
 "common_blocked_users" = "Blokkerte brukere";

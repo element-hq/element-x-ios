@@ -80,6 +80,7 @@
 "action_enable" = "Activar";
 "action_end_poll" = "Finalizar encuesta";
 "action_enter_pin" = "Introducir PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "¿Olvidaste tu contraseña?";
 "action_forward" = "Reenviar";
 "action_go_back" = "Volver atrás";
@@ -102,6 +103,7 @@
 "action_no" = "No";
 "action_not_now" = "Ahora no";
 "action_ok" = "OK";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "Ajustes";
 "action_open_with" = "Abrir con";
 "action_pin" = "Fijar";
@@ -126,7 +128,9 @@
 "action_save" = "Guardar";
 "action_search" = "Buscar";
 "action_send" = "Enviar";
+"action_send_edited_message" = "Send edited message";
 "action_send_message" = "Enviar mensaje";
+"action_send_voice_message" = "Send voice message";
 "action_share" = "Compartir";
 "action_share_link" = "Compartir enlace";
 "action_show" = "Mostrar";
@@ -146,10 +150,6 @@
 "action_view_source" = "Ver fuente";
 "action_yes" = "Sí";
 "action_yes_try_again" = "Sí, intentar de nuevo";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Send edited message";
-"action.send_voice_message" = "Send voice message";
 "action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Cerrar sesión y actualizar";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ ya no es compatible con el antiguo protocolo. Cierra sesión y vuelve a iniciarla para seguir usando la aplicación.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Ajustes avanzados";
 "common_an_image" = "an image";
 "common_analytics" = "Estadísticas";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Apariencia";
 "common_audio" = "Sonido";
 "common_blocked_users" = "Usuarios bloqueados";

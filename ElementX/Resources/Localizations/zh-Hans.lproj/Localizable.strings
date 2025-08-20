@@ -80,6 +80,7 @@
 "action_enable" = "启用";
 "action_end_poll" = "结束投票";
 "action_enter_pin" = "输入 PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "忘记密码？";
 "action_forward" = "转发";
 "action_go_back" = "返回";
@@ -102,6 +103,7 @@
 "action_no" = "否";
 "action_not_now" = "以后再说";
 "action_ok" = "好";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "打开设置";
 "action_open_with" = "用其他方式打开";
 "action_pin" = "置顶";
@@ -126,7 +128,9 @@
 "action_save" = "保存";
 "action_search" = "搜索";
 "action_send" = "发送";
+"action_send_edited_message" = "Send edited message";
 "action_send_message" = "发送消息";
+"action_send_voice_message" = "Send voice message";
 "action_share" = "分享";
 "action_share_link" = "分享链接";
 "action_show" = "显示";
@@ -146,10 +150,6 @@
 "action_view_source" = "查看源码";
 "action_yes" = "是";
 "action_yes_try_again" = "是的，再试一次";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Send edited message";
-"action.send_voice_message" = "Send voice message";
 "action.view" = "查看";
 "banner_migrate_to_native_sliding_sync_action" = "登出并升级";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ 不再支持旧协议。请注销并重新登录以继续使用该应用程序。";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "高级设置";
 "common_an_image" = "an image";
 "common_analytics" = "分析";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "外观";
 "common_audio" = "音频";
 "common_blocked_users" = "已屏蔽用户";

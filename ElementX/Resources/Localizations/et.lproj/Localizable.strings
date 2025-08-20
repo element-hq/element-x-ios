@@ -80,6 +80,7 @@
 "action_enable" = "Võta kasutusele";
 "action_end_poll" = "Lõpeta küsitlus";
 "action_enter_pin" = "Sisesta PIN-kood";
+"action_finish" = "Lõpeta";
 "action_forgot_password" = "Kas unustasid salasõna?";
 "action_forward" = "Edasta";
 "action_go_back" = "Tagasi eelmisesse vaatesse";
@@ -102,6 +103,7 @@
 "action_no" = "Ei";
 "action_not_now" = "Mitte praegu";
 "action_ok" = "OK";
+"action_open_context_menu" = "Ava kontekstimenüü";
 "action_open_settings" = "Seadistused";
 "action_open_with" = "Ava rakendusega";
 "action_pin" = "Tõsta esile";
@@ -126,7 +128,9 @@
 "action_save" = "Salvesta";
 "action_search" = "Otsi";
 "action_send" = "Saada";
+"action_send_edited_message" = "Saada muudetud sõnum";
 "action_send_message" = "Saada sõnum";
+"action_send_voice_message" = "Saada häälsõnum";
 "action_share" = "Jaga";
 "action_share_link" = "Jaga linki";
 "action_show" = "Näita";
@@ -146,10 +150,6 @@
 "action_view_source" = "Vaata lähtekoodi";
 "action_yes" = "Jah";
 "action_yes_try_again" = "Jah, proovi uuesti";
-"action.finish" = "Finish";
-"action.open_context_menu" = "Ava kontekstimenüü";
-"action.send_edited_message" = "Saada muudetud sõnum";
-"action.send_voice_message" = "Saada häälsõnum";
 "action.view" = "Vaata";
 "banner_migrate_to_native_sliding_sync_action" = "Logi välja ja uuenda";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ enam ei toeta vana protokolli. Kui soovid rakendust edasi kasutada, siis logi korraks temast välja ning seejärel tagasi.";
@@ -165,6 +165,8 @@
 "common_advanced_settings" = "Täiendavad seadistused";
 "common_an_image" = "pilt";
 "common_analytics" = "Analüütika";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Välimus";
 "common_audio" = "Heli";
 "common_blocked_users" = "Blokeeritud kasutajad";
@@ -279,7 +281,7 @@
 "common_signing_out" = "Logime välja";
 "common_something_went_wrong" = "Midagi läks valesti";
 "common_something_went_wrong_message" = "Tekkis viga. Palun proovi uuesti.";
-"common_space" = "Space";
+"common_space" = "Kogukond";
 "common_starting_chat" = "Alustame vestlust…";
 "common_sticker" = "Kleeps";
 "common_success" = "Õnnestus";
@@ -956,7 +958,7 @@
 "screen_room_attachment_text_formatting" = "Tekstivorming";
 "screen_room_change_permissions_administrators" = "Vaid peakasutajad";
 "screen_room_change_permissions_ban_people" = "Suhtluskeelu seadmine";
-"screen_room_change_permissions_delete_messages" = "Sõnumite kustutamine";
+"screen_room_change_permissions_delete_messages" = "Eemalda sõnumid";
 "screen_room_change_permissions_invite_people" = "Kutsu teisi osalejaid ja vasta ise liitumiskutsetele";
 "screen_room_change_permissions_moderators" = "Peakasutajad ja moderaatorid";
 "screen_room_change_permissions_remove_people" = "Eemalda osalejaid jututoast ja lükka liitumiskutsed tagasi";
@@ -1077,7 +1079,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Sul veel pole lemmikvestlusi";
 "screen_roomlist_filter_invites_empty_state_title" = "Sul pole ootel kutseid.";
 "screen_roomlist_filter_low_priority" = "Vähetähtis";
-"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
+"screen_roomlist_filter_low_priority_empty_state_title" = "Sul pole veel ühtegi olulist vestlust";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Oma teiste vestluste nägemiseks sa pead filtrid eemaldama";
 "screen_roomlist_filter_mixed_empty_state_title" = "Selle valiku jaoks sul veel pole vestlusi";
 "screen_roomlist_filter_people_empty_state_title" = "Sul pole veel otsevestlusi";
