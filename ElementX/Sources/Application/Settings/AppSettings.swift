@@ -59,6 +59,7 @@ final class AppSettings {
         case enableKeyShareOnInvite
         case knockingEnabled
         case threadsEnabled
+        case spacesEnabled
         case developerOptionsEnabled
         
         // Doug's tweaks 🔧
@@ -372,6 +373,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var threadsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.spacesEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var spacesEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
