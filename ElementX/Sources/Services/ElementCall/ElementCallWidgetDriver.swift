@@ -94,28 +94,31 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         }
         
         do {
-            widgetSettings = try await newVirtualElementCallWidget(
-                props: .init(
-                    // init the url parameters with the full set of values
-                    elementCallUrl: baseURL.absoluteString,
-                    widgetId: widgetID,
-                    parentUrl: nil,
-                    fontScale: nil,
-                    font: nil,
-                    posthogUserId: nil,
-                    posthogApiHost: analyticsConfiguration?.posthogAPIHost,
-                    posthogApiKey: analyticsConfiguration?.posthogAPIKey,
-                    rageshakeSubmitUrl: rageshakeURL,
-                    sentryDsn: analyticsConfiguration?.sentryDSN,
-                    sentryEnvironment: nil
-                ),
-                config: .init(
-                    // init the set of configuration properties by only providing the intent
-                    // and leaving everything else to the default value
-                    intent: intent
-                    // all other fields are optional and default to nil
-                )
+            // Split into two separate initializations as required
+            // First init: URL parameters
+            let urlProps = ElementCallUrlProps.init(
+                elementCallUrl: baseURL.absoluteString,
+                widgetId: widgetID,
+                parentUrl: nil,
+                fontScale: nil,
+                font: nil,
+                posthogUserId: nil,
+                posthogApiHost: analyticsConfiguration?.posthogAPIHost,
+                posthogApiKey: analyticsConfiguration?.posthogAPIKey,
+                rageshakeSubmitUrl: rageshakeURL,
+                sentryDsn: analyticsConfiguration?.sentryDSN,
+                sentryEnvironment: nil
             )
+            
+            // Second init: Configuration properties with intent and defaults
+            let configProps = ElementCallConfigProps.init(
+                intent: intent
+                // All other configuration properties now use defaults via the intent system
+                // This replaces: header, hideHeader, preload, appPrompt, confineToRoom,
+                // encryption, hideScreensharing, controlledMediaDevices, sendNotificationType
+            )
+            
+            widgetSettings = try await newVirtualElementCallWidget(urlProps: urlProps, configProps: configProps)
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)
