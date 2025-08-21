@@ -171,7 +171,10 @@ extension NSItemProvider {
             return false
         }
         
-        return mimeType.hasPrefix("image/") || mimeType.hasPrefix("video/") || mimeType.hasPrefix("application/")
+        return mimeType.hasPrefix("application/") ||
+            mimeType.hasPrefix("audio/") ||
+            mimeType.hasPrefix("image/") ||
+            mimeType.hasPrefix("video/")
     }
 }
 
