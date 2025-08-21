@@ -97,7 +97,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         let action = try await deferred.fulfill()
         
         switch action {
-        case .selectSpace(let spaceRoomProxy) where spaceRoomProxy.id == selectedSpace.id:
+        case .selectSpace(let spaceRoomListProxy) where spaceRoomListProxy.spaceRoom.id == selectedSpace.id:
             break
         default:
             XCTFail("The action should select the space.")
@@ -111,7 +111,12 @@ class SpaceScreenViewModelTests: XCTestCase {
                                                           paginationStateSubject: paginationStateSubject,
                                                           paginationResponses: paginationResponses))
         
+        let spaceServiceProxy = SpaceServiceProxyMock(.init())
+        spaceServiceProxy.spaceRoomListForClosure = { .success(SpaceRoomListProxyMock(.init(spaceRoomProxy: $0))) }
+        
         viewModel = SpaceScreenViewModel(spaceRoomList: spaceRoomListProxy,
-                                         mediaProvider: MediaProviderMock(configuration: .init()))
+                                         spaceServiceProxy: spaceServiceProxy,
+                                         mediaProvider: MediaProviderMock(configuration: .init()),
+                                         userIndicatorController: UserIndicatorControllerMock())
     }
 }
