@@ -59,7 +59,7 @@ struct SpaceListScreen: View {
     
     var spaces: some View {
         ForEach(context.viewState.joinedSpaces, id: \.id) { spaceRoom in
-            SpaceRoomCell(spaceRoom: spaceRoom,
+            SpaceRoomCell(spaceRoomProxy: spaceRoom,
                           isSelected: spaceRoom.id == context.viewState.selectedSpaceID,
                           mediaProvider: context.mediaProvider) { action in
                 context.send(viewAction: .spaceAction(action))
@@ -105,10 +105,10 @@ struct SpaceListScreen_Previews: PreviewProvider, TestablePreview {
     static func makeViewModel() -> SpaceListScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        let spaceService = SpaceServiceProxyMock(.init(joinedSpaces: .mockJoinedSpaces))
+        let spaceServiceProxy = SpaceServiceProxyMock(.init(joinedSpaces: .mockJoinedSpaces))
         
         let viewModel = SpaceListScreenViewModel(userSession: userSession,
-                                                 spaceServiceProxy: spaceService,
+                                                 spaceServiceProxy: spaceServiceProxy,
                                                  selectedSpaceSubject: .init(nil),
                                                  userIndicatorController: UserIndicatorControllerMock())
         
