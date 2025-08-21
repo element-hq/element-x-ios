@@ -150,6 +150,8 @@
 		18978C9438206828C1D5AF2A /* test_animated_image.gif in Resources */ = {isa = PBXBuildFile; fileRef = 53FD6D3D38F556CEAA280C58 /* test_animated_image.gif */; };
 		18DB2F782E572636003155CF /* AttributedStringBuilderV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB2F772E57262F003155CF /* AttributedStringBuilderV1.swift */; };
 		18DB2F792E572636003155CF /* AttributedStringBuilderV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB2F772E57262F003155CF /* AttributedStringBuilderV1.swift */; };
+		18DB2F7B2E5727B3003155CF /* AttributedStringBuilderV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB2F7A2E5727B3003155CF /* AttributedStringBuilderV2.swift */; };
+		18DB2F7C2E5727B3003155CF /* AttributedStringBuilderV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DB2F7A2E5727B3003155CF /* AttributedStringBuilderV2.swift */; };
 		18E3786918486D4C9726BC84 /* FormButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FBFC09F9DAFF1E4BA97849 /* FormButtonStyles.swift */; };
 		18FDE4ED6D83B0771452B43D /* RoomSelectionScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F104596B0620CEFE5DFD31B1 /* RoomSelectionScreenCoordinator.swift */; };
 		192A3CDCD0174AD1E4A128E4 /* AudioRecorderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2441E2424E78A40FC95DBA76 /* AudioRecorderTests.swift */; };
@@ -1610,6 +1612,7 @@
 		184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorationTimelineItemProtocol.swift; sourceTree = "<group>"; };
 		18B223FA339BF53085328DEE /* SpaceScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceScreenViewModelTests.swift; sourceTree = "<group>"; };
 		18DB2F772E57262F003155CF /* AttributedStringBuilderV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringBuilderV1.swift; sourceTree = "<group>"; };
+		18DB2F7A2E5727B3003155CF /* AttributedStringBuilderV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringBuilderV2.swift; sourceTree = "<group>"; };
 		18F2958E6D247AE2516BEEE8 /* ClientProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientProxy.swift; sourceTree = "<group>"; };
 		190EC7285D3CFEF0D3011BCF /* GeoURI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoURI.swift; sourceTree = "<group>"; };
 		196004E7695FBA292A7944AF /* ScreenTrackerViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTrackerViewModifier.swift; sourceTree = "<group>"; };
@@ -5045,6 +5048,7 @@
 			isa = PBXGroup;
 			children = (
 				18DB2F772E57262F003155CF /* AttributedStringBuilderV1.swift */,
+				18DB2F7A2E5727B3003155CF /* AttributedStringBuilderV2.swift */,
 				2A5C6FBF97B6EED3D4FA5EFF /* AttributedStringBuilder.swift */,
 				72F37B5DA798C9AE436F2C2C /* AttributedStringBuilderProtocol.swift */,
 				1E508AB0EDEE017FF4F6F8D1 /* DTHTMLElement+AttributedStringBuilder.swift */,
@@ -7156,6 +7160,7 @@
 				59F940FCBE6BC343AECEF75E /* ImageCache.swift in Sources */,
 				EBE13FAB4E29738AC41BD3E5 /* InfoPlistReader.swift in Sources */,
 				8691186F9B99BCDDB7CACDD8 /* KeychainController.swift in Sources */,
+				18DB2F7C2E5727B3003155CF /* AttributedStringBuilderV2.swift in Sources */,
 				A440D4BC02088482EC633A88 /* KeychainControllerProtocol.swift in Sources */,
 				FB0A9D06FC9122E37992D962 /* LayoutDirection.swift in Sources */,
 				0728314DD51AC3819F818EA8 /* LogLevel.swift in Sources */,
@@ -8372,6 +8377,7 @@
 				4681820102DAC8BA586357D4 /* VoiceMessageCache.swift in Sources */,
 				4F2DF6138E87A4B8C2488CA3 /* VoiceMessageCacheProtocol.swift in Sources */,
 				4870F7F72CEBEFDAD1C973A6 /* VoiceMessageMediaEventsTimelineView.swift in Sources */,
+				18DB2F7B2E5727B3003155CF /* AttributedStringBuilderV2.swift in Sources */,
 				386720B603F87D156DB01FB2 /* VoiceMessageMediaManager.swift in Sources */,
 				9DE801D278AC34737467F937 /* VoiceMessageMediaManagerProtocol.swift in Sources */,
 				F7932A3F075B0D3F24DEECB5 /* VoiceMessagePreviewComposer.swift in Sources */,

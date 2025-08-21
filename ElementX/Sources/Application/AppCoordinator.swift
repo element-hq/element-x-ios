@@ -162,6 +162,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
             .store(in: &cancellables)
         
+        appSettings.$nextGenHTMLParserEnabled
+            .sink { value in
+                AttributedStringBuilder.useNextGenHTMLParser = value
+            }
+            .store(in: &cancellables)
+        
         elementCallService.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
