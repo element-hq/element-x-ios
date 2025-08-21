@@ -104,11 +104,9 @@ struct SpaceListScreen_Previews: PreviewProvider, TestablePreview {
     
     static func makeViewModel() -> SpaceListScreenViewModel {
         let clientProxy = ClientProxyMock(.init())
-        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        let spaceServiceProxy = SpaceServiceProxyMock(.init(joinedSpaces: .mockJoinedSpaces))
+        clientProxy.spaceService = SpaceServiceProxyMock(.init(joinedSpaces: .mockJoinedSpaces))
         
-        let viewModel = SpaceListScreenViewModel(userSession: userSession,
-                                                 spaceServiceProxy: spaceServiceProxy,
+        let viewModel = SpaceListScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                  selectedSpaceSubject: .init(nil),
                                                  userIndicatorController: UserIndicatorControllerMock())
         

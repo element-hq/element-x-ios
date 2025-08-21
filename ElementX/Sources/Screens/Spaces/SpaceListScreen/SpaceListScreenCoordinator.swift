@@ -12,7 +12,6 @@ import SwiftUI
 
 struct SpaceListScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let spaceServiceProxy: SpaceServiceProxyProtocol
     let selectedSpaceSubject: CurrentValuePublisher<String?, Never>
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -37,7 +36,6 @@ final class SpaceListScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = SpaceListScreenViewModel(userSession: parameters.userSession,
-                                             spaceServiceProxy: parameters.spaceServiceProxy,
                                              selectedSpaceSubject: parameters.selectedSpaceSubject,
                                              userIndicatorController: parameters.userIndicatorController)
     }

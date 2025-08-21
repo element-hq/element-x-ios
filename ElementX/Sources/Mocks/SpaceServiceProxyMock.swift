@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Combine
 import Foundation
 import MatrixRustSDK
 
@@ -25,5 +26,18 @@ extension SpaceServiceProxyMock {
                 .failure(.sdkError(ClientProxyMockError.generic))
             }
         }
+    }
+}
+
+extension SpaceServiceProxyMock.Configuration {
+    static var populated: SpaceServiceProxyMock.Configuration {
+        let spaceRoomLists = [SpaceRoomProxyProtocol].mockJoinedSpaces.map {
+            ($0.id, SpaceRoomListProxyMock(.init(spaceRoomProxy: $0, initialSpaceRooms: .mockSpaceList)))
+        }
+        let subSpaceRoomLists = [SpaceRoomProxyProtocol].mockSpaceList.map {
+            ($0.id, SpaceRoomListProxyMock(.init(spaceRoomProxy: $0, initialSpaceRooms: .mockSingleRoom)))
+        }
+        
+        return .init(joinedSpaces: .mockJoinedSpaces, spaceRoomLists: .init(uniqueKeysWithValues: spaceRoomLists + subSpaceRoomLists))
     }
 }

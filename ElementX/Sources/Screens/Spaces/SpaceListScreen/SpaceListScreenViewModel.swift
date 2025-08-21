@@ -20,10 +20,9 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
     }
 
     init(userSession: UserSessionProtocol,
-         spaceServiceProxy: SpaceServiceProxyProtocol,
          selectedSpaceSubject: CurrentValuePublisher<String?, Never>,
          userIndicatorController: UserIndicatorControllerProtocol) {
-        self.spaceServiceProxy = spaceServiceProxy
+        spaceServiceProxy = userSession.clientProxy.spaceService
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: SpaceListScreenViewState(userID: userSession.clientProxy.userID,

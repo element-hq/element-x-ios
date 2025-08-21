@@ -121,6 +121,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var sessionVerificationController: SessionVerificationControllerProxyProtocol? { get }
     
+    var spaceService: SpaceServiceProxyProtocol { get }
+    
     var isReportRoomSupported: Bool { get async }
     
     var isLiveKitRTCSupported: Bool { get async }

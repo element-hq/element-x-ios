@@ -271,7 +271,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         appSettings.$spacesEnabled
-            .map { $0 ? .automatic : .hidden }
+            .combineLatest(userSession.clientProxy.spaceService.joinedSpacesPublisher)
+            .map { $0 && !$1.isEmpty ? .automatic : .hidden }
             .weakAssign(to: \.chatsTabDetails.barVisibility, on: self)
             .store(in: &cancellables)
     }

@@ -14,7 +14,6 @@ enum SpaceExplorerFlowCoordinatorAction: Equatable {
 }
 
 class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
-    private let spaceServiceProxy: SpaceServiceProxyProtocol
     private let userSession: UserSessionProtocol
     
     private let navigationSplitCoordinator: NavigationSplitCoordinator
@@ -54,7 +53,6 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     init(userSession: UserSessionProtocol,
          navigationSplitCoordinator: NavigationSplitCoordinator,
          userIndicatorController: UserIndicatorControllerProtocol) {
-        spaceServiceProxy = SpaceServiceProxyMock(.init()) // Temporarily using the mock until the SDK is updated.
         self.userSession = userSession
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.userIndicatorController = userIndicatorController
@@ -116,7 +114,6 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentSpaceList() {
         let parameters = SpaceListScreenCoordinatorParameters(userSession: userSession,
-                                                              spaceServiceProxy: spaceServiceProxy,
                                                               selectedSpaceSubject: selectedSpaceSubject.asCurrentValuePublisher(),
                                                               userIndicatorController: userIndicatorController)
         let coordinator = SpaceListScreenCoordinator(parameters: parameters)
@@ -138,7 +135,7 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     private var spaceFlowCoordinator: SpaceFlowCoordinator?
     private func startSpaceFlow(spaceRoomListProxy: SpaceRoomListProxyProtocol) {
         let coordinator = SpaceFlowCoordinator(spaceRoomListProxy: spaceRoomListProxy,
-                                               spaceServiceProxy: spaceServiceProxy,
+                                               spaceServiceProxy: userSession.clientProxy.spaceService,
                                                isChildFlow: false,
                                                mediaProvider: userSession.mediaProvider,
                                                navigationStackCoordinator: detailNavigationStackCoordinator,

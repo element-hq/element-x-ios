@@ -2156,6 +2156,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingSecureBackupController: SecureBackupControllerProtocol!
     var sessionVerificationController: SessionVerificationControllerProxyProtocol?
+    var spaceService: SpaceServiceProxyProtocol {
+        get { return underlyingSpaceService }
+        set(value) { underlyingSpaceService = value }
+    }
+    var underlyingSpaceService: SpaceServiceProxyProtocol!
     var isReportRoomSupportedCallsCount = 0
     var isReportRoomSupportedCalled: Bool {
         return isReportRoomSupportedCallsCount > 0
