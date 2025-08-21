@@ -11,13 +11,13 @@ import LRUCache
 import MatrixRustSDK
 import UIKit
 
-struct AttributedStringBuilderV1: AttributedStringBuilderProtocol {
+struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
     private let cacheKey: String
     private let temporaryBlockquoteMarkingColor = UIColor.magenta
     private let temporaryCodeBlockMarkingColor = UIColor.cyan
     private let mentionBuilder: MentionBuilderProtocol
     
-    private static let cacheDispatchQueue = DispatchQueue(label: "io.element.elementx.attributed_string_builder_cache")
+    private static let cacheDispatchQueue = DispatchQueue(label: "io.element.elementx.attributed_string_builder_v2_cache")
     private static var caches: [String: LRUCache<String, AttributedString>] = [:]
 
     static func invalidateCaches() {
