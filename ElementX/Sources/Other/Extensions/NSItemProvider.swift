@@ -125,6 +125,18 @@ extension NSItemProvider {
         let supportedContentTypes = registeredContentTypes
             .filter { isMimeTypeSupported($0.preferredMIMEType) || isIdentifierSupported($0.identifier) }
         
+        // If we can't find any supported types try to fallback to the first with
+        // a valid extension. Return nil otherwise.
+        guard !supportedContentTypes.isEmpty else {
+            for type in registeredContentTypes {
+                if let fileExtension = type.preferredFilenameExtension {
+                    return .init(type: type, fileExtension: fileExtension)
+                }
+            }
+            
+            return nil
+        }
+        
         // Have .jpeg take priority over .heic
         if supportedContentTypes.contains(.jpeg) {
             guard let fileExtension = preferredFileExtension(for: .jpeg) else {
