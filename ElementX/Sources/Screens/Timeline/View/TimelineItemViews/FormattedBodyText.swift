@@ -134,24 +134,35 @@ struct FormattedBodyText: View {
 
 struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        body
+        body(AttributedStringBuilderV1(cacheKey: "v1", mentionBuilder: MentionBuilder()))
+            .previewLayout(.sizeThatFits)
+        
+        body(AttributedStringBuilderV2(cacheKey: "v2", mentionBuilder: MentionBuilder()))
+            .previewLayout(.sizeThatFits)
     }
     
     @ViewBuilder
-    static var body: some View {
+    static func body(_ attributedStringBuilder: AttributedStringBuilderProtocol) -> some View {
         let htmlStrings = [
             """
-            Plain text\n
-            !room:matrix.org\n
-            https://www.matrix.org\n
-            www.matrix.org\n
+            Plain text
+            <br>
+            !room:matrix.org
+            <br>
+            https://www.matrix.org
+            <br>
+            www.matrix.org
+            <br>
             matrix.org
+            <br>
+            what's <sup>sup</sup> dude?
+            <br>
+            thumbs if you liked it, <sub>sub</sub> if you loved it
             """,
             """
             Text before blockquote
-            <blockquote>
-            <b>bold</b> <i>italic</i>
-            </blockquote>Text after blockquote
+            <blockquote><b>bold</b> <i>italic</i></blockquote>
+            Text after blockquote
             """,
             """
             <blockquote>First blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
@@ -163,6 +174,21 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
             <p>Then another line of text here to reply to the blockquote, which is also a multiline component.</p>
             <blockquote>Short line here.</blockquote>
             <p>And a simple reply here.</p>
+            """,
+            """
+            <pre><code>struct ContentView: View {
+                var body: some View {
+                    VStack {
+                        Text("Knock, knock!")
+                            .padding()
+                            .background(Color.yellow, in: RoundedRectangle(cornerRadius: 8))
+                        Text("Who's there?")
+                    }
+                    .padding()
+                }
+            }
+            </code>
+            </pre>
             """,
             """
             <code>Hello world</code>
@@ -177,8 +203,6 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
             "<ul><li>First item</li><li>Second item</li><li>Third item</li></ul>",
             "<p>test</p>\n<p>test</p>"
         ]
-        
-        let attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
         
         ScrollView {
             VStack(alignment: .leading, spacing: 24.0) {
