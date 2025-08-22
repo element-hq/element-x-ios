@@ -57,7 +57,6 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(mode: mode,
-                                                                  appSettings: parameters.appSettings,
                                                                   userIndicatorController: parameters.userIndicatorController,
                                                                   orientationManager: parameters.orientationManager) { [weak self] action in
             guard let self else { return }

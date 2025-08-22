@@ -25,6 +25,8 @@ struct RoomListFiltersEmptyStateView: View {
                 return L10n.screenRoomlistFilterFavouritesEmptyStateTitle
             case .invites:
                 return L10n.screenRoomlistFilterInvitesEmptyStateTitle
+            case .lowPriority:
+                return L10n.screenRoomlistFilterLowPriorityEmptyStateTitle
             }
         }
         return L10n.screenRoomlistFilterMixedEmptyStateTitle
@@ -57,7 +59,8 @@ struct RoomListFiltersEmptyStateView_Previews: PreviewProvider, TestablePreview 
     static var previews: some View {
         VStack(spacing: 24) {
             ForEach(RoomListFilter.allCases) { filter in
-                RoomListFiltersEmptyStateView(state: .init(activeFilters: [filter]))
+                RoomListFiltersEmptyStateView(state: .init(activeFilters: [filter],
+                                                           appSettings: ServiceLocator.shared.settings))
             }
 //            RoomListFiltersEmptyStateView(state: .init(activeFilters: [.people, .favourites]))
             RoomListFiltersEmptyStateView(state: .init(activeFilters: [.rooms, .favourites]))

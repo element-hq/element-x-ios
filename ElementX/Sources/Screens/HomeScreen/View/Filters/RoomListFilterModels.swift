@@ -22,6 +22,7 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     case channels
     case favourites
     case invites
+    case lowPriority
     
     static var availableFilters: [RoomListFilter] {
         RoomListFilter.allCases
@@ -41,6 +42,8 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
             return L10n.screenRoomlistFilterFavourites
         case .invites:
             return L10n.screenRoomlistFilterInvites
+        case .lowPriority:
+            return L10n.screenRoomlistFilterLowPriority
         }
     }
     
@@ -78,19 +81,28 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
             return .all(filters: [.favourite, .joined])
         case .invites:
             return .invite
+        case .lowPriority:
+            // Note: When not activated, the setFilter method automatically applies the .nonLowPriority filter.
+            return .all(filters: [.lowPriority, .joined])
         }
     }
 }
 
 struct RoomListFiltersState {
     private(set) var activeFilters: OrderedSet<RoomListFilter>
+    private let appSettings: AppSettings
     
-    init(activeFilters: OrderedSet<RoomListFilter> = []) {
+    init(activeFilters: OrderedSet<RoomListFilter> = [], appSettings: AppSettings) {
         self.activeFilters = .init(activeFilters)
+        self.appSettings = appSettings
     }
     
     var availableFilters: [RoomListFilter] {
         var availableFilters = OrderedSet(RoomListFilter.availableFilters)
+        
+        if !appSettings.lowPriorityFilterEnabled {
+            availableFilters.remove(.lowPriority)
+        }
         
         for filter in activeFilters {
             availableFilters.remove(filter)

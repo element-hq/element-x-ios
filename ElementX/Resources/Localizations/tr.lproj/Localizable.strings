@@ -80,6 +80,7 @@
 "action_enable" = "Etkinleştir";
 "action_end_poll" = "Anketi sonlandır";
 "action_enter_pin" = "PIN girin";
+"action_finish" = "Finish";
 "action_forgot_password" = "Parolanızı mı unuttunuz?";
 "action_forward" = "İleri";
 "action_go_back" = "Geri dön";
@@ -102,6 +103,7 @@
 "action_no" = "Hayır";
 "action_not_now" = "Şimdi değil";
 "action_ok" = "TAMAM";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "Ayarlar";
 "action_open_with" = "İle aç";
 "action_pin" = "Pin";
@@ -126,7 +128,9 @@
 "action_save" = "Kaydet";
 "action_search" = "Ara";
 "action_send" = "Gönder";
+"action_send_edited_message" = "Send edited message";
 "action_send_message" = "Mesaj gönder";
+"action_send_voice_message" = "Send voice message";
 "action_share" = "Paylaş";
 "action_share_link" = "Linki paylaş";
 "action_show" = "Göster";
@@ -146,9 +150,6 @@
 "action_view_source" = "Kaynağı görüntüle";
 "action_yes" = "Evet";
 "action_yes_try_again" = "Evet, tekrar dene";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Send edited message";
-"action.send_voice_message" = "Send voice message";
 "action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Çıkış Yap ve Yükselt";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
@@ -164,6 +165,8 @@
 "common_advanced_settings" = "Gelişmiş Ayarlar";
 "common_an_image" = "an image";
 "common_analytics" = "Analizler";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Görünüm";
 "common_audio" = "Ses";
 "common_blocked_users" = "Engellenen kullanıcılar";
@@ -278,6 +281,7 @@
 "common_signing_out" = "Oturumu kapatma";
 "common_something_went_wrong" = "Bir şeyler ters gitti";
 "common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_space" = "Space";
 "common_starting_chat" = "Sohbet başlatılıyor...";
 "common_sticker" = "Çıkartma";
 "common_success" = "Başarılı";
@@ -504,6 +508,8 @@
 "screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "Dizinde görünür hale getirmek için bir oda adresine ihtiyacınız olacak.";
 "screen_edit_room_address_title" = "Oda adresi";
+"screen_invite_users_already_a_member" = "Zaten üye";
+"screen_invite_users_already_invited" = "Zaten davet edildi";
 "screen_join_room_cancel_knock_action" = "İsteği iptal et";
 "screen_join_room_cancel_knock_alert_confirmation" = "Evet, iptal et";
 "screen_join_room_cancel_knock_alert_description" = "Bu odaya katılma isteğinizi iptal etmek istediğinizden emin misiniz?";
@@ -975,8 +981,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "Kaydedilmemiş değişiklikleriniz var.";
 "screen_room_details_add_topic_title" = "Konu ekle";
-"screen_room_details_already_a_member" = "Zaten üye";
-"screen_room_details_already_invited" = "Zaten davet edildi";
 "screen_room_details_badge_encrypted" = "Şifrelenmiş";
 "screen_room_details_badge_not_encrypted" = "Şifrelenmemiş";
 "screen_room_details_edit_room_title" = "Odayı Düzenle";
@@ -1075,6 +1079,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Henüz favori sohbetleriniz yok";
 "screen_roomlist_filter_invites_empty_state_title" = "Bekleyen davetiniz yok.";
 "screen_roomlist_filter_low_priority" = "Düşük Öncelikli";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Diğer sohbetlerinizi görmek için filtrelerin seçimini kaldırabilirsiniz";
 "screen_roomlist_filter_mixed_empty_state_title" = "Bu seçim için sohbetiniz yok";
 "screen_roomlist_filter_people_empty_state_title" = "Henüz hiç DM'niz yok";

@@ -48,7 +48,11 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         return pickerViewController
     }
     
-    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) { }
+    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {
+        // Override the app wide tint color (currently set to `.compound.texActionPrimary
+        // as it's not legible enough in dark mode
+        uiViewController.view.tintColor = .compound.textActionAccent
+    }
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)

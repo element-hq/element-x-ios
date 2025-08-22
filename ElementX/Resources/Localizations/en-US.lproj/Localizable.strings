@@ -80,6 +80,7 @@
 "action_enable" = "Enable";
 "action_end_poll" = "End poll";
 "action_enter_pin" = "Enter PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "Forgot password?";
 "action_forward" = "Forward";
 "action_go_back" = "Go back";
@@ -102,6 +103,7 @@
 "action_no" = "No";
 "action_not_now" = "Not now";
 "action_ok" = "OK";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "Settings";
 "action_open_with" = "Open with";
 "action_pin" = "Pin";
@@ -126,7 +128,9 @@
 "action_save" = "Save";
 "action_search" = "Search";
 "action_send" = "Send";
+"action_send_edited_message" = "Send edited message";
 "action_send_message" = "Send message";
+"action_send_voice_message" = "Send voice message";
 "action_share" = "Share";
 "action_share_link" = "Share link";
 "action_show" = "Show";
@@ -146,9 +150,6 @@
 "action_view_source" = "View source";
 "action_yes" = "Yes";
 "action_yes_try_again" = "Yes, try again";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Send edited message";
-"action.send_voice_message" = "Send voice message";
 "action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
@@ -164,6 +165,8 @@
 "common_advanced_settings" = "Advanced settings";
 "common_an_image" = "an image";
 "common_analytics" = "Analytics";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Appearance";
 "common_audio" = "Audio";
 "common_blocked_users" = "Blocked users";
@@ -278,6 +281,7 @@
 "common_signing_out" = "Signing out";
 "common_something_went_wrong" = "Something went wrong";
 "common_something_went_wrong_message" = "We encountered an issue. Please try again.";
+"common_space" = "Space";
 "common_starting_chat" = "Starting chat…";
 "common_sticker" = "Sticker";
 "common_success" = "Success";
@@ -454,8 +458,8 @@
 "screen_advanced_settings_hide_invite_avatars_toggle_title" = "Hide avatars in room invite requests";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Hide media previews in timeline";
 "screen_advanced_settings_moderation_and_safety_section_title" = "Moderation and Safety";
-"screen_advanced_settings_optimise_image_upload_quality_description" = "Automatically optimise images for faster uploads and smaller file sizes.";
-"screen_advanced_settings_optimise_image_upload_quality_title" = "Optimise image upload quality";
+"screen_advanced_settings_optimise_image_upload_quality_description" = "Automatically optimize images for faster uploads and smaller file sizes.";
+"screen_advanced_settings_optimise_image_upload_quality_title" = "Optimize image upload quality";
 "screen_advanced_settings_optimise_video_upload_quality_description" = "%1$@. Tap here to change.";
 "screen_advanced_settings_optimise_video_upload_quality_high" = "High (1080p)";
 "screen_advanced_settings_optimise_video_upload_quality_low" = "Low (480p)";
@@ -504,6 +508,8 @@
 "screen_decline_and_block_title" = "Decline and block";
 "screen_edit_room_address_room_address_section_footer" = "You’ll need a room address in order to make it visible in the directory.";
 "screen_edit_room_address_title" = "Room address";
+"screen_invite_users_already_a_member" = "Already a member";
+"screen_invite_users_already_invited" = "Already invited";
 "screen_join_room_cancel_knock_action" = "Cancel request";
 "screen_join_room_cancel_knock_alert_confirmation" = "Yes, cancel";
 "screen_join_room_cancel_knock_alert_description" = "Are you sure that you want to cancel your request to join this room?";
@@ -555,7 +561,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Failed uploading media, please try again.";
 "screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
-"screen_media_upload_preview_optimize_image_quality_title" = "Optimise image quality";
+"screen_media_upload_preview_optimize_image_quality_title" = "Optimize image quality";
 "screen_media_upload_preview_processing" = "Processing...";
 "screen_pinned_timeline_empty_state_description" = "Press on a message and choose “%1$@” to include here.";
 "screen_pinned_timeline_empty_state_headline" = "Pin important messages so that they can be easily discovered";
@@ -975,8 +981,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "You have unsaved changes.";
 "screen_room_details_add_topic_title" = "Add topic";
-"screen_room_details_already_a_member" = "Already a member";
-"screen_room_details_already_invited" = "Already invited";
 "screen_room_details_badge_encrypted" = "Encrypted";
 "screen_room_details_badge_not_encrypted" = "Not encrypted";
 "screen_room_details_edit_room_title" = "Edit Room";
@@ -1075,6 +1079,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "You don’t have favorite chats yet";
 "screen_roomlist_filter_invites_empty_state_title" = "You don't have any pending invites.";
 "screen_roomlist_filter_low_priority" = "Low Priority";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "You can deselect filters in order to see your other chats";
 "screen_roomlist_filter_mixed_empty_state_title" = "You don’t have chats for this selection";
 "screen_roomlist_filter_people_empty_state_title" = "You don’t have any DMs yet";

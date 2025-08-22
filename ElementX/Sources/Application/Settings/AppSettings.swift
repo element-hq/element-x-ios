@@ -22,7 +22,6 @@ protocol CommonSettingsProtocol {
     var enableKeyShareOnInvite: Bool { get }
     var threadsEnabled: Bool { get }
     var hideQuietNotificationAlerts: Bool { get }
-    var multipleAttachmentUploadEnabled: Bool { get }
 }
 
 /// Store Element specific app settings.
@@ -55,12 +54,12 @@ final class AppSettings {
         // Feature flags
         case publicSearchEnabled
         case fuzzyRoomListSearchEnabled
+        case lowPriorityFilterEnabled
         case enableOnlySignedDeviceIsolationMode
         case enableKeyShareOnInvite
         case knockingEnabled
         case threadsEnabled
         case developerOptionsEnabled
-        case multipleAttachmentUploadEnabled
         
         case zeroAccessToken
         case zeroRewardsCredit
@@ -351,6 +350,9 @@ final class AppSettings {
     @UserPreference(key: UserDefaultsKeys.fuzzyRoomListSearchEnabled, defaultValue: false, storageType: .userDefaults(store))
     var fuzzyRoomListSearchEnabled
     
+    @UserPreference(key: UserDefaultsKeys.lowPriorityFilterEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var lowPriorityFilterEnabled
+    
     @UserPreference(key: UserDefaultsKeys.knockingEnabled, defaultValue: false, storageType: .userDefaults(store))
     var knockingEnabled
     
@@ -382,10 +384,6 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.hideQuietNotificationAlerts, defaultValue: false, storageType: .userDefaults(store))
     var hideQuietNotificationAlerts
-    
-    @UserPreference(key: UserDefaultsKeys.multipleAttachmentUploadEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
-    var multipleAttachmentUploadEnabled
-    
     // MARK: - ZERO Access Token
     
     @UserPreference(key: UserDefaultsKeys.zeroAccessToken, defaultValue: nil, storageType: .userDefaults(store))

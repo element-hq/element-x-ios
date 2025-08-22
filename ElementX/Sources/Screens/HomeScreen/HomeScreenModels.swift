@@ -359,7 +359,7 @@ struct HomeScreenViewState: BindableState {
 }
 
 struct HomeScreenViewStateBindings {
-    var filtersState = RoomListFiltersState()
+    var filtersState: RoomListFiltersState
     var searchQuery = ""
     var isSearchFieldFocused = false
     

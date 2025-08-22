@@ -80,6 +80,7 @@
 "action_enable" = "Ενεργοποίηση";
 "action_end_poll" = "Λήξη δημοσκόπησης";
 "action_enter_pin" = "Εισαγωγή PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "Ξέχασες τον κωδικό πρόσβασης;";
 "action_forward" = "Προώθηση";
 "action_go_back" = "Πήγαινε πίσω";
@@ -102,6 +103,7 @@
 "action_no" = "Όχι";
 "action_not_now" = "Όχι τώρα";
 "action_ok" = "OK";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "Ρυθμίσεις";
 "action_open_with" = "Άνοιγμα με";
 "action_pin" = "Καρφίτσωμα";
@@ -126,7 +128,9 @@
 "action_save" = "Αποθήκευση";
 "action_search" = "Αναζήτηση";
 "action_send" = "Αποστολή";
+"action_send_edited_message" = "Send edited message";
 "action_send_message" = "Αποστολή μηνύματος";
+"action_send_voice_message" = "Send voice message";
 "action_share" = "Κοινή χρήση";
 "action_share_link" = "Κοινή χρήση συνδέσμου";
 "action_show" = "Εμφάνιση";
@@ -146,9 +150,6 @@
 "action_view_source" = "Προβολή πηγής";
 "action_yes" = "Ναι";
 "action_yes_try_again" = "Ναι, δοκιμή ξανά";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Send edited message";
-"action.send_voice_message" = "Send voice message";
 "action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Αποσύνδεση & Αναβάθμιση";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "Το %1$@ δεν υποστηρίζει πλέον το παλιό πρωτόκολλο. Αποσυνδεθείτε και συνδεθείτε ξανά για να συνεχίσετε να χρησιμοποιείτε την εφαρμογή.";
@@ -164,6 +165,8 @@
 "common_advanced_settings" = "Ρυθμίσεις για προχωρημένους";
 "common_an_image" = "μια εικόνα";
 "common_analytics" = "Στατιστικά στοιχεία";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Εμφάνιση";
 "common_audio" = "Ήχος";
 "common_blocked_users" = "Αποκλεισμένοι χρήστες";
@@ -278,6 +281,7 @@
 "common_signing_out" = "Αποσύνδεση";
 "common_something_went_wrong" = "Κάτι πήγε στραβά";
 "common_something_went_wrong_message" = "Αντιμετωπίσαμε ένα πρόβλημα. Παρακαλώ προσπαθήστε ξανά.";
+"common_space" = "Space";
 "common_starting_chat" = "Έναρξη συνομιλίας...";
 "common_sticker" = "Αυτοκόλλητο";
 "common_success" = "Επιτυχία";
@@ -504,6 +508,8 @@
 "screen_decline_and_block_title" = "Απόρριψη και αποκλεισμός";
 "screen_edit_room_address_room_address_section_footer" = "Θα χρειαστείτε μια διεύθυνση αίθουσας για να την κάνετε ορατή στον κατάλογο.";
 "screen_edit_room_address_title" = "Διεύθυνση αίθουσας";
+"screen_invite_users_already_a_member" = "Ήδη μέλος";
+"screen_invite_users_already_invited" = "Ήδη προσκεκλημένος";
 "screen_join_room_cancel_knock_action" = "Ακύρωση αιτήματος";
 "screen_join_room_cancel_knock_alert_confirmation" = "Ναι, ακύρωση";
 "screen_join_room_cancel_knock_alert_description" = "Είστε βέβαιοι ότι θέλετε να ακυρώσετε το αίτημά σας να συμμετάσχετε σε αυτή την αίθουσα;";
@@ -975,8 +981,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "Έχεις μη αποθηκευμένες αλλαγές.";
 "screen_room_details_add_topic_title" = "Προσθήκη θέματος";
-"screen_room_details_already_a_member" = "Ήδη μέλος";
-"screen_room_details_already_invited" = "Ήδη προσκεκλημένος";
 "screen_room_details_badge_encrypted" = "Κρυπτογραφημένο";
 "screen_room_details_badge_not_encrypted" = "Μη κρυπτογραφημένο";
 "screen_room_details_edit_room_title" = "Επεξεργασία Αίθουσας";
@@ -1075,6 +1079,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Δεν έχεις ακόμα αγαπημένες συνομιλίες";
 "screen_roomlist_filter_invites_empty_state_title" = "Δεν έχεις εκκρεμείς προσκλήσεις.";
 "screen_roomlist_filter_low_priority" = "Χαμηλής Προτεραιότητας";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Μπορείς να καταργήσεις την επιλογή φίλτρων για να δεις τις άλλες συνομιλίες σου";
 "screen_roomlist_filter_mixed_empty_state_title" = "Δεν έχεις συνομιλίες για αυτήν την επιλογή";
 "screen_roomlist_filter_people_empty_state_title" = "Δεν έχεις ακόμα ΠΜ";

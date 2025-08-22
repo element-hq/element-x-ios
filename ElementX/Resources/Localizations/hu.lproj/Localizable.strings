@@ -80,6 +80,7 @@
 "action_enable" = "Engedélyezés";
 "action_end_poll" = "Szavazás lezárása";
 "action_enter_pin" = "Adja meg a PIN-kódot";
+"action_finish" = "Befejezés";
 "action_forgot_password" = "Elfelejtette a jelszót?";
 "action_forward" = "Tovább";
 "action_go_back" = "Visszalépés";
@@ -102,6 +103,7 @@
 "action_no" = "Nem";
 "action_not_now" = "Most nem";
 "action_ok" = "Rendben";
+"action_open_context_menu" = "Helyi menü megnyitása";
 "action_open_settings" = "Beállítások megnyitása";
 "action_open_with" = "Megnyitás a következővel";
 "action_pin" = "Kitűzés";
@@ -126,7 +128,9 @@
 "action_save" = "Mentés";
 "action_search" = "Keresés";
 "action_send" = "Küldés";
+"action_send_edited_message" = "Szerkesztett üzenet küldése";
 "action_send_message" = "Üzenet küldése";
+"action_send_voice_message" = "Hangüzenet küldése";
 "action_share" = "Megosztás";
 "action_share_link" = "Hivatkozás megosztása";
 "action_show" = "Megjelenítés";
@@ -146,9 +150,6 @@
 "action_view_source" = "Forrás megtekintése";
 "action_yes" = "Igen";
 "action_yes_try_again" = "Igen, újrapróbálkozás";
-"action.open_context_menu" = "Helyi menü megnyitása";
-"action.send_edited_message" = "Szerkesztett üzenet küldése";
-"action.send_voice_message" = "Hangüzenet küldése";
 "action.view" = "Megtekintés";
 "banner_migrate_to_native_sliding_sync_action" = "Kijelentkezés és frissítés";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ már nem támogatja a régi protokollt. Kérjük, jelentkezzen ki és jelentkezzen be újra az alkalmazás használatának folytatásához.";
@@ -164,6 +165,8 @@
 "common_advanced_settings" = "Speciális beállítások";
 "common_an_image" = "egy kép";
 "common_analytics" = "Elemzések";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Megjelenítés";
 "common_audio" = "Hang";
 "common_blocked_users" = "Letiltott felhasználók";
@@ -278,6 +281,7 @@
 "common_signing_out" = "Kijelentkezés";
 "common_something_went_wrong" = "Valamilyen hiba történt";
 "common_something_went_wrong_message" = "Problémába ütköztünk. Próbálja újra.";
+"common_space" = "Tér";
 "common_starting_chat" = "Csevegés megkezdése…";
 "common_sticker" = "Matrica";
 "common_success" = "Sikeres";
@@ -504,6 +508,8 @@
 "screen_decline_and_block_title" = "Elutasítás és blokkolás";
 "screen_edit_room_address_room_address_section_footer" = "Szüksége lesz egy szobacímre, hogy láthatóvá tegye a szobakatalógusban.";
 "screen_edit_room_address_title" = "A szoba címe";
+"screen_invite_users_already_a_member" = "Már tag";
+"screen_invite_users_already_invited" = "Már meghívták";
 "screen_join_room_cancel_knock_action" = "Kérés visszavonása";
 "screen_join_room_cancel_knock_alert_confirmation" = "Igen, visszavonás";
 "screen_join_room_cancel_knock_alert_description" = "Biztos, hogy visszavonja a szobához való csatlakozási kérését?";
@@ -975,8 +981,6 @@
 "screen_room_change_role_owners_title" = "Tulajdonosok kiválasztása";
 "screen_room_change_role_unsaved_changes_description" = "Mentetlen módosításai vannak.";
 "screen_room_details_add_topic_title" = "Téma hozzáadása";
-"screen_room_details_already_a_member" = "Már tag";
-"screen_room_details_already_invited" = "Már meghívták";
 "screen_room_details_badge_encrypted" = "Titkosított";
 "screen_room_details_badge_not_encrypted" = "Nem titkosított";
 "screen_room_details_edit_room_title" = "Szoba szerkesztése";
@@ -1075,6 +1079,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Még nincsenek kedvenc csevegései";
 "screen_roomlist_filter_invites_empty_state_title" = "Nincsenek függőben lévő meghívásai.";
 "screen_roomlist_filter_low_priority" = "Alacsony prioritás";
+"screen_roomlist_filter_low_priority_empty_state_title" = "Még nincsenek alacsony prioritású csevegései";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Kikapcsolhatja a szűrőket a többi csevegés megtekintéséhez";
 "screen_roomlist_filter_mixed_empty_state_title" = "Ehhez a kiválasztáshoz nem tartoznak csevegések";
 "screen_roomlist_filter_people_empty_state_title" = "Még nincsenek privát üzenetei";

@@ -80,6 +80,7 @@
 "action_enable" = "Habilitar";
 "action_end_poll" = "Encerrar enquete";
 "action_enter_pin" = "Inserir PIN";
+"action_finish" = "Finish";
 "action_forgot_password" = "Esqueceu a senha?";
 "action_forward" = "Encaminhar";
 "action_go_back" = "Voltar";
@@ -102,6 +103,7 @@
 "action_no" = "Não";
 "action_not_now" = "Agora não";
 "action_ok" = "OK";
+"action_open_context_menu" = "Open context menu";
 "action_open_settings" = "Configurações";
 "action_open_with" = "Abrir com";
 "action_pin" = "Fixar";
@@ -126,7 +128,9 @@
 "action_save" = "Salvar";
 "action_search" = "Pesquisar";
 "action_send" = "Enviar";
+"action_send_edited_message" = "Send edited message";
 "action_send_message" = "Enviar mensagem";
+"action_send_voice_message" = "Send voice message";
 "action_share" = "Compartilhar";
 "action_share_link" = "Compartilhar link";
 "action_show" = "Mostrar";
@@ -146,9 +150,6 @@
 "action_view_source" = "Ver fonte";
 "action_yes" = "Sim";
 "action_yes_try_again" = "Sim, tentar novamente";
-"action.open_context_menu" = "Open context menu";
-"action.send_edited_message" = "Send edited message";
-"action.send_voice_message" = "Send voice message";
 "action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Sair e atualizar";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ não suporta mais o protocolo antigo. Termine sessão e volte a iniciar sessão para continuar a utilizar a aplicação.";
@@ -164,6 +165,8 @@
 "common_advanced_settings" = "Configurações avançadas";
 "common_an_image" = "uma imagem";
 "common_analytics" = "Telemetria";
+"common_android_shortcuts_remove_reason_left_room" = "You left the room";
+"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Aparência";
 "common_audio" = "Áudio";
 "common_blocked_users" = "Usuários bloqueados";
@@ -278,6 +281,7 @@
 "common_signing_out" = "Saindo";
 "common_something_went_wrong" = "Algo deu errado";
 "common_something_went_wrong_message" = "Encontramos um problema. Tente novamente.";
+"common_space" = "Space";
 "common_starting_chat" = "Iniciando o chat...";
 "common_sticker" = "Adesivo";
 "common_success" = "Sucesso";
@@ -504,6 +508,8 @@
 "screen_decline_and_block_title" = "Recusar e bloquear";
 "screen_edit_room_address_room_address_section_footer" = "Você precisará de um endereço de sala para torná-lo visível no diretório.";
 "screen_edit_room_address_title" = "Endereço da sala";
+"screen_invite_users_already_a_member" = "Já é membro";
+"screen_invite_users_already_invited" = "Já foi convidado";
 "screen_join_room_cancel_knock_action" = "Cancelar pedido";
 "screen_join_room_cancel_knock_alert_confirmation" = "Sim, cancele";
 "screen_join_room_cancel_knock_alert_description" = "Tem a certeza de que pretende cancelar o seu pedido de adesão a esta sala?";
@@ -975,8 +981,6 @@
 "screen_room_change_role_owners_title" = "Choose Owners";
 "screen_room_change_role_unsaved_changes_description" = "Você tem alterações não salvas.";
 "screen_room_details_add_topic_title" = "Adicionar tópico";
-"screen_room_details_already_a_member" = "Já é membro";
-"screen_room_details_already_invited" = "Já foi convidado";
 "screen_room_details_badge_encrypted" = "Criptografado";
 "screen_room_details_badge_not_encrypted" = "Não criptografado";
 "screen_room_details_edit_room_title" = "Editar sala";
@@ -1075,6 +1079,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Você não tem nenhuma conversa favorita ainda";
 "screen_roomlist_filter_invites_empty_state_title" = "Você não tem nenhum convite pendente.";
 "screen_roomlist_filter_low_priority" = "Baixa prioridade";
+"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Você pode desmarcar filtros para ver suas outras conversas";
 "screen_roomlist_filter_mixed_empty_state_title" = "Você não tem conversas para esta seleção";
 "screen_roomlist_filter_people_empty_state_title" = "Você não tem nenhum conversa privada ainda";
