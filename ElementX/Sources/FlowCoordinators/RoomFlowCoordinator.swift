@@ -104,7 +104,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
          appSettings: AppSettings,
          appHooks: AppHooks,
          analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol) async {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomID = roomID
         self.userSession = userSession
         self.isChildFlow = isChildFlow
@@ -422,7 +422,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             // Other
                                     
             case (_, .startChildFlow(let roomID, let via, let entryPoint), .presentingChild):
-                Task { await self.startChildFlow(for: roomID, via: via, entryPoint: entryPoint) }
+                startChildFlow(for: roomID, via: via, entryPoint: entryPoint)
             case (.presentingChild, .dismissChildFlow, _):
                 childRoomFlowCoordinator = nil
                 
@@ -1556,19 +1556,19 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Other flows
     
-    private func startChildFlow(for roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint) async {
-        let coordinator = await RoomFlowCoordinator(roomID: roomID,
-                                                    userSession: userSession,
-                                                    isChildFlow: true,
-                                                    timelineControllerFactory: timelineControllerFactory,
-                                                    navigationStackCoordinator: navigationStackCoordinator,
-                                                    emojiProvider: emojiProvider,
-                                                    ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher,
-                                                    appMediator: appMediator,
-                                                    appSettings: appSettings,
-                                                    appHooks: appHooks,
-                                                    analytics: analytics,
-                                                    userIndicatorController: userIndicatorController)
+    private func startChildFlow(for roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint) {
+        let coordinator = RoomFlowCoordinator(roomID: roomID,
+                                              userSession: userSession,
+                                              isChildFlow: true,
+                                              timelineControllerFactory: timelineControllerFactory,
+                                              navigationStackCoordinator: navigationStackCoordinator,
+                                              emojiProvider: emojiProvider,
+                                              ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher,
+                                              appMediator: appMediator,
+                                              appSettings: appSettings,
+                                              appHooks: appHooks,
+                                              analytics: analytics,
+                                              userIndicatorController: userIndicatorController)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             

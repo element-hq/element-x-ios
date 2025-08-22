@@ -19,7 +19,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     var cancellables = Set<AnyCancellable>()
     
     func testRoomPresentation() async throws {
-        await setupRoomFlowCoordinator()
+        setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
@@ -29,7 +29,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testRoomDetailsPresentation() async throws {
-        await setupRoomFlowCoordinator()
+        setupRoomFlowCoordinator()
         
         try await process(route: .roomDetails(roomID: "1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
@@ -39,7 +39,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testNoOp() async throws {
-        await setupRoomFlowCoordinator()
+        setupRoomFlowCoordinator()
         
         try await process(route: .roomDetails(roomID: "1"))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomDetailsScreenCoordinator)
@@ -53,7 +53,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testPushDetails() async throws {
-        await setupRoomFlowCoordinator()
+        setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
@@ -66,7 +66,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testChildRoomFlow() async throws {
-        await setupRoomFlowCoordinator()
+        setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
@@ -88,7 +88,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     
     /// Tests the child flow teardown in isolation of it's parent.
     func testChildFlowTearDown() async throws {
-        await setupRoomFlowCoordinator(asChildFlow: true)
+        setupRoomFlowCoordinator(asChildFlow: true)
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
         try await process(route: .room(roomID: "1", via: []))
@@ -106,7 +106,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testChildRoomMemberDetails() async throws {
-        await setupRoomFlowCoordinator()
+        setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
@@ -123,7 +123,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testChildRoomIgnoresDirectDuplicate() async throws {
-        await setupRoomFlowCoordinator()
+        setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
@@ -145,7 +145,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testRoomMembershipInvite() async throws {
-        await setupRoomFlowCoordinator(roomType: .invited(roomID: "InvitedRoomID"))
+        setupRoomFlowCoordinator(roomType: .invited(roomID: "InvitedRoomID"))
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
@@ -154,7 +154,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         try await clearRoute(expectedActions: [.finished])
         XCTAssertNil(navigationStackCoordinator.rootCoordinator)
         
-        await setupRoomFlowCoordinator(roomType: .invited(roomID: "InvitedRoomID"))
+        setupRoomFlowCoordinator(roomType: .invited(roomID: "InvitedRoomID"))
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is JoinRoomScreenCoordinator)
@@ -171,7 +171,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testChildRoomMembershipInvite() async throws {
-        await setupRoomFlowCoordinator(asChildFlow: true, roomType: .invited(roomID: "InvitedRoomID"))
+        setupRoomFlowCoordinator(asChildFlow: true, roomType: .invited(roomID: "InvitedRoomID"))
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
@@ -182,7 +182,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         try await clearRoute(expectedActions: [.finished])
         XCTAssertNil(navigationStackCoordinator.stackCoordinators.last, "A child room flow should remove the join room scren on dismissal")
         
-        await setupRoomFlowCoordinator(asChildFlow: true, roomType: .invited(roomID: "InvitedRoomID"))
+        setupRoomFlowCoordinator(asChildFlow: true, roomType: .invited(roomID: "InvitedRoomID"))
         navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
         
         try await process(route: .room(roomID: "InvitedRoomID", via: []))
@@ -202,7 +202,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testEventRoute() async throws {
-        await setupRoomFlowCoordinator()
+        setupRoomFlowCoordinator()
         
         try await process(route: .event(eventID: "1", roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
@@ -219,7 +219,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testShareMediaRoute() async throws {
-        await setupRoomFlowCoordinator()
+        setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
@@ -244,7 +244,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testShareTextRoute() async throws {
-        await setupRoomFlowCoordinator()
+        setupRoomFlowCoordinator()
         
         try await process(route: .room(roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
@@ -269,7 +269,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
     }
     
     func testLeavingRoom() async throws {
-        await setupRoomFlowCoordinator()
+        setupRoomFlowCoordinator()
         
         var configuration = JoinedRoomProxyMockConfiguration()
         let roomProxy = JoinedRoomProxyMock(configuration)
@@ -333,7 +333,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         }
     }
     
-    private func setupRoomFlowCoordinator(asChildFlow: Bool = false, roomType: RoomType? = nil) async {
+    private func setupRoomFlowCoordinator(asChildFlow: Bool = false, roomType: RoomType? = nil) {
         cancellables.removeAll()
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         timelineControllerFactory = TimelineControllerFactoryMock(.init())
@@ -358,18 +358,18 @@ class RoomFlowCoordinatorTests: XCTestCase {
             "1"
         }
         
-        roomFlowCoordinator = await RoomFlowCoordinator(roomID: roomID,
-                                                        userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                        isChildFlow: asChildFlow,
-                                                        timelineControllerFactory: timelineControllerFactory,
-                                                        navigationStackCoordinator: navigationStackCoordinator,
-                                                        emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                                        ongoingCallRoomIDPublisher: .init(.init(nil)),
-                                                        appMediator: AppMediatorMock.default,
-                                                        appSettings: ServiceLocator.shared.settings,
-                                                        appHooks: AppHooks(),
-                                                        analytics: ServiceLocator.shared.analytics,
-                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        roomFlowCoordinator = RoomFlowCoordinator(roomID: roomID,
+                                                  userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                  isChildFlow: asChildFlow,
+                                                  timelineControllerFactory: timelineControllerFactory,
+                                                  navigationStackCoordinator: navigationStackCoordinator,
+                                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                  ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                                  appMediator: AppMediatorMock.default,
+                                                  appSettings: ServiceLocator.shared.settings,
+                                                  appHooks: AppHooks(),
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
 }
 

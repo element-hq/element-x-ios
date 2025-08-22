@@ -222,7 +222,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                     }
                     roomFlowCoordinator.handleAppRoute(route, animated: animated)
                 } else {
-                    Task { await self.startRoomFlow(roomID: roomID, via: via, entryPoint: entryPoint, animated: animated) }
+                    startRoomFlow(roomID: roomID, via: via, entryPoint: entryPoint, animated: animated)
                 }
                 hideCallScreenOverlay() // Turn any active call into a PiP so that navigation from a notification is visible to the user.
             case(.roomList, .deselectRoom, .roomList):
@@ -478,19 +478,19 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private func startRoomFlow(roomID: String,
                                via: [String],
                                entryPoint: RoomFlowCoordinatorEntryPoint,
-                               animated: Bool) async {
-        let coordinator = await RoomFlowCoordinator(roomID: roomID,
-                                                    userSession: userSession,
-                                                    isChildFlow: false,
-                                                    timelineControllerFactory: timelineControllerFactory,
-                                                    navigationStackCoordinator: detailNavigationStackCoordinator,
-                                                    emojiProvider: EmojiProvider(appSettings: appSettings),
-                                                    ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher,
-                                                    appMediator: appMediator,
-                                                    appSettings: appSettings,
-                                                    appHooks: appHooks,
-                                                    analytics: analytics,
-                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                               animated: Bool) {
+        let coordinator = RoomFlowCoordinator(roomID: roomID,
+                                              userSession: userSession,
+                                              isChildFlow: false,
+                                              timelineControllerFactory: timelineControllerFactory,
+                                              navigationStackCoordinator: detailNavigationStackCoordinator,
+                                              emojiProvider: EmojiProvider(appSettings: appSettings),
+                                              ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher,
+                                              appMediator: appMediator,
+                                              appSettings: appSettings,
+                                              appHooks: appHooks,
+                                              analytics: analytics,
+                                              userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
