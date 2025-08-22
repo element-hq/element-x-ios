@@ -11,12 +11,21 @@ import SwiftUI
 typealias SpaceScreenViewModelType = StateStoreViewModelV2<SpaceScreenViewState, SpaceScreenViewAction>
 
 class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtocol {
+    private let spaceServiceProxy: SpaceServiceProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    
     private let actionsSubject: PassthroughSubject<SpaceScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SpaceScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(spaceRoomList: SpaceRoomListProxyProtocol, mediaProvider: MediaProviderProtocol) {
+    init(spaceRoomList: SpaceRoomListProxyProtocol,
+         spaceServiceProxy: SpaceServiceProxyProtocol,
+         mediaProvider: MediaProviderProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
+        self.spaceServiceProxy = spaceServiceProxy
+        self.userIndicatorController = userIndicatorController
+        
         super.init(initialViewState: SpaceScreenViewState(space: spaceRoomList.spaceRoom,
                                                           rooms: spaceRoomList.spaceRoomsPublisher.value),
                    mediaProvider: mediaProvider)
@@ -47,14 +56,37 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .spaceAction(.select(let spaceRoom)):
-            if spaceRoom.isSpace {
-                actionsSubject.send(.selectSpace(spaceRoom))
+        case .spaceAction(.select(let spaceRoomProxy)):
+            if spaceRoomProxy.isSpace {
+                Task { await selectSpace(spaceRoomProxy) }
             } else {
-                #warning("Implement joining")
+                #warning("Implement room flow")
             }
         case .spaceAction(.join(let spaceID)):
             #warning("Implement joining.")
         }
+    }
+    
+    // MARK: - Private
+    
+    private func selectSpace(_ spaceRoomProxy: SpaceRoomProxyProtocol) async {
+        switch await spaceServiceProxy.spaceRoomList(for: spaceRoomProxy) {
+        case .success(let spaceRoomListProxy):
+            actionsSubject.send(.selectSpace(spaceRoomListProxy))
+        case .failure(let error):
+            MXLog.error("Unable to select space: \(error)")
+            showFailureIndicator()
+        }
+    }
+    
+    // MARK: - Indicators
+    
+    private static var failureIndicatorID: String { "\(Self.self)-Failure" }
+    
+    private func showFailureIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorID,
+                                                              type: .toast,
+                                                              title: L10n.errorUnknown,
+                                                              iconName: "xmark"))
     }
 }

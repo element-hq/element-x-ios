@@ -26,8 +26,8 @@ struct SpaceScreen: View {
     
     @ViewBuilder
     var rooms: some View {
-        ForEach(context.viewState.rooms, id: \.id) { spaceRoom in
-            SpaceRoomCell(spaceRoom: spaceRoom,
+        ForEach(context.viewState.rooms, id: \.id) { spaceRoomProxy in
+            SpaceRoomCell(spaceRoomProxy: spaceRoomProxy,
                           isSelected: false,
                           mediaProvider: context.mediaProvider) { action in
                 context.send(viewAction: .spaceAction(action))
@@ -65,7 +65,9 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
                                                               initialSpaceRooms: .mockSpaceList))
         
         let viewModel = SpaceScreenViewModel(spaceRoomList: spaceRoomListProxy,
-                                             mediaProvider: MediaProviderMock(configuration: .init()))
+                                             spaceServiceProxy: SpaceServiceProxyMock(.init()),
+                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             userIndicatorController: UserIndicatorControllerMock())
         return viewModel
     }
 }

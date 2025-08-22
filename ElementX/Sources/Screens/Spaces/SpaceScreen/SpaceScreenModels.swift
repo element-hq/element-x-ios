@@ -8,7 +8,7 @@
 import Foundation
 
 enum SpaceScreenViewModelAction {
-    case selectSpace(SpaceRoomProxyProtocol)
+    case selectSpace(SpaceRoomListProxyProtocol)
 }
 
 struct SpaceScreenViewState: BindableState {
