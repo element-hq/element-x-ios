@@ -22,6 +22,8 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     
     private let userIndicatorController: UserIndicatorControllerProtocol
     
+    private var spaceFlowCoordinator: SpaceFlowCoordinator?
+    
     enum State: StateType {
         /// The state machine hasn't started.
         case initial
@@ -132,7 +134,6 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
     }
     
-    private var spaceFlowCoordinator: SpaceFlowCoordinator?
     private func startSpaceFlow(spaceRoomListProxy: SpaceRoomListProxyProtocol) {
         let coordinator = SpaceFlowCoordinator(spaceRoomListProxy: spaceRoomListProxy,
                                                spaceServiceProxy: userSession.clientProxy.spaceService,

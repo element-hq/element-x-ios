@@ -38,8 +38,12 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         /// The flow is being started.
         case start
         
+        /// Request the presentation of a child space flow.
+        ///
+        /// The space's `SpaceRoomListProxyProtocol` must be provided in the `userInfo`.
         case startChildFlow
-        case tearDownChildFlow
+        /// Tidy-up the child flow after it has dismissed itself.
+        case stopChildFlow
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -111,7 +115,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         stateMachine.addRouteMapping { event, fromState, _ in
-            guard event == .tearDownChildFlow, case .presentingChild(_, let previousState) = fromState else { return nil }
+            guard event == .stopChildFlow, case .presentingChild(_, let previousState) = fromState else { return nil }
             return previousState
         } handler: { [weak self] _ in
             guard let self else { return }
@@ -166,7 +170,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                 
                 switch action {
                 case .finished:
-                    stateMachine.tryEvent(.tearDownChildFlow)
+                    stateMachine.tryEvent(.stopChildFlow)
                 }
             }
             .store(in: &cancellables)
