@@ -63,6 +63,8 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
         case .invites:
 //            return [.rooms, .people, .unreads, .favourites]
             return [.rooms, .channels, .favourites]
+        case .lowPriority:
+            return [.invites, .favourites]
         }
     }
     

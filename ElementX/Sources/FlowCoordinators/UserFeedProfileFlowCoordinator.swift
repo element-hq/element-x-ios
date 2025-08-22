@@ -144,7 +144,6 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
     private func presentMediaUploadPickerWithSource(_ attachMediaProtocol: FeedMediaSelectedProtocol,
                                                     stackCoordinator: NavigationStackCoordinator) {
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(mode: .init(source: .photoLibrary, selectionType: .single),
-                                                                  appSettings: ServiceLocator.shared.settings,
                                                                   userIndicatorController: userIndicatorController,
                                                                   orientationManager: appMediator.windowManager) { [weak self] action in
             guard let self else {

@@ -63,7 +63,7 @@ struct RoomListFiltersEmptyStateView_Previews: PreviewProvider, TestablePreview 
                                                            appSettings: ServiceLocator.shared.settings))
             }
 //            RoomListFiltersEmptyStateView(state: .init(activeFilters: [.people, .favourites]))
-            RoomListFiltersEmptyStateView(state: .init(activeFilters: [.rooms, .favourites]))
+            RoomListFiltersEmptyStateView(state: .init(activeFilters: [.rooms, .favourites], appSettings: ServiceLocator.shared.settings))
         }
         .padding(.bottom)
         .previewLayout(.sizeThatFits)

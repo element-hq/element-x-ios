@@ -57,7 +57,7 @@ private struct FilterToggleStyle: ToggleStyle {
 
 struct RoomListFilterView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        RoomListFilterView(filter: .people, isActive: .constant(false))
-        RoomListFilterView(filter: .people, isActive: .constant(true))
+        RoomListFilterView(filter: .rooms, isActive: .constant(false))
+        RoomListFilterView(filter: .rooms, isActive: .constant(true))
     }
 }

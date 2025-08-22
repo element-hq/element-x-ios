@@ -295,7 +295,7 @@ struct HomeScreenViewState: BindableState {
     var claimableUserRewards = ZeroRewards.empty()
     var showNewUserRewardsIntimation = false
     
-    var bindings = HomeScreenViewStateBindings()
+    var bindings: HomeScreenViewStateBindings
     
     var placeholderRooms: [HomeScreenRoom] {
         (1...10).map { _ in

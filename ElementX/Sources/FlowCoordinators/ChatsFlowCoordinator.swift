@@ -955,10 +955,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentMediaUploadPickerWithSource(_ attachMediaProtocol: FeedMediaSelectedProtocol,
                                                     stackCoordinator: NavigationStackCoordinator,
                                                     fromFeedDetails: Bool) {
-        
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(
             mode: .init(source: .photoLibrary, selectionType: .single),
-            appSettings: appSettings,
             userIndicatorController: ServiceLocator.shared.userIndicatorController,
             orientationManager: appMediator.windowManager,
         ) { [weak self] action in
