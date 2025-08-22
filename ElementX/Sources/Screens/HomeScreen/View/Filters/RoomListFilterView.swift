@@ -35,10 +35,10 @@ private struct FilterToggleStyle: ToggleStyle {
     func makeBody(configuration: Configuration) -> some View {
         let shape = RoundedRectangle(cornerRadius: 20)
         configuration.label
-            .font(.compound.bodyLG)
+            .font(.compound.bodyMD)
             .foregroundColor(foregroundColor(isOn: configuration.isOn))
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
             .background(shape.fill(backgroundColor(isOn: configuration.isOn)))
             .overlay {
                 shape
