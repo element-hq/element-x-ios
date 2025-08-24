@@ -34,7 +34,7 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var configuration = PHPickerConfiguration(photoLibrary: .shared())
-        
+        configuration.selection = .ordered
         configuration.selectionLimit = switch selectionType {
         case .single:
             1
@@ -86,18 +86,21 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
             
             Task {
                 let selectedURLs = await withTaskGroup { taskGroup in
-                    for result in results {
-                        taskGroup.addTask { await self.processResult(result) }
-                    }
-                    
-                    var selectedURLs = [URL]()
-                    for await url in taskGroup {
-                        if let url {
-                            selectedURLs.append(url)
+                    for (index, result) in results.enumerated() {
+                        taskGroup.addTask {
+                            let url = await self.processResult(result)
+                            return (index, url)
                         }
                     }
                     
-                    return selectedURLs
+                    var selectedURLs = [URL?](repeating: nil, count: results.count)
+                    for await (index, url) in taskGroup {
+                        if let url {
+                            selectedURLs[index] = url
+                        }
+                    }
+                    
+                    return selectedURLs.compactMap { $0 }
                 }
                 
                 photoLibraryPicker.callback(.selectedMediaAtURLs(selectedURLs))
