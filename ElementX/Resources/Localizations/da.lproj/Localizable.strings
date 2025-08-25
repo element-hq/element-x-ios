@@ -80,7 +80,7 @@
 "action_enable" = "Slå til";
 "action_end_poll" = "Afslut afstemning";
 "action_enter_pin" = "Indtast PIN-kode";
-"action_finish" = "Finish";
+"action_finish" = "Afslut";
 "action_forgot_password" = "Har du glemt din adgangskode?";
 "action_forward" = "Videresend";
 "action_go_back" = "Gå tilbage";
@@ -165,8 +165,8 @@
 "common_advanced_settings" = "Avancerede indstillinger";
 "common_an_image" = "et billede";
 "common_analytics" = "Analyse-værktøj";
-"common_android_shortcuts_remove_reason_left_room" = "You left the room";
-"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
+"common_android_shortcuts_remove_reason_left_room" = "Du forlod rummet";
+"common_android_shortcuts_remove_reason_session_logged_out" = "Du blev logget ud af sessionen";
 "common_appearance" = "Udseende";
 "common_audio" = "Lyd";
 "common_blocked_users" = "Blokerede brugere";
@@ -281,7 +281,7 @@
 "common_signing_out" = "Logger ud";
 "common_something_went_wrong" = "Noget gik galt";
 "common_something_went_wrong_message" = "Vi stødte på et problem. Prøv venligst igen.";
-"common_space" = "Space";
+"common_space" = "Klynge";
 "common_starting_chat" = "Starter samtale...";
 "common_sticker" = "Klistermærke";
 "common_success" = "Succes";
@@ -1079,7 +1079,7 @@
 "screen_roomlist_filter_favourites_empty_state_title" = "Du har endnu ingen foretrukne samtaler";
 "screen_roomlist_filter_invites_empty_state_title" = "Du har ingen afventende invitationer.";
 "screen_roomlist_filter_low_priority" = "Lav prioritet";
-"screen_roomlist_filter_low_priority_empty_state_title" = "You don’t have any low priority chats yet";
+"screen_roomlist_filter_low_priority_empty_state_title" = "Du har endnu ingen chats med lav prioritet";
 "screen_roomlist_filter_mixed_empty_state_subtitle" = "Du kan fravælge filtre for at se dine andre samtaler";
 "screen_roomlist_filter_mixed_empty_state_title" = "Du har ingen samtaler til dette valg";
 "screen_roomlist_filter_people_empty_state_title" = "Du har ingen DM'er endnu";
