@@ -101,23 +101,26 @@ struct MediaUploadingPreprocessor {
     /// and its associated details or any resulting error
     func processMedia(at urls: [URL], maxUploadSize: UInt) async -> Result<[MediaInfo], MediaUploadingPreprocessorError> {
         await withTaskGroup { taskGroup in
-            for url in urls {
+            for (index, url) in urls.enumerated() {
                 taskGroup.addTask {
-                    await processMedia(at: url, maxUploadSize: maxUploadSize)
+                    let result = await processMedia(at: url, maxUploadSize: maxUploadSize)
+                    return (index, result)
                 }
             }
             
-            var mediaInfos = [MediaInfo]()
-            for await result in taskGroup {
+            // Store results in their respective index as they come in
+            var results = [MediaInfo?](repeating: nil, count: urls.count)
+            
+            for await (index, result) in taskGroup {
                 switch result {
                 case .success(let mediaInfo):
-                    mediaInfos.append(mediaInfo)
+                    results[index] = mediaInfo
                 case .failure(let error):
                     return .failure(error)
                 }
             }
             
-            return .success(mediaInfos)
+            return .success(results.compactMap { $0 })
         }
     }
     
