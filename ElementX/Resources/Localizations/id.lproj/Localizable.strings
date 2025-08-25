@@ -9,9 +9,9 @@
 "a11y_jump_to_bottom" = "Lompat ke bawah";
 "a11y_notifications_mentions_only" = "Hanya sebutan";
 "a11y_notifications_muted" = "Dibisukan";
-"a11y_notifications_new_mentions" = "New mentions";
-"a11y_notifications_new_messages" = "New messages";
-"a11y_notifications_ongoing_call" = "Ongoing call";
+"a11y_notifications_new_mentions" = "Sebutan baru";
+"a11y_notifications_new_messages" = "Pesan baru";
+"a11y_notifications_ongoing_call" = "Panggilan berlangsung";
 "a11y_page_n" = "Halaman %1$d";
 "a11y_pause" = "Jeda";
 "a11y_paused_voice_message" = "Pesan suara, durasi: %1$@, posisi saat ini: %2$@";
@@ -103,7 +103,7 @@
 "action_no" = "Tidak";
 "action_not_now" = "Jangan sekarang";
 "action_ok" = "Oke";
-"action_open_context_menu" = "Open context menu";
+"action_open_context_menu" = "Buka menu konteks";
 "action_open_settings" = "Pengaturan";
 "action_open_with" = "Buka dengan";
 "action_pin" = "Sematkan";
@@ -130,7 +130,7 @@
 "action_send" = "Kirim";
 "action_send_edited_message" = "Kirim pesan tersunting";
 "action_send_message" = "Kirim pesan";
-"action_send_voice_message" = "Send voice message";
+"action_send_voice_message" = "Kirim pesan suara";
 "action_share" = "Bagikan";
 "action_share_link" = "Bagikan tautan";
 "action_show" = "Tampilkan";

@@ -99,6 +99,14 @@ extension [SpaceRoomProxyProtocol] {
         makeSpaceRooms(isSpace: true) + makeSpaceRooms(isSpace: false)
     }
     
+    static var mockSingleRoom: [SpaceRoomProxyProtocol] {
+        [SpaceRoomProxyMock(.init(id: "!spaceroom:matrix.org",
+                                  name: "Management",
+                                  isSpace: false,
+                                  joinedMembersCount: 12,
+                                  topic: "This is where everything gets organised 📋."))]
+    }
+    
     private static func makeSpaceRooms(isSpace: Bool) -> [SpaceRoomProxyMock] {
         let typeName = isSpace ? "Space" : "Room"
         

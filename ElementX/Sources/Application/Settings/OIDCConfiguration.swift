@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct OIDCConfigurationProxy {
+struct OIDCConfiguration {
     let clientName: String
     let redirectURI: URL
     let clientURI: URL
@@ -20,7 +20,7 @@ struct OIDCConfigurationProxy {
 #if canImport(MatrixRustSDK)
 import MatrixRustSDK
 
-extension OIDCConfigurationProxy {
+extension OIDCConfiguration {
     var rustValue: OidcConfiguration {
         OidcConfiguration(clientName: clientName,
                           redirectUri: redirectURI.absoluteString,

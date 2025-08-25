@@ -92,6 +92,7 @@ targets:
     - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
     - path: ../../ElementX/Sources/Services/UserSession/SessionDirectories.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
+    - path: ../../ElementX/Sources/Other/Extensions/Dictionary.swift
     - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
     - path: ../../ElementX/Sources/Other/Extensions/NSItemProvider.swift
     - path: ../../ElementX/Sources/Other/Extensions/ProcessInfo.swift

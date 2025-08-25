@@ -47,6 +47,7 @@ enum UITestsScreenIdentifier: String {
     case startChatWithSearchResults
     case userSessionScreen
     case userSessionScreenReply
+    case userSessionSpacesFlow
     case autoUpdatingTimeline
 }
 

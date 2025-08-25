@@ -37,8 +37,8 @@ private struct FilterToggleStyle: ToggleStyle {
         configuration.label
             .font(.zero.bodyLG)
             .foregroundColor(foregroundColor(isOn: configuration.isOn))
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
             .background(shape.fill(backgroundColor(isOn: configuration.isOn)))
             .overlay {
                 shape
