@@ -75,32 +75,43 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
             return .failure(.roomInvalid)
         }
         
-        async let useEncryption = (try? room.latestEncryptionState() == .encrypted) ?? false
         async let isDirect = room.isDirect()
+        let hasActiveCall = room.hasActiveRoomCall()
         let widgetSettings: WidgetSettings
         
+        // Compute the correct intent based on room type and call status
+        // There are 4 intents: join/start and dm/non-dm
+        let intent: ElementCallIntent
+        switch (hasActiveCall, await isDirect) {
+        case (true, true):
+            intent = .joinDmCall
+        case (true, false):
+            intent = .joinCall  
+        case (false, true):
+            intent = .startDmCall
+        case (false, false):
+            intent = .startCall
+        }
+        
         do {
-            widgetSettings = try await newVirtualElementCallWidget(props: .init(elementCallUrl: baseURL.absoluteString,
-                                                                                widgetId: widgetID,
-                                                                                parentUrl: nil,
-                                                                                header: .appBar,
-                                                                                hideHeader: true,
-                                                                                preload: nil,
-                                                                                fontScale: nil,
-                                                                                appPrompt: false,
-                                                                                confineToRoom: true,
-                                                                                font: nil,
-                                                                                encryption: useEncryption ? .perParticipantKeys : .unencrypted,
-                                                                                intent: .startCall,
-                                                                                hideScreensharing: false,
-                                                                                posthogUserId: nil,
-                                                                                posthogApiHost: analyticsConfiguration?.posthogAPIHost,
-                                                                                posthogApiKey: analyticsConfiguration?.posthogAPIKey,
-                                                                                rageshakeSubmitUrl: rageshakeURL,
-                                                                                sentryDsn: analyticsConfiguration?.sentryDSN,
-                                                                                sentryEnvironment: nil,
-                                                                                controlledMediaDevices: !ProcessInfo.processInfo.isiOSAppOnMac,
-                                                                                sendNotificationType: isDirect ? .ring : .notification))
+            widgetSettings = try await newVirtualElementCallWidget(
+                props: .init(
+                    elementCallUrl: baseURL.absoluteString,
+                    widgetId: widgetID,
+                    parentUrl: nil,
+                    fontScale: nil,
+                    font: nil,
+                    posthogUserId: nil,
+                    posthogApiHost: analyticsConfiguration?.posthogAPIHost,
+                    posthogApiKey: analyticsConfiguration?.posthogAPIKey,
+                    rageshakeSubmitUrl: rageshakeURL,
+                    sentryDsn: analyticsConfiguration?.sentryDSN,
+                    sentryEnvironment: nil
+                ),
+                config: .init(
+                    intent: intent
+                )
+            )
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)
