@@ -429,6 +429,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                     startUserProfileWithFeedFlow(userID: nil, profile: profile, feedProtocol: feedProtocol)
                 case .startWalletTransaction(let walletTransactionProtocol, let type, let meowPrice):
                     startZeroWalletTransactionsFlow(walletTransactionProtocol, type: type, meowPrice: meowPrice)
+                case .searchUser:
+                    presentSearchUserScreen()
                 }
             }
             .store(in: &cancellables)
@@ -1089,5 +1091,30 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 showFailureIndicator()
             }
         }
+    }
+    
+    private func presentSearchUserScreen() {
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        
+        let userDiscoveryService = UserDiscoveryService(clientProxy: userSession.clientProxy)
+        let parameters = SearchUserScreenCoordinatorParameters(userSession: userSession,
+                                                               userDiscoveryService: userDiscoveryService,
+                                                               appSettings: appSettings)
+        
+        let coordinator = SearchUserScreenCoordinator(parameters: parameters)
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .close:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            case .selectUser(let user):
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                startUserProfileWithFeedFlow(userID: user.userID, profile: nil, feedProtocol: nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: true)
     }
 }

@@ -29,6 +29,7 @@ enum HomeScreenViewModelAction {
     case postTapped(_ post: HomeScreenPost, feedProtocol: FeedProtocol)
     case openPostUserProfile(_ profile: ZPostUserProfile, feedProtocol: FeedProtocol)
     case startWalletTransaction(WalletTransactionProtocol, WalletTransactionType, ZeroCurrency?)
+    case searchUser
 }
 
 enum HomeScreenViewAction {
@@ -88,6 +89,8 @@ enum HomeScreenViewAction {
     case claimStakeRewards
     case stakeAmount(String)
     case unstakeAmount(String)
+    
+    case searchUser
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {

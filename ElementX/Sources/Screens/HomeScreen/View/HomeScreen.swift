@@ -191,6 +191,17 @@ struct HomeScreen: View {
             Image(asset: Asset.Images.zeroWordmark)
         }
         
+        if selectedTab == HomeTab.feed {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    context.send(viewAction: .searchUser)
+                } label: {
+                    CompoundIcon(\.search)
+                        .tint(.compound.iconSecondary)
+                }
+            }
+        }
+        
         ToolbarItem(placement: .primaryAction) {
             userProfileButton
         }
