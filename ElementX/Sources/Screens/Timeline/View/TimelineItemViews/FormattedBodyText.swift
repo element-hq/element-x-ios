@@ -213,7 +213,7 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
             This is an unordered list
             <ul>
             <li>Jones’ <b>Crumpets</b></li>
-            <li><i>Crumpetorium<i></li>
+            <li><i>Crumpetorium</i></li>
             <li>Village <u>Bakery</u></li>
             </ul>
             """,
