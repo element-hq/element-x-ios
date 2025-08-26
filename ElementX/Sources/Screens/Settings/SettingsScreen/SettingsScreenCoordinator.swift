@@ -34,6 +34,7 @@ enum SettingsScreenCoordinatorAction {
     case referAFriend
     case zeroProSub
     case claimRewards
+    case manageWallets
 }
 
 final class SettingsScreenCoordinator: CoordinatorProtocol {
@@ -96,6 +97,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.zeroProSub)
                 case .claimRewards:
                     actionsSubject.send(.claimRewards)
+                case .manageWallets:
+                    actionsSubject.send(.manageWallets)
                 }
             }
             .store(in: &cancellables)

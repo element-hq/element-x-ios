@@ -128,6 +128,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .claimRewards:
                     actionsSubject.send(.claimUserRewards)
                     parameters.navigationStackCoordinator.pop()
+                case .manageWallets:
+                    presentManageWalletsSettings()
                 }
             }
             .store(in: &cancellables)
@@ -288,6 +290,13 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentZeroProSubSettings() {
         let parameters = ZeroProSubcriptionScreenCoordinatorParams(userSession: parameters.userSession)
         let coordinator = ZeroProSubcriptionScreenCoordinator(parameters: parameters)
+        navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func presentManageWalletsSettings() {
+        let parameters = ManageWalletsCoordinatorParameters(userSession: parameters.userSession,
+                                                            userIndicatorController: parameters.userIndicatorController)
+        let coordinator = ManageWalletsCoordinator(parameters: parameters)
         navigationStackCoordinator.push(coordinator)
     }
 

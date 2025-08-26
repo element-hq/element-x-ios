@@ -165,6 +165,13 @@ struct SettingsScreen: View {
                 EmptyView()
             }
             
+            /// Manage Wallets
+            ZeroListRow(label: .plain(title: "Manage Wallets"),
+                        kind: .navigationLink {
+                context.send(viewAction: .manageWallets)
+            })
+            .accessibilityIdentifier("settings-manage-wallets")
+            
             /// Advanced Settings
             ZeroListRow(label: .plain(title: "Advanced Settings"),
                         kind: .navigationLink {

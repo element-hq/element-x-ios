@@ -148,6 +148,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             actionsSubject.send(.zeroProSub)
         case .claimRewards:
             actionsSubject.send(.claimRewards)
+        case .manageWallets:
+            actionsSubject.send(.manageWallets)
         }
     }
     
