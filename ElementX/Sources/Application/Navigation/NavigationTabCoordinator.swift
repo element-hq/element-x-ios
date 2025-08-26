@@ -16,6 +16,7 @@ import SwiftUI
         var dismissalCallback: (() -> Void)?
     }
     
+    @MainActor
     @Observable class TabDetails {
         /// A unique tab that identifies the tab for selection.
         let tag: Tag
@@ -23,13 +24,29 @@ import SwiftUI
         let icon: KeyPath<CompoundIcons, Image>
         let selectedIcon: KeyPath<CompoundIcons, Image>
         var badgeCount = 0
-        var barVisibility: Visibility = .automatic
+        var barVisibilityOverride: Visibility?
+        
+        /// Provide the tab's split coordinator in here to have the tab bar automatically hidden
+        /// when pushing a child into the split view's details on iPhone/compact iPad.
+        weak var navigationSplitCoordinator: NavigationSplitCoordinator?
         
         init(tag: Tag, title: String, icon: KeyPath<CompoundIcons, Image>, selectedIcon: KeyPath<CompoundIcons, Image>) {
             self.tag = tag
             self.title = title
             self.icon = icon
             self.selectedIcon = selectedIcon
+        }
+        
+        func barVisibility(in horizontalSizeClass: UserInterfaceSizeClass?) -> Visibility {
+            if let barVisibilityOverride {
+                barVisibilityOverride
+            } else if horizontalSizeClass == .compact, navigationSplitCoordinator?.detailCoordinator != nil {
+                // Whilst we support pushing screens on the stack in the sidebarCoordinator, in practice
+                // we never do that, so simply checking that the detailCoordinator exists is enough.
+                .hidden
+            } else {
+                .automatic
+            }
         }
     }
     
@@ -202,6 +219,8 @@ import SwiftUI
 }
 
 private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    
     @Bindable var navigationTabCoordinator: NavigationTabCoordinator<Tag>
     
     @State private var standardAppearance = UITabBarAppearance()
@@ -220,7 +239,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
                     }
                     .tag(module.details.tag)
                     .badge(module.details.badgeCount)
-                    .toolbar(module.details.barVisibility, for: .tabBar)
+                    .toolbar(module.details.barVisibility(in: horizontalSizeClass), for: .tabBar)
             }
         }
         .introspect(.tabView, on: .supportedVersions, customize: configureAppearance)
