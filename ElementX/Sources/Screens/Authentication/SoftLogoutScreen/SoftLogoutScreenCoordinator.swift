@@ -61,7 +61,7 @@ final class SoftLogoutScreenCoordinator: CoordinatorProtocol {
         viewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }
-                MXLog.info("[SoftLogoutCoordinator] SoftLogoutViewModel did complete with result: \(action).")
+                MXLog.info("Did complete with result: \(action).")
 
                 switch action {
                 case .login(let password):
