@@ -87,10 +87,10 @@ extension ZCurrentUser {
 
 public struct ZWallet: Codable {
     let id: String
-    let userId: String
+    let userId: String?
     let publicAddress: String
     let isDefault: Bool
-    let isMultiSig: Bool
+    let isMultiSig: Bool?
     let balance: String?
     let balanceCheckedAt: String?
     let dailyLimit: String?
@@ -100,4 +100,5 @@ public struct ZWallet: Codable {
     let isThirdWeb: Bool
     let createdAt: String?
     let updatedAt: String?
+    let canAuthenticate: Bool?
 }

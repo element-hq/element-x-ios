@@ -1144,6 +1144,21 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func fetchUserWallets() async -> Result<[ZWallet], ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.userAccountApi.fetchWallets()
+            switch result {
+            case .success(let wallets):
+                return .success(wallets)
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to fetch user wallets. Error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
             let zeroPostsResult = try await zeroApiProxy.postsApi.fetchPosts(channelZId: channelZId, following: following, limit: limit, skip: skip)

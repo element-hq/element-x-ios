@@ -284,6 +284,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func fetchZCurrentUser()
     
+    func fetchUserWallets() async -> Result<[ZWallet], ClientProxyError>
+    
     // MARK: - ZERO FEED
     
     func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>

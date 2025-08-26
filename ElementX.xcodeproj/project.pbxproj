@@ -1862,6 +1862,8 @@
 		792E92A82E5DB8EB00C88D7B /* ManageWalletsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792E92A62E5DB8E800C88D7B /* ManageWalletsModels.swift */; };
 		792E92AA2E5DB8F200C88D7B /* ManageWalletsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792E92A92E5DB8EE00C88D7B /* ManageWalletsCoordinator.swift */; };
 		792E92AB2E5DB8F200C88D7B /* ManageWalletsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792E92A92E5DB8EE00C88D7B /* ManageWalletsCoordinator.swift */; };
+		792E92AD2E5DBC8900C88D7B /* ZWalletListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792E92AC2E5DBC8100C88D7B /* ZWalletListResponse.swift */; };
+		792E92AE2E5DBC8900C88D7B /* ZWalletListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792E92AC2E5DBC8100C88D7B /* ZWalletListResponse.swift */; };
 		7937A5922DB287E9001A60CB /* TimelineItemThreadSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C6A082F2B2A15E1B9BE280 /* TimelineItemThreadSummary.swift */; };
 		7937A5932DB28819001A60CB /* TimelineEventContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F926D08EB3D622A480BCA71 /* TimelineEventContent.swift */; };
 		7937A5942DB289A0001A60CB /* TimelineThreadSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF2E6ADAE685F4109B1FE795 /* TimelineThreadSummaryView.swift */; };
@@ -3752,6 +3754,7 @@
 		792E92A32E5DB8DA00C88D7B /* ManageWalletsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageWalletsViewModel.swift; sourceTree = "<group>"; };
 		792E92A62E5DB8E800C88D7B /* ManageWalletsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageWalletsModels.swift; sourceTree = "<group>"; };
 		792E92A92E5DB8EE00C88D7B /* ManageWalletsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageWalletsCoordinator.swift; sourceTree = "<group>"; };
+		792E92AC2E5DBC8100C88D7B /* ZWalletListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZWalletListResponse.swift; sourceTree = "<group>"; };
 		793899C22DEF98F000980991 /* ReferAFriendSettingsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenCoordinator.swift; sourceTree = "<group>"; };
 		793899C52DEF990800980991 /* ReferAFriendSettingsScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenModel.swift; sourceTree = "<group>"; };
 		793899C82DEF991F00980991 /* ReferAFriendSettingsScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferAFriendSettingsScreenViewModel.swift; sourceTree = "<group>"; };
@@ -5118,6 +5121,7 @@
 				7909357F2E425353003423D7 /* ZStakingStatus.swift */,
 				790935822E425390003423D7 /* ZStakingUserRewardsInfo.swift */,
 				184D6FD52C7D9261006266D8 /* ZSSOToken.swift */,
+				792E92AC2E5DBC8100C88D7B /* ZWalletListResponse.swift */,
 				7996163A2E0EA30C008E73C4 /* ZWalletNFTs.swift */,
 				7909225A2E1E673E00833940 /* ZWalletRecipients.swift */,
 				798D991B2E4C9A4C00164028 /* ZWalletStakingApprovalResponse.swift */,
@@ -10647,6 +10651,7 @@
 				790AB7A72E1BE17200555B1F /* ZeroProSubcriptionScreenView.swift in Sources */,
 				18E9A56C2C9829970082DDA4 /* LongPressWithFeedback.swift in Sources */,
 				790922522E1DCC3600833940 /* TransferTokenModels.swift in Sources */,
+				792E92AE2E5DBC8900C88D7B /* ZWalletListResponse.swift in Sources */,
 				18E9A56D2C9829970082DDA4 /* MXLog.swift in Sources */,
 				18E9A56E2C9829970082DDA4 /* MapLibreMapView.swift in Sources */,
 				18E9A56F2C9829970082DDA4 /* MapLibreModels.swift in Sources */,
@@ -11695,6 +11700,7 @@
 				B1B255CE0E4306DD6E09D936 /* EncryptionResetPasswordScreenModels.swift in Sources */,
 				D6152E21036B88C44ECB22E7 /* EncryptionResetPasswordScreenViewModel.swift in Sources */,
 				18525CF92CF5E7D50055C5E8 /* InviteFriendSettingsScreenViewModelProtocol.swift in Sources */,
+				792E92AD2E5DBC8900C88D7B /* ZWalletListResponse.swift in Sources */,
 				A0601810597769B81C2358AF /* EncryptionResetPasswordScreenViewModelProtocol.swift in Sources */,
 				F3F9D61C53C348043D3D6F51 /* EncryptionResetScreen.swift in Sources */,
 				3041EBA2660F28FFB7BDA339 /* EncryptionResetScreenCoordinator.swift in Sources */,

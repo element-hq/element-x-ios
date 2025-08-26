@@ -22,10 +22,37 @@ class ManageWalletsViewModel: ManageWalletsViewModelType, ManageWalletsViewModel
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(bindings: .init()))
+        
+        fetchUserWallets()
     }
     
     override func process(viewAction: ManageWalletsViewAction) {
-        
+        switch viewAction {
+        case .onWalletSelected(let wallet):
+            openWalletAddress(wallet)
+        }
+    }
+    
+    private func fetchUserWallets() {
+        Task {
+            showLoadingIndicator()
+            defer { hideLoadingIndicator() }
+            
+            let result = await clientProxy.fetchUserWallets()
+            switch result {
+            case .success(let wallets):
+                state.wallets = wallets.map(ZeroWallet.init)
+            case .failure(let error):
+                //TODO: show error dialog
+                break
+            }
+        }
+    }
+    
+    private func openWalletAddress(_ wallet: ZeroWallet) {
+        if let url = wallet.zcanLiveUrl {
+            UIApplication.shared.open(url)
+        }
     }
     
     // MARK: Loading indicator

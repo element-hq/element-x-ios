@@ -7,10 +7,14 @@ enum ZeroContants {
     static let accountProvider: String = ZeroContants.appServer.matrixHomeServerUrl.replacingOccurrences(of: "https://", with: "")
     static let ZERO_APP_STORE_APP_ID = "6476882926"
     
+    /// Channel Constants
     static let ZERO_CHANNEL_PREFIX = "0://"
     
+    /// Wallet Constants
     static let ZERO_WALLET_ADDRESS_PREFIX = "0x"
+    static let ZERO_WALLET_ZSCAN_LIVE_URL = "https://zscan.live/"
     
+    /// Subscription Constants
     static let ZERO_PRO_SUBSCRIPTION_USD: Double = 14.99
     
     /// Staking Constants

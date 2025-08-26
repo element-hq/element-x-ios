@@ -6100,6 +6100,70 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         fetchZCurrentUserCallsCount += 1
         fetchZCurrentUserClosure?()
     }
+    //MARK: - fetchUserWallets
+
+    var fetchUserWalletsUnderlyingCallsCount = 0
+    var fetchUserWalletsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return fetchUserWalletsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserWalletsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserWalletsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserWalletsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var fetchUserWalletsCalled: Bool {
+        return fetchUserWalletsCallsCount > 0
+    }
+
+    var fetchUserWalletsUnderlyingReturnValue: Result<[ZWallet], ClientProxyError>!
+    var fetchUserWalletsReturnValue: Result<[ZWallet], ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return fetchUserWalletsUnderlyingReturnValue
+            } else {
+                var returnValue: Result<[ZWallet], ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = fetchUserWalletsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                fetchUserWalletsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    fetchUserWalletsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var fetchUserWalletsClosure: (() async -> Result<[ZWallet], ClientProxyError>)?
+
+    func fetchUserWallets() async -> Result<[ZWallet], ClientProxyError> {
+        fetchUserWalletsCallsCount += 1
+        if let fetchUserWalletsClosure = fetchUserWalletsClosure {
+            return await fetchUserWalletsClosure()
+        } else {
+            return fetchUserWalletsReturnValue
+        }
+    }
     //MARK: - fetchZeroFeeds
 
     var fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount = 0
