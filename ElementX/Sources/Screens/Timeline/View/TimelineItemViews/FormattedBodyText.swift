@@ -142,27 +142,45 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
     }
     
     @ViewBuilder
+    // swiftlint:disable:next function_body_length
     static func body(_ attributedStringBuilder: AttributedStringBuilderProtocol) -> some View {
         let htmlStrings = [
             """
-            Plain text
-            <br>
-            !room:matrix.org
-            <br>
-            https://www.matrix.org
-            <br>
-            www.matrix.org
-            <br>
-            matrix.org
-            <br>
-            what's <sup>sup</sup> dude?
-            <br>
-            thumbs if you liked it, <sub>sub</sub> if you loved it
+            Nothing is as permanent as a temporary solution that works. 
+            Experience is the name everyone gives to their mistakes. 
+            If debugging is the process of removing bugs, then programming must be the process of putting them in.
             """,
             """
-            Text before blockquote
-            <blockquote><b>bold</b> <i>italic</i></blockquote>
-            Text after blockquote
+            <h1>H1 Header</h1></br>
+            <h2>H2 Header</h2></br>
+            <h3>H3 Header</h3></br>
+            <h4>H4 Header</h4></br>
+            <h5>H5 Header</h5></br>
+            <h6>H6 Header</h6>
+            """,
+            """
+            <p>This is a paragraph.</p><p>And this is another one.</p>
+            <div>And this is a division.</div>
+            New lines are ignored.\n\nLike so.</br>
+            But this line comes after a line break.</br>
+            """,
+            """
+            We expect various identifiers to be (partially) detected:</br>
+            !room:matrix.org, #room:matrix.org, $event:matrix.org, @user:matrix.org</br>
+            matrix://roomid/room:matrix.org, matrix://r/room:matrix.org, matrix://roomid/room:matrix.org/e/event:matrix.org, matrix://roomid/room:matrix.org/u/user:matrix.org</br>
+            """,
+            """
+            Links too:</br><a href=\"https://www.matrix.org/\">Matrix rules! 🤘</a>, matrix.org, www.matrix.org, http://matrix.org
+            """,
+            """
+            <b>Text</b> <i>formatting</i> <u>should</u> <s>work</s> properly.</br>
+            <strong>Text</strong> <em>formatting</em> does <del>work!</del>.</br>
+            <b>And <i>mixed</i></b> <em><s>formatting</s></em> <del><strong>works</strong></del> <u><b>too!!1!</b></u>.
+            <br>
+            <sup>Thumbs</sup> if you liked it, <sub>sub</sub> if you loved it!
+            """,
+            """
+            Text before blockquote<blockquote><b>Nothing</b> <i>is</i> as permanent as a <u>temporary<u> solution that <a href=\"https://www.matrix.org/\">works.</blockquote>Text after blockquote
             """,
             """
             <blockquote>First blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
@@ -170,13 +188,12 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
             <blockquote>Third blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
             """,
             """
-            <blockquote>A blockquote that is long and goes onto multiple lines as the first item in the message</blockquote>
-            <p>Then another line of text here to reply to the blockquote, which is also a multiline component.</p>
-            <blockquote>Short line here.</blockquote>
-            <p>And a simple reply here.</p>
+            <blockquote>A blockquote that is long and goes onto multiple lines </blockquote>
+            <p>Then another line of text to reply to the blockquote, also multiline.</p>
+            <blockquote>Then a short blockquote.</blockquote><p>Followed by another short sentence.</p>
             """,
             """
-            <pre><code>struct ContentView: View {
+            <pre>A preformatted code block<code>struct ContentView: View {
                 var body: some View {
                     VStack {
                         Text("Knock, knock!")
@@ -186,37 +203,55 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
                     }
                     .padding()
                 }
-            }
-            </code>
-            </pre>
+            }</code></pre></br>
+            Followed by some plain code blocks</br>
+            <code>Hello, world!</code>
+            <code><b>Hello</b>, <i>world!</i></code>
+            <code><b>Hello</b>, <a href="https://www.matrix.org">world!</a></code>
             """,
             """
-            <code>Hello world</code>
-            <p>Text</p>
-            <code><b>Hello</b> <i>world</i></code>
-            <p>Text</p>
-            <code>Hello world</code>
-            <p>Text</p>
-            <code><a href="https://www.matrix.org">matrix.org</a> https://www.matrix.org</code>
+            This is an unordered list
+            <ul>
+            <li>Jones’ <b>Crumpets</b></li>
+            <li><i>Crumpetorium<i></li>
+            <li>Village <u>Bakery</u></li>
+            </ul>
             """,
-            "<p>This is a list</p>\n<ul>\n<li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n",
-            "<ul><li>First item</li><li>Second item</li><li>Third item</li></ul>",
-            "<p>test</p>\n<p>test</p>"
+            """
+            This is an ordered list
+            <ol>
+            <li>Jelly Belly</li>
+            <li>Starburst</li>
+            <li>Skittles</li>
+            </ol>
+            """
         ]
         
         ScrollView {
-            VStack(alignment: .leading, spacing: 24.0) {
+            VStack(alignment: .leading, spacing: 4.0) {
                 ForEach(htmlStrings, id: \.self) { htmlString in
-                    if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
-                        FormattedBodyText(attributedString: attributedString)
-                            .bubbleBackground()
+                    HStack(alignment: .top, spacing: 0) {
+                        Text(htmlString)
+                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                            .padding(4.0)
+                        
+                        Divider()
+                            .background(.black)
+                        
+                        if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
+                            FormattedBodyText(attributedString: attributedString)
+                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                .bubbleBackground()
+                                .padding(4.0)
+                        }
                     }
+                    .border(.black)
                 }
+                
                 FormattedBodyText(attributedString: AttributedString("Some plain text wrapped in an AttributedString."))
                     .bubbleBackground()
+                
                 FormattedBodyText(text: "Some plain text that's not an attributed component.")
-                    .bubbleBackground()
-                FormattedBodyText(text: "Some plain text that's not an attributed component. This one is really long.")
                     .bubbleBackground()
                 
                 FormattedBodyText(text: "❤️", boostFontSize: true)
@@ -224,6 +259,5 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
             }
             .padding()
         }
-        .previewLayout(.sizeThatFits)
     }
 }
