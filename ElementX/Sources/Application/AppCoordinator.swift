@@ -336,7 +336,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     func notificationTapped(content: UNNotificationContent) async {
-        MXLog.info("[AppCoordinator] tappedNotification")
+        MXLog.info("Tapped Notification")
         
         guard let roomID = content.roomID,
               content.receiverID != nil else {
@@ -355,7 +355,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
-        MXLog.info("[AppCoordinator] handle notification reply")
+        MXLog.info("Handle notification reply")
         
         guard let roomID = content.roomID else {
             return
