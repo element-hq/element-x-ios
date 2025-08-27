@@ -104,7 +104,7 @@ struct AttributedStringBuilderV1: AttributedStringBuilderProtocol {
         removeDTCoreTextArtifacts(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
-        Self.cacheValue(result, forKey: htmlString, cacheKey: cacheKey)
+        Self.cacheValue(result, forKey: originalHTMLString, cacheKey: cacheKey)
         
         return result
     }
