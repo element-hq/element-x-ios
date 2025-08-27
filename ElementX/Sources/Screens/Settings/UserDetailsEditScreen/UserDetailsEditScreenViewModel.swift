@@ -20,16 +20,15 @@ class UserDetailsEditScreenViewModel: UserDetailsEditScreenViewModelType, UserDe
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(clientProxy: ClientProxyProtocol,
-         mediaProvider: MediaProviderProtocol,
+    init(userSession: UserSessionProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          userIndicatorController: UserIndicatorControllerProtocol) {
-        self.clientProxy = clientProxy
+        clientProxy = userSession.clientProxy
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: UserDetailsEditScreenViewState(userID: clientProxy.userID,
-                                                                    bindings: .init()), mediaProvider: mediaProvider)
+                                                                    bindings: .init()), mediaProvider: userSession.mediaProvider)
         
         clientProxy.userAvatarURLPublisher
             .receive(on: DispatchQueue.main)

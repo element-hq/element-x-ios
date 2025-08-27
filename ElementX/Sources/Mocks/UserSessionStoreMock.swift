@@ -11,7 +11,7 @@ extension UserSessionStoreMock {
     convenience init(configuration: Configuration) {
         self.init()
         
-        userSessionForSessionDirectoriesPassphraseReturnValue = .success(UserSessionMock(.init(clientProxy: ClientProxyMock(.init()))))
+        userSessionForSessionDirectoriesPassphraseReturnValue = .success(UserSessionMock(.init()))
         clientSessionDelegate = KeychainControllerMock()
     }
 }

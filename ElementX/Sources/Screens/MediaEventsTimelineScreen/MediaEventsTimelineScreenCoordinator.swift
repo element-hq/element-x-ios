@@ -12,7 +12,7 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let mediaTimelineController: TimelineControllerProtocol
     let filesTimelineController: TimelineControllerProtocol
-    let mediaProvider: MediaProviderProtocol
+    let userSession: UserSessionProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let appMediator: AppMediatorProtocol
@@ -21,7 +21,6 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let emojiProvider: EmojiProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
-    let clientProxy: ClientProxyProtocol
 }
 
 enum MediaEventsTimelineScreenCoordinatorAction {
@@ -44,7 +43,7 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
         
         let mediaTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                                        timelineController: parameters.mediaTimelineController,
-                                                       mediaProvider: parameters.mediaProvider,
+                                                       userSession: parameters.userSession,
                                                        mediaPlayerProvider: parameters.mediaPlayerProvider,
                                                        voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                                        userIndicatorController: parameters.userIndicatorController,
@@ -52,12 +51,11 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appSettings: parameters.appSettings,
                                                        analyticsService: parameters.analytics,
                                                        emojiProvider: parameters.emojiProvider,
-                                                       timelineControllerFactory: parameters.timelineControllerFactory,
-                                                       clientProxy: parameters.clientProxy)
+                                                       timelineControllerFactory: parameters.timelineControllerFactory)
         
         let filesTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                                        timelineController: parameters.filesTimelineController,
-                                                       mediaProvider: parameters.mediaProvider,
+                                                       userSession: parameters.userSession,
                                                        mediaPlayerProvider: parameters.mediaPlayerProvider,
                                                        voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                                        userIndicatorController: parameters.userIndicatorController,
@@ -65,12 +63,11 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appSettings: parameters.appSettings,
                                                        analyticsService: parameters.analytics,
                                                        emojiProvider: parameters.emojiProvider,
-                                                       timelineControllerFactory: parameters.timelineControllerFactory,
-                                                       clientProxy: parameters.clientProxy)
+                                                       timelineControllerFactory: parameters.timelineControllerFactory)
         
         viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,
                                                        filesTimelineViewModel: filesTimelineViewModel,
-                                                       mediaProvider: parameters.mediaProvider,
+                                                       mediaProvider: parameters.userSession.mediaProvider,
                                                        userIndicatorController: parameters.userIndicatorController,
                                                        appMediator: parameters.appMediator)
         

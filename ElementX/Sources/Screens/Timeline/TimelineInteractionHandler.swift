@@ -33,7 +33,7 @@ enum TimelineInteractionHandlerAction {
 class TimelineInteractionHandler {
     private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: TimelineControllerProtocol
-    private let mediaProvider: MediaProviderProtocol
+    private let userSession: UserSessionProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let voiceMessageRecorder: VoiceMessageRecorderProtocol
     private let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
@@ -44,7 +44,6 @@ class TimelineInteractionHandler {
     private let emojiProvider: EmojiProviderProtocol
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
     private let pollInteractionHandler: PollInteractionHandlerProtocol
-    private let clientProxy: ClientProxyProtocol
     
     private let actionsSubject: PassthroughSubject<TimelineInteractionHandlerAction, Never> = .init()
     var actions: AnyPublisher<TimelineInteractionHandlerAction, Never> {
@@ -61,7 +60,7 @@ class TimelineInteractionHandler {
     
     init(roomProxy: JoinedRoomProxyProtocol,
          timelineController: TimelineControllerProtocol,
-         mediaProvider: MediaProviderProtocol,
+         userSession: UserSessionProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
          voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          voiceMessageRecorder: VoiceMessageRecorderProtocol,
@@ -70,11 +69,10 @@ class TimelineInteractionHandler {
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
          emojiProvider: EmojiProviderProtocol,
-         timelineControllerFactory: TimelineControllerFactoryProtocol,
-         clientProxy: ClientProxyProtocol) {
+         timelineControllerFactory: TimelineControllerFactoryProtocol) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
-        self.mediaProvider = mediaProvider
+        self.userSession = userSession
         self.mediaPlayerProvider = mediaPlayerProvider
         self.voiceMessageMediaManager = voiceMessageMediaManager
         self.voiceMessageRecorder = voiceMessageRecorder
@@ -84,7 +82,6 @@ class TimelineInteractionHandler {
         self.analyticsService = analyticsService
         self.emojiProvider = emojiProvider
         self.timelineControllerFactory = timelineControllerFactory
-        self.clientProxy = clientProxy
         
         pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService,
                                                         timelineController: timelineController)
@@ -582,14 +579,14 @@ class TimelineInteractionHandler {
                                                                                                                                  presentation: newTimelinePresentation,
                                                                                                                                  roomProxy: roomProxy,
                                                                                                                                  timelineItemFactory: timelineItemFactory,
-                                                                                                                                 mediaProvider: mediaProvider) else {
+                                                                                                                                 mediaProvider: userSession.mediaProvider) else {
                 MXLog.error("Failed presenting media timeline")
                 return .none
             }
             
             let timelineViewModel = TimelineViewModel(roomProxy: roomProxy,
                                                       timelineController: timelineController,
-                                                      mediaProvider: mediaProvider,
+                                                      userSession: userSession,
                                                       mediaPlayerProvider: mediaPlayerProvider,
                                                       voiceMessageMediaManager: voiceMessageMediaManager,
                                                       userIndicatorController: userIndicatorController,
@@ -597,8 +594,7 @@ class TimelineInteractionHandler {
                                                       appSettings: appSettings,
                                                       analyticsService: analyticsService,
                                                       emojiProvider: emojiProvider,
-                                                      timelineControllerFactory: timelineControllerFactory,
-                                                      clientProxy: clientProxy)
+                                                      timelineControllerFactory: timelineControllerFactory)
             
             return .displayMediaPreview(item: item, timelineViewModel: .new(timelineViewModel))
         } else {

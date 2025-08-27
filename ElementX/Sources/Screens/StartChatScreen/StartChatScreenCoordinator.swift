@@ -82,10 +82,9 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func presentInviteUsersScreen() {
-        let inviteParameters = InviteUsersScreenCoordinatorParameters(clientProxy: parameters.userSession.clientProxy,
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: parameters.userSession,
                                                                       selectedUsers: selectedUsersPublisher,
                                                                       roomType: .draft,
-                                                                      mediaProvider: parameters.userSession.mediaProvider,
                                                                       userDiscoveryService: parameters.userDiscoveryService,
                                                                       userIndicatorController: parameters.userIndicatorController)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)

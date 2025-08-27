@@ -38,10 +38,9 @@ class RoomScreenViewModelTests: XCTestCase {
         }
         // setup the room proxy actions publisher
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
-        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
@@ -119,10 +118,9 @@ class RoomScreenViewModelTests: XCTestCase {
                                                       .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: .init("2"))),
                                                       .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test3")), uniqueID: .init("3")))]
         roomProxyMock.pinnedEventsTimelineReturnValue = .success(pinnedTimelineMock)
-        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: "test1",
-                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
@@ -178,10 +176,9 @@ class RoomScreenViewModelTests: XCTestCase {
         let infoSubject = CurrentValueSubject<RoomInfoProxyProtocol, Never>(roomInfoProxyMock)
         roomProxyMock.underlyingInfoPublisher = infoSubject.asCurrentValuePublisher()
         
-        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
@@ -216,10 +213,9 @@ class RoomScreenViewModelTests: XCTestCase {
         // Given a room screen with no ongoing call.
         let ongoingCallRoomIDSubject = CurrentValueSubject<String?, Never>(nil)
         let roomProxyMock = JoinedRoomProxyMock(.init(id: "MyRoomID"))
-        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: ongoingCallRoomIDSubject.asCurrentValuePublisher(),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
@@ -262,10 +258,9 @@ class RoomScreenViewModelTests: XCTestCase {
             expectation.fulfill()
             return .success(())
         }
-        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
@@ -285,10 +280,9 @@ class RoomScreenViewModelTests: XCTestCase {
                                                                                    // This one should be filtered
                                                                                    KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org", isSeen: true))]),
                                                       joinRule: .knock))
-        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
@@ -321,10 +315,9 @@ class RoomScreenViewModelTests: XCTestCase {
                                                                                    // This one should be filtered
                                                                                    KnockRequestProxyMock(.init(eventID: "2", userID: "@bob:matrix.org"))]),
                                                       joinRule: .knock))
-        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
@@ -352,10 +345,9 @@ class RoomScreenViewModelTests: XCTestCase {
         ServiceLocator.shared.settings.knockingEnabled = true
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loading,
                                                       joinRule: .knock))
-        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,
@@ -374,10 +366,9 @@ class RoomScreenViewModelTests: XCTestCase {
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([KnockRequestProxyMock(.init(eventID: "1", userID: "@alice:matrix.org", displayName: "Alice", reason: "Hello World!"))]),
                                                       joinRule: .knock,
                                                       powerLevelsConfiguration: .init(canUserInvite: false)))
-        let viewModel = RoomScreenViewModel(clientProxy: ClientProxyMock(),
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: nil,
-                                            mediaProvider: MediaProviderMock(configuration: .init()),
                                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                                             appMediator: AppMediatorMock.default,
                                             appSettings: ServiceLocator.shared.settings,

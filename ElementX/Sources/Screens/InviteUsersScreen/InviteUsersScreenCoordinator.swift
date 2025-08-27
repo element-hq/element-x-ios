@@ -9,10 +9,9 @@ import Combine
 import SwiftUI
 
 struct InviteUsersScreenCoordinatorParameters {
-    let clientProxy: ClientProxyProtocol
+    let userSession: UserSessionProtocol
     let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>
     let roomType: InviteUsersScreenRoomType
-    let mediaProvider: MediaProviderProtocol
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -34,10 +33,9 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: InviteUsersScreenCoordinatorParameters) {
-        viewModel = InviteUsersScreenViewModel(clientProxy: parameters.clientProxy,
+        viewModel = InviteUsersScreenViewModel(userSession: parameters.userSession,
                                                selectedUsers: parameters.selectedUsers,
                                                roomType: parameters.roomType,
-                                               mediaProvider: parameters.mediaProvider,
                                                userDiscoveryService: parameters.userDiscoveryService,
                                                userIndicatorController: parameters.userIndicatorController)
     }

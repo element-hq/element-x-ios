@@ -257,7 +257,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
         let roomViewModel = RoomScreenViewModel.mock(roomProxyMock: roomProxyMock)
         let timelineViewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                                   timelineController: MockTimelineController(),
-                                                  mediaProvider: MediaProviderMock(configuration: .init()),
+                                                  userSession: UserSessionMock(.init()),
                                                   mediaPlayerProvider: MediaPlayerProviderMock(),
                                                   voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                                   userIndicatorController: ServiceLocator.shared.userIndicatorController,
@@ -265,8 +265,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                   appSettings: ServiceLocator.shared.settings,
                                                   analyticsService: ServiceLocator.shared.analytics,
                                                   emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                                  clientProxy: ClientProxyMock(.init()))
+                                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         return .init(room: roomViewModel, timeline: timelineViewModel)
     }

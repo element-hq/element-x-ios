@@ -274,7 +274,7 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         
         return TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Preview room")),
                                  timelineController: timelineController,
-                                 mediaProvider: MediaProviderMock(configuration: .init()),
+                                 userSession: UserSessionMock(.init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),
@@ -282,7 +282,6 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                  appSettings: ServiceLocator.shared.settings,
                                  analyticsService: ServiceLocator.shared.analytics,
                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                 clientProxy: ClientProxyMock(.init()))
+                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
 }

@@ -19,13 +19,12 @@ class RoomDirectorySearchScreenViewModel: RoomDirectorySearchScreenViewModelType
         actionsSubject.eraseToAnyPublisher()
     }
         
-    init(clientProxy: ClientProxyProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         mediaProvider: MediaProviderProtocol) {
-        roomDirectorySearchProxy = clientProxy.roomDirectorySearchProxy()
+    init(userSession: UserSessionProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol) {
+        roomDirectorySearchProxy = userSession.clientProxy.roomDirectorySearchProxy()
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: RoomDirectorySearchScreenViewState(), mediaProvider: mediaProvider)
+        super.init(initialViewState: RoomDirectorySearchScreenViewState(), mediaProvider: userSession.mediaProvider)
         
         state.rooms = roomDirectorySearchProxy.resultsPublisher.value
         

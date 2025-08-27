@@ -23,23 +23,24 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(clientProxy: ClientProxyProtocol,
+    init(userSession: UserSessionProtocol,
          selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
          roomType: InviteUsersScreenRoomType,
-         mediaProvider: MediaProviderProtocol,
          userDiscoveryService: UserDiscoveryServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomType = roomType
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value, isCreatingRoom: roomType.isCreatingRoom), mediaProvider: mediaProvider)
+        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value,
+                                                                isCreatingRoom: roomType.isCreatingRoom),
+                   mediaProvider: userSession.mediaProvider)
                 
         setupSubscriptions(selectedUsers: selectedUsers)
         fetchMembersIfNeeded()
         
         Task {
-            suggestedUsers = await clientProxy.recentConversationCounterparts()
+            suggestedUsers = await userSession.clientProxy.recentConversationCounterparts()
             
             if state.usersSection.type == .suggestions {
                 state.usersSection = .init(type: .suggestions, users: suggestedUsers)

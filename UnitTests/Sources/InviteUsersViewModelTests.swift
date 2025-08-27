@@ -89,10 +89,9 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         usersSubject.send([])
-        let viewModel = InviteUsersScreenViewModel(clientProxy: ClientProxyMock(.init()),
+        let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init()),
                                                    selectedUsers: usersSubject.asCurrentValuePublisher(),
                                                    roomType: roomType,
-                                                   mediaProvider: MediaProviderMock(configuration: .init()),
                                                    userDiscoveryService: userDiscoveryService,
                                                    userIndicatorController: UserIndicatorControllerMock())
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])

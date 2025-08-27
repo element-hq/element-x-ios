@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 struct UserSessionMockConfiguration {
-    let clientProxy: ClientProxyProtocol
+    var clientProxy: ClientProxyProtocol = ClientProxyMock(.init())
 }
 
 extension UserSessionMock {
