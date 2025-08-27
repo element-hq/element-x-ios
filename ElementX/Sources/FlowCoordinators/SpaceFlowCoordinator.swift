@@ -18,12 +18,11 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     private let spaceServiceProxy: SpaceServiceProxyProtocol
     private let isChildFlow: Bool
     
-    private let mediaProvider: MediaProviderProtocol
-    
     private let navigationStackCoordinator: NavigationStackCoordinator
-    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var childSpaceFlowCoordinator: SpaceFlowCoordinator?
+    
+    private let flowParameters: CommonFlowParameters
     
     indirect enum State: StateType {
         /// The state machine hasn't started.
@@ -57,17 +56,14 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     init(spaceRoomListProxy: SpaceRoomListProxyProtocol,
          spaceServiceProxy: SpaceServiceProxyProtocol,
          isChildFlow: Bool,
-         mediaProvider: MediaProviderProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         flowParameters: CommonFlowParameters) {
         self.spaceRoomListProxy = spaceRoomListProxy
         self.spaceServiceProxy = spaceServiceProxy
         self.isChildFlow = isChildFlow
-        
-        self.mediaProvider = mediaProvider
+        self.flowParameters = flowParameters
         
         self.navigationStackCoordinator = navigationStackCoordinator
-        self.userIndicatorController = userIndicatorController
         
         stateMachine = .init(state: .initial)
         configureStateMachine()
@@ -130,8 +126,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSpace() {
         let parameters = SpaceScreenCoordinatorParameters(spaceRoomListProxy: spaceRoomListProxy,
                                                           spaceServiceProxy: spaceServiceProxy,
-                                                          mediaProvider: mediaProvider,
-                                                          userIndicatorController: userIndicatorController)
+                                                          mediaProvider: flowParameters.userSession.mediaProvider,
+                                                          userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = SpaceScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher
             .sink { [weak self] action in
@@ -160,9 +156,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = SpaceFlowCoordinator(spaceRoomListProxy: spaceRoomListProxy,
                                                spaceServiceProxy: spaceServiceProxy,
                                                isChildFlow: true,
-                                               mediaProvider: mediaProvider,
                                                navigationStackCoordinator: navigationStackCoordinator,
-                                               userIndicatorController: userIndicatorController)
+                                               flowParameters: flowParameters)
         
         coordinator.actionsPublisher
             .sink { [weak self] action in

@@ -57,23 +57,18 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     
     private var verificationStateCancellable: AnyCancellable?
     
-    init(userSession: UserSessionProtocol,
+    init(isNewLogin: Bool,
          appLockService: AppLockServiceProtocol,
-         analyticsService: AnalyticsService,
-         appSettings: AppSettings,
-         notificationManager: NotificationManagerProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         windowManager: WindowManagerProtocol,
-         isNewLogin: Bool) {
-        self.userSession = userSession
-        self.appLockService = appLockService
-        self.analyticsService = analyticsService
-        self.appSettings = appSettings
-        self.notificationManager = notificationManager
-        self.userIndicatorController = userIndicatorController
-        self.windowManager = windowManager
+         flowParameters: CommonFlowParameters) {
         self.isNewLogin = isNewLogin
+        userSession = flowParameters.userSession
+        self.appLockService = appLockService
+        analyticsService = flowParameters.analytics
+        appSettings = flowParameters.appSettings
+        notificationManager = flowParameters.notificationManager
+        userIndicatorController = flowParameters.userIndicatorController
+        windowManager = flowParameters.windowManager
         
         self.navigationStackCoordinator = navigationStackCoordinator
         
@@ -298,7 +293,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentRecoveryKeyScreen() {
         let parameters = SecureBackupRecoveryKeyScreenCoordinatorParameters(secureBackupController: userSession.clientProxy.secureBackupController,
-                                                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                            userIndicatorController: userIndicatorController,
                                                                             isModallyPresented: false)
         
         let coordinator = SecureBackupRecoveryKeyScreenCoordinator(parameters: parameters)

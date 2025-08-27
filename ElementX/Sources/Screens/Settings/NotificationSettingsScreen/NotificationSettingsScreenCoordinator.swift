@@ -12,7 +12,6 @@ struct NotificationSettingsScreenCoordinatorParameters {
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userSession: UserSessionProtocol
     let userNotificationCenter: UserNotificationCenterProtocol
-    let notificationSettings: NotificationSettingsProxyProtocol
     let isModallyPresented: Bool
 }
 
@@ -39,7 +38,7 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
         
         viewModel = NotificationSettingsScreenViewModel(appSettings: ServiceLocator.shared.settings,
                                                         userNotificationCenter: parameters.userNotificationCenter,
-                                                        notificationSettingsProxy: parameters.notificationSettings,
+                                                        notificationSettingsProxy: parameters.userSession.clientProxy.notificationSettings,
                                                         isModallyPresented: parameters.isModallyPresented)
     }
     
@@ -67,8 +66,7 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     private func presentEditScreen(chatType: NotificationSettingsChatType) {
         let editSettingsParameters = NotificationSettingsEditScreenCoordinatorParameters(navigationStackCoordinator: parameters.navigationStackCoordinator,
                                                                                          chatType: chatType,
-                                                                                         userSession: parameters.userSession,
-                                                                                         notificationSettings: parameters.notificationSettings)
+                                                                                         userSession: parameters.userSession)
         let editSettingsCoordinator = NotificationSettingsEditScreenCoordinator(parameters: editSettingsParameters)
         navigationStackCoordinator?.push(editSettingsCoordinator)
     }

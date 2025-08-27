@@ -21,14 +21,12 @@ enum UserSessionFlowCoordinatorAction {
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     enum HomeTab: Hashable { case chats, spaces }
     
-    private let userSession: UserSessionProtocol
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationTabCoordinator: NavigationTabCoordinator<HomeTab>
     private let appLockService: AppLockServiceProtocol
-    private let bugReportService: BugReportServiceProtocol
-    private let appMediator: AppMediatorProtocol
-    private let appSettings: AppSettings
-    private let analytics: AnalyticsService
+    private let flowParameters: CommonFlowParameters
+    
+    private var userSession: UserSessionProtocol { flowParameters.userSession }
     
     private let onboardingFlowCoordinator: OnboardingFlowCoordinator
     private let onboardingStackCoordinator: NavigationStackCoordinator
@@ -67,75 +65,46 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol,
-         isNewLogin: Bool,
+    init(isNewLogin: Bool,
          navigationRootCoordinator: NavigationRootCoordinator,
          appLockService: AppLockServiceProtocol,
-         bugReportService: BugReportServiceProtocol,
-         elementCallService: ElementCallServiceProtocol,
-         timelineControllerFactory: TimelineControllerFactoryProtocol,
-         appMediator: AppMediatorProtocol,
-         appSettings: AppSettings,
-         appHooks: AppHooks,
-         analytics: AnalyticsService,
-         notificationManager: NotificationManagerProtocol,
-         stateMachineFactory: StateMachineFactoryProtocol) {
-        self.userSession = userSession
+         flowParameters: CommonFlowParameters) {
         self.navigationRootCoordinator = navigationRootCoordinator
         self.appLockService = appLockService
-        self.bugReportService = bugReportService
-        self.appMediator = appMediator
-        self.appSettings = appSettings
-        self.analytics = analytics
+        self.flowParameters = flowParameters
         
         navigationTabCoordinator = NavigationTabCoordinator()
         navigationRootCoordinator.setRootCoordinator(navigationTabCoordinator)
         
         let chatsSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
-        chatsFlowCoordinator = ChatsFlowCoordinator(userSession: userSession,
-                                                    isNewLogin: isNewLogin,
+        chatsFlowCoordinator = ChatsFlowCoordinator(isNewLogin: isNewLogin,
                                                     navigationSplitCoordinator: chatsSplitCoordinator,
-                                                    appLockService: appLockService,
-                                                    bugReportService: bugReportService,
-                                                    elementCallService: elementCallService,
-                                                    timelineControllerFactory: timelineControllerFactory,
-                                                    appMediator: appMediator,
-                                                    appSettings: appSettings,
-                                                    appHooks: appHooks,
-                                                    analytics: analytics,
-                                                    notificationManager: notificationManager,
-                                                    stateMachineFactory: stateMachineFactory)
+                                                    flowParameters: flowParameters)
         chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
         chatsTabDetails.navigationSplitCoordinator = chatsSplitCoordinator
         
-        if !appSettings.spacesEnabled {
+        if !flowParameters.appSettings.spacesEnabled {
             chatsTabDetails.barVisibilityOverride = .hidden
         }
         
         let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
-        spaceExplorerFlowCoordinator = SpaceExplorerFlowCoordinator(userSession: userSession,
-                                                                    navigationSplitCoordinator: spacesSplitCoordinator,
-                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        spaceExplorerFlowCoordinator = SpaceExplorerFlowCoordinator(navigationSplitCoordinator: spacesSplitCoordinator,
+                                                                    flowParameters: flowParameters)
         spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
         spacesTabDetails.navigationSplitCoordinator = spacesSplitCoordinator
         
         onboardingStackCoordinator = NavigationStackCoordinator()
-        onboardingFlowCoordinator = OnboardingFlowCoordinator(userSession: userSession,
+        onboardingFlowCoordinator = OnboardingFlowCoordinator(isNewLogin: isNewLogin,
                                                               appLockService: appLockService,
-                                                              analyticsService: analytics,
-                                                              appSettings: appSettings,
-                                                              notificationManager: notificationManager,
                                                               navigationStackCoordinator: onboardingStackCoordinator,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                              windowManager: appMediator.windowManager,
-                                                              isNewLogin: isNewLogin)
+                                                              flowParameters: flowParameters)
         
         navigationTabCoordinator.setTabs([
             .init(coordinator: chatsSplitCoordinator, details: chatsTabDetails),
             .init(coordinator: spacesSplitCoordinator, details: spacesTabDetails)
         ])
         
-        stateMachine = stateMachineFactory.makeUserSessionFlowStateMachine(state: .initial)
+        stateMachine = flowParameters.stateMachineFactory.makeUserSessionFlowStateMachine(state: .initial)
         configureStateMachine()
         
         setupObservers()
@@ -272,7 +241,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        appSettings.$spacesEnabled
+        flowParameters.appSettings.$spacesEnabled
             .combineLatest(userSession.clientProxy.spaceService.joinedSpacesPublisher)
             .map { $0 && !$1.isEmpty ? nil : .hidden }
             .weakAssign(to: \.chatsTabDetails.barVisibilityOverride, on: self)
@@ -294,16 +263,9 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startSettingsFlow() {
         let navigationStackCoordinator = NavigationStackCoordinator()
-        let coordinator = SettingsFlowCoordinator(parameters: .init(userSession: userSession,
-                                                                    windowManager: appMediator.windowManager,
-                                                                    appLockService: appLockService,
-                                                                    bugReportService: bugReportService,
-                                                                    notificationSettings: userSession.clientProxy.notificationSettings,
-                                                                    secureBackupController: userSession.clientProxy.secureBackupController,
-                                                                    appSettings: appSettings,
-                                                                    navigationStackCoordinator: navigationStackCoordinator,
-                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                    analytics: analytics))
+        let coordinator = SettingsFlowCoordinator(appLockService: appLockService,
+                                                  navigationStackCoordinator: navigationStackCoordinator,
+                                                  flowParameters: flowParameters)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -365,7 +327,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController,
                                                                         flow: flow,
-                                                                        appSettings: appSettings,
+                                                                        appSettings: flowParameters.appSettings,
                                                                         mediaProvider: userSession.mediaProvider)
         
         let coordinator = SessionVerificationScreenCoordinator(parameters: parameters)
@@ -390,7 +352,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let secureBackupController = userSession.clientProxy.secureBackupController
         
         guard case let .success(isLastDevice) = await userSession.clientProxy.isOnlyDeviceLeft() else {
-            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init())
+            flowParameters.userIndicatorController.alertInfo = .init(id: .init())
             return
         }
         
@@ -400,26 +362,26 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         guard secureBackupController.recoveryState.value == .enabled else {
-            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                            title: L10n.screenSignoutRecoveryDisabledTitle,
-                                                                            message: L10n.screenSignoutRecoveryDisabledSubtitle,
-                                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                                                self?.actionsSubject.send(.logout)
-                                                                            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
-                                                                                self?.chatsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
-                                                                            })
+            flowParameters.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                     title: L10n.screenSignoutRecoveryDisabledTitle,
+                                                                     message: L10n.screenSignoutRecoveryDisabledSubtitle,
+                                                                     primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                         self?.actionsSubject.send(.logout)
+                                                                     }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
+                                                                         self?.chatsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
+                                                                     })
             return
         }
         
         guard secureBackupController.keyBackupState.value == .enabled else {
-            ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                            title: L10n.screenSignoutKeyBackupDisabledTitle,
-                                                                            message: L10n.screenSignoutKeyBackupDisabledSubtitle,
-                                                                            primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                                                self?.actionsSubject.send(.logout)
-                                                                            }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
-                                                                                self?.chatsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
-                                                                            })
+            flowParameters.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                     title: L10n.screenSignoutKeyBackupDisabledTitle,
+                                                                     message: L10n.screenSignoutKeyBackupDisabledSubtitle,
+                                                                     primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                         self?.actionsSubject.send(.logout)
+                                                                     }, secondaryButton: .init(title: L10n.commonSettings, role: .cancel) { [weak self] in
+                                                                         self?.chatsFlowCoordinator.handleAppRoute(.chatBackupSettings, animated: true)
+                                                                     })
             return
         }
         
@@ -427,17 +389,17 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func logout() {
-        ServiceLocator.shared.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                        title: L10n.screenSignoutConfirmationDialogTitle,
-                                                                        message: L10n.screenSignoutConfirmationDialogContent,
-                                                                        primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
-                                                                            self?.actionsSubject.send(.logout)
-                                                                        })
+        flowParameters.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                 title: L10n.screenSignoutConfirmationDialogTitle,
+                                                                 message: L10n.screenSignoutConfirmationDialogContent,
+                                                                 primaryButton: .init(title: L10n.screenSignoutConfirmationDialogSubmit, role: .destructive) { [weak self] in
+                                                                     self?.actionsSubject.send(.logout)
+                                                                 })
     }
     
     private func presentSecureBackupLogoutConfirmationScreen() {
         let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
-                                                                                            appMediator: appMediator))
+                                                                                            appMediator: flowParameters.appMediator))
         
         coordinator.actions
             .sink { [weak self] action in
