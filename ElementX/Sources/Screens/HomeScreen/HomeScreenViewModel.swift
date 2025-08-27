@@ -957,7 +957,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                     state.walletTokenNextPageParams = walletTokenBalances.nextPageParams
                     
                     // fetch stake data
-                    fetchStakingData(userWalletAddress: walletAddress)
+                    fetchStakingData(userWalletAddress: walletAddress, refreshAllData: silentRefresh)
                 }
 //                if case .success(let walletNFTs) = results.1 {
 //                    var homeWalletContent: [HomeScreenWalletContent] = []

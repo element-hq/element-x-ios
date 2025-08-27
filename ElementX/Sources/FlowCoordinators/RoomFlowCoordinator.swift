@@ -98,7 +98,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         self.isChildFlow = isChildFlow
         self.navigationStackCoordinator = navigationStackCoordinator
         self.flowParameters = flowParameters
-        zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings)
+        zeroAttachmentService = ZeroAttachmentService(appSettings: flowParameters.appSettings)
         
         setupStateMachine()
         
@@ -537,7 +537,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let userID = userSession.clientProxy.userID
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
+                                                          stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
                                                           zeroAttachmentService: zeroAttachmentService)
         let timelineController = flowParameters.timelineControllerFactory.buildTimelineController(roomProxy: roomProxy,
                                                                                                   initialFocussedEventID: presentationAction?.focusedEvent?.eventID,
@@ -1660,8 +1660,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func startUserProfileWithFeedFlow(userId: String) {
         let flowCoordinator = UserFeedProfileFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
                                                              userSession: userSession,
-                                                             userIndicatorController: userIndicatorController,
-                                                             appMediator: appMediator,
+                                                             userIndicatorController: flowParameters.userIndicatorController,
+                                                             appMediator: flowParameters.appMediator,
                                                              fromHomeFlow: false,
                                                              userId: userId,
                                                              userFeedProfile: nil,
@@ -1691,8 +1691,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                   roomProxy: roomProxy,
                                                                   clientProxy: userSession.clientProxy,
                                                                   mediaProvider: userSession.mediaProvider,
-                                                                  userIndicatorController: userIndicatorController,
-                                                                  analytics: analytics)
+                                                                  userIndicatorController: flowParameters.userIndicatorController,
+                                                                  analytics: flowParameters.analytics)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
 
         coordinator.actions.sink { [weak self] action in

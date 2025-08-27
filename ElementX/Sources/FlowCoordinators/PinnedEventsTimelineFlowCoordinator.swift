@@ -38,7 +38,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         self.navigationStackCoordinator = navigationStackCoordinator
         self.flowParameters = flowParameters
         
-        zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings, isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted)
+        zeroAttachmentService = ZeroAttachmentService(appSettings: flowParameters.appSettings,
+                                                      isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted)
     }
     
     func start() {

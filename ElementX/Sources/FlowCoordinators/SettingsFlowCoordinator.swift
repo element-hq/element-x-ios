@@ -119,7 +119,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentZeroProSubSettings()
                 case .claimRewards:
                     actionsSubject.send(.claimUserRewards)
-                    parameters.navigationStackCoordinator.pop()
+                    navigationStackCoordinator.pop()
                 case .manageWallets:
                     presentManageWalletsSettings()
                 }
@@ -133,7 +133,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = EncryptionSettingsFlowCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                               appSettings: flowParameters.appSettings,
                                                                               userIndicatorController: flowParameters.userIndicatorController,
-                                                                              navigationStackCoordinator: navigationStackCoordinator))
+                                                                              navigationStackCoordinator: navigationStackCoordinator,
+                                                                              windowManager: flowParameters.windowManager))
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action {
             case .complete:
@@ -225,7 +226,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                 case .clearCache:
                     actionsSubject.send(.clearCache)
                 case .deleteAccount:
-                    parameters.navigationStackCoordinator.setSheetCoordinator(nil)
+                    navigationStackCoordinator.setSheetCoordinator(nil)
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         self.showDeleteZeroAccountConfirmation()
@@ -257,13 +258,13 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentUserRewards() {
-        let parameters = UserRewardsSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
+        let parameters = UserRewardsSettingsScreenCoordinatorParameters(userSession: flowParameters.userSession)
         let coordinator = UserRewardsSettingsScreenCoordinator(parameters: parameters)
         navigationStackCoordinator.push(coordinator)
     }
     
     private func presentInviteFriend() {
-        let parameters = InviteFriendSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
+        let parameters = InviteFriendSettingsScreenCoordinatorParameters(userSession: flowParameters.userSession)
         let coordinator = InviteFriendSettingsScreenCoordinator(parameters: parameters)
         navigationStackCoordinator.push(coordinator)
     }
@@ -272,20 +273,20 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
 //        let parameters = ReferAFriendSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
 //        let coordinator = ReferAFriendSettingsScreenCoordinator(parameters: parameters)
 //        navigationStackCoordinator.push(coordinator)
-        let parameters = InviteFriendSettingsScreenCoordinatorParameters(userSession: parameters.userSession)
+        let parameters = InviteFriendSettingsScreenCoordinatorParameters(userSession: flowParameters.userSession)
         let coordinator = InviteFriendSettingsScreenCoordinator(parameters: parameters)
         navigationStackCoordinator.push(coordinator)
     }
     
     private func presentZeroProSubSettings() {
-        let parameters = ZeroProSubcriptionScreenCoordinatorParams(userSession: parameters.userSession)
+        let parameters = ZeroProSubcriptionScreenCoordinatorParams(userSession: flowParameters.userSession)
         let coordinator = ZeroProSubcriptionScreenCoordinator(parameters: parameters)
         navigationStackCoordinator.push(coordinator)
     }
     
     private func presentManageWalletsSettings() {
-        let parameters = ManageWalletsCoordinatorParameters(userSession: parameters.userSession,
-                                                            userIndicatorController: parameters.userIndicatorController)
+        let parameters = ManageWalletsCoordinatorParameters(userSession: flowParameters.userSession,
+                                                            userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = ManageWalletsCoordinator(parameters: parameters)
         navigationStackCoordinator.push(coordinator)
     }
@@ -303,7 +304,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: ZERO Account Management
     
     private func showDeleteZeroAccountConfirmation() {
-        parameters.userIndicatorController.alertInfo = .init(id: .init(),
+        flowParameters.userIndicatorController.alertInfo = .init(id: .init(),
                                                                         title: "Delete Account",
                                                                         message: "Are you sure you want to delete your account? You won't be able to recover your account later!",
                                                                         primaryButton: .init(title: L10n.actionConfirm, role: .destructive) { [weak self] in

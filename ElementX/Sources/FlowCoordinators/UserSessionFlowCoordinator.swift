@@ -465,10 +465,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         let inviteCode = CreateAccountHelper.shared.inviteCode
         let stackCoordinator = NavigationStackCoordinator()
         let parameters = CompleteProfileScreenParameters(clientProxy: userSession.clientProxy,
-                                                         userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                         mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
-                                                         orientationManager: appMediator.windowManager,
-                                                         appSettings: appSettings,
+                                                         userIndicatorController: flowParameters.userIndicatorController,
+                                                         mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
+                                                         orientationManager: flowParameters.appMediator.windowManager,
+                                                         appSettings: flowParameters.appSettings,
                                                          navigationCoordinator: stackCoordinator,
                                                          inviteCode: inviteCode)
         let coordinator = CompleteProfileScreenCoordinator(parameters: parameters)

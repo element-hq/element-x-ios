@@ -927,8 +927,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                                                     fromFeedDetails: Bool) {
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(
             mode: .init(source: .photoLibrary, selectionType: .single),
-            userIndicatorController: ServiceLocator.shared.userIndicatorController,
-            orientationManager: appMediator.windowManager,
+            userIndicatorController: flowParameters.userIndicatorController,
+            orientationManager: flowParameters.windowManager,
         ) { [weak self] action in
             guard let self else {
                 return
@@ -967,7 +967,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         let flowCoordinator = UserFeedProfileFlowCoordinator(navigationStackCoordinator: detailNavigationStackCoordinator,
                                                              userSession: userSession,
                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                             appMediator: appMediator,
+                                                             appMediator: flowParameters.appMediator,
                                                              fromHomeFlow: true,
                                                              userId: userId,
                                                              userFeedProfile: profile,
@@ -999,8 +999,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                                                                 isPresentedModally: true,
                                                                 clientProxy: userSession.clientProxy,
                                                                 mediaProvider: userSession.mediaProvider,
-                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                analytics: analytics)
+                                                                userIndicatorController: flowParameters.userIndicatorController,
+                                                                analytics: flowParameters.analytics)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
@@ -1028,8 +1028,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                                                  meowPrice: ZeroCurrency?) {
         let flowCoordinator = ZeroWalletTransactionsFlowCoordinator(rootStackCoordinator: detailNavigationStackCoordinator,
                                                                     userSession: userSession,
-                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                    appMediator: appMediator,
+                                                                    userIndicatorController: flowParameters.userIndicatorController,
+                                                                    appMediator: flowParameters.appMediator,
                                                                     transactionType: type,
                                                                     meowPrice: meowPrice)
         flowCoordinator.actionsPublisher.sink { [weak self] action in
@@ -1067,7 +1067,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         let userDiscoveryService = UserDiscoveryService(clientProxy: userSession.clientProxy)
         let parameters = SearchUserScreenCoordinatorParameters(userSession: userSession,
                                                                userDiscoveryService: userDiscoveryService,
-                                                               appSettings: appSettings)
+                                                               appSettings: flowParameters.appSettings)
         
         let coordinator = SearchUserScreenCoordinator(parameters: parameters)
         coordinator.actions.sink { [weak self] action in
