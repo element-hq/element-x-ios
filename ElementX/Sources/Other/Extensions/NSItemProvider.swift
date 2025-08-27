@@ -125,9 +125,14 @@ extension NSItemProvider {
         let supportedContentTypes = registeredContentTypes
             .filter { isMimeTypeSupported($0.preferredMIMEType) || isIdentifierSupported($0.identifier) }
         
-        // If we can't find any supported types try to fallback to the first with
-        // a valid extension. Return nil otherwise.
+        // If we can't find any supported types but we do find a fileURL, use
+        // the sibling type that provides a correct file extension for it.
+        // Return nil otherwise which will make it be inserted into the composer as text.
         guard !supportedContentTypes.isEmpty else {
+            guard registeredContentTypes.contains(where: { $0.conforms(to: .fileURL) }) else {
+                return nil
+            }
+                        
             for type in registeredContentTypes {
                 if let fileExtension = type.preferredFilenameExtension {
                     return .init(type: type, fileExtension: fileExtension)

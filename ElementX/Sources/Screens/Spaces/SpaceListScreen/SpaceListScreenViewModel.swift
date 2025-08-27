@@ -12,24 +12,31 @@ typealias SpaceListScreenViewModelType = StateStoreViewModelV2<SpaceListScreenVi
 
 class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenViewModelProtocol {
     private let spaceServiceProxy: SpaceServiceProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<SpaceListScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SpaceListScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(userSession: UserSessionProtocol, spaceServiceProxy: SpaceServiceProxyProtocol) {
-        self.spaceServiceProxy = spaceServiceProxy
+    init(userSession: UserSessionProtocol,
+         selectedSpaceSubject: CurrentValuePublisher<String?, Never>,
+         userIndicatorController: UserIndicatorControllerProtocol) {
+        spaceServiceProxy = userSession.clientProxy.spaceService
+        self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: SpaceListScreenViewState(userID: userSession.clientProxy.userID,
                                                               joinedSpaces: spaceServiceProxy.joinedSpacesPublisher.value,
-                                                              joinedRoomsCount: 0,
                                                               bindings: .init()),
                    mediaProvider: userSession.mediaProvider)
         
         spaceServiceProxy.joinedSpacesPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.joinedSpaces, on: self)
+            .store(in: &cancellables)
+        
+        selectedSpaceSubject
+            .weakAssign(to: \.state.selectedSpaceID, on: self)
             .store(in: &cancellables)
         
         userSession.clientProxy.userAvatarURLPublisher
@@ -49,12 +56,35 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
         MXLog.info("View model: received view action: \(viewAction)")
         
         switch viewAction {
-        case .spaceAction(.select(let spaceRoom)):
-            actionsSubject.send(.selectSpace(spaceRoom))
+        case .spaceAction(.select(let spaceRoomProxy)):
+            Task { await selectSpace(spaceRoomProxy) }
         case .spaceAction(.join(let spaceRoom)):
             #warning("Implement joining.")
         case .showSettings:
             actionsSubject.send(.showSettings)
         }
+    }
+    
+    // MARK: - Private
+    
+    private func selectSpace(_ spaceRoomProxy: SpaceRoomProxyProtocol) async {
+        switch await spaceServiceProxy.spaceRoomList(for: spaceRoomProxy) {
+        case .success(let spaceRoomListProxy):
+            actionsSubject.send(.selectSpace(spaceRoomListProxy))
+        case .failure(let error):
+            MXLog.error("Unable to select space: \(error)")
+            showFailureIndicator()
+        }
+    }
+    
+    // MARK: - Indicators
+    
+    private static var failureIndicatorID: String { "\(Self.self)-Failure" }
+    
+    private func showFailureIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorID,
+                                                              type: .toast,
+                                                              title: L10n.errorUnknown,
+                                                              iconName: "xmark"))
     }
 }

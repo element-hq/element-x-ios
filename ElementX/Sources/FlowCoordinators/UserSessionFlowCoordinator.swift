@@ -108,7 +108,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     notificationManager: notificationManager,
                                                     stateMachineFactory: stateMachineFactory)
         chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
-        chatsTabDetails.barVisibility = .hidden
+        
+        if !appSettings.spacesEnabled {
+            chatsTabDetails.barVisibility = .hidden
+        }
         
         let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
         spaceExplorerFlowCoordinator = SpaceExplorerFlowCoordinator(userSession: userSession,
@@ -268,6 +271,12 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     logout()
                 }
             }
+            .store(in: &cancellables)
+        
+        appSettings.$spacesEnabled
+            .combineLatest(userSession.clientProxy.spaceService.joinedSpacesPublisher)
+            .map { $0 && !$1.isEmpty ? .automatic : .hidden }
+            .weakAssign(to: \.chatsTabDetails.barVisibility, on: self)
             .store(in: &cancellables)
         
         StateBus.shared.userAuthStatePublisher

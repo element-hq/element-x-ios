@@ -85,6 +85,8 @@ extension ClientProxyMock {
         secureBackupController = SecureBackupControllerMock(.init(recoveryState: configuration.recoveryState))
         resetIdentityReturnValue = .success(IdentityResetHandleSDKMock(.init()))
         
+        spaceService = SpaceServiceProxyMock(.init())
+        
         roomForIdentifierClosure = { [weak self] identifier in
             guard let room = self?.roomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier }) else {
                 return nil

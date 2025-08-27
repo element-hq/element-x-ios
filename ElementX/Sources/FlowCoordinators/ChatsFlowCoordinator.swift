@@ -228,7 +228,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                     }
                     roomFlowCoordinator.handleAppRoute(route, animated: animated)
                 } else {
-                    Task { await self.startRoomFlow(roomID: roomID, via: via, entryPoint: entryPoint, animated: animated) }
+                    startRoomFlow(roomID: roomID, via: via, entryPoint: entryPoint, animated: animated)
                 }
                 hideCallScreenOverlay() // Turn any active call into a PiP so that navigation from a notification is visible to the user.
             case(.roomList, .deselectRoom, .roomList):
@@ -429,6 +429,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                     startUserProfileWithFeedFlow(userID: nil, profile: profile, feedProtocol: feedProtocol)
                 case .startWalletTransaction(let walletTransactionProtocol, let type, let meowPrice):
                     startZeroWalletTransactionsFlow(walletTransactionProtocol, type: type, meowPrice: meowPrice)
+                case .searchUser:
+                    presentSearchUserScreen()
                 }
             }
             .store(in: &cancellables)
@@ -492,19 +494,19 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private func startRoomFlow(roomID: String,
                                via: [String],
                                entryPoint: RoomFlowCoordinatorEntryPoint,
-                               animated: Bool) async {
-        let coordinator = await RoomFlowCoordinator(roomID: roomID,
-                                                    userSession: userSession,
-                                                    isChildFlow: false,
-                                                    timelineControllerFactory: timelineControllerFactory,
-                                                    navigationStackCoordinator: detailNavigationStackCoordinator,
-                                                    emojiProvider: EmojiProvider(appSettings: appSettings),
-                                                    ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher,
-                                                    appMediator: appMediator,
-                                                    appSettings: appSettings,
-                                                    appHooks: appHooks,
-                                                    analytics: analytics,
-                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                               animated: Bool) {
+        let coordinator = RoomFlowCoordinator(roomID: roomID,
+                                              userSession: userSession,
+                                              isChildFlow: false,
+                                              timelineControllerFactory: timelineControllerFactory,
+                                              navigationStackCoordinator: detailNavigationStackCoordinator,
+                                              emojiProvider: EmojiProvider(appSettings: appSettings),
+                                              ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher,
+                                              appMediator: appMediator,
+                                              appSettings: appSettings,
+                                              appHooks: appHooks,
+                                              analytics: analytics,
+                                              userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -1089,5 +1091,30 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 showFailureIndicator()
             }
         }
+    }
+    
+    private func presentSearchUserScreen() {
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        
+        let userDiscoveryService = UserDiscoveryService(clientProxy: userSession.clientProxy)
+        let parameters = SearchUserScreenCoordinatorParameters(userSession: userSession,
+                                                               userDiscoveryService: userDiscoveryService,
+                                                               appSettings: appSettings)
+        
+        let coordinator = SearchUserScreenCoordinator(parameters: parameters)
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .close:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            case .selectUser(let user):
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+                startUserProfileWithFeedFlow(userID: user.userID, profile: nil, feedProtocol: nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: true)
     }
 }

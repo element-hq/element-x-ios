@@ -95,7 +95,7 @@ private struct StakePoolDetailsView : View {
         let stakeTokenName = selectedPool.stakeToken?.symbol.uppercased() ?? ""
         let rewardTokenName = selectedPool.rewardToken?.symbol.uppercased() ?? ""
         let rewardTokenBalance = selectedPool.pool.pendingRewards
-        let hasUnclaimedRewards = true
+        let hasUnclaimedRewards = rewardTokenBalance > 0
         
         Text("Pool Details")
             .font(.compound.bodyMDSemibold)

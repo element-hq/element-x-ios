@@ -8,7 +8,7 @@
 import Foundation
 
 enum SpaceListScreenViewModelAction {
-    case selectSpace(SpaceRoomProxyProtocol)
+    case selectSpace(SpaceRoomListProxyProtocol)
     case showSettings
 }
 
@@ -18,12 +18,16 @@ struct SpaceListScreenViewState: BindableState {
     var userAvatarURL: URL?
     
     var joinedSpaces: [SpaceRoomProxyProtocol]
-    var joinedRoomsCount: Int
+    var selectedSpaceID: String?
     
     var bindings: SpaceListScreenViewStateBindings
     
     var subtitle: String {
         L10n.screenSpaceListDetails(L10n.commonSpaces(joinedSpaces.count), L10n.commonRooms(joinedRoomsCount))
+    }
+    
+    var joinedRoomsCount: Int {
+        joinedSpaces.map(\.childrenCount).reduce(0, +)
     }
 }
 

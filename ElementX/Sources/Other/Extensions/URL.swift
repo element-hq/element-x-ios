@@ -98,15 +98,69 @@ extension URL {
     }
     
     var globalProxy: String? {
-        if let proxySettingsUnmanaged = CFNetworkCopySystemProxySettings() {
-            let proxySettings = proxySettingsUnmanaged.takeRetainedValue()
-            let proxiesUnmanaged = CFNetworkCopyProxiesForURL(self as CFURL, proxySettings)
-            if let proxy = (proxiesUnmanaged.takeRetainedValue() as? [[AnyHashable: Any]])?.first,
-               let hostname = proxy[kCFProxyHostNameKey] as? String,
-               let port = proxy[kCFProxyPortNumberKey] as? Int {
-                return "\(hostname):\(port)"
-            }
+        let span = MXLog.createSpan("Global proxy")
+        span.enter()
+        defer {
+            span.exit()
         }
+        
+        guard let proxySettings = CFNetworkCopySystemProxySettings()?.takeRetainedValue() else {
+            MXLog.error("Failed retrieving proxy settings")
+            return nil
+        }
+        
+        let proxies = CFNetworkCopyProxiesForURL(self as CFURL, proxySettings).takeRetainedValue() as? [[CFString: Any]]
+        
+        guard let firstProxy = proxies?.first,
+              let proxyType = firstProxy[kCFProxyTypeKey] as? String,
+              proxyType != kCFProxyTypeNone as String else {
+            MXLog.info("No global proxy configured.")
+            return nil
+        }
+        
+        MXLog.info("Found \(String(describing: proxies?.count)) proxies, using the first one.")
+    
+        if proxyType == kCFProxyTypeAutoConfigurationURL as String {
+            MXLog.info("Found proxy auto configuration")
+            
+            if let pacURL = firstProxy[kCFProxyAutoConfigurationURLKey] as? String {
+                MXLog.info("Retrieved global PAC URL: \(pacURL)")
+                return pacURL
+            } else {
+                MXLog.info("Failed retrieving PAC URL")
+            }
+        } else {
+            MXLog.info("Proxy type found as \(proxyType)")
+            
+            guard let host = firstProxy[kCFProxyHostNameKey] as? String else {
+                MXLog.error("Found proxy with invalid host name")
+                return nil
+            }
+            
+            let port = firstProxy[kCFProxyPortNumberKey] as? Int
+            
+            let scheme: String? = if proxyType == kCFProxyTypeHTTP as String {
+                "http"
+            } else if proxyType == kCFProxyTypeHTTPS as String {
+                "https"
+            } else if proxyType == kCFProxyTypeSOCKS as String {
+                "socks"
+            } else {
+                nil
+            }
+            
+            var components = URLComponents()
+            components.scheme = scheme
+            components.host = host
+            components.port = port
+            
+            MXLog.info("Found proxy components: \(String(describing: scheme)), \(host), \(String(describing: port))")
+            
+            MXLog.info("Retrieved global proxy: \(String(describing: components.url))")
+            
+            return components.url?.absoluteString
+        }
+    
         return nil
     }
     

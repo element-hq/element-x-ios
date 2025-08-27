@@ -22,20 +22,30 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     
     private let userIndicatorController: UserIndicatorControllerProtocol
     
+    private var spaceFlowCoordinator: SpaceFlowCoordinator?
+    
     enum State: StateType {
         /// The state machine hasn't started.
         case initial
         /// The root screen for this flow.
-        case spaceList
+        case spaceList(selectedSpaceID: String?)
     }
     
     enum Event: EventType {
         /// The flow is being started.
         case start
+        /// Request presentation for a particular space.
+        ///
+        /// The space's `SpaceRoomListProxyProtocol` must be provided in the `userInfo`.
+        case selectSpace
+        /// The space screen has been dismissed.
+        case deselectSpace
     }
     
     private let stateMachine: StateMachine<State, Event>
     private var cancellables: Set<AnyCancellable> = []
+    
+    private let selectedSpaceSubject = CurrentValueSubject<String?, Never>(nil)
     
     private let actionsSubject: PassthroughSubject<SpaceExplorerFlowCoordinatorAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SpaceExplorerFlowCoordinatorAction, Never> {
@@ -77,8 +87,26 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func configureStateMachine() {
-        stateMachine.addRoutes(event: .start, transitions: [.initial => .spaceList]) { [weak self] _ in
+        stateMachine.addRoutes(event: .start, transitions: [.initial => .spaceList(selectedSpaceID: nil)]) { [weak self] _ in
             self?.presentSpaceList()
+        }
+        
+        stateMachine.addRouteMapping { event, fromState, userInfo in
+            guard event == .selectSpace, case .spaceList = fromState else { return nil }
+            guard let spaceRoomListProxy = userInfo as? SpaceRoomListProxyProtocol else { fatalError("A space proxy must be provided.") }
+            return .spaceList(selectedSpaceID: spaceRoomListProxy.spaceRoom.id)
+        } handler: { [weak self] context in
+            guard let self, let spaceRoomListProxy = context.userInfo as? SpaceRoomListProxyProtocol else { return }
+            startSpaceFlow(spaceRoomListProxy: spaceRoomListProxy)
+        }
+        
+        stateMachine.addRouteMapping { event, fromState, _ in
+            guard event == .deselectSpace, case .spaceList(.some) = fromState else { return nil }
+            return .spaceList(selectedSpaceID: nil)
+        } handler: { [weak self] _ in
+            guard let self else { return }
+            selectedSpaceSubject.send(nil)
+            spaceFlowCoordinator = nil
         }
         
         stateMachine.addErrorHandler { context in
@@ -87,20 +115,51 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentSpaceList() {
-        // Temporarily using the mock until the SDK is updated.
-        let parameters = SpaceListScreenCoordinatorParameters(userSession: userSession, spaceServiceProxy: SpaceServiceProxyMock(.init()))
+        let parameters = SpaceListScreenCoordinatorParameters(userSession: userSession,
+                                                              selectedSpaceSubject: selectedSpaceSubject.asCurrentValuePublisher(),
+                                                              userIndicatorController: userIndicatorController)
         let coordinator = SpaceListScreenCoordinator(parameters: parameters)
-        coordinator.actionsPublisher.sink { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .showSettings:
-                actionsSubject.send(.showSettings)
-            case .selectSpace:
-                break
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .selectSpace(let spaceRoomListProxy):
+                    stateMachine.tryEvent(.selectSpace, userInfo: spaceRoomListProxy)
+                case .showSettings:
+                    actionsSubject.send(.showSettings)
+                }
             }
-        }
-        .store(in: &cancellables)
+            .store(in: &cancellables)
         
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
+    }
+    
+    private func startSpaceFlow(spaceRoomListProxy: SpaceRoomListProxyProtocol) {
+        let coordinator = SpaceFlowCoordinator(spaceRoomListProxy: spaceRoomListProxy,
+                                               spaceServiceProxy: userSession.clientProxy.spaceService,
+                                               isChildFlow: false,
+                                               mediaProvider: userSession.mediaProvider,
+                                               navigationStackCoordinator: detailNavigationStackCoordinator,
+                                               userIndicatorController: userIndicatorController)
+        
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .finished:
+                    stateMachine.tryEvent(.deselectSpace)
+                }
+            }
+            .store(in: &cancellables)
+        
+        spaceFlowCoordinator = coordinator
+        
+        if navigationSplitCoordinator.detailCoordinator !== detailNavigationStackCoordinator {
+            navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator)
+        }
+        
+        coordinator.start()
+        selectedSpaceSubject.send(spaceRoomListProxy.spaceRoom.id)
     }
 }
