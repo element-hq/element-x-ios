@@ -1,3 +1,45 @@
+## Changes in 25.09.0 (2025-08-27)
+
+### What's Changed
+
+✨ Features
+* Fix document picker tint colors, remove multi-selection feature flag by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4424
+
+🙌 Improvements
+* Make the room list filters smaller. by @amshakal in https://github.com/element-hq/element-x-ios/pull/4432
+* Improve global proxy detection, building and logging. by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4440
+
+🐛 Bugfixes
+* Only use the Element Call timeoutTask for room calls. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4417
+* Configure the video camera picker to record in high quality by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4423
+* Improve supported share types by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4428
+* Preserve the user chosen order when uploading multiple media files by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4436
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4422
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4438
+
+🧱 Build
+* Bump the calendar version ready for the next release by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4441
+
+🚧 In development 🚧
+* Add a Low Priority room filter behind a feature flag. by @Copilot in https://github.com/element-hq/element-x-ios/pull/4394
+* Add a feature flag for spaces. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4429
+* Space flow improvements. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4430
+
+Others
+* Update the SDK, handle API breaks. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4418
+* Add a couple of logs to debug badge counts. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4425
+* Remove unnecessary awaits on RoomFlowCoordinator.init. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4434
+* Tidy up some logs that have a prefix. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4443
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4445
+* Update Element Call to 0.15.0. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4446
+
+### New Contributors
+* @amshakal made their first contribution in https://github.com/element-hq/element-x-ios/pull/4432
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.08.5...release/25.09.0
+
 ## Changes in 25.08.5 (2025-08-15)
 
 ### What's Changed
