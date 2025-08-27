@@ -106,9 +106,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                     notificationManager: notificationManager,
                                                     stateMachineFactory: stateMachineFactory)
         chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
+        chatsTabDetails.navigationSplitCoordinator = chatsSplitCoordinator
         
         if !appSettings.spacesEnabled {
-            chatsTabDetails.barVisibility = .hidden
+            chatsTabDetails.barVisibilityOverride = .hidden
         }
         
         let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
@@ -116,6 +117,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                                                                     navigationSplitCoordinator: spacesSplitCoordinator,
                                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
         spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
+        spacesTabDetails.navigationSplitCoordinator = spacesSplitCoordinator
         
         onboardingStackCoordinator = NavigationStackCoordinator()
         onboardingFlowCoordinator = OnboardingFlowCoordinator(userSession: userSession,
@@ -272,8 +274,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         
         appSettings.$spacesEnabled
             .combineLatest(userSession.clientProxy.spaceService.joinedSpacesPublisher)
-            .map { $0 && !$1.isEmpty ? .automatic : .hidden }
-            .weakAssign(to: \.chatsTabDetails.barVisibility, on: self)
+            .map { $0 && !$1.isEmpty ? nil : .hidden }
+            .weakAssign(to: \.chatsTabDetails.barVisibilityOverride, on: self)
             .store(in: &cancellables)
     }
     
