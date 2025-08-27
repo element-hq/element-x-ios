@@ -133,12 +133,36 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
                     presentFeedDetailsScreen(reply, feedProtocol: feedProtocol, isChildFeed: true, stackCoordinator: stackCoordinator)
                 case .attachMedia(let attachMediaProtocol):
                     presentMediaUploadPickerWithSource(attachMediaProtocol, stackCoordinator: stackCoordinator)
-                case .openPostUserProfile( _):
-                    break
+                case .openPostUserProfile(let userProfile):
+                    presentChildFeedUserProfile(stackCoordinator: stackCoordinator, userProfile: userProfile)
                 }
             }
             .store(in: &cancellables)
         stackCoordinator.push(coordinator)
+    }
+    
+    private func presentChildFeedUserProfile(
+        stackCoordinator: NavigationStackCoordinator,
+        userProfile: ZPostUserProfile
+    ) {
+        let profileCoordinator = FeedUserProfileScreenCoordinator(parameters: .init(userSession: userSession,
+                                                                                    feedProtocol: feedProtocol,
+                                                                                    userProfile: userProfile))
+        profileCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .feedTapped(let feed):
+                    presentFeedDetailsScreen(feed, feedProtocol: feedProtocol, stackCoordinator: stackCoordinator)
+                case .openDirectChat(let roomId):
+                    navigationStackCoordinator.setSheetCoordinator(nil)
+                    actionsSubject.send(.openDirectChat(roomId))
+                case .newFeed(let createFeedProtocol):
+                    presentCreateFeedScreen(createFeedProtocol, stackCoordinator: stackCoordinator)
+                }
+            }
+            .store(in: &cancellables)
+        stackCoordinator.push(profileCoordinator)
     }
     
     private func presentMediaUploadPickerWithSource(_ attachMediaProtocol: FeedMediaSelectedProtocol,
