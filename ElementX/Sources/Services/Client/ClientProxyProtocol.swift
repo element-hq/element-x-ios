@@ -288,6 +288,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func fetchUserWallets() async -> Result<[ZWallet], ClientProxyError>
     
+    func deleteWallet(walletId: String) async -> Result<Void, ClientProxyError>
+    
+    func addWallet(canAuthenticate: Bool, web3Token: String) async -> Result<Void, ClientProxyError>
+    
     // MARK: - ZERO FEED
     
     func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError>

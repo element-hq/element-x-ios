@@ -1165,6 +1165,36 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func deleteWallet(walletId: String) async -> Result<Void, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.userAccountApi.deleteWallet(walletId: walletId)
+            switch result {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to delete wallet. Error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
+    func addWallet(canAuthenticate: Bool, web3Token: String) async -> Result<Void, ClientProxyError> {
+        do {
+            let result = try await zeroApiProxy.userAccountApi.addWallet(canAuthenticate: canAuthenticate, web3Token: web3Token)
+            switch result {
+            case .success:
+                return .success(())
+            case .failure(let error):
+                return .failure(.zeroError(error))
+            }
+        } catch {
+            MXLog.error("Failed to add wallet. Error: \(error)")
+            return .failure(.zeroError(error))
+        }
+    }
+    
     func fetchZeroFeeds(channelZId: String?, following: Bool, limit: Int, skip: Int) async -> Result<[ZPost], ClientProxyError> {
         do {
             let zeroPostsResult = try await zeroApiProxy.postsApi.fetchPosts(channelZId: channelZId, following: following, limit: limit, skip: skip)

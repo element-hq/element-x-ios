@@ -18,7 +18,7 @@ class WalletConnectService {
     private init() {}
     
     private var disposeBag = Set<AnyCancellable>()
-    
+
     func configureWalletConnect() {
         let projectId: String = ZeroContants.appServer.walletConnectProjectId
         
@@ -57,6 +57,10 @@ class WalletConnectService {
         }
     }
     
+    func connectedWalletAddress() -> String? {
+        AppKit.instance.getAddress()
+    }
+    
     private func disconnectAnyExistingWallet() async {
         do {
             try await AppKit.instance.cleanup()
@@ -77,7 +81,7 @@ class WalletConnectService {
             .store(in: &disposeBag)
     }
     
-    private func requestPersonalSignWithDelay() {
+    func requestPersonalSignWithDelay() {
         Task {
             try? await Task.sleep(for: .seconds(2))
             await requestWalletPersonalSign()

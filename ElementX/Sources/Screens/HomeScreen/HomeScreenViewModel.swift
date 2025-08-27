@@ -1161,6 +1161,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                                                          poolAddress: selectedPool.pool.poolAddress)
             switch result {
             case .success(_):
+                try? await Task.sleep(for: .seconds(1))
                 fetchStakingData(userWalletAddress: selectedPool.pool.userWalletAddress, refreshAllData: true)
             case .failure(let error):
                 displayError(message: error.localizedDescription)
@@ -1347,6 +1348,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 case .success(let transactionHash):
                     state.claimRewardsState = .success(transactionHash)
                     loadUserRewards()
+                    try? await Task.sleep(for: .seconds(1))
                     fetchWalletData(silentRefresh: true)
                 case .failure(_):
                     state.claimRewardsState = .failure

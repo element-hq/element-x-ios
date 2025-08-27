@@ -12,6 +12,7 @@ struct ManageWalletsViewState: BindableState {
     var bindings: ManageWalletsViewStateBindings
     
     var wallets: [ZeroWallet] = []
+    var connectedWalletAddress: String?
     
     var selfCustodyWallets: [ZeroWallet]  {
         wallets.filter { $0.canAuthenticate }
@@ -19,14 +20,23 @@ struct ManageWalletsViewState: BindableState {
     var zeroWallets: [ZeroWallet]  {
         wallets.filter { ($0.isThirdWeb) }
     }
+    var firstSelfCustodyWallet: ZeroWallet? {
+        selfCustodyWallets.first
+    }
 }
 
 struct ManageWalletsViewStateBindings {
+    var showLinkWalletAddressDialog: Bool = false
     
+    /// Information describing the currently displayed alert.
+    var alertInfo: AlertInfo<UUID>?
 }
 
 enum ManageWalletsViewAction {
     case onWalletSelected(ZeroWallet)
+    case linkWallet
+    case addWalletToZero(Bool)
+    case removeWallet(ZeroWallet)
 }
 
 struct ZeroWallet: Identifiable, Equatable {

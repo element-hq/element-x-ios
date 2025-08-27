@@ -6169,6 +6169,146 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return fetchUserWalletsReturnValue
         }
     }
+    //MARK: - deleteWallet
+
+    var deleteWalletWalletIdUnderlyingCallsCount = 0
+    var deleteWalletWalletIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return deleteWalletWalletIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deleteWalletWalletIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deleteWalletWalletIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deleteWalletWalletIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var deleteWalletWalletIdCalled: Bool {
+        return deleteWalletWalletIdCallsCount > 0
+    }
+    var deleteWalletWalletIdReceivedWalletId: String?
+    var deleteWalletWalletIdReceivedInvocations: [String] = []
+
+    var deleteWalletWalletIdUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var deleteWalletWalletIdReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return deleteWalletWalletIdUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = deleteWalletWalletIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                deleteWalletWalletIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    deleteWalletWalletIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var deleteWalletWalletIdClosure: ((String) async -> Result<Void, ClientProxyError>)?
+
+    func deleteWallet(walletId: String) async -> Result<Void, ClientProxyError> {
+        deleteWalletWalletIdCallsCount += 1
+        deleteWalletWalletIdReceivedWalletId = walletId
+        DispatchQueue.main.async {
+            self.deleteWalletWalletIdReceivedInvocations.append(walletId)
+        }
+        if let deleteWalletWalletIdClosure = deleteWalletWalletIdClosure {
+            return await deleteWalletWalletIdClosure(walletId)
+        } else {
+            return deleteWalletWalletIdReturnValue
+        }
+    }
+    //MARK: - addWallet
+
+    var addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount = 0
+    var addWalletCanAuthenticateWeb3TokenCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addWalletCanAuthenticateWeb3TokenUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var addWalletCanAuthenticateWeb3TokenCalled: Bool {
+        return addWalletCanAuthenticateWeb3TokenCallsCount > 0
+    }
+    var addWalletCanAuthenticateWeb3TokenReceivedArguments: (canAuthenticate: Bool, web3Token: String)?
+    var addWalletCanAuthenticateWeb3TokenReceivedInvocations: [(canAuthenticate: Bool, web3Token: String)] = []
+
+    var addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue: Result<Void, ClientProxyError>!
+    var addWalletCanAuthenticateWeb3TokenReturnValue: Result<Void, ClientProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, ClientProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addWalletCanAuthenticateWeb3TokenUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var addWalletCanAuthenticateWeb3TokenClosure: ((Bool, String) async -> Result<Void, ClientProxyError>)?
+
+    func addWallet(canAuthenticate: Bool, web3Token: String) async -> Result<Void, ClientProxyError> {
+        addWalletCanAuthenticateWeb3TokenCallsCount += 1
+        addWalletCanAuthenticateWeb3TokenReceivedArguments = (canAuthenticate: canAuthenticate, web3Token: web3Token)
+        DispatchQueue.main.async {
+            self.addWalletCanAuthenticateWeb3TokenReceivedInvocations.append((canAuthenticate: canAuthenticate, web3Token: web3Token))
+        }
+        if let addWalletCanAuthenticateWeb3TokenClosure = addWalletCanAuthenticateWeb3TokenClosure {
+            return await addWalletCanAuthenticateWeb3TokenClosure(canAuthenticate, web3Token)
+        } else {
+            return addWalletCanAuthenticateWeb3TokenReturnValue
+        }
+    }
     //MARK: - fetchZeroFeeds
 
     var fetchZeroFeedsChannelZIdFollowingLimitSkipUnderlyingCallsCount = 0

@@ -1,6 +1,11 @@
 import Alamofire
 import Foundation
 
+struct APIErrorResponse: Decodable, Error {
+    let code: String
+    let message: String
+}
+
 class APIManager {
     static let shared = APIManager()
     
@@ -63,7 +68,12 @@ class APIManager {
                         continuation.resume(returning: .success(data))
                     case .failure(let error):
                         self.checkResponseCode(error.responseCode)
-                        continuation.resume(returning: .failure(error))
+                        if let data = response.data,
+                           let apiError = try? JSONDecoder().decode(APIErrorResponse.self, from: data) {
+                            continuation.resume(returning: .failure(apiError))
+                        } else {
+                            continuation.resume(returning: .failure(error))
+                        }
                     }
                 }
         }
@@ -88,7 +98,12 @@ class APIManager {
                         continuation.resume(returning: .success(()))
                     case .failure(let error):
                         self.checkResponseCode(error.responseCode)
-                        continuation.resume(returning: .failure(error))
+                        if let data = response.data,
+                           let apiError = try? JSONDecoder().decode(APIErrorResponse.self, from: data) {
+                            continuation.resume(returning: .failure(apiError))
+                        } else {
+                            continuation.resume(returning: .failure(error))
+                        }
                     }
                 }
         }
