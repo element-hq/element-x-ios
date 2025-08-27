@@ -23,6 +23,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private let appSettings: AppSettings
     private let appDelegate: AppDelegate
     private let appHooks: AppHooks
+    private let bugReportService: BugReportServiceProtocol
     private let elementCallService: ElementCallServiceProtocol
 
     /// Common background task to continue long-running tasks in the background.
@@ -115,8 +116,13 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
                                                   appSettings: appSettings)
         
+        bugReportService = BugReportService(rageshakeURLPublisher: appSettings.bugReportRageshakeURL.publisher,
+                                            applicationID: appSettings.bugReportApplicationID,
+                                            sdkGitSHA: sdkGitSha(),
+                                            maxUploadSize: appSettings.bugReportMaxUploadSize,
+                                            appHooks: appHooks)
         Self.setupServiceLocator(appSettings: appSettings, appHooks: appHooks)
-        Self.setupSentry(appSettings: appSettings)
+        Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings)
         
         ServiceLocator.shared.analytics.signpost.start()
         ServiceLocator.shared.analytics.startIfEnabled()
@@ -151,8 +157,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         appSettings.$analyticsConsentState
             .dropFirst() // Called above before configuring the ServiceLocator
-            .sink { _ in
-                Self.setupSentry(appSettings: appSettings)
+            .sink { [bugReportService] _ in
+                Self.setupSentry(bugReportService: bugReportService, appSettings: appSettings)
             }
             .store(in: &cancellables)
         
@@ -375,11 +381,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private static func setupServiceLocator(appSettings: AppSettings, appHooks: AppHooks) {
         ServiceLocator.shared.register(userIndicatorController: UserIndicatorController())
         ServiceLocator.shared.register(appSettings: appSettings)
-        ServiceLocator.shared.register(bugReportService: BugReportService(rageshakeURLPublisher: appSettings.bugReportRageshakeURL.publisher,
-                                                                          applicationID: appSettings.bugReportApplicationID,
-                                                                          sdkGitSHA: sdkGitSha(),
-                                                                          maxUploadSize: appSettings.bugReportMaxUploadSize,
-                                                                          appHooks: appHooks))
+        
         let posthogAnalyticsClient = PostHogAnalyticsClient()
         posthogAnalyticsClient.updateSuperProperties(AnalyticsEvent.SuperProperties(appPlatform: .EXI, cryptoSDK: .Rust, cryptoSDKVersion: sdkGitSha()))
         ServiceLocator.shared.register(analytics: AnalyticsService(client: posthogAnalyticsClient,
@@ -556,7 +558,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                                                           appHooks: appHooks)
         
         let coordinator = AuthenticationFlowCoordinator(authenticationService: authenticationService,
-                                                        bugReportService: ServiceLocator.shared.bugReportService,
+                                                        bugReportService: bugReportService,
                                                         navigationRootCoordinator: navigationRootCoordinator,
                                                         appMediator: appMediator,
                                                         appSettings: appSettings,
@@ -642,7 +644,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
         
         let flowParameters = CommonFlowParameters(userSession: userSession,
-                                                  bugReportService: ServiceLocator.shared.bugReportService,
+                                                  bugReportService: bugReportService,
                                                   elementCallService: elementCallService,
                                                   timelineControllerFactory: TimelineControllerFactory(),
                                                   emojiProvider: EmojiProvider(appSettings: appSettings),
@@ -901,7 +903,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         }
     }
     
-    private static func setupSentry(appSettings: AppSettings) {
+    private static func setupSentry(bugReportService: BugReportServiceProtocol, appSettings: AppSettings) {
         guard let bugReportSentryURL = appSettings.bugReportSentryURL else { return }
         
         let options: Options = .init()
@@ -954,7 +956,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         // multiple callbacks if there are multiple crash events to send (see method documentation)
         options.onCrashedLastRun = { event in
             MXLog.error("Sentry detected a crash in the previous run: \(event.eventId.sentryIdString)")
-            ServiceLocator.shared.bugReportService.lastCrashEventID = event.eventId.sentryIdString
+            bugReportService.lastCrashEventID = event.eventId.sentryIdString
         }
         
         SentrySDK.start(options: options) // Swift
