@@ -1570,14 +1570,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func startPinnedEventsTimelineFlow() {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let flowCoordinator = PinnedEventsTimelineFlowCoordinator(navigationStackCoordinator: stackCoordinator,
-                                                                  userSession: userSession,
-                                                                  timelineControllerFactory: flowParameters.timelineControllerFactory,
-                                                                  roomProxy: roomProxy,
-                                                                  userIndicatorController: flowParameters.userIndicatorController,
-                                                                  appSettings: flowParameters.appSettings,
-                                                                  appMediator: flowParameters.appMediator,
-                                                                  emojiProvider: flowParameters.emojiProvider)
+        let flowCoordinator = PinnedEventsTimelineFlowCoordinator(roomProxy: roomProxy,
+                                                                  navigationStackCoordinator: stackCoordinator,
+                                                                  flowParameters: flowParameters)
         
         flowCoordinator.actionsPublisher.sink { [weak self] action in
             guard let self else {
@@ -1610,13 +1605,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func startMediaEventsTimelineFlow() async {
-        let flowCoordinator = MediaEventsTimelineFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
-                                                                 userSession: userSession,
-                                                                 timelineControllerFactory: flowParameters.timelineControllerFactory,
-                                                                 roomProxy: roomProxy,
-                                                                 userIndicatorController: flowParameters.userIndicatorController,
-                                                                 appMediator: flowParameters.appMediator,
-                                                                 emojiProvider: flowParameters.emojiProvider)
+        let flowCoordinator = MediaEventsTimelineFlowCoordinator(roomProxy: roomProxy,
+                                                                 navigationStackCoordinator: navigationStackCoordinator,
+                                                                 flowParameters: flowParameters)
         
         flowCoordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
