@@ -21,11 +21,12 @@ enum UserSessionFlowCoordinatorAction {
 class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     enum HomeTab: Hashable { case chats, spaces }
     
-    private let userSession: UserSessionProtocol
     private let navigationRootCoordinator: NavigationRootCoordinator
     private let navigationTabCoordinator: NavigationTabCoordinator<HomeTab>
     private let appLockService: AppLockServiceProtocol
     private let flowParameters: CommonFlowParameters
+    
+    private var userSession: UserSessionProtocol { flowParameters.userSession }
     
     private let onboardingFlowCoordinator: OnboardingFlowCoordinator
     private let onboardingStackCoordinator: NavigationStackCoordinator
@@ -68,7 +69,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
          navigationRootCoordinator: NavigationRootCoordinator,
          appLockService: AppLockServiceProtocol,
          flowParameters: CommonFlowParameters) {
-        userSession = flowParameters.userSession
         self.navigationRootCoordinator = navigationRootCoordinator
         self.appLockService = appLockService
         self.flowParameters = flowParameters

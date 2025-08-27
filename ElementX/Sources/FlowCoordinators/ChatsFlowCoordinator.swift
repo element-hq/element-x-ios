@@ -19,9 +19,10 @@ enum ChatsFlowCoordinatorAction {
 }
 
 class ChatsFlowCoordinator: FlowCoordinatorProtocol {
-    private let userSession: UserSessionProtocol
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let flowParameters: CommonFlowParameters
+    
+    private var userSession: UserSessionProtocol { flowParameters.userSession }
     
     private let stateMachine: ChatsFlowCoordinatorStateMachine
     
@@ -53,7 +54,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
          navigationSplitCoordinator: NavigationSplitCoordinator,
          flowParameters: CommonFlowParameters) {
         stateMachine = flowParameters.stateMachineFactory.makeChatsFlowStateMachine()
-        userSession = flowParameters.userSession
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.flowParameters = flowParameters
         

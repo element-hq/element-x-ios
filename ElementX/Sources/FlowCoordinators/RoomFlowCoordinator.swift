@@ -61,14 +61,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let flowParameters: CommonFlowParameters
     
     private var userSession: UserSessionProtocol { flowParameters.userSession }
-    private var timelineControllerFactory: TimelineControllerFactoryProtocol { flowParameters.timelineControllerFactory }
-    private var emojiProvider: EmojiProviderProtocol { flowParameters.emojiProvider }
-    private var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> { flowParameters.ongoingCallRoomIDPublisher }
-    private var appMediator: AppMediatorProtocol { flowParameters.appMediator }
-    private var appSettings: AppSettings { flowParameters.appSettings }
-    private var appHooks: AppHooks { flowParameters.appHooks }
-    private var analytics: AnalyticsService { flowParameters.analytics }
-    private var userIndicatorController: UserIndicatorControllerProtocol { flowParameters.userIndicatorController }
     
     private var roomProxy: JoinedRoomProxyProtocol!
     
@@ -106,7 +98,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         setupStateMachine()
         
-        analytics.signpost.beginRoomFlow(roomID)
+        flowParameters.analytics.signpost.beginRoomFlow(roomID)
     }
         
     // MARK: - FlowCoordinatorProtocol
@@ -206,8 +198,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = RoomChangeRolesScreenCoordinatorParameters(mode: .owner,
                                                                     roomProxy: roomProxy,
                                                                     mediaProvider: userSession.mediaProvider,
-                                                                    userIndicatorController: userIndicatorController,
-                                                                    analytics: analytics)
+                                                                    userIndicatorController: flowParameters.userIndicatorController,
+                                                                    analytics: flowParameters.analytics)
         let stackCoordinator = NavigationStackCoordinator()
         let coordinator = RoomChangeRolesScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
@@ -505,7 +497,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         // Flag the room as read on entering, the timeline will take care of the read receipts
         Task { await roomProxy.flagAsUnread(false) }
         
-        analytics.trackViewRoom(isDM: roomProxy.infoPublisher.value.isDirect, isSpace: roomProxy.infoPublisher.value.isSpace)
+        flowParameters.analytics.trackViewRoom(isDM: roomProxy.infoPublisher.value.isDirect, isSpace: roomProxy.infoPublisher.value.isSpace)
         
         let coordinator = makeRoomScreenCoordinator(presentationAction: presentationAction, animated: animated)
         roomScreenCoordinator = coordinator
@@ -540,10 +532,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let timelineItemFactory = RoomTimelineItemFactory(userID: userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
-        let timelineController = timelineControllerFactory.buildTimelineController(roomProxy: roomProxy,
-                                                                                   initialFocussedEventID: presentationAction?.focusedEvent?.eventID,
-                                                                                   timelineItemFactory: timelineItemFactory,
-                                                                                   mediaProvider: userSession.mediaProvider)
+        let timelineController = flowParameters.timelineControllerFactory.buildTimelineController(roomProxy: roomProxy,
+                                                                                                  initialFocussedEventID: presentationAction?.focusedEvent?.eventID,
+                                                                                                  timelineItemFactory: timelineItemFactory,
+                                                                                                  mediaProvider: userSession.mediaProvider)
         self.timelineController = timelineController
         
         let completionSuggestionService = CompletionSuggestionService(roomProxy: roomProxy,
@@ -560,14 +552,14 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                          mediaProvider: userSession.mediaProvider,
                                                          mediaPlayerProvider: MediaPlayerProvider(),
                                                          voiceMessageMediaManager: userSession.voiceMessageMediaManager,
-                                                         emojiProvider: emojiProvider,
+                                                         emojiProvider: flowParameters.emojiProvider,
                                                          completionSuggestionService: completionSuggestionService,
-                                                         ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher,
-                                                         appMediator: appMediator,
-                                                         appSettings: appSettings,
-                                                         appHooks: appHooks,
+                                                         ongoingCallRoomIDPublisher: flowParameters.ongoingCallRoomIDPublisher,
+                                                         appMediator: flowParameters.appMediator,
+                                                         appSettings: flowParameters.appSettings,
+                                                         appHooks: flowParameters.appHooks,
                                                          composerDraftService: composerDraftService,
-                                                         timelineControllerFactory: timelineControllerFactory)
+                                                         timelineControllerFactory: flowParameters.timelineControllerFactory)
         
         let coordinator = RoomScreenCoordinator(parameters: parameters)
         coordinator.actions
@@ -636,10 +628,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             fatalError("Invalid thread event ID")
         }
         
-        guard case let .success(timelineController) = await timelineControllerFactory.buildThreadTimelineController(eventID: threadRootEventID,
-                                                                                                                    roomProxy: roomProxy,
-                                                                                                                    timelineItemFactory: timelineItemFactory,
-                                                                                                                    mediaProvider: userSession.mediaProvider) else {
+        guard case let .success(timelineController) = await flowParameters.timelineControllerFactory.buildThreadTimelineController(eventID: threadRootEventID,
+                                                                                                                                   roomProxy: roomProxy,
+                                                                                                                                   timelineItemFactory: timelineItemFactory,
+                                                                                                                                   mediaProvider: userSession.mediaProvider) else {
             MXLog.error("Failed presenting media timeline")
             return
         }
@@ -656,12 +648,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                             mediaProvider: userSession.mediaProvider,
                                                                             mediaPlayerProvider: MediaPlayerProvider(),
                                                                             voiceMessageMediaManager: userSession.voiceMessageMediaManager,
-                                                                            emojiProvider: emojiProvider,
+                                                                            emojiProvider: flowParameters.emojiProvider,
                                                                             completionSuggestionService: completionSuggestionService,
-                                                                            appMediator: appMediator,
-                                                                            appSettings: appSettings,
+                                                                            appMediator: flowParameters.appMediator,
+                                                                            appSettings: flowParameters.appSettings,
                                                                             composerDraftService: composerDraftService,
-                                                                            timelineControllerFactory: timelineControllerFactory))
+                                                                            timelineControllerFactory: flowParameters.timelineControllerFactory))
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -709,8 +701,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                       via: via,
                                                                       clientProxy: userSession.clientProxy,
                                                                       mediaProvider: userSession.mediaProvider,
-                                                                      userIndicatorController: userIndicatorController,
-                                                                      appSettings: appSettings))
+                                                                      userIndicatorController: flowParameters.userIndicatorController,
+                                                                      appSettings: flowParameters.appSettings))
         
         joinRoomScreenCoordinator = coordinator
         
@@ -728,9 +720,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                             await storeAndSubscribeToRoomProxy(roomProxy)
                             stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
                             
-                            analytics.trackJoinedRoom(isDM: roomProxy.infoPublisher.value.isDirect,
-                                                      isSpace: roomProxy.infoPublisher.value.isSpace,
-                                                      activeMemberCount: UInt(roomProxy.infoPublisher.value.activeMembersCount))
+                            flowParameters.analytics.trackJoinedRoom(isDM: roomProxy.infoPublisher.value.isDirect,
+                                                                     isSpace: roomProxy.infoPublisher.value.isSpace,
+                                                                     activeMemberCount: UInt(roomProxy.infoPublisher.value.activeMembersCount))
                         } else {
                             stateMachine.tryEvent(.dismissFlow, userInfo: EventUserInfo(animated: animated))
                         }
@@ -776,18 +768,18 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         timelineController = nil
         
         actionsSubject.send(.finished)
-        analytics.signpost.endRoomFlow()
+        flowParameters.analytics.signpost.endRoomFlow()
     }
     
     private func presentRoomDetails(isRoot: Bool, animated: Bool) async {
         let params = RoomDetailsScreenCoordinatorParameters(roomProxy: roomProxy,
                                                             clientProxy: userSession.clientProxy,
                                                             mediaProvider: userSession.mediaProvider,
-                                                            analyticsService: analytics,
-                                                            userIndicatorController: userIndicatorController,
+                                                            analyticsService: flowParameters.analytics,
+                                                            userIndicatorController: flowParameters.userIndicatorController,
                                                             notificationSettings: userSession.clientProxy.notificationSettings,
                                                             attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                            appMediator: appMediator)
+                                                            appMediator: flowParameters.appMediator)
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -848,8 +840,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = RoomMembersListScreenCoordinatorParameters(clientProxy: userSession.clientProxy,
                                                                     roomProxy: roomProxy,
                                                                     mediaProvider: userSession.mediaProvider,
-                                                                    userIndicatorController: userIndicatorController,
-                                                                    analytics: analytics)
+                                                                    userIndicatorController: flowParameters.userIndicatorController,
+                                                                    analytics: flowParameters.analytics)
         let coordinator = RoomMembersListScreenCoordinator(parameters: parameters)
         
         coordinator.actions
@@ -873,7 +865,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentKnockRequestsList() {
         let parameters = KnockRequestsListScreenCoordinatorParameters(roomProxy: roomProxy,
                                                                       mediaProvider: userSession.mediaProvider,
-                                                                      userIndicatorController: userIndicatorController)
+                                                                      userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = KnockRequestsListScreenCoordinator(parameters: parameters)
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
@@ -887,11 +879,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(roomProxy: roomProxy,
                                                                                    clientProxy: userSession.clientProxy,
                                                                                    mediaProvider: userSession.mediaProvider,
-                                                                                   mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+                                                                                   mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
                                                                                    navigationStackCoordinator: stackCoordinator,
-                                                                                   userIndicatorController: userIndicatorController,
-                                                                                   orientationManager: appMediator.windowManager,
-                                                                                   appSettings: appSettings)
+                                                                                   userIndicatorController: flowParameters.userIndicatorController,
+                                                                                   orientationManager: flowParameters.appMediator.windowManager,
+                                                                                   appSettings: flowParameters.appSettings)
         let roomDetailsEditCoordinator = RoomDetailsEditScreenCoordinator(parameters: roomDetailsEditParameters)
         
         roomDetailsEditCoordinator.actions.sink { [weak self] action in
@@ -919,7 +911,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                   senderID: senderID,
                                                                   roomProxy: roomProxy,
                                                                   clientProxy: userSession.clientProxy,
-                                                                  userIndicatorController: userIndicatorController)
+                                                                  userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = ReportContentScreenCoordinator(parameters: parameters)
         
         coordinator.actions
@@ -932,7 +924,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .cancel:
                     break
                 case .finish:
-                    userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonReportSubmitted, iconName: "checkmark"))
+                    flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonReportSubmitted, iconName: "checkmark"))
                 }
             }
             .store(in: &cancellables)
@@ -949,8 +941,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(mode: mode,
-                                                                  userIndicatorController: userIndicatorController,
-                                                                  orientationManager: appMediator.windowManager) { [weak self] action in
+                                                                  userIndicatorController: flowParameters.userIndicatorController,
+                                                                  orientationManager: flowParameters.appMediator.windowManager) { [weak self] action in
             guard let self else {
                 return
             }
@@ -986,11 +978,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = MediaUploadPreviewScreenCoordinatorParameters(mediaURLs: mediaURLs,
                                                                        title: title,
                                                                        isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted,
-                                                                       shouldShowCaptionWarning: appSettings.shouldShowMediaCaptionWarning,
-                                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
+                                                                       shouldShowCaptionWarning: flowParameters.appSettings.shouldShowMediaCaptionWarning,
+                                                                       mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
                                                                        timelineController: timelineController,
                                                                        clientProxy: userSession.clientProxy,
-                                                                       userIndicatorController: userIndicatorController)
+                                                                       userIndicatorController: flowParameters.userIndicatorController)
 
         let mediaUploadPreviewScreenCoordinator = MediaUploadPreviewScreenCoordinator(parameters: parameters)
         
@@ -1016,7 +1008,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                     selectedEmoji: Set<String>,
                                     timelineController: TimelineControllerProtocol,
                                     animated: Bool) {
-        let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: emojiProvider,
+        let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: flowParameters.emojiProvider,
                                                             itemID: itemID, selectedEmojis: selectedEmoji)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
         
@@ -1051,8 +1043,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode,
-                                                               mapURLBuilder: appSettings.mapTilerConfiguration,
-                                                               appMediator: appMediator)
+                                                               mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration,
+                                                               appMediator: flowParameters.appMediator)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
@@ -1068,11 +1060,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     self.navigationStackCoordinator.setSheetCoordinator(nil)
                 }
                 
-                self.analytics.trackComposer(inThread: false,
-                                             isEditing: false,
-                                             isReply: false,
-                                             messageType: isUserLocation ? .LocationUser : .LocationPin,
-                                             startsThread: nil)
+                self.flowParameters.analytics.trackComposer(inThread: false,
+                                                            isEditing: false,
+                                                            isReply: false,
+                                                            messageType: isUserLocation ? .LocationUser : .LocationPin,
+                                                            startsThread: nil)
             case .close:
                 self.navigationStackCoordinator.setSheetCoordinator(nil)
             }
@@ -1131,19 +1123,19 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         Task {
             let result = await timelineController.createPoll(question: question, answers: options, pollKind: pollKind)
 
-            self.analytics.trackComposer(inThread: false,
-                                         isEditing: false,
-                                         isReply: false,
-                                         messageType: .Poll,
-                                         startsThread: nil)
+            self.flowParameters.analytics.trackComposer(inThread: false,
+                                                        isEditing: false,
+                                                        isReply: false,
+                                                        messageType: .Poll,
+                                                        startsThread: nil)
 
-            self.analytics.trackPollCreated(isUndisclosed: pollKind == .undisclosed, numberOfAnswers: options.count)
+            self.flowParameters.analytics.trackPollCreated(isUndisclosed: pollKind == .undisclosed, numberOfAnswers: options.count)
             
             switch result {
             case .success:
                 break
             case .failure:
-                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                self.flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
             }
         }
     }
@@ -1156,7 +1148,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .success:
                 break
             case .failure:
-                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                self.flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
             }
         }
     }
@@ -1164,7 +1156,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func deletePoll(mode: PollFormMode) {
         Task {
             guard case .edit(let pollStartID, _) = mode else {
-                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                self.flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
                 return
             }
             
@@ -1174,7 +1166,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .success:
                 break
             case .failure:
-                self.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
+                self.flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
             }
         }
     }
@@ -1186,12 +1178,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID))
                 
-        let timelineController = timelineControllerFactory.buildTimelineController(roomProxy: roomProxy,
-                                                                                   initialFocussedEventID: nil,
-                                                                                   timelineItemFactory: timelineItemFactory,
-                                                                                   mediaProvider: userSession.mediaProvider)
+        let timelineController = flowParameters.timelineControllerFactory.buildTimelineController(roomProxy: roomProxy,
+                                                                                                  initialFocussedEventID: nil,
+                                                                                                  timelineItemFactory: timelineItemFactory,
+                                                                                                  mediaProvider: userSession.mediaProvider)
         
-        let parameters = RoomPollsHistoryScreenCoordinatorParameters(pollInteractionHandler: PollInteractionHandler(analyticsService: analytics,
+        let parameters = RoomPollsHistoryScreenCoordinatorParameters(pollInteractionHandler: PollInteractionHandler(analyticsService: flowParameters.analytics,
                                                                                                                     timelineController: timelineController),
                                                                      timelineController: timelineController)
         let coordinator = RoomPollsHistoryScreenCoordinator(parameters: parameters)
@@ -1217,8 +1209,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                   roomProxy: roomProxy,
                                                                   clientProxy: userSession.clientProxy,
                                                                   mediaProvider: userSession.mediaProvider,
-                                                                  userIndicatorController: userIndicatorController,
-                                                                  analytics: analytics)
+                                                                  userIndicatorController: flowParameters.userIndicatorController,
+                                                                  analytics: flowParameters.analytics)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
@@ -1246,8 +1238,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                 isPresentedModally: false,
                                                                 clientProxy: userSession.clientProxy,
                                                                 mediaProvider: userSession.mediaProvider,
-                                                                userIndicatorController: userIndicatorController,
-                                                                analytics: analytics)
+                                                                userIndicatorController: flowParameters.userIndicatorController,
+                                                                analytics: flowParameters.analytics)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
@@ -1282,7 +1274,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                       clientProxy: userSession.clientProxy,
                                                                       roomSummaryProvider: roomSummaryProvider,
                                                                       mediaProvider: userSession.mediaProvider,
-                                                                      userIndicatorController: userIndicatorController)
+                                                                      userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = MessageForwardingScreenCoordinator(parameters: parameters)
         
         coordinator.actions.sink { [weak self] action in
@@ -1355,7 +1347,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                       roomType: .room(roomProxy: roomProxy),
                                                                       mediaProvider: userSession.mediaProvider,
                                                                       userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
-                                                                      userIndicatorController: userIndicatorController)
+                                                                      userIndicatorController: flowParameters.userIndicatorController)
         
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         stackCoordinator.setRootCoordinator(coordinator)
@@ -1409,9 +1401,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 return
             }
             
-            userIndicatorController.alertInfo = .init(id: .init(),
-                                                      title: L10n.commonUnableToInviteTitle,
-                                                      message: L10n.commonUnableToInviteMessage)
+            flowParameters.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                     title: L10n.commonUnableToInviteTitle,
+                                                                     message: L10n.commonUnableToInviteMessage)
         }
     }
     
@@ -1419,8 +1411,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = RoomRolesAndPermissionsFlowCoordinatorParameters(roomProxy: roomProxy,
                                                                           mediaProvider: userSession.mediaProvider,
                                                                           navigationStackCoordinator: navigationStackCoordinator,
-                                                                          userIndicatorController: userIndicatorController,
-                                                                          analytics: analytics)
+                                                                          userIndicatorController: flowParameters.userIndicatorController,
+                                                                          analytics: flowParameters.analytics)
         let coordinator = RoomRolesAndPermissionsFlowCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action {
@@ -1438,7 +1430,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = ResolveVerifiedUserSendFailureScreenCoordinator(parameters: .init(failure: failure,
                                                                                             sendHandle: sendHandle,
                                                                                             roomProxy: roomProxy,
-                                                                                            userIndicatorController: userIndicatorController))
+                                                                                            userIndicatorController: flowParameters.userIndicatorController))
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             
@@ -1457,7 +1449,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSecurityAndPrivacyScreen() {
         let coordinator = SecurityAndPrivacyScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                                 clientProxy: userSession.clientProxy,
-                                                                                userIndicatorController: userIndicatorController))
+                                                                                userIndicatorController: flowParameters.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
@@ -1478,7 +1470,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         let coordinator = EditRoomAddressScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                              clientProxy: userSession.clientProxy,
-                                                                             userIndicatorController: userIndicatorController))
+                                                                             userIndicatorController: flowParameters.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action {
@@ -1495,7 +1487,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentReportRoom() {
         let stackCoordinator = NavigationStackCoordinator()
         let coordinator = ReportRoomScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                        userIndicatorController: userIndicatorController))
+                                                                        userIndicatorController: flowParameters.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
@@ -1520,7 +1512,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = DeclineAndBlockScreenCoordinator(parameters: .init(userID: userID,
                                                                              roomID: roomID,
                                                                              clientProxy: userSession.clientProxy,
-                                                                             userIndicatorController: userIndicatorController))
+                                                                             userIndicatorController: flowParameters.userIndicatorController))
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
@@ -1580,12 +1572,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let flowCoordinator = PinnedEventsTimelineFlowCoordinator(navigationStackCoordinator: stackCoordinator,
                                                                   userSession: userSession,
-                                                                  timelineControllerFactory: timelineControllerFactory,
+                                                                  timelineControllerFactory: flowParameters.timelineControllerFactory,
                                                                   roomProxy: roomProxy,
-                                                                  userIndicatorController: userIndicatorController,
-                                                                  appSettings: appSettings,
-                                                                  appMediator: appMediator,
-                                                                  emojiProvider: emojiProvider)
+                                                                  userIndicatorController: flowParameters.userIndicatorController,
+                                                                  appSettings: flowParameters.appSettings,
+                                                                  appMediator: flowParameters.appMediator,
+                                                                  emojiProvider: flowParameters.emojiProvider)
         
         flowCoordinator.actionsPublisher.sink { [weak self] action in
             guard let self else {
@@ -1620,11 +1612,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func startMediaEventsTimelineFlow() async {
         let flowCoordinator = MediaEventsTimelineFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
                                                                  userSession: userSession,
-                                                                 timelineControllerFactory: timelineControllerFactory,
+                                                                 timelineControllerFactory: flowParameters.timelineControllerFactory,
                                                                  roomProxy: roomProxy,
-                                                                 userIndicatorController: userIndicatorController,
-                                                                 appMediator: appMediator,
-                                                                 emojiProvider: emojiProvider)
+                                                                 userIndicatorController: flowParameters.userIndicatorController,
+                                                                 appMediator: flowParameters.appMediator,
+                                                                 emojiProvider: flowParameters.emojiProvider)
         
         flowCoordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
@@ -1651,15 +1643,15 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private static let loadingIndicatorID = "\(RoomFlowCoordinator.self)-Loading"
     
     private func showLoadingIndicator(delay: Duration? = nil) {
-        userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorID,
-                                                      type: .modal(progress: .indeterminate,
-                                                                   interactiveDismissDisabled: false,
-                                                                   allowsInteraction: false),
-                                                      title: L10n.commonLoading, persistent: true),
-                                                delay: delay)
+        flowParameters.userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorID,
+                                                                     type: .modal(progress: .indeterminate,
+                                                                                  interactiveDismissDisabled: false,
+                                                                                  allowsInteraction: false),
+                                                                     title: L10n.commonLoading, persistent: true),
+                                                               delay: delay)
     }
     
     private func hideLoadingIndicator() {
-        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
+        flowParameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
     }
 }
