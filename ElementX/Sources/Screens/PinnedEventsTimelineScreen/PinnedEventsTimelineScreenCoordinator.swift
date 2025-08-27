@@ -13,7 +13,6 @@ struct PinnedEventsTimelineScreenCoordinatorParameters {
     let timelineController: TimelineControllerProtocol
     let userSession: UserSessionProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
-    let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
     let analytics: AnalyticsService
@@ -50,7 +49,6 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                               timelineController: parameters.timelineController,
                                               userSession: parameters.userSession,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                              voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                               userIndicatorController: parameters.userIndicatorController,
                                               appMediator: parameters.appMediator,
                                               appSettings: parameters.appSettings,

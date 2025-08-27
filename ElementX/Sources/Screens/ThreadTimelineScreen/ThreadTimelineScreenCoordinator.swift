@@ -15,7 +15,6 @@ struct ThreadTimelineScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let timelineController: TimelineControllerProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
-    let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let emojiProvider: EmojiProviderProtocol
     let completionSuggestionService: CompletionSuggestionServiceProtocol
     let appMediator: AppMediatorProtocol
@@ -61,7 +60,6 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                                               timelineController: parameters.timelineController,
                                               userSession: parameters.userSession,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                              voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                               userIndicatorController: parameters.userIndicatorController,
                                               appMediator: parameters.appMediator,
                                               appSettings: parameters.appSettings,

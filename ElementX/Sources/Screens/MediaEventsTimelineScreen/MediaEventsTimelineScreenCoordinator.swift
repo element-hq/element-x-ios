@@ -14,7 +14,6 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let filesTimelineController: TimelineControllerProtocol
     let userSession: UserSessionProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
-    let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
     let analytics: AnalyticsService
@@ -45,7 +44,6 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        timelineController: parameters.mediaTimelineController,
                                                        userSession: parameters.userSession,
                                                        mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                                       voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                                        userIndicatorController: parameters.userIndicatorController,
                                                        appMediator: parameters.appMediator,
                                                        appSettings: parameters.appSettings,
@@ -57,7 +55,6 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        timelineController: parameters.filesTimelineController,
                                                        userSession: parameters.userSession,
                                                        mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                                       voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                                        userIndicatorController: parameters.userIndicatorController,
                                                        appMediator: parameters.appMediator,
                                                        appSettings: parameters.appSettings,
