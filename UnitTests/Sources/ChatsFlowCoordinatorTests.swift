@@ -33,19 +33,21 @@ class ChatsFlowCoordinatorTests: XCTestCase {
         
         notificationManager = NotificationManagerMock()
         
-        chatsFlowCoordinator = ChatsFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                    isNewLogin: false,
+        let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                  bugReportService: BugReportServiceMock(.init()),
+                                                  elementCallService: ElementCallServiceMock(.init()),
+                                                  timelineControllerFactory: timelineControllerFactory,
+                                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                  appMediator: AppMediatorMock.default,
+                                                  appSettings: ServiceLocator.shared.settings,
+                                                  appHooks: AppHooks(),
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  notificationManager: notificationManager,
+                                                  stateMachineFactory: stateMachineFactory)
+        chatsFlowCoordinator = ChatsFlowCoordinator(isNewLogin: false,
                                                     navigationSplitCoordinator: splitCoordinator,
-                                                    appLockService: AppLockServiceMock(),
-                                                    bugReportService: BugReportServiceMock(.init()),
-                                                    elementCallService: ElementCallServiceMock(.init()),
-                                                    timelineControllerFactory: timelineControllerFactory,
-                                                    appMediator: AppMediatorMock.default,
-                                                    appSettings: ServiceLocator.shared.settings,
-                                                    appHooks: AppHooks(),
-                                                    analytics: ServiceLocator.shared.analytics,
-                                                    notificationManager: notificationManager,
-                                                    stateMachineFactory: stateMachineFactory)
+                                                    flowParameters: flowParameters)
         
         let deferred = deferFulfillment(stateMachineFactory.chatsFlowStatePublisher) { $0 == .roomList(roomListSelectedRoomID: nil) }
         chatsFlowCoordinator.start()

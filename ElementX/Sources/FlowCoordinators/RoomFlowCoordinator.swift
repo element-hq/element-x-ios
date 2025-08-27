@@ -56,17 +56,19 @@ struct FocusEvent: Hashable {
 // swiftlint:disable:next type_body_length
 class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private let roomID: String
-    private let userSession: UserSessionProtocol
     private let isChildFlow: Bool
-    private let timelineControllerFactory: TimelineControllerFactoryProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
-    private let emojiProvider: EmojiProviderProtocol
-    private let ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>
-    private let appMediator: AppMediatorProtocol
-    private let appSettings: AppSettings
-    private let appHooks: AppHooks
-    private let analytics: AnalyticsService
-    private let userIndicatorController: UserIndicatorControllerProtocol
+    private let flowParameters: CommonFlowParameters
+    
+    private var userSession: UserSessionProtocol { flowParameters.userSession }
+    private var timelineControllerFactory: TimelineControllerFactoryProtocol { flowParameters.timelineControllerFactory }
+    private var emojiProvider: EmojiProviderProtocol { flowParameters.emojiProvider }
+    private var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> { flowParameters.ongoingCallRoomIDPublisher }
+    private var appMediator: AppMediatorProtocol { flowParameters.appMediator }
+    private var appSettings: AppSettings { flowParameters.appSettings }
+    private var appHooks: AppHooks { flowParameters.appHooks }
+    private var analytics: AnalyticsService { flowParameters.analytics }
+    private var userIndicatorController: UserIndicatorControllerProtocol { flowParameters.userIndicatorController }
     
     private var roomProxy: JoinedRoomProxyProtocol!
     
@@ -94,29 +96,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private var timelineController: TimelineControllerProtocol?
     
     init(roomID: String,
-         userSession: UserSessionProtocol,
          isChildFlow: Bool,
-         timelineControllerFactory: TimelineControllerFactoryProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
-         emojiProvider: EmojiProviderProtocol,
-         ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
-         appMediator: AppMediatorProtocol,
-         appSettings: AppSettings,
-         appHooks: AppHooks,
-         analytics: AnalyticsService,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         flowParameters: CommonFlowParameters) {
         self.roomID = roomID
-        self.userSession = userSession
         self.isChildFlow = isChildFlow
-        self.timelineControllerFactory = timelineControllerFactory
         self.navigationStackCoordinator = navigationStackCoordinator
-        self.emojiProvider = emojiProvider
-        self.ongoingCallRoomIDPublisher = ongoingCallRoomIDPublisher
-        self.appMediator = appMediator
-        self.appSettings = appSettings
-        self.appHooks = appHooks
-        self.analytics = analytics
-        self.userIndicatorController = userIndicatorController
+        self.flowParameters = flowParameters
         
         setupStateMachine()
         
@@ -1344,7 +1330,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: stackCoordinator,
                                                                          userSession: userSession,
                                                                          userNotificationCenter: UNUserNotificationCenter.current(),
-                                                                         notificationSettings: userSession.clientProxy.notificationSettings,
                                                                          isModallyPresented: true)
         let coordinator = NotificationSettingsScreenCoordinator(parameters: parameters)
         coordinator.actions.sink { [weak self] action in
@@ -1558,17 +1543,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startChildFlow(for roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint) {
         let coordinator = RoomFlowCoordinator(roomID: roomID,
-                                              userSession: userSession,
                                               isChildFlow: true,
-                                              timelineControllerFactory: timelineControllerFactory,
                                               navigationStackCoordinator: navigationStackCoordinator,
-                                              emojiProvider: emojiProvider,
-                                              ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher,
-                                              appMediator: appMediator,
-                                              appSettings: appSettings,
-                                              appHooks: appHooks,
-                                              analytics: analytics,
-                                              userIndicatorController: userIndicatorController)
+                                              flowParameters: flowParameters)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             

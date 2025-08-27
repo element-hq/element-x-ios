@@ -18,6 +18,8 @@ struct ClientProxyMockConfiguration {
     
     var recoveryState: SecureBackupRecoveryState = .enabled
     
+    var notificationSettings = NotificationSettingsProxyMock(with: .init())
+    
     var timelineMediaVisibility = TimelineMediaVisibility.always
     var hideInviteAvatars = false
     
@@ -54,7 +56,7 @@ extension ClientProxyMock {
         
         ignoredUsersPublisher = CurrentValueSubject<[String]?, Never>([RoomMemberProxyMock].allMembers.map(\.userID)).asCurrentValuePublisher()
         
-        notificationSettings = NotificationSettingsProxyMock(with: .init())
+        notificationSettings = configuration.notificationSettings
         
         isOnlyDeviceLeftReturnValue = .success(false)
         accountURLActionReturnValue = "https://matrix.org/account"

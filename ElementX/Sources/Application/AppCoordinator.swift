@@ -640,19 +640,23 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
-                                                                    isNewLogin: isNewLogin,
+        let flowParameters = CommonFlowParameters(userSession: userSession,
+                                                  bugReportService: ServiceLocator.shared.bugReportService,
+                                                  elementCallService: elementCallService,
+                                                  timelineControllerFactory: TimelineControllerFactory(),
+                                                  emojiProvider: EmojiProvider(appSettings: appSettings),
+                                                  appMediator: appMediator,
+                                                  appSettings: appSettings,
+                                                  appHooks: appHooks,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                  notificationManager: notificationManager,
+                                                  stateMachineFactory: StateMachineFactory())
+        
+        let userSessionFlowCoordinator = UserSessionFlowCoordinator(isNewLogin: isNewLogin,
                                                                     navigationRootCoordinator: navigationRootCoordinator,
                                                                     appLockService: appLockFlowCoordinator.appLockService,
-                                                                    bugReportService: ServiceLocator.shared.bugReportService,
-                                                                    elementCallService: elementCallService,
-                                                                    timelineControllerFactory: TimelineControllerFactory(),
-                                                                    appMediator: appMediator,
-                                                                    appSettings: appSettings,
-                                                                    appHooks: appHooks,
-                                                                    analytics: ServiceLocator.shared.analytics,
-                                                                    notificationManager: notificationManager,
-                                                                    stateMachineFactory: StateMachineFactory())
+                                                                    flowParameters: flowParameters)
         
         userSessionFlowCoordinator.actionsPublisher
             .sink { [weak self] action in
