@@ -8,9 +8,14 @@
 @testable import ElementX
 import XCTest
 
-class AttributedStringBuilderTests: XCTestCase {
-    private lazy var attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
+class AttributedStringBuilderV2Tests: XCTestCase {
+    private var attributedStringBuilder: AttributedStringBuilder!
     private let maxHeaderPointSize = ceil(UIFont.preferredFont(forTextStyle: .body).pointSize * 1.2)
+    
+    override func setUp() async throws {
+        AttributedStringBuilder.useNextGenHTMLParser = true
+        attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
+    }
     
     func testRenderHTMLStringWithHeaders() {
         let h1HTMLString = "<h1>Large Heading</h1>"
