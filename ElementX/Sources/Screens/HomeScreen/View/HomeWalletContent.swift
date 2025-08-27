@@ -62,6 +62,9 @@ struct HomeWalletContent: View {
                 .scrollDismissesKeyboard(.immediately)
                 .scrollIndicators(.hidden)
                 .animation(.elementDefault, value: context.viewState.walletContentListMode)
+                .refreshable {
+                    context.send(viewAction: .refreshWalletData)
+                }
             }
             .padding(.horizontal)
         }

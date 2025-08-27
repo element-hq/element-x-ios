@@ -346,6 +346,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             stakeAmount(amount)
         case .unstakeAmount(let amount):
             unstakeAmount(amount)
+        case .refreshWalletData:
+            fetchWalletData()
         case .searchUser:
             actionsSubject.send(.searchUser)
         }

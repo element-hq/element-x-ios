@@ -89,6 +89,7 @@ enum HomeScreenViewAction {
     case claimStakeRewards
     case stakeAmount(String)
     case unstakeAmount(String)
+    case refreshWalletData
     
     case searchUser
 }
