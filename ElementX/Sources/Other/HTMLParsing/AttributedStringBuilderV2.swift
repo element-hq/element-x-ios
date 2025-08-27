@@ -164,6 +164,14 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
                 content.setFontPreservingSymbolicTraits(UIFont.monospacedSystemFont(ofSize: UIFont.systemFontSize, weight: .regular))
                 content.addAttribute(.backgroundColor, value: UIColor.compound._bgCodeBlock as Any, range: NSRange(location: 0, length: content.length))
                 
+                // Don't allow identifiers in code blocks
+                content.removeAttribute(.MatrixRoomID, range: NSRange(location: 0, length: content.length))
+                content.removeAttribute(.MatrixRoomAlias, range: NSRange(location: 0, length: content.length))
+                content.removeAttribute(.MatrixUserID, range: NSRange(location: 0, length: content.length))
+                content.removeAttribute(.MatrixEventOnRoomID, range: NSRange(location: 0, length: content.length))
+                content.removeAttribute(.MatrixEventOnRoomAlias, range: NSRange(location: 0, length: content.length))
+                content.removeAttribute(.MatrixAllUsersMention, range: NSRange(location: 0, length: content.length))
+                
             case "hr":
                 content = NSMutableAttributedString(string: "\n")
                 
