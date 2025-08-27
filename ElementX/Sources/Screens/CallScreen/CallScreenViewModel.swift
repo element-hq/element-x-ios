@@ -226,7 +226,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     
     private func handleOutputDeviceSelected(deviceID: String) {
         let isEarpiece = deviceID == Self.earpieceID
-        MXLog.info("[handleOutputDeviceSelected] is earpiece: \(isEarpiece)")
+        MXLog.info("Is earpiece: \(isEarpiece)")
         UIDevice.current.isProximityMonitoringEnabled = isEarpiece
     }
     

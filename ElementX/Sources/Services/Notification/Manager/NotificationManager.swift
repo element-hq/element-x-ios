@@ -47,7 +47,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         notificationCenter.delegate = self
         
         notificationsEnabled = appSettings.enableNotifications
-        MXLog.info("[NotificationManager] app setting 'enableNotifications' is '\(notificationsEnabled)'")
+        MXLog.info("App setting 'enableNotifications' is '\(notificationsEnabled)'")
         
         // Listen for changes to AppSettings.enableNotifications
         appSettings.$enableNotifications
@@ -62,14 +62,14 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
         Task {
             do {
                 let permissionGranted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
-                MXLog.info("[NotificationManager] permission granted: \(permissionGranted)")
+                MXLog.info("Permission granted: \(permissionGranted)")
                 await MainActor.run {
                     if permissionGranted {
                         self.delegate?.registerForRemoteNotifications()
                     }
                 }
             } catch {
-                MXLog.error("[NotificationManager] request authorization failed: \(error)")
+                MXLog.error("Request authorization failed: \(error)")
             }
         }
     }
@@ -101,7 +101,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     }
 
     func registrationFailed(with error: Error) {
-        MXLog.error("[NotificationManager] device token registration failed with error: \(error)")
+        MXLog.error("Device token registration failed with error: \(error)")
     }
 
     func showLocalNotification(with title: String, subtitle: String?) async {
@@ -115,9 +115,9 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                                             trigger: nil)
         do {
             try await notificationCenter.add(request)
-            MXLog.info("[NotificationManager] show local notification succeeded")
+            MXLog.info("Show local notification succeeded")
         } catch {
-            MXLog.error("[NotificationManager] show local notification failed: \(error)")
+            MXLog.error("Show local notification failed: \(error)")
         }
     }
     
@@ -169,10 +169,10 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
                                                               profileTag: pusherProfileTag(),
                                                               lang: Bundle.app.preferredLocalizations.first ?? "en")
             try await clientProxy.setPusher(with: configuration)
-            MXLog.info("[NotificationManager] set pusher succeeded")
+            MXLog.info("Set pusher succeeded")
             return true
         } catch {
-            MXLog.error("[NotificationManager] set pusher failed: \(error)")
+            MXLog.error("Set pusher failed: \(error)")
             return false
         }
     }
@@ -194,7 +194,7 @@ final class NotificationManager: NSObject, NotificationManagerProtocol {
     private func enableNotifications(_ enable: Bool) {
         guard notificationsEnabled != enable else { return }
         notificationsEnabled = enable
-        MXLog.info("[NotificationManager] app setting 'enableNotifications' changed to '\(enable)'")
+        MXLog.info("App setting 'enableNotifications' changed to '\(enable)'")
         if enable {
             requestAuthorization()
         } else {

@@ -16,11 +16,10 @@ enum SpaceExplorerFlowCoordinatorAction: Equatable {
 class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
     
+    private var flowParameters: CommonFlowParameters
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
-    
-    private let userIndicatorController: UserIndicatorControllerProtocol
     
     private var spaceFlowCoordinator: SpaceFlowCoordinator?
     
@@ -52,12 +51,10 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol,
-         navigationSplitCoordinator: NavigationSplitCoordinator,
-         userIndicatorController: UserIndicatorControllerProtocol) {
-        self.userSession = userSession
+    init(navigationSplitCoordinator: NavigationSplitCoordinator, flowParameters: CommonFlowParameters) {
+        userSession = flowParameters.userSession
         self.navigationSplitCoordinator = navigationSplitCoordinator
-        self.userIndicatorController = userIndicatorController
+        self.flowParameters = flowParameters
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
@@ -117,7 +114,7 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSpaceList() {
         let parameters = SpaceListScreenCoordinatorParameters(userSession: userSession,
                                                               selectedSpaceSubject: selectedSpaceSubject.asCurrentValuePublisher(),
-                                                              userIndicatorController: userIndicatorController)
+                                                              userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = SpaceListScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher
             .sink { [weak self] action in
@@ -138,9 +135,8 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = SpaceFlowCoordinator(spaceRoomListProxy: spaceRoomListProxy,
                                                spaceServiceProxy: userSession.clientProxy.spaceService,
                                                isChildFlow: false,
-                                               mediaProvider: userSession.mediaProvider,
                                                navigationStackCoordinator: detailNavigationStackCoordinator,
-                                               userIndicatorController: userIndicatorController)
+                                               flowParameters: flowParameters)
         
         coordinator.actionsPublisher
             .sink { [weak self] action in

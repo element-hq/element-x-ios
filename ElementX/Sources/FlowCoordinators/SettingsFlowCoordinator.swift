@@ -19,22 +19,10 @@ enum SettingsFlowCoordinatorAction {
     case claimUserRewards
 }
 
-struct SettingsFlowCoordinatorParameters {
-    let userSession: UserSessionProtocol
-    let windowManager: WindowManagerProtocol
-    let appLockService: AppLockServiceProtocol
-    let bugReportService: BugReportServiceProtocol
-    let notificationSettings: NotificationSettingsProxyProtocol
-    let secureBackupController: SecureBackupControllerProtocol
-    let appSettings: AppSettings
-    let navigationStackCoordinator: NavigationStackCoordinator
-    let userIndicatorController: UserIndicatorControllerProtocol
-    let analytics: AnalyticsService
-}
-
 class SettingsFlowCoordinator: FlowCoordinatorProtocol {
-    private let parameters: SettingsFlowCoordinatorParameters
-    private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
+    private let appLockService: AppLockServiceProtocol
+    private let navigationStackCoordinator: NavigationStackCoordinator
+    private let flowParameters: CommonFlowParameters
     
     // periphery:ignore - retaining purpose
     private var appLockSetupFlowCoordinator: AppLockSetupFlowCoordinator?
@@ -50,8 +38,12 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: SettingsFlowCoordinatorParameters) {
-        self.parameters = parameters
+    init(appLockService: AppLockServiceProtocol,
+         navigationStackCoordinator: NavigationStackCoordinator,
+         flowParameters: CommonFlowParameters) {
+        self.appLockService = appLockService
+        self.navigationStackCoordinator = navigationStackCoordinator
+        self.flowParameters = flowParameters
     }
     
     func start() {
@@ -76,9 +68,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func presentSettingsScreen(animated: Bool) {
-        let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: parameters.userSession,
-                                                                                    appSettings: parameters.appSettings,
-                                                                                    isBugReportServiceEnabled: parameters.bugReportService.isEnabled))
+        let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
+                                                                                    appSettings: flowParameters.appSettings,
+                                                                                    isBugReportServiceEnabled: flowParameters.bugReportService.isEnabled))
         
         settingsScreenCoordinator.actions
             .sink { [weak self] action in
@@ -101,9 +93,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
                     presentAppLockSetupFlow()
                 case .bugReport:
                     bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .push(navigationStackCoordinator),
-                                                                                          userIndicatorController: parameters.userIndicatorController,
-                                                                                          bugReportService: parameters.bugReportService,
-                                                                                          userSession: parameters.userSession))
+                                                                                          userIndicatorController: flowParameters.userIndicatorController,
+                                                                                          bugReportService: flowParameters.bugReportService,
+                                                                                          userSession: flowParameters.userSession))
                     bugReportFlowCoordinator?.start()
                 case .about:
                     presentLegalInformationScreen()
@@ -138,11 +130,10 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func startEncryptionSettingsFlow(animated: Bool) {
-        let coordinator = EncryptionSettingsFlowCoordinator(parameters: .init(userSession: parameters.userSession,
-                                                                              appSettings: parameters.appSettings,
-                                                                              userIndicatorController: parameters.userIndicatorController,
-                                                                              navigationStackCoordinator: navigationStackCoordinator,
-                                                                              windowManager: parameters.windowManager))
+        let coordinator = EncryptionSettingsFlowCoordinator(parameters: .init(userSession: flowParameters.userSession,
+                                                                              appSettings: flowParameters.appSettings,
+                                                                              userIndicatorController: flowParameters.userIndicatorController,
+                                                                              navigationStackCoordinator: navigationStackCoordinator))
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action {
             case .complete:
@@ -157,26 +148,26 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentUserDetailsEditScreen() {
-        let coordinator = UserDetailsEditScreenCoordinator(parameters: .init(orientationManager: parameters.windowManager,
-                                                                             clientProxy: parameters.userSession.clientProxy,
-                                                                             mediaProvider: parameters.userSession.mediaProvider,
-                                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: parameters.appSettings),
+        let coordinator = UserDetailsEditScreenCoordinator(parameters: .init(orientationManager: flowParameters.windowManager,
+                                                                             clientProxy: flowParameters.userSession.clientProxy,
+                                                                             mediaProvider: flowParameters.userSession.mediaProvider,
+                                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
                                                                              navigationStackCoordinator: navigationStackCoordinator,
-                                                                             userIndicatorController: parameters.userIndicatorController,
-                                                                             appSettings: parameters.appSettings))
+                                                                             userIndicatorController: flowParameters.userIndicatorController,
+                                                                             appSettings: flowParameters.appSettings))
         
         navigationStackCoordinator.push(coordinator)
     }
     
     private func presentAnalyticsScreen() {
-        let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: parameters.appSettings,
-                                                                               analytics: parameters.analytics))
+        let coordinator = AnalyticsSettingsScreenCoordinator(parameters: .init(appSettings: flowParameters.appSettings,
+                                                                               analytics: flowParameters.analytics))
         navigationStackCoordinator.push(coordinator)
     }
     
     private func presentAppLockSetupFlow() {
         let coordinator = AppLockSetupFlowCoordinator(presentingFlow: .settings,
-                                                      appLockService: parameters.appLockService,
+                                                      appLockService: appLockService,
                                                       navigationStackCoordinator: navigationStackCoordinator)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -195,32 +186,31 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentLegalInformationScreen() {
-        navigationStackCoordinator.push(LegalInformationScreenCoordinator(appSettings: parameters.appSettings))
+        navigationStackCoordinator.push(LegalInformationScreenCoordinator(appSettings: flowParameters.appSettings))
     }
     
     private func presentBlockedUsersScreen() {
-        let coordinator = BlockedUsersScreenCoordinator(parameters: .init(hideProfiles: parameters.appSettings.hideIgnoredUserProfiles,
-                                                                          clientProxy: parameters.userSession.clientProxy,
-                                                                          mediaProvider: parameters.userSession.mediaProvider,
-                                                                          userIndicatorController: parameters.userIndicatorController))
+        let coordinator = BlockedUsersScreenCoordinator(parameters: .init(hideProfiles: flowParameters.appSettings.hideIgnoredUserProfiles,
+                                                                          clientProxy: flowParameters.userSession.clientProxy,
+                                                                          mediaProvider: flowParameters.userSession.mediaProvider,
+                                                                          userIndicatorController: flowParameters.userIndicatorController))
         navigationStackCoordinator.push(coordinator)
     }
         
     private func presentNotificationSettings() {
         let notificationParameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
-                                                                                     userSession: parameters.userSession,
+                                                                                     userSession: flowParameters.userSession,
                                                                                      userNotificationCenter: UNUserNotificationCenter.current(),
-                                                                                     notificationSettings: parameters.notificationSettings,
                                                                                      isModallyPresented: false)
         let coordinator = NotificationSettingsScreenCoordinator(parameters: notificationParameters)
         navigationStackCoordinator.push(coordinator)
     }
     
     private func presentAdvancedSettings() {
-        let coordinator = AdvancedSettingsScreenCoordinator(parameters: .init(appSettings: parameters.appSettings,
-                                                                              analytics: parameters.analytics,
-                                                                              clientProxy: parameters.userSession.clientProxy,
-                                                                              userIndicatorController: parameters.userIndicatorController))
+        let coordinator = AdvancedSettingsScreenCoordinator(parameters: .init(appSettings: flowParameters.appSettings,
+                                                                              analytics: flowParameters.analytics,
+                                                                              clientProxy: flowParameters.userSession.clientProxy,
+                                                                              userIndicatorController: flowParameters.userIndicatorController))
         navigationStackCoordinator.push(coordinator)
     }
     
@@ -248,8 +238,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentDeactivateAccount() {
-        let parameters = DeactivateAccountScreenCoordinatorParameters(clientProxy: parameters.userSession.clientProxy,
-                                                                      userIndicatorController: parameters.userIndicatorController)
+        let parameters = DeactivateAccountScreenCoordinatorParameters(clientProxy: flowParameters.userSession.clientProxy,
+                                                                      userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = DeactivateAccountScreenCoordinator(parameters: parameters)
         
         coordinator.actionsPublisher
@@ -306,7 +296,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentAccountManagementURL(_ url: URL) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
         // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
-        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url, presentationAnchor: parameters.windowManager.mainWindow)
+        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url, presentationAnchor: flowParameters.windowManager.mainWindow)
         accountSettingsPresenter?.start()
     }
     

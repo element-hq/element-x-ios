@@ -19,21 +19,15 @@ enum ChatsFlowCoordinatorAction {
 }
 
 class ChatsFlowCoordinator: FlowCoordinatorProtocol {
-    private let userSession: UserSessionProtocol
     private let navigationSplitCoordinator: NavigationSplitCoordinator
-    private let bugReportService: BugReportServiceProtocol
-    private let elementCallService: ElementCallServiceProtocol
-    private let appMediator: AppMediatorProtocol
-    private let appSettings: AppSettings
-    private let appHooks: AppHooks
-    private let analytics: AnalyticsService
-    private let notificationManager: NotificationManagerProtocol
+    private let flowParameters: CommonFlowParameters
+    
+    private var userSession: UserSessionProtocol { flowParameters.userSession }
     
     private let stateMachine: ChatsFlowCoordinatorStateMachine
     
     // periphery:ignore - retaining purpose
     private var roomFlowCoordinator: RoomFlowCoordinator?
-    private let timelineControllerFactory: TimelineControllerFactoryProtocol
     
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
@@ -62,30 +56,12 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(userSession: UserSessionProtocol,
-         isNewLogin: Bool,
+    init(isNewLogin: Bool,
          navigationSplitCoordinator: NavigationSplitCoordinator,
-         appLockService: AppLockServiceProtocol,
-         bugReportService: BugReportServiceProtocol,
-         elementCallService: ElementCallServiceProtocol,
-         timelineControllerFactory: TimelineControllerFactoryProtocol,
-         appMediator: AppMediatorProtocol,
-         appSettings: AppSettings,
-         appHooks: AppHooks,
-         analytics: AnalyticsService,
-         notificationManager: NotificationManagerProtocol,
-         stateMachineFactory: StateMachineFactoryProtocol) {
-        stateMachine = stateMachineFactory.makeChatsFlowStateMachine()
-        self.userSession = userSession
+         flowParameters: CommonFlowParameters) {
+        stateMachine = flowParameters.stateMachineFactory.makeChatsFlowStateMachine()
         self.navigationSplitCoordinator = navigationSplitCoordinator
-        self.bugReportService = bugReportService
-        self.elementCallService = elementCallService
-        self.timelineControllerFactory = timelineControllerFactory
-        self.appMediator = appMediator
-        self.appSettings = appSettings
-        self.appHooks = appHooks
-        self.analytics = analytics
-        self.notificationManager = notificationManager
+        self.flowParameters = flowParameters
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
@@ -236,8 +212,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (.roomList, .feedbackScreen, .feedbackScreen):
                 bugReportFlowCoordinator = BugReportFlowCoordinator(parameters: .init(presentationMode: .sheet(sidebarNavigationStackCoordinator),
-                                                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                                      bugReportService: bugReportService,
+                                                                                      userIndicatorController: flowParameters.userIndicatorController,
+                                                                                      bugReportService: flowParameters.bugReportService,
                                                                                       userSession: userSession))
                 bugReportFlowCoordinator?.start()
             case (.feedbackScreen, .dismissedFeedbackScreen, .roomList):
@@ -325,7 +301,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 case .receivedSyncUpdate:
                     Task {
                         let roomSummaries = self.userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher.value
-                        await self.notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries)
+                        await self.flowParameters.notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries)
                     }
                 default:
                     break
@@ -333,7 +309,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        elementCallService.actions
+        flowParameters.elementCallService.actions
             .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 switch action {
@@ -364,25 +340,25 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         case .withheldBySender: .OlmKeysNotSentError
         }
         
-        analytics.trackError(context: nil,
-                             domain: .E2EE,
-                             name: errorName,
-                             timeToDecryptMillis: timeToDecryptMs,
-                             eventLocalAgeMillis: Int(truncatingIfNeeded: info.eventLocalAgeMillis),
-                             isFederated: info.ownHomeserver != info.senderHomeserver,
-                             isMatrixDotOrg: info.ownHomeserver == "matrix.org",
-                             userTrustsOwnIdentity: info.userTrustsOwnIdentity,
-                             wasVisibleToUser: nil)
+        flowParameters.analytics.trackError(context: nil,
+                                            domain: .E2EE,
+                                            name: errorName,
+                                            timeToDecryptMillis: timeToDecryptMs,
+                                            eventLocalAgeMillis: Int(truncatingIfNeeded: info.eventLocalAgeMillis),
+                                            isFederated: info.ownHomeserver != info.senderHomeserver,
+                                            isMatrixDotOrg: info.ownHomeserver == "matrix.org",
+                                            userTrustsOwnIdentity: info.userTrustsOwnIdentity,
+                                            wasVisibleToUser: nil)
     }
     
     private func presentHomeScreen() {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
-                                                         bugReportService: bugReportService,
+                                                         bugReportService: flowParameters.bugReportService,
                                                          selectedRoomPublisher: selectedRoomSubject.asCurrentValuePublisher(),
-                                                         appSettings: appSettings,
-                                                         analyticsService: analytics,
-                                                         notificationManager: notificationManager,
-                                                         userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                         appSettings: flowParameters.appSettings,
+                                                         analyticsService: flowParameters.analytics,
+                                                         notificationManager: flowParameters.notificationManager,
+                                                         userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = HomeScreenCoordinator(parameters: parameters)
         
         coordinator.actions
@@ -447,7 +423,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         
         let navigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = ReportRoomScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController))
+                                                                        userIndicatorController: flowParameters.userIndicatorController))
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             switch action {
@@ -472,7 +448,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = DeclineAndBlockScreenCoordinator(parameters: .init(userID: userID,
                                                                              roomID: roomID,
                                                                              clientProxy: userSession.clientProxy,
-                                                                             userIndicatorController: ServiceLocator.shared.userIndicatorController))
+                                                                             userIndicatorController: flowParameters.userIndicatorController))
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
             
@@ -496,17 +472,9 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                                entryPoint: RoomFlowCoordinatorEntryPoint,
                                animated: Bool) {
         let coordinator = RoomFlowCoordinator(roomID: roomID,
-                                              userSession: userSession,
                                               isChildFlow: false,
-                                              timelineControllerFactory: timelineControllerFactory,
                                               navigationStackCoordinator: detailNavigationStackCoordinator,
-                                              emojiProvider: EmojiProvider(appSettings: appSettings),
-                                              ongoingCallRoomIDPublisher: elementCallService.ongoingCallRoomIDPublisher,
-                                              appMediator: appMediator,
-                                              appSettings: appSettings,
-                                              appHooks: appHooks,
-                                              analytics: analytics,
-                                              userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                              flowParameters: flowParameters)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
@@ -544,7 +512,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         Task {
             let _ = await userSession.clientProxy.trackRecentlyVisitedRoom(roomID)
             
-            await notificationManager.removeDeliveredMessageNotifications(for: roomID)
+            await flowParameters.notificationManager.removeDeliveredMessageNotifications(for: roomID)
         }
     }
     
@@ -560,13 +528,13 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         let startChatNavigationStackCoordinator = NavigationStackCoordinator()
         
         let userDiscoveryService = UserDiscoveryService(clientProxy: userSession.clientProxy)
-        let parameters = StartChatScreenCoordinatorParameters(orientationManager: appMediator.windowManager,
+        let parameters = StartChatScreenCoordinatorParameters(orientationManager: flowParameters.windowManager,
                                                               userSession: userSession,
-                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                              userIndicatorController: flowParameters.userIndicatorController,
                                                               navigationStackCoordinator: startChatNavigationStackCoordinator,
                                                               userDiscoveryService: userDiscoveryService,
-                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
-                                                              appSettings: appSettings)
+                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
+                                                              appSettings: flowParameters.appSettings)
         
         let coordinator = StartChatScreenCoordinator(parameters: parameters)
         coordinator.actions.sink { [weak self] action in
@@ -606,27 +574,27 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol) {
-        let colorScheme: ColorScheme = appMediator.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
+        let colorScheme: ColorScheme = flowParameters.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
         presentCallScreen(configuration: .init(roomProxy: roomProxy,
                                                clientProxy: userSession.clientProxy,
                                                clientID: InfoPlistReader.main.bundleIdentifier,
-                                               elementCallBaseURL: appSettings.elementCallBaseURL,
-                                               elementCallBaseURLOverride: appSettings.elementCallBaseURLOverride,
+                                               elementCallBaseURL: flowParameters.appSettings.elementCallBaseURL,
+                                               elementCallBaseURLOverride: flowParameters.appSettings.elementCallBaseURLOverride,
                                                colorScheme: colorScheme))
     }
     
     private var callScreenPictureInPictureController: AVPictureInPictureController?
     private func presentCallScreen(configuration: ElementCallConfiguration) {
-        guard elementCallService.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
+        guard flowParameters.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
             MXLog.info("Returning to existing call.")
             callScreenPictureInPictureController?.stopPictureInPicture()
             return
         }
         
-        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
+        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: flowParameters.elementCallService,
                                                                             configuration: configuration,
                                                                             allowPictureInPicture: true,
-                                                                            appHooks: appHooks))
+                                                                            appHooks: flowParameters.appHooks))
         
         callScreenCoordinator.actions
             .sink { [weak self] action in
@@ -649,7 +617,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         
         navigationSplitCoordinator.setOverlayCoordinator(callScreenCoordinator, animated: true)
         
-        analytics.track(screen: .RoomCall)
+        flowParameters.analytics.track(screen: .RoomCall)
     }
     
     private func hideCallScreenOverlay() {
@@ -677,7 +645,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentRecoveryKeyScreen(animated: Bool) {
         let sheetNavigationStackCoordinator = NavigationStackCoordinator()
         let parameters = SecureBackupRecoveryKeyScreenCoordinatorParameters(secureBackupController: userSession.clientProxy.secureBackupController,
-                                                                            userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                            userIndicatorController: flowParameters.userIndicatorController,
                                                                             isModallyPresented: true,
                                                                             isForceKeyReset: false)
         
@@ -701,9 +669,9 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private func startEncryptionResetFlow(animated: Bool) {
         let sheetNavigationStackCoordinator = NavigationStackCoordinator()
         let parameters = EncryptionResetFlowCoordinatorParameters(userSession: userSession,
-                                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                                  userIndicatorController: flowParameters.userIndicatorController,
                                                                   navigationStackCoordinator: sheetNavigationStackCoordinator,
-                                                                  windowManger: appMediator.windowManager)
+                                                                  windowManger: flowParameters.windowManager)
         
         let coordinator = EncryptionResetFlowCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
@@ -753,14 +721,14 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         
         let hostingController = UIHostingController(rootView: coordinator.toPresentable())
         hostingController.view.backgroundColor = .clear
-        appMediator.windowManager.globalSearchWindow.rootViewController = hostingController
-        
-        appMediator.windowManager.showGlobalSearch()
+        flowParameters.windowManager.globalSearchWindow.rootViewController = hostingController
+
+        flowParameters.windowManager.showGlobalSearch()
     }
     
     private func dismissGlobalSearch() {
-        appMediator.windowManager.globalSearchWindow.rootViewController = nil
-        appMediator.windowManager.hideGlobalSearch()
+        flowParameters.windowManager.globalSearchWindow.rootViewController = nil
+        flowParameters.windowManager.hideGlobalSearch()
         
         globalSearchScreenCoordinator = nil
     }
@@ -770,7 +738,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentRoomDirectorySearch() {
         let coordinator = RoomDirectorySearchScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
                                                                                  mediaProvider: userSession.mediaProvider,
-                                                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController))
+                                                                                 userIndicatorController: flowParameters.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
@@ -805,8 +773,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                                                                 isPresentedModally: true,
                                                                 clientProxy: userSession.clientProxy,
                                                                 mediaProvider: userSession.mediaProvider,
-                                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
-                                                                analytics: analytics)
+                                                                userIndicatorController: flowParameters.userIndicatorController,
+                                                                analytics: flowParameters.analytics)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }
@@ -881,22 +849,22 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private static let failureIndicatorIdentifier = "\(ChatsFlowCoordinator.self)-Failure"
     
     private func showLoadingIndicator(delay: Duration? = nil) {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                                                    type: .modal,
-                                                                                    title: L10n.commonLoading,
-                                                                                    persistent: true),
-                                                                      delay: delay)
+        flowParameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                             type: .modal,
+                                                                             title: L10n.commonLoading,
+                                                                             persistent: true),
+                                                               delay: delay)
     }
     
     private func hideLoadingIndicator() {
-        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        flowParameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
     private func showFailureIndicator() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorIdentifier,
-                                                                                    type: .toast,
-                                                                                    title: L10n.errorUnknown,
-                                                                                    iconName: "xmark"))
+        flowParameters.userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorIdentifier,
+                                                                             type: .toast,
+                                                                             title: L10n.errorUnknown,
+                                                                             iconName: "xmark"))
     }
     
     private func presentFeedDetailsScreen(_ post: HomeScreenPost,

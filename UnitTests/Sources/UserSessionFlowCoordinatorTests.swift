@@ -35,19 +35,23 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         
         notificationManager = NotificationManagerMock()
         
-        userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                                isNewLogin: false,
+        let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                  bugReportService: BugReportServiceMock(.init()),
+                                                  elementCallService: ElementCallServiceMock(.init()),
+                                                  timelineControllerFactory: timelineControllerFactory,
+                                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                  appMediator: AppMediatorMock.default,
+                                                  appSettings: ServiceLocator.shared.settings,
+                                                  appHooks: AppHooks(),
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  notificationManager: notificationManager,
+                                                  stateMachineFactory: stateMachineFactory)
+        
+        userSessionFlowCoordinator = UserSessionFlowCoordinator(isNewLogin: false,
                                                                 navigationRootCoordinator: rootCoordinator,
                                                                 appLockService: AppLockServiceMock(),
-                                                                bugReportService: BugReportServiceMock(.init()),
-                                                                elementCallService: ElementCallServiceMock(.init()),
-                                                                timelineControllerFactory: timelineControllerFactory,
-                                                                appMediator: AppMediatorMock.default,
-                                                                appSettings: ServiceLocator.shared.settings,
-                                                                appHooks: AppHooks(),
-                                                                analytics: ServiceLocator.shared.analytics,
-                                                                notificationManager: notificationManager,
-                                                                stateMachineFactory: stateMachineFactory)
+                                                                flowParameters: flowParameters)
         
         userSessionFlowCoordinator.start()
     }

@@ -346,7 +346,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                 }
             }
         } catch {
-            MXLog.error("[RoomProxy] Failed updating members using no sync API: \(error)")
+            MXLog.error("Failed updating members using no sync API: \(error)")
         }
         
         do {
@@ -361,7 +361,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
                 }
             }
         } catch {
-            MXLog.error("[RoomProxy] Failed updating members using sync API: \(error)")
+            MXLog.error("Failed updating members using sync API: \(error)")
         }
     }
 

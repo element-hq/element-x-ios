@@ -38,7 +38,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
 
         guard let textAttachment = textAttachment as? PillTextAttachment,
               let pillData = textAttachment.pillData else {
-            MXLog.failure("[PillAttachmentViewProvider]: attachment is missing data or not of expected class")
+            MXLog.failure("Attachment is missing data or not of expected class")
             return
         }
         
@@ -52,7 +52,7 @@ final class PillAttachmentViewProvider: NSTextAttachmentViewProvider, NSSecureCo
             context = PillContext(timelineContext: timelineContext, data: pillData)
             mediaProvider = timelineContext.mediaProvider
         } else {
-            MXLog.failure("[PillAttachmentViewProvider]: missing room context")
+            MXLog.failure("Missing room context")
             return
         }
         

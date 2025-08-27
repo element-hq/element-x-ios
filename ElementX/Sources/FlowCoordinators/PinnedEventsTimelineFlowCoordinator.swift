@@ -16,14 +16,11 @@ enum PinnedEventsTimelineFlowCoordinatorAction {
 }
 
 class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
-    private let navigationStackCoordinator: NavigationStackCoordinator
-    private let userSession: UserSessionProtocol
-    private let timelineControllerFactory: TimelineControllerFactoryProtocol
     private let roomProxy: JoinedRoomProxyProtocol
-    private let userIndicatorController: UserIndicatorControllerProtocol
-    private let appSettings: AppSettings
-    private let appMediator: AppMediatorProtocol
-    private let emojiProvider: EmojiProviderProtocol
+    private let navigationStackCoordinator: NavigationStackCoordinator
+    private let flowParameters: CommonFlowParameters
+    
+    private var userSession: UserSessionProtocol { flowParameters.userSession }
     
     private let zeroAttachmentService: ZeroAttachmentService
     
@@ -34,22 +31,12 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(navigationStackCoordinator: NavigationStackCoordinator,
-         userSession: UserSessionProtocol,
-         timelineControllerFactory: TimelineControllerFactoryProtocol,
-         roomProxy: JoinedRoomProxyProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         appSettings: AppSettings,
-         appMediator: AppMediatorProtocol,
-         emojiProvider: EmojiProviderProtocol) {
-        self.navigationStackCoordinator = navigationStackCoordinator
-        self.userSession = userSession
-        self.timelineControllerFactory = timelineControllerFactory
+    init(roomProxy: JoinedRoomProxyProtocol,
+         navigationStackCoordinator: NavigationStackCoordinator,
+         flowParameters: CommonFlowParameters) {
         self.roomProxy = roomProxy
-        self.userIndicatorController = userIndicatorController
-        self.appSettings = appSettings
-        self.appMediator = appMediator
-        self.emojiProvider = emojiProvider
+        self.navigationStackCoordinator = navigationStackCoordinator
+        self.flowParameters = flowParameters
         
         zeroAttachmentService = ZeroAttachmentService(appSettings: appSettings, isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted)
     }
@@ -73,9 +60,9 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID),
                                                           zeroAttachmentService: zeroAttachmentService)
         
-        guard case let .success(timelineController) = await timelineControllerFactory.buildPinnedEventsTimelineController(roomProxy: roomProxy,
-                                                                                                                          timelineItemFactory: timelineItemFactory,
-                                                                                                                          mediaProvider: userSession.mediaProvider) else {
+        guard case let .success(timelineController) = await flowParameters.timelineControllerFactory.buildPinnedEventsTimelineController(roomProxy: roomProxy,
+                                                                                                                                         timelineItemFactory: timelineItemFactory,
+                                                                                                                                         mediaProvider: userSession.mediaProvider) else {
             fatalError("This can never fail because we allow this view to be presented only when the timeline is fully loaded and not nil")
         }
         
@@ -84,9 +71,9 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                                   mediaProvider: userSession.mediaProvider,
                                                                                   mediaPlayerProvider: MediaPlayerProvider(),
                                                                                   voiceMessageMediaManager: userSession.voiceMessageMediaManager,
-                                                                                  appMediator: appMediator,
-                                                                                  emojiProvider: emojiProvider,
-                                                                                  timelineControllerFactory: timelineControllerFactory,
+                                                                                  appMediator: flowParameters.appMediator,
+                                                                                  emojiProvider: flowParameters.emojiProvider,
+                                                                                  timelineControllerFactory: flowParameters.timelineControllerFactory,
                                                                                   clientProxy: userSession.clientProxy))
         
         coordinator.actions
@@ -115,8 +102,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let params = StaticLocationScreenCoordinatorParameters(interactionMode: .viewOnly(geoURI: geoURI, description: description),
-                                                               mapURLBuilder: appSettings.mapTilerConfiguration,
-                                                               appMediator: appMediator)
+                                                               mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration,
+                                                               appMediator: flowParameters.appMediator)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
@@ -145,7 +132,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                       clientProxy: userSession.clientProxy,
                                                                       roomSummaryProvider: roomSummaryProvider,
                                                                       mediaProvider: userSession.mediaProvider,
-                                                                      userIndicatorController: userIndicatorController)
+                                                                      userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = MessageForwardingScreenCoordinator(parameters: parameters)
         
         coordinator.actions.sink { [weak self] action in

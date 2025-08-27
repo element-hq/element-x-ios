@@ -14,3 +14,25 @@ protocol FlowCoordinatorProtocol {
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool)
     func clearRoute(animated: Bool)
 }
+
+/// Core parameters that are shared across the main flows for easy dependency injection.
+///
+/// Please do **not** pass this type directly to screen coordinators/view models.
+@MainActor
+struct CommonFlowParameters {
+    let userSession: UserSessionProtocol
+    let bugReportService: BugReportServiceProtocol
+    let elementCallService: ElementCallServiceProtocol
+    let timelineControllerFactory: TimelineControllerFactoryProtocol
+    let emojiProvider: EmojiProviderProtocol
+    let appMediator: AppMediatorProtocol
+    let appSettings: AppSettings
+    let appHooks: AppHooks
+    let analytics: AnalyticsService
+    let userIndicatorController: UserIndicatorControllerProtocol
+    let notificationManager: NotificationManagerProtocol
+    let stateMachineFactory: StateMachineFactoryProtocol
+    
+    var windowManager: WindowManagerProtocol { appMediator.windowManager }
+    var ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never> { elementCallService.ongoingCallRoomIDPublisher }
+}

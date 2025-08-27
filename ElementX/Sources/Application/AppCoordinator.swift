@@ -337,7 +337,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     func notificationTapped(content: UNNotificationContent) async {
-        MXLog.info("[AppCoordinator] tappedNotification")
+        MXLog.info("Tapped Notification")
         
         guard let roomID = content.roomID,
               content.receiverID != nil else {
@@ -356,7 +356,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     }
     
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
-        MXLog.info("[AppCoordinator] handle notification reply")
+        MXLog.info("Handle notification reply")
         
         guard let roomID = content.roomID else {
             return
@@ -642,19 +642,23 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             fatalError("User session not setup")
         }
         
-        let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
-                                                                    isNewLogin: isNewLogin,
+        let flowParameters = CommonFlowParameters(userSession: userSession,
+                                                  bugReportService: ServiceLocator.shared.bugReportService,
+                                                  elementCallService: elementCallService,
+                                                  timelineControllerFactory: TimelineControllerFactory(),
+                                                  emojiProvider: EmojiProvider(appSettings: appSettings),
+                                                  appMediator: appMediator,
+                                                  appSettings: appSettings,
+                                                  appHooks: appHooks,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                  notificationManager: notificationManager,
+                                                  stateMachineFactory: StateMachineFactory())
+        
+        let userSessionFlowCoordinator = UserSessionFlowCoordinator(isNewLogin: isNewLogin,
                                                                     navigationRootCoordinator: navigationRootCoordinator,
                                                                     appLockService: appLockFlowCoordinator.appLockService,
-                                                                    bugReportService: ServiceLocator.shared.bugReportService,
-                                                                    elementCallService: elementCallService,
-                                                                    timelineControllerFactory: TimelineControllerFactory(),
-                                                                    appMediator: appMediator,
-                                                                    appSettings: appSettings,
-                                                                    appHooks: appHooks,
-                                                                    analytics: ServiceLocator.shared.analytics,
-                                                                    notificationManager: notificationManager,
-                                                                    stateMachineFactory: StateMachineFactory())
+                                                                    flowParameters: flowParameters)
         
         userSessionFlowCoordinator.actionsPublisher
             .sink { [weak self] action in

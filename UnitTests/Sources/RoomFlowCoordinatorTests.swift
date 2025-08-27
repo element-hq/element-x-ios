@@ -358,18 +358,23 @@ class RoomFlowCoordinatorTests: XCTestCase {
             "1"
         }
         
-        roomFlowCoordinator = RoomFlowCoordinator(roomID: roomID,
-                                                  userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                                  isChildFlow: asChildFlow,
+        let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                  bugReportService: BugReportServiceMock(.init()),
+                                                  elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: timelineControllerFactory,
-                                                  navigationStackCoordinator: navigationStackCoordinator,
                                                   emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                                  ongoingCallRoomIDPublisher: .init(.init(nil)),
                                                   appMediator: AppMediatorMock.default,
                                                   appSettings: ServiceLocator.shared.settings,
                                                   appHooks: AppHooks(),
                                                   analytics: ServiceLocator.shared.analytics,
-                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                  notificationManager: NotificationManagerMock(),
+                                                  stateMachineFactory: StateMachineFactory())
+        
+        roomFlowCoordinator = RoomFlowCoordinator(roomID: roomID,
+                                                  isChildFlow: asChildFlow,
+                                                  navigationStackCoordinator: navigationStackCoordinator,
+                                                  flowParameters: flowParameters)
     }
 }
 
