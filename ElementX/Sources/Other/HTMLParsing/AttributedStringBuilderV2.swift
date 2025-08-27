@@ -182,7 +182,7 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
                 }
                 
             case "span":
-                if (try? childElement.attr(Self.attributeMSC4286)) ?? nil != nil {
+                if childElement.dataset()[Self.attributeMSC4286] != nil {
                     content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 }
                 
