@@ -160,7 +160,7 @@ final class NotificationManagerTests: XCTestCase {
         notificationCenter.authorizationStatusReturnValue = .authorized
         notificationManager.delegate = self
         
-        notificationManager.setUserSession(UserSessionMock(.init(clientProxy: ClientProxyMock(.init()))))
+        notificationManager.setUserSession(UserSessionMock(.init()))
         try await Task.sleep(for: .seconds(1))
         
         XCTAssertFalse(authorizationStatusWasGranted)
@@ -177,7 +177,7 @@ final class NotificationManagerTests: XCTestCase {
             expectation.fulfill()
         }
         
-        notificationManager.setUserSession(UserSessionMock(.init(clientProxy: ClientProxyMock(.init()))))
+        notificationManager.setUserSession(UserSessionMock(.init()))
         await fulfillment(of: [expectation])
         
         XCTAssertTrue(authorizationStatusWasGranted)

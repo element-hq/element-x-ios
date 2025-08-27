@@ -723,8 +723,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Room Directory Search
     
     private func presentRoomDirectorySearch() {
-        let coordinator = RoomDirectorySearchScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
-                                                                                 mediaProvider: userSession.mediaProvider,
+        let coordinator = RoomDirectorySearchScreenCoordinator(parameters: .init(userSession: userSession,
                                                                                  userIndicatorController: flowParameters.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in
@@ -758,8 +757,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         let navigationStackCoordinator = NavigationStackCoordinator()
         let parameters = UserProfileScreenCoordinatorParameters(userID: userID,
                                                                 isPresentedModally: true,
-                                                                clientProxy: userSession.clientProxy,
-                                                                mediaProvider: userSession.mediaProvider,
+                                                                userSession: userSession,
                                                                 userIndicatorController: flowParameters.userIndicatorController,
                                                                 analytics: flowParameters.analytics)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)
@@ -791,9 +789,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         
         let stackCoordinator = NavigationStackCoordinator()
         
-        let coordinator = RoomSelectionScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
-                                                                           roomSummaryProvider: roomSummaryProvider,
-                                                                           mediaProvider: userSession.mediaProvider))
+        let coordinator = RoomSelectionScreenCoordinator(parameters: .init(userSession: userSession,
+                                                                           roomSummaryProvider: roomSummaryProvider))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }

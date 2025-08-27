@@ -20,13 +20,12 @@ class RoomSelectionScreenViewModel: RoomSelectionScreenViewModelType, RoomSelect
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(clientProxy: ClientProxyProtocol,
-         roomSummaryProvider: RoomSummaryProviderProtocol,
-         mediaProvider: MediaProviderProtocol) {
-        self.clientProxy = clientProxy
+    init(userSession: UserSessionProtocol,
+         roomSummaryProvider: RoomSummaryProviderProtocol) {
+        clientProxy = userSession.clientProxy
         self.roomSummaryProvider = roomSummaryProvider
         
-        super.init(initialViewState: RoomSelectionScreenViewState(), mediaProvider: mediaProvider)
+        super.init(initialViewState: RoomSelectionScreenViewState(), mediaProvider: userSession.mediaProvider)
         
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)

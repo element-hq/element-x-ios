@@ -155,8 +155,7 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
                                                   members: [.mockMeAdmin]))
         
         return RoomDetailsEditScreenViewModel(roomProxy: roomProxy,
-                                              clientProxy: ClientProxyMock(.init()),
-                                              mediaProvider: MediaProviderMock(configuration: .init()),
+                                              userSession: UserSessionMock(.init()),
                                               mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                               userIndicatorController: UserIndicatorControllerMock.default)
     }()
@@ -167,8 +166,7 @@ struct RoomDetailsEditScreen_Previews: PreviewProvider, TestablePreview {
                                                   members: [.mockAlice]))
         
         return RoomDetailsEditScreenViewModel(roomProxy: roomProxy,
-                                              clientProxy: ClientProxyMock(.init()),
-                                              mediaProvider: MediaProviderMock(configuration: .init()),
+                                              userSession: UserSessionMock(.init()),
                                               mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
                                               userIndicatorController: UserIndicatorControllerMock.default)
     }()

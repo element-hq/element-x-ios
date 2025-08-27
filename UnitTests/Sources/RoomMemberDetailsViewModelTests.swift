@@ -28,8 +28,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         roomMemberProxyMock = RoomMemberProxyMock.mockAlice
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
-                                                     clientProxy: ClientProxyMock(.init()),
-                                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                                     userSession: UserSessionMock(.init()),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                      analytics: ServiceLocator.shared.analytics)
         
@@ -45,8 +44,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         roomMemberProxyMock = RoomMemberProxyMock.mockAlice
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
-                                                     clientProxy: ClientProxyMock(.init()),
-                                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                                     userSession: UserSessionMock(.init()),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                      analytics: ServiceLocator.shared.analytics)
         
@@ -83,8 +81,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         clientProxy.ignoreUserReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
-                                                     clientProxy: clientProxy,
-                                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                      analytics: ServiceLocator.shared.analytics)
         
@@ -120,8 +117,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
-                                                     clientProxy: ClientProxyMock(.init()),
-                                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                                     userSession: UserSessionMock(.init()),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                      analytics: ServiceLocator.shared.analytics)
         
@@ -156,8 +152,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         clientProxy.unignoreUserReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
-                                                     clientProxy: clientProxy,
-                                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                      analytics: ServiceLocator.shared.analytics)
         
@@ -192,8 +187,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         roomMemberProxyMock = RoomMemberProxyMock.mockMe
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
-                                                     clientProxy: ClientProxyMock(.init()),
-                                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                                     userSession: UserSessionMock(.init()),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                      analytics: ServiceLocator.shared.analytics)
         
@@ -209,8 +203,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
         viewModel = RoomMemberDetailsScreenViewModel(userID: roomMemberProxyMock.userID,
                                                      roomProxy: roomProxyMock,
-                                                     clientProxy: ClientProxyMock(.init()),
-                                                     mediaProvider: MediaProviderMock(configuration: .init()),
+                                                     userSession: UserSessionMock(.init()),
                                                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                      analytics: ServiceLocator.shared.analytics)
         

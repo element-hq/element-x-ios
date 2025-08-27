@@ -12,8 +12,7 @@ typealias RoomMemberDetailsScreenViewModelType = StateStoreViewModel<RoomMemberD
 
 class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, RoomMemberDetailsScreenViewModelProtocol {
     private let roomProxy: JoinedRoomProxyProtocol
-    private let clientProxy: ClientProxyProtocol
-    private let mediaProvider: MediaProviderProtocol
+    private let userSession: UserSessionProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
     
@@ -27,19 +26,17 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     
     init(userID: String,
          roomProxy: JoinedRoomProxyProtocol,
-         clientProxy: ClientProxyProtocol,
-         mediaProvider: MediaProviderProtocol,
+         userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
         self.roomProxy = roomProxy
-        self.clientProxy = clientProxy
-        self.mediaProvider = mediaProvider
+        self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
         
         let initialViewState = RoomMemberDetailsScreenViewState(userID: userID, bindings: .init())
         
-        super.init(initialViewState: initialViewState, mediaProvider: mediaProvider)
+        super.init(initialViewState: initialViewState, mediaProvider: userSession.mediaProvider)
         
         showMemberLoadingIndicator()
         
@@ -88,7 +85,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         case .verifyUser:
             actionsSubject.send(.verifyUser(userID: state.userID))
         case .withdrawVerification:
-            Task { await clientProxy.withdrawUserIdentityVerification(state.userID) }
+            Task { await userSession.clientProxy.withdrawUserIdentityVerification(state.userID) }
         }
     }
 
@@ -100,7 +97,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             roomMemberProxy = member
             state.memberDetails = RoomMemberDetails(withProxy: member)
             state.isOwnMemberDetails = member.userID == roomProxy.ownUserID
-            switch clientProxy.directRoomForUserID(member.userID) {
+            switch userSession.clientProxy.directRoomForUserID(member.userID) {
             case .success(let roomID):
                 state.dmRoomID = roomID
             case .failure:
@@ -114,7 +111,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             actionsSubject.send(.openUserProfile)
         }
         
-        if case let .success(.some(identity)) = await clientProxy.userIdentity(for: state.userID) {
+        if case let .success(.some(identity)) = await userSession.clientProxy.userIdentity(for: state.userID) {
             state.verificationState = identity.verificationState
         } else {
             MXLog.error("Failed to find the member's identity.")
@@ -127,7 +124,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         }
         
         state.isProcessingIgnoreRequest = true
-        let result = await clientProxy.ignoreUser(roomMemberProxy.userID)
+        let result = await userSession.clientProxy.ignoreUser(roomMemberProxy.userID)
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
@@ -148,7 +145,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         }
         
         state.isProcessingIgnoreRequest = true
-        let result = await clientProxy.unignoreUser(roomMemberProxy.userID)
+        let result = await userSession.clientProxy.unignoreUser(roomMemberProxy.userID)
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
@@ -179,7 +176,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             
         // We don't actually know the mime type here, assume it's an image.
         if let mediaSource = try? MediaSourceProxy(url: url, mimeType: "image/jpeg"),
-           case let .success(file) = await mediaProvider.loadFileFromSource(mediaSource) {
+           case let .success(file) = await userSession.mediaProvider.loadFileFromSource(mediaSource) {
             state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: roomMemberProxy.displayName)
         }
     }
@@ -195,7 +192,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
                                                 delay: .milliseconds(200))
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
         
-        switch clientProxy.directRoomForUserID(roomMemberProxy.userID) {
+        switch userSession.clientProxy.directRoomForUserID(roomMemberProxy.userID) {
         case .success(let roomID):
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
@@ -218,7 +215,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
                                                 delay: .milliseconds(200))
         defer { userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier) }
         
-        switch await clientProxy.createDirectRoom(with: roomMemberProxy.userID, expectedRoomName: roomMemberProxy.displayName) {
+        switch await userSession.clientProxy.createDirectRoom(with: roomMemberProxy.userID, expectedRoomName: roomMemberProxy.displayName) {
         case .success(let roomID):
             analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.openDirectChat(roomID: roomID))

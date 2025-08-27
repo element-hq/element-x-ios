@@ -544,12 +544,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                         timelineItemfactory: timelineItemFactory,
                                                         threadRootEventID: nil)
         
-        let parameters = RoomScreenCoordinatorParameters(clientProxy: userSession.clientProxy,
+        let parameters = RoomScreenCoordinatorParameters(userSession: userSession,
                                                          roomProxy: roomProxy,
                                                          focussedEvent: presentationAction?.focusedEvent,
                                                          sharedText: presentationAction?.sharedText,
                                                          timelineController: timelineController,
-                                                         mediaProvider: userSession.mediaProvider,
                                                          mediaPlayerProvider: MediaPlayerProvider(),
                                                          voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                          emojiProvider: flowParameters.emojiProvider,
@@ -644,10 +643,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                         timelineItemfactory: timelineItemFactory,
                                                         threadRootEventID: threadRootEventID)
         
-        let coordinator = ThreadTimelineScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
+        let coordinator = ThreadTimelineScreenCoordinator(parameters: .init(userSession: userSession,
                                                                             roomProxy: roomProxy,
                                                                             timelineController: timelineController,
-                                                                            mediaProvider: userSession.mediaProvider,
                                                                             mediaPlayerProvider: MediaPlayerProvider(),
                                                                             voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                             emojiProvider: flowParameters.emojiProvider,
@@ -703,8 +701,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentJoinRoomScreen(via: [String], animated: Bool) {
         let coordinator = JoinRoomScreenCoordinator(parameters: .init(roomID: roomID,
                                                                       via: via,
-                                                                      clientProxy: userSession.clientProxy,
-                                                                      mediaProvider: userSession.mediaProvider,
+                                                                      userSession: userSession,
                                                                       userIndicatorController: flowParameters.userIndicatorController,
                                                                       appSettings: flowParameters.appSettings))
         
@@ -777,8 +774,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentRoomDetails(isRoot: Bool, animated: Bool) async {
         let params = RoomDetailsScreenCoordinatorParameters(roomProxy: roomProxy,
-                                                            clientProxy: userSession.clientProxy,
-                                                            mediaProvider: userSession.mediaProvider,
+                                                            userSession: userSession,
                                                             analyticsService: flowParameters.analytics,
                                                             userIndicatorController: flowParameters.userIndicatorController,
                                                             notificationSettings: userSession.clientProxy.notificationSettings,
@@ -842,9 +838,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentRoomMembersList() {
-        let parameters = RoomMembersListScreenCoordinatorParameters(clientProxy: userSession.clientProxy,
+        let parameters = RoomMembersListScreenCoordinatorParameters(userSession: userSession,
                                                                     roomProxy: roomProxy,
-                                                                    mediaProvider: userSession.mediaProvider,
                                                                     userIndicatorController: flowParameters.userIndicatorController,
                                                                     analytics: flowParameters.analytics)
         let coordinator = RoomMembersListScreenCoordinator(parameters: parameters)
@@ -882,8 +877,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let roomDetailsEditParameters = RoomDetailsEditScreenCoordinatorParameters(roomProxy: roomProxy,
-                                                                                   clientProxy: userSession.clientProxy,
-                                                                                   mediaProvider: userSession.mediaProvider,
+                                                                                   userSession: userSession,
                                                                                    mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
                                                                                    navigationStackCoordinator: stackCoordinator,
                                                                                    userIndicatorController: flowParameters.userIndicatorController,
@@ -1213,8 +1207,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentRoomMemberDetails(userID: String) {
         let params = RoomMemberDetailsScreenCoordinatorParameters(userID: userID,
                                                                   roomProxy: roomProxy,
-                                                                  clientProxy: userSession.clientProxy,
-                                                                  mediaProvider: userSession.mediaProvider,
+                                                                  userSession: userSession,
                                                                   userIndicatorController: flowParameters.userIndicatorController,
                                                                   analytics: flowParameters.analytics)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
@@ -1242,8 +1235,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func replaceRoomMemberDetailsWithUserProfile(userID: String) {
         let parameters = UserProfileScreenCoordinatorParameters(userID: userID,
                                                                 isPresentedModally: false,
-                                                                clientProxy: userSession.clientProxy,
-                                                                mediaProvider: userSession.mediaProvider,
+                                                                userSession: userSession,
                                                                 userIndicatorController: flowParameters.userIndicatorController,
                                                                 analytics: flowParameters.analytics)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)
@@ -1277,9 +1269,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let parameters = MessageForwardingScreenCoordinatorParameters(forwardingItem: forwardingItem,
-                                                                      clientProxy: userSession.clientProxy,
+                                                                      userSession: userSession,
                                                                       roomSummaryProvider: roomSummaryProvider,
-                                                                      mediaProvider: userSession.mediaProvider,
                                                                       userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = MessageForwardingScreenCoordinator(parameters: parameters)
         
@@ -1349,10 +1340,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let selectedUsersSubject: CurrentValueSubject<[UserProfileProxy], Never> = .init([])
         
         let stackCoordinator = NavigationStackCoordinator()
-        let inviteParameters = InviteUsersScreenCoordinatorParameters(clientProxy: userSession.clientProxy,
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: userSession,
                                                                       selectedUsers: .init(selectedUsersSubject),
                                                                       roomType: .room(roomProxy: roomProxy),
-                                                                      mediaProvider: userSession.mediaProvider,
                                                                       userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
                                                                       userIndicatorController: flowParameters.userIndicatorController)
         

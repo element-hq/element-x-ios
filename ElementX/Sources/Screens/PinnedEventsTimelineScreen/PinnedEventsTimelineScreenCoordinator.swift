@@ -11,7 +11,7 @@ import SwiftUI
 struct PinnedEventsTimelineScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let timelineController: TimelineControllerProtocol
-    let mediaProvider: MediaProviderProtocol
+    let userSession: UserSessionProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let appMediator: AppMediatorProtocol
@@ -19,7 +19,6 @@ struct PinnedEventsTimelineScreenCoordinatorParameters {
     let analytics: AnalyticsService
     let emojiProvider: EmojiProviderProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
-    let clientProxy: ClientProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -49,7 +48,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
         viewModel = PinnedEventsTimelineScreenViewModel(analyticsService: parameters.analytics)
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               timelineController: parameters.timelineController,
-                                              mediaProvider: parameters.mediaProvider,
+                                              userSession: parameters.userSession,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
                                               voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                               userIndicatorController: parameters.userIndicatorController,
@@ -57,8 +56,7 @@ final class PinnedEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                               appSettings: parameters.appSettings,
                                               analyticsService: parameters.analytics,
                                               emojiProvider: parameters.emojiProvider,
-                                              timelineControllerFactory: parameters.timelineControllerFactory,
-                                              clientProxy: parameters.clientProxy)
+                                              timelineControllerFactory: parameters.timelineControllerFactory)
     }
     
     func start() {

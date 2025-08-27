@@ -23,16 +23,15 @@ class MessageForwardingScreenViewModel: MessageForwardingScreenViewModelType, Me
     }
 
     init(forwardingItem: MessageForwardingItem,
-         clientProxy: ClientProxyProtocol,
+         userSession: UserSessionProtocol,
          roomSummaryProvider: RoomSummaryProviderProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol,
-         mediaProvider: MediaProviderProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol) {
         self.forwardingItem = forwardingItem
-        self.clientProxy = clientProxy
+        clientProxy = userSession.clientProxy
         self.roomSummaryProvider = roomSummaryProvider
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: MessageForwardingScreenViewState(), mediaProvider: mediaProvider)
+        super.init(initialViewState: MessageForwardingScreenViewState(), mediaProvider: userSession.mediaProvider)
         
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)

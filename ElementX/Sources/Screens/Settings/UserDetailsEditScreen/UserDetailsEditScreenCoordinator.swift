@@ -10,8 +10,7 @@ import SwiftUI
 
 struct UserDetailsEditScreenCoordinatorParameters {
     let orientationManager: OrientationManagerProtocol
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+    let userSession: UserSessionProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     weak var navigationStackCoordinator: NavigationStackCoordinator?
     let userIndicatorController: UserIndicatorControllerProtocol
@@ -26,8 +25,7 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
     init(parameters: UserDetailsEditScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = UserDetailsEditScreenViewModel(clientProxy: parameters.clientProxy,
-                                                   mediaProvider: parameters.mediaProvider,
+        viewModel = UserDetailsEditScreenViewModel(userSession: parameters.userSession,
                                                    mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
                                                    userIndicatorController: parameters.userIndicatorController)
     }

@@ -10,9 +10,8 @@ import SwiftUI
 
 struct MessageForwardingScreenCoordinatorParameters {
     let forwardingItem: MessageForwardingItem
-    let clientProxy: ClientProxyProtocol
+    let userSession: UserSessionProtocol
     let roomSummaryProvider: RoomSummaryProviderProtocol
-    let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -32,10 +31,9 @@ final class MessageForwardingScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: MessageForwardingScreenCoordinatorParameters) {
         viewModel = MessageForwardingScreenViewModel(forwardingItem: parameters.forwardingItem,
-                                                     clientProxy: parameters.clientProxy,
+                                                     userSession: parameters.userSession,
                                                      roomSummaryProvider: parameters.roomSummaryProvider,
-                                                     userIndicatorController: parameters.userIndicatorController,
-                                                     mediaProvider: parameters.mediaProvider)
+                                                     userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {

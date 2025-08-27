@@ -16,8 +16,7 @@ class BlockedUsersScreenViewModelTests: XCTestCase {
         let clientProxy = ClientProxyMock(.init(userID: RoomMemberProxyMock.mockMe.userID))
         
         let viewModel = BlockedUsersScreenViewModel(hideProfiles: true,
-                                                    clientProxy: clientProxy,
-                                                    mediaProvider: MediaProviderMock(configuration: .init()),
+                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         let deferred = deferFailure(viewModel.context.observe(\.viewState.blockedUsers), timeout: 1) { $0.contains { $0.displayName != nil } }
@@ -31,8 +30,7 @@ class BlockedUsersScreenViewModelTests: XCTestCase {
         let clientProxy = ClientProxyMock(.init(userID: RoomMemberProxyMock.mockMe.userID))
         
         let viewModel = BlockedUsersScreenViewModel(hideProfiles: false,
-                                                    clientProxy: clientProxy,
-                                                    mediaProvider: MediaProviderMock(configuration: .init()),
+                                                    userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                     userIndicatorController: ServiceLocator.shared.userIndicatorController)
         
         let deferred = deferFulfillment(viewModel.context.observe(\.viewState.blockedUsers)) { $0.contains { $0.displayName != nil } }

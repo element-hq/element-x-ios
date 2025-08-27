@@ -392,8 +392,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: notificationSettingsProxyMockConfiguration)
         
         return .init(roomProxy: roomProxy,
-                     clientProxy: ClientProxyMock(.init()),
-                     mediaProvider: MediaProviderMock(configuration: .init()),
+                     userSession: UserSessionMock(.init()),
                      analyticsService: ServiceLocator.shared.analytics,
                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                      notificationSettingsProxy: notificationSettingsProxy,
@@ -423,8 +422,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         
         return .init(roomProxy: roomProxy,
-                     clientProxy: ClientProxyMock(.init()),
-                     mediaProvider: MediaProviderMock(configuration: .init()),
+                     userSession: UserSessionMock(.init()),
                      analyticsService: ServiceLocator.shared.analytics,
                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                      notificationSettingsProxy: notificationSettingsProxy,
@@ -463,8 +461,7 @@ struct RoomDetailsScreen_Previews: PreviewProvider, TestablePreview {
         let notificationSettingsProxy = NotificationSettingsProxyMock(with: .init())
         
         return .init(roomProxy: roomProxy,
-                     clientProxy: clientProxyMock,
-                     mediaProvider: MediaProviderMock(configuration: .init()),
+                     userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                      analyticsService: ServiceLocator.shared.analytics,
                      userIndicatorController: ServiceLocator.shared.userIndicatorController,
                      notificationSettingsProxy: notificationSettingsProxy,

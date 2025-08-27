@@ -91,9 +91,8 @@ struct RoomDirectorySearchScreen_Previews: PreviewProvider, TestablePreview {
         
         let clientProxy = ClientProxyMock(.init(roomDirectorySearchProxy: roomDirectorySearchProxy))
         
-        return RoomDirectorySearchScreenViewModel(clientProxy: clientProxy,
-                                                  userIndicatorController: UserIndicatorControllerMock(),
-                                                  mediaProvider: MediaProviderMock(configuration: .init()))
+        return RoomDirectorySearchScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                  userIndicatorController: UserIndicatorControllerMock())
     }()
     
     static var previews: some View {

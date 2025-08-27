@@ -63,7 +63,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         
         let coordinator = PinnedEventsTimelineScreenCoordinator(parameters: .init(roomProxy: roomProxy,
                                                                                   timelineController: timelineController,
-                                                                                  mediaProvider: userSession.mediaProvider,
+                                                                                  userSession: userSession,
                                                                                   mediaPlayerProvider: MediaPlayerProvider(),
                                                                                   voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                                   appMediator: flowParameters.appMediator,
@@ -71,7 +71,6 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                                   analytics: flowParameters.analytics,
                                                                                   emojiProvider: flowParameters.emojiProvider,
                                                                                   timelineControllerFactory: flowParameters.timelineControllerFactory,
-                                                                                  clientProxy: userSession.clientProxy,
                                                                                   userIndicatorController: flowParameters.userIndicatorController))
         
         coordinator.actions
@@ -127,9 +126,8 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         
         let parameters = MessageForwardingScreenCoordinatorParameters(forwardingItem: forwardingItem,
-                                                                      clientProxy: userSession.clientProxy,
+                                                                      userSession: userSession,
                                                                       roomSummaryProvider: roomSummaryProvider,
-                                                                      mediaProvider: userSession.mediaProvider,
                                                                       userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = MessageForwardingScreenCoordinator(parameters: parameters)
         

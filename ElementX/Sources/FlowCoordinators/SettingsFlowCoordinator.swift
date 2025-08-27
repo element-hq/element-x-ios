@@ -133,8 +133,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentUserDetailsEditScreen() {
         let coordinator = UserDetailsEditScreenCoordinator(parameters: .init(orientationManager: flowParameters.windowManager,
-                                                                             clientProxy: flowParameters.userSession.clientProxy,
-                                                                             mediaProvider: flowParameters.userSession.mediaProvider,
+                                                                             userSession: flowParameters.userSession,
                                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
                                                                              navigationStackCoordinator: navigationStackCoordinator,
                                                                              userIndicatorController: flowParameters.userIndicatorController,
@@ -175,8 +174,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentBlockedUsersScreen() {
         let coordinator = BlockedUsersScreenCoordinator(parameters: .init(hideProfiles: flowParameters.appSettings.hideIgnoredUserProfiles,
-                                                                          clientProxy: flowParameters.userSession.clientProxy,
-                                                                          mediaProvider: flowParameters.userSession.mediaProvider,
+                                                                          userSession: flowParameters.userSession,
                                                                           userIndicatorController: flowParameters.userIndicatorController))
         navigationStackCoordinator.push(coordinator)
     }

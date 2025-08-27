@@ -9,8 +9,7 @@ import Combine
 import SwiftUI
 
 struct RoomDirectorySearchScreenCoordinatorParameters {
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+    let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -31,9 +30,8 @@ final class RoomDirectorySearchScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomDirectorySearchScreenCoordinatorParameters) {
-        viewModel = RoomDirectorySearchScreenViewModel(clientProxy: parameters.clientProxy,
-                                                       userIndicatorController: parameters.userIndicatorController,
-                                                       mediaProvider: parameters.mediaProvider)
+        viewModel = RoomDirectorySearchScreenViewModel(userSession: parameters.userSession,
+                                                       userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {

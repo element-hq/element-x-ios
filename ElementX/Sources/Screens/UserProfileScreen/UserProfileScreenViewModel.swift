@@ -12,8 +12,7 @@ import SwiftUI
 typealias UserProfileScreenViewModelType = StateStoreViewModelV2<UserProfileScreenViewState, UserProfileScreenViewAction>
 
 class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScreenViewModelProtocol {
-    private let clientProxy: ClientProxyProtocol
-    private let mediaProvider: MediaProviderProtocol
+    private let userSession: UserSessionProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let analytics: AnalyticsService
     
@@ -24,21 +23,19 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     
     init(userID: String,
          isPresentedModally: Bool,
-         clientProxy: ClientProxyProtocol,
-         mediaProvider: MediaProviderProtocol,
+         userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          analytics: AnalyticsService) {
-        self.clientProxy = clientProxy
-        self.mediaProvider = mediaProvider
+        self.userSession = userSession
         self.userIndicatorController = userIndicatorController
         self.analytics = analytics
         
         let initialViewState = UserProfileScreenViewState(userID: userID,
-                                                          isOwnUser: userID == clientProxy.userID,
+                                                          isOwnUser: userID == userSession.clientProxy.userID,
                                                           isPresentedModally: isPresentedModally,
                                                           bindings: .init())
         
-        super.init(initialViewState: initialViewState, mediaProvider: mediaProvider)
+        super.init(initialViewState: initialViewState, mediaProvider: userSession.mediaProvider)
         
         showLoadingIndicator(allowsInteraction: true)
         Task {
@@ -74,15 +71,15 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
     // MARK: - Private
     
     private func loadProfile() async {
-        async let profileResult = clientProxy.profile(for: state.userID)
-        async let identityResult = clientProxy.userIdentity(for: state.userID)
+        async let profileResult = userSession.clientProxy.profile(for: state.userID)
+        async let identityResult = userSession.clientProxy.userIdentity(for: state.userID)
         
         switch await profileResult {
         case .success(let userProfile):
             state.userProfile = userProfile
             state.permalink = (try? matrixToUserPermalink(userId: state.userID)).flatMap(URL.init(string:))
             
-            switch clientProxy.directRoomForUserID(userProfile.userID) {
+            switch userSession.clientProxy.directRoomForUserID(userProfile.userID) {
             case .success(let roomID):
                 state.dmRoomID = roomID
             case .failure:
@@ -108,7 +105,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         
         // We don't actually know the mime type here, assume it's an image.
         if let mediaSource = try? MediaSourceProxy(url: url, mimeType: "image/jpeg"),
-           case let .success(file) = await mediaProvider.loadFileFromSource(mediaSource) {
+           case let .success(file) = await userSession.mediaProvider.loadFileFromSource(mediaSource) {
             state.bindings.mediaPreviewItem = MediaPreviewItem(file: file, title: userProfile.displayName)
         }
     }
@@ -119,7 +116,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         showLoadingIndicator(allowsInteraction: false)
         defer { hideLoadingIndicator() }
         
-        switch clientProxy.directRoomForUserID(userProfile.userID) {
+        switch userSession.clientProxy.directRoomForUserID(userProfile.userID) {
         case .success(let roomID):
             if let roomID {
                 actionsSubject.send(.openDirectChat(roomID: roomID))
@@ -137,7 +134,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
         showLoadingIndicator(allowsInteraction: false)
         defer { hideLoadingIndicator() }
         
-        switch await clientProxy.createDirectRoom(with: userProfile.userID, expectedRoomName: userProfile.displayName) {
+        switch await userSession.clientProxy.createDirectRoom(with: userProfile.userID, expectedRoomName: userProfile.displayName) {
         case .success(let roomID):
             analytics.trackCreatedRoom(isDM: true)
             actionsSubject.send(.openDirectChat(roomID: roomID))
