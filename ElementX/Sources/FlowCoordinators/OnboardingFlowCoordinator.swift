@@ -313,6 +313,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private func startEncryptionResetFlow() {
         let resetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                           appSettings: appSettings,
                                                                            userIndicatorController: userIndicatorController,
                                                                            navigationStackCoordinator: resetNavigationStackCoordinator,
                                                                            windowManger: windowManager))

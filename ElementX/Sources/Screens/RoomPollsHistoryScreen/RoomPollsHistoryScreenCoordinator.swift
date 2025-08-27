@@ -11,6 +11,7 @@ import SwiftUI
 struct RoomPollsHistoryScreenCoordinatorParameters {
     let pollInteractionHandler: PollInteractionHandlerProtocol
     let timelineController: TimelineControllerProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum RoomPollsHistoryScreenCoordinatorAction {
@@ -29,7 +30,7 @@ final class RoomPollsHistoryScreenCoordinator: CoordinatorProtocol {
     init(parameters: RoomPollsHistoryScreenCoordinatorParameters) {
         viewModel = RoomPollsHistoryScreenViewModel(pollInteractionHandler: parameters.pollInteractionHandler,
                                                     timelineController: parameters.timelineController,
-                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                                    userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {

@@ -81,6 +81,8 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                         mediaPlayerProvider: MediaPlayerProvider(),
                                                                         voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                         appMediator: flowParameters.appMediator,
+                                                                        appSettings: flowParameters.appSettings,
+                                                                        analytics: flowParameters.analytics,
                                                                         emojiProvider: flowParameters.emojiProvider,
                                                                         userIndicatorController: flowParameters.userIndicatorController,
                                                                         timelineControllerFactory: flowParameters.timelineControllerFactory,

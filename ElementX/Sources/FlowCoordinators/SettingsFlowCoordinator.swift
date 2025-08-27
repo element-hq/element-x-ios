@@ -185,7 +185,8 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
         let notificationParameters = NotificationSettingsScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                                                      userSession: flowParameters.userSession,
                                                                                      userNotificationCenter: UNUserNotificationCenter.current(),
-                                                                                     isModallyPresented: false)
+                                                                                     isModallyPresented: false,
+                                                                                     appSettings: flowParameters.appSettings)
         let coordinator = NotificationSettingsScreenCoordinator(parameters: notificationParameters)
         navigationStackCoordinator.push(coordinator)
     }
@@ -199,7 +200,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentDeveloperOptions() {
-        let coordinator = DeveloperOptionsScreenCoordinator()
+        let coordinator = DeveloperOptionsScreenCoordinator(appSettings: flowParameters.appSettings)
         
         coordinator.actions
             .sink { [weak self] action in
@@ -240,7 +241,9 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentAccountManagementURL(_ url: URL) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
         // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
-        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url, presentationAnchor: flowParameters.windowManager.mainWindow)
+        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url,
+                                                                presentationAnchor: flowParameters.windowManager.mainWindow,
+                                                                appSettings: flowParameters.appSettings)
         accountSettingsPresenter?.start()
     }
 }

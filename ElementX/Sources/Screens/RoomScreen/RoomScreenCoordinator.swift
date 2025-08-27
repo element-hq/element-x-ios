@@ -26,8 +26,10 @@ struct RoomScreenCoordinatorParameters {
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
     let appHooks: AppHooks
+    let analytics: AnalyticsService
     let composerDraftService: ComposerDraftServiceProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum RoomScreenCoordinatorAction {
@@ -75,8 +77,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                             appMediator: parameters.appMediator,
                                             appSettings: parameters.appSettings,
                                             appHooks: parameters.appHooks,
-                                            analyticsService: ServiceLocator.shared.analytics,
-                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+                                            analyticsService: parameters.analytics,
+                                            userIndicatorController: parameters.userIndicatorController)
         
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               focussedEventID: parameters.focussedEvent?.eventID,
@@ -84,10 +86,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                               mediaProvider: parameters.mediaProvider,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
                                               voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                              userIndicatorController: parameters.userIndicatorController,
                                               appMediator: parameters.appMediator,
                                               appSettings: parameters.appSettings,
-                                              analyticsService: ServiceLocator.shared.analytics,
+                                              analyticsService: parameters.analytics,
                                               emojiProvider: parameters.emojiProvider,
                                               timelineControllerFactory: parameters.timelineControllerFactory,
                                               clientProxy: parameters.clientProxy)
@@ -103,7 +105,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                                          mediaProvider: parameters.mediaProvider,
                                                          mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
                                                          appSettings: parameters.appSettings,
-                                                         analyticsService: ServiceLocator.shared.analytics,
+                                                         analyticsService: parameters.analytics,
                                                          composerDraftService: parameters.composerDraftService)
         self.composerViewModel = composerViewModel
     }

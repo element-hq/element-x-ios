@@ -101,10 +101,10 @@ class ResolveVerifiedUserSendFailureScreenViewModel: ResolveVerifiedUserSendFail
     private static let failureIndicatorIdentifier = "\(ResolveVerifiedUserSendFailureScreenViewModel.self)-Failure"
     
     private func showFailureIndicator() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorIdentifier,
-                                                                                    type: .toast,
-                                                                                    title: L10n.errorUnknown,
-                                                                                    iconName: "xmark"))
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorIdentifier,
+                                                              type: .toast,
+                                                              title: L10n.errorUnknown,
+                                                              iconName: "xmark"))
     }
 }
 

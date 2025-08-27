@@ -13,6 +13,7 @@ struct NotificationSettingsScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let userNotificationCenter: UserNotificationCenterProtocol
     let isModallyPresented: Bool
+    let appSettings: AppSettings
 }
 
 enum NotificationSettingsScreenCoordinatorAction {
@@ -36,7 +37,7 @@ final class NotificationSettingsScreenCoordinator: CoordinatorProtocol {
     init(parameters: NotificationSettingsScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = NotificationSettingsScreenViewModel(appSettings: ServiceLocator.shared.settings,
+        viewModel = NotificationSettingsScreenViewModel(appSettings: parameters.appSettings,
                                                         userNotificationCenter: parameters.userNotificationCenter,
                                                         notificationSettingsProxy: parameters.userSession.clientProxy.notificationSettings,
                                                         isModallyPresented: parameters.isModallyPresented)

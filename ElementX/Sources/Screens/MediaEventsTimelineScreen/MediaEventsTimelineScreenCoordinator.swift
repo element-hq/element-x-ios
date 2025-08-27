@@ -16,6 +16,8 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let appMediator: AppMediatorProtocol
+    let appSettings: AppSettings
+    let analytics: AnalyticsService
     let emojiProvider: EmojiProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
@@ -45,10 +47,10 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        mediaProvider: parameters.mediaProvider,
                                                        mediaPlayerProvider: parameters.mediaPlayerProvider,
                                                        voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                       userIndicatorController: parameters.userIndicatorController,
                                                        appMediator: parameters.appMediator,
-                                                       appSettings: ServiceLocator.shared.settings,
-                                                       analyticsService: ServiceLocator.shared.analytics,
+                                                       appSettings: parameters.appSettings,
+                                                       analyticsService: parameters.analytics,
                                                        emojiProvider: parameters.emojiProvider,
                                                        timelineControllerFactory: parameters.timelineControllerFactory,
                                                        clientProxy: parameters.clientProxy)
@@ -58,10 +60,10 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        mediaProvider: parameters.mediaProvider,
                                                        mediaPlayerProvider: parameters.mediaPlayerProvider,
                                                        voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                                       userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                       userIndicatorController: parameters.userIndicatorController,
                                                        appMediator: parameters.appMediator,
-                                                       appSettings: ServiceLocator.shared.settings,
-                                                       analyticsService: ServiceLocator.shared.analytics,
+                                                       appSettings: parameters.appSettings,
+                                                       analyticsService: parameters.analytics,
                                                        emojiProvider: parameters.emojiProvider,
                                                        timelineControllerFactory: parameters.timelineControllerFactory,
                                                        clientProxy: parameters.clientProxy)

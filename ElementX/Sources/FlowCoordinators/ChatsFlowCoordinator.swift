@@ -518,7 +518,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                                                               navigationStackCoordinator: startChatNavigationStackCoordinator,
                                                               userDiscoveryService: userDiscoveryService,
                                                               mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
-                                                              appSettings: flowParameters.appSettings)
+                                                              appSettings: flowParameters.appSettings,
+                                                              analytics: flowParameters.analytics)
         
         let coordinator = StartChatScreenCoordinator(parameters: parameters)
         coordinator.actions.sink { [weak self] action in
@@ -578,7 +579,9 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: flowParameters.elementCallService,
                                                                             configuration: configuration,
                                                                             allowPictureInPicture: true,
-                                                                            appHooks: flowParameters.appHooks))
+                                                                            appSettings: flowParameters.appSettings,
+                                                                            appHooks: flowParameters.appHooks,
+                                                                            analytics: flowParameters.analytics))
         
         callScreenCoordinator.actions
             .sink { [weak self] action in
@@ -652,6 +655,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private func startEncryptionResetFlow(animated: Bool) {
         let sheetNavigationStackCoordinator = NavigationStackCoordinator()
         let parameters = EncryptionResetFlowCoordinatorParameters(userSession: userSession,
+                                                                  appSettings: flowParameters.appSettings,
                                                                   userIndicatorController: flowParameters.userIndicatorController,
                                                                   navigationStackCoordinator: sheetNavigationStackCoordinator,
                                                                   windowManger: flowParameters.windowManager)
