@@ -281,6 +281,7 @@
 		30E5628F74AD3C27A061BF25 /* QRCodeLoginScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC1B7CB061C9865B2B91B56 /* QRCodeLoginScreenViewModel.swift */; };
 		311868F5E65BA61AFA6CCC2C /* CompoundHook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B89D6C760E8CAE29CA28FB1 /* CompoundHook.swift */; };
 		3118D9ABFD4BE5A3492FF88A /* ElementCallConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC437C491EA6996513B1CEAB /* ElementCallConfiguration.swift */; };
+		31CCF3159E5CE1C05AE5781B /* HTMLFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A5FBB74981BF8EFFDAE90D /* HTMLFixtures.swift */; };
 		31DE6B7FD15E1C6E43885717 /* RoomRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578AF9CE60816069536C0953 /* RoomRole.swift */; };
 		32B7891D937377A59606EDFC /* UserFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DD8599815136EFF5B73F38 /* UserFlowTests.swift */; };
 		32F47002A331817F0E6BD7EB /* RoomMembershipDetailsProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1434D5169F0EE319E226DA7F /* RoomMembershipDetailsProxyProtocol.swift */; };
@@ -1327,6 +1328,7 @@
 		F382E2FE3AC3719BC1F22D9C /* MapURLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB08D1F7C27A8C24EF81073C /* MapURLs.swift */; };
 		F38D32C1B0232AAFE6A0822C /* ExtensionLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A8571A8A071FB41778C016 /* ExtensionLogger.swift */; };
 		F396470968764E2C3EDA92DA /* SpaceListScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB180B67B452302260AF44B /* SpaceListScreenViewModel.swift */; };
+		F3C9CAD26FD4D7D6EBACF501 /* HTMLFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A5FBB74981BF8EFFDAE90D /* HTMLFixtures.swift */; };
 		F3E2D3F7ACDED65A4E5CD8DE /* RoomMembersListScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF79FB25E2D4BD6F50CE7C9 /* RoomMembersListScreenViewModel.swift */; };
 		F3ECA377FF77E81A4F1FA062 /* TimelineItemSendInfoLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753B4C6C0EDDCBF0708DC384 /* TimelineItemSendInfoLabel.swift */; };
 		F3F38062C6CA21CF403C5C90 /* AudioConverterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2757B1BE23DF8AA239937243 /* AudioConverterProtocol.swift */; };
@@ -1706,6 +1708,7 @@
 		276833816F5DEB1CE3B8BE1E /* ReportRoomScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportRoomScreen.swift; sourceTree = "<group>"; };
 		277C20CDD5B64510401B6D0D /* ServerConfigurationScreenViewStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConfigurationScreenViewStateTests.swift; sourceTree = "<group>"; };
 		27A1AD6389A4659AF0CEAE62 /* NotificationServiceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceExtension.swift; sourceTree = "<group>"; };
+		27A5FBB74981BF8EFFDAE90D /* HTMLFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLFixtures.swift; sourceTree = "<group>"; };
 		27A9E3FBE8A66B5A17AD7F74 /* AppRoutes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRoutes.swift; sourceTree = "<group>"; };
 		27D0EA07BD545CC9F234DB8D /* UserDetailsEditScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsEditScreenModels.swift; sourceTree = "<group>"; };
 		27DF257F5D968E5DD719583C /* BugReportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportTests.swift; sourceTree = "<group>"; };
@@ -5056,6 +5059,7 @@
 				F254AD274D6973B840FEAF0B /* AttributedStringBuilderV2.swift */,
 				1E508AB0EDEE017FF4F6F8D1 /* DTHTMLElement+AttributedStringBuilder.swift */,
 				C024C151639C4E1B91FCC68B /* ElementXAttributeScope.swift */,
+				27A5FBB74981BF8EFFDAE90D /* HTMLFixtures.swift */,
 				AB07F03461023BC39C730922 /* PhishingDetector.swift */,
 				A436057DBEA1A23CA8CB1FD7 /* UIFont+AttributedStringBuilder.h */,
 				E8CA187FE656EE5A3F6C7DE5 /* UIFont+AttributedStringBuilder.m */,
@@ -7162,6 +7166,7 @@
 				89198AE2649DD77673D5793B /* ExtensionLogger.swift in Sources */,
 				A33784831AD880A670CAA9F9 /* FileManager.swift in Sources */,
 				0DFCEAB8C82B151718F71D49 /* FrequentlyUsedEmoji.swift in Sources */,
+				31CCF3159E5CE1C05AE5781B /* HTMLFixtures.swift in Sources */,
 				59F940FCBE6BC343AECEF75E /* ImageCache.swift in Sources */,
 				EBE13FAB4E29738AC41BD3E5 /* InfoPlistReader.swift in Sources */,
 				8691186F9B99BCDDB7CACDD8 /* KeychainController.swift in Sources */,
@@ -7717,6 +7722,7 @@
 				D34E328E9E65904358248FDD /* GlobalSearchScreenModels.swift in Sources */,
 				55D18AA4F4A2257642EBDB94 /* GlobalSearchScreenViewModel.swift in Sources */,
 				E32A18802EB37EEE3EF7B965 /* GlobalSearchScreenViewModelProtocol.swift in Sources */,
+				F3C9CAD26FD4D7D6EBACF501 /* HTMLFixtures.swift in Sources */,
 				E8C4D9F93F0DCED211D5F187 /* HTMLParserStyle.swift in Sources */,
 				0C1E537A49ABB386F7554D4A /* HighlightedTimelineItemModifier.swift in Sources */,
 				964B9D2EC38C488C360CE0C9 /* HomeScreen.swift in Sources */,
