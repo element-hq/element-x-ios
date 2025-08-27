@@ -36,7 +36,6 @@ class TimelineInteractionHandler {
     private let userSession: UserSessionProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let voiceMessageRecorder: VoiceMessageRecorderProtocol
-    private let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
     private let appSettings: AppSettings
@@ -62,7 +61,6 @@ class TimelineInteractionHandler {
          timelineController: TimelineControllerProtocol,
          userSession: UserSessionProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
-         voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          voiceMessageRecorder: VoiceMessageRecorderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol,
@@ -74,7 +72,6 @@ class TimelineInteractionHandler {
         self.timelineController = timelineController
         self.userSession = userSession
         self.mediaPlayerProvider = mediaPlayerProvider
-        self.voiceMessageMediaManager = voiceMessageMediaManager
         self.voiceMessageRecorder = voiceMessageRecorder
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
@@ -451,7 +448,7 @@ class TimelineInteractionHandler {
             // Load content
             do {
                 MXLog.info("Loading voice message audio content from source for itemID \(itemID)")
-                let url = try await voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
+                let url = try await userSession.voiceMessageMediaManager.loadVoiceMessageFromSource(source, body: nil)
 
                 // Make sure that the player is still attached, as it may have been detached while waiting for the voice message to be loaded.
                 if audioPlayerState.isAttached {
@@ -588,7 +585,6 @@ class TimelineInteractionHandler {
                                                       timelineController: timelineController,
                                                       userSession: userSession,
                                                       mediaPlayerProvider: mediaPlayerProvider,
-                                                      voiceMessageMediaManager: voiceMessageMediaManager,
                                                       userIndicatorController: userIndicatorController,
                                                       appMediator: appMediator,
                                                       appSettings: appSettings,

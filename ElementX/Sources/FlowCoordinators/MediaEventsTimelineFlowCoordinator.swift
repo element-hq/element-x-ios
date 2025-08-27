@@ -79,7 +79,6 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                         filesTimelineController: filesTimelineController,
                                                                         userSession: userSession,
                                                                         mediaPlayerProvider: MediaPlayerProvider(),
-                                                                        voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                         appMediator: flowParameters.appMediator,
                                                                         appSettings: flowParameters.appSettings,
                                                                         analytics: flowParameters.analytics,

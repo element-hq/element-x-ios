@@ -73,7 +73,6 @@ struct PinnedEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
                                  timelineController: timelineController,
                                  userSession: UserSessionMock(.init()),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
-                                 voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                  userIndicatorController: UserIndicatorControllerMock(),
                                  appMediator: AppMediatorMock.default,
                                  appSettings: ServiceLocator.shared.settings,

@@ -65,7 +65,6 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                                   timelineController: timelineController,
                                                                                   userSession: userSession,
                                                                                   mediaPlayerProvider: MediaPlayerProvider(),
-                                                                                  voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                                   appMediator: flowParameters.appMediator,
                                                                                   appSettings: flowParameters.appSettings,
                                                                                   analytics: flowParameters.analytics,

@@ -18,7 +18,6 @@ struct RoomScreenCoordinatorParameters {
     var sharedText: String?
     let timelineController: TimelineControllerProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
-    let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let emojiProvider: EmojiProviderProtocol
     let completionSuggestionService: CompletionSuggestionServiceProtocol
     let ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>
@@ -83,7 +82,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                                               timelineController: parameters.timelineController,
                                               userSession: parameters.userSession,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                              voiceMessageMediaManager: parameters.voiceMessageMediaManager,
                                               userIndicatorController: parameters.userIndicatorController,
                                               appMediator: parameters.appMediator,
                                               appSettings: parameters.appSettings,
