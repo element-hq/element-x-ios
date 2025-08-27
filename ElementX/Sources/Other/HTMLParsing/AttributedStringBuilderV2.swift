@@ -177,8 +177,8 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
                 
             case "a":
                 content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
-                if let href = try? childElement.attr("href") {
-                    content.addAttribute(.link, value: href, range: NSRange(location: 0, length: content.length))
+                if let href = try? childElement.attr("href"), let url = URL(string: href) {
+                    content.addAttribute(.link, value: url, range: NSRange(location: 0, length: content.length))
                 }
                 
             case "span":
