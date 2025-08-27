@@ -272,8 +272,10 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                                             userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -293,8 +295,10 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                                             userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -314,8 +318,9 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -335,8 +340,9 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -359,8 +365,9 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -383,8 +390,8 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
-                                                             composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             analytics: ServiceLocator.shared.analytics,
+                                                             composerDraftService: ComposerDraftServiceMock(.init()), timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -407,8 +414,9 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -432,8 +440,9 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -456,8 +465,9 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -479,8 +489,9 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             
@@ -516,8 +527,9 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -540,8 +552,9 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -564,8 +577,9 @@ class MockScreen: Identifiable {
                                                              appMediator: AppMediatorMock.default,
                                                              appSettings: ServiceLocator.shared.settings,
                                                              appHooks: AppHooks(),
+                                                             analytics: ServiceLocator.shared.analytics,
                                                              composerDraftService: ComposerDraftServiceMock(.init()),
-                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()))
+                                                             timelineControllerFactory: TimelineControllerFactoryMock(.init()), userIndicatorController: UserIndicatorControllerMock())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -647,7 +661,8 @@ class MockScreen: Identifiable {
                                                                          navigationStackCoordinator: navigationStackCoordinator,
                                                                          userDiscoveryService: userDiscoveryMock,
                                                                          mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
-                                                                         appSettings: ServiceLocator.shared.settings)
+                                                                         appSettings: ServiceLocator.shared.settings,
+                                                                         analytics: ServiceLocator.shared.analytics)
             let coordinator = StartChatScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -663,7 +678,8 @@ class MockScreen: Identifiable {
                                                                            navigationStackCoordinator: navigationStackCoordinator,
                                                                            userDiscoveryService: userDiscoveryMock,
                                                                            mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
-                                                                           appSettings: ServiceLocator.shared.settings))
+                                                                           appSettings: ServiceLocator.shared.settings,
+                                                                           analytics: ServiceLocator.shared.analytics))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .createRoom:
@@ -675,7 +691,9 @@ class MockScreen: Identifiable {
             let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession,
                                                              userIndicatorController: UserIndicatorControllerMock(),
                                                              createRoomParameters: .init(createRoomParameters),
-                                                             selectedUsers: .init(selectedUsers))
+                                                             selectedUsers: .init(selectedUsers),
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             analytics: ServiceLocator.shared.analytics)
             let coordinator = CreateRoomCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -687,7 +705,9 @@ class MockScreen: Identifiable {
             let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession,
                                                              userIndicatorController: UserIndicatorControllerMock(),
                                                              createRoomParameters: .init(createRoomParameters),
-                                                             selectedUsers: .init([]))
+                                                             selectedUsers: .init([]),
+                                                             appSettings: ServiceLocator.shared.settings,
+                                                             analytics: ServiceLocator.shared.analytics)
             let coordinator = CreateRoomCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -722,6 +742,7 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             
             let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                               appSettings: ServiceLocator.shared.settings,
                                                                                userIndicatorController: userIndicatorController,
                                                                                navigationStackCoordinator: navigationStackCoordinator,
                                                                                windowManger: windowManager))

@@ -67,9 +67,12 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                                   mediaPlayerProvider: MediaPlayerProvider(),
                                                                                   voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                                   appMediator: flowParameters.appMediator,
+                                                                                  appSettings: flowParameters.appSettings,
+                                                                                  analytics: flowParameters.analytics,
                                                                                   emojiProvider: flowParameters.emojiProvider,
                                                                                   timelineControllerFactory: flowParameters.timelineControllerFactory,
-                                                                                  clientProxy: userSession.clientProxy))
+                                                                                  clientProxy: userSession.clientProxy,
+                                                                                  userIndicatorController: flowParameters.userIndicatorController))
         
         coordinator.actions
             .sink { [weak self] action in

@@ -21,8 +21,10 @@ struct ThreadTimelineScreenCoordinatorParameters {
     let completionSuggestionService: CompletionSuggestionServiceProtocol
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
+    let analytics: AnalyticsService
     let composerDraftService: ComposerDraftServiceProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum ThreadTimelineScreenCoordinatorAction {
@@ -61,10 +63,10 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                                               mediaProvider: parameters.mediaProvider,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
                                               voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                              userIndicatorController: parameters.userIndicatorController,
                                               appMediator: parameters.appMediator,
                                               appSettings: parameters.appSettings,
-                                              analyticsService: ServiceLocator.shared.analytics,
+                                              analyticsService: parameters.analytics,
                                               emojiProvider: parameters.emojiProvider,
                                               timelineControllerFactory: parameters.timelineControllerFactory,
                                               clientProxy: parameters.clientProxy)
@@ -81,7 +83,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                                                      mediaProvider: parameters.mediaProvider,
                                                      mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
                                                      appSettings: parameters.appSettings,
-                                                     analyticsService: ServiceLocator.shared.analytics,
+                                                     analyticsService: parameters.analytics,
                                                      composerDraftService: parameters.composerDraftService)
     }
     

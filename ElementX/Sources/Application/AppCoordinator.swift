@@ -612,6 +612,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             let parameters = SoftLogoutScreenCoordinatorParameters(authenticationService: authenticationService,
                                                                    credentials: credentials,
                                                                    keyBackupNeeded: false,
+                                                                   appSettings: appSettings,
                                                                    userIndicatorController: ServiceLocator.shared.userIndicatorController)
             let coordinator = SoftLogoutScreenCoordinator(parameters: parameters)
             self.softLogoutCoordinator = coordinator
@@ -769,7 +770,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: elementCallService,
                                                                             configuration: configuration,
                                                                             allowPictureInPicture: false,
-                                                                            appHooks: appHooks))
+                                                                            appSettings: appSettings,
+                                                                            appHooks: appHooks,
+                                                                            analytics: ServiceLocator.shared.analytics))
         
         callScreenCoordinator.actions
             .sink { [weak self] action in

@@ -13,6 +13,8 @@ struct CreateRoomCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
     let createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>
     let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>
+    let appSettings: AppSettings
+    let analytics: AnalyticsService
 }
 
 enum CreateRoomCoordinatorAction {
@@ -36,9 +38,9 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
         viewModel = CreateRoomViewModel(userSession: parameters.userSession,
                                         createRoomParameters: parameters.createRoomParameters,
                                         selectedUsers: parameters.selectedUsers,
-                                        analytics: ServiceLocator.shared.analytics,
+                                        analytics: parameters.analytics,
                                         userIndicatorController: parameters.userIndicatorController,
-                                        appSettings: ServiceLocator.shared.settings)
+                                        appSettings: parameters.appSettings)
     }
     
     func start() {

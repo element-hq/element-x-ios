@@ -18,6 +18,7 @@ enum EncryptionResetFlowCoordinatorAction: Equatable {
 
 struct EncryptionResetFlowCoordinatorParameters {
     let userSession: UserSessionProtocol
+    let appSettings: AppSettings
     let userIndicatorController: UserIndicatorControllerProtocol
     let navigationStackCoordinator: NavigationStackCoordinator
     let windowManger: WindowManagerProtocol
@@ -25,6 +26,7 @@ struct EncryptionResetFlowCoordinatorParameters {
 
 class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     private let userSession: UserSessionProtocol
+    private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let navigationStackCoordinator: NavigationStackCoordinator
@@ -59,6 +61,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     
     init(parameters: EncryptionResetFlowCoordinatorParameters) {
         userSession = parameters.userSession
+        appSettings = parameters.appSettings
         userIndicatorController = parameters.userIndicatorController
         navigationStackCoordinator = parameters.navigationStackCoordinator
         windowManager = parameters.windowManger
@@ -152,7 +155,9 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
     private func presentOIDCAuthorization(for url: URL) {
         // Note to anyone in the future if you come back here to make this open in Safari instead of a WAS.
         // As of iOS 16, there is an issue on the simulator with accessing the cookie but it works on a device. 🤷‍♂️
-        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url, presentationAnchor: windowManager.mainWindow)
+        accountSettingsPresenter = OIDCAccountSettingsPresenter(accountURL: url,
+                                                                presentationAnchor: windowManager.mainWindow,
+                                                                appSettings: appSettings)
         accountSettingsPresenter?.start()
     }
 }

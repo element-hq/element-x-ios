@@ -13,7 +13,9 @@ struct CallScreenCoordinatorParameters {
     let elementCallService: ElementCallServiceProtocol
     let configuration: ElementCallConfiguration
     let allowPictureInPicture: Bool
+    let appSettings: AppSettings
     let appHooks: AppHooks
+    let analytics: AnalyticsService
 }
 
 enum CallScreenCoordinatorAction {
@@ -44,8 +46,8 @@ final class CallScreenCoordinator: CoordinatorProtocol {
                                         configuration: parameters.configuration,
                                         allowPictureInPicture: parameters.allowPictureInPicture,
                                         appHooks: parameters.appHooks,
-                                        appSettings: ServiceLocator.shared.settings,
-                                        analyticsService: ServiceLocator.shared.analytics)
+                                        appSettings: parameters.appSettings,
+                                        analyticsService: parameters.analytics)
     }
     
     func start() {
