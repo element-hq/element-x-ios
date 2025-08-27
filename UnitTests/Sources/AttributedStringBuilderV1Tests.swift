@@ -228,8 +228,6 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         checkLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
         checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
     }
-    
-    // `Plain link in codeblock: https://www.matrix.org`, Link tag in codeblock: <a href=\"https://www.matrix.org/\">link</a>, plain link: https://www.matrix.org, link tag: <a href=\"https://www.matrix.org/\">link</a>
         
     func testDefaultFont() {
         let htmlString = "<b>Test</b> <i>string</i> "

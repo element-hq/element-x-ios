@@ -12,7 +12,8 @@ enum HTMLFixtures: String, CaseIterable {
     case matrixIdentifiers
     case links
     case textFormatting
-    case blockQuotes
+    case groupedBlockQuotes
+    case separatedBlockQuotes
     case codeBlocks
     case unorderedList
     case orderedList
@@ -49,7 +50,7 @@ enum HTMLFixtures: String, CaseIterable {
             """
         case .links:
             """
-            Links too:</br><a href=\"https://www.matrix.org/\">Matrix rules! 🤘</a>, matrix.org, www.matrix.org, http://matrix.org
+            Links too:</br><a href=\"https://www.alpha.org/\">Matrix rules! 🤘</a>, beta.org, www.gamma.org, http://delta.org
             """
         case .textFormatting:
             """
@@ -59,7 +60,13 @@ enum HTMLFixtures: String, CaseIterable {
             <br>
             <sup>Thumbs</sup> if you liked it, <sub>sub</sub> if you loved it!
             """
-        case .blockQuotes:
+        case .groupedBlockQuotes:
+            """
+            <blockquote>First blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+            <blockquote>Second blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+            <blockquote>Third blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+            """
+        case .separatedBlockQuotes:
             """
             <blockquote>First blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
             <blockquote>Second blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
@@ -67,7 +74,8 @@ enum HTMLFixtures: String, CaseIterable {
             """
         case .codeBlocks:
             """
-            <pre>A preformatted code block<code>struct ContentView: View {
+            <pre>A preformatted code block
+            <code>struct ContentView: View {
                 var body: some View {
                     VStack {
                         Text("Knock, knock!")
