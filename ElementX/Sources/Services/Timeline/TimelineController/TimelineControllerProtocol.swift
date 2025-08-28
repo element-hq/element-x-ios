@@ -84,6 +84,10 @@ protocol TimelineControllerProtocol {
     
     func unpin(eventID: String) async
     
+    func addBookmark(eventID: String) async
+    
+    func removeBookmark(eventID: String) async
+    
     func messageEventContent(for itemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation?
     
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo

@@ -186,6 +186,12 @@ class TimelineInteractionHandler {
                                                       kind: .Unpin))
             guard let eventID = itemID.eventID else { return }
             Task { await timelineController.unpin(eventID: eventID) }
+        case .bookmark:
+            guard let eventID = itemID.eventID else { return }
+            Task { await timelineController.addBookmark(eventID: eventID) }
+        case .removeBookmark:
+            guard let eventID = itemID.eventID else { return }
+            Task { await timelineController.removeBookmark(eventID: eventID) }
         case .viewInRoomTimeline:
             analyticsService.trackInteraction(name: .PinnedMessageListViewTimeline)
             guard let eventID = itemID.eventID else { return }

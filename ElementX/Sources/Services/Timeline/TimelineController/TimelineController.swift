@@ -245,6 +245,28 @@ class TimelineController: TimelineControllerProtocol {
         }
     }
     
+    func addBookmark(eventID: String) async {
+        MXLog.info("Adding bookmark for event \(eventID) in \(roomID)")
+        
+        switch await activeTimeline.addBookmark(eventID: eventID) {
+        case .success:
+            MXLog.info("Finished adding bookmark for event \(eventID)")
+        case .failure(let error):
+            MXLog.error("Failed adding bookmark for event \(eventID) with error: \(error)")
+        }
+    }
+    
+    func removeBookmark(eventID: String) async {
+        MXLog.info("Removing bookmark for event \(eventID) in \(roomID)")
+        
+        switch await activeTimeline.removeBookmark(eventID: eventID) {
+        case .success:
+            MXLog.info("Finished removing bookmark for event \(eventID)")
+        case .failure(let error):
+            MXLog.error("Failed removing bookmark for event \(eventID) with error: \(error)")
+        }
+    }
+    
     func messageEventContent(for timelineItemID: TimelineItemIdentifier) async -> RoomMessageEventContentWithoutRelation? {
         await activeTimeline.messageEventContent(for: timelineItemID)
     }

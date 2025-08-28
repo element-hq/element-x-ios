@@ -74,6 +74,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case endPoll(pollStartID: String)
     case pin
     case unpin
+    case bookmark
+    case removeBookmark
     case viewInRoomTimeline
     case share
     case save
@@ -181,6 +183,12 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionPin, icon: \.pin)
         case .unpin:
             Label(L10n.actionUnpin, icon: \.unpin)
+        case .bookmark:
+            // FIXME: Fix title and icon
+            Label("Bookmark", systemImage: "bookmark")
+        case .removeBookmark:
+            // FIXME: Fix title and icon
+            Label("Bookmark", systemImage: "bookmark.slash")
         case .viewInRoomTimeline:
             Label(L10n.actionViewInTimeline, icon: \.visibilityOn)
         case .share:

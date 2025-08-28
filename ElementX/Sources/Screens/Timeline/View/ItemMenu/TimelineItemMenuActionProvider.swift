@@ -85,6 +85,10 @@ struct TimelineItemMenuActionProvider {
         if canCurrentUserPin, let eventID = item.id.eventID {
             actions.append(pinnedEventIDs.contains(eventID) ? .unpin : .pin)
         }
+        
+        if item.canBeBookmarked {
+            actions.append(.bookmark)
+        }
 
         if item.isCopyable {
             actions.append(.copy)

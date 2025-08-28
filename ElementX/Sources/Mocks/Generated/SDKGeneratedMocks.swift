@@ -3832,6 +3832,75 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - roomsWithBookmarks
+
+    open var roomsWithBookmarksThrowableError: Error?
+    var roomsWithBookmarksUnderlyingCallsCount = 0
+    open var roomsWithBookmarksCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomsWithBookmarksUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomsWithBookmarksUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomsWithBookmarksUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomsWithBookmarksUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var roomsWithBookmarksCalled: Bool {
+        return roomsWithBookmarksCallsCount > 0
+    }
+
+    var roomsWithBookmarksUnderlyingReturnValue: [String]!
+    open var roomsWithBookmarksReturnValue: [String]! {
+        get {
+            if Thread.isMainThread {
+                return roomsWithBookmarksUnderlyingReturnValue
+            } else {
+                var returnValue: [String]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomsWithBookmarksUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomsWithBookmarksUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomsWithBookmarksUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var roomsWithBookmarksClosure: (() async throws -> [String])?
+
+    open override func roomsWithBookmarks() async throws -> [String] {
+        if let error = roomsWithBookmarksThrowableError {
+            throw error
+        }
+        roomsWithBookmarksCallsCount += 1
+        if let roomsWithBookmarksClosure = roomsWithBookmarksClosure {
+            return try await roomsWithBookmarksClosure()
+        } else {
+            return roomsWithBookmarksReturnValue
+        }
+    }
+
     //MARK: - searchUsers
 
     open var searchUsersSearchTermLimitThrowableError: Error?
@@ -22148,6 +22217,52 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 
     fileprivate var pointer: UnsafeMutableRawPointer!
 
+    //MARK: - addBookmark
+
+    open var addBookmarkEventIdInfoThrowableError: Error?
+    var addBookmarkEventIdInfoUnderlyingCallsCount = 0
+    open var addBookmarkEventIdInfoCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addBookmarkEventIdInfoUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addBookmarkEventIdInfoUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addBookmarkEventIdInfoUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addBookmarkEventIdInfoUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var addBookmarkEventIdInfoCalled: Bool {
+        return addBookmarkEventIdInfoCallsCount > 0
+    }
+    open var addBookmarkEventIdInfoReceivedArguments: (eventId: String, info: BookmarkInfo)?
+    open var addBookmarkEventIdInfoReceivedInvocations: [(eventId: String, info: BookmarkInfo)] = []
+    open var addBookmarkEventIdInfoClosure: ((String, BookmarkInfo) async throws -> Void)?
+
+    open override func addBookmark(eventId: String, info: BookmarkInfo) async throws {
+        if let error = addBookmarkEventIdInfoThrowableError {
+            throw error
+        }
+        addBookmarkEventIdInfoCallsCount += 1
+        addBookmarkEventIdInfoReceivedArguments = (eventId: eventId, info: info)
+        DispatchQueue.main.async {
+            self.addBookmarkEventIdInfoReceivedInvocations.append((eventId: eventId, info: info))
+        }
+        try await addBookmarkEventIdInfoClosure?(eventId, info)
+    }
+
     //MARK: - addListener
 
     var addListenerListenerUnderlyingCallsCount = 0
@@ -22975,6 +23090,52 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
             self.redactEventEventOrTransactionIdReasonReceivedInvocations.append((eventOrTransactionId: eventOrTransactionId, reason: reason))
         }
         try await redactEventEventOrTransactionIdReasonClosure?(eventOrTransactionId, reason)
+    }
+
+    //MARK: - removeBookmark
+
+    open var removeBookmarkEventIdThrowableError: Error?
+    var removeBookmarkEventIdUnderlyingCallsCount = 0
+    open var removeBookmarkEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeBookmarkEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeBookmarkEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeBookmarkEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeBookmarkEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var removeBookmarkEventIdCalled: Bool {
+        return removeBookmarkEventIdCallsCount > 0
+    }
+    open var removeBookmarkEventIdReceivedEventId: String?
+    open var removeBookmarkEventIdReceivedInvocations: [String] = []
+    open var removeBookmarkEventIdClosure: ((String) async throws -> Void)?
+
+    open override func removeBookmark(eventId: String) async throws {
+        if let error = removeBookmarkEventIdThrowableError {
+            throw error
+        }
+        removeBookmarkEventIdCallsCount += 1
+        removeBookmarkEventIdReceivedEventId = eventId
+        DispatchQueue.main.async {
+            self.removeBookmarkEventIdReceivedInvocations.append(eventId)
+        }
+        try await removeBookmarkEventIdClosure?(eventId)
     }
 
     //MARK: - retryDecryption

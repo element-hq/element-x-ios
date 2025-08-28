@@ -77,6 +77,10 @@ protocol TimelineProxyProtocol {
     
     func unpin(eventID: String) async -> Result<Bool, TimelineProxyError>
     
+    func addBookmark(eventID: String) async -> Result<Void, TimelineProxyError>
+    
+    func removeBookmark(eventID: String) async -> Result<Void, TimelineProxyError>
+    
     // MARK: - Sending
     
     func sendAudio(url: URL,

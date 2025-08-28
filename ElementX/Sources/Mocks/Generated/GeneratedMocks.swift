@@ -17104,6 +17104,146 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
             return unpinEventIDReturnValue
         }
     }
+    //MARK: - addBookmark
+
+    var addBookmarkEventIDUnderlyingCallsCount = 0
+    var addBookmarkEventIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addBookmarkEventIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addBookmarkEventIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addBookmarkEventIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addBookmarkEventIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var addBookmarkEventIDCalled: Bool {
+        return addBookmarkEventIDCallsCount > 0
+    }
+    var addBookmarkEventIDReceivedEventID: String?
+    var addBookmarkEventIDReceivedInvocations: [String] = []
+
+    var addBookmarkEventIDUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var addBookmarkEventIDReturnValue: Result<Void, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return addBookmarkEventIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addBookmarkEventIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addBookmarkEventIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addBookmarkEventIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var addBookmarkEventIDClosure: ((String) async -> Result<Void, TimelineProxyError>)?
+
+    func addBookmark(eventID: String) async -> Result<Void, TimelineProxyError> {
+        addBookmarkEventIDCallsCount += 1
+        addBookmarkEventIDReceivedEventID = eventID
+        DispatchQueue.main.async {
+            self.addBookmarkEventIDReceivedInvocations.append(eventID)
+        }
+        if let addBookmarkEventIDClosure = addBookmarkEventIDClosure {
+            return await addBookmarkEventIDClosure(eventID)
+        } else {
+            return addBookmarkEventIDReturnValue
+        }
+    }
+    //MARK: - removeBookmark
+
+    var removeBookmarkEventIDUnderlyingCallsCount = 0
+    var removeBookmarkEventIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return removeBookmarkEventIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeBookmarkEventIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeBookmarkEventIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeBookmarkEventIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var removeBookmarkEventIDCalled: Bool {
+        return removeBookmarkEventIDCallsCount > 0
+    }
+    var removeBookmarkEventIDReceivedEventID: String?
+    var removeBookmarkEventIDReceivedInvocations: [String] = []
+
+    var removeBookmarkEventIDUnderlyingReturnValue: Result<Void, TimelineProxyError>!
+    var removeBookmarkEventIDReturnValue: Result<Void, TimelineProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return removeBookmarkEventIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, TimelineProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = removeBookmarkEventIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                removeBookmarkEventIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    removeBookmarkEventIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var removeBookmarkEventIDClosure: ((String) async -> Result<Void, TimelineProxyError>)?
+
+    func removeBookmark(eventID: String) async -> Result<Void, TimelineProxyError> {
+        removeBookmarkEventIDCallsCount += 1
+        removeBookmarkEventIDReceivedEventID = eventID
+        DispatchQueue.main.async {
+            self.removeBookmarkEventIDReceivedInvocations.append(eventID)
+        }
+        if let removeBookmarkEventIDClosure = removeBookmarkEventIDClosure {
+            return await removeBookmarkEventIDClosure(eventID)
+        } else {
+            return removeBookmarkEventIDReturnValue
+        }
+    }
     //MARK: - sendAudio
 
     var sendAudioUrlAudioInfoCaptionRequestHandleUnderlyingCallsCount = 0
