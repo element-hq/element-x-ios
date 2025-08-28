@@ -80,7 +80,7 @@ struct HomeScreen: View {
         Button {
             context.send(viewAction: .showBookmarks)
         } label: {
-            Image(systemName: "bookmark")
+            Image(systemSymbol: .bookmark)
         }
         .accessibilityLabel("Bookmarks")
         .accessibilityIdentifier("bookmarks")

@@ -51,7 +51,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                             Spacer()
                         }
 
-                        messageBubbleWithReactions
+                        messageBubbleWithReactionsAndBookmark
                     }
                     .padding(timelineItem.isOutgoing ? .leading : .trailing, 48) // Additional padding to differentiate alignment.
 
@@ -98,6 +98,24 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 context.send(viewAction: .tappedOnSenderDetails(sender: timelineItem.sender))
             }
             .padding(.top, 8)
+        }
+    }
+    
+    private var messageBubbleWithReactionsAndBookmark: some View {
+        VStack(alignment: alignment, spacing: 2) {
+            messageBubbleWithReactions
+            
+            if timelineItem.properties.bookmarkInfo != nil {
+                Label("Bookmarked", systemSymbol: .bookmarkFill)
+                    .labelStyle(.custom(spacing: 4.0))
+                    .font(.compound.bodySM)
+                    .foregroundStyle(.compound.textSecondary)
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 12)
+                    .background {
+                        Capsule().fill(.compound.bgSubtleSecondary)
+                    }
+            }
         }
     }
     
@@ -370,6 +388,10 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
             .previewDisplayName("Pinned messages")
             .previewLayout(.fixed(width: 390, height: 1150))
             .padding(.bottom, 20)
+        pinnedAndBookmarked
+            .previewDisplayName("Pinned and Bookmarked")
+            .previewLayout(.sizeThatFits)
+            .padding(.bottom, 20)
     }
     
     static var mockTimeline: some View {
@@ -441,6 +463,14 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
     static var pinned: some View {
         ScrollView {
             MockTimelineContent(isPinned: true)
+        }
+        .environmentObject(viewModelWithPins.context)
+        .environment(\.timelineContext, viewModel.context)
+    }
+    
+    static var pinnedAndBookmarked: some View {
+        ScrollView {
+            MockTimelineContent(isPinned: true, bookmarkInfo: .init(creationDate: .distantPast))
         }
         .environmentObject(viewModelWithPins.context)
         .environment(\.timelineContext, viewModel.context)
@@ -535,6 +565,7 @@ private struct MockTimelineContent: View {
     var isThreaded = false
     var isPinned = false
     var threadSummary: TimelineItemThreadSummary?
+    var bookmarkInfo: TimelineItemBookmarkInfo?
     
     var body: some View {
         RoomTimelineItemView(viewState: .init(item: TextRoomTimelineItem(id: makeItemIdentifier(),
@@ -547,7 +578,8 @@ private struct MockTimelineContent: View {
                                                                          content: .init(body: "A long message that should be on multiple lines."),
                                                                          properties: .init(replyDetails: replyDetails,
                                                                                            isThreaded: isThreaded,
-                                                                                           threadSummary: threadSummary)),
+                                                                                           threadSummary: threadSummary,
+                                                                                           bookmarkInfo: bookmarkInfo)),
                                               groupStyle: .single))
 
         AudioRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
@@ -565,7 +597,8 @@ private struct MockTimelineContent: View {
                                                                  contentType: nil),
                                                   properties: .init(replyDetails: replyDetails,
                                                                     isThreaded: isThreaded,
-                                                                    threadSummary: threadSummary)))
+                                                                    threadSummary: threadSummary,
+                                                                    bookmarkInfo: bookmarkInfo)))
         
         FileRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
                                                  timestamp: .mock,
@@ -582,7 +615,8 @@ private struct MockTimelineContent: View {
                                                                 contentType: nil),
                                                  properties: .init(replyDetails: replyDetails,
                                                                    isThreaded: isThreaded,
-                                                                   threadSummary: threadSummary)))
+                                                                   threadSummary: threadSummary,
+                                                                   bookmarkInfo: bookmarkInfo)))
         
         ImageRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
                                                   timestamp: .mock,
@@ -596,7 +630,8 @@ private struct MockTimelineContent: View {
                                                                  thumbnailInfo: nil),
                                                   properties: .init(replyDetails: replyDetails,
                                                                     isThreaded: isThreaded,
-                                                                    threadSummary: threadSummary)))
+                                                                    threadSummary: threadSummary,
+                                                                    bookmarkInfo: bookmarkInfo)))
         
         LocationRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
                                                      timestamp: .mock,
@@ -611,7 +646,8 @@ private struct MockTimelineContent: View {
                                                                     description: "Location description description description description description description description description"),
                                                      properties: .init(replyDetails: replyDetails,
                                                                        isThreaded: isThreaded,
-                                                                       threadSummary: threadSummary)))
+                                                                       threadSummary: threadSummary,
+                                                                       bookmarkInfo: bookmarkInfo)))
         
         LocationRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
                                                      timestamp: .mock,
@@ -624,7 +660,8 @@ private struct MockTimelineContent: View {
                                                                     geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: nil),
                                                      properties: .init(replyDetails: replyDetails,
                                                                        isThreaded: isThreaded,
-                                                                       threadSummary: threadSummary)))
+                                                                       threadSummary: threadSummary,
+                                                                       bookmarkInfo: bookmarkInfo)))
         
         VoiceMessageRoomTimelineView(timelineItem: .init(id: makeItemIdentifier(),
                                                          timestamp: .mock,
@@ -641,7 +678,8 @@ private struct MockTimelineContent: View {
                                                                         contentType: nil),
                                                          properties: .init(replyDetails: replyDetails,
                                                                            isThreaded: isThreaded,
-                                                                           threadSummary: threadSummary)),
+                                                                           threadSummary: threadSummary,
+                                                                           bookmarkInfo: bookmarkInfo)),
                                      playerState: AudioPlayerState(id: .timelineItemIdentifier(.randomEvent),
                                                                    title: L10n.commonVoiceMessage,
                                                                    duration: 10,

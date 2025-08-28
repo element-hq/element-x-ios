@@ -227,7 +227,7 @@ final class TimelineProxy: TimelineProxyProtocol {
     func addBookmark(eventID: String) async -> Result<Void, TimelineProxyError> {
         do {
             return try await .success(timeline.addBookmark(eventId: eventID,
-                                                           info: .init(createdAtTs: UInt64(Date.now.timeIntervalSince1970), annotation: nil, reminderTs: nil)))
+                                                           info: .init(createdAtTs: UInt64(Date.now.timeIntervalSince1970) * 1000, annotation: nil, reminderTs: nil)))
         } catch {
             MXLog.error("Failed to add a bookmark for event \(eventID) with error: \(error)")
             return .failure(.sdkError(error))

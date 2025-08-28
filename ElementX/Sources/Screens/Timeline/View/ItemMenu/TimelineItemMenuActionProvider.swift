@@ -87,7 +87,11 @@ struct TimelineItemMenuActionProvider {
         }
         
         if item.canBeBookmarked {
-            actions.append(.bookmark)
+            if item.properties.bookmarkInfo != nil {
+                actions.append(.removeBookmark)
+            } else {
+                actions.append(.bookmark)
+            }
         }
 
         if item.isCopyable {

@@ -25,4 +25,6 @@ struct RoomTimelineItemProperties: Hashable {
     var orderedReadReceipts: [ReadReceipt] = []
     /// Authenticity warnings for item's sent in encrypted rooms.
     var encryptionAuthenticity: EncryptionAuthenticity?
+    /// Information about a bookmark for this item if any
+    var bookmarkInfo: TimelineItemBookmarkInfo?
 }

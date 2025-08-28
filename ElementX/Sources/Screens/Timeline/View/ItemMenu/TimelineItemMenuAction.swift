@@ -185,10 +185,10 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionUnpin, icon: \.unpin)
         case .bookmark:
             // FIXME: Fix title and icon
-            Label("Bookmark", systemImage: "bookmark")
+            Label("Bookmark", systemSymbol: .bookmark)
         case .removeBookmark:
             // FIXME: Fix title and icon
-            Label("Bookmark", systemImage: "bookmark.slash")
+            Label("Remove bookmark", systemSymbol: .bookmarkSlash)
         case .viewInRoomTimeline:
             Label(L10n.actionViewInTimeline, icon: \.visibilityOn)
         case .share:
