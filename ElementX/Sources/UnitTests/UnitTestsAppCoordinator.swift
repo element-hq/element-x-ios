@@ -21,7 +21,6 @@ class UnitTestsAppCoordinator: AppCoordinatorProtocol {
         AppSettings.configureWithSuiteName("io.element.elementx.unittests")
         AppSettings.resetAllSettings()
         ServiceLocator.shared.register(appSettings: AppSettings())
-        ServiceLocator.shared.register(bugReportService: BugReportServiceMock(.init()))
         
         let analyticsClient = AnalyticsClientMock()
         analyticsClient.isRunning = false

@@ -23,7 +23,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
 
     private let roomProxy: JoinedRoomProxyProtocol
     private let timelineController: TimelineControllerProtocol
-    private let mediaProvider: MediaProviderProtocol
+    private let userSession: UserSessionProtocol
     private let mediaPlayerProvider: MediaPlayerProviderProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appMediator: AppMediatorProtocol
@@ -31,7 +31,6 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     private let analyticsService: AnalyticsService
     private let emojiProvider: EmojiProviderProtocol
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
-    private let clientProxy: ClientProxyProtocol
     
     private let timelineInteractionHandler: TimelineInteractionHandler
     
@@ -50,45 +49,40 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     init(roomProxy: JoinedRoomProxyProtocol,
          focussedEventID: String? = nil,
          timelineController: TimelineControllerProtocol,
-         mediaProvider: MediaProviderProtocol,
+         userSession: UserSessionProtocol,
          mediaPlayerProvider: MediaPlayerProviderProtocol,
-         voiceMessageMediaManager: VoiceMessageMediaManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
          emojiProvider: EmojiProviderProtocol,
-         timelineControllerFactory: TimelineControllerFactoryProtocol,
-         clientProxy: ClientProxyProtocol) {
-        self.timelineController = timelineController
-        self.mediaProvider = mediaProvider
-        self.mediaPlayerProvider = mediaPlayerProvider
+         timelineControllerFactory: TimelineControllerFactoryProtocol) {
         self.roomProxy = roomProxy
+        self.timelineController = timelineController
+        self.userSession = userSession
+        self.mediaPlayerProvider = mediaPlayerProvider
         self.appSettings = appSettings
         self.analyticsService = analyticsService
         self.userIndicatorController = userIndicatorController
         self.appMediator = appMediator
         self.emojiProvider = emojiProvider
         self.timelineControllerFactory = timelineControllerFactory
-        self.clientProxy = clientProxy
         
         let voiceMessageRecorder = VoiceMessageRecorder(audioRecorder: AudioRecorder(), mediaPlayerProvider: mediaPlayerProvider)
         
         timelineInteractionHandler = TimelineInteractionHandler(roomProxy: roomProxy,
                                                                 timelineController: timelineController,
-                                                                mediaProvider: mediaProvider,
+                                                                userSession: userSession,
                                                                 mediaPlayerProvider: mediaPlayerProvider,
-                                                                voiceMessageMediaManager: voiceMessageMediaManager,
                                                                 voiceMessageRecorder: voiceMessageRecorder,
                                                                 userIndicatorController: userIndicatorController,
                                                                 appMediator: appMediator,
                                                                 appSettings: appSettings,
                                                                 analyticsService: analyticsService,
                                                                 emojiProvider: emojiProvider,
-                                                                timelineControllerFactory: timelineControllerFactory,
-                                                                clientProxy: clientProxy)
+                                                                timelineControllerFactory: timelineControllerFactory)
         
-        let hideTimelineMedia = switch clientProxy.timelineMediaVisibilityPublisher.value {
+        let hideTimelineMedia = switch userSession.clientProxy.timelineMediaVisibilityPublisher.value {
         case .always:
             false
         case .privateOnly:
@@ -109,7 +103,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        emojiProvider: emojiProvider,
                                                        mapTilerConfiguration: appSettings.mapTilerConfiguration,
                                                        bindings: .init(reactionsCollapsed: [:])),
-                   mediaProvider: mediaProvider)
+                   mediaProvider: userSession.mediaProvider)
         
         if focussedEventID != nil {
             // The timeline controller will start loading a detached timeline.
@@ -132,11 +126,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
         
         state.roomNameForIDResolver = { [weak self] roomID in
-            self?.clientProxy.roomSummaryForIdentifier(roomID)?.name
+            self?.userSession.clientProxy.roomSummaryForIdentifier(roomID)?.name
         }
         
         state.roomNameForAliasResolver = { [weak self] alias in
-            self?.clientProxy.roomSummaryForAlias(alias)?.name
+            self?.userSession.clientProxy.roomSummaryForAlias(alias)?.name
         }
         
         state.timelineState.paginationState = timelineController.paginationState
@@ -512,7 +506,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             .weakAssign(to: \.state.areThreadsEnabled, on: self)
             .store(in: &cancellables)
         
-        clientProxy.timelineMediaVisibilityPublisher
+        userSession.clientProxy.timelineMediaVisibilityPublisher
             .removeDuplicates()
             .flatMap { [weak self] timelineMediaVisibility -> AnyPublisher<Bool, Never> in
                 switch timelineMediaVisibility {
@@ -741,7 +735,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         
         return TimelineMediaPreviewViewModel(initialItem: item,
                                              timelineViewModel: timelineViewModel,
-                                             mediaProvider: mediaProvider,
+                                             mediaProvider: userSession.mediaProvider,
                                              photoLibraryManager: PhotoLibraryManager(),
                                              userIndicatorController: userIndicatorController,
                                              appMediator: appMediator)
@@ -948,18 +942,18 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             let pillViewState: PillViewState
             switch room {
             case .roomAlias(let alias):
-                let roomSummary = clientProxy.roomSummaryForAlias(alias)
+                let roomSummary = userSession.clientProxy.roomSummaryForAlias(alias)
                 pillViewState = .reference(displayText: PillUtilities.eventPillDisplayText(roomName: roomSummary?.name, rawRoomText: alias))
             case .roomID(let id):
-                let roomSummary = clientProxy.roomSummaryForIdentifier(id)
+                let roomSummary = userSession.clientProxy.roomSummaryForIdentifier(id)
                 pillViewState = .reference(displayText: PillUtilities.eventPillDisplayText(roomName: roomSummary?.name, rawRoomText: id))
             }
             pillContext.viewState = pillViewState
         case .roomAlias(let alias):
-            let roomSummary = clientProxy.roomSummaryForAlias(alias)
+            let roomSummary = userSession.clientProxy.roomSummaryForAlias(alias)
             pillContext.viewState = .reference(displayText: PillUtilities.roomPillDisplayText(roomName: roomSummary?.name, rawRoomText: alias))
         case .roomID(let id):
-            let roomSummary = clientProxy.roomSummaryForIdentifier(id)
+            let roomSummary = userSession.clientProxy.roomSummaryForIdentifier(id)
             pillContext.viewState = .reference(displayText: PillUtilities.roomPillDisplayText(roomName: roomSummary?.name, rawRoomText: id))
         }
     }
@@ -1023,16 +1017,14 @@ extension TimelineViewModel {
         return TimelineViewModel(roomProxy: roomProxy,
                                  focussedEventID: nil,
                                  timelineController: timelineController ?? MockTimelineController(timelineKind: timelineKind),
-                                 mediaProvider: MediaProviderMock(configuration: .init()),
+                                 userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
-                                 voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                  appMediator: AppMediatorMock.default,
                                  appSettings: ServiceLocator.shared.settings,
                                  analyticsService: ServiceLocator.shared.analytics,
                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                 clientProxy: clientProxyMock)
+                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
 }
 

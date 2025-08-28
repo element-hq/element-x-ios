@@ -23,9 +23,9 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init() {
-        viewModel = DeveloperOptionsScreenViewModel(developerOptions: ServiceLocator.shared.settings,
-                                                    elementCallBaseURL: ServiceLocator.shared.settings.elementCallBaseURL)
+    init(appSettings: AppSettings) {
+        viewModel = DeveloperOptionsScreenViewModel(developerOptions: appSettings,
+                                                    elementCallBaseURL: appSettings.elementCallBaseURL)
         
         viewModel.actions
             .sink { [weak self] action in

@@ -9,9 +9,8 @@ import Combine
 import SwiftUI
 
 struct RoomSelectionScreenCoordinatorParameters {
-    let clientProxy: ClientProxyProtocol
+    let userSession: UserSessionProtocol
     let roomSummaryProvider: RoomSummaryProviderProtocol
-    let mediaProvider: MediaProviderProtocol
 }
 
 enum RoomSelectionScreenCoordinatorAction {
@@ -29,9 +28,8 @@ final class RoomSelectionScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomSelectionScreenCoordinatorParameters) {
-        viewModel = RoomSelectionScreenViewModel(clientProxy: parameters.clientProxy,
-                                                 roomSummaryProvider: parameters.roomSummaryProvider,
-                                                 mediaProvider: parameters.mediaProvider)
+        viewModel = RoomSelectionScreenViewModel(userSession: parameters.userSession,
+                                                 roomSummaryProvider: parameters.roomSummaryProvider)
     }
     
     func start() {

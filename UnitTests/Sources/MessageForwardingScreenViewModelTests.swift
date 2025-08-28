@@ -26,10 +26,9 @@ class MessageForwardingScreenViewModelTests: XCTestCase {
         clientProxy.roomForIdentifierClosure = { .joined(JoinedRoomProxyMock(.init(id: $0))) }
         
         viewModel = MessageForwardingScreenViewModel(forwardingItem: forwardingItem,
-                                                     clientProxy: clientProxy,
+                                                     userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                      roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
-                                                     userIndicatorController: UserIndicatorControllerMock(),
-                                                     mediaProvider: MediaProviderMock(configuration: .init()))
+                                                     userIndicatorController: UserIndicatorControllerMock())
         context = viewModel.context
     }
     

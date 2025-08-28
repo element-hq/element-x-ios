@@ -50,17 +50,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    init(clientProxy: ClientProxyProtocol,
+    init(userSession: UserSessionProtocol,
          roomProxy: JoinedRoomProxyProtocol,
          initialSelectedPinnedEventID: String?,
-         mediaProvider: MediaProviderProtocol,
          ongoingCallRoomIDPublisher: CurrentValuePublisher<String?, Never>,
          appMediator: AppMediatorProtocol,
          appSettings: AppSettings,
          appHooks: AppHooks,
          analyticsService: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol) {
-        self.clientProxy = clientProxy
+        clientProxy = userSession.clientProxy
         self.roomProxy = roomProxy
         self.appMediator = appMediator
         self.appSettings = appSettings
@@ -75,7 +74,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                             hasOngoingCall: roomProxy.infoPublisher.value.hasRoomCall,
                                             hasSuccessor: roomProxy.infoPublisher.value.successor != nil)
         super.init(initialViewState: appHooks.roomScreenHook.update(viewState),
-                   mediaProvider: mediaProvider)
+                   mediaProvider: userSession.mediaProvider)
         
         updateRoomInfo(roomProxy.infoPublisher.value)
         setupSubscriptions(ongoingCallRoomIDPublisher: ongoingCallRoomIDPublisher)
@@ -445,10 +444,9 @@ extension RoomScreenViewModel {
     static func mock(roomProxyMock: JoinedRoomProxyMock,
                      clientProxyMock: ClientProxyMock = ClientProxyMock(),
                      appHooks: AppHooks = AppHooks()) -> RoomScreenViewModel {
-        RoomScreenViewModel(clientProxy: clientProxyMock,
+        RoomScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                             roomProxy: roomProxyMock,
                             initialSelectedPinnedEventID: nil,
-                            mediaProvider: MediaProviderMock(configuration: .init()),
                             ongoingCallRoomIDPublisher: .init(.init(nil)),
                             appMediator: AppMediatorMock.default,
                             appSettings: ServiceLocator.shared.settings,

@@ -10,13 +10,13 @@ import SwiftUI
 
 struct RoomDetailsScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+    let userSession: UserSessionProtocol
     let analyticsService: AnalyticsService
     let userIndicatorController: UserIndicatorControllerProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
     let attributedStringBuilder: AttributedStringBuilderProtocol
     let appMediator: AppMediatorProtocol
+    let appSettings: AppSettings
 }
 
 enum RoomDetailsScreenCoordinatorAction {
@@ -49,14 +49,13 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
         
     init(parameters: RoomDetailsScreenCoordinatorParameters) {
         viewModel = RoomDetailsScreenViewModel(roomProxy: parameters.roomProxy,
-                                               clientProxy: parameters.clientProxy,
-                                               mediaProvider: parameters.mediaProvider,
+                                               userSession: parameters.userSession,
                                                analyticsService: parameters.analyticsService,
                                                userIndicatorController: parameters.userIndicatorController,
                                                notificationSettingsProxy: parameters.notificationSettings,
                                                attributedStringBuilder: parameters.attributedStringBuilder,
                                                appMediator: parameters.appMediator,
-                                               appSettings: ServiceLocator.shared.settings)
+                                               appSettings: parameters.appSettings)
     }
     
     // MARK: - Public

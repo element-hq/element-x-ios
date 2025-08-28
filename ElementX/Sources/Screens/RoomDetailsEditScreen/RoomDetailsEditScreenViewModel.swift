@@ -22,12 +22,11 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
     }
     
     init(roomProxy: JoinedRoomProxyProtocol,
-         clientProxy: ClientProxyProtocol,
-         mediaProvider: MediaProviderProtocol,
+         userSession: UserSessionProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomProxy = roomProxy
-        self.clientProxy = clientProxy
+        clientProxy = userSession.clientProxy
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
         self.userIndicatorController = userIndicatorController
         
@@ -40,7 +39,8 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                                                                     initialName: roomName ?? "",
                                                                     initialTopic: roomTopic ?? "",
                                                                     avatarURL: roomAvatar,
-                                                                    bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")), mediaProvider: mediaProvider)
+                                                                    bindings: .init(name: roomName ?? "", topic: roomTopic ?? "")),
+                   mediaProvider: userSession.mediaProvider)
         
         roomProxy.infoPublisher
             .receive(on: DispatchQueue.main)

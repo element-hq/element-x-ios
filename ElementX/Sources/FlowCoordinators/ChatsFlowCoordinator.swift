@@ -534,7 +534,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                                                               navigationStackCoordinator: startChatNavigationStackCoordinator,
                                                               userDiscoveryService: userDiscoveryService,
                                                               mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
-                                                              appSettings: flowParameters.appSettings)
+                                                              appSettings: flowParameters.appSettings,
+                                                              analytics: flowParameters.analytics)
         
         let coordinator = StartChatScreenCoordinator(parameters: parameters)
         coordinator.actions.sink { [weak self] action in
@@ -594,7 +595,9 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: flowParameters.elementCallService,
                                                                             configuration: configuration,
                                                                             allowPictureInPicture: true,
-                                                                            appHooks: flowParameters.appHooks))
+                                                                            appSettings: flowParameters.appSettings,
+                                                                            appHooks: flowParameters.appHooks,
+                                                                            analytics: flowParameters.analytics))
         
         callScreenCoordinator.actions
             .sink { [weak self] action in
@@ -669,6 +672,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     private func startEncryptionResetFlow(animated: Bool) {
         let sheetNavigationStackCoordinator = NavigationStackCoordinator()
         let parameters = EncryptionResetFlowCoordinatorParameters(userSession: userSession,
+                                                                  appSettings: flowParameters.appSettings,
                                                                   userIndicatorController: flowParameters.userIndicatorController,
                                                                   navigationStackCoordinator: sheetNavigationStackCoordinator,
                                                                   windowManger: flowParameters.windowManager)
@@ -736,8 +740,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: Room Directory Search
     
     private func presentRoomDirectorySearch() {
-        let coordinator = RoomDirectorySearchScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
-                                                                                 mediaProvider: userSession.mediaProvider,
+        let coordinator = RoomDirectorySearchScreenCoordinator(parameters: .init(userSession: userSession,
                                                                                  userIndicatorController: flowParameters.userIndicatorController))
         
         coordinator.actionsPublisher.sink { [weak self] action in
@@ -771,8 +774,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         let navigationStackCoordinator = NavigationStackCoordinator()
         let parameters = UserProfileScreenCoordinatorParameters(userID: userID,
                                                                 isPresentedModally: true,
-                                                                clientProxy: userSession.clientProxy,
-                                                                mediaProvider: userSession.mediaProvider,
+                                                                userSession: userSession,
                                                                 userIndicatorController: flowParameters.userIndicatorController,
                                                                 analytics: flowParameters.analytics)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)
@@ -804,9 +806,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         
         let stackCoordinator = NavigationStackCoordinator()
         
-        let coordinator = RoomSelectionScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy,
-                                                                           roomSummaryProvider: roomSummaryProvider,
-                                                                           mediaProvider: userSession.mediaProvider))
+        let coordinator = RoomSelectionScreenCoordinator(parameters: .init(userSession: userSession,
+                                                                           roomSummaryProvider: roomSummaryProvider))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }

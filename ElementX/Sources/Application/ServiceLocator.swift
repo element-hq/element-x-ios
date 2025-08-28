@@ -29,10 +29,4 @@ class ServiceLocator {
     func register(analytics: AnalyticsService) {
         self.analytics = analytics
     }
-    
-    private(set) var bugReportService: BugReportServiceProtocol!
-    
-    func register(bugReportService: BugReportServiceProtocol) {
-        self.bugReportService = bugReportService
-    }
 }

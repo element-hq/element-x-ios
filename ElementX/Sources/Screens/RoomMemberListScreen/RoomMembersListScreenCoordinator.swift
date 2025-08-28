@@ -9,9 +9,8 @@ import Combine
 import SwiftUI
 
 struct RoomMembersListScreenCoordinatorParameters {
-    let clientProxy: ClientProxyProtocol
+    let userSession: UserSessionProtocol
     let roomProxy: JoinedRoomProxyProtocol
-    let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
 }
@@ -32,9 +31,8 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomMembersListScreenCoordinatorParameters) {
-        viewModel = RoomMembersListScreenViewModel(clientProxy: parameters.clientProxy,
+        viewModel = RoomMembersListScreenViewModel(userSession: parameters.userSession,
                                                    roomProxy: parameters.roomProxy,
-                                                   mediaProvider: parameters.mediaProvider,
                                                    userIndicatorController: parameters.userIndicatorController,
                                                    analytics: parameters.analytics)
     }

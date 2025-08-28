@@ -16,6 +16,7 @@ struct StartChatScreenCoordinatorParameters {
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let appSettings: AppSettings
+    let analytics: AnalyticsService
 }
 
 enum StartChatScreenCoordinatorAction {
@@ -48,10 +49,10 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = StartChatScreenViewModel(userSession: parameters.userSession,
-                                             analytics: ServiceLocator.shared.analytics,
+                                             analytics: parameters.analytics,
                                              userIndicatorController: parameters.userIndicatorController,
                                              userDiscoveryService: parameters.userDiscoveryService,
-                                             appSettings: ServiceLocator.shared.settings)
+                                             appSettings: parameters.appSettings)
     }
     
     func start() {
@@ -81,10 +82,9 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func presentInviteUsersScreen() {
-        let inviteParameters = InviteUsersScreenCoordinatorParameters(clientProxy: parameters.userSession.clientProxy,
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: parameters.userSession,
                                                                       selectedUsers: selectedUsersPublisher,
                                                                       roomType: .draft,
-                                                                      mediaProvider: parameters.userSession.mediaProvider,
                                                                       userDiscoveryService: parameters.userDiscoveryService,
                                                                       userIndicatorController: parameters.userIndicatorController)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
@@ -114,7 +114,9 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         let createParameters = CreateRoomCoordinatorParameters(userSession: parameters.userSession,
                                                                userIndicatorController: parameters.userIndicatorController,
                                                                createRoomParameters: createRoomParametersPublisher,
-                                                               selectedUsers: selectedUsersPublisher)
+                                                               selectedUsers: selectedUsersPublisher,
+                                                               appSettings: parameters.appSettings,
+                                                               analytics: parameters.analytics)
         let coordinator = CreateRoomCoordinator(parameters: createParameters)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }

@@ -10,8 +10,7 @@ import SwiftUI
 
 struct BlockedUsersScreenCoordinatorParameters {
     let hideProfiles: Bool
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+    let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -20,8 +19,7 @@ final class BlockedUsersScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: BlockedUsersScreenCoordinatorParameters) {
         viewModel = BlockedUsersScreenViewModel(hideProfiles: parameters.hideProfiles,
-                                                clientProxy: parameters.clientProxy,
-                                                mediaProvider: parameters.mediaProvider,
+                                                userSession: parameters.userSession,
                                                 userIndicatorController: parameters.userIndicatorController)
     }
     

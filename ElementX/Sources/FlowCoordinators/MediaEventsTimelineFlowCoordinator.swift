@@ -81,14 +81,14 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = MediaEventsTimelineScreenCoordinatorParameters(roomProxy: roomProxy,
                                                                         mediaTimelineController: mediaTimelineController,
                                                                         filesTimelineController: filesTimelineController,
-                                                                        mediaProvider: userSession.mediaProvider,
+                                                                        userSession: userSession,
                                                                         mediaPlayerProvider: MediaPlayerProvider(),
-                                                                        voiceMessageMediaManager: userSession.voiceMessageMediaManager,
                                                                         appMediator: flowParameters.appMediator,
+                                                                        appSettings: flowParameters.appSettings,
+                                                                        analytics: flowParameters.analytics,
                                                                         emojiProvider: flowParameters.emojiProvider,
                                                                         userIndicatorController: flowParameters.userIndicatorController,
-                                                                        timelineControllerFactory: flowParameters.timelineControllerFactory,
-                                                                        clientProxy: userSession.clientProxy)
+                                                                        timelineControllerFactory: flowParameters.timelineControllerFactory)
         
         let coordinator = MediaEventsTimelineScreenCoordinator(parameters: parameters)
         

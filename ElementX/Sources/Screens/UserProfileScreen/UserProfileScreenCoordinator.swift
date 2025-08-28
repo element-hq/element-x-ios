@@ -11,8 +11,7 @@ import SwiftUI
 struct UserProfileScreenCoordinatorParameters {
     let userID: String
     let isPresentedModally: Bool
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+    let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
 }
@@ -36,8 +35,7 @@ final class UserProfileScreenCoordinator: CoordinatorProtocol {
     init(parameters: UserProfileScreenCoordinatorParameters) {
         viewModel = UserProfileScreenViewModel(userID: parameters.userID,
                                                isPresentedModally: parameters.isPresentedModally,
-                                               clientProxy: parameters.clientProxy,
-                                               mediaProvider: parameters.mediaProvider,
+                                               userSession: parameters.userSession,
                                                userIndicatorController: parameters.userIndicatorController,
                                                analytics: parameters.analytics)
     }

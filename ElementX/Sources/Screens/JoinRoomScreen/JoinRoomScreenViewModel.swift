@@ -30,16 +30,15 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
     init(roomID: String,
          via: [String],
          appSettings: AppSettings,
-         clientProxy: ClientProxyProtocol,
-         mediaProvider: MediaProviderProtocol,
+         userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.roomID = roomID
         self.via = via
         self.appSettings = appSettings
-        self.clientProxy = clientProxy
+        clientProxy = userSession.clientProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: JoinRoomScreenViewState(roomID: roomID), mediaProvider: mediaProvider)
+        super.init(initialViewState: JoinRoomScreenViewState(roomID: roomID), mediaProvider: userSession.mediaProvider)
         
         clientProxy.hideInviteAvatarsPublisher
             .removeDuplicates()

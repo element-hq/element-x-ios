@@ -11,18 +11,18 @@ import SwiftUI
 import WysiwygComposer
 
 struct ThreadTimelineScreenCoordinatorParameters {
-    let clientProxy: ClientProxyProtocol
+    let userSession: UserSessionProtocol
     let roomProxy: JoinedRoomProxyProtocol
     let timelineController: TimelineControllerProtocol
-    let mediaProvider: MediaProviderProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
-    let voiceMessageMediaManager: VoiceMessageMediaManagerProtocol
     let emojiProvider: EmojiProviderProtocol
     let completionSuggestionService: CompletionSuggestionServiceProtocol
     let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
+    let analytics: AnalyticsService
     let composerDraftService: ComposerDraftServiceProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum ThreadTimelineScreenCoordinatorAction {
@@ -58,16 +58,14 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
         
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
                                               timelineController: parameters.timelineController,
-                                              mediaProvider: parameters.mediaProvider,
+                                              userSession: parameters.userSession,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
-                                              voiceMessageMediaManager: parameters.voiceMessageMediaManager,
-                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                              userIndicatorController: parameters.userIndicatorController,
                                               appMediator: parameters.appMediator,
                                               appSettings: parameters.appSettings,
-                                              analyticsService: ServiceLocator.shared.analytics,
+                                              analyticsService: parameters.analytics,
                                               emojiProvider: parameters.emojiProvider,
-                                              timelineControllerFactory: parameters.timelineControllerFactory,
-                                              clientProxy: parameters.clientProxy)
+                                              timelineControllerFactory: parameters.timelineControllerFactory)
         
         let wysiwygViewModel = WysiwygComposerViewModel(minHeight: ComposerConstant.minHeight,
                                                         maxCompressedHeight: ComposerConstant.maxHeight,
@@ -78,10 +76,10 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                                                      roomProxy: parameters.roomProxy,
                                                      wysiwygViewModel: wysiwygViewModel,
                                                      completionSuggestionService: parameters.completionSuggestionService,
-                                                     mediaProvider: parameters.mediaProvider,
+                                                     mediaProvider: parameters.userSession.mediaProvider,
                                                      mentionDisplayHelper: ComposerMentionDisplayHelper(timelineContext: timelineViewModel.context),
                                                      appSettings: parameters.appSettings,
-                                                     analyticsService: ServiceLocator.shared.analytics,
+                                                     analyticsService: parameters.analytics,
                                                      composerDraftService: parameters.composerDraftService)
     }
     

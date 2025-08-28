@@ -304,16 +304,14 @@ class TimelineViewModelTests: XCTestCase {
 
         let viewModel = TimelineViewModel(roomProxy: roomProxy,
                                           timelineController: timelineController,
-                                          mediaProvider: MediaProviderMock(configuration: .init()),
+                                          userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
                                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                          clientProxy: ClientProxyMock(.init()))
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         return (viewModel, roomProxy, timelineProxy, timelineController)
     }
     
@@ -331,16 +329,14 @@ class TimelineViewModelTests: XCTestCase {
         timelineController.timelineItems = [message]
         let viewModel = TimelineViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "", members: [RoomMemberProxyMock.mockAlice, RoomMemberProxyMock.mockCharlie])),
                                           timelineController: timelineController,
-                                          mediaProvider: MediaProviderMock(configuration: .init()),
+                                          userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
                                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                          clientProxy: ClientProxyMock(.init()))
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         let deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.bindings.readReceiptsSummaryInfo?.orderedReceipts == receipts
@@ -356,16 +352,14 @@ class TimelineViewModelTests: XCTestCase {
                                                                                          RoomMemberProxyMock.mockAlice],
                                                                                ownUserID: RoomMemberProxyMock.mockAdmin.userID)),
                                           timelineController: MockTimelineController(),
-                                          mediaProvider: MediaProviderMock(configuration: .init()),
+                                          userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
                                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                          clientProxy: ClientProxyMock(.init()))
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.canCurrentUserKick && value.canCurrentUserBan
@@ -393,16 +387,14 @@ class TimelineViewModelTests: XCTestCase {
                                                                                          RoomMemberProxyMock.mockAlice],
                                                                                ownUserID: RoomMemberProxyMock.mockAlice.userID)),
                                           timelineController: MockTimelineController(),
-                                          mediaProvider: MediaProviderMock(configuration: .init()),
+                                          userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
                                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                          clientProxy: ClientProxyMock(.init()))
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         var deferredState = deferFulfillment(viewModel.context.$viewState) { value in
             !value.canCurrentUserKick && !value.canCurrentUserBan
@@ -430,16 +422,14 @@ class TimelineViewModelTests: XCTestCase {
                                                                                          RoomMemberProxyMock.mockBanned[0]],
                                                                                ownUserID: RoomMemberProxyMock.mockAdmin.userID)),
                                           timelineController: MockTimelineController(),
-                                          mediaProvider: MediaProviderMock(configuration: .init()),
+                                          userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
                                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                          clientProxy: ClientProxyMock(.init()))
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         var deferredState = deferFulfillment(viewModel.context.$viewState) { value in
             value.canCurrentUserKick && value.canCurrentUserBan
@@ -473,16 +463,14 @@ class TimelineViewModelTests: XCTestCase {
         
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: MockTimelineController(),
-                                          mediaProvider: MediaProviderMock(configuration: .init()),
+                                          userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
                                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                          clientProxy: ClientProxyMock(.init()))
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         XCTAssertEqual(configuration.pinnedEventIDs, viewModel.context.viewState.pinnedEventIDs)
         
         configuration.pinnedEventIDs = ["test1", "test2"]
@@ -502,16 +490,14 @@ class TimelineViewModelTests: XCTestCase {
         
         let viewModel = TimelineViewModel(roomProxy: roomProxyMock,
                                           timelineController: MockTimelineController(),
-                                          mediaProvider: MediaProviderMock(configuration: .init()),
+                                          userSession: UserSessionMock(.init()),
                                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                                           userIndicatorController: userIndicatorControllerMock,
                                           appMediator: AppMediatorMock.default,
                                           appSettings: ServiceLocator.shared.settings,
                                           analyticsService: ServiceLocator.shared.analytics,
                                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                                          clientProxy: ClientProxyMock(.init()))
+                                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         var deferred = deferFulfillment(viewModel.context.$viewState) { value in
             value.canCurrentUserPin
@@ -541,16 +527,14 @@ class TimelineViewModelTests: XCTestCase {
         TimelineViewModel(roomProxy: roomProxy ?? JoinedRoomProxyMock(.init(name: "")),
                           focussedEventID: focussedEventID,
                           timelineController: timelineController,
-                          mediaProvider: MediaProviderMock(configuration: .init()),
+                          userSession: UserSessionMock(.init()),
                           mediaPlayerProvider: MediaPlayerProviderMock(),
-                          voiceMessageMediaManager: VoiceMessageMediaManagerMock(),
                           userIndicatorController: userIndicatorControllerMock,
                           appMediator: AppMediatorMock.default,
                           appSettings: ServiceLocator.shared.settings,
                           analyticsService: ServiceLocator.shared.analytics,
                           emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
-                          timelineControllerFactory: TimelineControllerFactoryMock(.init()),
-                          clientProxy: ClientProxyMock(.init()))
+                          timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
 }
 
