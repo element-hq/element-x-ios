@@ -95,6 +95,12 @@ extension PreviewTests {
         }
     }
 
+    func testBookmarksScreen() async throws {
+        for (index, preview) in BookmarksScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testBugReportScreen() async throws {
         for (index, preview) in BugReportScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

@@ -458,7 +458,18 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentBookmarksScreen() {
         let stackCoordinator = NavigationStackCoordinator()
-
+        let coordinator = BookmarksScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy))
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss:
+                navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
         navigationSplitCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.processEvent(.dismissedBookmarksScreen)
         }

@@ -63,6 +63,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "BlockedUsersScreen_Previews")
     }
 
+    func testBookmarksScreen() async throws {
+        try await performAccessibilityAudit(named: "BookmarksScreen_Previews")
+    }
+
     func testBugReportScreen() async throws {
         try await performAccessibilityAudit(named: "BugReportScreen_Previews")
     }
