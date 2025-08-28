@@ -14,6 +14,7 @@ struct StateRoomTimelineItem: EventBasedTimelineItemProtocol, Equatable {
     let isOutgoing: Bool
     let isEditable: Bool
     let canBeRepliedTo: Bool
+    let canBeBookmarked: Bool
     
     let sender: TimelineItemSender
     

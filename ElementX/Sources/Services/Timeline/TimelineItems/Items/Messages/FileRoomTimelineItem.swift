@@ -14,6 +14,7 @@ struct FileRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let isOutgoing: Bool
     let isEditable: Bool
     let canBeRepliedTo: Bool
+    let canBeBookmarked: Bool
     var shouldBoost = false
     
     let sender: TimelineItemSender

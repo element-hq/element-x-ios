@@ -59,6 +59,7 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                isOutgoing: false,
                                isEditable: false,
                                canBeRepliedTo: true,
+                               canBeBookmarked: true,
                                sender: .init(id: senderId),
                                content: .init(body: text))
     }

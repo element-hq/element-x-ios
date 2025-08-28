@@ -37,6 +37,7 @@ struct CallInviteRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                        timestamp: .mock,
                                                        isEditable: false,
                                                        canBeRepliedTo: false,
+                                                       canBeBookmarked: true,
                                                        sender: .init(id: "Bob")))
     }
 }

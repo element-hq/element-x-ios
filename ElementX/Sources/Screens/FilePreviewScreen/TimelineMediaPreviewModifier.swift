@@ -154,6 +154,7 @@ struct TimelineMediaPreviewModifier_Previews: PreviewProvider {
                                         isOutgoing: false,
                                         isEditable: false,
                                         canBeRepliedTo: true,
+                                        canBeBookmarked: true,
                                         sender: .init(id: "", displayName: "Sally Sanderson"),
                                         content: .init(filename: "Important document.pdf",
                                                        caption: "A caption goes right here.",

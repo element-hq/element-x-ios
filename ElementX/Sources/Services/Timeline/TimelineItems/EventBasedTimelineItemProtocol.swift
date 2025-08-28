@@ -13,6 +13,7 @@ protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol, CustomStringC
     var isOutgoing: Bool { get }
     var isEditable: Bool { get }
     var canBeRepliedTo: Bool { get }
+    var canBeBookmarked: Bool { get }
     
     var sender: TimelineItemSender { get }
     

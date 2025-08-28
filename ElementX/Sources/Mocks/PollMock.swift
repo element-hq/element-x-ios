@@ -89,6 +89,7 @@ extension PollRoomTimelineItem {
               isOutgoing: isOutgoing,
               isEditable: isEditable,
               canBeRepliedTo: true,
+              canBeBookmarked: true,
               sender: .init(id: "userID"),
               properties: .init())
     }

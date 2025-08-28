@@ -100,6 +100,8 @@ class EventTimelineItemProxy {
     }()
     
     lazy var canBeRepliedTo = item.canBeRepliedTo
+    
+    lazy var canBeBookmarked = item.canBeBookmarked
             
     lazy var content = item.content
 

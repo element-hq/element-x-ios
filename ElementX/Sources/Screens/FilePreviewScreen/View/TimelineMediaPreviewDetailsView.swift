@@ -210,6 +210,7 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
                                          isOutgoing: isOutgoing,
                                          isEditable: true,
                                          canBeRepliedTo: true,
+                                         canBeBookmarked: true,
                                          sender: .init(id: "@alice:matrix.org",
                                                        displayName: "Alice",
                                                        avatarURL: .mockMXCUserAvatar),

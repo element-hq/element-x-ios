@@ -85,6 +85,7 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                              isOutgoing: isOutgoing,
                              isEditable: isOutgoing,
                              canBeRepliedTo: true,
+                             canBeBookmarked: true,
                              sender: .init(id: senderId),
                              content: .init(body: text))
     }
@@ -98,6 +99,7 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                     isOutgoing: isOutgoing,
                                     isEditable: isOutgoing,
                                     canBeRepliedTo: true,
+                                    canBeBookmarked: true,
                                     sender: .init(id: senderId),
                                     content: .init(body: "", formattedBody: attributedString))
     }

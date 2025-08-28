@@ -48,6 +48,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                           isOutgoing: false,
                                                                           isEditable: false,
                                                                           canBeRepliedTo: true,
+                                                                          canBeBookmarked: true,
                                                                           sender: .init(id: "Bob"),
                                                                           imageInfo: .mockImage))
             
@@ -57,6 +58,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                                           isOutgoing: false,
                                                                           isEditable: false,
                                                                           canBeRepliedTo: true,
+                                                                          canBeBookmarked: true,
                                                                           sender: .init(id: "Bob"),
                                                                           imageInfo: .mockImage,
                                                                           blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))

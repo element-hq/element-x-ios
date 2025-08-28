@@ -102,6 +102,7 @@ struct VideoRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                               isOutgoing: false,
                               isEditable: false,
                               canBeRepliedTo: true,
+                              canBeBookmarked: true,
                               sender: .init(id: "Bob"),
                               content: .init(filename: "video.mp4",
                                              caption: caption,

@@ -31,6 +31,7 @@ struct VoiceMessageMediaEventsTimelineView_Previews: PreviewProvider, TestablePr
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     canBeRepliedTo: true,
+                                                                    canBeBookmarked: true,
                                                                     sender: .init(id: "Bob"),
                                                                     content: .init(filename: "audio.ogg",
                                                                                    duration: 300,

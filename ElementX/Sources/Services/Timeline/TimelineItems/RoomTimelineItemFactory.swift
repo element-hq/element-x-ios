@@ -113,6 +113,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              isOutgoing: isOutgoing,
                              isEditable: eventItemProxy.isEditable,
                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                             canBeBookmarked: eventItemProxy.canBeBookmarked,
                              shouldBoost: eventItemProxy.shouldBoost,
                              sender: eventItemProxy.sender,
                              content: buildTextTimelineItemContent(textMessageContent),
@@ -136,6 +137,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
                               canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                              canBeBookmarked: eventItemProxy.canBeBookmarked,
                               shouldBoost: eventItemProxy.shouldBoost,
                               sender: eventItemProxy.sender,
                               content: buildImageTimelineItemContent(imageMessageContent),
@@ -159,6 +161,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
                               canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                              canBeBookmarked: eventItemProxy.canBeBookmarked,
                               shouldBoost: eventItemProxy.shouldBoost,
                               sender: eventItemProxy.sender,
                               content: buildVideoTimelineItemContent(videoMessageContent),
@@ -182,6 +185,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
                               canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                              canBeBookmarked: eventItemProxy.canBeBookmarked,
                               shouldBoost: eventItemProxy.shouldBoost,
                               sender: eventItemProxy.sender,
                               content: buildAudioTimelineItemContent(audioMessageContent),
@@ -205,6 +209,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      isOutgoing: isOutgoing,
                                      isEditable: eventItemProxy.isEditable,
                                      canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                     canBeBookmarked: eventItemProxy.canBeBookmarked,
                                      sender: eventItemProxy.sender,
                                      content: buildAudioTimelineItemContent(audioMessageContent),
                                      properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
@@ -227,6 +232,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              isOutgoing: isOutgoing,
                              isEditable: eventItemProxy.isEditable,
                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                             canBeBookmarked: eventItemProxy.canBeBookmarked,
                              shouldBoost: eventItemProxy.shouldBoost,
                              sender: eventItemProxy.sender,
                              content: buildFileTimelineItemContent(fileMessageContent),
@@ -250,6 +256,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                isOutgoing: isOutgoing,
                                isEditable: eventItemProxy.isEditable,
                                canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                               canBeBookmarked: eventItemProxy.canBeBookmarked,
                                sender: eventItemProxy.sender,
                                content: buildNoticeTimelineItemContent(noticeMessageContent),
                                properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
@@ -272,6 +279,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
                               canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                              canBeBookmarked: eventItemProxy.canBeBookmarked,
                               sender: eventItemProxy.sender,
                               content: buildEmoteTimelineItemContent(senderDisplayName: eventItemProxy.sender.displayName, senderID: eventItemProxy.sender.id, messageContent: emoteMessageContent),
                               properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
@@ -294,6 +302,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                  isOutgoing: isOutgoing,
                                  isEditable: eventItemProxy.isEditable,
                                  canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                 canBeBookmarked: eventItemProxy.canBeBookmarked,
                                  sender: eventItemProxy.sender,
                                  content: buildLocationTimelineItemContent(locationMessageContent),
                                  properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
@@ -316,6 +325,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              isOutgoing: isOutgoing,
                              isEditable: eventItemProxy.isEditable,
                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                             canBeBookmarked: eventItemProxy.canBeBookmarked,
                              shouldBoost: eventItemProxy.shouldBoost,
                              sender: eventItemProxy.sender,
                              content: .init(body: galleryMessageContent.body),
@@ -343,6 +353,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                        isOutgoing: isOutgoing,
                                        isEditable: eventItemProxy.isEditable,
                                        canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                       canBeBookmarked: eventItemProxy.canBeBookmarked,
                                        sender: eventItemProxy.sender,
                                        imageInfo: imageInfo,
                                        blurhash: info.blurhash,
@@ -404,6 +415,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     isOutgoing: isOutgoing,
                                     isEditable: eventItemProxy.isEditable,
                                     canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                    canBeBookmarked: eventItemProxy.canBeBookmarked,
                                     sender: eventItemProxy.sender,
                                     properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
                                                       isThreaded: messageLikeContent.threadRoot != nil,
@@ -424,6 +436,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                  isOutgoing: isOutgoing,
                                  isEditable: eventItemProxy.isEditable,
                                  canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                 canBeBookmarked: eventItemProxy.canBeBookmarked,
                                  sender: eventItemProxy.sender,
                                  properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
                                                    isThreaded: messageLikeContent.threadRoot != nil,
@@ -477,6 +490,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                          isOutgoing: isOutgoing,
                                          isEditable: eventItemProxy.isEditable,
                                          canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                         canBeBookmarked: eventItemProxy.canBeBookmarked,
                                          sender: eventItemProxy.sender,
                                          properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
                                                            isThreaded: messageLikeContent.threadRoot != nil,
@@ -721,6 +735,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     isOutgoing: isOutgoing,
                                     isEditable: eventItemProxy.isEditable,
                                     canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                    canBeBookmarked: eventItemProxy.canBeBookmarked,
                                     sender: eventItemProxy.sender,
                                     properties: .init())
     }
@@ -730,6 +745,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                    timestamp: eventItemProxy.timestamp,
                                    isEditable: eventItemProxy.isEditable,
                                    canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                   canBeBookmarked: eventItemProxy.canBeBookmarked,
                                    sender: eventItemProxy.sender)
     }
     
@@ -738,6 +754,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                          timestamp: eventItemProxy.timestamp,
                                          isEditable: eventItemProxy.isEditable,
                                          canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                                         canBeBookmarked: eventItemProxy.canBeBookmarked,
                                          sender: eventItemProxy.sender)
     }
     
@@ -790,6 +807,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isOutgoing: isOutgoing,
                               isEditable: false,
                               canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                              canBeBookmarked: eventItemProxy.canBeBookmarked,
                               sender: eventItemProxy.sender)
     }
     

@@ -64,6 +64,7 @@ struct CallNotificationRoomTimelineView_Previews: PreviewProvider, TestablePrevi
                                                              timestamp: .mock,
                                                              isEditable: false,
                                                              canBeRepliedTo: false,
+                                                             canBeBookmarked: true,
                                                              sender: .init(id: "Bob")))
     }
 }

@@ -98,6 +98,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
+                                                     canBeBookmarked: true,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description")))
 
@@ -106,6 +107,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
+                                                     canBeBookmarked: true,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description")))
@@ -114,6 +116,7 @@ struct LocationRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                      isOutgoing: false,
                                                      isEditable: false,
                                                      canBeRepliedTo: true,
+                                                     canBeBookmarked: true,
                                                      sender: .init(id: "Bob"),
                                                      content: .init(body: "Fallback geo uri description",
                                                                     geoURI: .init(latitude: 41.902782, longitude: 12.496366), description: "Location description description description description description description description description"),

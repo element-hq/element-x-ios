@@ -90,6 +90,7 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                   isOutgoing: isOutgoing,
                                   isEditable: false,
                                   canBeRepliedTo: false,
+                                  canBeBookmarked: true,
                                   sender: .init(id: senderId))
     }
     
@@ -101,6 +102,7 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                   isOutgoing: isOutgoing,
                                   isEditable: false,
                                   canBeRepliedTo: false,
+                                  canBeBookmarked: true,
                                   sender: .init(id: senderId))
     }
 }

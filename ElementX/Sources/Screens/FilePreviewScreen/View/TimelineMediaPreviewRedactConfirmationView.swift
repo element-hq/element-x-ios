@@ -132,6 +132,7 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
                                          isOutgoing: false,
                                          isEditable: true,
                                          canBeRepliedTo: true,
+                                         canBeBookmarked: true,
                                          sender: .init(id: "@alice:matrix.org",
                                                        displayName: "Alice",
                                                        avatarURL: .mockMXCUserAvatar),

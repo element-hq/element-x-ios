@@ -54,6 +54,7 @@ struct FileMediaEventsTimelineView_Previews: PreviewProvider, TestablePreview {
               isOutgoing: false,
               isEditable: false,
               canBeRepliedTo: true,
+              canBeBookmarked: true,
               sender: .init(id: "Bob"),
               content: .init(filename: filename,
                              caption: caption,

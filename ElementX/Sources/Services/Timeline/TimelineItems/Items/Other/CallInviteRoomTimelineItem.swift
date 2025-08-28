@@ -12,6 +12,7 @@ struct CallInviteRoomTimelineItem: RoomTimelineItemProtocol, Equatable {
     let timestamp: Date
     let isEditable: Bool
     let canBeRepliedTo: Bool
+    let canBeBookmarked: Bool
     
     let sender: TimelineItemSender
     

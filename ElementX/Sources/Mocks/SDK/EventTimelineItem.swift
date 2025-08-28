@@ -18,7 +18,8 @@ struct EventTimelineItemSDKMockConfiguration {
                                                                reactions: [],
                                                                inReplyTo: nil,
                                                                threadRoot: nil,
-                                                               threadSummary: nil))
+                                                               threadSummary: nil,
+                                                               bookmark: nil))
 }
 
 extension EventTimelineItem {
@@ -36,6 +37,7 @@ extension EventTimelineItem {
                   readReceipts: [:],
                   origin: nil,
                   canBeRepliedTo: false,
+                  canBeBookmarked: false,
                   lazyProvider: LazyTimelineItemProviderSDKMock())
     }
     
@@ -50,7 +52,8 @@ extension EventTimelineItem {
                                                                  reactions: [],
                                                                  inReplyTo: nil,
                                                                  threadRoot: nil,
-                                                                 threadSummary: nil))
+                                                                 threadSummary: nil,
+                                                                 bookmark: nil))
         
         return .init(configuration: .init(content: content))
     }

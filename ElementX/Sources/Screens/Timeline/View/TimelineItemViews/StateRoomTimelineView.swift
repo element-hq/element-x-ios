@@ -36,5 +36,6 @@ struct StateRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                             isOutgoing: false,
                                             isEditable: false,
                                             canBeRepliedTo: true,
+                                            canBeBookmarked: false,
                                             sender: .init(id: ""))
 }
