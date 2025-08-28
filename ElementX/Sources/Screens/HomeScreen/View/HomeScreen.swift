@@ -50,7 +50,10 @@ struct HomeScreen: View {
         }
         
         ToolbarItem(placement: .primaryAction) {
-            newRoomButton
+            HStack(spacing: 16.0) {
+                bookmarksButton
+                newRoomButton
+            }
         }
     }
     
@@ -69,6 +72,18 @@ struct HomeScreen: View {
         default:
             EmptyView()
         }
+    }
+    
+    @ViewBuilder
+    private var bookmarksButton: some View {
+        #warning("Fix the icon and identifiers")
+        Button {
+            context.send(viewAction: .showBookmarks)
+        } label: {
+            Image(systemName: "bookmark")
+        }
+        .accessibilityLabel("Bookmarks")
+        .accessibilityIdentifier("bookmarks")
     }
     
     @ViewBuilder

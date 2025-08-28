@@ -20,6 +20,7 @@ enum HomeScreenViewModelAction: Equatable {
     case presentRecoveryKeyScreen
     case presentEncryptionResetScreen
     case presentSettingsScreen
+    case presentBookmarksScreen
     case presentFeedbackScreen
     case presentStartChatScreen
     case presentGlobalSearch
@@ -33,6 +34,7 @@ enum HomeScreenViewAction {
     case confirmLeaveRoom(roomIdentifier: String)
     case reportRoom(roomIdentifier: String)
     case showSettings
+    case showBookmarks
     case startChat
     case setupRecovery
     case confirmRecoveryKey

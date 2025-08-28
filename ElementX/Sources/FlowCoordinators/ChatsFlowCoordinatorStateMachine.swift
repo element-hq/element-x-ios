@@ -46,6 +46,8 @@ class ChatsFlowCoordinatorStateMachine {
         
         case declineAndBlockUserScreen(roomListSelectedRoomID: String?)
         
+        case bookmarksScreen(roomListSelectedRoomID: String?)
+        
         /// The selected room ID from the state if available.
         var roomListSelectedRoomID: String? {
             switch self {
@@ -59,7 +61,8 @@ class ChatsFlowCoordinatorStateMachine {
                  .logoutConfirmationScreen(let roomListSelectedRoomID),
                  .roomDirectorySearchScreen(let roomListSelectedRoomID),
                  .reportRoomScreen(let roomListSelectedRoomID),
-                 .declineAndBlockUserScreen(let roomListSelectedRoomID):
+                 .declineAndBlockUserScreen(let roomListSelectedRoomID),
+                 .bookmarksScreen(let roomListSelectedRoomID):
                 roomListSelectedRoomID
             }
         }
@@ -120,6 +123,9 @@ class ChatsFlowCoordinatorStateMachine {
         
         case presentDeclineAndBlockScreen(userID: String, roomID: String)
         case dismissedDeclineAndBlockScreen
+        
+        case presentBookmarksScreen
+        case dismissedBookmarksScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -186,6 +192,11 @@ class ChatsFlowCoordinatorStateMachine {
             case(.roomList(let roomListSelectedRoomID), .presentDeclineAndBlockScreen):
                 return .declineAndBlockUserScreen(roomListSelectedRoomID: roomListSelectedRoomID)
             case (.declineAndBlockUserScreen(let roomListSelectedRoomID), .dismissedDeclineAndBlockScreen):
+                return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
+                
+            case(.roomList(let roomListSelectedRoomID), .presentBookmarksScreen):
+                return .bookmarksScreen(roomListSelectedRoomID: roomListSelectedRoomID)
+            case (.bookmarksScreen(let roomListSelectedRoomID), .dismissedBookmarksScreen):
                 return .roomList(roomListSelectedRoomID: roomListSelectedRoomID)
                 
             default:

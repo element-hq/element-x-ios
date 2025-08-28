@@ -248,6 +248,11 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             case (.declineAndBlockUserScreen, .dismissedDeclineAndBlockScreen, .roomList):
                 break
                 
+            case (.roomList, .presentBookmarksScreen, .bookmarksScreen):
+                presentBookmarksScreen()
+            case (.bookmarksScreen, .dismissedBookmarksScreen, .roomList):
+                break
+                
             case (.roomList(let roomListSelectedRoomID), .showShareExtensionRoomList, .shareExtensionRoomList(let sharePayload)):
                 Task {
                     if roomListSelectedRoomID != nil {
@@ -373,6 +378,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                     }
                 case .presentSettingsScreen:
                     actionsSubject.send(.showSettings)
+                case .presentBookmarksScreen:
+                    stateMachine.processEvent(.presentBookmarksScreen)
                 case .presentFeedbackScreen:
                     stateMachine.processEvent(.feedbackScreen)
                 case .presentSecureBackupSettings:
@@ -446,6 +453,14 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         stackCoordinator.setRootCoordinator(coordinator)
         navigationSplitCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.processEvent(.dismissedDeclineAndBlockScreen)
+        }
+    }
+    
+    private func presentBookmarksScreen() {
+        let stackCoordinator = NavigationStackCoordinator()
+
+        navigationSplitCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedBookmarksScreen)
         }
     }
     
