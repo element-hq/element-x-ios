@@ -231,4 +231,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func setTimelineMediaVisibility(_ value: TimelineMediaVisibility) async -> Result<Void, ClientProxyError>
     func setHideInviteAvatars(_ value: Bool) async -> Result<Void, ClientProxyError>
+    
+    // MARK: - Bookmarks
+    
+    func getUserBookmarks() -> [String: [String]]
 }

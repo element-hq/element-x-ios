@@ -96,6 +96,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     func pinnedEventsTimeline() async -> Result<TimelineProxyProtocol, RoomProxyError>
     
+    func bookmarksTimeline() async -> Result<TimelineProxyProtocol, RoomProxyError>
+    
     func enableEncryption() async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>

@@ -264,6 +264,25 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    func bookmarksTimeline() async -> Result<TimelineProxyProtocol, RoomProxyError> {
+        do {
+            let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .pinnedEvents(maxEventsToLoad: 100, maxConcurrentRequests: 100),
+                                                                                            filter: .all,
+                                                                                            internalIdPrefix: UUID().uuidString,
+                                                                                            dateDividerMode: .daily,
+                                                                                            trackReadReceipts: true,
+                                                                                            reportUtds: true))
+            
+            let timeline = TimelineProxy(timeline: sdkTimeline, kind: .pinned)
+            await timeline.subscribeForUpdates()
+            
+            return .success(timeline)
+        } catch {
+            MXLog.error("Unexpected error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     func enableEncryption() async -> Result<Void, RoomProxyError> {
         do {
             try await room.enableEncryption()

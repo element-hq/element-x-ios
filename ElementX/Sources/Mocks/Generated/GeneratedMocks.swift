@@ -5199,6 +5199,70 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return setHideInviteAvatarsReturnValue
         }
     }
+    //MARK: - getUserBookmarks
+
+    var getUserBookmarksUnderlyingCallsCount = 0
+    var getUserBookmarksCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getUserBookmarksUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getUserBookmarksUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getUserBookmarksUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getUserBookmarksUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getUserBookmarksCalled: Bool {
+        return getUserBookmarksCallsCount > 0
+    }
+
+    var getUserBookmarksUnderlyingReturnValue: [String: [String]]!
+    var getUserBookmarksReturnValue: [String: [String]]! {
+        get {
+            if Thread.isMainThread {
+                return getUserBookmarksUnderlyingReturnValue
+            } else {
+                var returnValue: [String: [String]]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getUserBookmarksUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getUserBookmarksUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getUserBookmarksUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getUserBookmarksClosure: (() -> [String: [String]])?
+
+    func getUserBookmarks() -> [String: [String]] {
+        getUserBookmarksCallsCount += 1
+        if let getUserBookmarksClosure = getUserBookmarksClosure {
+            return getUserBookmarksClosure()
+        } else {
+            return getUserBookmarksReturnValue
+        }
+    }
     //MARK: - loadMediaContentForSource
 
     var loadMediaContentForSourceThrowableError: Error?
@@ -6722,6 +6786,70 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return await pinnedEventsTimelineClosure()
         } else {
             return pinnedEventsTimelineReturnValue
+        }
+    }
+    //MARK: - bookmarksTimeline
+
+    var bookmarksTimelineUnderlyingCallsCount = 0
+    var bookmarksTimelineCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return bookmarksTimelineUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = bookmarksTimelineUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                bookmarksTimelineUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    bookmarksTimelineUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var bookmarksTimelineCalled: Bool {
+        return bookmarksTimelineCallsCount > 0
+    }
+
+    var bookmarksTimelineUnderlyingReturnValue: Result<TimelineProxyProtocol, RoomProxyError>!
+    var bookmarksTimelineReturnValue: Result<TimelineProxyProtocol, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return bookmarksTimelineUnderlyingReturnValue
+            } else {
+                var returnValue: Result<TimelineProxyProtocol, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = bookmarksTimelineUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                bookmarksTimelineUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    bookmarksTimelineUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var bookmarksTimelineClosure: (() async -> Result<TimelineProxyProtocol, RoomProxyError>)?
+
+    func bookmarksTimeline() async -> Result<TimelineProxyProtocol, RoomProxyError> {
+        bookmarksTimelineCallsCount += 1
+        if let bookmarksTimelineClosure = bookmarksTimelineClosure {
+            return await bookmarksTimelineClosure()
+        } else {
+            return bookmarksTimelineReturnValue
         }
     }
     //MARK: - enableEncryption

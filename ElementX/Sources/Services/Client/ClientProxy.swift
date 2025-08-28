@@ -868,6 +868,12 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    // MARK: Bookmarks
+    
+    func getUserBookmarks() -> [String: [String]] {
+        ["!NnpfwIWXXYlrKsabWh:matrix.org": [], "!POTexKBdzTfplmDWTc:matrix.org": []]
+    }
+    
     // MARK: - Private
     
     private func cacheAccountURL() async {

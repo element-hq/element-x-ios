@@ -11,7 +11,15 @@ enum BookmarksScreenViewModelAction {
     case dismiss
 }
 
-struct BookmarksScreenViewState: BindableState { }
+struct BookmarkListItem: Identifiable {
+    let id: TimelineItemIdentifier
+    let body: String
+    let roomName: String
+}
+
+struct BookmarksScreenViewState: BindableState {
+    var items = [BookmarkListItem]()
+}
 
 enum BookmarksScreenViewAction {
     case dismiss

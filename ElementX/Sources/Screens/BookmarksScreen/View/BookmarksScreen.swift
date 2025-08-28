@@ -12,9 +12,28 @@ struct BookmarksScreen: View {
     @Bindable var context: BookmarksScreenViewModel.Context
     
     var body: some View {
-        Text("Some amazing bookmarks")
+        bookmarks
             .navigationTitle("Bookmarks")
             .toolbar { toolbar }
+    }
+    
+    @ViewBuilder
+    private var bookmarks: some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 4) {
+                ForEach(context.viewState.items) { bookmark in
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(bookmark.body)
+                        Text(bookmark.roomName)
+                    }
+                    .bubbleBackground(isOutgoing: true,
+                                      insets: .init(top: 4, leading: 4, bottom: 4, trailing: 4),
+                                      color: .compound._bgBubbleOutgoing)
+                }
+            }
+            .padding()
+        }
+        .ignoresSafeArea(edges: .bottom)
     }
     
     private var toolbar: some ToolbarContent {

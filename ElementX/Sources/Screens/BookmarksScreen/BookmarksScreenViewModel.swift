@@ -17,11 +17,17 @@ class BookmarksScreenViewModel: BookmarksScreenViewModelType, BookmarksScreenVie
     var actionsPublisher: AnyPublisher<BookmarksScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+    
+    private var roomsAndTimelines = [(JoinedRoomProxyProtocol, TimelineProxyProtocol)]()
 
     init(clientProxy: ClientProxyProtocol) {
         self.clientProxy = clientProxy
         
         super.init(initialViewState: .init())
+        
+        Task {
+            await setupTimelines()
+        }
     }
     
     // MARK: - Public
@@ -33,5 +39,61 @@ class BookmarksScreenViewModel: BookmarksScreenViewModelType, BookmarksScreenVie
         case .dismiss:
             actionsSubject.send(.dismiss)
         }
+    }
+    
+    // MARK: - Private
+    
+    private func setupTimelines() async {
+        let bookmarks = clientProxy.getUserBookmarks()
+        
+        var roomsAndTimelines = [(JoinedRoomProxyProtocol, TimelineProxyProtocol)]()
+        for roomID in bookmarks.keys {
+            switch await clientProxy.roomForIdentifier(roomID) {
+            case .joined(let roomProxy):
+                if case let .success(timelineProxy) = await roomProxy.bookmarksTimeline() {
+                    roomsAndTimelines.append((roomProxy, timelineProxy))
+                }
+            default:
+                continue
+            }
+        }
+        
+        self.roomsAndTimelines = roomsAndTimelines
+        
+        for timeline in roomsAndTimelines.map(\.1) {
+            timeline.timelineItemProvider.updatePublisher.sink { [weak self] _ in
+                Task { await self?.updateBookmarks() }
+            }
+            .store(in: &cancellables)
+        }
+    }
+    
+    private func updateBookmarks() async {
+        var stateItems = [BookmarkListItem]()
+        
+        for (room, timeline) in roomsAndTimelines {
+            for timelineItemProxy in timeline.timelineItemProvider.itemProxies {
+                switch timelineItemProxy {
+                case .event(let eventTimelineItemProxy):
+                    switch eventTimelineItemProxy.item.content {
+                    case .msgLike(let content):
+                        switch content.kind {
+                        case .message(let messageContent):
+                            stateItems.append(.init(id: eventTimelineItemProxy.id,
+                                                    body: messageContent.body,
+                                                    roomName: room.details.name ?? room.id))
+                        default:
+                            continue
+                        }
+                    default:
+                        continue
+                    }
+                default:
+                    continue
+                }
+            }
+        }
+        
+        state.items = stateItems
     }
 }
