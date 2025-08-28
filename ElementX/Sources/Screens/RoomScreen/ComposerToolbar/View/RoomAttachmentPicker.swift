@@ -47,15 +47,15 @@ struct RoomAttachmentPicker: View {
 //            }
 //            .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerLocation)
             
-//            if !context.viewState.isInThread {
-//                Button {
-//                    context.send(viewAction: .attach(.poll))
-//                } label: {
-//                    Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
-//                }
-//                .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
-//            }
-//            
+            //if !context.viewState.isInThread {
+                Button {
+                    context.send(viewAction: .attach(.poll))
+                } label: {
+                    Label(L10n.screenRoomAttachmentSourcePoll, icon: \.polls)
+                }
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.attachmentPickerPoll)
+            //}
+            
 //            if context.viewState.isLocationSharingEnabled {
 //                Button {
 //                    context.send(viewAction: .attach(.location))
