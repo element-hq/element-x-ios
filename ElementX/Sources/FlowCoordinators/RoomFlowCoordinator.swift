@@ -1685,8 +1685,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private func presentMatrixProfileScreen(userID: String) {
         let params = RoomMemberDetailsScreenCoordinatorParameters(userID: userID,
                                                                   roomProxy: roomProxy,
-                                                                  clientProxy: userSession.clientProxy,
-                                                                  mediaProvider: userSession.mediaProvider,
+                                                                  userSession: userSession,
                                                                   userIndicatorController: flowParameters.userIndicatorController,
                                                                   analytics: flowParameters.analytics)
         let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)

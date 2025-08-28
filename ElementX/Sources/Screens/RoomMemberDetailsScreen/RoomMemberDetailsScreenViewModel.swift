@@ -207,7 +207,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
             } else {
 //                state.bindings.inviteConfirmationUser = .init(userID: roomMemberProxy.userID, displayName: roomMemberProxy.displayName, avatarURL: roomMemberProxy.avatarURL)
                 Task {
-                    switch await clientProxy.createDirectRoom(with: roomMemberProxy.userID, expectedRoomName: roomMemberProxy.displayName) {
+                    switch await userSession.clientProxy.createDirectRoom(with: roomMemberProxy.userID, expectedRoomName: roomMemberProxy.displayName) {
                     case .success(let roomID):
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             self.analytics.trackCreatedRoom(isDM: true)

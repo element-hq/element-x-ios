@@ -190,6 +190,7 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private func presentResetRecoveryKeyScreen() {
         let resetNavigationStackCoordinator = NavigationStackCoordinator()
         let coordinator = EncryptionResetFlowCoordinator(parameters: .init(userSession: userSession,
+                                                                           appSettings: appSettings,
                                                                            userIndicatorController: userIndicatorController,
                                                                            navigationStackCoordinator: resetNavigationStackCoordinator,
                                                                            windowManger: windowManager))

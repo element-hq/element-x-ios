@@ -123,7 +123,7 @@ class UserProfileScreenViewModel: UserProfileScreenViewModelType, UserProfileScr
             } else {
                 //state.bindings.inviteConfirmationUser = userProfile
                 Task {
-                    switch await clientProxy.createDirectRoom(with: userProfile.userID, expectedRoomName: userProfile.displayName) {
+                    switch await userSession.clientProxy.createDirectRoom(with: userProfile.userID, expectedRoomName: userProfile.displayName) {
                     case .success(let roomID):
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             self.analytics.trackCreatedRoom(isDM: true)

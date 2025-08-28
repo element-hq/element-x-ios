@@ -998,8 +998,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         let navigationStackCoordinator = NavigationStackCoordinator()
         let parameters = UserProfileScreenCoordinatorParameters(userID: userID,
                                                                 isPresentedModally: true,
-                                                                clientProxy: userSession.clientProxy,
-                                                                mediaProvider: userSession.mediaProvider,
+                                                                userSession: userSession,
                                                                 userIndicatorController: flowParameters.userIndicatorController,
                                                                 analytics: flowParameters.analytics)
         let coordinator = UserProfileScreenCoordinator(parameters: parameters)

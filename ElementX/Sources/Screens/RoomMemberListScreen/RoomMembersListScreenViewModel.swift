@@ -150,7 +150,7 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         
         let manageMemberViewModel = ManageRoomMemberSheetViewModel(memberDetails: .memberDetails(roomMember: member),
                                                                    permissions: .init(canKick: state.canKickUsers,
-                                                                                      canBan: state.canBanUsers,
+                                                                                      canBan: false,
                                                                                       ownPowerLevel: currentUserProxy?.powerLevel ?? .init(value: 0)),
                                                                    roomProxy: roomProxy,
                                                                    userIndicatorController: userIndicatorController,
