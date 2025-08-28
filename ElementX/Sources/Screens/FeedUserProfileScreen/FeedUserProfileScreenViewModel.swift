@@ -198,10 +198,10 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
                 if let index = state.userFeeds.firstIndex(where: { $0.id == homePost.id }) {
                     state.userFeeds[index] = homePost
                 }
-                feedProtocol?.onFeedUpdated(postId)
+                feedProtocol?.onFeedUpdated(homePost)
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
-                displayError()
+//                displayError()
             }
         }
     }
@@ -340,7 +340,7 @@ class FeedUserProfileScreenViewModel: FeedUserProfileScreenViewModelType, FeedUs
         }
     }
     
-    func onFeedUpdated(_ feedId: String) { }
+    func onFeedUpdated(_ feed: HomeScreenPost) { }
 
     func onNewFeedPosted() {
         fetchUserFeeds(state.userID, isForceRefresh: true)

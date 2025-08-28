@@ -664,9 +664,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func fetchZeroHomeScreenData() {
-        Task {
-            async let checkUser: () = userSession.clientProxy.checkAndLinkZeroUser()
-            async let channels: () = fetchChannels()
+        Task.detached {
+            async let checkUser: () = self.userSession.clientProxy.checkAndLinkZeroUser()
+            async let channels: () = self.fetchChannels()
 //            async let posts: () = fetchPosts()
             _ = await (checkUser, channels)
         }
@@ -744,19 +744,22 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func addMeowToPost(_ postId: String, _ amount: Int) {
-        Task {
+        //update post locally first
+        guard let postIndex = state.posts.firstIndex(where: { $0.id == postId }) else { return }
+        let localPost = state.posts[postIndex]
+        state.posts[postIndex] = localPost.withUpdatedMeowCount(amount)
+        
+        Task(priority: .background) {
             let addMeowResult = await userSession.clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
             switch addMeowResult {
             case .success(let post):
                 let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
                                               post: post,
                                               rewardsDecimalPlaces: state.userRewards.decimals)
-                if let index = state.posts.firstIndex(where: { $0.id == homePost.id }) {
-                    state.posts[index] = homePost
-                }
+                state.posts[postIndex] = homePost
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
-                displayError()
+//                displayError()
             }
         }
     }
@@ -935,49 +938,49 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     }
     
     private func fetchWalletData(silentRefresh: Bool = false) {
-        if let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
-            state.walletContentListMode = silentRefresh ? state.walletContentListMode : .skeletons
-            Task {
-                async let meowPrice = userSession.clientProxy.getZeroMeowPrice()
-                async let tokens = userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: nil)
-                async let transactions = userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress, nextPage: nil)
-                //                async let nfts = userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress, nextPage: nil)
-                
-                let results = await (meowPrice, tokens, transactions)
-                if case .success(let meowPrice) = results.0 {
-                    state.meowPrice = meowPrice
+        guard let walletAddress = state.currentUserZeroProfile?.publicWalletAddress else { return }
+        if !silentRefresh {
+            state.walletContentListMode = .skeletons
+        }
+        Task {
+            async let meowPriceResult = userSession.clientProxy.getZeroMeowPrice()
+            async let tokensResult = userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: nil)
+            async let transactionsResult = userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress, nextPage: nil)
+
+            let (meowPrice, tokens, transactions) = await (meowPriceResult, tokensResult, transactionsResult)
+            let newMeowPrice: ZeroCurrency? = {
+                if case .success(let price) = meowPrice { return price }
+                return nil
+            }()
+            let walletTokens: ([HomeScreenWalletContent], NextPageParams?) = {
+                if case .success(let balances) = tokens {
+                    setUserWalletBalance(balances.tokens)
+                    let contents = balances.tokens.map { HomeScreenWalletContent(walletToken: $0, meowPrice: newMeowPrice) }
+                    return (contents.uniqued(on: \.id), balances.nextPageParams)
                 }
-                if case .success(let walletTokenBalances) = results.1 {
-                    var homeWalletContent: [HomeScreenWalletContent] = []
-                    // set meow token balance amount for user
-                    setUserWalletBalance(walletTokenBalances.tokens)
-                    for token in walletTokenBalances.tokens {
-                        let content = HomeScreenWalletContent(walletToken: token, meowPrice: state.meowPrice)
-                        homeWalletContent.append(content)
-                    }
-                    state.walletTokens = homeWalletContent.uniqued(on: \.id)
-                    state.walletTokenNextPageParams = walletTokenBalances.nextPageParams
-                    
-                    // fetch stake data
+                return ([], nil)
+            }()
+            let walletTransactions: ([HomeScreenWalletContent], TransactionNextPageParams?) = {
+                if case .success(let txs) = transactions {
+                    let contents = txs.transactions.map { HomeScreenWalletContent(walletTransaction: $0, meowPrice: newMeowPrice) }
+                    return (contents.uniqued(on: \.id), txs.nextPageParams)
+                }
+                return ([], nil)
+            }()
+
+            // Batch state updates on main actor
+            await MainActor.run {
+                if let price = newMeowPrice {
+                    state.meowPrice = price
+                }
+                if !walletTokens.0.isEmpty {
+                    state.walletTokens = walletTokens.0
+                    state.walletTokenNextPageParams = walletTokens.1
                     fetchStakingData(userWalletAddress: walletAddress, refreshAllData: silentRefresh)
                 }
-//                if case .success(let walletNFTs) = results.1 {
-//                    var homeWalletContent: [HomeScreenWalletContent] = []
-//                    for nft in walletNFTs.nfts {
-//                        let content = HomeScreenWalletContent(walletNFT: nft)
-//                        homeWalletContent.append(content)
-//                    }
-//                    state.walletNFTs = homeWalletContent.uniqued(on: \.id)
-//                    state.walletNFTsNextPageParams = walletNFTs.nextPageParams
-//                }
-                if case .success(let walletTransactions) = results.2 {
-                    var homeWalletContent: [HomeScreenWalletContent] = []
-                    for transaction in walletTransactions.transactions {
-                        let content = HomeScreenWalletContent(walletTransaction: transaction, meowPrice: state.meowPrice)
-                        homeWalletContent.append(content)
-                    }
-                    state.walletTransactions = homeWalletContent.uniqued(on: \.id)
-                    state.walletTransactionsNextPageParams = walletTransactions.nextPageParams
+                if !walletTransactions.0.isEmpty {
+                    state.walletTransactions = walletTransactions.0
+                    state.walletTransactionsNextPageParams = walletTransactions.1
                 }
                 state.walletContentListMode = .content
             }
@@ -1068,26 +1071,45 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     private func fetchStakingData(userWalletAddress: String, refreshAllData: Bool = false) {
         let poolAddress = ZeroContants.ZERO_WALLET_MEOW_POOL_ADDRESS
-        Task.detached {
-            async let totalStaked = self.userSession.clientProxy.getTotalStaked(poolAddress: poolAddress)
-            async let config = self.userSession.clientProxy.getStakingConfig(poolAddress: poolAddress)
-            async let stakerStatus = self.userSession.clientProxy.getStakerStatusInfo(userWalletAddress: userWalletAddress,
-                                                                                      poolAddress: poolAddress)
-            async let stakeRewards = self.userSession.clientProxy.getStakeRewardsInfo(userWalletAddress: userWalletAddress,
-                                                                                      poolAddress: poolAddress)
-            let results = await (totalStaked, config, stakerStatus, stakeRewards)
+        Task(priority: .background) { [weak self] in
+            guard let self else { return }
+            
+            async let totalStakedResult = userSession.clientProxy.getTotalStaked(poolAddress: poolAddress)
+            async let configResult = userSession.clientProxy.getStakingConfig(poolAddress: poolAddress)
+            async let stakerStatusResult = userSession.clientProxy.getStakerStatusInfo(
+                userWalletAddress: userWalletAddress,
+                poolAddress: poolAddress
+            )
+            async let stakeRewardsResult = userSession.clientProxy.getStakeRewardsInfo(
+                userWalletAddress: userWalletAddress,
+                poolAddress: poolAddress
+            )
+            let (totalStaked, config, stakerStatus, stakeRewards) = await (
+                totalStakedResult,
+                configResult,
+                stakerStatusResult,
+                stakeRewardsResult
+            )
             await MainActor.run {
-                if case .success(let totalStaked) = results.0,
-                   case .success(let stakingConfig) = results.1,
-                   case .success(let stakerStatus) = results.2,
-                   case .success(let stakeRewards) = results.3 {
-                    let pool = HomeScreenWalletStakingContent(meowPrice: self.state.meowPrice, userWalletAddress: userWalletAddress,
-                                                              poolAddress: poolAddress, totalStaked: totalStaked, stakingConfig: stakingConfig,
-                                                              stakerStatus: stakerStatus, stakeRewards: stakeRewards)
-                    self.state.walletStakings = [pool]
-                    if refreshAllData {
-                        self.fetchStakeDataOfPool(pool, silentRefresh: refreshAllData)
-                    }
+                guard case .success(let totalStaked) = totalStaked,
+                      case .success(let stakingConfig) = config,
+                      case .success(let stakerStatus) = stakerStatus,
+                      case .success(let stakeRewards) = stakeRewards else {
+                    return
+                }
+                
+                let pool = HomeScreenWalletStakingContent(
+                    meowPrice: self.state.meowPrice,
+                    userWalletAddress: userWalletAddress,
+                    poolAddress: poolAddress,
+                    totalStaked: totalStaked,
+                    stakingConfig: stakingConfig,
+                    stakerStatus: stakerStatus,
+                    stakeRewards: stakeRewards
+                )
+                self.state.walletStakings = [pool]
+                if refreshAllData {
+                    self.fetchStakeDataOfPool(pool, silentRefresh: refreshAllData)
                 }
             }
         }
@@ -1308,20 +1330,23 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
     
     // MARK: Zero Protcol Functions
     
-    func onFeedUpdated(_ feedId: String) {
-        Task {
-            let feedDetailsResult = await userSession.clientProxy.fetchFeedDetails(feedId: feedId)
-            switch feedDetailsResult {
-            case .success(let post):
-                let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
-                                              post: post,
-                                              rewardsDecimalPlaces: state.userRewards.decimals)
-                if let index = state.posts.firstIndex(where: { $0.id == homePost.id }) {
-                    state.posts[index] = homePost
-                }
-            case .failure(let error):
-                MXLog.error("Failed to fetch updated feed details: \(error)")
-            }
+    func onFeedUpdated(_ feed: HomeScreenPost) {
+//        Task {
+//            let feedDetailsResult = await userSession.clientProxy.fetchFeedDetails(feedId: feedId)
+//            switch feedDetailsResult {
+//            case .success(let post):
+//                let homePost = HomeScreenPost(loggedInUserId: userSession.clientProxy.userID,
+//                                              post: post,
+//                                              rewardsDecimalPlaces: state.userRewards.decimals)
+//                if let index = state.posts.firstIndex(where: { $0.id == homePost.id }) {
+//                    state.posts[index] = homePost
+//                }
+//            case .failure(let error):
+//                MXLog.error("Failed to fetch updated feed details: \(error)")
+//            }
+//        }
+        if let index = state.posts.firstIndex(where: { $0.id == feed.id }) {
+            state.posts[index] = feed
         }
     }
     

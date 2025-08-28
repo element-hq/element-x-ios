@@ -51,7 +51,7 @@ struct FeedDetailsScreenViewStateBindings {
 }
 
 enum FeedDetailsScreenViewModelAction {
-    case replyTapped(_ reply: HomeScreenPost)
+    case replyTapped(_ reply: HomeScreenPost, replyProtocol: FeedProtocol)
     case attachMedia(FeedMediaSelectedProtocol)
     case openPostUserProfile(_ profile: ZPostUserProfile)
 }

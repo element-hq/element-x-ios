@@ -16,7 +16,7 @@ struct FeedDetailsScreenCoordinatorParameters {
 }
 
 enum FeedDetailsScreenCoordinatorAction {
-    case replyTapped(_ reply: HomeScreenPost)
+    case replyTapped(_ reply: HomeScreenPost, replyProtocol: FeedProtocol)
     case attachMedia(FeedMediaSelectedProtocol)
     case openPostUserProfile(_ profile: ZPostUserProfile)
 }
@@ -35,7 +35,7 @@ final class FeedDetailsScreenCoordinator: CoordinatorProtocol {
     init(parameters: FeedDetailsScreenCoordinatorParameters) {
         self.isFeedDetailsRefreshable = parameters.isFeedDetailsRefreshable
         viewModel = FeedDetailsScreenViewModel(userSession: parameters.userSession,
-                                               feedProtocol: parameters.feedProtocol,
+                                               mainFeedProtocol: parameters.feedProtocol,
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                feedItem: parameters.feedItem)
         viewModel.actions
@@ -43,8 +43,8 @@ final class FeedDetailsScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .replyTapped(let reply):
-                    actionsSubject.send(.replyTapped(reply))
+                case .replyTapped(let reply, let replyProtocol):
+                    actionsSubject.send(.replyTapped(reply, replyProtocol: replyProtocol))
                 case .attachMedia(let attachMediaProtocol):
                     actionsSubject.send(.attachMedia(attachMediaProtocol))
                 case .openPostUserProfile(let profile):

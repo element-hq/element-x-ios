@@ -10,10 +10,11 @@ import SwiftUI
 
 typealias FeedDetailsScreenViewModelType = StateStoreViewModel<FeedDetailsScreenViewState, FeedDetailsScreenViewAction>
 
-class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScreenViewModelProtocol, FeedMediaSelectedProtocol {
+class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScreenViewModelProtocol,
+                                  FeedProtocol, FeedMediaSelectedProtocol {
     
     private let clientProxy: ClientProxyProtocol
-    private let feedProtocol: FeedProtocol?
+    private let mainFeedProtocol: FeedProtocol?
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let POST_REPLIES_PAGE_COUNT = 10
@@ -30,11 +31,11 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     }
     
     init(userSession: UserSessionProtocol,
-         feedProtocol: FeedProtocol?,
+         mainFeedProtocol: FeedProtocol?,
          userIndicatorController: UserIndicatorControllerProtocol,
          feedItem: HomeScreenPost) {
         self.clientProxy = userSession.clientProxy
-        self.feedProtocol = feedProtocol
+        self.mainFeedProtocol = mainFeedProtocol
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: .init(userID: clientProxy.userID, bindings: .init(feed: feedItem)), mediaProvider: userSession.mediaProvider)
@@ -71,7 +72,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
         case .replyTapped(let reply):
             let mediaUrl = state.postRepliesMediaInfoMap[reply.id]?.url
             let urlLinkPreview = state.postRepliesLinkPreviewsMap[reply.id]
-            actionsSubject.send(.replyTapped(reply.withUpdatedData(url: mediaUrl, urlLinkPreview: urlLinkPreview)))
+            actionsSubject.send(.replyTapped(reply.withUpdatedData(url: mediaUrl, urlLinkPreview: urlLinkPreview), replyProtocol: self))
         case .openArweaveLink(let post):
             openArweaveLink(post)
         case .openYoutubeLink(let url):
@@ -105,6 +106,7 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 let homePost = HomeScreenPost.init(loggedInUserId: clientProxy.userID, post: feed)
                 state.bindings.feed = homePost.withUpdatedData(mediaInfo: state.bindings.feed.mediaInfo,
                                                                urlLinkPreview: state.bindings.feed.urlLinkPreview)
+                mainFeedProtocol?.onFeedUpdated(homePost)
             case .failure(let error):
                 MXLog.error("Failed to fetch feed details: \(error)")
             }
@@ -180,7 +182,19 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
     }
     
     private func addMeowToPost(_ postId: String, _ amount: Int, isPostAReply: Bool) {
-        Task {
+        //update post locally first
+        if isPostAReply {
+            guard let postIndex = state.feedReplies.firstIndex(where: { $0.id == postId }) else { return }
+            let localPost = state.feedReplies[postIndex]
+            let updatedLocalPost = localPost.withUpdatedMeowCount(amount)
+            state.feedReplies[postIndex] = updatedLocalPost
+        } else {
+            let mainFeedUpdated = state.bindings.feed.withUpdatedMeowCount(amount)
+            state.bindings.feed = mainFeedUpdated
+            mainFeedProtocol?.onFeedUpdated(mainFeedUpdated)
+        }
+        
+        Task(priority: .background) {
             let addMeowResult = await clientProxy.addMeowsToFeed(feedId: postId, amount: amount)
             switch addMeowResult {
             case .success(let post):
@@ -192,10 +206,10 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 } else {
                     state.bindings.feed = homePost
                 }
-                feedProtocol?.onFeedUpdated(postId)
+                mainFeedProtocol?.onFeedUpdated(homePost)
             case .failure(let error):
                 MXLog.error("Failed to add meow: \(error)")
-                displayError()
+//                displayError()
             }
         }
     }
@@ -232,7 +246,6 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 state.bindings.myPostReply = ""
                 state.bindings.feedMedia = nil
                 forceRefreshFeed()
-                feedProtocol?.onFeedUpdated(state.bindings.feed.id)
             case .failure(_):
                 state.bindings.alertInfo = .init(id: UUID(),
                                                  title: L10n.commonError,
@@ -299,5 +312,16 @@ class FeedDetailsScreenViewModel: FeedDetailsScreenViewModelType, FeedDetailsScr
                 MXLog.error("Failed to preview feed media: \(error)")
             }
         }
+    }
+    
+    func onFeedUpdated(_ feed: HomeScreenPost) {
+        // this would be the reply case
+        if let postIndex = state.feedReplies.firstIndex(where: { $0.id == feed.id }) {
+            state.feedReplies[postIndex] = feed
+        }
+    }
+    
+    func onNewFeedPosted() {
+        fetchFeed(state.bindings.feed.id)
     }
 }

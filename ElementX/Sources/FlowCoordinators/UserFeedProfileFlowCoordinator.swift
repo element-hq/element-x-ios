@@ -129,8 +129,8 @@ class UserFeedProfileFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
-                case .replyTapped(let reply):
-                    presentFeedDetailsScreen(reply, feedProtocol: feedProtocol, isChildFeed: true, stackCoordinator: stackCoordinator)
+                case .replyTapped(let reply, let replyProtocol):
+                    presentFeedDetailsScreen(reply, feedProtocol: replyProtocol, isChildFeed: true, stackCoordinator: stackCoordinator)
                 case .attachMedia(let attachMediaProtocol):
                     presentMediaUploadPickerWithSource(attachMediaProtocol, stackCoordinator: stackCoordinator)
                 case .openPostUserProfile(let userProfile):

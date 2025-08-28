@@ -6,7 +6,7 @@
 //
 
 protocol FeedProtocol {
-    func onFeedUpdated(_ feedId: String)
+    func onFeedUpdated(_ feed: HomeScreenPost)
     
     func onNewFeedPosted()
 }

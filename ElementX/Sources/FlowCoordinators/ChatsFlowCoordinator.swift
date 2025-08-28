@@ -880,8 +880,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
-                case .replyTapped(let reply):
-                    presentFeedDetailsScreen(reply, feedProtocol: feedProtocol, childStackCoordinator: stackCoordinator)
+                case .replyTapped(let reply, let replyProtocol):
+                    presentFeedDetailsScreen(reply, feedProtocol: replyProtocol, childStackCoordinator: stackCoordinator)
                 case .attachMedia(let attachMediaProtocol):
                     presentMediaUploadPickerWithSource(attachMediaProtocol,
                                                        stackCoordinator: NavigationStackCoordinator(),

@@ -480,16 +480,17 @@ struct HomeScreenPost: Identifiable, Equatable {
     let postImageURL: URL?
     
     let worldPrimaryZId: String?
-    let meowCount: String
     let repliesCount: String
     
     let isPostInOwnFeed: Bool
     let arweaveId: String
-    let isMeowedByMe: Bool
     let postDateTime: String
     let isMyPost: Bool
     
     let senderProfile: ZPostUserProfile?
+    
+    var meowCount: String
+    var isMeowedByMe: Bool
     
     var mediaInfo: HomeScreenPostMediaInfo?
     var urlLinkPreview: ZLinkPreview?
@@ -506,14 +507,14 @@ struct HomeScreenPost: Identifiable, Equatable {
                        postTimestamp: "Now",
                        postImageURL: nil,
                        worldPrimaryZId: "0://placeholder-world-zid",
-                       meowCount: "0",
                        repliesCount: "0",
                        isPostInOwnFeed: false,
                        arweaveId: "",
-                       isMeowedByMe: false,
                        postDateTime: "",
                        isMyPost: false,
                        senderProfile: nil,
+                       meowCount: "0",
+                       isMeowedByMe: false,
                        mediaInfo: nil,
                        urlLinkPreview: nil)
     }
@@ -715,14 +716,14 @@ extension HomeScreenPost {
             postTimestamp: postTimeStamp,
             postImageURL: (post.imageUrl != nil) ? URL(string: post.imageUrl!) : nil,
             worldPrimaryZId: post.worldZid,
-            meowCount: meowCount,
             repliesCount: repliesCount,
             isPostInOwnFeed: isPostInOwnFeed,
             arweaveId: post.arweaveId,
-            isMeowedByMe: (post.meows?.isEmpty == false),
             postDateTime: postDateTime,
             isMyPost: isMyPost,
             senderProfile: post.userProfileView,
+            meowCount: meowCount,
+            isMeowedByMe: (post.meows?.isEmpty == false),
             mediaInfo: mediaInfo
         )
     }
@@ -738,6 +739,14 @@ extension HomeScreenPost {
         var updatedSelf = self
         updatedSelf.mediaInfo?.url = url
         updatedSelf.urlLinkPreview = urlLinkPreview
+        return updatedSelf
+    }
+    
+    func withUpdatedMeowCount(_ meowCount: Int) -> Self {
+        var updatedSelf = self
+        let updatedMeowCount = (Int(updatedSelf.meowCount) ?? 0) + meowCount
+        updatedSelf.meowCount = updatedMeowCount.description
+        updatedSelf.isMeowedByMe = true
         return updatedSelf
     }
     
