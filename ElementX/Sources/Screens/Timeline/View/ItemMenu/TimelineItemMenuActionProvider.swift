@@ -40,8 +40,12 @@ struct TimelineItemMenuActionProvider {
         var actions: [TimelineItemMenuAction] = []
         var secondaryActions: [TimelineItemMenuAction] = []
         
-        if timelineKind == .pinned || timelineKind == .media(.mediaFilesScreen) || timelineKind == .media(.pinnedEventsScreen) {
+        if timelineKind == .pinned || timelineKind == .media(.mediaFilesScreen) || timelineKind == .media(.pinnedEventsScreen) || timelineKind == .bookmarks {
             actions.append(.viewInRoomTimeline)
+        }
+        
+        if timelineKind == .bookmarks {
+            return .init(isReactable: false, actions: actions, secondaryActions: secondaryActions, emojiProvider: emojiProvider)
         }
         
         if canRedactItem(item), let poll = item.pollIfAvailable, !poll.hasEnded, let eventID = item.id.eventID {

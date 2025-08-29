@@ -9,6 +9,7 @@ import Foundation
 
 enum BookmarksScreenViewModelAction {
     case dismiss
+    case display(eventID: String, roomID: String)
 }
 
 struct BookmarkListItem: Identifiable {
@@ -20,6 +21,8 @@ struct BookmarkListItem: Identifiable {
     let timelineContext: TimelineViewModelType.Context
     
     let roomName: String
+    let eventID: String
+    let roomID: String
     let info: TimelineItemBookmarkInfo?
 }
 
@@ -29,4 +32,5 @@ struct BookmarksScreenViewState: BindableState {
 
 enum BookmarksScreenViewAction {
     case dismiss
+    case display(eventID: String, roomID: String)
 }

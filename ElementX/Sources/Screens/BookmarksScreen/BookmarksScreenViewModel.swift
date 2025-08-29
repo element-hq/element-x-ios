@@ -64,6 +64,8 @@ class BookmarksScreenViewModel: BookmarksScreenViewModelType, BookmarksScreenVie
         switch viewAction {
         case .dismiss:
             actionsSubject.send(.dismiss)
+        case .display(let eventID, let roomID):
+            actionsSubject.send(.display(eventID: eventID, roomID: roomID))
         }
     }
     
@@ -122,10 +124,12 @@ class BookmarksScreenViewModel: BookmarksScreenViewModelType, BookmarksScreenVie
             for timelineItemProxy in timelineProxy.timelineItemProvider.itemProxies {
                 switch timelineItemProxy {
                 case .event(let eventTimelineItemProxy):
-                    if let item = timelineItemFactory.buildTimelineItem(for: eventTimelineItemProxy, isDM: false) {
+                    if let item = timelineItemFactory.buildTimelineItem(for: eventTimelineItemProxy, isDM: false), let eventID = eventTimelineItemProxy.id.eventID {
                         stateItems.append(.init(timelineItemViewState: .init(item: item, groupStyle: .single),
                                                 timelineContext: timelineViewModel.context,
                                                 roomName: roomProxy.details.name ?? roomProxy.id,
+                                                eventID: eventID,
+                                                roomID: roomProxy.id,
                                                 info: (item as? EventBasedTimelineItemProtocol)?.properties.bookmarkInfo))
                     }
                 default:

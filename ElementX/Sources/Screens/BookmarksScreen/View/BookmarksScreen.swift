@@ -31,6 +31,9 @@ struct BookmarksScreen: View {
                             .foregroundStyle(.compound.textPrimary)
                             .padding(.leading, 32)
                     }
+                    .simultaneousGesture(LongPressGesture().onEnded { _ in
+                        context.send(viewAction: .display(eventID: bookmark.eventID, roomID: bookmark.roomID))
+                    })
                 }
             }
             .padding()

@@ -475,6 +475,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .dismiss:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
+            case .display(let eventID, let roomID):
+                handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []), animated: true)
             }
         }
         .store(in: &cancellables)

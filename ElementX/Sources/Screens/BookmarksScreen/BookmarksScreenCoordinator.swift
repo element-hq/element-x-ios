@@ -23,6 +23,7 @@ struct BookmarksScreenCoordinatorParameters {
 
 enum BookmarksScreenCoordinatorAction {
     case dismiss
+    case display(eventID: String, roomID: String)
 }
 
 final class BookmarksScreenCoordinator: CoordinatorProtocol {
@@ -57,6 +58,8 @@ final class BookmarksScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .dismiss:
                 actionsSubject.send(.dismiss)
+            case .display(let eventID, let roomID):
+                actionsSubject.send(.display(eventID: eventID, roomID: roomID))
             }
         }
         .store(in: &cancellables)
