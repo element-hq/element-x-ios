@@ -124,8 +124,9 @@ class BookmarksScreenViewModel: BookmarksScreenViewModelType, BookmarksScreenVie
                 case .event(let eventTimelineItemProxy):
                     if let item = timelineItemFactory.buildTimelineItem(for: eventTimelineItemProxy, isDM: false) {
                         stateItems.append(.init(timelineItemViewState: .init(item: item, groupStyle: .single),
+                                                timelineContext: timelineViewModel.context,
                                                 roomName: roomProxy.details.name ?? roomProxy.id,
-                                                timelineContext: timelineViewModel.context))
+                                                info: (item as? EventBasedTimelineItemProtocol)?.properties.bookmarkInfo))
                     }
                 default:
                     continue
@@ -133,6 +134,12 @@ class BookmarksScreenViewModel: BookmarksScreenViewModelType, BookmarksScreenVie
             }
         }
         
-        state.items = stateItems
+        state.items = stateItems.sorted { firstItem, secondItem in
+            guard let firstDate = firstItem.info?.creationDate, let secondDate = secondItem.info?.creationDate else {
+                return false
+            }
+            
+            return firstDate > secondDate
+        }
     }
 }

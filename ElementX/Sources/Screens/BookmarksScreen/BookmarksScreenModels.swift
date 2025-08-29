@@ -17,8 +17,10 @@ struct BookmarkListItem: Identifiable {
     }
     
     let timelineItemViewState: RoomTimelineItemViewState
-    let roomName: String
     let timelineContext: TimelineViewModelType.Context
+    
+    let roomName: String
+    let info: TimelineItemBookmarkInfo?
 }
 
 struct BookmarksScreenViewState: BindableState {
