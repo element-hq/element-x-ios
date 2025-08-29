@@ -251,6 +251,20 @@ class TimelineController: TimelineControllerProtocol {
         switch await activeTimeline.addBookmark(eventID: eventID) {
         case .success:
             MXLog.info("Finished adding bookmark for event \(eventID)")
+            
+            let content = UNMutableNotificationContent()
+            content.title = "Reminder"
+            content.sound = UNNotificationSound.default
+            content.userInfo = ["bookmarkEventID": eventID, "bookmarkRoomID": roomID]
+
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+            let request = UNNotificationRequest(identifier: eventID, content: content, trigger: trigger)
+            
+            do {
+                try await UNUserNotificationCenter.current().add(request)
+            } catch {
+                MXLog.error("Failed scheduling local notification with error: \(error)")
+            }
         case .failure(let error):
             MXLog.error("Failed adding bookmark for event \(eventID) with error: \(error)")
         }

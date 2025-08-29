@@ -344,6 +344,11 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     func notificationTapped(content: UNNotificationContent) async {
         MXLog.info("Tapped Notification")
         
+        if let roomID = content.userInfo["bookmarkRoomID"] as? String, let eventID = content.userInfo["bookmarkEventID"] as? String {
+            handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []))
+            return
+        }
+        
         guard let roomID = content.roomID,
               content.receiverID != nil else {
             return
