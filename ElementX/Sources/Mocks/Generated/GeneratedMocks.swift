@@ -5199,17 +5199,17 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return setHideInviteAvatarsReturnValue
         }
     }
-    //MARK: - getUserBookmarks
+    //MARK: - getRoomsWithBookmarks
 
-    var getUserBookmarksUnderlyingCallsCount = 0
-    var getUserBookmarksCallsCount: Int {
+    var getRoomsWithBookmarksUnderlyingCallsCount = 0
+    var getRoomsWithBookmarksCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getUserBookmarksUnderlyingCallsCount
+                return getRoomsWithBookmarksUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getUserBookmarksUnderlyingCallsCount
+                    returnValue = getRoomsWithBookmarksUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -5217,27 +5217,27 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getUserBookmarksUnderlyingCallsCount = newValue
+                getRoomsWithBookmarksUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getUserBookmarksUnderlyingCallsCount = newValue
+                    getRoomsWithBookmarksUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var getUserBookmarksCalled: Bool {
-        return getUserBookmarksCallsCount > 0
+    var getRoomsWithBookmarksCalled: Bool {
+        return getRoomsWithBookmarksCallsCount > 0
     }
 
-    var getUserBookmarksUnderlyingReturnValue: [String: [String]]!
-    var getUserBookmarksReturnValue: [String: [String]]! {
+    var getRoomsWithBookmarksUnderlyingReturnValue: Result<[String], ClientProxyError>!
+    var getRoomsWithBookmarksReturnValue: Result<[String], ClientProxyError>! {
         get {
             if Thread.isMainThread {
-                return getUserBookmarksUnderlyingReturnValue
+                return getRoomsWithBookmarksUnderlyingReturnValue
             } else {
-                var returnValue: [String: [String]]? = nil
+                var returnValue: Result<[String], ClientProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getUserBookmarksUnderlyingReturnValue
+                    returnValue = getRoomsWithBookmarksUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -5245,22 +5245,22 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getUserBookmarksUnderlyingReturnValue = newValue
+                getRoomsWithBookmarksUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getUserBookmarksUnderlyingReturnValue = newValue
+                    getRoomsWithBookmarksUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var getUserBookmarksClosure: (() -> [String: [String]])?
+    var getRoomsWithBookmarksClosure: (() async -> Result<[String], ClientProxyError>)?
 
-    func getUserBookmarks() -> [String: [String]] {
-        getUserBookmarksCallsCount += 1
-        if let getUserBookmarksClosure = getUserBookmarksClosure {
-            return getUserBookmarksClosure()
+    func getRoomsWithBookmarks() async -> Result<[String], ClientProxyError> {
+        getRoomsWithBookmarksCallsCount += 1
+        if let getRoomsWithBookmarksClosure = getRoomsWithBookmarksClosure {
+            return await getRoomsWithBookmarksClosure()
         } else {
-            return getUserBookmarksReturnValue
+            return getRoomsWithBookmarksReturnValue
         }
     }
     //MARK: - loadMediaContentForSource

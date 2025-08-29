@@ -44,10 +44,13 @@ class BookmarksScreenViewModel: BookmarksScreenViewModelType, BookmarksScreenVie
     // MARK: - Private
     
     private func setupTimelines() async {
-        let bookmarks = clientProxy.getUserBookmarks()
+        guard case let .success(roomsWithBookmarks) = await clientProxy.getRoomsWithBookmarks() else {
+            #warning("Show an error or something")
+            return
+        }
         
         var roomsAndTimelines = [(JoinedRoomProxyProtocol, TimelineProxyProtocol)]()
-        for roomID in bookmarks.keys {
+        for roomID in roomsWithBookmarks {
             switch await clientProxy.roomForIdentifier(roomID) {
             case .joined(let roomProxy):
                 if case let .success(timelineProxy) = await roomProxy.bookmarksTimeline() {

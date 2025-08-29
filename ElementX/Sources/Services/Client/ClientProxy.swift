@@ -870,8 +870,14 @@ class ClientProxy: ClientProxyProtocol {
     
     // MARK: Bookmarks
     
-    func getUserBookmarks() -> [String: [String]] {
-        ["!NnpfwIWXXYlrKsabWh:matrix.org": [], "!POTexKBdzTfplmDWTc:matrix.org": []]
+    func getRoomsWithBookmarks() async -> Result<[String], ClientProxyError> {
+        do {
+            let result = try await client.roomsWithBookmarks()
+            return .success(result)
+        } catch {
+            MXLog.error("Failed retrieving rooms with bookmarks with error: \(error)")
+            return .failure(.sdkError(error))
+        }
     }
     
     // MARK: - Private

@@ -125,7 +125,7 @@ struct TimelineItemMenuActionProvider {
             actions.append(.save)
             actions = actions.filter(\.canAppearInMediaDetails)
             secondaryActions = secondaryActions.filter(\.canAppearInMediaDetails)
-        case .live, .detached, .thread:
+        case .live, .detached, .thread, .bookmarks:
             break // viewInRoomTimeline is the only non-room item and was added conditionally.
         }
         

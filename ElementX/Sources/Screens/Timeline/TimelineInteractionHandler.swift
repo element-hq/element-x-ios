@@ -568,7 +568,7 @@ class TimelineInteractionHandler {
         case .pinned:
             newTimelineFocus = .pinned
             newTimelinePresentation = .pinnedEventsScreen
-        case .media, .thread:
+        case .media, .thread, .bookmarks:
             break // We don't need to create a new timeline as it is already filtered.
         }
         

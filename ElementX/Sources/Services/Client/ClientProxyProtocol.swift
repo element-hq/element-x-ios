@@ -234,5 +234,5 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     // MARK: - Bookmarks
     
-    func getUserBookmarks() -> [String: [String]]
+    func getRoomsWithBookmarks() async -> Result<[String], ClientProxyError>
 }

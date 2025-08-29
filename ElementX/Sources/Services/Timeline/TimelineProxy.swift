@@ -99,7 +99,7 @@ final class TimelineProxy: TimelineProxyProtocol {
             return await paginateBackwardsOnLive(requestSize: requestSize)
         case .detached, .media, .thread:
             return await focussedPaginate(.backwards, requestSize: requestSize)
-        case .pinned:
+        case .pinned, .bookmarks:
             return .success(())
         }
     }
@@ -631,7 +631,7 @@ final class TimelineProxy: TimelineProxyProtocol {
         case .media(let presentation):
             backPaginationStatusSubject.send(presentation == .pinnedEventsScreen ? .timelineEndReached : .idle)
             forwardPaginationStatusSubject.send(presentation == .roomScreenDetached ? .idle : .timelineEndReached)
-        case .pinned:
+        case .pinned, .bookmarks:
             backPaginationStatusSubject.send(.timelineEndReached)
             forwardPaginationStatusSubject.send(.timelineEndReached)
         }

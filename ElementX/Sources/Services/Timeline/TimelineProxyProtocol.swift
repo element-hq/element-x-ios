@@ -13,6 +13,7 @@ enum TimelineKind: Equatable {
     case live
     case detached
     case pinned
+    case bookmarks
     case thread(rootEventID: String)
     
     enum MediaPresentation { case roomScreenLive, roomScreenDetached, pinnedEventsScreen, mediaFilesScreen }

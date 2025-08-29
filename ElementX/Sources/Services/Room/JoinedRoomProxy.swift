@@ -266,14 +266,14 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     
     func bookmarksTimeline() async -> Result<TimelineProxyProtocol, RoomProxyError> {
         do {
-            let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .pinnedEvents(maxEventsToLoad: 100, maxConcurrentRequests: 100),
+            let sdkTimeline = try await room.timelineWithConfiguration(configuration: .init(focus: .bookmarks,
                                                                                             filter: .all,
                                                                                             internalIdPrefix: UUID().uuidString,
                                                                                             dateDividerMode: .daily,
                                                                                             trackReadReceipts: true,
                                                                                             reportUtds: true))
             
-            let timeline = TimelineProxy(timeline: sdkTimeline, kind: .pinned)
+            let timeline = TimelineProxy(timeline: sdkTimeline, kind: .bookmarks)
             await timeline.subscribeForUpdates()
             
             return .success(timeline)
