@@ -12,9 +12,13 @@ enum BookmarksScreenViewModelAction {
 }
 
 struct BookmarkListItem: Identifiable {
-    let id: TimelineItemIdentifier
-    let body: String
+    var id: ObjectIdentifier {
+        timelineItemViewState.id
+    }
+    
+    let timelineItemViewState: RoomTimelineItemViewState
     let roomName: String
+    let timelineContext: TimelineViewModelType.Context
 }
 
 struct BookmarksScreenViewState: BindableState {

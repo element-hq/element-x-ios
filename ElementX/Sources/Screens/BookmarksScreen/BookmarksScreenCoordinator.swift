@@ -11,7 +11,14 @@ import Combine
 import SwiftUI
 
 struct BookmarksScreenCoordinatorParameters {
-    let clientProxy: ClientProxyProtocol
+    let userSession: UserSessionProtocol
+    let mediaPlayerProvider: MediaPlayerProviderProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
+    let appMediator: AppMediatorProtocol
+    let appSettings: AppSettings
+    let analyticsService: AnalyticsService
+    let emojiProvider: EmojiProviderProtocol
+    let timelineControllerFactory: TimelineControllerFactoryProtocol
 }
 
 enum BookmarksScreenCoordinatorAction {
@@ -32,7 +39,14 @@ final class BookmarksScreenCoordinator: CoordinatorProtocol {
     init(parameters: BookmarksScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = BookmarksScreenViewModel(clientProxy: parameters.clientProxy)
+        viewModel = BookmarksScreenViewModel(userSession: parameters.userSession,
+                                             mediaPlayerProvider: parameters.mediaPlayerProvider,
+                                             userIndicatorController: parameters.userIndicatorController,
+                                             appMediator: parameters.appMediator,
+                                             appSettings: parameters.appSettings,
+                                             analyticsService: parameters.analyticsService,
+                                             emojiProvider: parameters.emojiProvider,
+                                             timelineControllerFactory: parameters.timelineControllerFactory)
     }
     
     func start() {

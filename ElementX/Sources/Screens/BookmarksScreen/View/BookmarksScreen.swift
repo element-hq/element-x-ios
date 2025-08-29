@@ -23,12 +23,14 @@ struct BookmarksScreen: View {
             LazyVStack(alignment: .leading, spacing: 4) {
                 ForEach(context.viewState.items) { bookmark in
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(bookmark.body)
+                        RoomTimelineItemView(viewState: bookmark.timelineItemViewState)
+                            .environment(\.timelineContext, bookmark.timelineContext)
+                            .environmentObject(bookmark.timelineContext)
                         Text(bookmark.roomName)
+                            .font(.compound.bodySMSemibold)
+                            .foregroundStyle(.compound.textPrimary)
+                            .padding(.leading, 32)
                     }
-                    .bubbleBackground(isOutgoing: true,
-                                      insets: .init(top: 4, leading: 4, bottom: 4, trailing: 4),
-                                      color: .compound._bgBubbleOutgoing)
                 }
             }
             .padding()
@@ -55,7 +57,14 @@ struct BookmarksScreen_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeViewModel() -> BookmarksScreenViewModel {
-        let viewModel = BookmarksScreenViewModel(clientProxy: ClientProxyMock())
+        let viewModel = BookmarksScreenViewModel(userSession: UserSessionMock(.init()),
+                                                 mediaPlayerProvider: MediaPlayerProviderMock(),
+                                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                                 appMediator: AppMediatorMock.default,
+                                                 appSettings: ServiceLocator.shared.settings,
+                                                 analyticsService: ServiceLocator.shared.analytics,
+                                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         return viewModel
     }

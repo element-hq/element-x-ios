@@ -458,7 +458,17 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentBookmarksScreen() {
         let stackCoordinator = NavigationStackCoordinator()
-        let coordinator = BookmarksScreenCoordinator(parameters: .init(clientProxy: userSession.clientProxy))
+        
+        let parameters = BookmarksScreenCoordinatorParameters(userSession: userSession,
+                                                              mediaPlayerProvider: MediaPlayerProvider(),
+                                                              userIndicatorController: flowParameters.userIndicatorController,
+                                                              appMediator: flowParameters.appMediator,
+                                                              appSettings: flowParameters.appSettings,
+                                                              analyticsService: flowParameters.analytics,
+                                                              emojiProvider: flowParameters.emojiProvider,
+                                                              timelineControllerFactory: flowParameters.timelineControllerFactory)
+        
+        let coordinator = BookmarksScreenCoordinator(parameters: parameters)
         
         coordinator.actionsPublisher.sink { [weak self] action in
             guard let self else { return }

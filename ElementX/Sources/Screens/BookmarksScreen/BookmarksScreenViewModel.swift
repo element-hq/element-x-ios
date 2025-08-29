@@ -11,17 +11,43 @@ import SwiftUI
 typealias BookmarksScreenViewModelType = StateStoreViewModelV2<BookmarksScreenViewState, BookmarksScreenViewAction>
 
 class BookmarksScreenViewModel: BookmarksScreenViewModelType, BookmarksScreenViewModelProtocol {
-    private let clientProxy: ClientProxyProtocol
+    private let userSession: UserSessionProtocol
+    private let mediaPlayerProvider: MediaPlayerProviderProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appMediator: AppMediatorProtocol
+    private let appSettings: AppSettings
+    private let analyticsService: AnalyticsService
+    private let emojiProvider: EmojiProviderProtocol
+    private let timelineControllerFactory: TimelineControllerFactoryProtocol
+    private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     
     private let actionsSubject: PassthroughSubject<BookmarksScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<BookmarksScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var roomsAndTimelines = [(JoinedRoomProxyProtocol, TimelineProxyProtocol)]()
-
-    init(clientProxy: ClientProxyProtocol) {
-        self.clientProxy = clientProxy
+    private var timelineComponents = [(JoinedRoomProxyProtocol, TimelineProxyProtocol, TimelineViewModelProtocol)]()
+    
+    init(userSession: UserSessionProtocol,
+         mediaPlayerProvider: MediaPlayerProviderProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appMediator: AppMediatorProtocol,
+         appSettings: AppSettings,
+         analyticsService: AnalyticsService,
+         emojiProvider: EmojiProviderProtocol,
+         timelineControllerFactory: TimelineControllerFactoryProtocol) {
+        self.userSession = userSession
+        self.mediaPlayerProvider = mediaPlayerProvider
+        self.userIndicatorController = userIndicatorController
+        self.appMediator = appMediator
+        self.appSettings = appSettings
+        self.analyticsService = analyticsService
+        self.emojiProvider = emojiProvider
+        self.timelineControllerFactory = timelineControllerFactory
+        
+        timelineItemFactory = RoomTimelineItemFactory(userID: userSession.clientProxy.userID,
+                                                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                      stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
         
         super.init(initialViewState: .init())
         
@@ -44,26 +70,44 @@ class BookmarksScreenViewModel: BookmarksScreenViewModelType, BookmarksScreenVie
     // MARK: - Private
     
     private func setupTimelines() async {
-        guard case let .success(roomsWithBookmarks) = await clientProxy.getRoomsWithBookmarks() else {
+        guard case let .success(roomsWithBookmarks) = await userSession.clientProxy.getRoomsWithBookmarks() else {
             #warning("Show an error or something")
             return
         }
         
-        var roomsAndTimelines = [(JoinedRoomProxyProtocol, TimelineProxyProtocol)]()
+        var timelineComponents = [(JoinedRoomProxyProtocol, TimelineProxyProtocol, TimelineViewModelProtocol)]()
         for roomID in roomsWithBookmarks {
-            switch await clientProxy.roomForIdentifier(roomID) {
+            switch await userSession.clientProxy.roomForIdentifier(roomID) {
             case .joined(let roomProxy):
                 if case let .success(timelineProxy) = await roomProxy.bookmarksTimeline() {
-                    roomsAndTimelines.append((roomProxy, timelineProxy))
+                    let timelineController = TimelineController(roomProxy: roomProxy,
+                                                                timelineProxy: timelineProxy,
+                                                                initialFocussedEventID: nil,
+                                                                timelineItemFactory: timelineItemFactory,
+                                                                mediaProvider: userSession.mediaProvider,
+                                                                appSettings: appSettings)
+                    
+                    let viewModel = TimelineViewModel(roomProxy: roomProxy,
+                                                      timelineController: timelineController,
+                                                      userSession: userSession,
+                                                      mediaPlayerProvider: mediaPlayerProvider,
+                                                      userIndicatorController: userIndicatorController,
+                                                      appMediator: appMediator,
+                                                      appSettings: appSettings,
+                                                      analyticsService: analyticsService,
+                                                      emojiProvider: emojiProvider,
+                                                      timelineControllerFactory: timelineControllerFactory)
+                                        
+                    timelineComponents.append((roomProxy, timelineProxy, viewModel))
                 }
             default:
                 continue
             }
         }
         
-        self.roomsAndTimelines = roomsAndTimelines
+        self.timelineComponents = timelineComponents
         
-        for timeline in roomsAndTimelines.map(\.1) {
+        for timeline in timelineComponents.map(\.1) {
             timeline.timelineItemProvider.updatePublisher.sink { [weak self] _ in
                 Task { await self?.updateBookmarks() }
             }
@@ -74,22 +118,14 @@ class BookmarksScreenViewModel: BookmarksScreenViewModelType, BookmarksScreenVie
     private func updateBookmarks() async {
         var stateItems = [BookmarkListItem]()
         
-        for (room, timeline) in roomsAndTimelines {
-            for timelineItemProxy in timeline.timelineItemProvider.itemProxies {
+        for (roomProxy, timelineProxy, timelineViewModel) in timelineComponents {
+            for timelineItemProxy in timelineProxy.timelineItemProvider.itemProxies {
                 switch timelineItemProxy {
                 case .event(let eventTimelineItemProxy):
-                    switch eventTimelineItemProxy.item.content {
-                    case .msgLike(let content):
-                        switch content.kind {
-                        case .message(let messageContent):
-                            stateItems.append(.init(id: eventTimelineItemProxy.id,
-                                                    body: messageContent.body,
-                                                    roomName: room.details.name ?? room.id))
-                        default:
-                            continue
-                        }
-                    default:
-                        continue
+                    if let item = timelineItemFactory.buildTimelineItem(for: eventTimelineItemProxy, isDM: false) {
+                        stateItems.append(.init(timelineItemViewState: .init(item: item, groupStyle: .single),
+                                                roomName: roomProxy.details.name ?? roomProxy.id,
+                                                timelineContext: timelineViewModel.context))
                     }
                 default:
                     continue

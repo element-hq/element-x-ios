@@ -47,22 +47,24 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
                 VStack(alignment: alignment, spacing: 0) {
                     HStack(spacing: 0) {
-                        if timelineItem.isOutgoing {
+                        if timelineItem.isOutgoing, context.viewState.timelineKind != .bookmarks {
                             Spacer()
                         }
 
                         messageBubbleWithReactionsAndBookmark
                     }
-                    .padding(timelineItem.isOutgoing ? .leading : .trailing, 48) // Additional padding to differentiate alignment.
+                    .padding(timelineItem.isOutgoing && context.viewState.timelineKind != .bookmarks ? .leading : .trailing, 48) // Additional padding to differentiate alignment.
 
-                    HStack(spacing: 0) {
-                        if !timelineItem.isOutgoing {
-                            Spacer()
+                    if context.viewState.timelineKind != .bookmarks {
+                        HStack(spacing: 0) {
+                            if !timelineItem.isOutgoing {
+                                Spacer()
+                            }
+                            TimelineItemStatusView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus)
+                                .environmentObject(context)
+                                .padding(.top, 8)
+                                .padding(.bottom, 3)
                         }
-                        TimelineItemStatusView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus)
-                            .environmentObject(context)
-                            .padding(.top, 8)
-                            .padding(.bottom, 3)
                     }
                 }
                 .padding(.horizontal, bubbleHorizontalPadding)
@@ -105,7 +107,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         VStack(alignment: alignment, spacing: 2) {
             messageBubbleWithReactions
             
-            if timelineItem.properties.bookmarkInfo != nil {
+            if context.viewState.timelineKind != .bookmarks, timelineItem.properties.bookmarkInfo != nil {
                 Label("Bookmarked", systemSymbol: .bookmarkFill)
                     .labelStyle(.custom(spacing: 4.0))
                     .font(.compound.bodySM)
@@ -127,8 +129,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     context.send(viewAction: .displayTimelineItemMenu(itemID: timelineItem.id))
                 }
             
-            // Do not display reactions in the pinned events timeline
-            if context.viewState.timelineKind != .pinned,
+            // Do not display reactions in the pinned or bookmarked events timeline
+            if context.viewState.timelineKind != .pinned, context.viewState.timelineKind != .bookmarks,
                !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(context: context,
                                       itemID: timelineItem.id,
@@ -188,12 +190,20 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             .padding(.top, messageBubbleTopPadding)
     }
     
+    @ViewBuilder
     var messageBubble: some View {
-        contentWithReply
-            .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
-            .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
-                              insets: timelineItem.bubbleInsets,
-                              color: timelineItem.bubbleBackgroundColor)
+        if context.viewState.timelineKind == .bookmarks {
+            contentWithReply
+                .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
+                                  insets: timelineItem.bubbleInsets,
+                                  color: timelineItem.bubbleBackgroundColor)
+        } else {
+            contentWithReply
+                .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
+                .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
+                                  insets: timelineItem.bubbleInsets,
+                                  color: timelineItem.bubbleBackgroundColor)
+        }
     }
     
     @ViewBuilder
@@ -240,7 +250,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
     
     private var alignment: HorizontalAlignment {
-        timelineItem.isOutgoing ? .trailing : .leading
+        if context.viewState.timelineKind == .bookmarks {
+            return .leading
+        }
+        
+        return timelineItem.isOutgoing ? .trailing : .leading
     }
     
     private var shouldShowSenderDetails: Bool {
