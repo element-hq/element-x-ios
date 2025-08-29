@@ -118,11 +118,11 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.presentReportContent(itemID: itemID, senderID: senderID))
                 case .displayCameraPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .camera, selectionType: .single)))
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .camera, selectionType: .multiple)))
                 case .displayMediaPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .photoLibrary, selectionType: .single)))
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .photoLibrary, selectionType: .multiple)))
                 case .displayDocumentPicker:
-                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .documents, selectionType: .single)))
+                    actionsSubject.send(.presentMediaUploadPicker(mode: .init(source: .documents, selectionType: .multiple)))
                 case .displayMediaPreview(let mediaPreviewViewModel):
                     roomViewModel.displayMediaPreview(mediaPreviewViewModel)
                 case .displayLocationPicker:
