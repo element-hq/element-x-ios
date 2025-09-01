@@ -15840,21 +15840,21 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
 }
 class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
-    var spaceRoom: SpaceRoomProxyProtocol {
-        get { return underlyingSpaceRoom }
-        set(value) { underlyingSpaceRoom = value }
+    var spaceRoomProxy: SpaceRoomProxyProtocol {
+        get { return underlyingSpaceRoomProxy }
+        set(value) { underlyingSpaceRoomProxy = value }
     }
-    var underlyingSpaceRoom: SpaceRoomProxyProtocol!
+    var underlyingSpaceRoomProxy: SpaceRoomProxyProtocol!
     var spaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
         get { return underlyingSpaceRoomsPublisher }
         set(value) { underlyingSpaceRoomsPublisher = value }
     }
     var underlyingSpaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never>!
-    var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListProxyPaginationState, Never> {
+    var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never> {
         get { return underlyingPaginationStatePublisher }
         set(value) { underlyingPaginationStatePublisher = value }
     }
-    var underlyingPaginationStatePublisher: CurrentValuePublisher<SpaceRoomListProxyPaginationState, Never>!
+    var underlyingPaginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never>!
 
     //MARK: - paginate
 
@@ -15964,7 +15964,7 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
     var spaceRoomListForCalled: Bool {
         return spaceRoomListForCallsCount > 0
     }
-    var spaceRoomListForReceivedSpaceRoom: SpaceRoomProxyProtocol?
+    var spaceRoomListForReceivedSpaceRoomProxy: SpaceRoomProxyProtocol?
     var spaceRoomListForReceivedInvocations: [SpaceRoomProxyProtocol] = []
 
     var spaceRoomListForUnderlyingReturnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>!
@@ -15993,14 +15993,14 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
     }
     var spaceRoomListForClosure: ((SpaceRoomProxyProtocol) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>)?
 
-    func spaceRoomList(for spaceRoom: SpaceRoomProxyProtocol) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError> {
+    func spaceRoomList(for spaceRoomProxy: SpaceRoomProxyProtocol) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError> {
         spaceRoomListForCallsCount += 1
-        spaceRoomListForReceivedSpaceRoom = spaceRoom
+        spaceRoomListForReceivedSpaceRoomProxy = spaceRoomProxy
         DispatchQueue.main.async {
-            self.spaceRoomListForReceivedInvocations.append(spaceRoom)
+            self.spaceRoomListForReceivedInvocations.append(spaceRoomProxy)
         }
         if let spaceRoomListForClosure = spaceRoomListForClosure {
-            return await spaceRoomListForClosure(spaceRoom)
+            return await spaceRoomListForClosure(spaceRoomProxy)
         } else {
             return spaceRoomListForReturnValue
         }
