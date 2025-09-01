@@ -1,9 +1,11 @@
 "Notification" = "آگاهی";
 "a11y_add_reaction" = "افزودن واکنش: %1$@";
 "a11y_avatar" = "چهرک";
+"a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "حذف";
 "a11y_edit_avatar" = "ویرایش چهرک";
 "a11y_edit_room_address_hint" = "نشانی کامل %1$@ خواهد بود";
+"a11y_expand_message_text_field" = "Expand message text field";
 "a11y_hide_password" = "نهفتن گذرواژه";
 "a11y_join_call" = "پیوستن به تماس";
 "a11y_jump_to_bottom" = "به پایین بروید";

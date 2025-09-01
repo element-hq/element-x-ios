@@ -1,9 +1,11 @@
 "Notification" = "Notifica";
 "a11y_add_reaction" = "Aggiungi reazione: %1$@";
 "a11y_avatar" = "Avatar";
+"a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "Elimina";
 "a11y_edit_avatar" = "Edit avatar";
 "a11y_edit_room_address_hint" = "The full address will be %1$@";
+"a11y_expand_message_text_field" = "Expand message text field";
 "a11y_hide_password" = "Nascondi password";
 "a11y_join_call" = "Entra in chiamata";
 "a11y_jump_to_bottom" = "Vai alla fine";

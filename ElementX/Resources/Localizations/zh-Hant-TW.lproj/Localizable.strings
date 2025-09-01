@@ -1,9 +1,11 @@
 "Notification" = "通知";
 "a11y_add_reaction" = "新增反應：%1$@";
 "a11y_avatar" = "大頭貼";
+"a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "刪除";
 "a11y_edit_avatar" = "編輯大頭照";
 "a11y_edit_room_address_hint" = "完整地址為 %1$@";
+"a11y_expand_message_text_field" = "Expand message text field";
 "a11y_hide_password" = "隱藏密碼";
 "a11y_join_call" = "加入通話";
 "a11y_jump_to_bottom" = "跳至底部";

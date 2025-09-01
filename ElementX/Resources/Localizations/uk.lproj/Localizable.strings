@@ -1,9 +1,11 @@
 "Notification" = "Сповіщення";
 "a11y_add_reaction" = "Додати реакцію: %1$@";
 "a11y_avatar" = "Аватар";
+"a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "Видалити";
 "a11y_edit_avatar" = "Редагувати аватар";
 "a11y_edit_room_address_hint" = "Повна адреса буде %1$@";
+"a11y_expand_message_text_field" = "Expand message text field";
 "a11y_hide_password" = "Cховати пароль";
 "a11y_join_call" = "Приєднатися до виклику";
 "a11y_jump_to_bottom" = "Перейти вниз";
