@@ -1057,94 +1057,25 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentPollForm(mode: PollFormMode, timelineController: TimelineControllerProtocol) {
         let stackCoordinator = NavigationStackCoordinator()
-        let coordinator = PollFormScreenCoordinator(parameters: .init(mode: mode))
+        let coordinator = PollFormScreenCoordinator(parameters: .init(mode: mode,
+                                                                      timelineController: timelineController,
+                                                                      analytics: flowParameters.analytics,
+                                                                      userIndicatorController: flowParameters.userIndicatorController))
         stackCoordinator.setRootCoordinator(coordinator)
 
         coordinator.actions
             .sink { [weak self] action in
-                guard let self else {
-                    return
-                }
-
-                self.navigationStackCoordinator.setSheetCoordinator(nil)
-
+                guard let self else { return }
+                
                 switch action {
-                case .cancel:
-                    break
-                case .delete:
-                    deletePoll(mode: mode)
-                case let .submit(question, options, pollKind):
-                    switch mode {
-                    case .new:
-                        createPoll(question: question,
-                                   options: options,
-                                   pollKind: pollKind,
-                                   timelineController: timelineController)
-                    case .edit(let eventID, _):
-                        editPoll(pollStartID: eventID,
-                                 question: question,
-                                 options: options,
-                                 pollKind: pollKind,
-                                 timelineController: timelineController)
-                    }
+                case .close:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
                 }
             }
             .store(in: &cancellables)
 
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissPollForm)
-        }
-    }
-    
-    private func createPoll(question: String, options: [String], pollKind: Poll.Kind, timelineController: TimelineControllerProtocol) {
-        Task {
-            let result = await timelineController.createPoll(question: question, answers: options, pollKind: pollKind)
-
-            self.flowParameters.analytics.trackComposer(inThread: false,
-                                                        isEditing: false,
-                                                        isReply: false,
-                                                        messageType: .Poll,
-                                                        startsThread: nil)
-
-            self.flowParameters.analytics.trackPollCreated(isUndisclosed: pollKind == .undisclosed, numberOfAnswers: options.count)
-            
-            switch result {
-            case .success:
-                break
-            case .failure:
-                self.flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-            }
-        }
-    }
-    
-    private func editPoll(pollStartID: String, question: String, options: [String], pollKind: Poll.Kind, timelineController: TimelineControllerProtocol) {
-        Task {
-            let result = await timelineController.editPoll(original: pollStartID, question: question, answers: options, pollKind: pollKind)
-            
-            switch result {
-            case .success:
-                break
-            case .failure:
-                self.flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-            }
-        }
-    }
-    
-    private func deletePoll(mode: PollFormMode) {
-        Task {
-            guard case .edit(let pollStartID, _) = mode else {
-                self.flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-                return
-            }
-            
-            let result = await roomProxy.redact(pollStartID)
-            
-            switch result {
-            case .success:
-                break
-            case .failure:
-                self.flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-            }
         }
     }
     
