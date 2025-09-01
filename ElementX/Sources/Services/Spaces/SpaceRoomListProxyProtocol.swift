@@ -10,7 +10,7 @@ import MatrixRustSDK
 
 // sourcery: AutoMockable
 protocol SpaceRoomListProxyProtocol {
-    var spaceRoom: SpaceRoomProxyProtocol { get }
+    var spaceRoomProxy: SpaceRoomProxyProtocol { get }
     
     var spaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> { get }
     var paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never> { get }

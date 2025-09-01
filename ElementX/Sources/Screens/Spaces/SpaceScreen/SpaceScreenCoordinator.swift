@@ -35,7 +35,7 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
     init(parameters: SpaceScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = SpaceScreenViewModel(spaceRoomList: parameters.spaceRoomListProxy,
+        viewModel = SpaceScreenViewModel(spaceRoomListProxy: parameters.spaceRoomListProxy,
                                          spaceServiceProxy: parameters.spaceServiceProxy,
                                          mediaProvider: parameters.mediaProvider,
                                          userIndicatorController: parameters.userIndicatorController)

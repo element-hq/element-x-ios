@@ -10,7 +10,7 @@ import MatrixRustSDK
 
 class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
     private let spaceRoomList: SpaceRoomListProtocol
-    let spaceRoom: SpaceRoomProxyProtocol
+    let spaceRoomProxy: SpaceRoomProxyProtocol
     
     private var spaceRoomsHandle: TaskHandle?
     private let spaceRoomsSubject = CurrentValueSubject<[SpaceRoomProxyProtocol], Never>([])
@@ -21,9 +21,9 @@ class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
     private let paginationStateHandle: TaskHandle
     let paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never>
     
-    init(_ spaceRoomList: SpaceRoomListProtocol, spaceRoom: SpaceRoomProxyProtocol) {
+    init(_ spaceRoomList: SpaceRoomListProtocol, spaceRoomProxy: SpaceRoomProxyProtocol) {
         self.spaceRoomList = spaceRoomList
-        self.spaceRoom = spaceRoom
+        self.spaceRoomProxy = spaceRoomProxy
         
         let paginationStateSubject = CurrentValueSubject<SpaceRoomListPaginationState, Never>(spaceRoomList.paginationState())
         paginationStatePublisher = paginationStateSubject.asCurrentValuePublisher()

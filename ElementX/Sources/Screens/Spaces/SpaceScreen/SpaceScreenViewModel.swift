@@ -19,30 +19,32 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(spaceRoomList: SpaceRoomListProxyProtocol,
+    init(spaceRoomListProxy: SpaceRoomListProxyProtocol,
          spaceServiceProxy: SpaceServiceProxyProtocol,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.spaceServiceProxy = spaceServiceProxy
         self.userIndicatorController = userIndicatorController
         
-        super.init(initialViewState: SpaceScreenViewState(space: spaceRoomList.spaceRoom,
-                                                          rooms: spaceRoomList.spaceRoomsPublisher.value),
+        super.init(initialViewState: SpaceScreenViewState(space: spaceRoomListProxy.spaceRoomProxy,
+                                                          rooms: spaceRoomListProxy.spaceRoomsPublisher.value),
                    mediaProvider: mediaProvider)
         
-        spaceRoomList.spaceRoomsPublisher
+        spaceRoomListProxy.spaceRoomsPublisher
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.rooms, on: self)
             .store(in: &cancellables)
         
-        spaceRoomList.paginationStatePublisher
+        // As the server is slow, we just let the screen automatically paginate everything in. We can
+        // switch this to use the scroll position once Synapse receives some performance improvements.
+        spaceRoomListProxy.paginationStatePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] paginationState in
                 switch paginationState {
                 case .idle(let endReached):
                     self?.state.isPaginating = false
                     guard !endReached else { return }
-                    Task { await spaceRoomList.paginate() }
+                    Task { await spaceRoomListProxy.paginate() }
                 case .loading:
                     self?.state.isPaginating = true
                 }

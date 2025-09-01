@@ -32,7 +32,7 @@ extension SpaceRoomListProxyMock {
         
         let spaceRoomsSubject: CurrentValueSubject<[SpaceRoomProxyProtocol], Never> = .init(configuration.initialSpaceRooms)
         
-        spaceRoom = configuration.spaceRoomProxy
+        spaceRoomProxy = configuration.spaceRoomProxy
         spaceRoomsPublisher = spaceRoomsSubject.asCurrentValuePublisher()
         paginationStatePublisher = configuration.paginationStateSubject.asCurrentValuePublisher()
         
