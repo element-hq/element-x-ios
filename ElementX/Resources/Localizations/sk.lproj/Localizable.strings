@@ -1,9 +1,11 @@
 "Notification" = "Oznámenie";
 "a11y_add_reaction" = "Pridať reakciu: %1$@";
 "a11y_avatar" = "Obrázok";
+"a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "Vymazať";
 "a11y_edit_avatar" = "Upraviť obrázok";
 "a11y_edit_room_address_hint" = "Celá adresa bude %1$@";
+"a11y_expand_message_text_field" = "Expand message text field";
 "a11y_hide_password" = "Skryť heslo";
 "a11y_join_call" = "Pripojiť sa k hovoru";
 "a11y_jump_to_bottom" = "Prejsť na spodok";

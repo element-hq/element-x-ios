@@ -1,9 +1,11 @@
 "Notification" = "通知";
 "a11y_add_reaction" = "Add reaction: %1$@";
 "a11y_avatar" = "头像";
+"a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "删除";
 "a11y_edit_avatar" = "编辑头像";
 "a11y_edit_room_address_hint" = "The full address will be %1$@";
+"a11y_expand_message_text_field" = "Expand message text field";
 "a11y_hide_password" = "隐藏密码";
 "a11y_join_call" = "加入通话";
 "a11y_jump_to_bottom" = "跳转到底部";

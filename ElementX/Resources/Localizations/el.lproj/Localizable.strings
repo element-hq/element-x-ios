@@ -1,9 +1,11 @@
 "Notification" = "Γνωστοποίηση";
 "a11y_add_reaction" = "Προσθήκη αντίδρασης: %1$@";
 "a11y_avatar" = "Εικόνα Προφίλ";
+"a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "Διαγραφή";
 "a11y_edit_avatar" = "Edit avatar";
 "a11y_edit_room_address_hint" = "The full address will be %1$@";
+"a11y_expand_message_text_field" = "Expand message text field";
 "a11y_hide_password" = "Απόκρυψη κωδικού πρόσβασης";
 "a11y_join_call" = "Συμμετοχή στην κλήση";
 "a11y_jump_to_bottom" = "Άλμα προς τα κάτω";

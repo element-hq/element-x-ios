@@ -2,4 +2,4 @@
 "NSFaceIDUsageDescription" = "Face ID este utilizat pentru a accesa aplicația.";
 "NSLocationWhenInUseUsageDescription" = "Acordați acces astfel încât Element X să vă poată partaja locația.";
 "NSMicrophoneUsageDescription" = "Pentru a înregistra și trimite mesaje audio, Element X trebuie să acceseze microfonul.";
-"NSPhotoLibraryUsageDescription" = "Permite salvarea fotografiilor și videoclipurilor în biblioteca dumneavoastră.";
+"NSPhotoLibraryUsageDescription" = "Permiteți salvarea fotografiilor și videoclipurilor în biblioteca dumneavoastră.";

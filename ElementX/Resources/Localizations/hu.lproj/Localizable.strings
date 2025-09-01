@@ -1,9 +1,11 @@
 "Notification" = "Értesítés";
 "a11y_add_reaction" = "Reakció hozzáadása: %1$@";
 "a11y_avatar" = "Profilkép";
+"a11y_collapse_message_text_field" = "Üzenet szövegmezőjének minimalizálása";
 "a11y_delete" = "Törlés";
 "a11y_edit_avatar" = "Profilkép szerkesztése";
 "a11y_edit_room_address_hint" = "A teljes cím ez lesz: %1$@";
+"a11y_expand_message_text_field" = "Üzenet szövegmezőjének kibontása";
 "a11y_hide_password" = "Jelszó elrejtése";
 "a11y_join_call" = "Csatlakozás a híváshoz";
 "a11y_jump_to_bottom" = "Ugrás az aljára";
@@ -165,8 +167,8 @@
 "common_advanced_settings" = "Speciális beállítások";
 "common_an_image" = "egy kép";
 "common_analytics" = "Elemzések";
-"common_android_shortcuts_remove_reason_left_room" = "You left the room";
-"common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
+"common_android_shortcuts_remove_reason_left_room" = "Elhagyta a szobát";
+"common_android_shortcuts_remove_reason_session_logged_out" = "Ki lett jelentkeztetve a munkamenetből";
 "common_appearance" = "Megjelenítés";
 "common_audio" = "Hang";
 "common_blocked_users" = "Letiltott felhasználók";

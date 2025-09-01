@@ -1,9 +1,11 @@
 "Notification" = "Hysbysiad";
 "a11y_add_reaction" = "Ychwanegu adwaith: %1$@";
 "a11y_avatar" = "Afatar";
+"a11y_collapse_message_text_field" = "Minimise message text field";
 "a11y_delete" = "Dileu";
 "a11y_edit_avatar" = "Golygu afatar";
 "a11y_edit_room_address_hint" = "The full address will be %1$@";
+"a11y_expand_message_text_field" = "Expand message text field";
 "a11y_hide_password" = "Cuddio cyfrinair";
 "a11y_join_call" = "Ymuno â galwad";
 "a11y_jump_to_bottom" = "Symud i'r gwaelod";
