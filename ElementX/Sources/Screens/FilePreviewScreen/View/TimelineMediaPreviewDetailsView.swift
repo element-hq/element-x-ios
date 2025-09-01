@@ -44,6 +44,7 @@ struct TimelineMediaPreviewDetailsView: View {
                                         contentID: item.sender.id,
                                         avatarSize: .user(on: .mediaPreviewDetails),
                                         mediaProvider: context.mediaProvider)
+                        .accessibilityHidden(true)
                     
                     VStack(alignment: .leading, spacing: 0) {
                         if let displayName = item.sender.displayName {

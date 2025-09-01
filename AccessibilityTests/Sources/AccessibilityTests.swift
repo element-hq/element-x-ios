@@ -16,7 +16,7 @@ final class AccessibilityTests: XCTestCase {
         app = Application.launch(viewID: name)
         await client.waitForApp()
         defer { try? client.stop() }
-                
+        
         try client.send(.accessibilityAudit(.nextPreview))
         
         // To handle location sharing popup in CI
@@ -55,6 +55,11 @@ final class AccessibilityTests: XCTestCase {
             do {
                 // We have removed `textClipped` and `contrast` for now
                 try app.performAccessibilityAudit(for: [.dynamicType, .elementDetection, .hitRegion, .sufficientElementDescription, .trait]) { issue in
+                    // Specific tests do not need specific accessibilty audit types
+                    if Self.ignoredA11yTest[name]?.isAccessibilityIssueFiltered(issue) == true {
+                        return true
+                    }
+                    
                     // Remove false positives for null elements
                     guard let element = issue.element else {
                         return true
@@ -84,15 +89,22 @@ final class AccessibilityTests: XCTestCase {
     }
     
     private static func isMatrixIdentifier(_ string: String) -> Bool {
-        MatrixEntityRegex.isMatrixRoomAlias(string) || MatrixEntityRegex.isMatrixUserIdentifier(string) || string == PillUtilities.atRoom
+        MatrixEntityRegex.isMatrixRoomAlias(string) || MatrixEntityRegex.isMatrixUserIdentifier(string) || string == PillUtilities.atRoom || MatrixEntityRegex.isLegacyMatrixRoomID(string)
     }
     
     private static let partiallyUnsupportedDynamicTypeMessage = "Dynamic Type font sizes are partially unsupported"
     private static let notHumanReadableMessage = "Label not human-readable"
+    private static let elementHasNoDescription = "Element has no description"
     
     /// Use this array to filter add specific filters to ignore specific issues for certain elements
     private static let ignoredA11yIdentifiers: [String: [FilterType]] = [
         A11yIdentifiers.serverConfirmationScreen.serverPicker: [.compactDescription(notHumanReadableMessage)]
+    ]
+    
+    /// Use this array to filter add specific filters to ignore specific tests
+    private static let ignoredA11yTest: [String: [FilterType]] = [
+        // It's an image rendering test doesn't need to have descriptions
+        "RoomAvatarImage_Previews-0": [.auditType(.sufficientElementDescription)]
     ]
 }
 
