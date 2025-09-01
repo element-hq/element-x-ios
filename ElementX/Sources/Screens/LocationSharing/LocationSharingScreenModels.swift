@@ -16,7 +16,6 @@ enum LocationSharingViewError: Error, Hashable {
 enum StaticLocationScreenViewModelAction {
     case close
     case openSystemSettings
-    case sendLocation(GeoURI, isUserLocation: Bool)
 }
 
 enum StaticLocationInteractionMode: Hashable {

@@ -1033,27 +1033,15 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode,
                                                                mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration,
-                                                               appMediator: flowParameters.appMediator)
+                                                               timelineController: timelineController,
+                                                               appMediator: flowParameters.appMediator,
+                                                               analytics: flowParameters.analytics,
+                                                               userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .selectedLocation(let geoURI, let isUserLocation):
-                Task {
-                    _ = await timelineController.sendLocation(body: geoURI.bodyMessage,
-                                                              geoURI: geoURI,
-                                                              description: nil,
-                                                              zoomLevel: 15,
-                                                              assetType: isUserLocation ? .sender : .pin)
-                    self.navigationStackCoordinator.setSheetCoordinator(nil)
-                }
-                
-                self.flowParameters.analytics.trackComposer(inThread: false,
-                                                            isEditing: false,
-                                                            isReply: false,
-                                                            messageType: isUserLocation ? .LocationUser : .LocationPin,
-                                                            startsThread: nil)
             case .close:
                 self.navigationStackCoordinator.setSheetCoordinator(nil)
             }
