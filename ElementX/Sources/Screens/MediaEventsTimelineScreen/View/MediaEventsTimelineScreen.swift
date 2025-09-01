@@ -85,6 +85,7 @@ struct MediaEventsTimelineScreen: View {
                     ForEach(group.items) { item in
                         VStack(spacing: 20) {
                             Divider()
+                                .accessibilityHidden(true)
                             
                             Button {
                                 tappedItem(item)
@@ -92,7 +93,11 @@ struct MediaEventsTimelineScreen: View {
                                 viewForTimelineItem(item)
                                     .scaleEffect(CGSize(width: 1, height: -1))
                             }
+                            .accessibilityRepresentation {
+                                viewForTimelineItem(item)
+                            }
                         }
+                        .accessibilityElement(children: .combine)
                         .padding(.horizontal, 16)
                     }
                 } footer: {

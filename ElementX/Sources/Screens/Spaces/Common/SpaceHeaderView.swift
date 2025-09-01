@@ -19,6 +19,7 @@ struct SpaceHeaderView: View {
             RoomAvatarImage(avatar: spaceRoomProxy.avatar,
                             avatarSize: .room(on: .spaceHeader),
                             mediaProvider: mediaProvider)
+                .accessibilityHidden(true)
             
             VStack(spacing: 8) {
                 Text(title)
