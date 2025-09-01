@@ -4572,6 +4572,71 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - spaceService
+
+    var spaceServiceUnderlyingCallsCount = 0
+    open var spaceServiceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return spaceServiceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceServiceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceServiceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceServiceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var spaceServiceCalled: Bool {
+        return spaceServiceCallsCount > 0
+    }
+
+    var spaceServiceUnderlyingReturnValue: SpaceService!
+    open var spaceServiceReturnValue: SpaceService! {
+        get {
+            if Thread.isMainThread {
+                return spaceServiceUnderlyingReturnValue
+            } else {
+                var returnValue: SpaceService? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceServiceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceServiceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceServiceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var spaceServiceClosure: (() -> SpaceService)?
+
+    open override func spaceService() -> SpaceService {
+        spaceServiceCallsCount += 1
+        if let spaceServiceClosure = spaceServiceClosure {
+            return spaceServiceClosure()
+        } else {
+            return spaceServiceReturnValue
+        }
+    }
+
     //MARK: - startSsoLogin
 
     open var startSsoLoginRedirectUrlIdpIdThrowableError: Error?
@@ -21111,6 +21176,551 @@ open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmo
         }
     }
 }
+open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendable {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - paginate
+
+    open var paginateThrowableError: Error?
+    var paginateUnderlyingCallsCount = 0
+    open var paginateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return paginateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginateUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var paginateCalled: Bool {
+        return paginateCallsCount > 0
+    }
+    open var paginateClosure: (() async throws -> Void)?
+
+    open override func paginate() async throws {
+        if let error = paginateThrowableError {
+            throw error
+        }
+        paginateCallsCount += 1
+        try await paginateClosure?()
+    }
+
+    //MARK: - paginationState
+
+    var paginationStateUnderlyingCallsCount = 0
+    open var paginationStateCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return paginationStateUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginationStateUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginationStateUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginationStateUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var paginationStateCalled: Bool {
+        return paginationStateCallsCount > 0
+    }
+
+    var paginationStateUnderlyingReturnValue: SpaceRoomListPaginationState!
+    open var paginationStateReturnValue: SpaceRoomListPaginationState! {
+        get {
+            if Thread.isMainThread {
+                return paginationStateUnderlyingReturnValue
+            } else {
+                var returnValue: SpaceRoomListPaginationState? = nil
+                DispatchQueue.main.sync {
+                    returnValue = paginationStateUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                paginationStateUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    paginationStateUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var paginationStateClosure: (() -> SpaceRoomListPaginationState)?
+
+    open override func paginationState() -> SpaceRoomListPaginationState {
+        paginationStateCallsCount += 1
+        if let paginationStateClosure = paginationStateClosure {
+            return paginationStateClosure()
+        } else {
+            return paginationStateReturnValue
+        }
+    }
+
+    //MARK: - rooms
+
+    var roomsUnderlyingCallsCount = 0
+    open var roomsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var roomsCalled: Bool {
+        return roomsCallsCount > 0
+    }
+
+    var roomsUnderlyingReturnValue: [SpaceRoom]!
+    open var roomsReturnValue: [SpaceRoom]! {
+        get {
+            if Thread.isMainThread {
+                return roomsUnderlyingReturnValue
+            } else {
+                var returnValue: [SpaceRoom]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var roomsClosure: (() -> [SpaceRoom])?
+
+    open override func rooms() -> [SpaceRoom] {
+        roomsCallsCount += 1
+        if let roomsClosure = roomsClosure {
+            return roomsClosure()
+        } else {
+            return roomsReturnValue
+        }
+    }
+
+    //MARK: - subscribeToPaginationStateUpdates
+
+    var subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount = 0
+    open var subscribeToPaginationStateUpdatesListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToPaginationStateUpdatesListenerCalled: Bool {
+        return subscribeToPaginationStateUpdatesListenerCallsCount > 0
+    }
+    open var subscribeToPaginationStateUpdatesListenerReceivedListener: SpaceRoomListPaginationStateListener?
+    open var subscribeToPaginationStateUpdatesListenerReceivedInvocations: [SpaceRoomListPaginationStateListener] = []
+
+    var subscribeToPaginationStateUpdatesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToPaginationStateUpdatesListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToPaginationStateUpdatesListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToPaginationStateUpdatesListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToPaginationStateUpdatesListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToPaginationStateUpdatesListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToPaginationStateUpdatesListenerClosure: ((SpaceRoomListPaginationStateListener) -> TaskHandle)?
+
+    open override func subscribeToPaginationStateUpdates(listener: SpaceRoomListPaginationStateListener) -> TaskHandle {
+        subscribeToPaginationStateUpdatesListenerCallsCount += 1
+        subscribeToPaginationStateUpdatesListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.subscribeToPaginationStateUpdatesListenerReceivedInvocations.append(listener)
+        }
+        if let subscribeToPaginationStateUpdatesListenerClosure = subscribeToPaginationStateUpdatesListenerClosure {
+            return subscribeToPaginationStateUpdatesListenerClosure(listener)
+        } else {
+            return subscribeToPaginationStateUpdatesListenerReturnValue
+        }
+    }
+
+    //MARK: - subscribeToRoomUpdate
+
+    var subscribeToRoomUpdateListenerUnderlyingCallsCount = 0
+    open var subscribeToRoomUpdateListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToRoomUpdateListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToRoomUpdateListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToRoomUpdateListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToRoomUpdateListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToRoomUpdateListenerCalled: Bool {
+        return subscribeToRoomUpdateListenerCallsCount > 0
+    }
+    open var subscribeToRoomUpdateListenerReceivedListener: SpaceRoomListEntriesListener?
+    open var subscribeToRoomUpdateListenerReceivedInvocations: [SpaceRoomListEntriesListener] = []
+
+    var subscribeToRoomUpdateListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToRoomUpdateListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToRoomUpdateListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToRoomUpdateListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToRoomUpdateListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToRoomUpdateListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToRoomUpdateListenerClosure: ((SpaceRoomListEntriesListener) -> TaskHandle)?
+
+    open override func subscribeToRoomUpdate(listener: SpaceRoomListEntriesListener) -> TaskHandle {
+        subscribeToRoomUpdateListenerCallsCount += 1
+        subscribeToRoomUpdateListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.subscribeToRoomUpdateListenerReceivedInvocations.append(listener)
+        }
+        if let subscribeToRoomUpdateListenerClosure = subscribeToRoomUpdateListenerClosure {
+            return subscribeToRoomUpdateListenerClosure(listener)
+        } else {
+            return subscribeToRoomUpdateListenerReturnValue
+        }
+    }
+}
+open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - joinedSpaces
+
+    var joinedSpacesUnderlyingCallsCount = 0
+    open var joinedSpacesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return joinedSpacesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinedSpacesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinedSpacesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinedSpacesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var joinedSpacesCalled: Bool {
+        return joinedSpacesCallsCount > 0
+    }
+
+    var joinedSpacesUnderlyingReturnValue: [SpaceRoom]!
+    open var joinedSpacesReturnValue: [SpaceRoom]! {
+        get {
+            if Thread.isMainThread {
+                return joinedSpacesUnderlyingReturnValue
+            } else {
+                var returnValue: [SpaceRoom]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = joinedSpacesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                joinedSpacesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    joinedSpacesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var joinedSpacesClosure: (() async -> [SpaceRoom])?
+
+    open override func joinedSpaces() async -> [SpaceRoom] {
+        joinedSpacesCallsCount += 1
+        if let joinedSpacesClosure = joinedSpacesClosure {
+            return await joinedSpacesClosure()
+        } else {
+            return joinedSpacesReturnValue
+        }
+    }
+
+    //MARK: - spaceRoomList
+
+    open var spaceRoomListSpaceIdThrowableError: Error?
+    var spaceRoomListSpaceIdUnderlyingCallsCount = 0
+    open var spaceRoomListSpaceIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return spaceRoomListSpaceIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceRoomListSpaceIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceRoomListSpaceIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceRoomListSpaceIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var spaceRoomListSpaceIdCalled: Bool {
+        return spaceRoomListSpaceIdCallsCount > 0
+    }
+    open var spaceRoomListSpaceIdReceivedSpaceId: String?
+    open var spaceRoomListSpaceIdReceivedInvocations: [String] = []
+
+    var spaceRoomListSpaceIdUnderlyingReturnValue: SpaceRoomList!
+    open var spaceRoomListSpaceIdReturnValue: SpaceRoomList! {
+        get {
+            if Thread.isMainThread {
+                return spaceRoomListSpaceIdUnderlyingReturnValue
+            } else {
+                var returnValue: SpaceRoomList? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceRoomListSpaceIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceRoomListSpaceIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceRoomListSpaceIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var spaceRoomListSpaceIdClosure: ((String) async throws -> SpaceRoomList)?
+
+    open override func spaceRoomList(spaceId: String) async throws -> SpaceRoomList {
+        if let error = spaceRoomListSpaceIdThrowableError {
+            throw error
+        }
+        spaceRoomListSpaceIdCallsCount += 1
+        spaceRoomListSpaceIdReceivedSpaceId = spaceId
+        DispatchQueue.main.async {
+            self.spaceRoomListSpaceIdReceivedInvocations.append(spaceId)
+        }
+        if let spaceRoomListSpaceIdClosure = spaceRoomListSpaceIdClosure {
+            return try await spaceRoomListSpaceIdClosure(spaceId)
+        } else {
+            return spaceRoomListSpaceIdReturnValue
+        }
+    }
+
+    //MARK: - subscribeToJoinedSpaces
+
+    var subscribeToJoinedSpacesListenerUnderlyingCallsCount = 0
+    open var subscribeToJoinedSpacesListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToJoinedSpacesListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToJoinedSpacesListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToJoinedSpacesListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToJoinedSpacesListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToJoinedSpacesListenerCalled: Bool {
+        return subscribeToJoinedSpacesListenerCallsCount > 0
+    }
+    open var subscribeToJoinedSpacesListenerReceivedListener: SpaceServiceJoinedSpacesListener?
+    open var subscribeToJoinedSpacesListenerReceivedInvocations: [SpaceServiceJoinedSpacesListener] = []
+
+    var subscribeToJoinedSpacesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToJoinedSpacesListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToJoinedSpacesListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToJoinedSpacesListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToJoinedSpacesListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToJoinedSpacesListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToJoinedSpacesListenerClosure: ((SpaceServiceJoinedSpacesListener) async -> TaskHandle)?
+
+    open override func subscribeToJoinedSpaces(listener: SpaceServiceJoinedSpacesListener) async -> TaskHandle {
+        subscribeToJoinedSpacesListenerCallsCount += 1
+        subscribeToJoinedSpacesListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.subscribeToJoinedSpacesListenerReceivedInvocations.append(listener)
+        }
+        if let subscribeToJoinedSpacesListenerClosure = subscribeToJoinedSpacesListenerClosure {
+            return await subscribeToJoinedSpacesListenerClosure(listener)
+        } else {
+            return subscribeToJoinedSpacesListenerReturnValue
+        }
+    }
+}
 open class SpanSDKMock: MatrixRustSDK.Span, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
@@ -21394,6 +22004,42 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
     }
 
     fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - expireSessions
+
+    var expireSessionsUnderlyingCallsCount = 0
+    open var expireSessionsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return expireSessionsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = expireSessionsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                expireSessionsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    expireSessionsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var expireSessionsCalled: Bool {
+        return expireSessionsCallsCount > 0
+    }
+    open var expireSessionsClosure: (() async -> Void)?
+
+    open override func expireSessions() async {
+        expireSessionsCallsCount += 1
+        await expireSessionsClosure?()
+    }
 
     //MARK: - roomListService
 

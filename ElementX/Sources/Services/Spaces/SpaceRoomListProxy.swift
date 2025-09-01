@@ -41,7 +41,7 @@ class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
         do {
             try await spaceRoomList.paginate()
         } catch {
-            MXLog.error("BOOOM \(error)")
+            MXLog.error("Pagination failure: \(error)")
         }
     }
     
