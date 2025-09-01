@@ -109,7 +109,11 @@ class MockTimelineController: TimelineControllerProtocol {
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async { }
         
-    func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async { }
+    func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async {
+        if let timelineProxy {
+            _ = await timelineProxy.toggleReaction(reaction, to: eventID)
+        }
+    }
     
     func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
               message: String,

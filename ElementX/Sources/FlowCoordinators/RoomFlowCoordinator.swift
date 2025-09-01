@@ -1005,24 +1005,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                     selectedEmoji: Set<String>,
                                     timelineController: TimelineControllerProtocol,
                                     animated: Bool) {
-        let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: flowParameters.emojiProvider,
-                                                            itemID: itemID, selectedEmojis: selectedEmoji)
+        let params = EmojiPickerScreenCoordinatorParameters(itemID: itemID,
+                                                            selectedEmojis: selectedEmoji,
+                                                            emojiProvider: flowParameters.emojiProvider,
+                                                            timelineController: timelineController)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             
             switch action {
-            case let .emojiSelected(emoji: emoji, itemID: itemID):
-                MXLog.debug("Selected \(emoji) for \(itemID)")
-                navigationStackCoordinator.setSheetCoordinator(nil)
-                Task {
-                    guard case let .event(_, eventOrTransactionID) = itemID else {
-                        fatalError()
-                    }
-                    
-                    await self.timelineController?.toggleReaction(emoji, to: eventOrTransactionID)
-                }
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             }
