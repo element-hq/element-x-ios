@@ -907,7 +907,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             default:
                 switch tab {
                 case .all:
-                    return $0.badges.isDotShown
+                    return $0.badges.isDotShown && !$0.badges.isMentionShown && !$0.badges.isMuteShown
                 case .highlighted:
                     return $0.badges.isMentionShown
                 case .muted:
