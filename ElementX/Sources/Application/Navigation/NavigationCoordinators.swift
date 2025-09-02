@@ -90,28 +90,6 @@ import SwiftUI
         fullScreenCoverModule?.coordinator
     }
     
-    fileprivate var overlayModule: NavigationModule? {
-        didSet {
-            if let oldValue {
-                logPresentationChange("Remove overlay", oldValue)
-                oldValue.tearDown()
-            }
-            
-            if let overlayModule {
-                logPresentationChange("Set overlay", overlayModule)
-                overlayModule.coordinator?.start()
-            }
-        }
-    }
-    
-    /// The currently displayed overlay coordinator
-    var overlayCoordinator: (any CoordinatorProtocol)? {
-        overlayModule?.coordinator
-    }
-    
-    enum OverlayPresentationMode { case fullScreen, minimized }
-    fileprivate var overlayPresentationMode: OverlayPresentationMode = .minimized
-    
     fileprivate var compactLayoutRootModule: NavigationModule? {
         if let sidebarNavigationStackCoordinator = sidebarModule?.coordinator as? NavigationStackCoordinator {
             if let sidebarRootModule = sidebarNavigationStackCoordinator.rootModule {
@@ -273,47 +251,6 @@ import SwiftUI
             fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
         }
     }
-    
-    /// Present an overlay on top of the split view
-    /// - Parameters:
-    ///   - coordinator: the coordinator to display
-    ///   - presentationMode: how the coordinator should be presented
-    ///   - animated: whether the transition should be animated
-    ///   - dismissalCallback: called when the overlay has been dismissed, programatically or otherwise
-    func setOverlayCoordinator(_ coordinator: (any CoordinatorProtocol)?,
-                               presentationMode: OverlayPresentationMode = .fullScreen,
-                               animated: Bool = true,
-                               dismissalCallback: (() -> Void)? = nil) {
-        guard let coordinator else {
-            overlayModule = nil
-            return
-        }
-        
-        if overlayModule?.coordinator === coordinator {
-            fatalError("Cannot use the same coordinator more than once")
-        }
-
-        var transaction = Transaction()
-        transaction.disablesAnimations = !animated
-
-        withTransaction(transaction) {
-            overlayPresentationMode = presentationMode
-            overlayModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
-        }
-    }
-    
-    /// Updates the presentation of the overlay coordinator.
-    /// - Parameters:
-    ///   - mode: The type of presentation to use.
-    ///   - animated: whether the transition should be animated
-    func setOverlayPresentationMode(_ mode: OverlayPresentationMode, animated: Bool = true) {
-        var transaction = Transaction()
-        transaction.disablesAnimations = !animated
-        
-        withTransaction(transaction) {
-            overlayPresentationMode = mode
-        }
-    }
         
     // MARK: - CoordinatorProtocol
     
@@ -414,18 +351,6 @@ private struct NavigationSplitCoordinatorView: View {
         .fullScreenCover(item: $navigationSplitCoordinator.fullScreenCoverModule) { module in
             module.coordinator?.toPresentable()
                 .id(module.id)
-        }
-        .accessibilityHidden(navigationSplitCoordinator.overlayModule?.coordinator != nil && navigationSplitCoordinator.overlayPresentationMode == .fullScreen)
-        .overlay {
-            Group {
-                if let coordinator = navigationSplitCoordinator.overlayModule?.coordinator {
-                    coordinator.toPresentable()
-                        .opacity(navigationSplitCoordinator.overlayPresentationMode == .minimized ? 0 : 1)
-                        .transition(.opacity)
-                }
-            }
-            .animation(.elementDefault, value: navigationSplitCoordinator.overlayPresentationMode)
-            .animation(.elementDefault, value: navigationSplitCoordinator.overlayModule)
         }
         .ignoresSafeArea() // Necessary when embedded in a TabView on iPadOS otherwise there's a gap at the top (as of 18.5).
     }

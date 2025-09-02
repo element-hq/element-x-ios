@@ -140,6 +140,8 @@ class NavigationStackCoordinatorTests: XCTestCase {
         assertCoordinatorsEqual(sheetCoordinator, navigationStackCoordinator.sheetCoordinator)
     }
     
+    // MARK: - Dismissal Callbacks
+    
     func testPopDismissalCallbacks() {
         let pushedCoordinator = SomeTestCoordinator()
         

@@ -19,7 +19,7 @@ struct RoomMemberDetailsScreenCoordinatorParameters {
 enum RoomMemberDetailsScreenCoordinatorAction {
     case openUserProfile
     case openDirectChat(roomID: String)
-    case startCall(roomID: String)
+    case startCall(roomProxy: JoinedRoomProxyProtocol)
     case verifyUser(userID: String)
 }
 
@@ -50,8 +50,8 @@ final class RoomMemberDetailsScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.openUserProfile)
             case .openDirectChat(let roomID):
                 actionsSubject.send(.openDirectChat(roomID: roomID))
-            case .startCall(let roomID):
-                actionsSubject.send(.startCall(roomID: roomID))
+            case .startCall(let roomProxy):
+                actionsSubject.send(.startCall(roomProxy: roomProxy))
             case .verifyUser(let userID):
                 actionsSubject.send(.verifyUser(userID: userID))
             }
