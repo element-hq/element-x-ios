@@ -15,5 +15,5 @@ enum SpaceServiceProxyError: Error {
 protocol SpaceServiceProxyProtocol {
     var joinedSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> { get }
     
-    func spaceRoomList(for spaceRoom: SpaceRoomProxyProtocol) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>
+    func spaceRoomList(for spaceRoomProxy: SpaceRoomProxyProtocol) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>
 }

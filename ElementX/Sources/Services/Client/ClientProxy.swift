@@ -205,9 +205,7 @@ class ClientProxy: ClientProxyProtocol {
         
         secureBackupController = SecureBackupController(encryption: client.encryption())
         
-        // Temporarily using the mock until the SDK is updated.
-        // spaceService = SpaceServiceProxy(spaceService: client.spaceService())
-        spaceService = SpaceServiceProxyMock(.init())
+        spaceService = SpaceServiceProxy(spaceService: client.spaceService())
         
         zeroApiProxy = ZeroApiProxy(client: client, appSettings: appSettings)
         

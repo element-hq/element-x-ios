@@ -29,9 +29,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Prozent der Stimmen insgesamt</string>
+			<string>%1$d Prozent aller Stimmen</string>
 			<key>other</key>
-			<string>%1$d Prozent der Gesamtstimmen</string>
+			<string>%1$d Prozent aller Stimmen</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -45,9 +45,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Gelesen von %1$@ und %2$d anderen</string>
+			<string>Gelesen von %1$@ und %2$d weiteren</string>
 			<key>other</key>
-			<string>Gelesen von %1$@ und %2$d anderen</string>
+			<string>Gelesen von %1$@ und %2$d weiteren</string>
 		</dict>
 	</dict>
 	<key>common_many_members</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Room</string>
+			<string>%1$d Chat</string>
 			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>%1$d Chats</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -237,9 +237,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%d Raum</string>
+			<string>%d Chat</string>
 			<key>other</key>
-			<string>%d Räume</string>
+			<string>%d Chats</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -253,9 +253,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Sie haben %1$d Entsperrversuch</string>
+			<string>Du hast %1$d Versuch, um zu entsperren</string>
 			<key>other</key>
-			<string>Sie haben %1$d Entsperrversuche</string>
+			<string>Du hast %1$d Versuche, um zu entsperren</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -269,9 +269,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Falsche PIN. Sie haben %1$d weiteren Versuch</string>
+			<string>Falsche PIN. Du hast %1$d weiteren Versuch</string>
 			<key>other</key>
-			<string>Falsche PIN. Sie haben %1$d weitere Versuche</string>
+			<string>Falsche PIN. Du hast %1$d weitere Versuche</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -317,9 +317,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@+ %2$d andere wollen diesem Chatroom beitreten</string>
+			<string>%1$@ +%2$d weiterer möchten diesem Chat beitreten</string>
 			<key>other</key>
-			<string>%1$@+ %2$d andere wollen diesem Chatroom beitreten</string>
+			<string>%1$@ +%2$d weitere möchten diesem Chat beitreten</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_a11y</key>
@@ -365,9 +365,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Raumänderung</string>
+			<string>%1$d Änderung im Chat</string>
 			<key>other</key>
-			<string>%1$d Raumänderungen</string>
+			<string>%1$d Änderungen im Chat</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>
@@ -413,9 +413,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Push-Anbieter gefunden: %2$@</string>
+			<string>%1$d Push-Dienst gefunden: %2$@</string>
 			<key>other</key>
-			<string>%1$d Push-Anbieter gefunden: %2$@</string>
+			<string>%1$d Push-Dienst gefunden: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>

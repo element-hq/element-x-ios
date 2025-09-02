@@ -13,12 +13,12 @@ extension SpaceRoomListProxyMock {
     class Configuration {
         var spaceRoomProxy: SpaceRoomProxyProtocol
         var initialSpaceRooms: [SpaceRoomProxyProtocol]
-        var paginationStateSubject: CurrentValueSubject<SpaceRoomListProxyPaginationState, Never>
+        var paginationStateSubject: CurrentValueSubject<SpaceRoomListPaginationState, Never>
         var paginationResponses: [[SpaceRoomProxyProtocol]]
         
         init(spaceRoomProxy: SpaceRoomProxyProtocol,
              initialSpaceRooms: [SpaceRoomProxyProtocol] = [],
-             paginationStateSubject: CurrentValueSubject<SpaceRoomListProxyPaginationState, Never> = .init(.idle(endReached: true)),
+             paginationStateSubject: CurrentValueSubject<SpaceRoomListPaginationState, Never> = .init(.idle(endReached: true)),
              paginationResponses: [[SpaceRoomProxyProtocol]] = []) {
             self.spaceRoomProxy = spaceRoomProxy
             self.initialSpaceRooms = initialSpaceRooms
@@ -32,7 +32,7 @@ extension SpaceRoomListProxyMock {
         
         let spaceRoomsSubject: CurrentValueSubject<[SpaceRoomProxyProtocol], Never> = .init(configuration.initialSpaceRooms)
         
-        spaceRoom = configuration.spaceRoomProxy
+        spaceRoomProxy = configuration.spaceRoomProxy
         spaceRoomsPublisher = spaceRoomsSubject.asCurrentValuePublisher()
         paginationStatePublisher = configuration.paginationStateSubject.asCurrentValuePublisher()
         

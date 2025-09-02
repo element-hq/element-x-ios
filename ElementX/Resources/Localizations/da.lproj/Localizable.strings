@@ -1,9 +1,11 @@
 "Notification" = "Meddelelse";
 "a11y_add_reaction" = "Tilføj reaktion: %1$@";
 "a11y_avatar" = "Avatar";
+"a11y_collapse_message_text_field" = "Minimér tekstfeltet for beskeder";
 "a11y_delete" = "Slet";
 "a11y_edit_avatar" = "Redigér avatar";
 "a11y_edit_room_address_hint" = "Den fulde adresse vil være %1$@";
+"a11y_expand_message_text_field" = "Udvid tekstfeltet for beskeder";
 "a11y_hide_password" = "Skjul adgangskode";
 "a11y_join_call" = "Deltag i opkald";
 "a11y_jump_to_bottom" = "Hop til bunden";
@@ -61,7 +63,7 @@
 "action_copy" = "Kopiér";
 "action_copy_caption" = "Kopiér billedtekst";
 "action_copy_link" = "Kopiér link";
-"action_copy_link_to_message" = "Kopier link til besked";
+"action_copy_link_to_message" = "Kopiér link til besked";
 "action_copy_text" = "Kopiér tekst";
 "action_create" = "Opret";
 "action_create_a_room" = "Opret et rum";
@@ -86,9 +88,9 @@
 "action_go_back" = "Gå tilbage";
 "action_ignore" = "Ignorér";
 "action_invite" = "Invitér";
-"action_invite_friends" = "Invitér folk";
-"action_invite_friends_to_app" = "Invitér folk til %1$@";
-"action_invite_people_to_app" = "Invitér folk til %1$@";
+"action_invite_friends" = "Invitér andre";
+"action_invite_friends_to_app" = "Invitér andre til %1$@";
+"action_invite_people_to_app" = "Invitér andre til %1$@";
 "action_invites_list" = "Invitationer";
 "action_join" = "Deltag";
 "action_learn_more" = "Få mere at vide";
@@ -233,7 +235,7 @@
 "common_optic_id_ios" = "Optisk ID";
 "common_or" = "eller";
 "common_password" = "Adgangskode";
-"common_people" = "Mennesker";
+"common_people" = "Brugere";
 "common_permalink" = "Permalink";
 "common_permission" = "Tilladelse";
 "common_pinned" = "Fastgjort";
@@ -455,7 +457,7 @@
 "screen_advanced_settings_element_call_base_url" = "Brugerdefineret URL til opkaldsbase for Element";
 "screen_advanced_settings_element_call_base_url_description" = "Angiv en brugerdefineret basis-URL til Element Call.";
 "screen_advanced_settings_element_call_base_url_validation_error" = "Ugyldig URL, sørg for at inkludere protokollen (http/https) og den korrekte adresse.";
-"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Skjul avatarer i ruminvitationsanmodninger";
+"screen_advanced_settings_hide_invite_avatars_toggle_title" = "Skjul avatarer i anmodninger om invitation til rum";
 "screen_advanced_settings_hide_timeline_media_toggle_title" = "Skjul forhåndsvisning af medier i tidslinjen";
 "screen_advanced_settings_moderation_and_safety_section_title" = "Moderation og sikkerhed";
 "screen_advanced_settings_optimise_image_upload_quality_description" = "Optimér automatisk billeder for hurtigere uploads og mindre filstørrelser.";
@@ -610,7 +612,7 @@
 "screen_security_and_privacy_encryption_section_footer" = "Når kryptering først er aktiveret, kan den ikke deaktiveres igen.";
 "screen_security_and_privacy_encryption_toggle_title" = "Aktivér end-to-end-kryptering";
 "screen_security_and_privacy_room_access_anyone_option_description" = "Alle kan finde og deltage";
-"screen_security_and_privacy_room_access_invite_only_option_description" = "Folk kan kun deltage, hvis de bliver inviteret";
+"screen_security_and_privacy_room_access_invite_only_option_description" = "Andre kan kun deltage, hvis de bliver inviteret";
 "screen_security_and_privacy_room_access_invite_only_option_title" = "Kun med invitation";
 "screen_security_and_privacy_room_access_section_header" = "Adgang til rummet";
 "screen_security_and_privacy_room_access_space_members_option_description" = "Klynger understøttes ikke i øjeblikket";
@@ -756,8 +758,8 @@
 "screen_deactivate_account_description" = "Deaktivering af din konto er %1$@, det vil:";
 "screen_deactivate_account_description_bold_part" = "irreversibel";
 "screen_deactivate_account_list_item_1" = "%1$@ din konto (du kan ikke logge ind igen, og dit ID kan ikke genbruges).";
-"screen_deactivate_account_list_item_1_bold_part" = "Deaktiver permanent";
-"screen_deactivate_account_list_item_2" = "Fjern dig fra alle samtalerum";
+"screen_deactivate_account_list_item_1_bold_part" = "Permanent deaktivere";
+"screen_deactivate_account_list_item_2" = "Fjerne dig fra alle samtaler";
 "screen_deactivate_account_list_item_3" = "Slette dine kontooplysninger fra vores identitetsserver.";
 "screen_deactivate_account_list_item_4" = "Dine beskeder vil stadig være synlige for registrerede brugere, men vil ikke være tilgængelige for nye eller uregistrerede brugere, hvis du vælger at slette dem.";
 "screen_edit_poll_delete_confirmation" = "Er du sikker på, at du ønsker at slette denne afstemning?";
@@ -855,7 +857,7 @@
 "screen_notification_settings_mode_all" = "Alle";
 "screen_notification_settings_mode_mentions" = "Omtaler";
 "screen_notification_settings_notification_section_title" = "Giv mig besked om";
-"screen_notification_settings_room_mention_label" = "Giv mig besked på @room";
+"screen_notification_settings_room_mention_label" = "Giv mig besked ved @room";
 "screen_notification_settings_system_notifications_action_required" = "For at modtage notifikationer, skal du ændre din %1$@ .";
 "screen_notification_settings_system_notifications_action_required_content_link" = "systemindstillinger";
 "screen_notification_settings_system_notifications_turned_off" = "Systemmeddelelser slået fra";
@@ -957,7 +959,7 @@
 "screen_room_attachment_source_poll" = "Afstemning";
 "screen_room_attachment_text_formatting" = "Tekstformatering";
 "screen_room_change_permissions_administrators" = "Kun admins";
-"screen_room_change_permissions_ban_people" = "Spær personer";
+"screen_room_change_permissions_ban_people" = "Spær brugere";
 "screen_room_change_permissions_delete_messages" = "Fjern beskeder";
 "screen_room_change_permissions_invite_people" = "Invitér personer og acceptér anmodninger om at deltage";
 "screen_room_change_permissions_moderators" = "Admins og moderatorer";
@@ -1319,7 +1321,7 @@
 "screen_chat_backup_recovery_action_setup" = "Opsæt gendannelse";
 "screen_create_account_title" = "Opret konto";
 "screen_create_poll_cancel_confirmation_content_ios" = "Dine ændringer vil ikke blive gemt";
-"screen_create_room_add_people_title" = "Invitér folk";
+"screen_create_room_add_people_title" = "Invitér andre";
 "screen_create_room_private_option_title" = "Privat rum";
 "screen_create_room_public_option_title" = "Offentligt rum";
 "screen_create_room_room_name_label" = "Navn på rum";
@@ -1351,7 +1353,7 @@
 "screen_room_change_role_section_users" = "Medlemmer";
 "screen_room_change_role_unsaved_changes_title" = "Gem ændringer?";
 "screen_room_details_badge_public" = "Offentligt rum";
-"screen_room_details_invite_people_title" = "Invitér folk";
+"screen_room_details_invite_people_title" = "Invitér andre";
 "screen_room_details_leave_conversation_title" = "Forlad samtalen";
 "screen_room_details_leave_room_title" = "Forlad rum";
 "screen_room_details_media_gallery_title" = "Medier og filer";
@@ -1366,7 +1368,7 @@
 "screen_room_notification_settings_mode_mentions_and_keywords" = "Kun omtaler og nøgleord";
 "screen_room_timeline_reactions_show_less" = "Vis mindre";
 "screen_roomlist_filter_invites" = "Invitationer";
-"screen_roomlist_filter_people" = "Mennesker";
+"screen_roomlist_filter_people" = "Brugere";
 "screen_server_confirmation_change_server" = "Skift kontoudbyder";
 "screen_session_verification_request_failure_subtitle" = "Enten udløb anmodningen, den blev afvist, eller der var en fejl i verifikationen.";
 "screen_session_verification_request_failure_title" = "Verifikation mislykkedes";

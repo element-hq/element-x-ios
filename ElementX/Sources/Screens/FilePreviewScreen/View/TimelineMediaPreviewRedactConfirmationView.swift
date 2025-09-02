@@ -71,6 +71,7 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
                         .aspectRatio(contentMode: .fill)
                     }
                     .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .accessibilityHidden(true)
             }
                 
             VStack(alignment: .leading, spacing: 4) {

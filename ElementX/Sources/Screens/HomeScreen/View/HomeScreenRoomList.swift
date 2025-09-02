@@ -24,7 +24,7 @@ struct HomeScreenRoomList: View {
         ForEach(context.viewState.visibleRooms.filter { !$0.name.starts(with: ZeroContants.ZERO_CHANNEL_PREFIX) }) { room in
             switch room.type {
             case .placeholder:
-                HomeScreenRoomCell(room: room, context: context, isSelected: false)
+                HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
                     .redacted(reason: .placeholder)
             case .invite:
                 HomeScreenInviteCell(room: room, context: context, hideInviteAvatars: context.viewState.hideInviteAvatars)
@@ -34,8 +34,9 @@ struct HomeScreenRoomList: View {
                 let isSelected = context.viewState.selectedRoomID == room.id
                 
                 HomeScreenRoomCell(room: room,
-                                   context: context,
                                    isSelected: isSelected,
+                                   mediaProvider: context.mediaProvider,
+                                   action: context.send,
                                    showProBadge: context.viewState.directRoomsUserStatusMap[room.id] == true)
                     .contextMenu {
                         if room.badges.isDotShown {

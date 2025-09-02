@@ -135,9 +135,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Room</string>
+			<string>%1$d místnost</string>
+			<key>few</key>
+			<string>%1$d místnosti</string>
 			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>%1$d místností</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -151,9 +153,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Space</string>
+			<string>%1$d prostor</string>
+			<key>few</key>
+			<string>%1$d prostory</string>
 			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>%1$d prostorů</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>

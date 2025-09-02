@@ -16,6 +16,8 @@ internal enum L10n {
   }
   /// Avatar
   internal static var a11yAvatar: String { return L10n.tr("Localizable", "a11y_avatar") }
+  /// Minimise message text field
+  internal static var a11yCollapseMessageTextField: String { return L10n.tr("Localizable", "a11y_collapse_message_text_field") }
   /// Delete
   internal static var a11yDelete: String { return L10n.tr("Localizable", "a11y_delete") }
   /// Plural format key: "%#@COUNT@"
@@ -28,6 +30,8 @@ internal enum L10n {
   internal static func a11yEditRoomAddressHint(_ p1: Any) -> String {
     return L10n.tr("Localizable", "a11y_edit_room_address_hint", String(describing: p1))
   }
+  /// Expand message text field
+  internal static var a11yExpandMessageTextField: String { return L10n.tr("Localizable", "a11y_expand_message_text_field") }
   /// Hide password
   internal static var a11yHidePassword: String { return L10n.tr("Localizable", "a11y_hide_password") }
   /// Join call

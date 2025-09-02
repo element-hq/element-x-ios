@@ -45,7 +45,7 @@ struct HomeScreenContent: View {
                 case .skeletons:
                     LazyVStack(spacing: 0) {
                         ForEach(context.viewState.visibleRooms) { room in
-                            HomeScreenRoomCell(room: room, context: context, isSelected: false)
+                            HomeScreenRoomCell(room: room, isSelected: false, mediaProvider: context.mediaProvider, action: context.send)
                                 .redacted(reason: .placeholder)
                                 .shimmer() // Putting this directly on the LazyVStack creates an accordion animation on iOS 16.
                         }

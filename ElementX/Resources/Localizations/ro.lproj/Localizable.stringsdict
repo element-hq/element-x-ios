@@ -31,9 +31,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d percent of total votes</string>
+			<string>%1$d la suta din totalul voturilor</string>
+			<key>few</key>
+			<string>%1$d la suta din totalul voturilor</string>
 			<key>other</key>
-			<string>%1$d percents of total votes</string>
+			<string>%1$d la suta din totalul voturilor</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -83,11 +85,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d membru</string>
+			<string>%1$d Membru</string>
 			<key>few</key>
-			<string>%1$d membri</string>
+			<string>%1$d Membri</string>
 			<key>other</key>
-			<string>%1$d membri</string>
+			<string>%1$d Membri</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -119,9 +121,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d reply</string>
+			<string>%1$d răspuns</string>
+			<key>few</key>
+			<string>%1$d răspunsuri</string>
 			<key>other</key>
-			<string>%1$d replies</string>
+			<string>%1$d răspunsuri</string>
 		</dict>
 	</dict>
 	<key>common_rooms</key>
@@ -135,9 +139,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Room</string>
+			<string>%1$d Camera</string>
+			<key>few</key>
+			<string>%1$d Camere</string>
 			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>%1$d Camere</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -151,9 +157,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Space</string>
+			<string>%1$d Spațiu</string>
+			<key>few</key>
+			<string>%1$d Spații</string>
 			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>%1$d Spații</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -333,9 +341,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ +%2$d other want to join this room</string>
+			<string>%1$@ +%2$d utilizator doresc să se alăture acestei camere</string>
+			<key>few</key>
+			<string>%1$@ +%2$d utilizatori doresc să se alăture acestei camere</string>
 			<key>other</key>
-			<string>%1$@ +%2$d others want to join this room</string>
+			<string>%1$@ +%2$d utilizatori doresc să se alăture acestei camere</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_a11y</key>
@@ -349,9 +359,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d member reacted with %2$@</string>
+			<string>%1$d membru a reacționat cu %2$@</string>
+			<key>few</key>
+			<string>%1$d membri au reacționat cu %2$@</string>
 			<key>other</key>
-			<string>%1$d members reacted with %2$@</string>
+			<string>%1$d membri au reacționat cu %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_including_you_a11y</key>
@@ -365,9 +377,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You and %1$d member reacted with %2$@</string>
+			<string>Dumneavoastră si %1$d membru ați reacționat cu %2$@</string>
+			<key>few</key>
+			<string>Dumneavoastră si %1$d membri ați reacționat cu %2$@</string>
 			<key>other</key>
-			<string>You and %1$d members reacted with %2$@</string>
+			<string>Dumneavoastră si %1$d membri ați reacționat cu %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>

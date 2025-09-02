@@ -67,17 +67,10 @@ struct ShimmerModifier: ViewModifier {
 }
 
 struct ShimmerOverlay_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = HomeScreenViewModel(userSession: UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "")))),
-                                               selectedRoomPublisher: CurrentValueSubject<String?, Never>(nil).asCurrentValuePublisher(),
-                                               appSettings: ServiceLocator.shared.settings,
-                                               analyticsService: ServiceLocator.shared.analytics,
-                                               notificationManager: NotificationManagerMock(),
-                                               userIndicatorController: ServiceLocator.shared.userIndicatorController)
-    
     static var previews: some View {
         VStack(spacing: 0) {
             ForEach(0...8, id: \.self) { _ in
-                HomeScreenRoomCell(room: .placeholder(), context: viewModel.context, isSelected: false)
+                HomeScreenRoomCell(room: .placeholder(), isSelected: false, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
             }
         }
         .redacted(reason: .placeholder)

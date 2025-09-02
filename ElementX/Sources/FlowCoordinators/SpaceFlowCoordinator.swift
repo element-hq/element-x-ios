@@ -104,7 +104,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRouteMapping { event, fromState, userInfo in
             guard event == .startChildFlow, case .space = fromState else { return nil }
             guard let spaceRoomListProxy = userInfo as? SpaceRoomListProxyProtocol else { fatalError("A space proxy must be provided.") }
-            return .presentingChild(childSpaceID: spaceRoomListProxy.spaceRoom.id, previousState: fromState)
+            return .presentingChild(childSpaceID: spaceRoomListProxy.spaceRoomProxy.id, previousState: fromState)
         } handler: { [weak self] context in
             guard let self, let spaceRoomListProxy = context.userInfo as? SpaceRoomListProxyProtocol else { return }
             startChildFlow(for: spaceRoomListProxy)
