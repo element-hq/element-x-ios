@@ -571,7 +571,10 @@ class MockScreen: Identifiable {
             appSettings.analyticsConsentState = .optedOut
             appSettings.spacesEnabled = true
             
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com", deviceID: "MOCKCLIENT", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com",
+                                                    deviceID: "MOCKCLIENT",
+                                                    roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                    joinedSpaceRooms: .mockSingleRoom))
             
             // The tab bar remains hidden for the non-spaces tests as we don't supply any mock spaces.
             let spaceServiceProxy = SpaceServiceProxyMock(id == .userSessionSpacesFlow ? .populated : .init())

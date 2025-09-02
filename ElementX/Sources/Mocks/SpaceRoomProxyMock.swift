@@ -104,7 +104,8 @@ extension [SpaceRoomProxyProtocol] {
                                   name: "Management",
                                   isSpace: false,
                                   joinedMembersCount: 12,
-                                  topic: "This is where everything gets organised 📋."))]
+                                  topic: "This is where everything gets organised 📋.",
+                                  state: .joined))]
     }
     
     private static func makeSpaceRooms(isSpace: Bool) -> [SpaceRoomProxyMock] {
