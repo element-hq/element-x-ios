@@ -47,9 +47,9 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         
         roomProxy.identityStatusChangesPublisher
             .receive(on: DispatchQueue.main)
-            .sink { changes in
+            .sink { [weak self] changes in
                 if changes.map(\.userId).contains(userID) {
-                    Task { await self.loadMember() }
+                    Task { await self?.loadMember() }
                 }
             }
             .store(in: &cancellables)
