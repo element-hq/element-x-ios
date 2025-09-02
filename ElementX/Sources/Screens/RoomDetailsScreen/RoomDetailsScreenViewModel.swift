@@ -223,8 +223,8 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .store(in: &cancellables)
         
         roomProxy.membersPublisher.combineLatest(roomProxy.identityStatusChangesPublisher)
-            .sink { _ in
-                Task { await self.updateMemberIdentityVerificationStates() }
+            .sink { [weak self] _ in
+                Task { await self?.updateMemberIdentityVerificationStates() }
             }
             .store(in: &cancellables)
     }
