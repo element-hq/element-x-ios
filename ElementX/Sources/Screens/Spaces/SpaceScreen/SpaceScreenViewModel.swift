@@ -61,8 +61,10 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         case .spaceAction(.select(let spaceRoomProxy)):
             if spaceRoomProxy.isSpace {
                 Task { await selectSpace(spaceRoomProxy) }
-            } else {
-                #warning("Implement room flow")
+            } else if spaceRoomProxy.state == .joined {
+                // This probably doesn't need the state condition as the room flow will show a join screen,
+                // but we can allow this later, once we've updated the design to indicate the parent space.
+                actionsSubject.send(.selectRoom(roomID: spaceRoomProxy.id))
             }
         case .spaceAction(.join(let spaceID)):
             #warning("Implement joining.")

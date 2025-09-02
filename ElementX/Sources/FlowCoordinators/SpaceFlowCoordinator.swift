@@ -9,7 +9,9 @@ import Combine
 import Foundation
 import SwiftState
 
-enum SpaceFlowCoordinatorAction: Equatable {
+enum SpaceFlowCoordinatorAction {
+    case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
+    case verifyUser(userID: String)
     case finished
 }
 
@@ -20,17 +22,20 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     
     private let navigationStackCoordinator: NavigationStackCoordinator
     
-    private var childSpaceFlowCoordinator: SpaceFlowCoordinator?
-    
     private let flowParameters: CommonFlowParameters
+    
+    private var childSpaceFlowCoordinator: SpaceFlowCoordinator?
+    private var roomFlowCoordinator: RoomFlowCoordinator?
     
     indirect enum State: StateType {
         /// The state machine hasn't started.
         case initial
         /// The root screen for this flow.
         case space
-        /// A child flow is in progress.
+        /// A child (space) flow is in progress.
         case presentingChild(childSpaceID: String, previousState: State)
+        /// A room flow is in progress
+        case roomFlow(previousState: State)
     }
     
     enum Event: EventType {
@@ -43,6 +48,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case startChildFlow
         /// Tidy-up the child flow after it has dismissed itself.
         case stopChildFlow
+        
+        case startRoomFlow(roomID: String)
+        case stopRoomFlow
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -91,6 +99,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case .presentingChild:
             childSpaceFlowCoordinator?.clearRoute(animated: animated)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
+        case .roomFlow:
+            roomFlowCoordinator?.clearRoute(animated: animated)
+            clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
         }
     }
     
@@ -118,6 +129,22 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             childSpaceFlowCoordinator = nil
         }
         
+        stateMachine.addRouteMapping { event, fromState, _ in
+            guard case .startRoomFlow = event, case .space = fromState else { return nil }
+            return .roomFlow(previousState: fromState)
+        } handler: { [weak self] context in
+            guard let self, case let .startRoomFlow(roomID) = context.event else { return }
+            startRoomFlow(roomID: roomID)
+        }
+        
+        stateMachine.addRouteMapping { event, fromState, _ in
+            guard event == .stopRoomFlow, case let .roomFlow(previousState) = fromState else { return nil }
+            return previousState
+        } handler: { [weak self] _ in
+            guard let self else { return }
+            roomFlowCoordinator = nil
+        }
+        
         stateMachine.addErrorHandler { context in
             fatalError("Unexpected transition: \(context)")
         }
@@ -135,6 +162,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                 switch action {
                 case .selectSpace(let spaceRoomListProxy):
                     stateMachine.tryEvent(.startChildFlow, userInfo: spaceRoomListProxy)
+                case .selectRoom(let roomID):
+                    stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
                 }
             }
             .store(in: &cancellables)
@@ -164,6 +193,10 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
+                case .presentCallScreen(let roomProxy):
+                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+                case .verifyUser(let userID):
+                    actionsSubject.send(.verifyUser(userID: userID))
                 case .finished:
                     stateMachine.tryEvent(.stopChildFlow)
                 }
@@ -172,5 +205,29 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         
         childSpaceFlowCoordinator = coordinator
         coordinator.start()
+    }
+    
+    private func startRoomFlow(roomID: String) {
+        let coordinator = RoomFlowCoordinator(roomID: roomID,
+                                              isChildFlow: true,
+                                              navigationStackCoordinator: navigationStackCoordinator,
+                                              flowParameters: flowParameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .presentCallScreen(let roomProxy):
+                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+                case .verifyUser(let userID):
+                    actionsSubject.send(.verifyUser(userID: userID))
+                case .finished:
+                    stateMachine.tryEvent(.stopRoomFlow)
+                }
+            }
+            .store(in: &cancellables)
+        
+        roomFlowCoordinator = coordinator
+        coordinator.handleAppRoute(.room(roomID: roomID, via: []), animated: true)
     }
 }

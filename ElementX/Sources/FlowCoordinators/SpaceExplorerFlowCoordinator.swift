@@ -9,8 +9,10 @@ import Combine
 import Foundation
 import SwiftState
 
-enum SpaceExplorerFlowCoordinatorAction: Equatable {
+enum SpaceExplorerFlowCoordinatorAction {
     case showSettings
+    case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
+    case verifyUser(userID: String)
 }
 
 class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
@@ -143,6 +145,10 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
+                case .presentCallScreen(let roomProxy):
+                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+                case .verifyUser(let userID):
+                    actionsSubject.send(.verifyUser(userID: userID))
                 case .finished:
                     stateMachine.tryEvent(.deselectSpace)
                 }
