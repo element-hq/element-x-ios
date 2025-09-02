@@ -91,7 +91,7 @@ class UserSessionScreenTests: XCTestCase {
         try await app.assertScreenshot(step: Step.subspaceScreen)
         
         app.buttons[A11yIdentifiers.spaceListScreen.spaceRoomName(firstSubspaceRoomName)].tap()
-        XCTAssert(app.staticTexts[firstSubspaceName].waitForExistence(timeout: 5.0))
+        XCTAssert(app.staticTexts[firstSubspaceRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.subspaceRoomScreen)
     }

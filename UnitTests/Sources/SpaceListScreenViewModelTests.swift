@@ -76,7 +76,7 @@ class SpaceListScreenViewModelTests: XCTestCase {
         clientProxy.spaceService = spaceServiceProxy
         
         viewModel = SpaceListScreenViewModel(userSession: userSession,
-                                             selectedSpaceSubject: .init(nil),
+                                             selectedSpacePublisher: .init(nil),
                                              userIndicatorController: UserIndicatorControllerMock())
     }
 }

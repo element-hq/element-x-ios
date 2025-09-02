@@ -24,6 +24,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     
     private let flowParameters: CommonFlowParameters
     
+    private let selectedSpaceRoomSubject: CurrentValueSubject<String?, Never> = .init(nil)
+    
     private var childSpaceFlowCoordinator: SpaceFlowCoordinator?
     private var roomFlowCoordinator: RoomFlowCoordinator?
     
@@ -127,6 +129,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         } handler: { [weak self] _ in
             guard let self else { return }
             childSpaceFlowCoordinator = nil
+            selectedSpaceRoomSubject.send(nil)
         }
         
         stateMachine.addRouteMapping { event, fromState, _ in
@@ -143,6 +146,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         } handler: { [weak self] _ in
             guard let self else { return }
             roomFlowCoordinator = nil
+            selectedSpaceRoomSubject.send(nil)
         }
         
         stateMachine.addErrorHandler { context in
@@ -153,6 +157,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     private func presentSpace() {
         let parameters = SpaceScreenCoordinatorParameters(spaceRoomListProxy: spaceRoomListProxy,
                                                           spaceServiceProxy: spaceServiceProxy,
+                                                          selectedSpaceRoomPublisher: selectedSpaceRoomSubject.asCurrentValuePublisher(),
                                                           mediaProvider: flowParameters.userSession.mediaProvider,
                                                           userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = SpaceScreenCoordinator(parameters: parameters)
@@ -205,6 +210,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         
         childSpaceFlowCoordinator = coordinator
         coordinator.start()
+        selectedSpaceRoomSubject.send(spaceRoomListProxy.spaceRoomProxy.id)
     }
     
     private func startRoomFlow(roomID: String) {
@@ -229,5 +235,6 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         
         roomFlowCoordinator = coordinator
         coordinator.handleAppRoute(.room(roomID: roomID, via: []), animated: true)
+        selectedSpaceRoomSubject.send(roomID)
     }
 }

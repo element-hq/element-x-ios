@@ -13,6 +13,7 @@ import SwiftUI
 struct SpaceScreenCoordinatorParameters {
     let spaceRoomListProxy: SpaceRoomListProxyProtocol
     let spaceServiceProxy: SpaceServiceProxyProtocol
+    let selectedSpaceRoomPublisher: CurrentValuePublisher<String?, Never>
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
@@ -38,6 +39,7 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
         
         viewModel = SpaceScreenViewModel(spaceRoomListProxy: parameters.spaceRoomListProxy,
                                          spaceServiceProxy: parameters.spaceServiceProxy,
+                                         selectedSpaceRoomPublisher: parameters.selectedSpaceRoomPublisher,
                                          mediaProvider: parameters.mediaProvider,
                                          userIndicatorController: parameters.userIndicatorController)
     }

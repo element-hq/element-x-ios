@@ -115,7 +115,7 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentSpaceList() {
         let parameters = SpaceListScreenCoordinatorParameters(userSession: userSession,
-                                                              selectedSpaceSubject: selectedSpaceSubject.asCurrentValuePublisher(),
+                                                              selectedSpacePublisher: selectedSpaceSubject.asCurrentValuePublisher(),
                                                               userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = SpaceListScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher

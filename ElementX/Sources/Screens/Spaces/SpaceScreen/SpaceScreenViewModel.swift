@@ -21,13 +21,15 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
 
     init(spaceRoomListProxy: SpaceRoomListProxyProtocol,
          spaceServiceProxy: SpaceServiceProxyProtocol,
+         selectedSpaceRoomPublisher: CurrentValuePublisher<String?, Never>,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.spaceServiceProxy = spaceServiceProxy
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: SpaceScreenViewState(space: spaceRoomListProxy.spaceRoomProxy,
-                                                          rooms: spaceRoomListProxy.spaceRoomsPublisher.value),
+                                                          rooms: spaceRoomListProxy.spaceRoomsPublisher.value,
+                                                          selectedSpaceRoomID: selectedSpaceRoomPublisher.value),
                    mediaProvider: mediaProvider)
         
         spaceRoomListProxy.spaceRoomsPublisher
@@ -49,6 +51,10 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                     self?.state.isPaginating = true
                 }
             }
+            .store(in: &cancellables)
+        
+        selectedSpaceRoomPublisher
+            .weakAssign(to: \.state.selectedSpaceRoomID, on: self)
             .store(in: &cancellables)
     }
     
