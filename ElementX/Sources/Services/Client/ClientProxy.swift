@@ -1403,7 +1403,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func getWalletTokenBalances(walletAddress: String, chainId: Int, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError> {
+    func getWalletTokenBalances(walletAddress: String, chainId: UInt64, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.walletsApi.getTokenBalances(walletAddress: walletAddress,
                                                                             chainId: chainId,
@@ -1420,7 +1420,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func getWalletNFTs(walletAddress: String, chainId: Int, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError> {
+    func getWalletNFTs(walletAddress: String, chainId: UInt64, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.walletsApi.getNFTs(walletAddress: walletAddress,
                                                                    chainId: chainId,
@@ -1437,7 +1437,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func getWalletTransactions(walletAddress: String, chainId: Int, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError> {
+    func getWalletTransactions(walletAddress: String, chainId: UInt64, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.walletsApi.getTransactions(walletAddress: walletAddress,
                                                                            chainId: chainId,
@@ -1454,7 +1454,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: Int) async -> Result<ZWalletTransactionResponse, ClientProxyError> {
+    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTransactionResponse, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.walletsApi.transferToken(senderWalletAddress: senderWalletAddress,
                                                                          recipientWalletAddress: recipientWalletAddress,
@@ -1488,7 +1488,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func getTransactionReceipt(transactionHash: String, chainId: Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+    func getTransactionReceipt(transactionHash: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.walletsApi.getTransactionReceipt(transactionHash: transactionHash, chainId: chainId)
             switch result {
@@ -1655,7 +1655,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+    func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
         do {
             // 1. Send approval request
             let approveResult = try await zeroApiProxy.walletsApi.approveERC20(
@@ -1700,7 +1700,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func unstakeAmount(walletAddress: String, poolAddress: String, amount: String, chainId: Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+    func unstakeAmount(walletAddress: String, poolAddress: String, amount: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.stakingApi.unstakeAmount(userWalletAddress: walletAddress,
                                                                          poolAddress: poolAddress,
@@ -1724,7 +1724,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func claimStakeRewards(walletAddress: String, poolAddress: String, chainId: Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+    func claimStakeRewards(walletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
         do {
             let result = try await zeroApiProxy.stakingApi.claimStakeRewards(userWalletAddress: walletAddress,
                                                                              poolAddress: poolAddress)

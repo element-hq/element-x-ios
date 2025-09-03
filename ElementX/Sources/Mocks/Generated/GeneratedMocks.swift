@@ -7236,8 +7236,8 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var getWalletTokenBalancesWalletAddressChainIdNextPageCalled: Bool {
         return getWalletTokenBalancesWalletAddressChainIdNextPageCallsCount > 0
     }
-    var getWalletTokenBalancesWalletAddressChainIdNextPageReceivedArguments: (walletAddress: String, chainId: Int, nextPage: NextPageParams?)?
-    var getWalletTokenBalancesWalletAddressChainIdNextPageReceivedInvocations: [(walletAddress: String, chainId: Int, nextPage: NextPageParams?)] = []
+    var getWalletTokenBalancesWalletAddressChainIdNextPageReceivedArguments: (walletAddress: String, chainId: UInt64, nextPage: NextPageParams?)?
+    var getWalletTokenBalancesWalletAddressChainIdNextPageReceivedInvocations: [(walletAddress: String, chainId: UInt64, nextPage: NextPageParams?)] = []
 
     var getWalletTokenBalancesWalletAddressChainIdNextPageUnderlyingReturnValue: Result<ZWalletTokenBalances, ClientProxyError>!
     var getWalletTokenBalancesWalletAddressChainIdNextPageReturnValue: Result<ZWalletTokenBalances, ClientProxyError>! {
@@ -7263,9 +7263,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var getWalletTokenBalancesWalletAddressChainIdNextPageClosure: ((String, Int, NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError>)?
+    var getWalletTokenBalancesWalletAddressChainIdNextPageClosure: ((String, UInt64, NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError>)?
 
-    func getWalletTokenBalances(walletAddress: String, chainId: Int, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError> {
+    func getWalletTokenBalances(walletAddress: String, chainId: UInt64, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError> {
         getWalletTokenBalancesWalletAddressChainIdNextPageCallsCount += 1
         getWalletTokenBalancesWalletAddressChainIdNextPageReceivedArguments = (walletAddress: walletAddress, chainId: chainId, nextPage: nextPage)
         DispatchQueue.main.async {
@@ -7306,8 +7306,8 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var getWalletNFTsWalletAddressChainIdNextPageCalled: Bool {
         return getWalletNFTsWalletAddressChainIdNextPageCallsCount > 0
     }
-    var getWalletNFTsWalletAddressChainIdNextPageReceivedArguments: (walletAddress: String, chainId: Int, nextPage: NextPageParams?)?
-    var getWalletNFTsWalletAddressChainIdNextPageReceivedInvocations: [(walletAddress: String, chainId: Int, nextPage: NextPageParams?)] = []
+    var getWalletNFTsWalletAddressChainIdNextPageReceivedArguments: (walletAddress: String, chainId: UInt64, nextPage: NextPageParams?)?
+    var getWalletNFTsWalletAddressChainIdNextPageReceivedInvocations: [(walletAddress: String, chainId: UInt64, nextPage: NextPageParams?)] = []
 
     var getWalletNFTsWalletAddressChainIdNextPageUnderlyingReturnValue: Result<ZWalletNFTs, ClientProxyError>!
     var getWalletNFTsWalletAddressChainIdNextPageReturnValue: Result<ZWalletNFTs, ClientProxyError>! {
@@ -7333,9 +7333,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var getWalletNFTsWalletAddressChainIdNextPageClosure: ((String, Int, NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError>)?
+    var getWalletNFTsWalletAddressChainIdNextPageClosure: ((String, UInt64, NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError>)?
 
-    func getWalletNFTs(walletAddress: String, chainId: Int, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError> {
+    func getWalletNFTs(walletAddress: String, chainId: UInt64, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError> {
         getWalletNFTsWalletAddressChainIdNextPageCallsCount += 1
         getWalletNFTsWalletAddressChainIdNextPageReceivedArguments = (walletAddress: walletAddress, chainId: chainId, nextPage: nextPage)
         DispatchQueue.main.async {
@@ -7376,8 +7376,8 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var getWalletTransactionsWalletAddressChainIdNextPageCalled: Bool {
         return getWalletTransactionsWalletAddressChainIdNextPageCallsCount > 0
     }
-    var getWalletTransactionsWalletAddressChainIdNextPageReceivedArguments: (walletAddress: String, chainId: Int, nextPage: TransactionNextPageParams?)?
-    var getWalletTransactionsWalletAddressChainIdNextPageReceivedInvocations: [(walletAddress: String, chainId: Int, nextPage: TransactionNextPageParams?)] = []
+    var getWalletTransactionsWalletAddressChainIdNextPageReceivedArguments: (walletAddress: String, chainId: UInt64, nextPage: TransactionNextPageParams?)?
+    var getWalletTransactionsWalletAddressChainIdNextPageReceivedInvocations: [(walletAddress: String, chainId: UInt64, nextPage: TransactionNextPageParams?)] = []
 
     var getWalletTransactionsWalletAddressChainIdNextPageUnderlyingReturnValue: Result<ZWalletTransactions, ClientProxyError>!
     var getWalletTransactionsWalletAddressChainIdNextPageReturnValue: Result<ZWalletTransactions, ClientProxyError>! {
@@ -7403,9 +7403,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var getWalletTransactionsWalletAddressChainIdNextPageClosure: ((String, Int, TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError>)?
+    var getWalletTransactionsWalletAddressChainIdNextPageClosure: ((String, UInt64, TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError>)?
 
-    func getWalletTransactions(walletAddress: String, chainId: Int, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError> {
+    func getWalletTransactions(walletAddress: String, chainId: UInt64, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError> {
         getWalletTransactionsWalletAddressChainIdNextPageCallsCount += 1
         getWalletTransactionsWalletAddressChainIdNextPageReceivedArguments = (walletAddress: walletAddress, chainId: chainId, nextPage: nextPage)
         DispatchQueue.main.async {
@@ -7446,8 +7446,8 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdCalled: Bool {
         return transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdCallsCount > 0
     }
-    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedArguments: (senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: Int)?
-    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedInvocations: [(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: Int)] = []
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedArguments: (senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64)?
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedInvocations: [(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64)] = []
 
     var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdUnderlyingReturnValue: Result<ZWalletTransactionResponse, ClientProxyError>!
     var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReturnValue: Result<ZWalletTransactionResponse, ClientProxyError>! {
@@ -7473,9 +7473,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdClosure: ((String, String, String, String, Int) async -> Result<ZWalletTransactionResponse, ClientProxyError>)?
+    var transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdClosure: ((String, String, String, String, UInt64) async -> Result<ZWalletTransactionResponse, ClientProxyError>)?
 
-    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: Int) async -> Result<ZWalletTransactionResponse, ClientProxyError> {
+    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64) async -> Result<ZWalletTransactionResponse, ClientProxyError> {
         transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdCallsCount += 1
         transferTokenSenderWalletAddressRecipientWalletAddressAmountTokenAddressChainIdReceivedArguments = (senderWalletAddress: senderWalletAddress, recipientWalletAddress: recipientWalletAddress, amount: amount, tokenAddress: tokenAddress, chainId: chainId)
         DispatchQueue.main.async {
@@ -7586,8 +7586,8 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var getTransactionReceiptTransactionHashChainIdCalled: Bool {
         return getTransactionReceiptTransactionHashChainIdCallsCount > 0
     }
-    var getTransactionReceiptTransactionHashChainIdReceivedArguments: (transactionHash: String, chainId: Int)?
-    var getTransactionReceiptTransactionHashChainIdReceivedInvocations: [(transactionHash: String, chainId: Int)] = []
+    var getTransactionReceiptTransactionHashChainIdReceivedArguments: (transactionHash: String, chainId: UInt64)?
+    var getTransactionReceiptTransactionHashChainIdReceivedInvocations: [(transactionHash: String, chainId: UInt64)] = []
 
     var getTransactionReceiptTransactionHashChainIdUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>!
     var getTransactionReceiptTransactionHashChainIdReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>! {
@@ -7613,9 +7613,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var getTransactionReceiptTransactionHashChainIdClosure: ((String, Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
+    var getTransactionReceiptTransactionHashChainIdClosure: ((String, UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
 
-    func getTransactionReceipt(transactionHash: String, chainId: Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+    func getTransactionReceipt(transactionHash: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
         getTransactionReceiptTransactionHashChainIdCallsCount += 1
         getTransactionReceiptTransactionHashChainIdReceivedArguments = (transactionHash: transactionHash, chainId: chainId)
         DispatchQueue.main.async {
@@ -8356,8 +8356,8 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdCalled: Bool {
         return stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdCallsCount > 0
     }
-    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedArguments: (walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: Int)?
-    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedInvocations: [(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: Int)] = []
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedArguments: (walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64)?
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedInvocations: [(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64)] = []
 
     var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>!
     var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>! {
@@ -8383,9 +8383,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdClosure: ((String, String, String, String, Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
+    var stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdClosure: ((String, String, String, String, UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
 
-    func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+    func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
         stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdCallsCount += 1
         stakeAmountWalletAddressPoolAddressTokenAddressAmountChainIdReceivedArguments = (walletAddress: walletAddress, poolAddress: poolAddress, tokenAddress: tokenAddress, amount: amount, chainId: chainId)
         DispatchQueue.main.async {
@@ -8426,8 +8426,8 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var unstakeAmountWalletAddressPoolAddressAmountChainIdCalled: Bool {
         return unstakeAmountWalletAddressPoolAddressAmountChainIdCallsCount > 0
     }
-    var unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedArguments: (walletAddress: String, poolAddress: String, amount: String, chainId: Int)?
-    var unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedInvocations: [(walletAddress: String, poolAddress: String, amount: String, chainId: Int)] = []
+    var unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedArguments: (walletAddress: String, poolAddress: String, amount: String, chainId: UInt64)?
+    var unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedInvocations: [(walletAddress: String, poolAddress: String, amount: String, chainId: UInt64)] = []
 
     var unstakeAmountWalletAddressPoolAddressAmountChainIdUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>!
     var unstakeAmountWalletAddressPoolAddressAmountChainIdReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>! {
@@ -8453,9 +8453,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var unstakeAmountWalletAddressPoolAddressAmountChainIdClosure: ((String, String, String, Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
+    var unstakeAmountWalletAddressPoolAddressAmountChainIdClosure: ((String, String, String, UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
 
-    func unstakeAmount(walletAddress: String, poolAddress: String, amount: String, chainId: Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+    func unstakeAmount(walletAddress: String, poolAddress: String, amount: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
         unstakeAmountWalletAddressPoolAddressAmountChainIdCallsCount += 1
         unstakeAmountWalletAddressPoolAddressAmountChainIdReceivedArguments = (walletAddress: walletAddress, poolAddress: poolAddress, amount: amount, chainId: chainId)
         DispatchQueue.main.async {
@@ -8496,8 +8496,8 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     var claimStakeRewardsWalletAddressPoolAddressChainIdCalled: Bool {
         return claimStakeRewardsWalletAddressPoolAddressChainIdCallsCount > 0
     }
-    var claimStakeRewardsWalletAddressPoolAddressChainIdReceivedArguments: (walletAddress: String, poolAddress: String, chainId: Int)?
-    var claimStakeRewardsWalletAddressPoolAddressChainIdReceivedInvocations: [(walletAddress: String, poolAddress: String, chainId: Int)] = []
+    var claimStakeRewardsWalletAddressPoolAddressChainIdReceivedArguments: (walletAddress: String, poolAddress: String, chainId: UInt64)?
+    var claimStakeRewardsWalletAddressPoolAddressChainIdReceivedInvocations: [(walletAddress: String, poolAddress: String, chainId: UInt64)] = []
 
     var claimStakeRewardsWalletAddressPoolAddressChainIdUnderlyingReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>!
     var claimStakeRewardsWalletAddressPoolAddressChainIdReturnValue: Result<ZWalletTransactionReceipt, ClientProxyError>! {
@@ -8523,9 +8523,9 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             }
         }
     }
-    var claimStakeRewardsWalletAddressPoolAddressChainIdClosure: ((String, String, Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
+    var claimStakeRewardsWalletAddressPoolAddressChainIdClosure: ((String, String, UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError>)?
 
-    func claimStakeRewards(walletAddress: String, poolAddress: String, chainId: Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
+    func claimStakeRewards(walletAddress: String, poolAddress: String, chainId: UInt64) async -> Result<ZWalletTransactionReceipt, ClientProxyError> {
         claimStakeRewardsWalletAddressPoolAddressChainIdCallsCount += 1
         claimStakeRewardsWalletAddressPoolAddressChainIdReceivedArguments = (walletAddress: walletAddress, poolAddress: poolAddress, chainId: chainId)
         DispatchQueue.main.async {

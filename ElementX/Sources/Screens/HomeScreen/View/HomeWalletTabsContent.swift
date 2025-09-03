@@ -139,7 +139,10 @@ struct HomeWalletTabContentCell : View {
                 }
                 
                 HStack {
-                    WalletTokenImage(url: content.icon)
+                    ZStack(alignment: .bottomTrailing) {
+                        WalletTokenImage(url: content.icon)
+                        Image(asset: Asset.Images.iconZChain)
+                    }
                     
                     VStack(alignment: .leading) {
                         if let transactionAction = content.transactionAction {
@@ -150,7 +153,7 @@ struct HomeWalletTabContentCell : View {
                                     .lineLimit(1)
                                     .layoutPriority(1)
                                 
-                                Image(asset: Asset.Images.iconZChain)
+//                                Image(asset: Asset.Images.iconZChain)
                                 
                                 Text(content.transactionAddress ?? "")
                                     .font(.zero.bodySM)
