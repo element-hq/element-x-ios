@@ -13,6 +13,8 @@ enum ZeroContants {
     /// Wallet Constants
     static let ZERO_WALLET_ADDRESS_PREFIX = "0x"
     static let ZERO_WALLET_ZSCAN_LIVE_URL = "https://zscan.live/"
+    static let ZERO_WALLET_ZCHAIN_ID = 9369
+    static let ZERO_WALLET_ZCHAIN_ID_ZEPHYR = 1417429182
     
     /// Subscription Constants
     static let ZERO_PRO_SUBSCRIPTION_USD: Double = 14.99

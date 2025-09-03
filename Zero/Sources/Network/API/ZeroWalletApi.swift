@@ -10,17 +10,17 @@ import Alamofire
 protocol ZeroWalletApiProtocol {
     func initializeThirdWebWallet() async throws -> Result<Void, Error>
     
-    func getTokenBalances(walletAddress: String, nextPageParams: NextPageParams?) async throws -> Result<ZWalletTokenBalances, Error>
+    func getTokenBalances(walletAddress: String, chainId: Int, nextPageParams: NextPageParams?) async throws -> Result<ZWalletTokenBalances, Error>
     
-    func getNFTs(walletAddress: String, nextPageParams: NextPageParams?) async throws -> Result<ZWalletNFTs, Error>
+    func getNFTs(walletAddress: String, chainId: Int, nextPageParams: NextPageParams?) async throws -> Result<ZWalletNFTs, Error>
     
-    func getTransactions(walletAddress: String, nextPageParams: TransactionNextPageParams?) async throws -> Result<ZWalletTransactions, Error>
+    func getTransactions(walletAddress: String, chainId: Int, nextPageParams: TransactionNextPageParams?) async throws -> Result<ZWalletTransactions, Error>
     
-    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String) async throws -> Result<ZWalletTransactionResponse, Error>
+    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: Int) async throws -> Result<ZWalletTransactionResponse, Error>
     
     func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async throws -> Result<ZWalletTransactionResponse, Error>
     
-    func getTransactionReceipt(transactionHash: String) async throws -> Result<ZWalletTransactionReceipt, Error>
+    func getTransactionReceipt(transactionHash: String, chainId: Int) async throws -> Result<ZWalletTransactionReceipt, Error>
     
     func searchRecipients(query: String) async throws -> Result<[WalletRecipient], Error>
     
@@ -56,8 +56,9 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         }
     }
     
-    func getTokenBalances(walletAddress: String, nextPageParams: NextPageParams?) async throws -> Result<ZWalletTokenBalances, any Error> {
-        let parameters = nextPageParams?.toDictionary() ?? [:]
+    func getTokenBalances(walletAddress: String, chainId: Int, nextPageParams: NextPageParams?) async throws -> Result<ZWalletTokenBalances, any Error> {
+        var parameters = nextPageParams?.toDictionary() ?? [:]
+        parameters["chainId"] = chainId.description
         let url = WalletEndPoints.tokenBalances.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: walletAddress)
         let tokenBalancesResult: Result<ZWalletTokenBalances, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                                      method: .get,
@@ -72,8 +73,9 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         }
     }
     
-    func getNFTs(walletAddress: String, nextPageParams: NextPageParams?) async throws -> Result<ZWalletNFTs, any Error> {
-        let parameters = nextPageParams?.toDictionary() ?? [:]
+    func getNFTs(walletAddress: String, chainId: Int, nextPageParams: NextPageParams?) async throws -> Result<ZWalletNFTs, any Error> {
+        var parameters = nextPageParams?.toDictionary() ?? [:]
+        parameters["chainId"] = chainId.description
         let url = WalletEndPoints.nfts.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: walletAddress)
         let nftsResult: Result<ZWalletNFTs, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                    method: .get,
@@ -88,8 +90,9 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         }
     }
     
-    func getTransactions(walletAddress: String, nextPageParams: TransactionNextPageParams?) async throws -> Result<ZWalletTransactions, any Error> {
-        let parameters = nextPageParams?.toDictionary() ?? [:]
+    func getTransactions(walletAddress: String, chainId: Int, nextPageParams: TransactionNextPageParams?) async throws -> Result<ZWalletTransactions, any Error> {
+        var parameters = nextPageParams?.toDictionary() ?? [:]
+        parameters["chainId"] = chainId.description
         let url = WalletEndPoints.transactions.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: walletAddress)
         let transactionsResult: Result<ZWalletTransactions, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                                    method: .get,
@@ -104,8 +107,11 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         }
     }
     
-    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String) async throws -> Result<ZWalletTransactionResponse, any Error> {
-        let parameters = ZWalletTransferToken(recipientWalletAddress: recipientWalletAddress, amount: amount, tokenAddress: tokenAddress)
+    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: Int) async throws -> Result<ZWalletTransactionResponse, any Error> {
+        let parameters = ZWalletTransferToken(recipientWalletAddress: recipientWalletAddress,
+                                              amount: amount,
+                                              tokenAddress: tokenAddress,
+                                              chainId: chainId)
             .toDictionary()
         let url = WalletEndPoints.transferToken.replacingOccurrences(of: WalletApiConstants.address_path_parameter, with: senderWalletAddress)
         let transactionResult: Result<ZWalletTransactionResponse, Error> = try await APIManager.shared.authorisedRequest(url,
@@ -136,11 +142,14 @@ class ZeroWalletApi: ZeroWalletApiProtocol {
         }
     }
     
-    func getTransactionReceipt(transactionHash: String) async throws -> Result<ZWalletTransactionReceipt, any Error> {
+    func getTransactionReceipt(transactionHash: String, chainId: Int) async throws -> Result<ZWalletTransactionReceipt, any Error> {
         let url = WalletEndPoints.transactionReceipt.replacingOccurrences(of: WalletApiConstants.trasaction_hash_path_parameter, with: transactionHash)
+        let parameters = ["chainId": chainId.description]
         let receiptResult: Result<ZWalletTransactionReceipt, Error> = try await APIManager.shared.authorisedRequest(url,
                                                                                                                     method: .get,
-                                                                                                                    appSettings: appSettings)
+                                                                                                                    appSettings: appSettings,
+                                                                                                                    parameters: parameters,
+                                                                                                                    encoding: URLEncoding.queryString)
         switch receiptResult {
         case .success(let receipt):
             return .success(receipt)

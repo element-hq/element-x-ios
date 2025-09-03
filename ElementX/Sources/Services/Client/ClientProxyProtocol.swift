@@ -326,17 +326,17 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func initializeThirdWebWalletForUser() async -> Result<Void, ClientProxyError>
     
-    func getWalletTokenBalances(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError>
+    func getWalletTokenBalances(walletAddress: String, chainId: Int, nextPage: NextPageParams?) async -> Result<ZWalletTokenBalances, ClientProxyError>
     
-    func getWalletNFTs(walletAddress: String, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError>
+    func getWalletNFTs(walletAddress: String, chainId: Int, nextPage: NextPageParams?) async -> Result<ZWalletNFTs, ClientProxyError>
     
-    func getWalletTransactions(walletAddress: String, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError>
+    func getWalletTransactions(walletAddress: String, chainId: Int, nextPage: TransactionNextPageParams?) async -> Result<ZWalletTransactions, ClientProxyError>
     
-    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String) async -> Result<ZWalletTransactionResponse, ClientProxyError>
+    func transferToken(senderWalletAddress: String, recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: Int) async -> Result<ZWalletTransactionResponse, ClientProxyError>
     
     func transferNFT(senderWalletAddress: String, recipientWalletAddress: String, tokenId: String, nftAddress: String) async -> Result<ZWalletTransactionResponse, ClientProxyError>
     
-    func getTransactionReceipt(transactionHash: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
+    func getTransactionReceipt(transactionHash: String, chainId: Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
     
     func searchTransactionRecipient(query: String) async -> Result<[WalletRecipient], ClientProxyError>
     
@@ -360,11 +360,11 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func getRewardsToken(poolAddress: String) async -> Result<ZWalletStakingRewardsToken, ClientProxyError>
     
-    func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
+    func stakeAmount(walletAddress: String, poolAddress: String, tokenAddress: String, amount: String, chainId: Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
     
-    func unstakeAmount(walletAddress: String, poolAddress: String, amount: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
+    func unstakeAmount(walletAddress: String, poolAddress: String, amount: String, chainId: Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
     
-    func claimStakeRewards(walletAddress: String, poolAddress: String) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
+    func claimStakeRewards(walletAddress: String, poolAddress: String, chainId: Int) async -> Result<ZWalletTransactionReceipt, ClientProxyError>
     
     // MARK: - ZERO METADATA
     

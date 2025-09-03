@@ -19,6 +19,7 @@ struct ZWalletToken: Codable {
     let amount: String
     let logo: String?
     let decimals: Int
+    let chainId: Int
 }
 
 extension ZWalletToken {

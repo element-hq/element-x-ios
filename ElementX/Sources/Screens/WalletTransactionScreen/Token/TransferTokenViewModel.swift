@@ -110,7 +110,9 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
     private func loadWalletTokenBalances() {
         if let walletAddress = state.currentUser?.publicWalletAddress {
             Task {
-                let result = await clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: state.walletTokenNextPageParams)
+                let result = await clientProxy.getWalletTokenBalances(walletAddress: walletAddress,
+                                                                      chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID,
+                                                                      nextPage: state.walletTokenNextPageParams)
                 if case .success(let walletTokenBalances) = result {
                     _walletTokenAssets = walletTokenBalances.tokens
                     var homeWalletContent: [HomeScreenWalletContent] = if case .assets(let tokens) = state.walletTokensListMode {
@@ -137,7 +139,8 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
                 let result = await clientProxy.transferToken(senderWalletAddress: currentUserAddress,
                                                              recipientWalletAddress: recipient.publicAddress,
                                                              amount:  state.bindings.transferAmount,
-                                                             tokenAddress: token.tokenAddress)
+                                                             tokenAddress: token.tokenAddress,
+                                                             chainId: token.chainId)
                 switch result {
                 case .success(let transaction):
                     setFlowState(.completed)
@@ -159,7 +162,8 @@ class TransferTokenViewModel: TransferTokenViewModelType, TransferTokenViewModel
     
     private func getTransactionReceipt(_ transactionHash: String) {
         Task.detached {
-            if case .success(let receipt) = await self.clientProxy.getTransactionReceipt(transactionHash: transactionHash) {
+            if case .success(let receipt) = await self.clientProxy.getTransactionReceipt(transactionHash: transactionHash,
+                                                                                         chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID) {
                 await MainActor.run {
                     self.completedTransactionReceipt = receipt
                 }
