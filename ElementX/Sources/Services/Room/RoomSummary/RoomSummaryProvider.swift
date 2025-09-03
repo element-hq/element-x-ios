@@ -131,7 +131,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             rustFilters.append(contentsOf: [.nonLeft, .nonSpace, .deduplicateVersions])
             
             if !filters.contains(.lowPriority), appSettings.lowPriorityFilterEnabled {
-                rustFilters.append(.all(filters: [.nonLowPriority, .joined]))
+                rustFilters.append(.nonLowPriority)
             }
             
             _ = listUpdatesSubscriptionResult?.controller().setFilter(kind: .all(filters: rustFilters))
