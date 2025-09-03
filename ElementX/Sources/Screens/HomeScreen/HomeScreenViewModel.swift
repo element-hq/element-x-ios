@@ -944,8 +944,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         }
         Task {
             async let meowPriceResult = userSession.clientProxy.getZeroMeowPrice()
-            async let tokensResult = userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: nil)
-            async let transactionsResult = userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress, nextPage: nil)
+            async let tokensResult = userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress,
+                                                                                    chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID,
+                                                                                    nextPage: nil)
+            async let transactionsResult = userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress,
+                                                                                         chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID,
+                                                                                         nextPage: nil)
 
             let (meowPrice, tokens, transactions) = await (meowPriceResult, tokensResult, transactionsResult)
             let newMeowPrice: ZeroCurrency? = {
@@ -991,7 +995,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         if let nextPageParams = state.walletTokenNextPageParams,
            let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
             Task {
-                let result = await userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress, nextPage: nextPageParams)
+                let result = await userSession.clientProxy.getWalletTokenBalances(walletAddress: walletAddress,
+                                                                                  chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID,
+                                                                                  nextPage: nextPageParams)
                 if case .success(let walletTokenBalances) = result {
                     var homeWalletContent: [HomeScreenWalletContent] = state.walletTokens
                     for token in walletTokenBalances.tokens {
@@ -1009,7 +1015,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         if let nextPageParams = state.walletTokenNextPageParams,
            let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
             Task {
-                let result = await userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress, nextPage: nextPageParams)
+                let result = await userSession.clientProxy.getWalletNFTs(walletAddress: walletAddress,
+                                                                         chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID,
+                                                                         nextPage: nextPageParams)
                 if case .success(let walletNFTs) = result {
                     var homeWalletContent: [HomeScreenWalletContent] = state.walletNFTs
                     for nft in walletNFTs.nfts {
@@ -1027,7 +1035,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         if let nextPageParams = state.walletTransactionsNextPageParams,
            let walletAddress = state.currentUserZeroProfile?.publicWalletAddress {
             Task {
-                let result = await userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress, nextPage: nextPageParams)
+                let result = await userSession.clientProxy.getWalletTransactions(walletAddress: walletAddress,
+                                                                                 chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID,
+                                                                                 nextPage: nextPageParams)
                 if case .success(let walletTransactions) = result {
                     var homeWalletContent: [HomeScreenWalletContent] = state.walletTransactions
                     for transaction in walletTransactions.transactions {
@@ -1062,7 +1072,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                                                                   type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
                                                                   title: L10n.commonLoading,
                                                                   persistent: true))
-            if case .success(let receipt) = await userSession.clientProxy.getTransactionReceipt(transactionHash: walletTransactionId),
+            if case .success(let receipt) = await userSession.clientProxy.getTransactionReceipt(transactionHash: walletTransactionId,
+                                                                                                chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID),
                let link = URL(string: receipt.blockExplorerUrl) {
                 await UIApplication.shared.open(link)
             }
@@ -1182,7 +1193,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
                 )
             )
             let result = await userSession.clientProxy.claimStakeRewards(walletAddress: selectedPool.pool.userWalletAddress,
-                                                                         poolAddress: selectedPool.pool.poolAddress)
+                                                                         poolAddress: selectedPool.pool.poolAddress,
+                                                                         chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID)
             switch result {
             case .success(_):
                 try? await Task.sleep(for: .seconds(1))
@@ -1206,7 +1218,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
             let result = await userSession.clientProxy.stakeAmount(walletAddress: selectedPool.pool.userWalletAddress,
                                                                    poolAddress: selectedPool.pool.poolAddress,
                                                                    tokenAddress: token.address,
-                                                                   amount: actualStakeAmount)
+                                                                   amount: actualStakeAmount,
+                                                                   chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID)
             switch result {
             case .success(_):
                 state.bindings.stakePoolViewState = .success
@@ -1229,8 +1242,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol,
         Task {
             state.bindings.stakePoolViewState = .inProgress
             let result = await userSession.clientProxy.unstakeAmount(walletAddress: selectedPool.pool.userWalletAddress,
-                                                                   poolAddress: selectedPool.pool.poolAddress,
-                                                                   amount: actualUnstakeAmount)
+                                                                     poolAddress: selectedPool.pool.poolAddress,
+                                                                     amount: actualUnstakeAmount,
+                                                                     chainId: ZeroContants.ZERO_WALLET_ZCHAIN_ID)
             switch result {
             case .success(_):
                 state.bindings.stakePoolViewState = .success

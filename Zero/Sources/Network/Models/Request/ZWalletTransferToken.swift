@@ -11,10 +11,12 @@ public struct ZWalletTransferToken: Encodable {
     public let to: String
     public let amount: String
     public let tokenAddress: String
+    public let chainId: UInt64
     
-    init(recipientWalletAddress: String, amount: String, tokenAddress: String) {
+    init(recipientWalletAddress: String, amount: String, tokenAddress: String, chainId: UInt64) {
         self.to = recipientWalletAddress
         self.amount = amount
         self.tokenAddress = tokenAddress
+        self.chainId = chainId
     }
 }
