@@ -109,7 +109,11 @@ class MockTimelineController: TimelineControllerProtocol {
     
     func processItemDisappearance(_ itemID: TimelineItemIdentifier) async { }
         
-    func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async { }
+    func toggleReaction(_ reaction: String, to eventID: TimelineItemIdentifier.EventOrTransactionID) async {
+        if let timelineProxy {
+            _ = await timelineProxy.toggleReaction(reaction, to: eventID)
+        }
+    }
     
     func edit(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID,
               message: String,
@@ -125,6 +129,9 @@ class MockTimelineController: TimelineControllerProtocol {
     
     private(set) var redactCalled = false
     func redact(_ eventOrTransactionID: TimelineItemIdentifier.EventOrTransactionID) async {
+        if let timelineProxy {
+            _ = await timelineProxy.redact(eventOrTransactionID, reason: nil)
+        }
         redactCalled = true
     }
     
@@ -248,19 +255,31 @@ class MockTimelineController: TimelineControllerProtocol {
     // MARK: - Polls
     
     func createPoll(question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
-        .success(())
+        if let timelineProxy {
+            _ = await timelineProxy.createPoll(question: question, answers: answers, pollKind: pollKind)
+        }
+        return .success(())
     }
     
     func editPoll(original eventID: String, question: String, answers: [String], pollKind: Poll.Kind) async -> Result<Void, TimelineControllerError> {
-        .success(())
+        if let timelineProxy {
+            _ = await timelineProxy.editPoll(original: eventID, question: question, answers: answers, pollKind: pollKind)
+        }
+        return .success(())
     }
     
     func sendPollResponse(pollStartID: String, answers: [String]) async -> Result<Void, TimelineControllerError> {
-        .success(())
+        if let timelineProxy {
+            _ = await timelineProxy.sendPollResponse(pollStartID: pollStartID, answers: answers)
+        }
+        return .success(())
     }
     
     func endPoll(pollStartID: String, text: String) async -> Result<Void, TimelineControllerError> {
-        .success(())
+        if let timelineProxy {
+            _ = await timelineProxy.endPoll(pollStartID: pollStartID, text: text)
+        }
+        return .success(())
     }
         
     // MARK: - UI Test signalling

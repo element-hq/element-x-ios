@@ -22,6 +22,8 @@ extension TimelineProxyMock {
         paginateBackwardsRequestSizeReturnValue = .success(())
         paginateForwardsRequestSizeReturnValue = .success(())
         sendReadReceiptForTypeReturnValue = .success(())
+        createPollQuestionAnswersPollKindReturnValue = .success(())
+        editPollOriginalQuestionAnswersPollKindReturnValue = .success(())
         
         if configuration.isAutoUpdating {
             underlyingTimelineItemProvider = AutoUpdatingTimelineItemProviderMock()

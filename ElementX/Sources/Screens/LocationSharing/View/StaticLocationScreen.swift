@@ -148,13 +148,22 @@ struct StaticLocationScreen: View {
 struct StaticLocationScreenViewer_Previews: PreviewProvider, TestablePreview {
     static let viewModel = StaticLocationScreenViewModel(interactionMode: .viewOnly(geoURI: .init(latitude: 41.9027835,
                                                                                                   longitude: 12.4963655)),
-                                                         mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration)
+                                                         mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+                                                         timelineController: MockTimelineController(),
+                                                         analytics: ServiceLocator.shared.analytics,
+                                                         userIndicatorController: UserIndicatorControllerMock())
     static let pickerViewModel = StaticLocationScreenViewModel(interactionMode: .picker,
-                                                               mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration)
+                                                               mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+                                                               timelineController: MockTimelineController(),
+                                                               analytics: ServiceLocator.shared.analytics,
+                                                               userIndicatorController: UserIndicatorControllerMock())
     static let descriptionViewModel = StaticLocationScreenViewModel(interactionMode: .viewOnly(geoURI: .init(latitude: 41.9027835,
                                                                                                              longitude: 12.4963655),
                                                                                                description: "Cool position"),
-                                                                    mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration)
+                                                                    mapURLBuilder: ServiceLocator.shared.settings.mapTilerConfiguration,
+                                                                    timelineController: MockTimelineController(),
+                                                                    analytics: ServiceLocator.shared.analytics,
+                                                                    userIndicatorController: UserIndicatorControllerMock())
     
     static var previews: some View {
         NavigationStack {

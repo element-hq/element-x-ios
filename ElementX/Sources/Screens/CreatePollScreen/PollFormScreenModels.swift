@@ -8,9 +8,7 @@
 import Foundation
 
 enum PollFormScreenViewModelAction: Equatable {
-    case cancel
-    case delete
-    case submit(question: String, options: [String], pollKind: Poll.Kind)
+    case close
 }
 
 struct PollFormScreenViewState: BindableState {
