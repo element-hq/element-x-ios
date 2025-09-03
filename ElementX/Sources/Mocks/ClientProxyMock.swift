@@ -80,9 +80,11 @@ extension ClientProxyMock {
         recentlyVisitedRoomsReturnValue = .success([])
         recentConversationCounterpartsReturnValue = []
         
-        loadMediaContentForSourceThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
-        loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
-        loadMediaFileForSourceFilenameThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
+        let mediaLoader = MediaLoaderMock()
+        mediaLoader.loadMediaContentForSourceThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
+        mediaLoader.loadMediaThumbnailForSourceWidthHeightThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
+        mediaLoader.loadMediaFileForSourceFilenameThrowableError = ClientProxyError.sdkError(ClientProxyMockError.generic)
+        self.mediaLoader = mediaLoader
         
         secureBackupController = SecureBackupControllerMock(.init(recoveryState: configuration.recoveryState))
         resetIdentityReturnValue = .success(IdentityResetHandleSDKMock(.init()))
