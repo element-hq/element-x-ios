@@ -162,6 +162,7 @@ private struct NavigationRootCoordinatorView: View {
         .sheet(item: $rootCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()
         }
+        .accessibilityHidden(rootCoordinator.overlayModule?.coordinator != nil)
         .overlay {
             Group {
                 if let coordinator = rootCoordinator.overlayModule?.coordinator {

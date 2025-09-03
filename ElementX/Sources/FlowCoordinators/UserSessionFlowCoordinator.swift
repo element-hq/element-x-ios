@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import AVKit
 import Combine
 import Compound
 import MatrixRustSDK
@@ -127,10 +128,14 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.showSettingsScreen)
             }
             settingsFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+        case .call(let roomID):
+            Task { await presentCallScreen(roomID: roomID) }
+        case .genericCallLink(let url):
+            presentCallScreen(genericCallLink: url)
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
              .roomDetails, .roomMemberDetails, .userProfile,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
-             .call, .genericCallLink, .share, .transferOwnership:
+             .share, .transferOwnership:
             clearPresentedSheets(animated: animated) // Make sure the presented route is visible.
             chatsFlowCoordinator.handleAppRoute(appRoute, animated: animated)
             if navigationTabCoordinator.selectedTab != .chats {
@@ -198,6 +203,10 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     handleAppRoute(.chatBackupSettings, animated: true)
                 case .sessionVerification(let flow):
                     presentSessionVerificationScreen(flow: flow)
+                case .showCallScreen(let roomProxy):
+                    presentCallScreen(roomProxy: roomProxy)
+                case .hideCallScreenOverlay:
+                    hideCallScreenOverlay()
                 case .logout:
                     Task { await self.runLogoutFlow() }
                 }
@@ -237,6 +246,18 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
                     navigationTabCoordinator.setFullScreenCoverCoordinator(nil)
                 case .logout:
                     logout()
+                }
+            }
+            .store(in: &cancellables)
+        
+        flowParameters.elementCallService.actions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                switch action {
+                case .endCall:
+                    self?.dismissCallScreenIfNeeded()
+                default:
+                    break
                 }
             }
             .store(in: &cancellables)
@@ -346,6 +367,89 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationTabCoordinator.setSheetCoordinator(navigationStackCoordinator)
     }
     
+    // MARK: - Calls
+    
+    private func presentCallScreen(genericCallLink url: URL) {
+        presentCallScreen(configuration: .init(genericCallLink: url))
+    }
+    
+    private func presentCallScreen(roomID: String) async {
+        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            return
+        }
+        
+        presentCallScreen(roomProxy: roomProxy)
+    }
+    
+    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol) {
+        let colorScheme: ColorScheme = flowParameters.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
+        presentCallScreen(configuration: .init(roomProxy: roomProxy,
+                                               clientProxy: userSession.clientProxy,
+                                               clientID: InfoPlistReader.main.bundleIdentifier,
+                                               elementCallBaseURL: flowParameters.appSettings.elementCallBaseURL,
+                                               elementCallBaseURLOverride: flowParameters.appSettings.elementCallBaseURLOverride,
+                                               colorScheme: colorScheme))
+    }
+    
+    private var callScreenPictureInPictureController: AVPictureInPictureController?
+    private func presentCallScreen(configuration: ElementCallConfiguration) {
+        guard flowParameters.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
+            MXLog.info("Returning to existing call.")
+            callScreenPictureInPictureController?.stopPictureInPicture()
+            return
+        }
+        
+        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: flowParameters.elementCallService,
+                                                                            configuration: configuration,
+                                                                            allowPictureInPicture: true,
+                                                                            appSettings: flowParameters.appSettings,
+                                                                            appHooks: flowParameters.appHooks,
+                                                                            analytics: flowParameters.analytics))
+        
+        callScreenCoordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .pictureInPictureIsAvailable(let controller):
+                    callScreenPictureInPictureController = controller
+                case .pictureInPictureStarted:
+                    MXLog.info("Hiding call for PiP presentation.")
+                    navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+                case .pictureInPictureStopped:
+                    MXLog.info("Restoring call after PiP presentation.")
+                    navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
+                case .dismiss:
+                    callScreenPictureInPictureController = nil
+                    navigationTabCoordinator.setOverlayCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationTabCoordinator.setOverlayCoordinator(callScreenCoordinator, animated: true)
+        
+        flowParameters.analytics.track(screen: .RoomCall)
+    }
+    
+    private func hideCallScreenOverlay() {
+        guard let callScreenPictureInPictureController else {
+            MXLog.warning("Picture in picture isn't available, dismissing the call screen.")
+            dismissCallScreenIfNeeded()
+            return
+        }
+        
+        MXLog.info("Starting picture in picture to hide the call screen overlay.")
+        callScreenPictureInPictureController.startPictureInPicture()
+        navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+    }
+    
+    private func dismissCallScreenIfNeeded() {
+        guard navigationTabCoordinator.overlayCoordinator is CallScreenCoordinator else {
+            return
+        }
+        
+        navigationTabCoordinator.setOverlayCoordinator(nil)
+    }
+
     // MARK: - Logout
     
     private func runLogoutFlow() async {

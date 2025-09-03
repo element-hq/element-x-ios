@@ -81,7 +81,7 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         case .createDirectChat:
             Task { await createDirectChat() }
         case .startCall(let roomID):
-            actionsSubject.send(.startCall(roomID: roomID))
+            Task { await startCall(roomID: roomID) }
         case .verifyUser:
             actionsSubject.send(.verifyUser(userID: state.userID))
         case .withdrawVerification:
@@ -224,12 +224,21 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
         }
     }
     
-    // MARK: Loading indicator
+    private func startCall(roomID: String) async {
+        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+            showErrorIndicator()
+            return
+        }
+        actionsSubject.send(.startCall(roomProxy: roomProxy))
+    }
     
-    private static let loadingIndicatorIdentifier = "\(RoomMemberDetailsScreenViewModel.self)-Loading"
+    // MARK: User Indicators
+    
+    private var loadingIndicatorIdentifier: String { "\(Self.self)-Loading" }
+    private var statusIndicatorIdentifier: String { "\(Self.self)-Status" }
     
     private func showMemberLoadingIndicator() {
-        userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+        userIndicatorController.submitIndicator(UserIndicator(id: loadingIndicatorIdentifier,
                                                               type: .modal(progress: .indeterminate, interactiveDismissDisabled: false, allowsInteraction: true),
                                                               title: L10n.commonLoading,
                                                               persistent: true),
@@ -237,6 +246,13 @@ class RoomMemberDetailsScreenViewModel: RoomMemberDetailsScreenViewModelType, Ro
     }
     
     private func hideMemberLoadingIndicator() {
-        userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+        userIndicatorController.retractIndicatorWithId(loadingIndicatorIdentifier)
+    }
+    
+    private func showErrorIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: statusIndicatorIdentifier,
+                                                              type: .toast,
+                                                              title: L10n.errorUnknown,
+                                                              iconName: "xmark"))
     }
 }

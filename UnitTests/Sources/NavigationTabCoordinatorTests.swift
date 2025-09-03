@@ -83,6 +83,30 @@ class NavigationTabCoordinatorTests: XCTestCase {
         XCTAssertNil(navigationTabCoordinator.fullScreenCoverCoordinator)
     }
     
+    func testOverlay() {
+        let tabCoordinator = SomeTestCoordinator()
+        navigationTabCoordinator.setTabs([.init(coordinator: tabCoordinator, details: .init(tag: .tab, title: "Tab", icon: \.help, selectedIcon: \.helpSolid))])
+        
+        let overlayCoordinator = SomeTestCoordinator()
+        navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator)
+        
+        assertCoordinatorsEqual(navigationTabCoordinator.tabCoordinators, [tabCoordinator])
+        assertCoordinatorsEqual(overlayCoordinator, navigationTabCoordinator.overlayCoordinator)
+        
+        // The coordinator should still be retained when changing the presentation mode.
+        navigationTabCoordinator.setOverlayPresentationMode(.minimized)
+        assertCoordinatorsEqual(overlayCoordinator, navigationTabCoordinator.overlayCoordinator)
+        navigationTabCoordinator.setOverlayPresentationMode(.fullScreen)
+        assertCoordinatorsEqual(overlayCoordinator, navigationTabCoordinator.overlayCoordinator)
+        
+        navigationTabCoordinator.setOverlayCoordinator(nil)
+        
+        assertCoordinatorsEqual(navigationTabCoordinator.tabCoordinators, [tabCoordinator])
+        XCTAssertNil(navigationTabCoordinator.overlayCoordinator)
+    }
+    
+    // MARK: - Dismissal Callbacks
+    
     func testTabDismissalCallbacks() {
         let chatsCoordinator = SomeTestCoordinator()
         let spacesCoordinator = SomeTestCoordinator()
@@ -119,6 +143,31 @@ class NavigationTabCoordinatorTests: XCTestCase {
         }
         
         navigationTabCoordinator.setFullScreenCoverCoordinator(nil)
+        waitForExpectations(timeout: 1.0)
+    }
+    
+    func testOverlayDismissalCallback() {
+        let overlayCoordinator = SomeTestCoordinator()
+        
+        let expectation = expectation(description: "Wait for callback")
+        navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator) {
+            expectation.fulfill()
+        }
+        
+        navigationTabCoordinator.setOverlayCoordinator(nil)
+        waitForExpectations(timeout: 1.0)
+    }
+    
+    func testOverlayDismissalCallbackWhenChangingMode() {
+        let overlayCoordinator = SomeTestCoordinator()
+        
+        let expectation = expectation(description: "Wait for callback")
+        expectation.isInverted = true
+        navigationTabCoordinator.setOverlayCoordinator(overlayCoordinator) {
+            expectation.fulfill()
+        }
+        
+        navigationTabCoordinator.setOverlayPresentationMode(.minimized)
         waitForExpectations(timeout: 1.0)
     }
     

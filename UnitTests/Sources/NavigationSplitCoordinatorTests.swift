@@ -110,31 +110,7 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         XCTAssertNil(navigationSplitCoordinator.fullScreenCoverCoordinator)
     }
     
-    func testOverlay() {
-        let sidebarCoordinator = SomeTestCoordinator()
-        navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
-        let detailCoordinator = SomeTestCoordinator()
-        navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
-        
-        let overlayCoordinator = SomeTestCoordinator()
-        navigationSplitCoordinator.setOverlayCoordinator(overlayCoordinator)
-        
-        assertCoordinatorsEqual(sidebarCoordinator, navigationSplitCoordinator.sidebarCoordinator)
-        assertCoordinatorsEqual(detailCoordinator, navigationSplitCoordinator.detailCoordinator)
-        assertCoordinatorsEqual(overlayCoordinator, navigationSplitCoordinator.overlayCoordinator)
-        
-        // The coordinator should still be retained when changing the presentation mode.
-        navigationSplitCoordinator.setOverlayPresentationMode(.minimized)
-        assertCoordinatorsEqual(overlayCoordinator, navigationSplitCoordinator.overlayCoordinator)
-        navigationSplitCoordinator.setOverlayPresentationMode(.fullScreen)
-        assertCoordinatorsEqual(overlayCoordinator, navigationSplitCoordinator.overlayCoordinator)
-        
-        navigationSplitCoordinator.setOverlayCoordinator(nil)
-        
-        assertCoordinatorsEqual(sidebarCoordinator, navigationSplitCoordinator.sidebarCoordinator)
-        assertCoordinatorsEqual(detailCoordinator, navigationSplitCoordinator.detailCoordinator)
-        XCTAssertNil(navigationSplitCoordinator.overlayCoordinator)
-    }
+    // MARK: - Dismissal Callbacks
     
     func testSidebarReplacementCallbacks() {
         let sidebarCoordinator = SomeTestCoordinator()
@@ -184,30 +160,7 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
     
-    func testOverlayDismissalCallback() {
-        let overlayCoordinator = SomeTestCoordinator()
-        
-        let expectation = expectation(description: "Wait for callback")
-        navigationSplitCoordinator.setOverlayCoordinator(overlayCoordinator) {
-            expectation.fulfill()
-        }
-        
-        navigationSplitCoordinator.setOverlayCoordinator(nil)
-        waitForExpectations(timeout: 1.0)
-    }
-    
-    func testOverlayDismissalCallbackWhenChangingMode() {
-        let overlayCoordinator = SomeTestCoordinator()
-        
-        let expectation = expectation(description: "Wait for callback")
-        expectation.isInverted = true
-        navigationSplitCoordinator.setOverlayCoordinator(overlayCoordinator) {
-            expectation.fulfill()
-        }
-        
-        navigationSplitCoordinator.setOverlayPresentationMode(.minimized)
-        waitForExpectations(timeout: 1.0)
-    }
+    // MARK: - Advanced
     
     func testEmbeddedStackPresentsSheetThroughSplit() {
         let sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
