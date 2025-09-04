@@ -38,30 +38,30 @@ struct UserWalletInfoView: View {
                             }
                         }
                         
-                        HStack{
-                            CompoundIcon(\.info, size: .xSmall, relativeTo: .zero.bodySM)
-                                .foregroundStyle(.compound.textSecondary)
-                            Text("This address can only receive assets native to Z Chain. Other EVM assets sent to this address will be inaccessible.")
-                                .font(.zero.bodySM)
-                                .foregroundStyle(.compound.textSecondary)
-                        }
-                        .padding(10)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(.compound.bgCanvasDefault)
-                        )
-                        .padding(16)
+//                        HStack{
+//                            CompoundIcon(\.info, size: .xSmall, relativeTo: .zero.bodySM)
+//                                .foregroundStyle(.compound.textSecondary)
+//                            Text("This address can only receive assets native to Z Chain. Other EVM assets sent to this address will be inaccessible.")
+//                                .font(.zero.bodySM)
+//                                .foregroundStyle(.compound.textSecondary)
+//                        }
+//                        .padding(10)
+//                        .background(
+//                            RoundedRectangle(cornerRadius: 12)
+//                                .fill(.compound.bgCanvasDefault)
+//                        )
+//                        .padding(16)
                         
                         UserWalletQRCode(walletAddress: address, onQRCodeGenerated: { qrCodeImage in
                             self.qrCodeImage = qrCodeImage
                         })
                         .padding(.vertical, 12)
                         
-                        Text("Supported Networks")
-                            .font(.zero.bodySM)
-                            .foregroundStyle(.compound.textSecondary)
-                        
-                        Image(asset: Asset.Images.iconZChain)
+//                        Text("Supported Networks")
+//                            .font(.zero.bodySM)
+//                            .foregroundStyle(.compound.textSecondary)
+//                        
+//                        Image(asset: Asset.Images.iconZChain)
                     }
                     
                     Spacer()

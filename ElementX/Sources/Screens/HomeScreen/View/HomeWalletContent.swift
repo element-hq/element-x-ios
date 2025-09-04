@@ -100,9 +100,9 @@ struct HomeWalletContent: View {
     @ViewBuilder
     private var actionButtonsView: some View {
         HStack(spacing: 10) {
-//            WalletActionButton(action: .receive, compactButtonStyle: isCompactMode) {
-//                context.send(viewAction: .startWalletTransaction(.receiveTransaction))
-//            }
+            WalletActionButton(action: .receive, compactButtonStyle: isCompactMode) {
+                context.send(viewAction: .startWalletTransaction(.receiveTransaction))
+            }
 //            
             // Uncomment when swap is ready
             // WalletActionButton(action: .swap) {
