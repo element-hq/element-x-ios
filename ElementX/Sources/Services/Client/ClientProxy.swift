@@ -137,6 +137,11 @@ class ClientProxy: ClientProxyProtocol {
         verificationStateSubject.asCurrentValuePublisher()
     }
     
+    private let homeserverReachabilitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable)
+    var homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
+        homeserverReachabilitySubject.asCurrentValuePublisher()
+    }
+    
     private let timelineMediaVisibilitySubject = CurrentValueSubject<TimelineMediaVisibility, Never>(.always)
     var timelineMediaVisibilityPublisher: CurrentValuePublisher<TimelineMediaVisibility, Never> {
         timelineMediaVisibilitySubject.asCurrentValuePublisher()
@@ -926,12 +931,11 @@ class ClientProxy: ClientProxyProtocol {
             
             switch state {
             case .running, .terminated, .idle:
-                break
+                homeserverReachabilitySubject.send(.reachable)
+            case .offline:
+                homeserverReachabilitySubject.send(.unreachable)
             case .error:
                 restartSync()
-            case .offline:
-                // This needs to be enabled in the client builder first to be actually used
-                break
             }
         })
     }
@@ -1196,6 +1200,7 @@ private struct ClientProxyServices {
         let syncService = try await client
             .syncService()
             .withCrossProcessLock()
+            .withOfflineMode()
             .withSharePos(enable: true)
             .finish()
         

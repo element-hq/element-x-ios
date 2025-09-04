@@ -239,6 +239,24 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
+        let reachabilityNotificationID = "io.element.elementx.reachability.notification"
+        userSession.clientProxy.homeserverReachabilityPublisher
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] reachability in
+                MXLog.info("Homeserver reachability changed to \(reachability)")
+                
+                guard let self else { return }
+                if reachability == .reachable {
+                    flowParameters.userIndicatorController.retractIndicatorWithId(reachabilityNotificationID)
+                } else {
+                    flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
+                                                                                 title: L10n.commonOffline,
+                                                                                 persistent: true))
+                }
+            }
+            .store(in: &cancellables)
+        
         onboardingFlowCoordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }

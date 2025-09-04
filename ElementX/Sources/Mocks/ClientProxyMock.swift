@@ -48,14 +48,14 @@ extension ClientProxyMock {
         roomDirectorySearchProxyReturnValue = configuration.roomDirectorySearchProxy
         
         actionsPublisher = PassthroughSubject<ClientProxyAction, Never>().eraseToAnyPublisher()
-        loadingStatePublisher = CurrentValuePublisher<ClientProxyLoadingState, Never>(.notLoading)
-        verificationStatePublisher = CurrentValuePublisher<SessionVerificationState, Never>(.unknown)
+        loadingStatePublisher = .init(.notLoading)
+        verificationStatePublisher = .init(.unknown)
+        homeserverReachabilityPublisher = .init(.reachable)
         
-        userAvatarURLPublisher = CurrentValueSubject<URL?, Never>(nil).asCurrentValuePublisher()
+        userAvatarURLPublisher = .init(nil)
+        userDisplayNamePublisher = .init("User display name")
         
-        userDisplayNamePublisher = CurrentValueSubject<String?, Never>("User display name").asCurrentValuePublisher()
-        
-        ignoredUsersPublisher = CurrentValueSubject<[String]?, Never>([RoomMemberProxyMock].allMembers.map(\.userID)).asCurrentValuePublisher()
+        ignoredUsersPublisher = .init([RoomMemberProxyMock].allMembers.map(\.userID))
         
         notificationSettings = configuration.notificationSettings
         

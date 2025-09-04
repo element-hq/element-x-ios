@@ -2082,6 +2082,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
         set(value) { underlyingVerificationStatePublisher = value }
     }
     var underlyingVerificationStatePublisher: CurrentValuePublisher<SessionVerificationState, Never>!
+    var homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> {
+        get { return underlyingHomeserverReachabilityPublisher }
+        set(value) { underlyingHomeserverReachabilityPublisher = value }
+    }
+    var underlyingHomeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>!
     var userID: String {
         get { return underlyingUserID }
         set(value) { underlyingUserID = value }

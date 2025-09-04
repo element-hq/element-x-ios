@@ -26,8 +26,10 @@ class NetworkMonitor: NetworkMonitorProtocol {
         pathMonitor.pathUpdateHandler = { [weak self] path in
             DispatchQueue.main.async {
                 if path.status == .satisfied {
+                    MXLog.info("Network reachability changed to reachable")
                     self?.reachabilitySubject.send(.reachable)
                 } else {
+                    MXLog.info("Network reachability changed to unreachable")
                     self?.reachabilitySubject.send(.unreachable)
                 }
             }
