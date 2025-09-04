@@ -7,10 +7,6 @@
 
 import Foundation
 
-enum MediaLoaderError: Error {
-    case missingClient
-}
-
 // sourcery: AutoMockable
 protocol MediaLoaderProtocol {
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data
