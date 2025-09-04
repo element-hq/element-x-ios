@@ -46,7 +46,9 @@ struct SpaceScreen: View {
         // also hides the navigation title.
         ToolbarItem(placement: .principal) {
             RoomHeaderView(roomName: context.viewState.spaceName,
+                           roomSubtitle: nil,
                            roomAvatar: context.viewState.space.avatar,
+                           showProSubscriptionBadge: false,
                            mediaProvider: context.mediaProvider)
         }
     }

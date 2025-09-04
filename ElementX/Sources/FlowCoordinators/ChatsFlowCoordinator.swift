@@ -911,8 +911,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             case .openDirectChat(let roomID):
                 navigationSplitCoordinator.setSheetCoordinator(nil)
                 stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
-            case .startCall(let roomID):
-                Task { await self.presentCallScreen(roomID: roomID) }
+            case .startCall(let roomProxy):
+                actionsSubject.send(.showCallScreen(roomProxy: roomProxy))
             case .dismiss:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }

@@ -1600,8 +1600,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentUserProfile(userID: userID))
             case .openDirectChat(let roomID):
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
-            case .startCall(let roomID):
-                Task { await self.presentCallScreen(roomID: roomID) }
+            case .startCall(let roomProxy):
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .verifyUser(let userID):
                 actionsSubject.send(.verifyUser(userID: userID))
             }
