@@ -32,7 +32,7 @@ struct SessionVerificationScreen: View {
         .navigationBarBackButtonHidden(context.viewState.verificationState == .verified)
         .toolbar { toolbar }
         .onAppear {
-            var announcement = AttributedString(L10n.a11yTimeLimitedActionRequired)
+            var announcement = AttributedString(L10n.a11ySessionVerificationTimeLimitedActionRequired)
             announcement.accessibilitySpeechAnnouncementPriority = .high
             AccessibilityNotification.Announcement(announcement).post()
         }

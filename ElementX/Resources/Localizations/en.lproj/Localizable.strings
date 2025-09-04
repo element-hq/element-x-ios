@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Remove reaction: %1$@";
 "a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Send files";
+"a11y_session_verification_time_limited_action_required" = "Time limited action required, you have 1 minute to verify";
 "a11y_show_password" = "Show password";
 "a11y_start_call" = "Start a call";
-"a11y_time_limited_action_required" = "Time limited action required";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "User menu";
 "a11y_view_avatar" = "View avatar";
@@ -368,6 +368,7 @@
 "emoji_picker_category_people" = "Smileys & People";
 "emoji_picker_category_places" = "Travel & Places";
 "emoji_picker_category_symbols" = "Symbols";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
