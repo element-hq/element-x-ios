@@ -87,7 +87,7 @@ struct MediaFileRoomTimelineContent: View {
             }
             .font(.compound.bodyLG)
             .foregroundStyle(.compound.textPrimary)
-            .lineLimit(1)
+            .lineLimit(2)
         } icon: {
             CompoundIcon(icon, size: .xSmall, relativeTo: .body)
                 .foregroundColor(.compound.iconPrimary)
@@ -109,6 +109,9 @@ struct FileRoomTimelineView_Previews: PreviewProvider, TestablePreview {
             FileRoomTimelineView(timelineItem: makeItem(filename: "document.pdf"))
             
             FileRoomTimelineView(timelineItem: makeItem(filename: "document.pdf",
+                                                        fileSize: 3 * 1024 * 1024))
+            
+            FileRoomTimelineView(timelineItem: makeItem(filename: "very very very very long named document.pdf",
                                                         fileSize: 3 * 1024 * 1024))
             
             FileRoomTimelineView(timelineItem: makeItem(filename: "spreadsheet.xlsx",
