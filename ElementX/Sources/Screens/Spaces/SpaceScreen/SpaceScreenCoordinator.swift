@@ -13,12 +13,14 @@ import SwiftUI
 struct SpaceScreenCoordinatorParameters {
     let spaceRoomListProxy: SpaceRoomListProxyProtocol
     let spaceServiceProxy: SpaceServiceProxyProtocol
+    let selectedSpaceRoomPublisher: CurrentValuePublisher<String?, Never>
     let mediaProvider: MediaProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum SpaceScreenCoordinatorAction {
     case selectSpace(SpaceRoomListProxyProtocol)
+    case selectRoom(roomID: String)
 }
 
 final class SpaceScreenCoordinator: CoordinatorProtocol {
@@ -37,6 +39,7 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
         
         viewModel = SpaceScreenViewModel(spaceRoomListProxy: parameters.spaceRoomListProxy,
                                          spaceServiceProxy: parameters.spaceServiceProxy,
+                                         selectedSpaceRoomPublisher: parameters.selectedSpaceRoomPublisher,
                                          mediaProvider: parameters.mediaProvider,
                                          userIndicatorController: parameters.userIndicatorController)
     }
@@ -49,6 +52,8 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .selectSpace(let spaceRoomListProxy):
                 actionsSubject.send(.selectSpace(spaceRoomListProxy))
+            case .selectRoom(let roomID):
+                actionsSubject.send(.selectRoom(roomID: roomID))
             }
         }
         .store(in: &cancellables)

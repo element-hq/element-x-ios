@@ -6,7 +6,6 @@
 //
 
 import AnalyticsEvents
-import AVKit
 import Combine
 import MatrixRustSDK
 import SwiftUI
@@ -15,6 +14,8 @@ enum ChatsFlowCoordinatorAction {
     case showSettings(UserRewardsProtocol)
     case showChatBackupSettings
     case sessionVerification(SessionVerificationScreenFlow)
+    case showCallScreen(roomProxy: JoinedRoomProxyProtocol)
+    case hideCallScreenOverlay
     case logout
 }
 
@@ -149,10 +150,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             
         case .userProfile(let userID):
             stateMachine.processEvent(.showUserProfileScreen(userID: userID), userInfo: .init(animated: animated))
-        case .call(let roomID):
-            Task { await presentCallScreen(roomID: roomID) }
-        case .genericCallLink(let url):
-            presentCallScreen(genericCallLink: url)
         case .share(let payload):
             if let roomID = payload.roomID {
                 stateMachine.processEvent(.selectRoom(roomID: roomID,
@@ -168,7 +165,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .transferOwnership))
             }
-        case .accountProvisioningLink, .settings, .chatBackupSettings:
+        case .accountProvisioningLink, .settings, .chatBackupSettings, .call, .genericCallLink:
             break // These routes cannot be handled.
         }
     }
@@ -206,7 +203,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 } else {
                     startRoomFlow(roomID: roomID, via: via, entryPoint: entryPoint, animated: animated)
                 }
-                hideCallScreenOverlay() // Turn any active call into a PiP so that navigation from a notification is visible to the user.
+                actionsSubject.send(.hideCallScreenOverlay) // Turn any active call into a PiP so that navigation from a notification is visible to the user.
             case(.roomList, .deselectRoom, .roomList):
                 dismissRoomFlow(animated: animated)
                 
@@ -303,18 +300,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                         let roomSummaries = self.userSession.clientProxy.staticRoomSummaryProvider.roomListPublisher.value
                         await self.flowParameters.notificationManager.removeDeliveredNotificationsForFullyReadRooms(roomSummaries)
                     }
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
-        
-        flowParameters.elementCallService.actions
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
-                switch action {
-                case .endCall:
-                    self?.dismissCallScreenIfNeeded()
                 default:
                     break
                 }
@@ -481,7 +466,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             
             switch action {
             case .presentCallScreen(let roomProxy):
-                presentCallScreen(roomProxy: roomProxy)
+                actionsSubject.send(.showCallScreen(roomProxy: roomProxy))
             case .verifyUser(let userID):
                 actionsSubject.send(.sessionVerification(.userInitiator(userID: userID)))
             case .finished:
@@ -558,89 +543,6 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         navigationSplitCoordinator.setSheetCoordinator(startChatNavigationStackCoordinator, animated: animated) { [weak self] in
             self?.stateMachine.processEvent(.dismissedStartChatScreen)
         }
-    }
-    
-    // MARK: Calls
-    
-    private func presentCallScreen(genericCallLink url: URL) {
-        presentCallScreen(configuration: .init(genericCallLink: url))
-    }
-    
-    private func presentCallScreen(roomID: String) async {
-        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            return
-        }
-        
-        presentCallScreen(roomProxy: roomProxy)
-    }
-    
-    private func presentCallScreen(roomProxy: JoinedRoomProxyProtocol) {
-        let colorScheme: ColorScheme = flowParameters.windowManager.mainWindow.traitCollection.userInterfaceStyle == .light ? .light : .dark
-        presentCallScreen(configuration: .init(roomProxy: roomProxy,
-                                               clientProxy: userSession.clientProxy,
-                                               clientID: InfoPlistReader.main.bundleIdentifier,
-                                               elementCallBaseURL: flowParameters.appSettings.elementCallBaseURL,
-                                               elementCallBaseURLOverride: flowParameters.appSettings.elementCallBaseURLOverride,
-                                               colorScheme: colorScheme))
-    }
-    
-    private var callScreenPictureInPictureController: AVPictureInPictureController?
-    private func presentCallScreen(configuration: ElementCallConfiguration) {
-        guard flowParameters.ongoingCallRoomIDPublisher.value != configuration.callRoomID else {
-            MXLog.info("Returning to existing call.")
-            callScreenPictureInPictureController?.stopPictureInPicture()
-            return
-        }
-        
-        let callScreenCoordinator = CallScreenCoordinator(parameters: .init(elementCallService: flowParameters.elementCallService,
-                                                                            configuration: configuration,
-                                                                            allowPictureInPicture: true,
-                                                                            appSettings: flowParameters.appSettings,
-                                                                            appHooks: flowParameters.appHooks,
-                                                                            analytics: flowParameters.analytics))
-        
-        callScreenCoordinator.actions
-            .sink { [weak self] action in
-                guard let self else { return }
-                switch action {
-                case .pictureInPictureIsAvailable(let controller):
-                    callScreenPictureInPictureController = controller
-                case .pictureInPictureStarted:
-                    MXLog.info("Hiding call for PiP presentation.")
-                    navigationSplitCoordinator.setOverlayPresentationMode(.minimized)
-                case .pictureInPictureStopped:
-                    MXLog.info("Restoring call after PiP presentation.")
-                    navigationSplitCoordinator.setOverlayPresentationMode(.fullScreen)
-                case .dismiss:
-                    callScreenPictureInPictureController = nil
-                    navigationSplitCoordinator.setOverlayCoordinator(nil)
-                }
-            }
-            .store(in: &cancellables)
-        
-        navigationSplitCoordinator.setOverlayCoordinator(callScreenCoordinator, animated: true)
-        
-        flowParameters.analytics.track(screen: .RoomCall)
-    }
-    
-    private func hideCallScreenOverlay() {
-        guard let callScreenPictureInPictureController else {
-            MXLog.warning("Picture in picture isn't available, dismissing the call screen.")
-            dismissCallScreenIfNeeded()
-            return
-        }
-        
-        MXLog.info("Starting picture in picture to hide the call screen overlay.")
-        callScreenPictureInPictureController.startPictureInPicture()
-        navigationSplitCoordinator.setOverlayPresentationMode(.minimized)
-    }
-    
-    private func dismissCallScreenIfNeeded() {
-        guard navigationSplitCoordinator.overlayCoordinator is CallScreenCoordinator else {
-            return
-        }
-        
-        navigationSplitCoordinator.setOverlayCoordinator(nil)
     }
     
     // MARK: Secure backup
@@ -785,8 +687,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             case .openDirectChat(let roomID):
                 navigationSplitCoordinator.setSheetCoordinator(nil)
                 stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
-            case .startCall(let roomID):
-                Task { await self.presentCallScreen(roomID: roomID) }
+            case .startCall(let roomProxy):
+                actionsSubject.send(.showCallScreen(roomProxy: roomProxy))
             case .dismiss:
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }

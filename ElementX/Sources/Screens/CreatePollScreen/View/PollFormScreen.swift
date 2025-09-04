@@ -197,8 +197,8 @@ private struct PollFormOptionRow: View {
 // MARK: - Previews
 
 struct PollFormScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = PollFormScreenViewModel(mode: .new)
-    static let editViewModel = PollFormScreenViewModel(mode: .edit(eventID: "1234", poll: poll))
+    static let viewModel = makeViewModel(mode: .new)
+    static let editViewModel = makeViewModel(mode: .edit(eventID: "1234", poll: poll))
     static let poll = Poll(question: "Cats or Dogs?",
                            kind: .disclosed,
                            maxSelections: 1,
@@ -221,6 +221,13 @@ struct PollFormScreen_Previews: PreviewProvider, TestablePreview {
             PollFormScreen(context: editViewModel.context)
         }
         .previewDisplayName("Edit")
+    }
+    
+    static func makeViewModel(mode: PollFormMode) -> PollFormScreenViewModel {
+        PollFormScreenViewModel(mode: mode,
+                                timelineController: MockTimelineController(),
+                                analytics: ServiceLocator.shared.analytics,
+                                userIndicatorController: UserIndicatorControllerMock())
     }
 }
 

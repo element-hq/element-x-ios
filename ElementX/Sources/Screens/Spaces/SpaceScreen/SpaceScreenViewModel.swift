@@ -21,13 +21,15 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
 
     init(spaceRoomListProxy: SpaceRoomListProxyProtocol,
          spaceServiceProxy: SpaceServiceProxyProtocol,
+         selectedSpaceRoomPublisher: CurrentValuePublisher<String?, Never>,
          mediaProvider: MediaProviderProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.spaceServiceProxy = spaceServiceProxy
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: SpaceScreenViewState(space: spaceRoomListProxy.spaceRoomProxy,
-                                                          rooms: spaceRoomListProxy.spaceRoomsPublisher.value),
+                                                          rooms: spaceRoomListProxy.spaceRoomsPublisher.value,
+                                                          selectedSpaceRoomID: selectedSpaceRoomPublisher.value),
                    mediaProvider: mediaProvider)
         
         spaceRoomListProxy.spaceRoomsPublisher
@@ -50,6 +52,10 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                 }
             }
             .store(in: &cancellables)
+        
+        selectedSpaceRoomPublisher
+            .weakAssign(to: \.state.selectedSpaceRoomID, on: self)
+            .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -61,8 +67,10 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         case .spaceAction(.select(let spaceRoomProxy)):
             if spaceRoomProxy.isSpace {
                 Task { await selectSpace(spaceRoomProxy) }
-            } else {
-                #warning("Implement room flow")
+            } else if spaceRoomProxy.state == .joined {
+                // This probably doesn't need the state condition as the room flow will show a join screen,
+                // but we can allow this later, once we've updated the design to indicate the parent space.
+                actionsSubject.send(.selectRoom(roomID: spaceRoomProxy.id))
             }
         case .spaceAction(.join(let spaceID)):
             #warning("Implement joining.")

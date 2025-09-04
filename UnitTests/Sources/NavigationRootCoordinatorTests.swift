@@ -47,6 +47,8 @@ class NavigationRootCoordinatorTests: XCTestCase {
         XCTAssertNil(navigationRootCoordinator.overlayCoordinator)
     }
     
+    // MARK: - Dismissal Callbacks
+    
     func testReplacementDismissalCallbacks() {
         XCTAssertNil(navigationRootCoordinator.rootCoordinator)
         

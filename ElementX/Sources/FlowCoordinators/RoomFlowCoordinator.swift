@@ -219,14 +219,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator, animated: true)
     }
     
-    private func presentCallScreen(roomID: String) async {
-        guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
-            return
-        }
-        
-        actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
-    }
-    
     private func handleRoomRoute(roomID: String, via: [String], presentationAction: PresentationAction? = nil, animated: Bool) async {
         guard roomID == self.roomID else { fatalError("Navigation route doesn't belong to this room flow.") }
         
@@ -1012,24 +1004,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                     selectedEmoji: Set<String>,
                                     timelineController: TimelineControllerProtocol,
                                     animated: Bool) {
-        let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: flowParameters.emojiProvider,
-                                                            itemID: itemID, selectedEmojis: selectedEmoji)
+        let params = EmojiPickerScreenCoordinatorParameters(itemID: itemID,
+                                                            selectedEmojis: selectedEmoji,
+                                                            emojiProvider: flowParameters.emojiProvider,
+                                                            timelineController: timelineController)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             
             switch action {
-            case let .emojiSelected(emoji: emoji, itemID: itemID):
-                MXLog.debug("Selected \(emoji) for \(itemID)")
-                navigationStackCoordinator.setSheetCoordinator(nil)
-                Task {
-                    guard case let .event(_, eventOrTransactionID) = itemID else {
-                        fatalError()
-                    }
-                    
-                    await self.timelineController?.toggleReaction(emoji, to: eventOrTransactionID)
-                }
             case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             }
@@ -1048,27 +1032,15 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let params = StaticLocationScreenCoordinatorParameters(interactionMode: interactionMode,
                                                                mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration,
-                                                               appMediator: flowParameters.appMediator)
+                                                               timelineController: timelineController,
+                                                               appMediator: flowParameters.appMediator,
+                                                               analytics: flowParameters.analytics,
+                                                               userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .selectedLocation(let geoURI, let isUserLocation):
-                Task {
-                    _ = await timelineController.sendLocation(body: geoURI.bodyMessage,
-                                                              geoURI: geoURI,
-                                                              description: nil,
-                                                              zoomLevel: 15,
-                                                              assetType: isUserLocation ? .sender : .pin)
-                    self.navigationStackCoordinator.setSheetCoordinator(nil)
-                }
-                
-                self.flowParameters.analytics.trackComposer(inThread: false,
-                                                            isEditing: false,
-                                                            isReply: false,
-                                                            messageType: isUserLocation ? .LocationUser : .LocationPin,
-                                                            startsThread: nil)
             case .close:
                 self.navigationStackCoordinator.setSheetCoordinator(nil)
             }
@@ -1084,94 +1056,25 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentPollForm(mode: PollFormMode, timelineController: TimelineControllerProtocol) {
         let stackCoordinator = NavigationStackCoordinator()
-        let coordinator = PollFormScreenCoordinator(parameters: .init(mode: mode))
+        let coordinator = PollFormScreenCoordinator(parameters: .init(mode: mode,
+                                                                      timelineController: timelineController,
+                                                                      analytics: flowParameters.analytics,
+                                                                      userIndicatorController: flowParameters.userIndicatorController))
         stackCoordinator.setRootCoordinator(coordinator)
 
         coordinator.actions
             .sink { [weak self] action in
-                guard let self else {
-                    return
-                }
-
-                self.navigationStackCoordinator.setSheetCoordinator(nil)
-
+                guard let self else { return }
+                
                 switch action {
-                case .cancel:
-                    break
-                case .delete:
-                    deletePoll(mode: mode)
-                case let .submit(question, options, pollKind):
-                    switch mode {
-                    case .new:
-                        createPoll(question: question,
-                                   options: options,
-                                   pollKind: pollKind,
-                                   timelineController: timelineController)
-                    case .edit(let eventID, _):
-                        editPoll(pollStartID: eventID,
-                                 question: question,
-                                 options: options,
-                                 pollKind: pollKind,
-                                 timelineController: timelineController)
-                    }
+                case .close:
+                    navigationStackCoordinator.setSheetCoordinator(nil)
                 }
             }
             .store(in: &cancellables)
 
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissPollForm)
-        }
-    }
-    
-    private func createPoll(question: String, options: [String], pollKind: Poll.Kind, timelineController: TimelineControllerProtocol) {
-        Task {
-            let result = await timelineController.createPoll(question: question, answers: options, pollKind: pollKind)
-
-            self.flowParameters.analytics.trackComposer(inThread: false,
-                                                        isEditing: false,
-                                                        isReply: false,
-                                                        messageType: .Poll,
-                                                        startsThread: nil)
-
-            self.flowParameters.analytics.trackPollCreated(isUndisclosed: pollKind == .undisclosed, numberOfAnswers: options.count)
-            
-            switch result {
-            case .success:
-                break
-            case .failure:
-                self.flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-            }
-        }
-    }
-    
-    private func editPoll(pollStartID: String, question: String, options: [String], pollKind: Poll.Kind, timelineController: TimelineControllerProtocol) {
-        Task {
-            let result = await timelineController.editPoll(original: pollStartID, question: question, answers: options, pollKind: pollKind)
-            
-            switch result {
-            case .success:
-                break
-            case .failure:
-                self.flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-            }
-        }
-    }
-    
-    private func deletePoll(mode: PollFormMode) {
-        Task {
-            guard case .edit(let pollStartID, _) = mode else {
-                self.flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-                return
-            }
-            
-            let result = await roomProxy.redact(pollStartID)
-            
-            switch result {
-            case .success:
-                break
-            case .failure:
-                self.flowParameters.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-            }
         }
     }
     
@@ -1253,8 +1156,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .openDirectChat(let roomID):
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
-            case .startCall(let roomID):
-                Task { await self.presentCallScreen(roomID: roomID) }
+            case .startCall(let roomProxy):
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .dismiss:
                 break // Not supported when pushed.
             }

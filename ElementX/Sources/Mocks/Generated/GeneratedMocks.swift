@@ -2125,6 +2125,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
     }
     var underlyingHideInviteAvatarsPublisher: CurrentValuePublisher<Bool, Never>!
     var pusherNotificationClientIdentifier: String?
+    var mediaLoader: MediaLoaderProtocol {
+        get { return underlyingMediaLoader }
+        set(value) { underlyingMediaLoader = value }
+    }
+    var underlyingMediaLoader: MediaLoaderProtocol!
     var roomSummaryProvider: RoomSummaryProviderProtocol {
         get { return underlyingRoomSummaryProvider }
         set(value) { underlyingRoomSummaryProvider = value }

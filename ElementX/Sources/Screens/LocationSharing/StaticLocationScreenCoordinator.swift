@@ -11,12 +11,14 @@ import SwiftUI
 struct StaticLocationScreenCoordinatorParameters {
     let interactionMode: StaticLocationInteractionMode
     let mapURLBuilder: MapTilerURLBuilderProtocol
+    let timelineController: TimelineControllerProtocol
     let appMediator: AppMediatorProtocol
+    let analytics: AnalyticsService
+    let userIndicatorController: UserIndicatorControllerProtocol
 }
 
 enum StaticLocationScreenCoordinatorAction {
     case close
-    case selectedLocation(GeoURI, isUserLocation: Bool)
 }
 
 final class StaticLocationScreenCoordinator: CoordinatorProtocol {
@@ -33,7 +35,11 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
     init(parameters: StaticLocationScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = StaticLocationScreenViewModel(interactionMode: parameters.interactionMode, mapURLBuilder: parameters.mapURLBuilder)
+        viewModel = StaticLocationScreenViewModel(interactionMode: parameters.interactionMode,
+                                                  mapURLBuilder: parameters.mapURLBuilder,
+                                                  timelineController: parameters.timelineController,
+                                                  analytics: parameters.analytics,
+                                                  userIndicatorController: parameters.userIndicatorController)
     }
     
     // MARK: - Public
@@ -46,8 +52,6 @@ final class StaticLocationScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.close)
             case .openSystemSettings:
                 parameters.appMediator.openAppSettings()
-            case .sendLocation(let geoURI, let isUserLocation):
-                actionsSubject.send(.selectedLocation(geoURI, isUserLocation: isUserLocation))
             }
         }
         .store(in: &cancellables)

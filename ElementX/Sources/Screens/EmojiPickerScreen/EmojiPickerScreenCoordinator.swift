@@ -9,13 +9,13 @@ import Combine
 import SwiftUI
 
 struct EmojiPickerScreenCoordinatorParameters {
-    let emojiProvider: EmojiProviderProtocol
     let itemID: TimelineItemIdentifier
     let selectedEmojis: Set<String>
+    let emojiProvider: EmojiProviderProtocol
+    let timelineController: TimelineControllerProtocol
 }
 
 enum EmojiPickerScreenCoordinatorAction {
-    case emojiSelected(emoji: String, itemID: TimelineItemIdentifier)
     case dismiss
 }
 
@@ -33,7 +33,10 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     init(parameters: EmojiPickerScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = EmojiPickerScreenViewModel(emojiProvider: parameters.emojiProvider)
+        viewModel = EmojiPickerScreenViewModel(itemID: parameters.itemID,
+                                               selectedEmojis: parameters.selectedEmojis,
+                                               emojiProvider: parameters.emojiProvider,
+                                               timelineController: parameters.timelineController)
     }
     
     func start() {
@@ -42,8 +45,6 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case let .emojiSelected(emoji: emoji):
-                    actionsSubject.send(.emojiSelected(emoji: emoji, itemID: self.parameters.itemID))
                 case .dismiss:
                     actionsSubject.send(.dismiss)
                 }
@@ -52,6 +53,6 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(EmojiPickerScreen(context: viewModel.context, selectedEmojis: parameters.selectedEmojis))
+        AnyView(EmojiPickerScreen(context: viewModel.context))
     }
 }

@@ -71,16 +71,11 @@ struct TimelineView: View {
 /// A table view wrapper that displays the timeline of a room.
 struct TimelineViewRepresentable: UIViewControllerRepresentable {
     @EnvironmentObject private var viewModelContext: TimelineViewModel.Context
-    @Environment(\.openURL) var openURL
 
     func makeUIViewController(context: Context) -> TimelineTableViewController {
         let tableViewController = TimelineTableViewController(coordinator: context.coordinator,
                                                               isScrolledToBottom: $viewModelContext.isScrolledToBottom,
                                                               scrollToBottomPublisher: viewModelContext.viewState.timelineState.scrollToBottomPublisher)
-        // Needs to be dispatched on main asynchronously otherwise we get a runtime warning
-        DispatchQueue.main.async {
-            viewModelContext.send(viewAction: .setOpenURLAction(openURL))
-        }
         return tableViewController
     }
     

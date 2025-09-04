@@ -9,6 +9,7 @@ import Foundation
 
 enum SpaceScreenViewModelAction {
     case selectSpace(SpaceRoomListProxyProtocol)
+    case selectRoom(roomID: String)
 }
 
 struct SpaceScreenViewState: BindableState {
@@ -16,8 +17,11 @@ struct SpaceScreenViewState: BindableState {
     
     var isPaginating = false
     var rooms: [SpaceRoomProxyProtocol]
+    var selectedSpaceRoomID: String?
     
     var bindings = SpaceScreenViewStateBindings()
+    
+    var spaceName: String { space.name ?? L10n.commonSpace }
 }
 
 struct SpaceScreenViewStateBindings { }

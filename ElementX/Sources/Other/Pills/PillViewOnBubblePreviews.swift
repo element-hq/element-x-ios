@@ -10,7 +10,6 @@ import SwiftUI
 
 /// A very simple mock layout of some pills within messages bubbles and the composer.
 struct PillViewOnBubble_Previews: PreviewProvider, TestablePreview {
-    static let mockMediaProvider = MediaProviderMock(configuration: .init())
     static let mentionContext = PillContext.mock(viewState: makeViewState(isOwnMention: false))
     static let ownMentionContext = PillContext.mock(viewState: makeViewState(isOwnMention: true))
     
@@ -40,8 +39,8 @@ struct PillViewOnBubble_Previews: PreviewProvider, TestablePreview {
     static var mockMessage: some View {
         HStack(spacing: 4) {
             Text("Hello").foregroundStyle(.compound.textPrimary)
-            PillView(mediaProvider: mockMediaProvider, context: mentionContext) { }
-            PillView(mediaProvider: mockMediaProvider, context: ownMentionContext) { }
+            PillView(context: mentionContext) { }
+            PillView(context: ownMentionContext) { }
         }
     }
     

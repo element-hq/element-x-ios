@@ -88,7 +88,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                 case .displayUser(let userID):
                     actionsSubject.send(.displayUser(userID: userID))
                 case .presentLocationViewer(let geoURI, let description):
-                    presentMapNavigator(geoURI: geoURI, description: description)
+                    presentMapNavigator(geoURI: geoURI, description: description, timelineController: timelineController)
                 case .displayMessageForwarding(let forwardingItem):
                     presentMessageForwarding(with: forwardingItem)
                 case .displayRoomScreenWithFocussedPin(let eventID):
@@ -100,20 +100,20 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.setRootCoordinator(coordinator)
     }
     
-    private func presentMapNavigator(geoURI: GeoURI, description: String?) {
+    private func presentMapNavigator(geoURI: GeoURI, description: String?, timelineController: TimelineControllerProtocol) {
         let stackCoordinator = NavigationStackCoordinator()
         
         let params = StaticLocationScreenCoordinatorParameters(interactionMode: .viewOnly(geoURI: geoURI, description: description),
                                                                mapURLBuilder: flowParameters.appSettings.mapTilerConfiguration,
-                                                               appMediator: flowParameters.appMediator)
+                                                               timelineController: timelineController,
+                                                               appMediator: flowParameters.appMediator,
+                                                               analytics: flowParameters.analytics,
+                                                               userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = StaticLocationScreenCoordinator(parameters: params)
         
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .selectedLocation:
-                // We don't handle the sending/picker case in this flow
-                break
             case .close:
                 self.navigationStackCoordinator.setSheetCoordinator(nil)
             }

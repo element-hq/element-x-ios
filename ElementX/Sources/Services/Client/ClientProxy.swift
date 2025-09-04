@@ -17,7 +17,7 @@ class ClientProxy: ClientProxyProtocol {
     private let networkMonitor: NetworkMonitorProtocol
     private let appSettings: AppSettings
     
-    private let mediaLoader: MediaLoaderProtocol
+    let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
     
     private var roomListService: RoomListService
@@ -2114,20 +2114,6 @@ class ClientProxy: ClientProxyProtocol {
     
     func roomNotificationModeUpdated(roomId: String, notificationMode: RoomNotificationModeProxy) {
         roomNotificationModeUpdateProtocol?.onRoomNotificationModeUpdated(for: roomId, mode: notificationMode)
-    }
-}
-
-extension ClientProxy: MediaLoaderProtocol {
-    func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
-        try await mediaLoader.loadMediaContentForSource(source)
-    }
-
-    func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
-        try await mediaLoader.loadMediaThumbnailForSource(source, width: width, height: height)
-    }
-    
-    func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy {
-        try await mediaLoader.loadMediaFileForSource(source, filename: filename)
     }
 }
 

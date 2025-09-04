@@ -59,7 +59,7 @@ final class RoomSummaryProviderTests: XCTestCase {
         XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last, .all(filters: [.nonLeft,
                                                                                                       .nonSpace,
                                                                                                       .deduplicateVersions,
-                                                                                                      .all(filters: [.nonLowPriority, .joined])]))
+                                                                                                      .nonLowPriority]))
         
         // When setting the low priority filter.
         roomSummaryProvider.setFilter(.all(filters: [.lowPriority]))
@@ -82,7 +82,7 @@ final class RoomSummaryProviderTests: XCTestCase {
                                                                                                       .nonLeft,
                                                                                                       .nonSpace,
                                                                                                       .deduplicateVersions,
-                                                                                                      .all(filters: [.nonLowPriority, .joined])]))
+                                                                                                      .nonLowPriority]))
     }
     
     // MARK: - Helpers
