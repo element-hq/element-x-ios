@@ -32,7 +32,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
     }
     
@@ -45,7 +44,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.leaveRoomAlertItem)) { $0 != nil }
         
@@ -65,7 +63,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.leaveRoomAlertItem)) { $0 != nil }
         
@@ -86,7 +83,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         context.send(viewAction: .processTapLeave)
@@ -139,7 +135,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         let deferred = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
@@ -160,7 +155,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
@@ -191,7 +185,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
@@ -221,7 +214,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
@@ -252,7 +244,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         let deferredRecipient = deferFulfillment(viewModel.context.observe(\.viewState.dmRecipientInfo)) { $0 != nil }
@@ -284,7 +275,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
@@ -301,7 +291,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
@@ -353,7 +342,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
@@ -392,7 +380,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
@@ -431,7 +418,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
@@ -451,7 +437,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
@@ -471,7 +456,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: NotificationSettingsProxyMock(with: NotificationSettingsProxyMockConfiguration()),
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         _ = await context.observe(\.viewState).debounce(for: .milliseconds(100)).first()
@@ -489,7 +473,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         var deferred = deferFulfillment(context.observe(\.viewState.notificationSettingsState)) { $0.isError }
@@ -682,7 +665,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         let deferred = deferFulfillment(context.observe(\.viewState)) { state in
@@ -704,7 +686,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         let deferred = deferFulfillment(context.observe(\.viewState)) { state in
@@ -728,7 +709,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         let deferred = deferFulfillment(context.observe(\.viewState)) { state in
@@ -752,7 +732,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
                                                userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                notificationSettingsProxy: notificationSettingsProxyMock,
                                                attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                               appMediator: AppMediatorMock.default,
                                                appSettings: ServiceLocator.shared.settings)
         
         let deferred = deferFulfillment(context.observe(\.viewState)) { state in

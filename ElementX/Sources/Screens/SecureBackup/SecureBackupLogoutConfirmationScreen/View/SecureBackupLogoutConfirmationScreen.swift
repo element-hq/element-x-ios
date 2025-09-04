@@ -168,7 +168,7 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
         appMediator.underlyingNetworkMonitor = networkMonitor
         
         let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                                      appMediator: appMediator)
+                                                                      homeserverReachabilityPublisher: .init(.reachable))
         
         if mode != .saveRecoveryKey {
             viewModel.context.send(viewAction: .logout)

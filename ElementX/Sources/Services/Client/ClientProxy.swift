@@ -223,10 +223,10 @@ class ClientProxy: ClientProxyProtocol {
         })
         
         sendQueueStatusSubject
-            .combineLatest(networkMonitor.reachabilityPublisher)
+            .combineLatest(homeserverReachabilityPublisher)
             .debounce(for: 1.0, scheduler: DispatchQueue.main)
             .sink { enabled, reachability in
-                MXLog.info("Send queue status changed to enabled: \(enabled), reachability: \(reachability)")
+                MXLog.info("Send queue status changed to enabled: \(enabled), homeserver reachability: \(reachability)")
                 
                 if enabled == false, reachability == .reachable {
                     MXLog.info("Enabling all send queues")
