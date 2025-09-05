@@ -476,7 +476,12 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 case .displayMediaUploadPreviewScreen(let mediaURLs):
                     actionsSubject.send(.displayMediaUploadPreviewScreen(mediaURLs: mediaURLs))
                 case .showActionMenu(let actionMenuInfo):
-                    self.state.bindings.actionMenuInfo = actionMenuInfo
+                    if case .media(.mediaFilesScreen) = timelineController.timelineKind,
+                       let item = actionMenuInfo.item as? EventBasedMessageTimelineItemProtocol {
+                        actionsSubject.send(.displayMediaDetails(item: item))
+                    } else {
+                        self.state.bindings.actionMenuInfo = actionMenuInfo
+                    }
                 case .showDebugInfo(let debugInfo):
                     state.bindings.debugInfo = debugInfo
                 case .viewInRoomTimeline(let eventID):

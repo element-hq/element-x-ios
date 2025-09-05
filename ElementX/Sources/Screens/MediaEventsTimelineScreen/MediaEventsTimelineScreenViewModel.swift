@@ -75,9 +75,19 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         .store(in: &cancellables)
         
         mediaTimelineViewModel.actions.sink { [weak self] action in
+            guard let self else { return }
             switch action {
             case .displayMediaPreview(let mediaPreviewViewModel):
-                self?.displayMediaPreview(mediaPreviewViewModel)
+                displayMediaPreview(mediaPreviewViewModel)
+            case .displayMediaDetails(item: let item):
+                let sheetModel = TimelineMediaPreviewViewModel(initialItem: item,
+                                                               timelineViewModel: activeTimelineViewModel,
+                                                               mediaProvider: mediaProvider,
+                                                               photoLibraryManager: PhotoLibraryManager(),
+                                                               userIndicatorController: userIndicatorController,
+                                                               appMediator: appMediator)
+                sheetModel.context.send(viewAction: .updateCurrentItem(sheetModel.state.currentItem))
+                state.bindings.mediaPreviewSheet = sheetModel
             case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
                  .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen,
                  .displaySenderDetails, .displayMessageForwarding, .displayLocation, .displayResolveSendFailure,
@@ -97,9 +107,20 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         .store(in: &cancellables)
         
         filesTimelineViewModel.actions.sink { [weak self] action in
+            guard let self else { return }
             switch action {
             case .displayMediaPreview(let mediaPreviewViewModel):
-                self?.displayMediaPreview(mediaPreviewViewModel)
+                displayMediaPreview(mediaPreviewViewModel)
+            case .displayMediaDetails(item: let item):
+                let sheetModel = TimelineMediaPreviewViewModel(initialItem: item,
+                                                               timelineViewModel: activeTimelineViewModel,
+                                                               mediaProvider: mediaProvider,
+                                                               photoLibraryManager: PhotoLibraryManager(),
+                                                               userIndicatorController: userIndicatorController,
+                                                               appMediator: appMediator)
+                sheetModel.context.send(viewAction: .updateCurrentItem(sheetModel.state.currentItem))
+                state.bindings.mediaPreviewSheet = sheetModel
+
             case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
                  .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen,
                  .displaySenderDetails, .displayMessageForwarding, .displayLocation, .displayResolveSendFailure,
@@ -127,6 +148,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             isOldestItemVisible = false
         case .tappedItem(let item):
             activeTimelineViewModel.context.send(viewAction: .mediaTapped(itemID: item.identifier))
+        case .showActions(let item):
+            activeTimelineViewModel.context.send(viewAction: .displayTimelineItemMenu(itemID: item.identifier))
         }
     }
     
