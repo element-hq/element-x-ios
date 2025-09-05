@@ -23,6 +23,11 @@ struct SpaceScreen: View {
         .navigationTitle(context.viewState.spaceName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
+        .sheet(isPresented: .constant(true)) {
+            SpaceScreenDescriptionView()
+                .presentationDetents([.height(199)])
+                .presentationDragIndicator(.visible)
+        }
     }
     
     @ViewBuilder
@@ -52,6 +57,22 @@ struct SpaceScreen: View {
     }
 }
 
+struct SpaceScreenDescriptionView: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10.0) {
+            Text("Description")
+                .font(.compound.bodySM)
+                .foregroundStyle(.compound.textSecondary)
+                .textCase(.uppercase)
+            Text("Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in. Sem amet enim habitant nibh augue mauris. Interdum mauris ultrices tincidunt proin morbi erat aenean risus nibh. Diam amet sit fermentum vulputate faucibus.")
+                .font(.compound.bodyMD)
+                .foregroundStyle(.compound.textPrimary)
+        }
+        .padding(16.0)
+    }
+}
+
+
 // MARK: - Previews
 
 struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
@@ -61,6 +82,7 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             SpaceScreen(context: viewModel.context)
         }
+        SpaceScreenDescriptionView()
     }
     
     static func makeViewModel() -> SpaceScreenViewModel {
