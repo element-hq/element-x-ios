@@ -13,11 +13,21 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
     
     let item: TimelineMediaPreviewItem.Media
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
-    
+    var preferredColorScheme: ColorScheme? = .dark
+
     @State private var sheetHeight: CGFloat = .zero
     private let topPadding: CGFloat = 19
     
     var body: some View {
+        if let preferredColorScheme {
+            mainContent
+                .preferredColorScheme(preferredColorScheme)
+        } else {
+            mainContent
+        }
+    }
+    
+    private var mainContent: some View {
         ScrollView {
             VStack(spacing: 0) {
                 header
@@ -31,7 +41,6 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
         .presentationDetents([.height(sheetHeight + topPadding)])
         .presentationDragIndicator(.visible)
         .presentationBackground(.compound.bgCanvasDefault)
-        .preferredColorScheme(.dark)
     }
     
     private var header: some View {

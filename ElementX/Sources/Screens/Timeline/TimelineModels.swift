@@ -29,6 +29,7 @@ enum TimelineViewModelAction {
     case hasScrolled(direction: ScrollDirection)
     case viewInRoomTimeline(eventID: String)
     case displayRoom(roomID: String, via: [String])
+    case displayMediaDetails(item: EventBasedMessageTimelineItemProtocol)
 }
 
 enum TimelineViewPollAction {

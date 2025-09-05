@@ -10,6 +10,7 @@ import SwiftUI
 
 struct MediaEventsTimelineScreen: View {
     @ObservedObject var context: MediaEventsTimelineScreenViewModel.Context
+    @State private var sheetHeight = CGFloat.zero
     
     var body: some View {
         mainContent
@@ -24,6 +25,15 @@ struct MediaEventsTimelineScreen: View {
                 context.send(viewAction: .changedScreenMode)
             }
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
+            .sheet(item: $context.mediaPreviewSheetViewModel) { sheet in
+                if case let .media(media) = sheet.state.currentItem {
+                    TimelineMediaPreviewDetailsView(item: media,
+                                                    context: sheet.context,
+                                                    preferredColorScheme: nil,
+                                                    sheetHeight: $sheetHeight)
+                        .presentationDetents([.height(sheetHeight)])
+                }
+            }
     }
     
     // The scale effects do the following:
@@ -66,6 +76,9 @@ struct MediaEventsTimelineScreen: View {
                             viewForTimelineItem(item)
                                 .scaleEffect(CGSize(width: -1, height: -1))
                         }
+                        .accessibleLongPress(named: L10n.actionOpenContextMenu) {
+                            context.send(viewAction: .longPressedItem(item: item))
+                        }
                     }
                 } footer: {
                     // Use a footer as the header because the scrollView is flipped
@@ -95,6 +108,9 @@ struct MediaEventsTimelineScreen: View {
                             }
                             .accessibilityRepresentation {
                                 viewForTimelineItem(item)
+                            }
+                            .accessibleLongPress(named: L10n.actionOpenContextMenu) {
+                                context.send(viewAction: .longPressedItem(item: item))
                             }
                         }
                         .accessibilityElement(children: .combine)
@@ -228,6 +244,10 @@ struct MediaEventsTimelineScreen: View {
     func tappedItem(_ item: RoomTimelineItemViewState) {
         context.send(viewAction: .tappedItem(item: item))
     }
+}
+
+extension TimelineMediaPreviewViewModel: Identifiable {
+    var id: UUID { instanceID }
 }
 
 // MARK: - Previews
