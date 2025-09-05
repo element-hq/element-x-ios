@@ -113,13 +113,13 @@ struct CompletionSuggestion_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         // Putting them is VStack allows the preview to work properly in tests
         VStack(spacing: 8) {
-            CompletionSuggestionView(mediaProvider: MediaProviderMock(configuration: .init()),
+            CompletionSuggestionView(mediaProvider: .mock,
                                      items: [.init(suggestionType: .user(.init(id: "@user_mention_1:matrix.org", displayName: "User 1", avatarURL: nil)), range: .init(), rawSuggestionText: ""),
                                              .init(suggestionType: .user(.init(id: "@user_mention_2:matrix.org", displayName: "User 2", avatarURL: .mockMXCUserAvatar)), range: .init(), rawSuggestionText: "")]) { _ in }
         }
         
         VStack(spacing: 8) {
-            CompletionSuggestionView(mediaProvider: MediaProviderMock(configuration: .init()),
+            CompletionSuggestionView(mediaProvider: .mock,
                                      items: multipleItems) { _ in }
         }
     }

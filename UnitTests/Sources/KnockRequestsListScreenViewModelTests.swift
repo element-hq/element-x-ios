@@ -24,7 +24,7 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
     func testLoadingState() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loading, joinRule: .knock))
         viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
-                                                     mediaProvider: MediaProviderMock(),
+                                                     mediaProvider: .mock,
                                                      userIndicatorController: UserIndicatorControllerMock())
         
         let deferred = deferFulfillment(context.$viewState) { state in
@@ -42,7 +42,7 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
     func testEmptyState() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init(knockRequestsState: .loaded([]), joinRule: .knock))
         viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
-                                                     mediaProvider: MediaProviderMock(),
+                                                     mediaProvider: .mock,
                                                      userIndicatorController: UserIndicatorControllerMock())
         
         let deferred = deferFulfillment(context.$viewState) { state in
@@ -66,7 +66,7 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
                                                       ownUserID: RoomMemberProxyMock.mockAdmin.userID,
                                                       joinRule: .knock))
         viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
-                                                     mediaProvider: MediaProviderMock(),
+                                                     mediaProvider: .mock,
                                                      userIndicatorController: UserIndicatorControllerMock())
         
         var deferred = deferFulfillment(context.$viewState) { state in
@@ -141,7 +141,7 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
                                                                                    KnockRequestProxyMock(.init(eventID: "4", userID: "@dan:matrix.org"))]),
                                                       joinRule: .knock))
         viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
-                                                     mediaProvider: MediaProviderMock(),
+                                                     mediaProvider: .mock,
                                                      userIndicatorController: UserIndicatorControllerMock())
         
         var deferred = deferFulfillment(context.$viewState) { state in
@@ -189,7 +189,7 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
                                                       ownUserID: RoomMemberProxyMock.mockAdmin.userID,
                                                       joinRule: .invite))
         viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
-                                                     mediaProvider: MediaProviderMock(),
+                                                     mediaProvider: .mock,
                                                      userIndicatorController: UserIndicatorControllerMock())
         
         let deferred = deferFulfillment(context.$viewState) { state in
@@ -210,7 +210,7 @@ class KnockRequestsListScreenViewModelTests: XCTestCase {
                                                       joinRule: .knock,
                                                       powerLevelsConfiguration: .init(canUserInvite: false)))
         viewModel = KnockRequestsListScreenViewModel(roomProxy: roomProxyMock,
-                                                     mediaProvider: MediaProviderMock(),
+                                                     mediaProvider: .mock,
                                                      userIndicatorController: UserIndicatorControllerMock())
         
         let deferred = deferFulfillment(context.$viewState) { state in

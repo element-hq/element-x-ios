@@ -21,7 +21,7 @@ class VoiceMessageMediaManagerTests: XCTestCase {
     
     override func setUp() async throws {
         voiceMessageCache = VoiceMessageCacheMock()
-        mediaProvider = MediaProviderMock(configuration: .init())
+        mediaProvider = .mock
         mediaProvider.loadFileFromSourceFilenameClosure = nil
         mediaProvider.loadFileFromSourceFilenameReturnValue = .failure(.failedRetrievingFile)
         voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider,

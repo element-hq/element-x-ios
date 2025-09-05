@@ -21,7 +21,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: sessionVerificationController,
                                                        flow: .deviceInitiator,
                                                        appSettings: AppSettings(),
-                                                       mediaProvider: MediaProviderMock(configuration: .init()))
+                                                       mediaProvider: .mock)
         context = viewModel.context
     }
 

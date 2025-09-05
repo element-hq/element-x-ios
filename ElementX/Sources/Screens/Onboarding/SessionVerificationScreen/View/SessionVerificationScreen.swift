@@ -263,7 +263,7 @@ struct SessionVerification_Previews: PreviewProvider, TestablePreview {
         let viewModel = SessionVerificationScreenViewModel(sessionVerificationControllerProxy: SessionVerificationControllerProxyMock.configureMock(),
                                                            flow: flow,
                                                            appSettings: AppSettings(),
-                                                           mediaProvider: MediaProviderMock(configuration: .init()),
+                                                           mediaProvider: .mock,
                                                            verificationState: state)
         
         return SessionVerificationScreen(context: viewModel.context)

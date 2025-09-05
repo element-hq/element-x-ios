@@ -63,18 +63,18 @@ struct ReadReceiptCell_Previews: PreviewProvider, TestablePreview {
                                            formattedTimestamp: "10:00"),
                         memberState: .init(displayName: "Test",
                                            avatarURL: nil),
-                        mediaProvider: MediaProviderMock(configuration: .init()))
+                        mediaProvider: .mock)
             .previewDisplayName("No Image")
         ReadReceiptCell(readReceipt: .init(userID: "@test:matrix.org",
                                            formattedTimestamp: "10:00"),
                         memberState: .init(displayName: "Test",
                                            avatarURL: .mockMXCUserAvatar),
-                        mediaProvider: MediaProviderMock(configuration: .init()))
+                        mediaProvider: .mock)
             .previewDisplayName("With Image")
         ReadReceiptCell(readReceipt: .init(userID: "@test:matrix.org",
                                            formattedTimestamp: "10:00"),
                         memberState: nil,
-                        mediaProvider: MediaProviderMock(configuration: .init()))
+                        mediaProvider: .mock)
             .previewDisplayName("Loading Member")
     }
 }

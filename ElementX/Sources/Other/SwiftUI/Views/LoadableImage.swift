@@ -396,7 +396,7 @@ struct LoadableImage_Previews: PreviewProvider, TestablePreview {
     }
     
     static func makeMediaProvider(isLoading: Bool = false) -> MediaProviderProtocol {
-        let mediaProvider = MediaProviderMock(configuration: .init())
+        let mediaProvider = MediaProviderMock(.init())
         
         if isLoading {
             mediaProvider.imageFromSourceSizeClosure = { _, _ in nil }

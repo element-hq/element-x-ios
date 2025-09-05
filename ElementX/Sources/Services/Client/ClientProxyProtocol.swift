@@ -73,7 +73,7 @@ enum TimelineMediaVisibility: Decodable {
 }
 
 // sourcery: AutoMockable
-protocol ClientProxyProtocol: AnyObject {
+protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var actionsPublisher: AnyPublisher<ClientProxyAction, Never> { get }
     
     var loadingStatePublisher: CurrentValuePublisher<ClientProxyLoadingState, Never> { get }
@@ -102,8 +102,6 @@ protocol ClientProxyProtocol: AnyObject {
     var hideInviteAvatarsPublisher: CurrentValuePublisher<Bool, Never> { get }
     
     var pusherNotificationClientIdentifier: String? { get }
-    
-    var mediaLoader: MediaLoaderProtocol { get }
     
     var roomSummaryProvider: RoomSummaryProviderProtocol { get }
     

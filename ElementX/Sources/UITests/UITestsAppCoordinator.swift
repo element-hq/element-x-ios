@@ -562,7 +562,7 @@ class MockScreen: Identifiable {
             let parameters = SessionVerificationScreenCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationControllerProxy,
                                                                             flow: .deviceInitiator,
                                                                             appSettings: ServiceLocator.shared.settings,
-                                                                            mediaProvider: MediaProviderMock(configuration: .init()))
+                                                                            mediaProvider: .mock)
             return SessionVerificationScreenCoordinator(parameters: parameters)
         case .userSessionScreen, .userSessionScreenReply, .userSessionSpacesFlow:
             let appSettings: AppSettings = ServiceLocator.shared.settings
@@ -618,7 +618,7 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             navigationStackCoordinator.setRootCoordinator(BlankFormCoordinator())
             let coordinator = RoomRolesAndPermissionsFlowCoordinator(parameters: .init(roomProxy: JoinedRoomProxyMock(.init(members: .allMembersAsAdmin)),
-                                                                                       mediaProvider: MediaProviderMock(configuration: .init()),
+                                                                                       mediaProvider: .mock,
                                                                                        navigationStackCoordinator: navigationStackCoordinator,
                                                                                        userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                                                        analytics: ServiceLocator.shared.analytics))
@@ -750,7 +750,7 @@ class MockScreen: Identifiable {
                                                         timelineItemFactory: RoomTimelineItemFactory(userID: "@alice:matrix.org",
                                                                                                      attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                                                                      stateEventStringBuilder: RoomStateEventStringBuilder(userID: "@alice:matrix.org")),
-                                                        mediaProvider: MediaProviderMock(configuration: .init()),
+                                                        mediaProvider: .mock,
                                                         appSettings: ServiceLocator.shared.settings)
             
             let flowCoordinator = ChatsFlowCoordinator(isNewLogin: false,
