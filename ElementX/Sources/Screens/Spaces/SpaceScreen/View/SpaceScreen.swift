@@ -28,8 +28,6 @@ struct SpaceScreen: View {
         .toolbar { toolbar }
         .sheet(isPresented: $isPresentingDescription) {
             SpaceScreenDescriptionView(description: context.viewState.space.topic ?? "")
-                .presentationDetents([.height(199)])
-                .presentationDragIndicator(.visible)
         }
     }
     
@@ -63,17 +61,29 @@ struct SpaceScreen: View {
 struct SpaceScreenDescriptionView: View {
     let description: String
     
+    @State private var sheetHeight: CGFloat = .zero
+    private let topPadding: CGFloat = 19
+    
     var body: some View {
-        VStack(alignment: .leading, spacing: 10.0) {
-            Text("Description")
-                .font(.compound.bodySM)
-                .foregroundStyle(.compound.textSecondary)
-                .textCase(.uppercase)
-            Text(description)
-                .font(.compound.bodyMD)
-                .foregroundStyle(.compound.textPrimary)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10.0) {
+                Text("Description")
+                    .font(.compound.bodySM)
+                    .foregroundStyle(.compound.textSecondary)
+                    .textCase(.uppercase)
+                Text(description)
+                    .font(.compound.bodyMD)
+                    .foregroundStyle(.compound.textPrimary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(16.0)
+            .readHeight($sheetHeight)
         }
-        .padding(16.0)
+        .scrollBounceBehavior(.basedOnSize)
+        .padding(.top, topPadding) // For the drag indicator
+        .presentationDetents([.height(sheetHeight + topPadding)])
+        .presentationDragIndicator(.visible)
+        .presentationBackground(.compound.bgCanvasDefault)
     }
 }
 
