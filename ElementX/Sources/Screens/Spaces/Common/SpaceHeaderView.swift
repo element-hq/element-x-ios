@@ -12,6 +12,8 @@ struct SpaceHeaderView: View {
     let spaceRoomProxy: SpaceRoomProxyProtocol
     let mediaProvider: MediaProviderProtocol?
     
+    @Binding var isPresentingDescription: Bool
+    
     var title: String { spaceRoomProxy.name ?? "" }
     
     var body: some View {
@@ -35,11 +37,13 @@ struct SpaceHeaderView: View {
             }
             
             if let topic = spaceRoomProxy.topic {
-                Text(topic)
-                    .font(.compound.bodyMD)
-                    .foregroundStyle(.compound.textPrimary)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
+                Button { isPresentingDescription = true } label: {
+                    Text(topic)
+                        .font(.compound.bodyMD)
+                        .foregroundStyle(.compound.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                }
             }
         }
         .fixedSize(horizontal: false, vertical: true)
@@ -156,7 +160,9 @@ struct SpaceHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 0) {
             ForEach(spaces, id: \.id) { space in
-                SpaceHeaderView(spaceRoomProxy: space, mediaProvider: .mock)
+                SpaceHeaderView(spaceRoomProxy: space,
+                                mediaProvider: .mock,
+                                isPresentingDescription: .constant(false))
             }
         }
     }
