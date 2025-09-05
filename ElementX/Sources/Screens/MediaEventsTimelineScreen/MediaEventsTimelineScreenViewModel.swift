@@ -80,14 +80,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             case .displayMediaPreview(let mediaPreviewViewModel):
                 displayMediaPreview(mediaPreviewViewModel)
             case .displayMediaDetails(item: let item):
-                let sheetModel = TimelineMediaPreviewViewModel(initialItem: item,
-                                                               timelineViewModel: activeTimelineViewModel,
-                                                               mediaProvider: mediaProvider,
-                                                               photoLibraryManager: PhotoLibraryManager(),
-                                                               userIndicatorController: userIndicatorController,
-                                                               appMediator: appMediator)
-                sheetModel.context.send(viewAction: .updateCurrentItem(sheetModel.state.currentItem))
-                state.bindings.mediaPreviewSheet = sheetModel
+                displayMediaPreviewSheet(for: item)
             case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
                  .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen,
                  .displaySenderDetails, .displayMessageForwarding, .displayLocation, .displayResolveSendFailure,
@@ -112,15 +105,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             case .displayMediaPreview(let mediaPreviewViewModel):
                 displayMediaPreview(mediaPreviewViewModel)
             case .displayMediaDetails(item: let item):
-                let sheetModel = TimelineMediaPreviewViewModel(initialItem: item,
-                                                               timelineViewModel: activeTimelineViewModel,
-                                                               mediaProvider: mediaProvider,
-                                                               photoLibraryManager: PhotoLibraryManager(),
-                                                               userIndicatorController: userIndicatorController,
-                                                               appMediator: appMediator)
-                sheetModel.context.send(viewAction: .updateCurrentItem(sheetModel.state.currentItem))
-                state.bindings.mediaPreviewSheet = sheetModel
-
+                displayMediaPreviewSheet(for: item)
             case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
                  .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen,
                  .displaySenderDetails, .displayMessageForwarding, .displayLocation, .displayResolveSendFailure,
@@ -148,7 +133,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             isOldestItemVisible = false
         case .tappedItem(let item):
             activeTimelineViewModel.context.send(viewAction: .mediaTapped(itemID: item.identifier))
-        case .showActions(let item):
+        case .longPressedItem(let item):
             activeTimelineViewModel.context.send(viewAction: .displayTimelineItemMenu(itemID: item.identifier))
         }
     }
@@ -159,6 +144,29 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
     }
     
     // MARK: - Private
+    
+    private func displayMediaPreviewSheet(for item: EventBasedMessageTimelineItemProtocol) {
+        let sheetModel = TimelineMediaPreviewViewModel(initialItem: item,
+                                                       timelineViewModel: activeTimelineViewModel,
+                                                       mediaProvider: mediaProvider,
+                                                       photoLibraryManager: PhotoLibraryManager(),
+                                                       userIndicatorController: userIndicatorController,
+                                                       appMediator: appMediator)
+        sheetModel.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .viewInRoomTimeline(let itemID):
+                actionsSubject.send(.viewInRoomTimeline(itemID))
+            case .dismiss:
+                state.bindings.mediaPreviewSheetViewModel = nil
+            }
+        }
+        .store(in: &cancellables)
+        
+        // Triggers a download of the item so that can be shared/saved
+        sheetModel.context.send(viewAction: .updateCurrentItem(sheetModel.state.currentItem))
+        state.bindings.mediaPreviewSheetViewModel = sheetModel
+    }
     
     private func updateWithTimelineViewState(_ timelineViewState: TimelineViewState) {
         var newGroups = [MediaEventsTimelineGroup]()

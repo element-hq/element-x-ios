@@ -7,10 +7,16 @@
 
 import SwiftUI
 
+extension View {
+    func accessibleLongPress(named name: String, action: @escaping () -> Void) -> some View {
+        modifier(AccessibleLongPress(name: name, action: action))
+    }
+}
+
 struct AccessibleLongPress: ViewModifier {
+    @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
     let name: String
     let action: () -> Void
-    @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
     
     func body(content: Content) -> some View {
         if isVoiceOverEnabled {
@@ -24,11 +30,5 @@ struct AccessibleLongPress: ViewModifier {
                     action()
                 }
         }
-    }
-}
-
-extension View {
-    func accessibleLongPress(named name: String, action: @escaping () -> Void) -> some View {
-        modifier(AccessibleLongPress(name: name, action: action))
     }
 }

@@ -11,21 +11,12 @@ import SwiftUI
 struct TimelineMediaPreviewDetailsView: View {
     let item: TimelineMediaPreviewItem.Media
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
-    var useDarkMode = true
+    var preferredColorScheme: ColorScheme? = .dark
     
     @Binding var sheetHeight: CGFloat
     private let topPadding: CGFloat = 19
     
     var body: some View {
-        if useDarkMode {
-            mainContent
-                .preferredColorScheme(.dark)
-        } else {
-            mainContent
-        }
-    }
-    
-    private var mainContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 details
@@ -39,8 +30,11 @@ struct TimelineMediaPreviewDetailsView: View {
         .presentationDetents([.height(sheetHeight + topPadding)])
         .presentationDragIndicator(.visible)
         .presentationBackground(.compound.bgCanvasDefault)
+        .preferredColorScheme(preferredColorScheme)
         .sheet(item: $context.redactConfirmationItem) { item in
-            TimelineMediaPreviewRedactConfirmationView(item: item, context: context)
+            TimelineMediaPreviewRedactConfirmationView(item: item,
+                                                       context: context,
+                                                       preferredColorScheme: preferredColorScheme)
         }
     }
     
