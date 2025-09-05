@@ -11,15 +11,15 @@ import SwiftUI
 struct TimelineMediaPreviewDetailsView: View {
     let item: TimelineMediaPreviewItem.Media
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
-    var useDarkMode = true
+    var preferredColorScheme: ColorScheme? = .dark
     
     @Binding var sheetHeight: CGFloat
     private let topPadding: CGFloat = 19
     
     var body: some View {
-        if useDarkMode {
+        if let preferredColorScheme {
             mainContent
-                .preferredColorScheme(.dark)
+                .preferredColorScheme(preferredColorScheme)
         } else {
             mainContent
         }
@@ -42,7 +42,7 @@ struct TimelineMediaPreviewDetailsView: View {
         .sheet(item: $context.redactConfirmationItem) { item in
             TimelineMediaPreviewRedactConfirmationView(item: item,
                                                        context: context,
-                                                       useDarkMode: useDarkMode)
+                                                       preferredColorScheme: preferredColorScheme)
         }
     }
     

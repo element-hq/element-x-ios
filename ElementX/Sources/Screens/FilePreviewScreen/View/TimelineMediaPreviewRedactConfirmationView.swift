@@ -13,15 +13,15 @@ struct TimelineMediaPreviewRedactConfirmationView: View {
     
     let item: TimelineMediaPreviewItem.Media
     @ObservedObject var context: TimelineMediaPreviewViewModel.Context
-    var useDarkMode = true
-    
+    var preferredColorScheme: ColorScheme? = .dark
+
     @State private var sheetHeight: CGFloat = .zero
     private let topPadding: CGFloat = 19
     
     var body: some View {
-        if useDarkMode {
+        if let preferredColorScheme {
             mainContent
-                .preferredColorScheme(.dark)
+                .preferredColorScheme(preferredColorScheme)
         } else {
             mainContent
         }

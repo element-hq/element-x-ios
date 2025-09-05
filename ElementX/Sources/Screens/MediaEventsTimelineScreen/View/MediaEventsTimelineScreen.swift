@@ -9,7 +9,6 @@ import Compound
 import SwiftUI
 
 struct MediaEventsTimelineScreen: View {
-    @Environment(\.accessibilityVoiceOverEnabled) private var isVoiceOverEnabled
     @ObservedObject var context: MediaEventsTimelineScreenViewModel.Context
     @State private var sheetHeight = CGFloat.zero
     
@@ -26,11 +25,11 @@ struct MediaEventsTimelineScreen: View {
                 context.send(viewAction: .changedScreenMode)
             }
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
-            .sheet(item: $context.mediaPreviewSheet) { sheet in
+            .sheet(item: $context.mediaPreviewSheetViewModel) { sheet in
                 if case let .media(media) = sheet.state.currentItem {
                     TimelineMediaPreviewDetailsView(item: media,
                                                     context: sheet.context,
-                                                    useDarkMode: false,
+                                                    preferredColorScheme: nil,
                                                     sheetHeight: $sheetHeight)
                         .presentationDetents([.height(sheetHeight)])
                 }
@@ -78,7 +77,7 @@ struct MediaEventsTimelineScreen: View {
                                 .scaleEffect(CGSize(width: -1, height: -1))
                         }
                         .accessibleLongPress(named: L10n.actionOpenContextMenu) {
-                            context.send(viewAction: .showActions(item: item))
+                            context.send(viewAction: .longPressedItem(item: item))
                         }
                     }
                 } footer: {
@@ -111,7 +110,7 @@ struct MediaEventsTimelineScreen: View {
                                 viewForTimelineItem(item)
                             }
                             .accessibleLongPress(named: L10n.actionOpenContextMenu) {
-                                context.send(viewAction: .showActions(item: item))
+                                context.send(viewAction: .longPressedItem(item: item))
                             }
                         }
                         .accessibilityElement(children: .combine)

@@ -133,7 +133,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             isOldestItemVisible = false
         case .tappedItem(let item):
             activeTimelineViewModel.context.send(viewAction: .mediaTapped(itemID: item.identifier))
-        case .showActions(let item):
+        case .longPressedItem(let item):
             activeTimelineViewModel.context.send(viewAction: .displayTimelineItemMenu(itemID: item.identifier))
         }
     }
@@ -158,13 +158,14 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             case .viewInRoomTimeline(let itemID):
                 actionsSubject.send(.viewInRoomTimeline(itemID))
             case .dismiss:
-                state.bindings.mediaPreviewSheet = nil
+                state.bindings.mediaPreviewSheetViewModel = nil
             }
         }
         .store(in: &cancellables)
         
+        // Triggers a download of the item so that can be shared/saved
         sheetModel.context.send(viewAction: .updateCurrentItem(sheetModel.state.currentItem))
-        state.bindings.mediaPreviewSheet = sheetModel
+        state.bindings.mediaPreviewSheetViewModel = sheetModel
     }
     
     private func updateWithTimelineViewState(_ timelineViewState: TimelineViewState) {
