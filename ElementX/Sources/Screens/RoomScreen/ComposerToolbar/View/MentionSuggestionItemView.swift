@@ -45,16 +45,14 @@ struct MentionSuggestionItemView: View {
 }
 
 struct MentionSuggestionItemView_Previews: PreviewProvider, TestablePreview {
-    static let mockMediaProvider = MediaProviderMock(configuration: .init())
-    
     static var previews: some View {
-        MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(suggestionType: .user(.init(id: "test", displayName: "Test", avatarURL: .mockMXCUserAvatar)), range: .init(), rawSuggestionText: ""))
+        MentionSuggestionItemView(mediaProvider: .mock, item: .init(suggestionType: .user(.init(id: "test", displayName: "Test", avatarURL: .mockMXCUserAvatar)), range: .init(), rawSuggestionText: ""))
             .previewDisplayName("User")
-        MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(suggestionType: .user(.init(id: "test2", displayName: nil, avatarURL: nil)), range: .init(), rawSuggestionText: ""))
+        MentionSuggestionItemView(mediaProvider: .mock, item: .init(suggestionType: .user(.init(id: "test2", displayName: nil, avatarURL: nil)), range: .init(), rawSuggestionText: ""))
             .previewDisplayName("User no display name")
-        MentionSuggestionItemView(mediaProvider: mockMediaProvider, item: .init(suggestionType: .allUsers(.room(id: "room", name: "Room", avatarURL: .mockMXCAvatar)), range: .init(), rawSuggestionText: ""))
+        MentionSuggestionItemView(mediaProvider: .mock, item: .init(suggestionType: .allUsers(.room(id: "room", name: "Room", avatarURL: .mockMXCAvatar)), range: .init(), rawSuggestionText: ""))
             .previewDisplayName("All users")
-        MentionSuggestionItemView(mediaProvider: mockMediaProvider,
+        MentionSuggestionItemView(mediaProvider: .mock,
                                   item: .init(suggestionType: .room(.init(id: "room",
                                                                           canonicalAlias: "#room:matrix.org",
                                                                           name: "Room",

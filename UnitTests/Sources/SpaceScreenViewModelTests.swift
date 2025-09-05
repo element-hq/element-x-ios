@@ -118,7 +118,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         viewModel = SpaceScreenViewModel(spaceRoomListProxy: spaceRoomListProxy,
                                          spaceServiceProxy: spaceServiceProxy,
                                          selectedSpaceRoomPublisher: .init(nil),
-                                         mediaProvider: MediaProviderMock(configuration: .init()),
+                                         mediaProvider: .mock,
                                          userIndicatorController: UserIndicatorControllerMock())
     }
 }

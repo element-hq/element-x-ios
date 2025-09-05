@@ -134,8 +134,6 @@ struct SpaceRoomCellButtonStyle: ButtonStyle {
 }
 
 struct SpaceRoomCell_Previews: PreviewProvider, TestablePreview {
-    static let mediaProvider = MediaProviderMock(configuration: .init())
-    
     static let spaces = [SpaceRoomProxyProtocol].mockSpaceList
     
     static var previews: some View {
@@ -143,7 +141,7 @@ struct SpaceRoomCell_Previews: PreviewProvider, TestablePreview {
             ForEach(spaces, id: \.id) { space in
                 SpaceRoomCell(spaceRoomProxy: space,
                               isSelected: false,
-                              mediaProvider: mediaProvider) { _ in }
+                              mediaProvider: .mock) { _ in }
             }
         }
     }

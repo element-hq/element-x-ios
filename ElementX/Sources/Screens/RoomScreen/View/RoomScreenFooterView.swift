@@ -166,11 +166,11 @@ struct RoomScreenFooterView_Previews: PreviewProvider, TestablePreview {
                                                                                                   learnMoreURL: "https://element.io/")
     
     static var previews: some View {
-        RoomScreenFooterView(details: bobDetails, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+        RoomScreenFooterView(details: bobDetails, mediaProvider: .mock) { _ in }
             .previewDisplayName("With displayname")
-        RoomScreenFooterView(details: noNameDetails, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+        RoomScreenFooterView(details: noNameDetails, mediaProvider: .mock) { _ in }
             .previewDisplayName("Without displayname")
-        RoomScreenFooterView(details: verificationViolationDetails, mediaProvider: MediaProviderMock(configuration: .init())) { _ in }
+        RoomScreenFooterView(details: verificationViolationDetails, mediaProvider: .mock) { _ in }
             .previewDisplayName("Verification Violation")
     }
 }

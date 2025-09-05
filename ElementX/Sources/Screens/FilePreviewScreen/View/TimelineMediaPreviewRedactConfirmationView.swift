@@ -147,7 +147,7 @@ struct TimelineMediaPreviewRedactConfirmationView_Previews: PreviewProvider, Tes
         return TimelineMediaPreviewViewModel(initialItem: item,
                                              timelineViewModel: TimelineViewModel.mock(timelineKind: timelineController.timelineKind,
                                                                                        timelineController: timelineController),
-                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             mediaProvider: .mock,
                                              photoLibraryManager: PhotoLibraryManagerMock(.init()),
                                              userIndicatorController: UserIndicatorControllerMock(),
                                              appMediator: AppMediatorMock())

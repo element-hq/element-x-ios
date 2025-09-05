@@ -65,21 +65,21 @@ struct UserProfileCell_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         Form {
-            UserProfileListRow(user: .mockAlice, membership: nil, mediaProvider: MediaProviderMock(configuration: .init()),
+            UserProfileListRow(user: .mockAlice, membership: nil, mediaProvider: .mock,
                                kind: .multiSelection(isSelected: true, action: action))
             
-            UserProfileListRow(user: .mockBob, membership: nil, mediaProvider: MediaProviderMock(configuration: .init()),
+            UserProfileListRow(user: .mockBob, membership: nil, mediaProvider: .mock,
                                kind: .multiSelection(isSelected: false, action: action))
             
-            UserProfileListRow(user: .mockCharlie, membership: .join, mediaProvider: MediaProviderMock(configuration: .init()),
+            UserProfileListRow(user: .mockCharlie, membership: .join, mediaProvider: .mock,
                                kind: .multiSelection(isSelected: true, action: action))
                 .disabled(true)
             
-            UserProfileListRow(user: .init(userID: "@someone:matrix.org"), membership: .join, mediaProvider: MediaProviderMock(configuration: .init()),
+            UserProfileListRow(user: .init(userID: "@someone:matrix.org"), membership: .join, mediaProvider: .mock,
                                kind: .multiSelection(isSelected: false, action: action))
                 .disabled(true)
             
-            UserProfileListRow(user: .init(userID: "@someone:matrix.org"), membership: nil, mediaProvider: MediaProviderMock(configuration: .init()),
+            UserProfileListRow(user: .init(userID: "@someone:matrix.org"), membership: nil, mediaProvider: .mock,
                                kind: .multiSelection(isSelected: false, action: action))
         }
         .compoundList()

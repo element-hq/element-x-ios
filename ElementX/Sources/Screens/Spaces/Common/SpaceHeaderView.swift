@@ -151,14 +151,12 @@ struct SpaceHeaderMembersView: View {
 }
 
 struct SpaceHeaderView_Previews: PreviewProvider, TestablePreview {
-    static let mediaProvider = MediaProviderMock(configuration: .init())
-    
     static let spaces = makeSpaceRooms()
     
     static var previews: some View {
         VStack(spacing: 0) {
             ForEach(spaces, id: \.id) { space in
-                SpaceHeaderView(spaceRoomProxy: space, mediaProvider: mediaProvider)
+                SpaceHeaderView(spaceRoomProxy: space, mediaProvider: .mock)
             }
         }
     }

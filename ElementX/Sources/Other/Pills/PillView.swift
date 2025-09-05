@@ -42,8 +42,6 @@ struct PillView: View {
 }
 
 struct PillView_Previews: PreviewProvider, TestablePreview {
-    static let mockMediaProvider = MediaProviderMock(configuration: .init())
-    
     static var previews: some View {
         PillView(context: PillContext.mock(viewState: .mention(isOwnMention: false,
                                                                displayText: PillUtilities.userPillDisplayText(username: "User",

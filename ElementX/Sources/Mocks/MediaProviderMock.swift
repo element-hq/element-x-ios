@@ -7,11 +7,17 @@
 
 import SwiftUI
 
+extension MediaProviderProtocol where Self == MediaProviderMock {
+    static var mock: MediaProviderMock { .shared }
+}
+
 extension MediaProviderMock {
+    static let shared = MediaProviderMock(.init())
+    
     struct Configuration { }
     
     // swiftlint:disable:next cyclomatic_complexity
-    convenience init(configuration: Configuration) {
+    convenience init(_ configuration: Configuration) {
         self.init()
         
         imageFromSourceSizeClosure = { mediaSource, _ in
