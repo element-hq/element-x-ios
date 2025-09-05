@@ -11,14 +11,11 @@ import SwiftUI
 struct SpaceScreen: View {
     @Bindable var context: SpaceScreenViewModel.Context
     
-    @State private var isPresentingDescription = false
-    
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
                 SpaceHeaderView(spaceRoomProxy: context.viewState.space,
-                                mediaProvider: context.mediaProvider,
-                                isPresentingDescription: $isPresentingDescription)
+                                mediaProvider: context.mediaProvider)
                 rooms
             }
         }
@@ -26,9 +23,6 @@ struct SpaceScreen: View {
         .navigationTitle(context.viewState.spaceName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
-        .sheet(isPresented: $isPresentingDescription) {
-            SpaceScreenDescriptionView(description: context.viewState.space.topic ?? "")
-        }
     }
     
     @ViewBuilder
@@ -58,35 +52,6 @@ struct SpaceScreen: View {
     }
 }
 
-struct SpaceScreenDescriptionView: View {
-    let description: String
-    
-    @State private var sheetHeight: CGFloat = .zero
-    private let topPadding: CGFloat = 19
-    
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 10.0) {
-                Text("Description")
-                    .font(.compound.bodySM)
-                    .foregroundStyle(.compound.textSecondary)
-                    .textCase(.uppercase)
-                Text(description)
-                    .font(.compound.bodyMD)
-                    .foregroundStyle(.compound.textPrimary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(16.0)
-            .readHeight($sheetHeight)
-        }
-        .scrollBounceBehavior(.basedOnSize)
-        .padding(.top, topPadding) // For the drag indicator
-        .presentationDetents([.height(sheetHeight + topPadding)])
-        .presentationDragIndicator(.visible)
-        .presentationBackground(.compound.bgCanvasDefault)
-    }
-}
-
 // MARK: - Previews
 
 struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
@@ -96,8 +61,6 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
         NavigationStack {
             SpaceScreen(context: viewModel.context)
         }
-        
-        SpaceScreenDescriptionView(description: "Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in. Sem amet enim habitant nibh augue mauris. Interdum mauris ultrices tincidunt proin morbi erat aenean risus nibh. Diam amet sit fermentum vulputate faucibus.")
     }
     
     static func makeViewModel() -> SpaceScreenViewModel {
