@@ -40,7 +40,9 @@ struct TimelineMediaPreviewDetailsView: View {
         .presentationDragIndicator(.visible)
         .presentationBackground(.compound.bgCanvasDefault)
         .sheet(item: $context.redactConfirmationItem) { item in
-            TimelineMediaPreviewRedactConfirmationView(item: item, context: context)
+            TimelineMediaPreviewRedactConfirmationView(item: item,
+                                                       context: context,
+                                                       useDarkMode: useDarkMode)
         }
     }
     
