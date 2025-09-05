@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "This month";
 "common_decryption_error" = "Decryption error";
+"common_description" = "Description";
 "common_developer_options" = "Developer options";
 "common_device_id" = "Device ID";
 "common_direct_chat" = "Direct chat";

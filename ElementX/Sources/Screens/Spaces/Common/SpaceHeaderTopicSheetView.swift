@@ -17,7 +17,7 @@ struct SpaceHeaderTopicSheetView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Description")
+                Text(L10n.commonDescription)
                     .font(.compound.bodySM)
                     .foregroundStyle(.compound.textSecondary)
                     .textCase(.uppercase)

@@ -412,6 +412,8 @@ internal enum L10n {
   internal static var commonDateThisMonth: String { return L10n.tr("Localizable", "common_date_this_month") }
   /// Decryption error
   internal static var commonDecryptionError: String { return L10n.tr("Localizable", "common_decryption_error") }
+  /// Description
+  internal static var commonDescription: String { return L10n.tr("Localizable", "common_description") }
   /// Developer options
   internal static var commonDeveloperOptions: String { return L10n.tr("Localizable", "common_developer_options") }
   /// Device ID
