@@ -161,14 +161,9 @@ struct SecureBackupLogoutConfirmationScreen_Previews: PreviewProvider, TestableP
         }
         
         let reachability: NetworkMonitorReachability = mode == .offline ? .unreachable : .reachable
-        let networkMonitor = NetworkMonitorMock()
-        networkMonitor.underlyingReachabilityPublisher = CurrentValueSubject<NetworkMonitorReachability, Never>(reachability).asCurrentValuePublisher()
-        
-        let appMediator = AppMediatorMock()
-        appMediator.underlyingNetworkMonitor = networkMonitor
         
         let viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: secureBackupController,
-                                                                      appMediator: appMediator)
+                                                                      homeserverReachabilityPublisher: .init(reachability))
         
         if mode != .saveRecoveryKey {
             viewModel.context.send(viewAction: .logout)

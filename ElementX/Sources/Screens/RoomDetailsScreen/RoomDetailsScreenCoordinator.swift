@@ -15,7 +15,6 @@ struct RoomDetailsScreenCoordinatorParameters {
     let userIndicatorController: UserIndicatorControllerProtocol
     let notificationSettings: NotificationSettingsProxyProtocol
     let attributedStringBuilder: AttributedStringBuilderProtocol
-    let appMediator: AppMediatorProtocol
     let appSettings: AppSettings
 }
 
@@ -54,7 +53,6 @@ final class RoomDetailsScreenCoordinator: CoordinatorProtocol {
                                                userIndicatorController: parameters.userIndicatorController,
                                                notificationSettingsProxy: parameters.notificationSettings,
                                                attributedStringBuilder: parameters.attributedStringBuilder,
-                                               appMediator: parameters.appMediator,
                                                appSettings: parameters.appSettings)
     }
     

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SecureBackupLogoutConfirmationScreenCoordinatorParameters {
     let secureBackupController: SecureBackupControllerProtocol
-    let appMediator: AppMediatorProtocol
+    let homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>
 }
 
 enum SecureBackupLogoutConfirmationScreenCoordinatorAction {
@@ -30,7 +30,7 @@ final class SecureBackupLogoutConfirmationScreenCoordinator: CoordinatorProtocol
     
     init(parameters: SecureBackupLogoutConfirmationScreenCoordinatorParameters) {
         viewModel = SecureBackupLogoutConfirmationScreenViewModel(secureBackupController: parameters.secureBackupController,
-                                                                  appMediator: parameters.appMediator)
+                                                                  homeserverReachabilityPublisher: parameters.homeserverReachabilityPublisher)
     }
     
     func start() {

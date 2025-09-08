@@ -239,6 +239,29 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
+        let reachabilityNotificationID = "io.element.elementx.reachability.notification"
+        userSession.clientProxy.homeserverReachabilityPublisher.removeDuplicates()
+            .combineLatest(flowParameters.appMediator.networkMonitor.reachabilityPublisher.removeDuplicates())
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] homeserverReachability, networkReachability in
+                MXLog.info("Homeserver reachability: \(homeserverReachability)")
+                
+                guard let self else { return }
+                switch (homeserverReachability, networkReachability) {
+                case (.reachable, _):
+                    flowParameters.userIndicatorController.retractIndicatorWithId(reachabilityNotificationID)
+                case (.unreachable, .unreachable):
+                    flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
+                                                                                 title: L10n.commonOffline,
+                                                                                 persistent: true))
+                case (.unreachable, .reachable):
+                    flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
+                                                                                 title: L10n.commonServerUnreachable,
+                                                                                 persistent: true))
+                }
+            }
+            .store(in: &cancellables)
+        
         onboardingFlowCoordinator.actions
             .sink { [weak self] action in
                 guard let self else { return }
@@ -507,7 +530,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentSecureBackupLogoutConfirmationScreen() {
         let coordinator = SecureBackupLogoutConfirmationScreenCoordinator(parameters: .init(secureBackupController: userSession.clientProxy.secureBackupController,
-                                                                                            appMediator: flowParameters.appMediator))
+                                                                                            homeserverReachabilityPublisher: userSession.clientProxy.homeserverReachabilityPublisher))
         
         coordinator.actions
             .sink { [weak self] action in

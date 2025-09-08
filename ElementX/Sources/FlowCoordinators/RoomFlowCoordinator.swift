@@ -769,7 +769,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                             userIndicatorController: flowParameters.userIndicatorController,
                                                             notificationSettings: userSession.clientProxy.notificationSettings,
                                                             attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                            appMediator: flowParameters.appMediator,
                                                             appSettings: flowParameters.appSettings)
         let coordinator = RoomDetailsScreenCoordinator(parameters: params)
         coordinator.actions.sink { [weak self] action in

@@ -12,14 +12,14 @@ import UIKit
 class MediaProvider: MediaProviderProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let imageCache: Kingfisher.ImageCache
-    private let networkMonitor: NetworkMonitorProtocol?
+    private let homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>?
     
     init(mediaLoader: MediaLoaderProtocol,
          imageCache: Kingfisher.ImageCache,
-         networkMonitor: NetworkMonitorProtocol?) {
+         homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>?) {
         self.mediaLoader = mediaLoader
         self.imageCache = imageCache
-        self.networkMonitor = networkMonitor
+        self.homeserverReachabilityPublisher = homeserverReachabilityPublisher
     }
     
     // MARK: Images
@@ -67,8 +67,8 @@ class MediaProvider: MediaProviderProtocol {
     }
     
     func loadImageRetryingOnReconnection(_ source: MediaSourceProxy, size: CGSize?) -> Task<UIImage, any Error> {
-        guard let networkMonitor else {
-            fatalError("This method shouldn't be invoked without a NetworkMonitor set.")
+        guard let homeserverReachabilityPublisher else {
+            fatalError("This method shouldn't be invoked without a homeserver reachability publisher set.")
         }
         
         return Task {
@@ -80,7 +80,7 @@ class MediaProvider: MediaProviderProtocol {
                 throw MediaProviderError.cancelled
             }
             
-            for await reachability in networkMonitor.reachabilityPublisher.values {
+            for await reachability in homeserverReachabilityPublisher.values {
                 guard !Task.isCancelled else {
                     throw MediaProviderError.cancelled
                 }

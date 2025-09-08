@@ -16,7 +16,7 @@ final class NSEUserSession {
     private let userID: String
     private(set) lazy var mediaProvider: MediaProviderProtocol = MediaProvider(mediaLoader: MediaLoader(client: baseClient),
                                                                                imageCache: .onlyOnDisk,
-                                                                               networkMonitor: nil)
+                                                                               homeserverReachabilityPublisher: nil)
     private let delegateHandle: TaskHandle?
     
     var mediaPreviewVisibility: MediaPreviews {

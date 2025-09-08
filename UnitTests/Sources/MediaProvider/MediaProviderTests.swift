@@ -15,18 +15,17 @@ import XCTest
 final class MediaProviderTests: XCTestCase {
     private var mediaLoader: MediaLoaderMock!
     private var imageCache: MockImageCache!
-    private var networkMonitor: NetworkMonitorMock!
+    private var reachabilitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable)
     
     var mediaProvider: MediaProvider!
     
     override func setUp() {
         mediaLoader = MediaLoaderMock()
         imageCache = MockImageCache(name: "Test")
-        networkMonitor = NetworkMonitorMock()
         
         mediaProvider = MediaProvider(mediaLoader: mediaLoader,
                                       imageCache: imageCache,
-                                      networkMonitor: networkMonitor)
+                                      homeserverReachabilityPublisher: reachabilitySubject.asCurrentValuePublisher())
     }
     
     func testLoadingRetriedOnReconnection() async throws {
@@ -38,19 +37,17 @@ final class MediaProviderTests: XCTestCase {
         
         let loadTask = try mediaProvider.loadImageRetryingOnReconnection(MediaSourceProxy(url: .mockMXCImage, mimeType: "image/jpeg"))
         
-        let connectivitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.unreachable)
+        reachabilitySubject.send(.unreachable)
         
-        mediaLoader.loadMediaContentForSourceClosure = { _ in
-            switch connectivitySubject.value {
+        mediaLoader.loadMediaContentForSourceClosure = { [reachabilitySubject] _ in
+            switch reachabilitySubject.value {
             case .unreachable:
-                connectivitySubject.send(.reachable)
+                reachabilitySubject.send(.reachable)
                 throw MediaProviderTestsError.error
             case .reachable:
                 return pngData
             }
         }
-        
-        networkMonitor.underlyingReachabilityPublisher = connectivitySubject.asCurrentValuePublisher()
         
         let result = try? await loadTask.value
         
@@ -61,11 +58,9 @@ final class MediaProviderTests: XCTestCase {
     func testLoadingRetriedOnReconnectionCancelsAfterSecondFailure() async throws {
         let loadTask = try mediaProvider.loadImageRetryingOnReconnection(MediaSourceProxy(url: .mockMXCImage, mimeType: "image/jpeg"))
         
-        let connectivitySubject = CurrentValueSubject<NetworkMonitorReachability, Never>(.reachable)
+        reachabilitySubject.send(.reachable)
         
         mediaLoader.loadMediaContentForSourceThrowableError = MediaProviderTestsError.error
-        
-        networkMonitor.underlyingReachabilityPublisher = connectivitySubject.asCurrentValuePublisher()
         
         let result = try? await loadTask.value
         

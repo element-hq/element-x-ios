@@ -80,6 +80,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var verificationStatePublisher: CurrentValuePublisher<SessionVerificationState, Never> { get }
     
+    var homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never> { get }
+    
     var userID: String { get }
 
     var deviceID: String? { get }

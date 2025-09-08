@@ -96,7 +96,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol) -> UserSessionProtocol {
         let mediaProvider = MediaProvider(mediaLoader: clientProxy,
                                           imageCache: .onlyInMemory,
-                                          networkMonitor: networkMonitor)
+                                          homeserverReachabilityPublisher: clientProxy.homeserverReachabilityPublisher)
         
         let voiceMessageMediaManager = VoiceMessageMediaManager(mediaProvider: mediaProvider)
         
