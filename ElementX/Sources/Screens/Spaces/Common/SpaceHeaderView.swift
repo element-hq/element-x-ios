@@ -12,6 +12,8 @@ struct SpaceHeaderView: View {
     let spaceRoomProxy: SpaceRoomProxyProtocol
     let mediaProvider: MediaProviderProtocol?
     
+    @State private var isPresentingTopic = false
+    
     var title: String { spaceRoomProxy.name ?? "" }
     
     var body: some View {
@@ -35,11 +37,13 @@ struct SpaceHeaderView: View {
             }
             
             if let topic = spaceRoomProxy.topic {
-                Text(topic)
-                    .font(.compound.bodyMD)
-                    .foregroundStyle(.compound.textPrimary)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
+                Button { isPresentingTopic = true } label: {
+                    Text(topic)
+                        .font(.compound.bodyMD)
+                        .foregroundStyle(.compound.textPrimary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                }
             }
         }
         .fixedSize(horizontal: false, vertical: true)
@@ -51,6 +55,11 @@ struct SpaceHeaderView: View {
             Rectangle()
                 .fill(Color.compound.borderDisabled)
                 .frame(height: 1 / UIScreen.main.scale)
+        }
+        .sheet(isPresented: $isPresentingTopic) {
+            if let topic = spaceRoomProxy.topic {
+                SpaceHeaderTopicSheetView(topic: topic)
+            }
         }
     }
     
