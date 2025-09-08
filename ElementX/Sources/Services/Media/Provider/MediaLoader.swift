@@ -16,16 +16,16 @@ private final class MediaRequest {
 }
 
 actor MediaLoader: MediaLoaderProtocol {
-    // Something is holding onto our MediaProvider (and therefore this MediaLoader) which means
-    // when attempting to clear the caches, the SDK's Client hangs around and we end up with 2.
-    // I have spent a long time trying to understand what's going on – there's instances of both
-    // TimelineViewModel.Context and ComposerToolbarViewModel.Context still hanging around and
-    // a closure captures the media provider from both of those as far as I can tell, but I was
-    // unable to break the reference. Possibly related to the ElementTextView too.
+    // We noticed that the keyboard appears to hold onto a reference to the `Context` of the last
+    // screen that had text input focus, resulting in its MediaProvider staying alive which in
+    // turn keeps this loader alive: https://github.com/element-hq/element-x-ios/issues/4465
+    // Therefore the client is `weak` so that the underlying `MatrixRustSDK.Client` is released
+    // when e.g. clearing the cache, otherwise we have the potential for 2 `Client`s to be alive
+    // at the same time causing havoc.
     //
-    // In lieu of the real fix, lets use a weak reference to the Client here so that it can be
-    // released and hopefully that will solve our logs files exploding in size when encountering
-    // a corrupt/missing database file.
+    // Whilst a more correct fix would be to make `Context.mediaProvider` weak, this requires a
+    // bunch of workarounds in our preview tests to keep the mock provider alive as some ViewModels
+    // don't have an accompanying ClientMock to own it.
     private weak var client: ClientProtocol?
     private var ongoingRequests = [MediaSourceProxy: MediaRequest]()
 
