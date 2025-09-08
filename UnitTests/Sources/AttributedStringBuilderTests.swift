@@ -8,12 +8,18 @@
 @testable import ElementX
 import XCTest
 
-class AttributedStringBuilderV2Tests: XCTestCase {
+class AttributedStringBuilderV2Tests: AttributedStringBuilderV1Tests {
+    override func setUp() async throws {
+        AttributedStringBuilder.useNextGenHTMLParser = true
+        try await super.setUp()
+    }
+}
+
+class AttributedStringBuilderV1Tests: XCTestCase {
     private var attributedStringBuilder: AttributedStringBuilder!
     private let maxHeaderPointSize = ceil(UIFont.preferredFont(forTextStyle: .body).pointSize * 1.2)
     
     override func setUp() async throws {
-        AttributedStringBuilder.useNextGenHTMLParser = true
         attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
     }
     
@@ -25,10 +31,29 @@ class AttributedStringBuilderV2Tests: XCTestCase {
         
         XCTAssertEqual(String(attributedString.characters), "H1 Header\nH2 Header\nH3 Header\nH4 Header\nH5 Header\nH6 Header")
         
-        XCTAssertEqual(attributedString.runs.count, 11) // newlines hold no attributes
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssertEqual(attributedString.runs.count, 11) // newlines hold no attributes
 
-        let pointSizes = attributedString.runs.compactMap(\.uiKit.font?.pointSize)
-        XCTAssertEqual(pointSizes, [24, 22, 20, 18, 16, 14])
+            let pointSizes = attributedString.runs.compactMap(\.uiKit.font?.pointSize)
+            XCTAssertEqual(pointSizes, [24, 22, 20, 18, 16, 14])
+        } else {
+            XCTAssert(attributedString.runs.count == 6)
+            
+            let firstRun = attributedString.runs[attributedString.runs.startIndex]
+            let secondRun = attributedString.runs[attributedString.runs.index(attributedString.runs.startIndex, offsetBy: 1)]
+            let thirdRun = attributedString.runs[attributedString.runs.index(attributedString.runs.startIndex, offsetBy: 2)]
+            
+            guard let h1PointSize = firstRun.uiKit.font?.pointSize else {
+                XCTFail("Invalid H1 point size")
+                return
+            }
+            
+            XCTAssertEqual(h1PointSize, secondRun.uiKit.font?.pointSize)
+            XCTAssertEqual(secondRun.uiKit.font?.pointSize, thirdRun.uiKit.font?.pointSize)
+            
+            XCTAssertGreaterThan(h1PointSize, UIFont.preferredFont(forTextStyle: .body).pointSize)
+            XCTAssertLessThan(h1PointSize, maxHeaderPointSize)
+        }
     }
     
     func testRenderHTMLStringWithPreCode() {
@@ -46,7 +71,11 @@ class AttributedStringBuilderV2Tests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 13)
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 13)
+        } else {
+            XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 10)
+        }
     }
     
     func testRenderHTMLStringWithLink() {
@@ -55,7 +84,11 @@ class AttributedStringBuilderV2Tests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(String(attributedString.characters), "Links too:\nMatrix rules! 🤘, beta.org, www.gamma.org, http://delta.org")
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssertEqual(String(attributedString.characters), "Links too:\nMatrix rules! 🤘, beta.org, www.gamma.org, http://delta.org")
+        } else {
+            XCTAssertEqual(String(attributedString.characters), "Links too:Matrix rules! 🤘, beta.org, www.gamma.org, http://delta.org")
+        }
         
         let link = attributedString.runs.first { $0.link != nil }?.link
         
@@ -132,7 +165,22 @@ class AttributedStringBuilderV2Tests: XCTestCase {
         XCTAssertEqual(h1AttributedString.runs.count, 1)
         XCTAssertEqual(h2AttributedString.runs.count, 1)
         XCTAssertEqual(h3AttributedString.runs.count, 1)
-                
+        
+        guard let h1Font = h1AttributedString.runs.first?.uiKit.font,
+              let h2Font = h2AttributedString.runs.first?.uiKit.font,
+              let h3Font = h3AttributedString.runs.first?.uiKit.font else {
+            XCTFail("Could not extract a font from the strings.")
+            return
+        }
+        
+        if !AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssertEqual(h1Font, h2Font)
+            XCTAssertEqual(h2Font, h3Font)
+            
+            XCTAssert(h1Font.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
+            XCTAssert(h1Font.pointSize <= maxHeaderPointSize)
+        }
+        
         XCTAssertEqual(h1AttributedString.runs.first?.link?.host, "matrix.org")
         XCTAssertEqual(h2AttributedString.runs.first?.link?.host, "matrix.org")
         XCTAssertEqual(h3AttributedString.runs.first?.link?.host, "matrix.org")
@@ -190,6 +238,25 @@ class AttributedStringBuilderV2Tests: XCTestCase {
         checkLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expectedLink: expectedLink.absoluteString, expectedRuns: 3)
     }
         
+    func testDefaultFont() {
+        let htmlString = "<b>Test</b> <i>string</i> "
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssertEqual(attributedString.runs.count, 4)
+        } else {
+            XCTAssertEqual(attributedString.runs.count, 3)
+            
+            for run in attributedString.runs {
+                XCTAssertEqual(run.uiKit.font?.familyName, UIFont.preferredFont(forTextStyle: .body).familyName)
+            }
+        }
+    }
+    
     func testDefaultForegroundColor() {
         let htmlString = "<b>Test</b> <i>string</i> <a href=\"https://www.matrix.org/\">link</a> <code><a href=\"https://www.matrix.org/\">link</a></code>"
         
@@ -326,9 +393,13 @@ class AttributedStringBuilderV2Tests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(attributedString.runs.count, 11)
-        
-        XCTAssertEqual(attributedString.formattedComponents.count, 5)
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssertEqual(attributedString.runs.count, 11)
+            XCTAssertEqual(attributedString.formattedComponents.count, 5)
+        } else {
+            XCTAssertEqual(attributedString.runs.count, 7)
+            XCTAssertEqual(attributedString.formattedComponents.count, 1)
+        }
         
         var numberOfBlockquotes = 0
         for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
@@ -344,11 +415,15 @@ class AttributedStringBuilderV2Tests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(attributedString.runs.count, 11)
-        
         let coalescedComponents = attributedString.formattedComponents
         
-        XCTAssertEqual(coalescedComponents.count, 5)
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssertEqual(attributedString.runs.count, 11)
+            XCTAssertEqual(coalescedComponents.count, 5)
+        } else {
+            XCTAssertEqual(attributedString.runs.count, 7)
+            XCTAssertEqual(coalescedComponents.count, 1)
+        }
         
         var numberOfBlockquotes = 0
         for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
@@ -508,24 +583,68 @@ class AttributedStringBuilderV2Tests: XCTestCase {
         checkAttachment(attributedString: attributedStringFromPlain2, expectedRuns: 1)
     }
     
+    func testURLsAreIgnoredInCode() {
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            return
+        }
+        
+        var htmlString = "<pre><code>test https://matrix.org test</code></pre>"
+        var attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
+        XCTAssert(attributedStringFromHTML?.runs.count == 1)
+        XCTAssertNil(attributedStringFromHTML?.link)
+        
+        htmlString = "<pre><code>matrix.org</code></pre>"
+        attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
+        XCTAssert(attributedStringFromHTML?.runs.count == 1)
+        XCTAssertNil(attributedStringFromHTML?.link)
+    }
+    
+    func testHyperlinksAreIgnoredInCode() {
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            return
+        }
+        
+        let htmlString = "<pre><code>test <a href=\"https://matrix.org\">matrix</a> test</code></pre>"
+        let attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
+        XCTAssertNil(attributedStringFromHTML?.link)
+    }
+    
     func testUserMentionIsIgnoredInCode() {
         let htmlString = "<pre><code>test https://matrix.org/#/@test:matrix.org test</code></pre>"
         let attributedString = attributedStringBuilder.fromHTML(htmlString)
-        XCTAssertEqual(attributedString?.runs.count, 3)
+        
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssert(attributedString?.runs.count == 3)
+        } else {
+            XCTAssert(attributedString?.runs.count == 1)
+        }
+        
         XCTAssertNil(attributedString?.attachment)
     }
     
     func testPlainTextUserMentionIsIgnoredInCode() {
         let htmlString = "<pre><code>Hey @some.user.ceriu:matrix.org</code></pre>"
         let attributedString = attributedStringBuilder.fromHTML(htmlString)
-        XCTAssertEqual(attributedString?.runs.count, 2)
+        
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssert(attributedString?.runs.count == 2)
+        } else {
+            XCTAssert(attributedString?.runs.count == 1)
+        }
+        
         XCTAssertNil(attributedString?.attachment)
     }
     
     func testAllUsersIsIgnoredInCode() {
         let htmlString = "<pre><code>test @room test</code></pre>"
         let attributedString = attributedStringBuilder.fromHTML(htmlString)
-        XCTAssertEqual(attributedString?.runs.count, 3)
+        
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssert(attributedString?.runs.count == 3)
+        } else {
+            XCTAssert(attributedString?.runs.count == 1)
+        }
+        
         XCTAssertNil(attributedString?.attachment)
     }
     
@@ -639,7 +758,6 @@ class AttributedStringBuilderV2Tests: XCTestCase {
             XCTFail("Couldn't find the link")
             return
         }
-        
         XCTAssertTrue(link.requiresConfirmation)
         XCTAssertEqual(link.confirmationParameters?.internalURL.absoluteString, "https://matrix.org")
         XCTAssertEqual(link.confirmationParameters?.displayString, "https://element.io")
