@@ -16,7 +16,17 @@ private final class MediaRequest {
 }
 
 actor MediaLoader: MediaLoaderProtocol {
-    private let client: ClientProtocol
+    // We noticed that the keyboard appears to hold onto a reference to the `Context` of the last
+    // screen that had text input focus, resulting in its MediaProvider staying alive which in
+    // turn keeps this loader alive: https://github.com/element-hq/element-x-ios/issues/4465
+    // Therefore the client is `weak` so that the underlying `MatrixRustSDK.Client` is released
+    // when e.g. clearing the cache, otherwise we have the potential for 2 `Client`s to be alive
+    // at the same time causing havoc.
+    //
+    // Whilst a more correct fix would be to make `Context.mediaProvider` weak, this requires a
+    // bunch of workarounds in our preview tests to keep the mock provider alive as some ViewModels
+    // don't have an accompanying ClientMock to own it.
+    private weak var client: ClientProtocol?
     private var ongoingRequests = [MediaSourceProxy: MediaRequest]()
 
     init(client: ClientProtocol) {
@@ -24,18 +34,21 @@ actor MediaLoader: MediaLoaderProtocol {
     }
     
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
-        try await enqueueLoadMediaRequest(forSource: source) {
-            try await self.client.getMediaContent(mediaSource: source.underlyingSource)
+        try await enqueueLoadMediaRequest(forSource: source) { [weak client] in
+            guard let client else { throw MediaLoaderError.missingClient }
+            return try await client.getMediaContent(mediaSource: source.underlyingSource)
         }
     }
     
     func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
-        try await enqueueLoadMediaRequest(forSource: source) {
-            try await self.client.getMediaThumbnail(mediaSource: source.underlyingSource, width: UInt64(width), height: UInt64(height))
+        try await enqueueLoadMediaRequest(forSource: source) { [weak client] in
+            guard let client else { throw MediaLoaderError.missingClient }
+            return try await client.getMediaThumbnail(mediaSource: source.underlyingSource, width: UInt64(width), height: UInt64(height))
         }
     }
     
     func loadMediaFileForSource(_ source: MediaSourceProxy, filename: String?) async throws -> MediaFileHandleProxy {
+        guard let client else { throw MediaLoaderError.missingClient }
         let result = try await client.getMediaFile(mediaSource: source.underlyingSource,
                                                    filename: filename,
                                                    mimeType: source.mimeType ?? "application/octet-stream",

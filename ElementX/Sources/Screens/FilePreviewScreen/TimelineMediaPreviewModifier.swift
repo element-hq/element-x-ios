@@ -135,12 +135,9 @@ private struct MediaPreviewViewController: UIViewControllerRepresentable {
 // MARK: - Previews
 
 struct TimelineMediaPreviewModifier_Previews: PreviewProvider {
-    static let viewModel = makeViewModel(mediaProvider: mediaProvider)
-    static let mediaProvider = MediaProviderMock(.init())
-    static let downloadingViewModel = makeViewModel(isDownloading: true, mediaProvider: downloadingMediaProvider)
-    static let downloadingMediaProvider = MediaProviderMock(.init())
-    static let downloadErrorViewModel = makeViewModel(isDownloadError: true, mediaProvider: downloadErrorMediaProvider)
-    static let downloadErrorMediaProvider = MediaProviderMock(.init())
+    static let viewModel = makeViewModel()
+    static let downloadingViewModel = makeViewModel(isDownloading: true)
+    static let downloadErrorViewModel = makeViewModel(isDownloadError: true)
     
     static var previews: some View {
         MediaPreviewViewController(viewModel: viewModel, dismissalPublisher: .init()) { }
@@ -151,7 +148,7 @@ struct TimelineMediaPreviewModifier_Previews: PreviewProvider {
             .previewDisplayName("Download Error")
     }
     
-    static func makeViewModel(isDownloading: Bool = false, isDownloadError: Bool = false, mediaProvider: MediaProviderMock) -> TimelineMediaPreviewViewModel {
+    static func makeViewModel(isDownloading: Bool = false, isDownloadError: Bool = false) -> TimelineMediaPreviewViewModel {
         let item = FileRoomTimelineItem(id: .randomEvent,
                                         timestamp: .mock,
                                         isOutgoing: false,
@@ -167,6 +164,8 @@ struct TimelineMediaPreviewModifier_Previews: PreviewProvider {
         
         let timelineController = MockTimelineController(timelineKind: .media(.mediaFilesScreen))
         timelineController.timelineItems = [item]
+        
+        let mediaProvider = MediaProviderMock(configuration: .init())
         
         if isDownloading {
             mediaProvider.loadFileFromSourceFilenameClosure = { _, _ in

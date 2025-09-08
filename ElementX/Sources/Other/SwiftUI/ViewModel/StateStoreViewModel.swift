@@ -65,12 +65,7 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
     
         /// An optional image loading service so that views can manage themselves
         /// Intentionally non-generic so that it doesn't grow uncontrollably
-        ///
-        /// We noticed that the keyboard appears to hold onto the Context of the last screen that had text input focus:
-        /// https://github.com/element-hq/element-x-ios/issues/4465
-        /// Therefore this is `weak` so that the underlying `MatrixRustSDK.Client` isn't retained when e.g. clearing
-        /// the cache, otherwise we have the potential for 2 `Client`s to be alive at the same time causing havoc.
-        private(set) weak var mediaProvider: MediaProviderProtocol?
+        let mediaProvider: MediaProviderProtocol?
     
         /// Set-able/Bindable access to the bindable state.
         subscript<T>(dynamicMember keyPath: WritableKeyPath<State.BindStateType, T>) -> T {

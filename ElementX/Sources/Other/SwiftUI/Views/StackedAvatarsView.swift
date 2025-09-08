@@ -54,13 +54,13 @@ struct StackedAvatarsView_Previews: PreviewProvider, TestablePreview {
                                lineWidth: 2,
                                avatars: avatars,
                                avatarSize: .user(on: .knockingUsersBannerStack),
-                               mediaProvider: .mock)
+                               mediaProvider: MediaProviderMock())
             StackedAvatarsView(overlap: 16,
                                lineWidth: 2,
                                shouldStackFromLast: true,
                                avatars: avatars,
                                avatarSize: .user(on: .knockingUsersBannerStack),
-                               mediaProvider: .mock)
+                               mediaProvider: MediaProviderMock())
         }
     }
 }

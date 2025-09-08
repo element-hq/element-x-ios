@@ -146,7 +146,7 @@ struct RoomChangeRolesScreen_Previews: PreviewProvider, TestablePreview {
         
         return RoomChangeRolesScreenViewModel(mode: mode,
                                               roomProxy: JoinedRoomProxyMock(.init(members: members)),
-                                              mediaProvider: .mock,
+                                              mediaProvider: MediaProviderMock(configuration: .init()),
                                               userIndicatorController: UserIndicatorControllerMock(),
                                               analytics: ServiceLocator.shared.analytics)
     }

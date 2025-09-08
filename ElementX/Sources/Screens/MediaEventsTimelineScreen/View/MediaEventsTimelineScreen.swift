@@ -285,7 +285,7 @@ struct MediaEventsTimelineScreen_Previews: PreviewProvider, TestablePreview {
         MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: makeTimelineViewModel(empty: empty),
                                            filesTimelineViewModel: makeTimelineViewModel(empty: empty),
                                            initialScreenMode: screenMode,
-                                           mediaProvider: .mock,
+                                           mediaProvider: MediaProviderMock(configuration: .init()),
                                            userIndicatorController: UserIndicatorControllerMock(),
                                            appMediator: AppMediatorMock())
     }

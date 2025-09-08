@@ -234,7 +234,7 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
                                          isPublic: true,
                                          isDirect: false),
                              avatarSize: .room(on: .details),
-                             mediaProvider: .mock) {
+                             mediaProvider: MediaProviderMock(configuration: .init())) {
                 HStack(spacing: 32) {
                     ShareLink(item: "test") {
                         CompoundIcon(\.shareIos)
@@ -248,7 +248,7 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
         
         Form {
             AvatarHeaderView(accountOwner: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockMe), dmRecipient: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),
-                             mediaProvider: .mock) {
+                             mediaProvider: MediaProviderMock(configuration: .init())) {
                 HStack(spacing: 32) {
                     ShareLink(item: "test") {
                         CompoundIcon(\.shareIos)
@@ -263,16 +263,16 @@ struct AvatarHeaderView_Previews: PreviewProvider, TestablePreview {
         VStack(spacing: 16) {
             AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockAlice),
                              avatarSize: .room(on: .details),
-                             mediaProvider: .mock) { Text("") }
+                             mediaProvider: MediaProviderMock(configuration: .init())) { Text("") }
             
             AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockBob),
                              isVerified: true,
                              avatarSize: .room(on: .details),
-                             mediaProvider: .mock) { Text("") }
+                             mediaProvider: MediaProviderMock(configuration: .init())) { Text("") }
             
             AvatarHeaderView(member: RoomMemberDetails(withProxy: RoomMemberProxyMock.mockBanned[3]),
                              avatarSize: .room(on: .details),
-                             mediaProvider: .mock) { Text("") }
+                             mediaProvider: MediaProviderMock(configuration: .init())) { Text("") }
         }
         .padding()
         .background(Color.compound.bgSubtleSecondaryLevel0)

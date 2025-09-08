@@ -32,7 +32,7 @@ class ManageRoomMemberSheetViewModelTests: XCTestCase {
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    analyticsService: ServiceLocator.shared.analytics,
-                                                   mediaProvider: .mock)
+                                                   mediaProvider: MediaProviderMock(configuration: .init()))
         
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
         let deferredAction = deferFulfillment(viewModel.actions) { action in
@@ -63,7 +63,7 @@ class ManageRoomMemberSheetViewModelTests: XCTestCase {
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    analyticsService: ServiceLocator.shared.analytics,
-                                                   mediaProvider: .mock)
+                                                   mediaProvider: MediaProviderMock(configuration: .init()))
         
         let deferred = deferFulfillment(context.observe(\.viewState.bindings.alertInfo)) { $0 != nil }
         context.send(viewAction: .ban)
@@ -85,7 +85,7 @@ class ManageRoomMemberSheetViewModelTests: XCTestCase {
                                                    roomProxy: roomProxy,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    analyticsService: ServiceLocator.shared.analytics,
-                                                   mediaProvider: .mock)
+                                                   mediaProvider: MediaProviderMock(configuration: .init()))
         
         let deferredAction = deferFulfillment(viewModel.actions) { action in
             action == .dismiss(shouldShowDetails: true)
