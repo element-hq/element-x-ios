@@ -410,7 +410,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
 extension RoomScreenViewModel {
     static func mock(roomProxyMock: JoinedRoomProxyMock,
-                     clientProxyMock: ClientProxyMock = ClientProxyMock(),
+                     clientProxyMock: ClientProxyMock = ClientProxyMock(.init()),
                      appHooks: AppHooks = AppHooks()) -> RoomScreenViewModel {
         RoomScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                             roomProxy: roomProxyMock,
