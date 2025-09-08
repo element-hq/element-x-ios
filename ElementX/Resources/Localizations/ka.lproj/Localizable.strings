@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "%1$@ რეაქციის წაშლა";
 "a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "ფაილების გაგზავნა";
+"a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
 "a11y_show_password" = "პაროლის ჩვენება";
 "a11y_start_call" = "დარეკვა";
-"a11y_time_limited_action_required" = "Time limited action required";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "მომხმარებლის მენიუ";
 "a11y_view_avatar" = "View avatar";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "This month";
 "common_decryption_error" = "გაშიფვრის შეცდომა";
+"common_description" = "Description";
 "common_developer_options" = "დეველოპერის პარამეტრები";
 "common_device_id" = "Device ID";
 "common_direct_chat" = "პირდაპირი ჩატი";
@@ -323,6 +324,9 @@
 "common_waiting" = "მოცდა...";
 "common_waiting_for_decryption_key" = "ლოდინი ამ შეტყობინებისათვის";
 "common_you" = "You";
+"common.add_account" = "Add an account";
+"common.add_another_account" = "Add another account";
+"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "დაადასტურეთ თქვენი აღდგენის გასაღები რათა გქონდეთ წვდომა გასაღებების დამგროვებელთან და შეტყობინებების ისტორიასთან.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "ღიმილები & ხალხი";
 "emoji_picker_category_places" = "მოგზაურობა და ადგილები";
 "emoji_picker_category_symbols" = "სიმბოლოები";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
 "error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation.";
 "error_failed_creating_the_permalink" = "მუდმივი ბმულის შექმნა ვერ მოხერხდა";
 "error_failed_loading_map" = "ვერ გამოვიდა რუკის %1$@ ჩატვირთვა. გთხოვთ, მოგვიანებით სცადოთ.";

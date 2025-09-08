@@ -31,9 +31,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d percent of total votes</string>
-			<key>other</key>
-			<string>%1$d percents of total votes</string>
+			<string>%1$d процент от общего числа голосов</string>
+			<key>few</key>
+			<string>%1$d процента от общего числа голосов</string>
+			<key>many</key>
+			<string>%1$d процентов от общего числа голосов</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -119,9 +121,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d reply</string>
-			<key>other</key>
-			<string>%1$d replies</string>
+			<string>%1$d ответ</string>
+			<key>few</key>
+			<string>%1$d ответа</string>
+			<key>many</key>
+			<string>%1$d ответов</string>
 		</dict>
 	</dict>
 	<key>common_rooms</key>
@@ -365,9 +369,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d member reacted with %2$@</string>
-			<key>other</key>
-			<string>%1$d members reacted with %2$@</string>
+			<string>%1$d участник отреагировал %2$@</string>
+			<key>few</key>
+			<string>%1$d участника отреагировало %2$@</string>
+			<key>many</key>
+			<string>%1$d участников отреагировало %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_including_you_a11y</key>
@@ -381,9 +387,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You and %1$d member reacted with %2$@</string>
-			<key>other</key>
-			<string>You and %1$d members reacted with %2$@</string>
+			<string>Вы и %1$d участник отреагировали %2$@</string>
+			<key>few</key>
+			<string>Вы и %1$d участника отреагировали %2$@</string>
+			<key>many</key>
+			<string>Вы и %1$d участников отреагировали %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>

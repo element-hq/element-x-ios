@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Ta bort reaktionen med %1$@";
 "a11y_remove_reaction_with" = "Ta bort reaktion med %1$@";
 "a11y_send_files" = "Skicka filer";
+"a11y_session_verification_time_limited_action_required" = "Tidsbegränsad åtgärd krävs";
 "a11y_show_password" = "Visa lösenord";
 "a11y_start_call" = "Starta ett samtal";
-"a11y_time_limited_action_required" = "Tidsbegränsad åtgärd krävs";
 "a11y_tombstoned_room" = "Gravstensmärkt rum";
 "a11y_user_menu" = "Användarmeny";
 "a11y_view_avatar" = "Visa avatar";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@vid %2$@";
 "common_date_this_month" = "Denna månad";
 "common_decryption_error" = "Avkrypteringsfel";
+"common_description" = "Description";
 "common_developer_options" = "Utvecklaralternativ";
 "common_device_id" = "Enhets-ID";
 "common_direct_chat" = "Direktchatt";
@@ -323,6 +324,9 @@
 "common_waiting" = "Väntar …";
 "common_waiting_for_decryption_key" = "Väntar på detta meddelande";
 "common_you" = "Du";
+"common.add_account" = "Add an account";
+"common.add_another_account" = "Add another account";
+"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Skickad från en osäker enhet";
 "common_unable_to_decrypt_verification_violation" = "Avsändarens verifierade identitet återställdes";
 "confirm_recovery_key_banner_message" = "Bekräfta din återställningsnyckel för att behålla åtkomsten till din nyckellagring och meddelandehistorik.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Smileys & personer";
 "emoji_picker_category_places" = "Resor & platser";
 "emoji_picker_category_symbols" = "Symboler";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "Rummet finns inte längre eller så är inbjudan inte längre giltig.";
 "error_network_or_server_issue" = "Detta kan bero på nätverks- eller serverproblem.";
 "error_room_address_already_exists" = "Den här rumsadressen finns redan. Försök att redigera adressfältet för rummet eller ändra rummets namn";
 "error_room_address_invalid_symbols" = "Vissa tecken är inte tillåtna. Endast bokstäver, siffror och följande symboler stöds ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
 "error_account_creation_not_possible" = "Din hemserver måste uppgraderas för att stödja Matrix Authentication Service och skapande av konto.";
 "error_failed_creating_the_permalink" = "Misslyckades att skapa permalänken";
 "error_failed_loading_map" = "%1$@ kunde inte ladda kartan. Vänligen försök igen senare.";

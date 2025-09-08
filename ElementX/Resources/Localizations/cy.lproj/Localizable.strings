@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Wedi dileu adwaith gyda %1$@";
 "a11y_remove_reaction_with" = "Wedi dileu adwaith gyda %1$@";
 "a11y_send_files" = "Anfon ffeiliau";
+"a11y_session_verification_time_limited_action_required" = "Mae angen gweithredu â chyfyngiad amser";
 "a11y_show_password" = "Dangos y cyfrinair";
 "a11y_start_call" = "Cychwyn galwad";
-"a11y_time_limited_action_required" = "Mae angen gweithredu â chyfyngiad amser";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Dewislen defnyddiwr";
 "a11y_view_avatar" = "Gweld afatar";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ am %2$@";
 "common_date_this_month" = "Y mis hwn";
 "common_decryption_error" = "Gwall dadgryptio";
+"common_description" = "Description";
 "common_developer_options" = "Dewisiadau datblygwr";
 "common_device_id" = "ID dyfais";
 "common_direct_chat" = "Sgwrs uniongyrchol";
@@ -323,6 +324,9 @@
 "common_waiting" = "Yn aros…";
 "common_waiting_for_decryption_key" = "Yn aros am y neges hon";
 "common_you" = "Chi";
+"common.add_account" = "Add an account";
+"common.add_another_account" = "Add another account";
+"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Wedi'i anfon o ddyfais anniogel";
 "common_unable_to_decrypt_verification_violation" = "Cafodd hunaniaeth yr anfonwr ei hailosod";
 "confirm_recovery_key_banner_message" = "Cadarnhewch eich allwedd adfer i gynnal mynediad i'ch storfa allweddi a'ch hanes negeseuon.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Wynebau Hapus a Phobl";
 "emoji_picker_category_places" = "Teithio a Llefydd";
 "emoji_picker_category_symbols" = "Symbolau";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "Nid yw'r ystafell yn bodoli mwyach neu nid yw'r gwahoddiad yn ddilys mwyach.";
 "error_network_or_server_issue" = "Gall hyn fod oherwydd problemau rhwydwaith neu weinydd.";
 "error_room_address_already_exists" = "Mae'r cyfeiriad ystafell hwn yn bodoli eisoes. Ceisiwch olygu'r maes cyfeiriad ystafell neu newid enw'r ystafell";
 "error_room_address_invalid_symbols" = "Dyw rhai nodau ddim yn cael eu caniatáu. Dim ond llythrennau, digidau a'r symbolau canlynol sy'n cael eu cefnogi ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
 "error_account_creation_not_possible" = "Mae angen uwchraddio eich gweinydd cartref i gefnogi Gwasanaeth Dilysu Matrix a chreu cyfrif.";
 "error_failed_creating_the_permalink" = "Wedi methu creu'r ddolen barhaol";
 "error_failed_loading_map" = "Methodd %1$@ â llwytho'r map. Ceisiwch eto yn nes ymlaen.";

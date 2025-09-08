@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Verwijder reactie met %1$@";
 "a11y_remove_reaction_with" = "Reactie met %1$@ verwijderen";
 "a11y_send_files" = "Bestanden verzenden";
+"a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
 "a11y_show_password" = "Wachtwoord weergeven";
 "a11y_start_call" = "Begin een oproep";
-"a11y_time_limited_action_required" = "Time limited action required";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Gebruikersmenu";
 "a11y_view_avatar" = "Bekijk afbeelding";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "This month";
 "common_decryption_error" = "Decryptie fout";
+"common_description" = "Description";
 "common_developer_options" = "Ontwikkelaarsopties";
 "common_device_id" = "Apparaat-ID";
 "common_direct_chat" = "Directe chat";
@@ -323,6 +324,9 @@
 "common_waiting" = "Wachten…";
 "common_waiting_for_decryption_key" = "Wachten op dit bericht";
 "common_you" = "Jij";
+"common.add_account" = "Add an account";
+"common.add_another_account" = "Add another account";
+"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
 "confirm_recovery_key_banner_message" = "Bevestig je herstelsleutel om toegang te houden tot je sleutelopslag en berichtengeschiedenis.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Smileys & Mensen";
 "emoji_picker_category_places" = "Reizen & Locaties";
 "emoji_picker_category_symbols" = "Symbolen";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "This may be due to network or server issues.";
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
 "error_account_creation_not_possible" = "Je homeserver moet worden geüpgraded om de Matrix Authentication Service en het aanmaken van accounts te ondersteunen.";
 "error_failed_creating_the_permalink" = "Het aanmaken van de permanente link is mislukt";
 "error_failed_loading_map" = "%1$@ kon de kaart niet laden. Probeer het later opnieuw.";

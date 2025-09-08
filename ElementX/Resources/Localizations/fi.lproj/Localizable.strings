@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Poista reaktio: %1$@";
 "a11y_remove_reaction_with" = "Poista reaktio: %1$@";
 "a11y_send_files" = "Lähetä tiedostoja";
+"a11y_session_verification_time_limited_action_required" = "Aikarajoitettu toimenpide vaaditaan";
 "a11y_show_password" = "Näytä salasana";
 "a11y_start_call" = "Aloita puhelu";
-"a11y_time_limited_action_required" = "Aikarajoitettu toimenpide vaaditaan";
 "a11y_tombstoned_room" = "Haudattu huone";
 "a11y_user_menu" = "Käyttäjävalikko";
 "a11y_view_avatar" = "Näytä avatar";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ klo %2$@";
 "common_date_this_month" = "Tässä kuussa";
 "common_decryption_error" = "Salauksen purkuvirhe";
+"common_description" = "Description";
 "common_developer_options" = "Kehittäjän asetukset";
 "common_device_id" = "Laitteen tunnus";
 "common_direct_chat" = "Yksityinen keskustelu";
@@ -323,6 +324,9 @@
 "common_waiting" = "Odotetaan…";
 "common_waiting_for_decryption_key" = "Odotetaan viestiä";
 "common_you" = "Sinä";
+"common.add_account" = "Add an account";
+"common.add_another_account" = "Add another account";
+"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Lähetetty suojaamattomasta laitteesta";
 "common_unable_to_decrypt_verification_violation" = "Lähettäjän vahvistettu identiteetti nollattiin";
 "confirm_recovery_key_banner_message" = "Vahvista palautusavaimesi, jotta pääset edelleen käyttämään avainten säilytystä ja viestihistoriaa.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Hymiöt ja ihmiset";
 "emoji_picker_category_places" = "Matkustaminen ja paikat";
 "emoji_picker_category_symbols" = "Symbolit";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "Huone ei ole enää olemassa tai kutsu ei ole enää voimassa.";
 "error_network_or_server_issue" = "Tämä voi johtua verkko- tai palvelinongelmista.";
 "error_room_address_already_exists" = "Tämä huoneen osoite on jo käytössä, yritä muokata huoneen osoitekenttää tai muuta huoneen nimeä";
 "error_room_address_invalid_symbols" = "Jotkin merkit eivät ole sallittuja. Vain kirjaimet, numerot ja seuraavat symbolit ovat tuettuja ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
 "error_account_creation_not_possible" = "Kotipalvelimesi on päivitettävä tukemaan Matrix Authentication Serviceä ja tilin luomista.";
 "error_failed_creating_the_permalink" = "Pysyvän linkin luominen epäonnistui";
 "error_failed_loading_map" = "%1$@ ei pystynyt lataamaan karttaa. Yritä myöhemmin uudelleen.";

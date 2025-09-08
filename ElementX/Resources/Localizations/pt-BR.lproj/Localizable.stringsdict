@@ -13,9 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d dígito inserido</string>
+			<string>%1$d dígito digitado</string>
 			<key>other</key>
-			<string>%1$d dígitos inseridos</string>
+			<string>%1$d dígitos digitados</string>
 		</dict>
 	</dict>
 	<key>a11y_polls_percent_of_total</key>
@@ -47,7 +47,7 @@
 			<key>one</key>
 			<string>Lido por %1$@ e %2$d outro</string>
 			<key>other</key>
-			<string>Lido por %1$@ e %2$d outros</string>
+			<string>Lido por %1$@ e outros %2$d</string>
 		</dict>
 	</dict>
 	<key>common_many_members</key>
@@ -125,9 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Room</string>
+			<string>%1$d sala</string>
 			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>%1$d salas</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -141,9 +141,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Space</string>
+			<string>%1$d espaço</string>
 			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>%1$d espaços</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -253,9 +253,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Você tem %1$d tentativa de debloqueio</string>
+			<string>Você tem %1$d tentativa de desbloqueio</string>
 			<key>other</key>
-			<string>Você tem %1$d tentativas de debloqueio</string>
+			<string>Você tem %1$d tentativas de desbloqueio</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -285,9 +285,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Mensagem fixada</string>
+			<string>%1$d mensagem fixada</string>
 			<key>other</key>
-			<string>%1$d Mensagens fixadas</string>
+			<string>%1$d mensagens fixadas</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -317,9 +317,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$@ +%2$d outro desejam entrar desta sala</string>
+			<string>%1$@ + outro %2$d desejam entrar nesta sala</string>
 			<key>other</key>
-			<string>%1$@ +%2$d outros desejam entrar desta sala</string>
+			<string>%1$@ + outros %2$d desejam entrar nesta sala</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_a11y</key>
@@ -413,9 +413,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Encontrado %1$d provedor de push: %2$@</string>
+			<string>Foi encontrado %1$d provedor de push: %2$@</string>
 			<key>other</key>
-			<string>Encontrados %1$d provedores de push: %2$@</string>
+			<string>Foram encontrados %1$d provedores de push: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
@@ -431,7 +431,7 @@
 			<key>one</key>
 			<string>%1$d distribuidor encontrado: %2$@.</string>
 			<key>other</key>
-			<string>%1$d Distribuidores encontrados: %2$@.</string>
+			<string>%1$d distribuidores encontrados: %2$@.</string>
 		</dict>
 	</dict>
 </dict>

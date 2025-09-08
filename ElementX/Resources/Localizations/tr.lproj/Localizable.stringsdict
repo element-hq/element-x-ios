@@ -79,7 +79,7 @@
 			<key>one</key>
 			<string>%1$d üye</string>
 			<key>other</key>
-			<string>%1$d üye</string>
+			<string>%1$d üyeleri</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>

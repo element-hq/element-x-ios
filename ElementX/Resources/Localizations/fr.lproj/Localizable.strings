@@ -1,11 +1,11 @@
 "Notification" = "Notification";
 "a11y_add_reaction" = "Ajouter une réaction: %1$@";
 "a11y_avatar" = "Avatar";
-"a11y_collapse_message_text_field" = "Minimise message text field";
+"a11y_collapse_message_text_field" = "Réduire la taille du composeur";
 "a11y_delete" = "Supprimer";
 "a11y_edit_avatar" = "Modifier l'avatar";
 "a11y_edit_room_address_hint" = "L'adresse complète sera %1$@";
-"a11y_expand_message_text_field" = "Expand message text field";
+"a11y_expand_message_text_field" = "Augmenter la taille du composeur";
 "a11y_hide_password" = "Masquer le mot de passe";
 "a11y_join_call" = "Rejoindre l’appel";
 "a11y_jump_to_bottom" = "Retourner à la fin de la conversation";
@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Supprimer la réaction avec %1$@";
 "a11y_remove_reaction_with" = "Supprimer la réaction avec %1$@";
 "a11y_send_files" = "Envoyer des fichiers";
+"a11y_session_verification_time_limited_action_required" = "Action limitée dans le temps requise, vous avez une minute pour effectuer la vérification";
 "a11y_show_password" = "Afficher le mot de passe";
 "a11y_start_call" = "Démarrer un appel";
-"a11y_time_limited_action_required" = "Demande d'action qui expirera dans un instant";
 "a11y_tombstoned_room" = "Salon clôturé";
 "a11y_user_menu" = "Menu utilisateur";
 "a11y_view_avatar" = "Voir l'avatar";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ à %2$@";
 "common_date_this_month" = "Ce mois-ci";
 "common_decryption_error" = "Erreur de déchiffrement";
+"common_description" = "Description";
 "common_developer_options" = "Options pour les développeurs";
 "common_device_id" = "Identifiant de session";
 "common_direct_chat" = "Discussion à deux";
@@ -323,6 +324,9 @@
 "common_waiting" = "En attente…";
 "common_waiting_for_decryption_key" = "En attente de la clé de déchiffrement";
 "common_you" = "Vous";
+"common.add_account" = "Ajouter un compte";
+"common.add_another_account" = "Ajouter un autre compte";
+"common.select_account" = "Choisir un compte";
 "common_unable_to_decrypt_insecure_device" = "Envoyé depuis un appareil non sécurisé";
 "common_unable_to_decrypt_verification_violation" = "L'identité vérifiée de l'expéditeur a été réinitialisée";
 "confirm_recovery_key_banner_message" = "Confirmez votre clé de récupération pour conserver l’accès à votre stockage de clés et à l’historique des messages.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Émoticônes et personnes";
 "emoji_picker_category_places" = "Voyages & lieux";
 "emoji_picker_category_symbols" = "Symboles";
+"emoji_picker_search_placeholder" = "Chercher des emojis";
 "error_invalid_invite" = "Ce salon n'existe plus ou l'invitation n'est plus valable.";
 "error_network_or_server_issue" = "Cela peut être dû à des problèmes de réseau ou de serveur.";
 "error_room_address_already_exists" = "Cette adresse de salon existe déjà, veuillez essayer de modifier le champ d'adresse de salon ou de modifier le nom du salon";
 "error_room_address_invalid_symbols" = "Certains caractères ne sont pas autorisés. Seuls les lettres, les chiffres et les symboles suivants sont utilisables ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "Vous êtes déjà connecté sur cet appareil en tant que %1$@.";
 "error_account_creation_not_possible" = "Votre serveur d’accueil doit être mis à jour pour prendre en charge le protocole MAS (Matrix Authentication Service) et la création de compte.";
 "error_failed_creating_the_permalink" = "Échec de la création du permalien";
 "error_failed_loading_map" = "%1$@ n’a pas pu charger la carte. Veuillez réessayer ultérieurement.";

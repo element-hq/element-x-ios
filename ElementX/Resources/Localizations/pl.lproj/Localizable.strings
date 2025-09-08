@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Usuń reakcję %1$@";
 "a11y_remove_reaction_with" = "Usuń reakcję z %1$@";
 "a11y_send_files" = "Wyślij pliki";
+"a11y_session_verification_time_limited_action_required" = "Wymagane jest działanie ograniczone czasowo";
 "a11y_show_password" = "Pokaż hasło";
 "a11y_start_call" = "Rozpocznij rozmowę";
-"a11y_time_limited_action_required" = "Wymagane jest działanie ograniczone czasowo";
 "a11y_tombstoned_room" = "Pokój nagrobkowy";
 "a11y_user_menu" = "Menu użytkownika";
 "a11y_view_avatar" = "Wyświetl awatar";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ o %2$@";
 "common_date_this_month" = "W tym miesiącu";
 "common_decryption_error" = "Błąd deszyfrowania";
+"common_description" = "Description";
 "common_developer_options" = "Opcje programisty";
 "common_device_id" = "ID urządzenia";
 "common_direct_chat" = "Czat prywatny";
@@ -323,6 +324,9 @@
 "common_waiting" = "Oczekiwanie…";
 "common_waiting_for_decryption_key" = "Oczekiwanie na tę wiadomość";
 "common_you" = "Ty";
+"common.add_account" = "Add an account";
+"common.add_another_account" = "Add another account";
+"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Wysłane z niebezpiecznego urządzenia";
 "common_unable_to_decrypt_verification_violation" = "Zweryfikowana tożsamość nadawcy została zresetowana";
 "confirm_recovery_key_banner_message" = "Potwierdź klucz przywracania, aby zachować dostęp do magazynu kluczy i historii wiadomości.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Buźki i osoby";
 "emoji_picker_category_places" = "Podróż i miejsca";
 "emoji_picker_category_symbols" = "Symbole";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "Pokój już nie istnieje lub zaproszenie nie jest już ważne.";
 "error_network_or_server_issue" = "Może to być spowodowane problemami z siecią lub serwerem.";
 "error_room_address_already_exists" = "Ten adres pokoju już istnieje. Spróbuj zmienić adres lub nazwę pokoju";
 "error_room_address_invalid_symbols" = "Niektóre znaki są niedozwolone. Obsługiwane są tylko litery, cyfry i następujące symbole ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
 "error_account_creation_not_possible" = "Twój serwer domowy wymaga aktualizacji, aby uzyskać wsparcie usługi Matrix Authentication Service i tworzenia kont.";
 "error_failed_creating_the_permalink" = "Nie udało się utworzyć linku bezpośredniego";
 "error_failed_loading_map" = "%1$@ nie mogło wczytać mapy. Spróbuj ponownie później.";

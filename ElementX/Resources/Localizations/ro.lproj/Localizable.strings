@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Îndepărtați reacția cu %1$@";
 "a11y_remove_reaction_with" = "Îndepărtați reacția %1$@";
 "a11y_send_files" = "Trimiteți fișiere";
+"a11y_session_verification_time_limited_action_required" = "Acțiune cu termen limită necesară";
 "a11y_show_password" = "Afișați parola";
 "a11y_start_call" = "Începeți un apel";
-"a11y_time_limited_action_required" = "Acțiune cu termen limită necesară";
 "a11y_tombstoned_room" = "Cameră terminată";
 "a11y_user_menu" = "Meniu utilizator";
 "a11y_view_avatar" = "Vizualizați avatarul";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ la %2$@";
 "common_date_this_month" = "Luna aceasta";
 "common_decryption_error" = "Eroare de decriptare";
+"common_description" = "Description";
 "common_developer_options" = "Opțiuni programator";
 "common_device_id" = "ID-ul dispozitivului";
 "common_direct_chat" = "Chat direct";
@@ -323,6 +324,9 @@
 "common_waiting" = "Se aşteaptă…";
 "common_waiting_for_decryption_key" = "Mesaj în așteptare";
 "common_you" = "Dumneavoastră";
+"common.add_account" = "Add an account";
+"common.add_another_account" = "Add another account";
+"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Trimis de pe un dispozitiv nesigur";
 "common_unable_to_decrypt_verification_violation" = "Identitatea verificată a expeditorului a fost resetată";
 "confirm_recovery_key_banner_message" = "Backup-ul pentru chat nu este sincronizat. Trebuie să confirmați cheia de recuperare pentru a menține accesul la backup.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Fețe zâmbitoare & Oameni";
 "emoji_picker_category_places" = "Călătorii & Locuri";
 "emoji_picker_category_symbols" = "Simboluri";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "Camera nu mai există sau invitația nu mai este valabilă.";
 "error_network_or_server_issue" = "Acest lucru se poate datora unor probleme de rețea sau de server.";
 "error_room_address_already_exists" = "Această adresă de cameră există deja. Încercați să editați câmpul adresei camerei sau să schimbați numele camerei.";
 "error_room_address_invalid_symbols" = "Unele caractere nu sunt permise. Sunt acceptate doar literele, cifrele și următoarele simboluri ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
 "error_account_creation_not_possible" = "Serverul dumneavoastră trebuie actualizat pentru a suporta serviciul de autentificare Matrix și crearea de conturi.";
 "error_failed_creating_the_permalink" = "Crearea permalink-ului a eșuat";
 "error_failed_loading_map" = "%1$@ nu a putut încărca harta. Vă rugăm să încercați din nou mai târziu.";

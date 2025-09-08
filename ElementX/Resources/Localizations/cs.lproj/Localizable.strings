@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Odstraňit reakci s %1$@";
 "a11y_remove_reaction_with" = "Odstranit reakci pomocí %1$@";
 "a11y_send_files" = "Odeslat soubory";
+"a11y_session_verification_time_limited_action_required" = "Vyžaduje se časově omezená akce";
 "a11y_show_password" = "Zobrazit heslo";
 "a11y_start_call" = "Zahájit hovor";
-"a11y_time_limited_action_required" = "Vyžaduje se časově omezená akce";
 "a11y_tombstoned_room" = "Místnost s náhrobkem";
 "a11y_user_menu" = "Uživatelské menu";
 "a11y_view_avatar" = "Zobrazit avatar";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ v %2$@";
 "common_date_this_month" = "Tento měsíc";
 "common_decryption_error" = "Chyba dešifrování";
+"common_description" = "Description";
 "common_developer_options" = "Možnosti pro vývojáře";
 "common_device_id" = "ID zařízení";
 "common_direct_chat" = "Přímý chat";
@@ -323,6 +324,9 @@
 "common_waiting" = "Čekání...";
 "common_waiting_for_decryption_key" = "Čekání na dešifrovací klíč";
 "common_you" = "Vy";
+"common.add_account" = "Add an account";
+"common.add_another_account" = "Add another account";
+"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Šifrováno nezabezpečeným zařízením";
 "common_unable_to_decrypt_verification_violation" = "Ověřená identita odesílatele se změnila";
 "confirm_recovery_key_banner_message" = "Potvrďte klíč pro obnovení, abyste zachovali přístup k úložišti klíčů a historii zpráv.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Smajlíci a lidé";
 "emoji_picker_category_places" = "Cestování a místa";
 "emoji_picker_category_symbols" = "Symboly";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "Místnost již neexistuje nebo pozvánka již není platná.";
 "error_network_or_server_issue" = "Může to být způsobeno problémy se sítí nebo serverem.";
 "error_room_address_already_exists" = "Tato adresa místnosti již existuje, zkuste prosím upravit pole adresy místnosti nebo změnit název místnosti";
 "error_room_address_invalid_symbols" = "Některé znaky nejsou povoleny. Podporovány jsou pouze písmena, číslice a následující symboly ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
 "error_account_creation_not_possible" = "Váš domovský server je třeba upgradovat, aby podporoval službu Matrix Authentication Service a vytváření účtu.";
 "error_failed_creating_the_permalink" = "Vytvoření trvalého odkazu se nezdařilo";
 "error_failed_loading_map" = "%1$@ nemohl načíst mapu. Zkuste to prosím později.";
