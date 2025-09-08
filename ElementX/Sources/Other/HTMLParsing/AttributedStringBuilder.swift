@@ -42,6 +42,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     
     static func invalidateCaches() {
         AttributedStringBuilderV1.invalidateCaches()
+        AttributedStringBuilderV2.invalidateCaches()
     }
     
     init(cacheKey: String = defaultKey, mentionBuilder: MentionBuilderProtocol) {
