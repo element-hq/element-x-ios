@@ -240,18 +240,23 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         let reachabilityNotificationID = "io.element.elementx.reachability.notification"
-        userSession.clientProxy.homeserverReachabilityPublisher
-            .removeDuplicates()
+        userSession.clientProxy.homeserverReachabilityPublisher.removeDuplicates()
+            .combineLatest(flowParameters.appMediator.networkMonitor.reachabilityPublisher.removeDuplicates())
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] reachability in
-                MXLog.info("Homeserver reachability changed to \(reachability)")
+            .sink { [weak self] homeserverReachability, networkReachability in
+                MXLog.info("Homeserver reachability: \(homeserverReachability)")
                 
                 guard let self else { return }
-                if reachability == .reachable {
+                switch (homeserverReachability, networkReachability) {
+                case (.reachable, _):
                     flowParameters.userIndicatorController.retractIndicatorWithId(reachabilityNotificationID)
-                } else {
+                case (.unreachable, .unreachable):
                     flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
                                                                                  title: L10n.commonOffline,
+                                                                                 persistent: true))
+                case (.unreachable, .reachable):
+                    flowParameters.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationID,
+                                                                                 title: L10n.commonServerUnreachable,
                                                                                  persistent: true))
                 }
             }

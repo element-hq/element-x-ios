@@ -278,6 +278,7 @@
 "common_sent" = "Sent";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Server not supported";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "Server URL";
 "common_settings" = "Settings";
 "common_shared_location" = "Shared location";

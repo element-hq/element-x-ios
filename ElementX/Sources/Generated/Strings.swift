@@ -630,6 +630,8 @@ internal enum L10n {
   internal static var commonSentenceDelimiter: String { return L10n.tr("Localizable", "common_sentence_delimiter") }
   /// Server not supported
   internal static var commonServerNotSupported: String { return L10n.tr("Localizable", "common_server_not_supported") }
+  /// Server unreachable
+  internal static var commonServerUnreachable: String { return L10n.tr("Localizable", "common_server_unreachable") }
   /// Server URL
   internal static var commonServerUrl: String { return L10n.tr("Localizable", "common_server_url") }
   /// Settings
