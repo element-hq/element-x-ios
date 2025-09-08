@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "사진이나 동영상을 촬영하여 메시지로 보내려면 Element X가 카메라에 액세스할 수 있어야 합니다.";
+"NSFaceIDUsageDescription" = "Face ID를 사용하여 앱에 액세스합니다.";
+"NSLocationWhenInUseUsageDescription" = "Element X가 귀하의 위치를 공유할 수 있도록 위치 액세스를 허용하세요.";
+"NSMicrophoneUsageDescription" = "오디오가 포함된 메시지를 녹음하고 전송하기 위해 Element X는 마이크에 액세스해야 합니다.";
+"NSPhotoLibraryUsageDescription" = "이 기능은 사진 라이브러리에 이미지 및 동영상을 저장할 수 있도록 합니다.";

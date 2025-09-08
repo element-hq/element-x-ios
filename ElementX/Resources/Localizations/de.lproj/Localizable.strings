@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Reaktion mit %1$@ entfernen";
 "a11y_remove_reaction_with" = "Entferne Reaktionen mit %1$@";
 "a11y_send_files" = "Dateien senden";
+"a11y_session_verification_time_limited_action_required" = "Zeitlich begrenzte Handlung erforderlich, du hast eine Minute Zeit zur Verifizierung";
 "a11y_show_password" = "Passwort anzeigen";
 "a11y_start_call" = "Anruf starten";
-"a11y_time_limited_action_required" = "Zeitlich begrenztes Handeln erforderlich";
 "a11y_tombstoned_room" = "Stillgelegter Chat";
 "a11y_user_menu" = "Nutzer-Menü";
 "a11y_view_avatar" = "Avatar ansehen";
@@ -82,7 +82,7 @@
 "action_enable" = "Aktivieren";
 "action_end_poll" = "Umfrage beenden";
 "action_enter_pin" = "PIN eingeben";
-"action_finish" = "Fertig";
+"action_finish" = "Fertigstellen";
 "action_forgot_password" = "Passwort vergessen?";
 "action_forward" = "Weiterleiten";
 "action_go_back" = "Zurück";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ um %2$@";
 "common_date_this_month" = "Diesen Monat";
 "common_decryption_error" = "Dekodierungsfehler";
+"common_description" = "Description";
 "common_developer_options" = "Entwickleroptionen";
 "common_device_id" = "Geräte-ID";
 "common_direct_chat" = "Direktnachricht";
@@ -323,6 +324,9 @@
 "common_waiting" = "Warten…";
 "common_waiting_for_decryption_key" = "Warte auf diese Nachricht";
 "common_you" = "Sie";
+"common.add_account" = "Konto hinzufügen";
+"common.add_another_account" = "Weiteres Konto hinzufügen";
+"common.select_account" = "Konto auswählen";
 "common_unable_to_decrypt_insecure_device" = "Von einem ungesicherten Gerät gesendet";
 "common_unable_to_decrypt_verification_violation" = "Die verifizierte Identität des Senders hat sich geändert";
 "confirm_recovery_key_banner_message" = "Bestätige deinen Wiederherstellungsschlüssel, um weiterhin auf deinen Schlüsselspeicher und den Nachrichtenverlauf zugreifen zu können.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Smileys & Menschen";
 "emoji_picker_category_places" = "Reisen & Orte";
 "emoji_picker_category_symbols" = "Symbole";
+"emoji_picker_search_placeholder" = "Emojis suchen";
 "error_invalid_invite" = "Der Chat existiert nicht mehr oder die Einladung ist nicht mehr gültig.";
 "error_network_or_server_issue" = "Dies kann auf Netzwerk- oder Serverprobleme zurückzuführen sein.";
 "error_room_address_already_exists" = "Diese Chat-Adresse existiert bereits. Bitte bearbeite das Adressfeld des Chats oder ändere den Namen des Chats";
 "error_room_address_invalid_symbols" = "Einige Zeichen sind nicht erlaubt. Es werden nur Buchstaben, Ziffern und die folgenden Symbole unterstützt: ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "Du bist auf diesem Gerät bereits als %1$@ angemeldet.";
 "error_account_creation_not_possible" = "Dein Homeserver muss aktualisiert werden, um den Matrix Authentication Services und die Erstellung von Konten zu unterstützen.";
 "error_failed_creating_the_permalink" = "Fehler beim Erstellen des Permalinks";
 "error_failed_loading_map" = "%1$@ konnte die Karte nicht laden. Bitte versuche es später erneut.";

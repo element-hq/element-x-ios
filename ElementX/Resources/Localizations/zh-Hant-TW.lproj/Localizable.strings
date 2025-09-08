@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "移除 %1$@ 的反應";
 "a11y_remove_reaction_with" = "移除反應 %1$@";
 "a11y_send_files" = "傳送檔案";
+"a11y_session_verification_time_limited_action_required" = "需要限時動作";
 "a11y_show_password" = "顯示密碼";
 "a11y_start_call" = "開始通話";
-"a11y_time_limited_action_required" = "需要限時動作";
 "a11y_tombstoned_room" = "墓碑聊天室";
 "a11y_user_menu" = "使用者選單";
 "a11y_view_avatar" = "檢視大頭照";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ 在 %2$@";
 "common_date_this_month" = "本月";
 "common_decryption_error" = "解密錯誤";
+"common_description" = "Description";
 "common_developer_options" = "開發者選項";
 "common_device_id" = "裝置 ID";
 "common_direct_chat" = "私訊";
@@ -323,6 +324,9 @@
 "common_waiting" = "等待中...";
 "common_waiting_for_decryption_key" = "等待此則訊息";
 "common_you" = "您";
+"common.add_account" = "Add an account";
+"common.add_another_account" = "Add another account";
+"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "從不安全的裝置傳送";
 "common_unable_to_decrypt_verification_violation" = "傳送者的驗證身份已重設";
 "confirm_recovery_key_banner_message" = "確認您的復原金鑰以維持對金鑰儲存空間與訊息歷史紀錄的存取權。";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "表情與人物";
 "emoji_picker_category_places" = "旅行與景點";
 "emoji_picker_category_symbols" = "標誌";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "此聊天室不再存在或邀請不再有效。";
 "error_network_or_server_issue" = "這可能是因為網路或伺服器的問題所致。";
 "error_room_address_already_exists" = "此聊天室地址已存在。請嘗試編輯聊天室地址欄位或變更聊天室名稱";
 "error_room_address_invalid_symbols" = "不允許使用部份字元。僅支援字母、數字與以下符號 ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
 "error_account_creation_not_possible" = "您的家伺服器需要升級才能支援 Matrix Authentication Service 與帳號建立。";
 "error_failed_creating_the_permalink" = "無法建立永久連結";
 "error_failed_loading_map" = "%1$@無法載入地圖。請稍後再試。";

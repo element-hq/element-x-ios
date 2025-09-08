@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Eemalda reageerimine %1$@ emotikoniga";
 "a11y_remove_reaction_with" = "Eemalda reageerimine: %1$@";
 "a11y_send_files" = "Saada faile";
+"a11y_session_verification_time_limited_action_required" = "Palun tee see ajapiiranguga toiming, sul on aega üks minut";
 "a11y_show_password" = "Näita salasõna";
 "a11y_start_call" = "Helista";
-"a11y_time_limited_action_required" = "Palun tee see ajapiiranguga toiming";
 "a11y_tombstoned_room" = "Lõpetatuks märgitud jututuba";
 "a11y_user_menu" = "Kasutajamenüü";
 "a11y_view_avatar" = "Vaata tunnuspilti";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@, %2$@";
 "common_date_this_month" = "Sel kuul";
 "common_decryption_error" = "Dekrüptimisviga";
+"common_description" = "Description";
 "common_developer_options" = "Arendaja valikud";
 "common_device_id" = "Seadme tunnus";
 "common_direct_chat" = "Otsevestlus";
@@ -323,6 +324,9 @@
 "common_waiting" = "Ootame…";
 "common_waiting_for_decryption_key" = "Ootame selle sõnumi dekrüptimisvõtit";
 "common_you" = "Sina";
+"common.add_account" = "Lisa kasutajakonto";
+"common.add_another_account" = "Lisa veel üks kasutajakonto";
+"common.select_account" = "Vali kasutajakonto";
 "common_unable_to_decrypt_insecure_device" = "Saadetud ebaturvalisest seadmest";
 "common_unable_to_decrypt_verification_violation" = "Saatja verifitseeritud identiteet on lähtestatud";
 "confirm_recovery_key_banner_message" = "Säilitamaks ligipääsu vestluste ja krüptovõtmete varukoopiale, palun sisesta kinnituseks oma taastevõti.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Emotikonid ja inimesed";
 "emoji_picker_category_places" = "Reisimine ja kohad";
 "emoji_picker_category_symbols" = "Sümbolid";
+"emoji_picker_search_placeholder" = "Otsi emojisid";
 "error_invalid_invite" = "Seda jututuba pole enam olemas või pole see kutse enam kehtiv.";
 "error_network_or_server_issue" = "See võib olla põhjustatud võrgu- või serverivigadest.";
 "error_room_address_already_exists" = "Selline jututoa aadress on juba olemas. Palun proovi muuta kas aadressi või jututoa nime";
 "error_room_address_invalid_symbols" = "Mõned tähemärgid pole lubatud. Kasuta vaid tähti, numbreid ja neid kirjavahemärke ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "Sa juba oled sellesse seadmesse sisseloginud kasutajana %1$@.";
 "error_account_creation_not_possible" = "Selleks et koos kasutajakonto loomisega toimiks Matrix Authentication Service'i tugi, vajab sinu koduserver uuendamist.";
 "error_failed_creating_the_permalink" = "Püsilingi loomine ei õnnestumud";
 "error_failed_loading_map" = "%1$@ kaardi laadimine ei õnnestunud. Palun proovi hiljem uuesti.";
@@ -587,7 +593,7 @@
 "screen_room_multiple_knock_requests_view_all_button_title" = "Vaata kõiki";
 "screen_room_pinned_banner_indicator" = "%1$@ / %2$@";
 "screen_room_pinned_banner_indicator_description" = "%1$@ esiletõstetud sõnumit";
-"screen_room_pinned_banner_loading_description" = "Laadime sõnumit…";
+"screen_room_pinned_banner_loading_description" = "Laadin sõnumit…";
 "screen_room_pinned_banner_view_all_button_title" = "Näita kõiki";
 "screen_room_single_knock_request_title" = "%1$@ soovib selle jututoaga liituda";
 "screen_room_single_knock_request_view_button_title" = "Vaata";

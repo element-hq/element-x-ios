@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Odstrániť reakciu s %1$@";
 "a11y_remove_reaction_with" = "Odstrániť reakciu s %1$@";
 "a11y_send_files" = "Odoslať súbory";
+"a11y_session_verification_time_limited_action_required" = "Vyžaduje sa časovo obmedzená akcia";
 "a11y_show_password" = "Zobraziť heslo";
 "a11y_start_call" = "Začať hovor";
-"a11y_time_limited_action_required" = "Vyžaduje sa časovo obmedzená akcia";
 "a11y_tombstoned_room" = "Opustená miestnosť";
 "a11y_user_menu" = "Používateľské menu";
 "a11y_view_avatar" = "Zobraziť profilový obrázok";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ o %2$@";
 "common_date_this_month" = "Tento mesiac";
 "common_decryption_error" = "Chyba dešifrovania";
+"common_description" = "Description";
 "common_developer_options" = "Možnosti pre vývojárov";
 "common_device_id" = "ID zariadenia";
 "common_direct_chat" = "Priama konverzácia";
@@ -323,6 +324,9 @@
 "common_waiting" = "Čaká sa…";
 "common_waiting_for_decryption_key" = "Čaká sa na dešifrovací kľúč";
 "common_you" = "Vy";
+"common.add_account" = "Add an account";
+"common.add_another_account" = "Add another account";
+"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Odoslané z nezabezpečeného zariadenia";
 "common_unable_to_decrypt_verification_violation" = "Overená totožnosť odosielateľa bola obnovená";
 "confirm_recovery_key_banner_message" = "Potvrďte svoj kľúč na obnovenie, aby ste zachovali prístup k úložisku kľúčov a histórii správ.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Smajlíky a ľudia";
 "emoji_picker_category_places" = "Cestovanie a miesta";
 "emoji_picker_category_symbols" = "Symboly";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "Miestnosť už neexistuje alebo pozvánka už nie je platná.";
 "error_network_or_server_issue" = "Môže to byť spôsobené problémami so sieťou alebo serverom.";
 "error_room_address_already_exists" = "Táto adresa miestnosti už existuje, skúste upraviť pole adresy miestnosti alebo zmeňte názov miestnosti";
 "error_room_address_invalid_symbols" = "Niektoré znaky nie sú povolené. Podporované sú iba písmená, číslice a nasledujúce symboly ! $ & '() * +/; =? @ [] - . _";
+"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
 "error_account_creation_not_possible" = "Váš domovský server musí byť aktualizovaný tak, aby podporoval Matrix Authentication Service a vytvorenie účtu.";
 "error_failed_creating_the_permalink" = "Nepodarilo sa vytvoriť trvalý odkaz";
 "error_failed_loading_map" = "%1$@ nedokázal načítať mapu. Skúste to prosím neskôr.";

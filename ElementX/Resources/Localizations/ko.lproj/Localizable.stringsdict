@@ -13,7 +13,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>已输入 %1$d 个数字</string>
+			<string>%1$d자리 입력됨</string>
 		</dict>
 	</dict>
 	<key>a11y_polls_percent_of_total</key>
@@ -27,7 +27,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d 总投票百分比</string>
+			<string>%1$d 총 투표율</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -41,7 +41,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$@ 及其他 %2$d 人已读</string>
+			<string>읽은 사람 %1$@ 그리고 %2$d 다른 사람들</string>
 		</dict>
 	</dict>
 	<key>common_many_members</key>
@@ -55,7 +55,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>其他 %d 人</string>
+			<string>%d 기타</string>
 		</dict>
 	</dict>
 	<key>common_member_count</key>
@@ -69,7 +69,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d个成员</string>
+			<string>%1$d 회원</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -83,7 +83,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%d 票</string>
+			<string>%d 에 투표</string>
 		</dict>
 	</dict>
 	<key>common_replies</key>
@@ -97,7 +97,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d 个回复</string>
+			<string>%1$d 답변</string>
 		</dict>
 	</dict>
 	<key>common_rooms</key>
@@ -111,7 +111,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d 房间</string>
+			<string>%1$d 방</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -125,7 +125,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d 空间</string>
+			<string>%1$d 스페이스</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -139,7 +139,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$@：%2$d 条消息</string>
+			<string>%1$@: %2$d 메세지</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -153,7 +153,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%d 条通知</string>
+			<string>%d 알림</string>
 		</dict>
 	</dict>
 	<key>notification_invitations</key>
@@ -167,7 +167,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%d 个邀请</string>
+			<string>%d 초대</string>
 		</dict>
 	</dict>
 	<key>notification_new_messages_for_room</key>
@@ -181,7 +181,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%d 条新消息</string>
+			<string>%d 새 메시지</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages</key>
@@ -195,7 +195,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%d 条未读消息</string>
+			<string>%d 읽지 않은 메시지 알림</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -209,7 +209,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%d 个聊天室</string>
+			<string>%d 방</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle</key>
@@ -223,7 +223,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>还剩 %1$d 次解锁机会</string>
+			<string>당신은 %1$d 회 잠금 해제 시도를 가지고 있습니다</string>
 		</dict>
 	</dict>
 	<key>screen_app_lock_subtitle_wrong_pin</key>
@@ -237,7 +237,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>PIN 码错误。还剩 %1$d 次机会</string>
+			<string>PIN이 잘못되었습니다. %1$d 번 남았습니다</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -251,7 +251,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d 置顶消息</string>
+			<string>%1$d 고정된 메시지</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -265,7 +265,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d 人</string>
+			<string>%1$d 사람</string>
 		</dict>
 	</dict>
 	<key>screen_room_multiple_knock_requests_title</key>
@@ -279,7 +279,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$@+ %2$d 其他人想加入这个房间</string>
+			<string>%1$@ +%2$d 명이 이 방에 참여하고 싶어합니다.</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_a11y</key>
@@ -293,7 +293,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d 个成员添加表情符号 %2$@</string>
+			<string>%1$d 회원들이 반응했습니다: %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_including_you_a11y</key>
@@ -307,7 +307,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>您与 %1$d 个成员添加表情符号 %2$@</string>
+			<string>당신과 %1$d 멤버들은 다음과 같이 반응했습니다 %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
@@ -321,7 +321,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$d 个聊天室变化</string>
+			<string>%1$d 방 변경</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_many_members</key>
@@ -335,7 +335,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$@，%2$@ 和其他 %3$d 个人</string>
+			<string>%1$@, %2$@ 및 %3$d 기타</string>
 		</dict>
 	</dict>
 	<key>screen_room_typing_notification</key>
@@ -349,7 +349,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$@ 正在输入</string>
+			<string>%1$@ 입력 중입니다</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
@@ -363,7 +363,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>找到了 %1$d 个推送提供者：%2$@</string>
+			<string>%1$d 푸시 제공자를 찾았습니다: %2$@</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_unified_push_success</key>
@@ -377,7 +377,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>找到 %1$d 个 distributors：%2$@</string>
+			<string>%1$d 배포자 목록: %2$@.</string>
 		</dict>
 	</dict>
 </dict>

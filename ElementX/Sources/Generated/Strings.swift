@@ -104,7 +104,7 @@ internal enum L10n {
   }
   /// Send files
   internal static var a11ySendFiles: String { return L10n.tr("Localizable", "a11y_send_files") }
-  /// Time limited action required, you have 1 minute to verify
+  /// Time limited action required, you have one minute to verify
   internal static var a11ySessionVerificationTimeLimitedActionRequired: String { return L10n.tr("Localizable", "a11y_session_verification_time_limited_action_required") }
   /// Show password
   internal static var a11yShowPassword: String { return L10n.tr("Localizable", "a11y_show_password") }
@@ -412,6 +412,8 @@ internal enum L10n {
   internal static var commonDateThisMonth: String { return L10n.tr("Localizable", "common_date_this_month") }
   /// Decryption error
   internal static var commonDecryptionError: String { return L10n.tr("Localizable", "common_decryption_error") }
+  /// Description
+  internal static var commonDescription: String { return L10n.tr("Localizable", "common_description") }
   /// Developer options
   internal static var commonDeveloperOptions: String { return L10n.tr("Localizable", "common_developer_options") }
   /// Device ID
@@ -3279,6 +3281,22 @@ internal enum L10n {
   internal enum Action {
     /// View
     internal static var view: String { return L10n.tr("Localizable", "action.view") }
+  }
+
+  internal enum Common {
+    /// Add an account
+    internal static var addAccount: String { return L10n.tr("Localizable", "common.add_account") }
+    /// Add another account
+    internal static var addAnotherAccount: String { return L10n.tr("Localizable", "common.add_another_account") }
+    /// Select an account
+    internal static var selectAccount: String { return L10n.tr("Localizable", "common.select_account") }
+  }
+
+  internal enum Error {
+    /// You're already logged in on this device as %1$@.
+    internal static func accountAlreadyLoggedIn(_ p1: Any) -> String {
+      return L10n.tr("Localizable", "error.account_already_logged_in", String(describing: p1))
+    }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Kendu %1$@ erreakzioa";
 "a11y_remove_reaction_with" = "Remove reaction with %1$@";
 "a11y_send_files" = "Bidali fitxategiak";
+"a11y_session_verification_time_limited_action_required" = "Time limited action required, you have one minute to verify";
 "a11y_show_password" = "Erakutsi pasahitza";
 "a11y_start_call" = "Hasi dei bat";
-"a11y_time_limited_action_required" = "Time limited action required";
 "a11y_tombstoned_room" = "Tombstoned room";
 "a11y_user_menu" = "Erabiltzailea-menua";
 "a11y_view_avatar" = "Ikusi abatarra";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ at %2$@";
 "common_date_this_month" = "Hilabete hau";
 "common_decryption_error" = "Deszifratze-errorea";
+"common_description" = "Description";
 "common_developer_options" = "Garapen aukerak";
 "common_device_id" = "Gailuaren IDa";
 "common_direct_chat" = "Txata zuzena";
@@ -323,6 +324,9 @@
 "common_waiting" = "Zain…";
 "common_waiting_for_decryption_key" = "Mezu honen zain";
 "common_you" = "Zeu";
+"common.add_account" = "Add an account";
+"common.add_another_account" = "Add another account";
+"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Egiaztatu gabeko gailu batetik bidalia";
 "common_unable_to_decrypt_verification_violation" = "Igorlearen egiaztatutako identitatea berrezarri da";
 "confirm_recovery_key_banner_message" = "Confirm your recovery key to maintain access to your key storage and message history.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Irribartxoak eta jendea";
 "emoji_picker_category_places" = "Bidaiak eta tokiak";
 "emoji_picker_category_symbols" = "Ikurrak";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
 "error_network_or_server_issue" = "Sarearen edo zerbitzariaren arazoren bategatik izan daiteke.";
 "error_room_address_already_exists" = "Gela badago lehendik ere. Saiatu gelaren helbidearen eremua editatzen edo aldatu gelaren izena";
 "error_room_address_invalid_symbols" = "Karaktere batzuk ez daude baimenduta. Hizkiak, zifrak, eta ondorengo ikurrak onartzen dira bakarrik: ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
+"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
 "error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation.";
 "error_failed_creating_the_permalink" = "Huts egin du esteka iraunkorra sortzeak";
 "error_failed_loading_map" = "%1$@ ezin izan da mapa kargatu. Saiatu berriro geroago.";

@@ -30,9 +30,9 @@
 "a11y_remove_reaction" = "Reakció eltávolítása: %1$@";
 "a11y_remove_reaction_with" = "Reakció eltávolítása: %1$@";
 "a11y_send_files" = "Fájlküldés";
+"a11y_session_verification_time_limited_action_required" = "Időkorlátos művelet szükséges";
 "a11y_show_password" = "Jelszó megjelenítése";
 "a11y_start_call" = "Hanghívás indítása";
-"a11y_time_limited_action_required" = "Időkorlátos művelet szükséges";
 "a11y_tombstoned_room" = "Elévült szoba";
 "a11y_user_menu" = "Felhasználói menü";
 "a11y_view_avatar" = "Profilkép megtekintése";
@@ -185,6 +185,7 @@
 "common_date_date_at_time" = "%1$@ itt: %2$@";
 "common_date_this_month" = "Ebben a hónapban";
 "common_decryption_error" = "Visszafejtési hiba";
+"common_description" = "Description";
 "common_developer_options" = "Fejlesztői beállítások";
 "common_device_id" = "Eszközazonosító";
 "common_direct_chat" = "Közvetlen csevegés";
@@ -323,6 +324,9 @@
 "common_waiting" = "Várakozás…";
 "common_waiting_for_decryption_key" = "Várakozás a visszafejtési kulcsra";
 "common_you" = "Ön";
+"common.add_account" = "Add an account";
+"common.add_another_account" = "Add another account";
+"common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Nem biztonságos eszközről küldve";
 "common_unable_to_decrypt_verification_violation" = "A feladó ellenőrzött személyazonossága megváltozott";
 "confirm_recovery_key_banner_message" = "Erősítse meg a helyreállítási kulcsát, hogy továbbra is hozzáférjen a kulcstárolójához és az üzenetelőzményekhez.";
@@ -368,10 +372,12 @@
 "emoji_picker_category_people" = "Mosolyok és emberek";
 "emoji_picker_category_places" = "Utazás és helyek";
 "emoji_picker_category_symbols" = "Szimbólumok";
+"emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "A szoba már nem létezik, vagy a meghívó már nem érvényes.";
 "error_network_or_server_issue" = "Ennek oka hálózati vagy kiszolgálóprobléma lehet.";
 "error_room_address_already_exists" = "Ez a szobacím már létezik. Próbálja meg szerkeszteni a szobacím mezőt, vagy módosítsa a szoba nevét.";
 "error_room_address_invalid_symbols" = "Egyes karakterek nem engedélyezettek. Csak a betűk, a számjegyek és a következő szimbólumok támogatottak: $ & '() * +/; =? @ [] - . _";
+"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
 "error_account_creation_not_possible" = "A Matrix-kiszolgálót frissíteni kell a Matrix Authentication Service és a fióklétrehozás támogatásához.";
 "error_failed_creating_the_permalink" = "Nem sikerült létrehozni az állandó hivatkozást";
 "error_failed_loading_map" = "Az %1$@ nem tudta betölteni a térképet. Próbálja meg újra később.";
