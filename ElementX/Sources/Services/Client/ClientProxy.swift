@@ -410,6 +410,10 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func expireSyncSessions() async {
+        await syncService.expireSessions()
+    }
+    
     func accountURL(action: AccountManagementAction) async -> URL? {
         try? await client.accountUrl(action: action).flatMap(URL.init(string:))
     }

@@ -138,6 +138,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func stopSync()
     
     func stopSync(completion: (() -> Void)?) // Hopefully this will become async once we get SE-0371.
+    
+    func expireSyncSessions() async
         
     func accountURL(action: AccountManagementAction) async -> URL?
     
