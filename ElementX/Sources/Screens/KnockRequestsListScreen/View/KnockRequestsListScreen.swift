@@ -163,7 +163,7 @@ extension KnockRequestsListScreenViewModel {
                                                    knockRequestsState: requestsState,
                                                    ownUserID: RoomMemberProxyMock.mockAdmin.userID,
                                                    joinRule: .knock)),
-              mediaProvider: .mock,
+              mediaProvider: MediaProviderMock(),
               userIndicatorController: UserIndicatorControllerMock())
     }
 }

@@ -9,7 +9,7 @@ import Combine
 import Kingfisher
 import UIKit
 
-class MediaProvider: MediaProviderProtocol {
+struct MediaProvider: MediaProviderProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let imageCache: Kingfisher.ImageCache
     private let homeserverReachabilityPublisher: CurrentValuePublisher<NetworkMonitorReachability, Never>?

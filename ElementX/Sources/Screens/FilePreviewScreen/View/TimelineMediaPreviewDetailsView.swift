@@ -229,7 +229,7 @@ struct TimelineMediaPreviewDetailsView_Previews: PreviewProvider, TestablePrevie
         let viewModel = TimelineMediaPreviewViewModel(initialItem: item,
                                                       timelineViewModel: TimelineViewModel.mock(timelineKind: timelineKind,
                                                                                                 timelineController: timelineController),
-                                                      mediaProvider: .mock,
+                                                      mediaProvider: MediaProviderMock(configuration: .init()),
                                                       photoLibraryManager: PhotoLibraryManagerMock(.init()),
                                                       userIndicatorController: UserIndicatorControllerMock(),
                                                       appMediator: AppMediatorMock())

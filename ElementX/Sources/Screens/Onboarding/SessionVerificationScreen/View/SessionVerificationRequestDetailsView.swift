@@ -120,13 +120,13 @@ struct SessionVerificationRequestDetailsView_Previews: PreviewProvider, Testable
     static var previews: some View {
         SessionVerificationRequestDetailsView(details: details,
                                               isUserVerification: true,
-                                              mediaProvider: .mock)
+                                              mediaProvider: MediaProviderMock(configuration: .init()))
             .padding()
             .previewDisplayName("User")
         
         SessionVerificationRequestDetailsView(details: details,
                                               isUserVerification: false,
-                                              mediaProvider: .mock)
+                                              mediaProvider: MediaProviderMock(configuration: .init()))
             .padding()
             .previewDisplayName("Device")
     }

@@ -78,7 +78,7 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
         let viewModel = SpaceScreenViewModel(spaceRoomListProxy: spaceRoomListProxy,
                                              spaceServiceProxy: SpaceServiceProxyMock(.init()),
                                              selectedSpaceRoomPublisher: .init(nil),
-                                             mediaProvider: .mock,
+                                             mediaProvider: MediaProviderMock(configuration: .init()),
                                              userIndicatorController: UserIndicatorControllerMock())
         return viewModel
     }

@@ -75,7 +75,7 @@ struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
                                          name: "Some Room Name",
                                          avatarURL: avatarURL),
                        dmRecipientVerificationState: verificationState,
-                       mediaProvider: .mock)
+                       mediaProvider: MediaProviderMock(configuration: .init()))
             .padding()
     }
 }
