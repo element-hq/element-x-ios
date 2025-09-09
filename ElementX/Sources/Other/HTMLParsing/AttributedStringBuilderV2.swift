@@ -115,10 +115,12 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
             var content = NSMutableAttributedString()
             var childIndex = 1
             
+            let fontPointSize = UIFont.preferredFont(forTextStyle: .body).pointSize
+            
             switch tag {
             case "h1", "h2", "h3", "h4", "h5", "h6":
                 let level = max(3, Int(String(tag.dropFirst())) ?? 1)
-                let size: CGFloat = UIFont.systemFontSize + CGFloat(6 - level) * 2
+                let size: CGFloat = fontPointSize + CGFloat(6 - level) * 2
                 content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.setFontPreservingSymbolicTraits(UIFont.boldSystemFont(ofSize: size))
                 
@@ -131,11 +133,11 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
                 
             case "b", "strong":
                 content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
-                content.setFontPreservingSymbolicTraits(UIFont.boldSystemFont(ofSize: UIFont.systemFontSize))
+                content.setFontPreservingSymbolicTraits(UIFont.boldSystemFont(ofSize: fontPointSize))
                 
             case "i", "em":
                 content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
-                content.setFontPreservingSymbolicTraits(UIFont.italicSystemFont(ofSize: UIFont.systemFontSize))
+                content.setFontPreservingSymbolicTraits(UIFont.italicSystemFont(ofSize: fontPointSize))
                 
             case "u":
                 content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
@@ -148,12 +150,12 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
             case "sup":
                 content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.baselineOffset, value: 6, range: NSRange(location: 0, length: content.length))
-                content.setFontPreservingSymbolicTraits(UIFont.systemFont(ofSize: UIFont.systemFontSize * 0.7))
+                content.setFontPreservingSymbolicTraits(UIFont.systemFont(ofSize: fontPointSize * 0.7))
                 
             case "sub":
                 content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.baselineOffset, value: -4, range: NSRange(location: 0, length: content.length))
-                content.setFontPreservingSymbolicTraits(UIFont.systemFont(ofSize: UIFont.systemFontSize * 0.7))
+                content.setFontPreservingSymbolicTraits(UIFont.systemFont(ofSize: fontPointSize * 0.7))
                 
             case "blockquote":
                 content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
@@ -162,7 +164,7 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
             case "code", "pre":
                 let preserveFormatting = preserveFormatting || tag == "pre"
                 content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
-                content.setFontPreservingSymbolicTraits(UIFont.monospacedSystemFont(ofSize: UIFont.systemFontSize, weight: .regular))
+                content.setFontPreservingSymbolicTraits(UIFont.monospacedSystemFont(ofSize: fontPointSize, weight: .regular))
                 content.addAttribute(.CodeBlock, value: true, range: NSRange(location: 0, length: content.length))
                 content.addAttribute(.backgroundColor, value: UIColor.compound._bgCodeBlock as Any, range: NSRange(location: 0, length: content.length))
                 
@@ -243,6 +245,7 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
         return result
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func addLinksAndMentions(_ attributedString: NSMutableAttributedString) {
         let string = attributedString.string
         
