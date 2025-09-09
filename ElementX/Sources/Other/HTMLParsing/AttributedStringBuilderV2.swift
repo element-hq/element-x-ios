@@ -116,7 +116,7 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
             
             switch tag {
             case "h1", "h2", "h3", "h4", "h5", "h6":
-                let level = Int(String(tag.dropFirst())) ?? 1
+                let level = max(3, Int(String(tag.dropFirst())) ?? 1)
                 let size: CGFloat = UIFont.systemFontSize + CGFloat(6 - level) * 2
                 content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.setFontPreservingSymbolicTraits(UIFont.boldSystemFont(ofSize: size))

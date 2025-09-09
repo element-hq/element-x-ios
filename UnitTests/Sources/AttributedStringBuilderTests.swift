@@ -35,7 +35,7 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             XCTAssertEqual(attributedString.runs.count, 11) // newlines hold no attributes
 
             let pointSizes = attributedString.runs.compactMap(\.uiKit.font?.pointSize)
-            XCTAssertEqual(pointSizes, [24, 22, 20, 18, 16, 14])
+            XCTAssertEqual(pointSizes, [23, 23, 23, 21, 19, 17])
         } else {
             XCTAssert(attributedString.runs.count == 6)
             
@@ -173,7 +173,13 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             return
         }
         
-        if !AttributedStringBuilder.useNextGenHTMLParser {
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssertEqual(h1Font, h2Font)
+            XCTAssertEqual(h2Font, h3Font)
+            
+            XCTAssert(h1Font.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
+            XCTAssert(h1Font.pointSize <= 23)
+        } else {
             XCTAssertEqual(h1Font, h2Font)
             XCTAssertEqual(h2Font, h3Font)
             
