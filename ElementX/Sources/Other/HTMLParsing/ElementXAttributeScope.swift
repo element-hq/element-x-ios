@@ -62,6 +62,11 @@ enum AllUsersMentionAttribute: AttributedStringKey {
     static let name = "MXAllUsersMentionAttribute"
 }
 
+enum CodeBlockAttribute: AttributedStringKey {
+    typealias Value = Bool
+    static let name = "MXCodeBlockAttribute"
+}
+
 // periphery: ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
 extension AttributeScopes {
     struct ElementXAttributes: AttributeScope {
@@ -76,6 +81,8 @@ extension AttributeScopes {
         let eventOnRoomAlias: EventOnRoomAliasAttribute
         
         let allUsersMention: AllUsersMentionAttribute
+        
+        let codeBlock: CodeBlockAttribute
         
         let swiftUI: SwiftUIAttributes
         let uiKit: UIKitAttributes

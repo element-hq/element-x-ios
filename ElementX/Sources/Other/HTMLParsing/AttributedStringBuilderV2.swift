@@ -85,6 +85,7 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
         
     // MARK: - Private
     
+    // swiftlint:disable:next function_body_length
     func attributedString(from element: Element, preserveFormatting: Bool,
                           listTag: String?,
                           listIndex: inout Int,
@@ -162,15 +163,17 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
                 let preserveFormatting = preserveFormatting || tag == "pre"
                 content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.setFontPreservingSymbolicTraits(UIFont.monospacedSystemFont(ofSize: UIFont.systemFontSize, weight: .regular))
+                content.addAttribute(.CodeBlock, value: true, range: NSRange(location: 0, length: content.length))
                 content.addAttribute(.backgroundColor, value: UIColor.compound._bgCodeBlock as Any, range: NSRange(location: 0, length: content.length))
                 
-                // Don't allow identifiers in code blocks
+                // Don't allow identifiers or links in code blocks
                 content.removeAttribute(.MatrixRoomID, range: NSRange(location: 0, length: content.length))
                 content.removeAttribute(.MatrixRoomAlias, range: NSRange(location: 0, length: content.length))
                 content.removeAttribute(.MatrixUserID, range: NSRange(location: 0, length: content.length))
                 content.removeAttribute(.MatrixEventOnRoomID, range: NSRange(location: 0, length: content.length))
                 content.removeAttribute(.MatrixEventOnRoomAlias, range: NSRange(location: 0, length: content.length))
                 content.removeAttribute(.MatrixAllUsersMention, range: NSRange(location: 0, length: content.length))
+                content.removeAttribute(.link, range: NSRange(location: 0, length: content.length))
                 
             case "hr":
                 content = NSMutableAttributedString(string: "\n")
@@ -295,9 +298,15 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
         
         // Sort the links by length so the longest one always takes priority
         matches.sorted { $0.range.length > $1.range.length }.forEach { [attributedString] match in
+            // Don't highlight links within codeblocks
+            let isInCodeBlock = attributedString.attribute(.CodeBlock, at: match.range.location, effectiveRange: nil) != nil
+            if isInCodeBlock {
+                return
+            }
+            
             var hasLink = false
             attributedString.enumerateAttribute(.link, in: match.range, options: []) { value, _, stop in
-                if value != nil {
+                if value != nil, !isInCodeBlock {
                     hasLink = true
                     stop.pointee = true
                 }

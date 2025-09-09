@@ -89,7 +89,8 @@ enum HTMLFixtures: String, CaseIterable {
             Followed by some plain code blocks</br>
             <code>Hello, world!</code>
             <code><b>Hello</b>, <i>world!</i></code>
-            <code><b>Hello</b>, <a href="https://www.matrix.org">world!</a></code>
+            <code><a href="https://www.matrix.org">This link should not be interpreted as such</a></code>
+            <code>And this https://www.matrix.org should be not highlighted</code>
             """
         case .unorderedList:
             """
