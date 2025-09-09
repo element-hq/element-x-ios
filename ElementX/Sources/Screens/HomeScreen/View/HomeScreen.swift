@@ -22,7 +22,14 @@ struct HomeScreen: View {
                    actions: leaveRoomAlertActions,
                    message: leaveRoomAlertMessage)
             .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-            .toolbar { toolbar }
+            .toolbar {
+                if #available(iOS 26, *) {
+                    toolbar
+                        .sharedBackgroundVisibility(.hidden)
+                } else {
+                    toolbar
+                }
+            }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .track(screen: .Home)
             .bloom()
