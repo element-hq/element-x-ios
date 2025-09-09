@@ -31,6 +31,7 @@ extension NSAttributedString.Key {
     static let MatrixEventOnRoomID: NSAttributedString.Key = .init(rawValue: EventOnRoomIDAttribute.name)
     static let MatrixEventOnRoomAlias: NSAttributedString.Key = .init(rawValue: EventOnRoomAliasAttribute.name)
     static let MatrixAllUsersMention: NSAttributedString.Key = .init(rawValue: AllUsersMentionAttribute.name)
+    static let CodeBlock: NSAttributedString.Key = .init(rawValue: CodeBlockAttribute.name)
 }
 
 struct AttributedStringBuilder: AttributedStringBuilderProtocol {

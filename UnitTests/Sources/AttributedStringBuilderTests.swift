@@ -590,10 +590,6 @@ class AttributedStringBuilderV1Tests: XCTestCase {
     }
     
     func testURLsAreIgnoredInCode() {
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            return
-        }
-        
         var htmlString = "<pre><code>test https://matrix.org test</code></pre>"
         var attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
         XCTAssert(attributedStringFromHTML?.runs.count == 1)
@@ -606,10 +602,6 @@ class AttributedStringBuilderV1Tests: XCTestCase {
     }
     
     func testHyperlinksAreIgnoredInCode() {
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            return
-        }
-        
         let htmlString = "<pre><code>test <a href=\"https://matrix.org\">matrix</a> test</code></pre>"
         let attributedStringFromHTML = attributedStringBuilder.fromHTML(htmlString)
         XCTAssertNil(attributedStringFromHTML?.link)
@@ -619,11 +611,7 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         let htmlString = "<pre><code>test https://matrix.org/#/@test:matrix.org test</code></pre>"
         let attributedString = attributedStringBuilder.fromHTML(htmlString)
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssert(attributedString?.runs.count == 3)
-        } else {
-            XCTAssert(attributedString?.runs.count == 1)
-        }
+        XCTAssert(attributedString?.runs.count == 1)
         
         XCTAssertNil(attributedString?.attachment)
     }
@@ -632,11 +620,7 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         let htmlString = "<pre><code>Hey @some.user.ceriu:matrix.org</code></pre>"
         let attributedString = attributedStringBuilder.fromHTML(htmlString)
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssert(attributedString?.runs.count == 2)
-        } else {
-            XCTAssert(attributedString?.runs.count == 1)
-        }
+        XCTAssert(attributedString?.runs.count == 1)
         
         XCTAssertNil(attributedString?.attachment)
     }
@@ -645,11 +629,7 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         let htmlString = "<pre><code>test @room test</code></pre>"
         let attributedString = attributedStringBuilder.fromHTML(htmlString)
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssert(attributedString?.runs.count == 3)
-        } else {
-            XCTAssert(attributedString?.runs.count == 1)
-        }
+        XCTAssert(attributedString?.runs.count == 1)
         
         XCTAssertNil(attributedString?.attachment)
     }
