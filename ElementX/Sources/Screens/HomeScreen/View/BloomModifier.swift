@@ -6,17 +6,43 @@
 //
 
 import Compound
+import Foundation
 import SwiftUI
 import SwiftUIIntrospect
 
 extension View {
     @ViewBuilder
     func bloom() -> some View {
-        modifier(BloomModifier())
+        if #available(iOS 26, *) {
+            modifier(BloomModifier())
+        } else {
+            modifier(OldBloomModifier())
+        }
     }
 }
 
 private struct BloomModifier: ViewModifier {
+    @State private var height = CGFloat.zero
+    
+    func body(content: Content) -> some View {
+        content
+            .onGeometryChange(for: CGFloat.self) { proxy in
+                proxy.safeAreaInsets.top
+            } action: { height in
+                self.height = height
+            }
+            .overlay(alignment: .top) {
+                LinearGradient(gradient: .compound.subtle,
+                               startPoint: .top,
+                               endPoint: .init(x: 0.5, y: 0.35))
+                    .ignoresSafeArea(edges: .all)
+                    .frame(height: height)
+                    .allowsHitTesting(false)
+            }
+    }
+}
+
+private struct OldBloomModifier: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
     
     @State private var standardAppearance = UINavigationBarAppearance()
