@@ -215,7 +215,7 @@ struct MediaEventsTimelineScreen: View {
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .principal) {
-            if #available(iOS 19, *) {
+            if #available(iOS 26, *) {
                 screenModePicker
             } else {
                 screenModePicker
