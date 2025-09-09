@@ -423,13 +423,8 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         
         let coalescedComponents = attributedString.formattedComponents
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(attributedString.runs.count, 5)
-            XCTAssertEqual(coalescedComponents.count, 5)
-        } else {
-            XCTAssertEqual(attributedString.runs.count, 6)
-            XCTAssertEqual(coalescedComponents.count, 5)
-        }
+        XCTAssertEqual(attributedString.runs.count, 5)
+        XCTAssertEqual(coalescedComponents.count, 5)
         
         var numberOfBlockquotes = 0
         for run in attributedString.runs where run.elementX.blockquote ?? false {
