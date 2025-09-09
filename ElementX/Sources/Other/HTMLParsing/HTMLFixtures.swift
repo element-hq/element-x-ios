@@ -68,9 +68,11 @@ enum HTMLFixtures: String, CaseIterable {
             """
         case .separatedBlockQuotes:
             """
-            <blockquote>First blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
-            <blockquote>Second blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
-            <blockquote>Third blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+            Text before blockquote
+            <blockquote>Some blockquote</blockquote>
+            Text after first blockquote
+            <blockquote>Some other blockquote</blockquote>
+            Text after second blockquote
             """
         case .codeBlocks:
             """

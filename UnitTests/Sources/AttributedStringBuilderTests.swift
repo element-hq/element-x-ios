@@ -424,19 +424,19 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         let coalescedComponents = attributedString.formattedComponents
         
         if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(attributedString.runs.count, 11)
+            XCTAssertEqual(attributedString.runs.count, 5)
             XCTAssertEqual(coalescedComponents.count, 5)
         } else {
-            XCTAssertEqual(attributedString.runs.count, 7)
-            XCTAssertEqual(coalescedComponents.count, 1)
+            XCTAssertEqual(attributedString.runs.count, 6)
+            XCTAssertEqual(coalescedComponents.count, 5)
         }
         
         var numberOfBlockquotes = 0
-        for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
+        for run in attributedString.runs where run.elementX.blockquote ?? false {
             numberOfBlockquotes += 1
         }
         
-        XCTAssertEqual(numberOfBlockquotes, 3, "Couldn't find all the blockquotes")
+        XCTAssertEqual(numberOfBlockquotes, 2, "Couldn't find all the blockquotes")
     }
     
     func testUserPermalinkMentionAtachment() {
