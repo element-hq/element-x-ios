@@ -122,6 +122,7 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
                 let level = max(3, Int(String(tag.dropFirst())) ?? 1)
                 let size: CGFloat = fontPointSize + CGFloat(6 - level) * 2
                 content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content.append(NSAttributedString(string: "\n"))
                 content.setFontPreservingSymbolicTraits(UIFont.boldSystemFont(ofSize: size))
                 
             case "p", "div":
