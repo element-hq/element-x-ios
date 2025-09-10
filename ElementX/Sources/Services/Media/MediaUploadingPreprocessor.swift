@@ -316,9 +316,15 @@ struct MediaUploadingPreprocessor {
         let metadataKeysToRemove = [kCGImagePropertyGPSDictionary: kCFNull]
         
         let data = NSMutableData()
-        guard let destination = CGImageDestinationCreateWithData(data as CFMutableData, type.identifier as CFString, count, nil) else {
+        
+        // Certain type identifiers cannot be used for image destinations, fall
+        // back to `public.jpeg` when that's the case
+        let destination = CGImageDestinationCreateWithData(data as CFMutableData, type.identifier as CFString, count, nil) ??
+            CGImageDestinationCreateWithData(data as CFMutableData, UTType.jpeg.identifier as CFString, count, nil)
+        guard let destination else {
             throw .failedStrippingLocationData
         }
+        
         CGImageDestinationAddImageFromSource(destination, imageSource, 0, metadataKeysToRemove as NSDictionary)
         CGImageDestinationFinalize(destination)
         
