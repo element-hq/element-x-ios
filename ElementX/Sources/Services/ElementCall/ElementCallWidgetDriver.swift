@@ -76,15 +76,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         }
         
         async let useEncryption = (try? room.latestEncryptionState() == .encrypted) ?? false
-        async let isDirect = room.isDirect()
-        let hasActiveCall = room.hasActiveRoomCall()
-        
-        let intent: Intent = switch await (hasActiveCall, isDirect) {
-        case (true, true): .joinExistingDm
-        case (true, false): .joinExisting
-        case (false, true): .startCallDm
-        case (false, false): .startCall
-        }
+        async let intent = room.joinCallIntent
         
         let widgetSettings: WidgetSettings
         do {
