@@ -81,14 +81,14 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         
         // Compute the correct intent based on room type and call status
         // There are 4 intents: join/start and dm/non-dm
-        let intent: ElementCallIntent
+        let intent: Intent
         switch (hasActiveCall, await isDirect) {
         case (true, true):
-            intent = .joinDmCall
+            intent = .joinExistingDM
         case (true, false):
-            intent = .joinCall  
+            intent = .joinExisting  
         case (false, true):
-            intent = .startDmCall
+            intent = .startCallDM
         case (false, false):
             intent = .startCall
         }
@@ -101,6 +101,7 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
                     parentUrl: nil,
                     fontScale: nil,
                     font: nil,
+                    encryption: .perParticipantKeys,
                     posthogUserId: nil,
                     posthogApiHost: analyticsConfiguration?.posthogAPIHost,
                     posthogApiKey: analyticsConfiguration?.posthogAPIKey,
