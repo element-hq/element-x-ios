@@ -75,38 +75,41 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
             return .failure(.roomInvalid)
         }
         
+        async let useEncryption = (try? room.latestEncryptionState() == .encrypted) ?? false
         async let isDirect = room.isDirect()
         let hasActiveCall = room.hasActiveRoomCall()
-        let widgetSettings: WidgetSettings
         
-        // Compute the correct intent based on room type and call status
-        // There are 4 intents: join/start and dm/non-dm
-        let intent: Intent
-        switch await (hasActiveCall, isDirect) {
-        case (true, true):
-            intent = .joinExistingDM
-        case (true, false):
-            intent = .joinExisting
-        case (false, true):
-            intent = .startCallDM
-        case (false, false):
-            intent = .startCall
+        let intent: Intent = switch await (hasActiveCall, isDirect) {
+        case (true, true): .joinExistingDm
+        case (true, false): .joinExisting
+        case (false, true): .startCallDm
+        case (false, false): .startCall
         }
         
+        let widgetSettings: WidgetSettings
         do {
             widgetSettings = try await newVirtualElementCallWidget(props: .init(elementCallUrl: baseURL.absoluteString,
                                                                                 widgetId: widgetID,
                                                                                 parentUrl: nil,
                                                                                 fontScale: nil,
                                                                                 font: nil,
-                                                                                encryption: .perParticipantKeys,
+                                                                                encryption: useEncryption ? .perParticipantKeys : .unencrypted,
                                                                                 posthogUserId: nil,
                                                                                 posthogApiHost: analyticsConfiguration?.posthogAPIHost,
                                                                                 posthogApiKey: analyticsConfiguration?.posthogAPIKey,
                                                                                 rageshakeSubmitUrl: rageshakeURL,
                                                                                 sentryDsn: analyticsConfiguration?.sentryDSN,
                                                                                 sentryEnvironment: nil),
-                                                                   config: .init(intent: intent))
+                                                                   config: .init(intent: intent,
+                                                                                 skipLobby: nil,
+                                                                                 header: nil,
+                                                                                 hideHeader: nil,
+                                                                                 preload: nil,
+                                                                                 appPrompt: nil,
+                                                                                 confineToRoom: nil,
+                                                                                 hideScreensharing: nil,
+                                                                                 controlledAudioDevices: nil,
+                                                                                 sendNotificationType: nil))
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)

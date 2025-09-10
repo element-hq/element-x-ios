@@ -68,7 +68,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: develop
+    exactVersion: 25.09.10
     # path: ../matrix-rust-sdk
   Compound:
     url: https://github.com/element-hq/compound-ios
