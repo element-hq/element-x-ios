@@ -15,6 +15,7 @@ import MatrixRustSDK
 class SpaceScreenViewModelTests: XCTestCase {
     var spaceRoomListProxy: SpaceRoomListProxyMock!
     let mockSpaceRooms = [SpaceRoomProxyProtocol].mockSpaceList
+    var clientProxy: ClientProxyMock!
     var paginationStateSubject: CurrentValueSubject<SpaceRoomListPaginationState, Never> = .init(.idle(endReached: true))
     
     var viewModel: SpaceScreenViewModelProtocol!
@@ -121,6 +122,60 @@ class SpaceScreenViewModelTests: XCTestCase {
         }
     }
     
+    func testJoiningSpace() async throws {
+        setupViewModel()
+        
+        let selectedSpace = try XCTUnwrap(mockSpaceRooms.first { $0.isSpace }, "There should be a space to select.")
+        
+        let expectation = XCTestExpectation(description: "Join room")
+        clientProxy.joinRoomViaClosure = { _, _ in
+            expectation.fulfill()
+            return .success(())
+        }
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { _ in true }
+        let deferredState = deferFulfillment(viewModel.context.observe(\.viewState.joiningRoomIDs), transitionValues: [[selectedSpace.id], []])
+        
+        viewModel.context.send(viewAction: .spaceAction(.join(selectedSpace)))
+        
+        await fulfillment(of: [expectation])
+        try await deferredState.fulfill()
+        let action = try await deferred.fulfill()
+        
+        switch action {
+        case .selectSpace(let spaceRoomListProxy) where spaceRoomListProxy.spaceRoomProxy.id == selectedSpace.id:
+            break
+        default:
+            XCTFail("The join should finish by selecting the space.")
+        }
+    }
+    
+    func testJoiningRoom() async throws {
+        setupViewModel()
+        
+        let selectedRoom = try XCTUnwrap(mockSpaceRooms.first { !$0.isSpace }, "There should be a room to select.")
+        
+        let expectation = XCTestExpectation(description: "Join room")
+        clientProxy.joinRoomViaClosure = { _, _ in
+            expectation.fulfill()
+            return .success(())
+        }
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { _ in true }
+        let deferredState = deferFulfillment(viewModel.context.observe(\.viewState.joiningRoomIDs), transitionValues: [[selectedRoom.id], []])
+        
+        viewModel.context.send(viewAction: .spaceAction(.join(selectedRoom)))
+        
+        await fulfillment(of: [expectation])
+        try await deferredState.fulfill()
+        let action = try await deferred.fulfill()
+        
+        switch action {
+        case .selectRoom(let roomID) where roomID == selectedRoom.id:
+            break
+        default:
+            XCTFail("The join should finish by selecting the room.")
+        }
+    }
+    
     // MARK: - Helpers
     
     private func setupViewModel(paginationResponses: [[SpaceRoomProxyProtocol]] = []) {
@@ -131,10 +186,12 @@ class SpaceScreenViewModelTests: XCTestCase {
         let spaceServiceProxy = SpaceServiceProxyMock(.init())
         spaceServiceProxy.spaceRoomListForClosure = { .success(SpaceRoomListProxyMock(.init(spaceRoomProxy: $0))) }
         
+        clientProxy = ClientProxyMock(.init())
+        
         viewModel = SpaceScreenViewModel(spaceRoomListProxy: spaceRoomListProxy,
                                          spaceServiceProxy: spaceServiceProxy,
                                          selectedSpaceRoomPublisher: .init(nil),
-                                         mediaProvider: MediaProviderMock(configuration: .init()),
+                                         userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                          userIndicatorController: UserIndicatorControllerMock())
     }
 }

@@ -14,6 +14,7 @@ struct SpaceRoomCell: View {
     
     let spaceRoomProxy: SpaceRoomProxyProtocol
     let isSelected: Bool
+    var isJoining = false
     let mediaProvider: MediaProviderProtocol!
     
     enum Action { case select(SpaceRoomProxyProtocol), join(SpaceRoomProxyProtocol) }
@@ -116,6 +117,12 @@ struct SpaceRoomCell: View {
             Button(L10n.actionJoin) { action(.join(spaceRoomProxy)) }
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textActionAccent)
+                .opacity(isJoining ? 0 : 1)
+                .overlay {
+                    if isJoining {
+                        ProgressView()
+                    }
+                }
         case .joined, .knocked, .banned:
             EmptyView()
         }
@@ -145,6 +152,15 @@ struct SpaceRoomCell_Previews: PreviewProvider, TestablePreview {
                               isSelected: false,
                               mediaProvider: mediaProvider) { _ in }
             }
+            
+            SpaceRoomCell(spaceRoomProxy: SpaceRoomProxyMock(.init(id: "Space being joined", isSpace: true)),
+                          isSelected: false,
+                          isJoining: true,
+                          mediaProvider: mediaProvider) { _ in }
+            SpaceRoomCell(spaceRoomProxy: SpaceRoomProxyMock(.init(id: "Room being joined", isSpace: false)),
+                          isSelected: false,
+                          isJoining: true,
+                          mediaProvider: mediaProvider) { _ in }
         }
     }
 }

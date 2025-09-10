@@ -97,8 +97,8 @@ extension ClientProxyMock {
         roomForIdentifierClosure = { [weak self] identifier in
             if let room = self?.roomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier }) {
                 await .joined(JoinedRoomProxyMock(.init(id: room.id, name: room.name)))
-            } else if let spaceRoom = configuration.joinedSpaceRooms.first(where: { $0.id == identifier }) {
-                await .joined(JoinedRoomProxyMock(.init(id: spaceRoom.id, name: spaceRoom.name)))
+            } else if let spaceRoomProxy = configuration.joinedSpaceRooms.first(where: { $0.id == identifier }) {
+                await .joined(JoinedRoomProxyMock(.init(id: spaceRoomProxy.id, name: spaceRoomProxy.name)))
             } else {
                 nil
             }

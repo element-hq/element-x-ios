@@ -19,8 +19,8 @@ extension SpaceServiceProxyMock {
         self.init()
         
         joinedSpacesPublisher = .init(configuration.joinedSpaces)
-        spaceRoomListForClosure = { spaceRoom in
-            if let spaceRoomList = configuration.spaceRoomLists[spaceRoom.id] {
+        spaceRoomListForClosure = { spaceRoomProxy in
+            if let spaceRoomList = configuration.spaceRoomLists[spaceRoomProxy.id] {
                 .success(spaceRoomList)
             } else {
                 .failure(.sdkError(ClientProxyMockError.generic))

@@ -12,6 +12,7 @@ typealias SpaceScreenViewModelType = StateStoreViewModelV2<SpaceScreenViewState,
 
 class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtocol {
     private let spaceServiceProxy: SpaceServiceProxyProtocol
+    private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<SpaceScreenViewModelAction, Never> = .init()
@@ -22,15 +23,16 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
     init(spaceRoomListProxy: SpaceRoomListProxyProtocol,
          spaceServiceProxy: SpaceServiceProxyProtocol,
          selectedSpaceRoomPublisher: CurrentValuePublisher<String?, Never>,
-         mediaProvider: MediaProviderProtocol,
+         userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.spaceServiceProxy = spaceServiceProxy
+        clientProxy = userSession.clientProxy
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: SpaceScreenViewState(space: spaceRoomListProxy.spaceRoomProxy,
                                                           rooms: spaceRoomListProxy.spaceRoomsPublisher.value,
                                                           selectedSpaceRoomID: selectedSpaceRoomPublisher.value),
-                   mediaProvider: mediaProvider)
+                   mediaProvider: userSession.mediaProvider)
         
         spaceRoomListProxy.spaceRoomsPublisher
             .receive(on: DispatchQueue.main)
@@ -71,9 +73,14 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                 // No need to check the join state, the room flow will show an appropriately configured join screen if needed.
                 actionsSubject.send(.selectRoom(roomID: spaceRoomProxy.id))
             }
-        case .spaceAction(.join(let spaceID)):
-            #warning("Implement joining.")
+        case .spaceAction(.join(let spaceRoomProxy)):
+            Task { await join(spaceRoomProxy) }
         }
+    }
+    
+    func stop() {
+        // If we pop this screen with running join operations, we don't want them to do anything.
+        state.joiningRoomIDs.removeAll()
     }
     
     // MARK: - Private
@@ -85,6 +92,25 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         case .failure(let error):
             MXLog.error("Unable to select space: \(error)")
             showFailureIndicator()
+        }
+    }
+    
+    private func join(_ spaceRoomProxy: SpaceRoomProxyProtocol) async {
+        state.joiningRoomIDs.insert(spaceRoomProxy.id)
+        defer { state.joiningRoomIDs.remove(spaceRoomProxy.id) }
+        
+        guard case .success = await clientProxy.joinRoom(spaceRoomProxy.id, via: []) else {
+            showFailureIndicator()
+            return
+        }
+        
+        // If multiple join operations are running, then only show the last one.
+        guard state.joiningRoomIDs == [spaceRoomProxy.id] else { return }
+        
+        if spaceRoomProxy.isSpace {
+            await selectSpace(spaceRoomProxy)
+        } else {
+            actionsSubject.send(.selectRoom(roomID: spaceRoomProxy.id))
         }
     }
     

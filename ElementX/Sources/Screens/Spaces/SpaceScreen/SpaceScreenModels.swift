@@ -18,6 +18,7 @@ struct SpaceScreenViewState: BindableState {
     var isPaginating = false
     var rooms: [SpaceRoomProxyProtocol]
     var selectedSpaceRoomID: String?
+    var joiningRoomIDs: Set<String> = []
     
     var bindings = SpaceScreenViewStateBindings()
     
