@@ -13,6 +13,11 @@ class AttributedStringBuilderV2Tests: AttributedStringBuilderV1Tests {
         AttributedStringBuilder.useNextGenHTMLParser = true
         try await super.setUp()
     }
+    
+    override func tearDown() async throws {
+        AttributedStringBuilder.useNextGenHTMLParser = false
+        try await super.tearDown()
+    }
 }
 
 class AttributedStringBuilderV1Tests: XCTestCase {
