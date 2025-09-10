@@ -77,20 +77,26 @@ struct RoomScreen: View {
     
     @ViewBuilder
     private var pinnedItemsBanner: some View {
-        Group {
+        // Color.clear and clipped() are required for iOS 26 transparent nav bar
+        VStack(spacing: 0) {
             if context.viewState.shouldShowPinnedEventsBanner {
                 PinnedItemsBannerView(state: context.viewState.pinnedEventsBannerState,
                                       onMainButtonTap: { context.send(viewAction: .tappedPinnedEventsBanner) },
                                       onViewAllButtonTap: { context.send(viewAction: .viewAllPins) })
                     .transition(.move(edge: .top))
+            } else {
+                Color.clear
+                    .allowsHitTesting(false)
             }
         }
         .animation(.elementDefault, value: context.viewState.shouldShowPinnedEventsBanner)
+        .clipped()
     }
     
     @ViewBuilder
     private var knockRequestsBanner: some View {
-        Group {
+        // Color.clear and clipped() are required for iOS 26 transparent nav bar
+        VStack(spacing: 0) {
             if context.viewState.shouldSeeKnockRequests {
                 KnockRequestsBannerView(requests: context.viewState.displayedKnockRequests,
                                         onDismiss: dismissKnockRequestsBanner,
@@ -99,9 +105,13 @@ struct RoomScreen: View {
                                         mediaProvider: context.mediaProvider)
                     .padding(.top, 16)
                     .transition(.move(edge: .top))
+            } else {
+                Color.clear
+                    .allowsHitTesting(false)
             }
         }
         .animation(.elementDefault, value: context.viewState.shouldSeeKnockRequests)
+        .clipped()
     }
     
     private func dismissKnockRequestsBanner() {
