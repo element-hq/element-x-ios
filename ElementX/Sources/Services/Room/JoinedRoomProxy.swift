@@ -639,6 +639,16 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         ElementCallWidgetDriver(room: room, deviceID: deviceID)
     }
     
+    func declineCall(notificationId: String) async -> Result<Void, RoomProxyError> {
+        do {
+            try await room.declineCall(rtcNotificationEventId: notificationId)
+            return .success(())
+        } catch {
+            MXLog.error("Failed to decline rtc notification \(notificationId) with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Permalinks
     
     func matrixToPermalink() async -> Result<URL, RoomProxyError> {

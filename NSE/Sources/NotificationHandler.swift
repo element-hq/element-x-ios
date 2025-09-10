@@ -126,6 +126,7 @@ class NotificationHandler {
                 return .processedShouldDiscard
             case .callNotify(let notifyType):
                 return await handleCallNotification(notifyType: notifyType,
+                                                    rtcNotifyEventId: event.eventId(),
                                                     timestamp: event.timestamp(),
                                                     roomID: itemProxy.roomID,
                                                     roomDisplayName: itemProxy.roomDisplayName)
@@ -153,6 +154,7 @@ class NotificationHandler {
     /// Handle incoming call notifications.
     /// - Returns: A boolean indicating whether the notification was handled and should now be discarded.
     private func handleCallNotification(notifyType: NotifyType,
+                                        rtcNotifyEventId: String,
                                         timestamp: Timestamp,
                                         roomID: String,
                                         roomDisplayName: String) async -> NotificationProcessingResult {
@@ -206,7 +208,8 @@ class NotificationHandler {
         }
         
         let payload = [ElementCallServiceNotificationKey.roomID.rawValue: roomID,
-                       ElementCallServiceNotificationKey.roomDisplayName.rawValue: roomDisplayName]
+                       ElementCallServiceNotificationKey.roomDisplayName.rawValue: roomDisplayName,
+                       ElementCallServiceNotificationKey.rtcNotifyEventId.rawValue: rtcNotifyEventId]
         
         do {
             try await CXProvider.reportNewIncomingVoIPPushPayload(payload)
