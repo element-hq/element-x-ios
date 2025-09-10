@@ -5,16 +5,15 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import XCTest
 import MatrixRustSDK
 import SwiftUI
+import XCTest
 
 @testable import ElementX
 
 /// Tests for ElementCallWidgetDriver intent computation during call placement
 @MainActor
 class ElementCallWidgetDriverIntentTests: XCTestCase {
-    
     private let baseURL = URL(string: "https://call.element.io")!
     private let clientID = "test-client-id"
     private let deviceID = "test-device-id"
@@ -28,13 +27,11 @@ class ElementCallWidgetDriverIntentTests: XCTestCase {
         let driver = ElementCallWidgetDriver(room: mockRoom, deviceID: deviceID)
         
         // When: Starting the widget
-        let result = await driver.start(
-            baseURL: baseURL,
-            clientID: clientID,
-            colorScheme: .light,
-            rageshakeURL: nil,
-            analyticsConfiguration: nil
-        )
+        let result = await driver.start(baseURL: baseURL,
+                                        clientID: clientID,
+                                        colorScheme: .light,
+                                        rageshakeURL: nil,
+                                        analyticsConfiguration: nil)
         
         // Then: The intent computation was called correctly
         XCTAssertTrue(mockRoom.hasActiveRoomCallCalled, "Should check if room has active call")
@@ -61,13 +58,11 @@ class ElementCallWidgetDriverIntentTests: XCTestCase {
         let driver = ElementCallWidgetDriver(room: mockRoom, deviceID: deviceID)
         
         // When: Starting the widget
-        let result = await driver.start(
-            baseURL: baseURL,
-            clientID: clientID,
-            colorScheme: .light,
-            rageshakeURL: nil,
-            analyticsConfiguration: nil
-        )
+        let result = await driver.start(baseURL: baseURL,
+                                        clientID: clientID,
+                                        colorScheme: .light,
+                                        rageshakeURL: nil,
+                                        analyticsConfiguration: nil)
         
         // Then: The room state was checked for join intent
         XCTAssertTrue(mockRoom.hasActiveRoomCallCalled)
@@ -90,13 +85,11 @@ class ElementCallWidgetDriverIntentTests: XCTestCase {
         let driver = ElementCallWidgetDriver(room: mockRoom, deviceID: deviceID)
         
         // When: Starting the widget
-        let result = await driver.start(
-            baseURL: baseURL,
-            clientID: clientID,
-            colorScheme: .light,
-            rageshakeURL: nil,
-            analyticsConfiguration: nil
-        )
+        let result = await driver.start(baseURL: baseURL,
+                                        clientID: clientID,
+                                        colorScheme: .light,
+                                        rageshakeURL: nil,
+                                        analyticsConfiguration: nil)
         
         // Then: The room state was checked for DM start intent
         XCTAssertTrue(mockRoom.hasActiveRoomCallCalled)
@@ -119,13 +112,11 @@ class ElementCallWidgetDriverIntentTests: XCTestCase {
         let driver = ElementCallWidgetDriver(room: mockRoom, deviceID: deviceID)
         
         // When: Starting the widget
-        let result = await driver.start(
-            baseURL: baseURL,
-            clientID: clientID,
-            colorScheme: .light,
-            rageshakeURL: nil,
-            analyticsConfiguration: nil
-        )
+        let result = await driver.start(baseURL: baseURL,
+                                        clientID: clientID,
+                                        colorScheme: .light,
+                                        rageshakeURL: nil,
+                                        analyticsConfiguration: nil)
         
         // Then: The room state was checked for DM join intent
         XCTAssertTrue(mockRoom.hasActiveRoomCallCalled)

@@ -82,11 +82,11 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         // Compute the correct intent based on room type and call status
         // There are 4 intents: join/start and dm/non-dm
         let intent: Intent
-        switch (hasActiveCall, await isDirect) {
+        switch await (hasActiveCall, isDirect) {
         case (true, true):
             intent = .joinExistingDM
         case (true, false):
-            intent = .joinExisting  
+            intent = .joinExisting
         case (false, true):
             intent = .startCallDM
         case (false, false):
@@ -94,25 +94,19 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         }
         
         do {
-            widgetSettings = try await newVirtualElementCallWidget(
-                props: .init(
-                    elementCallUrl: baseURL.absoluteString,
-                    widgetId: widgetID,
-                    parentUrl: nil,
-                    fontScale: nil,
-                    font: nil,
-                    encryption: .perParticipantKeys,
-                    posthogUserId: nil,
-                    posthogApiHost: analyticsConfiguration?.posthogAPIHost,
-                    posthogApiKey: analyticsConfiguration?.posthogAPIKey,
-                    rageshakeSubmitUrl: rageshakeURL,
-                    sentryDsn: analyticsConfiguration?.sentryDSN,
-                    sentryEnvironment: nil
-                ),
-                config: .init(
-                    intent: intent
-                )
-            )
+            widgetSettings = try await newVirtualElementCallWidget(props: .init(elementCallUrl: baseURL.absoluteString,
+                                                                                widgetId: widgetID,
+                                                                                parentUrl: nil,
+                                                                                fontScale: nil,
+                                                                                font: nil,
+                                                                                encryption: .perParticipantKeys,
+                                                                                posthogUserId: nil,
+                                                                                posthogApiHost: analyticsConfiguration?.posthogAPIHost,
+                                                                                posthogApiKey: analyticsConfiguration?.posthogAPIKey,
+                                                                                rageshakeSubmitUrl: rageshakeURL,
+                                                                                sentryDsn: analyticsConfiguration?.sentryDSN,
+                                                                                sentryEnvironment: nil),
+                                                                   config: .init(intent: intent))
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)
