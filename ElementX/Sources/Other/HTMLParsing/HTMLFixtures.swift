@@ -37,10 +37,10 @@ enum HTMLFixtures: String, CaseIterable {
             """
         case .paragraphs:
             """
-            <p>This is a paragraph.</p><p>And this is another one.</p>
-            <div>And this is a division.</div>
-            New lines are ignored.\n\nLike so.</br>
-            But this line comes after a line break.</br>
+            <p>This is a paragraph.</p><p>And this is another one.</p>\
+            <div>And this is a division.</div>\
+            New lines outside of tags are not ignored.\n\nLike so.</br>\
+            This line comes after a line break.</br>
             """
         case .matrixIdentifiers:
             """
@@ -54,10 +54,9 @@ enum HTMLFixtures: String, CaseIterable {
             """
         case .textFormatting:
             """
-            <b>Text</b> <i>formatting</i> <u>should</u> <s>work</s> properly.</br>
-            <strong>Text</strong> <em>formatting</em> does <del>work!</del>.</br>
+            <b>Text</b> <i>formatting</i> <u>should</u> <s>work</s> properly.
+            <strong>Text</strong> <em>formatting</em> does <del>work!</del>.
             <b>And <i>mixed</i></b> <em><s>formatting</s></em> <del><strong>works</strong></del> <u><b>too!!1!</b></u>.
-            <br>
             <sup>Thumbs</sup> if you liked it, <sub>sub</sub> if you loved it!
             """
         case .groupedBlockQuotes:
@@ -68,10 +67,10 @@ enum HTMLFixtures: String, CaseIterable {
             """
         case .separatedBlockQuotes:
             """
-            Text before blockquote
-            <blockquote>Some blockquote</blockquote>
-            Text after first blockquote
-            <blockquote>Some other blockquote</blockquote>
+            Text before blockquote\
+            <blockquote>Some blockquote</blockquote>\
+            Text after first blockquote\
+            <blockquote>Some other blockquote</blockquote>\
             Text after second blockquote
             """
         case .codeBlocks:

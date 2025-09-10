@@ -72,7 +72,7 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
         }
         
         var listIndex = 1
-        let mutableAttributedString = attributedString(from: body, preserveFormatting: false, listTag: nil, listIndex: &listIndex, indentLevel: 0)
+        let mutableAttributedString = attributedString(element: body, documentBody: body, preserveFormatting: false, listTag: nil, listIndex: &listIndex, indentLevel: 0)
         detectPhishingAttempts(mutableAttributedString)
         addLinksAndMentions(mutableAttributedString)
         addMatrixEntityPermalinkAttributesTo(mutableAttributedString)
@@ -86,7 +86,9 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
     // MARK: - Private
     
     // swiftlint:disable:next function_body_length
-    func attributedString(from element: Element, preserveFormatting: Bool,
+    func attributedString(element: Element,
+                          documentBody: Element,
+                          preserveFormatting: Bool,
                           listTag: String?,
                           listIndex: inout Int,
                           indentLevel: Int) -> NSMutableAttributedString {
@@ -94,6 +96,12 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
         
         for node in element.getChildNodes() {
             if let textNode = node as? TextNode {
+                // If this node is plain text just append its preformatted contents
+                if node.parent() == documentBody {
+                    result.append(NSAttributedString(string: textNode.getWholeText()))
+                    continue
+                }
+                
                 var text = preserveFormatting ? textNode.getWholeText() : textNode.text()
                 
                 // There seem to be sibling TextNodes following every </br> tag that
@@ -121,50 +129,50 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
             case "h1", "h2", "h3", "h4", "h5", "h6":
                 let level = max(3, Int(String(tag.dropFirst())) ?? 1)
                 let size: CGFloat = fontPointSize + CGFloat(6 - level) * 2
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.append(NSAttributedString(string: "\n"))
                 content.setFontPreservingSymbolicTraits(UIFont.boldSystemFont(ofSize: size))
-                
+
             case "p", "div":
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.append(NSAttributedString(string: "\n"))
                 
             case "br":
                 content = NSMutableAttributedString(string: "\n")
                 
             case "b", "strong":
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.setFontPreservingSymbolicTraits(UIFont.boldSystemFont(ofSize: fontPointSize))
                 
             case "i", "em":
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.setFontPreservingSymbolicTraits(UIFont.italicSystemFont(ofSize: fontPointSize))
                 
             case "u":
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: content.length))
                 
             case "s", "del":
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.strikethroughStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: content.length))
                 
             case "sup":
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.baselineOffset, value: 6, range: NSRange(location: 0, length: content.length))
                 content.setFontPreservingSymbolicTraits(UIFont.systemFont(ofSize: fontPointSize * 0.7))
                 
             case "sub":
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.baselineOffset, value: -4, range: NSRange(location: 0, length: content.length))
                 content.setFontPreservingSymbolicTraits(UIFont.systemFont(ofSize: fontPointSize * 0.7))
                 
             case "blockquote":
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.addAttribute(.MatrixBlockquote, value: true, range: NSRange(location: 0, length: content.length))
                 
             case "code", "pre":
                 let preserveFormatting = preserveFormatting || tag == "pre"
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 content.setFontPreservingSymbolicTraits(UIFont.monospacedSystemFont(ofSize: fontPointSize, weight: .regular))
                 content.addAttribute(.CodeBlock, value: true, range: NSRange(location: 0, length: content.length))
                 content.addAttribute(.backgroundColor, value: UIColor.compound._bgCodeBlock as Any, range: NSRange(location: 0, length: content.length))
@@ -182,19 +190,19 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
                 content = NSMutableAttributedString(string: "\n")
                 
             case "a":
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 if let href = try? childElement.attr("href"), let url = URL(string: href) {
                     content.addAttribute(.link, value: url, range: NSRange(location: 0, length: content.length))
                 }
                 
             case "span":
                 if childElement.dataset()[Self.attributeMSC4286] != nil {
-                    content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                    content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
                 }
                 
             case "ul", "ol":
                 var listIndex = 1
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: tag, listIndex: &listIndex, indentLevel: indentLevel + 1)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: tag, listIndex: &listIndex, indentLevel: indentLevel + 1)
                 if listTag == nil { // If not within another list
                     content.insert(NSAttributedString(string: "\n"), at: 0)
                 }
@@ -208,7 +216,7 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
                     bullet = "• "
                 }
                 
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel + 1)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel + 1)
                 content.insert(NSAttributedString(string: bullet), at: 0)
                 content.append(NSAttributedString(string: "\n"))
                 
@@ -218,7 +226,7 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
                 content.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: content.length))
                 
             default:
-                content = attributedString(from: childElement, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
             }
             
             result.append(content)
