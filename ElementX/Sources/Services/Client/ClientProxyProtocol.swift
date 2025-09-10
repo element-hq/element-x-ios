@@ -165,6 +165,8 @@ protocol ClientProxyProtocol: AnyObject {
     
     func knockRoomAlias(_ roomAlias: String, message: String?) async -> Result<Void, ClientProxyError>
     
+    func canJoinRoom(with rules: [AllowRule]) -> Bool
+    
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError>
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyType?

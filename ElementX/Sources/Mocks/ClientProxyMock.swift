@@ -15,6 +15,7 @@ struct ClientProxyMockConfiguration {
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol = RoomSummaryProviderMock(.init())
     var joinedSpaceRooms: [SpaceRoomProxyProtocol] = []
+    var roomPreviews: [RoomPreviewProxyProtocol] = []
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
     
     var recoveryState: SecureBackupRecoveryState = .enabled
@@ -65,6 +66,7 @@ extension ClientProxyMock {
         directRoomForUserIDReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         createDirectRoomWithExpectedRoomNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
+        canJoinRoomWithReturnValue = true
         uploadMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         loadUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
@@ -99,6 +101,14 @@ extension ClientProxyMock {
                 await .joined(JoinedRoomProxyMock(.init(id: spaceRoom.id, name: spaceRoom.name)))
             } else {
                 nil
+            }
+        }
+        
+        roomPreviewForIdentifierViaClosure = { roomID, _ in
+            if let preview = configuration.roomPreviews.first(where: { $0.info.id == roomID }) {
+                .success(preview)
+            } else {
+                .failure(.roomPreviewIsPrivate)
             }
         }
         

@@ -92,7 +92,7 @@ class SpaceScreenViewModelTests: XCTestCase {
     func testSelectingSpace() async throws {
         setupViewModel()
         
-        let selectedSpace = mockSpaceRooms[0]
+        let selectedSpace = try XCTUnwrap(mockSpaceRooms.first { $0.isSpace }, "There should be a space to select.")
         let deferred = deferFulfillment(viewModel.actionsPublisher) { _ in true }
         viewModel.context.send(viewAction: .spaceAction(.select(selectedSpace)))
         let action = try await deferred.fulfill()
@@ -102,6 +102,22 @@ class SpaceScreenViewModelTests: XCTestCase {
             break
         default:
             XCTFail("The action should select the space.")
+        }
+    }
+    
+    func testSelectingRoom() async throws {
+        setupViewModel()
+        
+        let selectedRoom = try XCTUnwrap(mockSpaceRooms.first { !$0.isSpace }, "There should be a room to select.")
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { _ in true }
+        viewModel.context.send(viewAction: .spaceAction(.select(selectedRoom)))
+        let action = try await deferred.fulfill()
+        
+        switch action {
+        case .selectRoom(let roomID) where roomID == selectedRoom.id:
+            break
+        default:
+            XCTFail("The action should select the room.")
         }
     }
     

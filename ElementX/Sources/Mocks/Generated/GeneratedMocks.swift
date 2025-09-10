@@ -2987,6 +2987,76 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return knockRoomAliasMessageReturnValue
         }
     }
+    //MARK: - canJoinRoom
+
+    var canJoinRoomWithUnderlyingCallsCount = 0
+    var canJoinRoomWithCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return canJoinRoomWithUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canJoinRoomWithUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canJoinRoomWithUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canJoinRoomWithUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var canJoinRoomWithCalled: Bool {
+        return canJoinRoomWithCallsCount > 0
+    }
+    var canJoinRoomWithReceivedRules: [AllowRule]?
+    var canJoinRoomWithReceivedInvocations: [[AllowRule]] = []
+
+    var canJoinRoomWithUnderlyingReturnValue: Bool!
+    var canJoinRoomWithReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return canJoinRoomWithUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = canJoinRoomWithUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                canJoinRoomWithUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    canJoinRoomWithUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var canJoinRoomWithClosure: (([AllowRule]) -> Bool)?
+
+    func canJoinRoom(with rules: [AllowRule]) -> Bool {
+        canJoinRoomWithCallsCount += 1
+        canJoinRoomWithReceivedRules = rules
+        DispatchQueue.main.async {
+            self.canJoinRoomWithReceivedInvocations.append(rules)
+        }
+        if let canJoinRoomWithClosure = canJoinRoomWithClosure {
+            return canJoinRoomWithClosure(rules)
+        } else {
+            return canJoinRoomWithReturnValue
+        }
+    }
     //MARK: - uploadMedia
 
     var uploadMediaUnderlyingCallsCount = 0

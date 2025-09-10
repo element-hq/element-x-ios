@@ -96,4 +96,18 @@ extension RoomPreviewProxyMock {
         
         underlyingOwnMembershipDetails = roomMembershipDetails
     }
+    
+    convenience init(spaceRoom: SpaceRoomProxyProtocol) {
+        self.init(Configuration(roomID: spaceRoom.id,
+                                canonicalAlias: spaceRoom.canonicalAlias ?? "",
+                                name: spaceRoom.name ?? "",
+                                topic: spaceRoom.topic ?? "",
+                                avatarURL: spaceRoom.avatarURL?.absoluteString ?? "",
+                                numJoinedMembers: UInt64(spaceRoom.joinedMembersCount),
+                                numActiveMembers: UInt64(spaceRoom.joinedMembersCount),
+                                roomType: spaceRoom.isSpace ? .space : .room,
+                                membership: nil,
+                                joinRule: spaceRoom.joinRule ?? .restricted(rules: []),
+                                isDirect: false))
+    }
 }
