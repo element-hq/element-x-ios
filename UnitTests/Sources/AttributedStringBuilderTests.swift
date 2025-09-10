@@ -29,14 +29,16 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(String(attributedString.characters), "H1 Header\nH2 Header\nH3 Header\nH4 Header\nH5 Header\nH6 Header")
-        
         if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssertEqual(String(attributedString.characters), "H1 Header\n\nH2 Header\n\nH3 Header\n\nH4 Header\n\nH5 Header\n\nH6 Header\n")
+            
             XCTAssertEqual(attributedString.runs.count, 11) // newlines hold no attributes
 
             let pointSizes = attributedString.runs.compactMap(\.uiKit.font?.pointSize)
             XCTAssertEqual(pointSizes, [23, 23, 23, 21, 19, 17])
         } else {
+            XCTAssertEqual(String(attributedString.characters), "H1 Header\nH2 Header\nH3 Header\nH4 Header\nH5 Header\nH6 Header")
+            
             XCTAssert(attributedString.runs.count == 6)
             
             let firstRun = attributedString.runs[attributedString.runs.startIndex]
@@ -72,7 +74,7 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         }
         
         if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 13)
+            XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 18)
         } else {
             XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 10)
         }
@@ -158,14 +160,6 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(String(h1AttributedString.characters), "Matrix.org")
-        XCTAssertEqual(String(h2AttributedString.characters), "Matrix.org")
-        XCTAssertEqual(String(h3AttributedString.characters), "Matrix.org")
-        
-        XCTAssertEqual(h1AttributedString.runs.count, 1)
-        XCTAssertEqual(h2AttributedString.runs.count, 1)
-        XCTAssertEqual(h3AttributedString.runs.count, 1)
-        
         guard let h1Font = h1AttributedString.runs.first?.uiKit.font,
               let h2Font = h2AttributedString.runs.first?.uiKit.font,
               let h3Font = h3AttributedString.runs.first?.uiKit.font else {
@@ -174,12 +168,28 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         }
         
         if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssertEqual(String(h1AttributedString.characters), "Matrix.org\n")
+            XCTAssertEqual(String(h2AttributedString.characters), "Matrix.org\n")
+            XCTAssertEqual(String(h3AttributedString.characters), "Matrix.org\n")
+            
+            XCTAssertEqual(h1AttributedString.runs.count, 2)
+            XCTAssertEqual(h2AttributedString.runs.count, 2)
+            XCTAssertEqual(h3AttributedString.runs.count, 2)
+            
             XCTAssertEqual(h1Font, h2Font)
             XCTAssertEqual(h2Font, h3Font)
             
             XCTAssert(h1Font.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
             XCTAssert(h1Font.pointSize <= 23)
         } else {
+            XCTAssertEqual(String(h1AttributedString.characters), "Matrix.org")
+            XCTAssertEqual(String(h2AttributedString.characters), "Matrix.org")
+            XCTAssertEqual(String(h3AttributedString.characters), "Matrix.org")
+            
+            XCTAssertEqual(h1AttributedString.runs.count, 1)
+            XCTAssertEqual(h2AttributedString.runs.count, 1)
+            XCTAssertEqual(h3AttributedString.runs.count, 1)
+            
             XCTAssertEqual(h1Font, h2Font)
             XCTAssertEqual(h2Font, h3Font)
             
