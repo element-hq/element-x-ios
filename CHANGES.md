@@ -1,3 +1,21 @@
+## Changes in 25.09.3 (2025-09-11)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix stripping location data away from raw images when processing them for upload by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4497
+* Await user session migrations rather than launching a task. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4502
+
+🚧 In development 🚧
+* Tweak attributed string formatting by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4496
+
+Others
+* Update the Enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4495
+* Add intent system to widget url creation. by @Copilot in https://github.com/element-hq/element-x-ios/pull/4427
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.09.2...release/25.09.3
+
 ## Changes in 25.09.2 (2025-09-09)
 
 ### What's Changed
