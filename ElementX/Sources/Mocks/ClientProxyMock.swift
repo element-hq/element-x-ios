@@ -15,7 +15,7 @@ struct ClientProxyMockConfiguration {
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol = RoomSummaryProviderMock(.init())
     var joinedSpaceRooms: [SpaceRoomProxyProtocol] = []
-    var roomPreviews: [RoomPreviewProxyProtocol] = []
+    var roomPreviews: [RoomPreviewProxyProtocol]?
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
     
     var recoveryState: SecureBackupRecoveryState = .enabled
@@ -104,11 +104,13 @@ extension ClientProxyMock {
             }
         }
         
-        roomPreviewForIdentifierViaClosure = { roomID, _ in
-            if let preview = configuration.roomPreviews.first(where: { $0.info.id == roomID }) {
-                .success(preview)
-            } else {
-                .failure(.roomPreviewIsPrivate)
+        if let roomPreviews = configuration.roomPreviews {
+            roomPreviewForIdentifierViaClosure = { roomID, _ in
+                if let preview = roomPreviews.first(where: { $0.info.id == roomID }) {
+                    .success(preview)
+                } else {
+                    .failure(.roomPreviewIsPrivate)
+                }
             }
         }
         
