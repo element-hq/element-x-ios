@@ -30,6 +30,7 @@ struct SpaceScreen: View {
         ForEach(context.viewState.rooms, id: \.id) { spaceRoomProxy in
             SpaceRoomCell(spaceRoomProxy: spaceRoomProxy,
                           isSelected: spaceRoomProxy.id == context.viewState.selectedSpaceRoomID,
+                          isJoining: context.viewState.joiningRoomIDs.contains(spaceRoomProxy.id),
                           mediaProvider: context.mediaProvider) { action in
                 context.send(viewAction: .spaceAction(action))
             }
@@ -78,7 +79,7 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
         let viewModel = SpaceScreenViewModel(spaceRoomListProxy: spaceRoomListProxy,
                                              spaceServiceProxy: SpaceServiceProxyMock(.init()),
                                              selectedSpaceRoomPublisher: .init(nil),
-                                             mediaProvider: MediaProviderMock(configuration: .init()),
+                                             userSession: UserSessionMock(.init()),
                                              userIndicatorController: UserIndicatorControllerMock())
         return viewModel
     }

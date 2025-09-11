@@ -58,9 +58,9 @@ struct SpaceListScreen: View {
     }
     
     var spaces: some View {
-        ForEach(context.viewState.joinedSpaces, id: \.id) { spaceRoom in
-            SpaceRoomCell(spaceRoomProxy: spaceRoom,
-                          isSelected: spaceRoom.id == context.viewState.selectedSpaceID,
+        ForEach(context.viewState.joinedSpaces, id: \.id) { spaceRoomProxy in
+            SpaceRoomCell(spaceRoomProxy: spaceRoomProxy,
+                          isSelected: spaceRoomProxy.id == context.viewState.selectedSpaceID,
                           mediaProvider: context.mediaProvider) { action in
                 context.send(viewAction: .spaceAction(action))
             }

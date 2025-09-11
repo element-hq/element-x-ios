@@ -14,7 +14,7 @@ struct SpaceScreenCoordinatorParameters {
     let spaceRoomListProxy: SpaceRoomListProxyProtocol
     let spaceServiceProxy: SpaceServiceProxyProtocol
     let selectedSpaceRoomPublisher: CurrentValuePublisher<String?, Never>
-    let mediaProvider: MediaProviderProtocol
+    let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -40,7 +40,7 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
         viewModel = SpaceScreenViewModel(spaceRoomListProxy: parameters.spaceRoomListProxy,
                                          spaceServiceProxy: parameters.spaceServiceProxy,
                                          selectedSpaceRoomPublisher: parameters.selectedSpaceRoomPublisher,
-                                         mediaProvider: parameters.mediaProvider,
+                                         userSession: parameters.userSession,
                                          userIndicatorController: parameters.userIndicatorController)
     }
     
@@ -57,6 +57,10 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
             }
         }
         .store(in: &cancellables)
+    }
+    
+    func stop() {
+        viewModel.stop()
     }
         
     func toPresentable() -> AnyView {

@@ -58,7 +58,7 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
         switch viewAction {
         case .spaceAction(.select(let spaceRoomProxy)):
             Task { await selectSpace(spaceRoomProxy) }
-        case .spaceAction(.join(let spaceRoom)):
+        case .spaceAction(.join(let spaceRoomProxy)):
             #warning("Implement joining.")
         case .showSettings:
             actionsSubject.send(.showSettings)

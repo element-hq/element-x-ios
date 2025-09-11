@@ -542,6 +542,17 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func canJoinRoom(with rules: [AllowRule]) -> Bool {
+        for rule in rules {
+            if case let .roomMembership(roomID) = rule,
+               let room = try? client.getRoom(roomId: roomID),
+               room.membership() == .joined {
+                return true
+            }
+        }
+        return false
+    }
+    
     func uploadMedia(_ media: MediaInfo) async -> Result<String, ClientProxyError> {
         guard let mimeType = media.mimeType else {
             MXLog.error("Failed uploading media, invalid mime type: \(media)")
