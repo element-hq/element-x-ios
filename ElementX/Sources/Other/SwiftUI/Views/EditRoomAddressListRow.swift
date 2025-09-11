@@ -46,11 +46,23 @@ struct EditRoomAddressListRow: View {
 }
 
 private extension View {
-    func errorBackground(_ shouldDisplay: Bool) -> some View {
-        listRowBackground(shouldDisplay ? AnyView(RoundedRectangle(cornerRadius: 10)
+    @ViewBuilder
+    private var shape: some View {
+        if #available(iOS 26, *) {
+            Capsule()
                 .inset(by: 1)
                 .fill(.compound.bgCriticalSubtleHovered)
-                .stroke(Color.compound.borderCriticalPrimary)) : AnyView(Color.compound.bgCanvasDefaultLevel1))
+                .stroke(Color.compound.borderCriticalPrimary)
+        } else {
+            RoundedRectangle(cornerRadius: 10)
+                .inset(by: 1)
+                .fill(.compound.bgCriticalSubtleHovered)
+                .stroke(Color.compound.borderCriticalPrimary)
+        }
+    }
+    
+    func errorBackground(_ shouldDisplay: Bool) -> some View {
+        listRowBackground(shouldDisplay ? AnyView(shape) : AnyView(Color.compound.bgCanvasDefaultLevel1))
     }
 }
 
