@@ -38,7 +38,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 configureNotificationManager()
                 observeUserSessionChanges()
                 startSync()
-                Task { await performUserSessionMigrations(userSession) }
                 Task { await appHooks.configure(with: userSession) }
             }
         }
@@ -568,6 +567,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         Task {
             switch await userSessionStore.restoreUserSession() {
             case .success(let userSession):
+                await self.performUserSessionMigrations(userSession)
                 self.userSession = userSession
                 stateMachine.processEvent(.createdUserSession)
             case .failure:
