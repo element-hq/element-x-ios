@@ -306,7 +306,8 @@ struct JoinRoomScreen: View {
 struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
     static let unknownViewModel = makeViewModel(mode: .unknown)
     static let joinableViewModel = makeViewModel(mode: .joinable)
-    static let restrictedViewModel = makeViewModel(mode: .restricted)
+    static let restrictedViewModel = makeViewModel(mode: .restricted, canJoinRoom: false)
+    static let restrictedJoinableViewModel = makeViewModel(mode: .restricted)
     static let inviteRequiredViewModel = makeViewModel(mode: .inviteRequired)
     static let invitedViewModel = makeViewModel(mode: .invited(isDM: false))
     static let invitedDMViewModel = makeViewModel(mode: .invited(isDM: true))
@@ -321,6 +322,8 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         makePreview(viewModel: unknownViewModel, mode: .unknown)
         makePreview(viewModel: joinableViewModel, mode: .joinable)
         makePreview(viewModel: restrictedViewModel, mode: .restricted)
+        makePreview(viewModel: restrictedJoinableViewModel, mode: .restricted,
+                    customPreviewName: "RestrictedJoinable")
         makePreview(viewModel: inviteRequiredViewModel, mode: .inviteRequired)
         makePreview(viewModel: invitedViewModel, mode: .invited(isDM: false))
         makePreview(viewModel: invitedDMViewModel, mode: .invited(isDM: true))
@@ -359,11 +362,14 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
         }
     }
     
-    static func makeViewModel(mode: JoinRoomScreenMode, hideInviteAvatars: Bool = false) -> JoinRoomScreenViewModel {
+    static func makeViewModel(mode: JoinRoomScreenMode,
+                              canJoinRoom: Bool = true,
+                              hideInviteAvatars: Bool = false) -> JoinRoomScreenViewModel {
         let appSettings = AppSettings()
         appSettings.knockingEnabled = true
         
         let clientProxy = ClientProxyMock(.init(hideInviteAvatars: hideInviteAvatars))
+        clientProxy.canJoinRoomWithReturnValue = canJoinRoom
         
         switch mode {
         case .unknown:
