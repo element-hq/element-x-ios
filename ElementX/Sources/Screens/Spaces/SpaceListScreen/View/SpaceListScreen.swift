@@ -20,7 +20,14 @@ struct SpaceListScreen: View {
         }
         .navigationTitle(L10n.screenSpaceListTitle)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar { toolbar }
+        .toolbar {
+            if #available(iOS 26, *) {
+                toolbar
+                    .sharedBackgroundVisibility(.hidden)
+            } else {
+                toolbar
+            }
+        }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .bloom()
     }
