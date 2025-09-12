@@ -1,3 +1,16 @@
+## Changes in 25.09.4 (2025-09-12)
+
+### What's Changed
+
+🐛 Bugfixes
+* Revert "Add intent system to widget URL creation. (#4427)" by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4504
+
+🚧 In development 🚧
+* Add support for joining rooms from a space. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4501
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.09.3...release/25.09.4
+
 ## Changes in 25.09.3 (2025-09-11)
 
 ### What's Changed
