@@ -1279,9 +1279,19 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func inviteUsers(_ users: [String], in room: JoinedRoomProxyProtocol) {
-        navigationStackCoordinator.setSheetCoordinator(nil)
+        if flowParameters.appSettings.enableKeyShareOnInvite {
+            showLoadingIndicator(title: L10n.screenRoomDetailsInvitePeoplePreparing,
+                                 message: L10n.screenRoomDetailsInvitePeopleDontClose)
+        } else {
+            showLoadingIndicator()
+        }
         
         Task {
+            defer {
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                hideLoadingIndicator()
+            }
+            
             let result: Result<Void, RoomProxyError> = await withTaskGroup(of: Result<Void, RoomProxyError>.self) { group in
                 for user in users {
                     group.addTask {
@@ -1530,12 +1540,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private static let loadingIndicatorID = "\(RoomFlowCoordinator.self)-Loading"
     
-    private func showLoadingIndicator(delay: Duration? = nil) {
+    private func showLoadingIndicator(delay: Duration? = nil,
+                                      title: String = L10n.commonLoading,
+                                      message: String? = nil) {
         flowParameters.userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorID,
                                                                      type: .modal(progress: .indeterminate,
                                                                                   interactiveDismissDisabled: false,
                                                                                   allowsInteraction: false),
-                                                                     title: L10n.commonLoading, persistent: true),
+                                                                     title: title,
+                                                                     message: message,
+                                                                     persistent: true),
                                                                delay: delay)
     }
     
