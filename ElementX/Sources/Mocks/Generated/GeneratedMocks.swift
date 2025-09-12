@@ -9067,6 +9067,76 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return declineCallNotificationIDReturnValue
         }
     }
+    //MARK: - callDeclineEventPublisher
+
+    var callDeclineEventPublisherNotificationIdUnderlyingCallsCount = 0
+    var callDeclineEventPublisherNotificationIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return callDeclineEventPublisherNotificationIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = callDeclineEventPublisherNotificationIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                callDeclineEventPublisherNotificationIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    callDeclineEventPublisherNotificationIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var callDeclineEventPublisherNotificationIdCalled: Bool {
+        return callDeclineEventPublisherNotificationIdCallsCount > 0
+    }
+    var callDeclineEventPublisherNotificationIdReceivedRtcNotificationEventId: String?
+    var callDeclineEventPublisherNotificationIdReceivedInvocations: [String] = []
+
+    var callDeclineEventPublisherNotificationIdUnderlyingReturnValue: AnyPublisher<RtcDeclinedEvent, Never>!
+    var callDeclineEventPublisherNotificationIdReturnValue: AnyPublisher<RtcDeclinedEvent, Never>! {
+        get {
+            if Thread.isMainThread {
+                return callDeclineEventPublisherNotificationIdUnderlyingReturnValue
+            } else {
+                var returnValue: AnyPublisher<RtcDeclinedEvent, Never>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = callDeclineEventPublisherNotificationIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                callDeclineEventPublisherNotificationIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    callDeclineEventPublisherNotificationIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var callDeclineEventPublisherNotificationIdClosure: ((String) -> AnyPublisher<RtcDeclinedEvent, Never>)?
+
+    func callDeclineEventPublisher(notificationId rtcNotificationEventId: String) -> AnyPublisher<RtcDeclinedEvent, Never> {
+        callDeclineEventPublisherNotificationIdCallsCount += 1
+        callDeclineEventPublisherNotificationIdReceivedRtcNotificationEventId = rtcNotificationEventId
+        DispatchQueue.main.async {
+            self.callDeclineEventPublisherNotificationIdReceivedInvocations.append(rtcNotificationEventId)
+        }
+        if let callDeclineEventPublisherNotificationIdClosure = callDeclineEventPublisherNotificationIdClosure {
+            return callDeclineEventPublisherNotificationIdClosure(rtcNotificationEventId)
+        } else {
+            return callDeclineEventPublisherNotificationIdReturnValue
+        }
+    }
     //MARK: - matrixToPermalink
 
     var matrixToPermalinkUnderlyingCallsCount = 0
