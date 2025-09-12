@@ -14867,6 +14867,71 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
+    //MARK: - newLatestEvent
+
+    var newLatestEventUnderlyingCallsCount = 0
+    open var newLatestEventCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return newLatestEventUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = newLatestEventUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                newLatestEventUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    newLatestEventUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var newLatestEventCalled: Bool {
+        return newLatestEventCallsCount > 0
+    }
+
+    var newLatestEventUnderlyingReturnValue: LatestEventValue!
+    open var newLatestEventReturnValue: LatestEventValue! {
+        get {
+            if Thread.isMainThread {
+                return newLatestEventUnderlyingReturnValue
+            } else {
+                var returnValue: LatestEventValue? = nil
+                DispatchQueue.main.sync {
+                    returnValue = newLatestEventUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                newLatestEventUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    newLatestEventUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var newLatestEventClosure: (() async -> LatestEventValue)?
+
+    open override func newLatestEvent() async -> LatestEventValue {
+        newLatestEventCallsCount += 1
+        if let newLatestEventClosure = newLatestEventClosure {
+            return await newLatestEventClosure()
+        } else {
+            return newLatestEventReturnValue
+        }
+    }
+
     //MARK: - ownUserId
 
     var ownUserIdUnderlyingCallsCount = 0
