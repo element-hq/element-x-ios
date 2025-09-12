@@ -71,7 +71,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     var knockRequestsStatePublisher: CurrentValuePublisher<KnockRequestsState, Never> {
         knockRequestsStateSubject.asCurrentValuePublisher()
     }
-    
+
     init(roomListService: RoomListServiceProtocol,
          room: RoomProtocol,
          appSettings: AppSettings) async throws {
@@ -835,5 +835,59 @@ private final class RoomKnockRequestsListener: KnockRequestsListener {
     
     func call(joinRequests: [KnockRequest]) {
         onUpdateClosure(joinRequests)
+    }
+}
+
+final class RoomCallDeclineListener: CallDeclineListener {
+    private let onUpdateClosure: (RtcDeclinedEvent) -> Void
+    private let notificationId: String
+    
+    init(notificationId: String, onUpdateClosure: @escaping (RtcDeclinedEvent) -> Void) {
+        self.notificationId = notificationId
+        self.onUpdateClosure = onUpdateClosure
+    }
+    
+    func call(declinerUserId: String) {
+        onUpdateClosure(.init(sender: declinerUserId, notificationEventId: notificationId))
+    }
+}
+
+// Helper to transform callback to publisher while correctly retaining the task handle and listener.
+struct DeclineCallbackPublisher: Publisher {
+    typealias Output = RtcDeclinedEvent
+    typealias Failure = Never
+ 
+    let room: JoinedRoomProxy
+    let eventId: String
+    
+    func receive<S>(subscriber: S) where S: Subscriber, Never == S.Failure, RtcDeclinedEvent == S.Input {
+        let subscription = Inner(subscriber: subscriber, room: room, eventId: eventId)
+        subscriber.receive(subscription: subscription)
+    }
+    
+    private final class Inner<S: Subscriber>: Subscription
+        where S.Input == RtcDeclinedEvent, S.Failure == Never {
+        private var subscriber: S?
+        private var handle: TaskHandle?
+        private var listener: RoomCallDeclineListener?
+
+        init(subscriber: S, room: JoinedRoomProxy, eventId: String) {
+            self.subscriber = subscriber
+            listener = RoomCallDeclineListener(notificationId: eventId) { [weak self] ev in
+                _ = self?.subscriber?.receive(ev)
+            }
+            handle = try? room.subscribeToCallDeclineEvents(rtcNotificationEventId: eventId, listener: listener!).get()
+        }
+
+        func request(_ demand: Subscribers.Demand) {
+            // nop
+        }
+        
+        func cancel() {
+            handle?.cancel()
+            handle = nil
+            listener = nil
+            subscriber = nil
+        }
     }
 }
