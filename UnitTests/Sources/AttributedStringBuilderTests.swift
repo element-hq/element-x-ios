@@ -35,7 +35,7 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         }
         
         if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(String(attributedString.characters), "H1 Header\n\nH2 Header\n\nH3 Header\n\nH4 Header\n\nH5 Header\n\nH6 Header\n")
+            XCTAssertEqual(String(attributedString.characters), "H1 Header\n\nH2 Header\n\nH3 Header\n\nH4 Header\n\nH5 Header\n\nH6 Header")
             
             XCTAssertEqual(attributedString.runs.count, 11) // newlines hold no attributes
 
@@ -172,32 +172,21 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             return
         }
         
+        XCTAssertEqual(String(h1AttributedString.characters), "Matrix.org")
+        XCTAssertEqual(String(h2AttributedString.characters), "Matrix.org")
+        XCTAssertEqual(String(h3AttributedString.characters), "Matrix.org")
+        
+        XCTAssertEqual(h1AttributedString.runs.count, 1)
+        XCTAssertEqual(h2AttributedString.runs.count, 1)
+        XCTAssertEqual(h3AttributedString.runs.count, 1)
+        
+        XCTAssertEqual(h1Font, h2Font)
+        XCTAssertEqual(h2Font, h3Font)
+        
         if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(String(h1AttributedString.characters), "Matrix.org\n")
-            XCTAssertEqual(String(h2AttributedString.characters), "Matrix.org\n")
-            XCTAssertEqual(String(h3AttributedString.characters), "Matrix.org\n")
-            
-            XCTAssertEqual(h1AttributedString.runs.count, 2)
-            XCTAssertEqual(h2AttributedString.runs.count, 2)
-            XCTAssertEqual(h3AttributedString.runs.count, 2)
-            
-            XCTAssertEqual(h1Font, h2Font)
-            XCTAssertEqual(h2Font, h3Font)
-            
             XCTAssert(h1Font.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
             XCTAssert(h1Font.pointSize <= 23)
         } else {
-            XCTAssertEqual(String(h1AttributedString.characters), "Matrix.org")
-            XCTAssertEqual(String(h2AttributedString.characters), "Matrix.org")
-            XCTAssertEqual(String(h3AttributedString.characters), "Matrix.org")
-            
-            XCTAssertEqual(h1AttributedString.runs.count, 1)
-            XCTAssertEqual(h2AttributedString.runs.count, 1)
-            XCTAssertEqual(h3AttributedString.runs.count, 1)
-            
-            XCTAssertEqual(h1Font, h2Font)
-            XCTAssertEqual(h2Font, h3Font)
-            
             XCTAssert(h1Font.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
             XCTAssert(h1Font.pointSize <= maxHeaderPointSize)
         }
@@ -267,11 +256,9 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             return
         }
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(attributedString.runs.count, 4)
-        } else {
-            XCTAssertEqual(attributedString.runs.count, 3)
-            
+        XCTAssertEqual(attributedString.runs.count, 3)
+        
+        if !AttributedStringBuilder.useNextGenHTMLParser {
             for run in attributedString.runs {
                 XCTAssertEqual(run.uiKit.font?.familyName, UIFont.preferredFont(forTextStyle: .body).familyName)
             }
