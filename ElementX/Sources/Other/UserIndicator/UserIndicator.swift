@@ -33,6 +33,7 @@ struct UserIndicator: Equatable, Identifiable {
     var id: String = UUID().uuidString
     var type: UserIndicatorType = .toast
     var title: String
+    var message: String?
     var iconName: String?
     var persistent = false
     
