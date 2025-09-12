@@ -76,6 +76,7 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
         detectPhishingAttempts(mutableAttributedString)
         addLinksAndMentions(mutableAttributedString)
         addMatrixEntityPermalinkAttributesTo(mutableAttributedString)
+        removeParsingArtefacts(mutableAttributedString)
         
         let result = try? AttributedString(mutableAttributedString, including: \.elementX)
         Self.cacheValue(result, forKey: originalHTMLString, cacheKey: cacheKey)
@@ -409,6 +410,18 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
         }
         
         attributedString.addAttribute(.link, value: finalURL, range: range)
+    }
+    
+    private func removeParsingArtefacts(_ attributedString: NSMutableAttributedString) {
+        guard attributedString.length > 0 else {
+            return
+        }
+        
+        // Ruma's markdown parsing sometimes inserts extra trailing new lines
+        // https://github.com/ruma/ruma/blob/c3dc6de3e03b2ca131eab889a9d310ef160b95ac/crates/ruma-events/src/room/message.rs#L962
+        while (attributedString.string as NSString).hasSuffixCharacter(from: .whitespacesAndNewlines) {
+            attributedString.deleteCharacters(in: .init(location: attributedString.length - 1, length: 1))
+        }
     }
 }
 
