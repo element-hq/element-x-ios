@@ -232,6 +232,8 @@ internal enum L10n {
   internal static var actionLeaveConversation: String { return L10n.tr("Localizable", "action_leave_conversation") }
   /// Leave room
   internal static var actionLeaveRoom: String { return L10n.tr("Localizable", "action_leave_room") }
+  /// Leave space
+  internal static var actionLeaveSpace: String { return L10n.tr("Localizable", "action_leave_space") }
   /// Load more
   internal static var actionLoadMore: String { return L10n.tr("Localizable", "action_load_more") }
   /// Manage account
@@ -1278,6 +1280,14 @@ internal enum L10n {
   }
   /// Send invite?
   internal static var screenBottomSheetCreateDmTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_title") }
+  /// This will also remove you from all rooms in this space.
+  internal static var screenBottomSheetLeaveSpaceSubtitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_leave_space_subtitle") }
+  /// This will also remove you from all rooms in this space, including those you’re the only administrator for:
+  internal static var screenBottomSheetLeaveSpaceSubtitleAdmin: String { return L10n.tr("Localizable", "screen_bottom_sheet_leave_space_subtitle_admin") }
+  /// Leave %1$@?
+  internal static func screenBottomSheetLeaveSpaceTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_bottom_sheet_leave_space_title", String(describing: p1))
+  }
   /// Ban from room
   internal static var screenBottomSheetManageRoomMemberBan: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_ban") }
   /// Ban
@@ -2302,6 +2312,10 @@ internal enum L10n {
   internal static var screenRoomDetailsErrorMuting: String { return L10n.tr("Localizable", "screen_room_details_error_muting") }
   /// Failed unmuting this room, please try again.
   internal static var screenRoomDetailsErrorUnmuting: String { return L10n.tr("Localizable", "screen_room_details_error_unmuting") }
+  /// Don't close the app until finished.
+  internal static var screenRoomDetailsInvitePeopleDontClose: String { return L10n.tr("Localizable", "screen_room_details_invite_people_dont_close") }
+  /// Preparing invitations...
+  internal static var screenRoomDetailsInvitePeoplePreparing: String { return L10n.tr("Localizable", "screen_room_details_invite_people_preparing") }
   /// Invite people
   internal static var screenRoomDetailsInvitePeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_invite_people_title") }
   /// Leave conversation
