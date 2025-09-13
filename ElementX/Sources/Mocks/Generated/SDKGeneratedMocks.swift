@@ -12385,6 +12385,52 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         try await clearEventCacheStorageClosure?()
     }
 
+    //MARK: - declineCall
+
+    open var declineCallRtcNotificationEventIdThrowableError: Error?
+    var declineCallRtcNotificationEventIdUnderlyingCallsCount = 0
+    open var declineCallRtcNotificationEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return declineCallRtcNotificationEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = declineCallRtcNotificationEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                declineCallRtcNotificationEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    declineCallRtcNotificationEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var declineCallRtcNotificationEventIdCalled: Bool {
+        return declineCallRtcNotificationEventIdCallsCount > 0
+    }
+    open var declineCallRtcNotificationEventIdReceivedRtcNotificationEventId: String?
+    open var declineCallRtcNotificationEventIdReceivedInvocations: [String] = []
+    open var declineCallRtcNotificationEventIdClosure: ((String) async throws -> Void)?
+
+    open override func declineCall(rtcNotificationEventId: String) async throws {
+        if let error = declineCallRtcNotificationEventIdThrowableError {
+            throw error
+        }
+        declineCallRtcNotificationEventIdCallsCount += 1
+        declineCallRtcNotificationEventIdReceivedRtcNotificationEventId = rtcNotificationEventId
+        DispatchQueue.main.async {
+            self.declineCallRtcNotificationEventIdReceivedInvocations.append(rtcNotificationEventId)
+        }
+        try await declineCallRtcNotificationEventIdClosure?(rtcNotificationEventId)
+    }
+
     //MARK: - discardRoomKey
 
     open var discardRoomKeyThrowableError: Error?
@@ -16124,6 +16170,81 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
         stopLiveLocationShareCallsCount += 1
         try await stopLiveLocationShareClosure?()
+    }
+
+    //MARK: - subscribeToCallDeclineEvents
+
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerThrowableError: Error?
+    var subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingCallsCount = 0
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerCalled: Bool {
+        return subscribeToCallDeclineEventsRtcNotificationEventIdListenerCallsCount > 0
+    }
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerReceivedArguments: (rtcNotificationEventId: String, listener: CallDeclineListener)?
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerReceivedInvocations: [(rtcNotificationEventId: String, listener: CallDeclineListener)] = []
+
+    var subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerClosure: ((String, CallDeclineListener) throws -> TaskHandle)?
+
+    open override func subscribeToCallDeclineEvents(rtcNotificationEventId: String, listener: CallDeclineListener) throws -> TaskHandle {
+        if let error = subscribeToCallDeclineEventsRtcNotificationEventIdListenerThrowableError {
+            throw error
+        }
+        subscribeToCallDeclineEventsRtcNotificationEventIdListenerCallsCount += 1
+        subscribeToCallDeclineEventsRtcNotificationEventIdListenerReceivedArguments = (rtcNotificationEventId: rtcNotificationEventId, listener: listener)
+        DispatchQueue.main.async {
+            self.subscribeToCallDeclineEventsRtcNotificationEventIdListenerReceivedInvocations.append((rtcNotificationEventId: rtcNotificationEventId, listener: listener))
+        }
+        if let subscribeToCallDeclineEventsRtcNotificationEventIdListenerClosure = subscribeToCallDeclineEventsRtcNotificationEventIdListenerClosure {
+            return try subscribeToCallDeclineEventsRtcNotificationEventIdListenerClosure(rtcNotificationEventId, listener)
+        } else {
+            return subscribeToCallDeclineEventsRtcNotificationEventIdListenerReturnValue
+        }
     }
 
     //MARK: - subscribeToIdentityStatusChanges
