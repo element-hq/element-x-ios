@@ -18,6 +18,7 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
     let appSettings: AppSettings
     let analytics: AnalyticsService
     let emojiProvider: EmojiProviderProtocol
+    let linkMetadataProvider: LinkMetadataProviderProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let timelineControllerFactory: TimelineControllerFactoryProtocol
 }
@@ -49,6 +50,7 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appSettings: parameters.appSettings,
                                                        analyticsService: parameters.analytics,
                                                        emojiProvider: parameters.emojiProvider,
+                                                       linkMetadataProvider: parameters.linkMetadataProvider,
                                                        timelineControllerFactory: parameters.timelineControllerFactory)
         
         let filesTimelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
@@ -60,6 +62,7 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
                                                        appSettings: parameters.appSettings,
                                                        analyticsService: parameters.analytics,
                                                        emojiProvider: parameters.emojiProvider,
+                                                       linkMetadataProvider: parameters.linkMetadataProvider,
                                                        timelineControllerFactory: parameters.timelineControllerFactory)
         
         viewModel = MediaEventsTimelineScreenViewModel(mediaTimelineViewModel: mediaTimelineViewModel,

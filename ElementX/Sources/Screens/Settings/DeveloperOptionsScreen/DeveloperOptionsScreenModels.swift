@@ -54,6 +54,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var knockingEnabled: Bool { get set }
     
     var nextGenHTMLParserEnabled: Bool { get set }
+    var linkPreviewsEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }

@@ -144,6 +144,7 @@ struct TimelineView_Previews: PreviewProvider, TestablePreview {
                                                      appSettings: ServiceLocator.shared.settings,
                                                      analyticsService: ServiceLocator.shared.analytics,
                                                      emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                     linkMetadataProvider: LinkMetadataProvider(),
                                                      timelineControllerFactory: TimelineControllerFactoryMock(.init()))
 
     static var previews: some View {

@@ -264,6 +264,7 @@ struct RoomScreen_Previews: PreviewProvider, TestablePreview {
                                                   appSettings: ServiceLocator.shared.settings,
                                                   analyticsService: ServiceLocator.shared.analytics,
                                                   emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                  linkMetadataProvider: LinkMetadataProvider(),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()))
         
         return .init(room: roomViewModel, timeline: timelineViewModel)

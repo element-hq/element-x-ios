@@ -41,6 +41,7 @@ class TimelineInteractionHandler {
     private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     private let emojiProvider: EmojiProviderProtocol
+    private let linkMetadataProvider: LinkMetadataProviderProtocol
     private let timelineControllerFactory: TimelineControllerFactoryProtocol
     private let pollInteractionHandler: PollInteractionHandlerProtocol
     
@@ -67,6 +68,7 @@ class TimelineInteractionHandler {
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
          emojiProvider: EmojiProviderProtocol,
+         linkMetadataProvider: LinkMetadataProviderProtocol,
          timelineControllerFactory: TimelineControllerFactoryProtocol) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
@@ -78,6 +80,7 @@ class TimelineInteractionHandler {
         self.appSettings = appSettings
         self.analyticsService = analyticsService
         self.emojiProvider = emojiProvider
+        self.linkMetadataProvider = linkMetadataProvider
         self.timelineControllerFactory = timelineControllerFactory
         
         pollInteractionHandler = PollInteractionHandler(analyticsService: analyticsService,
@@ -590,6 +593,7 @@ class TimelineInteractionHandler {
                                                       appSettings: appSettings,
                                                       analyticsService: analyticsService,
                                                       emojiProvider: emojiProvider,
+                                                      linkMetadataProvider: linkMetadataProvider,
                                                       timelineControllerFactory: timelineControllerFactory)
             
             return .displayMediaPreview(item: item, timelineViewModel: .new(timelineViewModel))
