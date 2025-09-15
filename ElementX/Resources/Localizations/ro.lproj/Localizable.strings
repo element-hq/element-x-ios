@@ -97,6 +97,7 @@
 "action_leave" = "Părăsiți";
 "action_leave_conversation" = "Părăsiți conversația";
 "action_leave_room" = "Părăsiți camera";
+"action_leave_space" = "Leave space";
 "action_load_more" = "Încărcați mai mult";
 "action_manage_account" = "Administrare cont";
 "action_manage_devices" = "Gestionare dispozitive";
@@ -180,6 +181,7 @@
 "common_creating_room" = "Se creează camera…";
 "common_current_user_canceled_knock" = "Cerere anulată";
 "common_current_user_left_room" = "Ați parăsit camera";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Invitația a fost refuzată";
 "common_dark" = "Întunecat";
 "common_date_date_at_time" = "%1$@ la %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "Trimis";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Serverul nu este compatibil";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "Adresa URL a serverului";
 "common_settings" = "Setări";
 "common_shared_location" = "Locație partajată";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Trimiteți invitația";
 "screen_bottom_sheet_create_dm_message" = "Doriți să începeți o discuție cu %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Trimiteți invitația?";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Îndepărtați și interziceți membrul";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Interzicere";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Nu se vor putea alătura din nou acestei camere dacă sunt invitați.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "A apărut o eroare la încărcarea setărilor pentru notificari.";
 "screen_room_details_error_muting" = "Dezactivarea notificarilor pentru această cameră a eșuat, încercați din nou.";
 "screen_room_details_error_unmuting" = "Activarea notificarilor pentru această cameră a eșuat, încercați din nou.";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "Personalizat";
 "screen_room_details_notification_mode_default" = "Implicit";
 "screen_room_details_share_room_title" = "Partajați camera";

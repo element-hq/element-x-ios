@@ -97,6 +97,7 @@
 "action_leave" = "Вийти";
 "action_leave_conversation" = "Залишити розмову";
 "action_leave_room" = "Вийти з кімнати";
+"action_leave_space" = "Leave space";
 "action_load_more" = "Завантажити ще";
 "action_manage_account" = "Керування обліковим записом";
 "action_manage_devices" = "Керування пристроями";
@@ -180,6 +181,7 @@
 "common_creating_room" = "Створення кімнати...";
 "common_current_user_canceled_knock" = "Запит скасовано";
 "common_current_user_left_room" = "Виходить з кімнати";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Запрошення відхилено";
 "common_dark" = "Темна";
 "common_date_date_at_time" = "%1$@ о %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "Надіслано";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Сервер не підтримується";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "URL-адреса сервера";
 "common_settings" = "Налаштування";
 "common_shared_location" = "Поширене розташування";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Надіслати запрошення";
 "screen_bottom_sheet_create_dm_message" = "Хочете розпочати бесіду з %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Надіслати запрошення?";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Вилучити й заблокувати учасника";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Заблокувати";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Він не зможе приєднатися до цієї кімнати знову, якщо його запросять.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "Виникла помилка при завантаженні налаштувань сповіщень.";
 "screen_room_details_error_muting" = "Не вдалося вимкнути цю кімнату. Будь ласка, спробуйте ще раз.";
 "screen_room_details_error_unmuting" = "Не вдалося ввімкнути звук цієї кімнати. Повторіть спробу.";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "Власні";
 "screen_room_details_notification_mode_default" = "Типово";
 "screen_room_details_share_room_title" = "Поділитися кімнатою";

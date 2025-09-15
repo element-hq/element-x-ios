@@ -402,6 +402,8 @@ internal enum L10n {
   internal static var commonCurrentUserCanceledKnock: String { return L10n.tr("Localizable", "common_current_user_canceled_knock") }
   /// Left room
   internal static var commonCurrentUserLeftRoom: String { return L10n.tr("Localizable", "common_current_user_left_room") }
+  /// Left space
+  internal static var commonCurrentUserLeftSpace: String { return L10n.tr("Localizable", "common_current_user_left_space") }
   /// Invite declined
   internal static var commonCurrentUserRejectedInvite: String { return L10n.tr("Localizable", "common_current_user_rejected_invite") }
   /// Dark

@@ -97,6 +97,7 @@
 "action_leave" = "Пакінуць";
 "action_leave_conversation" = "Пакінуць размову";
 "action_leave_room" = "Пакінуць пакой";
+"action_leave_space" = "Leave space";
 "action_load_more" = "Загрузіць больш";
 "action_manage_account" = "Кіраванне ўліковым запісам";
 "action_manage_devices" = "Кіраванне прыладамі";
@@ -180,6 +181,7 @@
 "common_creating_room" = "Стварэнне пакоя…";
 "common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Выйшаў з пакоя";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "Цёмная";
 "common_date_date_at_time" = "%1$@ at %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "Адпраўлена";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Сервер не падтрымліваецца";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "URL-адрас сервера";
 "common_settings" = "Налады";
 "common_shared_location" = "Абагулена месцазнаходжанне";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Выдаліць і заблакіраваць удзельніка";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Заблакіраваць";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Яны не змогуць зноў далучыцца да гэтага пакоя, калі іх запросяць.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "Пры загрузцы налад апавяшчэнняў адбылася памылка.";
 "screen_room_details_error_muting" = "Не атрымалася адключыць гук у гэтым пакоі, паўтарыце спробу.";
 "screen_room_details_error_unmuting" = "Не ўдалося ўключыць гук у гэтым пакоі. Паўтарыце спробу.";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "Уласныя";
 "screen_room_details_notification_mode_default" = "Стандартныя";
 "screen_room_details_share_room_title" = "Падзяліцца пакоем";

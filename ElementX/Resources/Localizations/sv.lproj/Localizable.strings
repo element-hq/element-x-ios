@@ -97,6 +97,7 @@
 "action_leave" = "Lämna";
 "action_leave_conversation" = "Lämna konversation";
 "action_leave_room" = "Lämna rum";
+"action_leave_space" = "Leave space";
 "action_load_more" = "Ladda mer";
 "action_manage_account" = "Hantera konto";
 "action_manage_devices" = "Hantera enheter";
@@ -180,6 +181,7 @@
 "common_creating_room" = "Skapar rum …";
 "common_current_user_canceled_knock" = "Begäran avbruten";
 "common_current_user_left_room" = "Lämnade rummet";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Inbjudan avvisad";
 "common_dark" = "Mörkt";
 "common_date_date_at_time" = "%1$@vid %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "Skickat";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Servern stöds inte";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "Server-URL";
 "common_settings" = "Inställningar";
 "common_shared_location" = "Delade plats";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Skicka inbjudan";
 "screen_bottom_sheet_create_dm_message" = "Vill du starta en chatt med %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Skicka inbjudan?";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Ta bort och banna medlem";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Banna";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Denne kommer inte att kunna gå med i det här rummet igen om denne bjuds in.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "Ett fel uppstod vid laddning av aviseringsinställningar.";
 "screen_room_details_error_muting" = "Misslyckades att tysta det här rummet, vänligen pröva igen.";
 "screen_room_details_error_unmuting" = "Misslyckades att avtysta det här rummet, vänligen pröva igen.";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "Anpassad";
 "screen_room_details_notification_mode_default" = "Förval";
 "screen_room_details_share_room_title" = "Dela rum";

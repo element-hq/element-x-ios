@@ -97,6 +97,7 @@
 "action_leave" = "Forlat";
 "action_leave_conversation" = "Forlat samtalen";
 "action_leave_room" = "Forlat rommet";
+"action_leave_space" = "Leave space";
 "action_load_more" = "Last inn mer";
 "action_manage_account" = "Administrer konto";
 "action_manage_devices" = "Administrer enheter";
@@ -180,6 +181,7 @@
 "common_creating_room" = "Oppretter rom …";
 "common_current_user_canceled_knock" = "Forespørsel kansellert";
 "common_current_user_left_room" = "Forlot rommet";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Invitasjon avslått";
 "common_dark" = "Mørk";
 "common_date_date_at_time" = "%1$@ kl. %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "Sendt";
 "common_sentence_delimiter" = "";
 "common_server_not_supported" = "Server støttes ikke";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "URL-adresse til server";
 "common_settings" = "Innstillinger";
 "common_shared_location" = "Delt posisjon";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invitasjon";
 "screen_bottom_sheet_create_dm_message" = "Vil du starte en chat med %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Vil du sende invitasjon?";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Fjern og utesteng medlem";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Utesteng";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "De vil ikke kunne bli med i dette rommet igjen hvis de blir invitert.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "Det oppstod en feil ved lasting av varslingsinnstillinger.";
 "screen_room_details_error_muting" = "Mislyktes i å dempe dette rommet, prøv igjen.";
 "screen_room_details_error_unmuting" = "Mislyktes i å oppheve dempingen av dette rommet, prøv igjen.";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "Tilpasset";
 "screen_room_details_notification_mode_default" = "Standard";
 "screen_room_details_share_room_title" = "Del rom";

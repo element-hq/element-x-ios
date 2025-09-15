@@ -97,6 +97,7 @@
 "action_leave" = "چھوڑ دیں";
 "action_leave_conversation" = "گفتگو چھوڑیں";
 "action_leave_room" = "کمرہ چھوڑ دیں";
+"action_leave_space" = "Leave space";
 "action_load_more" = "مزید لادیں";
 "action_manage_account" = "کھاتہ کا انتظام کریں";
 "action_manage_devices" = "آلات کا نظم کریں";
@@ -180,6 +181,7 @@
 "common_creating_room" = "کمرہ تخلیق کررہاہے…";
 "common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "کمرہ چھوڑ لیا";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Invite declined";
 "common_dark" = "اندھیرا";
 "common_date_date_at_time" = "%1$@ at %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "ارسال کردہ";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "خادم تعاون یافتہ نہیں";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "خادم عنوان";
 "common_settings" = "ترتیبات";
 "common_shared_location" = "مشترکہ مقام";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "کمرے سے محظور کریں";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "محظور کریں";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "اگر وہ مدعو کیا گیا تو وہ دوبارہ اس کمرے میں شامل نہیں ہوسکیں گے۔";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "اطلاع کی ترتیبات لادتے ہوئے ایک نقص واقع ہوا۔";
 "screen_room_details_error_muting" = "اس کمرے کو خاموش کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔";
 "screen_room_details_error_unmuting" = "اس کمرے کو غیر خاموش کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "حسب ضرورت";
 "screen_room_details_notification_mode_default" = "طے شدہ";
 "screen_room_details_share_room_title" = "کمرے کا اشتراک کریں";

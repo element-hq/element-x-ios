@@ -97,6 +97,7 @@
 "action_leave" = "Atera";
 "action_leave_conversation" = "Utzi elkarrizketa";
 "action_leave_room" = "Atera gelatik";
+"action_leave_space" = "Leave space";
 "action_load_more" = "Kargatu gehiago";
 "action_manage_account" = "Kudeatu kontua";
 "action_manage_devices" = "Kudeatu gailuak";
@@ -180,6 +181,7 @@
 "common_creating_room" = "Gela sortzen…";
 "common_current_user_canceled_knock" = "Eskaera bertan behera utzi da";
 "common_current_user_left_room" = "Gelatik atera da";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Gonbidapenari uko egin zaio";
 "common_dark" = "Iluna";
 "common_date_date_at_time" = "%1$@ at %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "Bidalita";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Zerbitzaria ez da bateragarria";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "Zerbitzariaren URLa";
 "common_settings" = "Ezarpenak";
 "common_shared_location" = "Partekatutako kokapena";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Bidali gonbidapena";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Gonbidapena bidali?";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Kendu kidea eta ezarri debekua";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Ezarri debekua";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "Errorea gertatu da jakinarazpen-ezarpenak kargatzean.";
 "screen_room_details_error_muting" = "Ezin izan da gela mututu; saiatu berriro.";
 "screen_room_details_error_unmuting" = "Ezin izan da gela mututzeari utzi; saiatu berriro.";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "Custom";
 "screen_room_details_notification_mode_default" = "Lehenetsia";
 "screen_room_details_share_room_title" = "Partekatu gela";

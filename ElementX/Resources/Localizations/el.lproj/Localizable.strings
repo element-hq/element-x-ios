@@ -97,6 +97,7 @@
 "action_leave" = "Αποχώρηση";
 "action_leave_conversation" = "Αποχώρηση από τη συζήτηση";
 "action_leave_room" = "Αποχώρηση από την αίθουσα";
+"action_leave_space" = "Leave space";
 "action_load_more" = "Φόρτωσε περισσότερα";
 "action_manage_account" = "Διαχείριση λογαριασμού";
 "action_manage_devices" = "Διαχείριση συσκευών";
@@ -180,6 +181,7 @@
 "common_creating_room" = "Δημιουργία αίθουσας...";
 "common_current_user_canceled_knock" = "Το αίτημα ακυρώθηκε";
 "common_current_user_left_room" = "Αποχώρησε από την αίθουσα";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Η πρόσκληση απορρίφθηκε";
 "common_dark" = "Σκοτεινό";
 "common_date_date_at_time" = "%1$@ στις %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "Εστάλη";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Ο διακομιστής δεν υποστηρίζεται";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "URL διακομιστή";
 "common_settings" = "Ρυθμίσεις";
 "common_shared_location" = "Κοινόχρηστη τοποθεσία";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Αποστολή πρόσκλησης";
 "screen_bottom_sheet_create_dm_message" = "Θα θέλατε να ξεκινήσετε μια συνομιλία με τον χρήστη %1$@;";
 "screen_bottom_sheet_create_dm_title" = "Αποστολή πρόσκλησης;";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Αφαίρεση και αποκλεισμός μέλους";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Αποκλεισμός";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Δεν θα μπορούν να ενταχθούν ξανά σε αυτή την αίθουσα, αν προσκληθούν.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "Παρουσιάστηκε σφάλμα κατά τη φόρτωση των ρυθμίσεων ειδοποίησης.";
 "screen_room_details_error_muting" = "Η σίγαση αυτής της αίθουσας απέτυχε, δοκιμάστε ξανά.";
 "screen_room_details_error_unmuting" = "Η κατάργηση σίγασης αυτής της αίθουσας απέτυχε, δοκιμάστε ξανά.";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "Προσαρμοσμένο";
 "screen_room_details_notification_mode_default" = "Προεπιλογή";
 "screen_room_details_share_room_title" = "Κοινή χρήση αίθουσας";

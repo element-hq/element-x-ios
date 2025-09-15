@@ -97,6 +97,7 @@
 "action_leave" = "Sair";
 "action_leave_conversation" = "Sair da conversa";
 "action_leave_room" = "Sair da sala";
+"action_leave_space" = "Leave space";
 "action_load_more" = "Carregar mais";
 "action_manage_account" = "Gerenciar conta";
 "action_manage_devices" = "Gerenciar dispositivos";
@@ -180,6 +181,7 @@
 "common_creating_room" = "Criando sala…";
 "common_current_user_canceled_knock" = "Solicitação cancelada";
 "common_current_user_left_room" = "Saiu da sala";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Convite recusado";
 "common_dark" = "Escuro";
 "common_date_date_at_time" = "%1$@ às %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "Enviado";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Servidor não suportado";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "URL do servidor";
 "common_settings" = "Configurações";
 "common_shared_location" = "Localização compartilhada";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Enviar convite";
 "screen_bottom_sheet_create_dm_message" = "Gostaria de iniciar uma conversa com %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Enviar convite?";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Banir da sala";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Banir";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Essa pessoa não poderá entrar nesta sala novamente se for convidada.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "Ocorreu um erro ao carregar as configurações de notificação.";
 "screen_room_details_error_muting" = "Falha ao silenciar esta sala, tente novamente.";
 "screen_room_details_error_unmuting" = "Falha ao desilenciar esta sala. Tente novamente.";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "Personalizado";
 "screen_room_details_notification_mode_default" = "Padrão";
 "screen_room_details_share_room_title" = "Compartilhar sala";

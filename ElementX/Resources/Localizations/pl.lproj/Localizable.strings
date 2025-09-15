@@ -97,6 +97,7 @@
 "action_leave" = "Opuść";
 "action_leave_conversation" = "Opuść rozmowę";
 "action_leave_room" = "Opuść pokój";
+"action_leave_space" = "Leave space";
 "action_load_more" = "Załaduj więcej";
 "action_manage_account" = "Zarządzaj kontem";
 "action_manage_devices" = "Zarządzaj urządzeniami";
@@ -180,6 +181,7 @@
 "common_creating_room" = "Tworzenie pokoju...";
 "common_current_user_canceled_knock" = "Anulowano żądanie";
 "common_current_user_left_room" = "Opuszczono pokój";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Odrzucono zaproszenie";
 "common_dark" = "Ciemny";
 "common_date_date_at_time" = "%1$@ o %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "Wysłano";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Serwer nie jest obsługiwany";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "Adres URL serwera";
 "common_settings" = "Ustawienia";
 "common_shared_location" = "Udostępniona lokalizacja";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Wyślij zaproszenie";
 "screen_bottom_sheet_create_dm_message" = "Czy chcesz rozpocząć czat z %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Wysłać zaproszenie?";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Usuń i zbanuj członka";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Zbanuj";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Nie będą mogli ponownie dołączyć do tego pokoju, jeśli zostaną zaproszeni.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "Wystąpił błąd podczas ładowania ustawień powiadomień.";
 "screen_room_details_error_muting" = "Wyciszenie tego pokoju nie powiodło się, spróbuj ponownie.";
 "screen_room_details_error_unmuting" = "Nie udało się wyłączyć wyciszenia tego pokoju. Spróbuj ponownie.";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "Niestandardowe";
 "screen_room_details_notification_mode_default" = "Domyślny";
 "screen_room_details_share_room_title" = "Udostępnij pokój";
