@@ -97,6 +97,7 @@
 "action_leave" = "Tark etish";
 "action_leave_conversation" = "Suhbatni tark etish";
 "action_leave_room" = "Xonani tark etish";
+"action_leave_space" = "Leave space";
 "action_load_more" = "Ko'proq yuklash";
 "action_manage_account" = "Hisobni boshqarish";
 "action_manage_devices" = "Qurilmalarni boshqarish";
@@ -180,6 +181,7 @@
 "common_creating_room" = "Xona yaratilmoqda…";
 "common_current_user_canceled_knock" = "So'rov bekor qilindi";
 "common_current_user_left_room" = "Xonani tark etdi";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Taklif rad etildi";
 "common_dark" = "Tungi";
 "common_date_date_at_time" = "%1$@da %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "Yuborilgan";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Server qo'llab-quvvatlanmaydi";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "Server URL manzili";
 "common_settings" = "Sozlamalar";
 "common_shared_location" = "Joylashuvi ulashildi";
@@ -378,7 +381,7 @@
 "error_room_address_already_exists" = "This room address already exists. Please try editing the room address field or change the room name";
 "error_room_address_invalid_symbols" = "Some characters are not allowed. Only letters, digits and the following symbols are supported ! $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
 "error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
-"error_account_creation_not_possible" = "Your homeserver needs to be upgraded to support Matrix Authentication Service and account creation.";
+"error_account_creation_not_possible" = "Matrix autentifikatsiya xizmati va hisob yaratish imkoniyatini qo‘llab-quvvatlash uchun uy serveringizni yangilash talab etiladi.";
 "error_failed_creating_the_permalink" = "Doimiy havola yaratilmadi";
 "error_failed_loading_map" = "%1$@xaritani yuklay olmadi. Iltimos keyinroq qayta urinib ko'ring.";
 "error_failed_loading_messages" = "Xabarlar yuklanmadi";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Xonadan chetlashtirish";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Taqiqlash";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Taklif qilingan taqdirda ham, ular bu xonaga boshqa qo‘shila olmaydilar.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "Bildirishnoma sozlamalarini yuklashda xatolik yuz berdi.";
 "screen_room_details_error_muting" = "Bu xona ovozini o‘chirib bo‘lmadi, qayta urinib ko‘ring.";
 "screen_room_details_error_unmuting" = "Bu xonaning ovozi yoqilmadi, qayta urinib ko‘ring.";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "Maxsus";
 "screen_room_details_notification_mode_default" = "Standart";
 "screen_room_details_share_room_title" = "Xonani baham ko'ring";

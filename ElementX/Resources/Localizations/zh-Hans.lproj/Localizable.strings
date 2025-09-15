@@ -30,7 +30,7 @@
 "a11y_remove_reaction" = "撤回反应 %1$@";
 "a11y_remove_reaction_with" = "移除表情符号%1$@";
 "a11y_send_files" = "发送文件";
-"a11y_session_verification_time_limited_action_required" = "时限内必须完成的任务";
+"a11y_session_verification_time_limited_action_required" = "限时操作，您有一分钟的时间来验证";
 "a11y_show_password" = "显示密码";
 "a11y_start_call" = "开始通话";
 "a11y_tombstoned_room" = "墓碑聊天室";
@@ -97,6 +97,7 @@
 "action_leave" = "离开";
 "action_leave_conversation" = "离开聊天";
 "action_leave_room" = "离开聊天室";
+"action_leave_space" = "Leave space";
 "action_load_more" = "载入更多";
 "action_manage_account" = "管理账户";
 "action_manage_devices" = "管理设备";
@@ -180,12 +181,13 @@
 "common_creating_room" = "正在创建聊天室...";
 "common_current_user_canceled_knock" = "请求已取消";
 "common_current_user_left_room" = "离开聊天室";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "邀请已拒绝";
 "common_dark" = "深色";
 "common_date_date_at_time" = "%1$@在 %2$@";
 "common_date_this_month" = "本月";
 "common_decryption_error" = "解密错误";
-"common_description" = "Description";
+"common_description" = "描述";
 "common_developer_options" = "开发者选项";
 "common_device_id" = "设备 ID";
 "common_direct_chat" = "私聊";
@@ -278,6 +280,7 @@
 "common_sent" = "已发送";
 "common_sentence_delimiter" = "。 ";
 "common_server_not_supported" = "服务器不支持";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "服务器 URL";
 "common_settings" = "设置";
 "common_shared_location" = "共享位置";
@@ -324,9 +327,9 @@
 "common_waiting" = "等待...";
 "common_waiting_for_decryption_key" = "正在等待解密密钥";
 "common_you" = "您";
-"common.add_account" = "Add an account";
-"common.add_another_account" = "Add another account";
-"common.select_account" = "Select an account";
+"common.add_account" = "添加账户";
+"common.add_another_account" = "添加另一个账户";
+"common.select_account" = "选择账户";
 "common_unable_to_decrypt_insecure_device" = "从不安全的设备发送";
 "common_unable_to_decrypt_verification_violation" = "发送者的已验证身份已重置";
 "confirm_recovery_key_banner_message" = "确认恢复密钥，以保持对密钥存储和消息历史的访问。";
@@ -372,12 +375,12 @@
 "emoji_picker_category_people" = "表情和人物";
 "emoji_picker_category_places" = "旅行和地点";
 "emoji_picker_category_symbols" = "符号";
-"emoji_picker_search_placeholder" = "Search emojis";
+"emoji_picker_search_placeholder" = "搜索表情符号";
 "error_invalid_invite" = "该房间已不存在或邀请已失效。";
 "error_network_or_server_issue" = "这可能是由于网络或服务器问题导致";
 "error_room_address_already_exists" = "此房间地址已存在。请尝试编辑房间地址字段或更改房间名称";
 "error_room_address_invalid_symbols" = "不允许使用某些字符。仅支持字母、数字和以下符号 $ & ‘ ( ) * + / ; = ? @ [ ] - . _";
-"error.account_already_logged_in" = "You're already logged in on this device as %1$@.";
+"error.account_already_logged_in" = "您已在此设备以%1$@ 身份登录。";
 "error_account_creation_not_possible" = "您的服务器需要升级，以支持 Matrix 鉴权服务和账户创建。";
 "error_failed_creating_the_permalink" = "创建固定链接失败";
 "error_failed_loading_map" = "%1$@ 无法加载地图，请稍后再试。";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "发送邀请";
 "screen_bottom_sheet_create_dm_message" = "您想与%1$@ 开始聊天吗？";
 "screen_bottom_sheet_create_dm_title" = "发送邀请？";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "移除并封禁成员";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "封禁";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "即使受到邀请，他们也无法再次加入聊天室。";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "加载通知设置时出错。";
 "screen_room_details_error_muting" = "无法将此聊天室静音，请重试。";
 "screen_room_details_error_unmuting" = "无法取消此聊天室的静音，请重试。";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "自定义";
 "screen_room_details_notification_mode_default" = "默认";
 "screen_room_details_share_room_title" = "分享聊天室";

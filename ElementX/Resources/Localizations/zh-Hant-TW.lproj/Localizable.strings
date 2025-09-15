@@ -97,6 +97,7 @@
 "action_leave" = "離開";
 "action_leave_conversation" = "離開對話";
 "action_leave_room" = "離開聊天室";
+"action_leave_space" = "Leave space";
 "action_load_more" = "載入更多";
 "action_manage_account" = "管理帳號";
 "action_manage_devices" = "管理裝置";
@@ -180,6 +181,7 @@
 "common_creating_room" = "正在建立聊天室...";
 "common_current_user_canceled_knock" = "請求已取消";
 "common_current_user_left_room" = "已離開聊天室";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "邀請被拒絕";
 "common_dark" = "深色";
 "common_date_date_at_time" = "%1$@ 在 %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "已傳送";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "伺服器不支援";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "伺服器 URL";
 "common_settings" = "設定";
 "common_shared_location" = "位置分享";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "傳送邀請";
 "screen_bottom_sheet_create_dm_message" = "您想要開始與 %1$@ 聊天嗎？";
 "screen_bottom_sheet_create_dm_title" = "傳送邀請？";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "踢出並加入黑名單";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "加入黑名單";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "即使收到邀請，他們仍然無法加入聊天室。";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "載入通知設定時發生錯誤。";
 "screen_room_details_error_muting" = "無法關閉聊天室通知，請再試一次。";
 "screen_room_details_error_unmuting" = "無法開啟聊天室通知，請再試一次。";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "自訂";
 "screen_room_details_notification_mode_default" = "預設";
 "screen_room_details_share_room_title" = "分享聊天室";

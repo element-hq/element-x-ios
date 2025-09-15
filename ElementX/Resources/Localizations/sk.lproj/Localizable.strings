@@ -97,6 +97,7 @@
 "action_leave" = "Opustiť";
 "action_leave_conversation" = "Opustiť konverzáciu";
 "action_leave_room" = "Opustiť miestnosť";
+"action_leave_space" = "Leave space";
 "action_load_more" = "Načítať viac";
 "action_manage_account" = "Spravovať účet";
 "action_manage_devices" = "Spravovať zariadenia";
@@ -180,6 +181,7 @@
 "common_creating_room" = "Vytváranie miestnosti...";
 "common_current_user_canceled_knock" = "Žiadosť bola zrušená";
 "common_current_user_left_room" = "Opustil/a miestnosť";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Pozvánka bola odmietnutá";
 "common_dark" = "Tmavý";
 "common_date_date_at_time" = "%1$@ o %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "Odoslané";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Server nie je podporovaný";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "URL adresa servera";
 "common_settings" = "Nastavenia";
 "common_shared_location" = "Zdieľaná poloha";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Odoslať pozvánku";
 "screen_bottom_sheet_create_dm_message" = "Chceli by ste začať rozhovor s používateľom %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Poslať pozvánku?";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Odstrániť a zakázať člena";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Zakázať";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Nebudú sa môcť pripojiť k tejto miestnosti znova ani ak budú pozvaní.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "Pri načítaní nastavení oznámení došlo k chybe.";
 "screen_room_details_error_muting" = "Nepodarilo sa stlmiť túto miestnosť, skúste to prosím znova.";
 "screen_room_details_error_unmuting" = "Nepodarilo sa zrušiť stlmenie tejto miestnosti, skúste to prosím znova.";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "Vlastné";
 "screen_room_details_notification_mode_default" = "Predvolené";
 "screen_room_details_share_room_title" = "Zdieľať miestnosť";

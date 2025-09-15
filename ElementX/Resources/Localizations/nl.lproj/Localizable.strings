@@ -97,6 +97,7 @@
 "action_leave" = "Verlaten";
 "action_leave_conversation" = "Gesprek verlaten";
 "action_leave_room" = "Kamer verlaten";
+"action_leave_space" = "Leave space";
 "action_load_more" = "Meer laden";
 "action_manage_account" = "Account beheren";
 "action_manage_devices" = "Apparaten beheren";
@@ -180,6 +181,7 @@
 "common_creating_room" = "Kamer maken...";
 "common_current_user_canceled_knock" = "Request canceled";
 "common_current_user_left_room" = "Heeft de kamer verlaten";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Uitnodiging geweigerd";
 "common_dark" = "Donker";
 "common_date_date_at_time" = "%1$@ at %2$@";
@@ -278,6 +280,7 @@
 "common_sent" = "Verzonden";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Server niet ondersteund";
+"common_server_unreachable" = "Server unreachable";
 "common_server_url" = "Server-URL";
 "common_settings" = "Instellingen";
 "common_shared_location" = "Gedeelde locatie";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";
+"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
+"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Lid verwijderen en verbannen";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Verbannen";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Ze kunnen niet meer toetreden tot deze kamer als ze worden uitgenodigd.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "Er is een fout opgetreden bij het laden van de meldingsinstellingen.";
 "screen_room_details_error_muting" = "Het dempen van deze kamer is mislukt. Probeer het opnieuw.";
 "screen_room_details_error_unmuting" = "Het dempen opheffen voor deze kamer is mislukt. Probeer het opnieuw.";
+"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_preparing" = "Preparing invitations...";
 "screen_room_details_notification_mode_custom" = "Aangepast";
 "screen_room_details_notification_mode_default" = "Standaard";
 "screen_room_details_share_room_title" = "Kamer delen";

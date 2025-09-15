@@ -97,6 +97,7 @@
 "action_leave" = "Lahku";
 "action_leave_conversation" = "Lahku vestlusest";
 "action_leave_room" = "Lahku jututoast";
+"action_leave_space" = "Lahku kogukonnast";
 "action_load_more" = "Näita veel";
 "action_manage_account" = "Halda kasutajakontot";
 "action_manage_devices" = "Halda seadmeid";
@@ -180,12 +181,13 @@
 "common_creating_room" = "Loome jututoa…";
 "common_current_user_canceled_knock" = "Päring on tühistatud";
 "common_current_user_left_room" = "Lahkus jututoast";
+"common_current_user_left_space" = "Left space";
 "common_current_user_rejected_invite" = "Keeldusid kutsest";
 "common_dark" = "Tume";
 "common_date_date_at_time" = "%1$@, %2$@";
 "common_date_this_month" = "Sel kuul";
 "common_decryption_error" = "Dekrüptimisviga";
-"common_description" = "Description";
+"common_description" = "Kirjeldus";
 "common_developer_options" = "Arendaja valikud";
 "common_device_id" = "Seadme tunnus";
 "common_direct_chat" = "Otsevestlus";
@@ -278,6 +280,7 @@
 "common_sent" = "Saadetud";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Server pole toetatud";
+"common_server_unreachable" = "Server pole leitav";
 "common_server_url" = "Serveri URL";
 "common_settings" = "Seadistused";
 "common_shared_location" = "Jagatud asukoht";
@@ -481,6 +484,9 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Saada kutse";
 "screen_bottom_sheet_create_dm_message" = "Kas sa soovid alustada vestlust kasutajaga %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Kas saadame kutse?";
+"screen_bottom_sheet_leave_space_subtitle" = "Sellega eemaldad end ka kõikidest antud kogukonna jututubadest.";
+"screen_bottom_sheet_leave_space_subtitle_admin" = "Sellega eemaldad end ka kõikidest antud kogukonna jututubadest, sealhulgast järgnevaist, kus oled ainus peakasutaja:";
+"screen_bottom_sheet_leave_space_title" = "Kas lahkud %1$@ kogukonnast?";
 "screen_bottom_sheet_manage_room_member_ban" = "Eemalda ja sea suhtluskeeld";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Sea suhtluskeeld";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Ta ei saa selle jututoaga liituda isegi kutse olemasolul.";
@@ -999,6 +1005,8 @@
 "screen_room_details_error_loading_notification_settings" = "Teavituste seadistuste laadimisel tekkis viga.";
 "screen_room_details_error_muting" = "Selle jututoa summutamine ei õnnestunud. Palun proovi uuesti.";
 "screen_room_details_error_unmuting" = "Selle jututoa summutamise eemaldamine ei õnnestunud. Palun proovi uuesti.";
+"screen_room_details_invite_people_dont_close" = "Ära sulge rakendust enne, kui tegevus on lõppenud.";
+"screen_room_details_invite_people_preparing" = "Valmistan kutseid ette...";
 "screen_room_details_notification_mode_custom" = "Kohandatud";
 "screen_room_details_notification_mode_default" = "Vaikimisi";
 "screen_room_details_share_room_title" = "Jaga jututuba";
