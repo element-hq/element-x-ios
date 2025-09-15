@@ -95,7 +95,6 @@ struct SwipeRightAction<Label: View>: ViewModifier {
                         } else {
                             hasReachedActionThreshold = false
                         }
-                        
                     }
                 })
         } else {
@@ -222,10 +221,8 @@ private struct PanGesture: UIGestureRecognizerRepresentable {
     }
     
     class Coordinator: NSObject, UIGestureRecognizerDelegate {
-        func gestureRecognizer(
-            _ gestureRecognizer: UIGestureRecognizer,
-            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
-        ) -> Bool {
+        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                               shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
             false
         }
         
