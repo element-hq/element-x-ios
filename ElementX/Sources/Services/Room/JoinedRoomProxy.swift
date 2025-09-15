@@ -639,12 +639,12 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         ElementCallWidgetDriver(room: room, deviceID: deviceID)
     }
     
-    func declineCall(notificationId: String) async -> Result<Void, RoomProxyError> {
+    func declineCall(notificationID: String) async -> Result<Void, RoomProxyError> {
         do {
-            try await room.declineCall(rtcNotificationEventId: notificationId)
+            try await room.declineCall(rtcNotificationEventId: notificationID)
             return .success(())
         } catch {
-            MXLog.error("Failed to decline rtc notification \(notificationId) with error: \(error)")
+            MXLog.error("Failed to decline rtc notification \(notificationID) with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
