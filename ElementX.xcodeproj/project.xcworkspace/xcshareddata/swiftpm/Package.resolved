@@ -15,7 +15,7 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/compound-ios",
       "state" : {
-        "revision" : "07563f32203a0a8c3a660cc9fc7cd59cdebcc34f"
+        "revision" : "92f99140d925e77f01f5ef72c1aeffe0b0e3d96a"
       }
     },
     {
@@ -311,8 +311,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/SwiftUI-Introspect",
       "state" : {
-        "revision" : "807f73ce09a9b9723f12385e592b4e0aaebd3336",
-        "version" : "1.3.0"
+        "revision" : "712db7f70540eb0d09d72a7a34c6fa6092c9a142",
+        "version" : "26.0.0-rc.1"
       }
     },
     {
