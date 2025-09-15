@@ -209,6 +209,52 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
     }
 
+    //MARK: - addRecentEmoji
+
+    open var addRecentEmojiEmojiThrowableError: Error?
+    var addRecentEmojiEmojiUnderlyingCallsCount = 0
+    open var addRecentEmojiEmojiCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return addRecentEmojiEmojiUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = addRecentEmojiEmojiUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                addRecentEmojiEmojiUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    addRecentEmojiEmojiUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var addRecentEmojiEmojiCalled: Bool {
+        return addRecentEmojiEmojiCallsCount > 0
+    }
+    open var addRecentEmojiEmojiReceivedEmoji: String?
+    open var addRecentEmojiEmojiReceivedInvocations: [String] = []
+    open var addRecentEmojiEmojiClosure: ((String) async throws -> Void)?
+
+    open override func addRecentEmoji(emoji: String) async throws {
+        if let error = addRecentEmojiEmojiThrowableError {
+            throw error
+        }
+        addRecentEmojiEmojiCallsCount += 1
+        addRecentEmojiEmojiReceivedEmoji = emoji
+        DispatchQueue.main.async {
+            self.addRecentEmojiEmojiReceivedInvocations.append(emoji)
+        }
+        try await addRecentEmojiEmojiClosure?(emoji)
+    }
+
     //MARK: - availableSlidingSyncVersions
 
     var availableSlidingSyncVersionsUnderlyingCallsCount = 0
@@ -1811,6 +1857,75 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
             return try await getProfileUserIdClosure(userId)
         } else {
             return getProfileUserIdReturnValue
+        }
+    }
+
+    //MARK: - getRecentEmojis
+
+    open var getRecentEmojisThrowableError: Error?
+    var getRecentEmojisUnderlyingCallsCount = 0
+    open var getRecentEmojisCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getRecentEmojisUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRecentEmojisUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRecentEmojisUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRecentEmojisUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var getRecentEmojisCalled: Bool {
+        return getRecentEmojisCallsCount > 0
+    }
+
+    var getRecentEmojisUnderlyingReturnValue: [RecentEmoji]!
+    open var getRecentEmojisReturnValue: [RecentEmoji]! {
+        get {
+            if Thread.isMainThread {
+                return getRecentEmojisUnderlyingReturnValue
+            } else {
+                var returnValue: [RecentEmoji]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRecentEmojisUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRecentEmojisUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRecentEmojisUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var getRecentEmojisClosure: (() async throws -> [RecentEmoji])?
+
+    open override func getRecentEmojis() async throws -> [RecentEmoji] {
+        if let error = getRecentEmojisThrowableError {
+            throw error
+        }
+        getRecentEmojisCallsCount += 1
+        if let getRecentEmojisClosure = getRecentEmojisClosure {
+            return try await getRecentEmojisClosure()
+        } else {
+            return getRecentEmojisReturnValue
         }
     }
 
@@ -12385,6 +12500,52 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         try await clearEventCacheStorageClosure?()
     }
 
+    //MARK: - declineCall
+
+    open var declineCallRtcNotificationEventIdThrowableError: Error?
+    var declineCallRtcNotificationEventIdUnderlyingCallsCount = 0
+    open var declineCallRtcNotificationEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return declineCallRtcNotificationEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = declineCallRtcNotificationEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                declineCallRtcNotificationEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    declineCallRtcNotificationEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var declineCallRtcNotificationEventIdCalled: Bool {
+        return declineCallRtcNotificationEventIdCallsCount > 0
+    }
+    open var declineCallRtcNotificationEventIdReceivedRtcNotificationEventId: String?
+    open var declineCallRtcNotificationEventIdReceivedInvocations: [String] = []
+    open var declineCallRtcNotificationEventIdClosure: ((String) async throws -> Void)?
+
+    open override func declineCall(rtcNotificationEventId: String) async throws {
+        if let error = declineCallRtcNotificationEventIdThrowableError {
+            throw error
+        }
+        declineCallRtcNotificationEventIdCallsCount += 1
+        declineCallRtcNotificationEventIdReceivedRtcNotificationEventId = rtcNotificationEventId
+        DispatchQueue.main.async {
+            self.declineCallRtcNotificationEventIdReceivedInvocations.append(rtcNotificationEventId)
+        }
+        try await declineCallRtcNotificationEventIdClosure?(rtcNotificationEventId)
+    }
+
     //MARK: - discardRoomKey
 
     open var discardRoomKeyThrowableError: Error?
@@ -14821,6 +14982,71 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
+    //MARK: - newLatestEvent
+
+    var newLatestEventUnderlyingCallsCount = 0
+    open var newLatestEventCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return newLatestEventUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = newLatestEventUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                newLatestEventUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    newLatestEventUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var newLatestEventCalled: Bool {
+        return newLatestEventCallsCount > 0
+    }
+
+    var newLatestEventUnderlyingReturnValue: LatestEventValue!
+    open var newLatestEventReturnValue: LatestEventValue! {
+        get {
+            if Thread.isMainThread {
+                return newLatestEventUnderlyingReturnValue
+            } else {
+                var returnValue: LatestEventValue? = nil
+                DispatchQueue.main.sync {
+                    returnValue = newLatestEventUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                newLatestEventUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    newLatestEventUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var newLatestEventClosure: (() async -> LatestEventValue)?
+
+    open override func newLatestEvent() async -> LatestEventValue {
+        newLatestEventCallsCount += 1
+        if let newLatestEventClosure = newLatestEventClosure {
+            return await newLatestEventClosure()
+        } else {
+            return newLatestEventReturnValue
+        }
+    }
+
     //MARK: - ownUserId
 
     var ownUserIdUnderlyingCallsCount = 0
@@ -16124,6 +16350,81 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
         stopLiveLocationShareCallsCount += 1
         try await stopLiveLocationShareClosure?()
+    }
+
+    //MARK: - subscribeToCallDeclineEvents
+
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerThrowableError: Error?
+    var subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingCallsCount = 0
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerCalled: Bool {
+        return subscribeToCallDeclineEventsRtcNotificationEventIdListenerCallsCount > 0
+    }
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerReceivedArguments: (rtcNotificationEventId: String, listener: CallDeclineListener)?
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerReceivedInvocations: [(rtcNotificationEventId: String, listener: CallDeclineListener)] = []
+
+    var subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToCallDeclineEventsRtcNotificationEventIdListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToCallDeclineEventsRtcNotificationEventIdListenerClosure: ((String, CallDeclineListener) throws -> TaskHandle)?
+
+    open override func subscribeToCallDeclineEvents(rtcNotificationEventId: String, listener: CallDeclineListener) throws -> TaskHandle {
+        if let error = subscribeToCallDeclineEventsRtcNotificationEventIdListenerThrowableError {
+            throw error
+        }
+        subscribeToCallDeclineEventsRtcNotificationEventIdListenerCallsCount += 1
+        subscribeToCallDeclineEventsRtcNotificationEventIdListenerReceivedArguments = (rtcNotificationEventId: rtcNotificationEventId, listener: listener)
+        DispatchQueue.main.async {
+            self.subscribeToCallDeclineEventsRtcNotificationEventIdListenerReceivedInvocations.append((rtcNotificationEventId: rtcNotificationEventId, listener: listener))
+        }
+        if let subscribeToCallDeclineEventsRtcNotificationEventIdListenerClosure = subscribeToCallDeclineEventsRtcNotificationEventIdListenerClosure {
+            return try subscribeToCallDeclineEventsRtcNotificationEventIdListenerClosure(rtcNotificationEventId, listener)
+        } else {
+            return subscribeToCallDeclineEventsRtcNotificationEventIdListenerReturnValue
+        }
     }
 
     //MARK: - subscribeToIdentityStatusChanges
@@ -24481,9 +24782,34 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     }
     open var toggleReactionItemIdKeyReceivedArguments: (itemId: EventOrTransactionId, key: String)?
     open var toggleReactionItemIdKeyReceivedInvocations: [(itemId: EventOrTransactionId, key: String)] = []
-    open var toggleReactionItemIdKeyClosure: ((EventOrTransactionId, String) async throws -> Void)?
 
-    open override func toggleReaction(itemId: EventOrTransactionId, key: String) async throws {
+    var toggleReactionItemIdKeyUnderlyingReturnValue: Bool!
+    open var toggleReactionItemIdKeyReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return toggleReactionItemIdKeyUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = toggleReactionItemIdKeyUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                toggleReactionItemIdKeyUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    toggleReactionItemIdKeyUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var toggleReactionItemIdKeyClosure: ((EventOrTransactionId, String) async throws -> Bool)?
+
+    open override func toggleReaction(itemId: EventOrTransactionId, key: String) async throws -> Bool {
         if let error = toggleReactionItemIdKeyThrowableError {
             throw error
         }
@@ -24492,7 +24818,11 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
         DispatchQueue.main.async {
             self.toggleReactionItemIdKeyReceivedInvocations.append((itemId: itemId, key: key))
         }
-        try await toggleReactionItemIdKeyClosure?(itemId, key)
+        if let toggleReactionItemIdKeyClosure = toggleReactionItemIdKeyClosure {
+            return try await toggleReactionItemIdKeyClosure(itemId, key)
+        } else {
+            return toggleReactionItemIdKeyReturnValue
+        }
     }
 
     //MARK: - unpinEvent
