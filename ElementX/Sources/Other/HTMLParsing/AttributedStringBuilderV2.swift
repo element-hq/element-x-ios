@@ -229,6 +229,13 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
                 paragraphStyle.firstLineHeadIndent = CGFloat(indentLevel) * 20
                 content.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: content.length))
                 
+            case "img":
+                if let alt = try? childElement.attr("alt"), !alt.isEmpty {
+                    content = NSMutableAttributedString(string: "[img: \(alt)]")
+                } else {
+                    content = NSMutableAttributedString(string: "[img]")
+                }
+                
             default:
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
             }

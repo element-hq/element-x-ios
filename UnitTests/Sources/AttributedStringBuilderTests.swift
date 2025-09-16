@@ -723,6 +723,21 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         XCTAssertEqual(foundAttachments, 2)
     }
     
+    func testImageTags() {
+        let htmlString = "Hey <img src=\"smiley.gif\" alt=\"Smiley face\">! How's work<img src=\"workplace.jpg\">?"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssertEqual(String(attributedString.characters), "Hey [img: Smiley face]! How's work[img]?")
+        } else {
+            XCTAssertEqual(String(attributedString.characters), "Hey ￼! How's work￼?") // No bueno
+        }
+    }
+    
     // MARK: - Phishing prevention
     
     func testPhishingLink() {
