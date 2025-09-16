@@ -11,17 +11,14 @@ import SwiftUI
 
 struct RoomHeaderView: View {
     let roomName: String
+    var roomSubtitle: String?
     let roomAvatar: RoomAvatar
     var dmRecipientVerificationState: UserIdentityVerificationState?
     
     let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
-        if #available(iOS 19, *) {
-            // https://github.com/element-hq/element-x-ios/issues/4180
-            // Terminating app due to uncaught exception 'NSInternalInconsistencyException', reason: 'NSLayoutConstraint constant is not finite!
-            content
-        } else if ProcessInfo.isRunningAccessibilityTests {
+        if ProcessInfo.isRunningAccessibilityTests {
             // Accessibility tests scale up the dynamic size in real time which may break the view
             content
         } else {
@@ -37,10 +34,18 @@ struct RoomHeaderView: View {
                 .accessibilityHidden(true)
             
             HStack(spacing: 4) {
-                Text(roomName)
-                    .lineLimit(1)
-                    .font(.compound.bodyLGSemibold)
-                    .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(roomName)
+                        .lineLimit(1)
+                        .font(.compound.bodyLGSemibold)
+                        .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
+                    if let roomSubtitle {
+                        Text(roomSubtitle)
+                            .lineLimit(1)
+                            .font(.compound.bodyXS)
+                            .foregroundStyle(.compound.textSecondary)
+                    }
+                }
                 
                 if let dmRecipientVerificationState {
                     VerificationBadge(verificationState: dmRecipientVerificationState)

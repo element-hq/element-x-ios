@@ -50,7 +50,9 @@ struct TimelineItemMenuActionProvider {
 
         if item.canBeRepliedTo, canCurrentUserSendMessage {
             if let messageItem = item as? EventBasedMessageTimelineItemProtocol {
-                actions.append(.reply(isThread: messageItem.properties.isThreaded))
+                // If threads are enabled we will have the dedicated `replyInThread` action
+                // so there is no need to make the normal reply use the thread.
+                actions.append(.reply(isThread: areThreadsEnabled ? false : messageItem.properties.isThreaded))
             } else {
                 actions.append(.reply(isThread: false))
             }
