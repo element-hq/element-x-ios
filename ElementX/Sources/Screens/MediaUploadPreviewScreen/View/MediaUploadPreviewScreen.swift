@@ -29,9 +29,13 @@ struct MediaUploadPreviewScreen: View {
             .ignoresSafeArea(edges: [.horizontal])
             .safeAreaInset(edge: .top) {
                 if context.viewState.mediaURLs.count > 1 {
-                    Text("\(currentIndex + 1) / \(context.viewState.mediaURLs.count)")
-                        .font(.compound.bodySM)
-                        .foregroundColor(.compound.textSecondary)
+                    Text(L10n.screenMediaUploadPreviewItemCount(currentIndex + 1, context.viewState.mediaURLs.count))
+                        .font(.compound.bodyMD)
+                        .foregroundColor(.compound.textPrimary)
+                        .padding(.vertical, 4)
+                        .padding(.horizontal, 8)
+                        .background(.compound.bgBadgeDefault)
+                        .clipShape(.capsule)
                 }
             }
             .safeAreaInset(edge: .bottom, spacing: 0) {
