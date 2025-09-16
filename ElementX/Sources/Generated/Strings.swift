@@ -640,6 +640,8 @@ internal enum L10n {
   internal static var commonServerUrl: String { return L10n.tr("Localizable", "common_server_url") }
   /// Settings
   internal static var commonSettings: String { return L10n.tr("Localizable", "common_settings") }
+  /// Share space
+  internal static var commonShareSpace: String { return L10n.tr("Localizable", "common_share_space") }
   /// Shared location
   internal static var commonSharedLocation: String { return L10n.tr("Localizable", "common_shared_location") }
   /// Signing out
@@ -850,6 +852,8 @@ internal enum L10n {
   internal static var emojiPickerCategoryPeople: String { return L10n.tr("Localizable", "emoji_picker_category_people") }
   /// Travel & Places
   internal static var emojiPickerCategoryPlaces: String { return L10n.tr("Localizable", "emoji_picker_category_places") }
+  /// Recent emojis
+  internal static var emojiPickerCategoryRecent: String { return L10n.tr("Localizable", "emoji_picker_category_recent") }
   /// Symbols
   internal static var emojiPickerCategorySymbols: String { return L10n.tr("Localizable", "emoji_picker_category_symbols") }
   /// Search emojis
@@ -1876,6 +1880,10 @@ internal enum L10n {
   }
   /// The file is too large to upload
   internal static var screenMediaUploadPreviewErrorTooLargeTitle: String { return L10n.tr("Localizable", "screen_media_upload_preview_error_too_large_title") }
+  /// Item %1$d of %2$d
+  internal static func screenMediaUploadPreviewItemCount(_ p1: Int, _ p2: Int) -> String {
+    return L10n.tr("Localizable", "screen_media_upload_preview_item_count", p1, p2)
+  }
   /// Optimise image quality
   internal static var screenMediaUploadPreviewOptimizeImageQualityTitle: String { return L10n.tr("Localizable", "screen_media_upload_preview_optimize_image_quality_title") }
   /// Processing...
