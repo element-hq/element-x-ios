@@ -68,7 +68,7 @@ struct RtcDeclinedEvent {
     /// The sender of the decline event
     let sender: String
     /// The rtc.notification event that is beeing declined
-    let notificationEventId: String
+    let notificationEventID: String
 }
 
 // sourcery: AutoMockable

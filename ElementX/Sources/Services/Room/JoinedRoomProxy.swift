@@ -650,14 +650,14 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     /// Subscribe to call decline events from that rtc notification event.
-    func callDeclineEventPublisher(notificationId rtcNotificationEventId: String) -> AnyPublisher<RtcDeclinedEvent, Never> {
-        let publisher = DeclineCallbackPublisher(room: self, eventId: rtcNotificationEventId)
+    func callDeclineEventPublisher(notificationId rtcNotificationEventID: String) -> AnyPublisher<RtcDeclinedEvent, Never> {
+        let publisher = DeclineCallbackPublisher(room: self, eventID: rtcNotificationEventID)
         return publisher.eraseToAnyPublisher()
     }
     
-    func subscribeToCallDeclineEvents(rtcNotificationEventId: String, listener: RoomCallDeclineListener) -> Result<TaskHandle, RoomProxyError> {
+    func subscribeToCallDeclineEvents(rtcNotificationEventID: String, listener: RoomCallDeclineListener) -> Result<TaskHandle, RoomProxyError> {
         do {
-            let handle = try room.subscribeToCallDeclineEvents(rtcNotificationEventId: rtcNotificationEventId, listener: listener)
+            let handle = try room.subscribeToCallDeclineEvents(rtcNotificationEventId: rtcNotificationEventID, listener: listener)
             return .success(handle)
         } catch {
             MXLog.error("Failed observing rtc decline with error: \(error)")
@@ -834,15 +834,15 @@ private final class RoomKnockRequestsListener: KnockRequestsListener {
 
 final class RoomCallDeclineListener: CallDeclineListener {
     private let onUpdateClosure: (RtcDeclinedEvent) -> Void
-    private let notificationId: String
+    private let notificationID: String
     
-    init(notificationId: String, onUpdateClosure: @escaping (RtcDeclinedEvent) -> Void) {
-        self.notificationId = notificationId
+    init(notificationID: String, onUpdateClosure: @escaping (RtcDeclinedEvent) -> Void) {
+        self.notificationID = notificationID
         self.onUpdateClosure = onUpdateClosure
     }
     
     func call(declinerUserId: String) {
-        onUpdateClosure(.init(sender: declinerUserId, notificationEventId: notificationId))
+        onUpdateClosure(.init(sender: declinerUserId, notificationEventID: notificationID))
     }
 }
 
@@ -852,10 +852,10 @@ struct DeclineCallbackPublisher: Publisher {
     typealias Failure = Never
  
     let room: JoinedRoomProxy
-    let eventId: String
+    let eventID: String
     
     func receive<S>(subscriber: S) where S: Subscriber, Never == S.Failure, RtcDeclinedEvent == S.Input {
-        let subscription = Inner(subscriber: subscriber, room: room, eventId: eventId)
+        let subscription = Inner(subscriber: subscriber, room: room, eventID: eventID)
         subscriber.receive(subscription: subscription)
     }
     
@@ -865,12 +865,12 @@ struct DeclineCallbackPublisher: Publisher {
         private var handle: TaskHandle?
         private var listener: RoomCallDeclineListener?
 
-        init(subscriber: S, room: JoinedRoomProxy, eventId: String) {
+        init(subscriber: S, room: JoinedRoomProxy, eventID: String) {
             self.subscriber = subscriber
-            listener = RoomCallDeclineListener(notificationId: eventId) { [weak self] ev in
+            listener = RoomCallDeclineListener(notificationID: eventID) { [weak self] ev in
                 _ = self?.subscriber?.receive(ev)
             }
-            handle = try? room.subscribeToCallDeclineEvents(rtcNotificationEventId: eventId, listener: listener!).get()
+            handle = try? room.subscribeToCallDeclineEvents(rtcNotificationEventID: eventID, listener: listener!).get()
         }
 
         func request(_ demand: Subscribers.Demand) {

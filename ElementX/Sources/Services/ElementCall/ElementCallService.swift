@@ -372,7 +372,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             return
         }
         
-        guard let rtcNotificationId = incomingCallID.rtcNotificationId else {
+        guard let rtcNotificationID = incomingCallID.rtcNotificationID else {
             MXLog.warning("Decline: No RTC notification ID found for the incoming call.")
             return
         }
@@ -383,10 +383,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
         let ownUserId = clientProxy.userID
         
-        MXLog.info("Observe decline events for notification \(rtcNotificationId)")
+        MXLog.info("Observe decline events for notification \(rtcNotificationID)")
         
         declineListenerCancellable = roomProxy
-            .callDeclineEventPublisher(notificationId: rtcNotificationId)
+            .callDeclineEventPublisher(notificationId: rtcNotificationID)
             .sink { ev in
                 MXLog.debug("Call declined event received from \(ev.sender)")
                 if ev.sender == ownUserId {
