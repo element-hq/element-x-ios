@@ -10,7 +10,10 @@ import Foundation
 enum ThreadTimelineScreenViewModelAction { }
 
 struct ThreadTimelineScreenViewState: BindableState {
+    var roomTitle: String
+    var roomAvatar: RoomAvatar
     var canSendMessage = true
+    var dmRecipientVerificationState: UserIdentityVerificationState?
     
     var bindings = ThreadTimelineScreenViewStateBindings()
 }

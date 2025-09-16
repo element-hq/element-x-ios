@@ -23,8 +23,9 @@ struct ThreadTimelineScreen: View {
         
     var body: some View {
         TimelineView(timelineContext: timelineContext)
-            .navigationTitle("Thread")
+            .navigationTitle(L10n.commonThread)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar { toolbar }
             .background(.compound.bgCanvasDefault)
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
@@ -50,6 +51,24 @@ struct ThreadTimelineScreen: View {
             composerToolbar
         } else {
             ComposerDisabledView()
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        // .principal + .primaryAction works better than .navigation leading + trailing
+        // as the latter disables interaction in the action button for rooms with long names
+        ToolbarItem(placement: .principal) {
+            RoomHeaderView(roomName: L10n.commonThread,
+                           roomSubtitle: context.viewState.roomTitle,
+                           roomAvatar: context.viewState.roomAvatar,
+                           dmRecipientVerificationState: context.viewState.dmRecipientVerificationState,
+                           mediaProvider: context.mediaProvider)
+                // Using a button stops it from getting truncated in the navigation bar
+                .contentShape(.rect)
+        }
+        if #available(iOS 26, *) {
+            ToolbarSpacer()
         }
     }
     
