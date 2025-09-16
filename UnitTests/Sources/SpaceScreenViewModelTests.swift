@@ -93,13 +93,29 @@ class SpaceScreenViewModelTests: XCTestCase {
     func testSelectingSpace() async throws {
         setupViewModel()
         
-        let selectedSpace = try XCTUnwrap(mockSpaceRooms.first { $0.isSpace }, "There should be a space to select.")
+        let selectedSpace = try XCTUnwrap(mockSpaceRooms.first { $0.isSpace && $0.state == .joined }, "There should be a space to select.")
         let deferred = deferFulfillment(viewModel.actionsPublisher) { _ in true }
         viewModel.context.send(viewAction: .spaceAction(.select(selectedSpace)))
         let action = try await deferred.fulfill()
         
         switch action {
         case .selectSpace(let spaceRoomListProxy) where spaceRoomListProxy.spaceRoomProxy.id == selectedSpace.id:
+            break
+        default:
+            XCTFail("The action should select the space.")
+        }
+    }
+    
+    func testSelectingUnjoinedSpace() async throws {
+        setupViewModel()
+        
+        let selectedSpace = try XCTUnwrap(mockSpaceRooms.first { $0.isSpace && $0.state != .joined }, "There should be a space to select.")
+        let deferred = deferFulfillment(viewModel.actionsPublisher) { _ in true }
+        viewModel.context.send(viewAction: .spaceAction(.select(selectedSpace)))
+        let action = try await deferred.fulfill()
+        
+        switch action {
+        case .selectUnjoinedSpace(let spaceRoomProxy) where spaceRoomProxy.id == selectedSpace.id:
             break
         default:
             XCTFail("The action should select the space.")
@@ -125,7 +141,7 @@ class SpaceScreenViewModelTests: XCTestCase {
     func testJoiningSpace() async throws {
         setupViewModel()
         
-        let selectedSpace = try XCTUnwrap(mockSpaceRooms.first { $0.isSpace }, "There should be a space to select.")
+        let selectedSpace = try XCTUnwrap(mockSpaceRooms.first { $0.isSpace && $0.state != .joined }, "There should be a space to select.")
         
         let expectation = XCTestExpectation(description: "Join room")
         clientProxy.joinRoomViaClosure = { _, _ in
@@ -184,7 +200,10 @@ class SpaceScreenViewModelTests: XCTestCase {
                                                           paginationResponses: paginationResponses))
         
         let spaceServiceProxy = SpaceServiceProxyMock(.init())
-        spaceServiceProxy.spaceRoomListForClosure = { .success(SpaceRoomListProxyMock(.init(spaceRoomProxy: $0))) }
+        spaceServiceProxy.spaceRoomListSpaceIDClosure = { [mockSpaceRooms] spaceID in
+            guard let spaceRoomProxy = mockSpaceRooms.first(where: { $0.id == spaceID }) else { return .failure(.missingSpace) }
+            return .success(SpaceRoomListProxyMock(.init(spaceRoomProxy: spaceRoomProxy)))
+        }
         
         clientProxy = ClientProxyMock(.init())
         

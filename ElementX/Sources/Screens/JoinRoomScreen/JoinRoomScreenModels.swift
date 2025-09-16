@@ -43,6 +43,7 @@ struct JoinRoomScreenRoomDetails {
     let memberCount: Int?
     let inviter: RoomInviterDetails?
     let isDirect: Bool?
+    let isSpace: Bool?
 }
 
 struct JoinRoomScreenViewState: BindableState {

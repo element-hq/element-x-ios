@@ -21,9 +21,11 @@ class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
     private let paginationStateHandle: TaskHandle
     let paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never>
     
-    init(_ spaceRoomList: SpaceRoomListProtocol, spaceRoomProxy: SpaceRoomProxyProtocol) {
+    init(_ spaceRoomList: SpaceRoomListProtocol) throws {
+        guard let spaceRoom = spaceRoomList.space() else { throw SpaceRoomListProxyError.missingSpace }
+        
         self.spaceRoomList = spaceRoomList
-        self.spaceRoomProxy = spaceRoomProxy
+        spaceRoomProxy = SpaceRoomProxy(spaceRoom: spaceRoom)
         
         let paginationStateSubject = CurrentValueSubject<SpaceRoomListPaginationState, Never>(spaceRoomList.paginationState())
         paginationStatePublisher = paginationStateSubject.asCurrentValuePublisher()
