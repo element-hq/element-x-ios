@@ -76,31 +76,25 @@ class ElementCallWidgetDriver: WidgetCapabilitiesProvider, ElementCallWidgetDriv
         }
         
         async let useEncryption = (try? room.latestEncryptionState() == .encrypted) ?? false
-        async let isDirect = room.isDirect()
-        let widgetSettings: WidgetSettings
+        async let intent = room.joinCallIntent
         
+        let widgetSettings: WidgetSettings
         do {
             widgetSettings = try await newVirtualElementCallWidget(props: .init(elementCallUrl: baseURL.absoluteString,
                                                                                 widgetId: widgetID,
                                                                                 parentUrl: nil,
-                                                                                header: .appBar,
-                                                                                hideHeader: true,
-                                                                                preload: nil,
                                                                                 fontScale: nil,
-                                                                                appPrompt: false,
-                                                                                confineToRoom: true,
                                                                                 font: nil,
                                                                                 encryption: useEncryption ? .perParticipantKeys : .unencrypted,
-                                                                                intent: .startCall,
-                                                                                hideScreensharing: false,
                                                                                 posthogUserId: nil,
                                                                                 posthogApiHost: analyticsConfiguration?.posthogAPIHost,
                                                                                 posthogApiKey: analyticsConfiguration?.posthogAPIKey,
                                                                                 rageshakeSubmitUrl: rageshakeURL,
                                                                                 sentryDsn: analyticsConfiguration?.sentryDSN,
-                                                                                sentryEnvironment: nil,
-                                                                                controlledMediaDevices: !ProcessInfo.processInfo.isiOSAppOnMac,
-                                                                                sendNotificationType: isDirect ? .ring : .notification))
+                                                                                sentryEnvironment: nil),
+                                                                   config: .init(intent: intent,
+                                                                                 skipLobby: true, // Should be nil, but needs a new EC.
+                                                                                 preload: false)) // Should be nil, but needs a new EC.
         } catch {
             MXLog.error("Failed to build widget settings: \(error)")
             return .failure(.failedBuildingWidgetSettings)
