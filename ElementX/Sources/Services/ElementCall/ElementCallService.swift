@@ -16,6 +16,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     private struct CallID: Equatable {
         let callKitID: UUID
         let roomID: String
+        let rtcNotificationID: String?
     }
     
     private let pushRegistry: PKPushRegistry
@@ -93,7 +94,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let callID = if let incomingCallID, incomingCallID.roomID == roomID {
             incomingCallID
         } else {
-            CallID(callKitID: UUID(), roomID: roomID)
+            CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: nil)
         }
         
         incomingCallID = nil
@@ -146,12 +147,17 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             return
         }
         
+        guard let rtcNotificationID = payload.dictionaryPayload[ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue] as? String else {
+            MXLog.error("Something went wrong, missing rtc notification event identifier for incoming voip call: \(payload)")
+            return
+        }
+        
         guard ongoingCallID?.roomID != roomID else {
             MXLog.warning("Call already ongoing for room \(roomID), ignoring incoming push")
             return
         }
         
-        let callID = CallID(callKitID: UUID(), roomID: roomID)
+        let callID = CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: rtcNotificationID)
         incomingCallID = callID
         
         let roomDisplayName = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomDisplayName.rawValue] as? String
@@ -253,6 +259,12 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             actionsSubject.send(.endCall(roomID: ongoingCallID.roomID))
         }
         
+        if let incomingCallID {
+            Task {
+                await sendDeclineCallEvent(incomingCallID)
+            }
+        }
+        
         tearDownCallSession(sendEndCallAction: false)
         
         action.fulfill()
@@ -272,6 +284,25 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
         
         ongoingCallID = nil
+    }
+    
+    private func sendDeclineCallEvent(_ incomingCallID: CallID) async {
+        guard let rtcNotificationID = incomingCallID.rtcNotificationID else {
+            MXLog.info("No rtc notification event to decline.")
+            return
+        }
+        
+        guard let clientProxy else {
+            MXLog.warning("A ClientProxy is needed to fetch the room.")
+            return
+        }
+        
+        guard case let .joined(roomProxy) = await clientProxy.roomForIdentifier(incomingCallID.roomID) else {
+            MXLog.warning("Failed to fetch a joined room for the incoming call.")
+            return
+        }
+        
+        _ = await roomProxy.declineCall(notificationID: rtcNotificationID)
     }
     
     private func observeIncomingCallRoomInfo() async {

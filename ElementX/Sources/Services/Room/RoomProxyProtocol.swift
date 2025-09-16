@@ -169,6 +169,7 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     // MARK: - Element Call
     
     func elementCallWidgetDriver(deviceID: String) -> ElementCallWidgetDriverProtocol
+    func declineCall(notificationID: String) async -> Result<Void, RoomProxyError>
     
     // MARK: - Permalinks
     

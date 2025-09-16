@@ -8997,6 +8997,76 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return elementCallWidgetDriverDeviceIDReturnValue
         }
     }
+    //MARK: - declineCall
+
+    var declineCallNotificationIDUnderlyingCallsCount = 0
+    var declineCallNotificationIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return declineCallNotificationIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = declineCallNotificationIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                declineCallNotificationIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    declineCallNotificationIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var declineCallNotificationIDCalled: Bool {
+        return declineCallNotificationIDCallsCount > 0
+    }
+    var declineCallNotificationIDReceivedNotificationID: String?
+    var declineCallNotificationIDReceivedInvocations: [String] = []
+
+    var declineCallNotificationIDUnderlyingReturnValue: Result<Void, RoomProxyError>!
+    var declineCallNotificationIDReturnValue: Result<Void, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return declineCallNotificationIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<Void, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = declineCallNotificationIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                declineCallNotificationIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    declineCallNotificationIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var declineCallNotificationIDClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
+    func declineCall(notificationID: String) async -> Result<Void, RoomProxyError> {
+        declineCallNotificationIDCallsCount += 1
+        declineCallNotificationIDReceivedNotificationID = notificationID
+        DispatchQueue.main.async {
+            self.declineCallNotificationIDReceivedInvocations.append(notificationID)
+        }
+        if let declineCallNotificationIDClosure = declineCallNotificationIDClosure {
+            return await declineCallNotificationIDClosure(notificationID)
+        } else {
+            return declineCallNotificationIDReturnValue
+        }
+    }
     //MARK: - matrixToPermalink
 
     var matrixToPermalinkUnderlyingCallsCount = 0
