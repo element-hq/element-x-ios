@@ -872,7 +872,7 @@ struct DeclineCallbackPublisher: Publisher {
             }
             handle = try? room.subscribeToCallDeclineEvents(rtcNotificationEventID: eventID, listener: callDeclineListener).get()
             listener = callDeclineListener
-         }
+        }
 
         func request(_ demand: Subscribers.Demand) {
             // nop
