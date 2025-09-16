@@ -16,8 +16,13 @@ struct JoinRoomScreenCoordinatorParameters {
     let appSettings: AppSettings
 }
 
+enum JoinRoomScreenJoinDetails {
+    case roomID(String)
+    case space(SpaceRoomListProxyProtocol)
+}
+
 enum JoinRoomScreenCoordinatorAction {
-    case joined
+    case joined(JoinRoomScreenJoinDetails)
     case cancelled
     case presentDeclineAndBlock(userID: String)
 }
@@ -46,8 +51,8 @@ final class JoinRoomScreenCoordinator: CoordinatorProtocol {
             
             guard let self else { return }
             switch action {
-            case .joined:
-                actionsSubject.send(.joined)
+            case .joined(let details):
+                actionsSubject.send(.joined(details))
             case .dismiss:
                 actionsSubject.send(.cancelled)
             case .presentDeclineAndBlock(let userID):

@@ -86,6 +86,11 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
     // MARK: - Private
     
     private func selectSpace(_ spaceRoomProxy: SpaceRoomProxyProtocol) async {
+        guard spaceRoomProxy.state == .joined else {
+            actionsSubject.send(.selectUnjoinedSpace(spaceRoomProxy))
+            return
+        }
+        
         switch await spaceServiceProxy.spaceRoomList(for: spaceRoomProxy) {
         case .success(let spaceRoomListProxy):
             actionsSubject.send(.selectSpace(spaceRoomListProxy))

@@ -244,7 +244,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             switch await clientProxy.joinRoomAlias(alias) {
             case .success:
                 appSettings.seenInvites.remove(roomID)
-                actionsSubject.send(.joined)
+                actionsSubject.send(.joined(.roomID(roomID)))
             case .failure(let error):
                 switch error {
                 case .forbiddenAccess:
@@ -262,7 +262,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             switch await clientProxy.joinRoom(roomID, via: via) {
             case .success:
                 appSettings.seenInvites.remove(roomID)
-                actionsSubject.send(.joined)
+                actionsSubject.send(.joined(.roomID(roomID)))
             case .failure(let error):
                 switch error {
                 case .forbiddenAccess:

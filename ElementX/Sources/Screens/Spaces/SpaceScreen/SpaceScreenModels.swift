@@ -9,6 +9,7 @@ import Foundation
 
 enum SpaceScreenViewModelAction {
     case selectSpace(SpaceRoomListProxyProtocol)
+    case selectUnjoinedSpace(SpaceRoomProxyProtocol)
     case selectRoom(roomID: String)
 }
 
