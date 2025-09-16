@@ -174,7 +174,10 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
             case "code", "pre":
                 let preserveFormatting = preserveFormatting || tag == "pre"
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                
+                let fontPointSize = fontPointSize * 0.9 // Intentionally shrink code blocks by 10%
                 content.setFontPreservingSymbolicTraits(UIFont.monospacedSystemFont(ofSize: fontPointSize, weight: .regular))
+                
                 content.addAttribute(.CodeBlock, value: true, range: NSRange(location: 0, length: content.length))
                 content.addAttribute(.backgroundColor, value: UIColor.compound._bgCodeBlock as Any, range: NSRange(location: 0, length: content.length))
                 
