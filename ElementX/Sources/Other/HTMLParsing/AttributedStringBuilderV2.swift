@@ -207,9 +207,6 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
             case "ul", "ol":
                 var listIndex = 1
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: tag, listIndex: &listIndex, indentLevel: indentLevel + 1)
-                if listTag == nil { // If not within another list
-                    content.insert(NSAttributedString(string: "\n"), at: 0)
-                }
 
             case "li":
                 var bullet = ""
@@ -223,11 +220,6 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel + 1)
                 content.insert(NSAttributedString(string: bullet), at: 0)
                 content.append(NSAttributedString(string: "\n"))
-                
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.headIndent = CGFloat(indentLevel) * 20
-                paragraphStyle.firstLineHeadIndent = CGFloat(indentLevel) * 20
-                content.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: content.length))
                 
             case "img":
                 if let alt = try? childElement.attr("alt"), !alt.isEmpty {
