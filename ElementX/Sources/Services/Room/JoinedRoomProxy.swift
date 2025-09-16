@@ -867,11 +867,12 @@ struct DeclineCallbackPublisher: Publisher {
 
         init(subscriber: S, room: JoinedRoomProxy, eventID: String) {
             self.subscriber = subscriber
-            listener = RoomCallDeclineListener(notificationID: eventID) { [weak self] ev in
+            let callDeclineListener = RoomCallDeclineListener(notificationID: eventID) { [weak self] ev in
                 _ = self?.subscriber?.receive(ev)
             }
-            handle = try? room.subscribeToCallDeclineEvents(rtcNotificationEventID: eventID, listener: listener!).get()
-        }
+            handle = try? room.subscribeToCallDeclineEvents(rtcNotificationEventID: eventID, listener: callDeclineListener).get()
+            listener = callDeclineListener
+         }
 
         func request(_ demand: Subscribers.Demand) {
             // nop
