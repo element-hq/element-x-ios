@@ -67,9 +67,6 @@ struct ThreadTimelineScreen: View {
                 // Using a button stops it from getting truncated in the navigation bar
                 .contentShape(.rect)
         }
-        if #available(iOS 26, *) {
-            ToolbarSpacer()
-        }
     }
     
     private var isAtBottomAndLive: Bool {
