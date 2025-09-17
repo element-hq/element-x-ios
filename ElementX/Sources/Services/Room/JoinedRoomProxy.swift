@@ -650,12 +650,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     }
     
     /// Subscribe to call decline events from that rtc notification event.
-    func callDeclineEventPublisher(notificationId rtcNotificationEventID: String) -> AnyPublisher<RtcDeclinedEvent, Never> {
-        let publisher = DeclineCallbackPublisher(room: self, eventID: rtcNotificationEventID)
-        return publisher.eraseToAnyPublisher()
-    }
-    
-    func subscribeToCallDeclineEvents(rtcNotificationEventID: String, listener: RoomCallDeclineListener) -> Result<TaskHandle, RoomProxyError> {
+    func subscribeToCallDeclineEvents(rtcNotificationEventID: String, listener: CallDeclineListener) -> Result<TaskHandle, RoomProxyError> {
         do {
             let handle = try room.subscribeToCallDeclineEvents(rtcNotificationEventId: rtcNotificationEventID, listener: listener)
             return .success(handle)
@@ -829,60 +824,5 @@ private final class RoomKnockRequestsListener: KnockRequestsListener {
     
     func call(joinRequests: [KnockRequest]) {
         onUpdateClosure(joinRequests)
-    }
-}
-
-final class RoomCallDeclineListener: CallDeclineListener {
-    private let onUpdateClosure: (RtcDeclinedEvent) -> Void
-    private let notificationID: String
-    
-    init(notificationID: String, onUpdateClosure: @escaping (RtcDeclinedEvent) -> Void) {
-        self.notificationID = notificationID
-        self.onUpdateClosure = onUpdateClosure
-    }
-    
-    func call(declinerUserId: String) {
-        onUpdateClosure(.init(sender: declinerUserId, notificationEventID: notificationID))
-    }
-}
-
-// Helper to transform callback to publisher while correctly retaining the task handle and listener.
-struct DeclineCallbackPublisher: Publisher {
-    typealias Output = RtcDeclinedEvent
-    typealias Failure = Never
- 
-    let room: JoinedRoomProxy
-    let eventID: String
-    
-    func receive<S>(subscriber: S) where S: Subscriber, Never == S.Failure, RtcDeclinedEvent == S.Input {
-        let subscription = Inner(subscriber: subscriber, room: room, eventID: eventID)
-        subscriber.receive(subscription: subscription)
-    }
-    
-    private final class Inner<S: Subscriber>: Subscription
-        where S.Input == RtcDeclinedEvent, S.Failure == Never {
-        private var subscriber: S?
-        private var handle: TaskHandle?
-        private var listener: RoomCallDeclineListener?
-
-        init(subscriber: S, room: JoinedRoomProxy, eventID: String) {
-            self.subscriber = subscriber
-            let callDeclineListener = RoomCallDeclineListener(notificationID: eventID) { [weak self] ev in
-                _ = self?.subscriber?.receive(ev)
-            }
-            handle = try? room.subscribeToCallDeclineEvents(rtcNotificationEventID: eventID, listener: callDeclineListener).get()
-            listener = callDeclineListener
-        }
-
-        func request(_ demand: Subscribers.Demand) {
-            // nop
-        }
-        
-        func cancel() {
-            handle?.cancel()
-            handle = nil
-            listener = nil
-            subscriber = nil
-        }
     }
 }

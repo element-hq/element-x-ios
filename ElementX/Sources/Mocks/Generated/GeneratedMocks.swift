@@ -9067,17 +9067,17 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return declineCallNotificationIDReturnValue
         }
     }
-    //MARK: - callDeclineEventPublisher
+    //MARK: - subscribeToCallDeclineEvents
 
-    var callDeclineEventPublisherNotificationIdUnderlyingCallsCount = 0
-    var callDeclineEventPublisherNotificationIdCallsCount: Int {
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingCallsCount = 0
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return callDeclineEventPublisherNotificationIdUnderlyingCallsCount
+                return subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = callDeclineEventPublisherNotificationIdUnderlyingCallsCount
+                    returnValue = subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -9085,29 +9085,29 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                callDeclineEventPublisherNotificationIdUnderlyingCallsCount = newValue
+                subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    callDeclineEventPublisherNotificationIdUnderlyingCallsCount = newValue
+                    subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var callDeclineEventPublisherNotificationIdCalled: Bool {
-        return callDeclineEventPublisherNotificationIdCallsCount > 0
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerCalled: Bool {
+        return subscribeToCallDeclineEventsRtcNotificationEventIDListenerCallsCount > 0
     }
-    var callDeclineEventPublisherNotificationIdReceivedRtcNotificationEventId: String?
-    var callDeclineEventPublisherNotificationIdReceivedInvocations: [String] = []
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedArguments: (rtcNotificationEventID: String, listener: CallDeclineListener)?
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedInvocations: [(rtcNotificationEventID: String, listener: CallDeclineListener)] = []
 
-    var callDeclineEventPublisherNotificationIdUnderlyingReturnValue: AnyPublisher<RtcDeclinedEvent, Never>!
-    var callDeclineEventPublisherNotificationIdReturnValue: AnyPublisher<RtcDeclinedEvent, Never>! {
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingReturnValue: Result<TaskHandle, RoomProxyError>!
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerReturnValue: Result<TaskHandle, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return callDeclineEventPublisherNotificationIdUnderlyingReturnValue
+                return subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingReturnValue
             } else {
-                var returnValue: AnyPublisher<RtcDeclinedEvent, Never>? = nil
+                var returnValue: Result<TaskHandle, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = callDeclineEventPublisherNotificationIdUnderlyingReturnValue
+                    returnValue = subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -9115,26 +9115,26 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                callDeclineEventPublisherNotificationIdUnderlyingReturnValue = newValue
+                subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    callDeclineEventPublisherNotificationIdUnderlyingReturnValue = newValue
+                    subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var callDeclineEventPublisherNotificationIdClosure: ((String) -> AnyPublisher<RtcDeclinedEvent, Never>)?
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerClosure: ((String, CallDeclineListener) -> Result<TaskHandle, RoomProxyError>)?
 
-    func callDeclineEventPublisher(notificationId rtcNotificationEventId: String) -> AnyPublisher<RtcDeclinedEvent, Never> {
-        callDeclineEventPublisherNotificationIdCallsCount += 1
-        callDeclineEventPublisherNotificationIdReceivedRtcNotificationEventId = rtcNotificationEventId
+    func subscribeToCallDeclineEvents(rtcNotificationEventID: String, listener: CallDeclineListener) -> Result<TaskHandle, RoomProxyError> {
+        subscribeToCallDeclineEventsRtcNotificationEventIDListenerCallsCount += 1
+        subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedArguments = (rtcNotificationEventID: rtcNotificationEventID, listener: listener)
         DispatchQueue.main.async {
-            self.callDeclineEventPublisherNotificationIdReceivedInvocations.append(rtcNotificationEventId)
+            self.subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedInvocations.append((rtcNotificationEventID: rtcNotificationEventID, listener: listener))
         }
-        if let callDeclineEventPublisherNotificationIdClosure = callDeclineEventPublisherNotificationIdClosure {
-            return callDeclineEventPublisherNotificationIdClosure(rtcNotificationEventId)
+        if let subscribeToCallDeclineEventsRtcNotificationEventIDListenerClosure = subscribeToCallDeclineEventsRtcNotificationEventIDListenerClosure {
+            return subscribeToCallDeclineEventsRtcNotificationEventIDListenerClosure(rtcNotificationEventID, listener)
         } else {
-            return callDeclineEventPublisherNotificationIdReturnValue
+            return subscribeToCallDeclineEventsRtcNotificationEventIDListenerReturnValue
         }
     }
     //MARK: - matrixToPermalink

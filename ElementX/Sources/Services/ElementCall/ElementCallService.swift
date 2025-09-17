@@ -42,17 +42,14 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             // There's a race condition where a call starts when the app has been killed and the
             // observation set in `incomingCallID` occurs *before* the user session is restored.
             // So observe when the client proxy is set to fix this (the method guards for the call).
-            Task { await observeIncomingCallRoomInfo() }
+            Task { await observeIncomingCall() }
         }
     }
     
     private var incomingCallRoomInfoCancellable: AnyCancellable?
     private var incomingCallID: CallID? {
         didSet {
-            Task {
-                await observeIncomingCallRoomInfo()
-                await observeDeclineEvents()
-            }
+            Task { await observeIncomingCall() }
         }
     }
     
@@ -72,7 +69,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private var declineListenerCancellable: AnyCancellable?
+    private var declineListenerHandle: TaskHandle?
     
     override init() {
         pushRegistry = PKPushRegistry(queue: nil)
@@ -311,7 +308,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         _ = await roomProxy.declineCall(notificationID: rtcNotificationID)
     }
     
-    private func observeIncomingCallRoomInfo() async {
+    private func observeIncomingCall() async {
         incomingCallRoomInfoCancellable = nil
         
         guard let incomingCallID else {
@@ -347,56 +344,45 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
                 
                 if !hasOngoingCall {
                     MXLog.info("Call cancelled by remote")
-                    
-                    incomingCallRoomInfoCancellable = nil
-                    endUnansweredCallTask?.cancel()
-                    callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .remoteEnded)
+                    reportEndedCall(incomingCallID: incomingCallID, reason: .remoteEnded)
                 } else if participants.contains(roomProxy.ownUserID) {
                     MXLog.info("Call answered elsewhere")
-                    
-                    incomingCallRoomInfoCancellable = nil
-                    endUnansweredCallTask?.cancel()
-                    callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .answeredElsewhere)
+                    reportEndedCall(incomingCallID: incomingCallID, reason: .answeredElsewhere)
                 }
             }
-    }
-    
-    private func observeDeclineEvents() async {
-        guard let incomingCallID else {
-            MXLog.info("Decline: No incoming call to observe for.")
-            return
-        }
-        
-        guard let clientProxy else {
-            MXLog.warning("Decline: A ClientProxy is needed to fetch the room.")
-            return
-        }
         
         guard let rtcNotificationID = incomingCallID.rtcNotificationID else {
             MXLog.warning("Decline: No RTC notification ID found for the incoming call.")
             return
         }
-
-        guard case let .joined(roomProxy) = await clientProxy.roomForIdentifier(incomingCallID.roomID) else {
-            MXLog.warning("Failed to fetch a joined room for the incoming call.")
-            return
-        }
-        let ownUserId = clientProxy.userID
         
         MXLog.info("Observe decline events for notification \(rtcNotificationID)")
         
-        declineListenerCancellable = roomProxy
-            .callDeclineEventPublisher(notificationId: rtcNotificationID)
-            .sink { ev in
-                MXLog.debug("Call declined event received from \(ev.sender)")
-                if ev.sender == ownUserId {
-                    // Stop ringing!
-                    MXLog.debug("Call declined elsewhere")
-                    self.declineListenerCancellable?.cancel()
-                    self.declineListenerCancellable = nil
-                    self.endUnansweredCallTask?.cancel()
-                    self.callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .declinedElsewhere)
-                }
+        let ownUserID = clientProxy.userID
+        let listener: CallDeclineListener = SDKListener { [weak self] senderID in
+            guard let self else { return }
+            
+            MXLog.debug("Call declined event received from \(senderID)")
+            
+            if senderID == ownUserID {
+                // Stop ringing!
+                MXLog.debug("Call declined elsewhere")
+                reportEndedCall(incomingCallID: incomingCallID, reason: .declinedElsewhere)
             }
+        }
+        
+        guard case let .success(handle) = roomProxy.subscribeToCallDeclineEvents(rtcNotificationEventID: rtcNotificationID, listener: listener) else {
+            MXLog.error("Unable to listen for decline events.")
+            return
+        }
+        
+        declineListenerHandle = handle
+    }
+    
+    private func reportEndedCall(incomingCallID: CallID, reason: CXCallEndedReason) {
+        declineListenerHandle?.cancel()
+        declineListenerHandle = nil
+        endUnansweredCallTask?.cancel()
+        callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: reason)
     }
 }

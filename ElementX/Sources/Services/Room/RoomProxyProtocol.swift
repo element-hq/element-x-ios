@@ -177,7 +177,7 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     func elementCallWidgetDriver(deviceID: String) -> ElementCallWidgetDriverProtocol
     func declineCall(notificationID: String) async -> Result<Void, RoomProxyError>
-    func callDeclineEventPublisher(notificationId rtcNotificationEventId: String) -> AnyPublisher<RtcDeclinedEvent, Never>
+    func subscribeToCallDeclineEvents(rtcNotificationEventID: String, listener: CallDeclineListener) -> Result<TaskHandle, RoomProxyError>
     
     // MARK: - Permalinks
     
