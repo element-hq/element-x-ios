@@ -21658,6 +21658,71 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
         }
     }
 
+    //MARK: - space
+
+    var spaceUnderlyingCallsCount = 0
+    open var spaceCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return spaceUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var spaceCalled: Bool {
+        return spaceCallsCount > 0
+    }
+
+    var spaceUnderlyingReturnValue: SpaceRoom?
+    open var spaceReturnValue: SpaceRoom? {
+        get {
+            if Thread.isMainThread {
+                return spaceUnderlyingReturnValue
+            } else {
+                var returnValue: SpaceRoom?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = spaceUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                spaceUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    spaceUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var spaceClosure: (() -> SpaceRoom?)?
+
+    open override func space() -> SpaceRoom? {
+        spaceCallsCount += 1
+        if let spaceClosure = spaceClosure {
+            return spaceClosure()
+        } else {
+            return spaceReturnValue
+        }
+    }
+
     //MARK: - subscribeToPaginationStateUpdates
 
     var subscribeToPaginationStateUpdatesListenerUnderlyingCallsCount = 0
@@ -21797,6 +21862,77 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
             return subscribeToRoomUpdateListenerClosure(listener)
         } else {
             return subscribeToRoomUpdateListenerReturnValue
+        }
+    }
+
+    //MARK: - subscribeToSpaceUpdates
+
+    var subscribeToSpaceUpdatesListenerUnderlyingCallsCount = 0
+    open var subscribeToSpaceUpdatesListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToSpaceUpdatesListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToSpaceUpdatesListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToSpaceUpdatesListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToSpaceUpdatesListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToSpaceUpdatesListenerCalled: Bool {
+        return subscribeToSpaceUpdatesListenerCallsCount > 0
+    }
+    open var subscribeToSpaceUpdatesListenerReceivedListener: SpaceRoomListSpaceListener?
+    open var subscribeToSpaceUpdatesListenerReceivedInvocations: [SpaceRoomListSpaceListener] = []
+
+    var subscribeToSpaceUpdatesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToSpaceUpdatesListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToSpaceUpdatesListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToSpaceUpdatesListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToSpaceUpdatesListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToSpaceUpdatesListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToSpaceUpdatesListenerClosure: ((SpaceRoomListSpaceListener) -> TaskHandle)?
+
+    open override func subscribeToSpaceUpdates(listener: SpaceRoomListSpaceListener) -> TaskHandle {
+        subscribeToSpaceUpdatesListenerCallsCount += 1
+        subscribeToSpaceUpdatesListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.subscribeToSpaceUpdatesListenerReceivedInvocations.append(listener)
+        }
+        if let subscribeToSpaceUpdatesListenerClosure = subscribeToSpaceUpdatesListenerClosure {
+            return subscribeToSpaceUpdatesListenerClosure(listener)
+        } else {
+            return subscribeToSpaceUpdatesListenerReturnValue
         }
     }
 }

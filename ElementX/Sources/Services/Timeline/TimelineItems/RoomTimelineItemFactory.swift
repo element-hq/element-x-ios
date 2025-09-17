@@ -64,7 +64,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                        isOutgoing: isOutgoing)
         case .callInvite:
             return buildCallInviteTimelineItem(for: eventItemProxy)
-        case .callNotify:
+        case .rtcNotification:
             return buildCallNotificationTimelineItem(for: eventItemProxy)
         }
     }

@@ -70,7 +70,7 @@ struct NotificationContentBuilder {
                 notificationContent.body = L10n.commonPollSummary(question)
             case .callInvite:
                 notificationContent.body = L10n.commonUnsupportedCall
-            case .callNotify:
+            case .rtcNotification:
                 notificationContent.body = L10n.notificationIncomingCall
             default:
                 processEmpty(&notificationContent)

@@ -77,7 +77,7 @@ struct RoomEventStringBuilder {
                 .map(AttributedString.init)
         case .callInvite:
             return prefix(L10n.commonUnsupportedCall, with: displayName, isOutgoing: isOutgoing)
-        case .callNotify:
+        case .rtcNotification:
             return prefix(L10n.commonCallStarted, with: displayName, isOutgoing: isOutgoing)
         }
     }
