@@ -138,9 +138,6 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         if let previousVersion = appSettings.lastVersionLaunched.flatMap(Version.init) {
             performMigrationsIfNecessary(from: previousVersion, to: currentVersion)
-            
-            // Manual clean to handle the potential case where the app crashes before moving a shared file.
-            cleanAppGroupTemporaryDirectory()
         } else {
             // The app has been deleted since the previous run. Reset everything.
             wipeUserData(includingSettings: true)
@@ -397,6 +394,9 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     private func performMigrationsIfNecessary(from oldVersion: Version, to newVersion: Version) {
         guard oldVersion != newVersion else { return }
         
+        // Be tidy and clean up after ourselves every now and then (because Apple is lazy)
+        clearTemporaryDirectories()
+        
         MXLog.info("The app was upgraded from \(oldVersion) to \(newVersion)")
         
         if oldVersion < Version(1, 6, 0) {
@@ -498,25 +498,39 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     /// Manually cleans up any files in the app group's `tmp` directory.
     ///
     /// **Note:** If there is a single file we consider it to be an active share payload and ignore it.
-    private func cleanAppGroupTemporaryDirectory() {
-        let fileURLs: [URL]
+    private func clearTemporaryDirectories() {
+        // First get rid of everything in the App's temporary directory
         do {
-            fileURLs = try FileManager.default.contentsOfDirectory(at: URL.appGroupTemporaryDirectory, includingPropertiesForKeys: nil, options: [])
+            let fileURLs = try FileManager.default.contentsOfDirectory(at: URL.temporaryDirectory, includingPropertiesForKeys: nil, options: [])
+            
+            fileURLs.forEach { url in
+                do {
+                    try FileManager.default.removeItem(at: url)
+                } catch {
+                    MXLog.warning("Failed to remove file from temporary directory: \(error)")
+                }
+            }
+        } catch {
+            MXLog.warning("Failed to enumerate temporary directory: \(error)")
+        }
+        
+        // Manual clean to handle the potential case where the app crashes before moving a shared file.
+        do {
+            let fileURLs = try FileManager.default.contentsOfDirectory(at: URL.appGroupTemporaryDirectory, includingPropertiesForKeys: nil, options: [])
+            
+            guard fileURLs.count > 1 else {
+                return // If there is only a single item in here, there's likely a pending share payload that is yet to be processed.
+            }
+            
+            for url in fileURLs {
+                do {
+                    try FileManager.default.removeItem(at: url)
+                } catch {
+                    MXLog.warning("Failed to remove file from app group temporary directory: \(error)")
+                }
+            }
         } catch {
             MXLog.warning("Failed to enumerate app group temporary directory: \(error)")
-            return
-        }
-        
-        guard fileURLs.count > 1 else {
-            return // If there is only a single item in here, there's likely a pending share payload that is yet to be processed.
-        }
-        
-        for url in fileURLs {
-            do {
-                try FileManager.default.removeItem(at: url)
-            } catch {
-                MXLog.warning("Failed to remove file from app group temporary directory: \(error)")
-            }
         }
     }
     
