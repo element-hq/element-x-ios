@@ -11,9 +11,9 @@ import XCTest
 class UserSessionScreenTests: XCTestCase {
     let firstRoomName = "Foundation 🔭🪐🌌"
     let firstSpaceName = "The Foundation"
-    let firstSpaceRoomName = "Company Room"
-    let firstSubspaceName = "Company Space"
-    let firstSubspaceRoomName = "Management"
+    let unjoinedSpaceRoomName = "Company Room"
+    let joinedSubspaceName = "Joined Space"
+    let joinedSubspaceRoomName = "Management"
     
     enum Step {
         static let homeScreen = 1
@@ -87,24 +87,24 @@ class UserSessionScreenTests: XCTestCase {
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.spaceScreen)
         
-        app.buttons[A11yIdentifiers.spaceListScreen.spaceRoomName(firstSubspaceName)].tap()
-        XCTAssert(app.staticTexts[firstSubspaceName].waitForExistence(timeout: 5.0))
+        app.buttons[A11yIdentifiers.spaceListScreen.spaceRoomName(joinedSubspaceName)].tap()
+        XCTAssert(app.staticTexts[joinedSubspaceName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.subspaceScreen)
         
-        app.buttons[A11yIdentifiers.spaceListScreen.spaceRoomName(firstSubspaceRoomName)].tap()
-        XCTAssert(app.staticTexts[firstSubspaceRoomName].waitForExistence(timeout: 5.0))
+        app.buttons[A11yIdentifiers.spaceListScreen.spaceRoomName(joinedSubspaceRoomName)].tap()
+        XCTAssert(app.staticTexts[joinedSubspaceRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.subspaceRoomScreen)
         
-        app.navigationBars.buttons[firstSubspaceName].firstMatch.tap(.center)
-        XCTAssert(app.staticTexts[firstSubspaceName].waitForExistence(timeout: 5.0))
+        app.navigationBars.buttons[joinedSubspaceName].firstMatch.tap(.center)
+        XCTAssert(app.staticTexts[joinedSubspaceName].waitForExistence(timeout: 5.0))
         
         app.navigationBars.buttons[firstSpaceName].firstMatch.tap(.center)
         XCTAssert(app.staticTexts[firstSpaceName].waitForExistence(timeout: 5.0))
         
-        app.buttons[A11yIdentifiers.spaceListScreen.spaceRoomName(firstSpaceRoomName)].tap()
-        XCTAssert(app.staticTexts[firstSpaceRoomName].waitForExistence(timeout: 5.0))
+        app.buttons[A11yIdentifiers.spaceListScreen.spaceRoomName(unjoinedSpaceRoomName)].tap()
+        XCTAssert(app.staticTexts[unjoinedSpaceRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.spaceJoinRoomScreen)
     }

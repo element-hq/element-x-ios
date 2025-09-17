@@ -8,6 +8,10 @@
 import Combine
 import MatrixRustSDK
 
+enum SpaceRoomListProxyError: Error {
+    case missingSpace
+}
+
 // sourcery: AutoMockable
 protocol SpaceRoomListProxyProtocol {
     var spaceRoomProxy: SpaceRoomProxyProtocol { get }

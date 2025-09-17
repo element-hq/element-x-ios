@@ -703,7 +703,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 guard let self else { return }
                 
                 switch action {
-                case .joined:
+                case .joined(.roomID(let roomID)):
                     Task { [weak self] in
                         guard let self else { return }
                         
@@ -718,6 +718,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                             stateMachine.tryEvent(.dismissFlow, userInfo: EventUserInfo(animated: animated))
                         }
                     }
+                case .joined(.space):
+                    #warning("The space flow should be shown here.")
                 case .cancelled:
                     stateMachine.tryEvent(.dismissJoinRoomScreen)
                 case .presentDeclineAndBlock(let userID):

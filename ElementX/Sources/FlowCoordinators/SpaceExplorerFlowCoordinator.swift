@@ -134,7 +134,7 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func startSpaceFlow(spaceRoomListProxy: SpaceRoomListProxyProtocol) {
-        let coordinator = SpaceFlowCoordinator(spaceRoomListProxy: spaceRoomListProxy,
+        let coordinator = SpaceFlowCoordinator(entryPoint: .space(spaceRoomListProxy),
                                                spaceServiceProxy: userSession.clientProxy.spaceService,
                                                isChildFlow: false,
                                                navigationStackCoordinator: detailNavigationStackCoordinator,

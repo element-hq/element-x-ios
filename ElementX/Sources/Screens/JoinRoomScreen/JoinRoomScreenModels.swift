@@ -7,8 +7,8 @@
 
 import Foundation
 
-enum JoinRoomScreenViewModelAction: Equatable {
-    case joined
+enum JoinRoomScreenViewModelAction {
+    case joined(JoinRoomScreenJoinDetails)
     case dismiss
     case presentDeclineAndBlock(userID: String)
 }
@@ -43,6 +43,7 @@ struct JoinRoomScreenRoomDetails {
     let memberCount: Int?
     let inviter: RoomInviterDetails?
     let isDirect: Bool?
+    let isSpace: Bool?
 }
 
 struct JoinRoomScreenViewState: BindableState {
