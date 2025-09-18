@@ -14,7 +14,7 @@ struct SpaceHeaderView: View {
     
     @State private var isPresentingTopic = false
     
-    var title: String { spaceRoomProxy.name ?? "" }
+    var title: String { spaceRoomProxy.name ?? spaceRoomProxy.canonicalAlias ?? spaceRoomProxy.id }
     
     var body: some View {
         VStack(spacing: 16) {

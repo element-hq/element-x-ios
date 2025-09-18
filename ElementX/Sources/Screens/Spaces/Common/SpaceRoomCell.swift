@@ -77,7 +77,7 @@ struct SpaceRoomCell: View {
     private var content: some View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(spaceRoomProxy.name ?? spaceRoomProxy.id)
+                Text(spaceRoomProxy.name ?? spaceRoomProxy.canonicalAlias ?? spaceRoomProxy.id)
                     .font(.compound.bodyLGSemibold)
                     .foregroundColor(.compound.textPrimary)
                     .lineLimit(1)
