@@ -358,13 +358,12 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         
         MXLog.info("Observe decline events for notification \(rtcNotificationID)")
         
-        let ownUserID = clientProxy.userID
         let listener: CallDeclineListener = SDKListener { [weak self] senderID in
             guard let self else { return }
             
             MXLog.debug("Call declined event received from \(senderID)")
             
-            if senderID == ownUserID {
+            if senderID == roomProxy.ownUserID {
                 // Stop ringing!
                 MXLog.debug("Call declined elsewhere")
                 reportEndedCall(incomingCallID: incomingCallID, reason: .declinedElsewhere)
