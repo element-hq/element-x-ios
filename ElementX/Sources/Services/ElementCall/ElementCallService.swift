@@ -23,20 +23,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private let pushRegistry: PKPushRegistry
     private let callController = CXCallController()
-    private let callProvider: CXProvider = {
-        let configuration = CXProviderConfiguration()
-        configuration.supportsVideo = true
-        configuration.includesCallsInRecents = true
-        
-        if let callKitIcon = UIImage(named: "images/app-logo") {
-            configuration.iconTemplateImageData = callKitIcon.pngData()
-        }
-        
-        // https://stackoverflow.com/a/46077628/730924
-        configuration.supportedHandleTypes = [.generic]
-        
-        return CXProvider(configuration: configuration)
-    }()
+    private let callProvider: CXProviderProtocol
     
     private weak var clientProxy: ClientProxyProtocol? {
         didSet {
@@ -72,15 +59,32 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private var declineListenerHandle: TaskHandle?
     
-    override init() {
+    init(callProvider: CXProviderProtocol? = nil) {
         pushRegistry = PKPushRegistry(queue: nil)
+        
+        if let callProvider = callProvider {
+            self.callProvider = callProvider
+        } else {
+            let configuration = CXProviderConfiguration()
+            configuration.supportsVideo = true
+            configuration.includesCallsInRecents = true
+            
+            if let callKitIcon = UIImage(named: "images/app-logo") {
+                configuration.iconTemplateImageData = callKitIcon.pngData()
+            }
+            
+            // https://stackoverflow.com/a/46077628/730924
+            configuration.supportedHandleTypes = [.generic]
+            
+            self.callProvider = CXProvider(configuration: configuration)
+        }
         
         super.init()
         
         pushRegistry.delegate = self
         pushRegistry.desiredPushTypes = [.voIP]
         
-        callProvider.setDelegate(self, queue: nil)
+        self.callProvider.setDelegate(self, queue: nil)
     }
     
     func setClientProxy(_ clientProxy: any ClientProxyProtocol) {
@@ -170,7 +174,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
         let nowTimestampMillis = UInt64(Date().timeIntervalSince1970 * 1000)
         
-        guard nowTimestampMillis > expirationTimestamp else {
+        guard nowTimestampMillis < expirationTimestamp else {
             MXLog.warning("Call expired for room \(roomID), ignoring incoming push")
             return
         }
