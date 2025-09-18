@@ -16,10 +16,16 @@ struct CallScreen: View {
     @ObservedObject var context: CallScreenViewModel.Context
     
     var body: some View {
-        content
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .alert(item: $context.alertInfo)
+        NavigationStack {
+            content
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar(context.viewState.isGenericCallLink ? .visible : .hidden, for: .navigationBar)
+                .toolbar { toolbar }
+        }
+        .alert(item: $context.alertInfo)
+        .preferredColorScheme(context.viewState.isGenericCallLink ? .dark : nil)
     }
     
     @ViewBuilder
@@ -31,6 +37,15 @@ struct CallScreen: View {
                 // This URL is stable, forces view reloads if this representable is ever reused for another url
                 .id(context.viewState.url)
                 .ignoresSafeArea(edges: .bottom)
+        }
+    }
+    
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button { context.send(viewAction: .navigateBack) } label: {
+                Image(systemSymbol: .chevronBackward)
+                    .fontWeight(.semibold)
+            }
         }
     }
 }
