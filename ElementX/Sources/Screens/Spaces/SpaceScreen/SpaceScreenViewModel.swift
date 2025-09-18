@@ -93,7 +93,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         state.joiningRoomIDs.insert(spaceRoomProxy.id)
         defer { state.joiningRoomIDs.remove(spaceRoomProxy.id) }
         
-        guard case .success = await clientProxy.joinRoom(spaceRoomProxy.id, via: []) else {
+        guard case .success = await clientProxy.joinRoom(spaceRoomProxy.id, via: spaceRoomProxy.via) else {
             showFailureIndicator()
             return
         }

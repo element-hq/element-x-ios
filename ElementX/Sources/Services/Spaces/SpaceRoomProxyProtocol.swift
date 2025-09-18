@@ -26,6 +26,7 @@ protocol SpaceRoomProxyProtocol {
     var worldReadable: Bool? { get }
     var guestCanJoin: Bool { get }
     var state: Membership? { get }
+    var via: [String] { get }
 }
 
 extension SpaceRoomProxyProtocol {

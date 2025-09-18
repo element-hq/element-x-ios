@@ -31,4 +31,5 @@ class SpaceRoomProxy: SpaceRoomProxyProtocol {
     var worldReadable: Bool? { spaceRoom.worldReadable }
     var guestCanJoin: Bool { spaceRoom.guestCanJoin }
     var state: Membership? { spaceRoom.state }
+    var via: [String] { spaceRoom.via }
 }
