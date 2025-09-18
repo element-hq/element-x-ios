@@ -9067,6 +9067,76 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return declineCallNotificationIDReturnValue
         }
     }
+    //MARK: - subscribeToCallDeclineEvents
+
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingCallsCount = 0
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerCalled: Bool {
+        return subscribeToCallDeclineEventsRtcNotificationEventIDListenerCallsCount > 0
+    }
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedArguments: (rtcNotificationEventID: String, listener: CallDeclineListener)?
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedInvocations: [(rtcNotificationEventID: String, listener: CallDeclineListener)] = []
+
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingReturnValue: Result<TaskHandle, RoomProxyError>!
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerReturnValue: Result<TaskHandle, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingReturnValue
+            } else {
+                var returnValue: Result<TaskHandle, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToCallDeclineEventsRtcNotificationEventIDListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var subscribeToCallDeclineEventsRtcNotificationEventIDListenerClosure: ((String, CallDeclineListener) -> Result<TaskHandle, RoomProxyError>)?
+
+    func subscribeToCallDeclineEvents(rtcNotificationEventID: String, listener: CallDeclineListener) -> Result<TaskHandle, RoomProxyError> {
+        subscribeToCallDeclineEventsRtcNotificationEventIDListenerCallsCount += 1
+        subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedArguments = (rtcNotificationEventID: rtcNotificationEventID, listener: listener)
+        DispatchQueue.main.async {
+            self.subscribeToCallDeclineEventsRtcNotificationEventIDListenerReceivedInvocations.append((rtcNotificationEventID: rtcNotificationEventID, listener: listener))
+        }
+        if let subscribeToCallDeclineEventsRtcNotificationEventIDListenerClosure = subscribeToCallDeclineEventsRtcNotificationEventIDListenerClosure {
+            return subscribeToCallDeclineEventsRtcNotificationEventIDListenerClosure(rtcNotificationEventID, listener)
+        } else {
+            return subscribeToCallDeclineEventsRtcNotificationEventIDListenerReturnValue
+        }
+    }
     //MARK: - matrixToPermalink
 
     var matrixToPermalinkUnderlyingCallsCount = 0

@@ -98,6 +98,10 @@ extension SDKListener: RoomInfoListener where T == RoomInfo {
     func call(roomInfo: RoomInfo) { onUpdateClosure(roomInfo) }
 }
 
+extension SDKListener: CallDeclineListener where T == String {
+    func call(declinerUserId: String) { onUpdateClosure(declinerUserId) }
+}
+
 // MARK: TimelineProxy
 
 extension SDKListener: PaginationStatusListener where T == RoomPaginationStatus {

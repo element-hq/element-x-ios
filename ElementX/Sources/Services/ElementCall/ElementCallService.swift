@@ -9,6 +9,7 @@ import AVFoundation
 import CallKit
 import Combine
 import Foundation
+import MatrixRustSDK
 import PushKit
 import UIKit
 
@@ -41,14 +42,14 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             // There's a race condition where a call starts when the app has been killed and the
             // observation set in `incomingCallID` occurs *before* the user session is restored.
             // So observe when the client proxy is set to fix this (the method guards for the call).
-            Task { await observeIncomingCallRoomInfo() }
+            Task { await observeIncomingCall() }
         }
     }
     
     private var incomingCallRoomInfoCancellable: AnyCancellable?
     private var incomingCallID: CallID? {
         didSet {
-            Task { await observeIncomingCallRoomInfo() }
+            Task { await observeIncomingCall() }
         }
     }
     
@@ -67,6 +68,8 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     var actions: AnyPublisher<ElementCallServiceAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+    
+    private var declineListenerHandle: TaskHandle?
     
     override init() {
         pushRegistry = PKPushRegistry(queue: nil)
@@ -305,7 +308,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         _ = await roomProxy.declineCall(notificationID: rtcNotificationID)
     }
     
-    private func observeIncomingCallRoomInfo() async {
+    private func observeIncomingCall() async {
         incomingCallRoomInfoCancellable = nil
         
         guard let incomingCallID else {
@@ -341,17 +344,44 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
                 
                 if !hasOngoingCall {
                     MXLog.info("Call cancelled by remote")
-                    
-                    incomingCallRoomInfoCancellable = nil
-                    endUnansweredCallTask?.cancel()
-                    callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .remoteEnded)
+                    reportEndedCall(incomingCallID: incomingCallID, reason: .remoteEnded)
                 } else if participants.contains(roomProxy.ownUserID) {
                     MXLog.info("Call answered elsewhere")
-                    
-                    incomingCallRoomInfoCancellable = nil
-                    endUnansweredCallTask?.cancel()
-                    callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: .answeredElsewhere)
+                    reportEndedCall(incomingCallID: incomingCallID, reason: .answeredElsewhere)
                 }
             }
+        
+        guard let rtcNotificationID = incomingCallID.rtcNotificationID else {
+            MXLog.warning("Decline: No RTC notification ID found for the incoming call.")
+            return
+        }
+        
+        MXLog.info("Observe decline events for notification \(rtcNotificationID)")
+        
+        let listener: CallDeclineListener = SDKListener { [weak self] senderID in
+            guard let self else { return }
+            
+            MXLog.debug("Call declined event received from \(senderID)")
+            
+            if senderID == roomProxy.ownUserID {
+                // Stop ringing!
+                MXLog.debug("Call declined elsewhere")
+                reportEndedCall(incomingCallID: incomingCallID, reason: .declinedElsewhere)
+            }
+        }
+        
+        guard case let .success(handle) = roomProxy.subscribeToCallDeclineEvents(rtcNotificationEventID: rtcNotificationID, listener: listener) else {
+            MXLog.error("Unable to listen for decline events.")
+            return
+        }
+        
+        declineListenerHandle = handle
+    }
+    
+    private func reportEndedCall(incomingCallID: CallID, reason: CXCallEndedReason) {
+        declineListenerHandle?.cancel()
+        declineListenerHandle = nil
+        endUnansweredCallTask?.cancel()
+        callProvider.reportCall(with: incomingCallID.callKitID, endedAt: nil, reason: reason)
     }
 }

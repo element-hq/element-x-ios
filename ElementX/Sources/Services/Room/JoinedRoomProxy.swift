@@ -649,6 +649,17 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
+    /// Subscribe to call decline events from that rtc notification event.
+    func subscribeToCallDeclineEvents(rtcNotificationEventID: String, listener: CallDeclineListener) -> Result<TaskHandle, RoomProxyError> {
+        do {
+            let handle = try room.subscribeToCallDeclineEvents(rtcNotificationEventId: rtcNotificationEventID, listener: listener)
+            return .success(handle)
+        } catch {
+            MXLog.error("Failed observing rtc decline with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Permalinks
     
     func matrixToPermalink() async -> Result<URL, RoomProxyError> {
