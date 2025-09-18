@@ -164,6 +164,19 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let callID = CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: rtcNotificationID)
         incomingCallID = callID
         
+        guard let expirationTimestamp = payload.dictionaryPayload[ElementCallServiceNotificationKey.expirationTimestampMillis.rawValue] as? UInt64 else {
+            MXLog.error("Something went wrong, missing expiration timestamp for incoming voip call: \(payload)")
+            return
+        }
+        let nowTimestampMillis = UInt64(Date().timeIntervalSince1970 * 1000)
+        
+        guard nowTimestampMillis > expirationTimestamp else {
+            MXLog.warning("Call expired for room \(roomID), ignoring incoming push")
+            return
+        }
+        
+        let ringDurationMillis = min(expirationTimestamp - nowTimestampMillis, 90000)
+        
         let roomDisplayName = payload.dictionaryPayload[ElementCallServiceNotificationKey.roomDisplayName.rawValue] as? String
         
         let update = CXCallUpdate()
@@ -183,7 +196,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
         
         endUnansweredCallTask = Task { [weak self] in
-            try? await Task.sleep(for: .seconds(90))
+            try? await Task.sleep(for: .milliseconds(ringDurationMillis))
             
             guard let self, !Task.isCancelled else {
                 return
