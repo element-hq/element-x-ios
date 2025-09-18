@@ -124,10 +124,11 @@ class NotificationHandler {
                 }
                 
                 return .processedShouldDiscard
-            case .rtcNotification(let notificationType, _):
+            case .rtcNotification(let notificationType, let expirationTimestamp):
                 return await handleCallNotification(notificationType: notificationType,
                                                     rtcNotifyEventID: event.eventId(),
                                                     timestamp: event.timestamp(),
+                                                    expirationTimestamp: expirationTimestamp,
                                                     roomID: itemProxy.roomID,
                                                     roomDisplayName: itemProxy.roomDisplayName)
             case .callAnswer,
@@ -156,6 +157,7 @@ class NotificationHandler {
     private func handleCallNotification(notificationType: RtcNotificationType,
                                         rtcNotifyEventID: String,
                                         timestamp: Timestamp,
+                                        expirationTimestamp: Timestamp,
                                         roomID: String,
                                         roomDisplayName: String) async -> NotificationProcessingResult {
         // Handle incoming VoIP calls, show the native OS call screen
@@ -209,7 +211,8 @@ class NotificationHandler {
         
         let payload = [ElementCallServiceNotificationKey.roomID.rawValue: roomID,
                        ElementCallServiceNotificationKey.roomDisplayName.rawValue: roomDisplayName,
-                       ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue: rtcNotifyEventID]
+                       ElementCallServiceNotificationKey.expirationTimestampMillis.rawValue: expirationTimestamp,
+                       ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue: rtcNotifyEventID] as [String: Any]
         
         do {
             try await CXProvider.reportNewIncomingVoIPPushPayload(payload)
