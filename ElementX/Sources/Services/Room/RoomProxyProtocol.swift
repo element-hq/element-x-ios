@@ -64,7 +64,7 @@ enum KnockRequestsState {
     case loaded([KnockRequestProxyProtocol])
 }
 
-struct RtcDeclinedEvent {
+struct RTCDeclinedEvent {
     /// The sender of the decline event
     let sender: String
     /// The rtc.notification event that is beeing declined
