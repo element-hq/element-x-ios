@@ -71,7 +71,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
     var knockRequestsStatePublisher: CurrentValuePublisher<KnockRequestsState, Never> {
         knockRequestsStateSubject.asCurrentValuePublisher()
     }
-
+    
     init(roomListService: RoomListServiceProtocol,
          room: RoomProtocol,
          appSettings: AppSettings) async throws {

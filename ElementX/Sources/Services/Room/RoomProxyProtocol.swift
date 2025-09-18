@@ -83,7 +83,7 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     var identityStatusChangesPublisher: CurrentValuePublisher<[IdentityStatusChange], Never> { get }
     
     var knockRequestsStatePublisher: CurrentValuePublisher<KnockRequestsState, Never> { get }
-        
+    
     var timeline: TimelineProxyProtocol { get }
     
     var predecessorRoom: PredecessorRoom? { get }
