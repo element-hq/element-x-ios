@@ -5,7 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import OrderedCollections
+import Algorithms
 import UIKit
 
 struct TextRoomTimelineItem: TextBasedRoomTimelineItem, Equatable {
@@ -51,6 +51,6 @@ struct TextRoomTimelineItem: TextBasedRoomTimelineItem, Equatable {
             return run.link
         }
         
-        return Array(OrderedSet(links))
+        return Array(links.uniqued())
     }
 }

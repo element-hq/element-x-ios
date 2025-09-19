@@ -18,30 +18,12 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     
     @State private var linkMetadata: OrderedDictionary<URL, LinkMetadataProviderItem>
     
-    init(timelineItem: TextRoomTimelineItem) {
+    init(timelineItem: TextRoomTimelineItem, linkMetadata: OrderedDictionary<URL, LinkMetadataProviderItem> = [:]) {
         self.timelineItem = timelineItem
-        
-        var linkMetadata = OrderedDictionary<URL, LinkMetadataProviderItem>()
-        for url in timelineItem.links.prefix(Self.maxLinkPreviewsToRender) {
-            linkMetadata[url] = LinkMetadataProviderItem(url: url, metadata: nil)
-        }
         self.linkMetadata = linkMetadata
     }
     
     var body: some View {
-        content
-            .task {
-                if context?.viewState.linkPreviewsEnabled ?? false {
-                    for url in timelineItem.links.prefix(Self.maxLinkPreviewsToRender) {
-                        if case let .success(metadata) = await context?.viewState.linkMetadataProvider?.fetchMetadataFor(url: url) {
-                            linkMetadata[url] = metadata
-                        }
-                    }
-                }
-            }
-    }
-    
-    private var content: some View {
         TimelineStyler(timelineItem: timelineItem) {
             VStack(alignment: .leading, spacing: 8) {
                 if let attributedString = timelineItem.content.formattedBody {
@@ -62,6 +44,25 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
                         }
                     }
                     .padding(.bottom, 16)
+                }
+            }
+        }
+        .task { await fetchLinkPreviews() }
+    }
+    
+    private func fetchLinkPreviews() async {
+        guard context?.viewState.linkPreviewsEnabled ?? false else {
+            return
+        }
+        
+        await withTaskGroup { taskGroup in
+            for url in timelineItem.links.prefix(Self.maxLinkPreviewsToRender) {
+                taskGroup.addTask {
+                    if case let .success(metadata) = await context?.viewState.linkMetadataProvider?.fetchMetadataFor(url: url) {
+                        await MainActor.run {
+                            linkMetadata[url] = metadata
+                        }
+                    }
                 }
             }
         }

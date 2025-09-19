@@ -36,8 +36,6 @@ struct LinkPreviewView: UIViewRepresentable {
     }
 }
 
-import Combine
-
 struct LinkPreviewView_Previews: PreviewProvider {
     static var previews: some View {
         if let url = URL(string: "https://www.lunch.club") {
