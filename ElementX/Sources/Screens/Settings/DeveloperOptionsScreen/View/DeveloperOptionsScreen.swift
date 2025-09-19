@@ -62,6 +62,11 @@ struct DeveloperOptionsScreen: View {
                 Toggle(isOn: $context.lowPriorityFilterEnabled) {
                     Text("Low priority filter")
                 }
+                
+                Toggle(isOn: $context.latestEventSorterEnabled) {
+                    Text("Latest event sorter")
+                    Text("Requires app reboot")
+                }
             }
             
             Section("Timeline") {

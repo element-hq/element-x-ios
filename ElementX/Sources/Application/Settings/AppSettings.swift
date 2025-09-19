@@ -63,6 +63,7 @@ final class AppSettings {
         case developerOptionsEnabled
         case nextGenHTMLParserEnabled
         case linkPreviewsEnabled
+        case latestEventSorterEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -388,6 +389,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.linkPreviewsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkPreviewsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.latestEventSorterEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var latestEventSorterEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
