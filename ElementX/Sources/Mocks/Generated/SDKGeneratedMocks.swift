@@ -17941,6 +17941,77 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
         }
     }
 
+    //MARK: - entriesWithDynamicAdaptersWith
+
+    var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingCallsCount = 0
+    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerCalled: Bool {
+        return entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerCallsCount > 0
+    }
+    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReceivedArguments: (pageSize: UInt32, enableLatestEventSorter: Bool, listener: RoomListEntriesListener)?
+    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReceivedInvocations: [(pageSize: UInt32, enableLatestEventSorter: Bool, listener: RoomListEntriesListener)] = []
+
+    var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingReturnValue: RoomListEntriesWithDynamicAdaptersResult!
+    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReturnValue: RoomListEntriesWithDynamicAdaptersResult! {
+        get {
+            if Thread.isMainThread {
+                return entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingReturnValue
+            } else {
+                var returnValue: RoomListEntriesWithDynamicAdaptersResult? = nil
+                DispatchQueue.main.sync {
+                    returnValue = entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerClosure: ((UInt32, Bool, RoomListEntriesListener) -> RoomListEntriesWithDynamicAdaptersResult)?
+
+    open override func entriesWithDynamicAdaptersWith(pageSize: UInt32, enableLatestEventSorter: Bool, listener: RoomListEntriesListener) -> RoomListEntriesWithDynamicAdaptersResult {
+        entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerCallsCount += 1
+        entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReceivedArguments = (pageSize: pageSize, enableLatestEventSorter: enableLatestEventSorter, listener: listener)
+        DispatchQueue.main.async {
+            self.entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReceivedInvocations.append((pageSize: pageSize, enableLatestEventSorter: enableLatestEventSorter, listener: listener))
+        }
+        if let entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerClosure = entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerClosure {
+            return entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerClosure(pageSize, enableLatestEventSorter, listener)
+        } else {
+            return entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReturnValue
+        }
+    }
+
     //MARK: - loadingState
 
     open var loadingStateListenerThrowableError: Error?
