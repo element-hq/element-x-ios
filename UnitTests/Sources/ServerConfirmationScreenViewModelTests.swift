@@ -311,6 +311,7 @@ class ServerConfirmationScreenViewModelTests: XCTestCase {
         if restrictedFlow {
             appSettings.override(accountProviders: ["matrix.org", "beta.matrix.org"],
                                  allowOtherAccountProviders: false,
+                                 hideBrandChrome: false,
                                  pushGatewayBaseURL: appSettings.pushGatewayBaseURL,
                                  oidcRedirectURL: appSettings.oidcRedirectURL,
                                  websiteURL: appSettings.websiteURL,

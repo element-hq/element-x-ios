@@ -8,26 +8,26 @@
 import SwiftUI
 
 class PlaceholderScreenCoordinator: CoordinatorProtocol {
-    private let showsBackgroundGradient: Bool
+    private let hideBrandChrome: Bool
     
-    init(showsBackgroundGradient: Bool = false) {
-        self.showsBackgroundGradient = showsBackgroundGradient
+    init(hideBrandChrome: Bool = true) {
+        self.hideBrandChrome = hideBrandChrome
     }
     
     func toPresentable() -> AnyView {
-        AnyView(PlaceholderScreen(showsBackgroundGradient: showsBackgroundGradient))
+        AnyView(PlaceholderScreen(hideBrandChrome: hideBrandChrome))
     }
 }
 
 /// The screen shown in split view when the detail has no content.
 struct PlaceholderScreen: View {
-    let showsBackgroundGradient: Bool
+    let hideBrandChrome: Bool
     
     var body: some View {
-        AuthenticationStartLogo(isOnGradient: showsBackgroundGradient)
+        AuthenticationStartLogo(isOnGradient: !hideBrandChrome)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background {
-                if showsBackgroundGradient {
+                if !hideBrandChrome {
                     AuthenticationStartScreenBackgroundImage()
                 }
             }
@@ -40,10 +40,10 @@ struct PlaceholderScreen: View {
 
 struct PlaceholderScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        PlaceholderScreen(showsBackgroundGradient: false)
+        PlaceholderScreen(hideBrandChrome: true)
             .previewDisplayName("Screen")
         
-        PlaceholderScreen(showsBackgroundGradient: true)
+        PlaceholderScreen(hideBrandChrome: false)
             .previewDisplayName("With background")
         
         NavigationSplitView {
@@ -53,7 +53,7 @@ struct PlaceholderScreen_Previews: PreviewProvider, TestablePreview {
                 }
             }
         } detail: {
-            PlaceholderScreen(showsBackgroundGradient: false)
+            PlaceholderScreen(hideBrandChrome: true)
         }
         .previewDisplayName("Split View")
         .previewInterfaceOrientation(.landscapeLeft)
