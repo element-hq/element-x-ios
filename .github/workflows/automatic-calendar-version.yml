@@ -11,7 +11,7 @@ on:
 # Patch bumps are handled by the release script.
 jobs:
   automatic-calendar-version:
-    runs-on: macos-15
+    runs-on: macos-26
     # Skip in forks
     if: github.repository == 'element-hq/element-x-ios'
     steps:
