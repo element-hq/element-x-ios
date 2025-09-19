@@ -1016,6 +1016,7 @@
 		B5479997ECC516C121E6625E /* LocationMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFECCE59967018204876D0A5 /* LocationMarkerView.swift */; };
 		B5899F18AD6C56CE08FE532B /* RoomSummaryProviderMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC83F47D2173B7538AA72E0E /* RoomSummaryProviderMock.swift */; };
 		B5BCE012F9E7C45D1C76108E /* RoomMembersListScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2520C4F33AA0C061D209C28 /* RoomMembersListScreenTests.swift */; };
+		B5C40DCFFDFBA0F86E228602 /* Clocks in Frameworks */ = {isa = PBXBuildFile; productRef = FFA423B0A7BBD8AA9BB91AB0 /* Clocks */; };
 		B5E455C9689EA600EDB3E9E0 /* NavigationRootCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA28F29C9F93E93CC3C2C715 /* NavigationRootCoordinator.swift */; };
 		B6048166B4AA4CEFEA9B77A6 /* InfoPlistReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A580295A56B55A856CC4084 /* InfoPlistReader.swift */; };
 		B6064D82FCDCB829601C1F59 /* SecureBackupLogoutConfirmationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37FEE10AB666891E6A675E5E /* SecureBackupLogoutConfirmationScreen.swift */; };
@@ -2878,6 +2879,7 @@
 			files = (
 				7FF27DA70D833CFC5724EFC5 /* MatrixRustSDK in Frameworks */,
 				BCA5E2157CE27AB6F1D043D3 /* AsyncAlgorithms in Frameworks */,
+				B5C40DCFFDFBA0F86E228602 /* Clocks in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6718,6 +6720,7 @@
 			packageProductDependencies = (
 				C07EA60CAB296D7726210F5B /* MatrixRustSDK */,
 				5A8EF1A5F9629FCA309D4B2A /* AsyncAlgorithms */,
+				FFA423B0A7BBD8AA9BB91AB0 /* Clocks */,
 			);
 			productName = UnitTests;
 			productReference = AAC9344689121887B74877AF /* UnitTests.xctest */;
@@ -6968,6 +6971,7 @@
 				E025F19D013D9BA6C58B37F4 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 				AC3475112CA40C2C6E78D1EB /* XCRemoteSwiftPackageReference "matrix-analytics-events" */,
 				4A8D3ABF18EABB8066BBD46E /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
+				869B65C34E469FC879A9F116 /* XCRemoteSwiftPackageReference "swift-clocks" */,
 				F76A08D0EA29A07A54F4EB4D /* XCRemoteSwiftPackageReference "swift-collections" */,
 				4C34425923978C97409A3EF2 /* XCRemoteSwiftPackageReference "DSWaveformImage" */,
 				D5F7D47BBAAE0CF1DDEB3034 /* XCRemoteSwiftPackageReference "DeviceKit" */,
@@ -9496,6 +9500,14 @@
 				minimumVersion = 1.4.2;
 			};
 		};
+		869B65C34E469FC879A9F116 /* XCRemoteSwiftPackageReference "swift-clocks" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-clocks";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.6;
+			};
+		};
 		91740346377FEBEAF7AD32FC /* XCRemoteSwiftPackageReference "swift-mutex" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/swhitty/swift-mutex";
@@ -9927,6 +9939,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AB8E808A59756170682BEC20 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
+		};
+		FFA423B0A7BBD8AA9BB91AB0 /* Clocks */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 869B65C34E469FC879A9F116 /* XCRemoteSwiftPackageReference "swift-clocks" */;
+			productName = Clocks;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
