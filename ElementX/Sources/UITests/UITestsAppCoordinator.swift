@@ -127,6 +127,7 @@ class MockScreen: Identifiable {
                 let accountProviders = id == .singleProviderAuthenticationFlow ? ["example.com"] : ["guest.example.com", "example.com"]
                 appSettings.override(accountProviders: accountProviders,
                                      allowOtherAccountProviders: false,
+                                     hideBrandChrome: false,
                                      pushGatewayBaseURL: appSettings.pushGatewayBaseURL,
                                      oidcRedirectURL: appSettings.oidcRedirectURL,
                                      websiteURL: appSettings.websiteURL,

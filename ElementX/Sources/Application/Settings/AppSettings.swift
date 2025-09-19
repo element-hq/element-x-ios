@@ -108,6 +108,7 @@ final class AppSettings {
     // swiftlint:disable:next function_parameter_count
     func override(accountProviders: [String],
                   allowOtherAccountProviders: Bool,
+                  hideBrandChrome: Bool,
                   pushGatewayBaseURL: URL,
                   oidcRedirectURL: URL,
                   websiteURL: URL,
@@ -126,6 +127,7 @@ final class AppSettings {
                   mapTilerConfiguration: MapTilerConfiguration) {
         self.accountProviders = accountProviders
         self.allowOtherAccountProviders = allowOtherAccountProviders
+        self.hideBrandChrome = hideBrandChrome
         self.pushGatewayBaseURL = pushGatewayBaseURL
         self.oidcRedirectURL = oidcRedirectURL
         self.websiteURL = websiteURL
@@ -164,6 +166,8 @@ final class AppSettings {
     private(set) var accountProviders = ["matrix.org"]
     /// Whether or not the user is allowed to manually enter their own account provider or must select from one of `defaultAccountProviders`.
     private(set) var allowOtherAccountProviders = true
+    /// Whether the components surrounding the app brand/logo should be hidden or not
+    private(set) var hideBrandChrome = false
     
     /// The task identifier used for background app refresh. Also used in main target's the Info.plist
     let backgroundAppRefreshTaskIdentifier = "io.element.elementx.background.refresh"

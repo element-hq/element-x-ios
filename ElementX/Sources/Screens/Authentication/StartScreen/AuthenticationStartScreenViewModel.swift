@@ -42,17 +42,20 @@ class AuthenticationStartScreenViewModel: AuthenticationStartScreenViewModelType
             // The assumption here being that if you're running a custom app, your users will already be created.
             AuthenticationStartScreenViewState(serverName: appSettings.accountProviders.count == 1 ? appSettings.accountProviders[0] : nil,
                                                showCreateAccountButton: false,
-                                               showQRCodeLoginButton: isQRCodeScanningSupported)
+                                               showQRCodeLoginButton: isQRCodeScanningSupported,
+                                               hideBrandChrome: appSettings.hideBrandChrome)
         } else if let provisioningParameters {
             // We only show the "Sign in to …" button when using a provisioning link.
             AuthenticationStartScreenViewState(serverName: provisioningParameters.accountProvider,
                                                showCreateAccountButton: false,
-                                               showQRCodeLoginButton: false)
+                                               showQRCodeLoginButton: false,
+                                               hideBrandChrome: appSettings.hideBrandChrome)
         } else {
             // The default configuration.
             AuthenticationStartScreenViewState(serverName: nil,
                                                showCreateAccountButton: appSettings.showCreateAccountButton,
-                                               showQRCodeLoginButton: isQRCodeScanningSupported)
+                                               showQRCodeLoginButton: isQRCodeScanningSupported,
+                                               hideBrandChrome: appSettings.hideBrandChrome)
         }
         
         super.init(initialViewState: initialViewState)

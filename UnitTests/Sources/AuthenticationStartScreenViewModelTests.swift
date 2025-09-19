@@ -159,6 +159,7 @@ class AuthenticationStartScreenViewModelTests: XCTestCase {
     private func setAllowedAccountProviders(_ providers: [String]) {
         appSettings.override(accountProviders: providers,
                              allowOtherAccountProviders: false,
+                             hideBrandChrome: false,
                              pushGatewayBaseURL: appSettings.pushGatewayBaseURL,
                              oidcRedirectURL: appSettings.oidcRedirectURL,
                              websiteURL: appSettings.websiteURL,
