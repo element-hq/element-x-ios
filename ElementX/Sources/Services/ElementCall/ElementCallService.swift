@@ -14,6 +14,12 @@ import MatrixRustSDK
 import PushKit
 import UIKit
 
+// Keep this class testable
+struct Time {
+    var clock: any Clock<Duration>
+    var nowDate: () -> Date
+}
+
 class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDelegate, CXProviderDelegate {
     private struct CallID: Equatable {
         let callKitID: UUID
@@ -24,6 +30,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     private let pushRegistry: PKPushRegistry
     private let callController = CXCallController()
     private let callProvider: CXProviderProtocol
+    private let timeClock: Time
     
     private weak var clientProxy: ClientProxyProtocol? {
         didSet {
@@ -59,10 +66,12 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private var declineListenerHandle: TaskHandle?
     
-    init(callProvider: CXProviderProtocol? = nil) {
+    init(callProvider: CXProviderProtocol? = nil, timeClock: Time? = nil) {
         pushRegistry = PKPushRegistry(queue: nil)
         
-        if let callProvider = callProvider {
+        self.timeClock = timeClock ?? Time(clock: ContinuousClock(), nowDate: Date.init)
+        
+        if let callProvider {
             self.callProvider = callProvider
         } else {
             let configuration = CXProviderConfiguration()
@@ -168,11 +177,11 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         let callID = CallID(callKitID: UUID(), roomID: roomID, rtcNotificationID: rtcNotificationID)
         incomingCallID = callID
         
-        guard let expirationTimestamp = payload.dictionaryPayload[ElementCallServiceNotificationKey.expirationTimestampMillis.rawValue] as? UInt64 else {
+        guard let expirationTimestamp = (payload.dictionaryPayload[ElementCallServiceNotificationKey.expirationTimestampMillis.rawValue] as? NSNumber)?.uint64Value else {
             MXLog.error("Something went wrong, missing expiration timestamp for incoming voip call: \(payload)")
             return
         }
-        let nowTimestampMillis = UInt64(Date().timeIntervalSince1970 * 1000)
+        let nowTimestampMillis = UInt64(timeClock.nowDate().timeIntervalSince1970 * 1000)
         
         guard nowTimestampMillis < expirationTimestamp else {
             MXLog.warning("Call expired for room \(roomID), ignoring incoming push")
@@ -200,7 +209,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
         
         endUnansweredCallTask = Task { [weak self] in
-            try? await Task.sleep(for: .milliseconds(ringDurationMillis))
+            try? await self?.timeClock.clock.sleep(for: .milliseconds(ringDurationMillis))
             
             guard let self, !Task.isCancelled else {
                 return
