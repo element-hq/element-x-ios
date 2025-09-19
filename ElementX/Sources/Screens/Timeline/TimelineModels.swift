@@ -107,9 +107,12 @@ struct TimelineViewState: BindableState {
     var canCurrentUserPin = false
     var canCurrentUserKick = false
     var canCurrentUserBan = false
+    
+    var hideTimelineMedia: Bool
+    
     var isViewSourceEnabled: Bool
     var areThreadsEnabled: Bool
-    var hideTimelineMedia: Bool
+    var linkPreviewsEnabled: Bool
     
     let hasPredecessor: Bool
         
@@ -130,6 +133,8 @@ struct TimelineViewState: BindableState {
     var roomNameForAliasResolver: (@MainActor (String) -> String?)?
     
     var emojiProvider: EmojiProviderProtocol
+    
+    var linkMetadataProvider: LinkMetadataProviderProtocol?
     
     var mapTilerConfiguration: MapTilerConfiguration
     

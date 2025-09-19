@@ -83,6 +83,7 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                         appSettings: flowParameters.appSettings,
                                                                         analytics: flowParameters.analytics,
                                                                         emojiProvider: flowParameters.emojiProvider,
+                                                                        linkMetadataProvider: flowParameters.linkMetadataProvider,
                                                                         userIndicatorController: flowParameters.userIndicatorController,
                                                                         timelineControllerFactory: flowParameters.timelineControllerFactory)
         

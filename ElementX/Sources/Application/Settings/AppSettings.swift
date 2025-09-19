@@ -62,6 +62,7 @@ final class AppSettings {
         case spacesEnabled
         case developerOptionsEnabled
         case nextGenHTMLParserEnabled
+        case linkPreviewsEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -384,6 +385,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.nextGenHTMLParserEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var nextGenHTMLParserEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.linkPreviewsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var linkPreviewsEnabled
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled

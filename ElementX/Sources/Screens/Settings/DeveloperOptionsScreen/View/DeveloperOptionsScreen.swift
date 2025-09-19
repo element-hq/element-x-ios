@@ -63,6 +63,15 @@ struct DeveloperOptionsScreen: View {
                     Text("Low priority filter")
                 }
             }
+            
+            Section("Timeline") {
+                Toggle(isOn: $context.linkPreviewsEnabled) {
+                    Text("Link previews")
+                    Text("Follows the timeline media visibility settings.")
+                    Text("Can leak the device IP address when loading link metadata.")
+                        .foregroundStyle(.compound.textCriticalPrimary)
+                }
+            }
                         
             Section("Join rules") {
                 Toggle(isOn: $context.knockingEnabled) {

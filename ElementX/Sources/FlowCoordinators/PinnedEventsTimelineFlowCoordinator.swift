@@ -69,6 +69,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                                                                                   appSettings: flowParameters.appSettings,
                                                                                   analytics: flowParameters.analytics,
                                                                                   emojiProvider: flowParameters.emojiProvider,
+                                                                                  linkMetadataProvider: flowParameters.linkMetadataProvider,
                                                                                   timelineControllerFactory: flowParameters.timelineControllerFactory,
                                                                                   userIndicatorController: flowParameters.userIndicatorController))
         

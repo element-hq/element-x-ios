@@ -38,6 +38,7 @@ class ChatsFlowCoordinatorTests: XCTestCase {
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: timelineControllerFactory,
                                                   emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                  linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: AppMediatorMock.default,
                                                   appSettings: ServiceLocator.shared.settings,
                                                   appHooks: AppHooks(),

@@ -46,6 +46,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()),
                                                   emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                  linkMetadataProvider: LinkMetadataProvider(),
                                                   appMediator: appMediator,
                                                   appSettings: ServiceLocator.shared.settings,
                                                   appHooks: AppHooks(),

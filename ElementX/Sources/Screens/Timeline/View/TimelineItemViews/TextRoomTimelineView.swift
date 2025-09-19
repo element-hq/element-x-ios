@@ -8,19 +8,62 @@
 import Foundation
 import SwiftUI
 
+import OrderedCollections
+
 struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
+    static let maxLinkPreviewsToRender = 2
+    
+    @Environment(\.timelineContext) private var context
     let timelineItem: TextRoomTimelineItem
+    
+    @State private var linkMetadata: OrderedDictionary<URL, LinkMetadataProviderItem>
+    
+    init(timelineItem: TextRoomTimelineItem, linkMetadata: OrderedDictionary<URL, LinkMetadataProviderItem> = [:]) {
+        self.timelineItem = timelineItem
+        self.linkMetadata = linkMetadata
+    }
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            if let attributedString = timelineItem.content.formattedBody {
-                FormattedBodyText(attributedString: attributedString,
-                                  additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                  boostFontSize: timelineItem.shouldBoost)
-            } else {
-                FormattedBodyText(text: timelineItem.body,
-                                  additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
-                                  boostFontSize: timelineItem.shouldBoost)
+            VStack(alignment: .leading, spacing: 8) {
+                if let attributedString = timelineItem.content.formattedBody {
+                    FormattedBodyText(attributedString: attributedString,
+                                      additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
+                                      boostFontSize: timelineItem.shouldBoost)
+                } else {
+                    FormattedBodyText(text: timelineItem.body,
+                                      additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
+                                      boostFontSize: timelineItem.shouldBoost)
+                }
+                
+                if context?.viewState.linkPreviewsEnabled ?? false {
+                    VStack(spacing: 8) {
+                        ForEach(linkMetadata.keys, id: \.absoluteString) { url in
+                            let metadata = linkMetadata[url]?.metadata ?? context?.viewState.linkMetadataProvider?.metadataItems[url]?.metadata
+                            LinkPreviewView(url: url, metadata: metadata)
+                        }
+                    }
+                    .padding(.bottom, 16)
+                }
+            }
+        }
+        .task { await fetchLinkPreviews() }
+    }
+    
+    private func fetchLinkPreviews() async {
+        guard context?.viewState.linkPreviewsEnabled ?? false else {
+            return
+        }
+        
+        await withTaskGroup { taskGroup in
+            for url in timelineItem.links.prefix(Self.maxLinkPreviewsToRender) {
+                taskGroup.addTask {
+                    if case let .success(metadata) = await context?.viewState.linkMetadataProvider?.fetchMetadataFor(url: url) {
+                        await MainActor.run {
+                            linkMetadata[url] = metadata
+                        }
+                    }
+                }
             }
         }
     }
@@ -32,10 +75,12 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         body.environmentObject(viewModel.context)
             .previewDisplayName("Bubble")
+            .previewLayout(.sizeThatFits)
         body
             .environmentObject(viewModel.context)
             .environment(\.layoutDirection, .rightToLeft)
             .previewDisplayName("Bubble RTL")
+            .previewLayout(.sizeThatFits)
     }
     
     static var body: some View {
@@ -46,7 +91,7 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                             isOutgoing: false,
                                                             senderId: "Bob"))
                 
-                TextRoomTimelineView(timelineItem: itemWith(text: "Some other text",
+                TextRoomTimelineView(timelineItem: itemWith(text: "Check out this cool website: https://www.apple.com and also https://github.com for some great projects!",
                                                             timestamp: .mock,
                                                             isOutgoing: true,
                                                             senderId: "Anne"))
@@ -75,6 +120,12 @@ struct TextRoomTimelineView_Previews: PreviewProvider, TestablePreview {
                                                             timestamp: .mock,
                                                             isOutgoing: true,
                                                             senderId: "Anne"))
+                
+                // HTML with links for testing
+                TextRoomTimelineView(timelineItem: itemWith(html: "Check out <a href=\"https://www.apple.com\">Apple's website</a> and <a href=\"https://github.com\">GitHub</a>!",
+                                                            timestamp: .mock,
+                                                            isOutgoing: false,
+                                                            senderId: "Bob"))
             }
         }
     }

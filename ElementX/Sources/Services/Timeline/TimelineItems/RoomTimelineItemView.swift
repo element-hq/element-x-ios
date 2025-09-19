@@ -6,6 +6,8 @@
 //
 import SwiftUI
 
+import OrderedCollections
+
 struct RoomTimelineItemView: View {
     @Environment(\.timelineContext) var context
     @ObservedObject var viewState: RoomTimelineItemViewState
@@ -26,7 +28,7 @@ struct RoomTimelineItemView: View {
     @ViewBuilder private var timelineView: some View {
         switch viewState.type {
         case .text(let item):
-            TextRoomTimelineView(timelineItem: item)
+            TextRoomTimelineView(timelineItem: item, linkMetadata: linkMetadataForItem(item))
         case .separator(let item):
             SeparatorRoomTimelineView(timelineItem: item)
         case .image(let item):
@@ -64,13 +66,26 @@ struct RoomTimelineItemView: View {
         case .poll(let item):
             PollRoomTimelineView(timelineItem: item)
         case .voice(let item):
-            VoiceMessageRoomTimelineView(timelineItem: item, playerState: context?.viewState.audioPlayerStateProvider?(item.id) ?? AudioPlayerState(id: .timelineItemIdentifier(item.id),
-                                                                                                                                                    title: L10n.commonVoiceMessage,
-                                                                                                                                                    duration: 0))
+            let playerState = context?.viewState.audioPlayerStateProvider?(item.id) ?? AudioPlayerState(id: .timelineItemIdentifier(item.id),
+                                                                                                        title: L10n.commonVoiceMessage,
+                                                                                                        duration: 0)
+            VoiceMessageRoomTimelineView(timelineItem: item, playerState: playerState)
         case .callInvite(let item):
             CallInviteRoomTimelineView(timelineItem: item)
         case .callNotification(let item):
             CallNotificationRoomTimelineView(timelineItem: item)
         }
+    }
+    
+    private func linkMetadataForItem(_ item: TextRoomTimelineItem) -> OrderedDictionary<URL, LinkMetadataProviderItem> {
+        var linkMetadata = OrderedDictionary<URL, LinkMetadataProviderItem>()
+        for url in item.links.prefix(TextRoomTimelineView.maxLinkPreviewsToRender) {
+            if let item = context?.viewState.linkMetadataProvider?.metadataItems[url] {
+                linkMetadata[url] = item
+            } else {
+                linkMetadata[url] = LinkMetadataProviderItem(url: url, metadata: nil)
+            }
+        }
+        return linkMetadata
     }
 }

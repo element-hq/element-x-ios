@@ -56,6 +56,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
          appSettings: AppSettings,
          analyticsService: AnalyticsService,
          emojiProvider: EmojiProviderProtocol,
+         linkMetadataProvider: LinkMetadataProviderProtocol,
          timelineControllerFactory: TimelineControllerFactoryProtocol) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
@@ -80,6 +81,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                                 appSettings: appSettings,
                                                                 analyticsService: analyticsService,
                                                                 emojiProvider: emojiProvider,
+                                                                linkMetadataProvider: linkMetadataProvider,
                                                                 timelineControllerFactory: timelineControllerFactory)
         
         let hideTimelineMedia = switch userSession.clientProxy.timelineMediaVisibilityPublisher.value {
@@ -95,12 +97,14 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                                        isDirectOneToOneRoom: roomProxy.isDirectOneToOneRoom,
                                                        timelineState: TimelineState(focussedEvent: focussedEventID.map { .init(eventID: $0, appearance: .immediate) }),
                                                        ownUserID: roomProxy.ownUserID,
+                                                       hideTimelineMedia: hideTimelineMedia,
                                                        isViewSourceEnabled: appSettings.viewSourceEnabled,
                                                        areThreadsEnabled: appSettings.threadsEnabled,
-                                                       hideTimelineMedia: hideTimelineMedia,
+                                                       linkPreviewsEnabled: appSettings.linkPreviewsEnabled,
                                                        hasPredecessor: roomProxy.predecessorRoom != nil,
                                                        pinnedEventIDs: roomProxy.infoPublisher.value.pinnedEventIDs,
                                                        emojiProvider: emojiProvider,
+                                                       linkMetadataProvider: hideTimelineMedia ? nil : linkMetadataProvider,
                                                        mapTilerConfiguration: appSettings.mapTilerConfiguration,
                                                        bindings: .init(reactionsCollapsed: [:])),
                    mediaProvider: userSession.mediaProvider)
@@ -1007,6 +1011,7 @@ extension TimelineViewModel {
                                  appSettings: ServiceLocator.shared.settings,
                                  analyticsService: ServiceLocator.shared.analytics,
                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                 linkMetadataProvider: LinkMetadataProvider(),
                                  timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }
 }
