@@ -227,7 +227,6 @@ targets:
     - package: Algorithms
     - package: AnalyticsEvents
     - package: Collections
-    - package: Clocks
     - package: DeviceKit
     - package: DTCoreText
     - package: EmbeddedElementCall
