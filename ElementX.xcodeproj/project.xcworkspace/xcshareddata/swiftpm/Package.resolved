@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/element-hq/element-call-swift",
       "state" : {
-        "revision" : "2bf81a3c0a4a0cf6347290f2476a30e0ed96eb47",
-        "version" : "0.16.0-rc.2"
+        "revision" : "48523e02e3ea1e9d1b8c1ca8652c37ff64299187",
+        "version" : "0.16.0-rc.3"
       }
     },
     {
