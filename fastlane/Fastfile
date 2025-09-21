@@ -28,9 +28,15 @@ lane :unit_tests do |options|
   )
   
   if !options[:skip_previews]
+    create_simulator_if_necessary(
+      name: "iPhone-SE-3rd-generation-26.0",
+      type: "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation",
+      runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
+    )
+
     run_tests(
       scheme: "PreviewTests",
-      device: "iPhone SE (3rd generation) (26.0)",
+      device: "iPhone-SE-3rd-generation-26.0 (26.0)",
       ensure_devices_found: true,
       result_bundle: true,
       number_of_retries: 3,
