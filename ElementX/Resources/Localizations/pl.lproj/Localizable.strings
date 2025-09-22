@@ -283,6 +283,7 @@
 "common_server_unreachable" = "Server unreachable";
 "common_server_url" = "Adres URL serwera";
 "common_settings" = "Ustawienia";
+"common_share_space" = "Share space";
 "common_shared_location" = "Udostępniona lokalizacja";
 "common_signing_out" = "Wylogowywanie";
 "common_something_went_wrong" = "Coś poszło nie tak";
@@ -329,6 +330,7 @@
 "common_you" = "Ty";
 "common.add_account" = "Add an account";
 "common.add_another_account" = "Add another account";
+"common.no_space_name" = "No space name";
 "common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Wysłane z niebezpiecznego urządzenia";
 "common_unable_to_decrypt_verification_violation" = "Zweryfikowana tożsamość nadawcy została zresetowana";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "Obiekty";
 "emoji_picker_category_people" = "Buźki i osoby";
 "emoji_picker_category_places" = "Podróż i miejsca";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Symbole";
 "emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "Pokój już nie istnieje lub zaproszenie nie jest już ważne.";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Przesyłanie multimediów nie powiodło się, spróbuj ponownie.";
 "screen_media_upload_preview_error_too_large_message" = "Maksymalny dozwolony rozmiar pliku to %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "Plik jest za duży, aby go przesłać.";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimise image quality";
 "screen_media_upload_preview_processing" = "Processing...";
 "screen_pinned_timeline_empty_state_description" = "Naciśnij wiadomość i wybierz “%1$@”, aby dołączyć tutaj.";

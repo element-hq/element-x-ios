@@ -36,10 +36,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%1$d y cant o'r holl bleidleisiau</string>
 			<key>one</key>
-			<string>%1$d percent of total votes</string>
+			<string>%1$d y cant o'r holl bleidleisiau</string>
+			<key>two</key>
+			<string>%1$d y cant o'r holl bleidleisiau</string>
+			<key>few</key>
+			<string>%1$d y cant o'r holl bleidleisiau</string>
+			<key>many</key>
+			<string>%1$d y cant o'r holl bleidleisiau</string>
 			<key>other</key>
-			<string>%1$d percents of total votes</string>
+			<string>%1$d y cant o'r holl bleidleisiau</string>
 		</dict>
 	</dict>
 	<key>a11y_read_receipts_multiple_with_others</key>
@@ -101,17 +109,17 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>zero</key>
-			<string>%1$d aelodau</string>
+			<string>%1$d Aelodau</string>
 			<key>one</key>
-			<string>%1$d aelod</string>
+			<string>%1$d Aelod</string>
 			<key>two</key>
-			<string>%1$d aelod</string>
+			<string>%1$d Aelod</string>
 			<key>few</key>
-			<string>%1$d aelod</string>
+			<string>%1$d Aelod</string>
 			<key>many</key>
-			<string>%1$d aelod</string>
+			<string>%1$d Aelod</string>
 			<key>other</key>
-			<string>%1$d aelod</string>
+			<string>%1$d Aelod</string>
 		</dict>
 	</dict>
 	<key>common_poll_votes_count</key>
@@ -148,10 +156,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%1$d atebion</string>
 			<key>one</key>
-			<string>%1$d reply</string>
+			<string>%1$d ateb</string>
+			<key>two</key>
+			<string>%1$d ateb</string>
+			<key>few</key>
+			<string>%1$d ateb</string>
+			<key>many</key>
+			<string>%1$d ateb</string>
 			<key>other</key>
-			<string>%1$d replies</string>
+			<string>%1$d ateb</string>
 		</dict>
 	</dict>
 	<key>common_rooms</key>
@@ -164,10 +180,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%1$d Ystafelloedd</string>
 			<key>one</key>
-			<string>%1$d Room</string>
+			<string>%1$d Ystafell</string>
+			<key>two</key>
+			<string>%1$d Ystafell</string>
+			<key>few</key>
+			<string>%1$d Ystafell</string>
+			<key>many</key>
+			<string>%1$d Ystafell</string>
 			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>%1$d Ystafell</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -180,10 +204,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>%1$d Gofodau</string>
 			<key>one</key>
-			<string>%1$d Space</string>
+			<string>%1$d Gofod</string>
+			<key>two</key>
+			<string>%1$d Ofod</string>
+			<key>few</key>
+			<string>%1$d Gofod</string>
+			<key>many</key>
+			<string>%1$d Gofod</string>
 			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>%1$d Gofod</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -460,10 +492,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>Ymatebodd %1$d aelodau gyda %2$@</string>
 			<key>one</key>
-			<string>%1$d member reacted with %2$@</string>
+			<string>Ymatebodd %1$d aelodau gyda %2$@</string>
+			<key>two</key>
+			<string>Ymatebodd %1$d aelod gyda %2$@</string>
+			<key>few</key>
+			<string>Ymatebodd %1$d aelod gyda %2$@</string>
+			<key>many</key>
+			<string>Ymatebodd %1$d aelod gyda %2$@</string>
 			<key>other</key>
-			<string>%1$d members reacted with %2$@</string>
+			<string>Ymatebodd %1$d aelod gyda %2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_reaction_including_you_a11y</key>

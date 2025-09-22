@@ -283,6 +283,7 @@
 "common_server_unreachable" = "Server unreachable";
 "common_server_url" = "Server URL manzili";
 "common_settings" = "Sozlamalar";
+"common_share_space" = "Share space";
 "common_shared_location" = "Joylashuvi ulashildi";
 "common_signing_out" = "Chiqish";
 "common_something_went_wrong" = "Nimadir xato ketdi";
@@ -329,6 +330,7 @@
 "common_you" = "Siz";
 "common.add_account" = "Add an account";
 "common.add_another_account" = "Add another account";
+"common.no_space_name" = "No space name";
 "common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Xavfsiz boʻlmagan qurilmadan yuborilgan";
 "common_unable_to_decrypt_verification_violation" = "Yuboruvchining tasdiqlangan shaxsi qayta tiklandi";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "Ob'ektlar";
 "emoji_picker_category_people" = "Smayllar va odamlar";
 "emoji_picker_category_places" = "Sayohat va Joylar";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Belgilar";
 "emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Media yuklanmadi, qayta urinib ko‘ring.";
 "screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimise image quality";
 "screen_media_upload_preview_processing" = "Processing...";
 "screen_pinned_timeline_empty_state_description" = "Xabarni bosib, bu yerga kiritish uchun \"%1$@\"-ni tanlang.";

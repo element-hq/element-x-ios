@@ -283,6 +283,7 @@
 "common_server_unreachable" = "Server unreachable";
 "common_server_url" = "服务器 URL";
 "common_settings" = "设置";
+"common_share_space" = "Share space";
 "common_shared_location" = "共享位置";
 "common_signing_out" = "正在登出";
 "common_something_went_wrong" = "发生了一些错误";
@@ -329,6 +330,7 @@
 "common_you" = "您";
 "common.add_account" = "添加账户";
 "common.add_another_account" = "添加另一个账户";
+"common.no_space_name" = "No space name";
 "common.select_account" = "选择账户";
 "common_unable_to_decrypt_insecure_device" = "从不安全的设备发送";
 "common_unable_to_decrypt_verification_violation" = "发送者的已验证身份已重置";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "物品";
 "emoji_picker_category_people" = "表情和人物";
 "emoji_picker_category_places" = "旅行和地点";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "符号";
 "emoji_picker_search_placeholder" = "搜索表情符号";
 "error_invalid_invite" = "该房间已不存在或邀请已失效。";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "上传媒体失败，请重试。";
 "screen_media_upload_preview_error_too_large_message" = "允许的最大文件大小为%1$@ 。";
 "screen_media_upload_preview_error_too_large_title" = "文件太大，无法上传";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "优化图像质量";
 "screen_media_upload_preview_processing" = "处理中…";
 "screen_pinned_timeline_empty_state_description" = "按下消息并选择 “%1$@” 将其包含在此处。";

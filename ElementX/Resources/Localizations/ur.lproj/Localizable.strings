@@ -283,6 +283,7 @@
 "common_server_unreachable" = "Server unreachable";
 "common_server_url" = "خادم عنوان";
 "common_settings" = "ترتیبات";
+"common_share_space" = "Share space";
 "common_shared_location" = "مشترکہ مقام";
 "common_signing_out" = "خارج ہو رہا ہے";
 "common_something_went_wrong" = "کچھ غلط ہو گیا";
@@ -329,6 +330,7 @@
 "common_you" = "آپ";
 "common.add_account" = "Add an account";
 "common.add_another_account" = "Add another account";
+"common.no_space_name" = "No space name";
 "common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Sent from an insecure device";
 "common_unable_to_decrypt_verification_violation" = "Sender's verified identity was reset";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "اشیاء";
 "emoji_picker_category_people" = "مسکراہٹیں و لوگ";
 "emoji_picker_category_places" = "سفر و مقامات";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "علامتیں";
 "emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "The room no longer exists or the invite is no longer valid.";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "وسائط رفع کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔";
 "screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimise image quality";
 "screen_media_upload_preview_processing" = "Processing...";
 "screen_pinned_timeline_empty_state_description" = "ایک پیغام پر دبائیں اور یہاں شامل کرنے کے لیے %1$@ منتخب کریں۔";

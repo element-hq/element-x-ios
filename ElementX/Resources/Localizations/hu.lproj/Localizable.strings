@@ -283,6 +283,7 @@
 "common_server_unreachable" = "Server unreachable";
 "common_server_url" = "Kiszolgáló webcíme";
 "common_settings" = "Beállítások";
+"common_share_space" = "Share space";
 "common_shared_location" = "Megosztott tartózkodási hely";
 "common_signing_out" = "Kijelentkezés";
 "common_something_went_wrong" = "Valamilyen hiba történt";
@@ -329,6 +330,7 @@
 "common_you" = "Ön";
 "common.add_account" = "Add an account";
 "common.add_another_account" = "Add another account";
+"common.no_space_name" = "No space name";
 "common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Nem biztonságos eszközről küldve";
 "common_unable_to_decrypt_verification_violation" = "A feladó ellenőrzött személyazonossága megváltozott";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "Tárgyak";
 "emoji_picker_category_people" = "Mosolyok és emberek";
 "emoji_picker_category_places" = "Utazás és helyek";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Szimbólumok";
 "emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "A szoba már nem létezik, vagy a meghívó már nem érvényes.";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Nem sikerült a média feltöltése, próbálja újra.";
 "screen_media_upload_preview_error_too_large_message" = "A maximálisan megengedett fájlméret: %1$@ .";
 "screen_media_upload_preview_error_too_large_title" = "A fájl túl nagy a feltöltéshez";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Képminőség optimalizációja";
 "screen_media_upload_preview_processing" = "Feldolgozás…";
 "screen_pinned_timeline_empty_state_description" = "Nyomjon hosszan az üzenetre, és válassza a „%1$@” lehetőséget, hogy itt szerepeljen.";

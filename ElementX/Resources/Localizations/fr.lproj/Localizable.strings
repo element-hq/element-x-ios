@@ -280,9 +280,10 @@
 "common_sent" = "Envoyé";
 "common_sentence_delimiter" = ". ";
 "common_server_not_supported" = "Serveur non pris en charge";
-"common_server_unreachable" = "Server unreachable";
+"common_server_unreachable" = "Serveur inaccessible";
 "common_server_url" = "URL du serveur";
 "common_settings" = "Paramètres";
+"common_share_space" = "Share space";
 "common_shared_location" = "Position partagée";
 "common_signing_out" = "Déconnexion";
 "common_something_went_wrong" = "Une erreur s'est produite";
@@ -329,6 +330,7 @@
 "common_you" = "Vous";
 "common.add_account" = "Ajouter un compte";
 "common.add_another_account" = "Ajouter un autre compte";
+"common.no_space_name" = "No space name";
 "common.select_account" = "Choisir un compte";
 "common_unable_to_decrypt_insecure_device" = "Envoyé depuis un appareil non sécurisé";
 "common_unable_to_decrypt_verification_violation" = "L'identité vérifiée de l'expéditeur a été réinitialisée";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "Objets";
 "emoji_picker_category_people" = "Émoticônes et personnes";
 "emoji_picker_category_places" = "Voyages & lieux";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Symboles";
 "emoji_picker_search_placeholder" = "Chercher des emojis";
 "error_invalid_invite" = "Ce salon n'existe plus ou l'invitation n'est plus valable.";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Échec du téléchargement du média, veuillez réessayer.";
 "screen_media_upload_preview_error_too_large_message" = "La taille maximale autorisée pour les fichiers est de %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "Le fichier est trop volumineux pour être envoyé.";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimiser la qualité de l'image";
 "screen_media_upload_preview_processing" = "Traitement en cours…";
 "screen_pinned_timeline_empty_state_description" = "Cliquez (clic long) sur un message et choisissez « %1$@ » pour qu‘il apparaisse ici.";
@@ -1006,7 +1010,7 @@
 "screen_room_details_error_muting" = "Échec de la mise en sourdine de ce salon, veuillez réessayer.";
 "screen_room_details_error_unmuting" = "Échec de la désactivation de la mise en sourdine de ce salon, veuillez réessayer.";
 "screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
-"screen_room_details_invite_people_preparing" = "Preparing invitations...";
+"screen_room_details_invite_people_preparing" = "Préparation des invitations...";
 "screen_room_details_notification_mode_custom" = "Personnalisé";
 "screen_room_details_notification_mode_default" = "Défaut";
 "screen_room_details_share_room_title" = "Partager le salon";

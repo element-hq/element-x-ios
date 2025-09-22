@@ -283,6 +283,7 @@
 "common_server_unreachable" = "Server nicht erreichbar";
 "common_server_url" = "Server-URL";
 "common_settings" = "Einstellungen";
+"common_share_space" = "Share space";
 "common_shared_location" = "Geteilter Standort";
 "common_signing_out" = "Abmelden";
 "common_something_went_wrong" = "Es ist ein Fehler aufgetreten.";
@@ -329,6 +330,7 @@
 "common_you" = "Sie";
 "common.add_account" = "Konto hinzufügen";
 "common.add_another_account" = "Weiteres Konto hinzufügen";
+"common.no_space_name" = "No space name";
 "common.select_account" = "Konto auswählen";
 "common_unable_to_decrypt_insecure_device" = "Von einem ungesicherten Gerät gesendet";
 "common_unable_to_decrypt_verification_violation" = "Die verifizierte Identität des Senders hat sich geändert";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "Objekte";
 "emoji_picker_category_people" = "Smileys & Menschen";
 "emoji_picker_category_places" = "Reisen & Orte";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Symbole";
 "emoji_picker_search_placeholder" = "Emojis suchen";
 "error_invalid_invite" = "Der Chat existiert nicht mehr oder die Einladung ist nicht mehr gültig.";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut.";
 "screen_media_upload_preview_error_too_large_message" = "Die maximal zulässige Dateigröße beträgt %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "Die Datei ist zu groß zum Hochladen.";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimiere die Bildqualität";
 "screen_media_upload_preview_processing" = "Verarbeitung läuft …";
 "screen_pinned_timeline_empty_state_description" = "Halte eine Nachricht gedrückt und wähle “%1$@”, um sie hier einzufügen.";

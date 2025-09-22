@@ -283,6 +283,7 @@
 "common_server_unreachable" = "Server unreachable";
 "common_server_url" = "URL adresa servera";
 "common_settings" = "Nastavenia";
+"common_share_space" = "Share space";
 "common_shared_location" = "Zdieľaná poloha";
 "common_signing_out" = "Odhlasovanie";
 "common_something_went_wrong" = "Niečo sa pokazilo";
@@ -329,6 +330,7 @@
 "common_you" = "Vy";
 "common.add_account" = "Add an account";
 "common.add_another_account" = "Add another account";
+"common.no_space_name" = "No space name";
 "common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Odoslané z nezabezpečeného zariadenia";
 "common_unable_to_decrypt_verification_violation" = "Overená totožnosť odosielateľa bola obnovená";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "Predmety";
 "emoji_picker_category_people" = "Smajlíky a ľudia";
 "emoji_picker_category_places" = "Cestovanie a miesta";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Symboly";
 "emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "Miestnosť už neexistuje alebo pozvánka už nie je platná.";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Nepodarilo sa nahrať médiá, skúste to prosím znova.";
 "screen_media_upload_preview_error_too_large_message" = "Maximálna povolená veľkosť súboru je %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "Súbor je príliš veľký na nahratie";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimalizovať kvalitu obrázku";
 "screen_media_upload_preview_processing" = "Prebieha spracovanie…";
 "screen_pinned_timeline_empty_state_description" = "Stlačte správu a vyberte možnosť „%1$@“, ktorú chcete zahrnúť sem.";
