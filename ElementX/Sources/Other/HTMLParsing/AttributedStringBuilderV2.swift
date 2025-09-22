@@ -206,6 +206,10 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
                 
             case "ul", "ol":
                 var listIndex = 1
+                if let startAttribute = try? childElement.attr("start"), let startIndex = Int(startAttribute) {
+                    listIndex = startIndex
+                }
+                
                 content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: tag, listIndex: &listIndex, indentLevel: indentLevel + 1)
 
             case "li":

@@ -753,6 +753,21 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         }
     }
     
+    func testOutOfOrderListNubmering() {
+        let htmlString = "<ol start=\"2\">\n<li>this is a two</li>\n</ol>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        if AttributedStringBuilder.useNextGenHTMLParser {
+            XCTAssertEqual(String(attributedString.characters), " 2. this is a two")
+        } else {
+            XCTAssertEqual(String(attributedString.characters), "\t2.\tthis is a two")
+        }
+    }
+    
     // MARK: - Phishing prevention
     
     func testPhishingLink() {
