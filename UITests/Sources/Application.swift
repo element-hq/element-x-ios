@@ -32,9 +32,9 @@ enum Application {
     }
     
     private static func checkEnvironments() {
-        let requirediPhoneSimulator = "iPhone17,3" // iPhone 16
-        let requirediPadSimulator = "iPad13,18" // iPad (10th generation)
-        let requiredOSVersion = 18
+        let requirediPhoneSimulator = "iPhone18,3" // iPhone 17
+        let requirediPadSimulator = "iPad15,7" // iPad (A16)
+        let requiredOSVersion = 26
         
         let osVersion = ProcessInfo().operatingSystemVersion
         guard osVersion.majorVersion == requiredOSVersion else {
@@ -47,7 +47,7 @@ enum Application {
         guard deviceModel == requirediPhoneSimulator || deviceModel == requirediPadSimulator else {
             fatalError("Running on \(deviceModel) but we only support \(requirediPhoneSimulator) and \(requirediPadSimulator).")
         }
-        guard UIDevice.current.snapshotName == "iPhone-18.5" || UIDevice.current.snapshotName == "iPad-18.5" else {
+        guard UIDevice.current.snapshotName == "iPhone-26.0" || UIDevice.current.snapshotName == "iPad-26.0" else {
             fatalError("Running on a simulator that hasn't been renamed to match the expected snapshot filenames.")
         }
     }

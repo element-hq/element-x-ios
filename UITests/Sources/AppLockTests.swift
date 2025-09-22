@@ -102,7 +102,7 @@ class AppLockUITests: XCTestCase {
         
         // Then then the app should sign the user out.
         try await app.assertScreenshot(step: Step.logoutAlert)
-        app.alerts.element.buttons[A11yIdentifiers.alertInfo.primaryButton].tap()
+        app.alerts.element.buttons[A11yIdentifiers.alertInfo.primaryButton].firstMatch.tap()
         try await app.assertScreenshot(step: Step.forcedLogout)
     }
     

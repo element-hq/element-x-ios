@@ -68,7 +68,7 @@ class AppLockSetupUITests: XCTestCase {
         try await app.assertScreenshot(step: Step.settings)
         
         app.buttons[A11yIdentifiers.appLockSetupSettingsScreen.removePIN].tap()
-        app.alerts.element.buttons[A11yIdentifiers.alertInfo.primaryButton].tap()
+        app.alerts.element.buttons[A11yIdentifiers.alertInfo.primaryButton].firstMatch.tap()
         
         // Pop the stack returning to whatever was last presented.
         try await app.assertScreenshot(step: Step.clearedStack)
@@ -110,7 +110,7 @@ class AppLockSetupUITests: XCTestCase {
         try await app.assertScreenshot(step: Step.settings)
         
         app.buttons[A11yIdentifiers.appLockSetupSettingsScreen.removePIN].tap()
-        app.alerts.element.buttons[A11yIdentifiers.alertInfo.primaryButton].tap()
+        app.alerts.element.buttons[A11yIdentifiers.alertInfo.primaryButton].firstMatch.tap()
         
         // Pop the stack returning to whatever was last presented.
         try await app.assertScreenshot(step: Step.clearedStack)
