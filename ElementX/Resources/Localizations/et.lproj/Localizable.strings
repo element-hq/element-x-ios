@@ -283,6 +283,7 @@
 "common_server_unreachable" = "Server pole leitav";
 "common_server_url" = "Serveri URL";
 "common_settings" = "Seadistused";
+"common_share_space" = "Share space";
 "common_shared_location" = "Jagatud asukoht";
 "common_signing_out" = "Logime välja";
 "common_something_went_wrong" = "Midagi läks valesti";
@@ -329,6 +330,7 @@
 "common_you" = "Sina";
 "common.add_account" = "Lisa kasutajakonto";
 "common.add_another_account" = "Lisa veel üks kasutajakonto";
+"common.no_space_name" = "No space name";
 "common.select_account" = "Vali kasutajakonto";
 "common_unable_to_decrypt_insecure_device" = "Saadetud ebaturvalisest seadmest";
 "common_unable_to_decrypt_verification_violation" = "Saatja verifitseeritud identiteet on lähtestatud";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "Esemed";
 "emoji_picker_category_people" = "Emotikonid ja inimesed";
 "emoji_picker_category_places" = "Reisimine ja kohad";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Sümbolid";
 "emoji_picker_search_placeholder" = "Otsi emojisid";
 "error_invalid_invite" = "Seda jututuba pole enam olemas või pole see kutse enam kehtiv.";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Meediafaili üleslaadimine ei õnnestunud. Palun proovi uuesti.";
 "screen_media_upload_preview_error_too_large_message" = "Maksimaalne lubatud failisuurus on %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "Fail on üleslaadimiseks liiga suur";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimeeri pildikvaliteeti";
 "screen_media_upload_preview_processing" = "Töötlen...";
 "screen_pinned_timeline_empty_state_description" = "Siia lisamiseks vajuta sõnumil ja vali „%1$@“.";

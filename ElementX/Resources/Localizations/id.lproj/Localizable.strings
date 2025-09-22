@@ -283,6 +283,7 @@
 "common_server_unreachable" = "Server unreachable";
 "common_server_url" = "URL Server";
 "common_settings" = "Pengaturan";
+"common_share_space" = "Share space";
 "common_shared_location" = "Lokasi terbagi";
 "common_signing_out" = "Mengeluarkan dari akun";
 "common_something_went_wrong" = "Ada yang salah";
@@ -329,6 +330,7 @@
 "common_you" = "Anda";
 "common.add_account" = "Add an account";
 "common.add_another_account" = "Add another account";
+"common.no_space_name" = "No space name";
 "common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Dikirim dari perangkat yang tidak aman";
 "common_unable_to_decrypt_verification_violation" = "Identitas terverifikasi pengirim diatur ulang";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "Objek";
 "emoji_picker_category_people" = "Senyuman & Orang";
 "emoji_picker_category_places" = "Wisata & Tempat";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Simbol";
 "emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "Ruangan tidak ada lagi atau undangan tidak lagi valid.";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Gagal mengunggah media, silakan coba lagi.";
 "screen_media_upload_preview_error_too_large_message" = "The maximum file size allowed is %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "The file is too large to upload";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimise image quality";
 "screen_media_upload_preview_processing" = "Processing...";
 "screen_pinned_timeline_empty_state_description" = "Tekan pesan dan pilih “%1$@” untuk disertakan di sini.";

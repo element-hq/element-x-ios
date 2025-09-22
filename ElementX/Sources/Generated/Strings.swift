@@ -3314,6 +3314,8 @@ internal enum L10n {
     internal static var addAccount: String { return L10n.tr("Localizable", "common.add_account") }
     /// Add another account
     internal static var addAnotherAccount: String { return L10n.tr("Localizable", "common.add_another_account") }
+    /// No space name
+    internal static var noSpaceName: String { return L10n.tr("Localizable", "common.no_space_name") }
     /// Select an account
     internal static var selectAccount: String { return L10n.tr("Localizable", "common.select_account") }
   }

@@ -283,6 +283,7 @@
 "common_server_unreachable" = "Server unreachable";
 "common_server_url" = "URL do servidor";
 "common_settings" = "Configurações";
+"common_share_space" = "Share space";
 "common_shared_location" = "Localização compartilhada";
 "common_signing_out" = "Saindo";
 "common_something_went_wrong" = "Algo deu errado";
@@ -329,6 +330,7 @@
 "common_you" = "Você";
 "common.add_account" = "Add an account";
 "common.add_another_account" = "Add another account";
+"common.no_space_name" = "No space name";
 "common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Enviado de um dispositivo inseguro";
 "common_unable_to_decrypt_verification_violation" = "A identidade verificada do remetente foi redefinida";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "Objetos";
 "emoji_picker_category_people" = "Sorrisos & Pessoas";
 "emoji_picker_category_places" = "Viagens & Lugares";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Símbolos";
 "emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "A sala não existe mais ou o convite não é mais válido.";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Falha ao enviar mídia. Tente novamente.";
 "screen_media_upload_preview_error_too_large_message" = "O tamanho de arquivo máximo permitido é %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "O arquivo é muito grande para enviar";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimise image quality";
 "screen_media_upload_preview_processing" = "Processing...";
 "screen_pinned_timeline_empty_state_description" = "Pressione em uma mensagem e escolha \"%1$@\" para incluir aqui.";

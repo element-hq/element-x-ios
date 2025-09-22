@@ -283,6 +283,7 @@
 "common_server_unreachable" = "Serveren er ikke tilgængelig";
 "common_server_url" = "Server URL";
 "common_settings" = "Indstillinger";
+"common_share_space" = "Share space";
 "common_shared_location" = "Delt placering";
 "common_signing_out" = "Logger ud";
 "common_something_went_wrong" = "Noget gik galt";
@@ -329,6 +330,7 @@
 "common_you" = "Dig";
 "common.add_account" = "Tilføj en konto";
 "common.add_another_account" = "Tilføj en anden konto";
+"common.no_space_name" = "No space name";
 "common.select_account" = "Vælg en konto";
 "common_unable_to_decrypt_insecure_device" = "Sendt fra en usikker enhed";
 "common_unable_to_decrypt_verification_violation" = "Afsenderens verificerede identitet blev nulstillet";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "Objekter";
 "emoji_picker_category_people" = "Smileys og mennesker";
 "emoji_picker_category_places" = "Rejser og steder";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Symboler";
 "emoji_picker_search_placeholder" = "Søg emojis";
 "error_invalid_invite" = "Rummet findes ikke længere, eller invitationen er ikke længere gyldig.";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Upload af medier mislykkedes. Prøv igen.";
 "screen_media_upload_preview_error_too_large_message" = "Den maksimalt tilladte filstørrelse er %1$@ .";
 "screen_media_upload_preview_error_too_large_title" = "Filen er for stor til at kunne uploades.";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimér billedkvaliteten";
 "screen_media_upload_preview_processing" = "Behandler…";
 "screen_pinned_timeline_empty_state_description" = "Tryk på en besked og vælg \"%1$@\" for at inkludere den her.";

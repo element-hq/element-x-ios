@@ -283,6 +283,7 @@
 "common_server_unreachable" = "Server unreachable";
 "common_server_url" = "Adresa URL a serverului";
 "common_settings" = "Setări";
+"common_share_space" = "Share space";
 "common_shared_location" = "Locație partajată";
 "common_signing_out" = "Deconectare în curs";
 "common_something_went_wrong" = "Ceva nu a mers bine";
@@ -329,6 +330,7 @@
 "common_you" = "Dumneavoastră";
 "common.add_account" = "Add an account";
 "common.add_another_account" = "Add another account";
+"common.no_space_name" = "No space name";
 "common.select_account" = "Select an account";
 "common_unable_to_decrypt_insecure_device" = "Trimis de pe un dispozitiv nesigur";
 "common_unable_to_decrypt_verification_violation" = "Identitatea verificată a expeditorului a fost resetată";
@@ -374,6 +376,7 @@
 "emoji_picker_category_objects" = "Obiecte";
 "emoji_picker_category_people" = "Fețe zâmbitoare & Oameni";
 "emoji_picker_category_places" = "Călătorii & Locuri";
+"emoji_picker_category_recent" = "Recent emojis";
 "emoji_picker_category_symbols" = "Simboluri";
 "emoji_picker_search_placeholder" = "Search emojis";
 "error_invalid_invite" = "Camera nu mai există sau invitația nu mai este valabilă.";
@@ -575,6 +578,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Încărcarea fișierelor media a eșuat, încercați din nou.";
 "screen_media_upload_preview_error_too_large_message" = "Dimensiunea maximă permisă pentru fișiere este de %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "Fișierul este prea mare pentru a fi încărcat.";
+"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimizați calitatea imaginii";
 "screen_media_upload_preview_processing" = "Se procesează...";
 "screen_pinned_timeline_empty_state_description" = "Apăsați pe un mesaj și alegeți \"%1$@\" pentru a-l include aici.";
