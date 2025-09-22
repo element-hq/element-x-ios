@@ -60,7 +60,7 @@ class UserFlowTests: XCTestCase {
         tapOnBackButton("Chats")
         
         // Cancel initial the room search
-        let searchCancelButton = app.buttons["Cancel"].firstMatch
+        let searchCancelButton = app.buttons["Close"].firstMatch
         XCTAssertTrue(searchCancelButton.waitForExistence(timeout: 10.0))
         searchCancelButton.tap(.center)
     }
@@ -263,7 +263,7 @@ class UserFlowTests: XCTestCase {
     /// When there are multiple buttons with the same label in the hierarchy, all the buttons we created
     /// should have an identifier set, and so this method will ignore those picking the one with only a label.
     private func tapOnBackButton(_ label: String = "Back") {
-        let button = app.buttons.matching(NSPredicate(format: "label == %@ && identifier == ''", label)).firstMatch
+        let button = app.buttons.matching(NSPredicate(format: "label == %@ && identifier == 'BackButton'", label)).firstMatch
         XCTAssertTrue(button.waitForExistence(timeout: 10.0))
         button.tap(.center)
     }
