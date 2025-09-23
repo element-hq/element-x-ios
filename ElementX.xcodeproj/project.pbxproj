@@ -2551,6 +2551,7 @@
 		CACA846B3E3E9A521D98B178 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CAD9547E47C58930E2CE8306 /* CallScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallScreenViewModelTests.swift; sourceTree = "<group>"; };
 		CB7B588A06911B455AC0B4C9 /* ManageRoomMemberSheetViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageRoomMemberSheetViewModelProtocol.swift; sourceTree = "<group>"; };
+		CBA95E52C4C6EE8769A63E57 /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CBBCC6E74774E79B599625D0 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CBF9AEA706926DD0DA2B954C /* JoinedRoomSize+MemberCount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JoinedRoomSize+MemberCount.swift"; sourceTree = "<group>"; };
 		CC03209FDE8CE0810617BFFF /* RoomMembersListScreenMemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersListScreenMemberCell.swift; sourceTree = "<group>"; };
@@ -2561,6 +2562,7 @@
 		CCF71646898A2F720C5BFDF5 /* RoomDirectorySearchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDirectorySearchScreenViewModel.swift; sourceTree = "<group>"; };
 		CD469F7513574341181F7EAA /* ServerSelectionScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionScreen.swift; sourceTree = "<group>"; };
 		CD6613DE16AD26B3A74DA1F5 /* LocationRoomTimelineItemContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRoomTimelineItemContent.swift; sourceTree = "<group>"; };
+		CD787C3C7E7D4D90E037D5C5 /* eo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = eo; path = eo.lproj/SAS.strings; sourceTree = "<group>"; };
 		CDA38C9B58693A49A3032552 /* DeclineAndBlockScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeclineAndBlockScreenCoordinator.swift; sourceTree = "<group>"; };
 		CDB3227C7A74B734924942E9 /* RoomSummaryProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryProvider.swift; sourceTree = "<group>"; };
 		CDE3F3911FF7CC639BDE5844 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -6833,6 +6835,7 @@
 				el,
 				en,
 				"en-US",
+				eo,
 				es,
 				et,
 				eu,
@@ -8522,6 +8525,7 @@
 				2E11E7C396ED06A154CF6DF3 /* cs */,
 				DA3D82522494E78746B2214E /* de */,
 				7447C0AD7EF302CD027D6230 /* en */,
+				CD787C3C7E7D4D90E037D5C5 /* eo */,
 				6722709BD6178E10B70C9641 /* es */,
 				F3C7252B3461D06175D975A4 /* et */,
 				C715CFE00686DACA59D836EA /* fa */,
@@ -8596,6 +8600,7 @@
 				113356152C099951A6D17D85 /* el */,
 				CACA846B3E3E9A521D98B178 /* en */,
 				F409D44C2E6BE50462E82F8A /* en-US */,
+				CBA95E52C4C6EE8769A63E57 /* eo */,
 				CBBCC6E74774E79B599625D0 /* es */,
 				A443FAE2EE820A5790C35C8D /* et */,
 				44AEEE13AC1BF303AE48CBF8 /* eu */,
