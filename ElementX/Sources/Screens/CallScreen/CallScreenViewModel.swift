@@ -153,7 +153,7 @@ class CallScreenViewModel: CallScreenViewModelType, CallScreenViewModelProtocol 
     private func handleWidgetAction(message: String) async {
         if timeoutTask != nil,
            let decodedMessage = try? DecodedWidgetMessage.decode(message: message),
-           decodedMessage.hasJoined {
+           decodedMessage.hasLoaded {
             // This means that the call room was joined succesfully, we can stop the timeout task
             timeoutTask = nil
         }
