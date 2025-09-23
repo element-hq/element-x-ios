@@ -1,3 +1,40 @@
+## Changes in 25.09.12 (2025-09-23)
+
+### What's Changed
+
+✨ Features
+* Element Call: Send rtc.decline event when incoming call is declined by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/4499
+* Automatically clear temporary folders whenever migrating versions  by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4518
+* Listen to call decline to stop ringing when declined from other device by @BillCarsonFr in https://github.com/element-hq/element-x-ios/pull/4505
+* Add an app setting to disable rendering the chrome around the app logo/brand by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4526
+
+🙌 Improvements
+* Show a modal dialog while inviting people to rooms by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4508
+
+🐛 Bugfixes
+* Revert "Add intent system to widget URL creation. (#4427)" by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4504
+* Fix traling new lines appearing in attributed string when sending text separated by 2 new lines by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4506
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4509
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4530
+
+🚧 In development 🚧
+* Add support for joining rooms from a space. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4501
+* RoomAvatar in thread timeline by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4516
+* Add the JoinRoomScreen into the SpaceFlowCoordinator. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4513
+* Implement link previews for text messages using Apple's LinkPreview framework by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4520
+
+Others
+* Add the intent system back to call widget URL creation. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4511
+* Various UI tweaks by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4514
+* Update the SDK. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4517
+* Update the SDK and Element Call. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4522
+* Update the SDK and Element Call. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4527
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.09.3...release/25.09.12
+
 ## Changes in 25.09.4 (2025-09-12)
 
 ### What's Changed
