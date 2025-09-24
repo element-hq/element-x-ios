@@ -62,7 +62,7 @@ struct AuthenticationStartScreen: View {
             if verticalSizeClass == .regular {
                 Spacer()
                 
-                AuthenticationStartLogo(isOnGradient: !context.viewState.hideBrandChrome)
+                AuthenticationStartLogo(hideBrandChrome: context.viewState.hideBrandChrome)
             }
             
             Spacer()

@@ -29,7 +29,7 @@ class ChatsFlowCoordinatorTests: XCTestCase {
         clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
         timelineControllerFactory = TimelineControllerFactoryMock(.init())
         
-        splitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
+        splitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: false))
         
         notificationManager = NotificationManagerMock()
         

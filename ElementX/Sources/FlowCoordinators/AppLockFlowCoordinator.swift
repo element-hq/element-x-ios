@@ -22,6 +22,7 @@ enum AppLockFlowCoordinatorAction: Equatable {
 class AppLockFlowCoordinator: CoordinatorProtocol {
     let appLockService: AppLockServiceProtocol
     let navigationCoordinator: NavigationRootCoordinator
+    let appSettings: AppSettings
     
     /// States the flow can find itself in
     enum State: StateType {
@@ -89,9 +90,11 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     init(initialState: State = .initial,
          appLockService: AppLockServiceProtocol,
          navigationCoordinator: NavigationRootCoordinator,
-         notificationCenter: NotificationCenter = .default) {
+         notificationCenter: NotificationCenter = .default,
+         appSettings: AppSettings) {
         self.appLockService = appLockService
         self.navigationCoordinator = navigationCoordinator
+        self.appSettings = appSettings
         
         // Set the initial state and start with the placeholder screen as the root view.
         stateMachine = .init(state: initialState)
@@ -218,7 +221,7 @@ class AppLockFlowCoordinator: CoordinatorProtocol {
     
     /// Displays the unlock flow with the app's placeholder view to hide obscure the view hierarchy in the app switcher.
     private func showPlaceholder() {
-        navigationCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: false), animated: false)
+        navigationCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: appSettings.hideBrandChrome), animated: false)
         actionsSubject.send(.lockApp)
     }
     

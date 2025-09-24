@@ -77,7 +77,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         navigationTabCoordinator = NavigationTabCoordinator()
         navigationRootCoordinator.setRootCoordinator(navigationTabCoordinator)
         
-        let chatsSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
+        let chatsSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.appSettings.hideBrandChrome))
         chatsFlowCoordinator = ChatsFlowCoordinator(isNewLogin: isNewLogin,
                                                     navigationSplitCoordinator: chatsSplitCoordinator,
                                                     flowParameters: flowParameters)
@@ -88,7 +88,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             chatsTabDetails.barVisibilityOverride = .hidden
         }
         
-        let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
+        let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.appSettings.hideBrandChrome))
         spaceExplorerFlowCoordinator = SpaceExplorerFlowCoordinator(navigationSplitCoordinator: spacesSplitCoordinator,
                                                                     flowParameters: flowParameters)
         spacesTabDetails = .init(tag: HomeTab.spaces, title: L10n.screenHomeTabSpaces, icon: \.space, selectedIcon: \.spaceSolid)
