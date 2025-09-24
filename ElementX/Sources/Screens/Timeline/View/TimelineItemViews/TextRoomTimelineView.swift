@@ -36,7 +36,7 @@ struct TextRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
                                       boostFontSize: timelineItem.shouldBoost)
                 }
                 
-                if context?.viewState.linkPreviewsEnabled ?? false {
+                if context?.viewState.linkPreviewsEnabled ?? false, !linkMetadata.keys.isEmpty {
                     VStack(spacing: 8) {
                         ForEach(linkMetadata.keys, id: \.absoluteString) { url in
                             let metadata = linkMetadata[url]?.metadata ?? context?.viewState.linkMetadataProvider?.metadataItems[url]?.metadata
