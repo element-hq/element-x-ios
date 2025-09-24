@@ -111,7 +111,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         let appLockService = AppLockService(keychainController: keychainController, appSettings: appSettings)
         let appLockNavigationCoordinator = NavigationRootCoordinator()
         appLockFlowCoordinator = AppLockFlowCoordinator(appLockService: appLockService,
-                                                        navigationCoordinator: appLockNavigationCoordinator)
+                                                        navigationCoordinator: appLockNavigationCoordinator,
+                                                        appSettings: appSettings)
         
         notificationManager = NotificationManager(notificationCenter: UNUserNotificationCenter.current(),
                                                   appSettings: appSettings)
@@ -911,7 +912,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
         
         showLoadingIndicator()
         
-        navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator())
+        navigationRootCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: appSettings.hideBrandChrome))
         
         stopSync(isBackgroundTask: false)
         userSessionFlowCoordinator?.stop()

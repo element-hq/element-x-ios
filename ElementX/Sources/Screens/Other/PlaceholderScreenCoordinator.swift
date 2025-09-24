@@ -10,7 +10,7 @@ import SwiftUI
 class PlaceholderScreenCoordinator: CoordinatorProtocol {
     private let hideBrandChrome: Bool
     
-    init(hideBrandChrome: Bool = true) {
+    init(hideBrandChrome: Bool) {
         self.hideBrandChrome = hideBrandChrome
     }
     
@@ -24,7 +24,7 @@ struct PlaceholderScreen: View {
     let hideBrandChrome: Bool
     
     var body: some View {
-        AuthenticationStartLogo(isOnGradient: !hideBrandChrome)
+        AuthenticationStartLogo(hideBrandChrome: hideBrandChrome)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background {
                 if !hideBrandChrome {
@@ -40,11 +40,11 @@ struct PlaceholderScreen: View {
 
 struct PlaceholderScreen_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        PlaceholderScreen(hideBrandChrome: true)
-            .previewDisplayName("Screen")
-        
         PlaceholderScreen(hideBrandChrome: false)
-            .previewDisplayName("With background")
+            .previewDisplayName("With chrome")
+        
+        PlaceholderScreen(hideBrandChrome: true)
+            .previewDisplayName("Without chrome")
         
         NavigationSplitView {
             List {
@@ -53,7 +53,7 @@ struct PlaceholderScreen_Previews: PreviewProvider, TestablePreview {
                 }
             }
         } detail: {
-            PlaceholderScreen(hideBrandChrome: true)
+            PlaceholderScreen(hideBrandChrome: false)
         }
         .previewDisplayName("Split View")
         .previewInterfaceOrientation(.landscapeLeft)

@@ -347,7 +347,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
             }
         }
         
-        let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator())
+        let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: false))
         navigationStackCoordinator = NavigationStackCoordinator()
         navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator)
         
