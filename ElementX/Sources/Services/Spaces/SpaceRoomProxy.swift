@@ -10,9 +10,15 @@ import MatrixRustSDK
 
 class SpaceRoomProxy: SpaceRoomProxyProtocol {
     private let spaceRoom: SpaceRoom
+    let parent: SpaceRoomProxyProtocol?
     
-    init(spaceRoom: SpaceRoom) {
+    /// Proxies a `SpaceRoom` from the Rust SDK.
+    /// - Parameters:
+    ///   - spaceRoom: The `SpaceRoom` to proxy.
+    ///   - parent: A temporary parameter until we get the `AllowRule`s from the server.
+    init(spaceRoom: SpaceRoom, parent: SpaceRoomProxyProtocol?) {
         self.spaceRoom = spaceRoom
+        self.parent = parent
     }
     
     lazy var id = spaceRoom.roomId

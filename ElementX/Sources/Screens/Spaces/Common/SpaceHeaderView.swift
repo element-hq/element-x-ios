@@ -74,30 +74,23 @@ struct SpaceHeaderView: View {
     }
     
     var spaceDetailsVisibilityTitle: String {
-        switch spaceRoomProxy.joinRule {
-        case .public:
-            L10n.commonPublicSpace
-        case .restricted(let rules), .knockRestricted(let rules):
-            // FIXME: Get this from the rule (falling back to a passed in parent??)
-            "<Parent name> space"
-        case .invite, .knock, .private, .custom, .none:
-            L10n.commonPrivateSpace
+        switch spaceRoomProxy.visibility {
+        case .public: L10n.commonPublicSpace
+        case .private: L10n.commonPrivateSpace
+        case .restricted(let parentName): L10n.screenSpaceListParentSpace(parentName)
+        case .none: L10n.commonPrivateSpace
         }
     }
     
     var spaceDetailsVisibilityIcon: KeyPath<CompoundIcons, Image> {
-        switch spaceRoomProxy.joinRule {
-        case .public:
-            \.public
-        case .restricted, .knockRestricted:
-            \.space
-        case .invite, .knock, .private, .custom, .none:
-            \.lock
+        switch spaceRoomProxy.visibility {
+        case .public: \.public
+        case .private: \.lock
+        case .restricted: \.space
+        case .none: \.lock
         }
     }
 }
-
-import MatrixRustSDK
 
 struct SpaceHeaderMembersView: View {
     let heroes: [UserProfileProxy]
@@ -157,6 +150,8 @@ struct SpaceHeaderMembersView: View {
     }
 }
 
+// MARK: - Previews
+
 struct SpaceHeaderView_Previews: PreviewProvider, TestablePreview {
     static let mediaProvider = MediaProviderMock(configuration: .init())
     
@@ -188,6 +183,7 @@ struct SpaceHeaderView_Previews: PreviewProvider, TestablePreview {
             SpaceRoomProxyMock(.init(id: "!space3:matrix.org",
                                      name: "Subspace",
                                      isSpace: true,
+                                     parent: SpaceRoomProxyMock(.init(name: "Foundation", isSpace: true)),
                                      childrenCount: 30,
                                      joinedMembersCount: 123,
                                      heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],

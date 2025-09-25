@@ -2880,6 +2880,10 @@ internal enum L10n {
   internal static func screenSpaceListDetails(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_space_list_details", String(describing: p1), String(describing: p2))
   }
+  /// %1$@ space
+  internal static func screenSpaceListParentSpace(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_space_list_parent_space", String(describing: p1))
+  }
   /// Spaces
   internal static var screenSpaceListTitle: String { return L10n.tr("Localizable", "screen_space_list_title") }
   /// An error occurred when trying to start a chat

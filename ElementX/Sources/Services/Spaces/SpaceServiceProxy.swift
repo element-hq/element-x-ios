@@ -30,9 +30,10 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         })
     }
     
-    func spaceRoomList(spaceID: String) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError> {
+    // The parent here is temporary until we get the restricted AllowRules from the server.
+    func spaceRoomList(spaceID: String, parent: SpaceRoomProxyProtocol?) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError> {
         do {
-            return try await .success(SpaceRoomListProxy(spaceService.spaceRoomList(spaceId: spaceID)))
+            return try await .success(SpaceRoomListProxy(spaceService.spaceRoomList(spaceId: spaceID), parent: parent))
         } catch {
             MXLog.error("Failed creating space room list for \(spaceID): \(error)")
             return .failure(.sdkError(error))
@@ -47,27 +48,27 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         for update in updates {
             switch update {
             case .append(let spaceRooms):
-                spaces.append(contentsOf: spaceRooms.map(SpaceRoomProxy.init))
+                spaces.append(contentsOf: spaceRooms.map { SpaceRoomProxy(spaceRoom: $0, parent: nil) })
             case .clear:
                 spaces.removeAll()
             case .pushFront(let spaceRoom):
-                spaces.insert(SpaceRoomProxy(spaceRoom: spaceRoom), at: 0)
+                spaces.insert(SpaceRoomProxy(spaceRoom: spaceRoom, parent: nil), at: 0)
             case .pushBack(let spaceRoom):
-                spaces.append(SpaceRoomProxy(spaceRoom: spaceRoom))
+                spaces.append(SpaceRoomProxy(spaceRoom: spaceRoom, parent: nil))
             case .popFront:
                 spaces.removeFirst()
             case .popBack:
                 spaces.removeLast()
             case .insert(let index, let spaceRoom):
-                spaces.insert(SpaceRoomProxy(spaceRoom: spaceRoom), at: Int(index))
+                spaces.insert(SpaceRoomProxy(spaceRoom: spaceRoom, parent: nil), at: Int(index))
             case .set(let index, let spaceRoom):
-                spaces[Int(index)] = SpaceRoomProxy(spaceRoom: spaceRoom)
+                spaces[Int(index)] = SpaceRoomProxy(spaceRoom: spaceRoom, parent: nil)
             case .remove(let index):
                 spaces.remove(at: Int(index))
             case .truncate(let length):
                 spaces.removeSubrange(Int(length)..<spaces.count)
             case .reset(let spaceRooms):
-                spaces = spaceRooms.map(SpaceRoomProxy.init)
+                spaces = spaceRooms.map { SpaceRoomProxy(spaceRoom: $0, parent: nil) }
             }
         }
         

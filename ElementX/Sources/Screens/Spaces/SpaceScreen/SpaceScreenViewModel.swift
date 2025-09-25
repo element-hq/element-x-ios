@@ -11,6 +11,7 @@ import SwiftUI
 typealias SpaceScreenViewModelType = StateStoreViewModelV2<SpaceScreenViewState, SpaceScreenViewAction>
 
 class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtocol {
+    private let spaceRoomListProxy: SpaceRoomListProxyProtocol
     private let spaceServiceProxy: SpaceServiceProxyProtocol
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
@@ -25,6 +26,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
          selectedSpaceRoomPublisher: CurrentValuePublisher<String?, Never>,
          userSession: UserSessionProtocol,
          userIndicatorController: UserIndicatorControllerProtocol) {
+        self.spaceRoomListProxy = spaceRoomListProxy
         self.spaceServiceProxy = spaceServiceProxy
         clientProxy = userSession.clientProxy
         self.userIndicatorController = userIndicatorController
@@ -109,7 +111,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
     }
     
     private func selectSpace(_ spaceRoomProxy: SpaceRoomProxyProtocol) async {
-        switch await spaceServiceProxy.spaceRoomList(spaceID: spaceRoomProxy.id) {
+        switch await spaceServiceProxy.spaceRoomList(spaceID: spaceRoomProxy.id, parent: spaceRoomListProxy.spaceRoomProxy) {
         case .success(let spaceRoomListProxy):
             actionsSubject.send(.selectSpace(spaceRoomListProxy))
         case .failure(let error):
