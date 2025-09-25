@@ -15,6 +15,7 @@ extension SpaceRoomProxyMock {
         var avatarURL: URL?
         
         var isSpace: Bool
+        var isDirect: Bool?
         var childrenCount = 0
         
         var joinedMembersCount = 0
@@ -35,6 +36,7 @@ extension SpaceRoomProxyMock {
         name = configuration.name
         avatarURL = configuration.avatarURL
         isSpace = configuration.isSpace
+        isDirect = configuration.isDirect
         childrenCount = configuration.childrenCount
         joinedMembersCount = configuration.joinedMembersCount
         heroes = configuration.heroes

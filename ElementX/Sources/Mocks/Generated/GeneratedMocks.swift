@@ -15938,6 +15938,7 @@ class SpaceRoomProxyMock: SpaceRoomProxyProtocol, @unchecked Sendable {
         set(value) { underlyingIsSpace = value }
     }
     var underlyingIsSpace: Bool!
+    var isDirect: Bool?
     var childrenCount: Int {
         get { return underlyingChildrenCount }
         set(value) { underlyingChildrenCount = value }
@@ -15959,6 +15960,7 @@ class SpaceRoomProxyMock: SpaceRoomProxyProtocol, @unchecked Sendable {
     }
     var underlyingGuestCanJoin: Bool!
     var state: Membership?
+    var via: [String] = []
 
 }
 class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {

@@ -14,8 +14,6 @@ struct SpaceHeaderView: View {
     
     @State private var isPresentingTopic = false
     
-    var title: String { spaceRoomProxy.name ?? spaceRoomProxy.canonicalAlias ?? spaceRoomProxy.id }
-    
     var body: some View {
         VStack(spacing: 16) {
             RoomAvatarImage(avatar: spaceRoomProxy.avatar,
@@ -24,7 +22,7 @@ struct SpaceHeaderView: View {
                 .accessibilityHidden(true)
             
             VStack(spacing: 8) {
-                Text(title)
+                Text(spaceRoomProxy.computedName)
                     .font(.compound.headingLGBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)

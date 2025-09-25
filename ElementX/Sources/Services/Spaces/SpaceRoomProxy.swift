@@ -20,6 +20,7 @@ class SpaceRoomProxy: SpaceRoomProxyProtocol {
     var avatarURL: URL? { spaceRoom.avatarUrl.flatMap(URL.init) }
     
     var isSpace: Bool { spaceRoom.roomType == .space }
+    var isDirect: Bool? { spaceRoom.isDirect }
     var childrenCount: Int { Int(spaceRoom.childrenCount) }
     
     var joinedMembersCount: Int { Int(spaceRoom.numJoinedMembers) }

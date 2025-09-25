@@ -15,6 +15,7 @@ protocol SpaceRoomProxyProtocol {
     var avatarURL: URL? { get }
     
     var isSpace: Bool { get }
+    var isDirect: Bool? { get }
     var childrenCount: Int { get }
     
     var joinedMembersCount: Int { get }
@@ -33,8 +34,18 @@ extension SpaceRoomProxyProtocol {
     var avatar: RoomAvatar {
         if isSpace {
             .space(id: id, name: name, avatarURL: avatarURL)
-        } else { // We don't need to check for heroes, we only do that for DMs.
+        } else if isDirect == true, avatarURL == nil, heroes.count == 1 {
+            .heroes(heroes)
+        } else {
             .room(id: id, name: name, avatarURL: avatarURL)
+        }
+    }
+    
+    var computedName: String {
+        if !isSpace, isDirect == true, name == nil, heroes.count == 1, let dmRecipient = heroes.first {
+            dmRecipient.displayName ?? dmRecipient.id
+        } else {
+            name ?? canonicalAlias ?? id
         }
     }
 }
