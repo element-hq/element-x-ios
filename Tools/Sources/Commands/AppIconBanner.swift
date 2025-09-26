@@ -52,13 +52,13 @@ struct BannerImage: View {
                 .aspectRatio(contentMode: .fit)
             
             Text(text)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.black.opacity(0.5))
                 .foregroundColor(.white)
                 .font(.system(size: 140))
                 .lineLimit(1)
-                .allowsTightening(true)
+                .minimumScaleFactor(0.5)
+                .padding()
+                .background(Color.black.opacity(0.5))
+                .frame(maxWidth: .infinity)
         }
         .frame(width: image.size.width, height: image.size.height)
     }
