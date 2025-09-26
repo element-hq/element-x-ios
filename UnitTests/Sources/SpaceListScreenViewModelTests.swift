@@ -72,7 +72,7 @@ class SpaceListScreenViewModelTests: XCTestCase {
         ])
         spaceServiceProxy = SpaceServiceProxyMock(.init())
         spaceServiceProxy.joinedSpacesPublisher = joinedSpacesSubject.asCurrentValuePublisher()
-        spaceServiceProxy.spaceRoomListSpaceIDClosure = { [joinedSpacesSubject] spaceID in
+        spaceServiceProxy.spaceRoomListSpaceIDParentClosure = { [joinedSpacesSubject] spaceID, _ in
             guard let spaceRoomProxy = joinedSpacesSubject?.value.first(where: { $0.id == spaceID }) else { return .failure(.missingSpace) }
             return .success(SpaceRoomListProxyMock(.init(spaceRoomProxy: spaceRoomProxy)))
         }

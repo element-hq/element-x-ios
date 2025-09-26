@@ -200,7 +200,7 @@ class SpaceScreenViewModelTests: XCTestCase {
                                                           paginationResponses: paginationResponses))
         
         let spaceServiceProxy = SpaceServiceProxyMock(.init())
-        spaceServiceProxy.spaceRoomListSpaceIDClosure = { [mockSpaceRooms] spaceID in
+        spaceServiceProxy.spaceRoomListSpaceIDParentClosure = { [mockSpaceRooms] spaceID, _ in
             guard let spaceRoomProxy = mockSpaceRooms.first(where: { $0.id == spaceID }) else { return .failure(.missingSpace) }
             return .success(SpaceRoomListProxyMock(.init(spaceRoomProxy: spaceRoomProxy)))
         }

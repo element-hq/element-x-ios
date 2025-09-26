@@ -286,7 +286,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
             return
         }
         
-        switch await clientProxy.spaceService.spaceRoomList(spaceID: roomID) {
+        switch await clientProxy.spaceService.spaceRoomList(spaceID: roomID, parent: nil) {
         case .success(let spaceRoomListProxy):
             actionsSubject.send(.joined(.space(spaceRoomListProxy)))
         case .failure(let error):

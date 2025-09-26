@@ -25,9 +25,23 @@ struct SpaceRoomCell: View {
     
     private var subtitle: String {
         if spaceRoomProxy.isSpace {
-            spaceRoomProxy.joinRule == .public ? L10n.commonPublicSpace : L10n.commonPrivateSpace
+            switch spaceRoomProxy.visibility {
+            case .public: L10n.commonPublicSpace
+            case .private: L10n.commonPrivateSpace
+            case .restricted(let parentName): L10n.screenSpaceListParentSpace(parentName)
+            case .none: L10n.commonPrivateSpace
+            }
         } else {
             L10n.commonMemberCount(spaceRoomProxy.joinedMembersCount)
+        }
+    }
+    
+    var visibilityIcon: KeyPath<CompoundIcons, Image>? {
+        switch spaceRoomProxy.visibility {
+        case .public: \.public
+        case .private: \.lockSolid
+        case .restricted: nil
+        case .none: \.lockSolid
         }
     }
     
@@ -77,12 +91,12 @@ struct SpaceRoomCell: View {
     private var content: some View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 2) {
-                Text(spaceRoomProxy.name ?? spaceRoomProxy.id)
+                Text(spaceRoomProxy.computedName)
                     .font(.compound.bodyLGSemibold)
                     .foregroundColor(.compound.textPrimary)
                     .lineLimit(1)
                 
-                visibilityLabel
+                subtitleLabel
                 
                 Text(details)
                     .font(.compound.bodyMD)
@@ -95,17 +109,19 @@ struct SpaceRoomCell: View {
         }
     }
     
-    private var visibilityLabel: some View {
+    private var subtitleLabel: some View {
         Label {
             Text(subtitle)
                 .font(.compound.bodyMD)
                 .foregroundStyle(.compound.textSecondary)
                 .lineLimit(1)
         } icon: {
-            CompoundIcon(spaceRoomProxy.joinRule == .public ? \.public : \.lockSolid,
-                         size: .xSmall,
-                         relativeTo: .compound.bodyMD)
-                .foregroundStyle(.compound.iconTertiary)
+            if let visibilityIcon {
+                CompoundIcon(visibilityIcon,
+                             size: .xSmall,
+                             relativeTo: .compound.bodyMD)
+                    .foregroundStyle(.compound.iconTertiary)
+            }
         }
         .labelStyle(.custom(spacing: 4))
     }

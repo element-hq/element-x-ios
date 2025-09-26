@@ -19,7 +19,7 @@ extension SpaceServiceProxyMock {
         self.init()
         
         joinedSpacesPublisher = .init(configuration.joinedSpaces)
-        spaceRoomListSpaceIDClosure = { spaceID in
+        spaceRoomListSpaceIDParentClosure = { spaceID, _ in
             if let spaceRoomList = configuration.spaceRoomLists[spaceID] {
                 .success(spaceRoomList)
             } else {

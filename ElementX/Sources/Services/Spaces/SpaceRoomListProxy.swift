@@ -21,11 +21,12 @@ class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
     private let paginationStateHandle: TaskHandle
     let paginationStatePublisher: CurrentValuePublisher<SpaceRoomListPaginationState, Never>
     
-    init(_ spaceRoomList: SpaceRoomListProtocol) throws {
+    // Parent is temporary until we get the restricted AllowRules from the server.
+    init(_ spaceRoomList: SpaceRoomListProtocol, parent: SpaceRoomProxyProtocol?) throws {
         guard let spaceRoom = spaceRoomList.space() else { throw SpaceRoomListProxyError.missingSpace }
         
         self.spaceRoomList = spaceRoomList
-        spaceRoomProxy = SpaceRoomProxy(spaceRoom: spaceRoom)
+        spaceRoomProxy = SpaceRoomProxy(spaceRoom: spaceRoom, parent: parent)
         
         let paginationStateSubject = CurrentValueSubject<SpaceRoomListPaginationState, Never>(spaceRoomList.paginationState())
         paginationStatePublisher = paginationStateSubject.asCurrentValuePublisher()
@@ -55,27 +56,27 @@ class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
         for update in updates {
             switch update {
             case .append(let spaceRooms):
-                rooms.append(contentsOf: spaceRooms.map(SpaceRoomProxy.init))
+                rooms.append(contentsOf: spaceRooms.map { SpaceRoomProxy(spaceRoom: $0, parent: spaceRoomProxy) })
             case .clear:
                 rooms.removeAll()
             case .pushFront(let spaceRoom):
-                rooms.insert(SpaceRoomProxy(spaceRoom: spaceRoom), at: 0)
+                rooms.insert(SpaceRoomProxy(spaceRoom: spaceRoom, parent: spaceRoomProxy), at: 0)
             case .pushBack(let spaceRoom):
-                rooms.append(SpaceRoomProxy(spaceRoom: spaceRoom))
+                rooms.append(SpaceRoomProxy(spaceRoom: spaceRoom, parent: spaceRoomProxy))
             case .popFront:
                 rooms.removeFirst()
             case .popBack:
                 rooms.removeLast()
             case .insert(let index, let spaceRoom):
-                rooms.insert(SpaceRoomProxy(spaceRoom: spaceRoom), at: Int(index))
+                rooms.insert(SpaceRoomProxy(spaceRoom: spaceRoom, parent: spaceRoomProxy), at: Int(index))
             case .set(let index, let spaceRoom):
-                rooms[Int(index)] = SpaceRoomProxy(spaceRoom: spaceRoom)
+                rooms[Int(index)] = SpaceRoomProxy(spaceRoom: spaceRoom, parent: spaceRoomProxy)
             case .remove(let index):
                 rooms.remove(at: Int(index))
             case .truncate(let length):
                 rooms.removeSubrange(Int(length)..<rooms.count)
             case .reset(let spaceRooms):
-                rooms = spaceRooms.map(SpaceRoomProxy.init)
+                rooms = spaceRooms.map { SpaceRoomProxy(spaceRoom: $0, parent: spaceRoomProxy) }
             }
         }
         
