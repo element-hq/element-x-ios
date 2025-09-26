@@ -390,3 +390,42 @@ private extension [HomeScreenRoom] {
         }
     }
 }
+
+extension HomeScreenViewModelAction: @retroactive Equatable {
+    public static func == (lhs: HomeScreenViewModelAction, rhs: HomeScreenViewModelAction) -> Bool {
+        switch (lhs, rhs) {
+        case (.presentRoom(let lhsID), .presentRoom(let rhsID)):
+            lhsID == rhsID
+        case (.presentRoomDetails(let lhsID), .presentRoomDetails(let rhsID)):
+            lhsID == rhsID
+        case (.presentReportRoom(let lhsID), .presentReportRoom(let rhsID)):
+            lhsID == rhsID
+        case (.presentDeclineAndBlock(let lhsUserID, let lhsRoomID), .presentDeclineAndBlock(let rhsUserID, let rhsRoomID)):
+            lhsUserID == rhsUserID && lhsRoomID == rhsRoomID
+        case (.presentSpace(let lhsSpaceRoomListProxy), .presentSpace(let rhsSpaceRoomListProxy)):
+            lhsSpaceRoomListProxy.spaceRoomProxy.id == rhsSpaceRoomListProxy.spaceRoomProxy.id
+        case (.roomLeft(let lhsID), .roomLeft(let rhsID)):
+            lhsID == rhsID
+        case (.transferOwnership(let lhsID), .transferOwnership(let rhsID)):
+            lhsID == rhsID
+        case (.presentSecureBackupSettings, .presentSecureBackupSettings):
+            true
+        case (.presentRecoveryKeyScreen, .presentRecoveryKeyScreen):
+            true
+        case (.presentEncryptionResetScreen, .presentEncryptionResetScreen):
+            true
+        case (.presentSettingsScreen, .presentSettingsScreen):
+            true
+        case (.presentFeedbackScreen, .presentFeedbackScreen):
+            true
+        case (.presentStartChatScreen, .presentStartChatScreen):
+            true
+        case (.presentGlobalSearch, .presentGlobalSearch):
+            true
+        case (.logout, .logout):
+            true
+        default:
+            false
+        }
+    }
+}
