@@ -14,6 +14,7 @@ struct InvitedRoomProxyMockConfiguration {
     var id = UUID().uuidString
     var name: String?
     var avatarURL: URL?
+    var isSpace = false
     var members: [RoomMemberProxyMock] = .allMembers
     var inviter: RoomMemberProxyMock = .mockAlice
 }
@@ -44,7 +45,7 @@ extension RoomInfoProxyMock {
         avatarURL = configuration.avatarURL
         
         isDirect = false
-        isSpace = false
+        isSpace = configuration.isSpace
         successor = nil
         isFavourite = false
         canonicalAlias = nil
