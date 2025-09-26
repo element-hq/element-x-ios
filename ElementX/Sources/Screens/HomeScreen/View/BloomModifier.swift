@@ -38,6 +38,8 @@ private struct BloomModifier: ViewModifier {
                     .ignoresSafeArea(edges: .all)
                     .frame(height: height)
                     .allowsHitTesting(false)
+                    // Does not render properly on dark themes otherwise
+                    .colorScheme(.light)
             }
     }
 }
