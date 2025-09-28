@@ -5,8 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import SwiftUI
 import Compound
+import SwiftUI
 
 struct IconsScreen: View {
     let icons = Image.compound.allValues.sorted(by: { $0.name < $1.name })

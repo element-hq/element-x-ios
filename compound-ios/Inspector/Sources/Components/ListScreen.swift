@@ -5,9 +5,9 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import SwiftUI
 import Compound
 import HyperionCore
+import SwiftUI
 
 struct ListScreen: View {
     var body: some View {

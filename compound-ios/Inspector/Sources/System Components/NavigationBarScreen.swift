@@ -5,8 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import SwiftUI
 import Compound
+import SwiftUI
 
 struct NavigationBarScreen: View {
     enum TitleMode {
@@ -42,16 +42,16 @@ struct NavigationBarScreen: View {
             Section {
                 ListRow(label: .plain(title: "Title"),
                         kind: .picker(selection: $titleMode, items: [
-                                        (title: "Large", tag: .large),
-                                        (title: "Inline", tag: .inline),
-                                        (title: "Hidden", tag: .hidden)
-                                      ]))
+                            (title: "Large", tag: .large),
+                            (title: "Inline", tag: .inline),
+                            (title: "Hidden", tag: .hidden)
+                        ]))
                 ListRow(label: .plain(title: "Back Button"),
                         kind: .picker(selection: $backButtonMode, items: [
-                                        (title: "Navigation", tag: .navigation),
-                                        (title: "Cancelation Action", tag: .cancellationAction),
-                                        (title: "Hidden", tag: .hidden)
-                                      ]))
+                            (title: "Navigation", tag: .navigation),
+                            (title: "Cancelation Action", tag: .cancellationAction),
+                            (title: "Hidden", tag: .hidden)
+                        ]))
                 
                 ListRow(label: .plain(title: "Confirmation Action"),
                         kind: .toggle($hasConfirmationAction))

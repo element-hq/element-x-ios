@@ -5,9 +5,9 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import SwiftUI
 import Compound
 import HyperionCore
+import SwiftUI
 
 @main
 struct CompoundInspectorApp: App {
@@ -24,11 +24,11 @@ struct CompoundInspectorApp: App {
                     .navigationTitle("Components")
                     .navigationDestination(for: Screen.self) { screen in
                         screen
-                            #if targetEnvironment(macCatalyst)
-                            .dynamicTypeSize(dynamicTypeSize)
-                            #endif
-                            .navigationBarTitleDisplayMode(.inline)
-                            .toolbar { screenToolbar }
+                        #if targetEnvironment(macCatalyst)
+                        .dynamicTypeSize(dynamicTypeSize)
+                        #endif
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar { screenToolbar }
                     }
             } detail: {
                 EmptyView()
