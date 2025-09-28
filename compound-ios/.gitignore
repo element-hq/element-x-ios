@@ -1,0 +1,23 @@
+.DS_Store
+/.build
+/Packages
+/*.xcodeproj
+xcuserdata/
+DerivedData/
+.swiftpm/config/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
+.nova
+node_modules
+
+# Cocoapods in Inspector app
+Inspector/Pods
+
+# Ridiculous workaround to unignore the Package.resolved file to keep Xcode Cloud happy.
+# https://stackoverflow.com/a/16318111/730924
+Inspector/Inspector.xcworkspace/*
+!Inspector/Inspector.xcworkspace/xcshareddata
+Inspector/Inspector.xcworkspace/xcshareddata/*
+!Inspector/Inspector.xcworkspace/xcshareddata/swiftpm
+Inspector/Inspector.xcworkspace/xcshareddata/swiftpm/*
+!Inspector/Inspector.xcworkspace/xcshareddata/swiftpm/Package.resolved
