@@ -1,0 +1,64 @@
+# This workflow will build a Swift project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
+
+name: Compound
+
+on:
+  push:
+    branches: [ main ]
+  
+  pull_request:
+
+jobs:
+  tests:
+
+    runs-on: macos-15
+
+    concurrency:
+      # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ format('compound-tests-{0}', github.ref) }}
+      cancel-in-progress: true
+
+    steps:
+    - uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 #v1.2.3
+
+    - name: Configure Xcode 26
+      run: sudo xcode-select -s /Applications/Xcode_26.0.app
+        
+    - name: Install sourcery
+      run: brew install sourcery
+        
+    - name: Generate preview tests
+      working-directory: compound-ios
+      run: sourcery --config Tools/Sourcery/PreviewTestsConfig.yml
+
+    - name: Create simulator
+      run: xcrun simctl create "iPhone SE 26.0" "iPhone SE (3rd generation)" "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
+
+    - name: Run tests
+      working-directory: compound-ios
+      run: set -o pipefail && xcodebuild test -scheme 'Compound' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone SE 26.0,OS=26.0' -skipPackagePluginValidation -resultBundlePath Logs/CompoundTests.xcresult | xcbeautify --renderer github-actions
+
+    - name: Zip artifacts
+      if: failure() # We only care about artefacts if the tests fail
+      working-directory: compound-ios
+      run: zip -r Logs/CompoundTests.xcresult.zip Logs/CompoundTests.xcresult/
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v4
+      if: failure() # We only care about artefacts if the tests fail
+      with:
+        name: test-results
+        path: compound-ios/Logs/CompoundTests.xcresult.zip
+        retention-days: 1
+        if-no-files-found: ignore
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+      with:
+        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}
+        xcode: true
+        xcode_archive_path: compound-ios/Logs/CompoundTests.xcresult
+        flags: compound
+ 
