@@ -1,5 +1,5 @@
 {
-  "originHash" : "9d89a9320c29b16ca97c3b4c1dce15f8ab13ae1a66da50c98eec015db72c30d1",
+  "originHash" : "123c89d756b94a4cfdf4ca86fa4278640fc96854ac223bcef68e5566b0c47018",
   "pins" : [
     {
       "identity" : "compound-design-tokens",
@@ -8,14 +8,6 @@
       "state" : {
         "revision" : "be5d26dfd4ad659b0d3b3aec1ad1cccd0dc8d063",
         "version" : "6.0.0"
-      }
-    },
-    {
-      "identity" : "compound-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/element-hq/compound-ios",
-      "state" : {
-        "revision" : "16f4544d2823d590401f13da260e56b8674b66b3"
       }
     },
     {

@@ -1,0 +1,7 @@
+sources:
+  include:
+    - ../../Sources
+templates:
+  - PreviewTests.stencil
+output:
+  ../../Tests/CompoundTests/GeneratedPreviewTests.swift
