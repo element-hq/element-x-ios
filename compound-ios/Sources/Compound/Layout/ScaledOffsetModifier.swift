@@ -28,7 +28,6 @@ private struct ScaledOffsetModifier: ViewModifier {
     }
 }
 
-
 // MARK: - Previews
 
 struct ScaledOffsetModifier_Previews: PreviewProvider, TestablePreview {

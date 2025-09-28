@@ -26,17 +26,17 @@ public struct ListRowAccessory: View {
     
     /// A chevron to indicate that the button pushes another screen.
     public static var navigationLink: Self {
-        Self.init(kind: .navigationLink)
+        Self(kind: .navigationLink)
     }
     
     /// A checkmark (or reserved space) to indicate that the row is selected.
     public static func selection(_ isSelected: Bool) -> Self {
-        Self.init(kind: isSelected ? .selected : .unselected)
+        Self(kind: isSelected ? .selected : .unselected)
     }
     
     /// A circular checkmark (or empty circle) to indicate that the row is one of multiple selected.
     public static func multiSelection(_ isSelected: Bool) -> Self {
-        Self.init(kind: isSelected ? .multiSelected : .multiUnselected)
+        Self(kind: isSelected ? .multiSelected : .multiUnselected)
     }
     
     let kind: Kind

@@ -61,7 +61,7 @@ public struct ListRowDetails<Icon: View> {
     public static func icon(_ icon: KeyPath<CompoundIcons, Image>,
                             counter: Int? = nil,
                             isWaiting: Bool = false) -> Self where Icon == CompoundIcon {
-        ListRowDetails(icon:CompoundIcon(icon),
+        ListRowDetails(icon: CompoundIcon(icon),
                        counter: counter,
                        isWaiting: isWaiting)
     }

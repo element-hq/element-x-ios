@@ -18,13 +18,13 @@ struct ListInlinePicker<SelectedValue: Hashable>: View {
             ListRow(label: .plain(title: item.title),
                     details: isWaiting ? .isWaiting(selection == item.tag) : nil,
                     kind: .selection(isSelected: !isWaiting ? selection == item.tag : false) {
-                var transaction = Transaction()
-                transaction.disablesAnimations = true
+                        var transaction = Transaction()
+                        transaction.disablesAnimations = true
 
-                withTransaction(transaction) {
-                    selection = item.tag
-                }
-            })
+                        withTransaction(transaction) {
+                            selection = item.tag
+                        }
+                    })
         }
     }
 }
