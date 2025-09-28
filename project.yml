@@ -71,9 +71,7 @@ packages:
     exactVersion: 25.09.19-2
     # path: ../matrix-rust-sdk
   Compound:
-    url: https://github.com/element-hq/compound-ios
-    revision: 16f4544d2823d590401f13da260e56b8674b66b3
-    # path: ../compound-ios
+    path: compound-ios
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
     minorVersion: 0.29.2

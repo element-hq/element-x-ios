@@ -1,0 +1,46 @@
+// swiftlint:disable all
+// swiftformat:disable all
+
+import XCTest
+@testable import Compound
+{% if argument.mainTarget %}
+@testable import {{ argument.mainTarget }}
+{% endif %}
+{% for import in argument.imports %}
+{% if import != "last" %}
+import {{ import }}
+{% endif %}
+{% endfor %}
+{% for import in argument.testableImports %}
+{% if import != "last" %}
+@testable import {{ import }}
+{% endif %}
+{% endfor %}
+
+extension PreviewTests {
+    {% if argument.file %}
+
+    private var file: StaticString { .init(stringLiteral: "{{ argument.file }}") }
+    {% endif %}
+
+    // MARK: - PreviewProvider
+
+    {% for type in types.types where (type.implements.TestablePreview or type.based.TestablePreview or type|annotated:"TestablePreview") and type.name != "TestablePreview" %}
+    func test{{ type.name|replace:"_Previews", "" }}() async throws {
+        for (index, preview) in {{ type.name }}._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+    {%- if not forloop.last %}
+
+    {% endif %}
+    {% endfor %}
+    {% if argument.previewsMacros %}
+    // MARK: - Macros
+
+    {{ argument.previewsMacros }}
+    {% endif %}
+}
+
+// swiftlint:enable all
+// swiftformat:enable all
