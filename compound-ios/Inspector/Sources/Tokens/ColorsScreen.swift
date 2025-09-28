@@ -5,8 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import SwiftUI
 import Compound
+import SwiftUI
 
 struct ColorsScreen: View {
     var body: some View {
@@ -71,7 +71,7 @@ private extension Color {
 
 private extension CGFloat {
     var asHex: String {
-        String(format:"%02X", Int((self * 255).rounded()))
+        String(format: "%02X", Int((self * 255).rounded()))
     }
 }
 

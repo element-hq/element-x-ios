@@ -5,8 +5,8 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
-import SwiftUI
 import DesignKit
+import SwiftUI
 
 struct TextFieldsScreen: View {
     var body: some View {

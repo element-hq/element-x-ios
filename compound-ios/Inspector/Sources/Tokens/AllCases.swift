@@ -61,6 +61,6 @@ extension CompoundIcons {
     }
     
     private subscript(checkedMirrorDescendant key: String) -> Any {
-        return Mirror(reflecting: self).descendant(key)!
+        Mirror(reflecting: self).descendant(key)!
     }
 }
