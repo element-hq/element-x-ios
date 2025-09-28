@@ -306,7 +306,7 @@ public struct CompoundButtonStyle_Previews: PreviewProvider, TestablePreview {
                 .foregroundStyle(.compound.textSecondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding([.leading, .top])
-                .padding(.leading )
+                .padding(.leading)
         }
     }
 }

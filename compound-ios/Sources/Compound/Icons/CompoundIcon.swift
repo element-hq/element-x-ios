@@ -52,8 +52,8 @@ public struct CompoundIcon: View {
     ///   - icon: The icon to show.
     public init(_ icon: KeyPath<CompoundIcons, Image>) {
         image = .compound[keyPath: icon]
-        self.size = .medium
-        self.font = .compound.bodyLG
+        size = .medium
+        font = .compound.bodyLG
     }
     
     /// Creates an icon using a key path from the Compound tokens.
@@ -78,8 +78,8 @@ public struct CompoundIcon: View {
     /// ** Note:** The image should have a square frame or it may end up distorted.
     public init(customImage: Image) {
         image = customImage
-        self.size = .medium
-        self.font = .compound.bodyLG
+        size = .medium
+        font = .compound.bodyLG
     }
     
     /// Creates an icon using a custom image to allow assets from outside
@@ -179,7 +179,6 @@ struct CompoundIcon_Previews: PreviewProvider, TestablePreview {
             }
         }
     }
-    
     
     static var accessibilityLabels: some View {
         Grid(alignment: .leading) {
