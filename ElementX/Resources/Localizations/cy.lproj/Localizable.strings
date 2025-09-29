@@ -188,6 +188,7 @@
 "common_date_this_month" = "Y mis hwn";
 "common_decryption_error" = "Gwall dadgryptio";
 "common_description" = "Disgrifiad";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Dewisiadau datblygwr";
 "common_device_id" = "ID dyfais";
 "common_direct_chat" = "Sgwrs uniongyrchol";
@@ -274,6 +275,7 @@
 "common_search_results" = "Canlyniadau chwilio";
 "common_security" = "Diogelwch";
 "common_seen_by" = "Wedi'i weld gan";
+"common_select_all" = "Select all";
 "common_send_to" = "Anfon at";
 "common_sending" = "Yn anfon…";
 "common_sending_failed" = "Methodd anfon";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Anfon gwahoddiad";
 "screen_bottom_sheet_create_dm_message" = "Hoffech chi ddechrau sgwrs gyda %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Anfon gwahoddiad?";
-"screen_bottom_sheet_leave_space_subtitle" = "Bydd hyn hefyd yn eich tynnu o bob ystafell yn y gofod hwn.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "Bydd hyn hefyd yn eich tynnu o bob ystafell yn y gofod hwn, gan gynnwys y rhai rydych chi'n unig weinyddwr ar eu cyfer:";
-"screen_bottom_sheet_leave_space_title" = "Gadael %1$@ ?";
 "screen_bottom_sheet_manage_room_member_ban" = "Gwahardd o ystafell";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Atal";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Fyddan nhw ddim yn gallu ymuno â'r ystafell hon eto os cân nhw wahoddiad.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Ydych chi'n siŵr eich bod am wrthod y gwahoddiad i ymuno â'r ystafell hon? Bydd hyn hefyd yn atal %1$@ rhag cysylltu â chi neu eich gwahodd i ystafelloedd.";
 "screen_join_room_decline_and_block_alert_title" = "Gwrthod gwahoddiad a rhwystro";
 "screen_join_room_decline_and_block_button_title" = "Gwrthod a rhwystro";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "Nodau a ganiateir %1$d o %2$d";
 "screen_join_room_knock_message_description" = "Neges (dewisol)";
 "screen_join_room_knock_sent_description" = "Byddwch yn derbyn gwahoddiad i ymuno â'r ystafell os caiff eich cais ei dderbyn.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "Pan fydd rhywun yn gofyn am gael ymuno â'r ystafell, byddwch yn gallu gweld eu cais yma.";
 "screen_knock_requests_list_empty_state_title" = "Dim cais i ymuno yn disgwyl";
 "screen_knock_requests_list_initial_loading_title" = "Yn llwytho ceisiadau i ymuno…";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Bydd hyn hefyd yn eich tynnu o bob ystafell yn y gofod hwn.";
+"screen_leave_space_title" = "Gadael %1$@ ?";
 "screen_media_details_file_format" = "Fformat ffeil";
 "screen_media_details_filename" = "Enw'r ffeil";
 "screen_media_details_no_more_files_to_show" = "Dim mwy o ffeiliau i'w dangos";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Diogelwch a phreifatrwydd";
 "screen_space_list_description" = "Gofodau rydych wedi'u creu neu wedi ymuno â nhw.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Gofodau";
 "screen_start_chat_join_room_by_address_action" = "Ymuno â'r ystafell yn ôl cyfeiriad";
 "screen_start_chat_join_room_by_address_invalid_address" = "Ddim yn gyfeiriad dilys";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Mae eich logiau'n rhy fawr felly nid oes modd eu cynnwys yn yr adroddiad hwn, anfonwch nhw atom mewn ffordd arall.";
 "screen_bug_report_include_screenshot" = "Anfon luniau sgrin";
 "screen_bug_report_logs_description" = "Bydd cofnodion yn cael eu cynnwys gyda'ch neges i wneud yn siŵr bod popeth yn gweithio'n iawn. I anfon eich neges heb logiau, diffoddwch y gosodiad hwn.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Gweld logiau";
 "screen_change_account_provider_matrix_org_subtitle" = "Mae Matrix.org yn weinydd mawr, rhad ac am ddim ar y rhwydwaith Matrix cyhoeddus ar gyfer cyfathrebu diogel, datganoledig, sy'n cael ei redeg gan y Matrix.org Foundation.";
 "screen_change_account_provider_other" = "Arall";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "Cymharwch rifau";
 "screen_session_verification_complete_subtitle" = "Mae eich sesiwn newydd bellach wedi'i dilysu. Mae ganddo fynediad i'ch negeseuon wedi'u hamgryptio, a bydd defnyddwyr eraill yn ei ystyried yn rhai y mae modd ymddiried ynddyn nhw.";
 "screen_session_verification_complete_user_subtitle" = "Nawr gallwch ymddiried yn hunaniaeth y defnyddiwr hwn wrth anfon neu dderbyn negeseuon.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "Rhowch eich allwedd adfer";
 "screen_session_verification_failed_subtitle" = "Naill ai daeth y cais i ben, gwrthodwyd y cais, neu roedd diffyg cyfatebiaeth dilysu.";
 "screen_session_verification_open_existing_session_subtitle" = "Profwch mai chi sydd yno i gael mynediad at eich hanes negeseuon wedi'u hamgryptio.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Does gennych chi ddim mynediad i'r neges hon";
 "timeline_decryption_failure_unable_to_decrypt" = "Methu dadgryptio'r neges";
 "timeline_decryption_failure_withheld_unverified" = "Cafodd y neges hon ei rhwystro naill ai oherwydd nad ydych wedi ddilysu'ch dyfais neu oherwydd bod angen i'r anfonwr ddilysu'ch hunaniaeth chi.";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "Hanes gwthio";
 "troubleshoot_notifications_entry_point_section" = "Datrys Problemau";
 "troubleshoot_notifications_screen_action" = "Rhedeg profion";

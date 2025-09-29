@@ -188,6 +188,7 @@
 "common_date_this_month" = "This month";
 "common_decryption_error" = "Decryptie fout";
 "common_description" = "Description";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Ontwikkelaarsopties";
 "common_device_id" = "Apparaat-ID";
 "common_direct_chat" = "Directe chat";
@@ -274,6 +275,7 @@
 "common_search_results" = "Zoekresultaten";
 "common_security" = "Beveiliging";
 "common_seen_by" = "Gezien door";
+"common_select_all" = "Select all";
 "common_send_to" = "Sturen naar";
 "common_sending" = "Verzenden…";
 "common_sending_failed" = "Verzenden mislukt";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Lid verwijderen en verbannen";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Verbannen";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Ze kunnen niet meer toetreden tot deze kamer als ze worden uitgenodigd.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Are you sure you want to decline the invite to join this room? This will also prevent %1$@ from contacting you or inviting you to rooms.";
 "screen_join_room_decline_and_block_alert_title" = "Decline invite & block";
 "screen_join_room_decline_and_block_button_title" = "Decline and block";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Bericht (optioneel)";
 "screen_join_room_knock_sent_description" = "Je ontvangt een uitnodiging om deel te nemen aan de kamer als je aanvraag wordt geaccepteerd.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_initial_loading_title" = "Loading requests to join…";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
+"screen_leave_space_title" = "Leave %1$@?";
 "screen_media_details_file_format" = "File format";
 "screen_media_details_filename" = "File name";
 "screen_media_details_no_more_files_to_show" = "No more files to show";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Security & privacy";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_start_chat_join_room_by_address_action" = "Join room by address";
 "screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Schermafbeelding verzenden";
 "screen_bug_report_logs_description" = "Er worden logbestanden bij uw bericht gevoegd om er zeker van te zijn dat alles goed werkt. Als u uw bericht zonder logbestanden wilt verzenden, schakelt u deze instelling uit.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Logboeken weergeven";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org is een grote, gratis server op het openbare Matrix-netwerk voor veilige, gedecentraliseerde communicatie, beheerd door de Matrix.org Foundation.";
 "screen_change_account_provider_other" = "Anders";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "Vergelijk getallen";
 "screen_session_verification_complete_subtitle" = "Je nieuwe sessie is nu geverifieerd. Het heeft toegang tot je versleutelde berichten en andere gebruikers zullen het als vertrouwd beschouwen.";
 "screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "Voer herstelsleutel in";
 "screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Bewijs dat jij het bent om toegang te krijgen tot je versleutelde berichtgeschiedenis.";
@@ -1147,7 +1154,7 @@
 "screen_session_verification_user_responder_subtitle" = "For extra security, another user wants to verify your identity. You’ll be shown a set of emojis to compare.";
 "screen_session_verification_waiting_another_device_subtitle" = "You should see a popup on the other device. Start the verification from there now.";
 "screen_session_verification_waiting_another_device_title" = "Start verification on the other device";
-"screen_session_verification_waiting_other_device_title" = "Waiting for the other device";
+"screen_session_verification_waiting_other_device_title" = "Start verification on the other device";
 "screen_session_verification_waiting_other_user_title" = "Waiting for the other user";
 "screen_session_verification_waiting_subtitle" = "Once accepted you’ll be able to continue with the verification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accepteer het verzoek tot verificatie in je andere sessie om door te gaan.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "You don't have access to this message";
 "timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
 "timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push history";
 "troubleshoot_notifications_entry_point_section" = "Problemen oplossen";
 "troubleshoot_notifications_screen_action" = "Tests uitvoeren";

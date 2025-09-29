@@ -288,6 +288,38 @@
 			<string>Wrong PIN. You have %1$d more chances</string>
 		</dict>
 	</dict>
+	<key>screen_leave_space_submit</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Leave %1$d room and space</string>
+			<key>other</key>
+			<string>Leave %1$d rooms and space</string>
+		</dict>
+	</dict>
+	<key>screen_leave_space_subtitle_only_last_admin</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>You will not be removed from the following room because you're the only administrator:</string>
+			<key>other</key>
+			<string>You will not be removed from the following rooms because you're the only administrator:</string>
+		</dict>
+	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -418,6 +450,22 @@
 			<string>%1$@ is typing</string>
 			<key>other</key>
 			<string>%1$@ are typing</string>
+		</dict>
+	</dict>
+	<key>troubleshoot_notifications_test_blocked_users_result_some</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
+			<key>other</key>
+			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>

@@ -188,6 +188,7 @@
 "common_date_this_month" = "本月";
 "common_decryption_error" = "解密錯誤";
 "common_description" = "描述";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "開發者選項";
 "common_device_id" = "裝置 ID";
 "common_direct_chat" = "私訊";
@@ -274,6 +275,7 @@
 "common_search_results" = "搜尋結果";
 "common_security" = "安全性";
 "common_seen_by" = "已讀";
+"common_select_all" = "Select all";
 "common_send_to" = "傳送給";
 "common_sending" = "傳送中...";
 "common_sending_failed" = "傳送失敗";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "傳送邀請";
 "screen_bottom_sheet_create_dm_message" = "您想要開始與 %1$@ 聊天嗎？";
 "screen_bottom_sheet_create_dm_title" = "傳送邀請？";
-"screen_bottom_sheet_leave_space_subtitle" = "這也會將您從此空間中的所有聊天室移除。";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "這也會將您從此空間中的所有聊天室移除，包含您是唯一管理員的聊天室：";
-"screen_bottom_sheet_leave_space_title" = "離開 %1$@？";
 "screen_bottom_sheet_manage_room_member_ban" = "踢出並加入黑名單";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "加入黑名單";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "即使收到邀請，他們仍然無法加入聊天室。";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "您確定要拒絕加入此聊天室的邀請嗎？這也會防止 %1$@ 聯絡您或邀請您加入聊天室。";
 "screen_join_room_decline_and_block_alert_title" = "拒絕邀請並封鎖";
 "screen_join_room_decline_and_block_button_title" = "拒絕並封鎖";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "允許的字元 %1$d 中的 %2$d";
 "screen_join_room_knock_message_description" = "訊息（選擇性）";
 "screen_join_room_knock_sent_description" = "若接受了您的請求，您將會收到加入聊天是的邀請。";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "當有人要求加入聊天室時，您可以在這裡看到他們的請求。";
 "screen_knock_requests_list_empty_state_title" = "沒有待處理的加入請求";
 "screen_knock_requests_list_initial_loading_title" = "正在載入加入請求……";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "這也會將您從此空間中的所有聊天室移除。";
+"screen_leave_space_title" = "離開 %1$@？";
 "screen_media_details_file_format" = "檔案格式";
 "screen_media_details_filename" = "檔案名稱";
 "screen_media_details_no_more_files_to_show" = "無可顯示的檔案";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "安全與隱私";
 "screen_space_list_description" = "您建立或加入的空間";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "空間";
 "screen_start_chat_join_room_by_address_action" = "按地址加入聊天室";
 "screen_start_chat_join_room_by_address_invalid_address" = "不是有效的位址";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "您的紀錄檔太大了，無法包含在此報告中，請透過其他方式傳送給我們。";
 "screen_bug_report_include_screenshot" = "傳送螢幕截圖";
 "screen_bug_report_logs_description" = "紀錄檔將包含在您的訊息中以確保一切運作正常。要在不包含紀錄檔的情況下傳送訊息，請關閉此設定。";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "查看日誌";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org 由 Matrix.org 基金會營運，是用於安全、去中心化通訊的公共 Matrix 網路上的大型免費伺服器。";
 "screen_change_account_provider_other" = "其他";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "比較數字";
 "screen_session_verification_complete_subtitle" = "新的工作階段已完成驗證。它能夠存取您的加密訊息，而其他使用者會將它視為可信任的。";
 "screen_session_verification_complete_user_subtitle" = "現在，您可以在傳送或接收訊息時信任此使用者的身份。";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "輸入復原金鑰";
 "screen_session_verification_failed_subtitle" = "請求逾時、請求被拒或是驗證不符。";
 "screen_session_verification_open_existing_session_subtitle" = "為了存取被加密的歷史訊息，您需要證明這是您本人。";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "您無權檢視此訊息";
 "timeline_decryption_failure_unable_to_decrypt" = "無法解密訊息";
 "timeline_decryption_failure_withheld_unverified" = "此訊息被封鎖是因為您沒有驗證您的裝置，或是因為傳送者需要驗證您的身份而被封鎖。";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "推播通知歷史紀錄";
 "troubleshoot_notifications_entry_point_section" = "疑難排解";
 "troubleshoot_notifications_screen_action" = "執行測試";

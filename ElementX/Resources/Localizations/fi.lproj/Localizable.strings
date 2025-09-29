@@ -188,6 +188,7 @@
 "common_date_this_month" = "Tässä kuussa";
 "common_decryption_error" = "Salauksen purkuvirhe";
 "common_description" = "Kuvaus";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Kehittäjän asetukset";
 "common_device_id" = "Laitteen tunnus";
 "common_direct_chat" = "Yksityinen keskustelu";
@@ -274,6 +275,7 @@
 "common_search_results" = "Hakutulokset";
 "common_security" = "Turvallisuus";
 "common_seen_by" = "Nähneet henkilöt";
+"common_select_all" = "Select all";
 "common_send_to" = "Jaa";
 "common_sending" = "Lähetetään…";
 "common_sending_failed" = "Lähetys epäonnistui";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Lähetä kutsu";
 "screen_bottom_sheet_create_dm_message" = "Haluaisitko aloittaa keskustelun käyttäjän %1$@ kanssa?";
 "screen_bottom_sheet_create_dm_title" = "Lähetetäänkö kutsu?";
-"screen_bottom_sheet_leave_space_subtitle" = "Tämä poistaa sinut myös kaikista tämän tilan huoneista.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "Tämä poistaa sinut myös kaikista tämän tilan huoneista, mukaan lukien ne, joissa olet ainoa ylläpitäjä:";
-"screen_bottom_sheet_leave_space_title" = "Haluatko poistua tilasta %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Poista jäsen huoneesta ja anna porttikielto";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Anna porttikielto";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "He eivät voi enää liittyä tähän huoneeseen, jos heidät kutsutaan.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Oletko varma, että haluat kieltäytyä kutsusta liittyä tähän huoneeseen? Tämä estää myös käyttäjää %1$@ ottamasta sinuun yhteyttä tai kutsumasta sinua huoneisiin.";
 "screen_join_room_decline_and_block_alert_title" = "Hylkää kutsu ja estä";
 "screen_join_room_decline_and_block_button_title" = "Hylkää ja estä";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "%1$d merkkiä käytetty, %2$d merkkiä sallittu";
 "screen_join_room_knock_message_description" = "Viesti (valinnainen)";
 "screen_join_room_knock_sent_description" = "Saat kutsun liittyä huoneeseen, jos pyyntösi hyväksytään.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "Kun joku pyytää liittyä huoneeseen, näet hänen pyyntönsä täällä.";
 "screen_knock_requests_list_empty_state_title" = "Ei odottavia liittymispyyntöjä";
 "screen_knock_requests_list_initial_loading_title" = "Ladataan liittymispyyntöjä…";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Tämä poistaa sinut myös kaikista tämän tilan huoneista.";
+"screen_leave_space_title" = "Haluatko poistua tilasta %1$@?";
 "screen_media_details_file_format" = "Tiedostomuoto";
 "screen_media_details_filename" = "Tiedostonimi";
 "screen_media_details_no_more_files_to_show" = "Ei enää näytettäviä tiedostoja";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Turvallisuus ja yksityisyys";
 "screen_space_list_description" = "Luomasi tai liittymäsi tilat.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Tilat";
 "screen_start_chat_join_room_by_address_action" = "Liity huoneeseen osoitteella";
 "screen_start_chat_join_room_by_address_invalid_address" = "Osoite ei ole kelvollinen";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Lokitiedostosi ovat liian suuria, joten niitä ei voida sisällyttää tähän raporttiin. Lähetä ne meille toisella tavalla.";
 "screen_bug_report_include_screenshot" = "Lähetä kuvakaappaus";
 "screen_bug_report_logs_description" = "Lähetä lokitiedostot viestisi kanssa, jotta voimme varmistaa, että kaikki toimii oikein. Jos haluat lähettää viestisi ilman lokeja, jätä tämä asetus valitsematta.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Näytä lokitiedostot";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org on suuri, ilmainen palvelin julkisessa Matrix-verkossa turvalliseen, hajautettuun viestintään, jota ylläpitää Matrix.org-säätiö.";
 "screen_change_account_provider_other" = "Muu";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "Vertaa numeroita";
 "screen_session_verification_complete_subtitle" = "Uusi kirjautumisesi on nyt vahvistettu. Sillä on pääsy salattuihin viesteihisi, ja muut käyttäjät näkevät sen luotettuna.";
 "screen_session_verification_complete_user_subtitle" = "Nyt voit luottaa tämän käyttäjän identiteettiin, kun lähetät tai vastaanotat viestejä.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "Syötä palautusavain";
 "screen_session_verification_failed_subtitle" = "Joko pyyntö aikakatkaistiin, pyyntö hylättiin tai vahvistus ei täsmännyt.";
 "screen_session_verification_open_existing_session_subtitle" = "Vahvista, että se olet sinä, jotta näet aiemmat salatut viestisi.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Sinulla ei ole oikeutta lukea tätä viestiä";
 "timeline_decryption_failure_unable_to_decrypt" = "Viestin salauksen purkaminen ei onnistu";
 "timeline_decryption_failure_withheld_unverified" = "Tämä viesti estettiin, koska laitettasi ei ole vahvistettu tai koska lähettäjän on vahvistettava identiteettisi.";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push-historia";
 "troubleshoot_notifications_entry_point_section" = "Vianmääritys";
 "troubleshoot_notifications_screen_action" = "Suorita testit";

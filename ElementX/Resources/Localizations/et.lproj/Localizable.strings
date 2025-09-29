@@ -181,13 +181,14 @@
 "common_creating_room" = "Loome jututoa…";
 "common_current_user_canceled_knock" = "Päring on tühistatud";
 "common_current_user_left_room" = "Lahkus jututoast";
-"common_current_user_left_space" = "Left space";
+"common_current_user_left_space" = "Lahkus kogukonnast";
 "common_current_user_rejected_invite" = "Keeldusid kutsest";
 "common_dark" = "Tume";
 "common_date_date_at_time" = "%1$@, %2$@";
 "common_date_this_month" = "Sel kuul";
 "common_decryption_error" = "Dekrüptimisviga";
 "common_description" = "Kirjeldus";
+"common_deselect_all" = "Eemalda kõik valikud";
 "common_developer_options" = "Arendaja valikud";
 "common_device_id" = "Seadme tunnus";
 "common_direct_chat" = "Otsevestlus";
@@ -274,6 +275,7 @@
 "common_search_results" = "Otsingutulemused";
 "common_security" = "Turvalisus";
 "common_seen_by" = "Seda nägi(d)";
+"common_select_all" = "Vali kõik";
 "common_send_to" = "Saada kasutajale";
 "common_sending" = "Saadame...";
 "common_sending_failed" = "Saatmine ei õnnestunud";
@@ -283,7 +285,7 @@
 "common_server_unreachable" = "Server pole leitav";
 "common_server_url" = "Serveri URL";
 "common_settings" = "Seadistused";
-"common_share_space" = "Share space";
+"common_share_space" = "Jaga kogukonda";
 "common_shared_location" = "Jagatud asukoht";
 "common_signing_out" = "Logime välja";
 "common_something_went_wrong" = "Midagi läks valesti";
@@ -330,7 +332,7 @@
 "common_you" = "Sina";
 "common.add_account" = "Lisa kasutajakonto";
 "common.add_another_account" = "Lisa veel üks kasutajakonto";
-"common.no_space_name" = "No space name";
+"common.no_space_name" = "Kogukonnal pole nime";
 "common.select_account" = "Vali kasutajakonto";
 "common_unable_to_decrypt_insecure_device" = "Saadetud ebaturvalisest seadmest";
 "common_unable_to_decrypt_verification_violation" = "Saatja verifitseeritud identiteet on lähtestatud";
@@ -376,7 +378,7 @@
 "emoji_picker_category_objects" = "Esemed";
 "emoji_picker_category_people" = "Emotikonid ja inimesed";
 "emoji_picker_category_places" = "Reisimine ja kohad";
-"emoji_picker_category_recent" = "Recent emojis";
+"emoji_picker_category_recent" = "Hiljutised emojid";
 "emoji_picker_category_symbols" = "Sümbolid";
 "emoji_picker_search_placeholder" = "Otsi emojisid";
 "error_invalid_invite" = "Seda jututuba pole enam olemas või pole see kutse enam kehtiv.";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Saada kutse";
 "screen_bottom_sheet_create_dm_message" = "Kas sa soovid alustada vestlust kasutajaga %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Kas saadame kutse?";
-"screen_bottom_sheet_leave_space_subtitle" = "Sellega eemaldad end ka kõikidest antud kogukonna jututubadest.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "Sellega eemaldad end ka kõikidest antud kogukonna jututubadest, sealhulgast järgnevaist, kus oled ainus peakasutaja:";
-"screen_bottom_sheet_leave_space_title" = "Kas lahkud %1$@ kogukonnast?";
 "screen_bottom_sheet_manage_room_member_ban" = "Eemalda ja sea suhtluskeeld";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Sea suhtluskeeld";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Ta ei saa selle jututoaga liituda isegi kutse olemasolul.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Kas sa oled kindel, et soovid keelduda kutsest sellesse jututuppa? Samaga kaob kasutajal %1$@ võimalus sinuga suhelda ja saata sulle jututubade kutseid.";
 "screen_join_room_decline_and_block_alert_title" = "Keeldu kutsest ja blokeeri";
 "screen_join_room_decline_and_block_button_title" = "Keeldu ja blokeeri";
+"screen_join_room_invited_by" = "Kutsuja";
 "screen_join_room_knock_message_characters_count" = "Lubatud tähemärke: %1$d / %2$d";
 "screen_join_room_knock_message_description" = "Selgitus (kui soovid lisada)";
 "screen_join_room_knock_sent_description" = "Kui sinu liitumispalvega ollakse nõus, siis saad kutse jututoaga liitumiseks.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "Kui keegi soovib jututoaga liituda, siis need päringud on kuvatud siin.";
 "screen_knock_requests_list_empty_state_title" = "Pole ühtegi liitumispalvet";
 "screen_knock_requests_list_initial_loading_title" = "Laadime liitumispalveid…";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Sellega eemaldad end ka kõikidest antud kogukonna jututubadest.";
+"screen_leave_space_title" = "Kas lahkud %1$@ kogukonnast?";
 "screen_media_details_file_format" = "Failivorming";
 "screen_media_details_filename" = "Failinimi";
 "screen_media_details_no_more_files_to_show" = "Pole enam kuvatavaid faile";
@@ -578,7 +581,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Meediafaili üleslaadimine ei õnnestunud. Palun proovi uuesti.";
 "screen_media_upload_preview_error_too_large_message" = "Maksimaalne lubatud failisuurus on %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "Fail on üleslaadimiseks liiga suur";
-"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
+"screen_media_upload_preview_item_count" = "Objekt %1$d/%2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimeeri pildikvaliteeti";
 "screen_media_upload_preview_processing" = "Töötlen...";
 "screen_pinned_timeline_empty_state_description" = "Siia lisamiseks vajuta sõnumil ja vali „%1$@“.";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Turvalisus ja privaatsus";
 "screen_space_list_description" = "Sinu loodud kogukonnad ning need, millega oled liitunud.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "Kogukond: %1$@";
 "screen_space_list_title" = "Kogukonnad";
 "screen_start_chat_join_room_by_address_action" = "Liitu jututoaga aadressi alusel";
 "screen_start_chat_join_room_by_address_invalid_address" = "See pole kehtiv aadress";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Sinu logid on väga mahukad ja neid ei saa siia lisada. Palun saada logid meile mõnel muul viisil.";
 "screen_bug_report_include_screenshot" = "Saada ekraanitõmmis";
 "screen_bug_report_logs_description" = "Tõhusama veaotsingu nimel lisame sinu veateatele logid. Kui sa seda ei soovi, siis lülita antud valik välja.";
+"screen_bug_report_send_notification_settings_description" = "Kui sul teavitused ei toimi päris korralikult, siis teavituste seadistuste üleslaadimine võib aidata meil põhjuse tuvastada.";
+"screen_bug_report_send_notification_settings_title" = "Teavituste seadistuste saatmine";
 "screen_bug_report_view_logs" = "Vaata logisid";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org on suur ja tasuta koduserver Matrixi võrgus, mis on mõeldud turvalise ja hajutatud suhtluse jaoks. Selle serveri halduse eest vastutab Matrix.org Foundation.";
 "screen_change_account_provider_other" = "Muu teenusepakkuja";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "Võrdle numbreid";
 "screen_session_verification_complete_subtitle" = "Sinu uus sessioon on nüüd verifitseeritud. Sellel sessioonil on nüüd ligipääs sinu krüptitud sõnumitele ja teised osapooled näevad teda usaldusväärsena.";
 "screen_session_verification_complete_user_subtitle" = "Nüüd sa võid sõnumite vastuvõtmisel ja saatmisel selle kasutaja identiteeti usaldada.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "Sisesta taastevõti";
 "screen_session_verification_failed_subtitle" = "Kas verifitseerimine aegus, teine osapool keeldus vastamast või tekkis vastuste mittevastavus.";
 "screen_session_verification_open_existing_session_subtitle" = "Saamaks ligipääsu krüptitud sõnumite ajaloole tõesta et tegemist on sinuga.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Sul puudub ligipääs sellele sõnumile";
 "timeline_decryption_failure_unable_to_decrypt" = "Sõnumi dekrüptimine ei õnnestu";
 "timeline_decryption_failure_withheld_unverified" = "Kuna seade on verifitseerimata või saatja pole sind verifitseerinud, siis sõnumi näitamine on blokeeritud.";
+"troubleshoot_notifications_test_blocked_users_description" = "Kontrollin blokeeritud kasutajaid";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "Vaata blokeeritud kasutajaid";
+"troubleshoot_notifications_test_blocked_users_result_none" = "Sa pole ühtegi kasutajat blokeerinud.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blokeeritud kasutajad";
 "troubleshoot_notifications_entry_point_push_history_title" = "Tõuketeadete ajalugu";
 "troubleshoot_notifications_entry_point_section" = "Veaotsing";
 "troubleshoot_notifications_screen_action" = "Käivita testid";

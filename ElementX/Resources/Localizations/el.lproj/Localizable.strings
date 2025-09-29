@@ -188,6 +188,7 @@
 "common_date_this_month" = "Αυτό το μήνα";
 "common_decryption_error" = "Σφάλμα αποκρυπτογράφησης";
 "common_description" = "Description";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Επιλογές προγραμματιστή";
 "common_device_id" = "ID συσκευής";
 "common_direct_chat" = "Άμεση συνομιλία";
@@ -274,6 +275,7 @@
 "common_search_results" = "Αποτελέσματα αναζήτησης";
 "common_security" = "Ασφάλεια";
 "common_seen_by" = "Προβλήθηκε από";
+"common_select_all" = "Select all";
 "common_send_to" = "Αποστολή σε";
 "common_sending" = "Αποστολή...";
 "common_sending_failed" = "Αποτυχία αποστολής";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Αποστολή πρόσκλησης";
 "screen_bottom_sheet_create_dm_message" = "Θα θέλατε να ξεκινήσετε μια συνομιλία με τον χρήστη %1$@;";
 "screen_bottom_sheet_create_dm_title" = "Αποστολή πρόσκλησης;";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Αφαίρεση και αποκλεισμός μέλους";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Αποκλεισμός";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Δεν θα μπορούν να ενταχθούν ξανά σε αυτή την αίθουσα, αν προσκληθούν.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Είστε βέβαιοι ότι θέλετε να απορρίψετε την πρόσκληση συμμετοχής σε αυτήν την αίθουσα; Αυτό θα εμποδίσει επίσης τον χρήστη %1$@ να επικοινωνήσει μαζί σας ή να σας προσκαλέσει σε αίθουσες.";
 "screen_join_room_decline_and_block_alert_title" = "Απόρριψη πρόσκλησης και αποκλεισμός";
 "screen_join_room_decline_and_block_button_title" = "Απόρριψη και αποκλεισμός";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Μήνυμα (προαιρετικό)";
 "screen_join_room_knock_sent_description" = "Θα λάβετε πρόσκληση για να συμμετάσχετε στην αίθουσα, εάν το αίτημά σας γίνει αποδεκτό.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "Όταν κάποιος θα ζητήσει να συμμετάσχει στην αίθουσα, θα μπορείτε να δείτε το αίτημά του εδώ.";
 "screen_knock_requests_list_empty_state_title" = "Δεν υπάρχει εκκρεμές αίτημα συμμετοχής";
 "screen_knock_requests_list_initial_loading_title" = "Φόρτωση αιτημάτων συμμετοχής...";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
+"screen_leave_space_title" = "Leave %1$@?";
 "screen_media_details_file_format" = "Μορφή αρχείου";
 "screen_media_details_filename" = "Όνομα αρχείου";
 "screen_media_details_no_more_files_to_show" = "Δεν υπάρχουν άλλα αρχεία για εμφάνιση";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Ασφάλεια & απόρρητο";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_start_chat_join_room_by_address_action" = "Συμμετοχή σε αίθουσα μέσω διεύθυνσης";
 "screen_start_chat_join_room_by_address_invalid_address" = "Μη έγκυρη διεύθυνση";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Αποστολή στιγμιοτύπου οθόνης";
 "screen_bug_report_logs_description" = "Τα αρχεία καταγραφής θα συμπεριληφθούν στο μήνυμά σου για να βεβαιωθούμε ότι όλα λειτουργούν σωστά. Για να στείλεις το μήνυμά σου χωρίς αρχεία καταγραφής, απενεργοποίησε αυτήν τη ρύθμιση.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Προβολή αρχείων καταγραφής";
 "screen_change_account_provider_matrix_org_subtitle" = "Το Matrix.org είναι ένας μεγάλος, δωρεάν διακομιστής στο δημόσιο δίκτυο Matrix για ασφαλή, αποκεντρωμένη επικοινωνία, που διευθύνεται από το Ίδρυμα Matrix.org.";
 "screen_change_account_provider_other" = "Άλλο";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "Σύγκριση αριθμών";
 "screen_session_verification_complete_subtitle" = "Η νέα σου συνεδρία έχει πλέον επαληθευτεί. Έχει πρόσβαση στα κρυπτογραφημένα μηνύματά σας και άλλοι χρήστες θα το βλέπουν ως αξιόπιστο.";
 "screen_session_verification_complete_user_subtitle" = "Τώρα μπορείτε να εμπιστευτείτε την ταυτότητα αυτού του χρήστη κατά την αποστολή ή τη λήψη μηνυμάτων.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "Εισαγωγή κλειδιού ανάκτησης";
 "screen_session_verification_failed_subtitle" = "Είτε το αίτημα έληξε είτε απορρίφθηκε είτε υπήρξε αναντιστοιχία επαλήθευσης.";
 "screen_session_verification_open_existing_session_subtitle" = "Απέδειξε ότι είσαι εσύ για να αποκτήσεις πρόσβαση στο κρυπτογραφημένο ιστορικό μηνυμάτων σου.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Δεν έχεις πρόσβαση σε αυτό το μήνυμα";
 "timeline_decryption_failure_unable_to_decrypt" = "Δεν είναι δυνατή η αποκρυπτογράφηση μηνύματος";
 "timeline_decryption_failure_withheld_unverified" = "Αυτό το μήνυμα αποκλείστηκε είτε επειδή δεν επαλήθευσες τη συσκευή σου είτε επειδή ο αποστολέας πρέπει να επαληθεύσει την ταυτότητά σου.";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "Ιστορικό push";
 "troubleshoot_notifications_entry_point_section" = "Αντιμετώπιση προβλημάτων";
 "troubleshoot_notifications_screen_action" = "Εκτέλεση δοκιμών";

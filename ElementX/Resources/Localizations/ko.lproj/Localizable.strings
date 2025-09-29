@@ -188,6 +188,7 @@
 "common_date_this_month" = "이번 달";
 "common_decryption_error" = "복호화 오류";
 "common_description" = "Description";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "개발자 설정";
 "common_device_id" = "기기 ID";
 "common_direct_chat" = "다이렉트 채팅";
@@ -274,6 +275,7 @@
 "common_search_results" = "검색 결과";
 "common_security" = "보안";
 "common_seen_by" = "본 사람";
+"common_select_all" = "Select all";
 "common_send_to" = "보내기";
 "common_sending" = "전송 중…";
 "common_sending_failed" = "전송 실패";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "초대장 보내기";
 "screen_bottom_sheet_create_dm_message" = "%1$@ 와 채팅을 시작하시겠습니까?";
 "screen_bottom_sheet_create_dm_title" = "초대장을 보내시겠습니까?";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "방에서 차단";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "차단";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "초대하더라도 그들은 이 방에 다시 참여할 수 없습니다.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "이 방에 대한 초대 거부를 정말로 확인하시겠습니까? 이 경우 %1$@ 에서 귀하에게 연락하거나 방에 초대할 수 없게 됩니다.";
 "screen_join_room_decline_and_block_alert_title" = "초대 거부 및 차단";
 "screen_join_room_decline_and_block_button_title" = "거부 및 차단";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "%2$d의 %1$d 문자가 허용됨";
 "screen_join_room_knock_message_description" = "메시지 (선택 사항)";
 "screen_join_room_knock_sent_description" = "요청이 승인되면 방에 참여하기 위한 초대장이 발송됩니다.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "누군가가 방에 참여 요청을 한다면, 여기에서 그 요청을 볼 수 있습니다.";
 "screen_knock_requests_list_empty_state_title" = "보류 중인 가입 요청이 없습니다.";
 "screen_knock_requests_list_initial_loading_title" = "가입 요청을 로딩 중…";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
+"screen_leave_space_title" = "Leave %1$@?";
 "screen_media_details_file_format" = "파일 형식";
 "screen_media_details_filename" = "파일 명";
 "screen_media_details_no_more_files_to_show" = "더 이상 표시할 파일이 없습니다";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "보안 및 개인정보 보호";
 "screen_space_list_description" = "당신이 스페이스를 만들거나 가입했습니다.";
 "screen_space_list_details" = "%1$@•%2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "스페이스";
 "screen_start_chat_join_room_by_address_action" = "주소로 방에 참가하기";
 "screen_start_chat_join_room_by_address_invalid_address" = "유효한 주소가 아닙니다";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "귀하의 로그가 너무 커서 이 보고서에 포함할 수 없습니다. 다른 방법으로 보내주시기 바랍니다.";
 "screen_bug_report_include_screenshot" = "스크린샷 전송";
 "screen_bug_report_logs_description" = "모든 기능이 제대로 작동하는지 확인하기 위해 로그애 메시지가 포함됩니다. 로그 없이 메시지를 보내려면 이 설정을 해제하세요.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "로그 보기";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org는 Matrix.org 재단이 운영하는, 안전하고 분산된 통신을 위한 공개 Matrix 네트워크의 대규모 무료 서버입니다.";
 "screen_change_account_provider_other" = "기타";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "숫자 비교";
 "screen_session_verification_complete_subtitle" = "새로운 세션이 확인되었습니다. 이 세션은 귀하의 암호화된 메시지에 액세스할 수 있으며, 다른 사용자는 이 세션을 신뢰할 수 있는 세션으로 인식합니다.";
 "screen_session_verification_complete_user_subtitle" = "이제 메시지를 보내거나 받을 때 이 사용자의 신원을 신뢰할 수 있습니다.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "복구 키를 입력하세요";
 "screen_session_verification_failed_subtitle" = "요청이 시간 초과되었거나, 요청이 거부되었거나, 검증 불일치가 발생했습니다.";
 "screen_session_verification_open_existing_session_subtitle" = "암호화된 메시지 기록에 액세스하기 위해 본인임을 증명하세요.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "이 메시지에 액세스할 수 없습니다.";
 "timeline_decryption_failure_unable_to_decrypt" = "메시지를 해독할 수 없습니다.";
 "timeline_decryption_failure_withheld_unverified" = "이 메시지는 귀하가 기기를 확인하지 않았거나 발신자가 귀하의 신원을 확인해야 하기 때문에 차단되었습니다.";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "푸시 기록";
 "troubleshoot_notifications_entry_point_section" = "문제 해결";
 "troubleshoot_notifications_screen_action" = "테스트 실행";

@@ -97,7 +97,7 @@
 "action_leave" = "Quitter";
 "action_leave_conversation" = "Quitter la discussion";
 "action_leave_room" = "Quitter le salon";
-"action_leave_space" = "Leave space";
+"action_leave_space" = "Quitter l’espace";
 "action_load_more" = "Voir plus";
 "action_manage_account" = "Gérer le compte";
 "action_manage_devices" = "Gérez les sessions";
@@ -180,14 +180,15 @@
 "common_copyright" = "Droits d’auteur";
 "common_creating_room" = "Création du salon…";
 "common_current_user_canceled_knock" = "Demande annulée";
-"common_current_user_left_room" = "Quitter le salon";
-"common_current_user_left_space" = "Left space";
+"common_current_user_left_room" = "Vous avez quitté le salon";
+"common_current_user_left_space" = "Vous avez quitté l'espace";
 "common_current_user_rejected_invite" = "Invitation refusée";
 "common_dark" = "Sombre";
 "common_date_date_at_time" = "%1$@ à %2$@";
 "common_date_this_month" = "Ce mois-ci";
 "common_decryption_error" = "Erreur de déchiffrement";
 "common_description" = "Description";
+"common_deselect_all" = "Tout désélectionner";
 "common_developer_options" = "Options pour les développeurs";
 "common_device_id" = "Identifiant de session";
 "common_direct_chat" = "Discussion à deux";
@@ -274,6 +275,7 @@
 "common_search_results" = "Résultats de la recherche";
 "common_security" = "Sécurité";
 "common_seen_by" = "Vu par";
+"common_select_all" = "Tout sélectionner";
 "common_send_to" = "Envoyer vers";
 "common_sending" = "Envoi en cours…";
 "common_sending_failed" = "Échec de l'envoi";
@@ -283,7 +285,7 @@
 "common_server_unreachable" = "Serveur inaccessible";
 "common_server_url" = "URL du serveur";
 "common_settings" = "Paramètres";
-"common_share_space" = "Share space";
+"common_share_space" = "Partager l'espace";
 "common_shared_location" = "Position partagée";
 "common_signing_out" = "Déconnexion";
 "common_something_went_wrong" = "Une erreur s'est produite";
@@ -330,7 +332,7 @@
 "common_you" = "Vous";
 "common.add_account" = "Ajouter un compte";
 "common.add_another_account" = "Ajouter un autre compte";
-"common.no_space_name" = "No space name";
+"common.no_space_name" = "Espace sans nom";
 "common.select_account" = "Choisir un compte";
 "common_unable_to_decrypt_insecure_device" = "Envoyé depuis un appareil non sécurisé";
 "common_unable_to_decrypt_verification_violation" = "L'identité vérifiée de l'expéditeur a été réinitialisée";
@@ -376,7 +378,7 @@
 "emoji_picker_category_objects" = "Objets";
 "emoji_picker_category_people" = "Émoticônes et personnes";
 "emoji_picker_category_places" = "Voyages & lieux";
-"emoji_picker_category_recent" = "Recent emojis";
+"emoji_picker_category_recent" = "Emojis récents";
 "emoji_picker_category_symbols" = "Symboles";
 "emoji_picker_search_placeholder" = "Chercher des emojis";
 "error_invalid_invite" = "Ce salon n'existe plus ou l'invitation n'est plus valable.";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Envoyer l'invitation";
 "screen_bottom_sheet_create_dm_message" = "Voulez-vous entamer une discussion avec %1$@ ?";
 "screen_bottom_sheet_create_dm_title" = "Envoyer l'invitation ?";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Bannir du salon";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Bannir";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Il ne pourra pas rejoindre le salon à nouveau, même si il est invité.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Êtes-vous sûr de vouloir refuser l'invitation à rejoindre ce salon ? Cela empêchera également %1$@ de vous contacter ou de vous inviter dans les salons.";
 "screen_join_room_decline_and_block_alert_title" = "Refuser l'invitation et bloquer";
 "screen_join_room_decline_and_block_button_title" = "Refuser et bloquer";
+"screen_join_room_invited_by" = "Invité(e) par";
 "screen_join_room_knock_message_characters_count" = "Caractères autorisés %1$d sur %2$d";
 "screen_join_room_knock_message_description" = "Message (facultatif)";
 "screen_join_room_knock_sent_description" = "Vous recevrez une invitation à rejoindre le salon si votre demande est acceptée.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "Lorsque quelqu'un demandera à rejoindre le salon, vous pourrez voir sa demande ici.";
 "screen_knock_requests_list_empty_state_title" = "Personne ne demande à rejoindre le salon";
 "screen_knock_requests_list_initial_loading_title" = "Chargement...";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Sélectionnez les salons que vous souhaitez quitter et dont vous n'êtes pas le seul administrateur:";
+"screen_leave_space_title" = "Quitter %1$@?";
 "screen_media_details_file_format" = "Format du fichier";
 "screen_media_details_filename" = "Nom du fichier";
 "screen_media_details_no_more_files_to_show" = "Il n'y a plus de fichiers à montrer";
@@ -578,7 +581,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Échec du téléchargement du média, veuillez réessayer.";
 "screen_media_upload_preview_error_too_large_message" = "La taille maximale autorisée pour les fichiers est de %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "Le fichier est trop volumineux pour être envoyé.";
-"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
+"screen_media_upload_preview_item_count" = "Élément %1$d sur %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimiser la qualité de l'image";
 "screen_media_upload_preview_processing" = "Traitement en cours…";
 "screen_pinned_timeline_empty_state_description" = "Cliquez (clic long) sur un message et choisissez « %1$@ » pour qu‘il apparaisse ici.";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Sécurité & confidentialité";
 "screen_space_list_description" = "Espaces que vous avez créés ou rejoints.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "Espace %1$@";
 "screen_space_list_title" = "Espaces";
 "screen_start_chat_join_room_by_address_action" = "Saisir une adresse de salon";
 "screen_start_chat_join_room_by_address_invalid_address" = "Ce n'est pas une adresse valide";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Vos fichiers de log sont trop volumineux et ne peuvent donc pas être inclus dans ce rapport, veuillez nous les envoyer par un autre moyen.";
 "screen_bug_report_include_screenshot" = "Envoyer une capture d’écran";
 "screen_bug_report_logs_description" = "Pour vérifier que les choses fonctionnent comme prévu, des journaux techniques seront envoyés avec votre message. Pour ne pas envoyer ces journaux, désactivez ce paramètre.";
+"screen_bug_report_send_notification_settings_description" = "Si vous rencontrez des problèmes avec les notifications, l'envoie des paramètres de notification peut nous aider à identifier la cause du problème.";
+"screen_bug_report_send_notification_settings_title" = "Envoyer les paramètres de notification";
 "screen_bug_report_view_logs" = "Afficher les journaux";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org est un grand serveur gratuit sur le réseau public Matrix pour une communication sécurisée et décentralisée, géré par la Fondation Matrix.org.";
 "screen_change_account_provider_other" = "Autres";
@@ -1009,7 +1015,7 @@
 "screen_room_details_error_loading_notification_settings" = "Une erreur s’est produite lors du chargement des paramètres de notification.";
 "screen_room_details_error_muting" = "Échec de la mise en sourdine de ce salon, veuillez réessayer.";
 "screen_room_details_error_unmuting" = "Échec de la désactivation de la mise en sourdine de ce salon, veuillez réessayer.";
-"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
+"screen_room_details_invite_people_dont_close" = "Ne fermez pas l'application avant que l'opération soit terminée.";
 "screen_room_details_invite_people_preparing" = "Préparation des invitations...";
 "screen_room_details_notification_mode_custom" = "Personnalisé";
 "screen_room_details_notification_mode_default" = "Défaut";
@@ -1117,13 +1123,14 @@
 "screen_server_confirmation_title_picker_mode" = "Choisissez un fournisseur de compte";
 "screen_server_confirmation_title_register" = "Vous êtes sur le point de créer un compte sur %1$@";
 "screen_session_verification_cancelled_subtitle" = "Quelque chose ne va pas. Soit la demande a expiré, soit elle a été refusée.";
-"screen_session_verification_compare_emojis_subtitle" = "Confirmez que les émojis ci-dessous correspondent à ceux affichés sur votre autre session.";
+"screen_session_verification_compare_emojis_subtitle" = "Confirmez que les émojis ci-dessous correspondent à ceux affichés sur votre autre appareil.";
 "screen_session_verification_compare_emojis_title" = "Comparez les émojis";
 "screen_session_verification_compare_emojis_user_subtitle" = "Vérifiez que les émojis ci-dessous correspondent à ceux affichés sur l'appareil de l'autre utilisateur.";
 "screen_session_verification_compare_numbers_subtitle" = "Confirmez que les nombres ci-dessous correspondent à ceux affichés sur votre autre session.";
 "screen_session_verification_compare_numbers_title" = "Comparez les nombres";
-"screen_session_verification_complete_subtitle" = "Votre nouvelle session est désormais vérifiée. Elle a accès à vos messages chiffrés et les autres utilisateurs la verront identifiée comme fiable.";
+"screen_session_verification_complete_subtitle" = "Vous pouvez désormais lire ou envoyer des messages en toute sécurité sur votre autre appareil.";
 "screen_session_verification_complete_user_subtitle" = "Vous pouvez désormais avoir confiance en l’identité de cet utilisateur lorsque vous lui envoyez des messages ou que vous recevez des messages de sa part.";
+"screen_session_verification_device_verified" = "Appareil vérifié";
 "screen_session_verification_enter_recovery_key" = "Utiliser la clé de récupération";
 "screen_session_verification_failed_subtitle" = "Soit la demande a expiré, soit elle a été refusée, soit les éléments à comparer ne correspondaient pas.";
 "screen_session_verification_open_existing_session_subtitle" = "Prouvez qu’il s’agit bien de vous pour accéder à l’historique de vos messages chiffrés.";
@@ -1147,7 +1154,7 @@
 "screen_session_verification_user_responder_subtitle" = "Pour plus de sécurité, cet autre utilisateur souhaite vérifier votre identité. Des émojis à comparer vous seront présentés.";
 "screen_session_verification_waiting_another_device_subtitle" = "Vous devriez voir une alerte sur l'autre appareil. Démarrez la vérification à partir de là dès maintenant.";
 "screen_session_verification_waiting_another_device_title" = "Démarrer la vérification sur l’autre appareil";
-"screen_session_verification_waiting_other_device_title" = "En attente de l'autre appareil";
+"screen_session_verification_waiting_other_device_title" = "Démarrer la vérification sur l’autre appareil";
 "screen_session_verification_waiting_other_user_title" = "En attente de l'autre utilisateur";
 "screen_session_verification_waiting_subtitle" = "Une fois acceptée, vous pourrez poursuivre la vérification.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Pour continuer, acceptez la demande de lancement de la procédure de vérification dans votre autre session.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Vous n'avez pas accès à ce message";
 "timeline_decryption_failure_unable_to_decrypt" = "Impossible de déchiffrer le message";
 "timeline_decryption_failure_withheld_unverified" = "Ce message a été bloqué soit parce que vous n'avez pas vérifié votre session, soit parce que l'expéditeur doit vérifier votre identité.";
+"troubleshoot_notifications_test_blocked_users_description" = "Vérification des utilisateurs bloqués";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "Voir les utilisateurs bloqués";
+"troubleshoot_notifications_test_blocked_users_result_none" = "Aucun utilisateur n'est bloqué.";
+"troubleshoot_notifications_test_blocked_users_title" = "Utilisateurs bloqués";
 "troubleshoot_notifications_entry_point_push_history_title" = "Historique des Push";
 "troubleshoot_notifications_entry_point_section" = "Dépannage";
 "troubleshoot_notifications_screen_action" = "Exécuter les tests";

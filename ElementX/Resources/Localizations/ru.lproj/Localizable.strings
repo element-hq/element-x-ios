@@ -188,6 +188,7 @@
 "common_date_this_month" = "В этом месяце";
 "common_decryption_error" = "Ошибка расшифровки";
 "common_description" = "Description";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Для разработчика";
 "common_device_id" = "Идентификатор устройства";
 "common_direct_chat" = "Личный чат";
@@ -274,6 +275,7 @@
 "common_search_results" = "Результаты поиска";
 "common_security" = "Безопасность";
 "common_seen_by" = "Просмотрено";
+"common_select_all" = "Select all";
 "common_send_to" = "Отправить";
 "common_sending" = "Отправка…";
 "common_sending_failed" = "Сбой отправки";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Отправить приглашение";
 "screen_bottom_sheet_create_dm_message" = "Хотите начать чат с %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Отправить приглашение?";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Удалить и заблокировать участника";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Заблокировать";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Они не смогут снова присоединиться к этой комнате, если их пригласят.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Вы действительно хотите отклонить приглашение в эту комнате? Это также предотвратит %1$@ возможность связываться с вами или приглашать вас в комнаты.";
 "screen_join_room_decline_and_block_alert_title" = "Отклонить приглашение и заблокировать";
 "screen_join_room_decline_and_block_button_title" = "Отклонить и заблокировать";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Сообщение (опционально)";
 "screen_join_room_knock_sent_description" = "Вы получите приглашение присоединиться к комнате, как только ваш запрос будет принят.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "Вы сможете увидеть запрос, когда кто-то попросит присоединиться к комнате.";
 "screen_knock_requests_list_empty_state_title" = "Нет ожидающих запросов на присоединение";
 "screen_knock_requests_list_initial_loading_title" = "Загрузка запросов на присоединение...";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
+"screen_leave_space_title" = "Leave %1$@?";
 "screen_media_details_file_format" = "Формат файла";
 "screen_media_details_filename" = "Имя файла";
 "screen_media_details_no_more_files_to_show" = "Больше нет файлов для показа";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Безопасность и конфиденциальность";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_start_chat_join_room_by_address_action" = "Присоединиться к комнате по адресу";
 "screen_start_chat_join_room_by_address_invalid_address" = "Недействительный адрес";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Ваши журналы слишком большие для включения в этот отчет. Пожалуйста, отправьте их нам другим способом.";
 "screen_bug_report_include_screenshot" = "Отправить снимок экрана";
 "screen_bug_report_logs_description" = "Чтобы убедиться, что все работает правильно, в сообщение будут включены журналы. Чтобы отправить сообщение без журналов, отключите эту настройку.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Просмотр журналов";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org — это большой бесплатный сервер в общедоступной сети Matrix для безопасной децентрализованной связи, управляемый Matrix.org Foundation.";
 "screen_change_account_provider_other" = "Другое";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "Сравните числа";
 "screen_session_verification_complete_subtitle" = "Ваш новый сеанс подтвержден. У него есть доступ к вашим зашифрованным сообщениям, и другие пользователи увидят его как доверенное.";
 "screen_session_verification_complete_user_subtitle" = "Теперь вы можете доверять этому пользователя при отправке или получении сообщений.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "Введите ключ восстановления";
 "screen_session_verification_failed_subtitle" = "Время ожидания подтверждения истекло, запрос был отклонён, или при подтверждении произошло несоответствие.";
 "screen_session_verification_open_existing_session_subtitle" = "Чтобы получить доступ к зашифрованной истории сообщений, докажите, что это вы.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "У вас нет доступа к этому сообщению";
 "timeline_decryption_failure_unable_to_decrypt" = "Не удалось расшифровать сообщение";
 "timeline_decryption_failure_withheld_unverified" = "Это сообщение было заблокировано по причине того, что вы не подтвердили свое устройство, либо отправителю необходимо подтвердить вашу личность.";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "История уведомлений";
 "troubleshoot_notifications_entry_point_section" = "Устранение неполадок";
 "troubleshoot_notifications_screen_action" = "Выполнение тестов";
