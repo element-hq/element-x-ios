@@ -9,7 +9,7 @@ on:
 jobs:
   integration_tests:
     name: Integration Tests
-    runs-on: macos-26-xlarge
+    runs-on: macos-15
 
     concurrency:
       # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
