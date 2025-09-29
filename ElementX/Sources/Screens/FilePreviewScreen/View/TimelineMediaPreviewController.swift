@@ -24,7 +24,14 @@ class TimelineMediaPreviewController: QLPreviewController {
     private var cancellables: Set<AnyCancellable> = []
     
     private var navigationBar: UINavigationBar? { view.subviews.first?.subviews.first { $0 is UINavigationBar } as? UINavigationBar }
-    private var toolbar: UIToolbar? { view.subviews.first?.subviews.last { $0 is UIToolbar } as? UIToolbar }
+    private var bottomBarItemsContainer: UIView? {
+        if #available(iOS 26, *) {
+            view.subviews.first?.subviews.last?.subviews.first
+        } else {
+            view.subviews.first?.subviews.last { $0 is UIToolbar }
+        }
+    }
+
     private var pageScrollView: UIScrollView? { view.firstScrollView() }
     private var captionView: UIView { captionHostingController.view }
     
@@ -105,16 +112,27 @@ class TimelineMediaPreviewController: QLPreviewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        if let toolbar {
+        if let bottomBarItemsContainer {
             // Using the toolbar's visibility doesn't work so check its frame.
-            captionView.isHidden = toolbar.frame.minY >= view.frame.maxY
+            captionView.isHidden = if #available(iOS 26, *) {
+                navigationBar?.topItem?.leftBarButtonItem?.frame(in: view) == nil
+            } else {
+                bottomBarItemsContainer.frame.minY >= view.frame.maxY
+            }
             
             if captionView.constraints.isEmpty {
                 captionHostingController.view.translatesAutoresizingMaskIntoConstraints = false
+                
+                let bottomConstraint = if #available(iOS 26, *) {
+                    captionView.bottomAnchor.constraint(equalTo: bottomBarItemsContainer.safeAreaLayoutGuide.bottomAnchor, constant: -50)
+                } else {
+                    captionView.bottomAnchor.constraint(equalTo: bottomBarItemsContainer.topAnchor)
+                }
+                
                 NSLayoutConstraint.activate([
-                    captionView.bottomAnchor.constraint(equalTo: toolbar.topAnchor),
-                    captionView.leadingAnchor.constraint(equalTo: toolbar.leadingAnchor),
-                    captionView.trailingAnchor.constraint(equalTo: toolbar.trailingAnchor)
+                    bottomConstraint,
+                    captionView.leadingAnchor.constraint(equalTo: bottomBarItemsContainer.leadingAnchor),
+                    captionView.trailingAnchor.constraint(equalTo: bottomBarItemsContainer.trailingAnchor)
                 ])
             }
         }
