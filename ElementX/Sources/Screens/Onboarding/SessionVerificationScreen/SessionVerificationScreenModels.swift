@@ -96,7 +96,12 @@ struct SessionVerificationScreenViewState: BindableState {
         case .decliningChallenge:
             return L10n.screenSessionVerificationCompareEmojisTitle
         case .verified:
-            return L10n.commonVerificationComplete
+            switch flow {
+            case .deviceInitiator, .deviceResponder:
+                return L10n.screenSessionVerificationDeviceVerified
+            case .userInitiator, .userResponder:
+                return L10n.commonVerificationComplete
+            }
         case .cancelling:
             return waitingTitle
         case .cancelled:
