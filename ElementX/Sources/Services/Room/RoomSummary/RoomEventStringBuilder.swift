@@ -55,6 +55,8 @@ struct RoomEventStringBuilder {
                 default: L10n.commonWaitingForDecryptionKey
                 }
                 return prefix(errorMessage, with: displayName, isOutgoing: isOutgoing)
+            case .other(eventType: let eventType):
+                return nil // We shouldn't receive these without asking for custom event types.
             }
         case .failedToParseMessageLike, .failedToParseState:
             return prefix(L10n.commonUnsupportedEvent, with: displayName, isOutgoing: isOutgoing)

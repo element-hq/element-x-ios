@@ -1,4 +1,4 @@
-// Generated using Sourcery 2.2.7 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 2.3.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 // swiftlint:disable all
@@ -8149,6 +8149,75 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
         }
     }
 
+    //MARK: - hasDevicesToVerifyAgainst
+
+    open var hasDevicesToVerifyAgainstThrowableError: Error?
+    var hasDevicesToVerifyAgainstUnderlyingCallsCount = 0
+    open var hasDevicesToVerifyAgainstCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return hasDevicesToVerifyAgainstUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = hasDevicesToVerifyAgainstUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                hasDevicesToVerifyAgainstUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    hasDevicesToVerifyAgainstUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var hasDevicesToVerifyAgainstCalled: Bool {
+        return hasDevicesToVerifyAgainstCallsCount > 0
+    }
+
+    var hasDevicesToVerifyAgainstUnderlyingReturnValue: Bool!
+    open var hasDevicesToVerifyAgainstReturnValue: Bool! {
+        get {
+            if Thread.isMainThread {
+                return hasDevicesToVerifyAgainstUnderlyingReturnValue
+            } else {
+                var returnValue: Bool? = nil
+                DispatchQueue.main.sync {
+                    returnValue = hasDevicesToVerifyAgainstUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                hasDevicesToVerifyAgainstUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    hasDevicesToVerifyAgainstUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var hasDevicesToVerifyAgainstClosure: (() async throws -> Bool)?
+
+    open override func hasDevicesToVerifyAgainst() async throws -> Bool {
+        if let error = hasDevicesToVerifyAgainstThrowableError {
+            throw error
+        }
+        hasDevicesToVerifyAgainstCallsCount += 1
+        if let hasDevicesToVerifyAgainstClosure = hasDevicesToVerifyAgainstClosure {
+            return try await hasDevicesToVerifyAgainstClosure()
+        } else {
+            return hasDevicesToVerifyAgainstReturnValue
+        }
+    }
+
     //MARK: - isLastDevice
 
     open var isLastDeviceThrowableError: Error?
@@ -14286,6 +14355,81 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
             return try await loadComposerDraftThreadRootClosure(threadRoot)
         } else {
             return loadComposerDraftThreadRootReturnValue
+        }
+    }
+
+    //MARK: - loadOrFetchEvent
+
+    open var loadOrFetchEventEventIdThrowableError: Error?
+    var loadOrFetchEventEventIdUnderlyingCallsCount = 0
+    open var loadOrFetchEventEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return loadOrFetchEventEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadOrFetchEventEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadOrFetchEventEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadOrFetchEventEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var loadOrFetchEventEventIdCalled: Bool {
+        return loadOrFetchEventEventIdCallsCount > 0
+    }
+    open var loadOrFetchEventEventIdReceivedEventId: String?
+    open var loadOrFetchEventEventIdReceivedInvocations: [String] = []
+
+    var loadOrFetchEventEventIdUnderlyingReturnValue: TimelineEvent!
+    open var loadOrFetchEventEventIdReturnValue: TimelineEvent! {
+        get {
+            if Thread.isMainThread {
+                return loadOrFetchEventEventIdUnderlyingReturnValue
+            } else {
+                var returnValue: TimelineEvent? = nil
+                DispatchQueue.main.sync {
+                    returnValue = loadOrFetchEventEventIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                loadOrFetchEventEventIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    loadOrFetchEventEventIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var loadOrFetchEventEventIdClosure: ((String) async throws -> TimelineEvent)?
+
+    open override func loadOrFetchEvent(eventId: String) async throws -> TimelineEvent {
+        if let error = loadOrFetchEventEventIdThrowableError {
+            throw error
+        }
+        loadOrFetchEventEventIdCallsCount += 1
+        loadOrFetchEventEventIdReceivedEventId = eventId
+        DispatchQueue.main.async {
+            self.loadOrFetchEventEventIdReceivedInvocations.append(eventId)
+        }
+        if let loadOrFetchEventEventIdClosure = loadOrFetchEventEventIdClosure {
+            return try await loadOrFetchEventEventIdClosure(eventId)
+        } else {
+            return loadOrFetchEventEventIdReturnValue
         }
     }
 
@@ -25314,6 +25458,71 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
             return senderIdClosure()
         } else {
             return senderIdReturnValue
+        }
+    }
+
+    //MARK: - threadRootEventId
+
+    var threadRootEventIdUnderlyingCallsCount = 0
+    open var threadRootEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return threadRootEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = threadRootEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                threadRootEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    threadRootEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var threadRootEventIdCalled: Bool {
+        return threadRootEventIdCallsCount > 0
+    }
+
+    var threadRootEventIdUnderlyingReturnValue: String?
+    open var threadRootEventIdReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return threadRootEventIdUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = threadRootEventIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                threadRootEventIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    threadRootEventIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var threadRootEventIdClosure: (() -> String?)?
+
+    open override func threadRootEventId() -> String? {
+        threadRootEventIdCallsCount += 1
+        if let threadRootEventIdClosure = threadRootEventIdClosure {
+            return threadRootEventIdClosure()
+        } else {
+            return threadRootEventIdReturnValue
         }
     }
 

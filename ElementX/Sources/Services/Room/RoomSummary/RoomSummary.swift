@@ -37,6 +37,7 @@ struct RoomSummary {
     
     let name: String
     let isDirect: Bool
+    let isSpace: Bool
     let avatarURL: URL?
     
     let heroes: [UserProfileProxy]
@@ -107,6 +108,7 @@ extension RoomSummary {
         let string = "\(settingsMode) - messages: \(hasUnreadMessages) - mentions: \(hasUnreadMentions) - notifications: \(hasUnreadNotifications)"
         name = string
         isDirect = true
+        isSpace = false
         avatarURL = nil
         
         heroes = []
@@ -134,12 +136,9 @@ extension RoomSummary {
             return .tombstoned
         }
         
-        // NOTE: The check for isSpace isn't implemented yet, waiting to see
-        // whether we end up with a different type for spaces in the room list.
-        //
-        // Don't forget to add a test when you remove this comment 😄
-        
-        if isDirect, avatarURL == nil, heroes.count == 1 {
+        if isSpace {
+            return .space(id: id, name: name, avatarURL: avatarURL)
+        } else if isDirect, avatarURL == nil, heroes.count == 1 {
             return .heroes(heroes)
         } else {
             return .room(id: id, name: name, avatarURL: avatarURL)

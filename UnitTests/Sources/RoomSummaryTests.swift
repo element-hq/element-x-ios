@@ -15,7 +15,7 @@ class RoomSummaryTests: XCTestCase {
     let heroes = [UserProfileProxy(userID: "hero_1", displayName: "Hero 1", avatarURL: "mxc://hs.tld/user/avatar")]
     
     func testRoomAvatar() {
-        let details = makeSummary(isDirect: false, hasRoomAvatar: true, isTombstoned: false)
+        let details = makeSummary(isDirect: false, isSpace: false, hasRoomAvatar: true, isTombstoned: false)
         
         switch details.avatar {
         case .room(let id, let name, let avatarURL):
@@ -32,7 +32,7 @@ class RoomSummaryTests: XCTestCase {
     }
     
     func testDMAvatarSet() {
-        let details = makeSummary(isDirect: true, hasRoomAvatar: true, isTombstoned: false)
+        let details = makeSummary(isDirect: true, isSpace: false, hasRoomAvatar: true, isTombstoned: false)
         
         switch details.avatar {
         case .room(let id, let name, let avatarURL):
@@ -49,7 +49,7 @@ class RoomSummaryTests: XCTestCase {
     }
     
     func testDMAvatarNotSet() {
-        let details = makeSummary(isDirect: true, hasRoomAvatar: false, isTombstoned: false)
+        let details = makeSummary(isDirect: true, isSpace: false, hasRoomAvatar: false, isTombstoned: false)
         
         switch details.avatar {
         case .room:
@@ -63,20 +63,38 @@ class RoomSummaryTests: XCTestCase {
         }
     }
     
+    func testSpaceAvatar() {
+        let details = makeSummary(isDirect: false, isSpace: true, hasRoomAvatar: true, isTombstoned: false)
+        
+        switch details.avatar {
+        case .room:
+            XCTFail("A space shouldn't use a room avatar.")
+        case .heroes:
+            XCTFail("A room shouldn't use the heroes for its avatar.")
+        case .space(let id, let name, let avatarURL):
+            XCTAssertEqual(id, roomDetails.id)
+            XCTAssertEqual(name, roomDetails.name)
+            XCTAssertEqual(avatarURL, roomDetails.avatarURL)
+        case .tombstoned:
+            XCTFail("A room shouldn't use the tombstone for its avatar.")
+        }
+    }
+    
     func testTombstonedAvatar() {
-        let details = makeSummary(isDirect: false, hasRoomAvatar: true, isTombstoned: true)
+        let details = makeSummary(isDirect: false, isSpace: false, hasRoomAvatar: true, isTombstoned: true)
         
         XCTAssertEqual(details.avatar, .tombstoned)
     }
     
     // MARK: - Helpers
     
-    func makeSummary(isDirect: Bool, hasRoomAvatar: Bool, isTombstoned: Bool) -> RoomSummary {
+    func makeSummary(isDirect: Bool, isSpace: Bool, hasRoomAvatar: Bool, isTombstoned: Bool) -> RoomSummary {
         RoomSummary(room: .init(noPointer: .init()),
                     id: roomDetails.id,
                     joinRequestType: nil,
                     name: roomDetails.name,
                     isDirect: isDirect,
+                    isSpace: isSpace,
                     avatarURL: hasRoomAvatar ? roomDetails.avatarURL : nil,
                     heroes: heroes,
                     activeMembersCount: 0,
