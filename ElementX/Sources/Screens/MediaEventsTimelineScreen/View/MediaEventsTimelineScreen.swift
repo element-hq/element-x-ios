@@ -223,9 +223,13 @@ struct MediaEventsTimelineScreen: View {
             }
         }
         
-        ToolbarItem(placement: .primaryAction) {
-            // Reserve the space trailing space to match the back button.
-            CompoundIcon(\.search).hidden()
+        if #available(iOS 26, *) {
+            ToolbarSpacer()
+        } else {
+            ToolbarItem(placement: .primaryAction) {
+                // Reserve the space trailing space to match the back button.
+                CompoundIcon(\.search).hidden()
+            }
         }
     }
     
