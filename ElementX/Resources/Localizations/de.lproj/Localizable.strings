@@ -188,6 +188,7 @@
 "common_date_this_month" = "Diesen Monat";
 "common_decryption_error" = "Dekodierungsfehler";
 "common_description" = "Beschreibung";
+"common_deselect_all" = "Auswahl aufheben";
 "common_developer_options" = "Entwickleroptionen";
 "common_device_id" = "Geräte-ID";
 "common_direct_chat" = "Direktnachricht";
@@ -274,6 +275,7 @@
 "common_search_results" = "Suchergebnisse";
 "common_security" = "Sicherheit";
 "common_seen_by" = "Gesehen von";
+"common_select_all" = "Alles auswählen";
 "common_send_to" = "Senden an";
 "common_sending" = "Wird gesendet...";
 "common_sending_failed" = "Senden fehlgeschlagen";
@@ -283,7 +285,7 @@
 "common_server_unreachable" = "Server nicht erreichbar";
 "common_server_url" = "Server-URL";
 "common_settings" = "Einstellungen";
-"common_share_space" = "Share space";
+"common_share_space" = "Space teilen";
 "common_shared_location" = "Geteilter Standort";
 "common_signing_out" = "Abmelden";
 "common_something_went_wrong" = "Es ist ein Fehler aufgetreten.";
@@ -330,7 +332,7 @@
 "common_you" = "Sie";
 "common.add_account" = "Konto hinzufügen";
 "common.add_another_account" = "Weiteres Konto hinzufügen";
-"common.no_space_name" = "No space name";
+"common.no_space_name" = "Kein Space Name";
 "common.select_account" = "Konto auswählen";
 "common_unable_to_decrypt_insecure_device" = "Von einem ungesicherten Gerät gesendet";
 "common_unable_to_decrypt_verification_violation" = "Die verifizierte Identität des Senders hat sich geändert";
@@ -376,7 +378,7 @@
 "emoji_picker_category_objects" = "Objekte";
 "emoji_picker_category_people" = "Smileys & Menschen";
 "emoji_picker_category_places" = "Reisen & Orte";
-"emoji_picker_category_recent" = "Recent emojis";
+"emoji_picker_category_recent" = "Zuletzt verwendete Emojis";
 "emoji_picker_category_symbols" = "Symbole";
 "emoji_picker_search_placeholder" = "Emojis suchen";
 "error_invalid_invite" = "Der Chat existiert nicht mehr oder die Einladung ist nicht mehr gültig.";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Einladung senden";
 "screen_bottom_sheet_create_dm_message" = "Möchtest du einen Chat mit %1$@ starten?";
 "screen_bottom_sheet_create_dm_title" = "Einladung senden?";
-"screen_bottom_sheet_leave_space_subtitle" = "Dadurch wirst du auch aus allen Chats in diesem Space entfernt.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "Dadurch wirst du auch aus allen Chats in diesem Space entfernt, auch aus denen, für die du der einzige Admin bist:";
-"screen_bottom_sheet_leave_space_title" = "%1$@ verlassen?";
 "screen_bottom_sheet_manage_room_member_ban" = "Mitglied entfernen und sperren";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Sperren";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Sie können diesem Chat auch auf Einladung nicht erneut beitreten.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Bist du sicher, dass du die Einladung zu diesem Chat ablehnen möchtest? Dadurch wird auch jede weitere Kontaktaufnahme oder Chat Einladung von %1$@ blockiert.";
 "screen_join_room_decline_and_block_alert_title" = "Einladung ablehnen & Nutzer blockieren";
 "screen_join_room_decline_and_block_button_title" = "Ablehnen und blockieren";
+"screen_join_room_invited_by" = "Eingeladen von";
 "screen_join_room_knock_message_characters_count" = "%1$d von %2$d erlaubte Zeichen";
 "screen_join_room_knock_message_description" = "Nachricht (optional)";
 "screen_join_room_knock_sent_description" = "Sollte deine Anfrage akzeptiert werden, erhältst du eine Einladung, dem Chat beizutreten.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "Sollte jemand um Beitritt zum Chat bitten, kannst du die Anfrage hier sehen.";
 "screen_knock_requests_list_empty_state_title" = "Keine ausstehende Beitrittsanfrage";
 "screen_knock_requests_list_initial_loading_title" = "Beitrittsanfragen werden geladen …";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Dadurch wirst du auch aus allen Chats in diesem Space entfernt.";
+"screen_leave_space_title" = "%1$@ verlassen?";
 "screen_media_details_file_format" = "Dateiformat";
 "screen_media_details_filename" = "Dateiname";
 "screen_media_details_no_more_files_to_show" = "Keine weiteren Dateien zum Anzeigen";
@@ -578,7 +581,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Das Hochladen der Medien ist fehlgeschlagen. Bitte versuche es erneut.";
 "screen_media_upload_preview_error_too_large_message" = "Die maximal zulässige Dateigröße beträgt %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "Die Datei ist zu groß zum Hochladen.";
-"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
+"screen_media_upload_preview_item_count" = "%1$d von %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimiere die Bildqualität";
 "screen_media_upload_preview_processing" = "Verarbeitung läuft …";
 "screen_pinned_timeline_empty_state_description" = "Halte eine Nachricht gedrückt und wähle “%1$@”, um sie hier einzufügen.";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Sicherheit & Datenschutz";
 "screen_space_list_description" = "Von dir erstellte oder beigetretene Spaces.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ Space";
 "screen_space_list_title" = "Spaces";
 "screen_start_chat_join_room_by_address_action" = "Chat per Adresse beitreten";
 "screen_start_chat_join_room_by_address_invalid_address" = "Keine gültige Adresse";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Deine Logs sind zu groß und können dem Bericht nicht beigefügt werden. Bitte sende sie uns auf einem anderen Weg.";
 "screen_bug_report_include_screenshot" = "Bildschirmfoto senden";
 "screen_bug_report_logs_description" = "Die Protokolle werden deiner Nachricht beigefügt, um sicherzustellen, dass alles ordnungsgemäß funktioniert. Um deine Nachricht ohne Protokolle zu senden, deaktiviere diese Einstellung.";
+"screen_bug_report_send_notification_settings_description" = "Wenn du Probleme mit Benachrichtigungen hast, kann das Hochladen der Einstellungen für Benachrichtigungen uns helfen, die Ursache zu finden.";
+"screen_bug_report_send_notification_settings_title" = "Einstellungen für Benachrichtigungen senden";
 "screen_bug_report_view_logs" = "Logs ansehen";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org ist ein großer, kostenloser Server im öffentlichen Matrix-Netzwerk für eine sichere, dezentralisierte Kommunikation, der von der Matrix.org Foundation betrieben wird.";
 "screen_change_account_provider_other" = "Sonstige";
@@ -1117,13 +1123,14 @@
 "screen_server_confirmation_title_picker_mode" = "Kontoanbieter auswählen";
 "screen_server_confirmation_title_register" = "Du bist dabei, auf %1$@ ein Konto zu erstellen";
 "screen_session_verification_cancelled_subtitle" = "Etwas scheint nicht zu stimmen. Entweder ist das Zeitlimit für die Anfrage abgelaufen oder die Anfrage wurde abgelehnt.";
-"screen_session_verification_compare_emojis_subtitle" = "Bestätige, dass die folgenden Emojis mit denen in deiner anderen Sitzung übereinstimmen.";
+"screen_session_verification_compare_emojis_subtitle" = "Bestätige, dass die folgenden Emojis mit denen auf deinem anderen Gerät übereinstimmen.";
 "screen_session_verification_compare_emojis_title" = "Emojis vergleichen";
 "screen_session_verification_compare_emojis_user_subtitle" = "Bestätige, dass die folgenden Emojis mit denen auf dem Gerät des anderen Nutzers übereinstimmen.";
 "screen_session_verification_compare_numbers_subtitle" = "Bestätige, dass die folgenden Zahlen mit denen in deiner anderen Sitzung übereinstimmen.";
 "screen_session_verification_compare_numbers_title" = "Vergleiche die Zahlen";
-"screen_session_verification_complete_subtitle" = "Deine neue Sitzung ist nun verifiziert. Sie hat Zugriff auf deine verschlüsselten Nachrichten und wird von anderen Nutzern als vertrauenswürdig eingestuft.";
+"screen_session_verification_complete_subtitle" = "Jetzt kannst du verschlüsselte Nachrichten sicher auf deinem anderen Gerät schreiben und lesen.";
 "screen_session_verification_complete_user_subtitle" = "Jetzt kannst du der Identität dieses Nutzers vertrauen, wenn du Nachrichten sendest oder empfängst.";
+"screen_session_verification_device_verified" = "Gerät verifiziert";
 "screen_session_verification_enter_recovery_key" = "Wiederherstellungsschlüssel eingeben";
 "screen_session_verification_failed_subtitle" = "Entweder ist die Anfrage abgelaufen, oder die Anfrage wurde abgelehnt, oder es gab eine Unstimmigkeit bei der Überprüfung.";
 "screen_session_verification_open_existing_session_subtitle" = "Beweise deine Identität, um auf deinen verschlüsselten Nachrichtenverlauf zuzugreifen.";
@@ -1147,7 +1154,7 @@
 "screen_session_verification_user_responder_subtitle" = "Für zusätzliche Sicherheit möchte ein anderer Nutzer deine Identität verifizieren. Es werden dir einige Emojis zum Vergleich angezeigt.";
 "screen_session_verification_waiting_another_device_subtitle" = "Du solltest ein Popup-Fenster auf dem anderen Gerät sehen. Starte die Verifizierung von dort aus.";
 "screen_session_verification_waiting_another_device_title" = "Starte die Verifizierung auf dem anderen Gerät";
-"screen_session_verification_waiting_other_device_title" = "Warten auf das andere Gerät";
+"screen_session_verification_waiting_other_device_title" = "Beginne die Verifizierung auf dem anderen Gerät";
 "screen_session_verification_waiting_other_user_title" = "Warten auf den anderen Nutzer";
 "screen_session_verification_waiting_subtitle" = "Nach der Bestätigung kannst du mit der Verifizierung fortfahren.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Akzeptiere die Anfrage für die Verifizierung in deiner anderen Sitzung um fortzufahren.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Du hast keinen Zugriff auf diese Nachricht.";
 "timeline_decryption_failure_unable_to_decrypt" = "Nachricht kann nicht entschlüsselt werden";
 "timeline_decryption_failure_withheld_unverified" = "Diese Nachricht wurde entweder blockiert, weil du dein Gerät nicht verifiziert hast oder weil der Absender deine Identität verifizieren muss.";
+"troubleshoot_notifications_test_blocked_users_description" = "Überprüfen von gesperrten Nutzern";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "Gesperrte Nutzer ansehen";
+"troubleshoot_notifications_test_blocked_users_result_none" = "Keine Nutzer sind gesperrt.";
+"troubleshoot_notifications_test_blocked_users_title" = "Gesperrte Nutzer";
 "troubleshoot_notifications_entry_point_push_history_title" = "Verlauf pushen";
 "troubleshoot_notifications_entry_point_section" = "Fehlerbehebung";
 "troubleshoot_notifications_screen_action" = "Tests durchführen";

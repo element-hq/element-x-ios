@@ -188,6 +188,7 @@
 "common_date_this_month" = "Bu ay";
 "common_decryption_error" = "Şifre çözme hatası";
 "common_description" = "Description";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Geliştirici seçenekleri";
 "common_device_id" = "Cihaz Kimliği";
 "common_direct_chat" = "Doğrudan sohbet";
@@ -274,6 +275,7 @@
 "common_search_results" = "Arama sonuçları";
 "common_security" = "Güvenlik";
 "common_seen_by" = "Tarafından görüldü";
+"common_select_all" = "Select all";
 "common_send_to" = "Şuraya gönder";
 "common_sending" = "Gönderiliyor...";
 "common_sending_failed" = "Gönderme başarısız oldu";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Davet gönder";
 "screen_bottom_sheet_create_dm_message" = "%1$@ ile sohbet başlatmak ister misiniz?";
 "screen_bottom_sheet_create_dm_title" = "Davet gönder?";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Üyeyi çıkar ve yasakla";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Yasakla";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Davet edilseler bile bu odaya tekrar katılamazlar.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Bu odaya katılma davetini reddetmek istediğinizden emin misiniz? Bu aynı zamanda %1$@ sizinle iletişim kurmasını veya sizi odalara davet etmesini de engeller.";
 "screen_join_room_decline_and_block_alert_title" = "Daveti reddet ve engelle";
 "screen_join_room_decline_and_block_button_title" = "Reddet ve engelle";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Mesaj (isteğe bağlı)";
 "screen_join_room_knock_sent_description" = "Talebiniz kabul edilirse odaya katılmanız için bir davet alacaksınız.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "Birisi odaya katılmak istediğinde, isteklerini burada görebileceksiniz.";
 "screen_knock_requests_list_empty_state_title" = "Bekleyen katılım isteği yok";
 "screen_knock_requests_list_initial_loading_title" = "Katılma istekleri yükleniyor…";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
+"screen_leave_space_title" = "Leave %1$@?";
 "screen_media_details_file_format" = "Dosya biçimi";
 "screen_media_details_filename" = "Dosya adı";
 "screen_media_details_no_more_files_to_show" = "Gösterilecek daha fazla dosya yok";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Güvenlik ve gizlilik";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_start_chat_join_room_by_address_action" = "Bir adres ile odaya katılın";
 "screen_start_chat_join_room_by_address_invalid_address" = "Geçerli bir adres değil";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Ekran görüntüsü gönder";
 "screen_bug_report_logs_description" = "Her şeyin düzgün çalıştığından emin olmak için günlükler mesajınıza dahil edilecektir. Mesajınızı kayıt tutmadan göndermek için bu ayarı kapatın.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Günlükleri görüntüle";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org, Matrix.org Vakfı tarafından yönetilen, güvenli, merkezi olmayan iletişim için halka açık Matrix ağında büyük, ücretsiz bir sunucudur.";
 "screen_change_account_provider_other" = "Diğer";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "Sayıları karşılaştır";
 "screen_session_verification_complete_subtitle" = "Yeni oturumunuz artık doğrulandı. Şifrelenmiş mesajlarınıza erişebilir ve diğer kullanıcılar oturumu güvenilir olarak görecektir.";
 "screen_session_verification_complete_user_subtitle" = "Artık mesaj gönderirken veya alırken bu kullanıcının kimliğine güvenebilirsiniz.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "Kurtarma anahtarını girin";
 "screen_session_verification_failed_subtitle" = "İstek zaman aşımına uğradı, istek reddedildi veya bir doğrulama uyuşmazlığı vardı.";
 "screen_session_verification_open_existing_session_subtitle" = "Şifrelenmiş mesaj geçmişinize erişmek için siz olduğunuzu kanıtlayın.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Bu mesaja erişiminiz yok";
 "timeline_decryption_failure_unable_to_decrypt" = "Mesaj şifresi çözülemedi";
 "timeline_decryption_failure_withheld_unverified" = "Bu mesaj, cihazınızı doğrulamadığınız veya gönderenin kimliğinizi doğrulaması gerektiği için engellendi.";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push history";
 "troubleshoot_notifications_entry_point_section" = "Sorun gider";
 "troubleshoot_notifications_screen_action" = "Testleri çalıştır";

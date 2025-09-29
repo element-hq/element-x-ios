@@ -188,6 +188,7 @@
 "common_date_this_month" = "Denna månad";
 "common_decryption_error" = "Avkrypteringsfel";
 "common_description" = "Description";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Utvecklaralternativ";
 "common_device_id" = "Enhets-ID";
 "common_direct_chat" = "Direktchatt";
@@ -274,6 +275,7 @@
 "common_search_results" = "Sökresultat";
 "common_security" = "Säkerhet";
 "common_seen_by" = "Sett av";
+"common_select_all" = "Select all";
 "common_send_to" = "Skicka till";
 "common_sending" = "Skickar …";
 "common_sending_failed" = "Misslyckades att skicka";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Skicka inbjudan";
 "screen_bottom_sheet_create_dm_message" = "Vill du starta en chatt med %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Skicka inbjudan?";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Ta bort och banna medlem";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Banna";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Denne kommer inte att kunna gå med i det här rummet igen om denne bjuds in.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Är du säker på att du vill avvisa inbjudan att gå med i det här rummet? Detta kommer också att hindra %1$@ från att kontakta dig eller bjuda in dig till rum.";
 "screen_join_room_decline_and_block_alert_title" = "Avvisa inbjudan och blockera";
 "screen_join_room_decline_and_block_button_title" = "Avvisa och blockera";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "Tillåtna tecken %1$d av %2$d";
 "screen_join_room_knock_message_description" = "Meddelande (valfritt)";
 "screen_join_room_knock_sent_description" = "Du kommer att få en inbjudan att gå med i rummet om din begäran accepteras.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "När någon begär om att gå med i rummet, kan du se deras förfrågan här.";
 "screen_knock_requests_list_empty_state_title" = "Ingen väntande begäran om att gå med";
 "screen_knock_requests_list_initial_loading_title" = "Laddar förfrågningar om att gå med …";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
+"screen_leave_space_title" = "Leave %1$@?";
 "screen_media_details_file_format" = "Filformat";
 "screen_media_details_filename" = "Filnamn";
 "screen_media_details_no_more_files_to_show" = "Inga fler filer att visa";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Säkerhet och sekretess";
 "screen_space_list_description" = "Utrymmen som du har skapat eller gått med i.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Utrymmen";
 "screen_start_chat_join_room_by_address_action" = "Gå med i rum med adress";
 "screen_start_chat_join_room_by_address_invalid_address" = "Inte en giltig adress";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Dina loggar är alltför stora och kan därför inte inkluderas i den här rapporten. Vänligen skicka dem till oss på annat sätt.";
 "screen_bug_report_include_screenshot" = "Skicka skärmdump";
 "screen_bug_report_logs_description" = "Loggar kommer att inkluderas i ditt meddelande för att se till att allt fungerar korrekt. Om du vill skicka ditt meddelande utan loggar stänger du av den här inställningen.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Se loggar";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org är en stor gratisserver på det offentliga Matrix-nätverket för säker, decentraliserad kommunikation, som drivs av Matrix.org Foundation.";
 "screen_change_account_provider_other" = "Annan";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "Jämför siffror";
 "screen_session_verification_complete_subtitle" = "Din nya session är nu verifierad. Den har tillgång till dina krypterade meddelanden, och andra användare kommer att se den som betrodd.";
 "screen_session_verification_complete_user_subtitle" = "Nu kan du lita på användarens identitet när du skickar eller tar emot meddelanden.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "Ange återställningsnyckel";
 "screen_session_verification_failed_subtitle" = "Antingen överskreds tidsgränsen för begäran, begäran nekades eller så fanns det ett matchningsfel för verifieringen.";
 "screen_session_verification_open_existing_session_subtitle" = "Bevisa att det är du för att komma åt din krypterade meddelandehistorik.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Du har inte tillgång till det här meddelandet";
 "timeline_decryption_failure_unable_to_decrypt" = "Det gick inte att dekryptera meddelandet";
 "timeline_decryption_failure_withheld_unverified" = "Det här meddelandet blockerades antingen för att du inte verifierade din enhet eller för att avsändaren måste verifiera din identitet.";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push-historik";
 "troubleshoot_notifications_entry_point_section" = "Felsök";
 "troubleshoot_notifications_screen_action" = "Kör tester";

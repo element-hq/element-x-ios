@@ -418,6 +418,8 @@ internal enum L10n {
   internal static var commonDecryptionError: String { return L10n.tr("Localizable", "common_decryption_error") }
   /// Description
   internal static var commonDescription: String { return L10n.tr("Localizable", "common_description") }
+  /// Deselect all
+  internal static var commonDeselectAll: String { return L10n.tr("Localizable", "common_deselect_all") }
   /// Developer options
   internal static var commonDeveloperOptions: String { return L10n.tr("Localizable", "common_developer_options") }
   /// Device ID
@@ -622,6 +624,8 @@ internal enum L10n {
   internal static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
   /// Seen by
   internal static var commonSeenBy: String { return L10n.tr("Localizable", "common_seen_by") }
+  /// Select all
+  internal static var commonSelectAll: String { return L10n.tr("Localizable", "common_select_all") }
   /// Send to
   internal static var commonSendTo: String { return L10n.tr("Localizable", "common_send_to") }
   /// Sending…
@@ -1286,14 +1290,6 @@ internal enum L10n {
   }
   /// Send invite?
   internal static var screenBottomSheetCreateDmTitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_create_dm_title") }
-  /// This will also remove you from all rooms in this space.
-  internal static var screenBottomSheetLeaveSpaceSubtitle: String { return L10n.tr("Localizable", "screen_bottom_sheet_leave_space_subtitle") }
-  /// This will also remove you from all rooms in this space, including those you’re the only administrator for:
-  internal static var screenBottomSheetLeaveSpaceSubtitleAdmin: String { return L10n.tr("Localizable", "screen_bottom_sheet_leave_space_subtitle_admin") }
-  /// Leave %1$@?
-  internal static func screenBottomSheetLeaveSpaceTitle(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "screen_bottom_sheet_leave_space_title", String(describing: p1))
-  }
   /// Ban from room
   internal static var screenBottomSheetManageRoomMemberBan: String { return L10n.tr("Localizable", "screen_bottom_sheet_manage_room_member_ban") }
   /// Ban
@@ -1366,6 +1362,10 @@ internal enum L10n {
   internal static func screenBugReportRashLogsAlertTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bug_report_rash_logs_alert_title", String(describing: p1))
   }
+  /// If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.
+  internal static var screenBugReportSendNotificationSettingsDescription: String { return L10n.tr("Localizable", "screen_bug_report_send_notification_settings_description") }
+  /// Send notification settings
+  internal static var screenBugReportSendNotificationSettingsTitle: String { return L10n.tr("Localizable", "screen_bug_report_send_notification_settings_title") }
   /// View logs
   internal static var screenBugReportViewLogs: String { return L10n.tr("Localizable", "screen_bug_report_view_logs") }
   /// Matrix.org is a large, free server on the public Matrix network for secure, decentralised communication, run by the Matrix.org Foundation.
@@ -1702,6 +1702,8 @@ internal enum L10n {
   internal static var screenJoinRoomForgetAction: String { return L10n.tr("Localizable", "screen_join_room_forget_action") }
   /// You need an invite in order to join this room
   internal static var screenJoinRoomInviteRequiredMessage: String { return L10n.tr("Localizable", "screen_join_room_invite_required_message") }
+  /// Invited by
+  internal static var screenJoinRoomInvitedBy: String { return L10n.tr("Localizable", "screen_join_room_invited_by") }
   /// Join room
   internal static var screenJoinRoomJoinAction: String { return L10n.tr("Localizable", "screen_join_room_join_action") }
   /// You may need to be invited or be a member of a space in order to join.
@@ -1806,6 +1808,22 @@ internal enum L10n {
   internal static var screenKnockRequestsListInitialLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_initial_loading_title") }
   /// Requests to join
   internal static var screenKnockRequestsListTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_title") }
+  /// (Admin)
+  internal static var screenLeaveSpaceLastAdminInfo: String { return L10n.tr("Localizable", "screen_leave_space_last_admin_info") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenLeaveSpaceSubmit(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_leave_space_submit", p1)
+  }
+  /// Select the rooms you’d like to leave which you're not the only administrator for:
+  internal static var screenLeaveSpaceSubtitle: String { return L10n.tr("Localizable", "screen_leave_space_subtitle") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func screenLeaveSpaceSubtitleOnlyLastAdmin(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_leave_space_subtitle_only_last_admin", p1)
+  }
+  /// Leave %1$@?
+  internal static func screenLeaveSpaceTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_leave_space_title", String(describing: p1))
+  }
   /// This account has been deactivated.
   internal static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
   /// Incorrect username and/or password
@@ -2744,7 +2762,7 @@ internal enum L10n {
   }
   /// Something doesn’t seem right. Either the request timed out or the request was denied.
   internal static var screenSessionVerificationCancelledSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_cancelled_subtitle") }
-  /// Confirm that the emojis below match those shown on your other session.
+  /// Confirm that the emojis below match those shown on your other device.
   internal static var screenSessionVerificationCompareEmojisSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_emojis_subtitle") }
   /// Compare emojis
   internal static var screenSessionVerificationCompareEmojisTitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_emojis_title") }
@@ -2754,10 +2772,12 @@ internal enum L10n {
   internal static var screenSessionVerificationCompareNumbersSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_numbers_subtitle") }
   /// Compare numbers
   internal static var screenSessionVerificationCompareNumbersTitle: String { return L10n.tr("Localizable", "screen_session_verification_compare_numbers_title") }
-  /// Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.
+  /// Now you can read or send messages securely on your other device.
   internal static var screenSessionVerificationCompleteSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_complete_subtitle") }
   /// Now you can trust the identity of this user when sending or receiving messages.
   internal static var screenSessionVerificationCompleteUserSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_complete_user_subtitle") }
+  /// Device verified
+  internal static var screenSessionVerificationDeviceVerified: String { return L10n.tr("Localizable", "screen_session_verification_device_verified") }
   /// Enter recovery key
   internal static var screenSessionVerificationEnterRecoveryKey: String { return L10n.tr("Localizable", "screen_session_verification_enter_recovery_key") }
   /// Either the request timed out, the request was denied, or there was a verification mismatch.
@@ -2810,7 +2830,7 @@ internal enum L10n {
   internal static var screenSessionVerificationWaitingAnotherDeviceSubtitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_another_device_subtitle") }
   /// Start verification on the other device
   internal static var screenSessionVerificationWaitingAnotherDeviceTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_another_device_title") }
-  /// Waiting for the other device
+  /// Start verification on the other device
   internal static var screenSessionVerificationWaitingOtherDeviceTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_other_device_title") }
   /// Waiting for the other user
   internal static var screenSessionVerificationWaitingOtherUserTitle: String { return L10n.tr("Localizable", "screen_session_verification_waiting_other_user_title") }
@@ -3206,6 +3226,18 @@ internal enum L10n {
   internal static var troubleshootNotificationsScreenTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_title") }
   /// Some tests require your attention. Please check the details.
   internal static var troubleshootNotificationsScreenWaiting: String { return L10n.tr("Localizable", "troubleshoot_notifications_screen_waiting") }
+  /// Checking blocked users
+  internal static var troubleshootNotificationsTestBlockedUsersDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_blocked_users_description") }
+  /// View blocked users
+  internal static var troubleshootNotificationsTestBlockedUsersQuickFix: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_blocked_users_quick_fix") }
+  /// No users are blocked.
+  internal static var troubleshootNotificationsTestBlockedUsersResultNone: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_blocked_users_result_none") }
+  /// Plural format key: "%#@COUNT@"
+  internal static func troubleshootNotificationsTestBlockedUsersResultSome(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "troubleshoot_notifications_test_blocked_users_result_some", p1)
+  }
+  /// Blocked users
+  internal static var troubleshootNotificationsTestBlockedUsersTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_blocked_users_title") }
   /// Check that the application can show notifications.
   internal static var troubleshootNotificationsTestCheckPermissionDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_check_permission_description") }
   /// Check permissions

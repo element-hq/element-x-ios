@@ -188,6 +188,7 @@
 "common_date_this_month" = "本月";
 "common_decryption_error" = "解密错误";
 "common_description" = "描述";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "开发者选项";
 "common_device_id" = "设备 ID";
 "common_direct_chat" = "私聊";
@@ -274,6 +275,7 @@
 "common_search_results" = "搜索结果";
 "common_security" = "安全";
 "common_seen_by" = "已读";
+"common_select_all" = "Select all";
 "common_send_to" = "发送至";
 "common_sending" = "正在发送…";
 "common_sending_failed" = "发送失败";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "发送邀请";
 "screen_bottom_sheet_create_dm_message" = "您想与%1$@ 开始聊天吗？";
 "screen_bottom_sheet_create_dm_title" = "发送邀请？";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "移除并封禁成员";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "封禁";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "即使受到邀请，他们也无法再次加入聊天室。";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "您确定要拒绝加入此房间的邀请吗？这也将阻止%1$@ 与您联系或邀请您加入房间。";
 "screen_join_room_decline_and_block_alert_title" = "拒绝邀请并屏蔽";
 "screen_join_room_decline_and_block_button_title" = "拒绝并屏蔽";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "允许的字符数量 %2$d中的%1$d";
 "screen_join_room_knock_message_description" = "消息（可选）";
 "screen_join_room_knock_sent_description" = "如果您的请求被接受，您将收到加入房间的邀请。";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "当有人请求加入房间时，您将能够在这里看到他们的请求。";
 "screen_knock_requests_list_empty_state_title" = "没有待处理的加入请求";
 "screen_knock_requests_list_initial_loading_title" = "正在加载加入请求...";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
+"screen_leave_space_title" = "Leave %1$@?";
 "screen_media_details_file_format" = "文件格式";
 "screen_media_details_filename" = "文件名";
 "screen_media_details_no_more_files_to_show" = "没有更多文件可显示了";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "安全与隐私";
 "screen_space_list_description" = "您创建或加入的空间。";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "空间";
 "screen_start_chat_join_room_by_address_action" = "输入地址加入房间";
 "screen_start_chat_join_room_by_address_invalid_address" = "地址无效";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "日志文件过大，无法包含在本报告中，请通过其他方式发送给我们。";
 "screen_bug_report_include_screenshot" = "发送屏幕截图";
 "screen_bug_report_logs_description" = "为确认一切正常运行，您的消息中将包含日志。如要发送不带日志的消息，请关闭此设置。";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "查看日志";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org 由 Matrix.org 基金会运营，是用于安全、去中心化的通信的公共 Matrix 网络上的大型免费服务器。";
 "screen_change_account_provider_other" = "其他";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "比较数字";
 "screen_session_verification_complete_subtitle" = "新设备已经成功验证。现在新设备可以访问加密信息，其他用户也会信任这个设备。";
 "screen_session_verification_complete_user_subtitle" = "现在您可以在发送或接收消息时信任该用户的身份。";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "输入恢复密钥";
 "screen_session_verification_failed_subtitle" = "要么请求超时，要么请求被拒绝，要么验证不匹配。";
 "screen_session_verification_open_existing_session_subtitle" = "证明自己的身份以访问加密历史消息。";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "您无权访问此消息";
 "timeline_decryption_failure_unable_to_decrypt" = "无法解密消息";
 "timeline_decryption_failure_withheld_unverified" = "此消息已被阻止，因为您未验证您的设备，或者发件人需要验证您的身份。";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "推送历史记录";
 "troubleshoot_notifications_entry_point_section" = "排查问题";
 "troubleshoot_notifications_screen_action" = "运行测试";

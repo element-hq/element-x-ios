@@ -97,7 +97,7 @@
 "action_leave" = "Forlad";
 "action_leave_conversation" = "Forlad samtalen";
 "action_leave_room" = "Forlad rum";
-"action_leave_space" = "Leave space";
+"action_leave_space" = "Forlad klynge";
 "action_load_more" = "Indlæs mere";
 "action_manage_account" = "Administrer konto";
 "action_manage_devices" = "Administrer enheder";
@@ -181,13 +181,14 @@
 "common_creating_room" = "Opretter rum...";
 "common_current_user_canceled_knock" = "Anmodning annulleret";
 "common_current_user_left_room" = "Forlod rummet";
-"common_current_user_left_space" = "Left space";
+"common_current_user_left_space" = "Forlod klynge";
 "common_current_user_rejected_invite" = "Invitationen blev afvist";
 "common_dark" = "Mørkt tema";
 "common_date_date_at_time" = "%1$@ kl. %2$@";
 "common_date_this_month" = "Denne måned";
 "common_decryption_error" = "Fejl under dekryptering";
 "common_description" = "Beskrivelse";
+"common_deselect_all" = "Fravælg alle";
 "common_developer_options" = "Indstillinger for udviklere";
 "common_device_id" = "Enheds-ID";
 "common_direct_chat" = "Direkte samtale";
@@ -274,6 +275,7 @@
 "common_search_results" = "Søgeresultater";
 "common_security" = "Sikkerhed";
 "common_seen_by" = "Set af";
+"common_select_all" = "Vælg alle";
 "common_send_to" = "Send til";
 "common_sending" = "Sender...";
 "common_sending_failed" = "Afsendelse mislykkedes";
@@ -283,7 +285,7 @@
 "common_server_unreachable" = "Serveren er ikke tilgængelig";
 "common_server_url" = "Server URL";
 "common_settings" = "Indstillinger";
-"common_share_space" = "Share space";
+"common_share_space" = "Del klynge";
 "common_shared_location" = "Delt placering";
 "common_signing_out" = "Logger ud";
 "common_something_went_wrong" = "Noget gik galt";
@@ -330,7 +332,7 @@
 "common_you" = "Dig";
 "common.add_account" = "Tilføj en konto";
 "common.add_another_account" = "Tilføj en anden konto";
-"common.no_space_name" = "No space name";
+"common.no_space_name" = "Intet klyngenavn";
 "common.select_account" = "Vælg en konto";
 "common_unable_to_decrypt_insecure_device" = "Sendt fra en usikker enhed";
 "common_unable_to_decrypt_verification_violation" = "Afsenderens verificerede identitet blev nulstillet";
@@ -374,9 +376,9 @@
 "emoji_picker_category_foods" = "Mad og drikke";
 "emoji_picker_category_nature" = "Dyr og natur";
 "emoji_picker_category_objects" = "Objekter";
-"emoji_picker_category_people" = "Smileys og mennesker";
+"emoji_picker_category_people" = "Smileys og personer";
 "emoji_picker_category_places" = "Rejser og steder";
-"emoji_picker_category_recent" = "Recent emojis";
+"emoji_picker_category_recent" = "Seneste emojis";
 "emoji_picker_category_symbols" = "Symboler";
 "emoji_picker_search_placeholder" = "Søg emojis";
 "error_invalid_invite" = "Rummet findes ikke længere, eller invitationen er ikke længere gyldig.";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invitation";
 "screen_bottom_sheet_create_dm_message" = "Kunne du tænke dig at starte en samtale med %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invitation?";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Spær fra rum";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Spær";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "De vil ikke være i stand til at deltage i dette rum igen, selv om de inviteres.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Er du sikker på, at du vil afvise invitationen til at deltage i dette rum? Dette forhindrer også %1$@ i at kontakte dig eller invitere dig til andre rum.";
 "screen_join_room_decline_and_block_alert_title" = "Afvis invitation og blokér";
 "screen_join_room_decline_and_block_button_title" = "Afvis og blokér";
+"screen_join_room_invited_by" = "Inviteret af";
 "screen_join_room_knock_message_characters_count" = "Tilladte tegn %1$d af %2$d";
 "screen_join_room_knock_message_description" = "Besked (valgfrit)";
 "screen_join_room_knock_sent_description" = "Du vil modtage en invitation til at deltage i rummet, hvis din anmodning accepteres.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "Når nogen beder om at deltage i rummet, kan du se deres anmodning her.";
 "screen_knock_requests_list_empty_state_title" = "Ingen ventende anmodning om at deltage";
 "screen_knock_requests_list_initial_loading_title" = "Indlæser anmodninger om at deltage...";
+"screen_leave_space_last_admin_info" = "Administrator";
+"screen_leave_space_subtitle" = "Vælg de rum, du vil forlade, som du ikke er den eneste administrator for:";
+"screen_leave_space_title" = "Forlad %1$@?";
 "screen_media_details_file_format" = "Filformat";
 "screen_media_details_filename" = "Filnavn";
 "screen_media_details_no_more_files_to_show" = "Ikke flere filer at vise";
@@ -578,7 +581,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Upload af medier mislykkedes. Prøv igen.";
 "screen_media_upload_preview_error_too_large_message" = "Den maksimalt tilladte filstørrelse er %1$@ .";
 "screen_media_upload_preview_error_too_large_title" = "Filen er for stor til at kunne uploades.";
-"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
+"screen_media_upload_preview_item_count" = "Fil %1$d af %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimér billedkvaliteten";
 "screen_media_upload_preview_processing" = "Behandler…";
 "screen_pinned_timeline_empty_state_description" = "Tryk på en besked og vælg \"%1$@\" for at inkludere den her.";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Sikkerhed og privatliv";
 "screen_space_list_description" = "Klynger, du har oprettet eller deltager i";
 "screen_space_list_details" = "%1$@•%2$@";
+"screen_space_list_parent_space" = "%1$@ klynge";
 "screen_space_list_title" = "Klynger";
 "screen_start_chat_join_room_by_address_action" = "Tilslut dig rummet med adressen";
 "screen_start_chat_join_room_by_address_invalid_address" = "Ikke en gyldig adresse";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Dine logfiler er for store, så de kan ikke medtages i denne rapport, send dem venligst til os på en anden måde.";
 "screen_bug_report_include_screenshot" = "Send skærmbillede";
 "screen_bug_report_logs_description" = "Logfiler vil blive inkluderet i din besked for at sikre, at alt fungerer korrekt. Hvis du vil sende din besked uden logfiler, skal du deaktivere denne indstilling.";
+"screen_bug_report_send_notification_settings_description" = "Hvis du har problemer med notifikationer, kan upload af notifikationsindstillingerne hjælpe os med at identificere den grundlæggende årsag.";
+"screen_bug_report_send_notification_settings_title" = "Send notifikationsindstillinger";
 "screen_bug_report_view_logs" = "Se logfiler";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org er en stor, gratis server på det offentlige Matrix-netværk til sikker, decentraliseret kommunikation, drevet af Matrix.org Foundation.";
 "screen_change_account_provider_other" = "Anden";
@@ -1009,8 +1015,8 @@
 "screen_room_details_error_loading_notification_settings" = "Der opstod en fejl under indlæsning af notifikationsindstillinger.";
 "screen_room_details_error_muting" = "Det lykkedes ikke at slå lyden fra for dette rum. Prøv igen.";
 "screen_room_details_error_unmuting" = "Det lykkedes ikke at slå lyden til igen i dette rum. Prøv igen.";
-"screen_room_details_invite_people_dont_close" = "Don't close the app until finished.";
-"screen_room_details_invite_people_preparing" = "Preparing invitations...";
+"screen_room_details_invite_people_dont_close" = "Luk ikke appen, før den er færdig.";
+"screen_room_details_invite_people_preparing" = "Forbereder invitationer...";
 "screen_room_details_notification_mode_custom" = "Brugerdefineret";
 "screen_room_details_notification_mode_default" = "Standard";
 "screen_room_details_share_room_title" = "Del rum";
@@ -1117,13 +1123,14 @@
 "screen_server_confirmation_title_picker_mode" = "Vælg din kontoudbyder";
 "screen_server_confirmation_title_register" = "Du er ved at oprette en konto på %1$@";
 "screen_session_verification_cancelled_subtitle" = "Et ellervandet virker ikke rigtigt. Enten udløb anmodningen, eller anmodningen blev afvist.";
-"screen_session_verification_compare_emojis_subtitle" = "Bekræft, at emojierne nedenfor matcher dem, der vises på din anden session.";
+"screen_session_verification_compare_emojis_subtitle" = "Bekræft, at emojierne nedenfor matcher dem, der vises på din anden enhed.";
 "screen_session_verification_compare_emojis_title" = "Sammenlign emojier";
 "screen_session_verification_compare_emojis_user_subtitle" = "Bekræft, at emojierne nedenfor matcher dem, der vises på den anden brugers enhed.";
 "screen_session_verification_compare_numbers_subtitle" = "Bekræft, at numrene nedenfor stemmer overens med dem, der vises på din anden session.";
 "screen_session_verification_compare_numbers_title" = "Sammenlign tal";
-"screen_session_verification_complete_subtitle" = "Din nye session er nu bekræftet. Det har adgang til dine krypterede meddelelser, og andre brugere vil se den som betroet.";
+"screen_session_verification_complete_subtitle" = "Nu kan du læse eller sende beskeder sikkert med din anden enhed.";
 "screen_session_verification_complete_user_subtitle" = "Nu kan du stole på identiteten af denne bruger, når I sender og modtager beskeder fra hinanden.";
+"screen_session_verification_device_verified" = "Enhed verificeret";
 "screen_session_verification_enter_recovery_key" = "Indtast gendannelsesnøgle";
 "screen_session_verification_failed_subtitle" = "Enten udløb anmodningen, den blev afvist, eller der var en fejl i verifikationen.";
 "screen_session_verification_open_existing_session_subtitle" = "Bevis, at det er dig, for at få adgang til din krypterede beskedhistorik.";
@@ -1147,7 +1154,7 @@
 "screen_session_verification_user_responder_subtitle" = "For ekstra sikkerhed ønsker en anden bruger at bekræfte din identitet. Du får vist et sæt emojier til sammenligning.";
 "screen_session_verification_waiting_another_device_subtitle" = "Du burde se en popup på den anden enhed. Start verifikationen derfra nu.";
 "screen_session_verification_waiting_another_device_title" = "Start verifikation på den anden enhed";
-"screen_session_verification_waiting_other_device_title" = "Venter på den anden enhed";
+"screen_session_verification_waiting_other_device_title" = "Start verifikation på den anden enhed";
 "screen_session_verification_waiting_other_user_title" = "Venter på den anden bruger";
 "screen_session_verification_waiting_subtitle" = "Når du er blevet accepteret, kan du fortsætte med verifikationen.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Accepter anmodningen om at starte bekræftelsesprocessen i din anden session for at fortsætte.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Du har ikke adgang til denne besked";
 "timeline_decryption_failure_unable_to_decrypt" = "Kan ikke dekryptere beskeden";
 "timeline_decryption_failure_withheld_unverified" = "Denne besked blev blokeret, enten fordi du ikke verificerede din enhed, eller fordi afsenderen skal have verificeret din identitet.";
+"troubleshoot_notifications_test_blocked_users_description" = "Kontrollerer blokerede brugere";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "Se blokerede brugere";
+"troubleshoot_notifications_test_blocked_users_result_none" = "Ingen brugere er blokeret.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blokerede brugere";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push-historik";
 "troubleshoot_notifications_entry_point_section" = "Fejlfind";
 "troubleshoot_notifications_screen_action" = "Kør test";

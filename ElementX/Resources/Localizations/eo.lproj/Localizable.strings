@@ -100,7 +100,7 @@
 "action_leave_space" = "Leave space";
 "action_load_more" = "Load more";
 "action_manage_account" = "Manage account";
-"action_manage_devices" = "Manage connected devices";
+"action_manage_devices" = "Manage linked devices";
 "action_message" = "Message";
 "action_next" = "Next";
 "action_no" = "No";
@@ -188,6 +188,7 @@
 "common_date_this_month" = "This month";
 "common_decryption_error" = "Decryption error";
 "common_description" = "Description";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Developer options";
 "common_device_id" = "Device ID";
 "common_direct_chat" = "Direct chat";
@@ -274,6 +275,7 @@
 "common_search_results" = "Search results";
 "common_security" = "Security";
 "common_seen_by" = "Seen by";
+"common_select_all" = "Select all";
 "common_send_to" = "Send to";
 "common_sending" = "Sending…";
 "common_sending_failed" = "Sending failed";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Send invite";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Send invite?";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Ban from room";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Ban";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Are you sure you want to decline the invite to join this room? This will also prevent %1$@ from contacting you or inviting you to rooms.";
 "screen_join_room_decline_and_block_alert_title" = "Decline invite & block";
 "screen_join_room_decline_and_block_button_title" = "Decline and block";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Message (optional)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_initial_loading_title" = "Loading requests to join…";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
+"screen_leave_space_title" = "Leave %1$@?";
 "screen_media_details_file_format" = "File format";
 "screen_media_details_filename" = "File name";
 "screen_media_details_no_more_files_to_show" = "No more files to show";
@@ -596,8 +599,8 @@
 "screen_resolve_send_failure_unsigned_device_primary_button_title" = "Send message anyway";
 "screen_resolve_send_failure_unsigned_device_subtitle" = "%1$@ is using one or more unconfirmed devices. You can send the message anyway, or you can cancel for now and try again later after %2$@ has confirmed all their devices.";
 "screen_resolve_send_failure_unsigned_device_title" = "Your message was not sent because %1$@ has not confirmed all devices";
-"screen_resolve_send_failure_you_unsigned_device_subtitle" = "One or more of your connected devices are unconfirmed. You can send the message anyway, or you can cancel for now and try again later after you have confirmed all of your connected devices.";
-"screen_resolve_send_failure_you_unsigned_device_title" = "Your message was not sent because you have not confirmed one or more of your connected devices";
+"screen_resolve_send_failure_you_unsigned_device_subtitle" = "One or more of your linked devices are unconfirmed. You can send the message anyway, or you can cancel for now and try again later after you have confirmed all of your linked devices.";
+"screen_resolve_send_failure_you_unsigned_device_title" = "Your message was not sent because you have not confirmed one or more of your linked devices";
 "screen_room_event_pill" = "Message in %1$@";
 "screen_room_mentions_at_room_subtitle" = "Notify the whole room";
 "screen_room_multiple_knock_requests_view_all_button_title" = "View all";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Security & privacy";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_start_chat_join_room_by_address_action" = "Join room by address";
 "screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
@@ -654,7 +658,7 @@
 "screen_start_chat_join_room_by_address_supporting_text" = "e.g. #room-name:matrix.org";
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@'s security verification has changed.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not confirmed all their devices.";
-"screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not confirmed one or more of your connected devices.";
+"screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not confirmed one or more of your linked devices.";
 "screen_account_provider_form_hint" = "Homeserver address";
 "screen_account_provider_form_notice" = "Enter a search term or a domain address.";
 "screen_account_provider_form_subtitle" = "Search for a company, community, or private server.";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Send screenshot";
 "screen_bug_report_logs_description" = "Logs will be included with your message to make sure that everything is working properly. To send your message without logs, turn off this setting.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "View logs";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org is a large, free server on the public Matrix network for secure, decentralised communication, run by the Matrix.org Foundation.";
 "screen_change_account_provider_other" = "Other";
@@ -892,7 +898,7 @@
 "screen_polls_history_filter_past" = "Past";
 "screen_polls_history_title" = "Polls";
 "screen_qr_code_login_connecting_subtitle" = "Establishing a secure connection";
-"screen_qr_code_login_connection_note_secure_state_description" = "A secure connection could not be made to the new device. Your existing connected devices are still safe and you don't need to worry about them.";
+"screen_qr_code_login_connection_note_secure_state_description" = "A secure connection could not be made to the new device. Your existing linked devices are still safe and you don't need to worry about them.";
 "screen_qr_code_login_connection_note_secure_state_list_header" = "What now?";
 "screen_qr_code_login_connection_note_secure_state_list_item_1" = "Try signing in again with a QR code in case this was a network problem";
 "screen_qr_code_login_connection_note_secure_state_list_item_2" = "If you encounter the same problem, try a different wifi network or use your mobile data instead of wifi";
@@ -935,13 +941,13 @@
 "screen_recovery_key_change_generate_key" = "Generate a new backup password";
 "screen_recovery_key_change_success" = "Backup password changed";
 "screen_recovery_key_change_title" = "Change backup password?";
-"screen_recovery_key_confirm_create_new_recovery_key" = "Create new recovery key";
+"screen_recovery_key_confirm_create_new_recovery_key" = "Create new backup password";
 "screen_recovery_key_confirm_description" = "Make sure nobody can see this screen!";
 "screen_recovery_key_confirm_error_content" = "Please try again to confirm access to your message backup.";
 "screen_recovery_key_confirm_error_title" = "Incorrect backup password";
 "screen_recovery_key_confirm_key_description" = "You might have seen the terms \"recovery key\", \"security key\" or \"security phrase\" instead of \"backup password\". Don't worry, this is all the same.";
 "screen_recovery_key_confirm_key_placeholder" = "Enter…";
-"screen_recovery_key_confirm_lost_recovery_key" = "Lost your recovery key?";
+"screen_recovery_key_confirm_lost_recovery_key" = "Lost your backup password?";
 "screen_recovery_key_confirm_success" = "Backup password confirmed";
 "screen_recovery_key_copied_to_clipboard" = "Copied backup password";
 "screen_recovery_key_generating_key" = "Generating…";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "Compare numbers";
 "screen_session_verification_complete_subtitle" = "Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.";
 "screen_session_verification_complete_user_subtitle" = "Now you can trust this user when sending or receiving messages.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "Enter backup password";
 "screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Prove it’s you in order to access your encrypted message history.";
@@ -1175,7 +1182,7 @@
 "screen_signout_save_recovery_key_subtitle" = "You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages.";
 "screen_start_chat_error_starting_chat" = "An error occurred when trying to start a chat";
 "screen_view_location_title" = "Location";
-"session_verification_banner_message" = "Looks like you're using a new device. Confirm it with another connected device to access your encrypted messages.";
+"session_verification_banner_message" = "Looks like you're using a new device. Confirm it with another linked device to access your encrypted messages.";
 "session_verification_banner_title" = "Verify it’s you";
 "settings_rageshake" = "Rageshake";
 "settings_rageshake_detection_threshold" = "Detection threshold";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "You don't have access to this message";
 "timeline_decryption_failure_unable_to_decrypt" = "Unable to decrypt message";
 "timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not confirm your device or because the sender needs to verify you.";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push history";
 "troubleshoot_notifications_entry_point_section" = "Troubleshoot";
 "troubleshoot_notifications_screen_action" = "Run tests";

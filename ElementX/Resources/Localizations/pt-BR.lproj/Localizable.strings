@@ -188,6 +188,7 @@
 "common_date_this_month" = "Este mês";
 "common_decryption_error" = "Erro de descriptografia";
 "common_description" = "Description";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Opções de desenvolvedor";
 "common_device_id" = "ID do dispositivo";
 "common_direct_chat" = "Conversa direta";
@@ -274,6 +275,7 @@
 "common_search_results" = "Resultados da pesquisa";
 "common_security" = "Segurança";
 "common_seen_by" = "Visto por";
+"common_select_all" = "Select all";
 "common_send_to" = "Enviar para";
 "common_sending" = "Enviando...";
 "common_sending_failed" = "Envio falhou";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Enviar convite";
 "screen_bottom_sheet_create_dm_message" = "Gostaria de iniciar uma conversa com %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Enviar convite?";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Banir da sala";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Banir";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Essa pessoa não poderá entrar nesta sala novamente se for convidada.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Tem certeza de que quer recusar o convite para entrar nesta sala? Isso também impedirá que %1$@ entre em contato com você ou o convide para salas.";
 "screen_join_room_decline_and_block_alert_title" = "Recusar convite e bloquear";
 "screen_join_room_decline_and_block_button_title" = "Recusar e bloquear";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "%1$d de %2$d caráteres permitidos";
 "screen_join_room_knock_message_description" = "Mensagem (opcional)";
 "screen_join_room_knock_sent_description" = "Você receberá um convite para entrar nesta sala se seu pedido for aceito.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "Quando alguém pedir para entrar na sala, você poderá ver o pedido aqui.";
 "screen_knock_requests_list_empty_state_title" = "Nenhum pedido de entrada pendente";
 "screen_knock_requests_list_initial_loading_title" = "Carregando solicitações de entrada...";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
+"screen_leave_space_title" = "Leave %1$@?";
 "screen_media_details_file_format" = "Formato do arquivo";
 "screen_media_details_filename" = "Nome do arquivo";
 "screen_media_details_no_more_files_to_show" = "Não há mais arquivos para mostrar";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Segurança e privacidade";
 "screen_space_list_description" = "Os espaços que você criou ou entrou.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Espaços";
 "screen_start_chat_join_room_by_address_action" = "Entrar na sala pelo endereço";
 "screen_start_chat_join_room_by_address_invalid_address" = "Não é um endereço válido";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Seus registros são grandes demais portanto não podem serem inclusos no relatório, por favor envie-os para a gente de outra maneira.";
 "screen_bug_report_include_screenshot" = "Enviar captura de tela";
 "screen_bug_report_logs_description" = "Os registros serão incluídos com sua mensagem para garantir que tudo esteja funcionando corretamente. Para enviar sua mensagem sem registros, desative essa configuração.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Ver registros";
 "screen_change_account_provider_matrix_org_subtitle" = "O Matrix.org é um grande servidor gratuito na rede pública Matrix para comunicação segura e descentralizada, administrado pela Fundação Matrix.org.";
 "screen_change_account_provider_other" = "Outro";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "Comparar números";
 "screen_session_verification_complete_subtitle" = "Sua nova sessão está verificada agora. Ela tem acesso às suas mensagens criptografadas e outros usuários a verão como confiável.";
 "screen_session_verification_complete_user_subtitle" = "Agora você pode confiar na identidade desse usuário ao enviar ou receber mensagens.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "Digitar chave de recuperação";
 "screen_session_verification_failed_subtitle" = "Ou a solicitação expirou, a solicitação foi negada ou houve uma não correspondência na verificação.";
 "screen_session_verification_open_existing_session_subtitle" = "Prove que é você para acessar seu histórico de mensagens criptografadas.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Você não tem acesso à esta mensagem";
 "timeline_decryption_failure_unable_to_decrypt" = "Não foi possível descriptografar a mensagem";
 "timeline_decryption_failure_withheld_unverified" = "Esta mensagem foi bloqueada porque você não verificou seu dispositivo ou porque o remetente precisa verificar sua identidade.";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "Histórico de push";
 "troubleshoot_notifications_entry_point_section" = "Solução de problemas";
 "troubleshoot_notifications_screen_action" = "Executar testes";

@@ -188,6 +188,7 @@
 "common_date_this_month" = "Luna aceasta";
 "common_decryption_error" = "Eroare de decriptare";
 "common_description" = "Description";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Opțiuni programator";
 "common_device_id" = "ID-ul dispozitivului";
 "common_direct_chat" = "Chat direct";
@@ -274,6 +275,7 @@
 "common_search_results" = "Rezultatele căutării";
 "common_security" = "Securitate";
 "common_seen_by" = "Văzut de";
+"common_select_all" = "Select all";
 "common_send_to" = "Trimiteți către";
 "common_sending" = "Se trimite…";
 "common_sending_failed" = "Trimiterea a eșuat";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Trimiteți invitația";
 "screen_bottom_sheet_create_dm_message" = "Doriți să începeți o discuție cu %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Trimiteți invitația?";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Îndepărtați și interziceți membrul";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Interzicere";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Nu se vor putea alătura din nou acestei camere dacă sunt invitați.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Sunteți sigur că doriți să refuzați invitația de a vă alătura acestei camere? Acest lucru va împiedica, de asemenea, %1$@ să vă contacteze sau să vă invite în camere.";
 "screen_join_room_decline_and_block_alert_title" = "Refuzați invitația și blocați";
 "screen_join_room_decline_and_block_button_title" = "Refuzați și blocați";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "Caractere permise %1$d din %2$d";
 "screen_join_room_knock_message_description" = "Mesaj (opțional)";
 "screen_join_room_knock_sent_description" = "Veți primi o invitație de a vă alătura camerei dacă cererea dumneavoastră este acceptată.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "Când cineva va cere să se alăture camerei, veți putea vedea cererea aici.";
 "screen_knock_requests_list_empty_state_title" = "Nu există cereri de alăturare în așteptare";
 "screen_knock_requests_list_initial_loading_title" = "Se încarcă cererile de alăturare...";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
+"screen_leave_space_title" = "Leave %1$@?";
 "screen_media_details_file_format" = "Format fişier";
 "screen_media_details_filename" = "Nume fișier";
 "screen_media_details_no_more_files_to_show" = "Nu mai există fișiere de afișat";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Securitate & confidențialitate";
 "screen_space_list_description" = "Spații pe care le-ați creat sau la care v-ați alăturat.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spații";
 "screen_start_chat_join_room_by_address_action" = "Gasiți o cameră după adresă";
 "screen_start_chat_join_room_by_address_invalid_address" = "Adresa nu e este validă";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Jurnalele dumneavoastră sunt prea mari și nu pot fi incluse în acest raport. Vă rugăm să ni le trimiteți prin altă metodă.";
 "screen_bug_report_include_screenshot" = "Trimiteți captură de ecran";
 "screen_bug_report_logs_description" = "Pentru a verifica că lucrurile funcționează conform așteptărilor, log-uri vor fi trimise împreună cu mesajul. Acestea vor fi private. Pentru a trimite doar mesajul, dezactivați această setare.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Vizualizați log-urile";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org este un server mare și gratuit din rețeaua publică Matrix pentru comunicații sigure și descentralizate, administrat de Fundația Matrix.org.";
 "screen_change_account_provider_other" = "Altul";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "Comparați numerele";
 "screen_session_verification_complete_subtitle" = "Noua dumneavoastră sesiune este acum verificată. Are acces la mesajele dumneavoastră criptate, iar alți utilizatori vă vor vedea ca fiind de încredere.";
 "screen_session_verification_complete_user_subtitle" = "Acum puteți avea încredere în identitatea acestui utilizator atunci când trimiteți sau primiți mesaje.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "Introduceți cheia de recuperare";
 "screen_session_verification_failed_subtitle" = "Fie cererea a expirat, cererea a fost respinsă, fie a existat o nepotrivire de verificare.";
 "screen_session_verification_open_existing_session_subtitle" = "Demonstrați-vă identitatea pentru a accesa mesaje anterioare criptate.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Nu aveți acces la acest mesaj";
 "timeline_decryption_failure_unable_to_decrypt" = "Nu s-a putut decripta mesajul";
 "timeline_decryption_failure_withheld_unverified" = "Acest mesaj a fost blocat fie pentru că nu ați verificat dispozitivul, fie pentru că expeditorul trebuie să vă verifice identitatea.";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "Istoricul notificărilor";
 "troubleshoot_notifications_entry_point_section" = "Depanare";
 "troubleshoot_notifications_screen_action" = "Rulați testele";

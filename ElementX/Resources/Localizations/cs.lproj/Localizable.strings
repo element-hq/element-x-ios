@@ -188,6 +188,7 @@
 "common_date_this_month" = "Tento měsíc";
 "common_decryption_error" = "Chyba dešifrování";
 "common_description" = "Popis";
+"common_deselect_all" = "Odznačit vše";
 "common_developer_options" = "Možnosti pro vývojáře";
 "common_device_id" = "ID zařízení";
 "common_direct_chat" = "Přímý chat";
@@ -274,6 +275,7 @@
 "common_search_results" = "Výsledky hledání";
 "common_security" = "Zabezpečení";
 "common_seen_by" = "Viděno";
+"common_select_all" = "Vybrat vše";
 "common_send_to" = "Odeslat do";
 "common_sending" = "Odesílání…";
 "common_sending_failed" = "Odeslání se nezdařilo";
@@ -330,7 +332,7 @@
 "common_you" = "Vy";
 "common.add_account" = "Přidat účet";
 "common.add_another_account" = "Přidat další účet";
-"common.no_space_name" = "No space name";
+"common.no_space_name" = "Žádný název prostoru";
 "common.select_account" = "Vybrat účet";
 "common_unable_to_decrypt_insecure_device" = "Šifrováno nezabezpečeným zařízením";
 "common_unable_to_decrypt_verification_violation" = "Ověřená identita odesílatele se změnila";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Poslat pozvánku";
 "screen_bottom_sheet_create_dm_message" = "Chcete začít chatovat s %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Poslat pozvánku?";
-"screen_bottom_sheet_leave_space_subtitle" = "Tím budete také odstraněni ze všech místností v tomto prostoru.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "Tímto budete také odstraněni ze všech místností v tomto prostoru, včetně těch, jejichž jediným správcem jste:";
-"screen_bottom_sheet_leave_space_title" = "Opustit %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Odebrat a vykázat člena";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Vykázat";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Nebudou se moci znovu připojit k této místnosti, pokud budou pozváni.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Opravdu chcete odmítnout pozvánku do této místnosti? Tím také zabráníte tomu, aby vás %1$@ kontaktoval(a) nebo pozval(a) do místností.";
 "screen_join_room_decline_and_block_alert_title" = "Odmítnout pozvání a zablokovat";
 "screen_join_room_decline_and_block_button_title" = "Odmítnout a zablokovat";
+"screen_join_room_invited_by" = "Pozván(a)";
 "screen_join_room_knock_message_characters_count" = "Povolené znaky %1$d z %2$d";
 "screen_join_room_knock_message_description" = "Zpráva (nepovinné)";
 "screen_join_room_knock_sent_description" = "Pokud bude váš požadavek přijat, obdržíte pozvánku na vstup do místnosti.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "Když někdo požádá o vstup do místnosti, uvidíte jeho žádost zde.";
 "screen_knock_requests_list_empty_state_title" = "Žádná čekající žádost o vstup";
 "screen_knock_requests_list_initial_loading_title" = "Načítání žádostí o vstup...";
+"screen_leave_space_last_admin_info" = "(Správce)";
+"screen_leave_space_subtitle" = "Tím budete také odstraněni ze všech místností v tomto prostoru.";
+"screen_leave_space_title" = "Opustit %1$@?";
 "screen_media_details_file_format" = "Formát souboru";
 "screen_media_details_filename" = "Název souboru";
 "screen_media_details_no_more_files_to_show" = "Žádné další soubory k zobrazení";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Zabezpečení a soukromí";
 "screen_space_list_description" = "Prostory, které jste vytvořili nebo se k nim připojili.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ prostor";
 "screen_space_list_title" = "Prostory";
 "screen_start_chat_join_room_by_address_action" = "Vstoupit do místnosti pomocí adresy";
 "screen_start_chat_join_room_by_address_invalid_address" = "Neplatná adresa";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Vaše protokoly jsou příliš velké, proto je nelze zahrnout do této zprávy. Zašlete nám je prosím jiným způsobem.";
 "screen_bug_report_include_screenshot" = "Odeslat snímek obrazovky";
 "screen_bug_report_logs_description" = "Protokoly budou součástí vaší zprávy, aby se zajistilo že vše funguje správně. Chcete-li odeslat zprávu bez protokolů, vypněte toto nastavení.";
+"screen_bug_report_send_notification_settings_description" = "Pokud máte problémy s oznámeními, nahrání nastavení oznámení nám může pomoci určit jejich příčinu.";
+"screen_bug_report_send_notification_settings_title" = "Nastavení odesílání oznámení";
 "screen_bug_report_view_logs" = "Zobrazit protokoly";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org je velký bezplatný server ve veřejné síti Matrix pro bezpečnou decentralizovanou komunikaci, který provozuje nadace Matrix.org.";
 "screen_change_account_provider_other" = "Jiný";
@@ -1117,13 +1123,14 @@
 "screen_server_confirmation_title_picker_mode" = "Vyberte poskytovatele účtu";
 "screen_server_confirmation_title_register" = "Chystáte se vytvořit účet na %1$@";
 "screen_session_verification_cancelled_subtitle" = "Něco není v pořádku. Buď vypršel časový limit požadavku, nebo byl požadavek zamítnut.";
-"screen_session_verification_compare_emojis_subtitle" = "Zkontrolujte, zda se níže uvedené emotikony shodují s emotikony zobrazenými na jiné relaci.";
+"screen_session_verification_compare_emojis_subtitle" = "Zkontrolujte, zda se níže uvedené emotikony shodují s emotikony zobrazenými na vašem druhém zařízení.";
 "screen_session_verification_compare_emojis_title" = "Porovnání emotikonů";
 "screen_session_verification_compare_emojis_user_subtitle" = "Zkontrolujte, zda se níže uvedené emotikony shodují s emotikony zobrazenými v zařízení druhého uživatele.";
 "screen_session_verification_compare_numbers_subtitle" = "Potvrďte, že níže uvedená čísla odpovídají číslům zobrazeným na vaší druhé relaci.";
 "screen_session_verification_compare_numbers_title" = "Porovnejte čísla";
-"screen_session_verification_complete_subtitle" = "Vaše nová relace je nyní ověřena. Má přístup k vašim zašifrovaným zprávám a ostatní uživatelé ji uvidí jako důvěryhodnou.";
+"screen_session_verification_complete_subtitle" = "Nyní můžete bezpečně číst nebo odesílat zprávy na svém druhém zařízení.";
 "screen_session_verification_complete_user_subtitle" = "Nyní můžete důvěřovat identitě tohoto uživatele při odesílání nebo přijímání zpráv.";
+"screen_session_verification_device_verified" = "Zařízení ověřeno";
 "screen_session_verification_enter_recovery_key" = "Zadejte klíč pro obnovení";
 "screen_session_verification_failed_subtitle" = "Buď vypršel časový limit požadavku, požadavek byl zamítnut, nebo došlo k nesouladu ověření.";
 "screen_session_verification_open_existing_session_subtitle" = "Pro přístup k historii zašifrovaných zpráv prokažte, že jste to vy.";
@@ -1147,7 +1154,7 @@
 "screen_session_verification_user_responder_subtitle" = "Pro větší bezpečnost chce jiný uživatel ověřit vaši identitu. Zobrazí se vám sada emotikonů k porovnání.";
 "screen_session_verification_waiting_another_device_subtitle" = "Na druhém zařízení byste měli vidět vyskakovací okno. Začněte s ověrením tam.";
 "screen_session_verification_waiting_another_device_title" = "Spusťte ověření na druhém zařízení";
-"screen_session_verification_waiting_other_device_title" = "Čekání na druhé zařízení";
+"screen_session_verification_waiting_other_device_title" = "Spusťte ověření na druhém zařízení";
 "screen_session_verification_waiting_other_user_title" = "Čekání na druhého uživatele";
 "screen_session_verification_waiting_subtitle" = "Po přijetí budete moci pokračovat v ověřování.";
 "screen_session_verification_waiting_to_accept_subtitle" = "Pro pokračování přijměte požadavek na zahájení ověření v jiné relaci.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "Nemáte přístup k této zprávě";
 "timeline_decryption_failure_unable_to_decrypt" = "Nelze dešifrovat zprávu";
 "timeline_decryption_failure_withheld_unverified" = "Tato zpráva byla zablokována buď proto, že jste neověřili své zařízení, nebo proto, že odesílatel potřebuje ověřit vaši identitu.";
+"troubleshoot_notifications_test_blocked_users_description" = "Kontrola blokovaných uživatelů";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "Zobrazit blokované uživatele";
+"troubleshoot_notifications_test_blocked_users_result_none" = "Žádní uživatelé nejsou blokováni.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blokovaní uživatelé";
 "troubleshoot_notifications_entry_point_push_history_title" = "Historie push oznámení";
 "troubleshoot_notifications_entry_point_section" = "Odstraňování problémů";
 "troubleshoot_notifications_screen_action" = "Spustit testy";

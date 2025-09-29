@@ -188,6 +188,7 @@
 "common_date_this_month" = "Hilabete hau";
 "common_decryption_error" = "Deszifratze-errorea";
 "common_description" = "Description";
+"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Garapen aukerak";
 "common_device_id" = "Gailuaren IDa";
 "common_direct_chat" = "Txata zuzena";
@@ -274,6 +275,7 @@
 "common_search_results" = "Bilaketaren emaitzak";
 "common_security" = "Segurtasuna";
 "common_seen_by" = "Ikusi du";
+"common_select_all" = "Select all";
 "common_send_to" = "Bidali";
 "common_sending" = "Bidaltzen…";
 "common_sending_failed" = "Bidalketak huts egin du";
@@ -487,9 +489,6 @@
 "screen_bottom_sheet_create_dm_confirmation_button_title" = "Bidali gonbidapena";
 "screen_bottom_sheet_create_dm_message" = "Would you like to start a chat with %1$@?";
 "screen_bottom_sheet_create_dm_title" = "Gonbidapena bidali?";
-"screen_bottom_sheet_leave_space_subtitle" = "This will also remove you from all rooms in this space.";
-"screen_bottom_sheet_leave_space_subtitle_admin" = "This will also remove you from all rooms in this space, including those you’re the only administrator for:";
-"screen_bottom_sheet_leave_space_title" = "Leave %1$@?";
 "screen_bottom_sheet_manage_room_member_ban" = "Kendu kidea eta ezarri debekua";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Ezarri debekua";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
@@ -535,6 +534,7 @@
 "screen_join_room_decline_and_block_alert_message" = "Are you sure you want to decline the invite to join this room? This will also prevent %1$@ from contacting you or inviting you to rooms.";
 "screen_join_room_decline_and_block_alert_title" = "Eman gonbidapenari ezetza eta blokeatu";
 "screen_join_room_decline_and_block_button_title" = "Eman ezetza eta blokeatu";
+"screen_join_room_invited_by" = "Invited by";
 "screen_join_room_knock_message_characters_count" = "Allowed characters %1$d of %2$d";
 "screen_join_room_knock_message_description" = "Mezua (aukerakoa)";
 "screen_join_room_knock_sent_description" = "You will receive an invite to join the room if your request is accepted.";
@@ -565,6 +565,9 @@
 "screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_initial_loading_title" = "Loading requests to join…";
+"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
+"screen_leave_space_title" = "Leave %1$@?";
 "screen_media_details_file_format" = "Fitxategiaren formatua";
 "screen_media_details_filename" = "Fitxategiaren izena";
 "screen_media_details_no_more_files_to_show" = "No more files to show";
@@ -645,6 +648,7 @@
 "screen_security_and_privacy_title" = "Segurtasuna eta pribatutasuna";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";
+"screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
 "screen_start_chat_join_room_by_address_action" = "Join room by address";
 "screen_start_chat_join_room_by_address_invalid_address" = "Ez da baliozko helbidea";
@@ -718,6 +722,8 @@
 "screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Bidali pantaila-argazkia";
 "screen_bug_report_logs_description" = "Logs will be included with your message to make sure that everything is working properly. To send your message without logs, turn off this setting.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Ikusi erregistroak";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org is a large, free server on the public Matrix network for secure, decentralised communication, run by the Matrix.org Foundation.";
 "screen_change_account_provider_other" = "Beste bat";
@@ -1124,6 +1130,7 @@
 "screen_session_verification_compare_numbers_title" = "Konparatu zenbakiak";
 "screen_session_verification_complete_subtitle" = "Saio berria egiaztatu da. Zifratutako mezu guztiak atzitu ditzake, eta gainerako erabiltzaileek fidagarritzat izango dute.";
 "screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
+"screen_session_verification_device_verified" = "Device verified";
 "screen_session_verification_enter_recovery_key" = "Sartu berreskuratze-gakoa";
 "screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_open_existing_session_subtitle" = "Frogatu zeu zarela zifratutako mezuen historia atzitzeko.";
@@ -1257,6 +1264,10 @@
 "timeline_decryption_failure_historical_event_user_not_joined" = "You don't have access to this message";
 "timeline_decryption_failure_unable_to_decrypt" = "Ezin da mezua deszifratu";
 "timeline_decryption_failure_withheld_unverified" = "This message was blocked either because you did not verify your device or because the sender needs to verify your identity.";
+"troubleshoot_notifications_test_blocked_users_description" = "Checking blocked users";
+"troubleshoot_notifications_test_blocked_users_quick_fix" = "View blocked users";
+"troubleshoot_notifications_test_blocked_users_result_none" = "No users are blocked.";
+"troubleshoot_notifications_test_blocked_users_title" = "Blocked users";
 "troubleshoot_notifications_entry_point_push_history_title" = "Push history";
 "troubleshoot_notifications_entry_point_section" = "Troubleshoot";
 "troubleshoot_notifications_screen_action" = "Exekutatu testak";
