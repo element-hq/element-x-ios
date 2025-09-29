@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: Danger
-    runs-on: macos-26
+    runs-on: macos-15
 
     steps:
       - name: Checkout
