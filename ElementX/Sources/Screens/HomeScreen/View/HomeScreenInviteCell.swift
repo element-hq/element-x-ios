@@ -158,29 +158,29 @@ struct HomeScreenInviteCell_Previews: PreviewProvider, TestablePreview {
                                  context: makeViewModel().context,
                                  hideInviteAvatars: false)
             
-            HomeScreenInviteCell(room: .roomInvite(),
+            HomeScreenInviteCell(room: .invite(),
                                  context: makeViewModel().context,
                                  hideInviteAvatars: false)
             
-            HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org",
-                                                   avatarURL: .mockMXCAvatar),
+            HomeScreenInviteCell(room: .invite(alias: "#footest:somewhere.org",
+                                               avatarURL: .mockMXCAvatar),
                                  context: makeViewModel().context,
                                  hideInviteAvatars: false)
             
             // Not the final design, may get its own cell type entirely.
-            HomeScreenInviteCell(room: .roomInvite(name: "Awesome Space",
-                                                   isSpace: true,
-                                                   alias: "#footest:somewhere.org",
-                                                   avatarURL: .mockMXCAvatar),
+            HomeScreenInviteCell(room: .invite(name: "Awesome Space",
+                                               isSpace: true,
+                                               alias: "#footest:somewhere.org",
+                                               avatarURL: .mockMXCAvatar),
                                  context: makeViewModel().context,
                                  hideInviteAvatars: false)
             
-            HomeScreenInviteCell(room: .roomInvite(name: "Hidden Avatars",
-                                                   avatarURL: .mockMXCAvatar),
+            HomeScreenInviteCell(room: .invite(name: "Hidden Avatars",
+                                               avatarURL: .mockMXCAvatar),
                                  context: makeViewModel().context,
                                  hideInviteAvatars: true)
             
-            HomeScreenInviteCell(room: .roomInvite(alias: "#footest:somewhere.org"),
+            HomeScreenInviteCell(room: .invite(alias: "#footest:somewhere.org"),
                                  context: makeViewModel().context,
                                  hideInviteAvatars: false)
                 .dynamicTypeSize(.accessibility1)
@@ -235,10 +235,10 @@ private extension HomeScreenRoom {
         return .init(summary: summary, hideUnreadMessagesBadge: false)
     }
     
-    static func roomInvite(name: String = "Awesome Room",
-                           isSpace: Bool = false,
-                           alias: String? = nil,
-                           avatarURL: URL? = nil) -> HomeScreenRoom {
+    static func invite(name: String = "Awesome Room",
+                       isSpace: Bool = false,
+                       alias: String? = nil,
+                       avatarURL: URL? = nil) -> HomeScreenRoom {
         let inviter = RoomMemberProxyMock()
         inviter.displayName = "Luca"
         inviter.userID = "@jack:somewhi.nl"
