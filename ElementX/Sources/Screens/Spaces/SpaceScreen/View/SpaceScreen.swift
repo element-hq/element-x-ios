@@ -42,6 +42,7 @@ struct SpaceScreen: View {
         }
     }
     
+    @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
         // Use the same trick as the RoomScreen for a leading title view that
         // also hides the navigation title.
@@ -49,6 +50,22 @@ struct SpaceScreen: View {
             RoomHeaderView(roomName: context.viewState.spaceName,
                            roomAvatar: context.viewState.space.avatar,
                            mediaProvider: context.mediaProvider)
+        }
+        
+        ToolbarItemGroup(placement: .secondaryAction) {
+            if let permalink = context.viewState.permalink {
+                Section {
+                    ShareLink(item: permalink) {
+                        Label(L10n.actionShare, icon: \.shareIos)
+                    }
+                }
+            }
+            
+            Section {
+                Button(role: .destructive) { context.send(viewAction: .leaveSpace) } label: {
+                    Label(L10n.actionLeaveSpace, icon: \.leave)
+                }
+            }
         }
     }
 }

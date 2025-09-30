@@ -60,6 +60,13 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         selectedSpaceRoomPublisher
             .weakAssign(to: \.state.selectedSpaceRoomID, on: self)
             .store(in: &cancellables)
+        
+        Task {
+            if case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(spaceRoomListProxy.spaceRoomProxy.id),
+               case let .success(permalinkURL) = await roomProxy.matrixToPermalink() {
+                state.permalink = permalinkURL
+            }
+        }
     }
     
     // MARK: - Public
@@ -81,6 +88,15 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             }
         case .spaceAction(.join(let spaceRoomProxy)):
             Task { await join(spaceRoomProxy) }
+        case .leaveSpace:
+            #if DEBUG
+            Task { // Temporary implementation to make joining a space easier to test.
+                if case let .joined(roomProxy) = await clientProxy.roomForIdentifier(spaceRoomListProxy.spaceRoomProxy.id),
+                   case .success = await roomProxy.leaveRoom() {
+                    actionsSubject.send(.leftSpace)
+                }
+            }
+            #endif
         }
     }
     
