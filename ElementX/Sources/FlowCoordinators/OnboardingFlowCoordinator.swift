@@ -23,7 +23,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
     private let notificationManager: NotificationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let windowManager: WindowManagerProtocol
-    private let isNewLogin: Bool
+    private var isNewLogin: Bool
     
     private var navigationStackCoordinator: NavigationStackCoordinator!
     
@@ -219,6 +219,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
             case (_, _, .notificationPermissions):
                 presentNotificationPermissionsScreen()
             case (_, _, .finished):
+                isNewLogin = false
                 actionsSubject.send(.dismiss)
                 stateMachine.tryState(.initial)
             case (.finished, _, .initial):
