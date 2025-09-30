@@ -154,9 +154,13 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         stateMachine.addRouteMapping { event, fromState, userInfo in
-            guard event == .startChildFlow, case .space = fromState else { return nil }
+            guard event == .startChildFlow else { return nil }
             guard let childEntryPoint = userInfo as? SpaceFlowCoordinatorEntryPoint else { fatalError("An entry point must be provided.") }
-            return .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: fromState)
+            return switch fromState {
+            case .space: .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: fromState)
+            case .roomFlow(let previousState): .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: previousState)
+            default: nil
+            }
         } handler: { [weak self] context in
             guard let self, let entryPoint = context.userInfo as? SpaceFlowCoordinatorEntryPoint else { return }
             startChildFlow(with: entryPoint)
@@ -323,6 +327,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                     actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
                 case .verifyUser(let userID):
                     actionsSubject.send(.verifyUser(userID: userID))
+                case .continueWithSpaceFlow(let spaceRoomListProxy):
+                    stateMachine.tryEvent(.startChildFlow, userInfo: SpaceFlowCoordinatorEntryPoint.space(spaceRoomListProxy))
                 case .finished:
                     stateMachine.tryEvent(.stopRoomFlow)
                 }
