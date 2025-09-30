@@ -14,37 +14,25 @@ extension Observable {
     ///
     /// - Parameter property: The key path to the property you would like to observe.
     func observe<Value>(_ property: KeyPath<Self, Value>) -> AsyncStream<Value> {
-        if #available(iOS 26, *) {
-            let observations = Observations { self[keyPath: property] }
-            return AsyncStream { continuation in
-                let task = Task {
-                    for await value in observations {
-                        continuation.yield(value)
+        AsyncStream { continuation in
+            let isActive = Mutex(true)
+            
+            @Sendable func observe() {
+                let value = withObservationTracking {
+                    self[keyPath: property]
+                } onChange: {
+                    // Handle the update on the next run loop as this is willSet not didSet.
+                    DispatchQueue.main.async {
+                        guard isActive.withLock({ $0 }) else { return }
+                        observe()
                     }
                 }
-                continuation.onTermination = { _ in task.cancel() }
+                continuation.yield(value)
             }
-        } else {
-            return AsyncStream { continuation in
-                let isActive = Mutex(true)
-                
-                @Sendable func observe() {
-                    let value = withObservationTracking {
-                        self[keyPath: property]
-                    } onChange: {
-                        // Handle the update on the next run loop as this is willSet not didSet.
-                        DispatchQueue.main.async {
-                            guard isActive.withLock({ $0 }) else { return }
-                            observe()
-                        }
-                    }
-                    continuation.yield(value)
-                }
-                
-                continuation.onTermination = { _ in isActive.withLock { $0 = false } }
-                
-                observe()
-            }
+            
+            continuation.onTermination = { _ in isActive.withLock { $0 = false } }
+            
+            observe()
         }
     }
 }
