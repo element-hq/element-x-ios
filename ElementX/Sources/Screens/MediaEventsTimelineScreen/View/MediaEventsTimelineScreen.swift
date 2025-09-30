@@ -47,20 +47,32 @@ struct MediaEventsTimelineScreen: View {
         if context.viewState.shouldShowEmptyState {
             emptyState
         } else {
-            ScrollView {
-                Group {
-                    switch context.viewState.bindings.screenMode {
-                    case .media:
-                        mediaContent
-                    case .files:
-                        filesContent
-                    }
-                    
-                    header
-                }
+            if #available(iOS 26, *) {
+                scrollView
+                    // Remove the glass effect of iOS 26+
+                    // A flipped table view will always trigger it
+                    // since the nav bar thinks is always at the bottom.
+                    .scrollEdgeEffectHidden()
+            } else {
+                scrollView
             }
-            .scaleEffect(.init(width: 1, height: -1))
         }
+    }
+    
+    private var scrollView: some View {
+        ScrollView {
+            Group {
+                switch context.viewState.bindings.screenMode {
+                case .media:
+                    mediaContent
+                case .files:
+                    filesContent
+                }
+                
+                header
+            }
+        }
+        .scaleEffect(.init(width: 1, height: -1))
     }
     
     @ViewBuilder
