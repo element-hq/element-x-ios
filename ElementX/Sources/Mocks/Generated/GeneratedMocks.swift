@@ -6483,6 +6483,76 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return threadTimelineEventIDReturnValue
         }
     }
+    //MARK: - getThreadRootEventID
+
+    var getThreadRootEventIDForUnderlyingCallsCount = 0
+    var getThreadRootEventIDForCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getThreadRootEventIDForUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getThreadRootEventIDForUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getThreadRootEventIDForUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getThreadRootEventIDForUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var getThreadRootEventIDForCalled: Bool {
+        return getThreadRootEventIDForCallsCount > 0
+    }
+    var getThreadRootEventIDForReceivedEventID: String?
+    var getThreadRootEventIDForReceivedInvocations: [String] = []
+
+    var getThreadRootEventIDForUnderlyingReturnValue: Result<String?, RoomProxyError>!
+    var getThreadRootEventIDForReturnValue: Result<String?, RoomProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return getThreadRootEventIDForUnderlyingReturnValue
+            } else {
+                var returnValue: Result<String?, RoomProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getThreadRootEventIDForUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getThreadRootEventIDForUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getThreadRootEventIDForUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var getThreadRootEventIDForClosure: ((String) async -> Result<String?, RoomProxyError>)?
+
+    func getThreadRootEventID(for eventID: String) async -> Result<String?, RoomProxyError> {
+        getThreadRootEventIDForCallsCount += 1
+        getThreadRootEventIDForReceivedEventID = eventID
+        DispatchQueue.main.async {
+            self.getThreadRootEventIDForReceivedInvocations.append(eventID)
+        }
+        if let getThreadRootEventIDForClosure = getThreadRootEventIDForClosure {
+            return await getThreadRootEventIDForClosure(eventID)
+        } else {
+            return getThreadRootEventIDForReturnValue
+        }
+    }
     //MARK: - messageFilteredTimeline
 
     var messageFilteredTimelineFocusAllowedMessageTypesPresentationUnderlyingCallsCount = 0
