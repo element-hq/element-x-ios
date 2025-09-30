@@ -97,6 +97,8 @@ protocol JoinedRoomProxyProtocol: RoomProxyProtocol {
     
     func threadTimeline(eventID: String) async -> Result<TimelineProxyProtocol, RoomProxyError>
     
+    func getThreadRootEventID(for eventID: String) async -> Result<String?, RoomProxyError>
+    
     func messageFilteredTimeline(focus: TimelineFocus,
                                  allowedMessageTypes: [TimelineAllowedMessageType],
                                  presentation: TimelineKind.MediaPresentation) async -> Result<TimelineProxyProtocol, RoomProxyError>

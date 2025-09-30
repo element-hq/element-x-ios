@@ -148,7 +148,6 @@ struct MessageText: UIViewRepresentable {
             if case .link(let url) = textItem.content {
                 return .init(title: defaultAction.title,
                              image: defaultAction.image,
-                             identifier: defaultAction.identifier,
                              discoverabilityTitle: defaultAction.discoverabilityTitle,
                              attributes: defaultAction.attributes,
                              state: defaultAction.state) { [weak self] _ in
