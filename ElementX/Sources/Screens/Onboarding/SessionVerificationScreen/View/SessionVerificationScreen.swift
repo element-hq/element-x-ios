@@ -137,7 +137,7 @@ struct SessionVerificationScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
             case .deviceResponder, .userResponder:
                 VStack(spacing: 16) {
-                    Button(L10n.actionStart) {
+                    Button(L10n.actionStartVerification) {
                         context.send(viewAction: .acceptVerificationRequest)
                     }
                     .buttonStyle(.compound(.primary))
