@@ -307,6 +307,7 @@ private struct NavigationTabCoordinatorView<Tag: Hashable>: View {
                     .toolbar(module.details.barVisibility(in: horizontalSizeClass), for: .tabBar)
             }
         }
+        .backportTabBarMinimizeBehaviorOnScrollDown()
         .introspect(.tabView, on: .supportedVersions, customize: configureAppearance)
         .sheet(item: $navigationTabCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()
