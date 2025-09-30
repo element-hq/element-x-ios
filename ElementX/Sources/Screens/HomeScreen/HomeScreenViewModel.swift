@@ -414,11 +414,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         switch await userSession.clientProxy.joinRoom(roomID, via: []) {
         case .success:
-            actionsSubject.send(.presentRoom(roomIdentifier: roomID))
-            analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
-                                             isSpace: roomProxy.info.isSpace,
-                                             activeMemberCount: UInt(roomProxy.info.activeMembersCount))
-            appSettings.seenInvites.remove(roomID)
+            await finishAcceptInvite(roomProxy: roomProxy)
         case .failure(let error):
             switch error {
             case .invalidInvite:
@@ -427,6 +423,28 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 displayError()
             }
         }
+    }
+    
+    private func finishAcceptInvite(roomProxy: InvitedRoomProxyProtocol) async {
+        if roomProxy.info.isSpace {
+            let spaceService = userSession.clientProxy.spaceService
+            
+            switch await spaceService.spaceRoomList(spaceID: roomProxy.id, parent: nil) {
+            case .success(let spaceRoomListProxy):
+                actionsSubject.send(.presentSpace(spaceRoomListProxy))
+            case .failure(let error):
+                MXLog.error("Failed to get the space room list after accepting invite: \(error)")
+                displayError()
+                return
+            }
+        } else {
+            actionsSubject.send(.presentRoom(roomIdentifier: roomProxy.id))
+        }
+        
+        analyticsService.trackJoinedRoom(isDM: roomProxy.info.isDirect,
+                                         isSpace: roomProxy.info.isSpace,
+                                         activeMemberCount: UInt(roomProxy.info.activeMembersCount))
+        appSettings.seenInvites.remove(roomProxy.id)
     }
     
     private func showDeclineInviteConfirmationAlert(roomID: String) async {

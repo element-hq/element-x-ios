@@ -76,7 +76,7 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     }
     
     func testRoomPresentation() async throws {
-        try await process(route: .room(roomID: "1", via: []), expectedChatsState: .roomList(roomListSelectedRoomID: "1"))
+        try await process(route: .room(roomID: "1", via: []), expectedChatsState: .roomList(detailState: .room(roomID: "1")))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
     }
@@ -86,14 +86,14 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
         XCTAssertTrue((tabCoordinator?.sheetCoordinator as? NavigationStackCoordinator)?.rootCoordinator is SettingsScreenCoordinator)
         XCTAssertNil(detailCoordinator)
         
-        try await process(route: .room(roomID: "1", via: []), expectedChatsState: .roomList(roomListSelectedRoomID: "1"))
+        try await process(route: .room(roomID: "1", via: []), expectedChatsState: .roomList(detailState: .room(roomID: "1")))
         XCTAssertNil((tabCoordinator?.sheetCoordinator))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
     }
     
     func testChildRoomPresentation() async throws {
-        try await process(route: .room(roomID: "1", via: []), expectedChatsState: .roomList(roomListSelectedRoomID: "1"))
+        try await process(route: .room(roomID: "1", via: []), expectedChatsState: .roomList(detailState: .room(roomID: "1")))
         let detailNavigationStack = try XCTUnwrap(detailNavigationStack, "There must be a navigation stack.")
         XCTAssertTrue(detailNavigationStack.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNotNil(detailCoordinator)
@@ -121,14 +121,14 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     }
     
     func testShareMediaRouteWithRoom() async throws {
-        try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedChatsState: .roomList(roomListSelectedRoomID: "1"))
+        try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedChatsState: .roomList(detailState: .room(roomID: "1")))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNil(tabCoordinator?.sheetCoordinator)
         XCTAssertNil(chatsSplitCoordinator?.sheetCoordinator)
 
         let sharePayload: ShareExtensionPayload = .mediaFiles(roomID: "2", mediaFiles: [.init(url: .picturesDirectory, suggestedName: nil)])
         try await process(route: .share(sharePayload),
-                          expectedChatsState: .roomList(roomListSelectedRoomID: "2"))
+                          expectedChatsState: .roomList(detailState: .room(roomID: "2")))
 
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNil(tabCoordinator?.sheetCoordinator)
@@ -149,14 +149,14 @@ class UserSessionFlowCoordinatorTests: XCTestCase {
     }
     
     func testShareTextRouteWithRoom() async throws {
-        try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedChatsState: .roomList(roomListSelectedRoomID: "1"))
+        try await process(route: .event(eventID: "1", roomID: "1", via: []), expectedChatsState: .roomList(detailState: .room(roomID: "1")))
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNil(tabCoordinator?.sheetCoordinator)
         XCTAssertNil(chatsSplitCoordinator?.sheetCoordinator)
 
         let sharePayload: ShareExtensionPayload = .text(roomID: "2", text: "Important text")
         try await process(route: .share(sharePayload),
-                          expectedChatsState: .roomList(roomListSelectedRoomID: "2"))
+                          expectedChatsState: .roomList(detailState: .room(roomID: "2")))
 
         XCTAssertTrue(detailNavigationStack?.rootCoordinator is RoomScreenCoordinator)
         XCTAssertNil(tabCoordinator?.sheetCoordinator)
