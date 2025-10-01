@@ -104,6 +104,7 @@ class SpaceExplorerFlowCoordinator: FlowCoordinatorProtocol {
             return .spaceList(selectedSpaceID: nil)
         } handler: { [weak self] _ in
             guard let self else { return }
+            navigationSplitCoordinator.setDetailCoordinator(nil) // If we forget to do this, the tab bar remains hidden.
             selectedSpaceSubject.send(nil)
             spaceFlowCoordinator = nil
         }

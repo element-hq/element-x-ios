@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 extension View {
@@ -52,6 +53,18 @@ extension View {
             tabBarMinimizeBehavior(.onScrollDown)
         } else {
             self
+        }
+    }
+    
+    @ViewBuilder
+    func backportSafeAreaBar(edge: VerticalEdge,
+                             alignment: HorizontalAlignment = .center,
+                             spacing: CGFloat? = nil,
+                             content: () -> some View) -> some View {
+        if #available(iOS 26.0, *) {
+            safeAreaBar(edge: edge, alignment: alignment, spacing: spacing, content: content)
+        } else {
+            safeAreaInset(edge: edge, alignment: alignment, spacing: spacing) { content().background(Color.compound.bgCanvasDefault.ignoresSafeArea()) }
         }
     }
     

@@ -40,6 +40,15 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         }
     }
     
+    func leaveSpace(spaceID: String) async -> Result<LeaveSpaceHandleProxy, SpaceServiceProxyError> {
+        do {
+            return try await .success(.init(spaceID: spaceID, leaveHandle: spaceService.leaveSpace(spaceId: spaceID)))
+        } catch {
+            MXLog.error("Failed to get leave handle for \(spaceID): \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+    
     // MARK: - Private
     
     private func handleUpdates(_ updates: [SpaceListUpdate]) {

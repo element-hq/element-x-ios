@@ -17,4 +17,5 @@ protocol SpaceServiceProxyProtocol {
     var joinedSpacesPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> { get }
     
     func spaceRoomList(spaceID: String, parent: SpaceRoomProxyProtocol?) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>
+    func leaveSpace(spaceID: String) async -> Result<LeaveSpaceHandleProxy, SpaceServiceProxyError>
 }

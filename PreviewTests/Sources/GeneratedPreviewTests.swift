@@ -365,6 +365,12 @@ extension PreviewTests {
         }
     }
 
+    func testLeaveSpaceView() async throws {
+        for (index, preview) in LeaveSpaceView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testLegalInformationScreen() async throws {
         for (index, preview) in LegalInformationScreen_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
