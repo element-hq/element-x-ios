@@ -173,6 +173,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                             if case .thread(threadRootEventID: threadRootEventID, _) = stateMachine.state, let threadCoordinator = childThreads.last {
                                 threadCoordinator.focusOnEvent(eventID: eventID)
                             } else {
+                                if childThreads.isEmpty {
+                                    roomScreenCoordinator?.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
+                                }
                                 stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: eventID))
                             }
                         } else if !childThreads.isEmpty {
@@ -260,7 +263,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     guard flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() else {
                         break
                     }
-                    stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
+                    stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: threadRootEventID, shouldSetPin: false))), userInfo: EventUserInfo(animated: animated))
                     stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focusEvent.eventID), userInfo: EventUserInfo(animated: false))
                     return
                 case .failure:
