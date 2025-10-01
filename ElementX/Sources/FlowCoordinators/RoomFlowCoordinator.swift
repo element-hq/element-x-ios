@@ -68,6 +68,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private var roomProxy: JoinedRoomProxyProtocol!
     
     private var roomScreenCoordinator: RoomScreenCoordinator?
+    private var childThreads: [ThreadTimelineScreenCoordinator] = []
     private weak var joinRoomScreenCoordinator: JoinRoomScreenCoordinator?
     
     // periphery:ignore - used to avoid deallocation
@@ -163,7 +164,28 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             } else if roomID != roomProxy.id {
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: EventUserInfo(animated: animated))
             } else {
-                roomScreenCoordinator?.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
+                showLoadingIndicator(delay: .seconds(0.5))
+                Task {
+                    defer { hideLoadingIndicator() }
+                    switch await roomProxy.loadOrFetchEvent(for: eventID) {
+                    case .success(let event):
+                        if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
+                            if case .thread(threadRootEventID: threadRootEventID, _) = stateMachine.state, let threadCoordinator = childThreads.last {
+                                threadCoordinator.focusOnEvent(eventID: eventID)
+                            } else {
+                                stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: eventID))
+                            }
+                        } else if !childThreads.isEmpty {
+                            // If we are showing a child thread, and we are navigating to a non threaded event
+                            // of the same room, we want to push the room on top of the thread
+                            stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: EventUserInfo(animated: animated))
+                        } else {
+                            roomScreenCoordinator?.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
+                        }
+                    case .failure:
+                        showError()
+                    }
+                }
             }
         case .share(let payload):
             guard let roomID = payload.roomID, roomID == self.roomID else {
@@ -232,12 +254,27 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         switch room {
         case .joined(let roomProxy):
             await storeAndSubscribeToRoomProxy(roomProxy)
+            if case let .eventFocus(focusEvent) = presentationAction {
+                switch await roomProxy.loadOrFetchEvent(for: focusEvent.eventID) {
+                case .success(let event):
+                    guard flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() else {
+                        break
+                    }
+                    stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
+                    stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focusEvent.eventID), userInfo: EventUserInfo(animated: false))
+                    return
+                case .failure:
+                    showError()
+                    stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
+                    return
+                }
+            }
             stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
         default:
             stateMachine.tryEvent(.presentJoinRoomScreen(via: via), userInfo: EventUserInfo(animated: animated))
         }
     }
-
+    
     func clearRoute(animated: Bool) {
         guard stateMachine.state != .initial else {
             return
@@ -305,8 +342,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 
             // Thread
                 
-            case (.room, .presentThread(let itemID), .thread):
-                Task { await self.presentThread(itemID: itemID, animated: animated) }
+            case (_, .presentThread(let threadRootEventID, let focusEventID), .thread):
+                Task { await self.presentThread(threadRootEventID: threadRootEventID, focusEventID: focusEventID, animated: animated) }
                 
             // Thread + Room
                 
@@ -605,7 +642,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentKnockRequestsList:
                     stateMachine.tryEvent(.presentKnockRequestsListScreen)
                 case .presentThread(let itemID):
-                    stateMachine.tryEvent(.presentThread(itemID: itemID))
+                    guard let threadRootEventID = itemID.eventID else {
+                        fatalError("A thread root has always an eventID")
+                    }
+                    stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: nil))
                 case .presentRoom(let roomID, let via):
                     stateMachine.tryEvent(.startChildFlow(roomID: roomID,
                                                           via: via,
@@ -617,17 +657,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         return coordinator
     }
     
-    private func presentThread(itemID: TimelineItemIdentifier, animated: Bool) async {
+    private func presentThread(threadRootEventID: String, focusEventID: String?, animated: Bool) async {
         showLoadingIndicator()
         defer { hideLoadingIndicator() }
         
         let timelineItemFactory = RoomTimelineItemFactory(userID: userSession.clientProxy.userID,
                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                           stateEventStringBuilder: RoomStateEventStringBuilder(userID: userSession.clientProxy.userID))
-        
-        guard let threadRootEventID = itemID.eventID else {
-            fatalError("Invalid thread event ID")
-        }
         
         guard case let .success(timelineController) = await flowParameters.timelineControllerFactory.buildThreadTimelineController(eventID: threadRootEventID,
                                                                                                                                    roomProxy: roomProxy,
@@ -645,6 +681,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         let coordinator = ThreadTimelineScreenCoordinator(parameters: .init(userSession: userSession,
                                                                             roomProxy: roomProxy,
+                                                                            focussedEventID: focusEventID,
                                                                             timelineController: timelineController,
                                                                             mediaPlayerProvider: MediaPlayerProvider(),
                                                                             emojiProvider: flowParameters.emojiProvider,
@@ -693,9 +730,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
                 
-        navigationStackCoordinator.push(coordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissThread)
+        navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
+            guard let self else { return }
+            stateMachine.tryEvent(.dismissThread)
+            childThreads.removeAll { $0 === coordinator }
         }
+        
+        childThreads.append(coordinator)
     }
     
     private func presentJoinRoomScreen(via: [String], animated: Bool) {
@@ -1578,5 +1619,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     
     private func hideLoadingIndicator() {
         flowParameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
+    }
+    
+    private func showError() {
+        flowParameters.userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
     }
 }

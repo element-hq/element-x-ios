@@ -48,7 +48,7 @@ extension RoomFlowCoordinator {
         case initial
         case joinRoomScreen
         case room
-        case thread(itemID: TimelineItemIdentifier)
+        case thread(threadRootEventID: String, previousState: State)
         case roomDetails(isRoot: Bool)
         case roomDetailsEditScreen
         case notificationSettings
@@ -95,7 +95,7 @@ extension RoomFlowCoordinator {
         case presentRoom(presentationAction: PresentationAction?)
         case dismissFlow
         
-        case presentThread(itemID: TimelineItemIdentifier)
+        case presentThread(threadRootEventID: String, focusEventID: String?)
         case dismissThread
         
         case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
@@ -216,10 +216,12 @@ extension RoomFlowCoordinator {
                 return previousState
                 
             // Thread
-            case (.room, .presentThread(let itemID)):
-                return .thread(itemID: itemID)
-            case (.thread, .dismissThread):
-                return .room
+            case (.room, .presentThread(let threadRootEventID, _)):
+                return .thread(threadRootEventID: threadRootEventID, previousState: fromState)
+            case (.thread, .presentThread(let threadRootEventID, _)):
+                return .thread(threadRootEventID: threadRootEventID, previousState: fromState)
+            case (.thread(_, let previousState), .dismissThread):
+                return previousState
                 
             case (.thread, .presentReportContent(let itemID, let senderID)):
                 return .reportContent(itemID: itemID, senderID: senderID, previousState: fromState)

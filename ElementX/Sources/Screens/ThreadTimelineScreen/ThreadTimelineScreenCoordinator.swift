@@ -13,6 +13,7 @@ import WysiwygComposer
 struct ThreadTimelineScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let roomProxy: JoinedRoomProxyProtocol
+    let focussedEventID: String?
     let timelineController: TimelineControllerProtocol
     let mediaPlayerProvider: MediaPlayerProviderProtocol
     let emojiProvider: EmojiProviderProtocol
@@ -58,6 +59,7 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
         viewModel = ThreadTimelineScreenViewModel(roomProxy: parameters.roomProxy, userSession: parameters.userSession)
         
         timelineViewModel = TimelineViewModel(roomProxy: parameters.roomProxy,
+                                              focussedEventID: parameters.focussedEventID,
                                               timelineController: parameters.timelineController,
                                               userSession: parameters.userSession,
                                               mediaPlayerProvider: parameters.mediaPlayerProvider,
@@ -154,5 +156,9 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
         return AnyView(ThreadTimelineScreen(context: viewModel.context,
                                             timelineContext: timelineViewModel.context,
                                             composerToolbar: composerToolbar))
+    }
+    
+    func focusOnEvent(eventID: String) {
+        Task { await timelineViewModel.focusOnEvent(eventID: eventID) }
     }
 }

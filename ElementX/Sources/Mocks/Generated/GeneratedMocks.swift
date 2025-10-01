@@ -6483,17 +6483,17 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
             return threadTimelineEventIDReturnValue
         }
     }
-    //MARK: - getThreadRootEventID
+    //MARK: - loadOrFetchEvent
 
-    var getThreadRootEventIDForUnderlyingCallsCount = 0
-    var getThreadRootEventIDForCallsCount: Int {
+    var loadOrFetchEventForUnderlyingCallsCount = 0
+    var loadOrFetchEventForCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return getThreadRootEventIDForUnderlyingCallsCount
+                return loadOrFetchEventForUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getThreadRootEventIDForUnderlyingCallsCount
+                    returnValue = loadOrFetchEventForUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -6501,29 +6501,29 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getThreadRootEventIDForUnderlyingCallsCount = newValue
+                loadOrFetchEventForUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getThreadRootEventIDForUnderlyingCallsCount = newValue
+                    loadOrFetchEventForUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var getThreadRootEventIDForCalled: Bool {
-        return getThreadRootEventIDForCallsCount > 0
+    var loadOrFetchEventForCalled: Bool {
+        return loadOrFetchEventForCallsCount > 0
     }
-    var getThreadRootEventIDForReceivedEventID: String?
-    var getThreadRootEventIDForReceivedInvocations: [String] = []
+    var loadOrFetchEventForReceivedEventID: String?
+    var loadOrFetchEventForReceivedInvocations: [String] = []
 
-    var getThreadRootEventIDForUnderlyingReturnValue: Result<String?, RoomProxyError>!
-    var getThreadRootEventIDForReturnValue: Result<String?, RoomProxyError>! {
+    var loadOrFetchEventForUnderlyingReturnValue: Result<TimelineEvent, RoomProxyError>!
+    var loadOrFetchEventForReturnValue: Result<TimelineEvent, RoomProxyError>! {
         get {
             if Thread.isMainThread {
-                return getThreadRootEventIDForUnderlyingReturnValue
+                return loadOrFetchEventForUnderlyingReturnValue
             } else {
-                var returnValue: Result<String?, RoomProxyError>? = nil
+                var returnValue: Result<TimelineEvent, RoomProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = getThreadRootEventIDForUnderlyingReturnValue
+                    returnValue = loadOrFetchEventForUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -6531,26 +6531,26 @@ class JoinedRoomProxyMock: JoinedRoomProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                getThreadRootEventIDForUnderlyingReturnValue = newValue
+                loadOrFetchEventForUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    getThreadRootEventIDForUnderlyingReturnValue = newValue
+                    loadOrFetchEventForUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var getThreadRootEventIDForClosure: ((String) async -> Result<String?, RoomProxyError>)?
+    var loadOrFetchEventForClosure: ((String) async -> Result<TimelineEvent, RoomProxyError>)?
 
-    func getThreadRootEventID(for eventID: String) async -> Result<String?, RoomProxyError> {
-        getThreadRootEventIDForCallsCount += 1
-        getThreadRootEventIDForReceivedEventID = eventID
+    func loadOrFetchEvent(for eventID: String) async -> Result<TimelineEvent, RoomProxyError> {
+        loadOrFetchEventForCallsCount += 1
+        loadOrFetchEventForReceivedEventID = eventID
         DispatchQueue.main.async {
-            self.getThreadRootEventIDForReceivedInvocations.append(eventID)
+            self.loadOrFetchEventForReceivedInvocations.append(eventID)
         }
-        if let getThreadRootEventIDForClosure = getThreadRootEventIDForClosure {
-            return await getThreadRootEventIDForClosure(eventID)
+        if let loadOrFetchEventForClosure = loadOrFetchEventForClosure {
+            return await loadOrFetchEventForClosure(eventID)
         } else {
-            return getThreadRootEventIDForReturnValue
+            return loadOrFetchEventForReturnValue
         }
     }
     //MARK: - messageFilteredTimeline
