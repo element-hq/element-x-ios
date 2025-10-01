@@ -173,8 +173,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                             if case .thread(threadRootEventID: threadRootEventID, _) = stateMachine.state, let threadCoordinator = childThreads.last {
                                 threadCoordinator.focusOnEvent(eventID: eventID)
                             } else {
+                                // If we are showing the room timeline, we want to focus the thread root
                                 if childThreads.isEmpty {
-                                    roomScreenCoordinator?.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
+                                    roomScreenCoordinator?.focusOnEvent(.init(eventID: threadRootEventID, shouldSetPin: false))
                                 }
                                 stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: eventID))
                             }
