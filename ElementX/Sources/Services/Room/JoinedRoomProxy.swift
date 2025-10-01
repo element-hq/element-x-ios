@@ -190,10 +190,10 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    func getThreadRootEventID(for eventID: String) async -> Result<String?, RoomProxyError> {
+    func loadOrFetchEvent(for eventID: String) async -> Result<TimelineEvent, RoomProxyError> {
         do {
             let event = try await room.loadOrFetchEvent(eventId: eventID)
-            return .success(event.threadRootEventId())
+            return .success(event)
         } catch {
             MXLog.error("Failed fetching the event with id: \(eventID) with error: \(error)")
             return .failure(.sdkError(error))
