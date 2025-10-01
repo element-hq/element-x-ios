@@ -10,6 +10,7 @@ import Foundation
 extension TimelineControllerFactoryMock {
     struct Configuration {
         var timelineController: TimelineControllerProtocol?
+        var threadTimelineController: TimelineControllerProtocol?
     }
     
     convenience init(_ configuration: Configuration) {
@@ -20,5 +21,15 @@ extension TimelineControllerFactoryMock {
             timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
             return timelineController
         }()
+        
+        buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderClosure = { threadRootEventID, _, _, _ in
+            if let threadTimelineController = configuration.threadTimelineController {
+                return .success(threadTimelineController)
+            } else {
+                let timelineController = MockTimelineController(timelineKind: .thread(rootEventID: threadRootEventID))
+                timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
+                return .success(timelineController)
+            }
+        }
     }
 }
