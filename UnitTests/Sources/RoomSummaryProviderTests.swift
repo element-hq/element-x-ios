@@ -5,6 +5,7 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import MatrixRustSDK
 import XCTest
 
 @testable import ElementX
@@ -13,6 +14,10 @@ final class RoomSummaryProviderTests: XCTestCase {
     var appSettings: AppSettings!
     var roomList: RoomListSDKMock!
     var dynamicEntriesController: RoomListDynamicEntriesControllerSDKMock!
+    
+    let baseFilters: [RoomListEntriesDynamicFilterKind] = [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
+                                                                          .all(filters: [.space, .invite])]),
+                                                           .deduplicateVersions]
     
     var roomSummaryProvider: RoomSummaryProvider!
     
@@ -32,9 +37,8 @@ final class RoomSummaryProviderTests: XCTestCase {
         
         // Then it should have the default Rust filters enabled.
         XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 1)
-        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last, .all(filters: [.nonLeft,
-                                                                                                      .nonSpace,
-                                                                                                      .deduplicateVersions]))
+        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
+                       .all(filters: baseFilters))
         
         // When setting one our user filters.
         roomSummaryProvider.setFilter(.all(filters: [.favourites]))
@@ -42,10 +46,8 @@ final class RoomSummaryProviderTests: XCTestCase {
         
         // Then that filter should be added to the default Rust filters.
         XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 2)
-        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last, .all(filters: [.all(filters: [.favourite, .joined]),
-                                                                                                      .nonLeft,
-                                                                                                      .nonSpace,
-                                                                                                      .deduplicateVersions]))
+        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
+                       .all(filters: [.all(filters: [.favourite, .joined])] + baseFilters))
     }
     
     func testLowPriorityRustFilters() async {
@@ -56,10 +58,8 @@ final class RoomSummaryProviderTests: XCTestCase {
         // Then the default Rust filters should include the non-low priority filter,
         // so that low priority rooms are hidden from the top of the room list.
         XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 1)
-        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last, .all(filters: [.nonLeft,
-                                                                                                      .nonSpace,
-                                                                                                      .deduplicateVersions,
-                                                                                                      .nonLowPriority]))
+        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
+                       .all(filters: baseFilters + [.nonLowPriority]))
         
         // When setting the low priority filter.
         roomSummaryProvider.setFilter(.all(filters: [.lowPriority]))
@@ -67,10 +67,8 @@ final class RoomSummaryProviderTests: XCTestCase {
         
         // Then the non-low priority filter should be replaced with the low priority filter.
         XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 2)
-        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last, .all(filters: [.all(filters: [.lowPriority, .joined]),
-                                                                                                      .nonLeft,
-                                                                                                      .nonSpace,
-                                                                                                      .deduplicateVersions]))
+        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
+                       .all(filters: [.all(filters: [.lowPriority, .joined])] + baseFilters))
         
         // When setting another one of our filters.
         roomSummaryProvider.setFilter(.all(filters: [.rooms]))
@@ -78,11 +76,8 @@ final class RoomSummaryProviderTests: XCTestCase {
         
         // Then the filter should be combined with the non-low priority filter.
         XCTAssertEqual(dynamicEntriesController.setFilterKindCallsCount, 3)
-        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last, .all(filters: [.all(filters: [.category(expect: .group), .joined]),
-                                                                                                      .nonLeft,
-                                                                                                      .nonSpace,
-                                                                                                      .deduplicateVersions,
-                                                                                                      .nonLowPriority]))
+        XCTAssertEqual(dynamicEntriesController.setFilterKindReceivedInvocations.last,
+                       .all(filters: [.all(filters: [.category(expect: .group), .joined])] + baseFilters + [.nonLowPriority]))
     }
     
     // MARK: - Helpers

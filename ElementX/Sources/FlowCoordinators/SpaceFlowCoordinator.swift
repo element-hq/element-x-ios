@@ -52,6 +52,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case presentingChild(childSpaceID: String, previousState: State)
         /// A room flow is in progress
         case roomFlow(previousState: State)
+        
+        case leftSpace
     }
     
     enum Event: EventType {
@@ -62,6 +64,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         
         /// The join space screen joined the space.
         case joinedSpace
+        /// The space screen left the space.
+        case leftSpace
         
         /// Request the presentation of a child space flow.
         ///
@@ -116,7 +120,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         switch stateMachine.state {
         case .initial:
             break
-        case .joinSpace, .space:
+        case .joinSpace, .space, .leftSpace:
             if isChildFlow {
                 navigationStackCoordinator.pop(animated: animated)
             } else {
@@ -145,11 +149,18 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRoutes(event: .joinedSpace, transitions: [.joinSpace => .space]) { [weak self] _ in
             self?.presentSpaceAfterJoining()
         }
+        stateMachine.addRoutes(event: .leftSpace, transitions: [.space => .leftSpace]) { [weak self] _ in
+            self?.clearRoute(animated: true)
+        }
         
         stateMachine.addRouteMapping { event, fromState, userInfo in
-            guard event == .startChildFlow, case .space = fromState else { return nil }
+            guard event == .startChildFlow else { return nil }
             guard let childEntryPoint = userInfo as? SpaceFlowCoordinatorEntryPoint else { fatalError("An entry point must be provided.") }
-            return .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: fromState)
+            return switch fromState {
+            case .space: .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: fromState)
+            case .roomFlow(let previousState): .presentingChild(childSpaceID: childEntryPoint.spaceID, previousState: previousState)
+            default: nil
+            }
         } handler: { [weak self] context in
             guard let self, let entryPoint = context.userInfo as? SpaceFlowCoordinatorEntryPoint else { return }
             startChildFlow(with: entryPoint)
@@ -205,6 +216,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.startChildFlow, userInfo: SpaceFlowCoordinatorEntryPoint.joinSpace(spaceRoomProxy))
                 case .selectRoom(let roomID):
                     stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
+                case .leftSpace:
+                    stateMachine.tryEvent(.leftSpace)
                 }
             }
             .store(in: &cancellables)
@@ -314,6 +327,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                     actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
                 case .verifyUser(let userID):
                     actionsSubject.send(.verifyUser(userID: userID))
+                case .continueWithSpaceFlow(let spaceRoomListProxy):
+                    stateMachine.tryEvent(.startChildFlow, userInfo: SpaceFlowCoordinatorEntryPoint.space(spaceRoomListProxy))
                 case .finished:
                     stateMachine.tryEvent(.stopRoomFlow)
                 }

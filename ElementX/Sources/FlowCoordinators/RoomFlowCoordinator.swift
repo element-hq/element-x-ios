@@ -13,6 +13,9 @@ import UserNotifications
 enum RoomFlowCoordinatorAction: Equatable {
     case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
     case verifyUser(userID: String)
+    /// The requested room was actually a space. The room flow has been dismissed
+    /// and a space flow should be started to continue.
+    case continueWithSpaceFlow(SpaceRoomListProxyProtocol)
     case finished
     
     static func == (lhs: RoomFlowCoordinatorAction, rhs: RoomFlowCoordinatorAction) -> Bool {
@@ -385,6 +388,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 presentJoinRoomScreen(via: via, animated: true)
             case (_, .dismissJoinRoomScreen, .complete):
                 dismissFlow(animated: animated)
+            case (_, .joinedSpace, .complete):
+                guard let spaceRoomListProxy = (context.userInfo as? EventUserInfo)?.spaceRoomListProxy else {
+                    fatalError("The space room list proxy is required to present a space.")
+                }
+                dismissFlow(animated: animated, continuingWith: spaceRoomListProxy)
                 
             case (.joinRoomScreen, .presentDeclineAndBlockScreen(let userID), .declineAndBlockScreen):
                 presentDeclineAndBlockScreen(userID: userID)
@@ -720,8 +728,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                             stateMachine.tryEvent(.dismissFlow, userInfo: EventUserInfo(animated: animated))
                         }
                     }
-                case .joined(.space):
-                    #warning("The space flow should be shown here.")
+                case .joined(.space(let spaceRoomListProxy)):
+                    stateMachine.tryEvent(.joinedSpace, userInfo: EventUserInfo(animated: true, spaceRoomListProxy: spaceRoomListProxy))
                 case .cancelled:
                     stateMachine.tryEvent(.dismissJoinRoomScreen)
                 case .presentDeclineAndBlock(let userID):
@@ -745,7 +753,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func dismissFlow(animated: Bool) {
+    private func dismissFlow(animated: Bool, continuingWith spaceRoomListProxy: SpaceRoomListProxyProtocol? = nil) {
         childRoomFlowCoordinator?.clearRoute(animated: animated)
         
         if isChildFlow {
@@ -757,12 +765,21 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
         } else {
             navigationStackCoordinator.popToRoot(animated: false)
-            navigationStackCoordinator.setRootCoordinator(nil, animated: false)
+            
+            // Leave the root alone when it is about to be replaced by the space flow, otherwise when running on
+            // iPhone the compact module diffs call the dismissal callback and we present a blank space flow 🙈
+            if spaceRoomListProxy == nil {
+                navigationStackCoordinator.setRootCoordinator(nil, animated: false)
+            }
         }
         
         timelineController = nil
         
-        actionsSubject.send(.finished)
+        if let spaceRoomListProxy {
+            actionsSubject.send(.continueWithSpaceFlow(spaceRoomListProxy))
+        } else {
+            actionsSubject.send(.finished)
+        }
         flowParameters.analytics.signpost.endRoomFlow()
     }
     
@@ -1457,6 +1474,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .verifyUser(let userID):
                 actionsSubject.send(.verifyUser(userID: userID))
+            case .continueWithSpaceFlow(let spaceRoomListProxy):
+                #warning("Present the space as a child.")
             case .finished:
                 stateMachine.tryEvent(.dismissChildFlow)
             }

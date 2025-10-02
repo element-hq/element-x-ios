@@ -11,10 +11,13 @@ enum SpaceScreenViewModelAction {
     case selectSpace(SpaceRoomListProxyProtocol)
     case selectUnjoinedSpace(SpaceRoomProxyProtocol)
     case selectRoom(roomID: String)
+    case leftSpace
 }
 
 struct SpaceScreenViewState: BindableState {
     let space: SpaceRoomProxyProtocol
+    
+    var permalink: URL?
     
     var isPaginating = false
     var rooms: [SpaceRoomProxyProtocol]
@@ -30,4 +33,5 @@ struct SpaceScreenViewStateBindings { }
 
 enum SpaceScreenViewAction {
     case spaceAction(SpaceRoomCell.Action)
+    case leaveSpace
 }

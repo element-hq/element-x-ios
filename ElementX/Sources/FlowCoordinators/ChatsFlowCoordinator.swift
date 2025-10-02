@@ -469,6 +469,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 actionsSubject.send(.showCallScreen(roomProxy: roomProxy))
             case .verifyUser(let userID):
                 actionsSubject.send(.sessionVerification(.userInitiator(userID: userID)))
+            case .continueWithSpaceFlow(let spaceRoomListProxy):
+                stateMachine.processEvent(.startSpaceFlow, userInfo: .init(animated: false, spaceRoomListProxy: spaceRoomListProxy))
             case .finished:
                 stateMachine.processEvent(.deselectRoom)
             }

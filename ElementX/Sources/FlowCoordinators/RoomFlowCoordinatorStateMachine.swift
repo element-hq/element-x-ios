@@ -84,11 +84,13 @@ extension RoomFlowCoordinator {
     struct EventUserInfo {
         let animated: Bool
         var timelineController: TimelineControllerProtocol?
+        var spaceRoomListProxy: SpaceRoomListProxyProtocol?
     }
 
     enum Event: EventType {
         case presentJoinRoomScreen(via: [String])
         case dismissJoinRoomScreen
+        case joinedSpace
         
         case presentRoom(presentationAction: PresentationAction?)
         case dismissFlow
@@ -320,6 +322,8 @@ extension RoomFlowCoordinator {
             case (_, .presentJoinRoomScreen):
                 return .joinRoomScreen
             case (_, .dismissJoinRoomScreen):
+                return .complete
+            case (_, .joinedSpace):
                 return .complete
                 
             case (.joinRoomScreen, .presentDeclineAndBlockScreen):
