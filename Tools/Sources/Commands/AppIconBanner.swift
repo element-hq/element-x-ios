@@ -56,9 +56,9 @@ struct BannerImage: View {
                 .font(.system(size: 140))
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
-                .padding()
-                .background(Color.black.opacity(0.5))
+                .padding(.horizontal, image.size.width * 0.1)
                 .frame(maxWidth: .infinity)
+                .background(Color.black.opacity(0.5))
         }
         .frame(width: image.size.width, height: image.size.height)
     }
