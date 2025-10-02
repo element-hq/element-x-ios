@@ -22,14 +22,7 @@ struct HomeScreen: View {
                    actions: leaveRoomAlertActions,
                    message: leaveRoomAlertMessage)
             .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-            .toolbar {
-                if #available(iOS 26, *) {
-                    toolbar
-                        .sharedBackgroundVisibility(.hidden)
-                } else {
-                    toolbar
-                }
-            }
+            .toolbar { toolbar }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .track(screen: .Home)
             .bloom()
@@ -43,10 +36,12 @@ struct HomeScreen: View {
         ToolbarItem(placement: .navigationBarLeading) {
             settingsButton
         }
+        .backportSharedBackgroundVisibility(.hidden)
         
         ToolbarItem(placement: .primaryAction) {
             newRoomButton
         }
+        .backportSharedBackgroundVisibility(.hidden)
     }
     
     private var settingsButton: some View {

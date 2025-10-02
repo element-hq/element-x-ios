@@ -20,14 +20,7 @@ struct SpaceListScreen: View {
         }
         .navigationTitle(L10n.screenSpaceListTitle)
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            if #available(iOS 26, *) {
-                toolbar
-                    .sharedBackgroundVisibility(.hidden)
-            } else {
-                toolbar
-            }
-        }
+        .toolbar { toolbar }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .bloom()
     }
@@ -90,11 +83,13 @@ struct SpaceListScreen: View {
             }
             .accessibilityLabel(L10n.commonSettings)
         }
+        .backportSharedBackgroundVisibility(.hidden)
         
         ToolbarItem(placement: .principal) {
             // Hides the navigationTitle (which is set for the navigation stack label).
             Text("").accessibilityHidden(true)
         }
+        .backportSharedBackgroundVisibility(.hidden)
     }
 }
 
