@@ -235,7 +235,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         
         var mockedEvent = TimelineEventSDKMock()
         mockedEvent.threadRootEventIdReturnValue = "1"
-        roomProxy.loadOrFetchEventForReturnValue = .success(mockedEvent)
+        roomProxy.loadOrFetchEventDetailsForReturnValue = .success(mockedEvent)
         
         clientProxy.roomForIdentifierClosure = { _ in
             .joined(roomProxy)
@@ -258,7 +258,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         // From the thread screen, navigate to another threaded event in the same room, but in a different thread.
         mockedEvent = TimelineEventSDKMock()
         mockedEvent.threadRootEventIdReturnValue = "4"
-        roomProxy.loadOrFetchEventForReturnValue = .success(mockedEvent)
+        roomProxy.loadOrFetchEventDetailsForReturnValue = .success(mockedEvent)
         try await process(route: .childEvent(eventID: "5", roomID: "1", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
         XCTAssertEqual(navigationStackCoordinator.stackCoordinators.count, 2)
@@ -274,7 +274,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         
         mockedEvent = TimelineEventSDKMock()
         mockedEvent.threadRootEventIdReturnValue = "1"
-        roomProxy.loadOrFetchEventForReturnValue = .success(mockedEvent)
+        roomProxy.loadOrFetchEventDetailsForReturnValue = .success(mockedEvent)
         
         clientProxy.roomForIdentifierClosure = { _ in
             .joined(roomProxy)
@@ -291,7 +291,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         // From the thread screen, navigate to an event of the same room that is not threaded
         mockedEvent = TimelineEventSDKMock()
         mockedEvent.threadRootEventIdReturnValue = nil
-        roomProxy.loadOrFetchEventForReturnValue = .success(mockedEvent)
+        roomProxy.loadOrFetchEventDetailsForReturnValue = .success(mockedEvent)
         
         try await process(route: .childEvent(eventID: "3", roomID: "2", via: []))
         XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
@@ -377,7 +377,7 @@ class RoomFlowCoordinatorTests: XCTestCase {
         
         try await fulfillment.fulfill()
     }
-        
+    
     // MARK: - Private
     
     private func process(route: AppRoute) async throws {

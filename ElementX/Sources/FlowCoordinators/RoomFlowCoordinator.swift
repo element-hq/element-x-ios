@@ -68,7 +68,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     private var roomProxy: JoinedRoomProxyProtocol!
     
     private var roomScreenCoordinator: RoomScreenCoordinator?
-    private var childThreads: [ThreadTimelineScreenCoordinator] = []
+    private var childThreadScreenCoordinators: [ThreadTimelineScreenCoordinator] = []
     private weak var joinRoomScreenCoordinator: JoinRoomScreenCoordinator?
     
     // periphery:ignore - used to avoid deallocation
@@ -167,27 +167,27 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 showLoadingIndicator(delay: .seconds(0.5))
                 Task {
                     defer { hideLoadingIndicator() }
-                    switch await roomProxy.loadOrFetchEvent(for: eventID) {
+                    switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
                     case .success(let event):
                         if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
-                            if case .thread(threadRootEventID: threadRootEventID, _) = stateMachine.state, let threadCoordinator = childThreads.last {
+                            if case .thread(threadRootEventID: threadRootEventID, _) = stateMachine.state, let threadCoordinator = childThreadScreenCoordinators.last {
                                 threadCoordinator.focusOnEvent(eventID: eventID)
                             } else {
-                                // If we are showing the room timeline, we want to focus the thread root
-                                if childThreads.isEmpty {
+                                // If we are showing the room timeline, we want to focus the thread root.
+                                if childThreadScreenCoordinators.isEmpty {
                                     roomScreenCoordinator?.focusOnEvent(.init(eventID: threadRootEventID, shouldSetPin: false))
                                 }
                                 stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: eventID))
                             }
-                        } else if !childThreads.isEmpty {
-                            // If we are showing a child thread, and we are navigating to a non threaded event
-                            // of the same room, we want to push the room on top of the thread
+                        } else if !childThreadScreenCoordinators.isEmpty {
+                            // If we are showing a child thread and we are navigating to a non threaded event
+                            // of the same room, we want to push the room on top of the thread.
                             stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: EventUserInfo(animated: animated))
                         } else {
                             roomScreenCoordinator?.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
                         }
                     case .failure:
-                        showError()
+                        showErrorIndicator()
                     }
                 }
             }
@@ -258,22 +258,24 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         switch room {
         case .joined(let roomProxy):
             await storeAndSubscribeToRoomProxy(roomProxy)
-            if case let .eventFocus(focusEvent) = presentationAction {
-                switch await roomProxy.loadOrFetchEvent(for: focusEvent.eventID) {
-                case .success(let event):
-                    guard flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() else {
-                        break
-                    }
+            guard case let .eventFocus(focusEvent) = presentationAction else {
+                // If is not a focus event just handle the presentation action directly in `presentRoom`
+                stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
+                return
+            }
+            // Otherwise check if the focussed event exists to handle a possible error or theaded event.
+            switch await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID) {
+            case .success(let event):
+                if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
                     stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: threadRootEventID, shouldSetPin: false))), userInfo: EventUserInfo(animated: animated))
                     stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focusEvent.eventID), userInfo: EventUserInfo(animated: false))
-                    return
-                case .failure:
-                    showError()
-                    stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
-                    return
+                } else {
+                    stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
                 }
+            case .failure:
+                showErrorIndicator()
+                stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
             }
-            stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
         default:
             stateMachine.tryEvent(.presentJoinRoomScreen(via: via), userInfo: EventUserInfo(animated: animated))
         }
@@ -737,10 +739,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
             guard let self else { return }
             stateMachine.tryEvent(.dismissThread)
-            childThreads.removeAll { $0 === coordinator }
+            childThreadScreenCoordinators.removeAll { $0 === coordinator }
         }
         
-        childThreads.append(coordinator)
+        childThreadScreenCoordinators.append(coordinator)
     }
     
     private func presentJoinRoomScreen(via: [String], animated: Bool) {
@@ -1625,7 +1627,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         flowParameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
     }
     
-    private func showError() {
+    private func showErrorIndicator() {
         flowParameters.userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
     }
 }
