@@ -97,11 +97,11 @@ extension ClientProxyMock {
         roomForIdentifierClosure = { [weak self] identifier in
             if let room = self?.roomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier }) {
                 let roomProxy = await JoinedRoomProxyMock(.init(id: room.id, name: room.name))
-                roomProxy.loadOrFetchEventForReturnValue = .success(TimelineEventSDKMock())
+                roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
                 return .joined(roomProxy)
             } else if let spaceRoomProxy = configuration.joinedSpaceRooms.first(where: { $0.id == identifier }) {
                 let roomProxy = await JoinedRoomProxyMock(.init(id: spaceRoomProxy.id, name: spaceRoomProxy.name))
-                roomProxy.loadOrFetchEventForReturnValue = .success(TimelineEventSDKMock())
+                roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
                 return .joined(roomProxy)
             } else {
                 return nil

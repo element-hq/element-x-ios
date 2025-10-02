@@ -190,7 +190,7 @@ class JoinedRoomProxy: JoinedRoomProxyProtocol {
         }
     }
     
-    func loadOrFetchEvent(for eventID: String) async -> Result<TimelineEvent, RoomProxyError> {
+    func loadOrFetchEventDetails(for eventID: String) async -> Result<TimelineEvent, RoomProxyError> {
         do {
             let event = try await room.loadOrFetchEvent(eventId: eventID)
             return .success(event)
