@@ -23,6 +23,10 @@ struct SpaceListScreen: View {
         .toolbar { toolbar }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .bloom()
+        .onAppear { context.send(viewAction: .screenAppeared) }
+        .sheet(isPresented: $context.isPresentingFeatureAnnouncement) {
+            SpacesAnnouncementSheetView(context: context)
+        }
     }
     
     var header: some View {
@@ -110,6 +114,7 @@ struct SpaceListScreen_Previews: PreviewProvider, TestablePreview {
         
         let viewModel = SpaceListScreenViewModel(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                  selectedSpacePublisher: .init(nil),
+                                                 appSettings: ServiceLocator.shared.settings,
                                                  userIndicatorController: UserIndicatorControllerMock())
         
         return viewModel

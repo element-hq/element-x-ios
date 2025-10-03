@@ -12,6 +12,7 @@ typealias SpaceListScreenViewModelType = StateStoreViewModelV2<SpaceListScreenVi
 
 class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenViewModelProtocol {
     private let spaceServiceProxy: SpaceServiceProxyProtocol
+    private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<SpaceListScreenViewModelAction, Never> = .init()
@@ -21,8 +22,10 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
 
     init(userSession: UserSessionProtocol,
          selectedSpacePublisher: CurrentValuePublisher<String?, Never>,
+         appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol) {
         spaceServiceProxy = userSession.clientProxy.spaceService
+        self.appSettings = appSettings
         self.userIndicatorController = userIndicatorController
         
         super.init(initialViewState: SpaceListScreenViewState(userID: userSession.clientProxy.userID,
@@ -62,6 +65,13 @@ class SpaceListScreenViewModel: SpaceListScreenViewModelType, SpaceListScreenVie
             fatalError("There shouldn't be any unjoined spaces in the joined spaces list.")
         case .showSettings:
             actionsSubject.send(.showSettings)
+        case .screenAppeared:
+            if !appSettings.hasSeenSpacesAnnouncement {
+                // Use a task otherwise the presentation isn't animated.
+                Task { state.bindings.isPresentingFeatureAnnouncement = true }
+            }
+        case .featureAnnouncementAppeared:
+            appSettings.hasSeenSpacesAnnouncement = true
         }
     }
     
