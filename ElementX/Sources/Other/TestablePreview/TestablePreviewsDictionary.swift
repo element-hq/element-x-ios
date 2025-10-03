@@ -53,6 +53,7 @@ enum TestablePreviewsDictionary {
         "HomeScreenEmptyStateView_Previews" : HomeScreenEmptyStateView_Previews.self,
         "HomeScreenInviteCell_Previews" : HomeScreenInviteCell_Previews.self,
         "HomeScreenKnockedCell_Previews" : HomeScreenKnockedCell_Previews.self,
+        "HomeScreenNewSoundBanner_Previews" : HomeScreenNewSoundBanner_Previews.self,
         "HomeScreenRecoveryKeyConfirmationBanner_Previews" : HomeScreenRecoveryKeyConfirmationBanner_Previews.self,
         "HomeScreenRoomCell_Previews" : HomeScreenRoomCell_Previews.self,
         "HomeScreen_Previews" : HomeScreen_Previews.self,

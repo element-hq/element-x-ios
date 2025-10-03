@@ -105,6 +105,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
+        appSettings.$hasSeenNewSoundBanner
+            .sink { [weak self] hasSeenNewSoundBanner in
+                self?.state.shouldShowNewSoundBanner = !hasSeenNewSoundBanner
+            }
+            .store(in: &cancellables)
+        
         userSession.clientProxy.hideInviteAvatarsPublisher
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
@@ -160,6 +166,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             actionsSubject.send(.presentEncryptionResetScreen)
         case .skipRecoveryKeyConfirmation:
             state.securityBannerMode = .dismissed
+        case .dismissNewSoundBanner:
+            appSettings.hasSeenNewSoundBanner = true
         case .updateVisibleItemRange(let range):
             roomSummaryProvider?.updateVisibleRange(range)
         case .startChat:

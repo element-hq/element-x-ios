@@ -29,6 +29,7 @@ final class AppSettings {
     private enum UserDefaultsKeys: String {
         case lastVersionLaunched
         case seenInvites
+        case hasSeenNewSoundBanner
         case appLockNumberOfPINAttempts
         case appLockNumberOfBiometricAttempts
         case timelineStyle
@@ -160,6 +161,10 @@ final class AppSettings {
     /// This Set is being used to implement badges for unread invites.
     @UserPreference(key: UserDefaultsKeys.seenInvites, defaultValue: [], storageType: .userDefaults(store))
     var seenInvites: Set<String>
+    
+    /// Defaults to `true` for new users, and we use a migration to set it to `false` for existing users.
+    @UserPreference(key: UserDefaultsKeys.hasSeenNewSoundBanner, defaultValue: true, storageType: .userDefaults(store))
+    var hasSeenNewSoundBanner
     
     /// The initial set of account providers shown to the user in the authentication flow.
     ///

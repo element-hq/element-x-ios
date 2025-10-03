@@ -183,6 +183,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "HomeScreenKnockedCell_Previews")
     }
 
+    func testHomeScreenNewSoundBanner() async throws {
+        try await performAccessibilityAudit(named: "HomeScreenNewSoundBanner_Previews")
+    }
+
     func testHomeScreenRecoveryKeyConfirmationBanner() async throws {
         try await performAccessibilityAudit(named: "HomeScreenRecoveryKeyConfirmationBanner_Previews")
     }
