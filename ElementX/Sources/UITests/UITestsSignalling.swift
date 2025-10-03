@@ -9,7 +9,7 @@ import Combine
 import KZFileWatchers
 import SwiftUI
 
-extension Notification.Name: Codable { }
+extension Notification.Name: @retroactive Codable { }
 
 enum UITestsSignal: Codable, Equatable {
     /// An internal signal used to indicate that one side of the connection is ready.
