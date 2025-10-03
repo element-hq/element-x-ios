@@ -52,7 +52,7 @@ struct TimelineItemMenu: View {
             }
         }
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.timelineItemActionMenu)
-        .presentationPage()
+        .backportPresentationSizingPage()
         .presentationDetents([.medium, .large])
         .presentationBackground(Color.compound.bgCanvasDefault)
         .presentationDragIndicator(.visible)
@@ -247,17 +247,6 @@ private extension EncryptionAuthenticity {
         switch color {
         case .red: .compound.textCriticalPrimary
         case .gray: .compound.textSecondary
-        }
-    }
-}
-
-private extension View {
-    /// Uses the old page style modal so that on iPadOS 18 the presentation detents have no effect.
-    @ViewBuilder func presentationPage() -> some View {
-        if #available(iOS 18.0, *) {
-            presentationSizing(.page)
-        } else {
-            self
         }
     }
 }

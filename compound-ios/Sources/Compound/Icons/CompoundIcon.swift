@@ -182,8 +182,7 @@ struct CompoundIcon_Previews: PreviewProvider, TestablePreview {
     
     static var accessibilityLabels: some View {
         Grid(alignment: .leading) {
-            ForEach(DynamicTypeSize.allCases, id: \.self) {
-                size in
+            ForEach(DynamicTypeSize.allCases, id: \.self) { size in
                 GridRow {
                     Label("Test XS", icon: \.userProfile, iconSize: .xSmall, relativeTo: .compound.bodyXS)
                         .font(.compound.bodyXS)

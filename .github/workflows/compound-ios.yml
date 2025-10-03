@@ -5,7 +5,7 @@ name: Compound
 
 on:
   push:
-    branches: [ main ]
+    branches: [ develop ]
   
   pull_request:
 

@@ -18,8 +18,9 @@ struct RoomHeaderView: View {
     let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
-        if ProcessInfo.isRunningAccessibilityTests {
-            // Accessibility tests scale up the dynamic size in real time which may break the view
+        if ProcessInfo.isRunningAccessibilityTests || ProcessInfo.processInfo.isiOSAppOnMac {
+            // Accessibility tests scale up the dynamic size in real time which may break the view.
+            // macOS really doesn't like the greedy size and does weird things to it.
             content
         } else {
             content

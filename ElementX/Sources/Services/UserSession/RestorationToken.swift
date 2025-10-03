@@ -57,7 +57,7 @@ extension RestorationToken: Codable {
     }
 }
 
-extension MatrixRustSDK.Session: Codable {
+extension MatrixRustSDK.Session: @retroactive Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         

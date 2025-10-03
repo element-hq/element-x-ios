@@ -280,6 +280,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             switch context.toState {
             case .roomList(detailState: .room(let detailStateRoomID)):
                 self?.selectedRoomSubject.send(detailStateRoomID)
+            case .roomList(detailState: nil):
+                self?.selectedRoomSubject.send(nil)
             default:
                 break
             }

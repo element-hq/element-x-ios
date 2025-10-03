@@ -99,7 +99,6 @@ private struct BackgroundView<Content: View>: View {
             .clipShape(RoundedCornerShape(radius: shadowRadius, corners: [.topLeft, .topRight]))
             .shadow(color: .black.opacity(0.20), radius: 20.0, x: 0.0, y: 3.0)
             .mask(Rectangle().padding(.init(top: -(shadowRadius * 2), leading: 0.0, bottom: 0.0, trailing: 0.0)))
-            .edgesIgnoringSafeArea(.all)
     }
 }
 

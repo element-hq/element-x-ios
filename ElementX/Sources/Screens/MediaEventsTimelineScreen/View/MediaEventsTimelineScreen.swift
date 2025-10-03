@@ -47,15 +47,11 @@ struct MediaEventsTimelineScreen: View {
         if context.viewState.shouldShowEmptyState {
             emptyState
         } else {
-            if #available(iOS 26, *) {
-                scrollView
-                    // Remove the glass effect of iOS 26+
-                    // A flipped table view will always trigger it
-                    // since the nav bar thinks is always at the bottom.
-                    .scrollEdgeEffectHidden()
-            } else {
-                scrollView
-            }
+            scrollView
+                // Remove the glass effect of iOS 26+
+                // A flipped table view will always trigger it
+                // since the nav bar thinks is always at the bottom.
+                .backportScrollEdgeEffectHidden()
         }
     }
     
