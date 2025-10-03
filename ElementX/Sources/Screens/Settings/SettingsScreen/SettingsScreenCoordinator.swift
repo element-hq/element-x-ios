@@ -27,6 +27,7 @@ enum SettingsScreenCoordinatorAction {
     case manageAccount(url: URL)
     case notifications
     case advancedSettings
+    case labs
     case developerOptions
     case deactivateAccount
 }
@@ -75,6 +76,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.notifications)
                 case .advancedSettings:
                     actionsSubject.send(.advancedSettings)
+                case .labs:
+                    actionsSubject.send(.labs)
                 case .developerOptions:
                     actionsSubject.send(.developerOptions)
                 case .logout:

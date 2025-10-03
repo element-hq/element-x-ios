@@ -41,7 +41,6 @@ protocol DeveloperOptionsProtocol: AnyObject {
     
     var enableOnlySignedDeviceIsolationMode: Bool { get set }
     var enableKeyShareOnInvite: Bool { get set }
-    var threadsEnabled: Bool { get set }
     var spacesEnabled: Bool { get set }
     var hideQuietNotificationAlerts: Bool { get set }
     
