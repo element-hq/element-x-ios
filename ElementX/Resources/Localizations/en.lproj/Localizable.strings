@@ -102,6 +102,7 @@
 "action_manage_account" = "Manage account";
 "action_manage_devices" = "Manage devices";
 "action_message" = "Message";
+"action_minimize" = "Minimise";
 "action_next" = "Next";
 "action_no" = "No";
 "action_not_now" = "Not now";
@@ -149,11 +150,11 @@
 "action_tap_for_options" = "Tap for options";
 "action_try_again" = "Try again";
 "action_unpin" = "Unpin";
+"action_view" = "View";
 "action_view_in_timeline" = "View in timeline";
 "action_view_source" = "View source";
 "action_yes" = "Yes";
 "action_yes_try_again" = "Yes, try again";
-"action.view" = "View";
 "banner_migrate_to_native_sliding_sync_action" = "Log Out & Upgrade";
 "banner_migrate_to_native_sliding_sync_app_force_logout_title" = "%1$@ no longer supports the old protocol. Please log out and log back in to continue using the app.";
 "banner_migrate_to_native_sliding_sync_description" = "Your server now supports a new, faster protocol. Log out and log back in to upgrade now. Doing this now will help you avoid a forced logout when the old protocol is removed later.";
@@ -219,6 +220,7 @@
 "common_in_reply_to" = "In reply to %1$@";
 "common_invite_unknown_profile" = "This Matrix ID can't be found, so the invite might not be received.";
 "common_leaving_room" = "Leaving room";
+"common_leaving_space" = "Leaving space";
 "common_light" = "Light";
 "common_line_copied_to_clipboard" = "Line copied to clipboard";
 "common_link_copied_to_clipboard" = "Link copied to clipboard";
@@ -565,8 +567,9 @@
 "screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_initial_loading_title" = "Loading requests to join…";
-"screen_leave_space_last_admin_info" = "(Admin)";
+"screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
+"screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
 "screen_leave_space_title" = "Leave %1$@?";
 "screen_media_details_file_format" = "File format";
 "screen_media_details_filename" = "File name";

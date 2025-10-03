@@ -29,9 +29,14 @@ struct SpaceScreenViewState: BindableState {
     var spaceName: String { space.name ?? L10n.commonSpace }
 }
 
-struct SpaceScreenViewStateBindings { }
+struct SpaceScreenViewStateBindings {
+    var leaveHandle: LeaveSpaceHandleProxy?
+}
 
 enum SpaceScreenViewAction {
     case spaceAction(SpaceRoomCell.Action)
     case leaveSpace
+    case deselectAllLeaveRoomDetails
+    case toggleLeaveSpaceRoomDetails(id: String)
+    case confirmLeaveSpace
 }

@@ -242,6 +242,8 @@ internal enum L10n {
   internal static var actionManageDevices: String { return L10n.tr("Localizable", "action_manage_devices") }
   /// Message
   internal static var actionMessage: String { return L10n.tr("Localizable", "action_message") }
+  /// Minimise
+  internal static var actionMinimize: String { return L10n.tr("Localizable", "action_minimize") }
   /// Next
   internal static var actionNext: String { return L10n.tr("Localizable", "action_next") }
   /// No
@@ -336,6 +338,8 @@ internal enum L10n {
   internal static var actionTryAgain: String { return L10n.tr("Localizable", "action_try_again") }
   /// Unpin
   internal static var actionUnpin: String { return L10n.tr("Localizable", "action_unpin") }
+  /// View
+  internal static var actionView: String { return L10n.tr("Localizable", "action_view") }
   /// View in timeline
   internal static var actionViewInTimeline: String { return L10n.tr("Localizable", "action_view_in_timeline") }
   /// View source
@@ -484,6 +488,8 @@ internal enum L10n {
   internal static var commonInviteUnknownProfile: String { return L10n.tr("Localizable", "common_invite_unknown_profile") }
   /// Leaving room
   internal static var commonLeavingRoom: String { return L10n.tr("Localizable", "common_leaving_room") }
+  /// Leaving space
+  internal static var commonLeavingSpace: String { return L10n.tr("Localizable", "common_leaving_space") }
   /// Light
   internal static var commonLight: String { return L10n.tr("Localizable", "common_light") }
   /// Line copied to clipboard
@@ -1808,18 +1814,18 @@ internal enum L10n {
   internal static var screenKnockRequestsListInitialLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_initial_loading_title") }
   /// Requests to join
   internal static var screenKnockRequestsListTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_title") }
-  /// (Admin)
-  internal static var screenLeaveSpaceLastAdminInfo: String { return L10n.tr("Localizable", "screen_leave_space_last_admin_info") }
+  /// %1$@ (Admin)
+  internal static func screenLeaveSpaceLastAdminInfo(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_leave_space_last_admin_info", String(describing: p1))
+  }
   /// Plural format key: "%#@COUNT@"
   internal static func screenLeaveSpaceSubmit(_ p1: Int) -> String {
     return L10n.tr("Localizable", "screen_leave_space_submit", p1)
   }
   /// Select the rooms you’d like to leave which you're not the only administrator for:
   internal static var screenLeaveSpaceSubtitle: String { return L10n.tr("Localizable", "screen_leave_space_subtitle") }
-  /// Plural format key: "%#@COUNT@"
-  internal static func screenLeaveSpaceSubtitleOnlyLastAdmin(_ p1: Int) -> String {
-    return L10n.tr("Localizable", "screen_leave_space_subtitle_only_last_admin", p1)
-  }
+  /// You will not be removed from the following room(s) because you're the only administrator:
+  internal static var screenLeaveSpaceSubtitleOnlyLastAdmin: String { return L10n.tr("Localizable", "screen_leave_space_subtitle_only_last_admin") }
   /// Leave %1$@?
   internal static func screenLeaveSpaceTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_leave_space_title", String(describing: p1))
@@ -3338,11 +3344,6 @@ internal enum L10n {
     internal static var userAvatar: String { return L10n.tr("Localizable", "a11y.user_avatar") }
     /// Your avatar
     internal static var yourAvatar: String { return L10n.tr("Localizable", "a11y.your_avatar") }
-  }
-
-  internal enum Action {
-    /// View
-    internal static var view: String { return L10n.tr("Localizable", "action.view") }
   }
 
   internal enum Common {

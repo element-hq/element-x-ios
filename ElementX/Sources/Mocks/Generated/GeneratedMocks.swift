@@ -16111,6 +16111,76 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
             return spaceRoomListSpaceIDParentReturnValue
         }
     }
+    //MARK: - leaveSpace
+
+    var leaveSpaceSpaceIDUnderlyingCallsCount = 0
+    var leaveSpaceSpaceIDCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return leaveSpaceSpaceIDUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = leaveSpaceSpaceIDUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                leaveSpaceSpaceIDUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    leaveSpaceSpaceIDUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var leaveSpaceSpaceIDCalled: Bool {
+        return leaveSpaceSpaceIDCallsCount > 0
+    }
+    var leaveSpaceSpaceIDReceivedSpaceID: String?
+    var leaveSpaceSpaceIDReceivedInvocations: [String] = []
+
+    var leaveSpaceSpaceIDUnderlyingReturnValue: Result<LeaveSpaceHandleProxy, SpaceServiceProxyError>!
+    var leaveSpaceSpaceIDReturnValue: Result<LeaveSpaceHandleProxy, SpaceServiceProxyError>! {
+        get {
+            if Thread.isMainThread {
+                return leaveSpaceSpaceIDUnderlyingReturnValue
+            } else {
+                var returnValue: Result<LeaveSpaceHandleProxy, SpaceServiceProxyError>? = nil
+                DispatchQueue.main.sync {
+                    returnValue = leaveSpaceSpaceIDUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                leaveSpaceSpaceIDUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    leaveSpaceSpaceIDUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    var leaveSpaceSpaceIDClosure: ((String) async -> Result<LeaveSpaceHandleProxy, SpaceServiceProxyError>)?
+
+    func leaveSpace(spaceID: String) async -> Result<LeaveSpaceHandleProxy, SpaceServiceProxyError> {
+        leaveSpaceSpaceIDCallsCount += 1
+        leaveSpaceSpaceIDReceivedSpaceID = spaceID
+        DispatchQueue.main.async {
+            self.leaveSpaceSpaceIDReceivedInvocations.append(spaceID)
+        }
+        if let leaveSpaceSpaceIDClosure = leaveSpaceSpaceIDClosure {
+            return await leaveSpaceSpaceIDClosure(spaceID)
+        } else {
+            return leaveSpaceSpaceIDReturnValue
+        }
+    }
 }
 class StaticRoomSummaryProviderMock: StaticRoomSummaryProviderProtocol, @unchecked Sendable {
     var roomListPublisher: CurrentValuePublisher<[RoomSummary], Never> {

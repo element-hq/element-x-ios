@@ -89,14 +89,21 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         case .spaceAction(.join(let spaceRoomProxy)):
             Task { await join(spaceRoomProxy) }
         case .leaveSpace:
-            #if DEBUG
-            Task { // Temporary implementation to make joining a space easier to test.
-                if case let .joined(roomProxy) = await clientProxy.roomForIdentifier(spaceRoomListProxy.spaceRoomProxy.id),
-                   case .success = await roomProxy.leaveRoom() {
-                    actionsSubject.send(.leftSpace)
-                }
+            Task { await showLeaveSpaceConfirmation() }
+        case .deselectAllLeaveRoomDetails:
+            guard let leaveHandle = state.bindings.leaveHandle else { fatalError("The leave handle should be available.") }
+            for room in leaveHandle.rooms {
+                room.isSelected = false
             }
-            #endif
+        case .toggleLeaveSpaceRoomDetails(let spaceRoomID):
+            guard let room = state.bindings.leaveHandle?.rooms.first(where: { $0.spaceRoomProxy.id == spaceRoomID }) else {
+                fatalError("The space room to toggle is not in the list of rooms to leave.")
+            }
+            withTransaction(\.disablesAnimations, true) { // The button is adding an unwanted animation.
+                room.isSelected.toggle()
+            }
+        case .confirmLeaveSpace:
+            Task { await confirmLeaveSpace() }
         }
     }
     
@@ -136,9 +143,44 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         }
     }
     
+    private func showLeaveSpaceConfirmation() async {
+        guard case let .success(leaveHandle) = await spaceServiceProxy.leaveSpace(spaceID: spaceRoomListProxy.spaceRoomProxy.id) else {
+            showFailureIndicator()
+            return
+        }
+        
+        state.bindings.leaveHandle = leaveHandle
+    }
+    
+    private func confirmLeaveSpace() async {
+        guard let leaveHandle = state.bindings.leaveHandle else { fatalError("Leaving without a handle is impossible.") }
+        
+        showLeavingIndicator()
+        defer { hideLeavingIndicator() }
+        
+        switch await leaveHandle.leave() {
+        case .success:
+            state.bindings.leaveHandle = nil
+            actionsSubject.send(.leftSpace)
+        case .failure:
+            showFailureIndicator()
+        }
+    }
+    
     // MARK: - Indicators
     
+    private static var leavingIndicatorID: String { "\(Self.self)-Leaving" }
     private static var failureIndicatorID: String { "\(Self.self)-Failure" }
+    
+    private func showLeavingIndicator() {
+        userIndicatorController.submitIndicator(UserIndicator(id: Self.leavingIndicatorID,
+                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                              title: L10n.commonLeavingSpace))
+    }
+    
+    private func hideLeavingIndicator() {
+        userIndicatorController.retractIndicatorWithId(Self.leavingIndicatorID)
+    }
     
     private func showFailureIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorID,

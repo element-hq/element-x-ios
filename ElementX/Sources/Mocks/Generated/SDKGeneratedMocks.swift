@@ -10135,6 +10135,128 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
         }
     }
 }
+open class LeaveSpaceHandleSDKMock: MatrixRustSDK.LeaveSpaceHandle, @unchecked Sendable {
+    init() {
+        super.init(noPointer: .init())
+    }
+
+    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
+        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    }
+
+    fileprivate var pointer: UnsafeMutableRawPointer!
+
+    //MARK: - leave
+
+    open var leaveRoomIdsThrowableError: Error?
+    var leaveRoomIdsUnderlyingCallsCount = 0
+    open var leaveRoomIdsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return leaveRoomIdsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = leaveRoomIdsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                leaveRoomIdsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    leaveRoomIdsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var leaveRoomIdsCalled: Bool {
+        return leaveRoomIdsCallsCount > 0
+    }
+    open var leaveRoomIdsReceivedRoomIds: [String]?
+    open var leaveRoomIdsReceivedInvocations: [[String]] = []
+    open var leaveRoomIdsClosure: (([String]) async throws -> Void)?
+
+    open override func leave(roomIds: [String]) async throws {
+        if let error = leaveRoomIdsThrowableError {
+            throw error
+        }
+        leaveRoomIdsCallsCount += 1
+        leaveRoomIdsReceivedRoomIds = roomIds
+        DispatchQueue.main.async {
+            self.leaveRoomIdsReceivedInvocations.append(roomIds)
+        }
+        try await leaveRoomIdsClosure?(roomIds)
+    }
+
+    //MARK: - rooms
+
+    var roomsUnderlyingCallsCount = 0
+    open var roomsCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return roomsUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomsUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomsUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomsUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var roomsCalled: Bool {
+        return roomsCallsCount > 0
+    }
+
+    var roomsUnderlyingReturnValue: [LeaveSpaceRoom]!
+    open var roomsReturnValue: [LeaveSpaceRoom]! {
+        get {
+            if Thread.isMainThread {
+                return roomsUnderlyingReturnValue
+            } else {
+                var returnValue: [LeaveSpaceRoom]? = nil
+                DispatchQueue.main.sync {
+                    returnValue = roomsUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                roomsUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    roomsUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var roomsClosure: (() -> [LeaveSpaceRoom])?
+
+    open override func rooms() -> [LeaveSpaceRoom] {
+        roomsCallsCount += 1
+        if let roomsClosure = roomsClosure {
+            return roomsClosure()
+        } else {
+            return roomsReturnValue
+        }
+    }
+}
 open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle, @unchecked Sendable {
     init() {
         super.init(noPointer: .init())
@@ -22224,6 +22346,81 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
             return await joinedSpacesClosure()
         } else {
             return joinedSpacesReturnValue
+        }
+    }
+
+    //MARK: - leaveSpace
+
+    open var leaveSpaceSpaceIdThrowableError: Error?
+    var leaveSpaceSpaceIdUnderlyingCallsCount = 0
+    open var leaveSpaceSpaceIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return leaveSpaceSpaceIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = leaveSpaceSpaceIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                leaveSpaceSpaceIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    leaveSpaceSpaceIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var leaveSpaceSpaceIdCalled: Bool {
+        return leaveSpaceSpaceIdCallsCount > 0
+    }
+    open var leaveSpaceSpaceIdReceivedSpaceId: String?
+    open var leaveSpaceSpaceIdReceivedInvocations: [String] = []
+
+    var leaveSpaceSpaceIdUnderlyingReturnValue: LeaveSpaceHandle!
+    open var leaveSpaceSpaceIdReturnValue: LeaveSpaceHandle! {
+        get {
+            if Thread.isMainThread {
+                return leaveSpaceSpaceIdUnderlyingReturnValue
+            } else {
+                var returnValue: LeaveSpaceHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = leaveSpaceSpaceIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                leaveSpaceSpaceIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    leaveSpaceSpaceIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var leaveSpaceSpaceIdClosure: ((String) async throws -> LeaveSpaceHandle)?
+
+    open override func leaveSpace(spaceId: String) async throws -> LeaveSpaceHandle {
+        if let error = leaveSpaceSpaceIdThrowableError {
+            throw error
+        }
+        leaveSpaceSpaceIdCallsCount += 1
+        leaveSpaceSpaceIdReceivedSpaceId = spaceId
+        DispatchQueue.main.async {
+            self.leaveSpaceSpaceIdReceivedInvocations.append(spaceId)
+        }
+        if let leaveSpaceSpaceIdClosure = leaveSpaceSpaceIdClosure {
+            return try await leaveSpaceSpaceIdClosure(spaceId)
+        } else {
+            return leaveSpaceSpaceIdReturnValue
         }
     }
 
