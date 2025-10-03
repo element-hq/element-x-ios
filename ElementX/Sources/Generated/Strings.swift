@@ -356,6 +356,10 @@ internal enum L10n {
   internal static var bannerMigrateToNativeSlidingSyncForceLogoutTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_force_logout_title") }
   /// Upgrade available
   internal static var bannerMigrateToNativeSlidingSyncTitle: String { return L10n.tr("Localizable", "banner_migrate_to_native_sliding_sync_title") }
+  /// Your notification ping has been updated—clearer, quicker, and less disruptive.
+  internal static var bannerNewSoundMessage: String { return L10n.tr("Localizable", "banner_new_sound_message") }
+  /// We’ve refreshed your sounds
+  internal static var bannerNewSoundTitle: String { return L10n.tr("Localizable", "banner_new_sound_title") }
   /// Recover your cryptographic identity and message history with a recovery key if you have lost all your existing devices.
   internal static var bannerSetUpRecoveryContent: String { return L10n.tr("Localizable", "banner_set_up_recovery_content") }
   /// Set up recovery

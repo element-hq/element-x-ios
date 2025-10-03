@@ -362,6 +362,19 @@ class HomeScreenViewModelTests: XCTestCase {
         try await deferredAction.fulfill()
     }
     
+    func testNewSoundBanner() {
+        appSettings.hasSeenNewSoundBanner = false
+        
+        setupViewModel()
+        XCTAssertTrue(context.viewState.shouldShowBanner)
+        XCTAssertTrue(context.viewState.shouldShowNewSoundBanner)
+        
+        context.send(viewAction: .dismissNewSoundBanner)
+        XCTAssertFalse(context.viewState.shouldShowBanner)
+        XCTAssertFalse(context.viewState.shouldShowNewSoundBanner)
+        XCTAssertTrue(appSettings.hasSeenNewSoundBanner)
+    }
+    
     // MARK: - Helpers
     
     enum InviteType { case rooms, spaces }

@@ -275,6 +275,12 @@ extension PreviewTests {
         }
     }
 
+    func testHomeScreenNewSoundBanner() async throws {
+        for (index, preview) in HomeScreenNewSoundBanner_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testHomeScreenRecoveryKeyConfirmationBanner() async throws {
         for (index, preview) in HomeScreenRecoveryKeyConfirmationBanner_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
