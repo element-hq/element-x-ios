@@ -86,6 +86,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
                 Task { await saveCurrentItem() }
             case .redact:
                 state.bindings.redactConfirmationItem = item
+            case .forward(let itemID):
+                Task { await forwardItem(itemID: itemID) }
             default:
                 MXLog.error("Received unexpected action: \(action)")
             }
@@ -94,6 +96,12 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         case .timelineEndReached:
             showTimelineEndIndicator()
         }
+    }
+    
+    private func forwardItem(itemID: TimelineItemIdentifier) async {
+        guard let forwardingItem = await timelineViewModel.getForwardingItem(for: itemID) else { return }
+        state.previewControllerDriver.send(.dismissDetailsSheet)
+        actionsSubject.send(.displayMessageForwarding(forwardingItem))
     }
     
     private func updateCurrentItem(_ previewItem: TimelineMediaPreviewItem) async {

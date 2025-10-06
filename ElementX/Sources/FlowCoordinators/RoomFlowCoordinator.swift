@@ -1592,12 +1592,15 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .viewInRoomTimeline(let itemID):
                 guard let eventID = itemID.eventID else {
                     MXLog.error("Unable to present room timeline for event \(itemID)")
+                   
                     return
                 }
                 stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false))),
                                       userInfo: EventUserInfo(animated: false)) // No animation so the timeline visible when the preview animates away.
             case .finished:
                 stateMachine.tryEvent(.dismissMediaEventsTimeline)
+            case .displayMessageForwarding(let forwardingItem):
+                stateMachine.tryEvent(.presentMessageForwarding(forwardingItem: forwardingItem))
             }
         }
         .store(in: &cancellables)

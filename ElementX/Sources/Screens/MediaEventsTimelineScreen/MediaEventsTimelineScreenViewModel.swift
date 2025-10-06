@@ -155,6 +155,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         sheetModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
+            case .displayMessageForwarding(let forwardingItem):
+                displayMessageForwarding(forwardingItem: forwardingItem)
             case .viewInRoomTimeline(let itemID):
                 actionsSubject.send(.viewInRoomTimeline(itemID))
             case .dismiss:
@@ -222,6 +224,8 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
+            case .displayMessageForwarding(let forwardingItem):
+                displayMessageForwarding(forwardingItem: forwardingItem)
             case .viewInRoomTimeline(let itemID):
                 state.bindings.mediaPreviewViewModel = nil
                 actionsSubject.send(.viewInRoomTimeline(itemID))
@@ -239,6 +243,15 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             L10n.commonDateThisMonth
         } else {
             date.formatted(.dateTime.month(.wide).year())
+        }
+    }
+    
+    private func displayMessageForwarding(forwardingItem: MessageForwardingItem) {
+        state.bindings.mediaPreviewViewModel = nil
+        state.bindings.mediaPreviewSheetViewModel = nil
+        // We need a small delay because we need to wait for the presented sheet to be fully dismissed.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.actionsSubject.send(.displayMessageForwarding(forwardingItem))
         }
     }
 }

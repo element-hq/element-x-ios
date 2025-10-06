@@ -181,6 +181,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentKnockRequestsList)
                 case .displayRoom(let roomID, let via):
                     actionsSubject.send(.presentRoom(roomID: roomID, via: via))
+                case .displayMessageForwarding(let forwardingItem):
+                    actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
                 }
             }
             .store(in: &cancellables)
