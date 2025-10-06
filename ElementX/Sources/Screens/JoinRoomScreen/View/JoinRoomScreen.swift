@@ -327,67 +327,42 @@ struct JoinRoomScreen: View {
 // MARK: - Previews
 
 struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
-    static let unknownViewModel = makeViewModel(mode: .unknown)
-    static let joinableViewModel = makeViewModel(mode: .joinable)
-    static let restrictedViewModel = makeViewModel(mode: .restricted, canJoinRoom: false)
-    static let restrictedJoinableViewModel = makeViewModel(mode: .restricted)
-    static let inviteRequiredViewModel = makeViewModel(mode: .inviteRequired)
-    static let invitedViewModel = makeViewModel(mode: .invited(isDM: false))
-    static let invitedDMViewModel = makeViewModel(mode: .invited(isDM: true))
-    static let invitedViewModelWithHiddenAvatars = makeViewModel(mode: .invited(isDM: false), hideInviteAvatars: true)
-    static let invitedDMViewModelWithHiddenAvatars = makeViewModel(mode: .invited(isDM: true), hideInviteAvatars: true)
-    static let knockableViewModel = makeViewModel(mode: .knockable)
-    static let knockedViewModel = makeViewModel(mode: .knocked)
-    static let bannedViewModel = makeViewModel(mode: .banned(sender: "Bob", reason: "Spamming"))
-    static let forbiddenViewModel = makeViewModel(mode: .forbidden)
+    static let previewWrappers: [JoinRoomScreenPreviewWrapper] = [
+        .init(mode: .unknown),
+        .init(mode: .joinable),
+        .init(mode: .restricted, canJoinRoom: false),
+        .init(mode: .restricted, customPreviewName: "RestrictedJoinable"),
+        .init(mode: .inviteRequired),
+        .init(mode: .invited(isDM: false)),
+        .init(mode: .invited(isDM: true)),
+        .init(mode: .invited(isDM: false), hideInviteAvatars: true, customPreviewName: "InvitedWithHiddenAvatars"),
+        .init(mode: .knockable),
+        .init(mode: .knocked),
+        .init(mode: .banned(sender: "Bob", reason: "Spamming")),
+        .init(mode: .forbidden)
+    ]
     
     static var previews: some View {
-        makePreview(viewModel: unknownViewModel, mode: .unknown)
-        makePreview(viewModel: joinableViewModel, mode: .joinable)
-        makePreview(viewModel: restrictedViewModel, mode: .restricted)
-        makePreview(viewModel: restrictedJoinableViewModel, mode: .restricted,
-                    customPreviewName: "RestrictedJoinable")
-        makePreview(viewModel: inviteRequiredViewModel, mode: .inviteRequired)
-        makePreview(viewModel: invitedViewModel, mode: .invited(isDM: false))
-        makePreview(viewModel: invitedDMViewModel, mode: .invited(isDM: true))
-        makePreview(viewModel: invitedViewModelWithHiddenAvatars,
-                    mode: .invited(isDM: false),
-                    customPreviewName: "InvitedWithHiddenAvatars")
-        makePreview(viewModel: knockableViewModel, mode: .knockable)
-        makePreview(viewModel: knockedViewModel, mode: .knocked)
-        makePreview(viewModel: bannedViewModel, mode: .banned(sender: nil, reason: nil))
-        makePreview(viewModel: forbiddenViewModel, mode: .forbidden)
-    }
-    
-    @ViewBuilder
-    static func makePreview(viewModel: JoinRoomScreenViewModel,
-                            mode: JoinRoomScreenMode,
-                            customPreviewName: String? = nil) -> some View {
-        if mode == .forbidden {
-            NavigationStack {
-                JoinRoomScreen(context: viewModel.context)
-            }
-            .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
-                state.mode == .forbidden
-            })
-            .onAppear {
-                forbiddenViewModel.context.send(viewAction: .join)
-            }
-            .previewDisplayName(customPreviewName ?? mode.previewDisplayName)
-        } else {
-            NavigationStack {
-                JoinRoomScreen(context: viewModel.context)
-            }
-            .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
-                state.roomDetails != nil
-            })
-            .previewDisplayName(customPreviewName ?? mode.previewDisplayName)
+        ForEach(previewWrappers) { wrapper in
+            wrapper.preview
         }
     }
+}
+
+@MainActor
+struct JoinRoomScreenPreviewWrapper: Identifiable {
+    let id = UUID()
+    let viewModel: JoinRoomScreenViewModel
+    let mode: JoinRoomScreenMode
+    var customPreviewName: String?
     
-    static func makeViewModel(mode: JoinRoomScreenMode,
-                              canJoinRoom: Bool = true,
-                              hideInviteAvatars: Bool = false) -> JoinRoomScreenViewModel {
+    init(mode: JoinRoomScreenMode,
+         canJoinRoom: Bool = true,
+         hideInviteAvatars: Bool = false,
+         customPreviewName: String? = nil) {
+        self.mode = mode
+        self.customPreviewName = customPreviewName
+        
         let appSettings = AppSettings()
         appSettings.knockingEnabled = true
         
@@ -442,16 +417,14 @@ struct JoinRoomScreen_Previews: PreviewProvider, TestablePreview {
             break
         }
         
-        return JoinRoomScreenViewModel(source: .generic(roomID: "1", via: []),
-                                       appSettings: appSettings,
-                                       userSession: UserSessionMock(.init(clientProxy: clientProxy)),
-                                       userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        viewModel = JoinRoomScreenViewModel(source: .generic(roomID: "1", via: []),
+                                            appSettings: appSettings,
+                                            userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
     }
-}
-
-private extension JoinRoomScreenMode {
+    
     var previewDisplayName: String {
-        switch self {
+        switch mode {
         case .unknown:
             return "Unknown"
         case .loading:
@@ -472,6 +445,30 @@ private extension JoinRoomScreenMode {
             return "Banned"
         case .forbidden:
             return "Forbidden"
+        }
+    }
+    
+    @ViewBuilder
+    var preview: some View {
+        if mode == .forbidden {
+            NavigationStack {
+                JoinRoomScreen(context: viewModel.context)
+            }
+            .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
+                state.mode == .forbidden
+            })
+            .onAppear {
+                viewModel.context.send(viewAction: .join)
+            }
+            .previewDisplayName(customPreviewName ?? previewDisplayName)
+        } else {
+            NavigationStack {
+                JoinRoomScreen(context: viewModel.context)
+            }
+            .snapshotPreferences(expect: viewModel.context.$viewState.map { state in
+                state.roomDetails != nil
+            })
+            .previewDisplayName(customPreviewName ?? previewDisplayName)
         }
     }
 }
