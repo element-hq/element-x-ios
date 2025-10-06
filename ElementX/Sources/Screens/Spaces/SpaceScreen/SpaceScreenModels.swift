@@ -24,6 +24,8 @@ struct SpaceScreenViewState: BindableState {
     var selectedSpaceRoomID: String?
     var joiningRoomIDs: Set<String> = []
     
+    var isSpaceManagementEnabled = false
+    
     var bindings = SpaceScreenViewStateBindings()
     
     var spaceName: String { space.name ?? L10n.commonSpace }
@@ -39,4 +41,5 @@ enum SpaceScreenViewAction {
     case deselectAllLeaveRoomDetails
     case toggleLeaveSpaceRoomDetails(id: String)
     case confirmLeaveSpace
+    case spaceSettings
 }

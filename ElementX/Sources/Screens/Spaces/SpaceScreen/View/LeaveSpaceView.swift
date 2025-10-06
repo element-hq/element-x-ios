@@ -9,7 +9,10 @@ import Compound
 import SwiftUI
 
 struct LeaveSpaceView: View {
+    @Environment(\.dismiss) private var dismiss
+    
     let context: SpaceScreenViewModel.Context
+    let leaveHandle: LeaveSpaceHandleProxy
     
     @State private var scrollViewHeight: CGFloat = .zero
     @State private var buttonsHeight: CGFloat = .zero
@@ -39,24 +42,16 @@ struct LeaveSpaceView: View {
             BigIcon(icon: \.errorSolid, style: .alertSolid)
             
             VStack(spacing: 8) {
-                Text(L10n.screenLeaveSpaceTitle(context.viewState.spaceName))
+                Text(leaveHandle.title(spaceName: context.viewState.spaceName))
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 
-                switch context.leaveHandle?.mode {
-                case .manyRooms:
-                    Text(L10n.screenLeaveSpaceSubtitle)
+                if let subtitle = leaveHandle.subtitle {
+                    Text(subtitle)
                         .font(.compound.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
                         .multilineTextAlignment(.center)
-                case .onlyAdminRooms:
-                    Text(L10n.screenLeaveSpaceSubtitleOnlyLastAdmin)
-                        .font(.compound.bodyMD)
-                        .foregroundStyle(.compound.textSecondary)
-                        .multilineTextAlignment(.center)
-                case .noRooms, nil:
-                    EmptyView()
                 }
             }
         }
@@ -65,10 +60,10 @@ struct LeaveSpaceView: View {
     
     @ViewBuilder
     var rooms: some View {
-        if let leaveRooms = context.leaveHandle?.rooms, !leaveRooms.isEmpty {
+        if !leaveHandle.rooms.isEmpty, leaveHandle.canLeave {
             LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
                 Section {
-                    ForEach(leaveRooms, id: \.spaceRoomProxy.id) { room in
+                    ForEach(leaveHandle.rooms, id: \.spaceRoomProxy.id) { room in
                         LeaveSpaceRoomDetailsCell(room: room, mediaProvider: context.mediaProvider) {
                             context.send(viewAction: .toggleLeaveSpaceRoomDetails(id: room.spaceRoomProxy.id))
                         }
@@ -90,94 +85,50 @@ struct LeaveSpaceView: View {
     
     var buttons: some View {
         VStack(spacing: 16) {
-            Button(role: .destructive) {
-                context.send(viewAction: .confirmLeaveSpace)
-            } label: {
-                Label(context.leaveHandle?.confirmationTitle ?? L10n.actionLeaveSpace, icon: \.leave)
+            if leaveHandle.canLeave {
+                Button(role: .destructive) {
+                    context.send(viewAction: .confirmLeaveSpace)
+                } label: {
+                    Label(leaveHandle.confirmationTitle, icon: \.leave)
+                }
+                .buttonStyle(.compound(.primary))
+            } else if context.viewState.isSpaceManagementEnabled {
+                Button {
+                    context.send(viewAction: .spaceSettings)
+                } label: {
+                    Label(L10n.actionGoToSettings, icon: \.settings)
+                }
+                .buttonStyle(.compound(.primary))
             }
-            .buttonStyle(.compound(.primary))
             
-            Button(L10n.actionCancel) {
-                context.leaveHandle = nil
-            }
-            .buttonStyle(.compound(.tertiary))
+            Button(L10n.actionCancel, action: dismiss.callAsFunction)
+                .buttonStyle(.compound(.tertiary))
         }
         .padding(.horizontal, 16)
         .padding(.top, 16)
     }
 }
 
-struct LeaveSpaceRoomDetailsCell: View {
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    
-    let room: LeaveSpaceRoomDetails
-    let mediaProvider: MediaProviderProtocol?
-    
-    let action: () -> Void
-    
-    private var subtitle: String? {
-        guard !room.spaceRoomProxy.isSpace else { return nil }
-        let memberCount = L10n.commonMemberCount(room.spaceRoomProxy.joinedMembersCount)
-        return room.isLastAdmin ? L10n.screenLeaveSpaceLastAdminInfo(memberCount) : memberCount
-    }
-    
-    var visibilityIcon: KeyPath<CompoundIcons, Image>? {
-        switch room.spaceRoomProxy.visibility {
-        case .public: \.public
-        case .private: \.lockSolid
-        case .restricted: nil
-        case .none: \.lockSolid
+private extension LeaveSpaceHandleProxy {
+    func title(spaceName: String) -> String {
+        switch mode {
+        case .lastSpaceAdmin: L10n.screenLeaveSpaceTitleLastAdmin(spaceName)
+        default: L10n.screenLeaveSpaceTitle(spaceName)
         }
     }
     
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 16) {
-                if dynamicTypeSize < .accessibility3 {
-                    RoomAvatarImage(avatar: room.spaceRoomProxy.avatar,
-                                    avatarSize: .room(on: .leaveSpace),
-                                    mediaProvider: mediaProvider)
-                }
-                
-                VStack(alignment: .leading, spacing: 0) {
-                    Text(room.spaceRoomProxy.computedName)
-                        .font(.compound.bodyLGSemibold)
-                        .foregroundStyle(.compound.textPrimary)
-                        .lineLimit(1)
-                        .padding(.vertical, 1)
-                        .padding(.vertical, subtitle == nil ? 10 : 0)
-                    
-                    subtitleLabel
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 8)
-                
-                ListRowAccessory.multiSelection(room.isSelected)
-            }
-            .padding(.horizontal, 16)
+    var subtitle: String? {
+        switch mode {
+        case .manyRooms: L10n.screenLeaveSpaceSubtitle
+        case .onlyAdminRooms: L10n.screenLeaveSpaceSubtitleOnlyLastAdmin
+        case .noRooms: nil
+        case .lastSpaceAdmin: L10n.screenLeaveSpaceSubtitleLastAdmin
         }
-        .buttonStyle(SpaceRoomCellButtonStyle(isSelected: false))
     }
     
-    @ViewBuilder
-    private var subtitleLabel: some View {
-        if let subtitle {
-            Label {
-                Text(subtitle)
-                    .font(.compound.bodyMD)
-                    .foregroundStyle(.compound.textSecondary)
-                    .lineLimit(1)
-                    .padding(.vertical, 1)
-            } icon: {
-                if let visibilityIcon {
-                    CompoundIcon(visibilityIcon,
-                                 size: .xSmall,
-                                 relativeTo: .compound.bodyMD)
-                        .foregroundStyle(.compound.iconTertiary)
-                }
-            }
-            .labelStyle(.custom(spacing: 4))
-        }
+    var confirmationTitle: String {
+        let selectedCount = selectedCount
+        return selectedCount > 0 ? L10n.screenLeaveSpaceSubmit(selectedCount) : L10n.actionLeaveSpace
     }
 }
 
@@ -186,48 +137,51 @@ struct LeaveSpaceRoomDetailsCell: View {
 import MatrixRustSDK
 
 struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = makeViewModel(mode: .manyRooms)
-    static let onlyAdminRoomsViewModel = makeViewModel(mode: .onlyAdminRooms)
-    static let noRoomsViewModel = makeViewModel(mode: .noRooms)
+    static let viewModel = makeViewModel()
     
     static var previews: some View {
-        LeaveSpaceView(context: viewModel.context)
+        LeaveSpaceView(context: viewModel.context, leaveHandle: makeLeaveHandle(mode: .manyRooms))
             .previewDisplayName("Many Rooms")
-            .snapshotPreferences(expect: viewModel.context.observe(\.leaveHandle).map { $0 != nil }.eraseToStream())
-        LeaveSpaceView(context: onlyAdminRoomsViewModel.context)
+        LeaveSpaceView(context: viewModel.context, leaveHandle: makeLeaveHandle(mode: .onlyAdminRooms))
             .previewDisplayName("Only Admin Rooms")
-            .snapshotPreferences(expect: viewModel.context.observe(\.leaveHandle).map { $0 != nil }.eraseToStream())
-        LeaveSpaceView(context: noRoomsViewModel.context)
+        LeaveSpaceView(context: viewModel.context, leaveHandle: makeLeaveHandle(mode: .noRooms))
             .previewDisplayName("No Rooms")
-            .snapshotPreferences(expect: viewModel.context.observe(\.leaveHandle).map { $0 != nil }.eraseToStream())
+        LeaveSpaceView(context: viewModel.context, leaveHandle: makeLeaveHandle(mode: .lastSpaceAdmin))
+            .previewDisplayName("Last Space Admin")
     }
     
-    static func makeViewModel(mode: LeaveSpaceHandleProxy.Mode) -> SpaceScreenViewModel {
-        let spaceRoomProxy = SpaceRoomProxyMock(.init(id: "!eng-space:matrix.org",
-                                                      name: "Engineering Team",
-                                                      isSpace: true,
-                                                      parent: SpaceRoomProxyMock(.init(name: "MegaGroup", isSpace: true)),
-                                                      childrenCount: 30,
-                                                      joinedMembersCount: 76,
-                                                      heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
-                                                      topic: "Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in.",
-                                                      joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
+    static let spaceRoomProxy = SpaceRoomProxyMock(.init(id: "!eng-space:matrix.org",
+                                                         name: "Engineering Team",
+                                                         isSpace: true,
+                                                         parent: SpaceRoomProxyMock(.init(name: "MegaGroup", isSpace: true)),
+                                                         childrenCount: 30,
+                                                         joinedMembersCount: 76,
+                                                         heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
+                                                         topic: "Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in.",
+                                                         joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
+    
+    static func makeViewModel() -> SpaceScreenViewModel {
         let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceRoomProxy: spaceRoomProxy,
                                                               initialSpaceRooms: .mockSpaceList))
-        
-        let rooms: [LeaveSpaceRoom] = switch mode {
-        case .manyRooms: .mockRooms
-        case .onlyAdminRooms: .mockAdminRooms
-        case .noRooms: []
-        }
-        let spaceServiceProxy = SpaceServiceProxyMock(.init(leaveSpaceRooms: rooms))
+        let spaceServiceProxy = SpaceServiceProxyMock(.init())
         
         let viewModel = SpaceScreenViewModel(spaceRoomListProxy: spaceRoomListProxy,
                                              spaceServiceProxy: spaceServiceProxy,
                                              selectedSpaceRoomPublisher: .init(nil),
                                              userSession: UserSessionMock(.init()),
                                              userIndicatorController: UserIndicatorControllerMock())
-        viewModel.context.send(viewAction: .leaveSpace)
         return viewModel
+    }
+    
+    static func makeLeaveHandle(mode: LeaveSpaceHandleProxy.Mode) -> LeaveSpaceHandleProxy {
+        let rooms: [LeaveSpaceRoom] = switch mode {
+        case .manyRooms: .mockRooms
+        case .onlyAdminRooms: .mockAdminRooms
+        case .noRooms: []
+        case .lastSpaceAdmin: .mockLastSpaceAdmin(spaceRoomProxy: spaceRoomProxy)
+        }
+        
+        return LeaveSpaceHandleProxy(spaceID: spaceRoomProxy.id,
+                                     leaveHandle: LeaveSpaceHandleSDKMock(.init(rooms: rooms)))
     }
 }

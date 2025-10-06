@@ -10,17 +10,24 @@ import MatrixRustSDK
 
 class LeaveSpaceHandleProxy: Identifiable {
     let id: String
-    let leaveHandle: LeaveSpaceHandleProtocol
     var rooms: [LeaveSpaceRoomDetails]
     
-    enum Mode { case manyRooms, onlyAdminRooms, noRooms }
+    enum Mode { case manyRooms, onlyAdminRooms, noRooms, lastSpaceAdmin }
     let mode: Mode
+    
+    private let leaveHandle: LeaveSpaceHandleProtocol
+    
+    var canLeave: Bool { mode != .lastSpaceAdmin }
+    var selectedCount: Int { rooms.count { $0.isSelected } }
     
     init(spaceID: String, leaveHandle: LeaveSpaceHandleProtocol) {
         id = spaceID
         self.leaveHandle = leaveHandle
         
-        rooms = leaveHandle.rooms()
+        let rooms = leaveHandle.rooms()
+        let space = rooms.first { $0.spaceRoom.roomId == spaceID }
+        
+        self.rooms = rooms
             .compactMap { room in
                 guard room.spaceRoom.state == .joined, // The SDK is going to do this but not yet.
                       room.spaceRoom.isDirect != true,
@@ -32,7 +39,9 @@ class LeaveSpaceHandleProxy: Identifiable {
                              isSelected: !room.isLastAdmin)
             }
         
-        mode = if rooms.isEmpty {
+        mode = if space?.isLastAdmin == true {
+            .lastSpaceAdmin
+        } else if rooms.isEmpty {
             .noRooms
         } else if rooms.count(where: { !$0.isLastAdmin }) == 0 {
             .onlyAdminRooms
@@ -53,13 +62,6 @@ class LeaveSpaceHandleProxy: Identifiable {
             }
             return .failure(.sdkError(error))
         }
-    }
-    
-    var selectedCount: Int { rooms.count { $0.isSelected } }
-    
-    var confirmationTitle: String {
-        let selectedCount = selectedCount
-        return selectedCount > 0 ? L10n.screenLeaveSpaceSubmit(selectedCount) : L10n.actionLeaveSpace
     }
 }
 

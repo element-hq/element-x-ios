@@ -104,6 +104,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             }
         case .confirmLeaveSpace:
             Task { await confirmLeaveSpace() }
+        case .spaceSettings:
+            break // Not implemented.
         }
     }
     

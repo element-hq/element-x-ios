@@ -377,6 +377,12 @@ extension PreviewTests {
         }
     }
 
+    func testLeaveSpaceRoomDetailsCell() async throws {
+        for (index, preview) in LeaveSpaceRoomDetailsCell_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testLeaveSpaceView() async throws {
         for (index, preview) in LeaveSpaceView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
