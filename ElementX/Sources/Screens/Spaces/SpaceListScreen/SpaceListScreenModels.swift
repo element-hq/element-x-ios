@@ -31,9 +31,13 @@ struct SpaceListScreenViewState: BindableState {
     }
 }
 
-struct SpaceListScreenViewStateBindings { }
+struct SpaceListScreenViewStateBindings {
+    var isPresentingFeatureAnnouncement = false
+}
 
 enum SpaceListScreenViewAction {
     case spaceAction(SpaceRoomCell.Action)
     case showSettings
+    case screenAppeared
+    case featureAnnouncementAppeared
 }
