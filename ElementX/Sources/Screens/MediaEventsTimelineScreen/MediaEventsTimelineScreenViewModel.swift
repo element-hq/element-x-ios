@@ -250,7 +250,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         state.bindings.mediaPreviewViewModel = nil
         state.bindings.mediaPreviewSheetViewModel = nil
         // We need a small delay because we need to wait for the presented sheet to be fully dismissed.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + TimelineMediaPreviewViewModel.displayMessageForwardingDelay) {
             self.actionsSubject.send(.displayMessageForwarding(forwardingItem))
         }
     }

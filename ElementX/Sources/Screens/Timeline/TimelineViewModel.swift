@@ -270,7 +270,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
     }
     
-    func getForwardingItem(for itemID: TimelineItemIdentifier) async -> MessageForwardingItem? {
+    func makeForwardingItem(for itemID: TimelineItemIdentifier) async -> MessageForwardingItem? {
         guard let content = await timelineController.messageEventContent(for: itemID) else { return nil }
         return .init(id: itemID, roomID: roomProxy.id, content: content)
     }
@@ -904,7 +904,7 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     // MARK: - Message forwarding
     
     private func forwardMessage(itemID: TimelineItemIdentifier) async {
-        guard let forwardingItem = await getForwardingItem(for: itemID) else { return }
+        guard let forwardingItem = await makeForwardingItem(for: itemID) else { return }
         actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
     }
     

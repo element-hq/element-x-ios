@@ -143,7 +143,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             case .displayMessageForwarding(let forwardingItem):
                 state.bindings.mediaPreviewViewModel = nil
                 // We need a small delay because we need to wait for the media preview to be fully dismissed.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + TimelineMediaPreviewViewModel.displayMessageForwardingDelay) {
                     self.actionsSubject.send(.displayMessageForwarding(forwardingItem))
                 }
             case .viewInRoomTimeline:

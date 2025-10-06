@@ -19,5 +19,5 @@ protocol TimelineViewModelProtocol {
     func focusOnEvent(eventID: String) async
     
     /// Handles getting the content to forward an item given its item ID.
-    func getForwardingItem(for itemID: TimelineItemIdentifier) async -> MessageForwardingItem?
+    func makeForwardingItem(for itemID: TimelineItemIdentifier) async -> MessageForwardingItem?
 }

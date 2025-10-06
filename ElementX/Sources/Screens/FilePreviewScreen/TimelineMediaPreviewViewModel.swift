@@ -11,6 +11,8 @@ import Foundation
 typealias TimelineMediaPreviewViewModelType = StateStoreViewModel<TimelineMediaPreviewViewState, TimelineMediaPreviewViewAction>
 
 class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
+    static let displayMessageForwardingDelay: TimeInterval = 1.0
+    
     let instanceID = UUID()
     
     private let timelineViewModel: TimelineViewModelProtocol
@@ -99,7 +101,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     }
     
     private func forwardItem(itemID: TimelineItemIdentifier) async {
-        guard let forwardingItem = await timelineViewModel.getForwardingItem(for: itemID) else { return }
+        guard let forwardingItem = await timelineViewModel.makeForwardingItem(for: itemID) else { return }
         state.previewControllerDriver.send(.dismissDetailsSheet)
         actionsSubject.send(.displayMessageForwarding(forwardingItem))
     }
