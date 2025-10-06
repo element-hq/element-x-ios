@@ -392,6 +392,8 @@ internal enum L10n {
   internal static var commonAppearance: String { return L10n.tr("Localizable", "common_appearance") }
   /// Audio
   internal static var commonAudio: String { return L10n.tr("Localizable", "common_audio") }
+  /// Beta
+  internal static var commonBeta: String { return L10n.tr("Localizable", "common_beta") }
   /// Blocked users
   internal static var commonBlockedUsers: String { return L10n.tr("Localizable", "common_blocked_users") }
   /// Bubbles
@@ -1146,6 +1148,8 @@ internal enum L10n {
   internal static var screenAdvancedSettingsHideInviteAvatarsToggleTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_hide_invite_avatars_toggle_title") }
   /// Hide media previews in timeline
   internal static var screenAdvancedSettingsHideTimelineMediaToggleTitle: String { return L10n.tr("Localizable", "screen_advanced_settings_hide_timeline_media_toggle_title") }
+  /// Labs
+  internal static var screenAdvancedSettingsLabs: String { return L10n.tr("Localizable", "screen_advanced_settings_labs") }
   /// Upload photos and videos faster and reduce data usage
   internal static var screenAdvancedSettingsMediaCompressionDescription: String { return L10n.tr("Localizable", "screen_advanced_settings_media_compression_description") }
   /// Optimise media quality
@@ -1818,6 +1822,14 @@ internal enum L10n {
   internal static var screenKnockRequestsListInitialLoadingTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_initial_loading_title") }
   /// Requests to join
   internal static var screenKnockRequestsListTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_title") }
+  /// Enable thread replies
+  internal static var screenLabsEnableThreads: String { return L10n.tr("Localizable", "screen_labs_enable_threads") }
+  /// Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.
+  internal static var screenLabsHeaderDescription: String { return L10n.tr("Localizable", "screen_labs_header_description") }
+  /// Feeling experimental?
+  internal static var screenLabsHeaderTitle: String { return L10n.tr("Localizable", "screen_labs_header_title") }
+  /// Labs
+  internal static var screenLabsTitle: String { return L10n.tr("Localizable", "screen_labs_title") }
   /// %1$@ (Admin)
   internal static func screenLeaveSpaceLastAdminInfo(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_leave_space_last_admin_info", String(describing: p1))
@@ -1828,11 +1840,17 @@ internal enum L10n {
   }
   /// Select the rooms you’d like to leave which you're not the only administrator for:
   internal static var screenLeaveSpaceSubtitle: String { return L10n.tr("Localizable", "screen_leave_space_subtitle") }
+  /// You need to assign another admin for this space before you can leave.
+  internal static var screenLeaveSpaceSubtitleLastAdmin: String { return L10n.tr("Localizable", "screen_leave_space_subtitle_last_admin") }
   /// You will not be removed from the following room(s) because you're the only administrator:
   internal static var screenLeaveSpaceSubtitleOnlyLastAdmin: String { return L10n.tr("Localizable", "screen_leave_space_subtitle_only_last_admin") }
   /// Leave %1$@?
   internal static func screenLeaveSpaceTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_leave_space_title", String(describing: p1))
+  }
+  /// You are the only admin for %1$@
+  internal static func screenLeaveSpaceTitleLastAdmin(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_leave_space_title_last_admin", String(describing: p1))
   }
   /// This account has been deactivated.
   internal static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
@@ -2904,6 +2922,22 @@ internal enum L10n {
   internal static var screenSignoutSaveRecoveryKeySubtitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_subtitle") }
   /// Have you saved your recovery key?
   internal static var screenSignoutSaveRecoveryKeyTitle: String { return L10n.tr("Localizable", "screen_signout_save_recovery_key_title") }
+  /// View spaces you've created or joined
+  internal static var screenSpaceAnnouncementItem1: String { return L10n.tr("Localizable", "screen_space_announcement_item1") }
+  /// Accept or decline invites to spaces
+  internal static var screenSpaceAnnouncementItem2: String { return L10n.tr("Localizable", "screen_space_announcement_item2") }
+  /// Discover any rooms you can join in your spaces
+  internal static var screenSpaceAnnouncementItem3: String { return L10n.tr("Localizable", "screen_space_announcement_item3") }
+  /// Join public spaces
+  internal static var screenSpaceAnnouncementItem4: String { return L10n.tr("Localizable", "screen_space_announcement_item4") }
+  /// Leave any spaces you’ve joined
+  internal static var screenSpaceAnnouncementItem5: String { return L10n.tr("Localizable", "screen_space_announcement_item5") }
+  /// Creating and managing spaces is coming soon.
+  internal static var screenSpaceAnnouncementNotice: String { return L10n.tr("Localizable", "screen_space_announcement_notice") }
+  /// Welcome to the beta version of Spaces! With this first version you can:
+  internal static var screenSpaceAnnouncementSubtitle: String { return L10n.tr("Localizable", "screen_space_announcement_subtitle") }
+  /// Introducing Spaces
+  internal static var screenSpaceAnnouncementTitle: String { return L10n.tr("Localizable", "screen_space_announcement_title") }
   /// Spaces you have created or joined.
   internal static var screenSpaceListDescription: String { return L10n.tr("Localizable", "screen_space_list_description") }
   /// %1$@ • %2$@
@@ -3256,9 +3290,21 @@ internal enum L10n {
   internal static var troubleshootNotificationsTestCurrentPushProviderDescription: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_description") }
   /// No push providers selected.
   internal static var troubleshootNotificationsTestCurrentPushProviderFailure: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_failure") }
+  /// Current push provider: %1$@ and current distributor: %2$@. But the distributor %3$@ is not found. Maybe the application has been uninstalled?
+  internal static func troubleshootNotificationsTestCurrentPushProviderFailureDistributorNotFound(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
+    return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found", String(describing: p1), String(describing: p2), String(describing: p3))
+  }
+  /// Current push provider: %1$@, but no distributors have been configured.
+  internal static func troubleshootNotificationsTestCurrentPushProviderFailureNoDistributor(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_failure_no_distributor", String(describing: p1))
+  }
   /// Current push provider: %1$@.
   internal static func troubleshootNotificationsTestCurrentPushProviderSuccess(_ p1: Any) -> String {
     return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_success", String(describing: p1))
+  }
+  /// Current push provider: %1$@ (%2$@)
+  internal static func troubleshootNotificationsTestCurrentPushProviderSuccessWithDistributor(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_success_with_distributor", String(describing: p1), String(describing: p2))
   }
   /// Current push provider
   internal static var troubleshootNotificationsTestCurrentPushProviderTitle: String { return L10n.tr("Localizable", "troubleshoot_notifications_test_current_push_provider_title") }
