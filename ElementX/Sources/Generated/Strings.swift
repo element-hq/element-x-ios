@@ -1714,7 +1714,7 @@ internal enum L10n {
   internal static var screenJoinRoomDeclineAndBlockButtonTitle: String { return L10n.tr("Localizable", "screen_join_room_decline_and_block_button_title") }
   /// Joining failed
   internal static var screenJoinRoomFailMessage: String { return L10n.tr("Localizable", "screen_join_room_fail_message") }
-  /// This room is either invite-only or there might be restrictions to access at space level.
+  /// You either need to be invited to join or there might be restrictions to access.
   internal static var screenJoinRoomFailReason: String { return L10n.tr("Localizable", "screen_join_room_fail_reason") }
   /// Forget
   internal static var screenJoinRoomForgetAction: String { return L10n.tr("Localizable", "screen_join_room_forget_action") }

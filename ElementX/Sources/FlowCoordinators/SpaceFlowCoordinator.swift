@@ -236,8 +236,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     private func presentJoinSpaceScreen() {
         guard case let .joinSpace(spaceRoomProxy) = entryPoint else { fatalError("Attempting to join a space with the wrong entry point.") }
         
-        let parameters = JoinRoomScreenCoordinatorParameters(roomID: spaceRoomProxy.id,
-                                                             via: [],
+        let parameters = JoinRoomScreenCoordinatorParameters(source: .space(spaceRoomProxy),
                                                              userSession: flowParameters.userSession,
                                                              userIndicatorController: flowParameters.userIndicatorController,
                                                              appSettings: flowParameters.appSettings)

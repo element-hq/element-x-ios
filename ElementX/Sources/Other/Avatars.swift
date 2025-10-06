@@ -166,7 +166,7 @@ enum RoomAvatarSizeOnScreen {
         case .details:
             return 96
         case .joinRoom:
-            return 96
+            return 64
         case .spaceHeader:
             return 64
         }

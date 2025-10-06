@@ -194,8 +194,7 @@ class JoinRoomScreenViewModelTests: XCTestCase {
             }
         }
         
-        viewModel = JoinRoomScreenViewModel(roomID: "1",
-                                            via: [],
+        viewModel = JoinRoomScreenViewModel(source: .generic(roomID: "1", via: []),
                                             appSettings: appSettings,
                                             userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                             userIndicatorController: ServiceLocator.shared.userIndicatorController)

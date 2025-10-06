@@ -65,6 +65,7 @@ enum TestablePreviewsDictionary {
         "InviteUsersScreen_Previews" : InviteUsersScreen_Previews.self,
         "JoinRoomByAddressView_Previews" : JoinRoomByAddressView_Previews.self,
         "JoinRoomScreen_Previews" : JoinRoomScreen_Previews.self,
+        "JoinedMembersBadgeView_Previews" : JoinedMembersBadgeView_Previews.self,
         "KnockRequestCell_Previews" : KnockRequestCell_Previews.self,
         "KnockRequestsBannerView_Previews" : KnockRequestsBannerView_Previews.self,
         "KnockRequestsListEmptyStateView_Previews" : KnockRequestsListEmptyStateView_Previews.self,

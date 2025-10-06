@@ -347,6 +347,12 @@ extension PreviewTests {
         }
     }
 
+    func testJoinedMembersBadgeView() async throws {
+        for (index, preview) in JoinedMembersBadgeView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testKnockRequestCell() async throws {
         for (index, preview) in KnockRequestCell_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)
