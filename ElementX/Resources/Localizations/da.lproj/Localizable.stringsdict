@@ -288,22 +288,6 @@
 			<string>Forlad %1$d rum og klynger</string>
 		</dict>
 	</dict>
-	<key>screen_leave_space_subtitle_only_last_admin</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>Du vil ikke blive fjernet fra det følgende rum, da du er den eneste administrator:</string>
-			<key>other</key>
-			<string>Du vil ikke blive fjernet fra følgende rum, fordi du er den eneste administrator:</string>
-		</dict>
-	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>

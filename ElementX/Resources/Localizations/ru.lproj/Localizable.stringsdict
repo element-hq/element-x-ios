@@ -139,9 +139,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Room</string>
-			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>%1$d Комната</string>
+			<key>few</key>
+			<string>%1$d Комнат</string>
+			<key>many</key>
+			<string>%1$d Комнат</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -155,9 +157,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Space</string>
-			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>%1$d Пространство</string>
+			<key>few</key>
+			<string>%1$d Пространств</string>
+			<key>many</key>
+			<string>%1$d Пространств</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -315,25 +319,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Leave %1$d room and space</string>
-			<key>other</key>
-			<string>Leave %1$d rooms and space</string>
-		</dict>
-	</dict>
-	<key>screen_leave_space_subtitle_only_last_admin</key>
-	<dict>
-		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@COUNT@</string>
-		<key>COUNT</key>
-		<dict>
-			<key>NSStringFormatSpecTypeKey</key>
-			<string>NSStringPluralRuleType</string>
-			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
-			<key>one</key>
-			<string>You will not be removed from the following room because you're the only administrator:</string>
-			<key>other</key>
-			<string>You will not be removed from the following rooms because you're the only administrator:</string>
+			<string>Покинуть %1$d комнату и пространство</string>
+			<key>few</key>
+			<string>Покинуть %1$d комнат и пространство</string>
+			<key>many</key>
+			<string>Покинуть %1$d комнат и пространство</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -491,9 +481,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
-			<key>other</key>
-			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
+			<string>Вы заблокировали пользователя %1$d. Вы не будете получать уведомления от этого пользователей.</string>
+			<key>few</key>
+			<string>Вы заблокировали пользователей %1$d. Вы не будете получать уведомления от этих пользователей.</string>
+			<key>many</key>
+			<string>Вы заблокировали пользователей %1$d. Вы не будете получать уведомления от этих пользователей.</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
