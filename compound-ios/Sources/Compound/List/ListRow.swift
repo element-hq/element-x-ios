@@ -48,12 +48,20 @@ public struct ListRow<Icon: View, DetailsIcon: View, CustomContent: View, Select
     
     let kind: Kind<CustomContent, SelectionValue>
     
+    private var separatorTint: Color {
+        if #available(iOS 26, *) {
+            .compound.bgSubtleSecondary
+        } else {
+            .compound._borderInteractiveSecondaryAlpha
+        }
+    }
+    
     public var body: some View {
         rowContent
             .buttonStyle(ListRowButtonStyle())
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.compound.bgCanvasDefaultLevel1)
-            .listRowSeparatorTint(.compound._borderInteractiveSecondaryAlpha)
+            .listRowSeparatorTint(separatorTint)
     }
     
     @ViewBuilder
