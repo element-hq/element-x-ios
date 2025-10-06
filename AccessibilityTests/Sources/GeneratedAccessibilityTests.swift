@@ -227,6 +227,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "JoinRoomByAddressView_Previews")
     }
 
+    func testJoinRoomScreenSpace() async throws {
+        try await performAccessibilityAudit(named: "JoinRoomScreenSpace_Previews")
+    }
+
     func testJoinRoomScreen() async throws {
         try await performAccessibilityAudit(named: "JoinRoomScreen_Previews")
     }

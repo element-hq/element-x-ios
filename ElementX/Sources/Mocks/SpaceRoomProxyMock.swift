@@ -137,3 +137,43 @@ extension [SpaceRoomProxyProtocol] {
         ]
     }
 }
+
+extension SpaceRoomProxyMock {
+    convenience init(mode: JoinRoomScreenMode) {
+        var state: Membership?
+        var joinRule: JoinRule?
+        
+        switch mode {
+        case .joinable:
+            joinRule = .public
+        case .restricted:
+            joinRule = .restricted(rules: [])
+        case .inviteRequired:
+            joinRule = .private
+        case .invited:
+            state = .invited
+            joinRule = .private
+        case .knockable:
+            joinRule = .knock
+        case .knocked:
+            state = .knocked
+            joinRule = .knock
+        case .banned:
+            state = .banned
+        case .loading, .unknown, .forbidden:
+            break
+        }
+        
+        self.init(.init(id: "1",
+                        name: "The Three-Body Problem",
+                        avatarURL: .mockMXCAvatar,
+                        isSpace: true,
+                        childrenCount: 100,
+                        joinedMembersCount: 123,
+                        heroes: [.mockAlice, .mockBob, .mockCharlie],
+                        topic: "“Science and technology were the only keys to opening the door to the future, and people approached science with the faith and sincerity of elementary school students.”",
+                        canonicalAlias: "#3-body-problem:matrix.org",
+                        joinRule: joinRule,
+                        state: state))
+    }
+}
