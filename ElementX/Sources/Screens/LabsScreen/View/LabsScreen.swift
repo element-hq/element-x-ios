@@ -14,7 +14,7 @@ struct LabsScreen: View {
     var body: some View {
         Form {
             header
-            settingsSection
+            threadsSection
         }
         .compoundList()
         .navigationTitle(L10n.screenLabsTitle)
@@ -39,16 +39,23 @@ struct LabsScreen: View {
                         .multilineTextAlignment(.center)
                         .foregroundColor(.compound.textSecondary)
                 }
+                .compoundListSectionHeader()
             }
             .frame(maxWidth: .infinity)
         }
     }
     
-    private var settingsSection: some View {
+    private var threadsSection: some View {
         Section {
             ListRow(label: .default(title: L10n.screenLabsEnableThreads,
                                     icon: \.threads),
                     kind: .toggle($context.threadsEnabled))
+        } footer: {
+            Text(L10n.screenLabsEnableThreadsDescription)
+                .compoundListSectionFooter()
+        }
+        .onChange(of: context.threadsEnabled) { _, _ in
+            context.send(viewAction: .clearCache)
         }
     }
 }
@@ -56,7 +63,7 @@ struct LabsScreen: View {
 // MARK: - Previews
 
 struct LabsScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = LabsScreenViewModel(labsOptions: ServiceLocator.shared.settings)
+    static let viewModel = LabsScreenViewModel(labsOptions: AppSettings())
     
     static var previews: some View {
         NavigationStack {

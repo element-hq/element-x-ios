@@ -22,4 +22,11 @@ class LabsScreenViewModel: LabsScreenViewModelType, LabsScreenViewModelProtocol 
         
         super.init(initialViewState: state)
     }
+    
+    override func process(viewAction: LabsScreenViewAction) {
+        switch viewAction {
+        case .clearCache:
+            actionsSubject.send(.clearCache)
+        }
+    }
 }

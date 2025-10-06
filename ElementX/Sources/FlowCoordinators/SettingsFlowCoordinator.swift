@@ -117,6 +117,15 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentLabs() {
         let coordinator = LabsScreenCoordinator(parameters: .init(appSettings: flowParameters.appSettings))
+        coordinator.actions
+            .sink { [weak self] action in
+                switch action {
+                case .clearCache:
+                    self?.actionsSubject.send(.clearCache)
+                }
+            }
+            .store(in: &cancellables)
+        
         navigationStackCoordinator.push(coordinator)
     }
     

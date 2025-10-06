@@ -662,6 +662,8 @@ internal enum L10n {
   internal static var commonShareSpace: String { return L10n.tr("Localizable", "common_share_space") }
   /// Shared location
   internal static var commonSharedLocation: String { return L10n.tr("Localizable", "common_shared_location") }
+  /// Shared space
+  internal static var commonSharedSpace: String { return L10n.tr("Localizable", "common_shared_space") }
   /// Signing out
   internal static var commonSigningOut: String { return L10n.tr("Localizable", "common_signing_out") }
   /// Something went wrong
@@ -1682,11 +1684,11 @@ internal enum L10n {
   internal static func screenInvitesInvitedYou(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_invited_you", String(describing: p1), String(describing: p2))
   }
-  /// You were banned from this room by %1$@.
+  /// You were banned by %1$@.
   internal static func screenJoinRoomBanByMessage(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_join_room_ban_by_message", String(describing: p1))
   }
-  /// You were banned from this room
+  /// You were banned
   internal static var screenJoinRoomBanMessage: String { return L10n.tr("Localizable", "screen_join_room_ban_message") }
   /// Reason: %1$@.
   internal static func screenJoinRoomBanReason(_ p1: Any) -> String {
@@ -1710,17 +1712,17 @@ internal enum L10n {
   internal static var screenJoinRoomDeclineAndBlockAlertTitle: String { return L10n.tr("Localizable", "screen_join_room_decline_and_block_alert_title") }
   /// Decline and block
   internal static var screenJoinRoomDeclineAndBlockButtonTitle: String { return L10n.tr("Localizable", "screen_join_room_decline_and_block_button_title") }
-  /// Joining the room failed.
+  /// Joining failed
   internal static var screenJoinRoomFailMessage: String { return L10n.tr("Localizable", "screen_join_room_fail_message") }
   /// This room is either invite-only or there might be restrictions to access at space level.
   internal static var screenJoinRoomFailReason: String { return L10n.tr("Localizable", "screen_join_room_fail_reason") }
-  /// Forget this room
+  /// Forget
   internal static var screenJoinRoomForgetAction: String { return L10n.tr("Localizable", "screen_join_room_forget_action") }
-  /// You need an invite in order to join this room
+  /// You need an invite in order to join
   internal static var screenJoinRoomInviteRequiredMessage: String { return L10n.tr("Localizable", "screen_join_room_invite_required_message") }
   /// Invited by
   internal static var screenJoinRoomInvitedBy: String { return L10n.tr("Localizable", "screen_join_room_invited_by") }
-  /// Join room
+  /// Join
   internal static var screenJoinRoomJoinAction: String { return L10n.tr("Localizable", "screen_join_room_join_action") }
   /// You may need to be invited or be a member of a space in order to join.
   internal static var screenJoinRoomJoinRestrictedMessage: String { return L10n.tr("Localizable", "screen_join_room_join_restricted_message") }
@@ -1826,6 +1828,8 @@ internal enum L10n {
   internal static var screenKnockRequestsListTitle: String { return L10n.tr("Localizable", "screen_knock_requests_list_title") }
   /// Enable thread replies
   internal static var screenLabsEnableThreads: String { return L10n.tr("Localizable", "screen_labs_enable_threads") }
+  /// The app will restart to apply this change.
+  internal static var screenLabsEnableThreadsDescription: String { return L10n.tr("Localizable", "screen_labs_enable_threads_description") }
   /// Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.
   internal static var screenLabsHeaderDescription: String { return L10n.tr("Localizable", "screen_labs_header_description") }
   /// Feeling experimental?
