@@ -16009,7 +16009,6 @@ class SpaceRoomProxyMock: SpaceRoomProxyProtocol, @unchecked Sendable {
     }
     var underlyingIsSpace: Bool!
     var isDirect: Bool?
-    var parent: SpaceRoomProxyProtocol?
     var childrenCount: Int {
         get { return underlyingChildrenCount }
         set(value) { underlyingChildrenCount = value }

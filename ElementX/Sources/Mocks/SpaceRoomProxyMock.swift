@@ -16,7 +16,6 @@ extension SpaceRoomProxyMock {
         
         var isSpace: Bool
         var isDirect: Bool?
-        var parent: SpaceRoomProxyProtocol?
         var childrenCount = 0
         
         var joinedMembersCount = 0
@@ -38,7 +37,6 @@ extension SpaceRoomProxyMock {
         avatarURL = configuration.avatarURL
         isSpace = configuration.isSpace
         isDirect = configuration.isDirect
-        parent = configuration.parent
         childrenCount = configuration.childrenCount
         joinedMembersCount = configuration.joinedMembersCount
         heroes = configuration.heroes
@@ -129,7 +127,6 @@ extension [SpaceRoomProxyProtocol] {
             SpaceRoomProxyMock(.init(id: "!\(typeName.lowercased())3:matrix.org",
                                      name: "Joined \(typeName)",
                                      isSpace: isSpace,
-                                     parent: SpaceRoomProxyMock(.init(name: "Company", isSpace: true)),
                                      joinedMembersCount: 123,
                                      topic: "Discussion on specific topic goes here.",
                                      joinRule: .restricted(rules: []),

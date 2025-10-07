@@ -28,7 +28,7 @@ struct SpaceRoomCell: View {
             switch spaceRoomProxy.visibility {
             case .public: L10n.commonPublicSpace
             case .private: L10n.commonPrivateSpace
-            case .restricted(let parentName): L10n.screenSpaceListParentSpace(parentName)
+            case .restricted: L10n.commonSharedSpace
             case .none: L10n.commonPrivateSpace
             }
         } else {

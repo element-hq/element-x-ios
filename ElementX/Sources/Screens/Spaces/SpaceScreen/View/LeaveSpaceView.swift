@@ -153,7 +153,6 @@ struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
     static let spaceRoomProxy = SpaceRoomProxyMock(.init(id: "!eng-space:matrix.org",
                                                          name: "Engineering Team",
                                                          isSpace: true,
-                                                         parent: SpaceRoomProxyMock(.init(name: "MegaGroup", isSpace: true)),
                                                          childrenCount: 30,
                                                          joinedMembersCount: 76,
                                                          heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
