@@ -840,7 +840,7 @@
 "screen_join_room_ban_message" = "You were banned";
 "screen_join_room_ban_reason" = "Reason: %1$@.";
 "screen_join_room_fail_message" = "Joining failed";
-"screen_join_room_fail_reason" = "This room is either invite-only or there might be restrictions to access at space level.";
+"screen_join_room_fail_reason" = "You either need to be invited to join or there might be restrictions to access.";
 "screen_join_room_forget_action" = "Forget";
 "screen_join_room_invite_required_message" = "You need an invite in order to join";
 "screen_join_room_join_action" = "Join";

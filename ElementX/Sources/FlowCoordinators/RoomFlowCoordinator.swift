@@ -746,8 +746,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentJoinRoomScreen(via: [String], animated: Bool) {
-        let coordinator = JoinRoomScreenCoordinator(parameters: .init(roomID: roomID,
-                                                                      via: via,
+        let coordinator = JoinRoomScreenCoordinator(parameters: .init(source: .generic(roomID: roomID, via: via),
                                                                       userSession: userSession,
                                                                       userIndicatorController: flowParameters.userIndicatorController,
                                                                       appSettings: flowParameters.appSettings))
