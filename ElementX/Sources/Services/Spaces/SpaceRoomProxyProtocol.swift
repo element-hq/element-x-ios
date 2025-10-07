@@ -18,7 +18,8 @@ enum SpaceRoomProxyVisibility: Equatable {
 // sourcery: AutoMockable
 protocol SpaceRoomProxyProtocol {
     var id: String { get }
-    var name: String? { get }
+    var name: String { get }
+    var rawName: String? { get }
     var avatarURL: URL? { get }
     
     var isSpace: Bool { get }
@@ -45,14 +46,6 @@ extension SpaceRoomProxyProtocol {
             .heroes(heroes)
         } else {
             .room(id: id, name: name, avatarURL: avatarURL)
-        }
-    }
-    
-    var computedName: String {
-        if !isSpace, isDirect == true, name == nil, heroes.count == 1, let dmRecipient = heroes.first {
-            dmRecipient.displayName ?? dmRecipient.id
-        } else {
-            name ?? canonicalAlias ?? id
         }
     }
     

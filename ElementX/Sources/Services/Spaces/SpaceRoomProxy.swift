@@ -16,7 +16,8 @@ class SpaceRoomProxy: SpaceRoomProxyProtocol {
     }
     
     lazy var id = spaceRoom.roomId
-    var name: String? { spaceRoom.displayName }
+    var name: String { spaceRoom.displayName }
+    var rawName: String? { spaceRoom.rawName }
     var avatarURL: URL? { spaceRoom.avatarUrl.flatMap(URL.init) }
     
     var isSpace: Bool { spaceRoom.roomType == .space }
