@@ -86,6 +86,7 @@
 "action_forgot_password" = "Forgot password?";
 "action_forward" = "Forward";
 "action_go_back" = "Go back";
+"action_go_to_settings" = "Go to settings";
 "action_ignore" = "Ignore";
 "action_invite" = "Invite";
 "action_invite_friends" = "Invite people";

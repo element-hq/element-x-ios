@@ -23,8 +23,8 @@ struct SpaceScreen: View {
         .navigationTitle(context.viewState.spaceName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
-        .sheet(item: $context.leaveHandle) { _ in
-            LeaveSpaceView(context: context)
+        .sheet(item: $context.leaveHandle) { leaveHandle in
+            LeaveSpaceView(context: context, leaveHandle: leaveHandle)
         }
     }
     
@@ -56,7 +56,8 @@ struct SpaceScreen: View {
         }
         
         ToolbarItemGroup(placement: .secondaryAction) {
-            if let permalink = context.viewState.permalink {
+            // FIXME: The ShareLink crashes on iOS 26 due to the share sheet failing to morph out of the button 🤦‍♂️
+            if let permalink = context.viewState.permalink, #unavailable(iOS 26.0) {
                 Section {
                     ShareLink(item: permalink) {
                         Label(L10n.actionShare, icon: \.shareIos)
