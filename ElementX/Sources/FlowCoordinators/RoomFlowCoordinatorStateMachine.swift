@@ -79,6 +79,9 @@ extension RoomFlowCoordinator {
         case presentingChild(childRoomID: String, previousState: State)
         /// The flow is complete and is handing control of the stack back to its parent.
         case complete
+        
+        /// A space flow is in progress
+        case spaceFlow(previousState: State)
     }
     
     struct EventUserInfo {
@@ -97,6 +100,9 @@ extension RoomFlowCoordinator {
         
         case presentThread(threadRootEventID: String, focusEventID: String?)
         case dismissThread
+        
+        case startSpaceFlow
+        case finishedSpaceFlow
         
         case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
         case dismissReportContent
@@ -338,6 +344,11 @@ extension RoomFlowCoordinator {
             case (_, .startChildFlow(let roomID, _, _)):
                 return .presentingChild(childRoomID: roomID, previousState: fromState)
             case (.presentingChild(_, let previousState), .dismissChildFlow):
+                return previousState
+                
+            case (.presentingChild(_, let previousState), .startSpaceFlow):
+                return .spaceFlow(previousState: previousState)
+            case (.spaceFlow(let previousState), .finishedSpaceFlow):
                 return previousState
                     
             case (_, .presentRoomMemberDetails(userID: let userID)):
