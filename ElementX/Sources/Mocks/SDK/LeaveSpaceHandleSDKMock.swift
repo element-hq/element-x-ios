@@ -135,7 +135,8 @@ private extension SpaceRoom {
          via: [String] = []) {
         self.init(roomId: id,
                   canonicalAlias: canonicalAlias,
-                  name: name,
+                  displayName: name,
+                  rawName: name,
                   topic: topic,
                   avatarUrl: avatarURL?.absoluteString,
                   roomType: isSpace ? .space : .room,
