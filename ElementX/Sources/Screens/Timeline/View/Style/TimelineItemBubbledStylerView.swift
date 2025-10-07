@@ -323,12 +323,27 @@ private extension View {
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview {
     static let viewModel: TimelineViewModel = {
-        ServiceLocator.shared.settings.threadsEnabled = true
-        return TimelineViewModel.mock
+        let appSettings = AppSettings()
+        appSettings.threadsEnabled = true
+        
+        let roomProxy = JoinedRoomProxyMock(.init())
+        return TimelineViewModel(roomProxy: roomProxy,
+                                 focussedEventID: nil,
+                                 timelineController: MockTimelineController(),
+                                 userSession: UserSessionMock(.init()),
+                                 mediaPlayerProvider: MediaPlayerProviderMock(),
+                                 userIndicatorController: ServiceLocator.shared.userIndicatorController,
+                                 appMediator: AppMediatorMock.default,
+                                 appSettings: appSettings,
+                                 analyticsService: ServiceLocator.shared.analytics,
+                                 emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                 linkMetadataProvider: LinkMetadataProvider(),
+                                 timelineControllerFactory: TimelineControllerFactoryMock(.init()))
     }()
     
     static let viewModelWithPins: TimelineViewModel = {
-        ServiceLocator.shared.settings.threadsEnabled = true
+        let appSettings = AppSettings()
+        appSettings.threadsEnabled = true
         
         let roomProxy = JoinedRoomProxyMock(.init(name: "Preview Room", pinnedEventIDs: ["pinned"]))
         return TimelineViewModel(roomProxy: roomProxy,
@@ -338,7 +353,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider, TestablePreview 
                                  mediaPlayerProvider: MediaPlayerProviderMock(),
                                  userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                  appMediator: AppMediatorMock.default,
-                                 appSettings: ServiceLocator.shared.settings,
+                                 appSettings: appSettings,
                                  analyticsService: ServiceLocator.shared.analytics,
                                  emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
                                  linkMetadataProvider: LinkMetadataProvider(),
