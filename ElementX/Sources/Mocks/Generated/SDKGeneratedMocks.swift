@@ -11069,6 +11069,75 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
         }
     }
 
+    //MARK: - getRawPushRules
+
+    open var getRawPushRulesThrowableError: Error?
+    var getRawPushRulesUnderlyingCallsCount = 0
+    open var getRawPushRulesCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return getRawPushRulesUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRawPushRulesUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRawPushRulesUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRawPushRulesUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var getRawPushRulesCalled: Bool {
+        return getRawPushRulesCallsCount > 0
+    }
+
+    var getRawPushRulesUnderlyingReturnValue: String?
+    open var getRawPushRulesReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return getRawPushRulesUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = getRawPushRulesUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                getRawPushRulesUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    getRawPushRulesUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var getRawPushRulesClosure: (() async throws -> String?)?
+
+    open override func getRawPushRules() async throws -> String? {
+        if let error = getRawPushRulesThrowableError {
+            throw error
+        }
+        getRawPushRulesCallsCount += 1
+        if let getRawPushRulesClosure = getRawPushRulesClosure {
+            return try await getRawPushRulesClosure()
+        } else {
+            return getRawPushRulesReturnValue
+        }
+    }
+
     //MARK: - getRoomNotificationSettings
 
     open var getRoomNotificationSettingsRoomIdIsEncryptedIsOneToOneThrowableError: Error?
