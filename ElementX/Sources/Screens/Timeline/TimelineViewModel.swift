@@ -270,6 +270,11 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         }
     }
     
+    func makeForwardingItem(for itemID: TimelineItemIdentifier) async -> MessageForwardingItem? {
+        guard let content = await timelineController.messageEventContent(for: itemID) else { return nil }
+        return .init(id: itemID, roomID: roomProxy.id, content: content)
+    }
+    
     // MARK: - Private
     
     private func handleTappedOnSenderDetails(sender: TimelineItemSender) {
@@ -899,8 +904,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
     // MARK: - Message forwarding
     
     private func forwardMessage(itemID: TimelineItemIdentifier) async {
-        guard let content = await timelineController.messageEventContent(for: itemID) else { return }
-        actionsSubject.send(.displayMessageForwarding(forwardingItem: .init(id: itemID, roomID: roomProxy.id, content: content)))
+        guard let forwardingItem = await makeForwardingItem(for: itemID) else { return }
+        actionsSubject.send(.displayMessageForwarding(forwardingItem: forwardingItem))
     }
     
     // MARK: Pills

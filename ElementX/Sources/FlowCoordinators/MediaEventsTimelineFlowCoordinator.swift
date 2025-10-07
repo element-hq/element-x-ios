@@ -10,6 +10,7 @@ import Foundation
 
 enum MediaEventsTimelineFlowCoordinatorAction {
     case viewInRoomTimeline(TimelineItemIdentifier)
+    case displayMessageForwarding(MessageForwardingItem)
     case finished
 }
 
@@ -91,10 +92,13 @@ class MediaEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         
         coordinator.actions
             .sink { [weak self] action in
+                guard let self else { return }
                 switch action {
+                case .displayMessageForwarding(let forwardingItem):
+                    actionsSubject.send(.displayMessageForwarding(forwardingItem))
                 case .viewInRoomTimeline(let itemID):
-                    self?.navigationStackCoordinator.pop(animated: false)
-                    self?.actionsSubject.send(.viewInRoomTimeline(itemID))
+                    navigationStackCoordinator.pop(animated: false)
+                    actionsSubject.send(.viewInRoomTimeline(itemID))
                 }
             }
             .store(in: &cancellables)

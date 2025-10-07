@@ -88,6 +88,16 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
     }
     
     func start() {
+        viewModel.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .displayMessageForwarding(let forwardingItem):
+                    actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
+                }
+            }
+            .store(in: &cancellables)
+        
         timelineViewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }

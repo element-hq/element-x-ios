@@ -42,11 +42,18 @@ class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelTy
     
     func displayMediaPreview(_ mediaPreviewViewModel: TimelineMediaPreviewViewModel) {
         mediaPreviewViewModel.actions.sink { [weak self] action in
+            guard let self else { return }
             switch action {
+            case .displayMessageForwarding(let forwardingItem):
+                state.bindings.mediaPreviewViewModel = nil
+                // We need a small delay because we need to wait for the media preview to be fully dismissed.
+                DispatchQueue.main.asyncAfter(deadline: .now() + TimelineMediaPreviewViewModel.displayMessageForwardingDelay) {
+                    self.actionsSubject.send(.displayMessageForwarding(forwardingItem))
+                }
             case .viewInRoomTimeline(let itemID):
-                self?.actionsSubject.send(.viewInRoomTimeline(itemID: itemID))
+                actionsSubject.send(.viewInRoomTimeline(itemID: itemID))
             case .dismiss:
-                self?.state.bindings.mediaPreviewViewModel = nil
+                state.bindings.mediaPreviewViewModel = nil
             }
         }
         .store(in: &cancellables)
