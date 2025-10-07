@@ -25,7 +25,7 @@ struct HomeScreen: View {
             .toolbar { toolbar }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .track(screen: .Home)
-            .bloom()
+            .toolbarBloom(hasSearchBar: true)
             .sentryTrace("\(Self.self)")
     }
     
