@@ -34,7 +34,6 @@ class SpaceListScreenViewModelTests: XCTestCase {
     func testInitialState() {
         setupViewModel()
         XCTAssertEqual(context.viewState.joinedSpaces.count, 3)
-        XCTAssertEqual(context.viewState.joinedRoomsCount, 0)
     }
     
     func testJoinedSpacesSubscription() async throws {

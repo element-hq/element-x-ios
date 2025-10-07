@@ -21,14 +21,6 @@ struct SpaceListScreenViewState: BindableState {
     var selectedSpaceID: String?
     
     var bindings: SpaceListScreenViewStateBindings
-    
-    var subtitle: String {
-        L10n.screenSpaceListDetails(L10n.commonSpaces(joinedSpaces.count), L10n.commonRooms(joinedRoomsCount))
-    }
-    
-    var joinedRoomsCount: Int {
-        joinedSpaces.map(\.childrenCount).reduce(0, +)
-    }
 }
 
 struct SpaceListScreenViewStateBindings {

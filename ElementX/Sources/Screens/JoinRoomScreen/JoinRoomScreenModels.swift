@@ -75,8 +75,8 @@ struct JoinRoomScreenViewState: BindableState {
     }
     
     var subtitle: String? {
-        if roomDetails?.isSpace == true, let spaceVisibilityTitle, let childrenCount = roomDetails?.childrenCount {
-            return L10n.screenSpaceListDetails(spaceVisibilityTitle, L10n.commonRooms(childrenCount))
+        if roomDetails?.isSpace == true, let spaceVisibilityTitle {
+            return spaceVisibilityTitle
         } else {
             switch mode {
             case .invited(isDM: true):
@@ -98,7 +98,7 @@ struct JoinRoomScreenViewState: BindableState {
         return switch roomDetails?.spaceVisibility {
         case .public: \.public
         case .private: \.lock
-        case .restricted(let parentName): \.space
+        case .restricted: \.space
         case .none: \.lock
         }
     }
@@ -107,7 +107,7 @@ struct JoinRoomScreenViewState: BindableState {
         switch roomDetails?.spaceVisibility {
         case .public: L10n.commonPublicSpace
         case .private: L10n.commonPrivateSpace
-        case .restricted(let parentName): L10n.screenSpaceListParentSpace(parentName)
+        case .restricted: L10n.commonSharedSpace
         case .none: L10n.commonPrivateSpace
         }
     }

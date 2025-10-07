@@ -63,7 +63,7 @@ struct SpaceHeaderView: View {
     
     var spaceDetails: some View {
         Label {
-            Text(L10n.screenSpaceListDetails(spaceDetailsVisibilityTitle, L10n.commonRooms(spaceRoomProxy.childrenCount)))
+            Text(spaceDetailsVisibilityTitle)
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textSecondary)
                 .multilineTextAlignment(.center)
@@ -77,7 +77,7 @@ struct SpaceHeaderView: View {
         switch spaceRoomProxy.visibility {
         case .public: L10n.commonPublicSpace
         case .private: L10n.commonPrivateSpace
-        case .restricted(let parentName): L10n.screenSpaceListParentSpace(parentName)
+        case .restricted: L10n.commonSharedSpace
         case .none: L10n.commonPrivateSpace
         }
     }
@@ -125,7 +125,6 @@ struct SpaceHeaderView_Previews: PreviewProvider, TestablePreview {
             SpaceRoomProxyMock(.init(id: "!space3:matrix.org",
                                      name: "Subspace",
                                      isSpace: true,
-                                     parent: SpaceRoomProxyMock(.init(name: "Foundation", isSpace: true)),
                                      childrenCount: 30,
                                      joinedMembersCount: 123,
                                      heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],

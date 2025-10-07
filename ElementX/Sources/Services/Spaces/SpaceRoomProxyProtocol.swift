@@ -11,7 +11,7 @@ import MatrixRustSDK
 enum SpaceRoomProxyVisibility: Equatable {
     case `public`
     case `private`
-    case restricted(parentName: String)
+    case restricted
     // We can add the external case in here eventually.
 }
 
@@ -23,8 +23,6 @@ protocol SpaceRoomProxyProtocol {
     
     var isSpace: Bool { get }
     var isDirect: Bool? { get }
-    /// A temporary property until we get the `AllowRule`s from the server.
-    var parent: SpaceRoomProxyProtocol? { get }
     var childrenCount: Int { get }
     
     var joinedMembersCount: Int { get }
@@ -63,12 +61,7 @@ extension SpaceRoomProxyProtocol {
         case .public:
             .public
         case .restricted, .knockRestricted:
-            // Temporary solution until the server includes the `AllowRule` values (they're always empty right now).
-            if let parent {
-                .restricted(parentName: parent.computedName)
-            } else {
-                .private
-            }
+            .restricted
         case .invite, .knock, .private, .custom:
             .private
         case .none:

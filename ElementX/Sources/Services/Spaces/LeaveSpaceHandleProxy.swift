@@ -34,7 +34,7 @@ class LeaveSpaceHandleProxy: Identifiable {
                       room.spaceRoom.roomId != spaceID else {
                     return nil
                 }
-                return .init(spaceRoomProxy: SpaceRoomProxy(spaceRoom: room.spaceRoom, parent: nil),
+                return .init(spaceRoomProxy: SpaceRoomProxy(spaceRoom: room.spaceRoom),
                              isLastAdmin: room.isLastAdmin,
                              isSelected: !room.isLastAdmin)
             }
