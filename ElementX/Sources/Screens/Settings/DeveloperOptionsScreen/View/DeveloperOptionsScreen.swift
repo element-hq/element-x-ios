@@ -33,10 +33,6 @@ struct DeveloperOptionsScreen: View {
             }
             
             Section("General") {
-                Toggle(isOn: $context.spacesEnabled) {
-                    Text("Spaces")
-                }
-                
                 Toggle(isOn: $context.nextGenHTMLParserEnabled) {
                     Text("Next gen HTML parsing")
                 }

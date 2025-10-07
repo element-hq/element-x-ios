@@ -84,10 +84,6 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         chatsTabDetails = .init(tag: HomeTab.chats, title: L10n.screenHomeTabChats, icon: \.chat, selectedIcon: \.chatSolid)
         chatsTabDetails.navigationSplitCoordinator = chatsSplitCoordinator
         
-        if !flowParameters.appSettings.spacesEnabled {
-            chatsTabDetails.barVisibilityOverride = .hidden
-        }
-        
         let spacesSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: PlaceholderScreenCoordinator(hideBrandChrome: flowParameters.appSettings.hideBrandChrome))
         spaceExplorerFlowCoordinator = SpaceExplorerFlowCoordinator(navigationSplitCoordinator: spacesSplitCoordinator,
                                                                     flowParameters: flowParameters)
@@ -289,9 +285,8 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        flowParameters.appSettings.$spacesEnabled
-            .combineLatest(userSession.clientProxy.spaceService.joinedSpacesPublisher)
-            .map { $0 && !$1.isEmpty ? nil : .hidden }
+        userSession.clientProxy.spaceService.joinedSpacesPublisher
+            .map { $0.isEmpty ? .hidden : nil }
             .weakAssign(to: \.chatsTabDetails.barVisibilityOverride, on: self)
             .store(in: &cancellables)
     }

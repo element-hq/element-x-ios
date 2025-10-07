@@ -118,11 +118,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func setFilter(_ filter: RoomSummaryProviderFilter) {
-        let baseFilter: [RoomListEntriesDynamicFilterKind] = if appSettings.spacesEnabled {
+        let baseFilter: [RoomListEntriesDynamicFilterKind] = if #available(iOS 18.0, *) {
             [.any(filters: [.all(filters: [.nonSpace, .nonLeft]),
                             .all(filters: [.space, .invite])]),
              .deduplicateVersions]
         } else {
+            // Don't show space invites on iOS 17 given that the tab bar is disabled due to glitches on iPad.
             [.nonLeft, .nonSpace, .deduplicateVersions]
         }
         
