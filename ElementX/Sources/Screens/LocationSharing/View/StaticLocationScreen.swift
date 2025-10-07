@@ -130,7 +130,7 @@ struct StaticLocationScreen: View {
             Image(systemName: "square.and.arrow.up")
         }
     }
-
+    
     @ViewBuilder
     private var shareSheet: some View {
         let location = context.viewState.initialMapCenter
@@ -139,7 +139,16 @@ struct StaticLocationScreen: View {
                         applicationActivities: ShareToMapsAppActivity.MapsAppType.allCases.map { ShareToMapsAppActivity(type: $0, location: location, locationDescription: locationDescription) })
             .edgesIgnoringSafeArea(.bottom)
             .presentationDetents([.medium, .large])
+            .presentationCompactAdaptation(shareSheetCompactPresentation)
             .presentationDragIndicator(.hidden)
+    }
+    
+    private var shareSheetCompactPresentation: PresentationAdaptation {
+        if #available(iOS 26.0, *) {
+            .none // ShareLinks use a popover presentation on iOS 26, let it match that.
+        } else {
+            .sheet
+        }
     }
 }
 
