@@ -63,7 +63,7 @@ struct SpaceHeaderView: View {
     
     var spaceDetails: some View {
         Label {
-            Text(L10n.screenSpaceListDetails(spaceDetailsVisibilityTitle, L10n.commonRooms(spaceRoomProxy.childrenCount)))
+            Text(spaceDetailsVisibilityTitle)
                 .font(.compound.bodyLG)
                 .foregroundStyle(.compound.textSecondary)
                 .multilineTextAlignment(.center)

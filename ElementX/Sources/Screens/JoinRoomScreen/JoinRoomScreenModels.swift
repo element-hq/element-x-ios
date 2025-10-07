@@ -75,8 +75,8 @@ struct JoinRoomScreenViewState: BindableState {
     }
     
     var subtitle: String? {
-        if roomDetails?.isSpace == true, let spaceVisibilityTitle, let childrenCount = roomDetails?.childrenCount {
-            return L10n.screenSpaceListDetails(spaceVisibilityTitle, L10n.commonRooms(childrenCount))
+        if roomDetails?.isSpace == true, let spaceVisibilityTitle {
+            return spaceVisibilityTitle
         } else {
             switch mode {
             case .invited(isDM: true):

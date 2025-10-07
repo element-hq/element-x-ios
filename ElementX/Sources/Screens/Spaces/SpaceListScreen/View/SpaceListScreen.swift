@@ -39,7 +39,7 @@ struct SpaceListScreen: View {
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 
-                Text(context.viewState.subtitle)
+                Text(L10n.commonSpaces(context.viewState.joinedSpaces.count))
                     .font(.compound.bodyLG)
                     .foregroundStyle(.compound.textSecondary)
                     .multilineTextAlignment(.center)
