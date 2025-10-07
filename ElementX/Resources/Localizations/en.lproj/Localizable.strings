@@ -293,6 +293,7 @@
 "common_settings" = "Settings";
 "common_share_space" = "Share space";
 "common_shared_location" = "Shared location";
+"common_shared_space" = "Shared space";
 "common_signing_out" = "Signing out";
 "common_something_went_wrong" = "Something went wrong";
 "common_something_went_wrong_message" = "We encountered an issue. Please try again.";
@@ -573,6 +574,7 @@
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_initial_loading_title" = "Loading requests to join…";
 "screen_labs_enable_threads" = "Enable thread replies";
+"screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
 "screen_labs_header_title" = "Feeling experimental?";
 "screen_labs_title" = "Labs";
@@ -834,14 +836,14 @@
 "screen_invites_decline_direct_chat_title" = "Decline chat";
 "screen_invites_empty_list" = "No Invites";
 "screen_invites_invited_you" = "%1$@ (%2$@) invited you";
-"screen_join_room_ban_by_message" = "You were banned from this room by %1$@.";
-"screen_join_room_ban_message" = "You were banned from this room";
+"screen_join_room_ban_by_message" = "You were banned by %1$@.";
+"screen_join_room_ban_message" = "You were banned";
 "screen_join_room_ban_reason" = "Reason: %1$@.";
-"screen_join_room_fail_message" = "Joining the room failed.";
+"screen_join_room_fail_message" = "Joining failed";
 "screen_join_room_fail_reason" = "This room is either invite-only or there might be restrictions to access at space level.";
-"screen_join_room_forget_action" = "Forget this room";
-"screen_join_room_invite_required_message" = "You need an invite in order to join this room";
-"screen_join_room_join_action" = "Join room";
+"screen_join_room_forget_action" = "Forget";
+"screen_join_room_invite_required_message" = "You need an invite in order to join";
+"screen_join_room_join_action" = "Join";
 "screen_join_room_join_restricted_message" = "You may need to be invited or be a member of a space in order to join.";
 "screen_join_room_knock_action" = "Send request to join";
 "screen_join_room_space_not_supported_description" = "%1$@ does not support spaces yet. You can access spaces on web.";

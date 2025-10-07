@@ -7,9 +7,13 @@
 
 import Foundation
 
-enum LabsScreenViewAction { }
+enum LabsScreenViewAction {
+    case clearCache
+}
 
-enum LabsScreenViewModelAction { }
+enum LabsScreenViewModelAction {
+    case clearCache
+}
 
 struct LabsScreenViewState: BindableState {
     var bindings: LabsScreenViewStateBindings
