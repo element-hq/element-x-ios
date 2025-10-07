@@ -55,20 +55,27 @@ struct SpaceScreen: View {
                            mediaProvider: context.mediaProvider)
         }
         
-        ToolbarItemGroup(placement: .secondaryAction) {
-            // FIXME: The ShareLink crashes on iOS 26 due to the share sheet failing to morph out of the button 🤦‍♂️
-            if let permalink = context.viewState.permalink, #unavailable(iOS 26.0) {
-                Section {
-                    ShareLink(item: permalink) {
-                        Label(L10n.actionShare, icon: \.shareIos)
+        // This should really use a ToolbarItemGroup(placement: .secondaryAction), however it
+        // was crashing on iOS 26.0 when tapping the ShareLink as the popover presentation
+        // controller attempts to anchor itself to the button that is no longer visible.
+        ToolbarItem(placement: .primaryAction) {
+            Menu {
+                if let permalink = context.viewState.permalink {
+                    Section {
+                        ShareLink(item: permalink) {
+                            Label(L10n.actionShare, icon: \.shareIos)
+                        }
                     }
                 }
-            }
-            
-            Section {
-                Button(role: .destructive) { context.send(viewAction: .leaveSpace) } label: {
-                    Label(L10n.actionLeaveSpace, icon: \.leave)
+                
+                Section {
+                    Button(role: .destructive) { context.send(viewAction: .leaveSpace) } label: {
+                        Label(L10n.actionLeaveSpace, icon: \.leave)
+                    }
                 }
+            } label: {
+                // Use an SF Symbol to match what ToolbarItemGroup(placement: .secondaryAction) would give us.
+                Image(systemSymbol: .ellipsis)
             }
         }
     }
