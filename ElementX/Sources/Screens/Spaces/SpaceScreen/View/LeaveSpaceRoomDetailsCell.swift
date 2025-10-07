@@ -41,7 +41,7 @@ struct LeaveSpaceRoomDetailsCell: View {
                 }
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    Text(room.spaceRoomProxy.computedName)
+                    Text(room.spaceRoomProxy.name)
                         .font(.compound.bodyLGSemibold)
                         .foregroundStyle(.compound.textPrimary)
                         .lineLimit(1)

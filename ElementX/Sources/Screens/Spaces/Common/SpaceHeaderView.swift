@@ -22,7 +22,7 @@ struct SpaceHeaderView: View {
                 .accessibilityHidden(true)
             
             VStack(spacing: 8) {
-                Text(spaceRoomProxy.computedName)
+                Text(spaceRoomProxy.name)
                     .font(.compound.headingLGBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)

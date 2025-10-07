@@ -16001,7 +16001,12 @@ class SpaceRoomProxyMock: SpaceRoomProxyProtocol, @unchecked Sendable {
         set(value) { underlyingId = value }
     }
     var underlyingId: String!
-    var name: String?
+    var name: String {
+        get { return underlyingName }
+        set(value) { underlyingName = value }
+    }
+    var underlyingName: String!
+    var rawName: String?
     var avatarURL: URL?
     var isSpace: Bool {
         get { return underlyingIsSpace }

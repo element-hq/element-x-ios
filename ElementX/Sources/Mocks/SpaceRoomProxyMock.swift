@@ -12,6 +12,7 @@ extension SpaceRoomProxyMock {
     struct Configuration {
         var id: String = UUID().uuidString
         var name: String?
+        var rawName: String?
         var avatarURL: URL?
         
         var isSpace: Bool
@@ -33,7 +34,8 @@ extension SpaceRoomProxyMock {
         self.init()
         
         id = configuration.id
-        name = configuration.name
+        name = configuration.name ?? configuration.id
+        rawName = configuration.rawName
         avatarURL = configuration.avatarURL
         isSpace = configuration.isSpace
         isDirect = configuration.isDirect
