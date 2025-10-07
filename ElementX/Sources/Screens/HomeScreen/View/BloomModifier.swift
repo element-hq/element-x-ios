@@ -11,18 +11,24 @@ import SwiftUI
 import SwiftUIIntrospect
 
 extension View {
-    @ViewBuilder
-    func bloom() -> some View {
+    /// Adds a bloom behind the navigation bar.
+    /// - Parameter hasSearchBar: Whether or not the navigation bar contains a search bar (so that
+    /// the bloom can be sized appropriately).
+    @ViewBuilder func toolbarBloom(hasSearchBar: Bool) -> some View {
         if #available(iOS 26, *) {
-            modifier(BloomModifier())
+            modifier(BloomModifier(hasSearchBar: hasSearchBar))
         } else {
-            modifier(OldBloomModifier())
+            modifier(OldBloomModifier(hasSearchBar: hasSearchBar))
         }
     }
 }
 
 private struct BloomModifier: ViewModifier {
+    let hasSearchBar: Bool
+    
     @State private var height = CGFloat.zero
+    
+    private var endPointY: CGFloat { hasSearchBar ? 0.35 : 0.5 }
     
     func body(content: Content) -> some View {
         content
@@ -34,7 +40,7 @@ private struct BloomModifier: ViewModifier {
             .overlay(alignment: .top) {
                 LinearGradient(gradient: .compound.subtle,
                                startPoint: .top,
-                               endPoint: .init(x: 0.5, y: 0.35))
+                               endPoint: .init(x: 0.5, y: endPointY))
                     .ignoresSafeArea(edges: .all)
                     .frame(height: height)
                     .allowsHitTesting(false)
@@ -46,6 +52,8 @@ private struct BloomModifier: ViewModifier {
 
 private struct OldBloomModifier: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
+    
+    let hasSearchBar: Bool
     
     @State private var standardAppearance = UINavigationBarAppearance()
     @State private var scrollEdgeAppearance = UINavigationBarAppearance()
@@ -93,10 +101,12 @@ private struct OldBloomModifier: ViewModifier {
         return bloom
     }
     
+    private var endPointY: CGFloat { hasSearchBar ? 0.5 : 0.7 }
+    
     private var bloomGradient: some View {
         LinearGradient(gradient: .compound.subtle,
                        startPoint: .top,
-                       endPoint: .init(x: 0.5, y: 0.7))
+                       endPoint: .init(x: 0.5, y: endPointY))
             .ignoresSafeArea(edges: .all)
             .frame(width: 256, height: 256)
     }
@@ -113,5 +123,34 @@ private struct OldBloomModifier: ViewModifier {
         var image: UIImage?
         var colorScheme: ColorScheme?
         var baseColor: Color?
+    }
+}
+
+// MARK: - Previews
+
+struct BloomModifier_Previews: PreviewProvider, TestablePreview {
+    static var previews: some View {
+        NavigationStack {
+            mockScreen
+                .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
+                .searchable(text: .constant(""), placement: .navigationBarDrawer(displayMode: .always))
+                .toolbarBloom(hasSearchBar: true)
+        }
+        .previewDisplayName("Chats")
+        
+        NavigationStack {
+            mockScreen
+                .navigationTitle(L10n.screenSpaceListTitle)
+                .toolbarBloom(hasSearchBar: false)
+        }
+        .previewDisplayName("Spaces")
+    }
+    
+    static var mockScreen: some View {
+        List { }
+            .toolbar {
+                Button { } label: { CompoundIcon(\.check) }
+                    .accessibilityLabel(L10n.actionConfirm) // Keep the a11y tests happy 😄
+            }
     }
 }

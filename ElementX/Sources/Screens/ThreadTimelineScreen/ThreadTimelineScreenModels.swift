@@ -7,7 +7,9 @@
 
 import Foundation
 
-enum ThreadTimelineScreenViewModelAction { }
+enum ThreadTimelineScreenViewModelAction {
+    case displayMessageForwarding(MessageForwardingItem)
+}
 
 struct ThreadTimelineScreenViewState: BindableState {
     var roomTitle: String

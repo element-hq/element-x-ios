@@ -25,6 +25,7 @@ struct MediaEventsTimelineScreenCoordinatorParameters {
 
 enum MediaEventsTimelineScreenCoordinatorAction {
     case viewInRoomTimeline(TimelineItemIdentifier)
+    case displayMessageForwarding(MessageForwardingItem)
 }
 
 final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
@@ -73,9 +74,12 @@ final class MediaEventsTimelineScreenCoordinator: CoordinatorProtocol {
         
         viewModel.actionsPublisher
             .sink { [weak self] action in
+                guard let self else { return }
                 switch action {
+                case .displayMessageForwarding(let forwardingItem):
+                    actionsSubject.send(.displayMessageForwarding(forwardingItem))
                 case .viewInRoomTimeline(let itemID):
-                    self?.actionsSubject.send(.viewInRoomTimeline(itemID))
+                    actionsSubject.send(.viewInRoomTimeline(itemID))
                 }
             }
             .store(in: &cancellables)

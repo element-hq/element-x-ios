@@ -15,6 +15,10 @@ class AnalyticsSettingsScreenViewModelTests: XCTestCase {
     private var viewModel: AnalyticsSettingsScreenViewModelProtocol!
     private var context: AnalyticsSettingsScreenViewModelType.Context!
     
+    override func setUp() {
+        AppSettings.resetAllSettings()
+    }
+    
     override func tearDown() {
         AppSettings.resetAllSettings()
     }
