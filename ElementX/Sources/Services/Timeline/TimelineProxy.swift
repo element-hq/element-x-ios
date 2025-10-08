@@ -135,10 +135,8 @@ final class TimelineProxy: TimelineProxyProtocol {
         }
         
         // This extra check is necessary as detached timelines don't support subscribing to pagination status.
-        // We need it to make sure we send a valid status after a failure.
         guard subject.value == .idle else {
-            MXLog.error("Attempting to paginate \(direction.rawValue) when already at the end.")
-            return .failure(.failedPaginatingEndReached)
+            return .success(())
         }
         
         MXLog.info("Paginating \(direction.rawValue)")

@@ -47,7 +47,6 @@ enum TimelineProxyError: Error {
     case sdkError(Error)
     
     case failedRedacting
-    case failedPaginatingEndReached
 }
 
 /// Element X proxies generally wrap the counterpart RustSDK objects while providing platform specific
