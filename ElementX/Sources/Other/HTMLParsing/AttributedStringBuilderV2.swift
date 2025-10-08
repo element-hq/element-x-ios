@@ -12,7 +12,31 @@ import MatrixRustSDK
 import SwiftSoup
 import UIKit
 
-struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
+protocol MentionBuilderProtocol {
+    func handleUserMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, userID: String, userDisplayName: String?)
+    func handleRoomIDMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, roomID: String)
+    func handleRoomAliasMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, roomAlias: String, roomDisplayName: String?)
+    func handleEventOnRoomAliasMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, eventID: String, roomAlias: String)
+    func handleEventOnRoomIDMention(for attributedString: NSMutableAttributedString, in range: NSRange, url: URL, eventID: String, roomID: String)
+    func handleAllUsersMention(for attributedString: NSMutableAttributedString, in range: NSRange)
+}
+
+extension NSAttributedString.Key {
+    static let MatrixBlockquote: NSAttributedString.Key = .init(rawValue: BlockquoteAttribute.name)
+    static let MatrixUserID: NSAttributedString.Key = .init(rawValue: UserIDAttribute.name)
+    static let MatrixUserDisplayName: NSAttributedString.Key = .init(rawValue: UserDisplayNameAttribute.name)
+    static let MatrixRoomDisplayName: NSAttributedString.Key = .init(rawValue: RoomDisplayNameAttribute.name)
+    static let MatrixRoomID: NSAttributedString.Key = .init(rawValue: RoomIDAttribute.name)
+    static let MatrixRoomAlias: NSAttributedString.Key = .init(rawValue: RoomAliasAttribute.name)
+    static let MatrixEventOnRoomID: NSAttributedString.Key = .init(rawValue: EventOnRoomIDAttribute.name)
+    static let MatrixEventOnRoomAlias: NSAttributedString.Key = .init(rawValue: EventOnRoomAliasAttribute.name)
+    static let MatrixAllUsersMention: NSAttributedString.Key = .init(rawValue: AllUsersMentionAttribute.name)
+    static let CodeBlock: NSAttributedString.Key = .init(rawValue: CodeBlockAttribute.name)
+}
+
+struct AttributedStringBuilder: AttributedStringBuilderProtocol {
+    private static let defaultKey = "default"
+    
     private let cacheKey: String
     private let mentionBuilder: MentionBuilderProtocol
     
@@ -24,7 +48,7 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
         caches.removeAll()
     }
     
-    init(cacheKey: String, mentionBuilder: MentionBuilderProtocol) {
+    init(cacheKey: String = defaultKey, mentionBuilder: MentionBuilderProtocol) {
         self.cacheKey = cacheKey
         self.mentionBuilder = mentionBuilder
     }
@@ -473,5 +497,17 @@ private extension NSMutableAttributedString {
                 addAttribute(.font, value: newFont, range: range)
             }
         }
+    }
+}
+
+private extension NSString {
+    func hasSuffixCharacter(from characterSet: CharacterSet) -> Bool {
+        if length == 0 {
+            return false
+        }
+        
+        let lastChar = character(at: length - 1)
+        
+        return (characterSet as NSCharacterSet).characterIsMember(lastChar)
     }
 }
