@@ -28,7 +28,7 @@ private struct BloomModifier: ViewModifier {
     
     @State private var height = CGFloat.zero
     
-    private var endPointY: CGFloat { hasSearchBar ? 0.35 : 0.5 }
+    private var endPointY: CGFloat { hasSearchBar ? 0.35 : 0.55 }
     
     func body(content: Content) -> some View {
         content
