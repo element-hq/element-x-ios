@@ -78,7 +78,7 @@ struct JoinRoomScreen: View {
                             .multilineTextAlignment(.center)
                     } icon: {
                         if let icon = context.viewState.subtitleIcon {
-                            CompoundIcon(icon)
+                            CompoundIcon(icon, size: .small, relativeTo: .compound.bodyLG)
                                 .foregroundStyle(.compound.iconTertiary)
                         }
                     }
