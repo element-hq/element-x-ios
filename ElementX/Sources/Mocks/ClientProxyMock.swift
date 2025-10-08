@@ -17,6 +17,7 @@ struct ClientProxyMockConfiguration {
     var spaceServiceConfiguration: SpaceServiceProxyMock.Configuration = .init()
     var roomPreviews: [RoomPreviewProxyProtocol]?
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
+    var overrides = Overrides()
     
     var recoveryState: SecureBackupRecoveryState = .enabled
     
@@ -26,6 +27,10 @@ struct ClientProxyMockConfiguration {
     var hideInviteAvatars = false
     
     var maxMediaUploadSize: UInt = 100 * 1024 * 1024
+    
+    class Overrides {
+        var joinedRoomIDs: Set<String> = []
+    }
 }
 
 enum ClientProxyMockError: Error {
@@ -67,6 +72,11 @@ extension ClientProxyMock {
         createDirectRoomWithExpectedRoomNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         canJoinRoomWithReturnValue = true
+        joinRoomViaClosure = { roomID, _ in
+            configuration.overrides.joinedRoomIDs.insert(roomID)
+            return .success(())
+        }
+        joinRoomAliasReturnValue = .success(())
         uploadMediaReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         loadUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
         setUserDisplayNameReturnValue = .failure(.sdkError(ClientProxyMockError.generic))
@@ -96,9 +106,19 @@ extension ClientProxyMock {
         
         roomForIdentifierClosure = { [weak self] identifier in
             if let room = self?.roomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier }) {
-                let roomProxy = await JoinedRoomProxyMock(.init(id: room.id, name: room.name))
-                roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
-                return .joined(roomProxy)
+                let joinedRoomIDs = configuration.overrides.joinedRoomIDs
+                switch room.joinRequestType {
+                case .invite where !joinedRoomIDs.contains(room.id):
+                    let roomProxy = await InvitedRoomProxyMock(.init(id: room.id, name: room.name, isSpace: room.isSpace))
+                    return .invited(roomProxy)
+                case .knock where !joinedRoomIDs.contains(room.id):
+                    let roomProxy = await KnockedRoomProxyMock(.init(id: room.id, name: room.name))
+                    return .knocked(roomProxy)
+                default:
+                    let roomProxy = await JoinedRoomProxyMock(.init(id: room.id, name: room.name, isSpace: room.isSpace))
+                    roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
+                    return .joined(roomProxy)
+                }
             } else if let spaceRoomProxy = configuration.spaceServiceConfiguration.joinedSpaces.first(where: { $0.id == identifier }) {
                 let roomProxy = await JoinedRoomProxyMock(.init(id: spaceRoomProxy.id, name: spaceRoomProxy.name, isSpace: spaceRoomProxy.isSpace))
                 roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
