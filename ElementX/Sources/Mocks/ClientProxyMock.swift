@@ -14,7 +14,7 @@ struct ClientProxyMockConfiguration {
     var userID: String = RoomMemberProxyMock.mockMe.userID
     var deviceID: String?
     var roomSummaryProvider: RoomSummaryProviderProtocol = RoomSummaryProviderMock(.init())
-    var joinedSpaceRooms: [SpaceRoomProxyProtocol] = []
+    var spaceServiceConfiguration: SpaceServiceProxyMock.Configuration = .init()
     var roomPreviews: [RoomPreviewProxyProtocol]?
     var roomDirectorySearchProxy: RoomDirectorySearchProxyProtocol?
     
@@ -92,15 +92,15 @@ extension ClientProxyMock {
         secureBackupController = SecureBackupControllerMock(.init(recoveryState: configuration.recoveryState))
         resetIdentityReturnValue = .success(IdentityResetHandleSDKMock(.init()))
         
-        spaceService = SpaceServiceProxyMock(.init())
+        spaceService = SpaceServiceProxyMock(configuration.spaceServiceConfiguration)
         
         roomForIdentifierClosure = { [weak self] identifier in
             if let room = self?.roomSummaryProvider.roomListPublisher.value.first(where: { $0.id == identifier }) {
                 let roomProxy = await JoinedRoomProxyMock(.init(id: room.id, name: room.name))
                 roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
                 return .joined(roomProxy)
-            } else if let spaceRoomProxy = configuration.joinedSpaceRooms.first(where: { $0.id == identifier }) {
-                let roomProxy = await JoinedRoomProxyMock(.init(id: spaceRoomProxy.id, name: spaceRoomProxy.name))
+            } else if let spaceRoomProxy = configuration.spaceServiceConfiguration.joinedSpaces.first(where: { $0.id == identifier }) {
+                let roomProxy = await JoinedRoomProxyMock(.init(id: spaceRoomProxy.id, name: spaceRoomProxy.name, isSpace: spaceRoomProxy.isSpace))
                 roomProxy.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
                 return .joined(roomProxy)
             } else {
