@@ -378,6 +378,19 @@ class RoomFlowCoordinatorTests: XCTestCase {
         try await fulfillment.fulfill()
     }
     
+    // MARK: - Spaces
+    
+    func testSpacePermalink() async throws {
+        setupRoomFlowCoordinator()
+        
+        try await process(route: .room(roomID: "1", via: []))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        
+        try await process(route: .childRoom(roomID: "space1", via: []))
+        XCTAssert(navigationStackCoordinator.rootCoordinator is RoomScreenCoordinator)
+        XCTAssert(navigationStackCoordinator.stackCoordinators.first is SpaceScreenCoordinator)
+    }
+    
     // MARK: - Private
     
     private func process(route: AppRoute) async throws {
@@ -420,7 +433,9 @@ class RoomFlowCoordinatorTests: XCTestCase {
     
     private func setupRoomFlowCoordinator(asChildFlow: Bool = false, roomType: RoomType? = nil) {
         cancellables.removeAll()
-        clientProxy = ClientProxyMock(.init(userID: "hi@bob", roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms)))))
+        clientProxy = ClientProxyMock(.init(userID: "hi@bob",
+                                            roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                            spaceServiceConfiguration: .populated))
         timelineControllerFactory = TimelineControllerFactoryMock(.init())
         
         clientProxy.roomPreviewForIdentifierViaClosure = { [roomType] roomID, _ in
