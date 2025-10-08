@@ -420,10 +420,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>Gadael %1$d ystafelloedd a gofodau</string>
 			<key>one</key>
-			<string>Leave %1$d room and space</string>
+			<string>Gadael %1$d ystafell a gofod</string>
+			<key>two</key>
+			<string>Gadael %1$d ystafell a gofod</string>
+			<key>few</key>
+			<string>Gadael %1$d ystafell a gofod</string>
+			<key>many</key>
+			<string>Gadael %1$d ystafell a gofod</string>
 			<key>other</key>
-			<string>Leave %1$d rooms and space</string>
+			<string>Gadael %1$d ystafell a gofod</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -532,10 +540,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>Fe wnaethoch chi a%1$d aelod ymateb gyda%2$@</string>
 			<key>one</key>
-			<string>You and %1$d member reacted with %2$@</string>
+			<string>Fe wnaethoch chi a%1$d aelod ymateb gyda%2$@</string>
+			<key>two</key>
+			<string>Fe wnaethoch chi a%1$d aelod ymateb gyda%2$@</string>
+			<key>few</key>
+			<string>Fe wnaethoch chi a%1$d aelod ymateb gyda%2$@</string>
+			<key>many</key>
+			<string>Fe wnaethoch chi a%1$d aelod ymateb gyda%2$@</string>
 			<key>other</key>
-			<string>You and %1$d members reacted with %2$@</string>
+			<string>Fe wnaethoch chi a%1$d aelod ymateb gyda%2$@</string>
 		</dict>
 	</dict>
 	<key>screen_room_timeline_state_changes</key>
@@ -620,10 +636,18 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
+			<key>zero</key>
+			<string>Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn.</string>
 			<key>one</key>
-			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
+			<string>Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn.</string>
+			<key>two</key>
+			<string>Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn.</string>
+			<key>few</key>
+			<string>Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn.</string>
+			<key>many</key>
+			<string>Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn.</string>
 			<key>other</key>
-			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
+			<string>Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn.</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>

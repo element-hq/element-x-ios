@@ -250,10 +250,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>Leave %1$d room and space</string>
 			<key>other</key>
-			<string>Leave %1$d rooms and space</string>
+			<string>离开 %1$d 个房间和空间</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -378,10 +376,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>one</key>
-			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
 			<key>other</key>
-			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
+			<string>您已屏蔽 %1$d 位用户。您将不再收到这些用户的推送通知。</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>

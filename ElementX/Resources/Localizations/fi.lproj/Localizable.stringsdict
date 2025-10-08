@@ -285,9 +285,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Leave %1$d room and space</string>
+			<string>Poistu %1$d huoneesta ja tilasta</string>
 			<key>other</key>
-			<string>Leave %1$d rooms and space</string>
+			<string>Poistu %1$d huoneesta ja tilasta</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -429,9 +429,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
+			<string>Estit %1$d käyttäjän. Et saa ilmoituksia tältä käyttäjältä.</string>
 			<key>other</key>
-			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
+			<string>Estit %1$d käyttäjää. Et saa ilmoituksia näiltä käyttäjiltä.</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
