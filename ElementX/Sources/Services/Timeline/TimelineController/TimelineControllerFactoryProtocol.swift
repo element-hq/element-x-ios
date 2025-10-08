@@ -19,7 +19,8 @@ protocol TimelineControllerFactoryProtocol {
                                  timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                  mediaProvider: MediaProviderProtocol) -> TimelineControllerProtocol
     
-    func buildThreadTimelineController(eventID: String,
+    func buildThreadTimelineController(threadRootEventID: String,
+                                       initialFocussedEventID: String?,
                                        roomProxy: JoinedRoomProxyProtocol,
                                        timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                        mediaProvider: MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError>

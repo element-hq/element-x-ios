@@ -21,15 +21,16 @@ struct TimelineControllerFactory: TimelineControllerFactoryProtocol {
                            appSettings: ServiceLocator.shared.settings)
     }
     
-    func buildThreadTimelineController(eventID: String,
+    func buildThreadTimelineController(threadRootEventID: String,
+                                       initialFocussedEventID: String?,
                                        roomProxy: JoinedRoomProxyProtocol,
                                        timelineItemFactory: RoomTimelineItemFactoryProtocol,
                                        mediaProvider: MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError> {
-        switch await roomProxy.threadTimeline(eventID: eventID) {
+        switch await roomProxy.threadTimeline(eventID: threadRootEventID) {
         case .success(let timelineProxy):
             return .success(TimelineController(roomProxy: roomProxy,
                                                timelineProxy: timelineProxy,
-                                               initialFocussedEventID: nil,
+                                               initialFocussedEventID: initialFocussedEventID,
                                                timelineItemFactory: timelineItemFactory,
                                                mediaProvider: mediaProvider,
                                                appSettings: ServiceLocator.shared.settings))

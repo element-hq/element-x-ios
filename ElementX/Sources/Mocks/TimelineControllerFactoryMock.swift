@@ -22,7 +22,7 @@ extension TimelineControllerFactoryMock {
             return timelineController
         }()
         
-        buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderClosure = { threadRootEventID, _, _, _ in
+        buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderClosure = { threadRootEventID, _, _, _, _ in
             if let threadTimelineController = configuration.threadTimelineController {
                 return .success(threadTimelineController)
             } else {

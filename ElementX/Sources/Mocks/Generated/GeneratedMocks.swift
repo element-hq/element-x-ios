@@ -16309,15 +16309,15 @@ class TimelineControllerFactoryMock: TimelineControllerFactoryProtocol, @uncheck
     }
     //MARK: - buildThreadTimelineController
 
-    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = 0
-    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderCallsCount: Int {
+    var buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = 0
+    var buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount
+                return buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount
+                    returnValue = buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -16325,29 +16325,29 @@ class TimelineControllerFactoryMock: TimelineControllerFactoryProtocol, @uncheck
         }
         set {
             if Thread.isMainThread {
-                buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = newValue
+                buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = newValue
+                    buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderCalled: Bool {
-        return buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderCallsCount > 0
+    var buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderCalled: Bool {
+        return buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderCallsCount > 0
     }
-    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderReceivedArguments: (eventID: String, roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)?
-    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations: [(eventID: String, roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)] = []
+    var buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderReceivedArguments: (threadRootEventID: String, initialFocussedEventID: String?, roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)?
+    var buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations: [(threadRootEventID: String, initialFocussedEventID: String?, roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol)] = []
 
-    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue: Result<TimelineControllerProtocol, TimelineFactoryControllerError>!
-    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderReturnValue: Result<TimelineControllerProtocol, TimelineFactoryControllerError>! {
+    var buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue: Result<TimelineControllerProtocol, TimelineFactoryControllerError>!
+    var buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderReturnValue: Result<TimelineControllerProtocol, TimelineFactoryControllerError>! {
         get {
             if Thread.isMainThread {
-                return buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
+                return buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
             } else {
                 var returnValue: Result<TimelineControllerProtocol, TimelineFactoryControllerError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
+                    returnValue = buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -16355,26 +16355,26 @@ class TimelineControllerFactoryMock: TimelineControllerFactoryProtocol, @uncheck
         }
         set {
             if Thread.isMainThread {
-                buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue = newValue
+                buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue = newValue
+                    buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderClosure: ((String, JoinedRoomProxyProtocol, RoomTimelineItemFactoryProtocol, MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError>)?
+    var buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderClosure: ((String, String?, JoinedRoomProxyProtocol, RoomTimelineItemFactoryProtocol, MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError>)?
 
-    func buildThreadTimelineController(eventID: String, roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError> {
-        buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderCallsCount += 1
-        buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderReceivedArguments = (eventID: eventID, roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider)
+    func buildThreadTimelineController(threadRootEventID: String, initialFocussedEventID: String?, roomProxy: JoinedRoomProxyProtocol, timelineItemFactory: RoomTimelineItemFactoryProtocol, mediaProvider: MediaProviderProtocol) async -> Result<TimelineControllerProtocol, TimelineFactoryControllerError> {
+        buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderCallsCount += 1
+        buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderReceivedArguments = (threadRootEventID: threadRootEventID, initialFocussedEventID: initialFocussedEventID, roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider)
         DispatchQueue.main.async {
-            self.buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations.append((eventID: eventID, roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider))
+            self.buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderReceivedInvocations.append((threadRootEventID: threadRootEventID, initialFocussedEventID: initialFocussedEventID, roomProxy: roomProxy, timelineItemFactory: timelineItemFactory, mediaProvider: mediaProvider))
         }
-        if let buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderClosure = buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderClosure {
-            return await buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderClosure(eventID, roomProxy, timelineItemFactory, mediaProvider)
+        if let buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderClosure = buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderClosure {
+            return await buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderClosure(threadRootEventID, initialFocussedEventID, roomProxy, timelineItemFactory, mediaProvider)
         } else {
-            return buildThreadTimelineControllerEventIDRoomProxyTimelineItemFactoryMediaProviderReturnValue
+            return buildThreadTimelineControllerThreadRootEventIDInitialFocussedEventIDRoomProxyTimelineItemFactoryMediaProviderReturnValue
         }
     }
     //MARK: - buildPinnedEventsTimelineController
