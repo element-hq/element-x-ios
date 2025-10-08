@@ -427,9 +427,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
+			<string>Du blokkerte%1$d bruker. Du vil ikke motta varsler for denne brukeren.</string>
 			<key>other</key>
-			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
+			<string>Du blokkerte%1$d brukere. Du vil ikke motta varsler for disse brukerne.</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>
