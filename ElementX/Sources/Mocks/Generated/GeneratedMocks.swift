@@ -15943,11 +15943,16 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
 }
 class SpaceRoomListProxyMock: SpaceRoomListProxyProtocol, @unchecked Sendable {
-    var spaceRoomProxy: SpaceRoomProxyProtocol {
-        get { return underlyingSpaceRoomProxy }
-        set(value) { underlyingSpaceRoomProxy = value }
+    var id: String {
+        get { return underlyingId }
+        set(value) { underlyingId = value }
     }
-    var underlyingSpaceRoomProxy: SpaceRoomProxyProtocol!
+    var underlyingId: String!
+    var spaceRoomProxyPublisher: CurrentValuePublisher<SpaceRoomProxyProtocol, Never> {
+        get { return underlyingSpaceRoomProxyPublisher }
+        set(value) { underlyingSpaceRoomProxyPublisher = value }
+    }
+    var underlyingSpaceRoomProxyPublisher: CurrentValuePublisher<SpaceRoomProxyProtocol, Never>!
     var spaceRoomsPublisher: CurrentValuePublisher<[SpaceRoomProxyProtocol], Never> {
         get { return underlyingSpaceRoomsPublisher }
         set(value) { underlyingSpaceRoomsPublisher = value }
@@ -16047,15 +16052,15 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
 
     //MARK: - spaceRoomList
 
-    var spaceRoomListSpaceIDParentUnderlyingCallsCount = 0
-    var spaceRoomListSpaceIDParentCallsCount: Int {
+    var spaceRoomListSpaceIDUnderlyingCallsCount = 0
+    var spaceRoomListSpaceIDCallsCount: Int {
         get {
             if Thread.isMainThread {
-                return spaceRoomListSpaceIDParentUnderlyingCallsCount
+                return spaceRoomListSpaceIDUnderlyingCallsCount
             } else {
                 var returnValue: Int? = nil
                 DispatchQueue.main.sync {
-                    returnValue = spaceRoomListSpaceIDParentUnderlyingCallsCount
+                    returnValue = spaceRoomListSpaceIDUnderlyingCallsCount
                 }
 
                 return returnValue!
@@ -16063,29 +16068,29 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                spaceRoomListSpaceIDParentUnderlyingCallsCount = newValue
+                spaceRoomListSpaceIDUnderlyingCallsCount = newValue
             } else {
                 DispatchQueue.main.sync {
-                    spaceRoomListSpaceIDParentUnderlyingCallsCount = newValue
+                    spaceRoomListSpaceIDUnderlyingCallsCount = newValue
                 }
             }
         }
     }
-    var spaceRoomListSpaceIDParentCalled: Bool {
-        return spaceRoomListSpaceIDParentCallsCount > 0
+    var spaceRoomListSpaceIDCalled: Bool {
+        return spaceRoomListSpaceIDCallsCount > 0
     }
-    var spaceRoomListSpaceIDParentReceivedArguments: (spaceID: String, parent: SpaceRoomProxyProtocol?)?
-    var spaceRoomListSpaceIDParentReceivedInvocations: [(spaceID: String, parent: SpaceRoomProxyProtocol?)] = []
+    var spaceRoomListSpaceIDReceivedSpaceID: String?
+    var spaceRoomListSpaceIDReceivedInvocations: [String] = []
 
-    var spaceRoomListSpaceIDParentUnderlyingReturnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>!
-    var spaceRoomListSpaceIDParentReturnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>! {
+    var spaceRoomListSpaceIDUnderlyingReturnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>!
+    var spaceRoomListSpaceIDReturnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>! {
         get {
             if Thread.isMainThread {
-                return spaceRoomListSpaceIDParentUnderlyingReturnValue
+                return spaceRoomListSpaceIDUnderlyingReturnValue
             } else {
                 var returnValue: Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>? = nil
                 DispatchQueue.main.sync {
-                    returnValue = spaceRoomListSpaceIDParentUnderlyingReturnValue
+                    returnValue = spaceRoomListSpaceIDUnderlyingReturnValue
                 }
 
                 return returnValue!
@@ -16093,26 +16098,26 @@ class SpaceServiceProxyMock: SpaceServiceProxyProtocol, @unchecked Sendable {
         }
         set {
             if Thread.isMainThread {
-                spaceRoomListSpaceIDParentUnderlyingReturnValue = newValue
+                spaceRoomListSpaceIDUnderlyingReturnValue = newValue
             } else {
                 DispatchQueue.main.sync {
-                    spaceRoomListSpaceIDParentUnderlyingReturnValue = newValue
+                    spaceRoomListSpaceIDUnderlyingReturnValue = newValue
                 }
             }
         }
     }
-    var spaceRoomListSpaceIDParentClosure: ((String, SpaceRoomProxyProtocol?) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>)?
+    var spaceRoomListSpaceIDClosure: ((String) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError>)?
 
-    func spaceRoomList(spaceID: String, parent: SpaceRoomProxyProtocol?) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError> {
-        spaceRoomListSpaceIDParentCallsCount += 1
-        spaceRoomListSpaceIDParentReceivedArguments = (spaceID: spaceID, parent: parent)
+    func spaceRoomList(spaceID: String) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError> {
+        spaceRoomListSpaceIDCallsCount += 1
+        spaceRoomListSpaceIDReceivedSpaceID = spaceID
         DispatchQueue.main.async {
-            self.spaceRoomListSpaceIDParentReceivedInvocations.append((spaceID: spaceID, parent: parent))
+            self.spaceRoomListSpaceIDReceivedInvocations.append(spaceID)
         }
-        if let spaceRoomListSpaceIDParentClosure = spaceRoomListSpaceIDParentClosure {
-            return await spaceRoomListSpaceIDParentClosure(spaceID, parent)
+        if let spaceRoomListSpaceIDClosure = spaceRoomListSpaceIDClosure {
+            return await spaceRoomListSpaceIDClosure(spaceID)
         } else {
-            return spaceRoomListSpaceIDParentReturnValue
+            return spaceRoomListSpaceIDReturnValue
         }
     }
     //MARK: - leaveSpace

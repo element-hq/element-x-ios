@@ -61,7 +61,7 @@ class SpaceListScreenViewModelTests: XCTestCase {
         let action = try await deferred.fulfill()
         
         switch action {
-        case .selectSpace(let spaceRoomListProxy) where spaceRoomListProxy.spaceRoomProxy.id == selectedSpace.id:
+        case .selectSpace(let spaceRoomListProxy) where spaceRoomListProxy.id == selectedSpace.id:
             break
         default:
             XCTFail("The action should select the space.")
@@ -102,7 +102,7 @@ class SpaceListScreenViewModelTests: XCTestCase {
         ])
         spaceServiceProxy = SpaceServiceProxyMock(.init())
         spaceServiceProxy.joinedSpacesPublisher = joinedSpacesSubject.asCurrentValuePublisher()
-        spaceServiceProxy.spaceRoomListSpaceIDParentClosure = { [joinedSpacesSubject] spaceID, _ in
+        spaceServiceProxy.spaceRoomListSpaceIDClosure = { [joinedSpacesSubject] spaceID in
             guard let spaceRoomProxy = joinedSpacesSubject?.value.first(where: { $0.id == spaceID }) else { return .failure(.missingSpace) }
             return .success(SpaceRoomListProxyMock(.init(spaceRoomProxy: spaceRoomProxy)))
         }

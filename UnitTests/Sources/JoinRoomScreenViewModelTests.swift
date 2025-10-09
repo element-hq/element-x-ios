@@ -208,7 +208,7 @@ extension JoinRoomScreenViewModelAction: @retroactive Equatable {
         case (.joined(.roomID(let lhsRoomID)), .joined(.roomID(let rhsRoomID))):
             lhsRoomID == rhsRoomID
         case (.joined(.space(let lhsSpace)), .joined(.space(let rhsSpace))):
-            lhsSpace.spaceRoomProxy.id == rhsSpace.spaceRoomProxy.id
+            lhsSpace.id == rhsSpace.id
         case (.dismiss, .dismiss):
             true
         case (.presentDeclineAndBlock(let lhsUserID), .presentDeclineAndBlock(let rhsUserID)):

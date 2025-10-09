@@ -406,7 +406,7 @@ class HomeScreenViewModelTests: XCTestCase {
             clientProxy.roomForIdentifierClosure = { spaceID in .invited(InvitedRoomProxyMock(.init(id: spaceID, isSpace: true))) }
             
             let spaceServiceProxy = SpaceServiceProxyMock(.init())
-            spaceServiceProxy.spaceRoomListSpaceIDParentClosure = { spaceID, _ in
+            spaceServiceProxy.spaceRoomListSpaceIDClosure = { spaceID in
                 .success(SpaceRoomListProxyMock(.init(spaceRoomProxy: SpaceRoomProxyMock(.init(id: spaceID, isSpace: true)))))
             }
             clientProxy.underlyingSpaceService = spaceServiceProxy
@@ -454,7 +454,7 @@ extension HomeScreenViewModelAction: @retroactive Equatable {
         case (.presentDeclineAndBlock(let lhsUserID, let lhsRoomID), .presentDeclineAndBlock(let rhsUserID, let rhsRoomID)):
             lhsUserID == rhsUserID && lhsRoomID == rhsRoomID
         case (.presentSpace(let lhsSpaceRoomListProxy), .presentSpace(let rhsSpaceRoomListProxy)):
-            lhsSpaceRoomListProxy.spaceRoomProxy.id == rhsSpaceRoomListProxy.spaceRoomProxy.id
+            lhsSpaceRoomListProxy.id == rhsSpaceRoomListProxy.id
         case (.roomLeft(let lhsID), .roomLeft(let rhsID)):
             lhsID == rhsID
         case (.transferOwnership(let lhsID), .transferOwnership(let rhsID)):
