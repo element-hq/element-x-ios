@@ -149,21 +149,12 @@ class SpaceScreenViewModelTests: XCTestCase {
             expectation.fulfill()
             return .success(())
         }
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { _ in true }
         let deferredState = deferFulfillment(viewModel.context.observe(\.viewState.joiningRoomIDs), transitionValues: [[selectedSpace.id], []])
         
         viewModel.context.send(viewAction: .spaceAction(.join(selectedSpace)))
         
         await fulfillment(of: [expectation])
         try await deferredState.fulfill()
-        let action = try await deferred.fulfill()
-        
-        switch action {
-        case .selectSpace(let spaceRoomListProxy) where spaceRoomListProxy.spaceRoomProxy.id == selectedSpace.id:
-            break
-        default:
-            XCTFail("The join should finish by selecting the space.")
-        }
     }
     
     func testJoiningRoom() async throws {
@@ -176,21 +167,12 @@ class SpaceScreenViewModelTests: XCTestCase {
             expectation.fulfill()
             return .success(())
         }
-        let deferred = deferFulfillment(viewModel.actionsPublisher) { _ in true }
         let deferredState = deferFulfillment(viewModel.context.observe(\.viewState.joiningRoomIDs), transitionValues: [[selectedRoom.id], []])
         
         viewModel.context.send(viewAction: .spaceAction(.join(selectedRoom)))
         
         await fulfillment(of: [expectation])
         try await deferredState.fulfill()
-        let action = try await deferred.fulfill()
-        
-        switch action {
-        case .selectRoom(let roomID) where roomID == selectedRoom.id:
-            break
-        default:
-            XCTFail("The join should finish by selecting the room.")
-        }
     }
     
     func testLeavingSpace() async throws {

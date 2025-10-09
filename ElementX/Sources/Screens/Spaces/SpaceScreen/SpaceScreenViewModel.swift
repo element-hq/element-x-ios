@@ -125,14 +125,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             return
         }
         
-        // If multiple join operations are running, then only show the last one.
-        guard state.joiningRoomIDs == [spaceRoomProxy.id] else { return }
-        
-        if spaceRoomProxy.isSpace {
-            await selectSpace(spaceRoomProxy)
-        } else {
-            actionsSubject.send(.selectRoom(roomID: spaceRoomProxy.id))
-        }
+        // We don't want to show the space room after joining it this way 🤷‍♂️
     }
     
     private func selectSpace(_ spaceRoomProxy: SpaceRoomProxyProtocol) async {
