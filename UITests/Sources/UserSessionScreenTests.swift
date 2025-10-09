@@ -14,6 +14,7 @@ class UserSessionScreenTests: XCTestCase {
     let unjoinedSpaceRoomName = "Company Room"
     let joinedSubspaceName = "Joined Space"
     let joinedSubspaceRoomName = "Management"
+    let spaceInviteName = "First space"
     
     enum Step {
         static let homeScreen = 1
@@ -107,5 +108,37 @@ class UserSessionScreenTests: XCTestCase {
         XCTAssert(app.staticTexts[unjoinedSpaceRoomName].waitForExistence(timeout: 5.0))
         try await Task.sleep(for: .seconds(1))
         try await app.assertScreenshot(step: Step.spaceJoinRoomScreen)
+    }
+    
+    func testAcceptSpaceInvite() async throws {
+        let app = Application.launch(.userSessionSpacesFlow)
+        
+        app.swipeDown() // Make sure the header shows a large title
+        
+        try await app.assertScreenshot(step: Step.spacesTabBar)
+        
+        // Tap the space invite cell.
+        app.staticTexts[A11yIdentifiers.homeScreen.roomName(spaceInviteName)].tap()
+        XCTAssert(app.buttons[A11yIdentifiers.joinRoomScreen.join].waitForExistence(timeout: 5.0))
+        try await Task.sleep(for: .seconds(1))
+        try await app.assertScreenshot(step: Step.spaceJoinRoomScreen)
+        
+        // Tap join on the join room screen.
+        app.buttons[A11yIdentifiers.joinRoomScreen.join].tap()
+        XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.name].waitForExistence(timeout: 5.0)) // The space screen reuses the room screen header
+        try await Task.sleep(for: .seconds(1))
+        try await app.assertScreenshot(step: Step.spaceScreen)
+        
+        // Go back to the room list.
+        app.navigationBars.buttons["Chats"].firstMatch.tap(.center)
+        XCTAssert(app.staticTexts["Chats"].waitForExistence(timeout: 5.0))
+        
+        // Tap the join button in the space invite cell.
+        app.buttons.matching(NSPredicate(format: "identifier == %@ && label == %@",
+                                         A11yIdentifiers.homeScreen.roomName(spaceInviteName),
+                                         "Accept")).firstMatch.tap()
+        XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.name].waitForExistence(timeout: 5.0)) // The space screen reuses the room screen header
+        try await Task.sleep(for: .seconds(1))
+        try await app.assertScreenshot(step: Step.spaceScreen)
     }
 }

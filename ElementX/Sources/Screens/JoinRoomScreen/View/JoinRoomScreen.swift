@@ -78,7 +78,7 @@ struct JoinRoomScreen: View {
                             .multilineTextAlignment(.center)
                     } icon: {
                         if let icon = context.viewState.subtitleIcon {
-                            CompoundIcon(icon)
+                            CompoundIcon(icon, size: .small, relativeTo: .compound.bodyLG)
                                 .foregroundStyle(.compound.iconTertiary)
                         }
                     }
@@ -308,6 +308,7 @@ struct JoinRoomScreen: View {
     var joinButton: some View {
         Button(L10n.screenJoinRoomJoinAction) { context.send(viewAction: .join) }
             .buttonStyle(.compound(.super))
+            .accessibilityIdentifier(A11yIdentifiers.joinRoomScreen.join)
     }
     
     @ToolbarContentBuilder
