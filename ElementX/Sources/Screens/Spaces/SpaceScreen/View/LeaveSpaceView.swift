@@ -64,20 +64,24 @@ struct LeaveSpaceView: View {
             LazyVStack(spacing: 0, pinnedViews: .sectionHeaders) {
                 Section {
                     ForEach(leaveHandle.rooms, id: \.spaceRoomProxy.id) { room in
-                        LeaveSpaceRoomDetailsCell(room: room, mediaProvider: context.mediaProvider) {
+                        LeaveSpaceRoomDetailsCell(room: room,
+                                                  hideSelection: leaveHandle.mode == .onlyAdminRooms,
+                                                  mediaProvider: context.mediaProvider) {
                             context.send(viewAction: .toggleLeaveSpaceRoomDetails(id: room.spaceRoomProxy.id))
                         }
                         .disabled(room.isLastAdmin)
                     }
                 } header: {
-                    Button(leaveHandle.selectedCount > 0 ? L10n.actionDeselectAll : L10n.actionSelectAll) {
-                        context.send(viewAction: leaveHandle.selectedCount > 0 ? .deselectAllLeaveRoomDetails : .selectAllLeaveRoomDetails)
+                    if leaveHandle.mode == .manyRooms {
+                        Button(leaveHandle.selectedCount > 0 ? L10n.actionDeselectAll : L10n.actionSelectAll) {
+                            context.send(viewAction: leaveHandle.selectedCount > 0 ? .deselectAllLeaveRoomDetails : .selectAllLeaveRoomDetails)
+                        }
+                        .buttonStyle(.compound(.textLink, size: .small))
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 8)
+                        .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
                     }
-                    .buttonStyle(.compound(.textLink, size: .small))
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 8)
-                    .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
                 }
             }
         }
