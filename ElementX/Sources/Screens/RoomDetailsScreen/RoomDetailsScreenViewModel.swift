@@ -177,7 +177,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
         
         if !roomProxy.isDirectOneToOneRoom, state.accountOwner?.role.isOwner == true {
             var isLastOwner = true
-            for member in roomProxy.membersPublisher.value where member.userID != roomProxy.ownUserID {
+            for member in roomProxy.membersPublisher.value where member.userID != roomProxy.ownUserID && member.membership == .join {
                 if member.role.isOwner {
                     isLastOwner = false
                     break
