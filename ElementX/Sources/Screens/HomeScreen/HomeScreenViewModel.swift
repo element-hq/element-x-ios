@@ -363,7 +363,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                    ownMember.role.isOwner {
                     await roomProxy.updateMembers()
                     var isLastOwner = true
-                    for member in roomProxy.membersPublisher.value where member.userID != roomProxy.ownUserID {
+                    for member in roomProxy.membersPublisher.value where member.userID != roomProxy.ownUserID && member.membership == .join {
                         if member.role.isOwner {
                             isLastOwner = false
                             break
