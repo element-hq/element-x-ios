@@ -72,6 +72,7 @@
 "action_decline" = "Decline";
 "action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "Delete Poll";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "Disable";
 "action_discard" = "Discard";
 "action_dismiss" = "Dismiss";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Retry decryption";
 "action_save" = "Save";
 "action_search" = "Search";
+"action_select_all" = "Select all";
 "action_send" = "Send";
 "action_send_edited_message" = "Send edited message";
 "action_send_message" = "Send message";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "This month";
 "common_decryption_error" = "Decryption error";
 "common_description" = "Description";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Developer options";
 "common_device_id" = "Device ID";
 "common_direct_chat" = "Direct chat";
@@ -281,7 +282,6 @@
 "common_search_results" = "Search results";
 "common_security" = "Security";
 "common_seen_by" = "Seen by";
-"common_select_all" = "Select all";
 "common_send_to" = "Send to";
 "common_sending" = "Sending…";
 "common_sending_failed" = "Sending failed";

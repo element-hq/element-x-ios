@@ -42,7 +42,7 @@ struct LeaveSpaceView: View {
             BigIcon(icon: \.errorSolid, style: .alertSolid)
             
             VStack(spacing: 8) {
-                Text(leaveHandle.title(spaceName: context.viewState.spaceName))
+                Text(leaveHandle.title(spaceName: context.viewState.space.name))
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
@@ -70,8 +70,8 @@ struct LeaveSpaceView: View {
                         .disabled(room.isLastAdmin)
                     }
                 } header: {
-                    Button(L10n.commonDeselectAll) {
-                        context.send(viewAction: .deselectAllLeaveRoomDetails)
+                    Button(leaveHandle.selectedCount > 0 ? L10n.actionDeselectAll : L10n.actionSelectAll) {
+                        context.send(viewAction: leaveHandle.selectedCount > 0 ? .deselectAllLeaveRoomDetails : .selectAllLeaveRoomDetails)
                     }
                     .buttonStyle(.compound(.textLink, size: .small))
                     .frame(maxWidth: .infinity, alignment: .trailing)
