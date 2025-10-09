@@ -30,7 +30,7 @@ class SpaceServiceProxy: SpaceServiceProxyProtocol {
         })
     }
     
-    func spaceRoomList(spaceID: String, parent: SpaceRoomProxyProtocol?) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError> {
+    func spaceRoomList(spaceID: String) async -> Result<SpaceRoomListProxyProtocol, SpaceServiceProxyError> {
         do {
             return try await .success(SpaceRoomListProxy(spaceService.spaceRoomList(spaceId: spaceID)))
         } catch {

@@ -15,7 +15,7 @@ enum SpaceScreenViewModelAction {
 }
 
 struct SpaceScreenViewState: BindableState {
-    let space: SpaceRoomProxyProtocol
+    var space: SpaceRoomProxyProtocol
     
     var permalink: URL?
     

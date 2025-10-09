@@ -100,7 +100,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         let action = try await deferred.fulfill()
         
         switch action {
-        case .selectSpace(let spaceRoomListProxy) where spaceRoomListProxy.spaceRoomProxy.id == selectedSpace.id:
+        case .selectSpace(let spaceRoomListProxy) where spaceRoomListProxy.id == selectedSpace.id:
             break
         default:
             XCTFail("The action should select the space.")
@@ -202,7 +202,7 @@ class SpaceScreenViewModelTests: XCTestCase {
         XCTAssertNil(context.leaveHandle)
         XCTAssertTrue(rustLeaveHandle.leaveRoomIdsCalled)
         XCTAssertEqual(rustLeaveHandle.leaveRoomIdsReceivedRoomIds,
-                       [firstSelectedRoom.spaceRoomProxy.id, spaceRoomListProxy.spaceRoomProxy.id],
+                       [firstSelectedRoom.spaceRoomProxy.id, spaceRoomListProxy.id],
                        "Confirming the leave should first leave the selected room and then the space.")
     }
     
@@ -214,7 +214,7 @@ class SpaceScreenViewModelTests: XCTestCase {
                                                           paginationResponses: paginationResponses))
         
         let spaceServiceProxy = SpaceServiceProxyMock(.init())
-        spaceServiceProxy.spaceRoomListSpaceIDParentClosure = { [mockSpaceRooms] spaceID, _ in
+        spaceServiceProxy.spaceRoomListSpaceIDClosure = { [mockSpaceRooms] spaceID in
             guard let spaceRoomProxy = mockSpaceRooms.first(where: { $0.id == spaceID }) else { return .failure(.missingSpace) }
             return .success(SpaceRoomListProxyMock(.init(spaceRoomProxy: spaceRoomProxy)))
         }

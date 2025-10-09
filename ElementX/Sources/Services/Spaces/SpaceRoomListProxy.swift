@@ -9,8 +9,15 @@ import Combine
 import MatrixRustSDK
 
 class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
+    var id: String { spaceRoomProxyPublisher.value.id }
+    
     private let spaceRoomList: SpaceRoomListProtocol
-    let spaceRoomProxy: SpaceRoomProxyProtocol
+    
+    private var spaceRoomProxyHandle: TaskHandle?
+    private let spaceRoomProxySubject: CurrentValueSubject<SpaceRoomProxyProtocol, Never>
+    var spaceRoomProxyPublisher: CurrentValuePublisher<SpaceRoomProxyProtocol, Never> {
+        spaceRoomProxySubject.asCurrentValuePublisher()
+    }
     
     private var spaceRoomsHandle: TaskHandle?
     private let spaceRoomsSubject = CurrentValueSubject<[SpaceRoomProxyProtocol], Never>([])
@@ -25,7 +32,7 @@ class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
         guard let spaceRoom = spaceRoomList.space() else { throw SpaceRoomListProxyError.missingSpace }
         
         self.spaceRoomList = spaceRoomList
-        spaceRoomProxy = SpaceRoomProxy(spaceRoom: spaceRoom)
+        spaceRoomProxySubject = .init(SpaceRoomProxy(spaceRoom: spaceRoom))
         
         let paginationStateSubject = CurrentValueSubject<SpaceRoomListPaginationState, Never>(spaceRoomList.paginationState())
         paginationStatePublisher = paginationStateSubject.asCurrentValuePublisher()
@@ -36,6 +43,11 @@ class SpaceRoomListProxy: SpaceRoomListProxyProtocol {
         
         spaceRoomsHandle = spaceRoomList.subscribeToRoomUpdate(listener: SDKListener { [weak self] updates in
             self?.handleUpdates(updates)
+        })
+        
+        spaceRoomProxyHandle = spaceRoomList.subscribeToSpaceUpdates(listener: SDKListener { [weak self] spaceRoom in
+            guard let spaceRoom else { return }
+            self?.spaceRoomProxySubject.send(SpaceRoomProxy(spaceRoom: spaceRoom))
         })
     }
     

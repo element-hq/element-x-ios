@@ -260,7 +260,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         switch room {
         case .joined(let roomProxy):
             if roomProxy.infoPublisher.value.isSpace {
-                switch await userSession.clientProxy.spaceService.spaceRoomList(spaceID: roomProxy.id, parent: nil) {
+                switch await userSession.clientProxy.spaceService.spaceRoomList(spaceID: roomProxy.id) {
                 case .success(let spaceRoomListProxy):
                     actionsSubject.send(.continueWithSpaceFlow(spaceRoomListProxy))
                 case .failure:

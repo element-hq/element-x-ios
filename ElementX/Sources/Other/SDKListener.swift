@@ -92,6 +92,10 @@ extension SDKListener: SpaceRoomListPaginationStateListener where T == SpaceRoom
     func onUpdate(paginationState: SpaceRoomListPaginationState) { onUpdateClosure(paginationState) }
 }
 
+extension SDKListener: SpaceRoomListSpaceListener where T == SpaceRoom? {
+    func onUpdate(space: SpaceRoom?) { onUpdateClosure(space) }
+}
+
 // MARK: Room
 
 extension SDKListener: RoomInfoListener where T == RoomInfo {

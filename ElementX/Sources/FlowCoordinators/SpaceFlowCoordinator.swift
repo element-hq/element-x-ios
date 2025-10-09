@@ -21,7 +21,7 @@ enum SpaceFlowCoordinatorEntryPoint {
     
     var spaceID: String {
         switch self {
-        case .space(let spaceRoomListProxy): spaceRoomListProxy.spaceRoomProxy.id
+        case .space(let spaceRoomListProxy): spaceRoomListProxy.id
         case .joinSpace(let spaceRoomProxy): spaceRoomProxy.id
         }
     }

@@ -437,7 +437,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         if roomProxy.info.isSpace {
             let spaceService = userSession.clientProxy.spaceService
             
-            switch await spaceService.spaceRoomList(spaceID: roomProxy.id, parent: nil) {
+            switch await spaceService.spaceRoomList(spaceID: roomProxy.id) {
             case .success(let spaceRoomListProxy):
                 actionsSubject.send(.presentSpace(spaceRoomListProxy))
             case .failure(let error):
