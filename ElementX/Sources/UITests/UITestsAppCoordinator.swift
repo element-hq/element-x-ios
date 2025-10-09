@@ -586,9 +586,14 @@ class MockScreen: Identifiable {
             appSettings.analyticsConsentState = .optedOut
             appSettings.hasSeenSpacesAnnouncement = true
             
+            let roomSummaries: [RoomSummary] = if id == .userSessionSpacesFlow {
+                [[RoomSummary].mockSpaceInvites[0]] + .mockRooms
+            } else {
+                .mockRooms
+            }
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com",
                                                     deviceID: "MOCKCLIENT",
-                                                    roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(.mockRooms))),
+                                                    roomSummaryProvider: RoomSummaryProviderMock(.init(state: .loaded(roomSummaries))),
                                                     spaceServiceConfiguration: .init(joinedSpaces: .mockSingleRoom),
                                                     roomPreviews: [SpaceRoomProxyProtocol].mockSpaceList.map(RoomPreviewProxyMock.init)))
             

@@ -53,6 +53,7 @@ struct HomeScreenInviteCell: View {
                 context.send(viewAction: .selectRoom(roomIdentifier: roomID))
             }
         }
+        .accessibilityIdentifier(A11yIdentifiers.homeScreen.roomName(room.name))
     }
     
     // MARK: - Private

@@ -22,6 +22,7 @@ enum A11yIdentifiers {
     static let loginScreen = LoginScreen()
     static let authenticationStartScreen = AuthenticationStartScreen()
     static let reportContent = ReportContent()
+    static let joinRoomScreen = JoinRoomScreen()
     static let roomScreen = RoomScreen()
     static let roomDetailsScreen = RoomDetailsScreen()
     static let roomNotificationSettingsScreen = RoomNotificationSettingsScreen()
@@ -130,6 +131,10 @@ enum A11yIdentifiers {
     
     struct ReportContent {
         let ignoreUser = "report_content-ignore_user"
+    }
+    
+    struct JoinRoomScreen {
+        let join = "join-room_join"
     }
     
     struct RoomScreen {
