@@ -2938,7 +2938,7 @@ internal enum L10n {
   internal static var screenSpaceAnnouncementItem4: String { return L10n.tr("Localizable", "screen_space_announcement_item4") }
   /// Leave any spaces you’ve joined
   internal static var screenSpaceAnnouncementItem5: String { return L10n.tr("Localizable", "screen_space_announcement_item5") }
-  /// Creating and managing spaces is coming soon.
+  /// Filtering, creating and managing spaces is coming soon.
   internal static var screenSpaceAnnouncementNotice: String { return L10n.tr("Localizable", "screen_space_announcement_notice") }
   /// Welcome to the beta version of Spaces! With this first version you can:
   internal static var screenSpaceAnnouncementSubtitle: String { return L10n.tr("Localizable", "screen_space_announcement_subtitle") }
