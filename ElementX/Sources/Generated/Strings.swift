@@ -178,6 +178,8 @@ internal enum L10n {
   internal static var actionDeclineAndBlock: String { return L10n.tr("Localizable", "action_decline_and_block") }
   /// Delete Poll
   internal static var actionDeletePoll: String { return L10n.tr("Localizable", "action_delete_poll") }
+  /// Deselect all
+  internal static var actionDeselectAll: String { return L10n.tr("Localizable", "action_deselect_all") }
   /// Disable
   internal static var actionDisable: String { return L10n.tr("Localizable", "action_disable") }
   /// Discard
@@ -302,6 +304,8 @@ internal enum L10n {
   internal static var actionSave: String { return L10n.tr("Localizable", "action_save") }
   /// Search
   internal static var actionSearch: String { return L10n.tr("Localizable", "action_search") }
+  /// Select all
+  internal static var actionSelectAll: String { return L10n.tr("Localizable", "action_select_all") }
   /// Send
   internal static var actionSend: String { return L10n.tr("Localizable", "action_send") }
   /// Send edited message
@@ -430,8 +434,6 @@ internal enum L10n {
   internal static var commonDecryptionError: String { return L10n.tr("Localizable", "common_decryption_error") }
   /// Description
   internal static var commonDescription: String { return L10n.tr("Localizable", "common_description") }
-  /// Deselect all
-  internal static var commonDeselectAll: String { return L10n.tr("Localizable", "common_deselect_all") }
   /// Developer options
   internal static var commonDeveloperOptions: String { return L10n.tr("Localizable", "common_developer_options") }
   /// Device ID
@@ -638,8 +640,6 @@ internal enum L10n {
   internal static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
   /// Seen by
   internal static var commonSeenBy: String { return L10n.tr("Localizable", "common_seen_by") }
-  /// Select all
-  internal static var commonSelectAll: String { return L10n.tr("Localizable", "common_select_all") }
   /// Send to
   internal static var commonSendTo: String { return L10n.tr("Localizable", "common_send_to") }
   /// Sending…
@@ -2938,7 +2938,7 @@ internal enum L10n {
   internal static var screenSpaceAnnouncementItem4: String { return L10n.tr("Localizable", "screen_space_announcement_item4") }
   /// Leave any spaces you’ve joined
   internal static var screenSpaceAnnouncementItem5: String { return L10n.tr("Localizable", "screen_space_announcement_item5") }
-  /// Creating and managing spaces is coming soon.
+  /// Filtering, creating and managing spaces is coming soon.
   internal static var screenSpaceAnnouncementNotice: String { return L10n.tr("Localizable", "screen_space_announcement_notice") }
   /// Welcome to the beta version of Spaces! With this first version you can:
   internal static var screenSpaceAnnouncementSubtitle: String { return L10n.tr("Localizable", "screen_space_announcement_subtitle") }

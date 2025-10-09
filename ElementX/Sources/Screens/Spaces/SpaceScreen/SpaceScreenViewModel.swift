@@ -95,6 +95,11 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             for room in leaveHandle.rooms {
                 room.isSelected = false
             }
+        case .selectAllLeaveRoomDetails:
+            guard let leaveHandle = state.bindings.leaveHandle else { fatalError("The leave handle should be available.") }
+            for room in leaveHandle.rooms where !room.isLastAdmin {
+                room.isSelected = true
+            }
         case .toggleLeaveSpaceRoomDetails(let spaceRoomID):
             guard let room = state.bindings.leaveHandle?.rooms.first(where: { $0.spaceRoomProxy.id == spaceRoomID }) else {
                 fatalError("The space room to toggle is not in the list of rooms to leave.")
@@ -125,14 +130,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             return
         }
         
-        // If multiple join operations are running, then only show the last one.
-        guard state.joiningRoomIDs == [spaceRoomProxy.id] else { return }
-        
-        if spaceRoomProxy.isSpace {
-            await selectSpace(spaceRoomProxy)
-        } else {
-            actionsSubject.send(.selectRoom(roomID: spaceRoomProxy.id))
-        }
+        // We don't want to show the space room after joining it this way 🤷‍♂️
     }
     
     private func selectSpace(_ spaceRoomProxy: SpaceRoomProxyProtocol) async {

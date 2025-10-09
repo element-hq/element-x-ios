@@ -20,7 +20,7 @@ struct SpaceScreen: View {
             }
         }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-        .navigationTitle(context.viewState.spaceName)
+        .navigationTitle(context.viewState.space.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .sheet(item: $context.leaveHandle) { leaveHandle in
@@ -50,7 +50,7 @@ struct SpaceScreen: View {
         // Use the same trick as the RoomScreen for a leading title view that
         // also hides the navigation title.
         ToolbarItem(placement: .principal) {
-            RoomHeaderView(roomName: context.viewState.spaceName,
+            RoomHeaderView(roomName: context.viewState.space.name,
                            roomAvatar: context.viewState.space.avatar,
                            mediaProvider: context.mediaProvider)
         }

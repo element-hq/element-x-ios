@@ -12,6 +12,7 @@ struct LeaveSpaceRoomDetailsCell: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     
     let room: LeaveSpaceRoomDetails
+    var hideSelection = false
     let mediaProvider: MediaProviderProtocol?
     
     let action: () -> Void
@@ -53,7 +54,9 @@ struct LeaveSpaceRoomDetailsCell: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 8)
                 
-                ListRowAccessory.multiSelection(room.isSelected)
+                if !hideSelection {
+                    ListRowAccessory.multiSelection(room.isSelected)
+                }
             }
             .padding(.horizontal, 16)
         }
@@ -99,6 +102,13 @@ struct LeaveSpaceRoomDetailsCell_Previews: PreviewProvider, TestablePreview {
                                                   isLastAdmin: true,
                                                   isSelected: false),
                                       mediaProvider: MediaProviderMock(configuration: .init())) { }
+            LeaveSpaceRoomDetailsCell(room: .init(spaceRoomProxy: SpaceRoomProxyMock(.init(id: "2",
+                                                                                           name: "My Space",
+                                                                                           isSpace: true)),
+                                                  isLastAdmin: true,
+                                                  isSelected: false),
+                                      hideSelection: true,
+                                      mediaProvider: MediaProviderMock(configuration: .init())) { }
             LeaveSpaceRoomDetailsCell(room: .init(spaceRoomProxy: SpaceRoomProxyMock(.init(id: "3",
                                                                                            name: "Room",
                                                                                            isSpace: false)),
@@ -110,6 +120,13 @@ struct LeaveSpaceRoomDetailsCell_Previews: PreviewProvider, TestablePreview {
                                                                                            isSpace: false)),
                                                   isLastAdmin: true,
                                                   isSelected: false),
+                                      mediaProvider: MediaProviderMock(configuration: .init())) { }
+            LeaveSpaceRoomDetailsCell(room: .init(spaceRoomProxy: SpaceRoomProxyMock(.init(id: "4",
+                                                                                           name: "My Room",
+                                                                                           isSpace: false)),
+                                                  isLastAdmin: true,
+                                                  isSelected: false),
+                                      hideSelection: true,
                                       mediaProvider: MediaProviderMock(configuration: .init())) { }
         }
     }
