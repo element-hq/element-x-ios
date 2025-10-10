@@ -329,6 +329,7 @@ private struct NavigationSplitCoordinatorView: View {
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.scenePhase) private var scenePhase
     
     @Bindable var navigationSplitCoordinator: NavigationSplitCoordinator
     
@@ -351,6 +352,12 @@ private struct NavigationSplitCoordinatorView: View {
         .fullScreenCover(item: $navigationSplitCoordinator.fullScreenCoverModule) { module in
             module.coordinator?.toPresentable()
                 .id(module.id)
+        }
+        .onChange(of: columnVisibility) { oldValue, _ in
+            // Preserve the current column visibility when backgrounding the app
+            if scenePhase == .background {
+                columnVisibility = oldValue
+            }
         }
         .ignoresSafeArea() // Necessary when embedded in a TabView on iPadOS otherwise there's a gap at the top (as of 18.5).
     }
