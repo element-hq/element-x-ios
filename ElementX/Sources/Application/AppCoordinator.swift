@@ -605,8 +605,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
     
     private func startAuthentication() {
         let encryptionKeyProvider = EncryptionKeyProvider()
+        let classicAppManager = makeClassicAppManager()
         let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
                                                           encryptionKeyProvider: encryptionKeyProvider,
+                                                          classicAppManager: classicAppManager,
                                                           appSettings: appSettings,
                                                           appHooks: appHooks)
         
@@ -626,6 +628,19 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
            let storedAppRoute = storedAppRoute.take() {
             coordinator.handleAppRoute(storedAppRoute, animated: false)
         }
+    }
+    
+    private func makeClassicAppManager() -> ClassicAppManagerProtocol? {
+        guard let classicAppGroupIdentifier = InfoPlistReader.main.classicAppGroupIdentifier,
+              let classicAppKeychainServiceIdentifier = InfoPlistReader.main.classicAppKeychainServiceIdentifier,
+              let classicAppKeychainAccessGroupIdentifier = InfoPlistReader.main.classicAppKeychainAccessGroupIdentifier else {
+            MXLog.info("Classic App IDs not set, manager disabled.")
+            return nil
+        }
+            
+        return ClassicAppManager(classicAppGroupIdentifier: classicAppGroupIdentifier,
+                                 classicAppKeychainServiceIdentifier: classicAppKeychainServiceIdentifier,
+                                 classicAppKeychainAccessGroupIdentifier: classicAppKeychainAccessGroupIdentifier)
     }
     
     private func runPostSessionSetupTasks() async {
@@ -660,6 +675,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             
             let authenticationService = AuthenticationService(userSessionStore: userSessionStore,
                                                               encryptionKeyProvider: EncryptionKeyProvider(),
+                                                              classicAppManager: makeClassicAppManager(),
                                                               appSettings: appSettings,
                                                               appHooks: appHooks)
             _ = await authenticationService.configure(for: userSession.clientProxy.homeserver, flow: .login)

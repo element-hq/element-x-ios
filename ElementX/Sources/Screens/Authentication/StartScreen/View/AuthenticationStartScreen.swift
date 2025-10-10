@@ -13,7 +13,7 @@ import SwiftUI
 struct AuthenticationStartScreen: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     
-    let context: AuthenticationStartScreenViewModel.Context
+    @Bindable var context: AuthenticationStartScreenViewModel.Context
     
     var body: some View {
         GeometryReader { geometry in
@@ -51,6 +51,7 @@ struct AuthenticationStartScreen: View {
         .background {
             AuthenticationStartScreenBackgroundImage()
         }
+        .alert(item: $context.alertInfo)
         .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
         }
