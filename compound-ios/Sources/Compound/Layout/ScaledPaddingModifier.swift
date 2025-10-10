@@ -37,7 +37,7 @@ private struct ScaledPaddingModifier: ViewModifier {
 
 struct ScaledPaddingModifier_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        VStack {
+        VStack(spacing: 8) {
             ForEach(DynamicTypeSize.allCases, id: \.self) { size in
                 userProfileButtonLabel
                     .dynamicTypeSize(size)
