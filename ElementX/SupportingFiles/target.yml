@@ -75,7 +75,9 @@ targets:
         ]
         appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
         baseBundleIdentifier: $(BASE_BUNDLE_IDENTIFIER)
+        legacyAppBundleIdentifier: $(LEGACY_APP_BUNDLE_IDENTIFIER)
         keychainAccessGroupIdentifier: $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
+        legacyKeychainAccessoGroupIdentifier: $(LEGACY_KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
         productionAppName: $(PRODUCTION_APP_NAME)
         ITSAppUsesNonExemptEncryption: false
         NSUserActivityTypes: [

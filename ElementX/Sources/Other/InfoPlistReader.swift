@@ -10,7 +10,9 @@ import Foundation
 struct InfoPlistReader {
     private enum Keys {
         static let appGroupIdentifier = "appGroupIdentifier"
+        static let legacyAppGroupIdentifier = "legacyAppGroupIdentifier"
         static let baseBundleIdentifier = "baseBundleIdentifier"
+        static let legacyAppBundleIdentifier = "legacyAppBundleIdentifier"
         static let keychainAccessGroupIdentifier = "keychainAccessGroupIdentifier"
         static let bundleShortVersion = "CFBundleShortVersionString"
         static let bundleDisplayName = "CFBundleDisplayName"
@@ -46,6 +48,10 @@ struct InfoPlistReader {
     var appGroupIdentifier: String {
         infoPlistValue(forKey: Keys.appGroupIdentifier)
     }
+    
+    var legacyAppGroupIdentifier: String? {
+        optionalInfoPlistValue(forKey: Keys.legacyAppGroupIdentifier)
+    }
 
     /// Base bundle identifier set in Info.plist of the target
     var baseBundleIdentifier: String {
@@ -65,6 +71,10 @@ struct InfoPlistReader {
     /// Bundle identifier of the target
     var bundleIdentifier: String {
         infoPlistValue(forKey: kCFBundleIdentifierKey as String)
+    }
+    
+    var legacyAppBundleIdentifier: String? {
+        optionalInfoPlistValue(forKey: Keys.legacyAppBundleIdentifier)
     }
 
     /// Bundle short version string of the target
@@ -121,6 +131,10 @@ struct InfoPlistReader {
             fatalError("Add \(key) into your target's Info.plst")
         }
         return result
+    }
+    
+    private func optionalInfoPlistValue<T>(forKey key: String) -> T? {
+        bundle.object(forInfoDictionaryKey: key) as? T
     }
     
     private func customSchemeForName(_ name: String) -> String {
