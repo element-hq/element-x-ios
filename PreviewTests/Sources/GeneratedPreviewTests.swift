@@ -84,6 +84,14 @@ extension PreviewTests {
     }
 
     @Test
+    func authenticationClassicAppBackupInstructionsView() async throws {
+        AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
+        for (index, preview) in AuthenticationClassicAppBackupInstructionsView_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
+    @Test
     func authenticationStartScreen() async throws {
         AppSettings.resetAllSettings() // Ensure this test's previews start with fresh settings.
         for (index, preview) in AuthenticationStartScreen_Previews._allPreviews.enumerated() {

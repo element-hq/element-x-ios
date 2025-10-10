@@ -43,6 +43,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "AudioRoomTimelineView_Previews")
     }
 
+    func testAuthenticationClassicAppBackupInstructionsView() async throws {
+        try await performAccessibilityAudit(named: "AuthenticationClassicAppBackupInstructionsView_Previews")
+    }
+
     func testAuthenticationStartScreen() async throws {
         try await performAccessibilityAudit(named: "AuthenticationStartScreen_Previews")
     }

@@ -46,6 +46,9 @@ struct AuthenticationStartScreen: View {
             AuthenticationStartScreenBackgroundImage()
         }
         .alert(item: $context.alertInfo)
+        .sheet(isPresented: $context.showClassicAppBackupInstructions) {
+            AuthenticationClassicAppBackupInstructionsView(context: context)
+        }
         .introspect(.window, on: .supportedVersions) { window in
             context.send(viewAction: .updateWindow(window))
         }

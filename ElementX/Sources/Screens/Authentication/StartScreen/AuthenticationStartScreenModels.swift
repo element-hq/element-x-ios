@@ -55,6 +55,7 @@ struct AuthenticationStartScreenViewState: BindableState {
 
 struct AuthenticationStartScreenViewStateBindings {
     var alertInfo: AlertInfo<AuthenticationStartScreenAlertType>?
+    var showClassicAppBackupInstructions = false
 }
 
 enum AuthenticationStartScreenAlertType {
