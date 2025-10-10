@@ -156,7 +156,7 @@ lane :config_nightly do |options|
   release_version = get_version_number(target: "ElementX")
 
   Dir.chdir ".." do
-    sh("swift run tools app-icon-banner Variants/Nightly/Resources/Nightly.xcassets/NightlyAppIcon.appiconset/AppIcon.png --banner-text '#{release_version} (#{build_number})'")
+    sh("swift run tools app-icon-banner Variants/Nightly/Resources/NightlyAppIcon.icon/Assets/Version.png --banner-text '#{release_version} (#{build_number})'")
   end
 end
 
