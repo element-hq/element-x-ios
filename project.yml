@@ -41,6 +41,9 @@ options:
     - Other
     - UITests
     - AccessibilityTests
+  fileTypes:
+    icon:
+      file: true # https://github.com/yonaskolb/XcodeGen/issues/1556
   postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
 
 settings:

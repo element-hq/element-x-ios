@@ -53,12 +53,13 @@ struct BannerImage: View {
             
             Text(text)
                 .foregroundColor(.white)
-                .font(.system(size: 140))
+                .font(.system(size: 135, weight: .medium, design: .rounded))
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
                 .padding(.horizontal, image.size.width * 0.1)
                 .frame(maxWidth: .infinity)
-                .background(Color.black.opacity(0.5))
+                .padding(.top, 10)
+                .padding(.bottom, 30)
         }
         .frame(width: image.size.width, height: image.size.height)
     }
