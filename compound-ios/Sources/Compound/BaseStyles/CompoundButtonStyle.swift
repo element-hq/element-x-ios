@@ -235,7 +235,7 @@ public struct CompoundButtonStyle_Previews: PreviewProvider, TestablePreview {
     }
     
     public static func buttons(_ size: CompoundButtonStyle.Size) -> some View {
-        VStack {
+        VStack(spacing: 8) {
             Button("Super") { }
                 .buttonStyle(.compound(.super, size: size))
             

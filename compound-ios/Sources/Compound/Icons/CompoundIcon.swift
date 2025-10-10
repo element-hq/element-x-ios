@@ -168,9 +168,9 @@ struct CompoundIcon_Previews: PreviewProvider, TestablePreview {
     }
     
     static var accessibilityIcons: some View {
-        VStack {
+        VStack(spacing: 8) {
             ForEach(DynamicTypeSize.allCases, id: \.self) { size in
-                HStack {
+                HStack(spacing: 8) {
                     CompoundIcon(\.userProfile, size: .xSmall, relativeTo: .compound.bodyXS)
                     CompoundIcon(\.userProfile, size: .small, relativeTo: .compound.bodySM)
                     CompoundIcon(\.userProfile, size: .medium, relativeTo: .compound.bodyLG)
@@ -219,7 +219,7 @@ struct CompoundIcon_Previews: PreviewProvider, TestablePreview {
     }
     
     static var buttons: some View {
-        VStack {
+        VStack(spacing: 8) {
             Button { } label: {
                 Label { Text("Body Large") } icon: {
                     CompoundIcon(\.userProfile, size: .medium, relativeTo: .compound.bodyLG)
