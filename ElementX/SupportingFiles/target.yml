@@ -75,7 +75,9 @@ targets:
         ]
         appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
         baseBundleIdentifier: $(BASE_BUNDLE_IDENTIFIER)
+        classicAppBundleIdentifier: $(CLASSIC_APP_BUNDLE_IDENTIFIER)
         keychainAccessGroupIdentifier: $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
+        classicAppKeychainAccessGroupIdentifier: $(CLASSIC_APP_KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
         productionAppName: $(PRODUCTION_APP_NAME)
         ITSAppUsesNonExemptEncryption: false
         NSUserActivityTypes: [
@@ -126,9 +128,11 @@ targets:
         com.apple.security.app-sandbox: true
         com.apple.security.application-groups:
         - $(APP_GROUP_IDENTIFIER)
+        - $(CLASSIC_APP_GROUP_IDENTIFIER)
         com.apple.security.network.client: true
         keychain-access-groups:
         - $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
+        - $(CLASSIC_APP_KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
 
     settings:
       base:

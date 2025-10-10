@@ -1180,6 +1180,7 @@
 		CDAE3A37D4DF136F9D07DB61 /* RoomChangeRolesScreenSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAF710CB1C31F8938EAA3A7D /* RoomChangeRolesScreenSection.swift */; };
 		CDCA8A559E098503DDE29477 /* AttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C6FBF97B6EED3D4FA5EFF /* AttributedStringBuilder.swift */; };
 		CE1694C7BB93C3311524EF28 /* Untranslated.strings in Resources */ = {isa = PBXBuildFile; fileRef = D2F7194F440375338F8E2487 /* Untranslated.strings */; };
+		CE31F46AD93512913808C911 /* AppMigrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE9FA537E7DA64DEF3DFFF8 /* AppMigrationManager.swift */; };
 		CE3B7FC34FB2C279AAA5EA01 /* AVMetadataMachineReadableCodeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3339B1DDB1341E833D2555BC /* AVMetadataMachineReadableCodeObject.swift */; };
 		CE4B342F9DD747CF4BEDB5AB /* TestablePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43F773904F87FF5ADFE4DD1 /* TestablePreview.swift */; };
 		CE6F237360875D3D573FD0B2 /* RoomNotificationSettingsProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD6B522BD637845AB9570B10 /* RoomNotificationSettingsProxy.swift */; };
@@ -2472,6 +2473,7 @@
 		AACE9B8E1A4AE79A7E2914F6 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		AAD01F7FC2BBAC7351948595 /* UserProfile+Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserProfile+Mock.swift"; sourceTree = "<group>"; };
 		AAD8234D0E9C9B12BF9F240B /* LocationAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAnnotation.swift; sourceTree = "<group>"; };
+		AAE9FA537E7DA64DEF3DFFF8 /* AppMigrationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMigrationManager.swift; sourceTree = "<group>"; };
 		AB07F03461023BC39C730922 /* PhishingDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhishingDetector.swift; sourceTree = "<group>"; };
 		AB26D5444A4A7E095222DE8B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
 		AB389C38BD41EB3E47092CFB /* AccessibilityTests.xctestplan */ = {isa = PBXFileReference; path = AccessibilityTests.xctestplan; sourceTree = "<group>"; };
@@ -3147,6 +3149,7 @@
 			children = (
 				4BF8D11D9ED15CFC373D0119 /* Analytics */,
 				7803E03F759061C948D66B7E /* AppLock */,
+				D9D6A4B5AA84B080DF6935F8 /* AppMigration */,
 				FCE7249621F507F34A8122FB /* Audio */,
 				AAFDD509929A0CCF8BCE51EB /* Authentication */,
 				0ED3F5C21537519389C07644 /* BugReport */,
@@ -6333,6 +6336,14 @@
 			path = Virtual;
 			sourceTree = "<group>";
 		};
+		D9D6A4B5AA84B080DF6935F8 /* AppMigration */ = {
+			isa = PBXGroup;
+			children = (
+				AAE9FA537E7DA64DEF3DFFF8 /* AppMigrationManager.swift */,
+			);
+			path = AppMigration;
+			sourceTree = "<group>";
+		};
 		DAB7DC51866A6D1B51BDC3A2 /* RoomChangePermissionsScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -7884,6 +7895,7 @@
 				7A8B264506D3DDABC01B4EEB /* AppMediator.swift in Sources */,
 				A36AD251013402EDBD666C75 /* AppMediatorMock.swift in Sources */,
 				4BBF6C8E3EFC944B55231B19 /* AppMediatorProtocol.swift in Sources */,
+				CE31F46AD93512913808C911 /* AppMigrationManager.swift in Sources */,
 				355B11D08CE0CEF97A813236 /* AppRoutes.swift in Sources */,
 				D304343515CE0464C5089537 /* AppSettings.swift in Sources */,
 				4EAC427267424192964B16B3 /* AppSettingsHook.swift in Sources */,
@@ -9382,6 +9394,9 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CLASSIC_APP_BUNDLE_IDENTIFIER = im.vector.app;
+				CLASSIC_APP_GROUP_IDENTIFIER = group.im.vector;
+				CLASSIC_APP_KEYCHAIN_ACCESS_GROUP_IDENTIFIER = "$(DEVELOPMENT_TEAM).$(CLASSIC_APP_BUNDLE_IDENTIFIER).keychain.shared";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -9452,6 +9467,9 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CLASSIC_APP_BUNDLE_IDENTIFIER = im.vector.app;
+				CLASSIC_APP_GROUP_IDENTIFIER = group.im.vector;
+				CLASSIC_APP_KEYCHAIN_ACCESS_GROUP_IDENTIFIER = "$(DEVELOPMENT_TEAM).$(CLASSIC_APP_BUNDLE_IDENTIFIER).keychain.shared";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
