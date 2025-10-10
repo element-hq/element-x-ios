@@ -27,19 +27,19 @@ public struct ListRow<Icon: View, DetailsIcon: View, CustomContent: View, Select
     let label: ListRowLabel<Icon>
     let details: ListRowDetails<DetailsIcon>?
     
-    public enum Kind<CustomContent: View, SelectionValue: Hashable> {
+    public enum Kind<CustomView: View, Selection: Hashable> {
         case label
         case button(action: () -> Void)
         case navigationLink(action: () -> Void)
-        case picker(selection: Binding<SelectionValue>, items: [(title: String, tag: SelectionValue)])
+        case picker(selection: Binding<Selection>, items: [(title: String, tag: Selection)])
         case toggle(Binding<Bool>)
-        case inlinePicker(selection: Binding<SelectionValue>, items: [(title: String, tag: SelectionValue)])
+        case inlinePicker(selection: Binding<Selection>, items: [(title: String, tag: Selection)])
         case selection(isSelected: Bool, action: () -> Void)
         case multiSelection(isSelected: Bool, action: () -> Void)
         case textField(text: Binding<String>, axis: Axis?)
         case secureField(text: Binding<String>)
         
-        case custom(() -> CustomContent)
+        case custom(() -> CustomView)
         
         public static func textField(text: Binding<String>) -> Self {
             .textField(text: text, axis: nil)
