@@ -54,7 +54,7 @@ struct SwipeRightAction<Label: View>: ViewModifier {
             content
                 .offset(x: xOffset, y: 0.0)
                 .animation(.interactiveSpring().speed(0.5), value: xOffset)
-                .gesture(PanGesture { gesture in
+                .gesture(PanGestureRepresentable { gesture in
                     switch gesture.state {
                     case .ended, .cancelled, .failed:
                         if xOffset > actionThreshold {
@@ -204,7 +204,7 @@ struct SwipeRightAction_Previews: PreviewProvider, TestablePreview {
 
 // Fixes the issue on iOS 18 where DragGesture conflicts with the scroll view
 // https://github.com/feedback-assistant/reports/issues/542#issuecomment-2581322968
-private struct PanGesture: UIGestureRecognizerRepresentable {
+private struct PanGestureRepresentable: UIGestureRecognizerRepresentable {
     var handle: (UIPanGestureRecognizer) -> Void
     
     func makeCoordinator(converter: CoordinateSpaceConverter) -> Coordinator { .init() }
