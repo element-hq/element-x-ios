@@ -15,6 +15,49 @@ struct LongPressWithFeedback: ViewModifier {
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
     
     func body(content: Content) -> some View {
+        if #available(iOS 18, *) {
+            mainContent(content: content)
+                .gesture(LongPressGestureRepresentable { gesture in
+                    switch gesture.state {
+                    case .ended, .cancelled, .failed:
+                        handleLongPress(isPressing: false)
+                    default:
+                        handleLongPress(isPressing: true)
+                    }
+                })
+        } else {
+            mainContent(content: content)
+                .onLongPressGesture(minimumDuration: 0.25) { } onPressingChanged: { isPressing in
+                    handleLongPress(isPressing: isPressing)
+                }
+        }
+    }
+    
+    // The gesture's minimum duration doesn't actually invoke the perform block when elapsed (thus
+    // the implementation below) but it does cancel other system gestures e.g. swipe to reply
+    private func handleLongPress(isPressing: Bool) {
+        isLongPressing = isPressing
+        
+        guard isLongPressing else {
+            triggerTask?.cancel()
+            return
+        }
+        
+        feedbackGenerator.prepare()
+        
+        triggerTask = Task {
+            // The wait time needs to be at least 0.5 seconds or the long press gesture will take precedence over long pressing links.
+            try? await Task.sleep(for: .seconds(0.5))
+            
+            if Task.isCancelled { return }
+            
+            action()
+            feedbackGenerator.impactOccurred()
+        }
+    }
+    
+    @ViewBuilder
+    private func mainContent(content: Content) -> some View {
         content
             .compositingGroup() // Apply the shadow to the view as a whole.
             .shadow(color: .black.opacity(isLongPressing ? 0.2 : 0.0), radius: isLongPressing ? 12 : 0)
@@ -23,28 +66,6 @@ struct LongPressWithFeedback: ViewModifier {
                          y: isLongPressing ? 1.05 : 1)
             .animation(.spring(response: 0.7).delay(isLongPressing ? 0.1 : 0).disabledDuringTests(),
                        value: isLongPressing)
-            // The minimum duration here doesn't actually invoke the perform block when elapsed (thus
-            // the implementation below) but it does cancel other system gestures e.g. swipe to reply
-            .onLongPressGesture(minimumDuration: 0.25) { } onPressingChanged: { isPressing in
-                isLongPressing = isPressing
-                
-                guard isPressing else {
-                    triggerTask?.cancel()
-                    return
-                }
-                
-                feedbackGenerator.prepare()
-                
-                triggerTask = Task {
-                    // The wait time needs to be at least 0.5 seconds or the long press gesture will take precedence over long pressing links.
-                    try? await Task.sleep(for: .seconds(0.5))
-                    
-                    if Task.isCancelled { return }
-
-                    action()
-                    feedbackGenerator.impactOccurred()
-                }
-            }
     }
 }
 
@@ -98,6 +119,37 @@ struct LongPressWithFeedback_Previews: PreviewProvider, TestablePreview {
                 .bubbleBackground()
                 .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 12))
                 .onTapGesture { /* Fix long press gesture blocking the scroll view */ }
+        }
+    }
+}
+
+// Fixes the issue on iOS 18 where LongPress conflicts with the scroll view
+// https://github.com/feedback-assistant/reports/issues/542#issuecomment-2581322968
+private struct LongPressGestureRepresentable: UIGestureRecognizerRepresentable {
+    var handle: (UILongPressGestureRecognizer) -> Void
+    
+    func makeCoordinator(converter: CoordinateSpaceConverter) -> Coordinator { .init() }
+    
+    func makeUIGestureRecognizer(context: Context) -> UILongPressGestureRecognizer {
+        let gesture = UILongPressGestureRecognizer()
+        gesture.minimumPressDuration = 0.25
+        gesture.delegate = context.coordinator
+        gesture.isEnabled = true
+        return gesture
+    }
+    
+    func handleUIGestureRecognizerAction(_ recognizer: UILongPressGestureRecognizer, context: Context) {
+        handle(recognizer)
+    }
+        
+    class Coordinator: NSObject, UIGestureRecognizerDelegate {
+        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                               shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+            false
+        }
+        
+        func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+            true
         }
     }
 }
