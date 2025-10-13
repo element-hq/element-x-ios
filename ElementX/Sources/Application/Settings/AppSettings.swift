@@ -65,6 +65,7 @@ final class AppSettings {
         case nextGenHTMLParserEnabled
         case linkPreviewsEnabled
         case latestEventSorterEnabled
+        case focusEventOnNotificationTapEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -400,6 +401,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.developerOptionsEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
     var developerOptionsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.focusEventOnNotificationTapEnabled, defaultValue: isDevelopmentBuild, storageType: .userDefaults(store))
+    var focusEventOnNotificationTapEnabled
 }
 
 extension AppSettings: CommonSettingsProtocol { }
