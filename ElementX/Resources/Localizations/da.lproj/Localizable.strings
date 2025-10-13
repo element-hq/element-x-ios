@@ -72,6 +72,7 @@
 "action_decline" = "Afvis";
 "action_decline_and_block" = "Afvis og blokér";
 "action_delete_poll" = "Slet afstemning";
+"action_deselect_all" = "Fravælg alle";
 "action_disable" = "Deaktiver";
 "action_discard" = "Kassér";
 "action_dismiss" = "Afvis";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Prøv at dekryptere igen";
 "action_save" = "Gem";
 "action_search" = "Søg";
+"action_select_all" = "Vælg alle";
 "action_send" = "Send";
 "action_send_edited_message" = "Send redigeret besked";
 "action_send_message" = "Send besked";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Denne måned";
 "common_decryption_error" = "Fejl under dekryptering";
 "common_description" = "Beskrivelse";
-"common_deselect_all" = "Fravælg alle";
 "common_developer_options" = "Indstillinger for udviklere";
 "common_device_id" = "Enheds-ID";
 "common_direct_chat" = "Direkte samtale";
@@ -281,7 +282,6 @@
 "common_search_results" = "Søgeresultater";
 "common_security" = "Sikkerhed";
 "common_seen_by" = "Set af";
-"common_select_all" = "Vælg alle";
 "common_send_to" = "Send til";
 "common_sending" = "Sender...";
 "common_sending_failed" = "Afsendelse mislykkedes";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Finde alle rum, du kan deltage i, i dine klynger";
 "screen_space_announcement_item4" = "Deltage i offentlige klynger";
 "screen_space_announcement_item5" = "Forlade de klynger, du har tilsluttet dig";
-"screen_space_announcement_notice" = "Oprettelse og administration af klynger kommer snart.";
+"screen_space_announcement_notice" = "Filtrering, oprettelse og administration af klynger kommer snart.";
 "screen_space_announcement_subtitle" = "Velkommen til betaversionen af Klynger! Med denne første version kan du:";
 "screen_space_announcement_title" = "Introduktion til Klynger";
 "screen_space_list_description" = "Klynger, du har oprettet eller deltager i";

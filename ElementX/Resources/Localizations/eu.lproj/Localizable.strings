@@ -72,6 +72,7 @@
 "action_decline" = "Ukatu";
 "action_decline_and_block" = "Baztertu eta blokeatu";
 "action_delete_poll" = "Ezabatu inkesta";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "Desgaitu";
 "action_discard" = "Baztertu";
 "action_dismiss" = "Baztertu";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Saiatu berriro deszifratzen";
 "action_save" = "Gorde";
 "action_search" = "Bilatu";
+"action_select_all" = "Select all";
 "action_send" = "Bidali";
 "action_send_edited_message" = "Bidali editatutako mezua";
 "action_send_message" = "Bidali mezua";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Hilabete hau";
 "common_decryption_error" = "Deszifratze-errorea";
 "common_description" = "Description";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Garapen aukerak";
 "common_device_id" = "Gailuaren IDa";
 "common_direct_chat" = "Txata zuzena";
@@ -281,7 +282,6 @@
 "common_search_results" = "Bilaketaren emaitzak";
 "common_security" = "Segurtasuna";
 "common_seen_by" = "Ikusi du";
-"common_select_all" = "Select all";
 "common_send_to" = "Bidali";
 "common_sending" = "Bidaltzen…";
 "common_sending_failed" = "Bidalketak huts egin du";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";

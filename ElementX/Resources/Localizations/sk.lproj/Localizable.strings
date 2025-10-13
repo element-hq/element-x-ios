@@ -72,6 +72,7 @@
 "action_decline" = "Odmietnuť";
 "action_decline_and_block" = "Odmietnuť a zablokovať";
 "action_delete_poll" = "Odstrániť anketu";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "Vypnúť";
 "action_discard" = "Zahodiť";
 "action_dismiss" = "Zamietnuť";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Opakovať dešifrovanie";
 "action_save" = "Uložiť";
 "action_search" = "Hľadať";
+"action_select_all" = "Select all";
 "action_send" = "Odoslať";
 "action_send_edited_message" = "Odoslať upravenú správa";
 "action_send_message" = "Odoslať správu";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Tento mesiac";
 "common_decryption_error" = "Chyba dešifrovania";
 "common_description" = "Description";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Možnosti pre vývojárov";
 "common_device_id" = "ID zariadenia";
 "common_direct_chat" = "Priama konverzácia";
@@ -281,7 +282,6 @@
 "common_search_results" = "Výsledky hľadania";
 "common_security" = "Bezpečnosť";
 "common_seen_by" = "Videné";
-"common_select_all" = "Select all";
 "common_send_to" = "Odoslať";
 "common_sending" = "Odosiela sa…";
 "common_sending_failed" = "Odoslanie zlyhalo";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Priestory, ktoré ste vytvorili alebo ku ktorým ste sa pripojili.";

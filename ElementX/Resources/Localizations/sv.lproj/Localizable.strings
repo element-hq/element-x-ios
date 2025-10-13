@@ -72,6 +72,7 @@
 "action_decline" = "Neka";
 "action_decline_and_block" = "Avvisa och blockera";
 "action_delete_poll" = "Radera omröstning";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "Inaktivera";
 "action_discard" = "Kassera";
 "action_dismiss" = "Avfärda";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Försök att avkryptera igen";
 "action_save" = "Spara";
 "action_search" = "Sök";
+"action_select_all" = "Select all";
 "action_send" = "Skicka";
 "action_send_edited_message" = "Skicka redigerat message";
 "action_send_message" = "Skicka meddelande";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Denna månad";
 "common_decryption_error" = "Avkrypteringsfel";
 "common_description" = "Description";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Utvecklaralternativ";
 "common_device_id" = "Enhets-ID";
 "common_direct_chat" = "Direktchatt";
@@ -281,7 +282,6 @@
 "common_search_results" = "Sökresultat";
 "common_security" = "Säkerhet";
 "common_seen_by" = "Sett av";
-"common_select_all" = "Select all";
 "common_send_to" = "Skicka till";
 "common_sending" = "Skickar …";
 "common_sending_failed" = "Misslyckades att skicka";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Utrymmen som du har skapat eller gått med i.";
@@ -1135,7 +1135,7 @@
 "screen_server_confirmation_title_picker_mode" = "Välj kontoleverantör";
 "screen_server_confirmation_title_register" = "Du är på väg att skapa ett konto på %1$@";
 "screen_session_verification_cancelled_subtitle" = "Något verkar inte stämma. Antingen gick tidsgränsen för begäran ut eller så avvisades begäran.";
-"screen_session_verification_compare_emojis_subtitle" = "Bekräfta att emojierna nedan matchar de som visas på din andra session.";
+"screen_session_verification_compare_emojis_subtitle" = "Bekräfta att emojierna nedan matchar de som visas på din andra enhet.";
 "screen_session_verification_compare_emojis_title" = "Jämför emojis";
 "screen_session_verification_compare_emojis_user_subtitle" = "Bekräfta att emojierna nedan matchar de som visas på den andra användarens enhet.";
 "screen_session_verification_compare_numbers_subtitle" = "Bekräfta att siffrorna nedan matchar de som visas på din andra session.";

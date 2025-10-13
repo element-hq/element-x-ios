@@ -72,6 +72,7 @@
 "action_decline" = "Gwrthod";
 "action_decline_and_block" = "Gwrthod a rhwystro";
 "action_delete_poll" = "Dileu Pleidlais";
+"action_deselect_all" = "Dad ddewis y cyfan";
 "action_disable" = "Analluogi";
 "action_discard" = "Dileu";
 "action_dismiss" = "Cau";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Cynnig arall ar ddadgryptio";
 "action_save" = "Cadw";
 "action_search" = "Chwilio";
+"action_select_all" = "Dewis y cyfan";
 "action_send" = "Anfon";
 "action_send_edited_message" = "Anfon neges wedi'i golygu";
 "action_send_message" = "Anfonwch neges";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Y mis hwn";
 "common_decryption_error" = "Gwall dadgryptio";
 "common_description" = "Disgrifiad";
-"common_deselect_all" = "Dad ddewis y cyfan";
 "common_developer_options" = "Dewisiadau datblygwr";
 "common_device_id" = "ID dyfais";
 "common_direct_chat" = "Sgwrs uniongyrchol";
@@ -281,7 +282,6 @@
 "common_search_results" = "Canlyniadau chwilio";
 "common_security" = "Diogelwch";
 "common_seen_by" = "Wedi'i weld gan";
-"common_select_all" = "Dewis y cyfan";
 "common_send_to" = "Anfon at";
 "common_sending" = "Yn anfon…";
 "common_sending_failed" = "Methodd anfon";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Gofodau rydych wedi'u creu neu wedi ymuno â nhw.";

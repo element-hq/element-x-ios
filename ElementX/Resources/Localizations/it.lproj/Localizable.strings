@@ -72,6 +72,7 @@
 "action_decline" = "Rifiuta";
 "action_decline_and_block" = "Rifiuta e blocca";
 "action_delete_poll" = "Elimina sondaggio";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "Disabilita";
 "action_discard" = "Annulla";
 "action_dismiss" = "Chiudi";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Riprova la decrittazione";
 "action_save" = "Salva";
 "action_search" = "Ricerca";
+"action_select_all" = "Select all";
 "action_send" = "Invia";
 "action_send_edited_message" = "Invia messaggio modificato";
 "action_send_message" = "Invia messaggio";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Questo mese";
 "common_decryption_error" = "Errore di decrittazione";
 "common_description" = "Description";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Opzioni sviluppatore";
 "common_device_id" = "ID dispositivo";
 "common_direct_chat" = "Conversazione diretta";
@@ -281,7 +282,6 @@
 "common_search_results" = "Risultati di ricerca";
 "common_security" = "Sicurezza";
 "common_seen_by" = "Visto da";
-"common_select_all" = "Select all";
 "common_send_to" = "Invia a";
 "common_sending" = "Invio in corso…";
 "common_sending_failed" = "Invio fallito";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spazi che hai creato o a cui hai aderito.";

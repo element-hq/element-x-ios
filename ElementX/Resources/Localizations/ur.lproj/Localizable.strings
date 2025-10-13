@@ -72,6 +72,7 @@
 "action_decline" = "مسترد کریں";
 "action_decline_and_block" = "Decline and block";
 "action_delete_poll" = "رائے شماری حذف کریں";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "غیر فعال کریں";
 "action_discard" = "رد کریں";
 "action_dismiss" = "Dismiss";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "رمزکشائی کی پھر کوشش کریں";
 "action_save" = "محفوظ کریں";
 "action_search" = "تلاش کریں";
+"action_select_all" = "Select all";
 "action_send" = "بھیجیں";
 "action_send_edited_message" = "Send edited message";
 "action_send_message" = "پیغام بھیجیں";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "This month";
 "common_decryption_error" = "رمزکشائی کی خرابی";
 "common_description" = "Description";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "مطور اختیارات";
 "common_device_id" = "Device ID";
 "common_direct_chat" = "براہ راست گفتگو";
@@ -281,7 +282,6 @@
 "common_search_results" = "تلاش کے نتائج";
 "common_security" = "حفاظت";
 "common_seen_by" = "دیکھا گیا بہ";
-"common_select_all" = "Select all";
 "common_send_to" = "بھیجیں تا";
 "common_sending" = "بھیج رہا ہے…";
 "common_sending_failed" = "بھیجنا ناکام";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";

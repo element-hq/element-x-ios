@@ -72,6 +72,7 @@
 "action_decline" = "Отхвърляне";
 "action_decline_and_block" = "Отхвърляне и блокиране";
 "action_delete_poll" = "Изтриване на анкетата";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "Деактивиране";
 "action_discard" = "Discard";
 "action_dismiss" = "Dismiss";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Повторен опит за разшифроване";
 "action_save" = "Запазване";
 "action_search" = "Търсене";
+"action_select_all" = "Select all";
 "action_send" = "Изпращане";
 "action_send_edited_message" = "Send edited message";
 "action_send_message" = "Изпращане на съобщение";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Този месец";
 "common_decryption_error" = "Грешка при разшифроване";
 "common_description" = "Описание";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Опции за разработчици";
 "common_device_id" = "Device ID";
 "common_direct_chat" = "Директен чат";
@@ -281,7 +282,6 @@
 "common_search_results" = "Резултати от търсенето";
 "common_security" = "Защита";
 "common_seen_by" = "Видяно от";
-"common_select_all" = "Select all";
 "common_send_to" = "Send to";
 "common_sending" = "Изпраща се…";
 "common_sending_failed" = "Изпращането е неуспешно";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";
