@@ -35,7 +35,7 @@ enum RoomFlowCoordinatorEntryPoint: Hashable {
     /// The flow will start by showing the room directly.
     case room
     /// The flow will start by showing the room, focussing on the supplied event ID.
-    case eventID(String)
+    case eventID(String, threadState: ThreadState = .unknown)
     /// The flow will start by showing the room's details.
     case roomDetails
     /// An external media share request
@@ -153,11 +153,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: EventUserInfo(animated: animated))
             }
-        case .event(let eventID, let roomID, let via):
+        case .event(let eventID, let threadState, let roomID, let via):
             Task {
                 await handleRoomRoute(roomID: roomID,
                                       via: via,
-                                      presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false)),
+                                      presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false), threadState: threadState),
                                       animated: animated)
             }
         case .childEvent(let eventID, let roomID, let via):
@@ -270,24 +270,35 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 await storeAndSubscribeToRoomProxy(roomProxy)
                 
-                guard case let .eventFocus(focusEvent) = presentationAction else {
+                guard case let .eventFocus(focusEvent, threadState) = presentationAction else {
                     // If is not a focus event just handle the presentation action directly in `presentRoom`
                     stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
                     return
                 }
                 
-                // Otherwise check if the focussed event exists to handle a possible error or theaded event.
-                switch await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID) {
-                case .success(let event):
-                    if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
+                if flowParameters.appSettings.threadsEnabled {
+                    switch threadState {
+                    case .unknown:
+                        switch await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID) {
+                        case .success(let event):
+                            if let threadRootEventID = event.threadRootEventId() {
+                                stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: threadRootEventID, shouldSetPin: false))), userInfo: EventUserInfo(animated: animated))
+                                stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focusEvent.eventID), userInfo: EventUserInfo(animated: false))
+                            } else {
+                                stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
+                            }
+                        case .failure:
+                            showErrorIndicator()
+                            stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
+                        }
+                    case .unthreaded:
+                        stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
+                    case .threaded(let threadRootEventID):
                         stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: threadRootEventID, shouldSetPin: false))), userInfo: EventUserInfo(animated: animated))
                         stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focusEvent.eventID), userInfo: EventUserInfo(animated: false))
-                    } else {
-                        stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
                     }
-                case .failure:
-                    showErrorIndicator()
-                    stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
+                } else {
+                    stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
                 }
             }
         default:
@@ -544,7 +555,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 // The room is already on the stack, no need to present it again
                 
                 switch presentationAction {
-                case .eventFocus(let focusedEvent):
+                case .eventFocus(let focusedEvent, _):
                     roomScreenCoordinator?.focusOnEvent(focusedEvent)
                 case .share(.mediaFiles(_, let mediaFiles)):
                     stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: mediaFiles.map(\.url)),
@@ -1555,8 +1566,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         switch entryPoint {
         case .room:
             coordinator.handleAppRoute(.room(roomID: roomID, via: via), animated: true)
-        case .eventID(let eventID):
-            coordinator.handleAppRoute(.event(eventID: eventID, roomID: roomID, via: via), animated: true)
+        case .eventID(let eventID, let threadState):
+            coordinator.handleAppRoute(.event(eventID: eventID, threadState: threadState, roomID: roomID, via: via), animated: true)
         case .roomDetails:
             coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: true)
         case .share(let payload):

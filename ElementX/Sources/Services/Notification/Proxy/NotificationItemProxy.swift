@@ -76,6 +76,10 @@ struct NotificationItemProxy: NotificationItemProxyProtocol {
         }
         return nil
     }
+    
+    var threadRootEventID: String? {
+        notificationItem.threadId
+    }
 }
 
 struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
@@ -108,4 +112,6 @@ struct EmptyNotificationItemProxy: NotificationItemProxyProtocol {
     var roomJoinedMembers: Int { 0 }
     
     var hasMention: Bool { false }
+    
+    var threadRootEventID: String? { nil }
 }

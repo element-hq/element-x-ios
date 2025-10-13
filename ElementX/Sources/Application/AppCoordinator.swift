@@ -261,7 +261,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 } else {
                     handleAppRoute(.childRoomAlias(alias))
                 }
-            case .event(let eventID, let roomID, let via):
+            case .event(let eventID, _, let roomID, let via):
                 if isExternalURL {
                     handleAppRoute(route)
                 } else {
@@ -360,7 +360,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
             handleAppRoute(.room(roomID: roomID, via: []))
         } else if appSettings.focusEventOnNotificationTapEnabled, let eventID = content.eventID {
-            handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []))
+            let threadState: ThreadState = if let threadRootEventID = content.threadRootEventID {
+                .threaded(threadRootEventID: threadRootEventID)
+            } else {
+                .unthreaded
+            }
+            handleAppRoute(.event(eventID: eventID, threadState: threadState, roomID: roomID, via: []))
         } else {
             handleAppRoute(.room(roomID: roomID, via: []))
         }

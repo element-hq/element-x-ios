@@ -14,6 +14,7 @@ enum NotificationConstants {
         static let unreadCount = "unread_count"
         static let pusherNotificationClientIdentifier = "pusher_notification_client_identifier"
         static let receiverIdentifier = "receiver_id"
+        static let threadRootEventID = "thread_root_event_id"
     }
 
     enum Category {

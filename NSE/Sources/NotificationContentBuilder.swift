@@ -27,6 +27,7 @@ struct NotificationContentBuilder {
                  mediaProvider: MediaProviderProtocol) async {
         notificationContent.receiverID = notificationItem.receiverID
         notificationContent.roomID = notificationItem.roomID
+        notificationContent.threadRootEventID = notificationItem.threadRootEventID
         
         switch notificationItem.event {
         case .timeline(let event):

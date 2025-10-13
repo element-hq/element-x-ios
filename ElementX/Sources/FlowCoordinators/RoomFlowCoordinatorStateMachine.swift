@@ -22,12 +22,12 @@ extension RoomFlowCoordinator {
     }
     
     enum PresentationAction: Hashable {
-        case eventFocus(FocusEvent)
+        case eventFocus(FocusEvent, threadState: ThreadState = .unknown)
         case share(ShareExtensionPayload)
         
         var focusedEvent: FocusEvent? {
             switch self {
-            case .eventFocus(let focusEvent):
+            case .eventFocus(let focusEvent, _):
                 focusEvent
             default:
                 nil
