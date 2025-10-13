@@ -72,6 +72,7 @@
 "action_decline" = "Refuzați";
 "action_decline_and_block" = "Refuzați și blocați";
 "action_delete_poll" = "Ștergeți sondajul";
+"action_deselect_all" = "Deselectați tot";
 "action_disable" = "Dezactivați";
 "action_discard" = "Renunţare";
 "action_dismiss" = "Renunțați";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Reîncercați decriptarea";
 "action_save" = "Salvați";
 "action_search" = "Căutați";
+"action_select_all" = "Selectați tot";
 "action_send" = "Trimiteți";
 "action_send_edited_message" = "Trimiteți mesajul editat";
 "action_send_message" = "Trimiteți mesajul";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Luna aceasta";
 "common_decryption_error" = "Eroare de decriptare";
 "common_description" = "Descriere";
-"common_deselect_all" = "Deselectați tot";
 "common_developer_options" = "Opțiuni programator";
 "common_device_id" = "ID-ul dispozitivului";
 "common_direct_chat" = "Chat direct";
@@ -281,7 +282,6 @@
 "common_search_results" = "Rezultatele căutării";
 "common_security" = "Securitate";
 "common_seen_by" = "Văzut de";
-"common_select_all" = "Selectați tot";
 "common_send_to" = "Trimiteți către";
 "common_sending" = "Se trimite…";
 "common_sending_failed" = "Trimiterea a eșuat";

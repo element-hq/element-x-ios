@@ -33,7 +33,7 @@
 "a11y_session_verification_time_limited_action_required" = "Tidsbegrenset handling kreves, du har ett minutt på deg til å verifisere";
 "a11y_show_password" = "Vis passord";
 "a11y_start_call" = "Start en samtale";
-"a11y_tombstoned_room" = "Tombstoned room";
+"a11y_tombstoned_room" = "Deaktivert rom";
 "a11y_user_menu" = "Brukermeny";
 "a11y_view_avatar" = "Vis avatar";
 "a11y_view_details" = "Vis detaljer";
@@ -72,6 +72,7 @@
 "action_decline" = "Avslå";
 "action_decline_and_block" = "Avslå og blokker";
 "action_delete_poll" = "Slett avstemning";
+"action_deselect_all" = "Velg bort alle";
 "action_disable" = "Deaktiver";
 "action_discard" = "Forkast";
 "action_dismiss" = "Avvis";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Prøv dekryptering på nytt";
 "action_save" = "Lagre";
 "action_search" = "Søke";
+"action_select_all" = "Velg alle";
 "action_send" = "Sende";
 "action_send_edited_message" = "Send redigert melding";
 "action_send_message" = "Send melding";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Denne måneden";
 "common_decryption_error" = "Dekrypteringsfeil";
 "common_description" = "Beskrivelse";
-"common_deselect_all" = "Velg bort alle";
 "common_developer_options" = "Alternativer for utviklere";
 "common_device_id" = "Enhets-ID";
 "common_direct_chat" = "Direkte chat";
@@ -281,7 +282,6 @@
 "common_search_results" = "Søkeresultater";
 "common_security" = "Sikkerhet";
 "common_seen_by" = "Sett av";
-"common_select_all" = "Velg alle";
 "common_send_to" = "Sendt til";
 "common_sending" = "Sender...";
 "common_sending_failed" = "Kunne ikke sende";
@@ -339,7 +339,7 @@
 "common_you" = "Du";
 "common.add_account" = "Legg til en konto";
 "common.add_another_account" = "Legg til en annen konto";
-"common.no_space_name" = "No space name";
+"common.no_space_name" = "Ikke noe områdenavn";
 "common.select_account" = "Velg en konto";
 "common_unable_to_decrypt_insecure_device" = "Sendt fra en usikker enhet";
 "common_unable_to_decrypt_verification_violation" = "Avsenderens verifiserte identitet ble tilbakestilt";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Oppdag alle rom du kan bli med i i dine områder";
 "screen_space_announcement_item4" = "Bli med i offentlige områder";
 "screen_space_announcement_item5" = "Forlat områder du har blitt med i";
-"screen_space_announcement_notice" = "Oppretting og administrasjon av områder kommer snart.";
+"screen_space_announcement_notice" = "Oppretting, filtrering og administrasjon av områder kommer snart.";
 "screen_space_announcement_subtitle" = "Velkommen til betaversjonen av Områder! Med denne første versjonen kan du:";
 "screen_space_announcement_title" = "Vi introduserer Områder";
 "screen_space_list_description" = "Områder du har opprettet eller blitt med i.";

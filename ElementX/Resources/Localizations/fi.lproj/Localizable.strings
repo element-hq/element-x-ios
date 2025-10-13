@@ -72,6 +72,7 @@
 "action_decline" = "Hylkää";
 "action_decline_and_block" = "Hylkää ja estä";
 "action_delete_poll" = "Poista kysely";
+"action_deselect_all" = "Poista kaikki valinnat";
 "action_disable" = "Poista käytöstä";
 "action_discard" = "Hylkää";
 "action_dismiss" = "Sulje";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Yritä salauksen purkamista uudelleen";
 "action_save" = "Tallenna";
 "action_search" = "Hae";
+"action_select_all" = "Valitse kaikki";
 "action_send" = "Lähetä";
 "action_send_edited_message" = "Lähetä muokattu viesti";
 "action_send_message" = "Lähetä viesti";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Tässä kuussa";
 "common_decryption_error" = "Salauksen purkuvirhe";
 "common_description" = "Kuvaus";
-"common_deselect_all" = "Poista kaikki valinnat";
 "common_developer_options" = "Kehittäjän asetukset";
 "common_device_id" = "Laitteen tunnus";
 "common_direct_chat" = "Yksityinen keskustelu";
@@ -281,7 +282,6 @@
 "common_search_results" = "Hakutulokset";
 "common_security" = "Turvallisuus";
 "common_seen_by" = "Nähneet henkilöt";
-"common_select_all" = "Valitse kaikki";
 "common_send_to" = "Jaa";
 "common_sending" = "Lähetetään…";
 "common_sending_failed" = "Lähetys epäonnistui";
@@ -534,7 +534,7 @@
 "screen_join_room_decline_and_block_alert_confirmation" = "Kyllä, hylkää ja estä";
 "screen_join_room_decline_and_block_alert_message" = "Oletko varma, että haluat kieltäytyä kutsusta liittyä tähän huoneeseen? Tämä estää myös käyttäjää %1$@ ottamasta sinuun yhteyttä tai kutsumasta sinua huoneisiin.";
 "screen_join_room_decline_and_block_alert_title" = "Hylkää kutsu ja estä";
-"screen_join_room_invited_by" = "Invited by";
+"screen_join_room_invited_by" = "Kutsuja";
 "screen_join_room_knock_message_characters_count" = "%1$d merkkiä käytetty, %2$d merkkiä sallittu";
 "screen_join_room_knock_message_description" = "Viesti (valinnainen)";
 "screen_join_room_knock_sent_description" = "Saat kutsun liittyä huoneeseen, jos pyyntösi hyväksytään.";
@@ -570,7 +570,7 @@
 "screen_labs_header_description" = "Kokeile uusimpia kehitteillä olevia ideoitamme. Nämä ominaisuudet eivät ole vielä valmiita; ne voivat olla epävakaita ja muuttua.";
 "screen_labs_header_title" = "Kokeilunhaluinen olo?";
 "screen_labs_title" = "Labrat";
-"screen_leave_space_last_admin_info" = "%1$@ (Admin)";
+"screen_leave_space_last_admin_info" = "%1$@ (Ylläpitäjä)";
 "screen_leave_space_subtitle" = "Tämä poistaa sinut myös kaikista tämän tilan huoneista.";
 "screen_leave_space_subtitle_last_admin" = "Sinun on valittava tälle tilalle toinen ylläpitäjä ennen kuin voit poistua.";
 "screen_leave_space_subtitle_only_last_admin" = "Sinua ei poisteta seuraavista huoneista, koska olet ainoa ylläpitäjä:";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Löytää kaikki huoneet, joihin voit liittyä tiloissasi";
 "screen_space_announcement_item4" = "Liittyä julkisiin tiloihin";
 "screen_space_announcement_item5" = "Poistua mistä tahansa tilasta, johon olet liittynyt";
-"screen_space_announcement_notice" = "Tilojen luominen ja hallinta on tulossa pian.";
+"screen_space_announcement_notice" = "Tilojen suodatus, luominen ja hallinta on tulossa pian.";
 "screen_space_announcement_subtitle" = "Tervetuloa tilojen beetaversioon! Tämän ensimmäisen version avulla voit:";
 "screen_space_announcement_title" = "Esittelyssä tilat";
 "screen_space_list_description" = "Luomasi tai liittymäsi tilat.";

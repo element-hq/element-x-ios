@@ -72,6 +72,7 @@
 "action_decline" = "拒絕";
 "action_decline_and_block" = "拒絕並封鎖";
 "action_delete_poll" = "刪除投票";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "停用";
 "action_discard" = "捨棄";
 "action_dismiss" = "關閉";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "再次嘗試解密";
 "action_save" = "儲存";
 "action_search" = "搜尋";
+"action_select_all" = "Select all";
 "action_send" = "傳送";
 "action_send_edited_message" = "傳送已編輯的訊息";
 "action_send_message" = "傳送訊息";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "本月";
 "common_decryption_error" = "解密錯誤";
 "common_description" = "描述";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "開發者選項";
 "common_device_id" = "裝置 ID";
 "common_direct_chat" = "私訊";
@@ -281,7 +282,6 @@
 "common_search_results" = "搜尋結果";
 "common_security" = "安全性";
 "common_seen_by" = "已讀";
-"common_select_all" = "Select all";
 "common_send_to" = "傳送給";
 "common_sending" = "傳送中...";
 "common_sending_failed" = "傳送失敗";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "您建立或加入的空間";

@@ -283,9 +283,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Leave %1$d room and space</string>
+			<string>Forlat %1$d rom og område</string>
 			<key>other</key>
-			<string>Leave %1$d rooms and space</string>
+			<string>Forlat %1$d rom og område</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>

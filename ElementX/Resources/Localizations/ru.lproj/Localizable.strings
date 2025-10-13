@@ -72,6 +72,7 @@
 "action_decline" = "Отклонить";
 "action_decline_and_block" = "Отклонить и заблокировать";
 "action_delete_poll" = "Удалить опрос";
+"action_deselect_all" = "Отменить выбор";
 "action_disable" = "Отключить";
 "action_discard" = "Отменить";
 "action_dismiss" = "Отклонить";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Повторите расшифровку";
 "action_save" = "Сохранить";
 "action_search" = "Поиск";
+"action_select_all" = "Выбрать все";
 "action_send" = "Отправить";
 "action_send_edited_message" = "Отправить изменённое сообщение";
 "action_send_message" = "Отправить сообщение";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "В этом месяце";
 "common_decryption_error" = "Ошибка расшифровки";
 "common_description" = "Описание";
-"common_deselect_all" = "Отменить выбор";
 "common_developer_options" = "Для разработчика";
 "common_device_id" = "Идентификатор устройства";
 "common_direct_chat" = "Личный чат";
@@ -281,7 +282,6 @@
 "common_search_results" = "Результаты поиска";
 "common_security" = "Безопасность";
 "common_seen_by" = "Просмотрено";
-"common_select_all" = "Выбрать все";
 "common_send_to" = "Отправить";
 "common_sending" = "Отправка…";
 "common_sending_failed" = "Сбой отправки";

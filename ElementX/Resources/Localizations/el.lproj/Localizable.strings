@@ -72,6 +72,7 @@
 "action_decline" = "Απόρριψη";
 "action_decline_and_block" = "Απόρριψη και αποκλεισμός";
 "action_delete_poll" = "Διαγραφή Δημοσκόπησης";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "Απενεργοποίηση";
 "action_discard" = "Απόρριψη";
 "action_dismiss" = "Παράβλεψη";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Επανάληψη αποκρυπτογράφησης";
 "action_save" = "Αποθήκευση";
 "action_search" = "Αναζήτηση";
+"action_select_all" = "Select all";
 "action_send" = "Αποστολή";
 "action_send_edited_message" = "Send edited message";
 "action_send_message" = "Αποστολή μηνύματος";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Αυτό το μήνα";
 "common_decryption_error" = "Σφάλμα αποκρυπτογράφησης";
 "common_description" = "Description";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Επιλογές προγραμματιστή";
 "common_device_id" = "ID συσκευής";
 "common_direct_chat" = "Άμεση συνομιλία";
@@ -281,7 +282,6 @@
 "common_search_results" = "Αποτελέσματα αναζήτησης";
 "common_security" = "Ασφάλεια";
 "common_seen_by" = "Προβλήθηκε από";
-"common_select_all" = "Select all";
 "common_send_to" = "Αποστολή σε";
 "common_sending" = "Αποστολή...";
 "common_sending_failed" = "Αποτυχία αποστολής";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";

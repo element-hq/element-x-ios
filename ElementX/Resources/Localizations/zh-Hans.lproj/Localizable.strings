@@ -72,6 +72,7 @@
 "action_decline" = "拒绝";
 "action_decline_and_block" = "拒绝并屏蔽";
 "action_delete_poll" = "删除投票";
+"action_deselect_all" = "取消全选";
 "action_disable" = "禁用";
 "action_discard" = "丢弃";
 "action_dismiss" = "关闭";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "重试解密";
 "action_save" = "保存";
 "action_search" = "搜索";
+"action_select_all" = "全选";
 "action_send" = "发送";
 "action_send_edited_message" = "发送编辑后的消息";
 "action_send_message" = "发送消息";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "本月";
 "common_decryption_error" = "解密错误";
 "common_description" = "描述";
-"common_deselect_all" = "取消全选";
 "common_developer_options" = "开发者选项";
 "common_device_id" = "设备 ID";
 "common_direct_chat" = "私聊";
@@ -281,7 +282,6 @@
 "common_search_results" = "搜索结果";
 "common_security" = "安全";
 "common_seen_by" = "已读";
-"common_select_all" = "全选";
 "common_send_to" = "发送至";
 "common_sending" = "正在发送…";
 "common_sending_failed" = "发送失败";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "您创建或加入的空间。";

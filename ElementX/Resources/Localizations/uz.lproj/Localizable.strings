@@ -72,6 +72,7 @@
 "action_decline" = "Rad etish";
 "action_decline_and_block" = "Rad etish va bloklash";
 "action_delete_poll" = "So‘rovnomani o‘chirish";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "Oʻchirish";
 "action_discard" = "Bekor qilish";
 "action_dismiss" = "Bekor qilish";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Shifrni ochishni qayta urinish";
 "action_save" = "Saqlash";
 "action_search" = "Qidirmoq";
+"action_select_all" = "Select all";
 "action_send" = "Yuborish";
 "action_send_edited_message" = "Tahrirlangan xabarni yuboring";
 "action_send_message" = "Xabar yuborish";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Bu oy";
 "common_decryption_error" = "Shifrni ochish xatosi";
 "common_description" = "Description";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Dasturchi variantlari";
 "common_device_id" = "Qurilma ID";
 "common_direct_chat" = "Shaxsiy suhbat";
@@ -281,7 +282,6 @@
 "common_search_results" = "Qidiruv natijalari";
 "common_security" = "Xavfsizlik";
 "common_seen_by" = "Tomonidan koʻrilgan";
-"common_select_all" = "Select all";
 "common_send_to" = "Yubirish";
 "common_sending" = "Yuborilmoqda…";
 "common_sending_failed" = "Yuborilmadi";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";

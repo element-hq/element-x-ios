@@ -72,6 +72,7 @@
 "action_decline" = "رد";
 "action_decline_and_block" = "رد و انسداد";
 "action_delete_poll" = "حذف نظرسنجی";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "از کار انداختن";
 "action_discard" = "دور ریختن";
 "action_dismiss" = "دورانداختن";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "تلاش دوباره برای رمزگشایی";
 "action_save" = "ذخیره";
 "action_search" = "جست‌وجو";
+"action_select_all" = "Select all";
 "action_send" = "فرستادن";
 "action_send_edited_message" = "فرستادن پیام ویراسته";
 "action_send_message" = "فرستادن پیام";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "این ماه";
 "common_decryption_error" = "خطای رمزگشایی";
 "common_description" = "Description";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "گزینه‌های توسعه دهنده";
 "common_device_id" = "شناسه دستگاه";
 "common_direct_chat" = "گپ مستقیم";
@@ -281,7 +282,6 @@
 "common_search_results" = "نتایج جست‌وجو";
 "common_security" = "امنیت";
 "common_seen_by" = "دیده شده به دست";
-"common_select_all" = "Select all";
 "common_send_to" = "فرستادن به";
 "common_sending" = "فرستادن…";
 "common_sending_failed" = "فرستادن شکست خورد";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";

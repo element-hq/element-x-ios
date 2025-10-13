@@ -72,6 +72,7 @@
 "action_decline" = "Keeldu";
 "action_decline_and_block" = "Keeldu ja blokeeri";
 "action_delete_poll" = "Kustuta küsitlus";
+"action_deselect_all" = "Eemalda kõik valikud";
 "action_disable" = "Lülita välja";
 "action_discard" = "Loobu";
 "action_dismiss" = "Lõpeta";
@@ -86,7 +87,7 @@
 "action_forgot_password" = "Kas unustasid salasõna?";
 "action_forward" = "Edasta";
 "action_go_back" = "Tagasi eelmisesse vaatesse";
-"action_go_to_settings" = "Go to settings";
+"action_go_to_settings" = "Ava seadistused";
 "action_ignore" = "Eira";
 "action_invite" = "Kutsu";
 "action_invite_friends" = "Kutsu osalejaid";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Proovi dekrüptimist uuesti";
 "action_save" = "Salvesta";
 "action_search" = "Otsi";
+"action_select_all" = "Vali kõik";
 "action_send" = "Saada";
 "action_send_edited_message" = "Saada muudetud sõnum";
 "action_send_message" = "Saada sõnum";
@@ -161,8 +163,8 @@
 "banner_migrate_to_native_sliding_sync_description" = "Sinu koduserver toetab uut ja kiiremat protokolli. Uuendamiseks logi korraks rakendusest välja ja siis tagasi. Mingil hetkel tulevikus vana protokoll eemaldatakse kasutusest ja tehes uuenduse nüüd, väldid hilisemat sundkorras uuendust.";
 "banner_migrate_to_native_sliding_sync_force_logout_title" = "Sinu koduserver enam ei toeta vana protokolli. Jätkamaks rakenduse kasutamist palun logi välja ning seejärel tagasi.";
 "banner_migrate_to_native_sliding_sync_title" = "Saadaval on uuendus";
-"banner_new_sound_message" = "Your notification ping has been updated—clearer, quicker, and less disruptive.";
-"banner_new_sound_title" = "We’ve refreshed your sounds";
+"banner_new_sound_message" = "Sinu nutiseadme teavituste heli on uuenenud - see on nüüd selgem, kiirem ja vähem häiriv.";
+"banner_new_sound_title" = "Oleme sinu helisid värskendanud";
 "banner_set_up_recovery_content" = "Loo uus taastevõti, mida saad kasutada oma krüptitud sõnumite ajaloo taastamisel olukorras, kus kaotad ligipääsu oma seadmetele.";
 "banner_set_up_recovery_title" = "Seadista taastamine";
 "call_invalid_audio_device_bluetooth_devices_disabled" = "Element Call ei võimalda selles Androidi versioonis Bluetoothi heliseadmete kasutamist. Palun vali mõni muu heliseade.";
@@ -176,7 +178,7 @@
 "common_android_shortcuts_remove_reason_session_logged_out" = "Sa olid sessioonist väljaloginud";
 "common_appearance" = "Välimus";
 "common_audio" = "Heli";
-"common_beta" = "Beta";
+"common_beta" = "Beetaversioon";
 "common_blocked_users" = "Blokeeritud kasutajad";
 "common_bubbles" = "Mullid";
 "common_call_started" = "Kõne algas";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Sel kuul";
 "common_decryption_error" = "Dekrüptimisviga";
 "common_description" = "Kirjeldus";
-"common_deselect_all" = "Eemalda kõik valikud";
 "common_developer_options" = "Arendaja valikud";
 "common_device_id" = "Seadme tunnus";
 "common_direct_chat" = "Otsevestlus";
@@ -281,7 +282,6 @@
 "common_search_results" = "Otsingutulemused";
 "common_security" = "Turvalisus";
 "common_seen_by" = "Seda nägi(d)";
-"common_select_all" = "Vali kõik";
 "common_send_to" = "Saada kasutajale";
 "common_sending" = "Saadame...";
 "common_sending_failed" = "Saatmine ei õnnestunud";
@@ -568,7 +568,7 @@
 "screen_labs_enable_threads" = "Enable thread replies";
 "screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
-"screen_labs_header_title" = "Feeling experimental?";
+"screen_labs_header_title" = "Kas tahad katsetada?";
 "screen_labs_title" = "Labs";
 "screen_leave_space_last_admin_info" = "%1$@ (Peakasutaja)";
 "screen_leave_space_subtitle" = "Sellega eemaldad end ka kõikidest antud kogukonna jututubadest.";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Sinu loodud kogukonnad ning need, millega oled liitunud.";
@@ -829,7 +829,7 @@
 "screen_join_room_ban_by_message" = "%1$@ keelas sinu ligipääsu siia jututuppa.";
 "screen_join_room_ban_message" = "Sinul on ligipääsukeeld siia jututuppa";
 "screen_join_room_ban_reason" = "Põhjus: %1$@.";
-"screen_join_room_fail_message" = "Jututoaga liitumine ei õnnestunud.";
+"screen_join_room_fail_message" = "Jututoaga liitumine ei õnnestunud";
 "screen_join_room_fail_reason" = "Ligipääs siia jututuppa on võimalik vaid kutse alusel või kehtivad siin kogukonnakohased piirangud.";
 "screen_join_room_forget_action" = "Unusta see jututuba";
 "screen_join_room_invite_required_message" = "Selle jututoaga liitumiseks vajad sa kutset";

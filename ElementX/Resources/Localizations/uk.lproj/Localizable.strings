@@ -72,6 +72,7 @@
 "action_decline" = "Відхилити";
 "action_decline_and_block" = "Відхилити та заблокувати";
 "action_delete_poll" = "Видалити опитування";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "Вимкнути";
 "action_discard" = "Відкинути";
 "action_dismiss" = "Відхилити";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Повторити спробу розшифрування";
 "action_save" = "Зберегти";
 "action_search" = "Шукати";
+"action_select_all" = "Select all";
 "action_send" = "Надіслати";
 "action_send_edited_message" = "Надіслати змінене повідомлення";
 "action_send_message" = "Надіслати повідомлення";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Цього місяця";
 "common_decryption_error" = "Помилка розшифрування";
 "common_description" = "Description";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Налаштування розробника";
 "common_device_id" = "Ідентифікатор пристрою";
 "common_direct_chat" = "Особиста бесіда";
@@ -281,7 +282,6 @@
 "common_search_results" = "Результати пошуку";
 "common_security" = "Безпека";
 "common_seen_by" = "Переглянули";
-"common_select_all" = "Select all";
 "common_send_to" = "Надіслати до";
 "common_sending" = "Надсилання…";
 "common_sending_failed" = "Не вдалося надіслати";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Простори, які ви створили або до яких приєдналися.";

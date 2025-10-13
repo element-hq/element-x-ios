@@ -72,6 +72,7 @@
 "action_decline" = "Ablehnen";
 "action_decline_and_block" = "Ablehnen und blockieren";
 "action_delete_poll" = "Umfrage löschen";
+"action_deselect_all" = "Auswahl aufheben";
 "action_disable" = "Deaktivieren";
 "action_discard" = "Verwerfen";
 "action_dismiss" = "Schließen";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Entschlüsselung wiederholen";
 "action_save" = "Speichern";
 "action_search" = "Suchen";
+"action_select_all" = "Alles auswählen";
 "action_send" = "Senden";
 "action_send_edited_message" = "Bearbeitete Nachricht senden";
 "action_send_message" = "Nachricht senden";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Diesen Monat";
 "common_decryption_error" = "Dekodierungsfehler";
 "common_description" = "Beschreibung";
-"common_deselect_all" = "Auswahl aufheben";
 "common_developer_options" = "Entwickleroptionen";
 "common_device_id" = "Geräte-ID";
 "common_direct_chat" = "Direktnachricht";
@@ -281,7 +282,6 @@
 "common_search_results" = "Suchergebnisse";
 "common_security" = "Sicherheit";
 "common_seen_by" = "Gesehen von";
-"common_select_all" = "Alles auswählen";
 "common_send_to" = "Senden an";
 "common_sending" = "Wird gesendet...";
 "common_sending_failed" = "Senden fehlgeschlagen";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Chats innerhalb deiner Spaces entdecken, um ihnen beizutreten";
 "screen_space_announcement_item4" = "Öffentlichen Spaces beitreten";
 "screen_space_announcement_item5" = "Spaces verlassen, bei denen du Mitglied bist";
-"screen_space_announcement_notice" = "Das Erstellen und Verwalten von Spaces ist bald verfügbar.";
+"screen_space_announcement_notice" = "Das Filtern, Erstellen und Verwalten von Spaces ist bald verfügbar.";
 "screen_space_announcement_subtitle" = "Willkommen bei der Beta-Version von Spaces! Mit dieser ersten Version kannst du:";
 "screen_space_announcement_title" = "Einführung in Spaces";
 "screen_space_list_description" = "Von dir erstellte oder beigetretene Spaces.";

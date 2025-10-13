@@ -72,6 +72,7 @@
 "action_decline" = "Weigeren";
 "action_decline_and_block" = "Weigeren en blokkeren";
 "action_delete_poll" = "Peiling verwijderen";
+"action_deselect_all" = "Deselect all";
 "action_disable" = "Uitschakelen";
 "action_discard" = "Verwerpen";
 "action_dismiss" = "Sluiten";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Decryptie opnieuw proberen";
 "action_save" = "Opslaan";
 "action_search" = "Zoeken";
+"action_select_all" = "Select all";
 "action_send" = "Verzenden";
 "action_send_edited_message" = "Send edited message";
 "action_send_message" = "Bericht verzenden";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "This month";
 "common_decryption_error" = "Decryptie fout";
 "common_description" = "Description";
-"common_deselect_all" = "Deselect all";
 "common_developer_options" = "Ontwikkelaarsopties";
 "common_device_id" = "Apparaat-ID";
 "common_direct_chat" = "Directe chat";
@@ -281,7 +282,6 @@
 "common_search_results" = "Zoekresultaten";
 "common_security" = "Beveiliging";
 "common_seen_by" = "Gezien door";
-"common_select_all" = "Select all";
 "common_send_to" = "Sturen naar";
 "common_sending" = "Verzenden…";
 "common_sending_failed" = "Verzenden mislukt";
@@ -657,7 +657,7 @@
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
 "screen_space_announcement_item4" = "Join public spaces";
 "screen_space_announcement_item5" = "Leave any spaces you’ve joined";
-"screen_space_announcement_notice" = "Creating and managing spaces is coming soon.";
+"screen_space_announcement_notice" = "Filtering, creating and managing spaces is coming soon.";
 "screen_space_announcement_subtitle" = "Welcome to the beta version of Spaces! With this first version you can:";
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";

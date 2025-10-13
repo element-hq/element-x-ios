@@ -87,7 +87,7 @@
 			<key>one</key>
 			<string>%1$d członek</string>
 			<key>few</key>
-			<string>%1$d członki</string>
+			<string>%1$d członków</string>
 			<key>many</key>
 			<string>%1$d członków</string>
 		</dict>
@@ -139,9 +139,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Room</string>
-			<key>other</key>
-			<string>%1$d Rooms</string>
+			<string>%1$d Pokój</string>
+			<key>few</key>
+			<string>%1$d Pokoje</string>
+			<key>many</key>
+			<string>%1$d Pokoi</string>
 		</dict>
 	</dict>
 	<key>common_spaces</key>
@@ -155,9 +157,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Space</string>
-			<key>other</key>
-			<string>%1$d Spaces</string>
+			<string>%1$d Przestrzeń</string>
+			<key>few</key>
+			<string>%1$d Przestrzenie</string>
+			<key>many</key>
+			<string>%1$d Przestrzeni</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -315,9 +319,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Leave %1$d room and space</string>
-			<key>other</key>
-			<string>Leave %1$d rooms and space</string>
+			<string>Opuść %1$d pokój i przestrzeń</string>
+			<key>few</key>
+			<string>Opuść %1$d pokoje i przestrzeń</string>
+			<key>many</key>
+			<string>Opuść %1$d pokojów i przestrzeń</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -475,9 +481,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
-			<key>other</key>
-			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
+			<string>Zablokowano %1$d użytkownika. Nie otrzymasz od niego żadnych powiadomień.</string>
+			<key>few</key>
+			<string>Zablokowano %1$d użytkowników. Nie otrzymasz od nich żadnych powiadomień.</string>
+			<key>many</key>
+			<string>Zablokowano %1$d użytkowników. Nie otrzymasz od nich żadnych powiadomień.</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>

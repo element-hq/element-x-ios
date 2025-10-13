@@ -72,6 +72,7 @@
 "action_decline" = "Refuser";
 "action_decline_and_block" = "Refuser et bloquer";
 "action_delete_poll" = "Supprimer le sondage";
+"action_deselect_all" = "Tout désélectionner";
 "action_disable" = "Désactiver";
 "action_discard" = "Annuler";
 "action_dismiss" = "Ignorer";
@@ -132,6 +133,7 @@
 "action_retry_decryption" = "Réessayer le déchiffrement";
 "action_save" = "Enregistrer";
 "action_search" = "Rechercher";
+"action_select_all" = "Tout sélectionner";
 "action_send" = "Envoyer";
 "action_send_edited_message" = "Envoyer les modifications";
 "action_send_message" = "Envoyer un message";
@@ -193,7 +195,6 @@
 "common_date_this_month" = "Ce mois-ci";
 "common_decryption_error" = "Erreur de déchiffrement";
 "common_description" = "Description";
-"common_deselect_all" = "Tout désélectionner";
 "common_developer_options" = "Options pour les développeurs";
 "common_device_id" = "Identifiant de session";
 "common_direct_chat" = "Discussion à deux";
@@ -281,7 +282,6 @@
 "common_search_results" = "Résultats de la recherche";
 "common_security" = "Sécurité";
 "common_seen_by" = "Vu par";
-"common_select_all" = "Tout sélectionner";
 "common_send_to" = "Envoyer vers";
 "common_sending" = "Envoi en cours…";
 "common_sending_failed" = "Échec de l'envoi";
@@ -496,7 +496,7 @@
 "screen_bottom_sheet_create_dm_title" = "Envoyer l'invitation ?";
 "screen_bottom_sheet_manage_room_member_ban" = "Bannir du salon";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Bannir";
-"screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Il ne pourra pas rejoindre le salon à nouveau, même si il est invité.";
+"screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Ce compte ne pourra pas rejoindre le salon à nouveau, même si il est invité.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Êtes-vous certain de vouloir bannir ce membre ?";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Bannissement de %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Retirer";
@@ -506,8 +506,8 @@
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Retirer le membre et interdire l'adhésion à l'avenir ?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Enlever %1$@…";
 "screen_bottom_sheet_manage_room_member_unban" = "Débannir du salon";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "L'utilisateur pourra à nouveau rejoindre le salon s'il est invité.";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Êtes-vous sûr de vouloir débannir cet utilisateur?";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "Ce compte pourra à nouveau rejoindre le salon s'il est invité.";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Êtes-vous sûr de vouloir débannir ce compte?";
 "screen_bug_report_a11y_screenshot" = "Capture d'écran";
 "screen_create_poll_option_accessibility_label" = "%1$@: %2$@";
 "screen_create_poll_options_section_title" = "Options";
@@ -598,7 +598,7 @@
 "screen_report_room_leave_failed_alert_message" = "Votre rapport a été envoyé avec succès, mais nous avons rencontré un problème en essayant de quitter le salon. Veuillez réessayer.";
 "screen_report_room_leave_failed_alert_title" = "Impossible de quitter le salon";
 "screen_report_room_reason_footer" = "Signaler ce salon à votre admin. Si les messages sont chiffrés, votre admin ne pourra pas les lire.";
-"screen_report_room_reason_placeholder" = "Décrivez la raison...";
+"screen_report_room_reason_placeholder" = "Décrivez la raison du signalement…";
 "screen_report_room_title" = "Signaler le salon";
 "screen_reset_encryption_password_error" = "Une erreur s'est produite. Vérifiez que le mot de passe de votre compte est correct et réessayez.";
 "screen_resolve_send_failure_changed_identity_primary_button_title" = "Révoquer la verification et envoyer";
@@ -1338,7 +1338,7 @@
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Débannissement de %1$@";
 "screen_create_room_room_address_section_title" = "Adresse du salon";
 "screen_decline_and_block_block_user_option_title" = "Bloquer l’utilisateur";
-"screen_decline_and_block_report_user_reason_placeholder" = "Décrivez la raison...";
+"screen_decline_and_block_report_user_reason_placeholder" = "Décrivez la raison du signalement…";
 "screen_home_tab_chats" = "Conversations";
 "screen_home_tab_spaces" = "Espaces";
 "screen_join_room_decline_and_block_button_title" = "Refuser et bloquer";
