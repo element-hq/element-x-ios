@@ -1,3 +1,32 @@
+## Changes in 25.10.1 (2025-10-14)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix the bloom on the space tab for real. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4604
+* Thread tweaks by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4601
+* Fix last owner not prompted to promote on leave by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4608
+* Make the `SpaceRoomListProxy` publish its `SpaceRoomProxy` updates. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4607
+* Prevent the system from automatically hiding the sidebar when backgrounding the app by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4610
+* Convert the timeline's long press gesture recogniser to UIKit and prevent scroll view conflicts by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4615
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4618
+
+🧱 Build
+* Only run Compound tests when files are changed in Compound. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4611
+* Use the new Icon Composer .icon format. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4612
+
+Others
+* Add unit test for the in-timeline space permalink handling by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4592
+* Update dependency jpsim/Yams to from: "6.2.0" by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4599
+* Add UI tests for accepting space invites. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4602
+* The space tweaks continue! by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4606
+* Update the enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4609
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.10.0...release/25.10.1
+
 ## Changes in 25.10.0 (2025-10-08)
 
 ### What's Changed
