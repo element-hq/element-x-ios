@@ -360,12 +360,12 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
             handleAppRoute(.room(roomID: roomID, via: []))
         } else if appSettings.focusEventOnNotificationTapEnabled, let eventID = content.eventID {
-            let threadState: ThreadState = if let threadRootEventID = content.threadRootEventID {
-                .threaded(threadRootEventID: threadRootEventID)
+            let threadRoot: ThreadRoot = if let threadRootEventID = content.threadRootEventID {
+                .eventID(threadRootEventID)
             } else {
-                .unthreaded
+                .none
             }
-            handleAppRoute(.event(eventID: eventID, threadState: threadState, roomID: roomID, via: []))
+            handleAppRoute(.event(eventID: eventID, threadRoot: threadRoot, roomID: roomID, via: []))
         } else {
             handleAppRoute(.room(roomID: roomID, via: []))
         }

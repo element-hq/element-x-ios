@@ -128,8 +128,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             roomFlowCoordinator?.clearRoute(animated: animated)
         case .roomMemberDetails:
             roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
-        case .event(let eventID, let threadState, let roomID, let via):
-            stateMachine.processEvent(.selectRoom(roomID: roomID, via: via, entryPoint: .eventID(eventID, threadState: threadState)), userInfo: .init(animated: animated))
+        case .event(let eventID, let threadRoot, let roomID, let via):
+            stateMachine.processEvent(.selectRoom(roomID: roomID, via: via, entryPoint: .eventID(eventID, threadRoot: threadRoot)), userInfo: .init(animated: animated))
         case .eventOnRoomAlias(let eventID, let alias):
             switch await userSession.clientProxy.resolveRoomAlias(alias) {
             case .success(let resolved): await asyncHandleAppRoute(.event(eventID: eventID, roomID: resolved.roomId, via: resolved.servers), animated: animated)
@@ -194,7 +194,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                     let route: AppRoute = switch entryPoint {
                     case .room: .room(roomID: roomID, via: via)
                     case .roomDetails: .roomDetails(roomID: roomID)
-                    case .eventID(let eventID, let threadState): .event(eventID: eventID, threadState: threadState, roomID: roomID, via: via) // ignored.
+                    case .eventID(let eventID, let threadRoot): .event(eventID: eventID, threadRoot: threadRoot, roomID: roomID, via: via) // ignored.
                     case .share(let payload): .share(payload)
                     case .transferOwnership: .transferOwnership(roomID: roomID)
                     }
@@ -488,8 +488,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         switch entryPoint {
         case .room:
             coordinator.handleAppRoute(.room(roomID: roomID, via: via), animated: animated)
-        case .eventID(let eventID, let threadSate):
-            coordinator.handleAppRoute(.event(eventID: eventID, threadState: threadSate, roomID: roomID, via: via), animated: animated)
+        case .eventID(let eventID, let threadRoot):
+            coordinator.handleAppRoute(.event(eventID: eventID, threadRoot: threadRoot, roomID: roomID, via: via), animated: animated)
         case .roomDetails:
             coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: animated)
         case .share(let payload):

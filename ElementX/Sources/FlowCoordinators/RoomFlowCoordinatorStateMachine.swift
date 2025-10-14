@@ -22,7 +22,7 @@ extension RoomFlowCoordinator {
     }
     
     enum PresentationAction: Hashable {
-        case eventFocus(FocusEvent, threadState: ThreadState = .unknown)
+        case eventFocus(FocusEvent, threadRoot: ThreadRoot = .unknown)
         case share(ShareExtensionPayload)
         
         var focusedEvent: FocusEvent? {

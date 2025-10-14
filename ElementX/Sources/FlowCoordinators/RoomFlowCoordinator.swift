@@ -35,7 +35,7 @@ enum RoomFlowCoordinatorEntryPoint: Hashable {
     /// The flow will start by showing the room directly.
     case room
     /// The flow will start by showing the room, focussing on the supplied event ID.
-    case eventID(String, threadState: ThreadState = .unknown)
+    case eventID(String, threadRoot: ThreadRoot = .unknown)
     /// The flow will start by showing the room's details.
     case roomDetails
     /// An external media share request
@@ -153,11 +153,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: EventUserInfo(animated: animated))
             }
-        case .event(let eventID, let threadState, let roomID, let via):
+        case .event(let eventID, let threadRoot, let roomID, let via):
             Task {
                 await handleRoomRoute(roomID: roomID,
                                       via: via,
-                                      presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false), threadState: threadState),
+                                      presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: false), threadRoot: threadRoot),
                                       animated: animated)
             }
         case .childEvent(let eventID, let roomID, let via):
@@ -270,15 +270,17 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 await storeAndSubscribeToRoomProxy(roomProxy)
                 
-                guard case let .eventFocus(focusEvent, threadState) = presentationAction else {
+                guard case let .eventFocus(focusEvent, threadRoot) = presentationAction else {
                     // If is not a focus event just handle the presentation action directly in `presentRoom`
                     stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
                     return
                 }
                 
                 if flowParameters.appSettings.threadsEnabled {
-                    switch threadState {
+                    // If this route is handling a notification tap the thread root might be already known and available
+                    switch threadRoot {
                     case .unknown:
+                        // If not known, this route does not come from a notification, and we need to check if there is a thread root.
                         switch await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID) {
                         case .success(let event):
                             if let threadRootEventID = event.threadRootEventId() {
@@ -291,9 +293,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                             showErrorIndicator()
                             stateMachine.tryEvent(.presentRoom(presentationAction: nil), userInfo: EventUserInfo(animated: animated))
                         }
-                    case .unthreaded:
+                    case .none:
                         stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
-                    case .threaded(let threadRootEventID):
+                    case .eventID(let threadRootEventID):
                         stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: threadRootEventID, shouldSetPin: false))), userInfo: EventUserInfo(animated: animated))
                         stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focusEvent.eventID), userInfo: EventUserInfo(animated: false))
                     }
@@ -1566,8 +1568,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         switch entryPoint {
         case .room:
             coordinator.handleAppRoute(.room(roomID: roomID, via: via), animated: true)
-        case .eventID(let eventID, let threadState):
-            coordinator.handleAppRoute(.event(eventID: eventID, threadState: threadState, roomID: roomID, via: via), animated: true)
+        case .eventID(let eventID, let threadRoot):
+            coordinator.handleAppRoute(.event(eventID: eventID, threadRoot: threadRoot, roomID: roomID, via: via), animated: true)
         case .roomDetails:
             coordinator.handleAppRoute(.roomDetails(roomID: roomID), animated: true)
         case .share(let payload):

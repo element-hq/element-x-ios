@@ -29,7 +29,7 @@ enum AppRoute: Hashable {
     /// The profile of a member within the current room.
     case roomMemberDetails(userID: String)
     /// An event within a room, shown as the root of the stack (popping any child rooms).
-    case event(eventID: String, threadState: ThreadState = .unknown, roomID: String, via: [String])
+    case event(eventID: String, threadRoot: ThreadRoot = .unknown, roomID: String, via: [String])
     /// The same as ``event`` but using a room alias.
     case eventOnRoomAlias(eventID: String, alias: String)
     /// An event within a room, either within the last child on the stack or pushing a new child if needed.
@@ -63,10 +63,10 @@ enum AppRoute: Hashable {
 /// Only used for handling notifications tap where we already know the thread state of an event
 /// Use it to skip while handling the `event` route to avoid an unnecessary fetch
 /// In theory when notifications will be able to update the event cache, we won't need this anymore
-enum ThreadState: Hashable {
+enum ThreadRoot: Hashable {
     case unknown
-    case unthreaded
-    case threaded(threadRootEventID: String)
+    case none
+    case eventID(String)
 }
 
 /// The parameters parsed out of a provisioning link that can be applied to the authentication flow for a streamlined onboarding experience.
