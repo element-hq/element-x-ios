@@ -19,10 +19,14 @@ struct LongPressWithFeedback: ViewModifier {
             mainContent(content: content)
                 .gesture(LongPressGestureRepresentable { gesture in
                     switch gesture.state {
+                    case .began:
+                        handleLongPress(isPressing: true)
                     case .ended, .cancelled, .failed:
                         handleLongPress(isPressing: false)
-                    default:
-                        handleLongPress(isPressing: true)
+                    case .possible, .changed:
+                        break
+                    @unknown default:
+                        break
                     }
                 })
         } else {
@@ -49,7 +53,9 @@ struct LongPressWithFeedback: ViewModifier {
             // The wait time needs to be at least 0.5 seconds or the long press gesture will take precedence over long pressing links.
             try? await Task.sleep(for: .seconds(0.5))
             
-            if Task.isCancelled { return }
+            if Task.isCancelled {
+                return
+            }
             
             action()
             feedbackGenerator.impactOccurred()
