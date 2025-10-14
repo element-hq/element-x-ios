@@ -100,7 +100,7 @@ extension RoomPreviewProxyMock {
     convenience init(spaceRoomProxy: SpaceRoomProxyProtocol) {
         self.init(Configuration(roomID: spaceRoomProxy.id,
                                 canonicalAlias: spaceRoomProxy.canonicalAlias ?? "",
-                                name: spaceRoomProxy.name ?? "",
+                                name: spaceRoomProxy.name,
                                 topic: spaceRoomProxy.topic ?? "",
                                 avatarURL: spaceRoomProxy.avatarURL?.absoluteString ?? "",
                                 numJoinedMembers: UInt64(spaceRoomProxy.joinedMembersCount),
