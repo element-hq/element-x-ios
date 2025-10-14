@@ -116,7 +116,7 @@ class JoinRoomScreenViewModel: JoinRoomScreenViewModelType, JoinRoomScreenViewMo
                                                  primaryButton: .init(title: L10n.actionTryAgain) { [weak self] in Task { await self?.loadRoomDetails() }},
                                                  secondaryButton: .init(title: L10n.actionCancel, role: .cancel) { [weak self] in self?.actionsSubject.send(.dismiss) })
             }
-        case .space(let spaceRoomProxyProtocol):
+        case .space:
             isLoadingPreview = false
         }
         
