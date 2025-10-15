@@ -219,6 +219,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
                 case .leftSpace:
                     stateMachine.tryEvent(.leftSpace)
+                case .displayMembers:
+                    Task { await self.presentMembersScreen() }
                 }
             }
             .store(in: &cancellables)
@@ -232,6 +234,35 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                 self?.actionsSubject.send(.finished)
             }
         }
+    }
+    
+    private func presentMembersScreen() async {
+        guard case let .space(spaceRoomListProxy) = entryPoint,
+              case let .joined(roomProxy) = await flowParameters.userSession.clientProxy.roomForIdentifier(spaceRoomListProxy.id) else {
+            fatalError("Attempting to show members of a non joined space")
+        }
+        
+        // Required to listen for membership updates
+        await roomProxy.timeline.subscribeForUpdates()
+        
+        let navCoordinator = NavigationStackCoordinator()
+        let coordinator = RoomMembersListScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
+                                                                             roomProxy: roomProxy,
+                                                                             userIndicatorController: flowParameters.userIndicatorController,
+                                                                             analytics: flowParameters.analytics))
+        coordinator.actions.sink { action in
+            switch action {
+            // TODO: Handle these actions
+            case .invite:
+                break
+            case .selectedMember(let member):
+                break
+            }
+        }
+        .store(in: &cancellables)
+        
+        navCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(navCoordinator)
     }
     
     private func presentJoinSpaceScreen() {
