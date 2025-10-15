@@ -14,6 +14,7 @@ enum DeveloperOptionsScreenViewModelAction {
 
 struct DeveloperOptionsScreenViewState: BindableState {
     let elementCallBaseURL: URL
+    let appHooks: AppHooks
     var bindings: DeveloperOptionsScreenViewStateBindings
 }
 

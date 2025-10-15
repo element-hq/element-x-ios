@@ -16,6 +16,7 @@ public extension UIColor {
 
 /// The colours used by Element as defined in Compound Design Tokens.
 /// This struct contains only the colour tokens in a more usable form.
+@Observable
 @dynamicMemberLookup
 public class CompoundUIColors {
     /// The base colour tokens that form the palette of available colours.

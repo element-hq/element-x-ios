@@ -215,7 +215,7 @@ class SettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentDeveloperOptions() {
-        let coordinator = DeveloperOptionsScreenCoordinator(appSettings: flowParameters.appSettings)
+        let coordinator = DeveloperOptionsScreenCoordinator(appSettings: flowParameters.appSettings, appHooks: flowParameters.appHooks)
         
         coordinator.actions
             .sink { [weak self] action in
