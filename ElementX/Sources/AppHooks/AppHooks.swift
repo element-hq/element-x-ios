@@ -38,6 +38,11 @@ class AppHooks: AppHooksProtocol {
     func registerRoomScreenHook(_ hook: RoomScreenHookProtocol) {
         roomScreenHook = hook
     }
+    
+    private(set) var developerOptionsScreenHook: DeveloperOptionsScreenHookProtocol = DefaultDeveloperOptionsScreenHook()
+    func registerDeveloperOptionsScreenHook(_ hook: DeveloperOptionsScreenHookProtocol) {
+        developerOptionsScreenHook = hook
+    }
     #endif
     
     private(set) var tracingHook: TracingHookProtocol = DefaultTracingHook()
