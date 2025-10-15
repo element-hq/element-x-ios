@@ -62,8 +62,13 @@ struct SpaceScreen: View {
         // controller attempts to anchor itself to the button that is no longer visible.
         ToolbarItem(placement: .primaryAction) {
             Menu {
-                if let permalink = context.viewState.permalink {
-                    Section {
+                Section {
+                    if context.viewState.isSpaceJoined {
+                        Button { context.send(viewAction: .displayMembers) } label: {
+                            Label(L10n.screenSpaceMenuActionMembers, icon: \.user)
+                        }
+                    }
+                    if let permalink = context.viewState.permalink {
                         ShareLink(item: permalink) {
                             Label(L10n.actionShare, icon: \.shareIos)
                         }
@@ -106,10 +111,16 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
         let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceRoomProxy: spaceRoomProxy,
                                                               initialSpaceRooms: .mockSpaceList))
         
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.roomForIdentifierClosure = { _ in
+            .joined(JoinedRoomProxyMock(.init()))
+        }
+        let userSession = UserSessionMock(.init(clientProxy: clientProxy))
+        
         let viewModel = SpaceScreenViewModel(spaceRoomListProxy: spaceRoomListProxy,
                                              spaceServiceProxy: SpaceServiceProxyMock(.init()),
                                              selectedSpaceRoomPublisher: .init(nil),
-                                             userSession: UserSessionMock(.init()),
+                                             userSession: userSession,
                                              userIndicatorController: UserIndicatorControllerMock())
         return viewModel
     }

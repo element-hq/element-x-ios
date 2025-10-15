@@ -13,6 +13,7 @@ enum SpaceScreenViewModelAction {
     case selectUnjoinedSpace(SpaceRoomProxyProtocol)
     case selectRoom(roomID: String)
     case leftSpace
+    case displayMembers
 }
 
 struct SpaceScreenViewState: BindableState {
@@ -26,6 +27,7 @@ struct SpaceScreenViewState: BindableState {
     var joiningRoomIDs: Set<String> = []
     
     var isSpaceManagementEnabled = false
+    var isSpaceJoined = false
     
     var bindings = SpaceScreenViewStateBindings()
 }
@@ -42,4 +44,5 @@ enum SpaceScreenViewAction {
     case toggleLeaveSpaceRoomDetails(id: String)
     case confirmLeaveSpace
     case spaceSettings
+    case displayMembers
 }
