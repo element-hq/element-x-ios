@@ -1,0 +1,304 @@
+//
+// Copyright 2025 New Vector Ltd.
+//
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+// Please see LICENSE files in the repository root for full details.
+//
+
+import Combine
+import SwiftState
+import SwiftUI
+
+enum RoomMembersFlowCoordinatorAction {
+    case dismissFlow
+}
+
+enum RoomMembersFlowCoordinatorEntryPoint: Equatable {
+    case roomMember(userID: String)
+    case roomMembersList
+}
+
+final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
+    indirect enum State: StateType {
+        /// The state machine hasn't started.
+        case initial
+        /// The room members list
+        case roomMembersList
+        /// The details for a member of the room
+        case roomMemberDetails(userID: String)
+        /// The invite users screen
+        case inviteUsersScreen
+    }
+    
+    enum Event: EventType {
+        case start
+        
+        case presentRoomMembersList
+
+        case presentRoomMemberDetails(userID: String)
+        case dismissRoomMemberDetails
+        
+        case presentInviteUsersScreen
+        case dismissInviteUsersScreen
+    }
+    
+    private let entryPoint: RoomMembersFlowCoordinatorEntryPoint
+    private let isModallyPresented: Bool
+    private let roomProxy: JoinedRoomProxyProtocol
+    private let navigationStackCoordinator: NavigationStackCoordinator
+    private let flowParameters: CommonFlowParameters
+    
+    private let stateMachine: StateMachine<State, Event>
+    private var cancellables = Set<AnyCancellable>()
+    
+    private let actionsSubject: PassthroughSubject<RoomMembersFlowCoordinatorAction, Never> = .init()
+    var actions: AnyPublisher<RoomMembersFlowCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
+    
+    init(entryPoint: RoomMembersFlowCoordinatorEntryPoint,
+         isModallyPresented: Bool,
+         roomProxy: JoinedRoomProxyProtocol,
+         navigationStackCoordinator: NavigationStackCoordinator,
+         flowParameters: CommonFlowParameters) {
+        self.entryPoint = entryPoint
+        self.isModallyPresented = isModallyPresented
+        self.roomProxy = roomProxy
+        self.flowParameters = flowParameters
+        self.navigationStackCoordinator = navigationStackCoordinator
+        
+        stateMachine = .init(state: .initial)
+        configureStateMachine()
+    }
+    
+    func start() {
+        switch entryPoint {
+        case .roomMember(let userID):
+            stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
+        case .roomMembersList:
+            stateMachine.tryEvent(.presentRoomMembersList)
+        }
+    }
+    
+    func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
+        fatalError("Unavailable")
+    }
+    
+    func clearRoute(animated: Bool) {
+        fatalError("Unavailable")
+    }
+    
+    private func configureStateMachine() {
+        stateMachine.addRouteMapping { event, fromState, _ in
+            switch (fromState, event) {
+            case (.initial, .presentRoomMembersList):
+                return .roomMembersList
+            case (.initial, .presentRoomMemberDetails(let userID)):
+                return .roomMemberDetails(userID: userID)
+                
+            case (.roomMembersList, .presentRoomMemberDetails(let userID)):
+                return .roomMemberDetails(userID: userID)
+            case (.roomMemberDetails, .dismissRoomMemberDetails):
+                return .roomMembersList
+                
+            case (.roomMembersList, .presentInviteUsersScreen):
+                return .inviteUsersScreen
+            case (.inviteUsersScreen, .dismissInviteUsersScreen):
+                return .roomMembersList
+                
+            default:
+                return nil
+            }
+        }
+        
+        stateMachine.addAnyHandler(.any => .any) { [weak self] context in
+            guard let self else { return }
+            switch (context.fromState, context.event, context.toState) {
+            case (.initial, .presentRoomMembersList, .roomMembersList):
+                presentRoomMembersList()
+            case (.initial, .presentRoomMemberDetails, .roomMemberDetails(let userID)):
+                presentRoomMemberDetails(userID: userID)
+                
+            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(let userID)):
+                presentRoomMemberDetails(userID: userID)
+            case (.roomMemberDetails, .dismissRoomMemberDetails, .roomMembersList):
+                break
+                
+            case (.roomMembersList, .presentInviteUsersScreen, .inviteUsersScreen):
+                presentInviteUsersScreen()
+            case (.inviteUsersScreen, .dismissInviteUsersScreen, .roomMembersList):
+                break
+            default:
+                fatalError("Unhandled transition")
+            }
+        }
+    }
+    
+    private func presentRoomMembersList() {
+        let coordinator = RoomMembersListScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
+                                                                             roomProxy: roomProxy,
+                                                                             userIndicatorController: flowParameters.userIndicatorController,
+                                                                             analytics: flowParameters.analytics,
+                                                                             isModallyPresented: true))
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .invite:
+                stateMachine.tryEvent(.presentInviteUsersScreen)
+            case .selectedMember(let member):
+                stateMachine.tryEvent(.presentRoomMemberDetails(userID: member.userID))
+            case .dismissModal:
+                actionsSubject.send(.dismissFlow)
+            }
+        }
+        .store(in: &cancellables)
+        
+        if isModallyPresented {
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+        } else {
+            navigationStackCoordinator.push(coordinator)
+        }
+    }
+    
+    private func presentRoomMemberDetails(userID: String) {
+        let params = RoomMemberDetailsScreenCoordinatorParameters(userID: userID,
+                                                                  roomProxy: roomProxy,
+                                                                  userSession: flowParameters.userSession,
+                                                                  userIndicatorController: flowParameters.userIndicatorController,
+                                                                  analytics: flowParameters.analytics)
+        let coordinator = RoomMemberDetailsScreenCoordinator(parameters: params)
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .openUserProfile:
+                // TODO: Implement
+//                stateMachine.tryEvent(.presentUserProfile(userID: userID))
+                break
+            case .openDirectChat(let roomID):
+                // TODO: Implement
+//                stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
+                break
+            case .startCall(let roomProxy):
+                // TODO: Implement
+//                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+                break
+            case .verifyUser(let userID):
+                // TODO: Implement
+//                actionsSubject.send(.verifyUser(userID: userID))
+                break
+            }
+        }
+        .store(in: &cancellables)
+
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            guard let self else { return }
+            if entryPoint == .roomMember(userID: userID) {
+                actionsSubject.send(.dismissFlow)
+            } else {
+                stateMachine.tryEvent(.dismissRoomMemberDetails)
+            }
+        }
+    }
+    
+    private func presentInviteUsersScreen() {
+        let selectedUsersSubject: CurrentValueSubject<[UserProfileProxy], Never> = .init([])
+        
+        let stackCoordinator = NavigationStackCoordinator()
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: flowParameters.userSession,
+                                                                      selectedUsers: .init(selectedUsersSubject),
+                                                                      roomType: .room(roomProxy: roomProxy),
+                                                                      userDiscoveryService: UserDiscoveryService(clientProxy: flowParameters.userSession.clientProxy),
+                                                                      userIndicatorController: flowParameters.userIndicatorController)
+        
+        let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
+        stackCoordinator.setRootCoordinator(coordinator)
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .cancel:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            case .proceed:
+                break
+            case .invite(let users):
+                inviteUsers(users, in: roomProxy)
+            case .toggleUser(let user):
+                var selectedUsers = selectedUsersSubject.value
+                
+                if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
+                    selectedUsers.remove(at: index)
+                } else {
+                    selectedUsers.append(user)
+                }
+                
+                selectedUsersSubject.send(selectedUsers)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissInviteUsersScreen)
+        }
+    }
+    
+    private func inviteUsers(_ users: [String], in room: JoinedRoomProxyProtocol) {
+        if flowParameters.appSettings.enableKeyShareOnInvite {
+            showLoadingIndicator(title: L10n.screenRoomDetailsInvitePeoplePreparing,
+                                 message: L10n.screenRoomDetailsInvitePeopleDontClose)
+        } else {
+            showLoadingIndicator()
+        }
+        
+        Task {
+            defer {
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                hideLoadingIndicator()
+            }
+            
+            let result: Result<Void, RoomProxyError> = await withTaskGroup(of: Result<Void, RoomProxyError>.self) { group in
+                for user in users {
+                    group.addTask {
+                        await room.invite(userID: user)
+                    }
+                }
+                
+                return await group.first { inviteResult in
+                    inviteResult.isFailure
+                } ?? .success(())
+            }
+            
+            guard case .failure = result else {
+                return
+            }
+            
+            flowParameters.userIndicatorController.alertInfo = .init(id: .init(),
+                                                                     title: L10n.commonUnableToInviteTitle,
+                                                                     message: L10n.commonUnableToInviteMessage)
+        }
+    }
+    
+    private static let loadingIndicatorID = "\(RoomMembersFlowCoordinator.self)-Loading"
+    
+    private func showLoadingIndicator(delay: Duration? = nil,
+                                      title: String = L10n.commonLoading,
+                                      message: String? = nil) {
+        flowParameters.userIndicatorController.submitIndicator(.init(id: Self.loadingIndicatorID,
+                                                                     type: .modal(progress: .indeterminate,
+                                                                                  interactiveDismissDisabled: false,
+                                                                                  allowsInteraction: false),
+                                                                     title: title,
+                                                                     message: message,
+                                                                     persistent: true),
+                                                               delay: delay)
+    }
+    
+    private func hideLoadingIndicator() {
+        flowParameters.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorID)
+    }
+    
+    private func showErrorIndicator() {
+        flowParameters.userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+    }
+}
