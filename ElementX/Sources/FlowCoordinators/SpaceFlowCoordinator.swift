@@ -249,14 +249,16 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = RoomMembersListScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                              roomProxy: roomProxy,
                                                                              userIndicatorController: flowParameters.userIndicatorController,
-                                                                             analytics: flowParameters.analytics))
-        coordinator.actions.sink { action in
+                                                                             analytics: flowParameters.analytics,
+                                                                             isModallyPresented: true))
+        coordinator.actions.sink { [weak self] action in
             switch action {
-            // TODO: Handle these actions
             case .invite:
                 break
             case .selectedMember(let member):
                 break
+            case .dismissModal:
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
         .store(in: &cancellables)
