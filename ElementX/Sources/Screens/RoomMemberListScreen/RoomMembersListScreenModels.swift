@@ -11,6 +11,7 @@ import Foundation
 enum RoomMembersListScreenViewModelAction {
     case selectMember(_ member: RoomMemberProxyProtocol)
     case invite
+    case dismissModal
     
     var isSelectMember: Bool {
         switch self {
@@ -43,6 +44,8 @@ struct RoomMembersListScreenViewState: BindableState {
     let joinedMembersCount: Int
     var bannedMembersCount: Int { bannedMembers.count }
     
+    let isModallyPresented: Bool
+    
     var canInviteUsers = false
     var canKickUsers = false
     var canBanUsers = false
@@ -53,11 +56,13 @@ struct RoomMembersListScreenViewState: BindableState {
          joinedMembers: [RoomMemberListScreenEntry] = [],
          invitedMembers: [RoomMemberListScreenEntry] = [],
          bannedMembers: [RoomMemberListScreenEntry] = [],
+         isModallyPresented: Bool,
          bindings: RoomMembersListScreenViewStateBindings) {
         self.joinedMembersCount = joinedMembersCount
         self.joinedMembers = joinedMembers
         self.invitedMembers = invitedMembers
         self.bannedMembers = bannedMembers
+        self.isModallyPresented = isModallyPresented
         self.bindings = bindings
     }
     
@@ -91,6 +96,7 @@ struct RoomMembersListScreenViewStateBindings {
 enum RoomMembersListScreenViewAction {
     case selectMember(RoomMemberDetails)
     case invite
+    case dismissModal
 }
 
 enum RoomMembersListScreenAlertType: Hashable {

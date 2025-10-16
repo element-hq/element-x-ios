@@ -14,11 +14,13 @@ struct RoomMembersListScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
+    var isModallyPresented = false
 }
 
 enum RoomMembersListScreenCoordinatorAction {
     case invite
     case selectedMember(RoomMemberProxyProtocol)
+    case dismissModal
 }
 
 final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
@@ -32,7 +34,8 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: RoomMembersListScreenCoordinatorParameters) {
-        viewModel = RoomMembersListScreenViewModel(userSession: parameters.userSession,
+        viewModel = RoomMembersListScreenViewModel(isModallyPresented: parameters.isModallyPresented,
+                                                   userSession: parameters.userSession,
                                                    roomProxy: parameters.roomProxy,
                                                    userIndicatorController: parameters.userIndicatorController,
                                                    analytics: parameters.analytics)
@@ -48,6 +51,8 @@ final class RoomMembersListScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.selectedMember(member))
                 case .invite:
                     actionsSubject.send(.invite)
+                case .dismissModal:
+                    actionsSubject.send(.dismissModal)
                 }
             }
             .store(in: &cancellables)
