@@ -41,6 +41,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     
     private var childSpaceFlowCoordinator: SpaceFlowCoordinator?
     private var roomFlowCoordinator: RoomFlowCoordinator?
+    private var roomMembersFlowCoordinator: RoomMembersFlowCoordinator?
     
     indirect enum State: StateType {
         /// The state machine hasn't started.
@@ -246,25 +247,26 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         await roomProxy.timeline.subscribeForUpdates()
         
         let navCoordinator = NavigationStackCoordinator()
-        let coordinator = RoomMembersListScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
-                                                                             roomProxy: roomProxy,
-                                                                             userIndicatorController: flowParameters.userIndicatorController,
-                                                                             analytics: flowParameters.analytics,
-                                                                             isModallyPresented: true))
-        coordinator.actions.sink { [weak self] action in
-            switch action {
-            case .invite:
-                break
-            case .selectedMember(let member):
-                break
-            case .dismissModal:
-                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+        let flowCoordinator = RoomMembersFlowCoordinator(entryPoint: .roomMembersList,
+                                                         isModallyPresented: true,
+                                                         roomProxy: roomProxy,
+                                                         navigationStackCoordinator: navCoordinator,
+                                                         flowParameters: flowParameters)
+        
+        flowCoordinator.actions.sink { [weak self] actions in
+            guard let self else { return }
+            switch actions {
+            case .dismissFlow:
+                navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
         .store(in: &cancellables)
+        flowCoordinator.start()
+        roomMembersFlowCoordinator = flowCoordinator
         
-        navCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(navCoordinator)
+        navigationStackCoordinator.setSheetCoordinator(navCoordinator) { [weak self] in
+            self?.roomMembersFlowCoordinator = nil
+        }
     }
     
     private func presentJoinSpaceScreen() {
