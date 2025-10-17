@@ -11,10 +11,15 @@ import SwiftUI
 
 enum RoomMembersFlowCoordinatorAction {
     case dismissFlow
+    case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
+    case verifyUser(userID: String)
+    case openDirectChat(roomID: String)
 }
 
 enum RoomMembersFlowCoordinatorEntryPoint: Equatable {
+    /// To be used in a room when a member name is tapped
     case roomMember(userID: String)
+    /// To be used in the context of room details, space details etc.
     case roomMembersList
 }
 
@@ -25,7 +30,9 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         /// The room members list
         case roomMembersList
         /// The details for a member of the room
-        case roomMemberDetails(userID: String)
+        case roomMemberDetails(userID: String, previousState: State)
+        /// In case the details won't load because the user has left the room we load the profile
+        case userProfile(userID: String, previousState: State)
         /// The invite users screen
         case inviteUsersScreen
     }
@@ -40,6 +47,9 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         
         case presentInviteUsersScreen
         case dismissInviteUsersScreen
+        
+        case presentUserProfile(userID: String)
+        case dismissUserProfile
     }
     
     private let entryPoint: RoomMembersFlowCoordinatorEntryPoint
@@ -94,10 +104,11 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             case (.initial, .presentRoomMembersList):
                 return .roomMembersList
             case (.initial, .presentRoomMemberDetails(let userID)):
-                return .roomMemberDetails(userID: userID)
+                // previous state doesn't matter in this csase
+                return .roomMemberDetails(userID: userID, previousState: fromState)
                 
             case (.roomMembersList, .presentRoomMemberDetails(let userID)):
-                return .roomMemberDetails(userID: userID)
+                return .roomMemberDetails(userID: userID, previousState: fromState)
             case (.roomMemberDetails, .dismissRoomMemberDetails):
                 return .roomMembersList
                 
@@ -105,6 +116,11 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                 return .inviteUsersScreen
             case (.inviteUsersScreen, .dismissInviteUsersScreen):
                 return .roomMembersList
+                
+            case (.roomMemberDetails(_, let previousState), .presentUserProfile(let userID)):
+                return .userProfile(userID: userID, previousState: previousState)
+            case (.userProfile(_, let previousState), .dismissUserProfile):
+                return previousState
                 
             default:
                 return nil
@@ -116,10 +132,10 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .presentRoomMembersList, .roomMembersList):
                 presentRoomMembersList()
-            case (.initial, .presentRoomMemberDetails, .roomMemberDetails(let userID)):
+            case (.initial, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
                 presentRoomMemberDetails(userID: userID)
                 
-            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(let userID)):
+            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
                 presentRoomMemberDetails(userID: userID)
             case (.roomMemberDetails, .dismissRoomMemberDetails, .roomMembersList):
                 break
@@ -127,6 +143,11 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomMembersList, .presentInviteUsersScreen, .inviteUsersScreen):
                 presentInviteUsersScreen()
             case (.inviteUsersScreen, .dismissInviteUsersScreen, .roomMembersList):
+                break
+                
+            case (.roomMemberDetails, .presentUserProfile, .userProfile(let userID, _)):
+                replaceRoomMemberDetailsWithUserProfile(userID: userID)
+            case (.userProfile, .dismissUserProfile, _):
                 break
             default:
                 fatalError("Unhandled transition")
@@ -172,21 +193,28 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .openUserProfile:
-                // TODO: Implement
-//                stateMachine.tryEvent(.presentUserProfile(userID: userID))
-                break
+                stateMachine.tryEvent(.presentUserProfile(userID: userID))
             case .openDirectChat(let roomID):
-                // TODO: Implement
-//                stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
-                break
+                if isModallyPresented {
+                    // We never want a room to start in a modal so we delegate the handling to the presenter coordinator
+                    // which should dismiss this flow and then start the room flow.
+                    // However I am also realising that if another flow like the SpaceSettings one which is always modal
+                    // starts this flow with a push, this flow won't know that is modally presented.
+                    // So this logic might need to be revisited.
+                    // Maybe we should always delegate to the presenter coordinator the room handling?
+                    // And when we reach the Room/Space flow coordinator decide to either do a dismiss
+                    // or send back to this coordinator to push the room flow , depending on the flow that is using?
+                    actionsSubject.send(.openDirectChat(roomID: roomID))
+                } else {
+                    // TODO: Implement
+                    // This will be required to handle the case where the flow is pushed
+                    // if we want to reuse this flow coordinator also in the `RoomFlowCoordinator`
+                    // stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
+                }
             case .startCall(let roomProxy):
-                // TODO: Implement
-//                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
-                break
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .verifyUser(let userID):
-                // TODO: Implement
-//                actionsSubject.send(.verifyUser(userID: userID))
-                break
+                actionsSubject.send(.verifyUser(userID: userID))
             }
         }
         .store(in: &cancellables)
@@ -279,6 +307,46 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
+    private func replaceRoomMemberDetailsWithUserProfile(userID: String) {
+        let parameters = UserProfileScreenCoordinatorParameters(userID: userID,
+                                                                isPresentedModally: false,
+                                                                userSession: flowParameters.userSession,
+                                                                userIndicatorController: flowParameters.userIndicatorController,
+                                                                analytics: flowParameters.analytics)
+        let coordinator = UserProfileScreenCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            
+            switch action {
+            case .openDirectChat(let roomID):
+                if isModallyPresented {
+                    // We never want a room to start in a modal flow so we delegate the handling to the
+                    // presenter coordinator which should dismiss this flow and then start the room flow
+                    actionsSubject.send(.openDirectChat(roomID: roomID))
+                } else {
+                    // TODO: Implement
+                    // This will be required to handle the case where the flow is pushed
+                    // if we want to reuse this flow coordinator also in the `RoomFlowCoordinator`
+                    // stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
+                }
+            case .startCall(let roomProxy):
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+            case .dismiss:
+                break // Not supported when pushed.
+            }
+        }
+        .store(in: &cancellables)
+        
+        // Replace the RoomMemberDetailsScreen without any animation.
+        // If this pop and push happens before the previous navigation is completed it might break screen presentation logic
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+            self.navigationStackCoordinator.pop(animated: false)
+            self.navigationStackCoordinator.push(coordinator, animated: false) { [weak self] in
+                self?.stateMachine.tryEvent(.dismissUserProfile)
+            }
+        }
+    }
+        
     private static let loadingIndicatorID = "\(RoomMembersFlowCoordinator.self)-Loading"
     
     private func showLoadingIndicator(delay: Duration? = nil,

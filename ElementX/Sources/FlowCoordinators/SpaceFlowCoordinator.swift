@@ -258,6 +258,19 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             switch actions {
             case .dismissFlow:
                 navigationStackCoordinator.setSheetCoordinator(nil)
+            case .presentCallScreen(let roomProxy):
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+            case .verifyUser(let userID):
+                // Not sure about this, because user verification forces a dismissal on the top modal
+                // regardless of us dismissing it here or not.
+                // Maybe we should prevent that in this case by sending an extra argument?
+                // Or maybe just handle it internally whithin the `RoomMembersFlowCoordinator`
+                // when the flow has been presented modally?
+                actionsSubject.send(.verifyUser(userID: userID))
+            case .openDirectChat(roomID: let roomID):
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
             }
         }
         .store(in: &cancellables)
