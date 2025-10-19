@@ -14,21 +14,18 @@ public extension View {
     @MainActor
     @ViewBuilder
     func compoundSearchField() -> some View {
-        if #available(iOS 26, *) {
-            self
-        } else {
-            introspect(.navigationStack, on: .supportedVersions, scope: .ancestor) { navigationController in
-                // Uses the navigation stack as .searchField is unreliable when pushing the second search bar, during the create rooms flow.
-                guard let searchController = navigationController.navigationBar.topItem?.searchController else { return }
-                
-                // Ported from Riot iOS as this is the only reliable way to get the exact look we want.
-                // However this is fragile and tied to gutwrenching the current UISearchBar internals.
-                let textColor = UIColor.compound.textPrimary
+        introspect(.navigationStack, on: .supportedVersions, scope: .ancestor) { navigationController in
+            // Uses the navigation stack as .searchField is unreliable when pushing the second search bar, during the create rooms flow.
+            guard let searchController = navigationController.navigationBar.topItem?.searchController else { return }
+            
+            // Ported from Riot iOS as this is the only reliable way to get the exact look we want.
+            // However this is fragile and tied to gutwrenching the current UISearchBar internals.
+            
+            let searchTextField = searchController.searchBar.searchTextField
+            searchTextField.tintColor = .compound.iconAccentTertiary
+            
+            if #available(iOS 26.0, *) {
                 let placeholderColor = UIColor.compound.textSecondary
-                let textFieldTintColor = UIColor.compound.iconAccentTertiary
-                let textFieldBackgroundColor = UIColor.compound._bgSubtleSecondaryAlpha
-                
-                let searchTextField = searchController.searchBar.searchTextField
                 
                 // Magnifying glass icon.
                 let leftImageView = searchTextField.leftView as? UIImageView
@@ -43,9 +40,8 @@ public extension View {
                 clearButton?.tintColor = placeholderColor
                 
                 // Text field.
-                searchTextField.textColor = textColor
-                searchTextField.backgroundColor = textFieldBackgroundColor
-                searchTextField.tintColor = textFieldTintColor
+                searchTextField.textColor = .compound.textPrimary
+                searchTextField.backgroundColor = .compound._bgSubtleSecondaryAlpha
                 
                 // Hide the effect views so we can use the rounded rect style without any materials.
                 let effectBackgroundTop = searchTextField.value(forKey: "_effectBackgroundTop") as? UIView
