@@ -11,6 +11,7 @@ import MatrixRustSDK
 import SwiftUI
 
 enum ChatsFlowCoordinatorAction {
+    case switchToChatsTab
     case showSettings
     case showChatBackupSettings
     case sessionVerification(SessionVerificationScreenFlow)
@@ -661,6 +662,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 case .select(let roomID):
                     dismissGlobalSearch()
                     handleAppRoute(.room(roomID: roomID, via: []), animated: true)
+                    actionsSubject.send(.switchToChatsTab)
                 }
             }
             .store(in: &cancellables)
