@@ -36,6 +36,7 @@ struct ColorItem: View {
                     .font(.compound.bodySM.monospaced())
                     .foregroundColor(.compound.textSecondary)
             }
+            .layoutPriority(1)
         }
     }
     
