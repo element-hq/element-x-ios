@@ -133,7 +133,7 @@ struct TimelineThreadSummaryView: View {
                 
                 LoadableAvatarImage(url: sender?.avatarURL,
                                     name: sender?.displayName,
-                                    contentID: sender?.id,
+                                    contentID: senderID,
                                     avatarSize: .user(on: .threadSummary),
                                     mediaProvider: context.mediaProvider)
                     .accessibilityHidden(true)

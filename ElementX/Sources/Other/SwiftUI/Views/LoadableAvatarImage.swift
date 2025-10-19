@@ -10,7 +10,7 @@ import SwiftUI
 struct LoadableAvatarImage: View {
     private let url: URL?
     private let name: String?
-    private let contentID: String?
+    private let contentID: String
     private let isSpace: Bool
     private let avatarSize: Avatars.Size
     private let mediaProvider: MediaProviderProtocol?
@@ -20,7 +20,7 @@ struct LoadableAvatarImage: View {
     
     init(url: URL?,
          name: String?,
-         contentID: String?,
+         contentID: String,
          isSpace: Bool = false,
          avatarSize: Avatars.Size,
          mediaProvider: MediaProviderProtocol?,

@@ -5,28 +5,16 @@
 // Please see LICENSE files in the repository root for full details.
 //
 
+import Compound
 import SwiftUI
 
 struct OverridableAvatarImage: View {
-    private let overrideURL: URL?
-    private let url: URL?
-    private let name: String?
-    private let contentID: String?
-    private let avatarSize: Avatars.Size
-    private let mediaProvider: MediaProviderProtocol?
-    
-    @ScaledMetric private var frameSize: CGFloat
-    
-    init(overrideURL: URL?, url: URL?, name: String?, contentID: String?, avatarSize: Avatars.Size, mediaProvider: MediaProviderProtocol?) {
-        self.overrideURL = overrideURL
-        self.url = url
-        self.name = name
-        self.contentID = contentID
-        self.avatarSize = avatarSize
-        self.mediaProvider = mediaProvider
-        
-        _frameSize = ScaledMetric(wrappedValue: avatarSize.value)
-    }
+    let overrideURL: URL?
+    let url: URL?
+    let name: String?
+    let contentID: String
+    let avatarSize: Avatars.Size
+    let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
         if let overrideURL {
@@ -37,7 +25,7 @@ struct OverridableAvatarImage: View {
             } placeholder: {
                 ProgressView()
             }
-            .frame(width: frameSize, height: frameSize)
+            .scaledFrame(size: avatarSize.value)
             .clipShape(Circle())
         } else {
             LoadableAvatarImage(url: url,

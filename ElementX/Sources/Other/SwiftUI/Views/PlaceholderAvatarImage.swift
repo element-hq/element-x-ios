@@ -12,7 +12,7 @@ struct PlaceholderAvatarImage: View {
     @Environment(\.redactionReasons) private var redactionReasons
 
     private let textForImage: String
-    private let contentID: String?
+    private let contentID: String
     
     var body: some View {
         GeometryReader { geometry in
@@ -32,9 +32,9 @@ struct PlaceholderAvatarImage: View {
         .aspectRatio(1, contentMode: .fill)
     }
 
-    init(name: String?, contentID: String?) {
-        let baseName = name ?? contentID?.trimmingCharacters(in: .punctuationCharacters)
-        textForImage = baseName?.first?.uppercased() ?? ""
+    init(name: String?, contentID: String) {
+        let baseName = name ?? contentID.trimmingCharacters(in: .punctuationCharacters)
+        textForImage = baseName.first?.uppercased() ?? ""
         self.contentID = contentID
     }
 
@@ -47,11 +47,7 @@ struct PlaceholderAvatarImage: View {
     }
     
     private var avatarColor: DecorativeColor? {
-        guard let contentID else {
-            return nil
-        }
-        
-        return Color.compound.decorativeColor(for: contentID)
+        Color.compound.decorativeColor(for: contentID)
     }
 }
 
