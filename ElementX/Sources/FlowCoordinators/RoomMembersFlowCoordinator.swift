@@ -13,7 +13,6 @@ enum RoomMembersFlowCoordinatorAction {
     case dismissFlow
     case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
     case verifyUser(userID: String)
-    case openDirectChat(roomID: String)
 }
 
 enum RoomMembersFlowCoordinatorEntryPoint: Equatable {
@@ -53,7 +52,6 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private let entryPoint: RoomMembersFlowCoordinatorEntryPoint
-    private let isModallyPresented: Bool
     private let roomProxy: JoinedRoomProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let flowParameters: CommonFlowParameters
@@ -67,12 +65,10 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     init(entryPoint: RoomMembersFlowCoordinatorEntryPoint,
-         isModallyPresented: Bool,
          roomProxy: JoinedRoomProxyProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          flowParameters: CommonFlowParameters) {
         self.entryPoint = entryPoint
-        self.isModallyPresented = isModallyPresented
         self.roomProxy = roomProxy
         self.flowParameters = flowParameters
         self.navigationStackCoordinator = navigationStackCoordinator
@@ -159,8 +155,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         let coordinator = RoomMembersListScreenCoordinator(parameters: .init(userSession: flowParameters.userSession,
                                                                              roomProxy: roomProxy,
                                                                              userIndicatorController: flowParameters.userIndicatorController,
-                                                                             analytics: flowParameters.analytics,
-                                                                             isModallyPresented: true))
+                                                                             analytics: flowParameters.analytics))
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
@@ -168,16 +163,12 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                 stateMachine.tryEvent(.presentInviteUsersScreen)
             case .selectedMember(let member):
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: member.userID))
-            case .dismissModal:
-                actionsSubject.send(.dismissFlow)
             }
         }
         .store(in: &cancellables)
         
-        if isModallyPresented {
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-        } else {
-            navigationStackCoordinator.push(coordinator)
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.actionsSubject.send(.dismissFlow)
         }
     }
     
@@ -195,22 +186,9 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             case .openUserProfile:
                 stateMachine.tryEvent(.presentUserProfile(userID: userID))
             case .openDirectChat(let roomID):
-                if isModallyPresented {
-                    // We never want a room to start in a modal so we delegate the handling to the presenter coordinator
-                    // which should dismiss this flow and then start the room flow.
-                    // However I am also realising that if another flow like the SpaceSettings one which is always modal
-                    // starts this flow with a push, this flow won't know that is modally presented.
-                    // So this logic might need to be revisited.
-                    // Maybe we should always delegate to the presenter coordinator the room handling?
-                    // And when we reach the Room/Space flow coordinator decide to either do a dismiss
-                    // or send back to this coordinator to push the room flow , depending on the flow that is using?
-                    actionsSubject.send(.openDirectChat(roomID: roomID))
-                } else {
-                    // TODO: Implement
-                    // This will be required to handle the case where the flow is pushed
-                    // if we want to reuse this flow coordinator also in the `RoomFlowCoordinator`
-                    // stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
-                }
+                // TODO: Implement
+                // stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
+                break
             case .startCall(let roomProxy):
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .verifyUser(let userID):
@@ -319,16 +297,9 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             
             switch action {
             case .openDirectChat(let roomID):
-                if isModallyPresented {
-                    // We never want a room to start in a modal flow so we delegate the handling to the
-                    // presenter coordinator which should dismiss this flow and then start the room flow
-                    actionsSubject.send(.openDirectChat(roomID: roomID))
-                } else {
-                    // TODO: Implement
-                    // This will be required to handle the case where the flow is pushed
-                    // if we want to reuse this flow coordinator also in the `RoomFlowCoordinator`
-                    // stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
-                }
+                // TODO: Implement
+                // stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
+                break
             case .startCall(let roomProxy):
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .dismiss:

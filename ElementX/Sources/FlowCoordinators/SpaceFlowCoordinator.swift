@@ -246,40 +246,25 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         // Required to listen for membership updates
         await roomProxy.timeline.subscribeForUpdates()
         
-        let navCoordinator = NavigationStackCoordinator()
         let flowCoordinator = RoomMembersFlowCoordinator(entryPoint: .roomMembersList,
-                                                         isModallyPresented: true,
                                                          roomProxy: roomProxy,
-                                                         navigationStackCoordinator: navCoordinator,
+                                                         navigationStackCoordinator: navigationStackCoordinator,
                                                          flowParameters: flowParameters)
         
         flowCoordinator.actions.sink { [weak self] actions in
             guard let self else { return }
             switch actions {
             case .dismissFlow:
-                navigationStackCoordinator.setSheetCoordinator(nil)
+                navigationStackCoordinator.pop()
             case .presentCallScreen(let roomProxy):
-                navigationStackCoordinator.setSheetCoordinator(nil)
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .verifyUser(let userID):
-                // Not sure about this, because user verification forces a dismissal on the top modal
-                // regardless of us dismissing it here or not.
-                // Maybe we should prevent that in this case by sending an extra argument?
-                // Or maybe just handle it internally whithin the `RoomMembersFlowCoordinator`
-                // when the flow has been presented modally?
                 actionsSubject.send(.verifyUser(userID: userID))
-            case .openDirectChat(roomID: let roomID):
-                navigationStackCoordinator.setSheetCoordinator(nil)
-                stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
             }
         }
         .store(in: &cancellables)
         flowCoordinator.start()
         roomMembersFlowCoordinator = flowCoordinator
-        
-        navigationStackCoordinator.setSheetCoordinator(navCoordinator) { [weak self] in
-            self?.roomMembersFlowCoordinator = nil
-        }
     }
     
     private func presentJoinSpaceScreen() {

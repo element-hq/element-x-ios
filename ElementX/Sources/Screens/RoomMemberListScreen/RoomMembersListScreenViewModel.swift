@@ -27,7 +27,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
     }
 
     init(initialMode: RoomMembersListScreenMode = .members,
-         isModallyPresented: Bool,
          userSession: UserSessionProtocol,
          roomProxy: JoinedRoomProxyProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
@@ -38,7 +37,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
         self.analytics = analytics
         
         super.init(initialViewState: .init(joinedMembersCount: roomProxy.infoPublisher.value.joinedMembersCount,
-                                           isModallyPresented: isModallyPresented,
                                            bindings: .init(mode: initialMode)),
                    mediaProvider: userSession.mediaProvider)
         
@@ -53,8 +51,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             selectMember(member)
         case .invite:
             actionsSubject.send(.invite)
-        case .dismissModal:
-            actionsSubject.send(.dismissModal)
         }
     }
     
@@ -103,7 +99,6 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
                                joinedMembers: roomMembersDetails.joinedMembers,
                                invitedMembers: roomMembersDetails.invitedMembers,
                                bannedMembers: roomMembersDetails.bannedMembers,
-                               isModallyPresented: state.isModallyPresented,
                                bindings: state.bindings)
             
             if let powerLevels = roomProxy.infoPublisher.value.powerLevels {

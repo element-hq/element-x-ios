@@ -119,8 +119,7 @@ struct RoomMembersListMemberCell_Previews: PreviewProvider, TestablePreview {
         verificationState: .verificationViolation)
     ]
     
-    static let viewModel = RoomMembersListScreenViewModel(isModallyPresented: false,
-                                                          userSession: UserSessionMock(.init()),
+    static let viewModel = RoomMembersListScreenViewModel(userSession: UserSessionMock(.init()),
                                                           roomProxy: JoinedRoomProxyMock(.init(name: "Some room", members: [])),
                                                           userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                           analytics: ServiceLocator.shared.analytics)

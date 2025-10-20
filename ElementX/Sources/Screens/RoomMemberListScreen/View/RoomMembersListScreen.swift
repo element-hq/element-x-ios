@@ -96,14 +96,6 @@ struct RoomMembersListScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        if context.viewState.isModallyPresented {
-            ToolbarItem(placement: .cancellationAction) {
-                Button(L10n.actionClose) {
-                    context.send(viewAction: .dismissModal)
-                }
-            }
-        }
-        
         ToolbarItem(placement: .confirmationAction) {
             if context.viewState.canInviteUsers {
                 Button(L10n.actionInvite) {
@@ -206,7 +198,6 @@ struct RoomMembersListScreen_Previews: PreviewProvider, TestablePreview {
         }
         
         return RoomMembersListScreenViewModel(initialMode: initialMode,
-                                              isModallyPresented: false,
                                               userSession: UserSessionMock(.init(clientProxy: clientProxyMock)),
                                               roomProxy: JoinedRoomProxyMock(.init(name: "Some room",
                                                                                    members: members,
