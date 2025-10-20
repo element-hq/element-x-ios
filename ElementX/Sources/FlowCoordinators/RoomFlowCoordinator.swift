@@ -952,8 +952,6 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.presentInviteUsersScreen)
                 case .selectedMember(let member):
                     stateMachine.tryEvent(.presentRoomMemberDetails(userID: member.userID))
-                case .dismissModal:
-                    fatalError("This flow doesn't present the view modally.")
                 }
             }
             .store(in: &cancellables)
