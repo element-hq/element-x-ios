@@ -10,7 +10,7 @@ import SwiftState
 import SwiftUI
 
 enum RoomMembersFlowCoordinatorAction {
-    case dismissFlow
+    case finished
     case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
     case verifyUser(userID: String)
 }
@@ -34,6 +34,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         case userProfile(userID: String, previousState: State)
         /// The invite users screen
         case inviteUsersScreen
+        /// A room flow has been started
+        case roomFlow(roomID: String, previousState: State)
     }
     
     enum Event: EventType {
@@ -49,6 +51,9 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         
         case presentUserProfile(userID: String)
         case dismissUserProfile
+        
+        case startRoomFlow(roomID: String)
+        case stopRoomFlow
     }
     
     private let entryPoint: RoomMembersFlowCoordinatorEntryPoint
@@ -63,6 +68,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     var actions: AnyPublisher<RoomMembersFlowCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+    
+    private var roomFlowCoordinator: RoomFlowCoordinator?
     
     init(entryPoint: RoomMembersFlowCoordinatorEntryPoint,
          roomProxy: JoinedRoomProxyProtocol,
@@ -91,7 +98,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func clearRoute(animated: Bool) {
-        fatalError("Unavailable")
+        // TODO: Implement
     }
     
     private func configureStateMachine() {
@@ -116,6 +123,11 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomMemberDetails(_, let previousState), .presentUserProfile(let userID)):
                 return .userProfile(userID: userID, previousState: previousState)
             case (.userProfile(_, let previousState), .dismissUserProfile):
+                return previousState
+                
+            case (_, .startRoomFlow(let roomID)):
+                return .roomFlow(roomID: roomID, previousState: fromState)
+            case (.roomFlow(_, let previousState), .stopRoomFlow):
                 return previousState
                 
             default:
@@ -145,6 +157,12 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                 replaceRoomMemberDetailsWithUserProfile(userID: userID)
             case (.userProfile, .dismissUserProfile, _):
                 break
+                
+            case (_, .startRoomFlow(let roomID), .roomFlow):
+                startRoomFlow(roomID: roomID)
+            case (.roomFlow, .stopRoomFlow, _):
+                roomFlowCoordinator = nil
+                
             default:
                 fatalError("Unhandled transition")
             }
@@ -168,7 +186,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
-            self?.actionsSubject.send(.dismissFlow)
+            self?.actionsSubject.send(.finished)
         }
     }
     
@@ -186,9 +204,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             case .openUserProfile:
                 stateMachine.tryEvent(.presentUserProfile(userID: userID))
             case .openDirectChat(let roomID):
-                // TODO: Implement
-                // stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
-                break
+                stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
             case .startCall(let roomProxy):
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .verifyUser(let userID):
@@ -200,7 +216,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         navigationStackCoordinator.push(coordinator) { [weak self] in
             guard let self else { return }
             if entryPoint == .roomMember(userID: userID) {
-                actionsSubject.send(.dismissFlow)
+                actionsSubject.send(.finished)
             } else {
                 stateMachine.tryEvent(.dismissRoomMemberDetails)
             }
@@ -297,9 +313,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             
             switch action {
             case .openDirectChat(let roomID):
-                // TODO: Implement
-                // stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
-                break
+                stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
             case .startCall(let roomProxy):
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .dismiss:
@@ -316,6 +330,35 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
                 self?.stateMachine.tryEvent(.dismissUserProfile)
             }
         }
+    }
+    
+    private func startRoomFlow(roomID: String) {
+        let coordinator = RoomFlowCoordinator(roomID: roomID,
+                                              isChildFlow: true,
+                                              navigationStackCoordinator: navigationStackCoordinator,
+                                              flowParameters: flowParameters)
+        coordinator.actions
+            .sink { [weak self] action in
+                guard let self else { return }
+                
+                switch action {
+                case .presentCallScreen(let roomProxy):
+                    actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+                case .verifyUser(let userID):
+                    actionsSubject.send(.verifyUser(userID: userID))
+                case .continueWithSpaceFlow(let spaceRoomListProxy):
+                    // TODO: Implement
+                    // Not sure wha to do here since this can be presented also internally by the space flow
+//                    stateMachine.tryEvent(.startChildFlow, userInfo: SpaceFlowCoordinatorEntryPoint.space(spaceRoomListProxy))
+                    break
+                case .finished:
+                    stateMachine.tryEvent(.stopRoomFlow)
+                }
+            }
+            .store(in: &cancellables)
+        
+        roomFlowCoordinator = coordinator
+        coordinator.handleAppRoute(.room(roomID: roomID, via: []), animated: true)
     }
         
     private static let loadingIndicatorID = "\(RoomMembersFlowCoordinator.self)-Loading"
