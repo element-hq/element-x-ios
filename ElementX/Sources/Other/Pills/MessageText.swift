@@ -203,6 +203,8 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
         """
     
     private static let htmlStringWithList = "<p>This is a list</p>\n<ul>\n<li>One</li>\n<li>Two</li>\n<li>And number 3</li>\n</ul>\n"
+    
+    private static let htmlStringWithSpoiler = "partially <span data-mx-spoiler>spoilered</span>"
 
     private static let attributedStringBuilder = AttributedStringBuilder(mentionBuilder: MentionBuilder())
     
@@ -231,6 +233,11 @@ struct MessageText_Previews: PreviewProvider, TestablePreview {
             MessageText(attributedString: attributedString)
                 .border(Color.purple)
                 .previewDisplayName("With list")
+        }
+        if let attributedString = attributedStringBuilder.fromHTML(htmlStringWithSpoiler) {
+            MessageText(attributedString: attributedString)
+                .border(Color.purple)
+                .previewDisplayName("With spoiler")
         }
     }
 }

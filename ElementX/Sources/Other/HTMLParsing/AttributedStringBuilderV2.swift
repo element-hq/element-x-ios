@@ -16,6 +16,7 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
     private let mentionBuilder: MentionBuilderProtocol
     
     private static let attributeMSC4286 = "data-msc4286-external-payment-details"
+    private static let attributeMSC2010 = "mx-spoiler"
     private static let cacheDispatchQueue = DispatchQueue(label: "io.element.elementx.attributed_string_builder_v2_cache")
     private static var caches: [String: LRUCache<String, AttributedString>] = [:]
 
@@ -202,6 +203,10 @@ struct AttributedStringBuilderV2: AttributedStringBuilderProtocol {
             case "span":
                 if childElement.dataset()[Self.attributeMSC4286] != nil {
                     content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                }
+                if childElement.dataset()[Self.attributeMSC2010] != nil {
+                    content = attributedString(element: childElement, documentBody: documentBody, preserveFormatting: preserveFormatting, listTag: listTag, listIndex: &childIndex, indentLevel: indentLevel)
+                    content.addAttribute(.MatrixSpoiler, value: true, range: NSRange(location: 0, length: content.length))
                 }
                 
             case "ul", "ol":
