@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "房间发布";
 "screen_security_and_privacy_room_visibility_section_footer" = "房间地址是查找和访问房间的方式。这也确保你可以轻松地向他人分享房间。\n在 %1$@ 的公共房间目录中显示该房间时也需要地址。";
 "screen_security_and_privacy_title" = "安全与隐私";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "查看您创建或加入的空间";
 "screen_space_announcement_item2" = "接受或拒绝空间邀请";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";

@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Penerbitan ruangan";
 "screen_security_and_privacy_room_visibility_section_footer" = "Alamat ruangan adalah cara untuk menemukan dan mengakses ruangan. Hal ini juga memastikan Anda dapat dengan mudah berbagi ruangan dengan orang lain.\nAlamat ini juga diperlukan untuk membuat ruangan terlihat di %1$@ direktori ruangan publik.";
 "screen_security_and_privacy_title" = "Keamanan & privasi";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
@@ -736,7 +737,7 @@
 "screen_bug_report_include_logs_error" = "Log Anda terlalu besar sehingga tidak dapat dimasukkan dalam laporan ini, kirimkan kepada kami dengan cara lain.";
 "screen_bug_report_include_screenshot" = "Kirim tangkapan layar";
 "screen_bug_report_logs_description" = "Log akan disertakan dengan pesan Anda untuk memastikan bahwa semuanya berfungsi dengan baik. Untuk mengirimkan pesan Anda tanpa log, matikan pengaturan ini.";
-"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification push rules can help us pinpoint the root cause. Note these rules can contain private information, such as your display name or keywords to be notified for.";
 "screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Tampilkan catatan";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org adalah server besar dan gratis di jaringan Matrix publik untuk komunikasi yang aman dan terdesentralisasi, disediakan oleh Yayasan Matrix.org.";

@@ -570,7 +570,7 @@
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
 "screen_labs_header_title" = "Feeling experimental?";
 "screen_labs_title" = "Labs";
-"screen_leave_space_last_admin_info" = "%1$@ (Admin)";
+"screen_leave_space_last_admin_info" = "%1$@ (admin)";
 "screen_leave_space_subtitle" = "Também irás sair de todas as salas deste espaço.";
 "screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
 "screen_leave_space_subtitle_only_last_admin" = "You will not be removed from the following room(s) because you're the only administrator:";
@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Publicar sala";
 "screen_security_and_privacy_room_visibility_section_footer" = "Estes endereços permitem encontrar e aceder a sala, bem como a sua fácil partilha com outros.\nAlém disso, é necessário ter endereço para publicar a sala no diretório público do %1$@.";
 "screen_security_and_privacy_title" = "Segurança e privacidade";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
@@ -826,13 +827,13 @@
 "screen_invites_decline_direct_chat_title" = "Rejeitar conversa";
 "screen_invites_empty_list" = "Sem convites";
 "screen_invites_invited_you" = "%1$@ (%2$@) convidou-te";
-"screen_join_room_ban_by_message" = "Foste banido desta sala por %1$@.";
-"screen_join_room_ban_message" = "Foste banido desta sala.";
+"screen_join_room_ban_by_message" = "Foste banido(a) por %1$@.";
+"screen_join_room_ban_message" = "Foste banido(a)";
 "screen_join_room_ban_reason" = "Razão: %1$@.";
-"screen_join_room_fail_message" = "Falha ao entrar na sala.";
-"screen_join_room_fail_reason" = "A entrada nesta sala ou está limitada a convites ou a alguma configuração de espaço.";
-"screen_join_room_forget_action" = "Esquecer esta sala";
-"screen_join_room_invite_required_message" = "Precisas de um convite para entrares nesta sala";
+"screen_join_room_fail_message" = "Falha ao entrar";
+"screen_join_room_fail_reason" = "A entrada pode estar limitada a convites ou pode haver uma outra limitação de acesso.";
+"screen_join_room_forget_action" = "Esquecer";
+"screen_join_room_invite_required_message" = "Precisas de um convite para entrares";
 "screen_join_room_join_restricted_message" = "Podes ter que ser convidado ou pertenceres a um espaço para poderes entrar.";
 "screen_join_room_knock_action" = "Bater à porta";
 "screen_join_room_space_not_supported_description" = "A %1$@ ainda não funciona com espaços. Podes usá-los na aplicação web.";

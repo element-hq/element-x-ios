@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Rumspublicering";
 "screen_security_and_privacy_room_visibility_section_footer" = "Rumsadresser är sätt att hitta och komma åt rum. Detta säkerställer också att du enkelt kan dela ditt rum med andra. \nAdressen krävs också för att göra rummet synligt i%1$@ katalog för offentliga rum.";
 "screen_security_and_privacy_title" = "Säkerhet och sekretess";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
@@ -736,7 +737,7 @@
 "screen_bug_report_include_logs_error" = "Dina loggar är alltför stora och kan därför inte inkluderas i den här rapporten. Vänligen skicka dem till oss på annat sätt.";
 "screen_bug_report_include_screenshot" = "Skicka skärmdump";
 "screen_bug_report_logs_description" = "Loggar kommer att inkluderas i ditt meddelande för att se till att allt fungerar korrekt. Om du vill skicka ditt meddelande utan loggar stänger du av den här inställningen.";
-"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification push rules can help us pinpoint the root cause. Note these rules can contain private information, such as your display name or keywords to be notified for.";
 "screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Se loggar";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org är en stor gratisserver på det offentliga Matrix-nätverket för säker, decentraliserad kommunikation, som drivs av Matrix.org Foundation.";

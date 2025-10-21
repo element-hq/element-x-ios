@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Cyhoeddi ystafell";
 "screen_security_and_privacy_room_visibility_section_footer" = "Mae cyfeiriadau ystafelloedd yn ffyrdd o ddod o hyd i ystafelloedd a chael mynediad iddyn nhw. Mae hyn hefyd yn sicrhau y gallwch chi rannu'ch ystafell yn hawdd ag eraill.\nMae angen y cyfeiriad hefyd i wneud yr ystafell yn weladwy yng nghyfeiriadur ystafell gyhoeddus %1$@.";
 "screen_security_and_privacy_title" = "Diogelwch a phreifatrwydd";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";

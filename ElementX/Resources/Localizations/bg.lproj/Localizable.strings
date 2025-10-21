@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Room publishing";
 "screen_security_and_privacy_room_visibility_section_footer" = "Room addresses are ways to find and access rooms. This also ensures you can easily share your room with others.\nThe address is also required to make the room visible in %1$@ public room directory.";
 "screen_security_and_privacy_title" = "Защита и поверителност";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
@@ -736,7 +737,7 @@
 "screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Изпращане на екранна снимка";
 "screen_bug_report_logs_description" = "Дневниците ще бъдат включени към вашето съобщение, за да се уверим, че всичко работи правилно. За да изпратите съобщението си без дневници, изключете тази настройка.";
-"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification push rules can help us pinpoint the root cause. Note these rules can contain private information, such as your display name or keywords to be notified for.";
 "screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Преглед на дневниците";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org е голям, безплатен сървър в публичната мрежа на Matrix за сигурна, децентрализирана комуникация, управляван от фондация Matrix.org.";

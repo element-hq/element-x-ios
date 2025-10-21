@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Publikowanie pokoju";
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresy pokoju umożliwiają łatwe znalezienie i dołączenie do pokojów.\nDodatkowo adres pokoju jest wymagany, aby pomieszczenie było widoczne w katalogu pokoi publicznych %1$@.";
 "screen_security_and_privacy_title" = "Bezpieczeństwo i prywatność";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "Wyświetlić przestrzenie, które stworzyłeś lub do których dołączyłeś";
 "screen_space_announcement_item2" = "Akceptować lub odrzucać zaproszenia";
 "screen_space_announcement_item3" = "Odkrywać wszystkie pokoje, do których możesz dołączyć w swoich przestrzeniach";
