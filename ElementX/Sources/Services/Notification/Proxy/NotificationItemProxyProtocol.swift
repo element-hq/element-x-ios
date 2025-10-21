@@ -36,6 +36,8 @@ protocol NotificationItemProxyProtocol {
     var isNoisy: Bool { get }
 
     var hasMention: Bool { get }
+    
+    var threadRootEventID: String? { get }
 }
 
 extension NotificationItemProxyProtocol {
