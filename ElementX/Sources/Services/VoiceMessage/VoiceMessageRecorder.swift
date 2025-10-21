@@ -135,7 +135,8 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         var waveformData: [Float] = []
         let analyzer = WaveformAnalyzer()
         do {
-            waveformData = try await analyzer.samples(fromAudioAt: url, count: 100)
+            let samples = try await analyzer.samples(fromAudioAt: url, count: 100)
+            waveformData = samples.map { max(0, 1 - $0) }
         } catch {
             MXLog.error("Waveform analysis failed. \(error)")
             return .failure(.waveformAnalysisError)
