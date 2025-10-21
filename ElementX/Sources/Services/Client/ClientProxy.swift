@@ -342,6 +342,16 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
+    func hasDevicesToVerifyAgainst() async -> Result<Bool, ClientProxyError> {
+        do {
+            let result = try await client.encryption().hasDevicesToVerifyAgainst()
+            return .success(result)
+        } catch {
+            MXLog.error("Failed checking hasDevicesToVerifyAgainst with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+    }
+
     func startSync() {
         guard !hasEncounteredAuthError else {
             MXLog.warning("Ignoring request, this client has an unknown token.")

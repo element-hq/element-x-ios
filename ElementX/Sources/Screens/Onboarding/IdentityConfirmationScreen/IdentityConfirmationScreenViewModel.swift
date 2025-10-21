@@ -68,8 +68,8 @@ class IdentityConfirmationScreenViewModel: IdentityConfirmationScreenViewModelTy
         
         var availableActions: [IdentityConfirmationScreenViewState.AvailableActions] = []
         
-        if case let .success(isOnlyDeviceLeft) = await userSession.clientProxy.isOnlyDeviceLeft(),
-           !isOnlyDeviceLeft {
+        if case let .success(hasDevicesToVerifyAgainst) = await userSession.clientProxy.hasDevicesToVerifyAgainst(),
+           hasDevicesToVerifyAgainst {
             availableActions.append(.interactiveVerification)
         }
         
