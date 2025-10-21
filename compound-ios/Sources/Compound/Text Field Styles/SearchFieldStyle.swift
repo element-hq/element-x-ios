@@ -24,7 +24,7 @@ public extension View {
             let searchTextField = searchController.searchBar.searchTextField
             searchTextField.tintColor = .compound.iconAccentTertiary
             
-            if #available(iOS 26.0, *) {
+            if #unavailable(iOS 26.0) {
                 let placeholderColor = UIColor.compound.textSecondary
                 
                 // Magnifying glass icon.
