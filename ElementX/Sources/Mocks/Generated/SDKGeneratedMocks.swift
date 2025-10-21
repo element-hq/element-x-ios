@@ -17054,6 +17054,81 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         }
     }
 
+    //MARK: - subscribeToSendQueueUpdates
+
+    open var subscribeToSendQueueUpdatesListenerThrowableError: Error?
+    var subscribeToSendQueueUpdatesListenerUnderlyingCallsCount = 0
+    open var subscribeToSendQueueUpdatesListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return subscribeToSendQueueUpdatesListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToSendQueueUpdatesListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToSendQueueUpdatesListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToSendQueueUpdatesListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToSendQueueUpdatesListenerCalled: Bool {
+        return subscribeToSendQueueUpdatesListenerCallsCount > 0
+    }
+    open var subscribeToSendQueueUpdatesListenerReceivedListener: SendQueueListener?
+    open var subscribeToSendQueueUpdatesListenerReceivedInvocations: [SendQueueListener] = []
+
+    var subscribeToSendQueueUpdatesListenerUnderlyingReturnValue: TaskHandle!
+    open var subscribeToSendQueueUpdatesListenerReturnValue: TaskHandle! {
+        get {
+            if Thread.isMainThread {
+                return subscribeToSendQueueUpdatesListenerUnderlyingReturnValue
+            } else {
+                var returnValue: TaskHandle? = nil
+                DispatchQueue.main.sync {
+                    returnValue = subscribeToSendQueueUpdatesListenerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                subscribeToSendQueueUpdatesListenerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    subscribeToSendQueueUpdatesListenerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var subscribeToSendQueueUpdatesListenerClosure: ((SendQueueListener) async throws -> TaskHandle)?
+
+    open override func subscribeToSendQueueUpdates(listener: SendQueueListener) async throws -> TaskHandle {
+        if let error = subscribeToSendQueueUpdatesListenerThrowableError {
+            throw error
+        }
+        subscribeToSendQueueUpdatesListenerCallsCount += 1
+        subscribeToSendQueueUpdatesListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.subscribeToSendQueueUpdatesListenerReceivedInvocations.append(listener)
+        }
+        if let subscribeToSendQueueUpdatesListenerClosure = subscribeToSendQueueUpdatesListenerClosure {
+            return try await subscribeToSendQueueUpdatesListenerClosure(listener)
+        } else {
+            return subscribeToSendQueueUpdatesListenerReturnValue
+        }
+    }
+
     //MARK: - subscribeToTypingNotifications
 
     var subscribeToTypingNotificationsListenerUnderlyingCallsCount = 0
@@ -25247,8 +25322,8 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     open var sendVoiceMessageParamsAudioInfoWaveformCalled: Bool {
         return sendVoiceMessageParamsAudioInfoWaveformCallsCount > 0
     }
-    open var sendVoiceMessageParamsAudioInfoWaveformReceivedArguments: (params: UploadParameters, audioInfo: AudioInfo, waveform: [UInt16])?
-    open var sendVoiceMessageParamsAudioInfoWaveformReceivedInvocations: [(params: UploadParameters, audioInfo: AudioInfo, waveform: [UInt16])] = []
+    open var sendVoiceMessageParamsAudioInfoWaveformReceivedArguments: (params: UploadParameters, audioInfo: AudioInfo, waveform: [Float])?
+    open var sendVoiceMessageParamsAudioInfoWaveformReceivedInvocations: [(params: UploadParameters, audioInfo: AudioInfo, waveform: [Float])] = []
 
     var sendVoiceMessageParamsAudioInfoWaveformUnderlyingReturnValue: SendAttachmentJoinHandle!
     open var sendVoiceMessageParamsAudioInfoWaveformReturnValue: SendAttachmentJoinHandle! {
@@ -25274,9 +25349,9 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
             }
         }
     }
-    open var sendVoiceMessageParamsAudioInfoWaveformClosure: ((UploadParameters, AudioInfo, [UInt16]) throws -> SendAttachmentJoinHandle)?
+    open var sendVoiceMessageParamsAudioInfoWaveformClosure: ((UploadParameters, AudioInfo, [Float]) throws -> SendAttachmentJoinHandle)?
 
-    open override func sendVoiceMessage(params: UploadParameters, audioInfo: AudioInfo, waveform: [UInt16]) throws -> SendAttachmentJoinHandle {
+    open override func sendVoiceMessage(params: UploadParameters, audioInfo: AudioInfo, waveform: [Float]) throws -> SendAttachmentJoinHandle {
         if let error = sendVoiceMessageParamsAudioInfoWaveformThrowableError {
             throw error
         }

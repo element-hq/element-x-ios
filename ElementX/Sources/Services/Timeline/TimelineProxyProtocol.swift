@@ -109,7 +109,7 @@ protocol TimelineProxyProtocol {
     
     func sendVoiceMessage(url: URL,
                           audioInfo: AudioInfo,
-                          waveform: [UInt16],
+                          waveform: [Float],
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendReadReceipt(for eventID: String, type: ReceiptType) async -> Result<Void, TimelineProxyError>
