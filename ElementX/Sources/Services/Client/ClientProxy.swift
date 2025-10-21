@@ -347,7 +347,7 @@ class ClientProxy: ClientProxyProtocol {
             let result = try await client.encryption().hasDevicesToVerifyAgainst()
             return .success(result)
         } catch {
-            MXLog.error("Failed checking isLastDevice with error: \(error)")
+            MXLog.error("Failed checking hasDevicesToVerifyAgainst with error: \(error)")
             return .failure(.sdkError(error))
         }
     }
