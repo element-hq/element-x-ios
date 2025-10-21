@@ -45,6 +45,7 @@ Please read our [forking guide](docs/FORKING.md).
 
 ## Copyright & License
 
+Copyright (c) 2025 Element Creations Ltd.
 Copyright (c) 2022 - 2025 New Vector Ltd
 
 This software is dual licensed by New Vector Ltd (Element). It can be used either:
