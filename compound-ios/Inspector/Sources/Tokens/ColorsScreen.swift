@@ -19,6 +19,8 @@ struct ColorsScreen: View {
 }
 
 struct ColorItem: View {
+    @Environment(\.self) private var environment
+    
     let color: Color
     let name: String
     
@@ -30,10 +32,11 @@ struct ColorItem: View {
                 Text(name)
                     .font(.compound.bodyLG)
                     .foregroundColor(.compound.textPrimary)
-                Text(color.hexValue())
+                Text(color.hexValue(in: environment))
                     .font(.compound.bodySM.monospaced())
                     .foregroundColor(.compound.textSecondary)
             }
+            .layoutPriority(1)
         }
     }
     
@@ -55,23 +58,23 @@ struct ColorItem: View {
 }
 
 private extension Color {
-    func hexValue() -> String {
-        let uiColor = UIColor(self)
-        
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-        
-        uiColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-        
-        return "#\(red.asHex)\(green.asHex)\(blue.asHex)"
+    func hexValue(in environment: EnvironmentValues) -> String {
+        let resolved = resolve(in: environment)
+        return if resolved.opacity == 1 {
+            "#\(resolved.red.asHex)\(resolved.green.asHex)\(resolved.blue.asHex)"
+        } else {
+            "#\(resolved.red.asHex)\(resolved.green.asHex)\(resolved.blue.asHex) (\(resolved.opacity.asPercentage) opacity)"
+        }
     }
 }
 
-private extension CGFloat {
+private extension Float {
     var asHex: String {
         String(format: "%02X", Int((self * 255).rounded()))
+    }
+    
+    var asPercentage: String {
+        String(format: "%.0f%%", self * 100)
     }
 }
 
