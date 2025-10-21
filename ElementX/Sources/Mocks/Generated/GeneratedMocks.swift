@@ -2287,6 +2287,11 @@ class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {
             return isOnlyDeviceLeftReturnValue
         }
     }
+
+    func hasDevicesToVerifyAgainst() async -> Result<Bool, ClientProxyError> {
+        return (await isOnlyDeviceLeft()).map { !$0 }
+    }
+
     //MARK: - startSync
 
     var startSyncUnderlyingCallsCount = 0
