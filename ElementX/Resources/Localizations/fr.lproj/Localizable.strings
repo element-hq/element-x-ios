@@ -652,12 +652,13 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Publication du salon";
 "screen_security_and_privacy_room_visibility_section_footer" = "Les adresses de salon sont un moyen de trouver et d'accéder aux salons. Cela vous permet également de partager facilement votre salon avec d'autres personnes.\nL'adresse est également requise pour que le salon soit visible dans le répertoire %1$@ des salons publics.";
 "screen_security_and_privacy_title" = "Sécurité & confidentialité";
+"screen_space_menu_action_members" = "Voir les membres";
 "screen_space_announcement_item1" = "Voir les espaces que vous avez créés ou rejoints";
 "screen_space_announcement_item2" = "Accepter ou refuser les invitations aux espaces";
 "screen_space_announcement_item3" = "Découvrir les salons que vous pouvez joindre depuis vos espaces";
 "screen_space_announcement_item4" = "Rejoindre les espaces publics";
 "screen_space_announcement_item5" = "Quitter les espaces dont vous êtes membre.";
-"screen_space_announcement_notice" = "La création et la gestion des espaces seront bientôt disponibles.";
+"screen_space_announcement_notice" = "Le filtrage, la création et la gestion des espaces seront bientôt disponibles.";
 "screen_space_announcement_subtitle" = "Bienvenue dans la version bêta des espaces! Avec cette première version, vous pourrez :";
 "screen_space_announcement_title" = "Ajout des espaces";
 "screen_space_list_description" = "Espaces que vous avez créés ou rejoints.";

@@ -319,9 +319,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Leave %1$d room and space</string>
+			<string>Opustiť %1$d miestnosť a priestor</string>
+			<key>few</key>
+			<string>Opustiť %1$d miestnosti a priestory</string>
 			<key>other</key>
-			<string>Leave %1$d rooms and space</string>
+			<string>Opustiť %1$d miestností a priestorov</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
@@ -479,9 +481,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>You blocked %1$d user. You will not receive notifications for this user.</string>
+			<string>Zablokovali ste %1$d používateľa. Nebudete dostávať oznámenia od tohto používateľa.</string>
+			<key>few</key>
+			<string>Zablokovali ste %1$d používateľov. Nebudete dostávať oznámenia od týchto používateľov.</string>
 			<key>other</key>
-			<string>You blocked %1$d users. You will not receive notifications for these users.</string>
+			<string>Zablokovali ste %1$d používateľov. Nebudete dostávať oznámenia od týchto používateľov.</string>
 		</dict>
 	</dict>
 	<key>troubleshoot_notifications_test_detect_push_provider_success</key>

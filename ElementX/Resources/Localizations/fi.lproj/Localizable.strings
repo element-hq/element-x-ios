@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Huoneen julkaiseminen";
 "screen_security_and_privacy_room_visibility_section_footer" = "Huoneosoitteet ovat tapoja löytää ja käyttää huoneita. Näin voit myös helposti jakaa huoneesi muiden kanssa.\nOsoitetta tarvitaan myös, jotta huone näkyy %1$@ -palvelimen julkisessa huonehakemistossa.";
 "screen_security_and_privacy_title" = "Turvallisuus ja yksityisyys";
+"screen_space_menu_action_members" = "Näytä jäsenet";
 "screen_space_announcement_item1" = "Nähdä luomasi tai liittymäsi tilat";
 "screen_space_announcement_item2" = "Hyväksyä tai hylätä kutsuja tiloihin";
 "screen_space_announcement_item3" = "Löytää kaikki huoneet, joihin voit liittyä tiloissasi";

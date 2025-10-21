@@ -589,7 +589,7 @@
 "screen_media_upload_preview_error_failed_sending" = "Opplasting av medier mislyktes, vennligst prøv igjen.";
 "screen_media_upload_preview_error_too_large_message" = "Maksimal tillatt filstørrelse er %1$@.";
 "screen_media_upload_preview_error_too_large_title" = "Filen er for stor til å lastes opp";
-"screen_media_upload_preview_item_count" = "Item %1$d of %2$d";
+"screen_media_upload_preview_item_count" = "Fil %1$d av %2$d";
 "screen_media_upload_preview_optimize_image_quality_title" = "Optimaliser bildekvaliteten";
 "screen_media_upload_preview_processing" = "Behandler…";
 "screen_pinned_timeline_empty_state_description" = "Trykk på en melding og velg “%1$@” for å inkludere her.";
@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Publisering av rom";
 "screen_security_and_privacy_room_visibility_section_footer" = "Romadresser er en måte å finne og få tilgang til rommene på. Dette sikrer også at du enkelt kan dele rommet ditt med andre.\nAdressen er også nødvendig for å gjøre rommet synlig i den offentlige romkatalogen på %1$@.";
 "screen_security_and_privacy_title" = "Sikkerhet og personvern";
+"screen_space_menu_action_members" = "Vis medlemmer";
 "screen_space_announcement_item1" = "Se områder du har opprettet eller blitt med i";
 "screen_space_announcement_item2" = "Godta eller avslå invitasjoner til områder";
 "screen_space_announcement_item3" = "Oppdag alle rom du kan bli med i i dine områder";
@@ -737,7 +738,7 @@
 "screen_bug_report_include_screenshot" = "Send skjermbilde";
 "screen_bug_report_logs_description" = "Logger vil bli inkludert i meldingen din, for å sikre at alt fungerer som det skal. For å sende meldingen uten logger, slå av denne innstillingen.";
 "screen_bug_report_send_notification_settings_description" = "Hvis du har problemer med varsler, kan det å laste opp varslingsinnstillingene hjelpe oss med å finne den underliggende årsaken.";
-"screen_bug_report_send_notification_settings_title" = "Send notification settings";
+"screen_bug_report_send_notification_settings_title" = "Send varslingsinnstillinger";
 "screen_bug_report_view_logs" = "Vis logger";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org er en stor, gratis server på det offentlige Matrix-nettverket for sikker, desentralisert kommunikasjon, drevet av Matrix.org Foundation.";
 "screen_change_account_provider_other" = "Annet";
@@ -1289,7 +1290,7 @@
 "troubleshoot_notifications_test_check_permission_title" = "Sjekk tillatelser";
 "troubleshoot_notifications_test_current_push_provider_description" = "Få navnet på den nåværende tilbyderen.";
 "troubleshoot_notifications_test_current_push_provider_failure" = "Ingen push-leverandører er valgt.";
-"troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found" = "Current push provider: %1$@ and current distributor: %2$@. But the distributor %3$@ is not found. Maybe the application has been uninstalled?";
+"troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found" = "Nåværende push-leverandør: %1$@ og nåværende distributør: %2$@. Men distributøren %3$@ blir ikke funnet. Kanskje er applikasjonen  avinstallert?";
 "troubleshoot_notifications_test_current_push_provider_failure_no_distributor" = "Nåværende push-leverandør: %1$@, men ingen distributører er konfigurert.";
 "troubleshoot_notifications_test_current_push_provider_success" = "Gjeldende push-leverandør: %1$@.";
 "troubleshoot_notifications_test_current_push_provider_success_with_distributor" = "Nåværende push-leverandør: %1$@ (%2$@)";

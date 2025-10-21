@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Publicação da sala";
 "screen_security_and_privacy_room_visibility_section_footer" = "Os endereços das salas são formas de encontrar e acessar as salas. Isso também garante que você possa compartilhar facilmente sua sala com outras pessoas.\nO endereço também é necessário para que você possa ver a sala no diretório público de salas do %1$@.";
 "screen_security_and_privacy_title" = "Segurança e privacidade";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
@@ -736,7 +737,7 @@
 "screen_bug_report_include_logs_error" = "Seus registros são grandes demais portanto não podem serem inclusos no relatório, por favor envie-os para a gente de outra maneira.";
 "screen_bug_report_include_screenshot" = "Enviar captura de tela";
 "screen_bug_report_logs_description" = "Os registros serão incluídos com sua mensagem para garantir que tudo esteja funcionando corretamente. Para enviar sua mensagem sem registros, desative essa configuração.";
-"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification push rules can help us pinpoint the root cause. Note these rules can contain private information, such as your display name or keywords to be notified for.";
 "screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Ver registros";
 "screen_change_account_provider_matrix_org_subtitle" = "O Matrix.org é um grande servidor gratuito na rede pública Matrix para comunicação segura e descentralizada, administrado pela Fundação Matrix.org.";
