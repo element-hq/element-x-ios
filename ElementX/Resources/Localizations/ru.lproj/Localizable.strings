@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Публикация комнат";
 "screen_security_and_privacy_room_visibility_section_footer" = "Адреса комнат — это способ найти комнату и получить к ним доступ. Это также гарантирует, что вы сможете легко поделиться своей комнатой с другими.\nАдрес также необходим для отображения комнаты в каталоге %1$@ общедоступных комнат.";
 "screen_security_and_privacy_title" = "Безопасность и конфиденциальность";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "Просмотр пространств, которые вы создали или к которым присоединились";
 "screen_space_announcement_item2" = "Принимать или отклонять приглашения в пространства";
 "screen_space_announcement_item3" = "Откройте для себя все комнаты, к которым вы можете присоединиться в своих пространствах.";

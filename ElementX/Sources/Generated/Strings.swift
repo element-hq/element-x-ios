@@ -1380,7 +1380,7 @@ internal enum L10n {
   internal static func screenBugReportRashLogsAlertTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_bug_report_rash_logs_alert_title", String(describing: p1))
   }
-  /// If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.
+  /// If you are having issues with notifications, uploading the notification push rules can help us pinpoint the root cause. Note these rules can contain private information, such as your display name or keywords to be notified for.
   internal static var screenBugReportSendNotificationSettingsDescription: String { return L10n.tr("Localizable", "screen_bug_report_send_notification_settings_description") }
   /// Send notification settings
   internal static var screenBugReportSendNotificationSettingsTitle: String { return L10n.tr("Localizable", "screen_bug_report_send_notification_settings_title") }
@@ -2956,6 +2956,8 @@ internal enum L10n {
   }
   /// Spaces
   internal static var screenSpaceListTitle: String { return L10n.tr("Localizable", "screen_space_list_title") }
+  /// View members
+  internal static var screenSpaceMenuActionMembers: String { return L10n.tr("Localizable", "screen_space_menu_action_members") }
   /// An error occurred when trying to start a chat
   internal static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
   /// Join room by address

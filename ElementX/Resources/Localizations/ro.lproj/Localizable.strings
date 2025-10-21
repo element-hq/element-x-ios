@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Publicare cameră";
 "screen_security_and_privacy_room_visibility_section_footer" = "Adresele camerelor sunt modalități de a găsi și accesa camerele. Acest lucru vă asigură, de asemenea, că puteți partaja cu ușurință camera dvs. cu alte persoane.\nAdresa este necesară și pentru ca camera să fie vizibilă în directorul public de camere al %1$@.";
 "screen_security_and_privacy_title" = "Securitate & confidențialitate";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "Vizualizați spațiile pe care le-ați creat sau la care v-ați alăturat";
 "screen_space_announcement_item2" = "Acceptați sau refuzați invitațiile la spații";
 "screen_space_announcement_item3" = "Descoperiți toate camerele la care vă puteți alătura în spațiile dumneavoastră.";

@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Pubblicazione della stanza";
 "screen_security_and_privacy_room_visibility_section_footer" = "Gli indirizzi delle stanze sono modi per trovare e accedere a queste ultime. Questo assicura anche che tu possa condividere facilmente la tua stanza con altri. L'indirizzo è anche necessario per rendere la stanza visibile in %1$@ nell'elenco delle stanze pubbliche.";
 "screen_security_and_privacy_title" = "Sicurezza e privacy";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
@@ -736,7 +737,7 @@
 "screen_bug_report_include_logs_error" = "I tuoi log sono troppo grandi, quindi non possono essere inclusi in questo rapporto, inviaceli in un altro modo.";
 "screen_bug_report_include_screenshot" = "Invia istantanea schermo";
 "screen_bug_report_logs_description" = "Per verificare che le cose funzionino come previsto, i log verranno inviati con il tuo messaggio. Per inviare solo il tuo messaggio, disattiva questa impostazione.";
-"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification push rules can help us pinpoint the root cause. Note these rules can contain private information, such as your display name or keywords to be notified for.";
 "screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Visualizza i log";
 "screen_change_account_provider_matrix_org_subtitle" = "Matrix.org è un grande server gratuito nella rete pubblica Matrix per una comunicazione sicura e decentralizzata, gestito da Matrix.org Foundation.";

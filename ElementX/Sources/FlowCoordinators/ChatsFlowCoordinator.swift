@@ -1,7 +1,8 @@
 //
-// Copyright 2022-2024 New Vector Ltd.
+// Copyright 2025 Element Creations Ltd.
+// Copyright 2022-2025 New Vector Ltd.
 //
-// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 // Please see LICENSE files in the repository root for full details.
 //
 
@@ -11,6 +12,7 @@ import MatrixRustSDK
 import SwiftUI
 
 enum ChatsFlowCoordinatorAction {
+    case switchToChatsTab
     case showSettings
     case showChatBackupSettings
     case sessionVerification(SessionVerificationScreenFlow)
@@ -661,6 +663,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 case .select(let roomID):
                     dismissGlobalSearch()
                     handleAppRoute(.room(roomID: roomID, via: []), animated: true)
+                    actionsSubject.send(.switchToChatsTab)
                 }
             }
             .store(in: &cancellables)

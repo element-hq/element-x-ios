@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Szoba közzététele";
 "screen_security_and_privacy_room_visibility_section_footer" = "A szobacímek a szobák megtalálásának és elérésnek módjai. Ez azt is biztosítja, hogy könnyen megoszthatja a szobáját másokkal.\nA cím szükséges ahhoz is, hogy a nyilvános szoba láthatóvá váljon a(z) %1$@ kiszolgáló nyilvános szobakatalógusában.";
 "screen_security_and_privacy_title" = "Biztonság és adatvédelem";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "Az Ön által létrehozott vagy csatlakozott térek megtekintése";
 "screen_space_announcement_item2" = "A meghívások elfogadására vagy elutasítására a terekhez";
 "screen_space_announcement_item3" = "Szobák felfedezése a terekben, amelyekhez csatlakozhat";

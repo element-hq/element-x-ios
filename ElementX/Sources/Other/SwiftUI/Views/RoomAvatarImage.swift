@@ -1,7 +1,8 @@
 //
-// Copyright 2024 New Vector Ltd.
+// Copyright 2025 Element Creations Ltd.
+// Copyright 2024-2025 New Vector Ltd.
 //
-// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 // Please see LICENSE files in the repository root for full details.
 //
 
@@ -69,7 +70,7 @@ struct RoomAvatarImage: View {
             // We will expand upon this with more stack sizes in the future.
             if users.count == 0 {
                 let _ = assertionFailure("We should never pass empty heroes here.")
-                PlaceholderAvatarImage(name: nil, contentID: nil)
+                PlaceholderAvatarImage(name: nil, contentID: "")
             } else if users.count == 2 {
                 let clusterSize = avatarSize.value * 1.6
                 ZStack {

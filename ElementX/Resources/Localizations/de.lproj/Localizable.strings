@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Veröffentlichung von Chats";
 "screen_security_and_privacy_room_visibility_section_footer" = "Chat-Adressen machen es möglich, Chats zu finden und ihnen beizutreten. Dies erleichtert es, Chats mit anderen zu teilen.\nDie Adresse ist auch erforderlich, um den Chat im öffentlichen Verzeichnis von %1$@ zu veröffentlichen.";
 "screen_security_and_privacy_title" = "Sicherheit & Datenschutz";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "Von dir erstellte oder beigetretene Spaces anzeigen";
 "screen_space_announcement_item2" = "Einladungen zu Spaces annehmen oder ablehnen";
 "screen_space_announcement_item3" = "Chats innerhalb deiner Spaces entdecken, um ihnen beizutreten";

@@ -652,6 +652,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Δημοσίευση αίθουσας";
 "screen_security_and_privacy_room_visibility_section_footer" = "Οι διευθύνσεις αιθουσών είναι τρόποι εύρεσης και πρόσβασης σε αίθουσες. Αυτό εξασφαλίζει επίσης ότι μπορείτε εύκολα να μοιραστείτε την αίθουσα με άλλους.\nΗ διεύθυνση απαιτείται επίσης για να γίνει η αίθουσα ορατή στον δημόσιο κατάλογο αιθουσών %1$@.";
 "screen_security_and_privacy_title" = "Ασφάλεια & απόρρητο";
+"screen_space_menu_action_members" = "View members";
 "screen_space_announcement_item1" = "View spaces you've created or joined";
 "screen_space_announcement_item2" = "Accept or decline invites to spaces";
 "screen_space_announcement_item3" = "Discover any rooms you can join in your spaces";
@@ -736,7 +737,7 @@
 "screen_bug_report_include_logs_error" = "Your logs are excessively large so cannot be included in this report, please send them to us another way.";
 "screen_bug_report_include_screenshot" = "Αποστολή στιγμιοτύπου οθόνης";
 "screen_bug_report_logs_description" = "Τα αρχεία καταγραφής θα συμπεριληφθούν στο μήνυμά σου για να βεβαιωθούμε ότι όλα λειτουργούν σωστά. Για να στείλεις το μήνυμά σου χωρίς αρχεία καταγραφής, απενεργοποίησε αυτήν τη ρύθμιση.";
-"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification settings can help us pinpoint the root cause.";
+"screen_bug_report_send_notification_settings_description" = "If you are having issues with notifications, uploading the notification push rules can help us pinpoint the root cause. Note these rules can contain private information, such as your display name or keywords to be notified for.";
 "screen_bug_report_send_notification_settings_title" = "Send notification settings";
 "screen_bug_report_view_logs" = "Προβολή αρχείων καταγραφής";
 "screen_change_account_provider_matrix_org_subtitle" = "Το Matrix.org είναι ένας μεγάλος, δωρεάν διακομιστής στο δημόσιο δίκτυο Matrix για ασφαλή, αποκεντρωμένη επικοινωνία, που διευθύνεται από το Ίδρυμα Matrix.org.";

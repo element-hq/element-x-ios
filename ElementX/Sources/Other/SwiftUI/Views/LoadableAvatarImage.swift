@@ -1,7 +1,8 @@
 //
-// Copyright 2023, 2024 New Vector Ltd.
+// Copyright 2025 Element Creations Ltd.
+// Copyright 2023-2025 New Vector Ltd.
 //
-// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+// SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 // Please see LICENSE files in the repository root for full details.
 //
 
@@ -10,7 +11,7 @@ import SwiftUI
 struct LoadableAvatarImage: View {
     private let url: URL?
     private let name: String?
-    private let contentID: String?
+    private let contentID: String
     private let isSpace: Bool
     private let avatarSize: Avatars.Size
     private let mediaProvider: MediaProviderProtocol?
@@ -20,7 +21,7 @@ struct LoadableAvatarImage: View {
     
     init(url: URL?,
          name: String?,
-         contentID: String?,
+         contentID: String,
          isSpace: Bool = false,
          avatarSize: Avatars.Size,
          mediaProvider: MediaProviderProtocol?,

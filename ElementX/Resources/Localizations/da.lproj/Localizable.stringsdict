@@ -139,9 +139,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d Klynge</string>
+			<string>%1$d Gruppe</string>
 			<key>other</key>
-			<string>%1$d Klynger</string>
+			<string>%1$d Grupper</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -283,9 +283,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Forlad %1$d rum og klynge</string>
+			<string>Forlad %1$d rum og gruppe</string>
 			<key>other</key>
-			<string>Forlad %1$d rum og klynger</string>
+			<string>Forlad %1$d rum og Grupper</string>
 		</dict>
 	</dict>
 	<key>screen_pinned_timeline_screen_title</key>
