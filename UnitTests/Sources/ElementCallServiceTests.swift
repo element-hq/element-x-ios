@@ -27,7 +27,7 @@ class ElementCallServiceTests: XCTestCase {
         
         let expectation = XCTestExpectation(description: "Call accepted")
         
-        let pkPushPayloadMock = PKPushPayloadMock().addSeconds(currentDate, lifetime: 30)
+        let pkPushPayloadMock = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 30)
         
         service.pushRegistry(pushRegistry, didReceiveIncomingPushWith: pkPushPayloadMock, for: .voIP) {
             expectation.fulfill()
@@ -44,7 +44,7 @@ class ElementCallServiceTests: XCTestCase {
         
         let expectation = XCTestExpectation(description: "Call accepted")
         
-        let pushPayload = PKPushPayloadMock().addSeconds(currentDate, lifetime: 20)
+        let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
         
         service.pushRegistry(pushRegistry,
                              didReceiveIncomingPushWith: pushPayload,
@@ -66,7 +66,7 @@ class ElementCallServiceTests: XCTestCase {
    
         XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
-        let pushPayload = PKPushPayloadMock().addSeconds(currentDate, lifetime: 20)
+        let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 20)
         
         currentDate = currentDate.addingTimeInterval(60)
         
@@ -83,7 +83,7 @@ class ElementCallServiceTests: XCTestCase {
    
         XCTAssertFalse(callProvider.reportNewIncomingCallWithUpdateCompletionCalled)
         
-        let pushPayload = PKPushPayloadMock().addSeconds(currentDate, lifetime: 300)
+        let pushPayload = PKPushPayloadMock().updatingExpiration(currentDate, lifetime: 300)
         
         service.pushRegistry(pushRegistry,
                              didReceiveIncomingPushWith: pushPayload,
@@ -106,7 +106,7 @@ class ElementCallServiceTests: XCTestCase {
         let dateProvider: () -> Date = {
             self.currentDate
         }
-        service = ElementCallService(callProvider: callProvider, timeClock: Time(clock: testClock, now: dateProvider))
+        service = ElementCallService(callProvider: callProvider, timeProvider: TimeProvider(clock: testClock, now: dateProvider))
     }
 }
 
@@ -124,8 +124,8 @@ private class PKPushPayloadMock: PKPushPayload {
         dict
     }
     
-    func addSeconds(_ from: Date, lifetime: Int) -> Self {
-        dict[ElementCallServiceNotificationKey.expirationDate.rawValue] = from.addingTimeInterval(TimeInterval(lifetime))
+    func updatingExpiration(_ from: Date, lifetime: TimeInterval) -> Self {
+        dict[ElementCallServiceNotificationKey.expirationDate.rawValue] = from.addingTimeInterval(lifetime)
         return self
     }
 }

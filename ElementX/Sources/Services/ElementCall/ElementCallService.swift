@@ -15,7 +15,7 @@ import PushKit
 import UIKit
 
 // Keep this class testable
-struct Time {
+struct TimeProvider {
     var clock: any Clock<Duration>
     var now: () -> Date
 }
@@ -30,7 +30,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     private let pushRegistry: PKPushRegistry
     private let callController = CXCallController()
     private let callProvider: CXProviderProtocol
-    private let timeClock: Time
+    private let timeProvider: TimeProvider
     
     private weak var clientProxy: ClientProxyProtocol? {
         didSet {
@@ -66,10 +66,10 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     
     private var declineListenerHandle: TaskHandle?
     
-    init(callProvider: CXProviderProtocol? = nil, timeClock: Time? = nil) {
+    init(callProvider: CXProviderProtocol? = nil, timeProvider: TimeProvider? = nil) {
         pushRegistry = PKPushRegistry(queue: nil)
         
-        self.timeClock = timeClock ?? Time(clock: ContinuousClock(), now: Date.init)
+        self.timeProvider = timeProvider ?? TimeProvider(clock: ContinuousClock(), now: Date.init)
         
         if let callProvider {
             self.callProvider = callProvider
@@ -182,7 +182,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             return
         }
         
-        let nowDate = timeClock.now()
+        let nowDate = timeProvider.now()
         
         guard nowDate < expirationDate else {
             MXLog.warning("Call expired for room \(roomID), ignoring incoming push")
@@ -210,7 +210,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
         }
         
         endUnansweredCallTask = Task { [weak self] in
-            try? await self?.timeClock.clock.sleep(for: .milliseconds(ringDurationMillis))
+            try? await self?.timeProvider.clock.sleep(for: .milliseconds(ringDurationMillis))
             
             guard let self, !Task.isCancelled else {
                 return
