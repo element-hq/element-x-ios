@@ -19,13 +19,14 @@ struct RoomHeaderView: View {
     let mediaProvider: MediaProviderProtocol?
     
     var body: some View {
-        if ProcessInfo.isRunningAccessibilityTests || ProcessInfo.processInfo.isiOSAppOnMac {
-            // Accessibility tests scale up the dynamic size in real time which may break the view.
-            // macOS really doesn't like the greedy size and does weird things to it.
+        if #available(iOS 26.0, *) {
+            // On iOS 26+ we use the toolbarRole(.editor) to leading align.
             content
         } else {
+            // On iOS 18 and lower, the editor role causes an animation glitch with the back button whenever
+            // you push a screen whilst the large title is visible on the room screen.
             content
-                // Take up as much space as possible, with a leading alignment for use in the principal toolbar position
+                // So take up as much space as possible, with a leading alignment for use in the default principal toolbar position
                 .frame(idealWidth: .greatestFiniteMagnitude, maxWidth: .infinity, alignment: .leading)
         }
     }
@@ -64,9 +65,19 @@ struct RoomHeaderView: View {
     }
 }
 
+extension RoomHeaderView {
+    static var toolbarRole: ToolbarRole {
+        if #available(iOS 26.0, *) {
+            .editor
+        } else {
+            .automatic
+        }
+    }
+}
+
 struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        VStack(spacing: 8) {
+        VStack(alignment: .leading, spacing: 8) {
             makeHeader(avatarURL: nil, verificationState: .notVerified)
             makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified)
             makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verified)

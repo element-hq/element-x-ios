@@ -40,6 +40,7 @@ struct JoinRoomScreen: View {
         .alert(item: $context.alertInfo)
         .background()
         .backgroundStyle(.compound.bgCanvasDefault)
+        .toolbarRole(RoomHeaderView.toolbarRole)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .shouldScrollOnKeyboardDidShow(focus == .knockMessage, to: Focus.knockMessage)
