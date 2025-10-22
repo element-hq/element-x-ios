@@ -21,6 +21,7 @@ struct SpaceScreen: View {
             }
         }
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+        .toolbarRole(RoomHeaderView.toolbarRole)
         .navigationTitle(context.viewState.space.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }

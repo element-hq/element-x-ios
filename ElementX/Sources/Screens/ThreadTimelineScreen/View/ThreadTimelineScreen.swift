@@ -24,10 +24,11 @@ struct ThreadTimelineScreen: View {
         
     var body: some View {
         TimelineView(timelineContext: timelineContext)
+            .background(.compound.bgCanvasDefault)
+            .toolbarRole(RoomHeaderView.toolbarRole)
             .navigationTitle(L10n.commonThread)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
-            .background(.compound.bgCanvasDefault)
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .timelineMediaPreview(viewModel: $context.mediaPreviewViewModel)
             .overlay(alignment: .bottomTrailing) {
