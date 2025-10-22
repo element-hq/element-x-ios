@@ -106,7 +106,7 @@ class ElementCallServiceTests: XCTestCase {
         let dateProvider: () -> Date = {
             self.currentDate
         }
-        service = ElementCallService(callProvider: callProvider, timeClock: Time(clock: testClock, nowDate: dateProvider))
+        service = ElementCallService(callProvider: callProvider, timeClock: Time(clock: testClock, now: dateProvider))
     }
 }
 

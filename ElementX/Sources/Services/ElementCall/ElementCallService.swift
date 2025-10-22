@@ -17,7 +17,7 @@ import UIKit
 // Keep this class testable
 struct Time {
     var clock: any Clock<Duration>
-    var nowDate: () -> Date
+    var now: () -> Date
 }
 
 class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDelegate, CXProviderDelegate {
@@ -69,7 +69,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
     init(callProvider: CXProviderProtocol? = nil, timeClock: Time? = nil) {
         pushRegistry = PKPushRegistry(queue: nil)
         
-        self.timeClock = timeClock ?? Time(clock: ContinuousClock(), nowDate: Date.init)
+        self.timeClock = timeClock ?? Time(clock: ContinuousClock(), now: Date.init)
         
         if let callProvider {
             self.callProvider = callProvider
@@ -182,7 +182,7 @@ class ElementCallService: NSObject, ElementCallServiceProtocol, PKPushRegistryDe
             return
         }
         
-        let nowDate = timeClock.nowDate()
+        let nowDate = timeClock.now()
         
         guard nowDate < expirationDate else {
             MXLog.warning("Call expired for room \(roomID), ignoring incoming push")
