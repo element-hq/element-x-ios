@@ -127,17 +127,17 @@ class VoiceMessageRecorder: VoiceMessageRecorderProtocol {
         await previewAudioPlayerState?.updateState(progress: progress)
     }
     
-    func buildRecordingWaveform() async -> Result<[UInt16], VoiceMessageRecorderError> {
+    func buildRecordingWaveform() async -> Result<[Float], VoiceMessageRecorderError> {
         guard let url = audioRecorder.audioFileURL else {
             return .failure(.missingRecordingFile)
         }
         // build the waveform
-        var waveformData: [UInt16] = []
+        var waveformData: [Float] = []
         let analyzer = WaveformAnalyzer()
         do {
             let samples = try await analyzer.samples(fromAudioAt: url, count: 100)
             // linearly normalized to [0, 1] (1 -> -50 dB)
-            waveformData = samples.map { UInt16(max(0, (1 - $0) * 1024)) }
+            waveformData = samples.map { max(0, 1 - $0) }
         } catch {
             MXLog.error("Waveform analysis failed. \(error)")
             return .failure(.waveformAnalysisError)

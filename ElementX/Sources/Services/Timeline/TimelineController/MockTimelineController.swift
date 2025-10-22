@@ -241,7 +241,7 @@ class MockTimelineController: TimelineControllerProtocol {
     
     func sendVoiceMessage(url: URL,
                           audioInfo: MatrixRustSDK.AudioInfo,
-                          waveform: [UInt16],
+                          waveform: [Float],
                           requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineControllerError> {
         if let timelineProxy {
             return await timelineProxy.sendVoiceMessage(url: url,
