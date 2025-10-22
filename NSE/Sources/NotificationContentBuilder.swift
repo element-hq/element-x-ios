@@ -142,14 +142,22 @@ struct NotificationContentBuilder {
     private func icon(for notificationItem: NotificationItemProxyProtocol) -> NotificationIcon {
         if notificationItem.isDM {
             if userSession.settings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
-                return NotificationIcon(mediaSource: notificationItem.senderAvatarMediaSource,
-                                        groupInfo: .init(name: L10n.commonThread, id: threadRootEventID))
+                .init(mediaSource: notificationItem.senderAvatarMediaSource,
+                      groupInfo: .init(name: L10n.commonThread,
+                                       id: "\(notificationItem.roomID)\(threadRootEventID)"))
             } else {
-                return NotificationIcon(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
+                .init(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
             }
         } else {
-            return NotificationIcon(mediaSource: notificationItem.roomAvatarMediaSource,
-                                    groupInfo: .init(name: notificationItem.roomDisplayName, id: notificationItem.roomID))
+            if userSession.settings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+                .init(mediaSource: notificationItem.roomAvatarMediaSource,
+                      groupInfo: .init(name: L10n.notificationThreadInRoom(notificationItem.roomDisplayName),
+                                       id: "\(notificationItem.roomID)\(threadRootEventID)"))
+            } else {
+                .init(mediaSource: notificationItem.roomAvatarMediaSource,
+                      groupInfo: .init(name: notificationItem.roomDisplayName,
+                                       id: notificationItem.roomID))
+            }
         }
     }
 

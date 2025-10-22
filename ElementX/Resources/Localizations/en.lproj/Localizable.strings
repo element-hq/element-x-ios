@@ -420,6 +420,7 @@
 "leave_room_alert_select_new_owner_title" = "Transfer ownership";
 "leave_room_alert_subtitle" = "Are you sure that you want to leave the room?";
 "login_initial_device_name_ios" = "%1$@ iOS";
+"notification_thread_in_room" = "Thread in %1$@";
 "notification_channel_call" = "Call";
 "notification_channel_listening_for_events" = "Listening for events";
 "notification_channel_noisy" = "Noisy notifications";

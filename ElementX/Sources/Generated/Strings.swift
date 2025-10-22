@@ -1026,6 +1026,10 @@ internal enum L10n {
   }
   /// You are viewing the notification! Click me!
   internal static var notificationTestPushNotificationContent: String { return L10n.tr("Localizable", "notification_test_push_notification_content") }
+  /// Thread in %1$@
+  internal static func notificationThreadInRoom(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "notification_thread_in_room", String(describing: p1))
+  }
   /// %1$@: %2$@
   internal static func notificationTickerTextDm(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "notification_ticker_text_dm", String(describing: p1), String(describing: p2))
