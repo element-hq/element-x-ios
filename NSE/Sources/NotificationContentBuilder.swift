@@ -38,7 +38,7 @@ struct NotificationContentBuilder {
         }
         
         // So that the UI groups notification that are received for the same room/thread but also for the same user
-        var threadIdentifier = if userSession.settings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+        let threadIdentifier = if userSession.settings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
             // If a threaded message we group notifications also by thread root id
             "\(notificationItem.receiverID)\(notificationItem.roomID)\(threadRootEventID)"
         } else {
@@ -141,7 +141,12 @@ struct NotificationContentBuilder {
     
     private func icon(for notificationItem: NotificationItemProxyProtocol) -> NotificationIcon {
         if notificationItem.isDM {
-            return NotificationIcon(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
+            if userSession.settings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+                return NotificationIcon(mediaSource: notificationItem.senderAvatarMediaSource,
+                                        groupInfo: .init(name: L10n.commonThread, id: threadRootEventID))
+            } else {
+                return NotificationIcon(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
+            }
         } else {
             return NotificationIcon(mediaSource: notificationItem.roomAvatarMediaSource,
                                     groupInfo: .init(name: notificationItem.roomDisplayName, id: notificationItem.roomID))
