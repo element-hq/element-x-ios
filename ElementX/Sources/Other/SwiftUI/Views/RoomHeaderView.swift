@@ -77,7 +77,7 @@ extension RoomHeaderView {
 
 struct RoomHeaderView_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        VStack(spacing: 8) {
+        VStack(alignment: .leading, spacing: 8) {
             makeHeader(avatarURL: nil, verificationState: .notVerified)
             makeHeader(avatarURL: .mockMXCAvatar, verificationState: .notVerified)
             makeHeader(avatarURL: .mockMXCAvatar, verificationState: .verified)
