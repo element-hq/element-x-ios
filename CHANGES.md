@@ -1,3 +1,41 @@
+## Changes in 25.10.2 (2025-10-22)
+
+### What's Changed
+
+🐛 Bugfixes
+* Fix the bloom on the space tab for real. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4604
+* Thread tweaks by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4601
+* Fix last owner not prompted to promote on leave by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4608
+* Make the `SpaceRoomListProxy` publish its `SpaceRoomProxy` updates. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4607
+* Prevent the system from automatically hiding the sidebar when backgrounding the app by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4610
+* Convert the timeline's long press gesture recogniser to UIKit and prevent scroll view conflicts by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4615
+* Handle the long press gesture states better and avoid multiple action invocations by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4626
+* Use the editor toolbar role on iOS 26 instead of left aligning the header by frame. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4647
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4618
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4641
+
+🧱 Build
+* Only run Compound tests when files are changed in Compound. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4611
+* Use the new Icon Composer .icon format. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4612
+* Configure concurrency for Danger CI workflow by @t3chguy in https://github.com/element-hq/element-x-ios/pull/4646
+
+Others
+* Add unit test for the in-timeline space permalink handling by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4592
+* Update dependency jpsim/Yams to from: "6.2.0" by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4599
+* Add UI tests for accepting space invites. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4602
+* The space tweaks continue! by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4606
+* Update the enterprise submodule. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4609
+* Update dependency apple/swift-argument-parser to from: "1.6.2" by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4613
+* Some random tweaks made on a train 🚆 by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4636
+* Update copyright holding and dates by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4640
+* Update the enterprise submodule by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4643
+* Update SDK to 25.10.21 by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4642
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.10.0...release/25.10.2
+
 ## Changes in 25.10.1 (2025-10-14)
 
 ### What's Changed
