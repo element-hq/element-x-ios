@@ -25,12 +25,21 @@ extension RoomFlowCoordinator {
     enum PresentationAction: Hashable {
         case eventFocus(FocusEvent)
         case share(ShareExtensionPayload)
-        case thread(rootEventID: String)
+        case thread(rootEventID: String, focusEventID: String?)
         
         var focusedEvent: FocusEvent? {
             switch self {
             case .eventFocus(let focusEvent):
                 focusEvent
+            case .thread(let rootEventID, let focusEventID):
+                // Since this enum is for the room and not the threaded timeline,
+                // we will focus the thread root event id, and not the event id itself
+                // which will be done at the thread presentation level
+                if focusEventID != nil {
+                    .init(eventID: rootEventID, shouldSetPin: false)
+                } else {
+                    nil
+                }
             default:
                 nil
             }
