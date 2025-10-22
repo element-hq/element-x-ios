@@ -117,7 +117,7 @@ private class PKPushPayloadMock: PKPushPayload {
         dict[ElementCallServiceNotificationKey.roomID.rawValue] = "!room:example.com"
         dict[ElementCallServiceNotificationKey.roomDisplayName.rawValue] = "welcome"
         dict[ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue] = "$000"
-        dict[ElementCallServiceNotificationKey.expirationTimestampMillis.rawValue] = 10
+        dict[ElementCallServiceNotificationKey.expirationDate.rawValue] = Date(timeIntervalSince1970: 10)
     }
     
     override var dictionaryPayload: [AnyHashable: Any] {
@@ -125,7 +125,7 @@ private class PKPushPayloadMock: PKPushPayload {
     }
     
     func addSeconds(_ from: Date, lifetime: Int) -> Self {
-        dict[ElementCallServiceNotificationKey.expirationTimestampMillis.rawValue] = UInt64(from.timeIntervalSince1970 * 1000) + UInt64(lifetime)
+        dict[ElementCallServiceNotificationKey.expirationDate.rawValue] = from.addingTimeInterval(TimeInterval(lifetime))
         return self
     }
 }

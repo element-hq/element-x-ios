@@ -14,8 +14,8 @@ enum ElementCallServiceNotificationKey: String {
     /// When an incoming call is set to ring, there will be a `m.rtc.notification`event  (MSC4075).
     /// Keep the notification event id as it is needed to decline calls (MSC4310).
     case rtcNotifyEventID
-    /// The local timestamp in millis at which the incoming call should stop ringing.
-    case expirationTimestampMillis
+    /// The Date at which the incoming call should stop ringing.
+    case expirationDate
 }
 
 let ElementCallServiceNotificationDiscardDelta = 15.0

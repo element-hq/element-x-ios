@@ -210,9 +210,10 @@ class NotificationHandler {
             }
         }
         
+        let expirationDate = Date(timeIntervalSince1970: TimeInterval(expirationTimestamp / 1000))
         let payload = [ElementCallServiceNotificationKey.roomID.rawValue: roomID,
                        ElementCallServiceNotificationKey.roomDisplayName.rawValue: roomDisplayName,
-                       ElementCallServiceNotificationKey.expirationTimestampMillis.rawValue: expirationTimestamp,
+                       ElementCallServiceNotificationKey.expirationDate.rawValue: expirationDate,
                        ElementCallServiceNotificationKey.rtcNotifyEventID.rawValue: rtcNotifyEventID] as [String: Any]
         
         do {
