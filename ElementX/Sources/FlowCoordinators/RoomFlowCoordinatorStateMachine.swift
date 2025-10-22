@@ -25,6 +25,7 @@ extension RoomFlowCoordinator {
     enum PresentationAction: Hashable {
         case eventFocus(FocusEvent)
         case share(ShareExtensionPayload)
+        case thread(rootEventID: String)
         
         var focusedEvent: FocusEvent? {
             switch self {

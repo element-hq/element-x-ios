@@ -37,6 +37,9 @@ enum RoomFlowCoordinatorEntryPoint: Hashable {
     case room
     /// The flow will start by showing the room, focussing on the supplied event ID.
     case eventID(String)
+    /// The flow will start by showing a thread timeline, can only be triggered by notification taps,
+    /// which means it can never be a used for child flows.
+    case thread(rootEventID: String)
     /// The flow will start by showing the room's details.
     case roomDetails
     /// An external media share request
@@ -154,6 +157,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: EventUserInfo(animated: animated))
             }
+        case .thread(let roomID, let threadRootEventID):
+            Task {
+                await handleRoomRoute(roomID: roomID,
+                                      via: [],
+                                      presentationAction: .thread(rootEventID: threadRootEventID),
+                                      animated: animated)
+            }
         case .event(let eventID, let roomID, let via):
             Task {
                 await handleRoomRoute(roomID: roomID,
@@ -162,41 +172,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                       animated: animated)
             }
         case .childEvent(let eventID, let roomID, let via):
-            if case .presentingChild = stateMachine.state, let childRoomFlowCoordinator {
-                childRoomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
-            } else if roomID != roomProxy.id {
-                stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: EventUserInfo(animated: animated))
-            } else {
-                showLoadingIndicator(delay: .seconds(0.5))
-                Task {
-                    defer { hideLoadingIndicator() }
-                    switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
-                    case .success(let event):
-                        if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
-                            if case .thread(threadRootEventID: threadRootEventID, _) = stateMachine.state, let threadCoordinator = childThreadScreenCoordinators.last {
-                                threadCoordinator.focusOnEvent(eventID: eventID)
-                            } else {
-                                // If we are showing the room timeline, we want to focus the thread root.
-                                if childThreadScreenCoordinators.isEmpty {
-                                    roomScreenCoordinator?.focusOnEvent(.init(eventID: threadRootEventID, shouldSetPin: false))
-                                }
-                                stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: eventID))
-                            }
-                        } else if !childThreadScreenCoordinators.isEmpty {
-                            // If we are showing a child thread and we are navigating to a non threaded event
-                            // of the same room, we want to push the room on top of the thread.
-                            stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: EventUserInfo(animated: animated))
-                        } else {
-                            roomScreenCoordinator?.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
-                        }
-                    case .failure:
-                        showErrorIndicator()
-                    }
-                }
-            }
+            handleChildEventRoute(eventID: eventID, roomID: roomID, via: via, animated: animated)
         case .share(let payload):
             guard let roomID = payload.roomID, roomID == self.roomID else {
-                fatalError("Navigation route doesn't belong to this room flow.")
+                fatalError("Navigation route doesn't belong to this rovom flow.")
             }
             
             Task {
@@ -222,6 +201,41 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 }
                 
                 presentTransferOwnershipScreen()
+            }
+        }
+    }
+    
+    private func handleChildEventRoute(eventID: String, roomID: String, via: [String], animated: Bool) {
+        if case .presentingChild = stateMachine.state, let childRoomFlowCoordinator {
+            childRoomFlowCoordinator.handleAppRoute(.childEvent(eventID: eventID, roomID: roomID, via: via), animated: animated)
+        } else if roomID != roomProxy.id {
+            stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: EventUserInfo(animated: animated))
+        } else {
+            showLoadingIndicator(delay: .seconds(0.5))
+            Task {
+                defer { hideLoadingIndicator() }
+                switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
+                case .success(let event):
+                    if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
+                        if case .thread(threadRootEventID: threadRootEventID, _) = stateMachine.state, let threadCoordinator = childThreadScreenCoordinators.last {
+                            threadCoordinator.focusOnEvent(eventID: eventID)
+                        } else {
+                            // If we are showing the room timeline, we want to focus the thread root.
+                            if childThreadScreenCoordinators.isEmpty {
+                                roomScreenCoordinator?.focusOnEvent(.init(eventID: threadRootEventID, shouldSetPin: false))
+                            }
+                            stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: eventID))
+                        }
+                    } else if !childThreadScreenCoordinators.isEmpty {
+                        // If we are showing a child thread and we are navigating to a non threaded event
+                        // of the same room, we want to push the room on top of the thread.
+                        stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: EventUserInfo(animated: animated))
+                    } else {
+                        roomScreenCoordinator?.focusOnEvent(.init(eventID: eventID, shouldSetPin: false))
+                    }
+                case .failure:
+                    showErrorIndicator()
+                }
             }
         }
     }
@@ -552,6 +566,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .share(.text(_, let text)):
                     roomScreenCoordinator?.shareText(text)
+                case .thread(let rootEventID):
+                    stateMachine.tryEvent(.presentThread(threadRootEventID: rootEventID, focusEventID: nil))
                 case .none:
                     break
                 }
@@ -586,6 +602,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         case .share(.mediaFiles(_, let mediaFiles)):
             stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: mediaFiles.map(\.url)),
                                   userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
+        case .thread(let rootEventID):
+            stateMachine.tryEvent(.presentThread(threadRootEventID: rootEventID, focusEventID: nil))
         case .share(.text), .eventFocus:
             break // These are both handled in the coordinator's init.
         case .none:
@@ -1564,6 +1582,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             coordinator.handleAppRoute(.share(payload), animated: true)
         case .transferOwnership:
             coordinator.handleAppRoute(.transferOwnership(roomID: roomID), animated: true)
+        case .thread:
+            fatalError("This entry point is not allowed for child flows")
         }
     }
     
