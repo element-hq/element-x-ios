@@ -69,7 +69,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         
         Task {
             if case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(spaceRoomListProxy.id) {
-                state.isSpaceJoined = true
+                await roomProxy.subscribeForUpdates()
+                state.roomProxy = roomProxy
                 if case let .success(permalinkURL) = await roomProxy.matrixToPermalink() {
                     state.permalink = permalinkURL
                 }
@@ -117,8 +118,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             }
         case .confirmLeaveSpace:
             Task { await confirmLeaveSpace() }
-        case .displayMembers:
-            actionsSubject.send(.displayMembers)
+        case .displayMembers(let roomProxy):
+            actionsSubject.send(.displayMembers(roomProxy: roomProxy))
         case .spaceSettings:
             break // Not implemented.
         }

@@ -13,14 +13,14 @@ struct CreateRoomCoordinatorParameters {
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>
-    let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>
+    let selectedUsers: [UserProfileProxy]
     let appSettings: AppSettings
     let analytics: AnalyticsService
 }
 
 enum CreateRoomCoordinatorAction {
     case openRoom(withIdentifier: String)
-    case deselectUser(UserProfileProxy)
+    case updateSelectedUsers([UserProfileProxy])
     case updateDetails(CreateRoomFlowParameters)
     case displayMediaPickerWithMode(MediaPickerScreenMode)
     case removeImage
@@ -48,8 +48,8 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .deselectUser(let user):
-                actionsSubject.send(.deselectUser(user))
+            case .updateSelectedUsers(let users):
+                actionsSubject.send(.updateSelectedUsers(users))
             case .openRoom(let identifier):
                 actionsSubject.send(.openRoom(withIdentifier: identifier))
             case .updateDetails(let details):

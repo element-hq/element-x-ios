@@ -1354,7 +1354,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                       selectedUsers: .init(selectedUsersSubject),
                                                                       roomType: .room(roomProxy: roomProxy),
                                                                       userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
-                                                                      userIndicatorController: flowParameters.userIndicatorController)
+                                                                      userIndicatorController: flowParameters.userIndicatorController,
+                                                                      appSettings: flowParameters.appSettings)
         
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         stackCoordinator.setRootCoordinator(coordinator)
@@ -1363,64 +1364,16 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .cancel:
+            case .dismiss:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .proceed:
-                break
-            case .invite(let users):
-                self.inviteUsers(users, in: roomProxy)
-            case .toggleUser(let user):
-                var selectedUsers = selectedUsersSubject.value
-                
-                if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
-                    selectedUsers.remove(at: index)
-                } else {
-                    selectedUsers.append(user)
-                }
-                
-                selectedUsersSubject.send(selectedUsers)
+                fatalError("Not handled in this flow.")
             }
         }
         .store(in: &cancellables)
         
         navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
             self?.stateMachine.tryEvent(.dismissInviteUsersScreen)
-        }
-    }
-    
-    private func inviteUsers(_ users: [String], in room: JoinedRoomProxyProtocol) {
-        if flowParameters.appSettings.enableKeyShareOnInvite {
-            showLoadingIndicator(title: L10n.screenRoomDetailsInvitePeoplePreparing,
-                                 message: L10n.screenRoomDetailsInvitePeopleDontClose)
-        } else {
-            showLoadingIndicator()
-        }
-        
-        Task {
-            defer {
-                navigationStackCoordinator.setSheetCoordinator(nil)
-                hideLoadingIndicator()
-            }
-            
-            let result: Result<Void, RoomProxyError> = await withTaskGroup(of: Result<Void, RoomProxyError>.self) { group in
-                for user in users {
-                    group.addTask {
-                        await room.invite(userID: user)
-                    }
-                }
-                
-                return await group.first { inviteResult in
-                    inviteResult.isFailure
-                } ?? .success(())
-            }
-            
-            guard case .failure = result else {
-                return
-            }
-            
-            flowParameters.userIndicatorController.alertInfo = .init(id: .init(),
-                                                                     title: L10n.commonUnableToInviteTitle,
-                                                                     message: L10n.commonUnableToInviteMessage)
         }
     }
     

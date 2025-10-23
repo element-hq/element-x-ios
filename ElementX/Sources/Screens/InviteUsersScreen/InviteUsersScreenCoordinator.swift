@@ -11,17 +11,16 @@ import SwiftUI
 
 struct InviteUsersScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>
+    let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>?
     let roomType: InviteUsersScreenRoomType
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
+    let appSettings: AppSettings
 }
 
 enum InviteUsersScreenCoordinatorAction {
-    case cancel
-    case proceed
-    case invite(users: [String])
-    case toggleUser(UserProfileProxy)
+    case dismiss
+    case proceed(selectedUsers: [UserProfileProxy])
 }
 
 final class InviteUsersScreenCoordinator: CoordinatorProtocol {
@@ -38,21 +37,18 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
                                                selectedUsers: parameters.selectedUsers,
                                                roomType: parameters.roomType,
                                                userDiscoveryService: parameters.userDiscoveryService,
-                                               userIndicatorController: parameters.userIndicatorController)
+                                               userIndicatorController: parameters.userIndicatorController,
+                                               appSettings: parameters.appSettings)
     }
     
     func start() {
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .cancel:
-                actionsSubject.send(.cancel)
-            case .proceed:
-                actionsSubject.send(.proceed)
-            case .invite(let users):
-                actionsSubject.send(.invite(users: users))
-            case .toggleUser(let user):
-                actionsSubject.send(.toggleUser(user))
+            case .dismiss:
+                actionsSubject.send(.dismiss)
+            case .proceed(let selectedUsers):
+                actionsSubject.send(.proceed(selectedUsers: selectedUsers))
             }
         }
         .store(in: &cancellables)

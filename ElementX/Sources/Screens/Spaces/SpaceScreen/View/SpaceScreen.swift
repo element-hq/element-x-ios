@@ -63,8 +63,8 @@ struct SpaceScreen: View {
         ToolbarItem(placement: .primaryAction) {
             Menu {
                 Section {
-                    if context.viewState.isSpaceJoined {
-                        Button { context.send(viewAction: .displayMembers) } label: {
+                    if let roomProxy = context.viewState.roomProxy {
+                        Button { context.send(viewAction: .displayMembers(roomProxy: roomProxy)) } label: {
                             Label(L10n.screenSpaceMenuActionMembers, icon: \.user)
                         }
                     }
