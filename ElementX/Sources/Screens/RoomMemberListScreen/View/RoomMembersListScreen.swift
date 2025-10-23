@@ -48,6 +48,7 @@ struct RoomMembersListScreen: View {
         .autocorrectionDisabled()
         .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
         .navigationTitle(L10n.commonPeople)
+        .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $context.manageMemeberViewModel) {
             ManageRoomMemberSheetView(context: $0.context)
         }

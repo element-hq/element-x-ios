@@ -636,6 +636,7 @@
 		71B62C48B8079D49F3FBC845 /* ExpiringTaskRunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84B7A28A6606D58D1E38C55A /* ExpiringTaskRunnerTests.swift */; };
 		71C1347F23868324A4F43940 /* NavigationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A22A05E472533ED3C5A31B3 /* NavigationModule.swift */; };
 		7254FB2EFDD43BC8BB7A1213 /* SecurityAndPrivacyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4AE42C19EDE64B7CB7BE4D0 /* SecurityAndPrivacyScreen.swift */; };
+		726AA74DF4E5EFCEBD78CE3F /* RoomMembersFlowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A70B03471F6027C90EE868C /* RoomMembersFlowCoordinator.swift */; };
 		72D2298DE695A6797CDA1A2A /* SpaceScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18B223FA339BF53085328DEE /* SpaceScreenViewModelTests.swift */; };
 		733E2B19AB1FDA3B93293A28 /* AppLockSetupPINScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F275432954C8C6B1B7D966 /* AppLockSetupPINScreen.swift */; };
 		7366E5783D1871D42CF99D34 /* OIDCConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8D354D4232DED9649FD0FF4 /* OIDCConfiguration.swift */; };
@@ -1991,6 +1992,7 @@
 		5A37E2FACFD041CE466223CD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		5A43964330459965AF048A8C /* LoginScreenViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenViewModelTests.swift; sourceTree = "<group>"; };
 		5A4EF5724C0F894911AF7811 /* SpaceExplorerFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceExplorerFlowCoordinator.swift; sourceTree = "<group>"; };
+		5A70B03471F6027C90EE868C /* RoomMembersFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersFlowCoordinator.swift; sourceTree = "<group>"; };
 		5AEA0B743847CFA5B3C38EE4 /* RoomMembersListScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMembersListScreenCoordinator.swift; sourceTree = "<group>"; };
 		5B8F0ED874DF8C9A51B0AB6F /* SettingsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreenCoordinator.swift; sourceTree = "<group>"; };
 		5C1F000589F2CEE6B03ECFAB /* TimelineMediaPreviewViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineMediaPreviewViewModelTests.swift; sourceTree = "<group>"; };
@@ -4288,6 +4290,7 @@
 				A54AAF72E821B4084B7E4298 /* PinnedEventsTimelineFlowCoordinator.swift */,
 				9A008E57D52B07B78DFAD1BB /* RoomFlowCoordinator.swift */,
 				407C8DD85179D2DB896FC0FA /* RoomFlowCoordinatorStateMachine.swift */,
+				5A70B03471F6027C90EE868C /* RoomMembersFlowCoordinator.swift */,
 				0833F51229E166BCA141D004 /* RoomRolesAndPermissionsFlowCoordinator.swift */,
 				D28F7A6CEEA4A2815B0F0F55 /* SettingsFlowCoordinator.swift */,
 				5A4EF5724C0F894911AF7811 /* SpaceExplorerFlowCoordinator.swift */,
@@ -8155,6 +8158,7 @@
 				6448F8D1D3CA4CD27BB4CADD /* RoomMemberProxy.swift in Sources */,
 				92D9088B901CEBB1A99ECA4E /* RoomMemberProxyMock.swift in Sources */,
 				F118DD449066E594F63C697D /* RoomMemberProxyProtocol.swift in Sources */,
+				726AA74DF4E5EFCEBD78CE3F /* RoomMembersFlowCoordinator.swift in Sources */,
 				C08AAE7563E0722C9383F51C /* RoomMembersListScreen.swift in Sources */,
 				1C9BB74711E5F24C77B7FED0 /* RoomMembersListScreenCoordinator.swift in Sources */,
 				A975D60EA49F6AF73308809F /* RoomMembersListScreenMemberCell.swift in Sources */,

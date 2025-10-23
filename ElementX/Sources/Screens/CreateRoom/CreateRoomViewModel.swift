@@ -28,7 +28,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     
     init(userSession: UserSessionProtocol,
          createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>,
-         selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
+         selectedUsers: [UserProfileProxy],
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings) {
@@ -46,7 +46,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         super.init(initialViewState: CreateRoomViewState(roomName: parameters.name,
                                                          serverName: userSession.clientProxy.userIDServerName ?? "",
                                                          isKnockingFeatureEnabled: appSettings.knockingEnabled,
-                                                         selectedUsers: selectedUsers.value,
+                                                         selectedUsers: selectedUsers,
                                                          aliasLocalPart: parameters.aliasLocalPart ?? roomAliasNameFromRoomDisplayName(roomName: parameters.name),
                                                          bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
@@ -67,12 +67,6 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        selectedUsers
-            .sink { [weak self] users in
-                self?.state.selectedUsers = users
-            }
-            .store(in: &cancellables)
-        
         setupBindings()
     }
     
@@ -85,7 +79,8 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                 await createRoom()
             }
         case .deselectUser(let user):
-            actionsSubject.send(.deselectUser(user))
+            state.selectedUsers.removeAll { $0.userID == user.userID }
+            actionsSubject.send(.updateSelectedUsers(state.selectedUsers))
         case .displayCameraPicker:
             actionsSubject.send(.displayCameraPicker)
         case .displayMediaPicker:
