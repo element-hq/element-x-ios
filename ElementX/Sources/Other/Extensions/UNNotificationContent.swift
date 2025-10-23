@@ -27,7 +27,7 @@ extension UNNotificationContent {
     }
     
     @objc var threadRootEventID: String? {
-        userInfo[NotificationConstants.UserInfoKey.threadRootEventID] as? String
+        userInfo[NotificationConstants.UserInfoKey.threadRootEventIdentifier] as? String
     }
 }
 
@@ -61,10 +61,10 @@ extension UNMutableNotificationContent {
     
     override var threadRootEventID: String? {
         get {
-            userInfo[NotificationConstants.UserInfoKey.threadRootEventID] as? String
+            userInfo[NotificationConstants.UserInfoKey.threadRootEventIdentifier] as? String
         }
         set {
-            userInfo[NotificationConstants.UserInfoKey.threadRootEventID] = newValue
+            userInfo[NotificationConstants.UserInfoKey.threadRootEventIdentifier] = newValue
         }
     }
     

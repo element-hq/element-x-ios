@@ -359,15 +359,14 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             } else {
                 storedRoomsToAwait = [roomID]
             }
+            handleAppRoute(.room(roomID: roomID, via: []))
         } else if appSettings.threadsEnabled, let threadRootEventID = content.threadRootEventID {
             handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: content.eventID))
-            return
         } else if let eventID = content.eventID {
             handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []))
-            return
+        } else {
+            handleAppRoute(.room(roomID: roomID, via: []))
         }
-        
-        handleAppRoute(.room(roomID: roomID, via: []))
     }
     
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {

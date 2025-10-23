@@ -11,7 +11,7 @@ import MatrixRustSDK
 
 final class NSEUserSession {
     let sessionDirectories: SessionDirectories
-    let settings: CommonSettingsProtocol
+    let appSettings: CommonSettingsProtocol
     
     private let baseClient: Client
     private let notificationClient: NotificationClient
@@ -50,7 +50,7 @@ final class NSEUserSession {
          appSettings: CommonSettingsProtocol) async throws {
         sessionDirectories = credentials.restorationToken.sessionDirectories
         userID = credentials.userID
-        settings = appSettings
+        self.appSettings = appSettings
         
         let homeserverURL = credentials.restorationToken.session.homeserverUrl
         let clientBuilder = ClientBuilder

@@ -176,7 +176,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             handleChildEventRoute(eventID: eventID, roomID: roomID, via: via, animated: animated)
         case .share(let payload):
             guard let roomID = payload.roomID, roomID == self.roomID else {
-                fatalError("Navigation route doesn't belong to this rovom flow.")
+                fatalError("Navigation route doesn't belong to this room flow.")
             }
             
             Task {
