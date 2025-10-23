@@ -39,7 +39,7 @@ enum RoomFlowCoordinatorEntryPoint: Hashable {
     case eventID(String)
     /// The flow will start by showing a thread timeline, can only be triggered by notification taps,
     /// which means it can never be a used for child flows.
-    case thread(rootEventID: String)
+    case thread(rootEventID: String, focusEventID: String?)
     /// The flow will start by showing the room's details.
     case roomDetails
     /// An external media share request
@@ -157,12 +157,12 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: EventUserInfo(animated: animated))
             }
-        case .thread(let roomID, let threadRootEventID):
+        case .thread(let roomID, let threadRootEventID, let focusEventID):
             Task {
                 await handleRoomRoute(roomID: roomID,
                                       via: [],
                                       presentationAction: .thread(rootEventID: threadRootEventID,
-                                                                  focusEventID: nil),
+                                                                  focusEventID: focusEventID),
                                       animated: animated)
             }
         case .event(let eventID, let roomID, let via):

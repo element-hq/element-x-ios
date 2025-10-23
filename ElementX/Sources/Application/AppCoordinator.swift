@@ -360,7 +360,10 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
                 storedRoomsToAwait = [roomID]
             }
         } else if appSettings.threadsEnabled, let threadRootEventID = content.threadRootEventID {
-            handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID))
+            handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: content.eventID))
+            return
+        } else if let eventID = content.eventID {
+            handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []))
             return
         }
         

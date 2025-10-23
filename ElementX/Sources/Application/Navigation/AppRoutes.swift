@@ -52,7 +52,7 @@ enum AppRoute: Hashable {
     /// The change roles screen of a room with the transfer ownership setting
     case transferOwnership(roomID: String)
     /// A thread within a room, only to be used to handle tap on notification for threaded events.
-    case thread(roomID: String, threadRootEventID: String)
+    case thread(roomID: String, threadRootEventID: String, focusEventID: String?)
     
     /// Whether or not the route should be handled by the authentication flow.
     var isAuthenticationRoute: Bool {

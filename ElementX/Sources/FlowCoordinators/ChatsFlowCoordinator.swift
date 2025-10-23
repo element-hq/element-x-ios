@@ -130,10 +130,11 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             roomFlowCoordinator?.clearRoute(animated: animated)
         case .roomMemberDetails:
             roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
-        case .thread(let roomID, let threadRootEventID):
+        case .thread(let roomID, let threadRootEventID, let focusEventID):
             stateMachine.processEvent(.selectRoom(roomID: roomID,
                                                   via: [],
-                                                  entryPoint: .thread(rootEventID: threadRootEventID)),
+                                                  entryPoint: .thread(rootEventID: threadRootEventID,
+                                                                      focusEventID: focusEventID)),
                                       userInfo: .init(animated: animated))
         case .event(let eventID, let roomID, let via):
             stateMachine.processEvent(.selectRoom(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: .init(animated: animated))
@@ -296,7 +297,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             case .eventID(let eventID): .event(eventID: eventID, roomID: roomID, via: via) // ignored.
             case .share(let payload): .share(payload)
             case .transferOwnership: .transferOwnership(roomID: roomID)
-            case .thread(let rootEventID): .thread(roomID: roomID, threadRootEventID: rootEventID)
+            case .thread(let rootEventID, let focusEventID): .thread(roomID: roomID, threadRootEventID: rootEventID, focusEventID: focusEventID)
             }
             roomFlowCoordinator.handleAppRoute(route, animated: animated)
         } else {
@@ -508,8 +509,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             coordinator.handleAppRoute(.share(payload), animated: animated)
         case .transferOwnership:
             coordinator.handleAppRoute(.transferOwnership(roomID: roomID), animated: animated)
-        case .thread(let rootEventID):
-            coordinator.handleAppRoute(.thread(roomID: roomID, threadRootEventID: rootEventID), animated: animated)
+        case .thread(let rootEventID, let focusEventID):
+            coordinator.handleAppRoute(.thread(roomID: roomID, threadRootEventID: rootEventID, focusEventID: focusEventID), animated: animated)
         }
                 
         Task {
