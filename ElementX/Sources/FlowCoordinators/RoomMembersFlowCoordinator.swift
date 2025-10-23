@@ -106,7 +106,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         // We don't support dismissing a sub flow by itself, only the entire chain.
         // The presenter flow will take care of dismissing it
         actionsSubject.send(.finished)
-     }
+    }
     
     private func configureStateMachine() {
         stateMachine.addRouteMapping { event, fromState, _ in
