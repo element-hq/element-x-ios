@@ -18,7 +18,7 @@ enum CreateRoomScreenErrorType: Error {
 
 enum CreateRoomViewModelAction {
     case openRoom(withIdentifier: String)
-    case deselectUser(UserProfileProxy)
+    case updateSelectedUsers([UserProfileProxy])
     case updateDetails(CreateRoomFlowParameters)
     case displayMediaPicker
     case displayCameraPicker

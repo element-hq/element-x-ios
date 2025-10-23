@@ -16,6 +16,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private let roomType: InviteUsersScreenRoomType
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appSettings: AppSettings
     
     private var suggestedUsers = [UserProfileProxy]()
     
@@ -24,20 +25,25 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         actionsSubject.eraseToAnyPublisher()
     }
     
+    private let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>?
+    
     init(userSession: UserSessionProtocol,
-         selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>,
+         selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>?,
          roomType: InviteUsersScreenRoomType,
          userDiscoveryService: UserDiscoveryServiceProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appSettings: AppSettings) {
         self.roomType = roomType
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
+        self.appSettings = appSettings
+        self.selectedUsers = selectedUsers
         
-        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers.value,
+        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers?.value ?? [],
                                                                 isCreatingRoom: roomType.isCreatingRoom),
                    mediaProvider: userSession.mediaProvider)
                 
-        setupSubscriptions(selectedUsers: selectedUsers)
+        setupSubscriptions()
         fetchMembersIfNeeded()
         
         Task {
@@ -54,22 +60,66 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     override func process(viewAction: InviteUsersScreenViewAction) {
         switch viewAction {
         case .cancel:
-            actionsSubject.send(.cancel)
+            actionsSubject.send(.dismiss)
         case .proceed:
             switch roomType {
             case .draft:
-                actionsSubject.send(.proceed)
-            case .room:
-                actionsSubject.send(.invite(users: state.selectedUsers.map(\.userID)))
+                actionsSubject.send(.proceed(selectedUsers: state.selectedUsers))
+            case .room(let roomProxy):
+                inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
             }
         case .toggleUser(let user):
-            let willSelectUser = !state.selectedUsers.contains(user)
-            state.scrollToLastID = willSelectUser ? user.userID : nil
-            actionsSubject.send(.toggleUser(user))
+            toggleUser(user)
         }
     }
 
     // MARK: - Private
+    
+    private func toggleUser(_ user: UserProfileProxy) {
+        if state.selectedUsers.contains(user) {
+            state.scrollToLastID = nil
+            state.selectedUsers.removeAll(where: { $0.userID == user.userID })
+        } else {
+            state.scrollToLastID = user.userID
+            state.selectedUsers.append(user)
+        }
+    }
+    
+    private func inviteUsers(_ users: [String], roomProxy: JoinedRoomProxyProtocol) {
+        if appSettings.enableKeyShareOnInvite {
+            showLoader(title: L10n.screenRoomDetailsInvitePeoplePreparing,
+                       message: L10n.screenRoomDetailsInvitePeopleDontClose)
+        } else {
+            showLoader()
+        }
+        
+        Task {
+            defer {
+                hideLoader()
+                actionsSubject.send(.dismiss)
+            }
+            
+            let result: Result<Void, RoomProxyError> = await withTaskGroup(of: Result<Void, RoomProxyError>.self) { group in
+                for user in users {
+                    group.addTask {
+                        await roomProxy.invite(userID: user)
+                    }
+                }
+                
+                return await group.first { inviteResult in
+                    inviteResult.isFailure
+                } ?? .success(())
+            }
+            
+            guard case .failure = result else {
+                return
+            }
+            
+            userIndicatorController.alertInfo = .init(id: .init(),
+                                                      title: L10n.commonUnableToInviteTitle,
+                                                      message: L10n.commonUnableToInviteMessage)
+        }
+    }
     
     private func buildMembershipStateIfNeeded(members: [RoomMemberProxyProtocol]) {
         showLoader()
@@ -92,7 +142,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     @CancellableTask
     private var fetchUsersTask: Task<Void, Never>?
     
-    private func setupSubscriptions(selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>) {
+    private func setupSubscriptions() {
         context.$viewState
             .map(\.bindings.searchQuery)
             .debounceTextQueriesAndRemoveDuplicates()
@@ -101,11 +151,13 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             }
             .store(in: &cancellables)
         
-        selectedUsers
-            .sink { [weak self] users in
-                self?.state.selectedUsers = users
-            }
-            .store(in: &cancellables)
+        if let selectedUsers {
+            selectedUsers
+                .sink { [weak self] users in
+                    self?.state.selectedUsers = users
+                }
+                .store(in: &cancellables)
+        }
     }
     
     private func fetchMembersIfNeeded() {
@@ -159,8 +211,14 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     private let userIndicatorID = UUID().uuidString
     
-    private func showLoader() {
-        userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID, type: .modal, title: L10n.commonLoading, persistent: true), delay: .milliseconds(200))
+    private func showLoader(title: String = L10n.commonLoading,
+                            message: String? = nil) {
+        userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                              type: .modal,
+                                                              title: title,
+                                                              message: message,
+                                                              persistent: true),
+                                                delay: .milliseconds(200))
     }
     
     private func hideLoader() {

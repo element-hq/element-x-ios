@@ -54,7 +54,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case presentingChild(childSpaceID: String, previousState: State)
         /// A room flow is in progress
         case roomFlow(previousState: State)
-        /// A members flow in progress
+        /// A members flow is in progress
         case membersFlow
         
         case leftSpace
@@ -203,11 +203,15 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         }
         
         stateMachine.addRouteMapping { event, fromState, _ in
-            guard case .startMembersFlow = event, case .space = fromState else { return nil }
+            guard case .startMembersFlow = event, case .space = fromState else {
+                return nil
+            }
             return .membersFlow
-        } handler: { [weak self] _ in
-            guard let self else { return }
-            Task { await self.startMembersFlow() }
+        } handler: { [weak self] context in
+            guard let self, let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else {
+                fatalError("The room proxy must always be provided")
+            }
+            Task { await self.startMembersFlow(roomProxy: roomProxy) }
         }
         
         stateMachine.addRouteMapping { event, fromState, _ in
@@ -244,8 +248,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
                 case .leftSpace:
                     stateMachine.tryEvent(.leftSpace)
-                case .displayMembers:
-                    stateMachine.tryEvent(.startMembersFlow)
+                case .displayMembers(let roomProxy):
+                    stateMachine.tryEvent(.startMembersFlow, userInfo: roomProxy)
                 }
             }
             .store(in: &cancellables)
@@ -367,15 +371,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         selectedSpaceRoomSubject.send(roomID)
     }
     
-    private func startMembersFlow() async {
-        guard case let .space(spaceRoomListProxy) = entryPoint,
-              case let .joined(roomProxy) = await flowParameters.userSession.clientProxy.roomForIdentifier(spaceRoomListProxy.id) else {
-            fatalError("Attempting to show members of a non joined space")
-        }
-        
-        // Required to listen for membership updates
-        await roomProxy.timeline.subscribeForUpdates()
-        
+    private func startMembersFlow(roomProxy: JoinedRoomProxyProtocol) async {
         let flowCoordinator = RoomMembersFlowCoordinator(entryPoint: .roomMembersList,
                                                          roomProxy: roomProxy,
                                                          navigationStackCoordinator: navigationStackCoordinator,
