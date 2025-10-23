@@ -9,6 +9,7 @@
 
 import AnalyticsEvents
 import AVFoundation
+import CallKit
 import Foundation
 import LocalAuthentication
 import Photos
@@ -2064,6 +2065,132 @@ class BugReportServiceMock: BugReportServiceProtocol, @unchecked Sendable {
         } else {
             return submitBugReportProgressListenerReturnValue
         }
+    }
+}
+class CXProviderMock: CXProviderProtocol, @unchecked Sendable {
+
+    //MARK: - setDelegate
+
+    var setDelegateQueueUnderlyingCallsCount = 0
+    var setDelegateQueueCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return setDelegateQueueUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = setDelegateQueueUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                setDelegateQueueUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    setDelegateQueueUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var setDelegateQueueCalled: Bool {
+        return setDelegateQueueCallsCount > 0
+    }
+    var setDelegateQueueReceivedArguments: (delegate: CXProviderDelegate?, queue: DispatchQueue?)?
+    var setDelegateQueueReceivedInvocations: [(delegate: CXProviderDelegate?, queue: DispatchQueue?)] = []
+    var setDelegateQueueClosure: ((CXProviderDelegate?, DispatchQueue?) -> Void)?
+
+    func setDelegate(_ delegate: CXProviderDelegate?, queue: DispatchQueue?) {
+        setDelegateQueueCallsCount += 1
+        setDelegateQueueReceivedArguments = (delegate: delegate, queue: queue)
+        DispatchQueue.main.async {
+            self.setDelegateQueueReceivedInvocations.append((delegate: delegate, queue: queue))
+        }
+        setDelegateQueueClosure?(delegate, queue)
+    }
+    //MARK: - reportNewIncomingCall
+
+    var reportNewIncomingCallWithUpdateCompletionUnderlyingCallsCount = 0
+    var reportNewIncomingCallWithUpdateCompletionCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return reportNewIncomingCallWithUpdateCompletionUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = reportNewIncomingCallWithUpdateCompletionUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                reportNewIncomingCallWithUpdateCompletionUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    reportNewIncomingCallWithUpdateCompletionUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var reportNewIncomingCallWithUpdateCompletionCalled: Bool {
+        return reportNewIncomingCallWithUpdateCompletionCallsCount > 0
+    }
+    var reportNewIncomingCallWithUpdateCompletionReceivedArguments: (uuid: UUID, update: CXCallUpdate, completion: (Error?) -> Void)?
+    var reportNewIncomingCallWithUpdateCompletionReceivedInvocations: [(uuid: UUID, update: CXCallUpdate, completion: (Error?) -> Void)] = []
+    var reportNewIncomingCallWithUpdateCompletionClosure: ((UUID, CXCallUpdate, @escaping (Error?) -> Void) -> Void)?
+
+    func reportNewIncomingCall(with uuid: UUID, update: CXCallUpdate, completion: @escaping (Error?) -> Void) {
+        reportNewIncomingCallWithUpdateCompletionCallsCount += 1
+        reportNewIncomingCallWithUpdateCompletionReceivedArguments = (uuid: uuid, update: update, completion: completion)
+        DispatchQueue.main.async {
+            self.reportNewIncomingCallWithUpdateCompletionReceivedInvocations.append((uuid: uuid, update: update, completion: completion))
+        }
+        reportNewIncomingCallWithUpdateCompletionClosure?(uuid, update, completion)
+    }
+    //MARK: - reportCall
+
+    var reportCallWithEndedAtReasonUnderlyingCallsCount = 0
+    var reportCallWithEndedAtReasonCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return reportCallWithEndedAtReasonUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = reportCallWithEndedAtReasonUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                reportCallWithEndedAtReasonUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    reportCallWithEndedAtReasonUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    var reportCallWithEndedAtReasonCalled: Bool {
+        return reportCallWithEndedAtReasonCallsCount > 0
+    }
+    var reportCallWithEndedAtReasonReceivedArguments: (uuid: UUID, endedAt: Date?, reason: CXCallEndedReason)?
+    var reportCallWithEndedAtReasonReceivedInvocations: [(uuid: UUID, endedAt: Date?, reason: CXCallEndedReason)] = []
+    var reportCallWithEndedAtReasonClosure: ((UUID, Date?, CXCallEndedReason) -> Void)?
+
+    func reportCall(with uuid: UUID, endedAt: Date?, reason: CXCallEndedReason) {
+        reportCallWithEndedAtReasonCallsCount += 1
+        reportCallWithEndedAtReasonReceivedArguments = (uuid: uuid, endedAt: endedAt, reason: reason)
+        DispatchQueue.main.async {
+            self.reportCallWithEndedAtReasonReceivedInvocations.append((uuid: uuid, endedAt: endedAt, reason: reason))
+        }
+        reportCallWithEndedAtReasonClosure?(uuid, endedAt, reason)
     }
 }
 class ClientProxyMock: ClientProxyProtocol, @unchecked Sendable {

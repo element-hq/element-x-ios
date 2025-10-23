@@ -33,6 +33,7 @@ targets:
     - target: ElementX
     - package: MatrixRustSDK
     - package: AsyncAlgorithms
+    - package: Clocks
 
     info:
       path: ../SupportingFiles/Info.plist

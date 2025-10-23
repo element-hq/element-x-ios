@@ -102,6 +102,9 @@ packages:
   AsyncAlgorithms:
     url: https://github.com/apple/swift-async-algorithms
     minorVersion: 1.0.0
+  Clocks:
+    url: https://github.com/pointfreeco/swift-clocks
+    from: 1.0.6
   Collections:
     url: https://github.com/apple/swift-collections
     minorVersion: 1.2.0
