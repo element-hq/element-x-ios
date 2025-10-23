@@ -28,6 +28,7 @@ struct NotificationContentBuilder {
                  mediaProvider: MediaProviderProtocol) async {
         notificationContent.receiverID = notificationItem.receiverID
         notificationContent.roomID = notificationItem.roomID
+        notificationContent.threadRootEventID = notificationItem.threadRootEventID
         
         switch notificationItem.event {
         case .timeline(let event):
@@ -36,9 +37,16 @@ struct NotificationContentBuilder {
             notificationContent.eventID = nil
         }
         
-        // So that the UI groups notification that are received for the same room but also for the same user
+        // So that the UI groups notification that are received for the same room/thread but also for the same user
+        let threadIdentifier = if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+            // If a threaded message we group notifications also by thread root id
+            "\(notificationItem.receiverID)\(notificationItem.roomID)\(threadRootEventID)"
+        } else {
+            // otherwise only by room and receiver id
+            "\(notificationItem.receiverID)\(notificationItem.roomID)"
+        }
         // Removing the @ fixes an iOS bug where the notification crashes if the mute button is tapped
-        notificationContent.threadIdentifier = "\(notificationItem.receiverID)\(notificationItem.roomID)".replacingOccurrences(of: "@", with: "")
+        notificationContent.threadIdentifier = threadIdentifier.replacingOccurrences(of: "@", with: "")
         
         MXLog.info("isNoisy: \(notificationItem.isNoisy)")
         notificationContent.sound = notificationItem.isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
@@ -133,10 +141,23 @@ struct NotificationContentBuilder {
     
     private func icon(for notificationItem: NotificationItemProxyProtocol) -> NotificationIcon {
         if notificationItem.isDM {
-            return NotificationIcon(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
+            if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+                .init(mediaSource: notificationItem.senderAvatarMediaSource,
+                      groupInfo: .init(name: L10n.commonThread,
+                                       id: "\(notificationItem.roomID)\(threadRootEventID)"))
+            } else {
+                .init(mediaSource: notificationItem.senderAvatarMediaSource, groupInfo: nil)
+            }
         } else {
-            return NotificationIcon(mediaSource: notificationItem.roomAvatarMediaSource,
-                                    groupInfo: .init(name: notificationItem.roomDisplayName, id: notificationItem.roomID))
+            if userSession.appSettings.threadsEnabled, let threadRootEventID = notificationItem.threadRootEventID {
+                .init(mediaSource: notificationItem.roomAvatarMediaSource,
+                      groupInfo: .init(name: L10n.notificationThreadInRoom(notificationItem.roomDisplayName),
+                                       id: "\(notificationItem.roomID)\(threadRootEventID)"))
+            } else {
+                .init(mediaSource: notificationItem.roomAvatarMediaSource,
+                      groupInfo: .init(name: notificationItem.roomDisplayName,
+                                       id: notificationItem.roomID))
+            }
         }
     }
 

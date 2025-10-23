@@ -130,6 +130,12 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             roomFlowCoordinator?.clearRoute(animated: animated)
         case .roomMemberDetails:
             roomFlowCoordinator?.handleAppRoute(appRoute, animated: animated)
+        case .thread(let roomID, let threadRootEventID, let focusEventID):
+            stateMachine.processEvent(.selectRoom(roomID: roomID,
+                                                  via: [],
+                                                  entryPoint: .thread(rootEventID: threadRootEventID,
+                                                                      focusEventID: focusEventID)),
+                                      userInfo: .init(animated: animated))
         case .event(let eventID, let roomID, let via):
             stateMachine.processEvent(.selectRoom(roomID: roomID, via: via, entryPoint: .eventID(eventID)), userInfo: .init(animated: animated))
         case .eventOnRoomAlias(let eventID, let alias):
@@ -190,24 +196,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             case (.initial, .start, .roomList):
                 presentHomeScreen()
             case(.roomList(let detailState), .selectRoom(let roomID, let via, let entryPoint), .roomList):
-                if case .room(roomID) = detailState,
-                   !entryPoint.isEventID, // Don't reuse the existing room so the live timeline is hidden while the detached timeline is loading.
-                   let roomFlowCoordinator {
-                    let route: AppRoute = switch entryPoint {
-                    case .room: .room(roomID: roomID, via: via)
-                    case .roomDetails: .roomDetails(roomID: roomID)
-                    case .eventID(let eventID): .event(eventID: eventID, roomID: roomID, via: via) // ignored.
-                    case .share(let payload): .share(payload)
-                    case .transferOwnership: .transferOwnership(roomID: roomID)
-                    }
-                    roomFlowCoordinator.handleAppRoute(route, animated: animated)
-                } else {
-                    if case .space = detailState {
-                        dismissRoomFlow(animated: animated)
-                    }
-                    startRoomFlow(roomID: roomID, via: via, entryPoint: entryPoint, animated: animated)
-                }
-                actionsSubject.send(.hideCallScreenOverlay) // Turn any active call into a PiP so that navigation from a notification is visible to the user.
+                handleSelectRoomTransition(roomID: roomID, via: via, entryPoint: entryPoint, detailState: detailState, animated: animated)
             case(.roomList, .deselectRoom, .roomList):
                 dismissRoomFlow(animated: animated)
             
@@ -296,6 +285,28 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 fatalError("Failed transition with context: \(context)")
             }
         }
+    }
+    
+    private func handleSelectRoomTransition(roomID: String, via: [String], entryPoint: RoomFlowCoordinatorEntryPoint, detailState: ChatsFlowCoordinatorStateMachine.DetailState?, animated: Bool) {
+        if case .room(roomID) = detailState,
+           !entryPoint.isEventID, // Don't reuse the existing room so the live timeline is hidden while the detached timeline is loading.
+           let roomFlowCoordinator {
+            let route: AppRoute = switch entryPoint {
+            case .room: .room(roomID: roomID, via: via)
+            case .roomDetails: .roomDetails(roomID: roomID)
+            case .eventID(let eventID): .event(eventID: eventID, roomID: roomID, via: via) // ignored.
+            case .share(let payload): .share(payload)
+            case .transferOwnership: .transferOwnership(roomID: roomID)
+            case .thread(let rootEventID, let focusEventID): .thread(roomID: roomID, threadRootEventID: rootEventID, focusEventID: focusEventID)
+            }
+            roomFlowCoordinator.handleAppRoute(route, animated: animated)
+        } else {
+            if case .space = detailState {
+                dismissRoomFlow(animated: animated)
+            }
+            startRoomFlow(roomID: roomID, via: via, entryPoint: entryPoint, animated: animated)
+        }
+        actionsSubject.send(.hideCallScreenOverlay) // Turn any active call into a PiP so that navigation from a notification is visible to the user.
     }
     
     private func setupObservers() {
@@ -498,6 +509,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             coordinator.handleAppRoute(.share(payload), animated: animated)
         case .transferOwnership:
             coordinator.handleAppRoute(.transferOwnership(roomID: roomID), animated: animated)
+        case .thread(let rootEventID, let focusEventID):
+            coordinator.handleAppRoute(.thread(roomID: roomID, threadRootEventID: rootEventID, focusEventID: focusEventID), animated: animated)
         }
                 
         Task {

@@ -395,7 +395,10 @@ class TimelineTableViewController: UIViewController {
             guard let self else { return }
             if let kvPair = timelineItemsDictionary.first(where: { $0.value.identifier.eventID == eventID }),
                let indexPath = dataSource?.indexPath(for: kvPair.key) {
-                tableView.scrollToRow(at: indexPath, at: .middle, animated: animated)
+                // Scrolling to the middle created a small bump in the timeline
+                // Using top, which is bottom in the reversed timeline helps with rendering
+                // in full long messages and images
+                tableView.scrollToRow(at: indexPath, at: .top, animated: animated)
                 coordinator.send(viewAction: .scrolledToFocussedItem)
                 // Ensure VoiceOver focus happens after the scroll animation (if any)
                 DispatchQueue.main.asyncAfter(deadline: .now() + (animated ? 0.5 : 0.0)) {

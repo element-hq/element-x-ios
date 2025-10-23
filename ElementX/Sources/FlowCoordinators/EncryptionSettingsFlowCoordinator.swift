@@ -81,7 +81,7 @@ class EncryptionSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case .accountProvisioningLink:
             break // We always ignore this flow when logged in.
         case .roomList, .room, .roomAlias, .childRoom, .childRoomAlias,
-             .roomDetails, .roomMemberDetails, .userProfile,
+             .roomDetails, .roomMemberDetails, .userProfile, .thread,
              .event, .eventOnRoomAlias, .childEvent, .childEventOnRoomAlias,
              .call, .genericCallLink, .settings, .share, .transferOwnership:
             // These routes aren't in this flow so clear the entire stack.
