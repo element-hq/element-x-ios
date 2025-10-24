@@ -18,6 +18,8 @@ enum HTMLFixtures: String, CaseIterable {
     case codeBlocks
     case unorderedList
     case orderedList
+    case entirelySpoilered
+    case partiallySpoilered
     
     var rawValue: String {
         switch self {
@@ -111,6 +113,14 @@ enum HTMLFixtures: String, CaseIterable {
             <li>Starburst</li>
             <li>Skittles</li>
             </ol>
+            """
+        case .partiallySpoilered:
+            """
+            partially <span data-mx-spoiler>spoilered</span>
+            """
+        case .entirelySpoilered:
+            """
+            <span data-mx-spoiler>entirely spoilered</span>
             """
         }
     }
