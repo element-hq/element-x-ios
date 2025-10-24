@@ -33,12 +33,6 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
-            Section("General") {
-                Toggle(isOn: $context.nextGenHTMLParserEnabled) {
-                    Text("Next gen HTML parsing")
-                }
-            }
-            
             Section("Room List") {
                 Toggle(isOn: $context.publicSearchEnabled) {
                     Text("Public search")

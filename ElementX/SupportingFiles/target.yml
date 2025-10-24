@@ -228,7 +228,6 @@ targets:
     - package: AnalyticsEvents
     - package: Collections
     - package: DeviceKit
-    - package: DTCoreText
     - package: EmbeddedElementCall
     - package: KeychainAccess
     - package: Kingfisher

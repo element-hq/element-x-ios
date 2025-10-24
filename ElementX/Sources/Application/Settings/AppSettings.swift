@@ -63,7 +63,6 @@ final class AppSettings {
         case knockingEnabled
         case threadsEnabled
         case developerOptionsEnabled
-        case nextGenHTMLParserEnabled
         case linkPreviewsEnabled
         case latestEventSorterEnabled
         
@@ -389,10 +388,7 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var threadsEnabled
-    
-    @UserPreference(key: UserDefaultsKeys.nextGenHTMLParserEnabled, defaultValue: true, storageType: .userDefaults(store))
-    var nextGenHTMLParserEnabled
-    
+        
     @UserPreference(key: UserDefaultsKeys.linkPreviewsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkPreviewsEnabled
     

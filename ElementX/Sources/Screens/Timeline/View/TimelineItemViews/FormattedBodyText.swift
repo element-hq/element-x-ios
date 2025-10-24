@@ -135,13 +135,8 @@ struct FormattedBodyText: View {
 
 struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
-        body(AttributedStringBuilderV1(cacheKey: "v1", mentionBuilder: MentionBuilder()))
+        body(AttributedStringBuilder(cacheKey: "FormattedBodyText", mentionBuilder: MentionBuilder()))
             .previewLayout(.sizeThatFits)
-            .previewDisplayName("v1")
-        
-        body(AttributedStringBuilderV2(cacheKey: "v2", mentionBuilder: MentionBuilder()))
-            .previewLayout(.sizeThatFits)
-            .previewDisplayName("v2")
     }
     
     @ViewBuilder

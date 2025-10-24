@@ -111,9 +111,6 @@ packages:
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
     exactVersion: 14.1.1
-  DTCoreText:
-    url: https://github.com/Cocoanetics/DTCoreText
-    exactVersion: 1.6.26
   GZIP:
     url: https://github.com/nicklockwood/GZIP
     minorVersion: 1.3.2

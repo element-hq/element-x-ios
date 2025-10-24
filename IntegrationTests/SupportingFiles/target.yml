@@ -33,7 +33,6 @@ targets:
     - target: ElementX
     - package: MatrixRustSDK
     - package: DeviceKit
-    - package: DTCoreText
     - package: KeychainAccess
     - package: Kingfisher
     - package: SwiftState

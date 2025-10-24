@@ -9,19 +9,7 @@
 @testable import ElementX
 import XCTest
 
-class AttributedStringBuilderV2Tests: AttributedStringBuilderV1Tests {
-    override func setUp() async throws {
-        AttributedStringBuilder.useNextGenHTMLParser = true
-        try await super.setUp()
-    }
-    
-    override func tearDown() async throws {
-        AttributedStringBuilder.useNextGenHTMLParser = false
-        try await super.tearDown()
-    }
-}
-
-class AttributedStringBuilderV1Tests: XCTestCase {
+class AttributedStringBuilderTests: XCTestCase {
     private var attributedStringBuilder: AttributedStringBuilder!
     private let maxHeaderPointSize = ceil(UIFont.preferredFont(forTextStyle: .body).pointSize * 1.2)
     
@@ -35,33 +23,12 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             return
         }
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(String(attributedString.characters), "H1 Header\n\nH2 Header\n\nH3 Header\n\nH4 Header\n\nH5 Header\n\nH6 Header")
-            
-            XCTAssertEqual(attributedString.runs.count, 11) // newlines hold no attributes
-
-            let pointSizes = attributedString.runs.compactMap(\.uiKit.font?.pointSize)
-            XCTAssertEqual(pointSizes, [23, 23, 23, 21, 19, 17])
-        } else {
-            XCTAssertEqual(String(attributedString.characters), "H1 Header\nH2 Header\nH3 Header\nH4 Header\nH5 Header\nH6 Header")
-            
-            XCTAssert(attributedString.runs.count == 6)
-            
-            let firstRun = attributedString.runs[attributedString.runs.startIndex]
-            let secondRun = attributedString.runs[attributedString.runs.index(attributedString.runs.startIndex, offsetBy: 1)]
-            let thirdRun = attributedString.runs[attributedString.runs.index(attributedString.runs.startIndex, offsetBy: 2)]
-            
-            guard let h1PointSize = firstRun.uiKit.font?.pointSize else {
-                XCTFail("Invalid H1 point size")
-                return
-            }
-            
-            XCTAssertEqual(h1PointSize, secondRun.uiKit.font?.pointSize)
-            XCTAssertEqual(secondRun.uiKit.font?.pointSize, thirdRun.uiKit.font?.pointSize)
-            
-            XCTAssertGreaterThan(h1PointSize, UIFont.preferredFont(forTextStyle: .body).pointSize)
-            XCTAssertLessThan(h1PointSize, maxHeaderPointSize)
-        }
+        XCTAssertEqual(String(attributedString.characters), "H1 Header\n\nH2 Header\n\nH3 Header\n\nH4 Header\n\nH5 Header\n\nH6 Header")
+        
+        XCTAssertEqual(attributedString.runs.count, 11) // newlines hold no attributes
+        
+        let pointSizes = attributedString.runs.compactMap(\.uiKit.font?.pointSize)
+        XCTAssertEqual(pointSizes, [23, 23, 23, 21, 19, 17])
     }
     
     func testRenderHTMLStringWithPreCode() {
@@ -79,11 +46,7 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             return
         }
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 18)
-        } else {
-            XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 10)
-        }
+        XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 18)
     }
     
     func testRenderHTMLStringWithLink() {
@@ -92,11 +55,7 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             return
         }
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(String(attributedString.characters), "Links too:\nMatrix rules! 🤘, beta.org, www.gamma.org, http://delta.org")
-        } else {
-            XCTAssertEqual(String(attributedString.characters), "Links too:Matrix rules! 🤘, beta.org, www.gamma.org, http://delta.org")
-        }
+        XCTAssertEqual(String(attributedString.characters), "Links too:\nMatrix rules! 🤘, beta.org, www.gamma.org, http://delta.org")
         
         let link = attributedString.runs.first { $0.link != nil }?.link
         
@@ -184,13 +143,8 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         XCTAssertEqual(h1Font, h2Font)
         XCTAssertEqual(h2Font, h3Font)
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssert(h1Font.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
-            XCTAssert(h1Font.pointSize <= 23)
-        } else {
-            XCTAssert(h1Font.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
-            XCTAssert(h1Font.pointSize <= maxHeaderPointSize)
-        }
+        XCTAssert(h1Font.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
+        XCTAssert(h1Font.pointSize <= 23)
         
         XCTAssertEqual(h1AttributedString.runs.first?.link?.host, "matrix.org")
         XCTAssertEqual(h2AttributedString.runs.first?.link?.host, "matrix.org")
@@ -258,12 +212,6 @@ class AttributedStringBuilderV1Tests: XCTestCase {
         }
         
         XCTAssertEqual(attributedString.runs.count, 3)
-        
-        if !AttributedStringBuilder.useNextGenHTMLParser {
-            for run in attributedString.runs {
-                XCTAssertEqual(run.uiKit.font?.familyName, UIFont.preferredFont(forTextStyle: .body).familyName)
-            }
-        }
     }
     
     func testDefaultForegroundColor() {
@@ -402,13 +350,8 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             return
         }
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(attributedString.runs.count, 11)
-            XCTAssertEqual(attributedString.formattedComponents.count, 5)
-        } else {
-            XCTAssertEqual(attributedString.runs.count, 7)
-            XCTAssertEqual(attributedString.formattedComponents.count, 1)
-        }
+        XCTAssertEqual(attributedString.runs.count, 11)
+        XCTAssertEqual(attributedString.formattedComponents.count, 5)
         
         var numberOfBlockquotes = 0
         for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
@@ -732,11 +675,7 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             return
         }
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(String(attributedString.characters), "Hey [img: Smiley face]! How's work[img]?")
-        } else {
-            XCTAssertEqual(String(attributedString.characters), "Hey ￼! How's work￼?") // No bueno
-        }
+        XCTAssertEqual(String(attributedString.characters), "Hey [img: Smiley face]! How's work[img]?")
     }
     
     func testListTags() {
@@ -747,11 +686,7 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             return
         }
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(String(attributedString.characters), "like\n\n • this\ntest")
-        } else {
-            XCTAssertEqual(String(attributedString.characters), "like\n\t•\tthis\u{2028}test")
-        }
+        XCTAssertEqual(String(attributedString.characters), "like\n\n • this\ntest")
     }
     
     func testOutOfOrderListNubmering() {
@@ -762,11 +697,7 @@ class AttributedStringBuilderV1Tests: XCTestCase {
             return
         }
         
-        if AttributedStringBuilder.useNextGenHTMLParser {
-            XCTAssertEqual(String(attributedString.characters), " 2. this is a two")
-        } else {
-            XCTAssertEqual(String(attributedString.characters), "\t2.\tthis is a two")
-        }
+        XCTAssertEqual(String(attributedString.characters), " 2. this is a two")
     }
     
     // MARK: - Phishing prevention
