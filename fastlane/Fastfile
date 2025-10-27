@@ -1,4 +1,5 @@
 require 'yaml'
+require 'timeout'
 
 skip_docs
 
@@ -19,6 +20,11 @@ end
 
 lane :unit_tests do |options|
   reset_simulator = ENV.key?('CI')
+  
+  preboot_simulator(
+    name: "iPhone 17",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
+  )
   
   run_tests(
     scheme: "UnitTests",
@@ -55,14 +61,14 @@ lane :ui_tests do |options|
   if options[:device] == "iPhone"
     device = "iPhone-26.0"
     
-    create_simulator_if_necessary(
+    preboot_simulator(
       name: "iPhone-26.0",
       type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
     )
   elsif options[:device] == "iPad"
     device = "iPad-26.0"
     
-    create_simulator_if_necessary(
+    preboot_simulator(
       name: "iPad-26.0",
       type: "com.apple.CoreSimulator.SimDeviceType.iPad-A16"
     )
@@ -92,6 +98,11 @@ end
 
 lane :accessibility_tests do |options|
   reset_simulator = ENV.key?('CI')
+  
+  preboot_simulator(
+    name: "iPhone 17",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
+  )
   
   run_tests(
     scheme: "AccessibilityTests",
@@ -308,7 +319,7 @@ private_lane :bump_build_number do
   increment_build_number(build_number: build_number)
 end
 
-private_lane :create_simulator_if_necessary do |options|
+lane :preboot_simulator do |options|
   simulator_name = options[:name]
   UI.user_error!("Invalid simulator name") unless !simulator_name.to_s.empty?
 
@@ -334,3 +345,5 @@ private_lane :create_simulator_if_necessary do |options|
   
   # device_id is unused right now but is useful to check e.g. the boot status of a simulator.
 end
+
+default_platform(:ios)
