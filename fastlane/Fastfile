@@ -1,4 +1,5 @@
 require 'yaml'
+require 'timeout'
 
 skip_docs
 
@@ -18,6 +19,11 @@ end
 lane :unit_tests do |options|
   reset_simulator = ENV.key?('CI')
   
+  preboot_simulator(
+    name: "iPhone 17",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
+  )
+  
   run_tests(
     scheme: "UnitTests",
     device: "iPhone 17 (26.0)",
@@ -28,15 +34,14 @@ lane :unit_tests do |options|
   )
   
   if !options[:skip_previews]
-    create_simulator_if_necessary(
-      name: "iPhone-SE-3rd-generation-26.0",
-      type: "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation",
-      runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
+    preboot_simulator(
+      name: "iPhone SE (3rd generation)",
+      type: "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
     )
 
     run_tests(
       scheme: "PreviewTests",
-      device: "iPhone-SE-3rd-generation-26.0 (26.0)",
+      device: "iPhone SE (3rd generation) (26.0)",
       ensure_devices_found: true,
       result_bundle: true,
       number_of_retries: 3,
@@ -54,18 +59,16 @@ lane :ui_tests do |options|
   if options[:device] == "iPhone"
     device = "iPhone-26.0"
     
-    create_simulator_if_necessary(
+    preboot_simulator(
       name: "iPhone-26.0",
-      type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17",
-      runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
+      type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
     )
   elsif options[:device] == "iPad"
     device = "iPad-26.0"
     
-    create_simulator_if_necessary(
+    preboot_simulator(
       name: "iPad-26.0",
       type: "com.apple.CoreSimulator.SimDeviceType.iPad-A16",
-      runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
     )
   else
     UI.user_error!("Please supply a device argument as device:iPhone or device:iPad")
@@ -81,7 +84,7 @@ lane :ui_tests do |options|
   
   run_tests(
     scheme: "UITests",
-    device: device,
+    device: "#{device} (26.0)",
     ensure_devices_found: true,
     prelaunch_simulator: false,
     result_bundle: true,
@@ -93,6 +96,11 @@ end
 
 lane :accessibility_tests do |options|
   reset_simulator = ENV.key?('CI')
+  
+  preboot_simulator(
+    name: "iPhone 17",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
+  )
   
   run_tests(
     scheme: "AccessibilityTests",
@@ -109,17 +117,16 @@ end
 lane :integration_tests do
   clear_derived_data()
   
-  create_simulator_if_necessary(
-    name: "iPhone-26.0",
-    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
-    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
+  preboot_simulator(
+    name: "iPhone 17",
+    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
   )
 
   reset_simulator = ENV.key?('CI')
 
   run_tests(
     scheme: "IntegrationTests",
-    device: "iPhone-26.0",
+    device: "iPhone 17 (26.0)",
     ensure_devices_found: true,
     result_bundle: true,
     reset_simulator: reset_simulator
@@ -315,21 +322,69 @@ private_lane :bump_build_number do
   increment_build_number(build_number: build_number)
 end
 
-private_lane :create_simulator_if_necessary do |options|
+lane :preboot_simulator do |options|
   simulator_name = options[:name]
   UI.user_error!("Invalid simulator name") unless !simulator_name.to_s.empty?
 
   simulator_type = options[:type]
   UI.user_error!("Invalid simulator type") unless !simulator_type.to_s.empty?
-  
-  simulator_runtime = options[:runtime]
-  UI.user_error!("Invalid simulator runtime") unless !simulator_runtime.to_s.empty?
 
+  simulator_version = "26.0"
+  simulator_runtime = "com.apple.CoreSimulator.SimRuntime.iOS-#{simulator_version.gsub('.', '-')}"
 
+  simulators = sh("xcrun simctl list devices \"iOS #{simulator_version}\" available")
   # Use a `(` here to avoid matching `iPhone 14 Pro` on `iPhone 14 Pro Max` for example
-  begin sh("xcrun simctl list devices | grep '#{simulator_name} ('")
-    UI.success "Simulator already exists"
-  rescue
-    sh("xcrun simctl create '#{simulator_name}' #{simulator_type} #{simulator_runtime}")
+  existing_simulator = simulators.lines.find { |line| line.include?("#{simulator_name} (") }
+  
+  if existing_simulator
+    UI.message("Found simulator: #{existing_simulator.inspect}")
+    # Extract the device ID for the existing simulator
+    device_id = existing_simulator.match(/\(([A-F0-9-]+)\)/)[1]
+  else
+    UI.message "Simulator #{simulator_name} not found. Creating new simulator…"
+    # Create a new simulator and get its device ID.
+    create_command = "xcrun simctl create '#{simulator_name}\' #{simulator_type} #{simulator_runtime}"
+    device_id = sh(create_command).strip
+    
+    UI.message "Created new simulator: #{simulator_name} (#{device_id})"
   end
+
+  UI.message "Updating dyld_shared_cache:"
+  sh("xcrun simctl runtime dyld_shared_cache update --all")
+
+  UI.message "Booting simulator: #{simulator_name} (iOS #{simulator_version}) (#{device_id})"
+
+  max_attempts = 5
+  boot_success = false
+  
+  (1..max_attempts).each do |attempt|
+    UI.message "Attempt #{attempt}/#{max_attempts}"
+
+    begin
+      # Boot the simulator within a Timeout so we can retry instead of hanging for 6 hours.
+      Timeout.timeout(120) do
+        success = system("xcrun simctl bootstatus #{device_id} -b")
+        
+        if success
+          UI.message "Simulator booted successfully"
+          boot_success = true
+        end
+      end
+    rescue Timeout::Error
+      UI.message "Simulator boot timed out. Shutting down…"
+    end
+  
+    # Break the retry loop if successful.
+    break if boot_success
+  
+    # Shutdown and prepare for the next attempt.
+    sh("xcrun simctl shutdown #{device_id}") rescue nil
+    
+    UI.message "Retrying in 5s…"
+    sleep 5
+  end
+  
+  UI.user_error!("Failed to boot simulator after #{max_attempts} attempts.") unless boot_success
 end
+
+default_platform(:ios)
