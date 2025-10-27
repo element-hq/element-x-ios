@@ -87,20 +87,17 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
                                                                       selectedUsers: selectedUsersPublisher,
                                                                       roomType: .draft,
                                                                       userDiscoveryService: parameters.userDiscoveryService,
-                                                                      userIndicatorController: parameters.userIndicatorController)
+                                                                      userIndicatorController: parameters.userIndicatorController,
+                                                                      appSettings: parameters.appSettings)
         let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
-            
             switch action {
-            case .cancel:
-                break // Not shown in this flow.
-            case .proceed:
+            case .dismiss:
+                fatalError("Not shown in this flow.")
+            case .proceed(let selectedUsers):
+                self.selectedUsers.send(selectedUsers)
                 openCreateRoomScreen()
-            case .invite:
-                break
-            case .toggleUser(let user):
-                toggleUser(user)
             }
         }
         .store(in: &cancellables)
@@ -115,15 +112,15 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
         let createParameters = CreateRoomCoordinatorParameters(userSession: parameters.userSession,
                                                                userIndicatorController: parameters.userIndicatorController,
                                                                createRoomParameters: createRoomParametersPublisher,
-                                                               selectedUsers: selectedUsersPublisher,
+                                                               selectedUsers: selectedUsers.value,
                                                                appSettings: parameters.appSettings,
                                                                analytics: parameters.analytics)
         let coordinator = CreateRoomCoordinator(parameters: createParameters)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .deselectUser(let user):
-                self.toggleUser(user)
+            case .updateSelectedUsers(let users):
+                self.selectedUsers.send(users)
             case .updateDetails(let details):
                 self.createRoomParameters.send(details)
             case .openRoom(let identifier):
@@ -188,16 +185,6 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
             }
             hideLoadingIndicator()
         }
-    }
-    
-    private func toggleUser(_ user: UserProfileProxy) {
-        var selectedUsers = selectedUsers.value
-        if let index = selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
-            selectedUsers.remove(at: index)
-        } else {
-            selectedUsers.append(user)
-        }
-        self.selectedUsers.send(selectedUsers)
     }
     
     // MARK: Loading indicator

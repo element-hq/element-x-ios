@@ -15,10 +15,8 @@ enum InviteUsersScreenErrorType: Error {
 }
 
 enum InviteUsersScreenViewModelAction {
-    case cancel
-    case proceed
-    case invite(users: [String])
-    case toggleUser(UserProfileProxy)
+    case dismiss
+    case proceed(selectedUsers: [UserProfileProxy])
 }
 
 enum InviteUsersScreenRoomType {

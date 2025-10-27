@@ -13,12 +13,14 @@ enum SpaceScreenViewModelAction {
     case selectUnjoinedSpace(SpaceRoomProxyProtocol)
     case selectRoom(roomID: String)
     case leftSpace
+    case displayMembers(roomProxy: JoinedRoomProxyProtocol)
 }
 
 struct SpaceScreenViewState: BindableState {
     var space: SpaceRoomProxyProtocol
     
     var permalink: URL?
+    var roomProxy: JoinedRoomProxyProtocol?
     
     var isPaginating = false
     var rooms: [SpaceRoomProxyProtocol]
@@ -42,4 +44,5 @@ enum SpaceScreenViewAction {
     case toggleLeaveSpaceRoomDetails(id: String)
     case confirmLeaveSpace
     case spaceSettings
+    case displayMembers(roomProxy: JoinedRoomProxyProtocol)
 }
