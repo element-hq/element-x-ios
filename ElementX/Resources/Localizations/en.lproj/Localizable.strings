@@ -174,6 +174,7 @@
 "common_advanced_settings" = "Advanced settings";
 "common_an_image" = "an image";
 "common_analytics" = "Analytics";
+"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "You left the room";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Appearance";

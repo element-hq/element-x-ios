@@ -174,6 +174,7 @@
 "common_advanced_settings" = "Edistyneet asetukset";
 "common_an_image" = "kuva";
 "common_analytics" = "Analytiikka";
+"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Poistuit huoneesta";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Sinut kirjattiin ulos istunnosta";
 "common_appearance" = "Ulkoasu";
@@ -420,6 +421,7 @@
 "leave_room_alert_select_new_owner_title" = "Siirrä omistajuus";
 "leave_room_alert_subtitle" = "Haluatko varmasti poistua huoneesta?";
 "login_initial_device_name_ios" = "%1$@ iOS";
+"notification_thread_in_room" = "Thread in %1$@";
 "notification_channel_call" = "Puhelu";
 "notification_channel_listening_for_events" = "Tapahtumien kuuntelu";
 "notification_channel_noisy" = "Äänekkäät ilmoitukset";

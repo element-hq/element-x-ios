@@ -174,6 +174,7 @@
 "common_advanced_settings" = "高级设置";
 "common_an_image" = "一张图片";
 "common_analytics" = "分析";
+"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "你离开了聊天室";
 "common_android_shortcuts_remove_reason_session_logged_out" = "您已被注销当前会话";
 "common_appearance" = "外观";
@@ -420,6 +421,7 @@
 "leave_room_alert_select_new_owner_title" = "转让所有权";
 "leave_room_alert_subtitle" = "确定要离开聊天室吗？";
 "login_initial_device_name_ios" = "%1$@ iOS";
+"notification_thread_in_room" = "Thread in %1$@";
 "notification_channel_call" = "通话";
 "notification_channel_listening_for_events" = "监听事件";
 "notification_channel_noisy" = "嘈杂通知";

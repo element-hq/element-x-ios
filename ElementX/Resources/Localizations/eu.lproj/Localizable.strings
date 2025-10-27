@@ -174,6 +174,7 @@
 "common_advanced_settings" = "Ezarpen aurreratuak";
 "common_an_image" = "irudia";
 "common_analytics" = "Estatistikak";
+"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "You left the room";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Itxura";
@@ -420,6 +421,7 @@
 "leave_room_alert_select_new_owner_title" = "Eskualdatu jabetza";
 "leave_room_alert_subtitle" = "Ziur gelatik atera nahi duzula?";
 "login_initial_device_name_ios" = "%1$@ iOS";
+"notification_thread_in_room" = "Thread in %1$@";
 "notification_channel_call" = "Deia";
 "notification_channel_listening_for_events" = "Gertaerei adi";
 "notification_channel_noisy" = "Jakinarazpen zaratatsuak";
@@ -496,7 +498,7 @@
 "screen_bottom_sheet_create_dm_title" = "Gonbidapena bidali?";
 "screen_bottom_sheet_manage_room_member_ban" = "Kendu kidea eta ezarri debekua";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Ezarri debekua";
-"screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "They won’t be able to join this room again if invited.";
+"screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "They won’t be able to join again if invited.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Ziur kide honi debekua ezarri nahi diozula?";
 "screen_bottom_sheet_manage_room_member_banning_user" = "%1$@(r)i debekua ezartzen";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Kendu";
@@ -505,8 +507,8 @@
 "screen_bottom_sheet_manage_room_member_remove" = "Kendu gelatik";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Kidea kendu eta etorkizunean sartzea debekatu?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "%1$@ kentzen…";
-"screen_bottom_sheet_manage_room_member_unban" = "Unban from room";
-"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join the room again if invited";
+"screen_bottom_sheet_manage_room_member_unban" = "Unban user";
+"screen_bottom_sheet_manage_room_member_unban_member_confirmation_description" = "They would be able to join again if invited";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_title" = "Are you sure you want to unban this member?";
 "screen_bug_report_a11y_screenshot" = "Screenshot";
 "screen_create_poll_option_accessibility_label" = "%1$@: %2$@";

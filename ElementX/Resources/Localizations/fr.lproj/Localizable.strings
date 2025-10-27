@@ -174,6 +174,7 @@
 "common_advanced_settings" = "Paramètres avancés";
 "common_an_image" = "une image";
 "common_analytics" = "Statistiques d’utilisation";
+"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Vous avez quitter le salon";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Vous avez été déconnecté de la session";
 "common_appearance" = "Apparence";
@@ -420,6 +421,7 @@
 "leave_room_alert_select_new_owner_title" = "Transférer la propriété";
 "leave_room_alert_subtitle" = "Êtes-vous sûr de vouloir quitter le salon ?";
 "login_initial_device_name_ios" = "%1$@ iOS";
+"notification_thread_in_room" = "Thread in %1$@";
 "notification_channel_call" = "Appel";
 "notification_channel_listening_for_events" = "À l’écoute des événements";
 "notification_channel_noisy" = "Notifications bruyantes";

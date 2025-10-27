@@ -174,6 +174,7 @@
 "common_advanced_settings" = "Pokročilé nastavenia";
 "common_an_image" = "obrázok";
 "common_analytics" = "Analytika";
+"common_android_notification_sync_notifications_foreground_service_title" = "Načítavajú sa upozornenia...";
 "common_android_shortcuts_remove_reason_left_room" = "Opustili ste miestnosť";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Boli ste odhlásení zo relácie.";
 "common_appearance" = "Vzhľad";
@@ -420,6 +421,7 @@
 "leave_room_alert_select_new_owner_title" = "Preniesť vlastníctvo";
 "leave_room_alert_subtitle" = "Ste si istí, že chcete opustiť miestnosť?";
 "login_initial_device_name_ios" = "%1$@ iOS";
+"notification_thread_in_room" = "Vlákno v %1$@";
 "notification_channel_call" = "Zavolať";
 "notification_channel_listening_for_events" = "Počúvanie udalostí";
 "notification_channel_noisy" = "Hlasité oznámenia";
