@@ -373,6 +373,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startMembersFlow(roomProxy: JoinedRoomProxyProtocol) async {
         let flowCoordinator = RoomMembersFlowCoordinator(entryPoint: .roomMembersList,
+                                                         animatedEntry: true,
                                                          roomProxy: roomProxy,
                                                          navigationStackCoordinator: navigationStackCoordinator,
                                                          flowParameters: flowParameters)

@@ -64,9 +64,6 @@ extension RoomFlowCoordinator {
         case roomDetailsEditScreen
         case notificationSettings
         case globalNotificationSettings
-        case roomMembersList
-        case roomMemberDetails(userID: String, previousState: State)
-        case userProfile(userID: String, previousState: State)
         case inviteUsersScreen(previousState: State)
         case mediaUploadPicker(mode: MediaPickerScreenMode, previousState: State)
         case mediaUploadPreview(mediaURLs: [URL], previousState: State)
@@ -93,6 +90,8 @@ extension RoomFlowCoordinator {
         
         /// A space flow is in progress
         case spaceFlow(previousState: State)
+        /// A members flow is in progress
+        case membersFlow(previousState: State)
     }
     
     struct EventUserInfo {
@@ -129,15 +128,6 @@ extension RoomFlowCoordinator {
         
         case presentGlobalNotificationSettingsScreen
         case dismissGlobalNotificationSettingsScreen
-        
-        case presentRoomMembersList
-        case dismissRoomMembersList
-        
-        case presentRoomMemberDetails(userID: String)
-        case dismissRoomMemberDetails
-        
-        case presentUserProfile(userID: String)
-        case dismissUserProfile
         
         case presentInviteUsersScreen
         case dismissInviteUsersScreen
@@ -189,6 +179,9 @@ extension RoomFlowCoordinator {
         
         case presentDeclineAndBlockScreen(userID: String)
         case dismissDeclineAndBlockScreen
+        
+        case startMembersFlow(entryPoint: RoomMembersFlowCoordinatorEntryPoint)
+        case stopMembersFlow
     }
     
     // swiftlint:disable:next function_body_length
@@ -303,11 +296,6 @@ extension RoomFlowCoordinator {
             case (.roomDetailsEditScreen, .dismissRoomDetailsEditScreen):
                 return .roomDetails(isRoot: false)
                 
-            case (.roomDetails, .presentRoomMembersList):
-                return .roomMembersList
-            case (.roomMembersList, .dismissRoomMembersList):
-                return .roomDetails(isRoot: false)
-                
             case (.roomDetails, .presentNotificationSettingsScreen):
                 return .notificationSettings
             case (.notificationSettings, .dismissNotificationSettingsScreen):
@@ -353,6 +341,11 @@ extension RoomFlowCoordinator {
                 return .joinRoomScreen
                 
             // Other
+                
+            case (_, .startMembersFlow):
+                return .membersFlow(previousState: fromState)
+            case (.membersFlow(let previousState), .stopMembersFlow):
+                return previousState
             
             case (_, .startChildFlow(let roomID, _, _)):
                 return .presentingChild(childRoomID: roomID, previousState: fromState)
@@ -362,11 +355,6 @@ extension RoomFlowCoordinator {
             case (.presentingChild(_, let previousState), .startSpaceFlow):
                 return .spaceFlow(previousState: previousState)
             case (.spaceFlow(let previousState), .finishedSpaceFlow):
-                return previousState
-                    
-            case (_, .presentRoomMemberDetails(userID: let userID)):
-                return .roomMemberDetails(userID: userID, previousState: fromState)
-            case (.roomMemberDetails(_, let previousState), .dismissRoomMemberDetails):
                 return previousState
                 
             case (_, .presentKnockRequestsListScreen):
@@ -381,11 +369,6 @@ extension RoomFlowCoordinator {
                 return .globalNotificationSettings
             case (.globalNotificationSettings, .dismissGlobalNotificationSettingsScreen):
                 return .notificationSettings
-            
-            case (.roomMemberDetails(_, let previousState), .presentUserProfile(let userID)):
-                return .userProfile(userID: userID, previousState: previousState)
-            case (.userProfile(_, let previousState), .dismissUserProfile):
-                return previousState
                 
             case (.pollsHistory, .presentPollForm):
                 return .pollsHistoryForm
