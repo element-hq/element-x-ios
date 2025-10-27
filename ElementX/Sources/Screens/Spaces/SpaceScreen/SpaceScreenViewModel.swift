@@ -69,6 +69,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         
         Task {
             if case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(spaceRoomListProxy.id) {
+                // Required to listen for membership updates in the members flow
                 await roomProxy.subscribeForUpdates()
                 state.roomProxy = roomProxy
                 if case let .success(permalinkURL) = await roomProxy.matrixToPermalink() {
