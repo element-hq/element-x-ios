@@ -15,7 +15,7 @@ enum RoomMembersFlowCoordinatorAction {
     case verifyUser(userID: String)
 }
 
-enum RoomMembersFlowCoordinatorEntryPoint: Equatable {
+enum RoomMembersFlowCoordinatorEntryPoint: Hashable {
     /// To be used in a room when a member name is tapped
     case roomMember(userID: String)
     /// To be used in the context of room details, space details etc.
@@ -52,11 +52,12 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         case presentUserProfile(userID: String)
         case dismissedUserProfile
         
-        case startRoomFlow(roomID: String)
+        case startRoomFlow(roomID: String, via: [String], eventID: String?)
         case stopRoomFlow
     }
     
     private let entryPoint: RoomMembersFlowCoordinatorEntryPoint
+    private let animatedEntry: Bool
     private let roomProxy: JoinedRoomProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let flowParameters: CommonFlowParameters
@@ -72,6 +73,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     private var roomFlowCoordinator: RoomFlowCoordinator?
     
     init(entryPoint: RoomMembersFlowCoordinatorEntryPoint,
+         animatedEntry: Bool,
          roomProxy: JoinedRoomProxyProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          flowParameters: CommonFlowParameters) {
@@ -79,6 +81,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         self.roomProxy = roomProxy
         self.flowParameters = flowParameters
         self.navigationStackCoordinator = navigationStackCoordinator
+        self.animatedEntry = animatedEntry
         
         stateMachine = .init(state: .initial)
         configureStateMachine()
@@ -87,14 +90,37 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     func start() {
         switch entryPoint {
         case .roomMember(let userID):
-            stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID))
+            stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: animatedEntry)
         case .roomMembersList:
-            stateMachine.tryEvent(.presentRoomMembersList)
+            stateMachine.tryEvent(.presentRoomMembersList, userInfo: animatedEntry)
         }
     }
     
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool) {
-        fatalError("Unavailable")
+        switch appRoute {
+        case .roomMemberDetails(let userID):
+            if case .roomFlow = stateMachine.state, let roomFlowCoordinator {
+                roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            } else {
+                stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: animated)
+            }
+        case .childRoom(let roomID, let via):
+            if case .roomFlow = stateMachine.state, let roomFlowCoordinator {
+                roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            } else {
+                stateMachine.tryEvent(.startRoomFlow(roomID: roomID, via: via, eventID: nil), userInfo: animated)
+            }
+        case .childEvent(let eventID, let roomID, let via):
+            if case .roomFlow = stateMachine.state, let roomFlowCoordinator {
+                roomFlowCoordinator.handleAppRoute(appRoute, animated: animated)
+            } else {
+                stateMachine.tryEvent(.startRoomFlow(roomID: roomID, via: via, eventID: eventID), userInfo: animated)
+            }
+        case .accountProvisioningLink, .roomList, .room, .roomAlias, .childRoomAlias, .roomDetails, .event,
+             .eventOnRoomAlias, .childEventOnRoomAlias, .userProfile, .call, .genericCallLink, .settings,
+             .chatBackupSettings, .share, .transferOwnership, .thread:
+            break
+        }
     }
     
     func clearRoute(animated: Bool) {
@@ -113,14 +139,11 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             switch (fromState, event) {
             case (.initial, .presentRoomMembersList):
                 return .roomMembersList
-            case (.initial, .presentRoomMemberDetails(let userID)):
-                // previous state doesn't matter in this csase
-                return .roomMemberDetails(userID: userID, previousState: fromState)
                 
-            case (.roomMembersList, .presentRoomMemberDetails(let userID)):
+            case (_, .presentRoomMemberDetails(let userID)):
                 return .roomMemberDetails(userID: userID, previousState: fromState)
-            case (.roomMemberDetails, .dismissedRoomMemberDetails):
-                return .roomMembersList
+            case (.roomMemberDetails(_, let previousState), .dismissedRoomMemberDetails):
+                return previousState
                 
             case (.roomMembersList, .presentInviteUsersScreen):
                 return .inviteUsersScreen
@@ -132,7 +155,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             case (.userProfile(_, let previousState), .dismissedUserProfile):
                 return previousState
                 
-            case (_, .startRoomFlow(let roomID)):
+            case (_, .startRoomFlow(let roomID, _, _)):
                 return .roomFlow(roomID: roomID, previousState: fromState)
             case (.roomFlow(_, let previousState), .stopRoomFlow):
                 return previousState
@@ -144,14 +167,13 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         
         stateMachine.addAnyHandler(.any => .any) { [weak self] context in
             guard let self else { return }
+            let animated = context.userInfo as? Bool ?? true
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .presentRoomMembersList, .roomMembersList):
                 presentRoomMembersList()
-            case (.initial, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
-                presentRoomMemberDetails(userID: userID)
                 
-            case (.roomMembersList, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
-                presentRoomMemberDetails(userID: userID)
+            case (_, .presentRoomMemberDetails, .roomMemberDetails(let userID, _)):
+                presentRoomMemberDetails(userID: userID, animated: animated)
             case (.roomMemberDetails, .dismissedRoomMemberDetails, .roomMembersList):
                 break
                 
@@ -165,8 +187,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             case (.userProfile, .dismissedUserProfile, _):
                 break
                 
-            case (_, .startRoomFlow(let roomID), .roomFlow):
-                startRoomFlow(roomID: roomID)
+            case (_, .startRoomFlow(let roomID, let via, let eventID), .roomFlow):
+                startRoomFlow(roomID: roomID, via: via, eventID: eventID, animated: animated)
             case (.roomFlow, .stopRoomFlow, _):
                 roomFlowCoordinator = nil
                 
@@ -197,7 +219,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func presentRoomMemberDetails(userID: String) {
+    private func presentRoomMemberDetails(userID: String, animated: Bool) {
         let params = RoomMemberDetailsScreenCoordinatorParameters(userID: userID,
                                                                   roomProxy: roomProxy,
                                                                   userSession: flowParameters.userSession,
@@ -211,7 +233,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             case .openUserProfile:
                 stateMachine.tryEvent(.presentUserProfile(userID: userID))
             case .openDirectChat(let roomID):
-                stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
+                stateMachine.tryEvent(.startRoomFlow(roomID: roomID, via: [], eventID: nil))
             case .startCall(let roomProxy):
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .verifyUser(let userID):
@@ -220,9 +242,10 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
 
-        navigationStackCoordinator.push(coordinator) { [weak self] in
+        navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
             guard let self else { return }
-            if entryPoint == .roomMember(userID: userID) {
+            if case let .roomMemberDetails(_, previousState) = stateMachine.state,
+               previousState == .initial {
                 actionsSubject.send(.finished)
             } else {
                 stateMachine.tryEvent(.dismissedRoomMemberDetails)
@@ -271,7 +294,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             
             switch action {
             case .openDirectChat(let roomID):
-                stateMachine.tryEvent(.startRoomFlow(roomID: roomID))
+                stateMachine.tryEvent(.startRoomFlow(roomID: roomID, via: [], eventID: nil))
             case .startCall(let roomProxy):
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .dismiss:
@@ -290,7 +313,7 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
     
-    private func startRoomFlow(roomID: String) {
+    private func startRoomFlow(roomID: String, via: [String], eventID: String?, animated: Bool) {
         let coordinator = RoomFlowCoordinator(roomID: roomID,
                                               isChildFlow: true,
                                               navigationStackCoordinator: navigationStackCoordinator,
@@ -313,6 +336,10 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             .store(in: &cancellables)
         
         roomFlowCoordinator = coordinator
-        coordinator.handleAppRoute(.room(roomID: roomID, via: []), animated: true)
+        if let eventID {
+            coordinator.handleAppRoute(.event(eventID: eventID, roomID: roomID, via: via), animated: animated)
+        } else {
+            coordinator.handleAppRoute(.room(roomID: roomID, via: via), animated: animated)
+        }
     }
 }
