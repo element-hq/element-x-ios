@@ -68,6 +68,11 @@ enum CodeBlockAttribute: AttributedStringKey {
     static let name = "MXCodeBlockAttribute"
 }
 
+enum SpoilerAttribute: AttributedStringKey {
+    typealias Value = Bool
+    static let name = "MXSpoilerAttribute"
+}
+
 // periphery: ignore - required to make NSAttributedString to AttributedString conversion even if not used directly
 extension AttributeScopes {
     struct ElementXAttributes: AttributeScope {
