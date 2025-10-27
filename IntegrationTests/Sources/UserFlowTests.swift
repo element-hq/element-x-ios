@@ -78,7 +78,7 @@ class UserFlowTests: XCTestCase {
         sleep(10) // Wait for the message to be sent
         
         // Switch to the rich text editor
-        tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
+        tapOnButton(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerTextFormatting)
         
         composerTextField = app.textViews[A11yIdentifiers.roomScreen.messageComposer].firstMatch
@@ -96,7 +96,7 @@ class UserFlowTests: XCTestCase {
     }
         
     private func checkPhotoSharing() {
-        tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
+        tapOnButton(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerPhotoLibrary)
         
         sleep(10) // Wait for the picker to load
@@ -114,7 +114,7 @@ class UserFlowTests: XCTestCase {
     }
     
     private func checkDocumentSharing() {
-        tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
+        tapOnButton(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerDocuments)
         
         sleep(10) // Wait for the picker to load
@@ -123,7 +123,7 @@ class UserFlowTests: XCTestCase {
     }
     
     private func checkLocationSharing() {
-        tapOnMenu(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
+        tapOnButton(A11yIdentifiers.roomScreen.composerToolbar.openComposeOptions)
         tapOnButton(A11yIdentifiers.roomScreen.attachmentPickerLocation)
         
         sleep(10) // Wait for the picker to load
@@ -251,12 +251,6 @@ class UserFlowTests: XCTestCase {
             expectation(for: doesNotExistPredicate, evaluatedWith: button)
             waitForExpectations(timeout: 10.0)
         }
-    }
-    
-    private func tapOnMenu(_ identifier: String) {
-        let button = app.buttons[identifier]
-        XCTAssertTrue(button.waitForExistence(timeout: 10.0))
-        button.tap(.center)
     }
     
     /// Taps on a back button that the system configured with a label but no identifier.
