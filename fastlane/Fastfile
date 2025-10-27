@@ -18,6 +18,8 @@ end
 lane :unit_tests do |options|
   reset_simulator = ENV.key?('CI')
   
+  sh("xcrun simctl runtime dyld_shared_cache update --all")
+  
   run_tests(
     scheme: "UnitTests",
     device: "iPhone 17 (26.0)",
@@ -33,6 +35,8 @@ lane :unit_tests do |options|
       type: "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation",
       runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
     )
+    
+    sh("xcrun simctl runtime dyld_shared_cache update --all")
 
     run_tests(
       scheme: "PreviewTests",
@@ -79,6 +83,8 @@ lane :ui_tests do |options|
 
   reset_simulator = ENV.key?('CI')
   
+  sh("xcrun simctl runtime dyld_shared_cache update --all")
+  
   run_tests(
     scheme: "UITests",
     device: device,
@@ -93,6 +99,8 @@ end
 
 lane :accessibility_tests do |options|
   reset_simulator = ENV.key?('CI')
+  
+  sh("xcrun simctl runtime dyld_shared_cache update --all")
   
   run_tests(
     scheme: "AccessibilityTests",
@@ -116,6 +124,8 @@ lane :integration_tests do
   )
 
   reset_simulator = ENV.key?('CI')
+  
+  sh("xcrun simctl runtime dyld_shared_cache update --all")
 
   run_tests(
     scheme: "IntegrationTests",
