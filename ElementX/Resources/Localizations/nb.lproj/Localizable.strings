@@ -174,6 +174,7 @@
 "common_advanced_settings" = "Avanserte innstillinger";
 "common_an_image" = "et bilde";
 "common_analytics" = "Analyse";
+"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Du forlot rommet";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du ble logget ut av økten";
 "common_appearance" = "Utseende";
@@ -420,6 +421,7 @@
 "leave_room_alert_select_new_owner_title" = "Overfør eierskap";
 "leave_room_alert_subtitle" = "Er du sikker på at du vil forlate rommet?";
 "login_initial_device_name_ios" = "%1$@ iOS";
+"notification_thread_in_room" = "Thread in %1$@";
 "notification_channel_call" = "Anrop";
 "notification_channel_listening_for_events" = "Lytter etter hendelser";
 "notification_channel_noisy" = "Støyende varsler";

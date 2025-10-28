@@ -390,6 +390,8 @@ internal enum L10n {
   internal static var commonAnImage: String { return L10n.tr("Localizable", "common_an_image") }
   /// Analytics
   internal static var commonAnalytics: String { return L10n.tr("Localizable", "common_analytics") }
+  /// Fetching notifications...
+  internal static var commonAndroidNotificationSyncNotificationsForegroundServiceTitle: String { return L10n.tr("Localizable", "common_android_notification_sync_notifications_foreground_service_title") }
   /// You left the room
   internal static var commonAndroidShortcutsRemoveReasonLeftRoom: String { return L10n.tr("Localizable", "common_android_shortcuts_remove_reason_left_room") }
   /// You were logged out of the session

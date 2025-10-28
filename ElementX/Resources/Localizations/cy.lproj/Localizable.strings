@@ -174,6 +174,7 @@
 "common_advanced_settings" = "Gosodiadau uwch";
 "common_an_image" = "delwedd";
 "common_analytics" = "Dadansoddeg";
+"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Rydych wedi gadael yr ystafell";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Rydych wedi'ch allgofnodi o'r sesiwn";
 "common_appearance" = "Gwedd";
@@ -420,6 +421,7 @@
 "leave_room_alert_select_new_owner_title" = "Trosglwyddo perchnogaeth";
 "leave_room_alert_subtitle" = "Ydych chi'n siŵr eich bod am adael yr ystafell?";
 "login_initial_device_name_ios" = "iOS %1$@";
+"notification_thread_in_room" = "Thread in %1$@";
 "notification_channel_call" = "Galw";
 "notification_channel_listening_for_events" = "Gwrando am ddigwyddiadau";
 "notification_channel_noisy" = "Hysbysiadau swnllyd";
