@@ -178,9 +178,8 @@ class AuthenticationService: AuthenticationServiceProtocol {
         
         do {
             let client = try await makeClient(homeserverAddress: scannedServerName)
-            try await client.loginWithQrCode(qrCodeData: qrData,
-                                             oidcConfiguration: appSettings.oidcConfiguration.rustValue,
-                                             progressListener: listener)
+            let qrCodeHandler = client.loginWithQrCode(oidcConfiguration: appSettings.oidcConfiguration.rustValue)
+            try await qrCodeHandler.scan(qrCodeData: qrData, progressListener: listener)
             return await userSession(for: client)
         } catch let error as HumanQrLoginError {
             MXLog.error("QRCode login error: \(error)")
@@ -249,7 +248,7 @@ private extension HumanQrLoginError {
             .qrCodeError(.deviceNotSupported)
         case .OtherDeviceNotSignedIn:
             .qrCodeError(.deviceNotSignedIn)
-        case .Unknown, .OidcMetadataInvalid:
+        case .Unknown, .OidcMetadataInvalid, .CheckCodeAlreadySent, .CheckCodeCannotBeSent:
             .qrCodeError(.unknown)
         }
     }
