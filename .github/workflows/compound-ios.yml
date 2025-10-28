@@ -15,6 +15,7 @@ jobs:
   tests:
 
     runs-on: macos-15
+    timeout-minutes: 15
 
     concurrency:
       # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
