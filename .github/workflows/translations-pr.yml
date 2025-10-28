@@ -8,6 +8,8 @@ on:
 jobs:
   open-translations-pr:
     runs-on: macos-15
+    timeout-minutes: 15
+    
     # Skip in forks
     if: github.repository == 'element-hq/element-x-ios'
     steps:

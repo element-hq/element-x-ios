@@ -12,6 +12,7 @@ jobs:
   tests:
     name: Tests (Enterprise)
     runs-on: macos-15
+    timeout-minutes: 45
     
     # Skip in forks
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
