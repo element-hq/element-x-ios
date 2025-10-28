@@ -49,7 +49,7 @@ struct NotificationContentBuilder {
         notificationContent.threadIdentifier = threadIdentifier.replacingOccurrences(of: "@", with: "")
         
         MXLog.info("isNoisy: \(notificationItem.isNoisy)")
-        notificationContent.sound = notificationItem.isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
+        notificationContent.sound = notificationItem.isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: AppSettings.isDevelopmentBuild ? "new-message.caf" : "message.caf")) : nil
         
         switch notificationItem.event {
         case .none:
