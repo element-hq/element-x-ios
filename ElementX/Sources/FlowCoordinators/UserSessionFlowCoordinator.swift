@@ -108,7 +108,7 @@ class UserSessionFlowCoordinator: FlowCoordinatorProtocol {
         setupObservers()
     }
     
-    func start() {
+    func start(animated: Bool) {
         stateMachine.tryEvent(.start)
     }
     

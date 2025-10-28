@@ -71,7 +71,7 @@ class EncryptionResetFlowCoordinator: FlowCoordinatorProtocol {
         configureStateMachine()
     }
     
-    func start() {
+    func start(animated: Bool) {
         stateMachine.tryEvent(.start)
     }
     

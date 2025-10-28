@@ -70,7 +70,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
         setupObservers()
     }
     
-    func start() {
+    func start(animated: Bool) {
         stateMachine.processEvent(.start)
     }
     

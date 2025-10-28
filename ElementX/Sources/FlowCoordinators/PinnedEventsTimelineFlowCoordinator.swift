@@ -38,7 +38,7 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
         self.flowParameters = flowParameters
     }
     
-    func start() {
+    func start(animated: Bool) {
         Task { await presentPinnedEventsTimeline() }
     }
     
