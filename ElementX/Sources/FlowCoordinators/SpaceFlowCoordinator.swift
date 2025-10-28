@@ -147,6 +147,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: - Private
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func configureStateMachine() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .space]) { [weak self] _ in
             self?.presentSpace()
