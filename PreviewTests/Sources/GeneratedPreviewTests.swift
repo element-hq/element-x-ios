@@ -947,6 +947,12 @@ extension PreviewTests {
         }
     }
 
+    func testSpaceSettingsScreen() async throws {
+        for (index, preview) in SpaceSettingsScreen_Previews._allPreviews.enumerated() {
+            try await assertSnapshots(matching: preview, step: index)
+        }
+    }
+
     func testSpacesAnnouncementSheetView() async throws {
         for (index, preview) in SpacesAnnouncementSheetView_Previews._allPreviews.enumerated() {
             try await assertSnapshots(matching: preview, step: index)

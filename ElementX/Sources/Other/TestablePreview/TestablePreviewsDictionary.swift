@@ -165,6 +165,7 @@ enum TestablePreviewsDictionary {
         "SpaceListScreen_Previews" : SpaceListScreen_Previews.self,
         "SpaceRoomCell_Previews" : SpaceRoomCell_Previews.self,
         "SpaceScreen_Previews" : SpaceScreen_Previews.self,
+        "SpaceSettingsScreen_Previews" : SpaceSettingsScreen_Previews.self,
         "SpacesAnnouncementSheetView_Previews" : SpacesAnnouncementSheetView_Previews.self,
         "SplashScreen_Previews" : SplashScreen_Previews.self,
         "StackedAvatarsView_Previews" : StackedAvatarsView_Previews.self,

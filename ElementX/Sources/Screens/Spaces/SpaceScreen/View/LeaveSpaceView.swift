@@ -173,6 +173,7 @@ struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
                                              spaceServiceProxy: spaceServiceProxy,
                                              selectedSpaceRoomPublisher: .init(nil),
                                              userSession: UserSessionMock(.init()),
+                                             appSettings: AppSettings(),
                                              userIndicatorController: UserIndicatorControllerMock())
         return viewModel
     }

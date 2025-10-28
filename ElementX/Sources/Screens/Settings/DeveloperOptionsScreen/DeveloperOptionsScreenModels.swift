@@ -54,6 +54,8 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var latestEventSorterEnabled: Bool { get set }
     
     var linkPreviewsEnabled: Bool { get set }
+    
+    var spaceSettingsEnabled: Bool { get set }
 }
 
 extension AppSettings: DeveloperOptionsProtocol { }
