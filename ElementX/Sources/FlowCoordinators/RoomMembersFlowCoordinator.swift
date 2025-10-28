@@ -57,7 +57,6 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private let entryPoint: RoomMembersFlowCoordinatorEntryPoint
-    private let animatedEntry: Bool
     private let roomProxy: JoinedRoomProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     private let flowParameters: CommonFlowParameters
@@ -73,7 +72,6 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     private var roomFlowCoordinator: RoomFlowCoordinator?
     
     init(entryPoint: RoomMembersFlowCoordinatorEntryPoint,
-         animatedEntry: Bool,
          roomProxy: JoinedRoomProxyProtocol,
          navigationStackCoordinator: NavigationStackCoordinator,
          flowParameters: CommonFlowParameters) {
@@ -81,18 +79,17 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         self.roomProxy = roomProxy
         self.flowParameters = flowParameters
         self.navigationStackCoordinator = navigationStackCoordinator
-        self.animatedEntry = animatedEntry
         
         stateMachine = .init(state: .initial)
         configureStateMachine()
     }
     
-    func start() {
+    func start(animated: Bool) {
         switch entryPoint {
         case .roomMember(let userID):
-            stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: animatedEntry)
+            stateMachine.tryEvent(.presentRoomMemberDetails(userID: userID), userInfo: animated)
         case .roomMembersList:
-            stateMachine.tryEvent(.presentRoomMembersList, userInfo: animatedEntry)
+            stateMachine.tryEvent(.presentRoomMembersList, userInfo: animated)
         }
     }
     
@@ -116,9 +113,11 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
             } else {
                 stateMachine.tryEvent(.startRoomFlow(roomID: roomID, via: via, eventID: eventID), userInfo: animated)
             }
-        case .accountProvisioningLink, .roomList, .room, .roomAlias, .childRoomAlias, .roomDetails, .event,
-             .eventOnRoomAlias, .childEventOnRoomAlias, .userProfile, .call, .genericCallLink, .settings,
-             .chatBackupSettings, .share, .transferOwnership, .thread:
+        case .roomAlias, .childRoomAlias, .eventOnRoomAlias, .childEventOnRoomAlias:
+            break // These are converted to a room ID route one level above.
+        case .accountProvisioningLink, .roomList, .room, .roomDetails, .event,
+             .userProfile, .call, .genericCallLink, .settings, .chatBackupSettings,
+             .share, .transferOwnership, .thread:
             break
         }
     }

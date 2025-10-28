@@ -103,7 +103,7 @@ class OnboardingFlowCoordinator: FlowCoordinatorProtocol {
         return isNewLogin || requiresVerification || requiresAppLockSetup || requiresAnalyticsSetup || requiresNotificationsSetup
     }
     
-    func start() {
+    func start(animated: Bool) {
         guard shouldStart else {
             fatalError("This flow coordinator shouldn't have been started")
         }

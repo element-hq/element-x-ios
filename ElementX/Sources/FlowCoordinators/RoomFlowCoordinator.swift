@@ -115,7 +115,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
     // MARK: - FlowCoordinatorProtocol
     
-    func start() {
+    func start(animated: Bool) {
         fatalError("This flow coordinator expect a route")
     }
     
@@ -1550,12 +1550,11 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         
         spaceFlowCoordinator = coordinator
         
-        coordinator.start()
+        coordinator.start(animated: animated)
     }
     
     private func startMembersFlow(entryPoint: RoomMembersFlowCoordinatorEntryPoint, animated: Bool) {
         let flowCoordinator = RoomMembersFlowCoordinator(entryPoint: entryPoint,
-                                                         animatedEntry: animated,
                                                          roomProxy: roomProxy,
                                                          navigationStackCoordinator: navigationStackCoordinator,
                                                          flowParameters: flowParameters)
@@ -1573,7 +1572,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        flowCoordinator.start()
+        flowCoordinator.start(animated: animated)
         membersFlowCoordinator = flowCoordinator
     }
     

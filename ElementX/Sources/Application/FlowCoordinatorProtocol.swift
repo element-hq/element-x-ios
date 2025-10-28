@@ -11,9 +11,15 @@ import Foundation
 // periphery:ignore - markdown protocol
 @MainActor
 protocol FlowCoordinatorProtocol {
-    func start()
+    func start(animated: Bool)
     func handleAppRoute(_ appRoute: AppRoute, animated: Bool)
     func clearRoute(animated: Bool)
+}
+
+extension FlowCoordinatorProtocol {
+    func start() {
+        start(animated: true)
+    }
 }
 
 /// Core parameters that are shared across the main flows for easy dependency injection.

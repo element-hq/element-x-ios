@@ -50,7 +50,7 @@ class BugReportFlowCoordinator: FlowCoordinatorProtocol {
         self.parameters = parameters
     }
     
-    func start() {
+    func start(animated: Bool) {
         presentBugReportScreen()
     }
     
