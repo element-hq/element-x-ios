@@ -36,9 +36,10 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     
     // periphery:ignore - retaining purpose
     private var bugReportFlowCoordinator: BugReportFlowCoordinator?
-    
     // periphery:ignore - retaining purpose
     private var encryptionResetFlowCoordinator: EncryptionResetFlowCoordinator?
+    // periphery:ignore - retaining purpose
+    private var startChatFlowCoordinator: StartChatFlowCoordinator?
     
     // periphery:ignore - retaining purpose
     private var globalSearchScreenCoordinator: GlobalSearchScreenCoordinator?
@@ -223,12 +224,12 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             case (.roomList, .startEncryptionResetFlow, .encryptionResetFlow):
                 startEncryptionResetFlow(animated: animated)
             case (.encryptionResetFlow, .finishedEncryptionResetFlow, .roomList):
-                break
+                encryptionResetFlowCoordinator = nil
                 
-            case (.roomList, .showStartChatScreen, .startChatScreen):
-                presentStartChat(animated: animated)
-            case (.startChatScreen, .dismissedStartChatScreen, .roomList):
-                break
+            case (.roomList, .startStartChatFlow, .startChatFlow):
+                startStartChatFlow(animated: animated)
+            case (.startChatFlow, .finishedStartChatFlow, .roomList):
+                startChatFlowCoordinator = nil
                 
             case (.roomList, .showRoomDirectorySearchScreen, .roomDirectorySearchScreen):
                 presentRoomDirectorySearch()
@@ -398,7 +399,7 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentEncryptionResetScreen:
                     stateMachine.processEvent(.startEncryptionResetFlow)
                 case .presentStartChatScreen:
-                    stateMachine.processEvent(.showStartChatScreen)
+                    stateMachine.processEvent(.startStartChatFlow)
                 case .presentGlobalSearch:
                     presentGlobalSearch()
                 case .logout:
@@ -565,39 +566,33 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
     
     // MARK: Start Chat
     
-    private func presentStartChat(animated: Bool) {
-        let startChatNavigationStackCoordinator = NavigationStackCoordinator()
-
-        let userDiscoveryService = UserDiscoveryService(clientProxy: userSession.clientProxy)
-        let parameters = StartChatScreenCoordinatorParameters(orientationManager: flowParameters.windowManager,
-                                                              userSession: userSession,
-                                                              userIndicatorController: flowParameters.userIndicatorController,
-                                                              navigationStackCoordinator: startChatNavigationStackCoordinator,
-                                                              userDiscoveryService: userDiscoveryService,
-                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
-                                                              appSettings: flowParameters.appSettings,
-                                                              analytics: flowParameters.analytics)
+    private func startStartChatFlow(animated: Bool) {
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let coordinator = StartChatFlowCoordinator(navigationStackCoordinator: navigationStackCoordinator,
+                                                   flowParameters: flowParameters)
         
-        let coordinator = StartChatScreenCoordinator(parameters: parameters)
-        coordinator.actions.sink { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .close:
-                navigationSplitCoordinator.setSheetCoordinator(nil)
-            case .openRoom(let roomID):
-                navigationSplitCoordinator.setSheetCoordinator(nil)
-                stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
-            case .openRoomDirectorySearch:
-                navigationSplitCoordinator.setSheetCoordinator(nil)
-                stateMachine.processEvent(.showRoomDirectorySearchScreen)
+        coordinator.actionsPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .finished(let roomID):
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                    
+                    if let roomID {
+                        stateMachine.processEvent(.selectRoom(roomID: roomID, via: [], entryPoint: .room))
+                    }
+                case .showRoomDirectory:
+                    navigationSplitCoordinator.setSheetCoordinator(nil)
+                    stateMachine.processEvent(.showRoomDirectorySearchScreen)
+                }
             }
-        }
-        .store(in: &cancellables)
-
-        startChatNavigationStackCoordinator.setRootCoordinator(coordinator)
-
-        navigationSplitCoordinator.setSheetCoordinator(startChatNavigationStackCoordinator, animated: animated) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedStartChatScreen)
+            .store(in: &cancellables)
+        
+        startChatFlowCoordinator = coordinator
+        coordinator.start()
+        
+        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator, animated: animated) { [weak self] in
+            self?.stateMachine.processEvent(.finishedStartChatFlow)
         }
     }
     
@@ -639,10 +634,8 @@ class ChatsFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .resetComplete:
-                encryptionResetFlowCoordinator = nil
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             case .cancel:
-                encryptionResetFlowCoordinator = nil
                 navigationSplitCoordinator.setSheetCoordinator(nil)
             }
         }
