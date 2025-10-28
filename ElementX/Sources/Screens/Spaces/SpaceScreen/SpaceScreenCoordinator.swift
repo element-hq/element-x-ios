@@ -16,6 +16,7 @@ struct SpaceScreenCoordinatorParameters {
     let spaceServiceProxy: SpaceServiceProxyProtocol
     let selectedSpaceRoomPublisher: CurrentValuePublisher<String?, Never>
     let userSession: UserSessionProtocol
+    let appSettings: AppSettings
     let userIndicatorController: UserIndicatorControllerProtocol
 }
 
@@ -25,6 +26,7 @@ enum SpaceScreenCoordinatorAction {
     case selectRoom(roomID: String)
     case leftSpace
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
+    case displaySpaceSettings(roomProxy: JoinedRoomProxyProtocol)
 }
 
 final class SpaceScreenCoordinator: CoordinatorProtocol {
@@ -45,6 +47,7 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
                                          spaceServiceProxy: parameters.spaceServiceProxy,
                                          selectedSpaceRoomPublisher: parameters.selectedSpaceRoomPublisher,
                                          userSession: parameters.userSession,
+                                         appSettings: parameters.appSettings,
                                          userIndicatorController: parameters.userIndicatorController)
     }
     
@@ -64,6 +67,8 @@ final class SpaceScreenCoordinator: CoordinatorProtocol {
                 actionsSubject.send(.leftSpace)
             case .displayMembers(let roomProxy):
                 actionsSubject.send(.displayMembers(roomProxy: roomProxy))
+            case .displaySpaceSettings(let roomProxy):
+                actionsSubject.send(.displaySpaceSettings(roomProxy: roomProxy))
             }
         }
         .store(in: &cancellables)

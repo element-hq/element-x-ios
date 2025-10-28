@@ -33,6 +33,12 @@ struct DeveloperOptionsScreen: View {
                 }
             }
             
+            Section("Spaces") {
+                Toggle(isOn: $context.spaceSettingsEnabled) {
+                    Text("Space settings")
+                }
+            }
+            
             Section("Room List") {
                 Toggle(isOn: $context.publicSearchEnabled) {
                     Text("Public search")

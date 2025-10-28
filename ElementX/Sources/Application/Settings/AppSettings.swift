@@ -65,6 +65,7 @@ final class AppSettings {
         case developerOptionsEnabled
         case linkPreviewsEnabled
         case latestEventSorterEnabled
+        case spaceSettingsEnabled
         
         // Doug's tweaks 🔧
         case hideUnreadMessagesBadge
@@ -388,6 +389,9 @@ final class AppSettings {
     
     @UserPreference(key: UserDefaultsKeys.threadsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var threadsEnabled
+    
+    @UserPreference(key: UserDefaultsKeys.spaceSettingsEnabled, defaultValue: false, storageType: .userDefaults(store))
+    var spaceSettingsEnabled
         
     @UserPreference(key: UserDefaultsKeys.linkPreviewsEnabled, defaultValue: false, storageType: .userDefaults(store))
     var linkPreviewsEnabled

@@ -15,6 +15,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
     private let spaceRoomListProxy: SpaceRoomListProxyProtocol
     private let spaceServiceProxy: SpaceServiceProxyProtocol
     private let clientProxy: ClientProxyProtocol
+    private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
     private let actionsSubject: PassthroughSubject<SpaceScreenViewModelAction, Never> = .init()
@@ -26,11 +27,13 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
          spaceServiceProxy: SpaceServiceProxyProtocol,
          selectedSpaceRoomPublisher: CurrentValuePublisher<String?, Never>,
          userSession: UserSessionProtocol,
+         appSettings: AppSettings,
          userIndicatorController: UserIndicatorControllerProtocol) {
         self.spaceRoomListProxy = spaceRoomListProxy
         self.spaceServiceProxy = spaceServiceProxy
         clientProxy = userSession.clientProxy
         self.userIndicatorController = userIndicatorController
+        self.appSettings = appSettings
         
         super.init(initialViewState: SpaceScreenViewState(space: spaceRoomListProxy.spaceRoomProxyPublisher.value,
                                                           rooms: spaceRoomListProxy.spaceRoomsPublisher.value,
@@ -63,10 +66,6 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             }
             .store(in: &cancellables)
         
-        selectedSpaceRoomPublisher
-            .weakAssign(to: \.state.selectedSpaceRoomID, on: self)
-            .store(in: &cancellables)
-        
         Task {
             if case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(spaceRoomListProxy.id) {
                 // Required to listen for membership updates in the members flow
@@ -75,6 +74,22 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                 if case let .success(permalinkURL) = await roomProxy.matrixToPermalink() {
                     state.permalink = permalinkURL
                 }
+                
+                appSettings.$spaceSettingsEnabled
+                    .combineLatest(roomProxy.infoPublisher)
+                    .sink { [weak self] isEnabled, info in
+                        guard let self else { return }
+                        guard isEnabled, let powerLevels = info.powerLevels else {
+                            state.isSpaceManagementEnabled = false
+                            return
+                        }
+                        
+                        state.isSpaceManagementEnabled = powerLevels.canOwnUserEditRolesAndPermissions() ||
+                            powerLevels.canOwnUser(sendStateEvent: .roomName) ||
+                            powerLevels.canOwnUser(sendStateEvent: .roomTopic) ||
+                            powerLevels.canOwnUser(sendStateEvent: .roomAvatar)
+                    }
+                    .store(in: &cancellables)
             }
         }
     }
@@ -122,7 +137,10 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         case .displayMembers(let roomProxy):
             actionsSubject.send(.displayMembers(roomProxy: roomProxy))
         case .spaceSettings:
-            break // Not implemented.
+            guard let roomProxy = state.roomProxy else {
+                fatalError("Always available when the space settings button is tapped.")
+            }
+            actionsSubject.send(.displaySpaceSettings(roomProxy: roomProxy))
         }
     }
     
@@ -178,6 +196,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             showFailureIndicator()
         }
     }
+    
+    private func updatePermissions() { }
     
     // MARK: - Indicators
     

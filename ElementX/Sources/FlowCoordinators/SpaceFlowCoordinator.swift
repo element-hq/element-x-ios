@@ -42,6 +42,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     private var childSpaceFlowCoordinator: SpaceFlowCoordinator?
     private var roomFlowCoordinator: RoomFlowCoordinator?
     private var membersFlowCoordinator: RoomMembersFlowCoordinator?
+    private var settingsFlowCoordinator: SpaceSettingsFlowCoordinator?
     
     indirect enum State: StateType {
         /// The state machine hasn't started.
@@ -56,6 +57,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         case roomFlow(previousState: State)
         /// A members flow is in progress
         case membersFlow
+        /// A space settings flow is in progress
+        case settingsFlow
         
         case leftSpace
     }
@@ -83,6 +86,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         
         case startMembersFlow
         case stopMembersFlow
+        
+        case startSettingsFlow
+        case stopSettingsFlow
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -141,6 +147,9 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
         case .membersFlow:
             membersFlowCoordinator?.clearRoute(animated: animated)
+            clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
+        case .settingsFlow:
+            settingsFlowCoordinator?.clearRoute(animated: animated)
             clearRoute(animated: animated) // Re-run with the state machine back in the .space state.
         }
     }
@@ -212,7 +221,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             guard let self, let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else {
                 fatalError("The room proxy must always be provided")
             }
-            Task { await self.startMembersFlow(roomProxy: roomProxy) }
+            startMembersFlow(roomProxy: roomProxy)
         }
         
         stateMachine.addRouteMapping { event, fromState, _ in
@@ -221,6 +230,22 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         } handler: { [weak self] _ in
             guard let self else { return }
             membersFlowCoordinator = nil
+        }
+        
+        stateMachine.addRouteMapping { event, fromState, _ in
+            guard event == .startSettingsFlow, case .space = fromState else { return nil }
+            return .settingsFlow
+        } handler: { [weak self] context in
+            guard let self, let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else { return }
+            startSettingsFlow(roomProxy: roomProxy)
+        }
+        
+        stateMachine.addRouteMapping { event, fromState, _ in
+            guard event == .stopSettingsFlow, case .settingsFlow = fromState else { return nil }
+            return .space
+        } handler: { [weak self] _ in
+            guard let self else { return }
+            settingsFlowCoordinator = nil
         }
         
         stateMachine.addErrorHandler { context in
@@ -235,6 +260,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                                                           spaceServiceProxy: spaceServiceProxy,
                                                           selectedSpaceRoomPublisher: selectedSpaceRoomSubject.asCurrentValuePublisher(),
                                                           userSession: flowParameters.userSession,
+                                                          appSettings: flowParameters.appSettings,
                                                           userIndicatorController: flowParameters.userIndicatorController)
         let coordinator = SpaceScreenCoordinator(parameters: parameters)
         coordinator.actionsPublisher
@@ -251,6 +277,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.leftSpace)
                 case .displayMembers(let roomProxy):
                     stateMachine.tryEvent(.startMembersFlow, userInfo: roomProxy)
+                case .displaySpaceSettings(roomProxy: let roomProxy):
+                    stateMachine.tryEvent(.startSettingsFlow, userInfo: roomProxy)
                 }
             }
             .store(in: &cancellables)
@@ -372,7 +400,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         selectedSpaceRoomSubject.send(roomID)
     }
     
-    private func startMembersFlow(roomProxy: JoinedRoomProxyProtocol) async {
+    private func startMembersFlow(roomProxy: JoinedRoomProxyProtocol) {
         let flowCoordinator = RoomMembersFlowCoordinator(entryPoint: .roomMembersList,
                                                          roomProxy: roomProxy,
                                                          navigationStackCoordinator: navigationStackCoordinator,
@@ -391,6 +419,24 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         membersFlowCoordinator = flowCoordinator
+        flowCoordinator.start()
+    }
+    
+    private func startSettingsFlow(roomProxy: JoinedRoomProxyProtocol) {
+        let flowCoordinator = SpaceSettingsFlowCoordinator(roomProxy: roomProxy,
+                                                           navigationStackCoordinator: navigationStackCoordinator,
+                                                           flowParameters: flowParameters)
+        
+        flowCoordinator.actions.sink { [weak self] actions in
+            guard let self else { return }
+            switch actions {
+            case .finished:
+                stateMachine.tryEvent(.stopSettingsFlow)
+            }
+        }
+        .store(in: &cancellables)
+        
+        settingsFlowCoordinator = flowCoordinator
         flowCoordinator.start()
     }
 }
