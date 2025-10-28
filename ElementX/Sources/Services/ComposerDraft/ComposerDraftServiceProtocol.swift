@@ -44,7 +44,7 @@ struct ComposerDraftProxy: Equatable {
     let draftType: ComposerDraftType
     
     var toRust: ComposerDraft {
-        ComposerDraft(plainText: plainText, htmlText: htmlText, draftType: draftType.toRust)
+        ComposerDraft(plainText: plainText, htmlText: htmlText, draftType: draftType.toRust, attachments: [])
     }
 }
 

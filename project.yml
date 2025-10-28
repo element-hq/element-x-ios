@@ -71,7 +71,7 @@ packages:
   # Element/Matrix dependencies
   MatrixRustSDK:
     url: https://github.com/element-hq/matrix-rust-components-swift
-    exactVersion: 25.10.21
+    exactVersion: 25.10.27
     # path: ../matrix-rust-sdk
   Compound:
     path: compound-ios
@@ -111,9 +111,6 @@ packages:
   DSWaveformImage:
     url: https://github.com/dmrschmidt/DSWaveformImage
     exactVersion: 14.1.1
-  DTCoreText:
-    url: https://github.com/Cocoanetics/DTCoreText
-    exactVersion: 1.6.26
   GZIP:
     url: https://github.com/nicklockwood/GZIP
     minorVersion: 1.3.2
