@@ -8,7 +8,10 @@
 import Combine
 import SwiftUI
 
-struct SpaceSettingsScreenCoordinatorParameters { }
+struct SpaceSettingsScreenCoordinatorParameters {
+    let roomProxy: JoinedRoomProxyProtocol
+    let userSession: UserSessionProtocol
+}
 
 enum SpaceSettingsScreenCoordinatorAction { }
 
@@ -26,7 +29,8 @@ final class SpaceSettingsScreenCoordinator: CoordinatorProtocol {
     init(parameters: SpaceSettingsScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = SpaceSettingsScreenViewModel()
+        viewModel = SpaceSettingsScreenViewModel(roomProxy: parameters.roomProxy,
+                                                 userSession: parameters.userSession)
     }
     
     func start() {

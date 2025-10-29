@@ -208,6 +208,8 @@ internal enum L10n {
   internal static var actionForward: String { return L10n.tr("Localizable", "action_forward") }
   /// Go back
   internal static var actionGoBack: String { return L10n.tr("Localizable", "action_go_back") }
+  /// Go to roles & permissions
+  internal static var actionGoToRolesAndPermissions: String { return L10n.tr("Localizable", "action_go_to_roles_and_permissions") }
   /// Go to settings
   internal static var actionGoToSettings: String { return L10n.tr("Localizable", "action_go_to_settings") }
   /// Ignore
@@ -390,8 +392,6 @@ internal enum L10n {
   internal static var commonAnImage: String { return L10n.tr("Localizable", "common_an_image") }
   /// Analytics
   internal static var commonAnalytics: String { return L10n.tr("Localizable", "common_analytics") }
-  /// Fetching notifications...
-  internal static var commonAndroidNotificationSyncNotificationsForegroundServiceTitle: String { return L10n.tr("Localizable", "common_android_notification_sync_notifications_foreground_service_title") }
   /// You left the room
   internal static var commonAndroidShortcutsRemoveReasonLeftRoom: String { return L10n.tr("Localizable", "common_android_shortcuts_remove_reason_left_room") }
   /// You were logged out of the session
@@ -2464,7 +2464,7 @@ internal enum L10n {
   internal static func screenRoomMemberDetailsVerifyButtonTitle(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_room_member_details_verify_button_title", String(describing: p1))
   }
-  /// There are no banned users in this room.
+  /// There are no banned users.
   internal static var screenRoomMemberListBannedEmpty: String { return L10n.tr("Localizable", "screen_room_member_list_banned_empty") }
   /// Plural format key: "%#@COUNT@"
   internal static func screenRoomMemberListHeaderTitle(_ p1: Int) -> String {
@@ -2964,6 +2964,12 @@ internal enum L10n {
   internal static var screenSpaceListTitle: String { return L10n.tr("Localizable", "screen_space_list_title") }
   /// View members
   internal static var screenSpaceMenuActionMembers: String { return L10n.tr("Localizable", "screen_space_menu_action_members") }
+  /// Leave space
+  internal static var screenSpaceSettingsLeaveSpace: String { return L10n.tr("Localizable", "screen_space_settings_leave_space") }
+  /// Roles & permissions
+  internal static var screenSpaceSettingsRolesAndPermissions: String { return L10n.tr("Localizable", "screen_space_settings_roles_and_permissions") }
+  /// Security & privacy
+  internal static var screenSpaceSettingsSecurityAndPrivacy: String { return L10n.tr("Localizable", "screen_space_settings_security_and_privacy") }
   /// An error occurred when trying to start a chat
   internal static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
   /// Join room by address

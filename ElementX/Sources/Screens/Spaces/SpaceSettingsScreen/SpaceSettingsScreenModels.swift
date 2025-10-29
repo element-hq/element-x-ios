@@ -10,23 +10,18 @@ import Foundation
 enum SpaceSettingsScreenViewModelAction { }
 
 struct SpaceSettingsScreenViewState: BindableState {
-    var title: String
-    var placeholder: String
-    var counter = 0
+    var details: RoomDetails
     
-    var bindings: SpaceSettingsScreenViewStateBindings
-}
-
-struct SpaceSettingsScreenViewStateBindings {
-    var composerText: String
+    var joinedMembersCount: Int
+    var hasMemberIdentityVerificationStateViolations = false
+    
+    var canEditRolesOrPermissions = false
 }
 
 enum SpaceSettingsScreenViewAction {
-    case done
-    case textChanged
-    
-    case incrementCounter
-    case decrementCounter
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case processTapEdit
+    case processTapSecurity
+    case processTapPeople
+    case processTapRolesAndPermissions
+    case processTapLeave
 }
