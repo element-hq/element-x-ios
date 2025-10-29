@@ -25,24 +25,14 @@ class CreateRoomScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         clientProxy = ClientProxyMock(.init(userIDServerName: "matrix.org", userID: "@a:b.com"))
+        clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID))) }
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        let parameters = CreateRoomFlowParameters()
         ServiceLocator.shared.settings.knockingEnabled = true
         let viewModel = CreateRoomViewModel(userSession: userSession,
-                                            createRoomParameters: .init(parameters),
-                                            selectedUsers: [.mockAlice, .mockBob, .mockCharlie],
                                             analytics: ServiceLocator.shared.analytics,
                                             userIndicatorController: UserIndicatorControllerMock(),
                                             appSettings: ServiceLocator.shared.settings)
         self.viewModel = viewModel
-    }
-    
-    func testDeselectUser() {
-        XCTAssertFalse(context.viewState.selectedUsers.isEmpty)
-        XCTAssertEqual(context.viewState.selectedUsers.count, 3)
-        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfileProxy.mockAlice.userID)
-        context.send(viewAction: .deselectUser(.mockAlice))
-        XCTAssertNotEqual(context.viewState.selectedUsers.first?.userID, UserProfileProxy.mockAlice.userID)
     }
     
     func testDefaultSecurity() {
@@ -65,7 +55,7 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         // When creating the room.
         clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue = .success("1")
         let deferred = deferFulfillment(viewModel.actions) { action in
-            guard case .openRoom("1") = action else { return false }
+            guard case .createdRoom(let roomProxy) = action, roomProxy.id == "1" else { return false }
             return true
         }
         context.send(viewAction: .createRoom)
