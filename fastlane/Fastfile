@@ -29,7 +29,7 @@ lane :unit_tests do |options|
   
   run_tests(
     scheme: "UnitTests",
-    device: "unit_tests_sim (26.0.1)",
+    device: "unit_tests_sim",
     ensure_devices_found: true,
     result_bundle: true,
     number_of_retries: 3,
@@ -48,7 +48,7 @@ lane :unit_tests do |options|
 
     run_tests(
       scheme: "PreviewTests",
-      device: "previews_sim (26.0.1)",
+      device: "previews_sim",
       ensure_devices_found: true,
       result_bundle: true,
       number_of_retries: 3,
