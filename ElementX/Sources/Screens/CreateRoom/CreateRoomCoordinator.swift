@@ -12,18 +12,13 @@ import SwiftUI
 struct CreateRoomCoordinatorParameters {
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
-    let createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>
-    let selectedUsers: [UserProfileProxy]
     let appSettings: AppSettings
     let analytics: AnalyticsService
 }
 
 enum CreateRoomCoordinatorAction {
-    case openRoom(withIdentifier: String)
-    case updateSelectedUsers([UserProfileProxy])
-    case updateDetails(CreateRoomFlowParameters)
+    case createdRoom(JoinedRoomProxyProtocol)
     case displayMediaPickerWithMode(MediaPickerScreenMode)
-    case removeImage
 }
 
 final class CreateRoomCoordinator: CoordinatorProtocol {
@@ -37,8 +32,6 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
     
     init(parameters: CreateRoomCoordinatorParameters) {
         viewModel = CreateRoomViewModel(userSession: parameters.userSession,
-                                        createRoomParameters: parameters.createRoomParameters,
-                                        selectedUsers: parameters.selectedUsers,
                                         analytics: parameters.analytics,
                                         userIndicatorController: parameters.userIndicatorController,
                                         appSettings: parameters.appSettings)
@@ -48,18 +41,12 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
         viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .updateSelectedUsers(let users):
-                actionsSubject.send(.updateSelectedUsers(users))
-            case .openRoom(let identifier):
-                actionsSubject.send(.openRoom(withIdentifier: identifier))
-            case .updateDetails(let details):
-                actionsSubject.send(.updateDetails(details))
+            case .createdRoom(let roomProxy):
+                actionsSubject.send(.createdRoom(roomProxy))
             case .displayCameraPicker:
                 actionsSubject.send(.displayMediaPickerWithMode(.init(source: .camera, selectionType: .single)))
             case .displayMediaPicker:
                 actionsSubject.send(.displayMediaPickerWithMode(.init(source: .photoLibrary, selectionType: .single)))
-            case .removeImage:
-                actionsSubject.send(.removeImage)
             }
         }
         .store(in: &cancellables)
@@ -67,5 +54,9 @@ final class CreateRoomCoordinator: CoordinatorProtocol {
         
     func toPresentable() -> AnyView {
         AnyView(CreateRoomScreen(context: viewModel.context))
+    }
+    
+    func updateAvatar(fileURL: URL) {
+        viewModel.updateAvatar(fileURL: fileURL)
     }
 }

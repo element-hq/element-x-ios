@@ -13,7 +13,7 @@ import SwiftUI
 typealias InviteUsersScreenViewModelType = StateStoreViewModel<InviteUsersScreenViewState, InviteUsersScreenViewAction>
 
 class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScreenViewModelProtocol {
-    private let roomType: InviteUsersScreenRoomType
+    private let roomProxy: JoinedRoomProxyProtocol
     private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let appSettings: AppSettings
@@ -25,22 +25,19 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         actionsSubject.eraseToAnyPublisher()
     }
     
-    private let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>?
-    
     init(userSession: UserSessionProtocol,
-         selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>?,
-         roomType: InviteUsersScreenRoomType,
+         roomProxy: JoinedRoomProxyProtocol,
+         isCreatingRoom: Bool,
          userDiscoveryService: UserDiscoveryServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings) {
-        self.roomType = roomType
+        self.roomProxy = roomProxy
         self.userDiscoveryService = userDiscoveryService
         self.userIndicatorController = userIndicatorController
         self.appSettings = appSettings
-        self.selectedUsers = selectedUsers
         
-        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: selectedUsers?.value ?? [],
-                                                                isCreatingRoom: roomType.isCreatingRoom),
+        super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: [],
+                                                                isCreatingRoom: isCreatingRoom),
                    mediaProvider: userSession.mediaProvider)
                 
         setupSubscriptions()
@@ -62,12 +59,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         case .cancel:
             actionsSubject.send(.dismiss)
         case .proceed:
-            switch roomType {
-            case .draft:
-                actionsSubject.send(.proceed(selectedUsers: state.selectedUsers))
-            case .room(let roomProxy):
-                inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
-            }
+            inviteUsers(state.selectedUsers.map(\.userID), roomProxy: roomProxy)
         case .toggleUser(let user):
             toggleUser(user)
         }
@@ -78,7 +70,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     private func toggleUser(_ user: UserProfileProxy) {
         if state.selectedUsers.contains(user) {
             state.scrollToLastID = nil
-            state.selectedUsers.removeAll(where: { $0.userID == user.userID })
+            state.selectedUsers.removeAll { $0.userID == user.userID }
         } else {
             state.scrollToLastID = user.userID
             state.selectedUsers.append(user)
@@ -87,15 +79,14 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     private func inviteUsers(_ users: [String], roomProxy: JoinedRoomProxyProtocol) {
         if appSettings.enableKeyShareOnInvite {
-            showLoader(title: L10n.screenRoomDetailsInvitePeoplePreparing,
-                       message: L10n.screenRoomDetailsInvitePeopleDontClose)
+            showLoadingIndicator(title: L10n.screenRoomDetailsInvitePeoplePreparing, message: L10n.screenRoomDetailsInvitePeopleDontClose)
         } else {
-            showLoader()
+            showLoadingIndicator()
         }
         
         Task {
             defer {
-                hideLoader()
+                hideLoadingIndicator()
                 actionsSubject.send(.dismiss)
             }
             
@@ -122,7 +113,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     }
     
     private func buildMembershipStateIfNeeded(members: [RoomMemberProxyProtocol]) {
-        showLoader()
+        showLoadingIndicator()
         
         Task.detached { [members] in
             // accessing RoomMember's properties is very slow. We need to do it in a background thread.
@@ -133,7 +124,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
             
             Task { @MainActor in
                 self.state.membershipState = membershipState
-                self.hideLoader()
+                self.hideLoadingIndicator()
             }
         }
     }
@@ -150,25 +141,13 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                 self?.fetchUsers()
             }
             .store(in: &cancellables)
-        
-        if let selectedUsers {
-            selectedUsers
-                .sink { [weak self] users in
-                    self?.state.selectedUsers = users
-                }
-                .store(in: &cancellables)
-        }
     }
     
     private func fetchMembersIfNeeded() {
-        guard case let .room(roomProxy) = roomType else {
-            return
-        }
-        
         Task {
-            showLoader()
+            showLoadingIndicator()
             await roomProxy.updateMembers()
-            hideLoader()
+            hideLoadingIndicator()
         }
         
         roomProxy.membersPublisher
@@ -211,8 +190,8 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     private let userIndicatorID = UUID().uuidString
     
-    private func showLoader(title: String = L10n.commonLoading,
-                            message: String? = nil) {
+    private func showLoadingIndicator(title: String = L10n.commonLoading,
+                                      message: String? = nil) {
         userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
                                                               type: .modal,
                                                               title: title,
@@ -221,18 +200,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
                                                 delay: .milliseconds(200))
     }
     
-    private func hideLoader() {
+    private func hideLoadingIndicator() {
         userIndicatorController.retractIndicatorWithId(userIndicatorID)
-    }
-}
-
-private extension InviteUsersScreenRoomType {
-    var isCreatingRoom: Bool {
-        switch self {
-        case .draft:
-            return true
-        case .room:
-            return false
-        }
     }
 }

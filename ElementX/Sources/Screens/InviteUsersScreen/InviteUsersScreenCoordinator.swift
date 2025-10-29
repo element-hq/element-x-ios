@@ -11,8 +11,8 @@ import SwiftUI
 
 struct InviteUsersScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
-    let selectedUsers: CurrentValuePublisher<[UserProfileProxy], Never>?
-    let roomType: InviteUsersScreenRoomType
+    let roomProxy: JoinedRoomProxyProtocol
+    let isCreatingRoom: Bool
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let appSettings: AppSettings
@@ -20,7 +20,6 @@ struct InviteUsersScreenCoordinatorParameters {
 
 enum InviteUsersScreenCoordinatorAction {
     case dismiss
-    case proceed(selectedUsers: [UserProfileProxy])
 }
 
 final class InviteUsersScreenCoordinator: CoordinatorProtocol {
@@ -34,8 +33,8 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
     
     init(parameters: InviteUsersScreenCoordinatorParameters) {
         viewModel = InviteUsersScreenViewModel(userSession: parameters.userSession,
-                                               selectedUsers: parameters.selectedUsers,
-                                               roomType: parameters.roomType,
+                                               roomProxy: parameters.roomProxy,
+                                               isCreatingRoom: parameters.isCreatingRoom,
                                                userDiscoveryService: parameters.userDiscoveryService,
                                                userIndicatorController: parameters.userIndicatorController,
                                                appSettings: parameters.appSettings)
@@ -47,8 +46,6 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .dismiss:
                 actionsSubject.send(.dismiss)
-            case .proceed(let selectedUsers):
-                actionsSubject.send(.proceed(selectedUsers: selectedUsers))
             }
         }
         .store(in: &cancellables)

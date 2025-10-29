@@ -15,6 +15,7 @@ typealias CreateRoomViewModelType = StateStoreViewModel<CreateRoomViewState, Cre
 class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol {
     private let userSession: UserSessionProtocol
     private var createRoomParameters: CreateRoomFlowParameters
+    private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     private var syncNameAndAlias = true
@@ -27,45 +28,26 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     }
     
     init(userSession: UserSessionProtocol,
-         createRoomParameters: CurrentValuePublisher<CreateRoomFlowParameters, Never>,
-         selectedUsers: [UserProfileProxy],
+         initialParameters: CreateRoomFlowParameters = .init(),
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings) {
-        let parameters = createRoomParameters.value
-        
         self.userSession = userSession
-        self.createRoomParameters = parameters
+        createRoomParameters = initialParameters
+        mediaUploadingPreprocessor = MediaUploadingPreprocessor(appSettings: appSettings)
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
-        let bindings = CreateRoomViewStateBindings(roomTopic: parameters.topic,
-                                                   isRoomPrivate: parameters.isRoomPrivate,
-                                                   isKnockingOnly: appSettings.knockingEnabled ? parameters.isKnockingOnly : false)
+        let bindings = CreateRoomViewStateBindings(roomTopic: createRoomParameters.topic,
+                                                   isRoomPrivate: createRoomParameters.isRoomPrivate,
+                                                   isKnockingOnly: appSettings.knockingEnabled ? createRoomParameters.isKnockingOnly : false)
 
-        super.init(initialViewState: CreateRoomViewState(roomName: parameters.name,
+        super.init(initialViewState: CreateRoomViewState(roomName: createRoomParameters.name,
                                                          serverName: userSession.clientProxy.userIDServerName ?? "",
                                                          isKnockingFeatureEnabled: appSettings.knockingEnabled,
-                                                         selectedUsers: selectedUsers,
-                                                         aliasLocalPart: parameters.aliasLocalPart ?? roomAliasNameFromRoomDisplayName(roomName: parameters.name),
+                                                         aliasLocalPart: createRoomParameters.aliasLocalPart ?? roomAliasNameFromRoomDisplayName(roomName: createRoomParameters.name),
                                                          bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
-        
-        createRoomParameters
-            .map(\.avatarImageMedia)
-            .removeDuplicates { $0?.url == $1?.url }
-            .sink { [weak self] mediaInfo in
-                self?.createRoomParameters.avatarImageMedia = mediaInfo
-                switch mediaInfo {
-                case .image(_, let thumbnailURL, _):
-                    self?.state.avatarURL = thumbnailURL
-                case nil:
-                    self?.state.avatarURL = nil
-                default:
-                    break
-                }
-            }
-            .store(in: &cancellables)
         
         setupBindings()
     }
@@ -75,18 +57,14 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     override func process(viewAction: CreateRoomViewAction) {
         switch viewAction {
         case .createRoom:
-            Task {
-                await createRoom()
-            }
-        case .deselectUser(let user):
-            state.selectedUsers.removeAll { $0.userID == user.userID }
-            actionsSubject.send(.updateSelectedUsers(state.selectedUsers))
+            Task { await createRoom() }
         case .displayCameraPicker:
             actionsSubject.send(.displayCameraPicker)
         case .displayMediaPicker:
             actionsSubject.send(.displayMediaPicker)
         case .removeImage:
-            actionsSubject.send(.removeImage)
+            createRoomParameters.avatarImageMedia = nil
+            state.avatarURL = nil
         case .updateAliasLocalPart(let aliasLocalPart):
             state.aliasLocalPart = aliasLocalPart.lowercased()
             // If this has been called this means that the user wants a custom address not necessarily reflecting the name
@@ -101,6 +79,32 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             if syncNameAndAlias {
                 state.aliasLocalPart = roomAliasNameFromRoomDisplayName(roomName: name)
             }
+        }
+    }
+    
+    func updateAvatar(fileURL: URL) {
+        showLoadingIndicator()
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                guard case let .success(maxUploadSize) = await userSession.clientProxy.maxMediaUploadSize else {
+                    MXLog.error("Failed to get max upload size")
+                    userIndicatorController.alertInfo = AlertInfo(id: .init())
+                    return
+                }
+                let mediaInfo = try await mediaUploadingPreprocessor.processMedia(at: fileURL, maxUploadSize: maxUploadSize).get()
+                
+                switch mediaInfo {
+                case .image(_, let thumbnailURL, _):
+                    createRoomParameters.avatarImageMedia = mediaInfo
+                    state.avatarURL = thumbnailURL
+                default:
+                    break
+                }
+            } catch {
+                userIndicatorController.alertInfo = AlertInfo(id: .init())
+            }
+            hideLoadingIndicator()
         }
     }
     
@@ -135,7 +139,6 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             .sink { [weak self] state in
                 guard let self else { return }
                 updateParameters(state: state)
-                actionsSubject.send(.updateDetails(createRoomParameters))
             }
             .store(in: &cancellables)
         
@@ -256,12 +259,18 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                                                         isRoomPrivate: createRoomParameters.isRoomPrivate,
                                                         // As of right now we don't want to make private rooms with the knock rule
                                                         isKnockingOnly: createRoomParameters.isRoomPrivate ? false : createRoomParameters.isKnockingOnly,
-                                                        userIDs: state.selectedUsers.map(\.userID),
+                                                        userIDs: [], // The invite users screen is shown next so we don't need to invite anyone right now.
                                                         avatarURL: avatarURL,
                                                         aliasLocalPart: createRoomParameters.isRoomPrivate ? nil : createRoomParameters.aliasLocalPart) {
-        case .success(let roomId):
+        case .success(let roomID):
+            guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
+                state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
+                                                     title: L10n.commonError,
+                                                     message: L10n.screenStartChatErrorStartingChat)
+                return
+            }
             analytics.trackCreatedRoom(isDM: false)
-            actionsSubject.send(.openRoom(withIdentifier: roomId))
+            actionsSubject.send(.createdRoom(roomProxy))
         case .failure:
             state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
                                                  title: L10n.commonError,

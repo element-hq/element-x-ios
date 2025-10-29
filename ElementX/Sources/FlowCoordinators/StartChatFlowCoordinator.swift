@@ -16,20 +16,43 @@ enum StartChatFlowCoordinatorAction {
 }
 
 class StartChatFlowCoordinator: FlowCoordinatorProtocol {
+    private let userDiscoveryService: UserDiscoveryServiceProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
     
     private let flowParameters: CommonFlowParameters
     
+    private var createRoomScreenCoordinator: CreateRoomCoordinator?
+    
     indirect enum State: StateType {
         /// The state machine hasn't started.
         case initial
-        /// Shown when the flow is started for an unjoined space.
-        case startChatScreen
+        
+        /// Shown when the flow is started with options to create a room/DM, join by alias, use the room directory etc.
+        case startChat
+        /// The user is creating a new room.
+        case createRoom
+        /// The user is selecting an avatar for the new room.
+        case roomAvatarPicker
+        /// The user is inviting users to a newly created room.
+        case inviteUsers
     }
     
     enum Event: EventType {
         /// The flow is being started.
         case start
+        
+        /// The user would like to create a room.
+        case createRoom
+        /// The user dismissed the create room screen.
+        case dismissedCreateRoom
+        
+        /// The user would like to pick an avatar for the room.
+        case presentRoomAvatarPicker
+        /// The user finished picking the avatar.
+        case dismissedRoomAvatarPicker
+        
+        /// The user's room was created successfully.
+        case createdRoom
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -40,11 +63,13 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(navigationStackCoordinator: NavigationStackCoordinator,
+    init(userDiscoveryService: UserDiscoveryServiceProtocol,
+         navigationStackCoordinator: NavigationStackCoordinator,
          flowParameters: CommonFlowParameters) {
-        self.flowParameters = flowParameters
-        
+        self.userDiscoveryService = userDiscoveryService
         self.navigationStackCoordinator = navigationStackCoordinator
+        
+        self.flowParameters = flowParameters
         
         stateMachine = .init(state: .initial)
         configureStateMachine()
@@ -63,7 +88,17 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         switch stateMachine.state {
         case .initial:
             break
-        case .startChatScreen:
+        case .startChat:
+            navigationStackCoordinator.setRootCoordinator(nil)
+        case .createRoom:
+            navigationStackCoordinator.setRootCoordinator(nil)
+            navigationStackCoordinator.pop()
+        case .roomAvatarPicker:
+            navigationStackCoordinator.setSheetCoordinator(nil)
+            clearRoute(animated: animated) // Re-run with the state machine back in the .createRoom state.
+        case .inviteUsers:
+            navigationStackCoordinator.setRootCoordinator(nil)
+            navigationStackCoordinator.pop()
             navigationStackCoordinator.pop()
         }
     }
@@ -71,23 +106,45 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     // MARK: - Private
     
     private func configureStateMachine() {
-        stateMachine.addRoutes(event: .start, transitions: [.initial => .startChatScreen]) { [weak self] _ in
+        stateMachine.addRoutes(event: .start, transitions: [.initial => .startChat]) { [weak self] _ in
             self?.presentStartChatScreen()
         }
         
+        stateMachine.addRoutes(event: .createRoom, transitions: [.startChat => .createRoom]) { [weak self] _ in
+            self?.presentCreateRoomScreen()
+        }
+        stateMachine.addRoutes(event: .dismissedCreateRoom, transitions: [.createRoom => .startChat]) { [weak self] _ in
+            self?.createRoomScreenCoordinator = nil
+        }
+        
+        stateMachine.addRoutes(event: .presentRoomAvatarPicker, transitions: [.createRoom => .roomAvatarPicker]) { [weak self] context in
+            guard let mode = context.userInfo as? MediaPickerScreenMode else {
+                fatalError("A picker mode is required for the room avatar.")
+            }
+            self?.presentRoomAvatarPicker(mode)
+        }
+        stateMachine.addRoutes(event: .dismissedRoomAvatarPicker, transitions: [.roomAvatarPicker => .createRoom])
+        
+        stateMachine.addRoutes(event: .createdRoom, transitions: [.createRoom => .inviteUsers]) { [weak self] context in
+            guard let roomProxy = context.userInfo as? JoinedRoomProxyProtocol else {
+                fatalError("A room proxy is required to invite users.")
+            }
+            self?.presentInviteUsersScreen(roomProxy: roomProxy)
+        }
+        
         stateMachine.addErrorHandler { context in
-            fatalError("Unexpected transition: \(context)")
+            if context.fromState == context.toState {
+                MXLog.error("Transition between equal states: \(context.fromState)")
+            } else {
+                fatalError("Unexpected transition: \(context)")
+            }
         }
     }
     
     private func presentStartChatScreen() {
-        let userDiscoveryService = UserDiscoveryService(clientProxy: flowParameters.userSession.clientProxy)
-        let parameters = StartChatScreenCoordinatorParameters(orientationManager: flowParameters.windowManager,
-                                                              userSession: flowParameters.userSession,
-                                                              userIndicatorController: flowParameters.userIndicatorController,
-                                                              navigationStackCoordinator: navigationStackCoordinator,
+        let parameters = StartChatScreenCoordinatorParameters(userSession: flowParameters.userSession,
                                                               userDiscoveryService: userDiscoveryService,
-                                                              mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
+                                                              userIndicatorController: flowParameters.userIndicatorController,
                                                               appSettings: flowParameters.appSettings,
                                                               analytics: flowParameters.analytics)
         
@@ -97,6 +154,8 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
             switch action {
             case .close:
                 actionsSubject.send(.finished(roomID: nil))
+            case .createRoom:
+                stateMachine.tryEvent(.createRoom)
             case .openRoom(let roomID):
                 actionsSubject.send(.finished(roomID: roomID))
             case .openRoomDirectorySearch:
@@ -106,5 +165,73 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(coordinator)
+    }
+    
+    private func presentCreateRoomScreen() {
+        let createParameters = CreateRoomCoordinatorParameters(userSession: flowParameters.userSession,
+                                                               userIndicatorController: flowParameters.userIndicatorController,
+                                                               appSettings: flowParameters.appSettings,
+                                                               analytics: flowParameters.analytics)
+        let coordinator = CreateRoomCoordinator(parameters: createParameters)
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .createdRoom(let roomProxy):
+                stateMachine.tryEvent(.createdRoom, userInfo: roomProxy)
+            case .displayMediaPickerWithMode(let mode):
+                stateMachine.tryEvent(.presentRoomAvatarPicker, userInfo: mode)
+            }
+        }
+        .store(in: &cancellables)
+        
+        createRoomScreenCoordinator = coordinator
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedCreateRoom)
+        }
+    }
+    
+    private func presentRoomAvatarPicker(_ mode: MediaPickerScreenMode) {
+        let stackCoordinator = NavigationStackCoordinator()
+        
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(mode: mode,
+                                                                  userIndicatorController: flowParameters.userIndicatorController,
+                                                                  orientationManager: flowParameters.windowManager) { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .cancel:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            case .selectedMediaAtURLs(let urls):
+                guard urls.count == 1 else { fatalError("Received an invalid number of URLs") }
+                
+                navigationStackCoordinator.setSheetCoordinator(nil)
+                createRoomScreenCoordinator?.updateAvatar(fileURL: urls[0])
+            }
+        }
+        
+        stackCoordinator.setRootCoordinator(mediaPickerCoordinator)
+        
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedRoomAvatarPicker)
+        }
+    }
+    
+    private func presentInviteUsersScreen(roomProxy: JoinedRoomProxyProtocol) {
+        let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: flowParameters.userSession,
+                                                                      roomProxy: roomProxy,
+                                                                      isCreatingRoom: true,
+                                                                      userDiscoveryService: userDiscoveryService,
+                                                                      userIndicatorController: flowParameters.userIndicatorController,
+                                                                      appSettings: flowParameters.appSettings)
+        let coordinator = InviteUsersScreenCoordinator(parameters: inviteParameters)
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss:
+                actionsSubject.send(.finished(roomID: roomProxy.id))
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator)
     }
 }

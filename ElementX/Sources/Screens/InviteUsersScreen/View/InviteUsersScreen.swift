@@ -32,6 +32,7 @@ struct InviteUsersScreen: View {
                               accessibilityFocusOnStart: true)
             .compoundSearchField()
             .alert(item: $context.alertInfo)
+            .navigationBarBackButtonHidden(context.viewState.isCreatingRoom)
     }
     
     // MARK: - Private
@@ -155,8 +156,8 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
         return InviteUsersScreenViewModel(userSession: UserSessionMock(.init()),
-                                          selectedUsers: .init([]),
-                                          roomType: .draft,
+                                          roomProxy: JoinedRoomProxyMock(.init()),
+                                          isCreatingRoom: true,
                                           userDiscoveryService: userDiscoveryService,
                                           userIndicatorController: UserIndicatorControllerMock(),
                                           appSettings: ServiceLocator.shared.settings)

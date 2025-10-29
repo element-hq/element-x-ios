@@ -17,19 +17,15 @@ enum CreateRoomScreenErrorType: Error {
 }
 
 enum CreateRoomViewModelAction {
-    case openRoom(withIdentifier: String)
-    case updateSelectedUsers([UserProfileProxy])
-    case updateDetails(CreateRoomFlowParameters)
+    case createdRoom(JoinedRoomProxyProtocol)
     case displayMediaPicker
     case displayCameraPicker
-    case removeImage
 }
 
 struct CreateRoomViewState: BindableState {
     var roomName: String
     let serverName: String
     let isKnockingFeatureEnabled: Bool
-    var selectedUsers: [UserProfileProxy]
     var aliasLocalPart: String
     var bindings: CreateRoomViewStateBindings
     var avatarURL: URL?
@@ -61,7 +57,6 @@ struct CreateRoomViewStateBindings {
 
 enum CreateRoomViewAction {
     case createRoom
-    case deselectUser(UserProfileProxy)
     case displayCameraPicker
     case displayMediaPicker
     case removeImage

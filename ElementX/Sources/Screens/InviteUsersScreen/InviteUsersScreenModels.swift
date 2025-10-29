@@ -16,7 +16,6 @@ enum InviteUsersScreenErrorType: Error {
 
 enum InviteUsersScreenViewModelAction {
     case dismiss
-    case proceed(selectedUsers: [UserProfileProxy])
 }
 
 enum InviteUsersScreenRoomType {
@@ -56,10 +55,10 @@ struct InviteUsersScreenViewState: BindableState {
     let isCreatingRoom: Bool
     
     var actionText: String {
-        if isCreatingRoom {
-            return selectedUsers.isEmpty ? L10n.actionSkip : L10n.actionNext
+        if isCreatingRoom, selectedUsers.isEmpty {
+            L10n.actionSkip
         } else {
-            return L10n.actionInvite
+            L10n.actionInvite
         }
     }
     
