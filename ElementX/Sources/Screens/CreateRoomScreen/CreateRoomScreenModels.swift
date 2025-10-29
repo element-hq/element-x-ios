@@ -16,24 +16,24 @@ enum CreateRoomScreenErrorType: Error {
     case unknown
 }
 
-enum CreateRoomViewModelAction {
+enum CreateRoomScreenViewModelAction {
     case createdRoom(JoinedRoomProxyProtocol)
     case displayMediaPicker
     case displayCameraPicker
 }
 
-struct CreateRoomViewState: BindableState {
+struct CreateRoomScreenViewState: BindableState {
     var roomName: String
     let serverName: String
     let isKnockingFeatureEnabled: Bool
     var aliasLocalPart: String
-    var bindings: CreateRoomViewStateBindings
+    var bindings: CreateRoomScreenViewStateBindings
     var avatarURL: URL?
     var canCreateRoom: Bool {
         !roomName.isEmpty && aliasErrors.isEmpty
     }
 
-    var aliasErrors: Set<CreateRoomAliasErrorState> = []
+    var aliasErrors: Set<CreateRoomScreenAliasErrorState> = []
     var aliasErrorDescription: String? {
         if aliasErrors.contains(.alreadyExists) {
             L10n.errorRoomAddressAlreadyExists
@@ -45,7 +45,7 @@ struct CreateRoomViewState: BindableState {
     }
 }
 
-struct CreateRoomViewStateBindings {
+struct CreateRoomScreenViewStateBindings {
     var roomTopic: String
     var isRoomPrivate: Bool
     var isKnockingOnly: Bool
@@ -55,7 +55,7 @@ struct CreateRoomViewStateBindings {
     var alertInfo: AlertInfo<CreateRoomScreenErrorType>?
 }
 
-enum CreateRoomViewAction {
+enum CreateRoomScreenViewAction {
     case createRoom
     case displayCameraPicker
     case displayMediaPicker
@@ -64,12 +64,12 @@ enum CreateRoomViewAction {
     case updateAliasLocalPart(String)
 }
 
-enum CreateRoomAliasErrorState {
+enum CreateRoomScreenAliasErrorState {
     case alreadyExists
     case invalidSymbols
 }
 
-extension Set<CreateRoomAliasErrorState> {
+extension Set<CreateRoomScreenAliasErrorState> {
     var errorDescription: String? {
         if contains(.alreadyExists) {
             return L10n.errorRoomAddressAlreadyExists

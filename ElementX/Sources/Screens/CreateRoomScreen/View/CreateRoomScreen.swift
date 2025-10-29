@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 struct CreateRoomScreen: View {
-    @ObservedObject var context: CreateRoomViewModel.Context
+    @ObservedObject var context: CreateRoomScreenViewModel.Context
     @FocusState private var focus: Focus?
 
     private enum Focus {
@@ -212,48 +212,43 @@ struct CreateRoomScreen: View {
 struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
-        let parameters = CreateRoomFlowParameters()
-        
-        return CreateRoomViewModel(userSession: userSession,
-                                   initialParameters: parameters,
-                                   analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock(),
-                                   appSettings: ServiceLocator.shared.settings)
+        return CreateRoomScreenViewModel(userSession: userSession,
+                                         initialParameters: .init(),
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
     }()
     
     static let publicRoomViewModel = {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
-        let parameters = CreateRoomFlowParameters(isRoomPrivate: false)
         ServiceLocator.shared.settings.knockingEnabled = true
-        return CreateRoomViewModel(userSession: userSession,
-                                   initialParameters: parameters,
-                                   analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock(),
-                                   appSettings: ServiceLocator.shared.settings)
+        return CreateRoomScreenViewModel(userSession: userSession,
+                                         initialParameters: .init(isRoomPrivate: false),
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
     }()
     
     static let publicRoomInvalidAliasViewModel = {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
-        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, aliasLocalPart: "#:")
         ServiceLocator.shared.settings.knockingEnabled = true
-        return CreateRoomViewModel(userSession: userSession,
-                                   initialParameters: parameters,
-                                   analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock(),
-                                   appSettings: ServiceLocator.shared.settings)
+        return CreateRoomScreenViewModel(userSession: userSession,
+                                         initialParameters: .init(isRoomPrivate: false, aliasLocalPart: "#:"),
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
     }()
     
     static let publicRoomExistingAliasViewModel = {
         let clientProxy = ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))
         clientProxy.isAliasAvailableReturnValue = .success(false)
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, aliasLocalPart: "existing")
         ServiceLocator.shared.settings.knockingEnabled = true
-        return CreateRoomViewModel(userSession: userSession,
-                                   initialParameters: parameters,
-                                   analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock(),
-                                   appSettings: ServiceLocator.shared.settings)
+        return CreateRoomScreenViewModel(userSession: userSession,
+                                         initialParameters: .init(isRoomPrivate: false, aliasLocalPart: "existing"),
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
     }()
 
     static var previews: some View {

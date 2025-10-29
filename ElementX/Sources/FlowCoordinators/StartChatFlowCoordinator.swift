@@ -21,7 +21,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     
     private let flowParameters: CommonFlowParameters
     
-    private var createRoomScreenCoordinator: CreateRoomCoordinator?
+    private var createRoomScreenCoordinator: CreateRoomScreenCoordinator?
     
     indirect enum State: StateType {
         /// The state machine hasn't started.
@@ -168,11 +168,11 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentCreateRoomScreen() {
-        let createParameters = CreateRoomCoordinatorParameters(userSession: flowParameters.userSession,
-                                                               userIndicatorController: flowParameters.userIndicatorController,
-                                                               appSettings: flowParameters.appSettings,
-                                                               analytics: flowParameters.analytics)
-        let coordinator = CreateRoomCoordinator(parameters: createParameters)
+        let createParameters = CreateRoomScreenCoordinatorParameters(userSession: flowParameters.userSession,
+                                                                     userIndicatorController: flowParameters.userIndicatorController,
+                                                                     appSettings: flowParameters.appSettings,
+                                                                     analytics: flowParameters.analytics)
+        let coordinator = CreateRoomScreenCoordinator(parameters: createParameters)
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {

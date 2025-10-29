@@ -9,32 +9,32 @@
 import Combine
 import SwiftUI
 
-struct CreateRoomCoordinatorParameters {
+struct CreateRoomScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let appSettings: AppSettings
     let analytics: AnalyticsService
 }
 
-enum CreateRoomCoordinatorAction {
+enum CreateRoomScreenCoordinatorAction {
     case createdRoom(JoinedRoomProxyProtocol)
     case displayMediaPickerWithMode(MediaPickerScreenMode)
 }
 
-final class CreateRoomCoordinator: CoordinatorProtocol {
-    private var viewModel: CreateRoomViewModelProtocol
-    private let actionsSubject: PassthroughSubject<CreateRoomCoordinatorAction, Never> = .init()
+final class CreateRoomScreenCoordinator: CoordinatorProtocol {
+    private var viewModel: CreateRoomScreenViewModelProtocol
+    private let actionsSubject: PassthroughSubject<CreateRoomScreenCoordinatorAction, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
     
-    var actions: AnyPublisher<CreateRoomCoordinatorAction, Never> {
+    var actions: AnyPublisher<CreateRoomScreenCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: CreateRoomCoordinatorParameters) {
-        viewModel = CreateRoomViewModel(userSession: parameters.userSession,
-                                        analytics: parameters.analytics,
-                                        userIndicatorController: parameters.userIndicatorController,
-                                        appSettings: parameters.appSettings)
+    init(parameters: CreateRoomScreenCoordinatorParameters) {
+        viewModel = CreateRoomScreenViewModel(userSession: parameters.userSession,
+                                              analytics: parameters.analytics,
+                                              userIndicatorController: parameters.userIndicatorController,
+                                              appSettings: parameters.appSettings)
     }
     
     func start() {

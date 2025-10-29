@@ -13,13 +13,13 @@ import XCTest
 
 @MainActor
 class CreateRoomScreenViewModelTests: XCTestCase {
-    var viewModel: CreateRoomViewModelProtocol!
+    var viewModel: CreateRoomScreenViewModelProtocol!
     var clientProxy: ClientProxyMock!
     var userSession: UserSessionMock!
     
     private let usersSubject = CurrentValueSubject<[UserProfileProxy], Never>([])
     
-    var context: CreateRoomViewModel.Context {
+    var context: CreateRoomScreenViewModel.Context {
         viewModel.context
     }
     
@@ -28,10 +28,10 @@ class CreateRoomScreenViewModelTests: XCTestCase {
         clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID))) }
         userSession = UserSessionMock(.init(clientProxy: clientProxy))
         ServiceLocator.shared.settings.knockingEnabled = true
-        let viewModel = CreateRoomViewModel(userSession: userSession,
-                                            analytics: ServiceLocator.shared.analytics,
-                                            userIndicatorController: UserIndicatorControllerMock(),
-                                            appSettings: ServiceLocator.shared.settings)
+        let viewModel = CreateRoomScreenViewModel(userSession: userSession,
+                                                  analytics: ServiceLocator.shared.analytics,
+                                                  userIndicatorController: UserIndicatorControllerMock(),
+                                                  appSettings: ServiceLocator.shared.settings)
         self.viewModel = viewModel
     }
     

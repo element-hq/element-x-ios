@@ -10,43 +10,52 @@ import Combine
 import MatrixRustSDK
 import SwiftUI
 
-typealias CreateRoomViewModelType = StateStoreViewModel<CreateRoomViewState, CreateRoomViewAction>
+typealias CreateRoomScreenViewModelType = StateStoreViewModel<CreateRoomScreenViewState, CreateRoomScreenViewAction>
 
-class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol {
+class CreateRoomScreenViewModel: CreateRoomScreenViewModelType, CreateRoomScreenViewModelProtocol {
+    struct Parameters {
+        var name = ""
+        var topic = ""
+        var isRoomPrivate = true
+        var isKnockingOnly = false
+        var avatarImageMedia: MediaInfo?
+        var aliasLocalPart: String?
+    }
+    
     private let userSession: UserSessionProtocol
-    private var createRoomParameters: CreateRoomFlowParameters
+    private var parameters: Parameters
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     private let analytics: AnalyticsService
     private let userIndicatorController: UserIndicatorControllerProtocol
     private var syncNameAndAlias = true
     @CancellableTask private var checkAliasAvailabilityTask: Task<Void, Never>?
     
-    private var actionsSubject: PassthroughSubject<CreateRoomViewModelAction, Never> = .init()
+    private var actionsSubject: PassthroughSubject<CreateRoomScreenViewModelAction, Never> = .init()
     
-    var actions: AnyPublisher<CreateRoomViewModelAction, Never> {
+    var actions: AnyPublisher<CreateRoomScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
     init(userSession: UserSessionProtocol,
-         initialParameters: CreateRoomFlowParameters = .init(),
+         initialParameters: Parameters = .init(),
          analytics: AnalyticsService,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings) {
         self.userSession = userSession
-        createRoomParameters = initialParameters
+        parameters = initialParameters
         mediaUploadingPreprocessor = MediaUploadingPreprocessor(appSettings: appSettings)
         self.analytics = analytics
         self.userIndicatorController = userIndicatorController
         
-        let bindings = CreateRoomViewStateBindings(roomTopic: createRoomParameters.topic,
-                                                   isRoomPrivate: createRoomParameters.isRoomPrivate,
-                                                   isKnockingOnly: appSettings.knockingEnabled ? createRoomParameters.isKnockingOnly : false)
+        let bindings = CreateRoomScreenViewStateBindings(roomTopic: parameters.topic,
+                                                         isRoomPrivate: parameters.isRoomPrivate,
+                                                         isKnockingOnly: appSettings.knockingEnabled ? parameters.isKnockingOnly : false)
 
-        super.init(initialViewState: CreateRoomViewState(roomName: createRoomParameters.name,
-                                                         serverName: userSession.clientProxy.userIDServerName ?? "",
-                                                         isKnockingFeatureEnabled: appSettings.knockingEnabled,
-                                                         aliasLocalPart: createRoomParameters.aliasLocalPart ?? roomAliasNameFromRoomDisplayName(roomName: createRoomParameters.name),
-                                                         bindings: bindings),
+        super.init(initialViewState: CreateRoomScreenViewState(roomName: parameters.name,
+                                                               serverName: userSession.clientProxy.userIDServerName ?? "",
+                                                               isKnockingFeatureEnabled: appSettings.knockingEnabled,
+                                                               aliasLocalPart: parameters.aliasLocalPart ?? roomAliasNameFromRoomDisplayName(roomName: parameters.name),
+                                                               bindings: bindings),
                    mediaProvider: userSession.mediaProvider)
         
         setupBindings()
@@ -54,7 +63,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     
     // MARK: - Public
     
-    override func process(viewAction: CreateRoomViewAction) {
+    override func process(viewAction: CreateRoomScreenViewAction) {
         switch viewAction {
         case .createRoom:
             Task { await createRoom() }
@@ -63,7 +72,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         case .displayMediaPicker:
             actionsSubject.send(.displayMediaPicker)
         case .removeImage:
-            createRoomParameters.avatarImageMedia = nil
+            parameters.avatarImageMedia = nil
             state.avatarURL = nil
         case .updateAliasLocalPart(let aliasLocalPart):
             state.aliasLocalPart = aliasLocalPart.lowercased()
@@ -96,7 +105,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
                 
                 switch mediaInfo {
                 case .image(_, let thumbnailURL, _):
-                    createRoomParameters.avatarImageMedia = mediaInfo
+                    parameters.avatarImageMedia = mediaInfo
                     state.avatarURL = thumbnailURL
                 default:
                     break
@@ -186,15 +195,15 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             .store(in: &cancellables)
     }
     
-    private func updateParameters(state: CreateRoomViewState) {
-        createRoomParameters.name = state.roomName
-        createRoomParameters.topic = state.bindings.roomTopic
-        createRoomParameters.isRoomPrivate = state.bindings.isRoomPrivate
-        createRoomParameters.isKnockingOnly = state.bindings.isKnockingOnly
+    private func updateParameters(state: CreateRoomScreenViewState) {
+        parameters.name = state.roomName
+        parameters.topic = state.bindings.roomTopic
+        parameters.isRoomPrivate = state.bindings.isRoomPrivate
+        parameters.isKnockingOnly = state.bindings.isKnockingOnly
         if state.isKnockingFeatureEnabled, !state.aliasLocalPart.isEmpty {
-            createRoomParameters.aliasLocalPart = state.aliasLocalPart
+            parameters.aliasLocalPart = state.aliasLocalPart
         } else {
-            createRoomParameters.aliasLocalPart = nil
+            parameters.aliasLocalPart = nil
         }
     }
     
@@ -208,8 +217,8 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         updateParameters(state: state)
         
         // Better to double check the errors also when trying to create the room
-        if state.isKnockingFeatureEnabled, !createRoomParameters.isRoomPrivate {
-            guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: createRoomParameters.aliasLocalPart,
+        if state.isKnockingFeatureEnabled, !parameters.isRoomPrivate {
+            guard let canonicalAlias = String.makeCanonicalAlias(aliasLocalPart: parameters.aliasLocalPart,
                                                                  serverName: state.serverName),
                 isRoomAliasFormatValid(alias: canonicalAlias) else {
                 state.aliasErrors = [.invalidSymbols]
@@ -229,7 +238,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
         }
         
         let avatarURL: URL?
-        if let media = createRoomParameters.avatarImageMedia {
+        if let media = parameters.avatarImageMedia {
             switch await userSession.clientProxy.uploadMedia(media) {
             case .success(let url):
                 avatarURL = URL(string: url)
@@ -254,14 +263,14 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
             avatarURL = nil
         }
         
-        switch await userSession.clientProxy.createRoom(name: createRoomParameters.name,
-                                                        topic: createRoomParameters.topic.isBlank ? nil : createRoomParameters.topic,
-                                                        isRoomPrivate: createRoomParameters.isRoomPrivate,
+        switch await userSession.clientProxy.createRoom(name: parameters.name,
+                                                        topic: parameters.topic.isBlank ? nil : parameters.topic,
+                                                        isRoomPrivate: parameters.isRoomPrivate,
                                                         // As of right now we don't want to make private rooms with the knock rule
-                                                        isKnockingOnly: createRoomParameters.isRoomPrivate ? false : createRoomParameters.isKnockingOnly,
+                                                        isKnockingOnly: parameters.isRoomPrivate ? false : parameters.isKnockingOnly,
                                                         userIDs: [], // The invite users screen is shown next so we don't need to invite anyone right now.
                                                         avatarURL: avatarURL,
-                                                        aliasLocalPart: createRoomParameters.isRoomPrivate ? nil : createRoomParameters.aliasLocalPart) {
+                                                        aliasLocalPart: parameters.isRoomPrivate ? nil : parameters.aliasLocalPart) {
         case .success(let roomID):
             guard case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(roomID) else {
                 state.bindings.alertInfo = AlertInfo(id: .failedCreatingRoom,
@@ -280,7 +289,7 @@ class CreateRoomViewModel: CreateRoomViewModelType, CreateRoomViewModelProtocol 
     
     // MARK: Loading indicator
     
-    private static let loadingIndicatorIdentifier = "\(CreateRoomViewModel.self)-Loading"
+    private static let loadingIndicatorIdentifier = "\(CreateRoomScreenViewModel.self)-Loading"
     
     private func showLoadingIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
