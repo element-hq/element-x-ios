@@ -59,7 +59,7 @@ setup_github_actions_translations_environment() {
 xcode_select_for_github_actions() {
     # While fastlane has its own way of selecting Xcode, that only works inside of fastlane.
     # We need to select it globally for other processes like xcresultparser and our custom tools to use the same Xcode version.
-    sudo xcode-select -s /Applications/Xcode_26.0.app
+    sudo xcode-select -s /Applications/Xcode_26.1_beta_3.app
 }
 
 generate_what_to_test_notes() {
