@@ -24,9 +24,8 @@ lane :unit_tests do |options|
     runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
   )
 
-  prelaunch_simulator(
-    device: "Phone-17-26.0"
-  )
+  sh "xcrun simctl boot 'iPhone-17-26.0' || true"
+  sh "open -a Simulator.app || true"
   
   run_tests(
     scheme: "UnitTests",
@@ -44,9 +43,8 @@ lane :unit_tests do |options|
       runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
     )
 
-    prelaunch_simulator(
-      device: "iPhone-SE-3rd-generation-26.0"
-    )
+    sh "xcrun simctl boot 'iPhone-SE-3rd-generation-26.0' || true"
+    sh "open -a Simulator.app || true"
 
     run_tests(
       scheme: "PreviewTests",
