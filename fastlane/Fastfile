@@ -11,7 +11,7 @@ end
 simulator_version = "26.0"
 
 before_all do
-  xcversion(version: "~> 26.0.1")
+  xcversion(version: "~> 26.1.0")
 
   ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
   ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
