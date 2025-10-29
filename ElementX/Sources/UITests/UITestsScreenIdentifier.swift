@@ -22,8 +22,6 @@ enum UITestsScreenIdentifier: String {
     case multipleProvidersAuthenticationFlow
     case bugReport
     case createPoll
-    case createRoom
-    case createRoomNoUsers
     case encryptionSettings
     case encryptionSettingsOutOfSync
     case encryptionReset
@@ -44,8 +42,7 @@ enum UITestsScreenIdentifier: String {
     case roomWithUndisclosedPolls
     case serverSelection
     case sessionVerification
-    case startChat
-    case startChatWithSearchResults
+    case startChatFlow
     case userSessionScreen
     case userSessionScreenReply
     case userSessionSpacesFlow

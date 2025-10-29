@@ -123,6 +123,7 @@ extension JoinedRoomProxyMock {
         
         powerLevelsReturnValue = .success(powerLevelsProxyMock)
         
+        inviteUserIDReturnValue = .success(())
         kickUserReasonReturnValue = .success(())
         banUserReasonReturnValue = .success(())
         unbanUserReturnValue = .success(())

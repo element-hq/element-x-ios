@@ -108,6 +108,7 @@ struct CreateRoomScreen: View {
             }
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomAvatar)
         .confirmationDialog("", isPresented: $context.showAttachmentConfirmationDialog) {
             Button(L10n.actionTakePhoto) {
                 context.send(viewAction: .displayCameraPicker)
@@ -115,6 +116,8 @@ struct CreateRoomScreen: View {
             Button(L10n.actionChoosePhoto) {
                 context.send(viewAction: .displayMediaPicker)
             }
+            .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.mediaPicker)
+            
             if context.viewState.avatarURL != nil {
                 Button(L10n.actionRemove, role: .destructive) {
                     context.send(viewAction: .removeImage)
@@ -199,6 +202,7 @@ struct CreateRoomScreen: View {
                 context.send(viewAction: .createRoom)
             }
             .disabled(!context.viewState.canCreateRoom)
+            .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.create)
         }
     }
 }
