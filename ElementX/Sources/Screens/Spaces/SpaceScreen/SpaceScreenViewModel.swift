@@ -76,19 +76,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                 }
                 
                 appSettings.$spaceSettingsEnabled
-                    .combineLatest(roomProxy.infoPublisher)
-                    .sink { [weak self] isEnabled, info in
-                        guard let self else { return }
-                        guard isEnabled, let powerLevels = info.powerLevels else {
-                            state.isSpaceManagementEnabled = false
-                            return
-                        }
-                        
-                        state.isSpaceManagementEnabled = powerLevels.canOwnUserEditRolesAndPermissions() ||
-                            powerLevels.canOwnUser(sendStateEvent: .roomName) ||
-                            powerLevels.canOwnUser(sendStateEvent: .roomTopic) ||
-                            powerLevels.canOwnUser(sendStateEvent: .roomAvatar)
-                    }
+                    .weakAssign(to: \.state.isSpaceManagementEnabled, on: self)
                     .store(in: &cancellables)
             }
         }
@@ -141,6 +129,8 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                 fatalError("Always available when the space settings button is tapped.")
             }
             actionsSubject.send(.displaySpaceSettings(roomProxy: roomProxy))
+        case .rolesAndPermissions:
+            break // Not implemented yet
         }
     }
     

@@ -87,7 +87,8 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentSpaceSettings(animated: Bool) {
-        let coordinator = SpaceSettingsScreenCoordinator(parameters: .init())
+        let coordinator = SpaceSettingsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                           userSession: flowParameters.userSession))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action { }

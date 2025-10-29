@@ -99,9 +99,9 @@ struct LeaveSpaceView: View {
                 .buttonStyle(.compound(.primary))
             } else if context.viewState.isSpaceManagementEnabled {
                 Button {
-                    context.send(viewAction: .spaceSettings)
+                    context.send(viewAction: .rolesAndPermissions)
                 } label: {
-                    Label(L10n.actionGoToSettings, icon: \.settings)
+                    Label(L10n.actionGoToRolesAndPermissions, icon: \.settings)
                 }
                 .buttonStyle(.compound(.primary))
             }
