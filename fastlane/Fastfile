@@ -23,6 +23,10 @@ lane :unit_tests do |options|
     type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17",
     runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
   )
+
+  prelaunch_simulator(
+    device: "Phone-17-26.0"
+  )
   
   run_tests(
     scheme: "UnitTests",
@@ -38,6 +42,10 @@ lane :unit_tests do |options|
       name: "iPhone-SE-3rd-generation-26.0",
       type: "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation",
       runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
+    )
+
+    prelaunch_simulator(
+      device: "iPhone-SE-3rd-generation-26.0"
     )
 
     run_tests(
