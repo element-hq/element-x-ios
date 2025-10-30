@@ -270,8 +270,11 @@ enum A11yIdentifiers {
     }
     
     struct CreateRoomScreen {
+        let create = "create_room-create"
+        let roomAvatar = "create_room-room_avatar"
         let roomName = "create_room-room_name"
         let roomTopic = "create_room-room_topic"
+        let mediaPicker = "create_room-media_picker"
     }
 
     struct PollFormScreen {

@@ -33,8 +33,8 @@ class ChatsFlowCoordinatorStateMachine {
         /// Showing the encryption reset flow.
         case encryptionResetFlow(detailState: DetailState?)
         
-        /// Showing the start chat screen
-        case startChatScreen(detailState: DetailState?)
+        /// Showing the start chat flow
+        case startChatFlow(detailState: DetailState?)
         
         /// Showing the logout flows
         case logoutConfirmationScreen(detailState: DetailState?)
@@ -61,7 +61,7 @@ class ChatsFlowCoordinatorStateMachine {
                  .feedbackScreen(let detailState),
                  .recoveryKeyScreen(let detailState),
                  .encryptionResetFlow(let detailState),
-                 .startChatScreen(let detailState),
+                 .startChatFlow(let detailState),
                  .logoutConfirmationScreen(let detailState),
                  .roomDirectorySearchScreen(let detailState),
                  .reportRoomScreen(let detailState),
@@ -111,10 +111,10 @@ class ChatsFlowCoordinatorStateMachine {
         /// The encryption reset flow is complete and has been dismissed.
         case finishedEncryptionResetFlow
         
-        /// Request the start of the start chat flow
-        case showStartChatScreen
-        /// Start chat has been dismissed
-        case dismissedStartChatScreen
+        /// Request the start of the start chat flow.
+        case startStartChatFlow
+        /// The Start Chat flow is complete and has been dismissed.
+        case finishedStartChatFlow
         
         /// Request presentation of the room directory search screen.
         case showRoomDirectorySearchScreen
@@ -177,9 +177,9 @@ class ChatsFlowCoordinatorStateMachine {
             case (.encryptionResetFlow(let detailState), .finishedEncryptionResetFlow):
                 return .roomList(detailState: detailState)
                 
-            case (.roomList(let detailState), .showStartChatScreen):
-                return .startChatScreen(detailState: detailState)
-            case (.startChatScreen(let detailState), .dismissedStartChatScreen):
+            case (.roomList(let detailState), .startStartChatFlow):
+                return .startChatFlow(detailState: detailState)
+            case (.startChatFlow(let detailState), .finishedStartChatFlow):
                 return .roomList(detailState: detailState)
                 
             case (.roomList(let detailState), .showRoomDirectorySearchScreen):

@@ -7,9 +7,12 @@
 //
 
 import Combine
+import Foundation
 
 @MainActor
-protocol CreateRoomViewModelProtocol {
-    var actions: AnyPublisher<CreateRoomViewModelAction, Never> { get }
-    var context: CreateRoomViewModelType.Context { get }
+protocol CreateRoomScreenViewModelProtocol {
+    var actions: AnyPublisher<CreateRoomScreenViewModelAction, Never> { get }
+    var context: CreateRoomScreenViewModelType.Context { get }
+    
+    func updateAvatar(fileURL: URL)
 }

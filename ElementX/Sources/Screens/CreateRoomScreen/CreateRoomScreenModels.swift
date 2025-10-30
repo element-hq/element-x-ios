@@ -16,28 +16,24 @@ enum CreateRoomScreenErrorType: Error {
     case unknown
 }
 
-enum CreateRoomViewModelAction {
-    case openRoom(withIdentifier: String)
-    case updateSelectedUsers([UserProfileProxy])
-    case updateDetails(CreateRoomFlowParameters)
+enum CreateRoomScreenViewModelAction {
+    case createdRoom(JoinedRoomProxyProtocol)
     case displayMediaPicker
     case displayCameraPicker
-    case removeImage
 }
 
-struct CreateRoomViewState: BindableState {
+struct CreateRoomScreenViewState: BindableState {
     var roomName: String
     let serverName: String
     let isKnockingFeatureEnabled: Bool
-    var selectedUsers: [UserProfileProxy]
     var aliasLocalPart: String
-    var bindings: CreateRoomViewStateBindings
+    var bindings: CreateRoomScreenViewStateBindings
     var avatarURL: URL?
     var canCreateRoom: Bool {
         !roomName.isEmpty && aliasErrors.isEmpty
     }
 
-    var aliasErrors: Set<CreateRoomAliasErrorState> = []
+    var aliasErrors: Set<CreateRoomScreenAliasErrorState> = []
     var aliasErrorDescription: String? {
         if aliasErrors.contains(.alreadyExists) {
             L10n.errorRoomAddressAlreadyExists
@@ -49,7 +45,7 @@ struct CreateRoomViewState: BindableState {
     }
 }
 
-struct CreateRoomViewStateBindings {
+struct CreateRoomScreenViewStateBindings {
     var roomTopic: String
     var isRoomPrivate: Bool
     var isKnockingOnly: Bool
@@ -59,9 +55,8 @@ struct CreateRoomViewStateBindings {
     var alertInfo: AlertInfo<CreateRoomScreenErrorType>?
 }
 
-enum CreateRoomViewAction {
+enum CreateRoomScreenViewAction {
     case createRoom
-    case deselectUser(UserProfileProxy)
     case displayCameraPicker
     case displayMediaPicker
     case removeImage
@@ -69,12 +64,12 @@ enum CreateRoomViewAction {
     case updateAliasLocalPart(String)
 }
 
-enum CreateRoomAliasErrorState {
+enum CreateRoomScreenAliasErrorState {
     case alreadyExists
     case invalidSymbols
 }
 
-extension Set<CreateRoomAliasErrorState> {
+extension Set<CreateRoomScreenAliasErrorState> {
     var errorDescription: String? {
         if contains(.alreadyExists) {
             return L10n.errorRoomAddressAlreadyExists

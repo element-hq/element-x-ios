@@ -10,7 +10,7 @@ import Compound
 import SwiftUI
 
 struct CreateRoomScreen: View {
-    @ObservedObject var context: CreateRoomViewModel.Context
+    @ObservedObject var context: CreateRoomScreenViewModel.Context
     @FocusState private var focus: Focus?
 
     private enum Focus {
@@ -52,7 +52,6 @@ struct CreateRoomScreen: View {
         .navigationTitle(L10n.screenCreateRoomTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
-        .readFrame($frame)
         .alert(item: $context.alertInfo)
         .shouldScrollOnKeyboardDidShow(focus == .alias, to: Focus.alias)
     }
@@ -109,6 +108,7 @@ struct CreateRoomScreen: View {
             }
         }
         .buttonStyle(.plain)
+        .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.roomAvatar)
         .confirmationDialog("", isPresented: $context.showAttachmentConfirmationDialog) {
             Button(L10n.actionTakePhoto) {
                 context.send(viewAction: .displayCameraPicker)
@@ -116,6 +116,8 @@ struct CreateRoomScreen: View {
             Button(L10n.actionChoosePhoto) {
                 context.send(viewAction: .displayMediaPicker)
             }
+            .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.mediaPicker)
+            
             if context.viewState.avatarURL != nil {
                 Button(L10n.actionRemove, role: .destructive) {
                     context.send(viewAction: .removeImage)
@@ -134,30 +136,7 @@ struct CreateRoomScreen: View {
         } header: {
             Text(L10n.screenCreateRoomTopicLabel)
                 .compoundListSectionHeader()
-        } footer: {
-            if !context.viewState.selectedUsers.isEmpty {
-                selectedUsersSection
-            }
         }
-    }
-    
-    @State private var frame: CGRect = .zero
-    @ScaledMetric private var invitedUserCellWidth: CGFloat = 72
-
-    private var selectedUsersSection: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 16) {
-                ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                    InviteUsersScreenSelectedItem(user: user, mediaProvider: context.mediaProvider) {
-                        context.send(viewAction: .deselectUser(user))
-                    }
-                    .frame(width: invitedUserCellWidth)
-                }
-            }
-            .padding(.horizontal, ListRowPadding.horizontal)
-            .padding(.vertical, 22)
-        }
-        .frame(width: frame.width)
     }
     
     private var securitySection: some View {
@@ -223,6 +202,7 @@ struct CreateRoomScreen: View {
                 context.send(viewAction: .createRoom)
             }
             .disabled(!context.viewState.canCreateRoom)
+            .accessibilityIdentifier(A11yIdentifiers.createRoomScreen.create)
         }
     }
 }
@@ -232,65 +212,43 @@ struct CreateRoomScreen: View {
 struct CreateRoom_Previews: PreviewProvider, TestablePreview {
     static let viewModel = {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
-        let parameters = CreateRoomFlowParameters()
-        let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
-        
-        return CreateRoomViewModel(userSession: userSession,
-                                   createRoomParameters: .init(parameters),
-                                   selectedUsers: .init(selectedUsers),
-                                   analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock(),
-                                   appSettings: ServiceLocator.shared.settings)
-    }()
-    
-    static let emtpyViewModel = {
-        let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@userid:example.com"))))
-        let parameters = CreateRoomFlowParameters()
-        return CreateRoomViewModel(userSession: userSession,
-                                   createRoomParameters: .init(parameters),
-                                   selectedUsers: .init([]),
-                                   analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock(),
-                                   appSettings: ServiceLocator.shared.settings)
+        return CreateRoomScreenViewModel(userSession: userSession,
+                                         initialParameters: .init(),
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
     }()
     
     static let publicRoomViewModel = {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
-        let parameters = CreateRoomFlowParameters(isRoomPrivate: false)
-        let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
         ServiceLocator.shared.settings.knockingEnabled = true
-        return CreateRoomViewModel(userSession: userSession,
-                                   createRoomParameters: .init(parameters),
-                                   selectedUsers: .init([]),
-                                   analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock(),
-                                   appSettings: ServiceLocator.shared.settings)
+        return CreateRoomScreenViewModel(userSession: userSession,
+                                         initialParameters: .init(isRoomPrivate: false),
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
     }()
     
     static let publicRoomInvalidAliasViewModel = {
         let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))))
-        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, aliasLocalPart: "#:")
         ServiceLocator.shared.settings.knockingEnabled = true
-        return CreateRoomViewModel(userSession: userSession,
-                                   createRoomParameters: .init(parameters),
-                                   selectedUsers: .init([]),
-                                   analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock(),
-                                   appSettings: ServiceLocator.shared.settings)
+        return CreateRoomScreenViewModel(userSession: userSession,
+                                         initialParameters: .init(isRoomPrivate: false, aliasLocalPart: "#:"),
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
     }()
     
     static let publicRoomExistingAliasViewModel = {
         let clientProxy = ClientProxyMock(.init(userIDServerName: "example.org", userID: "@userid:example.com"))
         clientProxy.isAliasAvailableReturnValue = .success(false)
         let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-        let parameters = CreateRoomFlowParameters(isRoomPrivate: false, aliasLocalPart: "existing")
         ServiceLocator.shared.settings.knockingEnabled = true
-        return CreateRoomViewModel(userSession: userSession,
-                                   createRoomParameters: .init(parameters),
-                                   selectedUsers: .init([]),
-                                   analytics: ServiceLocator.shared.analytics,
-                                   userIndicatorController: UserIndicatorControllerMock(),
-                                   appSettings: ServiceLocator.shared.settings)
+        return CreateRoomScreenViewModel(userSession: userSession,
+                                         initialParameters: .init(isRoomPrivate: false, aliasLocalPart: "existing"),
+                                         analytics: ServiceLocator.shared.analytics,
+                                         userIndicatorController: UserIndicatorControllerMock(),
+                                         appSettings: ServiceLocator.shared.settings)
     }()
 
     static var previews: some View {
@@ -298,27 +256,22 @@ struct CreateRoom_Previews: PreviewProvider, TestablePreview {
             CreateRoomScreen(context: viewModel.context)
         }
         .previewDisplayName("Create Room")
-        NavigationStack {
-            CreateRoomScreen(context: emtpyViewModel.context)
-        }
-        .previewDisplayName("Create Room without users")
+        
         NavigationStack {
             CreateRoomScreen(context: publicRoomViewModel.context)
         }
         .previewDisplayName("Create Public Room")
+        
         NavigationStack {
             CreateRoomScreen(context: publicRoomInvalidAliasViewModel.context)
         }
-        .snapshotPreferences(expect: publicRoomExistingAliasViewModel.context.$viewState.map { state in
-            !state.aliasErrors.isEmpty
-        })
+        .snapshotPreferences(expect: publicRoomInvalidAliasViewModel.context.$viewState.map { !$0.aliasErrors.isEmpty })
         .previewDisplayName("Create Public Room, invalid alias")
+        
         NavigationStack {
             CreateRoomScreen(context: publicRoomExistingAliasViewModel.context)
         }
-        .snapshotPreferences(expect: publicRoomExistingAliasViewModel.context.$viewState.map { state in
-            !state.aliasErrors.isEmpty
-        })
+        .snapshotPreferences(expect: publicRoomExistingAliasViewModel.context.$viewState.map { !$0.aliasErrors.isEmpty })
         .previewDisplayName("Create Public Room, existing alias")
     }
 }

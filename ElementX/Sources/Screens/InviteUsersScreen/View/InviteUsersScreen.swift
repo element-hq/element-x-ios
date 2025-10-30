@@ -32,6 +32,7 @@ struct InviteUsersScreen: View {
                               accessibilityFocusOnStart: true)
             .compoundSearchField()
             .alert(item: $context.alertInfo)
+            .navigationBarBackButtonHidden(context.viewState.isSkippable)
     }
     
     // MARK: - Private
@@ -126,7 +127,7 @@ struct InviteUsersScreen: View {
     
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
-        if !context.viewState.isCreatingRoom {
+        if !context.viewState.isSkippable {
             ToolbarItem(placement: .cancellationAction) {
                 Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
@@ -155,8 +156,8 @@ struct InviteUsersScreen_Previews: PreviewProvider, TestablePreview {
         let userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([.mockAlice])
         return InviteUsersScreenViewModel(userSession: UserSessionMock(.init()),
-                                          selectedUsers: .init([]),
-                                          roomType: .draft,
+                                          roomProxy: JoinedRoomProxyMock(.init()),
+                                          isSkippable: true,
                                           userDiscoveryService: userDiscoveryService,
                                           userIndicatorController: UserIndicatorControllerMock(),
                                           appSettings: ServiceLocator.shared.settings)

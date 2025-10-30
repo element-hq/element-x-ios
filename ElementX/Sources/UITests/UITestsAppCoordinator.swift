@@ -648,67 +648,48 @@ class MockScreen: Identifiable {
             retainedState.append(coordinator)
             coordinator.start()
             return navigationStackCoordinator
-        case .startChat:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let userDiscoveryMock = UserDiscoveryServiceMock()
-            userDiscoveryMock.searchProfilesWithReturnValue = .success([])
-            let userSession = UserSessionMock(.init(clientProxy: ClientProxyMock(.init(userID: "@mock:client.com"))))
-            let parameters: StartChatScreenCoordinatorParameters = .init(orientationManager: OrientationManagerMock(),
-                                                                         userSession: userSession,
-                                                                         userIndicatorController: UserIndicatorControllerMock(),
-                                                                         navigationStackCoordinator: navigationStackCoordinator,
-                                                                         userDiscoveryService: userDiscoveryMock,
-                                                                         mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
-                                                                         appSettings: ServiceLocator.shared.settings,
-                                                                         analytics: ServiceLocator.shared.analytics)
-            let coordinator = StartChatScreenCoordinator(parameters: parameters)
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .startChatWithSearchResults:
-            let navigationStackCoordinator = NavigationStackCoordinator()
+        case .startChatFlow:
             let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
-            let userDiscoveryMock = UserDiscoveryServiceMock()
-            userDiscoveryMock.searchProfilesWithReturnValue = .success([.mockBob, .mockBobby])
-            let userSession = UserSessionMock(.init(clientProxy: clientProxy))
-            let coordinator = StartChatScreenCoordinator(parameters: .init(orientationManager: OrientationManagerMock(),
-                                                                           userSession: userSession,
-                                                                           userIndicatorController: UserIndicatorControllerMock(),
-                                                                           navigationStackCoordinator: navigationStackCoordinator,
-                                                                           userDiscoveryService: userDiscoveryMock,
-                                                                           mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
-                                                                           appSettings: ServiceLocator.shared.settings,
-                                                                           analytics: ServiceLocator.shared.analytics))
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .createRoom:
+            clientProxy.createRoomNameTopicIsRoomPrivateIsKnockingOnlyUserIDsAvatarURLAliasLocalPartReturnValue = .success("!new-room:client.com")
+            clientProxy.roomForIdentifierClosure = { roomID in .joined(JoinedRoomProxyMock(.init(id: roomID, members: []))) }
+            
+            let userDiscoveryService = UserDiscoveryServiceMock()
+            userDiscoveryService.searchProfilesWithReturnValue = .success([.mockBob, .mockBobby])
+            
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
-            let mockUserSession = UserSessionMock(.init(clientProxy: clientProxy))
-            let createRoomParameters = CreateRoomFlowParameters()
-            let selectedUsers: [UserProfileProxy] = [.mockAlice, .mockBob, .mockCharlie]
-            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession,
-                                                             userIndicatorController: UserIndicatorControllerMock(),
-                                                             createRoomParameters: .init(createRoomParameters),
-                                                             selectedUsers: .init(selectedUsers),
-                                                             appSettings: ServiceLocator.shared.settings,
-                                                             analytics: ServiceLocator.shared.analytics)
-            let coordinator = CreateRoomCoordinator(parameters: parameters)
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
-        case .createRoomNoUsers:
-            let navigationStackCoordinator = NavigationStackCoordinator()
-            let clientProxy = ClientProxyMock(.init(userID: "@mock:client.com"))
-            let mockUserSession = UserSessionMock(.init(clientProxy: clientProxy))
-            let createRoomParameters = CreateRoomFlowParameters()
-            let parameters = CreateRoomCoordinatorParameters(userSession: mockUserSession,
-                                                             userIndicatorController: UserIndicatorControllerMock(),
-                                                             createRoomParameters: .init(createRoomParameters),
-                                                             selectedUsers: .init([]),
-                                                             appSettings: ServiceLocator.shared.settings,
-                                                             analytics: ServiceLocator.shared.analytics)
-            let coordinator = CreateRoomCoordinator(parameters: parameters)
-            navigationStackCoordinator.setRootCoordinator(coordinator)
-            return navigationStackCoordinator
+            let flowCoordinator = StartChatFlowCoordinator(userDiscoveryService: userDiscoveryService,
+                                                           navigationStackCoordinator: navigationStackCoordinator,
+                                                           flowParameters: CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
+                                                                                                bugReportService: BugReportServiceMock(.init()),
+                                                                                                elementCallService: ElementCallServiceMock(.init()),
+                                                                                                timelineControllerFactory: TimelineControllerFactoryMock(.init()),
+                                                                                                emojiProvider: EmojiProvider(appSettings: ServiceLocator.shared.settings),
+                                                                                                linkMetadataProvider: LinkMetadataProvider(),
+                                                                                                appMediator: AppMediatorMock.default,
+                                                                                                appSettings: ServiceLocator.shared.settings,
+                                                                                                appHooks: AppHooks(),
+                                                                                                analytics: ServiceLocator.shared.analytics,
+                                                                                                userIndicatorController: UserIndicatorControllerMock(),
+                                                                                                notificationManager: NotificationManagerMock(),
+                                                                                                stateMachineFactory: StateMachineFactory()))
+            flowCoordinator.actionsPublisher
+                .sink { [weak self] action in
+                    guard let self else { return }
+                    switch action {
+                    case .finished(let roomID):
+                        navigationRootCoordinator.setSheetCoordinator(nil)
+                    case .showRoomDirectory:
+                        break // The test doesn't cover this.
+                    }
+                }
+                .store(in: &cancellables)
+            
+            retainedState.append(flowCoordinator)
+            flowCoordinator.start()
+            
+            // Use a sheet on top the the placeholder so we can test the dismissal.
+            navigationRootCoordinator.setSheetCoordinator(navigationStackCoordinator)
+            return PlaceholderScreenCoordinator(hideBrandChrome: false)
         case .createPoll:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = PollFormScreenCoordinator(parameters: .init(mode: .new,
