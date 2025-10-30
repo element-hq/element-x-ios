@@ -7,6 +7,8 @@ if File.exist?(enterprise)
   import enterprise
 end
 
+simulator_version = "26.0"
+
 before_all do
   xcversion(version: "~> 26.0.0")
 
@@ -20,7 +22,7 @@ lane :unit_tests do |options|
   
   run_tests(
     scheme: "UnitTests",
-    device: "iPhone 17 (26.0)",
+    device: "iPhone 17 (#{simulator_version})",
     ensure_devices_found: true,
     result_bundle: true,
     number_of_retries: 3,
@@ -29,14 +31,13 @@ lane :unit_tests do |options|
   
   if !options[:skip_previews]
     create_simulator_if_necessary(
-      name: "iPhone-SE-3rd-generation-26.0",
-      type: "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation",
-      runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
+      name: "iPhone SE (3rd generation)",
+      type: "com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation"
     )
 
     run_tests(
       scheme: "PreviewTests",
-      device: "iPhone-SE-3rd-generation-26.0 (26.0)",
+      device: "iPhone SE (3rd generation) (#{simulator_version})",
       ensure_devices_found: true,
       result_bundle: true,
       number_of_retries: 3,
@@ -56,16 +57,14 @@ lane :ui_tests do |options|
     
     create_simulator_if_necessary(
       name: "iPhone-26.0",
-      type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17",
-      runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
+      type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17"
     )
   elsif options[:device] == "iPad"
     device = "iPad-26.0"
     
     create_simulator_if_necessary(
       name: "iPad-26.0",
-      type: "com.apple.CoreSimulator.SimDeviceType.iPad-A16",
-      runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
+      type: "com.apple.CoreSimulator.SimDeviceType.iPad-A16"
     )
   else
     UI.user_error!("Please supply a device argument as device:iPhone or device:iPad")
@@ -81,7 +80,7 @@ lane :ui_tests do |options|
   
   run_tests(
     scheme: "UITests",
-    device: device,
+    device: "#{device} (#{simulator_version})",
     ensure_devices_found: true,
     prelaunch_simulator: false,
     result_bundle: true,
@@ -96,7 +95,7 @@ lane :accessibility_tests do |options|
   
   run_tests(
     scheme: "AccessibilityTests",
-    device: "iPhone 17 (26.0)",
+    device: "iPhone 17 (#{simulator_version})",
     ensure_devices_found: true,
     prelaunch_simulator: false,
     result_bundle: true,
@@ -108,18 +107,12 @@ end
 
 lane :integration_tests do
   clear_derived_data()
-  
-  create_simulator_if_necessary(
-    name: "iPhone-26.0",
-    type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro",
-    runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-0"
-  )
 
   reset_simulator = ENV.key?('CI')
 
   run_tests(
     scheme: "IntegrationTests",
-    device: "iPhone-26.0",
+    device: "iPhone 17 (#{simulator_version})",
     ensure_devices_found: true,
     result_bundle: true,
     reset_simulator: reset_simulator
@@ -321,15 +314,23 @@ private_lane :create_simulator_if_necessary do |options|
 
   simulator_type = options[:type]
   UI.user_error!("Invalid simulator type") unless !simulator_type.to_s.empty?
-  
-  simulator_runtime = options[:runtime]
-  UI.user_error!("Invalid simulator runtime") unless !simulator_runtime.to_s.empty?
 
+  simulator_runtime = "com.apple.CoreSimulator.SimRuntime.iOS-#{simulator_version.gsub('.', '-')}"
 
+  simulators = sh("xcrun simctl list devices \"iOS #{simulator_version}\" available")
   # Use a `(` here to avoid matching `iPhone 14 Pro` on `iPhone 14 Pro Max` for example
-  begin sh("xcrun simctl list devices | grep '#{simulator_name} ('")
-    UI.success "Simulator already exists"
-  rescue
-    sh("xcrun simctl create '#{simulator_name}' #{simulator_type} #{simulator_runtime}")
+  existing_simulator = simulators.lines.find { |line| line.include?("#{simulator_name} (") }
+  
+  if existing_simulator
+    UI.message("Found simulator: #{existing_simulator.inspect}")
+    device_id = existing_simulator.match(/\(([A-F0-9-]+)\)/)[1] # Extract the device ID for the existing simulator
+  else
+    UI.message "Simulator #{simulator_name} not found. Creating new simulator…"
+    create_command = "xcrun simctl create '#{simulator_name}\' #{simulator_type} #{simulator_runtime}"
+    device_id = sh(create_command).strip # Create a new simulator and get its device ID.
+    
+    UI.message "Created new simulator: #{simulator_name} (#{device_id})"
   end
+  
+  # device_id is unused right now but is useful to check e.g. the boot status of a simulator.
 end
