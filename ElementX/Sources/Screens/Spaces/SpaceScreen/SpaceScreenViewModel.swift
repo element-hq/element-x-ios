@@ -66,6 +66,10 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             }
             .store(in: &cancellables)
         
+        selectedSpaceRoomPublisher
+            .weakAssign(to: \.state.selectedSpaceRoomID, on: self)
+            .store(in: &cancellables)
+        
         Task {
             if case let .joined(roomProxy) = await userSession.clientProxy.roomForIdentifier(spaceRoomListProxy.id) {
                 // Required to listen for membership updates in the members flow
@@ -124,10 +128,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             Task { await confirmLeaveSpace() }
         case .displayMembers(let roomProxy):
             actionsSubject.send(.displayMembers(roomProxy: roomProxy))
-        case .spaceSettings:
-            guard let roomProxy = state.roomProxy else {
-                fatalError("Always available when the space settings button is tapped.")
-            }
+        case .spaceSettings(let roomProxy):
             actionsSubject.send(.displaySpaceSettings(roomProxy: roomProxy))
         case .rolesAndPermissions:
             break // Not implemented yet

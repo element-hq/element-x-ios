@@ -277,7 +277,7 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
                     stateMachine.tryEvent(.leftSpace)
                 case .displayMembers(let roomProxy):
                     stateMachine.tryEvent(.startMembersFlow, userInfo: roomProxy)
-                case .displaySpaceSettings(roomProxy: let roomProxy):
+                case .displaySpaceSettings(let roomProxy):
                     stateMachine.tryEvent(.startSettingsFlow, userInfo: roomProxy)
                 }
             }

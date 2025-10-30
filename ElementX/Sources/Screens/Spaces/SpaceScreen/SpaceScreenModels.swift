@@ -44,7 +44,7 @@ enum SpaceScreenViewAction {
     case selectAllLeaveRoomDetails
     case toggleLeaveSpaceRoomDetails(id: String)
     case confirmLeaveSpace
-    case spaceSettings
+    case spaceSettings(roomProxy: JoinedRoomProxyProtocol)
     case rolesAndPermissions
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
 }
