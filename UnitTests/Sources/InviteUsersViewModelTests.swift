@@ -23,7 +23,7 @@ class InviteUsersScreenViewModelTests: XCTestCase {
     func testSelectUser() {
         let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
         roomProxy.inviteUserIDReturnValue = .success(())
-        setupViewModel(roomProxy: roomProxy, isCreatingRoom: true)
+        setupViewModel(roomProxy: roomProxy, isSkippable: true)
         
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
         context.send(viewAction: .toggleUser(.mockAlice))
@@ -34,7 +34,7 @@ class InviteUsersScreenViewModelTests: XCTestCase {
     func testReselectUser() {
         let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
         roomProxy.inviteUserIDReturnValue = .success(())
-        setupViewModel(roomProxy: roomProxy, isCreatingRoom: true)
+        setupViewModel(roomProxy: roomProxy, isSkippable: true)
         
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
         context.send(viewAction: .toggleUser(.mockAlice))
@@ -47,7 +47,7 @@ class InviteUsersScreenViewModelTests: XCTestCase {
     func testDeselectUser() {
         let roomProxy = JoinedRoomProxyMock(.init(name: "newroom", members: []))
         roomProxy.inviteUserIDReturnValue = .success(())
-        setupViewModel(roomProxy: roomProxy, isCreatingRoom: true)
+        setupViewModel(roomProxy: roomProxy, isSkippable: true)
         
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
         context.send(viewAction: .toggleUser(.mockAlice))
@@ -61,7 +61,7 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         let mockedMembers: [RoomMemberProxyMock] = [.mockAlice, .mockBob]
         let roomProxy = JoinedRoomProxyMock(.init(name: "test", members: mockedMembers))
         roomProxy.inviteUserIDReturnValue = .success(())
-        setupViewModel(roomProxy: roomProxy, isCreatingRoom: false)
+        setupViewModel(roomProxy: roomProxy, isSkippable: false)
         
         let deferredState = deferFulfillment(viewModel.context.$viewState) { state in
             state.isUserSelected(.mockAlice)
@@ -84,12 +84,12 @@ class InviteUsersScreenViewModelTests: XCTestCase {
         XCTAssertEqual(roomProxy.inviteUserIDReceivedInvocations, [RoomMemberProxyMock.mockAlice.userID])
     }
     
-    private func setupViewModel(roomProxy: JoinedRoomProxyProtocol, isCreatingRoom: Bool) {
+    private func setupViewModel(roomProxy: JoinedRoomProxyProtocol, isSkippable: Bool) {
         userDiscoveryService = UserDiscoveryServiceMock()
         userDiscoveryService.searchProfilesWithReturnValue = .success([])
         let viewModel = InviteUsersScreenViewModel(userSession: UserSessionMock(.init()),
                                                    roomProxy: roomProxy,
-                                                   isCreatingRoom: isCreatingRoom,
+                                                   isSkippable: isSkippable,
                                                    userDiscoveryService: userDiscoveryService,
                                                    userIndicatorController: UserIndicatorControllerMock(),
                                                    appSettings: ServiceLocator.shared.settings)

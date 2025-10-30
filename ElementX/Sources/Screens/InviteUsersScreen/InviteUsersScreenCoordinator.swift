@@ -12,7 +12,7 @@ import SwiftUI
 struct InviteUsersScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let roomProxy: JoinedRoomProxyProtocol
-    let isCreatingRoom: Bool
+    let isSkippable: Bool
     let userDiscoveryService: UserDiscoveryServiceProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let appSettings: AppSettings
@@ -34,7 +34,7 @@ final class InviteUsersScreenCoordinator: CoordinatorProtocol {
     init(parameters: InviteUsersScreenCoordinatorParameters) {
         viewModel = InviteUsersScreenViewModel(userSession: parameters.userSession,
                                                roomProxy: parameters.roomProxy,
-                                               isCreatingRoom: parameters.isCreatingRoom,
+                                               isSkippable: parameters.isSkippable,
                                                userDiscoveryService: parameters.userDiscoveryService,
                                                userIndicatorController: parameters.userIndicatorController,
                                                appSettings: parameters.appSettings)

@@ -1270,7 +1270,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let stackCoordinator = NavigationStackCoordinator()
         let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: userSession,
                                                                       roomProxy: roomProxy,
-                                                                      isCreatingRoom: false,
+                                                                      isSkippable: false,
                                                                       userDiscoveryService: UserDiscoveryService(clientProxy: userSession.clientProxy),
                                                                       userIndicatorController: flowParameters.userIndicatorController,
                                                                       appSettings: flowParameters.appSettings)

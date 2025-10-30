@@ -89,17 +89,17 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
         case .initial:
             break
         case .startChat:
-            navigationStackCoordinator.setRootCoordinator(nil)
+            navigationStackCoordinator.setRootCoordinator(nil, animated: animated) // StartChatScreen
         case .createRoom:
-            navigationStackCoordinator.setRootCoordinator(nil)
-            navigationStackCoordinator.pop()
+            navigationStackCoordinator.pop(animated: animated) // CreateRoomScreen
+            navigationStackCoordinator.setRootCoordinator(nil, animated: animated) // StartChatScreen
         case .roomAvatarPicker:
-            navigationStackCoordinator.setSheetCoordinator(nil)
+            navigationStackCoordinator.setSheetCoordinator(nil, animated: animated) // Media Picker
             clearRoute(animated: animated) // Re-run with the state machine back in the .createRoom state.
         case .inviteUsers:
-            navigationStackCoordinator.setRootCoordinator(nil)
-            navigationStackCoordinator.pop()
-            navigationStackCoordinator.pop()
+            navigationStackCoordinator.pop(animated: animated) // InviteUsersScreen
+            navigationStackCoordinator.pop(animated: animated) // CreateRoomScreen
+            navigationStackCoordinator.setRootCoordinator(nil, animated: animated) // StartChatScreen
         }
     }
     
@@ -218,7 +218,7 @@ class StartChatFlowCoordinator: FlowCoordinatorProtocol {
     private func presentInviteUsersScreen(roomProxy: JoinedRoomProxyProtocol) {
         let inviteParameters = InviteUsersScreenCoordinatorParameters(userSession: flowParameters.userSession,
                                                                       roomProxy: roomProxy,
-                                                                      isCreatingRoom: true,
+                                                                      isSkippable: true,
                                                                       userDiscoveryService: userDiscoveryService,
                                                                       userIndicatorController: flowParameters.userIndicatorController,
                                                                       appSettings: flowParameters.appSettings)

@@ -52,10 +52,10 @@ struct InviteUsersScreenViewState: BindableState {
         membershipState[user.userID]
     }
     
-    let isCreatingRoom: Bool
+    let isSkippable: Bool
     
     var actionText: String {
-        if isCreatingRoom, selectedUsers.isEmpty {
+        if isSkippable, selectedUsers.isEmpty {
             L10n.actionSkip
         } else {
             L10n.actionInvite
@@ -63,7 +63,7 @@ struct InviteUsersScreenViewState: BindableState {
     }
     
     var isActionDisabled: Bool {
-        isCreatingRoom ? false : selectedUsers.isEmpty
+        isSkippable ? false : selectedUsers.isEmpty
     }
 }
 

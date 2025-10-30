@@ -27,7 +27,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
     
     init(userSession: UserSessionProtocol,
          roomProxy: JoinedRoomProxyProtocol,
-         isCreatingRoom: Bool,
+         isSkippable: Bool,
          userDiscoveryService: UserDiscoveryServiceProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
          appSettings: AppSettings) {
@@ -37,7 +37,7 @@ class InviteUsersScreenViewModel: InviteUsersScreenViewModelType, InviteUsersScr
         self.appSettings = appSettings
         
         super.init(initialViewState: InviteUsersScreenViewState(selectedUsers: [],
-                                                                isCreatingRoom: isCreatingRoom),
+                                                                isSkippable: isSkippable),
                    mediaProvider: userSession.mediaProvider)
                 
         setupSubscriptions()
