@@ -55,8 +55,7 @@ struct SpaceSettingsScreen: View {
                         .foregroundStyle(.compound.textSecondary)
                 }
             }
-            
-            Spacer()
+            .frame(maxWidth: .infinity, alignment: .leading)
             
             ListRowAccessory.navigationLink
         }

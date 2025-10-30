@@ -59,7 +59,12 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func clearRoute(animated: Bool) {
-        // Not implemented yet
+        switch stateMachine.state {
+        case .initial:
+            break
+        case .spaceSettings:
+            navigationStackCoordinator.pop(animated: animated) // SpaceSettingsScreen
+        }
     }
     
     private func configureStateMachine() {

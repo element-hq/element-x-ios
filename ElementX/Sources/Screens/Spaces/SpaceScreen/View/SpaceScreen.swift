@@ -74,8 +74,9 @@ struct SpaceScreen: View {
                         }
                     }
                     
-                    if context.viewState.isSpaceManagementEnabled {
-                        Button { context.send(viewAction: .spaceSettings) } label: {
+                    if context.viewState.isSpaceManagementEnabled,
+                       let roomProxy = context.viewState.roomProxy {
+                        Button { context.send(viewAction: .spaceSettings(roomProxy: roomProxy)) } label: {
                             Label(L10n.commonSettings, icon: \.settings)
                         }
                     }
