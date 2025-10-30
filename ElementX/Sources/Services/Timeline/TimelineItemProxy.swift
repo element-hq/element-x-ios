@@ -212,7 +212,7 @@ struct SendHandleProxy: Hashable {
     static var mock: SendHandleProxy {
         .init(itemID: .event(uniqueID: .init(UUID().uuidString),
                              eventOrTransactionID: .eventID(UUID().uuidString)),
-              underlyingHandle: .init(noPointer: .init()))
+              underlyingHandle: .init(noHandle: .init()))
     }
 }
 

@@ -8,14 +8,18 @@ import Foundation
 
 open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - send
 
@@ -65,14 +69,18 @@ open class CheckCodeSenderSDKMock: MatrixRustSDK.CheckCodeSender, @unchecked Sen
 }
 open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - abortOidcAuth
 
@@ -5769,14 +5777,18 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
 }
 open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - addRootCertificates
 
@@ -7807,14 +7819,18 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
 }
 open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - backupExistsOnServer
 
@@ -9134,14 +9150,18 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
 }
 open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - slidingSyncVersion
 
@@ -9535,14 +9555,18 @@ open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, 
 }
 open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - authType
 
@@ -9693,14 +9717,18 @@ open class IdentityResetHandleSDKMock: MatrixRustSDK.IdentityResetHandle, @unche
 }
 open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - event
 
@@ -9834,14 +9862,18 @@ open class InReplyToDetailsSDKMock: MatrixRustSDK.InReplyToDetails, @unchecked S
 }
 open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - accept
 
@@ -10017,14 +10049,18 @@ open class KnockRequestActionsSDKMock: MatrixRustSDK.KnockRequestActions, @unche
 }
 open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvider, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - containsOnlyEmojis
 
@@ -10294,14 +10330,18 @@ open class LazyTimelineItemProviderSDKMock: MatrixRustSDK.LazyTimelineItemProvid
 }
 open class LeaveSpaceHandleSDKMock: MatrixRustSDK.LeaveSpaceHandle, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - leave
 
@@ -10416,14 +10456,18 @@ open class LeaveSpaceHandleSDKMock: MatrixRustSDK.LeaveSpaceHandle, @unchecked S
 }
 open class LoginWithQrCodeHandlerSDKMock: MatrixRustSDK.LoginWithQrCodeHandler, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - generate
 
@@ -10519,14 +10563,18 @@ open class LoginWithQrCodeHandlerSDKMock: MatrixRustSDK.LoginWithQrCodeHandler, 
 }
 open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - path
 
@@ -10674,14 +10722,18 @@ open class MediaFileHandleSDKMock: MatrixRustSDK.MediaFileHandle, @unchecked Sen
 }
 open class MediaSourceSDKMock: MatrixRustSDK.MediaSource, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
     static func reset()
     {
     }
@@ -10818,14 +10870,18 @@ open class MediaSourceSDKMock: MatrixRustSDK.MediaSource, @unchecked Sendable {
 }
 open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - getNotification
 
@@ -11054,14 +11110,18 @@ open class NotificationClientSDKMock: MatrixRustSDK.NotificationClient, @uncheck
 }
 open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - canHomeserverPushEncryptedEventToDevice
 
@@ -12353,14 +12413,18 @@ open class NotificationSettingsSDKMock: MatrixRustSDK.NotificationSettings, @unc
 }
 open class OAuthAuthorizationDataSDKMock: MatrixRustSDK.OAuthAuthorizationData, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - loginUrl
 
@@ -12429,14 +12493,18 @@ open class OAuthAuthorizationDataSDKMock: MatrixRustSDK.OAuthAuthorizationData, 
 }
 open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
     static func reset()
     {
     }
@@ -12508,14 +12576,18 @@ open class QrCodeDataSDKMock: MatrixRustSDK.QrCodeData, @unchecked Sendable {
 }
 open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - activeMembersCount
 
@@ -14882,6 +14954,52 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
         } else {
             return loadOrFetchEventEventIdReturnValue
         }
+    }
+
+    //MARK: - markAsFullyReadUnchecked
+
+    open var markAsFullyReadUncheckedEventIdThrowableError: Error?
+    var markAsFullyReadUncheckedEventIdUnderlyingCallsCount = 0
+    open var markAsFullyReadUncheckedEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return markAsFullyReadUncheckedEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = markAsFullyReadUncheckedEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                markAsFullyReadUncheckedEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    markAsFullyReadUncheckedEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var markAsFullyReadUncheckedEventIdCalled: Bool {
+        return markAsFullyReadUncheckedEventIdCallsCount > 0
+    }
+    open var markAsFullyReadUncheckedEventIdReceivedEventId: String?
+    open var markAsFullyReadUncheckedEventIdReceivedInvocations: [String] = []
+    open var markAsFullyReadUncheckedEventIdClosure: ((String) async throws -> Void)?
+
+    open override func markAsFullyReadUnchecked(eventId: String) async throws {
+        if let error = markAsFullyReadUncheckedEventIdThrowableError {
+            throw error
+        }
+        markAsFullyReadUncheckedEventIdCallsCount += 1
+        markAsFullyReadUncheckedEventIdReceivedEventId = eventId
+        DispatchQueue.main.async {
+            self.markAsFullyReadUncheckedEventIdReceivedInvocations.append(eventId)
+        }
+        try await markAsFullyReadUncheckedEventIdClosure?(eventId)
     }
 
     //MARK: - markAsRead
@@ -18225,14 +18343,18 @@ open class RoomSDKMock: MatrixRustSDK.Room, @unchecked Sendable {
 }
 open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - isAtLastPage
 
@@ -18531,14 +18653,18 @@ open class RoomDirectorySearchSDKMock: MatrixRustSDK.RoomDirectorySearch, @unche
 }
 open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - entriesWithDynamicAdapters
 
@@ -18834,14 +18960,18 @@ open class RoomListSDKMock: MatrixRustSDK.RoomList, @unchecked Sendable {
 }
 open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynamicEntriesController, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - addOnePage
 
@@ -18988,14 +19118,18 @@ open class RoomListDynamicEntriesControllerSDKMock: MatrixRustSDK.RoomListDynami
 }
 open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomListEntriesWithDynamicAdaptersResult, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - controller
 
@@ -19129,14 +19263,18 @@ open class RoomListEntriesWithDynamicAdaptersResultSDKMock: MatrixRustSDK.RoomLi
 }
 open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - allRooms
 
@@ -19472,14 +19610,18 @@ open class RoomListServiceSDKMock: MatrixRustSDK.RoomListService, @unchecked Sen
 }
 open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - len
 
@@ -19619,14 +19761,18 @@ open class RoomMembersIteratorSDKMock: MatrixRustSDK.RoomMembersIterator, @unche
 }
 open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMessageEventContentWithoutRelation, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - withMentions
 
@@ -19701,14 +19847,18 @@ open class RoomMessageEventContentWithoutRelationSDKMock: MatrixRustSDK.RoomMess
 }
 open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - canOwnUserBan
 
@@ -21114,14 +21264,18 @@ open class RoomPowerLevelsSDKMock: MatrixRustSDK.RoomPowerLevels, @unchecked Sen
 }
 open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - forget
 
@@ -21400,14 +21554,18 @@ open class RoomPreviewSDKMock: MatrixRustSDK.RoomPreview, @unchecked Sendable {
 }
 open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHandle, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - cancel
 
@@ -21487,14 +21645,18 @@ open class SendAttachmentJoinHandleSDKMock: MatrixRustSDK.SendAttachmentJoinHand
 }
 open class SendGalleryJoinHandleSDKMock: MatrixRustSDK.SendGalleryJoinHandle, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - cancel
 
@@ -21574,14 +21736,18 @@ open class SendGalleryJoinHandleSDKMock: MatrixRustSDK.SendGalleryJoinHandle, @u
 }
 open class SendHandleSDKMock: MatrixRustSDK.SendHandle, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - abort
 
@@ -21694,14 +21860,18 @@ open class SendHandleSDKMock: MatrixRustSDK.SendHandle, @unchecked Sendable {
 }
 open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificationController, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - acceptVerificationRequest
 
@@ -22079,14 +22249,18 @@ open class SessionVerificationControllerSDKMock: MatrixRustSDK.SessionVerificati
 }
 open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmoji, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - description
 
@@ -22220,14 +22394,18 @@ open class SessionVerificationEmojiSDKMock: MatrixRustSDK.SessionVerificationEmo
 }
 open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - paginate
 
@@ -22679,14 +22857,18 @@ open class SpaceRoomListSDKMock: MatrixRustSDK.SpaceRoomList, @unchecked Sendabl
 }
 open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - joinedSpaces
 
@@ -22976,14 +23158,18 @@ open class SpaceServiceSDKMock: MatrixRustSDK.SpaceService, @unchecked Sendable 
 }
 open class SpanSDKMock: MatrixRustSDK.Span, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
     static func reset()
     {
     }
@@ -23127,14 +23313,18 @@ open class SpanSDKMock: MatrixRustSDK.Span, @unchecked Sendable {
 }
 open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - finish
 
@@ -23249,14 +23439,18 @@ open class SsoHandlerSDKMock: MatrixRustSDK.SsoHandler, @unchecked Sendable {
 }
 open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - expireSessions
 
@@ -23504,14 +23698,18 @@ open class SyncServiceSDKMock: MatrixRustSDK.SyncService, @unchecked Sendable {
 }
 open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - finish
 
@@ -23785,14 +23983,18 @@ open class SyncServiceBuilderSDKMock: MatrixRustSDK.SyncServiceBuilder, @uncheck
 }
 open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - cancel
 
@@ -23897,14 +24099,18 @@ open class TaskHandleSDKMock: MatrixRustSDK.TaskHandle, @unchecked Sendable {
 }
 open class ThreadSummarySDKMock: MatrixRustSDK.ThreadSummary, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - latestEvent
 
@@ -24038,14 +24244,18 @@ open class ThreadSummarySDKMock: MatrixRustSDK.ThreadSummary, @unchecked Sendabl
 }
 open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - addListener
 
@@ -24481,6 +24691,71 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
             return try await getEventTimelineItemByEventIdEventIdClosure(eventId)
         } else {
             return getEventTimelineItemByEventIdEventIdReturnValue
+        }
+    }
+
+    //MARK: - latestEventId
+
+    var latestEventIdUnderlyingCallsCount = 0
+    open var latestEventIdCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return latestEventIdUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = latestEventIdUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                latestEventIdUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    latestEventIdUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var latestEventIdCalled: Bool {
+        return latestEventIdCallsCount > 0
+    }
+
+    var latestEventIdUnderlyingReturnValue: String?
+    open var latestEventIdReturnValue: String? {
+        get {
+            if Thread.isMainThread {
+                return latestEventIdUnderlyingReturnValue
+            } else {
+                var returnValue: String?? = nil
+                DispatchQueue.main.sync {
+                    returnValue = latestEventIdUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                latestEventIdUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    latestEventIdUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var latestEventIdClosure: (() async -> String?)?
+
+    open override func latestEventId() async -> String? {
+        latestEventIdCallsCount += 1
+        if let latestEventIdClosure = latestEventIdClosure {
+            return await latestEventIdClosure()
+        } else {
+            return latestEventIdReturnValue
         }
     }
 
@@ -25854,14 +26129,18 @@ open class TimelineSDKMock: MatrixRustSDK.Timeline, @unchecked Sendable {
 }
 open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - eventId
 
@@ -26194,28 +26473,36 @@ open class TimelineEventSDKMock: MatrixRustSDK.TimelineEvent, @unchecked Sendabl
 }
 open class TimelineEventTypeFilterSDKMock: MatrixRustSDK.TimelineEventTypeFilter, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
     static func reset()
     {
     }
 }
 open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - asEvent
 
@@ -26479,14 +26766,18 @@ open class TimelineItemSDKMock: MatrixRustSDK.TimelineItem, @unchecked Sendable 
 }
 open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCount, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - hasNotifications
 
@@ -26685,14 +26976,18 @@ open class UnreadNotificationsCountSDKMock: MatrixRustSDK.UnreadNotificationsCou
 }
 open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - hasVerificationViolation
 
@@ -27036,14 +27331,18 @@ open class UserIdentitySDKMock: MatrixRustSDK.UserIdentity, @unchecked Sendable 
 }
 open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - run
 
@@ -27089,14 +27388,18 @@ open class WidgetDriverSDKMock: MatrixRustSDK.WidgetDriver, @unchecked Sendable 
 }
 open class WidgetDriverHandleSDKMock: MatrixRustSDK.WidgetDriverHandle, @unchecked Sendable {
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
 
-    fileprivate var pointer: UnsafeMutableRawPointer!
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
 
     //MARK: - recv
 
