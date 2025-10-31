@@ -65,11 +65,11 @@ final class NSEUserSession {
                          maxRequestRetryTime: 5000,
                          threadsEnabled: appSettings.threadsEnabled)
             .systemIsMemoryConstrained()
-            .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
-                          cachePath: credentials.restorationToken.sessionDirectories.cachePath)
+            .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
+                                       cachePath: credentials.restorationToken.sessionDirectories.cachePath)
+                    .passphrase(passphrase: credentials.restorationToken.passphrase))
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
-            .sessionPassphrase(passphrase: credentials.restorationToken.passphrase)
         
         baseClient = try await clientBuilder.build()
         delegateHandle = try baseClient.setDelegate(delegate: ClientDelegateWrapper())

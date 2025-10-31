@@ -6687,6 +6687,71 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 
+    //MARK: - inMemoryStore
+
+    var inMemoryStoreUnderlyingCallsCount = 0
+    open var inMemoryStoreCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return inMemoryStoreUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = inMemoryStoreUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                inMemoryStoreUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    inMemoryStoreUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var inMemoryStoreCalled: Bool {
+        return inMemoryStoreCallsCount > 0
+    }
+
+    var inMemoryStoreUnderlyingReturnValue: ClientBuilder!
+    open var inMemoryStoreReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return inMemoryStoreUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = inMemoryStoreUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                inMemoryStoreUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    inMemoryStoreUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var inMemoryStoreClosure: (() -> ClientBuilder)?
+
+    open override func inMemoryStore() -> ClientBuilder {
+        inMemoryStoreCallsCount += 1
+        if let inMemoryStoreClosure = inMemoryStoreClosure {
+            return inMemoryStoreClosure()
+        } else {
+            return inMemoryStoreReturnValue
+        }
+    }
+
     //MARK: - proxy
 
     var proxyUrlUnderlyingCallsCount = 0
@@ -7042,219 +7107,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
         }
     }
 
-    //MARK: - sessionCacheSize
-
-    var sessionCacheSizeCacheSizeUnderlyingCallsCount = 0
-    open var sessionCacheSizeCacheSizeCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return sessionCacheSizeCacheSizeUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sessionCacheSizeCacheSizeUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sessionCacheSizeCacheSizeUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sessionCacheSizeCacheSizeUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var sessionCacheSizeCacheSizeCalled: Bool {
-        return sessionCacheSizeCacheSizeCallsCount > 0
-    }
-    open var sessionCacheSizeCacheSizeReceivedCacheSize: UInt32?
-    open var sessionCacheSizeCacheSizeReceivedInvocations: [UInt32?] = []
-
-    var sessionCacheSizeCacheSizeUnderlyingReturnValue: ClientBuilder!
-    open var sessionCacheSizeCacheSizeReturnValue: ClientBuilder! {
-        get {
-            if Thread.isMainThread {
-                return sessionCacheSizeCacheSizeUnderlyingReturnValue
-            } else {
-                var returnValue: ClientBuilder? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sessionCacheSizeCacheSizeUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sessionCacheSizeCacheSizeUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sessionCacheSizeCacheSizeUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var sessionCacheSizeCacheSizeClosure: ((UInt32?) -> ClientBuilder)?
-
-    open override func sessionCacheSize(cacheSize: UInt32?) -> ClientBuilder {
-        sessionCacheSizeCacheSizeCallsCount += 1
-        sessionCacheSizeCacheSizeReceivedCacheSize = cacheSize
-        DispatchQueue.main.async {
-            self.sessionCacheSizeCacheSizeReceivedInvocations.append(cacheSize)
-        }
-        if let sessionCacheSizeCacheSizeClosure = sessionCacheSizeCacheSizeClosure {
-            return sessionCacheSizeCacheSizeClosure(cacheSize)
-        } else {
-            return sessionCacheSizeCacheSizeReturnValue
-        }
-    }
-
-    //MARK: - sessionJournalSizeLimit
-
-    var sessionJournalSizeLimitLimitUnderlyingCallsCount = 0
-    open var sessionJournalSizeLimitLimitCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return sessionJournalSizeLimitLimitUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sessionJournalSizeLimitLimitUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sessionJournalSizeLimitLimitUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sessionJournalSizeLimitLimitUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var sessionJournalSizeLimitLimitCalled: Bool {
-        return sessionJournalSizeLimitLimitCallsCount > 0
-    }
-    open var sessionJournalSizeLimitLimitReceivedLimit: UInt32?
-    open var sessionJournalSizeLimitLimitReceivedInvocations: [UInt32?] = []
-
-    var sessionJournalSizeLimitLimitUnderlyingReturnValue: ClientBuilder!
-    open var sessionJournalSizeLimitLimitReturnValue: ClientBuilder! {
-        get {
-            if Thread.isMainThread {
-                return sessionJournalSizeLimitLimitUnderlyingReturnValue
-            } else {
-                var returnValue: ClientBuilder? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sessionJournalSizeLimitLimitUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sessionJournalSizeLimitLimitUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sessionJournalSizeLimitLimitUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var sessionJournalSizeLimitLimitClosure: ((UInt32?) -> ClientBuilder)?
-
-    open override func sessionJournalSizeLimit(limit: UInt32?) -> ClientBuilder {
-        sessionJournalSizeLimitLimitCallsCount += 1
-        sessionJournalSizeLimitLimitReceivedLimit = limit
-        DispatchQueue.main.async {
-            self.sessionJournalSizeLimitLimitReceivedInvocations.append(limit)
-        }
-        if let sessionJournalSizeLimitLimitClosure = sessionJournalSizeLimitLimitClosure {
-            return sessionJournalSizeLimitLimitClosure(limit)
-        } else {
-            return sessionJournalSizeLimitLimitReturnValue
-        }
-    }
-
-    //MARK: - sessionPassphrase
-
-    var sessionPassphrasePassphraseUnderlyingCallsCount = 0
-    open var sessionPassphrasePassphraseCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return sessionPassphrasePassphraseUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sessionPassphrasePassphraseUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sessionPassphrasePassphraseUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sessionPassphrasePassphraseUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var sessionPassphrasePassphraseCalled: Bool {
-        return sessionPassphrasePassphraseCallsCount > 0
-    }
-    open var sessionPassphrasePassphraseReceivedPassphrase: String?
-    open var sessionPassphrasePassphraseReceivedInvocations: [String?] = []
-
-    var sessionPassphrasePassphraseUnderlyingReturnValue: ClientBuilder!
-    open var sessionPassphrasePassphraseReturnValue: ClientBuilder! {
-        get {
-            if Thread.isMainThread {
-                return sessionPassphrasePassphraseUnderlyingReturnValue
-            } else {
-                var returnValue: ClientBuilder? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sessionPassphrasePassphraseUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sessionPassphrasePassphraseUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sessionPassphrasePassphraseUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var sessionPassphrasePassphraseClosure: ((String?) -> ClientBuilder)?
-
-    open override func sessionPassphrase(passphrase: String?) -> ClientBuilder {
-        sessionPassphrasePassphraseCallsCount += 1
-        sessionPassphrasePassphraseReceivedPassphrase = passphrase
-        DispatchQueue.main.async {
-            self.sessionPassphrasePassphraseReceivedInvocations.append(passphrase)
-        }
-        if let sessionPassphrasePassphraseClosure = sessionPassphrasePassphraseClosure {
-            return sessionPassphrasePassphraseClosure(passphrase)
-        } else {
-            return sessionPassphrasePassphraseReturnValue
-        }
-    }
-
     //MARK: - sessionPaths
 
     var sessionPathsDataPathCachePathUnderlyingCallsCount = 0
@@ -7323,77 +7175,6 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
             return sessionPathsDataPathCachePathClosure(dataPath, cachePath)
         } else {
             return sessionPathsDataPathCachePathReturnValue
-        }
-    }
-
-    //MARK: - sessionPoolMaxSize
-
-    var sessionPoolMaxSizePoolMaxSizeUnderlyingCallsCount = 0
-    open var sessionPoolMaxSizePoolMaxSizeCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return sessionPoolMaxSizePoolMaxSizeUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sessionPoolMaxSizePoolMaxSizeUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sessionPoolMaxSizePoolMaxSizeUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sessionPoolMaxSizePoolMaxSizeUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var sessionPoolMaxSizePoolMaxSizeCalled: Bool {
-        return sessionPoolMaxSizePoolMaxSizeCallsCount > 0
-    }
-    open var sessionPoolMaxSizePoolMaxSizeReceivedPoolMaxSize: UInt32?
-    open var sessionPoolMaxSizePoolMaxSizeReceivedInvocations: [UInt32?] = []
-
-    var sessionPoolMaxSizePoolMaxSizeUnderlyingReturnValue: ClientBuilder!
-    open var sessionPoolMaxSizePoolMaxSizeReturnValue: ClientBuilder! {
-        get {
-            if Thread.isMainThread {
-                return sessionPoolMaxSizePoolMaxSizeUnderlyingReturnValue
-            } else {
-                var returnValue: ClientBuilder? = nil
-                DispatchQueue.main.sync {
-                    returnValue = sessionPoolMaxSizePoolMaxSizeUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                sessionPoolMaxSizePoolMaxSizeUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    sessionPoolMaxSizePoolMaxSizeUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var sessionPoolMaxSizePoolMaxSizeClosure: ((UInt32?) -> ClientBuilder)?
-
-    open override func sessionPoolMaxSize(poolMaxSize: UInt32?) -> ClientBuilder {
-        sessionPoolMaxSizePoolMaxSizeCallsCount += 1
-        sessionPoolMaxSizePoolMaxSizeReceivedPoolMaxSize = poolMaxSize
-        DispatchQueue.main.async {
-            self.sessionPoolMaxSizePoolMaxSizeReceivedInvocations.append(poolMaxSize)
-        }
-        if let sessionPoolMaxSizePoolMaxSizeClosure = sessionPoolMaxSizePoolMaxSizeClosure {
-            return sessionPoolMaxSizePoolMaxSizeClosure(poolMaxSize)
-        } else {
-            return sessionPoolMaxSizePoolMaxSizeReturnValue
         }
     }
 
@@ -7536,6 +7317,77 @@ open class ClientBuilderSDKMock: MatrixRustSDK.ClientBuilder, @unchecked Sendabl
             return slidingSyncVersionBuilderVersionBuilderClosure(versionBuilder)
         } else {
             return slidingSyncVersionBuilderVersionBuilderReturnValue
+        }
+    }
+
+    //MARK: - sqliteStore
+
+    var sqliteStoreConfigUnderlyingCallsCount = 0
+    open var sqliteStoreConfigCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return sqliteStoreConfigUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sqliteStoreConfigUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sqliteStoreConfigUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sqliteStoreConfigUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var sqliteStoreConfigCalled: Bool {
+        return sqliteStoreConfigCallsCount > 0
+    }
+    open var sqliteStoreConfigReceivedConfig: SqliteStoreBuilder?
+    open var sqliteStoreConfigReceivedInvocations: [SqliteStoreBuilder] = []
+
+    var sqliteStoreConfigUnderlyingReturnValue: ClientBuilder!
+    open var sqliteStoreConfigReturnValue: ClientBuilder! {
+        get {
+            if Thread.isMainThread {
+                return sqliteStoreConfigUnderlyingReturnValue
+            } else {
+                var returnValue: ClientBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = sqliteStoreConfigUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                sqliteStoreConfigUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    sqliteStoreConfigUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var sqliteStoreConfigClosure: ((SqliteStoreBuilder) -> ClientBuilder)?
+
+    open override func sqliteStore(config: SqliteStoreBuilder) -> ClientBuilder {
+        sqliteStoreConfigCallsCount += 1
+        sqliteStoreConfigReceivedConfig = config
+        DispatchQueue.main.async {
+            self.sqliteStoreConfigReceivedInvocations.append(config)
+        }
+        if let sqliteStoreConfigClosure = sqliteStoreConfigClosure {
+            return sqliteStoreConfigClosure(config)
+        } else {
+            return sqliteStoreConfigReturnValue
         }
     }
 
@@ -23308,6 +23160,370 @@ open class SpanSDKMock: MatrixRustSDK.Span, @unchecked Sendable {
             return isNoneClosure()
         } else {
             return isNoneReturnValue
+        }
+    }
+}
+open class SqliteStoreBuilderSDKMock: MatrixRustSDK.SqliteStoreBuilder, @unchecked Sendable {
+    init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+
+    //MARK: - cacheSize
+
+    var cacheSizeCacheSizeUnderlyingCallsCount = 0
+    open var cacheSizeCacheSizeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return cacheSizeCacheSizeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = cacheSizeCacheSizeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                cacheSizeCacheSizeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    cacheSizeCacheSizeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var cacheSizeCacheSizeCalled: Bool {
+        return cacheSizeCacheSizeCallsCount > 0
+    }
+    open var cacheSizeCacheSizeReceivedCacheSize: UInt32?
+    open var cacheSizeCacheSizeReceivedInvocations: [UInt32?] = []
+
+    var cacheSizeCacheSizeUnderlyingReturnValue: SqliteStoreBuilder!
+    open var cacheSizeCacheSizeReturnValue: SqliteStoreBuilder! {
+        get {
+            if Thread.isMainThread {
+                return cacheSizeCacheSizeUnderlyingReturnValue
+            } else {
+                var returnValue: SqliteStoreBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = cacheSizeCacheSizeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                cacheSizeCacheSizeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    cacheSizeCacheSizeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var cacheSizeCacheSizeClosure: ((UInt32?) -> SqliteStoreBuilder)?
+
+    open override func cacheSize(cacheSize: UInt32?) -> SqliteStoreBuilder {
+        cacheSizeCacheSizeCallsCount += 1
+        cacheSizeCacheSizeReceivedCacheSize = cacheSize
+        DispatchQueue.main.async {
+            self.cacheSizeCacheSizeReceivedInvocations.append(cacheSize)
+        }
+        if let cacheSizeCacheSizeClosure = cacheSizeCacheSizeClosure {
+            return cacheSizeCacheSizeClosure(cacheSize)
+        } else {
+            return cacheSizeCacheSizeReturnValue
+        }
+    }
+
+    //MARK: - journalSizeLimit
+
+    var journalSizeLimitLimitUnderlyingCallsCount = 0
+    open var journalSizeLimitLimitCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return journalSizeLimitLimitUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = journalSizeLimitLimitUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                journalSizeLimitLimitUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    journalSizeLimitLimitUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var journalSizeLimitLimitCalled: Bool {
+        return journalSizeLimitLimitCallsCount > 0
+    }
+    open var journalSizeLimitLimitReceivedLimit: UInt32?
+    open var journalSizeLimitLimitReceivedInvocations: [UInt32?] = []
+
+    var journalSizeLimitLimitUnderlyingReturnValue: SqliteStoreBuilder!
+    open var journalSizeLimitLimitReturnValue: SqliteStoreBuilder! {
+        get {
+            if Thread.isMainThread {
+                return journalSizeLimitLimitUnderlyingReturnValue
+            } else {
+                var returnValue: SqliteStoreBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = journalSizeLimitLimitUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                journalSizeLimitLimitUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    journalSizeLimitLimitUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var journalSizeLimitLimitClosure: ((UInt32?) -> SqliteStoreBuilder)?
+
+    open override func journalSizeLimit(limit: UInt32?) -> SqliteStoreBuilder {
+        journalSizeLimitLimitCallsCount += 1
+        journalSizeLimitLimitReceivedLimit = limit
+        DispatchQueue.main.async {
+            self.journalSizeLimitLimitReceivedInvocations.append(limit)
+        }
+        if let journalSizeLimitLimitClosure = journalSizeLimitLimitClosure {
+            return journalSizeLimitLimitClosure(limit)
+        } else {
+            return journalSizeLimitLimitReturnValue
+        }
+    }
+
+    //MARK: - passphrase
+
+    var passphrasePassphraseUnderlyingCallsCount = 0
+    open var passphrasePassphraseCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return passphrasePassphraseUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = passphrasePassphraseUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                passphrasePassphraseUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    passphrasePassphraseUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var passphrasePassphraseCalled: Bool {
+        return passphrasePassphraseCallsCount > 0
+    }
+    open var passphrasePassphraseReceivedPassphrase: String?
+    open var passphrasePassphraseReceivedInvocations: [String?] = []
+
+    var passphrasePassphraseUnderlyingReturnValue: SqliteStoreBuilder!
+    open var passphrasePassphraseReturnValue: SqliteStoreBuilder! {
+        get {
+            if Thread.isMainThread {
+                return passphrasePassphraseUnderlyingReturnValue
+            } else {
+                var returnValue: SqliteStoreBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = passphrasePassphraseUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                passphrasePassphraseUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    passphrasePassphraseUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var passphrasePassphraseClosure: ((String?) -> SqliteStoreBuilder)?
+
+    open override func passphrase(passphrase: String?) -> SqliteStoreBuilder {
+        passphrasePassphraseCallsCount += 1
+        passphrasePassphraseReceivedPassphrase = passphrase
+        DispatchQueue.main.async {
+            self.passphrasePassphraseReceivedInvocations.append(passphrase)
+        }
+        if let passphrasePassphraseClosure = passphrasePassphraseClosure {
+            return passphrasePassphraseClosure(passphrase)
+        } else {
+            return passphrasePassphraseReturnValue
+        }
+    }
+
+    //MARK: - poolMaxSize
+
+    var poolMaxSizePoolMaxSizeUnderlyingCallsCount = 0
+    open var poolMaxSizePoolMaxSizeCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return poolMaxSizePoolMaxSizeUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = poolMaxSizePoolMaxSizeUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                poolMaxSizePoolMaxSizeUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    poolMaxSizePoolMaxSizeUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var poolMaxSizePoolMaxSizeCalled: Bool {
+        return poolMaxSizePoolMaxSizeCallsCount > 0
+    }
+    open var poolMaxSizePoolMaxSizeReceivedPoolMaxSize: UInt32?
+    open var poolMaxSizePoolMaxSizeReceivedInvocations: [UInt32?] = []
+
+    var poolMaxSizePoolMaxSizeUnderlyingReturnValue: SqliteStoreBuilder!
+    open var poolMaxSizePoolMaxSizeReturnValue: SqliteStoreBuilder! {
+        get {
+            if Thread.isMainThread {
+                return poolMaxSizePoolMaxSizeUnderlyingReturnValue
+            } else {
+                var returnValue: SqliteStoreBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = poolMaxSizePoolMaxSizeUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                poolMaxSizePoolMaxSizeUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    poolMaxSizePoolMaxSizeUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var poolMaxSizePoolMaxSizeClosure: ((UInt32?) -> SqliteStoreBuilder)?
+
+    open override func poolMaxSize(poolMaxSize: UInt32?) -> SqliteStoreBuilder {
+        poolMaxSizePoolMaxSizeCallsCount += 1
+        poolMaxSizePoolMaxSizeReceivedPoolMaxSize = poolMaxSize
+        DispatchQueue.main.async {
+            self.poolMaxSizePoolMaxSizeReceivedInvocations.append(poolMaxSize)
+        }
+        if let poolMaxSizePoolMaxSizeClosure = poolMaxSizePoolMaxSizeClosure {
+            return poolMaxSizePoolMaxSizeClosure(poolMaxSize)
+        } else {
+            return poolMaxSizePoolMaxSizeReturnValue
+        }
+    }
+
+    //MARK: - systemIsMemoryConstrained
+
+    var systemIsMemoryConstrainedUnderlyingCallsCount = 0
+    open var systemIsMemoryConstrainedCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return systemIsMemoryConstrainedUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = systemIsMemoryConstrainedUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                systemIsMemoryConstrainedUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    systemIsMemoryConstrainedUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var systemIsMemoryConstrainedCalled: Bool {
+        return systemIsMemoryConstrainedCallsCount > 0
+    }
+
+    var systemIsMemoryConstrainedUnderlyingReturnValue: SqliteStoreBuilder!
+    open var systemIsMemoryConstrainedReturnValue: SqliteStoreBuilder! {
+        get {
+            if Thread.isMainThread {
+                return systemIsMemoryConstrainedUnderlyingReturnValue
+            } else {
+                var returnValue: SqliteStoreBuilder? = nil
+                DispatchQueue.main.sync {
+                    returnValue = systemIsMemoryConstrainedUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                systemIsMemoryConstrainedUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    systemIsMemoryConstrainedUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var systemIsMemoryConstrainedClosure: (() -> SqliteStoreBuilder)?
+
+    open override func systemIsMemoryConstrained() -> SqliteStoreBuilder {
+        systemIsMemoryConstrainedCallsCount += 1
+        if let systemIsMemoryConstrainedClosure = systemIsMemoryConstrainedClosure {
+            return systemIsMemoryConstrainedClosure()
+        } else {
+            return systemIsMemoryConstrainedReturnValue
         }
     }
 }

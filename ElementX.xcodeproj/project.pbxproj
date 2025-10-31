@@ -5842,13 +5842,6 @@
 			path = MapLibre;
 			sourceTree = "<group>";
 		};
-		C18958141C8ED6D778F779A4 /* CreateRoom */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = CreateRoom;
-			sourceTree = "<group>";
-		};
 		C1CD278862878F9545608040 /* SessionVerificationScreen */ = {
 			isa = PBXGroup;
 			children = (
@@ -6231,7 +6224,6 @@
 				53FB148CD26AFB6A5B9E20B3 /* BugReportScreen */,
 				1185EECDD07495D65AC84AFC /* CallScreen */,
 				90DC2E28718955ED87AD1456 /* CreatePollScreen */,
-				C18958141C8ED6D778F779A4 /* CreateRoom */,
 				821EB0D1C0019E3C7BBAEDBB /* CreateRoomScreen */,
 				3E1CCC4B607946CE90B4A827 /* DeclineAndBlockScreen */,
 				45F2BCFD6E9A6F040CC20582 /* EditRoomAddressScreen */,
@@ -9420,7 +9412,7 @@
 			repositoryURL = "https://github.com/element-hq/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = 25.10.27;
+				version = 25.10.31;
 			};
 		};
 		701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */ = {

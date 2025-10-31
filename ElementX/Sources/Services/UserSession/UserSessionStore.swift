@@ -123,11 +123,11 @@ class UserSessionStore: UserSessionStoreProtocol {
                          enableOnlySignedDeviceIsolationMode: appSettings.enableOnlySignedDeviceIsolationMode,
                          enableKeyShareOnInvite: appSettings.enableKeyShareOnInvite,
                          threadsEnabled: appSettings.threadsEnabled)
-            .sessionPaths(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
-                          cachePath: credentials.restorationToken.sessionDirectories.cachePath)
+            .sqliteStore(config: .init(dataPath: credentials.restorationToken.sessionDirectories.dataPath,
+                                       cachePath: credentials.restorationToken.sessionDirectories.cachePath)
+                    .passphrase(passphrase: credentials.restorationToken.passphrase))
             .username(username: credentials.userID)
             .homeserverUrl(url: homeserverURL)
-            .sessionPassphrase(passphrase: credentials.restorationToken.passphrase)
         
         do {
             let client = try await builder.build()
