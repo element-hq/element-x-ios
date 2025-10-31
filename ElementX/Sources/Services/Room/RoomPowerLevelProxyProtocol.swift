@@ -36,3 +36,12 @@ protocol RoomPowerLevelsProxyProtocol {
     func canUserPinOrUnpin(userID: String) -> Result<Bool, RoomProxyError>
     func canUserJoinCall(userID: String) -> Result<Bool, RoomProxyError>
 }
+
+// MARK: - Helpers
+
+extension RoomPowerLevelsProxyProtocol {
+    /// Can own user edit either the room name, avatar or topic
+    func canOwnUserEditBaseInfo() -> Bool {
+        canOwnUser(sendStateEvent: .roomAvatar) || canOwnUser(sendStateEvent: .roomName) || canOwnUser(sendStateEvent: .roomTopic)
+    }
+}

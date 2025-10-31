@@ -28,7 +28,12 @@ struct SpaceScreenViewState: BindableState {
     var selectedSpaceRoomID: String?
     var joiningRoomIDs: Set<String> = []
     
-    var isSpaceManagementEnabled = false
+    var canEditBaseInfo = false
+    var canEditRolesAndPermissions = false
+    
+    var isSpaceManagementEnabled: Bool {
+        canEditBaseInfo || canEditRolesAndPermissions
+    }
     
     var bindings = SpaceScreenViewStateBindings()
 }

@@ -97,7 +97,7 @@ struct LeaveSpaceView: View {
                     Label(leaveHandle.confirmationTitle, icon: \.leave)
                 }
                 .buttonStyle(.compound(.primary))
-            } else if context.viewState.isSpaceManagementEnabled {
+            } else if context.viewState.canEditRolesAndPermissions {
                 Button {
                     context.send(viewAction: .rolesAndPermissions)
                 } label: {

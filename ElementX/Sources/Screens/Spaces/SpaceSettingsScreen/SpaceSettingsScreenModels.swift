@@ -15,6 +15,7 @@ struct SpaceSettingsScreenViewState: BindableState {
     var joinedMembersCount: Int
     var hasMemberIdentityVerificationStateViolations = false
     
+    var canEditBaseInfo = false
     var canEditRolesOrPermissions = false
 }
 

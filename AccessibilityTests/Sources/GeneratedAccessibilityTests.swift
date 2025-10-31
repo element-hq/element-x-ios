@@ -91,6 +91,10 @@ extension AccessibilityTests {
         try await performAccessibilityAudit(named: "ComposerToolbar_Previews")
     }
 
+    func testCopyTextButton() async throws {
+        try await performAccessibilityAudit(named: "CopyTextButton_Previews")
+    }
+
     func testCreateRoom() async throws {
         try await performAccessibilityAudit(named: "CreateRoom_Previews")
     }

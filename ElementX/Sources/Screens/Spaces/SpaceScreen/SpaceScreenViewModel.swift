@@ -80,7 +80,17 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
                 }
                 
                 appSettings.$spaceSettingsEnabled
-                    .weakAssign(to: \.state.isSpaceManagementEnabled, on: self)
+                    .combineLatest(roomProxy.infoPublisher)
+                    .sink { [weak self] isEnabled, roomInfo in
+                        guard let self else { return }
+                        guard isEnabled, let powerLevels = roomInfo.powerLevels else {
+                            state.canEditBaseInfo = false
+                            state.canEditRolesAndPermissions = false
+                            return
+                        }
+                        state.canEditBaseInfo = powerLevels.canOwnUserEditBaseInfo()
+                        state.canEditRolesAndPermissions = powerLevels.canOwnUserEditRolesAndPermissions()
+                    }
                     .store(in: &cancellables)
             }
         }

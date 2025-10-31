@@ -59,7 +59,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         case .kick:
             state.bindings.alertInfo = .init(id: alertType,
                                              title: L10n.screenBottomSheetManageRoomMemberKickMemberConfirmationTitle,
-                                             message: L10n.screenBottomSheetManageRoomMemberKickMemberConfirmationDescription,
+                                             message: roomProxy.infoPublisher.value.isSpace ? L10n.screenBottomSheetManageRoomMemberKickMemberFromSpaceConfirmationDescription : L10n.screenBottomSheetManageRoomMemberKickMemberConfirmationDescription,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },
                                              secondaryButton: .init(title: L10n.screenBottomSheetManageRoomMemberKickMemberConfirmationAction) { [weak self] in Task { await self?.kickMember(id: memberID, name: memberName, reason: reason) } },
                                              textFields: [.init(placeholder: L10n.commonReason,
@@ -69,7 +69,7 @@ class ManageRoomMemberSheetViewModel: ManageRoomMemberSheetViewModelType, Manage
         case .ban:
             state.bindings.alertInfo = .init(id: alertType,
                                              title: L10n.screenBottomSheetManageRoomMemberBanMemberConfirmationTitle,
-                                             message: L10n.screenBottomSheetManageRoomMemberBanMemberConfirmationDescription,
+                                             message: roomProxy.infoPublisher.value.isSpace ? L10n.screenBottomSheetManageRoomMemberBanMemberFromSpaceConfirmationDescription : L10n.screenBottomSheetManageRoomMemberBanMemberConfirmationDescription,
                                              primaryButton: .init(title: L10n.actionCancel, role: .cancel) { },
                                              secondaryButton: .init(title: L10n.screenBottomSheetManageRoomMemberBanMemberConfirmationAction) { [weak self] in Task { await self?.banMember(id: memberID, name: memberName, reason: reason) } },
                                              textFields: [.init(placeholder: L10n.commonReason,

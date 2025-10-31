@@ -57,6 +57,7 @@ class SpaceSettingsScreenViewModel: SpaceSettingsScreenViewModelType, SpaceSetti
         
         if let powerLevels = roomInfo.powerLevels {
             state.canEditRolesOrPermissions = powerLevels.canOwnUserEditRolesAndPermissions()
+            state.canEditBaseInfo = powerLevels.canOwnUserEditBaseInfo()
         }
     }
     

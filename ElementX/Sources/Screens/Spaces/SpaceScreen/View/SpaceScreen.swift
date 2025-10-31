@@ -114,6 +114,7 @@ struct SpaceScreen_Previews: PreviewProvider, TestablePreview {
                                                       joinedMembersCount: 76,
                                                       heroes: [.mockDan, .mockBob, .mockCharlie, .mockVerbose],
                                                       topic: "Description of the space goes right here. Lorem ipsum dolor sit amet consectetur. Leo viverra morbi habitant in.",
+                                                      canonicalAlias: "#engineering-team:element.io",
                                                       joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
         let spaceRoomListProxy = SpaceRoomListProxyMock(.init(spaceRoomProxy: spaceRoomProxy,
                                                               initialSpaceRooms: .mockSpaceList))

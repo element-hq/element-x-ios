@@ -28,6 +28,10 @@ struct SpaceHeaderView: View {
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 
+                if let alias = spaceRoomProxy.canonicalAlias {
+                    CopyTextButton(content: alias)
+                }
+                
                 spaceDetails
                 
                 JoinedMembersBadgeView(heroes: spaceRoomProxy.heroes,
@@ -62,7 +66,7 @@ struct SpaceHeaderView: View {
         }
     }
     
-    var spaceDetails: some View {
+    private var spaceDetails: some View {
         Label {
             Text(spaceDetailsVisibilityTitle)
                 .font(.compound.bodyLG)
@@ -74,7 +78,7 @@ struct SpaceHeaderView: View {
         }
     }
     
-    var spaceDetailsVisibilityTitle: String {
+    private var spaceDetailsVisibilityTitle: String {
         switch spaceRoomProxy.visibility {
         case .public: L10n.commonPublicSpace
         case .private: L10n.commonPrivateSpace
@@ -83,7 +87,7 @@ struct SpaceHeaderView: View {
         }
     }
     
-    var spaceDetailsVisibilityIcon: KeyPath<CompoundIcons, Image> {
+    private var spaceDetailsVisibilityIcon: KeyPath<CompoundIcons, Image> {
         switch spaceRoomProxy.visibility {
         case .public: \.public
         case .private: \.lock
@@ -122,6 +126,7 @@ struct SpaceHeaderView_Previews: PreviewProvider, TestablePreview {
                                      childrenCount: 20,
                                      joinedMembersCount: 78,
                                      topic: "Description of the space goes right here.",
+                                     canonicalAlias: "#space:matrix.org",
                                      joinRule: .public)),
             SpaceRoomProxyMock(.init(id: "!space3:matrix.org",
                                      name: "Subspace",
@@ -135,6 +140,7 @@ struct SpaceHeaderView_Previews: PreviewProvider, TestablePreview {
                                              "Sem amet enim habitant nibh augue mauris.",
                                              "Interdum mauris ultrices tincidunt proin morbi erat aenean risus nibh.",
                                              "Diam amet sit fermentum vulputate faucibus."].joined(separator: " "),
+                                     canonicalAlias: "#subspace:matrix.org",
                                      joinRule: .knockRestricted(rules: [.roomMembership(roomId: "")])))
         ]
     }

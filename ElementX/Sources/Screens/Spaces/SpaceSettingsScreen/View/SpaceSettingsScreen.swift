@@ -26,17 +26,24 @@ struct SpaceSettingsScreen: View {
     
     private var editSection: some View {
         Section {
-            ListRow(kind: .custom {
-                Button {
-                    context.send(viewAction: .processTapEdit)
-                } label: {
-                    editSectionContent
-                }
-            })
+            ListRow(kind: .custom { editRow })
         }
     }
     
-    private var editSectionContent: some View {
+    @ViewBuilder
+    private var editRow: some View {
+        if context.viewState.canEditBaseInfo {
+            Button {
+                context.send(viewAction: .processTapEdit)
+            } label: {
+                editRowContent
+            }
+        } else {
+            editRowContent
+        }
+    }
+    
+    private var editRowContent: some View {
         HStack(spacing: 12) {
             RoomAvatarImage(avatar: context.viewState.details.avatar,
                             avatarSize: .room(on: .spaceSettings),
@@ -57,7 +64,9 @@ struct SpaceSettingsScreen: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-            ListRowAccessory.navigationLink
+            if context.viewState.canEditBaseInfo {
+                ListRowAccessory.navigationLink
+            }
         }
         .padding(.horizontal, ListRowPadding.horizontal)
         .padding(.vertical, 16)
@@ -108,16 +117,29 @@ struct SpaceSettingsScreen: View {
 // MARK: - Previews
 
 struct SpaceSettingsScreen_Previews: PreviewProvider, TestablePreview {
-    static let viewModel = SpaceSettingsScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Space",
-                                                                                             avatarURL: .mockMXCAvatar,
-                                                                                             isSpace: true,
-                                                                                             canonicalAlias: "#space:matrix.org",
-                                                                                             members: .allMembersAsCreator)),
-                                                        userSession: UserSessionMock(.init()))
+    static let ownerViewModel = SpaceSettingsScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Space",
+                                                                                                  avatarURL: .mockMXCAvatar,
+                                                                                                  isSpace: true,
+                                                                                                  canonicalAlias: "#space:matrix.org",
+                                                                                                  members: .allMembersAsCreator)),
+                                                             userSession: UserSessionMock(.init()))
+    
+    static let userViewModel = SpaceSettingsScreenViewModel(roomProxy: JoinedRoomProxyMock(.init(name: "Space",
+                                                                                                 avatarURL: .mockMXCAvatar,
+                                                                                                 isSpace: true,
+                                                                                                 canonicalAlias: "#space:matrix.org",
+                                                                                                 members: .allMembers)),
+                                                            userSession: UserSessionMock(.init()))
     
     static var previews: some View {
         NavigationStack {
-            SpaceSettingsScreen(context: viewModel.context)
+            SpaceSettingsScreen(context: ownerViewModel.context)
         }
+        .previewDisplayName("Owner")
+        
+        NavigationStack {
+            SpaceSettingsScreen(context: userViewModel.context)
+        }
+        .previewDisplayName("User")
     }
 }
