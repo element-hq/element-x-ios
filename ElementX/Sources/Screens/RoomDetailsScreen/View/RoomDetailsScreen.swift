@@ -46,7 +46,7 @@ struct RoomDetailsScreen: View {
                message: blockUserAlertMessage)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                if context.viewState.canEdit {
+                if context.viewState.canEditBaseInfo {
                     Button(L10n.actionEdit) {
                         context.send(viewAction: .processTapEdit)
                     }
