@@ -26,23 +26,24 @@ struct SpaceSettingsScreen: View {
     
     private var editSection: some View {
         Section {
-            if context.viewState.canEditBaseInfo {
-                ListRow(kind: .custom {
-                    Button {
-                        context.send(viewAction: .processTapEdit)
-                    } label: {
-                        editSectionContent
-                    }
-                })
-            } else {
-                ListRow(kind: .custom {
-                    editSectionContent
-                })
-            }
+            ListRow(kind: .custom { editRow })
         }
     }
     
-    private var editSectionContent: some View {
+    @ViewBuilder
+    private var editRow: some View {
+        if context.viewState.canEditBaseInfo {
+            Button {
+                context.send(viewAction: .processTapEdit)
+            } label: {
+                editRowContent
+            }
+        } else {
+            editRowContent
+        }
+    }
+    
+    private var editRowContent: some View {
         HStack(spacing: 12) {
             RoomAvatarImage(avatar: context.viewState.details.avatar,
                             avatarSize: .room(on: .spaceSettings),

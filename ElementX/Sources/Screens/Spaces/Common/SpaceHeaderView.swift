@@ -29,7 +29,7 @@ struct SpaceHeaderView: View {
                     .multilineTextAlignment(.center)
                 
                 if let alias = spaceRoomProxy.canonicalAlias {
-                    copiableAlias(alias)
+                    CopyTextButton(content: alias)
                 }
                 
                 spaceDetails
@@ -93,24 +93,6 @@ struct SpaceHeaderView: View {
         case .private: \.lock
         case .restricted: \.space
         case .none: \.lock
-        }
-    }
-    
-    private func copiableAlias(_ alias: String) -> some View {
-        Button {
-            UIPasteboard.general.string = alias
-        } label: {
-            Label {
-                Text(alias)
-                    .lineLimit(1)
-            } icon: {
-                CompoundIcon(\.copy, size: .small, relativeTo: .compound.bodyLG)
-                    .accessibilityHidden(true)
-            }
-            .font(.compound.bodyLG)
-            .foregroundStyle(.compound.textSecondary)
-            .labelStyle(.custom(spacing: 4, iconLayout: .trailing))
-            .accessibilityHint(L10n.actionCopy)
         }
     }
 }
