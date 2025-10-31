@@ -11,13 +11,17 @@ import SwiftUI
 struct SpaceSettingsScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let userSession: UserSessionProtocol
+    let analyticsService: AnalyticsService
+    let userIndicator: UserIndicatorControllerProtocol
+    let notificationSettingsProxy: NotificationSettingsProxyProtocol
+    let attributedStringBuilder: AttributedStringBuilderProtocol
+    let appSettings: AppSettings
 }
 
 enum SpaceSettingsScreenCoordinatorAction { }
 
 final class SpaceSettingsScreenCoordinator: CoordinatorProtocol {
-    private let parameters: SpaceSettingsScreenCoordinatorParameters
-    private let viewModel: SpaceSettingsScreenViewModelProtocol
+    private let viewModel: RoomDetailsScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
  
@@ -27,18 +31,32 @@ final class SpaceSettingsScreenCoordinator: CoordinatorProtocol {
     }
     
     init(parameters: SpaceSettingsScreenCoordinatorParameters) {
-        self.parameters = parameters
-        
-        viewModel = SpaceSettingsScreenViewModel(roomProxy: parameters.roomProxy,
-                                                 userSession: parameters.userSession)
+        viewModel = RoomDetailsScreenViewModel(roomProxy: parameters.roomProxy,
+                                               userSession: parameters.userSession,
+                                               analyticsService: parameters.analyticsService,
+                                               userIndicatorController: parameters.userIndicator,
+                                               notificationSettingsProxy: parameters.notificationSettingsProxy,
+                                               attributedStringBuilder: parameters.attributedStringBuilder,
+                                               appSettings: parameters.appSettings)
     }
     
     func start() {
-        viewModel.actionsPublisher.sink { [weak self] action in
+        viewModel.actions.sink { [weak self] action in
             MXLog.info("Coordinator: received view model action: \(action)")
-            
             guard let self else { return }
-            switch action { }
+            
+            switch action {
+            case .requestNotificationSettingsPresentation, .requestRecipientDetailsPresentation, .requestInvitePeoplePresentation, .leftRoom, .requestPollsHistoryPresentation, .requestRolesAndPermissionsPresentation, .startCall, .displayPinnedEventsTimeline, .displayMediaEventsTimeline, .displayKnockingRequests, .displayReportRoom:
+                break // Not handled in this context
+            case .requestEditDetailsPresentation:
+                break // TODO:
+            case .displaySecurityAndPrivacy:
+                break // TODO:
+            case .transferOwnership:
+                break // TODO:
+            case .requestMemberDetailsPresentation:
+                break // TODO:
+            }
         }
         .store(in: &cancellables)
     }

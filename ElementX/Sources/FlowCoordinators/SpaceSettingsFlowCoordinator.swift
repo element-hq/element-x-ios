@@ -93,7 +93,12 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private func presentSpaceSettings(animated: Bool) {
         let coordinator = SpaceSettingsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                           userSession: flowParameters.userSession))
+                                                                           userSession: flowParameters.userSession,
+                                                                           analyticsService: flowParameters.analytics,
+                                                                           userIndicator: flowParameters.userIndicatorController,
+                                                                           notificationSettingsProxy: flowParameters.userSession.clientProxy.notificationSettings,
+                                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                                           appSettings: flowParameters.appSettings))
         
         coordinator.actionsPublisher.sink { [weak self] action in
             switch action { }
