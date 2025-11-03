@@ -225,11 +225,11 @@ import {{ import }}
 {% call accessLevel type.accessLevel %}class {{ type.name | replace:"Protocol","" }}SDKMock: MatrixRustSDK.{{ type.name }}, @unchecked Sendable {
     {% if type.accessLevel == "open" %}
     init() {
-        super.init(noPointer: .init())
+        super.init(noHandle: .init())
     }
 
-    public required init(unsafeFromRawPointer pointer: UnsafeMutableRawPointer) {
-        fatalError("init(unsafeFromRawPointer:) has not been implemented")
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
     }
     {% endif %}
 

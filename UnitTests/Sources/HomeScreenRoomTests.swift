@@ -21,7 +21,7 @@ class HomeScreenRoomTests: XCTestCase {
                           unreadNotificationsCount: UInt,
                           notificationMode: RoomNotificationModeProxy,
                           hasOngoingCall: Bool) {
-        roomSummary = RoomSummary(room: .init(noPointer: .init()),
+        roomSummary = RoomSummary(room: .init(noHandle: .init()),
                                   id: "Test room",
                                   joinRequestType: nil,
                                   name: "Test room",

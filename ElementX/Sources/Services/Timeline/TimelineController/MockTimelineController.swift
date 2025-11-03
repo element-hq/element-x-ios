@@ -141,7 +141,7 @@ class MockTimelineController: TimelineControllerProtocol {
     func unpin(eventID: String) async { }
     
     func messageEventContent(for itemID: TimelineItemIdentifier) -> RoomMessageEventContentWithoutRelation? {
-        .init(noPointer: .init())
+        .init(noHandle: .init())
     }
     
     func debugInfo(for itemID: TimelineItemIdentifier) -> TimelineItemDebugInfo {

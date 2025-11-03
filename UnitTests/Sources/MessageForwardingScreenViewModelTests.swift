@@ -15,7 +15,7 @@ import XCTest
 class MessageForwardingScreenViewModelTests: XCTestCase {
     let forwardingItem = MessageForwardingItem(id: .event(uniqueID: .init("t1"), eventOrTransactionID: .eventID("t1")),
                                                roomID: "1",
-                                               content: .init(noPointer: .init()))
+                                               content: .init(noHandle: .init()))
     var viewModel: MessageForwardingScreenViewModelProtocol!
     var context: MessageForwardingScreenViewModelType.Context!
     var cancellables = Set<AnyCancellable>()

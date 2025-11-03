@@ -71,7 +71,7 @@ class LoggingTests: XCTestCase {
         let roomName = "Private Conversation"
         let lastMessage = "Secret information"
         let heroName = "Pseudonym"
-        let roomSummary = RoomSummary(room: .init(noPointer: .init()),
+        let roomSummary = RoomSummary(room: .init(noHandle: .init()),
                                       id: "myroomid",
                                       joinRequestType: nil,
                                       name: roomName,
@@ -224,19 +224,19 @@ class LoggingTests: XCTestCase {
         let rustImageMessage = ImageMessageContent(filename: "ImageString",
                                                    caption: "ImageString",
                                                    formattedCaption: nil,
-                                                   source: MediaSource(noPointer: .init()),
+                                                   source: MediaSource(noHandle: .init()),
                                                    info: nil)
         
         let rustVideoMessage = VideoMessageContent(filename: "VideoString",
                                                    caption: "VideoString",
                                                    formattedCaption: nil,
-                                                   source: MediaSource(noPointer: .init()),
+                                                   source: MediaSource(noHandle: .init()),
                                                    info: nil)
         
         let rustFileMessage = FileMessageContent(filename: "FileString",
                                                  caption: "FileString",
                                                  formattedCaption: nil,
-                                                 source: MediaSource(noPointer: .init()),
+                                                 source: MediaSource(noHandle: .init()),
                                                  info: nil)
         
         // When logging that value

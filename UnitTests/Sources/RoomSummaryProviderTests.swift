@@ -106,7 +106,7 @@ final class RoomSummaryProviderTests: XCTestCase {
         dynamicAdaptersResult.controllerReturnValue = dynamicEntriesController
         roomList = RoomListSDKMock()
         roomList.entriesWithDynamicAdaptersWithPageSizeEnableLatestEventSorterListenerReturnValue = dynamicAdaptersResult
-        roomList.loadingStateListenerReturnValue = .some(.init(state: .notLoaded, stateStream: .init(noPointer: .init())))
+        roomList.loadingStateListenerReturnValue = .some(.init(state: .notLoaded, stateStream: .init(noHandle: .init())))
         roomSummaryProvider.setRoomList(roomList)
     }
 }
