@@ -87,6 +87,7 @@
 "action_forgot_password" = "Elfelejtette a jelszót?";
 "action_forward" = "Tovább";
 "action_go_back" = "Visszalépés";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Ugrás a beállításokhoz";
 "action_ignore" = "Mellőzés";
 "action_invite" = "Meghívás";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Speciális beállítások";
 "common_an_image" = "egy kép";
 "common_analytics" = "Elemzések";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Elhagyta a szobát";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Ki lett jelentkeztetve a munkamenetből";
 "common_appearance" = "Megjelenítés";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Kitiltás";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Többé nem csatlakozhat ehhez a szobához, akkor sem, ha meghívják.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Biztos, hogy kitiltja ezt a tagot?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "%1$@ kitiltása";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Eltávolítás";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Biztos, hogy eltávolítja ezt a tagot?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Profil megtekintése";
 "screen_bottom_sheet_manage_room_member_remove" = "Eltávolítás a szobából";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Eltávolítja a tagot, és megtiltja a jövőbeni csatlakozást?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ tér";
 "screen_space_list_title" = "Terek";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Csatlakozás a szobához cím szerint";
 "screen_start_chat_join_room_by_address_invalid_address" = "Nem érvényes cím";
 "screen_start_chat_join_room_by_address_placeholder" = "Írja be...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "A szoba címe";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Bárki";
 "screen_security_and_privacy_room_visibility_section_header" = "Szoba láthatósága";
+"screen_space_settings_leave_space" = "Tér elhagyása";
+"screen_space_settings_security_and_privacy" = "Biztonság és adatvédelem";
 "screen_account_provider_change" = "Fiókszolgáltató módosítása";
 "screen_account_provider_signin_subtitle" = "Itt lesznek a beszélgetései – ahogyan egy e-mail-szolgáltatást is használna a levelei kezeléséhez.";
 "screen_account_provider_signup_subtitle" = "Itt lesznek a beszélgetései – ahogyan egy e-mail-szolgáltatást is használna a levelei kezeléséhez.";

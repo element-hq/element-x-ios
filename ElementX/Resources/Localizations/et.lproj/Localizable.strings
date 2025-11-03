@@ -87,6 +87,7 @@
 "action_forgot_password" = "Kas unustasid salasõna?";
 "action_forward" = "Edasta";
 "action_go_back" = "Tagasi eelmisesse vaatesse";
+"action_go_to_roles_and_permissions" = "Ava „Rollid ja õigused“";
 "action_go_to_settings" = "Ava seadistused";
 "action_ignore" = "Eira";
 "action_invite" = "Kutsu";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Täiendavad seadistused";
 "common_an_image" = "pilt";
 "common_analytics" = "Analüütika";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Sa oled jututoast lahkunud";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Sa olid sessioonist väljaloginud";
 "common_appearance" = "Välimus";
@@ -421,7 +421,7 @@
 "leave_room_alert_select_new_owner_title" = "Anna omand üle";
 "leave_room_alert_subtitle" = "Kas sa oled kindel, et soovid sellest jututoast lahkuda?";
 "login_initial_device_name_ios" = "%1$@ iOS";
-"notification_thread_in_room" = "Thread in %1$@";
+"notification_thread_in_room" = "Jutulõng „%1$@“ jututoas";
 "notification_channel_call" = "Kõne";
 "notification_channel_listening_for_events" = "Kontrollime, kas on uusi sündmusi";
 "notification_channel_noisy" = "Lärmakad teavitused";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Sea suhtluskeeld";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Ta ei saa selle jututoaga liituda isegi kutse olemasolul.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Kas sa oled kindel, et soovid sellele kasutajale seada suhtluskeelu?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Seame kasutajale %1$@ suhtluskeelu";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Eemalda";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Kas sa oled kindel, et soovid selle osaleja eemaldada?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Vaata profiili";
 "screen_bottom_sheet_manage_room_member_remove" = "Eemalda kasutaja jututoast";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Kas eemaldama kasutaja ja seame talle tulevikuks suhtluskeelu?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "Kogukond: %1$@";
 "screen_space_list_title" = "Kogukonnad";
+"screen_space_settings_roles_and_permissions" = "Rollid ja õigused";
 "screen_start_chat_join_room_by_address_action" = "Liitu jututoaga aadressi alusel";
 "screen_start_chat_join_room_by_address_invalid_address" = "See pole kehtiv aadress";
 "screen_start_chat_join_room_by_address_placeholder" = "Sisene...";
@@ -1053,7 +1056,7 @@
 "screen_room_member_details_unblock_user" = "Eemalda kasutajalt blokeering";
 "screen_room_member_details_verify_button_subtitle" = "Kasutaja verifitseerimiseks kasuta veebirakendust.";
 "screen_room_member_details_verify_button_title" = "Verifitseeri kasutaja %1$@";
-"screen_room_member_list_banned_empty" = "Jututoas pole suhtluskeeluga kasutajaid";
+"screen_room_member_list_banned_empty" = "Suhtluskeeluga kasutajaid pole";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Ainult eemalda kasutaja";
 "screen_room_member_list_manage_member_unban_action" = "Eemalda suhtluskeeld";
 "screen_room_member_list_manage_member_unban_message" = "Kutse olemasolul saab ta nüüd jututoaga uuesti liituda";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Jututoa aadress";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Kõik";
 "screen_security_and_privacy_room_visibility_section_header" = "Jututoa nähtavus";
+"screen_space_settings_leave_space" = "Lahku kogukonnast";
+"screen_space_settings_security_and_privacy" = "Turvalisus ja privaatsus";
 "screen_account_provider_change" = "Muuda teenusepakkujat";
 "screen_account_provider_signin_subtitle" = "See on koht, kus sinu vestlused elavad – just nagu kasutaksid oma e-kirjade säilitamiseks e-postiteenuse pakkujat.";
 "screen_account_provider_signup_subtitle" = "See on koht, kus sinu vestlused elavad – just nagu kasutaksid oma e-kirjade säilitamiseks e-postiteenuse pakkujat.";

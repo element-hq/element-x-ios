@@ -87,6 +87,7 @@
 "action_forgot_password" = "Glemt passordet?";
 "action_forward" = "Videresend";
 "action_go_back" = "Gå tilbake";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Gå til innstillinger";
 "action_ignore" = "Ignorer";
 "action_invite" = "Inviter";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Avanserte innstillinger";
 "common_an_image" = "et bilde";
 "common_analytics" = "Analyse";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Du forlot rommet";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du ble logget ut av økten";
 "common_appearance" = "Utseende";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Utesteng";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "De vil ikke kunne bli med i dette rommet igjen hvis de blir invitert.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Er du sikker på at du vil utestenge dette medlemmet?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Utestenger %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Fjern";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Er du sikker på at du vil fjerne dette medlemmet?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Vis profil";
 "screen_bottom_sheet_manage_room_member_remove" = "Fjern fra rommet";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Fjerne medlem og utestenge fra å bli med i fremtiden?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ område";
 "screen_space_list_title" = "Områder";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Bli med i rommet med adresse";
 "screen_start_chat_join_room_by_address_invalid_address" = "Ikke en gyldig adresse";
 "screen_start_chat_join_room_by_address_placeholder" = "Gå inn...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Romadresse";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Alle";
 "screen_security_and_privacy_room_visibility_section_header" = "Romsynlighet";
+"screen_space_settings_leave_space" = "Forlat område";
+"screen_space_settings_security_and_privacy" = "Sikkerhet og personvern";
 "screen_account_provider_change" = "Bytt kontotilbyder";
 "screen_account_provider_signin_subtitle" = "Det er her samtalene dine vil ligge - akkurat som du ville brukt en e-postleverandør til å oppbevare e-postene dine.";
 "screen_account_provider_signup_subtitle" = "Det er her samtalene dine vil ligge - akkurat som du ville brukt en e-postleverandør til å oppbevare e-postene dine.";

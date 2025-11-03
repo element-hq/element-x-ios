@@ -87,6 +87,7 @@
 "action_forgot_password" = "گذرواژه را فراموش کردید؟";
 "action_forward" = "پیشروی";
 "action_go_back" = "پس‌روی";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "نادیده‌گرفتن";
 "action_invite" = "دعوت";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "تنظیمات پیش‌رفته";
 "common_an_image" = "an image";
 "common_analytics" = "تجزیه و تحلیل";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "اتاق را ترک کردید";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "ظاهر";
@@ -448,7 +448,7 @@
 "preference_rageshake" = "Rageshake برای گزارش اشکال";
 "rageshake_detection_dialog_content" = "به نظر می‌رسد دارید گوشی خود را به دلیل کار نکردن تکان می‌دهید! آیا می‌خواهید یک اشکال در برنامه گزارش نمایید؟";
 "rich_text_editor_bullet_list" = "تغییر وضعیت سیاههٔ گلوله‌ای";
-"rich_text_editor_close_formatting_options" = "بستن گزینه‌های قالب‌بندی";
+"rich_text_editor_close_formatting_options" = "لغو و بستن قالب‌بندی متن";
 "rich_text_editor_code_block" = "تغییر حالت بلوک کد";
 "rich_text_editor_composer_encrypted_placeholder" = "پیام رمزنگاری شده…";
 "rich_text_editor_composer_placeholder" = "پیام…";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "تحریم";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "در صورت دعوت نمی‌تواند دوباره به اتاق بپیوندد.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "مطمئنید می‌خواهید این عضو را تحریم کنید؟";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "تحریم کردن %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "برداشتن";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "مطمئنید می‌خواهید این عضو را بردارید؟";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "دیدن نمایه";
 "screen_bottom_sheet_manage_room_member_remove" = "برداشتن از اتاق";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "برداشتن عضو و تحریم پیوستن در آینده؟";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "‏%1$@ فضا";
 "screen_space_list_title" = "فضاها";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "پیوستن به اتاق با نشانی";
 "screen_start_chat_join_room_by_address_invalid_address" = "نشانی معتبری نیست";
 "screen_start_chat_join_room_by_address_placeholder" = "ورود…";
@@ -1138,12 +1141,12 @@
 "screen_server_confirmation_title_picker_mode" = "Choose account provider";
 "screen_server_confirmation_title_register" = "دارید روی %1$@ حساب می‌سازید";
 "screen_session_verification_cancelled_subtitle" = "يه چيزي درست به نظر نمياد یا زمان درخواست به پایان رسید یا درخواست رد شد.";
-"screen_session_verification_compare_emojis_subtitle" = "تأیید کنید که ایموجی های زیر با ایموجی های نشان داده شده در جلسه دیگر شما مطابقت دارند.";
+"screen_session_verification_compare_emojis_subtitle" = "تأیید تطابق شکلک‌های زیر با شکلک‌های نشان داده شده روی افزارهٔ دیگرتان.";
 "screen_session_verification_compare_emojis_title" = "مقایسهٔ شکلک‌ها";
 "screen_session_verification_compare_emojis_user_subtitle" = "Confirm that the emojis below match those shown on the other user’s device.";
 "screen_session_verification_compare_numbers_subtitle" = "Confirm that the numbers below match those shown on your other session.";
 "screen_session_verification_compare_numbers_title" = "مقایسهٔ اعداد";
-"screen_session_verification_complete_subtitle" = "اکنون نشست جدیدتان تأیید شده‌. این نشست به پیام‌های رمزنگارش شده‌تان دسترسی داشته و دیگر کاربران مطمئن می‌بینندش.";
+"screen_session_verification_complete_subtitle" = "اکنون می‌توانید روی افزارهٔ دیگرتان با امنیت پیام فرستاده و بخوانید.";
 "screen_session_verification_complete_user_subtitle" = "Now you can trust the identity of this user when sending or receiving messages.";
 "screen_session_verification_enter_recovery_key" = "ورود کلید بازیابی";
 "screen_session_verification_failed_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
@@ -1184,14 +1187,14 @@
 "screen_signed_out_title" = "خارج شده‌اید";
 "screen_signout_confirmation_dialog_content" = "مطمئنید که می‌خواهید از حسابتان خارج شوید؟";
 "screen_signout_in_progress_dialog_content" = "خارج شدن…";
-"screen_signout_key_backup_disabled_subtitle" = "You are about to sign out of your last session. If you sign out now, you will lose access to your encrypted messages.";
+"screen_signout_key_backup_disabled_subtitle" = "دارید از واپسین نشستتان خارج می‌شوید. اگر اکنون خارج شوید پیام‌های رمزنگاشته‌تان را از دست خواهید داد.";
 "screen_signout_key_backup_disabled_title" = "پشتیبان را خاموش کرده‌اید";
 "screen_signout_key_backup_offline_subtitle" = "Your keys were still being backed up when you went offline. Reconnect so that your keys can be backed up before signing out.";
 "screen_signout_key_backup_ongoing_subtitle" = "لطفاً پیش از خروج منتظر پایانش شوید.";
 "screen_signout_key_backup_ongoing_title" = "کلیدهایتان هنوز در حال پشتیبان گیریند";
 "screen_signout_recovery_disabled_subtitle" = "شما در آستانه خروج از آخرین جلسه خود هستید. اگر اکنون از سیستم خارج شوید، دسترسی به پیام های رمزگذاری شده تان را از دست خواهید داد.";
 "screen_signout_recovery_disabled_title" = "بازگردانی برپا نشده";
-"screen_signout_save_recovery_key_subtitle" = "You are about to sign out of your last session. If you sign out now, you might lose access to your encrypted messages.";
+"screen_signout_save_recovery_key_subtitle" = "دارید از واپسین نشستتان خارج می‌شوید. اگر اکنون خارج شوید ممکن است پیام‌های رمزنگاشته‌تان را از دست بدهید.";
 "screen_start_chat_error_starting_chat" = "هنگام تلاش برای شروع چت خطایی روی داد";
 "screen_view_location_title" = "مکان";
 "session_verification_banner_message" = "گویا از افزاره‌ای جدید استفاده می‌کنید. تأیید با افزاره‌ای دیگر برای دسترسی به پیام‌های رمزنگاری شده‌تان.";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "نشانی اتاق";
 "screen_security_and_privacy_room_history_anyone_option_title" = "هرکسی";
 "screen_security_and_privacy_room_visibility_section_header" = "نمایانی اتاق";
+"screen_space_settings_leave_space" = "ترک فضا";
+"screen_space_settings_security_and_privacy" = "امنیت و محرمانگی";
 "screen_account_provider_change" = "تغییر فراهم کنندهٔ حساب";
 "screen_account_provider_signin_subtitle" = "جایی که گفت‌وگوهایتان خواهند زیست — درست مثل استفاده‌تان از فراهم کنندهٔ رایانامه‌ای برای نگه داشتن رایانامه‌هایتان.";
 "screen_account_provider_signup_subtitle" = "جایی که گفت‌وگوهایتان خواهند زیست — درست مثل استفاده‌تان از فراهم کنندهٔ رایانامه‌ای برای نگه داشتن رایانامه‌هایتان.";
@@ -1427,7 +1432,7 @@
 "screen_session_verification_device_verified" = "افزاره تأیید شده";
 "screen_session_verification_request_failure_subtitle" = "Either the request timed out, the request was denied, or there was a verification mismatch.";
 "screen_session_verification_request_failure_title" = "صحت‌سنجی شکست خورد";
-"screen_session_verification_request_success_subtitle" = "اکنون نشست جدیدتان تأیید شده‌. این نشست به پیام‌های رمزنگارش شده‌تان دسترسی داشته و دیگر کاربران مطمئن می‌بینندش.";
+"screen_session_verification_request_success_subtitle" = "اکنون می‌توانید روی افزارهٔ دیگرتان با امنیت پیام فرستاده و بخوانید.";
 "screen_session_verification_request_success_title" = "افزاره تأیید شده";
 "screen_session_verification_waiting_other_device_title" = "Start verification on the other device";
 "screen_signout_confirmation_dialog_submit" = "خروج";

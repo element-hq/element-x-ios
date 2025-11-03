@@ -87,6 +87,7 @@
 "action_forgot_password" = "Забыли пароль?";
 "action_forward" = "Переслать";
 "action_go_back" = "Вернуться";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "Игнорировать";
 "action_invite" = "Пригласить";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Дополнительные настройки";
 "common_an_image" = "изображение";
 "common_analytics" = "Аналитика";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Вы покинули комнату";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Вы вышли из сеанса";
 "common_appearance" = "Внешний вид";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Заблокировать";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Они не смогут снова присоединиться к этой комнате, если их пригласят.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Вы уверены, что хотите заблокировать этого участника?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Блокировка %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Удалить";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Вы действительно хотите удалить этого участника?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Посмотреть профиль";
 "screen_bottom_sheet_manage_room_member_remove" = "Удалить участника из комнаты";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Удалить участника и запретить присоединяться в будущем?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ пространство";
 "screen_space_list_title" = "Пространства";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Присоединиться к комнате по адресу";
 "screen_start_chat_join_room_by_address_invalid_address" = "Недействительный адрес";
 "screen_start_chat_join_room_by_address_placeholder" = "Ввести...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Адрес комнаты";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Любой";
 "screen_security_and_privacy_room_visibility_section_header" = "Видимость комнаты";
+"screen_space_settings_leave_space" = "Покинуть пространство";
+"screen_space_settings_security_and_privacy" = "Безопасность и конфиденциальность";
 "screen_account_provider_change" = "Сменить поставщика учетной записи";
 "screen_account_provider_signin_subtitle" = "Здесь будут храниться ваши разговоры — точно так же, как если бы вы использовали почтового провайдера для хранения своих писем.";
 "screen_account_provider_signup_subtitle" = "Здесь будут храниться ваши разговоры — точно так же, как если бы вы использовали почтового провайдера для хранения своих писем.";

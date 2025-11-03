@@ -87,6 +87,7 @@
 "action_forgot_password" = "Unohditko salasanan?";
 "action_forward" = "Välitä";
 "action_go_back" = "Takaisin";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Siirry asetuksiin";
 "action_ignore" = "Ohita";
 "action_invite" = "Kutsu";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Edistyneet asetukset";
 "common_an_image" = "kuva";
 "common_analytics" = "Analytiikka";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Poistuit huoneesta";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Sinut kirjattiin ulos istunnosta";
 "common_appearance" = "Ulkoasu";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Anna porttikielto";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "He eivät voi enää liittyä tähän huoneeseen, jos heidät kutsutaan.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Haluatko varmasti antaa tälle jäsenelle porttikiellon?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Annetaan porttikieltoa käyttäjälle %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Poista";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Haluatko varmasti poistaa tämän jäsenen?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Näytä profiili";
 "screen_bottom_sheet_manage_room_member_remove" = "Poista huoneesta";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Poistetaanko jäsen huoneesta ja kielletäänkö heitä liittymästä tulevaisuudessa?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ tila";
 "screen_space_list_title" = "Tilat";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Liity huoneeseen osoitteella";
 "screen_start_chat_join_room_by_address_invalid_address" = "Osoite ei ole kelvollinen";
 "screen_start_chat_join_room_by_address_placeholder" = "Syötä...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Huoneen osoite";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Kuka tahansa";
 "screen_security_and_privacy_room_visibility_section_header" = "Huoneen näkyvyys";
+"screen_space_settings_leave_space" = "Poistu tilasta";
+"screen_space_settings_security_and_privacy" = "Turvallisuus ja yksityisyys";
 "screen_account_provider_change" = "Vaihda palveluntarjoajaa";
 "screen_account_provider_signin_subtitle" = "Keskustelusi asuvat täällä — aivan kuten aivan kuten käyttäisit sähköpostipalveluntarjoajaa sähköpostiesi säilyttämiseen.";
 "screen_account_provider_signup_subtitle" = "Keskustelusi asuvat täällä — aivan kuten aivan kuten käyttäisit sähköpostipalveluntarjoajaa sähköpostiesi säilyttämiseen.";

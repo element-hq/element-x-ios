@@ -87,6 +87,7 @@
 "action_forgot_password" = "비밀번호를 잊으셨나요?";
 "action_forward" = "전달";
 "action_go_back" = "뒤로 가기";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "무시하다";
 "action_invite" = "초대";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "고급 설정";
 "common_an_image" = "이미지";
 "common_analytics" = "통계";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "방에서 나갔습니다";
 "common_android_shortcuts_remove_reason_session_logged_out" = "세션에서 로그아웃되었습니다.";
 "common_appearance" = "외관";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "차단";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "초대하더라도 그들은 이 방에 다시 참여할 수 없습니다.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "정말로 이 회원을 차단하시겠습니까?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "차단 %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "제거";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "이 회원을 정말로 제거하시겠습니까?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "프로필 보기";
 "screen_bottom_sheet_manage_room_member_remove" = "방에서 제거";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "회원을 삭제하고 앞으로 가입을 금지하시겠습니까?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@•%2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "스페이스";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "주소로 방에 참가하기";
 "screen_start_chat_join_room_by_address_invalid_address" = "유효한 주소가 아닙니다";
 "screen_start_chat_join_room_by_address_placeholder" = "입력하다...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "방 주소";
 "screen_security_and_privacy_room_history_anyone_option_title" = "누구나";
 "screen_security_and_privacy_room_visibility_section_header" = "방 표시 여부";
+"screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_security_and_privacy" = "보안 및 개인정보 보호";
 "screen_account_provider_change" = "계정 제공자 변경";
 "screen_account_provider_signin_subtitle" = "이곳이 귀하의 대화 공간입니다 — 이메일 제공업체를 사용해 이메일을 관리하는 것처럼 말이죠.";
 "screen_account_provider_signup_subtitle" = "이곳이 귀하의 대화 공간입니다 — 이메일 제공업체를 사용해 이메일을 관리하는 것처럼 말이죠.";

@@ -87,6 +87,7 @@
 "action_forgot_password" = "Zapomněli jste heslo?";
 "action_forward" = "Přeposlat";
 "action_go_back" = "Přejít zpět";
+"action_go_to_roles_and_permissions" = "Přejít na role a oprávnění";
 "action_go_to_settings" = "Přejít do nastavení";
 "action_ignore" = "Ignorovat";
 "action_invite" = "Pozvat";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Pokročilá nastavení";
 "common_an_image" = "obrázek";
 "common_analytics" = "Analytika";
-"common_android_notification_sync_notifications_foreground_service_title" = "Načítání oznámení...";
 "common_android_shortcuts_remove_reason_left_room" = "Opustili jste místnost";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Byli jste odhlášeni z relace";
 "common_appearance" = "Vzhled";
@@ -500,11 +500,13 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Vykázat";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Nebudou se moci znovu připojit k této místnosti, pokud budou pozváni.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Jste si jisti, že chcete vykázat tohoto člena?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Vykazování %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Odebrat";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Opravdu chcete tohoto člena odebrat?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Zobrazit profil";
-"screen_bottom_sheet_manage_room_member_remove" = "Odebrat z místnosti";
+"screen_bottom_sheet_manage_room_member_remove" = "Odebrat uživatele";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Odebrat člena a zakázat mu připojení v budoucnu?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Odstraňování %1$@...";
 "screen_bottom_sheet_manage_room_member_unban" = "Zrušit vykázání z místnosti";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ prostor";
 "screen_space_list_title" = "Prostory";
+"screen_space_settings_roles_and_permissions" = "Role a oprávnění";
 "screen_start_chat_join_room_by_address_action" = "Vstoupit do místnosti pomocí adresy";
 "screen_start_chat_join_room_by_address_invalid_address" = "Neplatná adresa";
 "screen_start_chat_join_room_by_address_placeholder" = "Zadejte...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Adresa místnosti";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Kdokoliv";
 "screen_security_and_privacy_room_visibility_section_header" = "Viditelnost místnosti";
+"screen_space_settings_leave_space" = "Opustit prostor";
+"screen_space_settings_security_and_privacy" = "Zabezpečení a soukromí";
 "screen_account_provider_change" = "Změnit poskytovatele účtu";
 "screen_account_provider_signin_subtitle" = "Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily.";
 "screen_account_provider_signup_subtitle" = "Zde budou uloženy vaše konverzace - podobně jako u poskytovatele e-mailových služeb uchováváte své e-maily.";

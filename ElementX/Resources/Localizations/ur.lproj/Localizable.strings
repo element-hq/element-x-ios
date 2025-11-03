@@ -87,6 +87,7 @@
 "action_forgot_password" = "لفظِ عبور بھول گئے؟";
 "action_forward" = "آگے کریں";
 "action_go_back" = "واپس جائیں";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "Ignore";
 "action_invite" = "مدعو کریں";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "اعلیٰ ترتیبات";
 "common_an_image" = "an image";
 "common_analytics" = "تجزیات";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "You left the room";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "ظہور";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "محظور کریں";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "اگر وہ مدعو کیا گیا تو وہ دوبارہ اس کمرے میں شامل نہیں ہوسکیں گے۔";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "کیا آپ کو یقین ہے کہ آپ اس رکن کو محظور کرنا چاہتے ہیں؟";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "%1$@ کو محظور کر رہا ہے";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Remove";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "نمایہ ملاحظہ کریں";
 "screen_bottom_sheet_manage_room_member_remove" = "کمرے سے ہٹائیں";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "رکن کو ہٹائیں اور مستقبل میں شمولیت پر پابندی لگائیں؟";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Join room by address";
 "screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
 "screen_start_chat_join_room_by_address_placeholder" = "Enter...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Room address";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Anyone";
 "screen_security_and_privacy_room_visibility_section_header" = "Room visibility";
+"screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_security_and_privacy" = "Security & privacy";
 "screen_account_provider_change" = "اکاؤنٹ فراہم کنندہ بدلیں";
 "screen_account_provider_signin_subtitle" = "یہ وہ جگہ ہے جہاں آپ کی گفتگوئیں زندہ رہیں گی — بالکل اسی طرح جیسے آپ اپنی برقی خطوط رکھنے کے لیے برقی ڈاک فراہم کنندہ کا استعمال کرتے ہوں گے۔";
 "screen_account_provider_signup_subtitle" = "یہ وہ جگہ ہے جہاں آپ کی گفتگوئیں زندہ رہیں گی — بالکل اسی طرح جیسے آپ اپنی برقی خطوط رکھنے کے لیے برقی ڈاک فراہم کنندہ کا استعمال کرتے ہوں گے۔";

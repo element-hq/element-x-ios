@@ -87,6 +87,7 @@
 "action_forgot_password" = "Parolanızı mı unuttunuz?";
 "action_forward" = "İleri";
 "action_go_back" = "Geri dön";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "Yoksay";
 "action_invite" = "Davet et";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Gelişmiş Ayarlar";
 "common_an_image" = "an image";
 "common_analytics" = "Analizler";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "You left the room";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Görünüm";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Yasakla";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Davet edilseler bile bu odaya tekrar katılamazlar.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Bu üyeyi yasaklamak istediğinize emin misiniz?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Yasaklanıyor %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Remove";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Profili görüntüle";
 "screen_bottom_sheet_manage_room_member_remove" = "Odadan çıkar";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Üyeyi çıkarın ve gelecekte katılmasını yasaklayın?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Bir adres ile odaya katılın";
 "screen_start_chat_join_room_by_address_invalid_address" = "Geçerli bir adres değil";
 "screen_start_chat_join_room_by_address_placeholder" = "Enter...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Oda adresi";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Herkes";
 "screen_security_and_privacy_room_visibility_section_header" = "Oda görünürlüğü";
+"screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_security_and_privacy" = "Güvenlik ve gizlilik";
 "screen_account_provider_change" = "Hesap sağlayıcısını değiştir";
 "screen_account_provider_signin_subtitle" = "Konuşmalarınızın saklanacağı yer burasıdır - tıpkı e-postalarınızı saklamak için bir e-posta sağlayıcısı kullandığınız gibi.";
 "screen_account_provider_signup_subtitle" = "Konuşmalarınızın saklanacağı yer burasıdır - tıpkı e-postalarınızı saklamak için bir e-posta sağlayıcısı kullandığınız gibi.";

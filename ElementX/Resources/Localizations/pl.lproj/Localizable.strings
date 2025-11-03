@@ -87,6 +87,7 @@
 "action_forgot_password" = "Nie pamiętasz hasła?";
 "action_forward" = "Przekaż dalej";
 "action_go_back" = "Wróć";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Przejdź do ustawień";
 "action_ignore" = "Ignoruj";
 "action_invite" = "Zaproś";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Ustawienia zaawansowane";
 "common_an_image" = "obraz";
 "common_analytics" = "Dane analityczne";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Opuściłeś pokój";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Zostałeś wylogowany z sesji";
 "common_appearance" = "Wygląd";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Zbanuj";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Nie będą mogli ponownie dołączyć do tego pokoju, jeśli zostaną zaproszeni.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Czy na pewno chcesz zbanować tego członka?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Banowanie %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Usuń";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Czy na pewno chcesz usunąć tego członka?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Wyświetl profil";
 "screen_bottom_sheet_manage_room_member_remove" = "Usuń z pokoju";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Usunąć członka i zablokować możliwość dołączenia w przyszłości?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "Przestrzeń %1$@";
 "screen_space_list_title" = "Przestrzenie";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Dołącz do pokoju za pomocą adresu";
 "screen_start_chat_join_room_by_address_invalid_address" = "Nieprawidłowy adres";
 "screen_start_chat_join_room_by_address_placeholder" = "Wprowadź...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Adres pokoju";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Wszyscy";
 "screen_security_and_privacy_room_visibility_section_header" = "Widoczność pomieszczenia";
+"screen_space_settings_leave_space" = "Opuść przestrzeń";
+"screen_space_settings_security_and_privacy" = "Bezpieczeństwo i prywatność";
 "screen_account_provider_change" = "Zmień dostawcę konta";
 "screen_account_provider_signin_subtitle" = "Tutaj będą przechowywane Twoje konwersacje - w podobnej formie jak wiadomości widnieją na skrzynce e-mail.";
 "screen_account_provider_signup_subtitle" = "Tutaj będą przechowywane Twoje konwersacje - w podobnej formie jak wiadomości widnieją na skrzynce e-mail.";

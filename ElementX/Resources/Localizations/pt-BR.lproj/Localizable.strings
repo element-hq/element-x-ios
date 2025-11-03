@@ -87,6 +87,7 @@
 "action_forgot_password" = "Esqueceu a senha?";
 "action_forward" = "Encaminhar";
 "action_go_back" = "Voltar";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "Ignorar";
 "action_invite" = "Convidar";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Configurações avançadas";
 "common_an_image" = "uma imagem";
 "common_analytics" = "Telemetria";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "You left the room";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Aparência";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Banir";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Essa pessoa não poderá entrar nesta sala novamente se for convidada.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Tem certeza de que quer banir este membro?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Banindo %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Remover";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Tem certeza de que deseja remover este membro?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Ver perfil";
 "screen_bottom_sheet_manage_room_member_remove" = "Remover da sala";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Remover membro e banir de entrar novamente no futuro?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Espaços";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Entrar na sala pelo endereço";
 "screen_start_chat_join_room_by_address_invalid_address" = "Não é um endereço válido";
 "screen_start_chat_join_room_by_address_placeholder" = "Digite...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Endereço da sala";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Qualquer pessoa";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilidade da sala";
+"screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_security_and_privacy" = "Segurança e privacidade";
 "screen_account_provider_change" = "Alterar provedor da conta";
 "screen_account_provider_signin_subtitle" = "Aqui é onde suas conversas vão ficar — assim como você usa um provedor de e-mail para guardar seus e-mails.";
 "screen_account_provider_signup_subtitle" = "Aqui é onde suas conversas vão ficar — assim como você usa um provedor de e-mail para guardar seus e-mails.";

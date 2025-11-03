@@ -87,6 +87,7 @@
 "action_forgot_password" = "Glömt lösenordet?";
 "action_forward" = "Vidarebefordra";
 "action_go_back" = "Gå tillbaka";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "Ignorera";
 "action_invite" = "Bjud in";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Avancerade inställningar";
 "common_an_image" = "en bild";
 "common_analytics" = "Analysdata";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Du lämnade rummet";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du loggades ut ur sessionen";
 "common_appearance" = "Utseende";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Banna";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Denne kommer inte att kunna gå med i det här rummet igen om denne bjuds in.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Är du säker på att du vill banna den här medlemmen?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Bannar %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Ta bort";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Är du säker på att du vill ta bort den här medlemmen?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Visa profil";
 "screen_bottom_sheet_manage_room_member_remove" = "Ta bort från rummet";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Ta bort medlem och banna från att gå med i framtiden?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Utrymmen";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Gå med i rum med adress";
 "screen_start_chat_join_room_by_address_invalid_address" = "Inte en giltig adress";
 "screen_start_chat_join_room_by_address_placeholder" = "Ange …";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Rumsadress";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Vem som helst";
 "screen_security_and_privacy_room_visibility_section_header" = "Rumssynlighet";
+"screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_security_and_privacy" = "Säkerhet och sekretess";
 "screen_account_provider_change" = "Byt kontoleverantör";
 "screen_account_provider_signin_subtitle" = "Det är här dina konversationer kommer att sparas - precis som du skulle använda en e-postleverantör för att spara dina e-brev.";
 "screen_account_provider_signup_subtitle" = "Det är här dina konversationer kommer att sparas - precis som du skulle använda en e-postleverantör för att spara dina e-brev.";

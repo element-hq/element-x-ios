@@ -87,6 +87,7 @@
 "action_forgot_password" = "Passwort vergessen?";
 "action_forward" = "Weiterleiten";
 "action_go_back" = "Zurück";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Zu den Einstellungen";
 "action_ignore" = "Ignorieren";
 "action_invite" = "Einladen";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Erweiterte Einstellungen";
 "common_an_image" = "ein Bild";
 "common_analytics" = "Analysedaten";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Du hast den Chat verlassen";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du wurdest aus der Sitzung abgemeldet.";
 "common_appearance" = "Erscheinungsbild";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Sperren";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Sie können diesem Chat auch auf Einladung nicht erneut beitreten.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Möchtest du diesen Nutzer wirklich sperren?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "%1$@ wird gesperrt.";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Entfernen";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Möchtest du dieses Mitglied wirklich entfernen?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Nutzerprofil anzeigen";
 "screen_bottom_sheet_manage_room_member_remove" = "Mitglied entfernen";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Mitglied entfernen und für die Zukunft sperren?";
@@ -654,7 +656,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "Veröffentlichung von Chats";
 "screen_security_and_privacy_room_visibility_section_footer" = "Chat-Adressen machen es möglich, Chats zu finden und ihnen beizutreten. Dies erleichtert es, Chats mit anderen zu teilen.\nDie Adresse ist auch erforderlich, um den Chat im öffentlichen Verzeichnis von %1$@ zu veröffentlichen.";
 "screen_security_and_privacy_title" = "Sicherheit & Datenschutz";
-"screen_space_menu_action_members" = "View members";
+"screen_space_menu_action_members" = "Mitglieder anzeigen";
 "screen_space_announcement_item1" = "Von dir erstellte oder beigetretene Spaces anzeigen";
 "screen_space_announcement_item2" = "Einladungen zu Spaces annehmen oder ablehnen";
 "screen_space_announcement_item3" = "Chats innerhalb deiner Spaces entdecken, um ihnen beizutreten";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ Space";
 "screen_space_list_title" = "Spaces";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Chat per Adresse beitreten";
 "screen_start_chat_join_room_by_address_invalid_address" = "Keine gültige Adresse";
 "screen_start_chat_join_room_by_address_placeholder" = "Eintreten...";
@@ -1053,7 +1056,7 @@
 "screen_room_member_details_unblock_user" = "Blockierung aufheben";
 "screen_room_member_details_verify_button_subtitle" = "Verwende die Web-App, um diesen Nutzer zu verifizieren.";
 "screen_room_member_details_verify_button_title" = "Verifiziere %1$@";
-"screen_room_member_list_banned_empty" = "In diesem Chat gibt es keine gesperrten Nutzer.";
+"screen_room_member_list_banned_empty" = "Es gibt keine gesperrten Nutzer.";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Mitglied nur entfernen";
 "screen_room_member_list_manage_member_unban_action" = "Sperre aufheben";
 "screen_room_member_list_manage_member_unban_message" = "Die Nutzer können dem Chat wieder beitreten, wenn sie eingeladen werden.";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Chat-Adresse";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Jeder";
 "screen_security_and_privacy_room_visibility_section_header" = " Sichtbarkeit des Chats";
+"screen_space_settings_leave_space" = "Space verlassen";
+"screen_space_settings_security_and_privacy" = "Sicherheit & Datenschutz";
 "screen_account_provider_change" = "Kontoanbieter wechseln";
 "screen_account_provider_signin_subtitle" = "Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würden.";
 "screen_account_provider_signup_subtitle" = "Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würden.";
