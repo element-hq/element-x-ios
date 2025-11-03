@@ -54,12 +54,8 @@ struct LoadableAvatarImage: View {
         avatar
             .frame(width: frameSize, height: frameSize)
             .background(Color.compound.bgCanvasDefault)
-            .clipShape(avatarShape)
+            .clipAvatar(isSpace: isSpace, scaledSize: _frameSize)
             .environment(\.shouldAutomaticallyLoadImages, true) // We always load avatars.
-    }
-    
-    private var avatarShape: some Shape {
-        isSpace ? AnyShape(RoundedRectangle(cornerRadius: frameSize / 4)) : AnyShape(Circle())
     }
     
     @ViewBuilder

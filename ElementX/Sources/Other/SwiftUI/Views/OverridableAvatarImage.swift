@@ -14,6 +14,7 @@ struct OverridableAvatarImage: View {
     let url: URL?
     let name: String?
     let contentID: String
+    let isSpace: Bool
     let avatarSize: Avatars.Size
     let mediaProvider: MediaProviderProtocol?
     
@@ -27,13 +28,48 @@ struct OverridableAvatarImage: View {
                 ProgressView()
             }
             .scaledFrame(size: avatarSize.value)
-            .clipShape(Circle())
+            .clipAvatar(isSpace: isSpace, size: avatarSize.value)
         } else {
             LoadableAvatarImage(url: url,
                                 name: name,
                                 contentID: contentID,
+                                isSpace: isSpace,
                                 avatarSize: avatarSize,
                                 mediaProvider: mediaProvider)
         }
+    }
+}
+
+extension View {
+    func clipAvatar(isSpace: Bool, size: CGFloat) -> some View {
+        modifier(ClipAvatarModifier(isSpace: isSpace, size: size))
+    }
+    
+    func clipAvatar(isSpace: Bool, scaledSize: ScaledMetric<CGFloat>) -> some View {
+        modifier(ClipAvatarModifier(isSpace: isSpace, scaledSize: scaledSize))
+    }
+}
+
+struct ClipAvatarModifier: ViewModifier {
+    private let isSpace: Bool
+    @ScaledMetric private var scaledSize: CGFloat
+    
+    init(isSpace: Bool, size: CGFloat) {
+        self.isSpace = isSpace
+        _scaledSize = ScaledMetric(wrappedValue: size)
+    }
+    
+    init(isSpace: Bool, scaledSize: ScaledMetric<CGFloat>) {
+        self.isSpace = isSpace
+        _scaledSize = scaledSize
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .clipShape(avatarShape)
+    }
+    
+    private var avatarShape: some Shape {
+        isSpace ? AnyShape(RoundedRectangle(cornerRadius: scaledSize / 4)) : AnyShape(Circle())
     }
 }
