@@ -87,6 +87,7 @@
 "action_forgot_password" = "Har du glemt din adgangskode?";
 "action_forward" = "Videresend";
 "action_go_back" = "Gå tilbage";
+"action_go_to_roles_and_permissions" = "Gå til roller og rettigheder";
 "action_go_to_settings" = "Gå til indstillinger";
 "action_ignore" = "Ignorér";
 "action_invite" = "Invitér";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Avancerede indstillinger";
 "common_an_image" = "et billede";
 "common_analytics" = "Analyse-værktøj";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Du forlod rummet";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Du blev logget ud af sessionen";
 "common_appearance" = "Udseende";
@@ -421,7 +421,7 @@
 "leave_room_alert_select_new_owner_title" = "Overdrag ejerskab";
 "leave_room_alert_subtitle" = "Er du sikker på, at du ønsker at forlade rummet?";
 "login_initial_device_name_ios" = "%1$@ iOS";
-"notification_thread_in_room" = "Thread in %1$@";
+"notification_thread_in_room" = "Tråd i %1$@";
 "notification_channel_call" = "Opkald";
 "notification_channel_listening_for_events" = "Lytter efter begivenheder";
 "notification_channel_noisy" = "Lyd på notifikationer";
@@ -500,11 +500,13 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Spær";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "De vil ikke være i stand til at deltage i dette rum igen, selv om de inviteres.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Er du stikker på, at du ønsker at spærre dette medlem?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "De vil ikke kunne deltage i gruppen igen, selv hvis de bliver inviteret. Men vil beholde deres medlemskaber i rum og undergrupper.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Spærrer %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Fjern";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Er du sikker på, at du vil fjerne dette medlem?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "De vil kunne deltage i dette rum igen, hvis de bliver inviteret, og de vil stadig beholde deres medlemskaber af eventuelle rum eller sub-grupper.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Se profil";
-"screen_bottom_sheet_manage_room_member_remove" = "Fjern fra rummet";
+"screen_bottom_sheet_manage_room_member_remove" = "Fjern bruger";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Fjern medlem og udeluk dem fra at deltage i fremtiden?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Fjerner %1$@...";
 "screen_bottom_sheet_manage_room_member_unban" = "Fjern brugerens spærring fra rummet";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@•%2$@";
 "screen_space_list_parent_space" = "%1$@ gruppe";
 "screen_space_list_title" = "Grupper";
+"screen_space_settings_roles_and_permissions" = "Roller og rettigheder";
 "screen_start_chat_join_room_by_address_action" = "Tilslut dig rummet med adressen";
 "screen_start_chat_join_room_by_address_invalid_address" = "Ikke en gyldig adresse";
 "screen_start_chat_join_room_by_address_placeholder" = "Indtast...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Rummets adresse";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Enhver";
 "screen_security_and_privacy_room_visibility_section_header" = "Rummets synlighed";
+"screen_space_settings_leave_space" = "Forlad gruppe";
+"screen_space_settings_security_and_privacy" = "Sikkerhed og privatliv";
 "screen_account_provider_change" = "Skift kontoudbyder";
 "screen_account_provider_signin_subtitle" = "Det er her, dine samtaler vil bo - ligesom du ville bruge en e-mail-udbyder til at opbevare dine e-mails.";
 "screen_account_provider_signup_subtitle" = "Det er her, dine samtaler vil bo - ligesom du ville bruge en e-mail-udbyder til at opbevare dine e-mails.";

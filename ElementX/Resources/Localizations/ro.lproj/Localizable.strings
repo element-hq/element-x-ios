@@ -87,6 +87,7 @@
 "action_forgot_password" = "Ați uitat parola?";
 "action_forward" = "Redirecționați";
 "action_go_back" = "Înapoi";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Mergeți la setări";
 "action_ignore" = "Ignorați";
 "action_invite" = "Invitați";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Setări avansate";
 "common_an_image" = "o imagine";
 "common_analytics" = "Analitice";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Ați părăsit camera";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Ați fost deconectat din sesiune.";
 "common_appearance" = "Aspect";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Interzicere";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Nu se vor putea alătura din nou acestei camere dacă sunt invitați.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Sunteți sigur că doriți să interziceți acest membru?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Se interzice %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Îndepărtați";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Sunteți sigur că doriți să îndepărtați acest membru?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Vizualizare profil";
 "screen_bottom_sheet_manage_room_member_remove" = "Înlăturați membrul";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Înlăturați membrul și interziceți-i să se alăture în viitor?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "Spațiu %1$@";
 "screen_space_list_title" = "Spații";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Gasiți o cameră după adresă";
 "screen_start_chat_join_room_by_address_invalid_address" = "Adresa nu e este validă";
 "screen_start_chat_join_room_by_address_placeholder" = "Introduceți...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Adresa camerei";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Oricine";
 "screen_security_and_privacy_room_visibility_section_header" = "Vizibilitatea camerei";
+"screen_space_settings_leave_space" = "Părăsiți spațiul";
+"screen_space_settings_security_and_privacy" = "Securitate & confidențialitate";
 "screen_account_provider_change" = "Schimbați furnizorul contului";
 "screen_account_provider_signin_subtitle" = "Aici vor trăi conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile.";
 "screen_account_provider_signup_subtitle" = "Aici vor trăi conversațiile dvs. - la fel cum ați folosi un furnizor de e-mail pentru a vă păstra e-mailurile.";

@@ -87,6 +87,7 @@
 "action_forgot_password" = "Lupa kata sandi?";
 "action_forward" = "Teruskan";
 "action_go_back" = "Kembali";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "Abaikan";
 "action_invite" = "Undang";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Pengaturan tingkat lanjut";
 "common_an_image" = "sebuah gambar";
 "common_analytics" = "Analitik";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "You left the room";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Penampilan";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Cekal";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Mereka tidak akan dapat bergabung ke ruangan ini lagi jika diundang.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Apakah Anda yakin ingin mencekal anggota ini?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Mencekal %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Hapus";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Apakah Anda yakin ingin menghapus anggota ini?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Tampilkan profil";
 "screen_bottom_sheet_manage_room_member_remove" = "Keluarkan dari ruangan";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Keluarkan pengguna dan cekal pengguna bergabung lagi di masa mendatang?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Bergabung dalam ruangan berdasarkan alamat";
 "screen_start_chat_join_room_by_address_invalid_address" = "Bukan alamat yang valid";
 "screen_start_chat_join_room_by_address_placeholder" = "Masuk...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Alamat ruangan";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Siapa pun";
 "screen_security_and_privacy_room_visibility_section_header" = "Keterlihatan ruangan";
+"screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_security_and_privacy" = "Keamanan & privasi";
 "screen_account_provider_change" = "Ubah penyedia akun";
 "screen_account_provider_signin_subtitle" = "Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda.";
 "screen_account_provider_signup_subtitle" = "Di sinilah percakapan Anda akan berlangsung — sama seperti Anda menggunakan penyedia surel untuk menyimpan surel Anda.";

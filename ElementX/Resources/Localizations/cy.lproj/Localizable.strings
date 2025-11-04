@@ -87,6 +87,7 @@
 "action_forgot_password" = "Wedi anghofio'ch cyfrinair?";
 "action_forward" = "Ymlaen";
 "action_go_back" = "Mynd nôl";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "Anwybyddu";
 "action_invite" = "Gwahodd";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Gosodiadau uwch";
 "common_an_image" = "delwedd";
 "common_analytics" = "Dadansoddeg";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Rydych wedi gadael yr ystafell";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Rydych wedi'ch allgofnodi o'r sesiwn";
 "common_appearance" = "Gwedd";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Atal";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Fyddan nhw ddim yn gallu ymuno â'r ystafell hon eto os cân nhw wahoddiad.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Ydych chi'n siŵr eich bod am wahardd yr aelod hwn?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Yn gwahardd %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Tynnu";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Ydych chi'n siŵr eich bod am ddileu'r aelod hwn?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Gweld proffil";
 "screen_bottom_sheet_manage_room_member_remove" = "Tynnu o'r ystafell";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Dileu aelod a'u gwahardd rhag ymuno yn y dyfodol?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "Gofod %1$@";
 "screen_space_list_title" = "Gofodau";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Ymuno â'r ystafell yn ôl cyfeiriad";
 "screen_start_chat_join_room_by_address_invalid_address" = "Ddim yn gyfeiriad dilys";
 "screen_start_chat_join_room_by_address_placeholder" = "Ewch i mewn...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Cyfeiriad yr ystafell";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Unrhyw un";
 "screen_security_and_privacy_room_visibility_section_header" = "Gwelededd yr ystafell";
+"screen_space_settings_leave_space" = "Gadael y gofod";
+"screen_space_settings_security_and_privacy" = "Diogelwch a phreifatrwydd";
 "screen_account_provider_change" = "Newid darparwr cyfrif";
 "screen_account_provider_signin_subtitle" = "Dyma lle bydd eich sgyrsiau'n byw - yn union fel y byddech chi'n defnyddio darparwr e-bost i gadw'ch e-byst.";
 "screen_account_provider_signup_subtitle" = "Dyma lle bydd eich sgyrsiau'n byw - yn union fel y byddech chi'n defnyddio darparwr e-bost i gadw'ch e-byst.";

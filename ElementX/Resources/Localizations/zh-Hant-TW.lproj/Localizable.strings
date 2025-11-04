@@ -87,6 +87,7 @@
 "action_forgot_password" = "忘記密碼？";
 "action_forward" = "轉寄";
 "action_go_back" = "返回";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "前往設定";
 "action_ignore" = "忽略";
 "action_invite" = "邀請";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "進階設定";
 "common_an_image" = "影像";
 "common_analytics" = "分析";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "您離開了聊天室";
 "common_android_shortcuts_remove_reason_session_logged_out" = "您已登出工作階段";
 "common_appearance" = "外觀";
@@ -421,7 +421,7 @@
 "leave_room_alert_select_new_owner_title" = "轉移所有權";
 "leave_room_alert_subtitle" = "您確定要離開聊天室嗎？";
 "login_initial_device_name_ios" = "%1$@ iOS";
-"notification_thread_in_room" = "Thread in %1$@";
+"notification_thread_in_room" = "在 %1$@ 的討論串";
 "notification_channel_call" = "通話";
 "notification_channel_listening_for_events" = "監聽事件";
 "notification_channel_noisy" = "吵雜通知";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "加入黑名單";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "即使收到邀請，他們仍然無法加入聊天室。";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "您確定要將此成員加入黑名單？";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "正在將 %1$@ 加入黑名單";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "移除";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "您真的想要移除此成員嗎？";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "查看個人檔案";
 "screen_bottom_sheet_manage_room_member_remove" = "踢出聊天室";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "移除成員並禁止未來再度加入？";
@@ -654,7 +656,7 @@
 "screen_security_and_privacy_room_publishing_section_header" = "聊天室發佈";
 "screen_security_and_privacy_room_visibility_section_footer" = "聊天室地址是尋找與存取聊天室的方法。也確保您可以輕鬆與其他人分享聊天室。\n若要讓聊天室在 %1$@ 公開聊天室目錄中可見，地址也是必要的。";
 "screen_security_and_privacy_title" = "安全與隱私";
-"screen_space_menu_action_members" = "View members";
+"screen_space_menu_action_members" = "檢視成員";
 "screen_space_announcement_item1" = "檢視您建立或加入的空間";
 "screen_space_announcement_item2" = "接受或拒絕空間邀請";
 "screen_space_announcement_item3" = "探索空間內您可以加入的任何聊天室";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ 空間";
 "screen_space_list_title" = "空間";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "按地址加入聊天室";
 "screen_start_chat_join_room_by_address_invalid_address" = "不是有效的位址";
 "screen_start_chat_join_room_by_address_placeholder" = "輸入……";
@@ -1053,7 +1056,7 @@
 "screen_room_member_details_unblock_user" = "解除封鎖使用者";
 "screen_room_member_details_verify_button_subtitle" = "使用網頁應用程式以驗證此使用者。";
 "screen_room_member_details_verify_button_title" = "驗證 %1$@";
-"screen_room_member_list_banned_empty" = "此聊天室沒有黑名單。";
+"screen_room_member_list_banned_empty" = "沒有被封鎖的使用者。";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "僅移除成員";
 "screen_room_member_list_manage_member_unban_action" = "解除黑名單";
 "screen_room_member_list_manage_member_unban_message" = "如果收到邀請，他們能再次加入聊天室。";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "聊天室地址";
 "screen_security_and_privacy_room_history_anyone_option_title" = "任何人";
 "screen_security_and_privacy_room_visibility_section_header" = "聊天室能見度";
+"screen_space_settings_leave_space" = "離開空間";
+"screen_space_settings_security_and_privacy" = "安全與隱私";
 "screen_account_provider_change" = "更改帳號提供者";
 "screen_account_provider_signin_subtitle" = "您的所有對話將保存於此，就如同您的電子郵件供應商會保存您的電子郵件一樣。";
 "screen_account_provider_signup_subtitle" = "您的所有對話將保存於此，就如同您的電子郵件供應商會保存您的電子郵件一樣。";

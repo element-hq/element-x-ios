@@ -87,6 +87,7 @@
 "action_forgot_password" = "Mot de passe oublié ?";
 "action_forward" = "Transférer";
 "action_go_back" = "Retour";
+"action_go_to_roles_and_permissions" = "Accédez à l'écran « Rôles et autorisations ».";
 "action_go_to_settings" = "Ouvrir les paramètres";
 "action_ignore" = "Ignorer";
 "action_invite" = "Inviter";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Paramètres avancés";
 "common_an_image" = "une image";
 "common_analytics" = "Statistiques d’utilisation";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Vous avez quitter le salon";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Vous avez été déconnecté de la session";
 "common_appearance" = "Apparence";
@@ -421,7 +421,7 @@
 "leave_room_alert_select_new_owner_title" = "Transférer la propriété";
 "leave_room_alert_subtitle" = "Êtes-vous sûr de vouloir quitter le salon ?";
 "login_initial_device_name_ios" = "%1$@ iOS";
-"notification_thread_in_room" = "Thread in %1$@";
+"notification_thread_in_room" = "Discussion dans %1$@";
 "notification_channel_call" = "Appel";
 "notification_channel_listening_for_events" = "À l’écoute des événements";
 "notification_channel_noisy" = "Notifications bruyantes";
@@ -500,11 +500,13 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Bannir";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Ce compte ne pourra pas rejoindre le salon à nouveau, même si il est invité.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Êtes-vous certain de vouloir bannir ce membre ?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "L'utilisateur ne pourra plus accéder à cet espace même sur invitation, mais il restera membre de tous les salons et sous-espaces dont il est déjà membre.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Bannissement de %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Retirer";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Voulez-vous vraiment supprimer ce membre ?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "L'utilisateur pourra rejoindre cet espace à nouveau s'il y est invité, et il restera membre de tous les salons et sous-espaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Voir le profil";
-"screen_bottom_sheet_manage_room_member_remove" = "Retirer le membre du salon";
+"screen_bottom_sheet_manage_room_member_remove" = "Exclure ce membre";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Retirer le membre et interdire l'adhésion à l'avenir ?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Enlever %1$@…";
 "screen_bottom_sheet_manage_room_member_unban" = "Débannir du salon";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "Espace %1$@";
 "screen_space_list_title" = "Espaces";
+"screen_space_settings_roles_and_permissions" = "Rôles et autorisations";
 "screen_start_chat_join_room_by_address_action" = "Saisir une adresse de salon";
 "screen_start_chat_join_room_by_address_invalid_address" = "Ce n'est pas une adresse valide";
 "screen_start_chat_join_room_by_address_placeholder" = "Saisir…";
@@ -1053,7 +1056,7 @@
 "screen_room_member_details_unblock_user" = "Débloquer l’utilisateur";
 "screen_room_member_details_verify_button_subtitle" = "Utilisez l'application Web pour vérifier cet utilisateur.";
 "screen_room_member_details_verify_button_title" = "Vérifier %1$@";
-"screen_room_member_list_banned_empty" = "Il n’y a pas d’utilisateur banni dans ce salon.";
+"screen_room_member_list_banned_empty" = "Il n’y a pas d’utilisateur banni.";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Retirer le membre uniquement";
 "screen_room_member_list_manage_member_unban_action" = "Débannir";
 "screen_room_member_list_manage_member_unban_message" = "Il pourra rejoindre le salon à nouveau si il est invité.";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Adresse du salon";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Tout le monde";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilité du salon";
+"screen_space_settings_leave_space" = "Quitter l’espace";
+"screen_space_settings_security_and_privacy" = "Sécurité & confidentialité";
 "screen_account_provider_change" = "Changer de fournisseur de compte";
 "screen_account_provider_signin_subtitle" = "C’est ici que vos conversations seront enregistrées, comme vous le feriez avec un fournisseur de messagerie pour conserver vos e-mails.";
 "screen_account_provider_signup_subtitle" = "C’est ici que vos conversations seront enregistrées, comme vous le feriez avec un fournisseur de messagerie pour conserver vos e-mails.";

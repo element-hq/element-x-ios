@@ -87,6 +87,7 @@
 "action_forgot_password" = "Password dimenticata?";
 "action_forward" = "Inoltra";
 "action_go_back" = "Indietro";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "Ignora";
 "action_invite" = "Invita";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Impostazioni avanzate";
 "common_an_image" = "un'immagine";
 "common_analytics" = "Statistiche di utilizzo";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "Hai lasciato la stanza";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Sei stato disconnesso dalla sessione";
 "common_appearance" = "Aspetto";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Escludi";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Non potrà entrare nuovamente in questa stanza se invitato.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Vuoi davvero escludere questo membro?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Esclusione di %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Rimuovi";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Sei sicuro di voler rimuovere questo membro?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Visualizza profilo";
 "screen_bottom_sheet_manage_room_member_remove" = "Rimuovi dalla stanza";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Rimuovere e vietare l'accesso in futuro?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spazi";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Accedi alla stanza tramite indirizzo";
 "screen_start_chat_join_room_by_address_invalid_address" = "Indirizzo non valido";
 "screen_start_chat_join_room_by_address_placeholder" = "Inserisci...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Indirizzo della stanza";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Chiunque";
 "screen_security_and_privacy_room_visibility_section_header" = "Visibilità della stanza";
+"screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_security_and_privacy" = "Sicurezza e privacy";
 "screen_account_provider_change" = "Cambia fornitore dell'account";
 "screen_account_provider_signin_subtitle" = "Qui è dove vivranno le tue conversazioni — proprio come useresti un fornitore di posta elettronica per conservare le tue email.";
 "screen_account_provider_signup_subtitle" = "Qui è dove vivranno le tue conversazioni — proprio come useresti un fornitore di posta elettronica per conservare le tue email.";

@@ -87,6 +87,7 @@
 "action_forgot_password" = "Zabudnuté heslo?";
 "action_forward" = "Preposlať";
 "action_go_back" = "Ísť späť";
+"action_go_to_roles_and_permissions" = "Prejsť na roly a oprávnenia";
 "action_go_to_settings" = "Prejsť na nastavenia";
 "action_ignore" = "Ignorovať";
 "action_invite" = "Pozvať";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Pokročilé nastavenia";
 "common_an_image" = "obrázok";
 "common_analytics" = "Analytika";
-"common_android_notification_sync_notifications_foreground_service_title" = "Načítavajú sa upozornenia...";
 "common_android_shortcuts_remove_reason_left_room" = "Opustili ste miestnosť";
 "common_android_shortcuts_remove_reason_session_logged_out" = "Boli ste odhlásení zo relácie.";
 "common_appearance" = "Vzhľad";
@@ -500,11 +500,13 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Zakázať";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "Nebudú sa môcť pripojiť k tejto miestnosti znova ani ak budú pozvaní.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Ste si istý, že chcete zakázať tohto člena?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "Ak dostanú pozvánku, nebudú sa môcť k tomuto priestoru znova pripojiť, ale stále si ponechajú členstvo vo všetkých miestnostiach alebo podpriestoroch.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "Zakazuje sa %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Odstrániť";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Ste si istý, že chcete odstrániť tohto člena?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "Ak dostanú pozvánku, budú sa môcť k tomuto priestoru znova pripojiť a stále si ponechajú členstvo vo všetkých miestnostiach alebo podpriestoroch.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Zobraziť profil";
-"screen_bottom_sheet_manage_room_member_remove" = "Odstrániť z miestnosti";
+"screen_bottom_sheet_manage_room_member_remove" = "Odstrániť používateľa";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Odstrániť člena a zakázať vstup v budúcnosti?";
 "screen_bottom_sheet_manage_room_member_removing_user" = "Odstraňuje sa %1$@…";
 "screen_bottom_sheet_manage_room_member_unban" = "Zrušiť zákaz prístupu do miestnosti";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ priestor";
 "screen_space_list_title" = "Priestory";
+"screen_space_settings_roles_and_permissions" = "Roly a oprávnenia";
 "screen_start_chat_join_room_by_address_action" = "Pripojte sa do miestnosti podľa adresy";
 "screen_start_chat_join_room_by_address_invalid_address" = "Neplatná adresa";
 "screen_start_chat_join_room_by_address_placeholder" = "Zadajte...";
@@ -1053,7 +1056,7 @@
 "screen_room_member_details_unblock_user" = "Odblokovať používateľa";
 "screen_room_member_details_verify_button_subtitle" = "Použite webovú aplikáciu na overenie tohto používateľa.";
 "screen_room_member_details_verify_button_title" = "Overiť %1$@";
-"screen_room_member_list_banned_empty" = "V tejto miestnosti nie sú žiadni zakázaní používatelia.";
+"screen_room_member_list_banned_empty" = "Neexistujú žiadni zablokovaní používatelia.";
 "screen_room_member_list_manage_member_remove_confirmation_kick" = "Iba odstrániť člena";
 "screen_room_member_list_manage_member_unban_action" = "Zrušiť zákaz";
 "screen_room_member_list_manage_member_unban_message" = "V prípade pozvania sa budú môcť znova pripojiť k tejto miestnosti.";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Adresa miestnosti";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Ktokoľvek";
 "screen_security_and_privacy_room_visibility_section_header" = "Viditeľnosť miestnosti";
+"screen_space_settings_leave_space" = "Opustiť priestor";
+"screen_space_settings_security_and_privacy" = "Bezpečnosť a súkromie";
 "screen_account_provider_change" = "Zmeniť poskytovateľa účtu";
 "screen_account_provider_signin_subtitle" = "Tu budú žiť vaše konverzácie - podobne ako používate poskytovateľa e-mailových služieb na uchovávanie e-mailov.";
 "screen_account_provider_signup_subtitle" = "Tu budú žiť vaše konverzácie - podobne ako používate poskytovateľa e-mailových služieb na uchovávanie e-mailov.";

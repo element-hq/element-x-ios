@@ -87,6 +87,7 @@
 "action_forgot_password" = "დაგავიწყდათ პაროლი?";
 "action_forward" = "გადაგზავნა";
 "action_go_back" = "დაბრუნება";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "Ignore";
 "action_invite" = "მოწვევა";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "გაფართოებული პარამეტრები";
 "common_an_image" = "an image";
 "common_analytics" = "ანალიტიკა";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "You left the room";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "გარეგნობა";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "დაბლოკვა";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "მოწვევის შემთხვევაში ამ ოთახში კვლავ გაწევრიანებას ვერ შეძლებენ.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "დარწმუნებული ხართ, რომ ამ წევრის დაბლოკვა გსურთ?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "%1$@-ს დაბლოკვა";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Remove";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "პროფილის ნახვა";
 "screen_bottom_sheet_manage_room_member_remove" = "ოთახიდან გაგდება";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "გსურთ წევრის გაგდება და მომავალში გაწევრიანების აკრძალვა?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Join room by address";
 "screen_start_chat_join_room_by_address_invalid_address" = "Not a valid address";
 "screen_start_chat_join_room_by_address_placeholder" = "Enter...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Room address";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Anyone";
 "screen_security_and_privacy_room_visibility_section_header" = "Room visibility";
+"screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_security_and_privacy" = "Security & privacy";
 "screen_account_provider_change" = "შეცვალეთ ანგარიშის მომწოდებელი";
 "screen_account_provider_signin_subtitle" = "აქ იქნება თქვენი საუბრები - ისევე, როგორც თქვენ ელ. ფოსტაში ინახება თქვენი ელ.წერილები.";
 "screen_account_provider_signup_subtitle" = "აქ იქნება თქვენი საუბრები - ისევე, როგორც თქვენ ელ. ფოსტაში ინახება თქვენი ელ.წერილები.";

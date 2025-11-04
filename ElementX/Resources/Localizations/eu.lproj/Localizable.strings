@@ -87,6 +87,7 @@
 "action_forgot_password" = "Pasahitza ahaztu duzu?";
 "action_forward" = "Birbidali";
 "action_go_back" = "Joan atzera";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "Ezikusi";
 "action_invite" = "Gonbidatu";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "Ezarpen aurreratuak";
 "common_an_image" = "irudia";
 "common_analytics" = "Estatistikak";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "You left the room";
 "common_android_shortcuts_remove_reason_session_logged_out" = "You were logged out of the session";
 "common_appearance" = "Itxura";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "Ezarri debekua";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "They won’t be able to join again if invited.";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "Ziur kide honi debekua ezarri nahi diozula?";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "%1$@(r)i debekua ezartzen";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "Kendu";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "Are you sure you want to remove this member?";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "Ikusi profila";
 "screen_bottom_sheet_manage_room_member_remove" = "Kendu gelatik";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "Kidea kendu eta etorkizunean sartzea debekatu?";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "Spaces";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Join room by address";
 "screen_start_chat_join_room_by_address_invalid_address" = "Ez da baliozko helbidea";
 "screen_start_chat_join_room_by_address_placeholder" = "Sartu…";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "Gelaren helbidea";
 "screen_security_and_privacy_room_history_anyone_option_title" = "Edonork";
 "screen_security_and_privacy_room_visibility_section_header" = "Gelaren ikusgarritasuna";
+"screen_space_settings_leave_space" = "Leave space";
+"screen_space_settings_security_and_privacy" = "Segurtasuna eta pribatutasuna";
 "screen_account_provider_change" = "Aldatu kontu-hornitzailea";
 "screen_account_provider_signin_subtitle" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";
 "screen_account_provider_signup_subtitle" = "This is where your conversations will live — just like you would use an email provider to keep your emails.";

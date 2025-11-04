@@ -87,6 +87,7 @@
 "action_forgot_password" = "忘记密码？";
 "action_forward" = "转发";
 "action_go_back" = "返回";
+"action_go_to_roles_and_permissions" = "Go to roles & permissions";
 "action_go_to_settings" = "Go to settings";
 "action_ignore" = "忽略";
 "action_invite" = "邀请";
@@ -174,7 +175,6 @@
 "common_advanced_settings" = "高级设置";
 "common_an_image" = "一张图片";
 "common_analytics" = "分析";
-"common_android_notification_sync_notifications_foreground_service_title" = "Fetching notifications...";
 "common_android_shortcuts_remove_reason_left_room" = "你离开了聊天室";
 "common_android_shortcuts_remove_reason_session_logged_out" = "您已被注销当前会话";
 "common_appearance" = "外观";
@@ -500,9 +500,11 @@
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_action" = "封禁";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_description" = "即使受到邀请，他们也无法再次加入聊天室。";
 "screen_bottom_sheet_manage_room_member_ban_member_confirmation_title" = "您确定要封禁该成员吗？";
+"screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description" = "They won’t be able to join this space again if invited, but they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_banning_user" = "封禁 %1$@";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_action" = "移除";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_title" = "您确定要移除此成员吗？";
+"screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description" = "They will be able to join this space again if invited, and they’ll still keep their memberships of any rooms or subspaces.";
 "screen_bottom_sheet_manage_room_member_member_user_info" = "查看个人资料";
 "screen_bottom_sheet_manage_room_member_remove" = "从聊天室移除";
 "screen_bottom_sheet_manage_room_member_remove_confirmation_title" = "删除成员并禁止重新加入？";
@@ -667,6 +669,7 @@
 "screen_space_list_details" = "%1$@ • %2$@";
 "screen_space_list_parent_space" = "%1$@ space";
 "screen_space_list_title" = "空间";
+"screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "输入地址加入房间";
 "screen_start_chat_join_room_by_address_invalid_address" = "地址无效";
 "screen_start_chat_join_room_by_address_placeholder" = "输入...";
@@ -1359,6 +1362,8 @@
 "screen_security_and_privacy_room_address_section_header" = "房间地址";
 "screen_security_and_privacy_room_history_anyone_option_title" = "任何人";
 "screen_security_and_privacy_room_visibility_section_header" = "房间可见性";
+"screen_space_settings_leave_space" = "离开空间";
+"screen_space_settings_security_and_privacy" = "安全与隐私";
 "screen_account_provider_change" = "更改账户提供方";
 "screen_account_provider_signin_subtitle" = "这是您的对话将存在的地方，就像您使用电子邮件提供方来保存电子邮件一样。";
 "screen_account_provider_signup_subtitle" = "这是您的对话将存在的地方，就像您使用电子邮件提供方来保存电子邮件一样。";
