@@ -347,6 +347,7 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             return
         }
         
+        let eventID = appSettings.focusEventOnNotificationTap ? content.eventID : nil
         if content.categoryIdentifier == NotificationConstants.Category.invite {
             if let userSession {
                 userSession.clientProxy.roomsToAwait.insert(roomID)
@@ -355,8 +356,8 @@ class AppCoordinator: AppCoordinatorProtocol, AuthenticationFlowCoordinatorDeleg
             }
             handleAppRoute(.room(roomID: roomID, via: []))
         } else if appSettings.threadsEnabled, let threadRootEventID = content.threadRootEventID {
-            handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: content.eventID))
-        } else if let eventID = content.eventID {
+            handleAppRoute(.thread(roomID: roomID, threadRootEventID: threadRootEventID, focusEventID: eventID))
+        } else if let eventID {
             handleAppRoute(.event(eventID: eventID, roomID: roomID, via: []))
         } else {
             handleAppRoute(.room(roomID: roomID, via: []))
