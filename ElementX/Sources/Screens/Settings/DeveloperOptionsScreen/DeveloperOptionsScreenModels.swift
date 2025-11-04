@@ -43,6 +43,7 @@ protocol DeveloperOptionsProtocol: AnyObject {
     var enableOnlySignedDeviceIsolationMode: Bool { get set }
     var enableKeyShareOnInvite: Bool { get set }
     var hideQuietNotificationAlerts: Bool { get set }
+    var focusEventOnNotificationTap: Bool { get set }
     
     var hideUnreadMessagesBadge: Bool { get set }
     var elementCallBaseURLOverride: URL? { get set }

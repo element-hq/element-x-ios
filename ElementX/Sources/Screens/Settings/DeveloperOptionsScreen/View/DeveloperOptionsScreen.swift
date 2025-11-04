@@ -121,6 +121,9 @@ struct DeveloperOptionsScreen: View {
                     Text("Hide quiet alerts")
                     Text("The badge count will still be updated")
                 }
+                Toggle(isOn: $context.focusEventOnNotificationTap) {
+                    Text("Focus event on notification tap")
+                }
             }
             
             Section {
