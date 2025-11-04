@@ -9,8 +9,9 @@
 import Foundation
 import MatrixRustSDK
 
-class LeaveSpaceHandleProxy: Identifiable {
+final class LeaveSpaceHandleProxy {
     let id: String
+    let spaceName: String
     var rooms: [LeaveSpaceRoomDetails]
     
     enum Mode { case manyRooms, onlyAdminRooms, noRooms, lastSpaceAdmin }
@@ -27,6 +28,7 @@ class LeaveSpaceHandleProxy: Identifiable {
         
         let rooms = leaveHandle.rooms()
         let space = rooms.first { $0.spaceRoom.roomId == spaceID }
+        spaceName = space?.spaceRoom.displayName ?? id
         
         self.rooms = rooms
             .compactMap { room in
@@ -49,6 +51,25 @@ class LeaveSpaceHandleProxy: Identifiable {
         } else {
             .manyRooms
         }
+    }
+    
+    func deselectAll() {
+        for room in rooms {
+            room.isSelected = false
+        }
+    }
+    
+    func selectAll() {
+        for room in rooms where !room.isLastAdmin {
+            room.isSelected = true
+        }
+    }
+    
+    func toggleRoom(roomID: String) {
+        guard let room = rooms.first(where: { $0.spaceRoomProxy.id == roomID }) else {
+            return
+        }
+        room.isSelected.toggle()
     }
     
     func leave() async -> Result<Void, SpaceServiceProxyError> {

@@ -25,8 +25,8 @@ struct SpaceScreen: View {
         .navigationTitle(context.viewState.space.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
-        .sheet(item: $context.leaveHandle) { leaveHandle in
-            LeaveSpaceView(context: context, leaveHandle: leaveHandle)
+        .sheet(item: $context.leaveSpaceViewModel) { leaveSpaceViewModel in
+            LeaveSpaceView(context: leaveSpaceViewModel.context)
         }
     }
     
