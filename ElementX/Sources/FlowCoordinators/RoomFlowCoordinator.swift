@@ -693,11 +693,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                      sendHandle: sendHandle))
                 case .presentKnockRequestsList:
                     stateMachine.tryEvent(.presentKnockRequestsListScreen)
-                case .presentThread(let itemID):
-                    guard let threadRootEventID = itemID.eventID else {
-                        fatalError("A thread root has always an eventID")
-                    }
-                    stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: nil))
+                case .presentThread(let threadRootEventID, let focussedEventID):
+                    stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focussedEventID))
                 case .presentRoom(let roomID, let via):
                     stateMachine.tryEvent(.startChildFlow(roomID: roomID,
                                                           via: via,

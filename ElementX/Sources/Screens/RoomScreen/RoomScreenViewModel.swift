@@ -85,11 +85,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .tappedPinnedEventsBanner:
-            analyticsService.trackInteraction(name: .PinnedMessageBannerClick)
-            if let eventID = state.pinnedEventsBannerState.selectedPinnedEventID {
-                actionsSubject.send(.focusEvent(eventID: eventID))
-            }
-            state.pinnedEventsBannerState.previousPin()
+            handleTappedPinnedEventsBanner()
         case .viewAllPins:
             analyticsService.trackInteraction(name: .PinnedMessageBannerViewAllButton)
             actionsSubject.send(.displayPinnedEventsTimeline)
@@ -400,6 +396,26 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return failedIDs
         }
         state.handledEventIDs.subtract(failedIDs)
+    }
+    
+    private func handleTappedPinnedEventsBanner() {
+        analyticsService.trackInteraction(name: .PinnedMessageBannerClick)
+        if let eventID = state.pinnedEventsBannerState.selectedPinnedEventID {
+            Task {
+                switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
+                case .success(let event):
+                    if appSettings.threadsEnabled,
+                       let threadRootEventID = event.threadRootEventId() {
+                        actionsSubject.send(.displayThread(threadRootEventID: threadRootEventID, focussedEventID: eventID))
+                    } else {
+                        actionsSubject.send(.focusEvent(eventID: eventID))
+                    }
+                case .failure:
+                    userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+                }
+            }
+        }
+        state.pinnedEventsBannerState.previousPin()
     }
     
     // MARK: Loading indicators

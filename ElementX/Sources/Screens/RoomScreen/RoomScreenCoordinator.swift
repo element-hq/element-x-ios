@@ -47,7 +47,7 @@ enum RoomScreenCoordinatorAction {
     case presentPinnedEventsTimeline
     case presentResolveSendFailure(failure: TimelineItemSendFailure.VerifiedUser, sendHandle: SendHandleProxy)
     case presentKnockRequestsList
-    case presentThread(itemID: TimelineItemIdentifier)
+    case presentThread(threadRootEventID: String, focussedEventID: String?)
     case presentRoom(roomID: String, via: [String])
 }
 
@@ -142,7 +142,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 case .displayResolveSendFailure(let failure, let sendHandle):
                     actionsSubject.send(.presentResolveSendFailure(failure: failure, sendHandle: sendHandle))
                 case .displayThread(let itemID):
-                    actionsSubject.send(.presentThread(itemID: itemID))
+                    guard let eventID = itemID.eventID else {
+                        fatalError("A thread root has always an eventID")
+                    }
+                    actionsSubject.send(.presentThread(threadRootEventID: eventID, focussedEventID: nil))
                 case .composer(let action):
                     composerViewModel.process(timelineAction: action)
                 case .hasScrolled(direction: let direction):
@@ -184,6 +187,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentRoom(roomID: roomID, via: via))
                 case .displayMessageForwarding(let forwardingItem):
                     actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
+                case .displayThread(threadRootEventID: let threadRootEventID, focussedEventID: let focussedEventID):
+                    actionsSubject.send(.presentThread(threadRootEventID: threadRootEventID, focussedEventID: focussedEventID))
                 }
             }
             .store(in: &cancellables)
