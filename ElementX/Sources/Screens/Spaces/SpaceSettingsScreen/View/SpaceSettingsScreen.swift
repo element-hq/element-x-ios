@@ -22,6 +22,9 @@ struct SpaceSettingsScreen: View {
         }
         .compoundList()
         .navigationTitle(L10n.commonSettings)
+        .sheet(item: $context.leaveSpaceViewModel) { viewModel in
+            LeaveSpaceView(context: viewModel.context)
+        }
     }
     
     private var editSection: some View {

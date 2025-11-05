@@ -123,8 +123,6 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             actionsSubject.send(.displayMembers(roomProxy: roomProxy))
         case .spaceSettings(let roomProxy):
             actionsSubject.send(.displaySpaceSettings(roomProxy: roomProxy))
-        case .rolesAndPermissions:
-            break // Not implemented yet
         }
     }
     

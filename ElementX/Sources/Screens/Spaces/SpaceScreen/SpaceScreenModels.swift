@@ -47,6 +47,5 @@ enum SpaceScreenViewAction {
     case spaceAction(SpaceRoomCell.Action)
     case leaveSpace
     case spaceSettings(roomProxy: JoinedRoomProxyProtocol)
-    case rolesAndPermissions
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
 }

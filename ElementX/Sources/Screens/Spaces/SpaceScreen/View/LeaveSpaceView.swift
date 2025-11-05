@@ -178,7 +178,7 @@ struct LeaveSpaceView_Previews: PreviewProvider, TestablePreview {
         let leaveHandle = LeaveSpaceHandleProxy(spaceID: spaceRoomProxy.id,
                                                 leaveHandle: LeaveSpaceHandleSDKMock(.init(rooms: rooms)))
         
-        return LeaveSpaceViewModel(spaceName: "Space",
+        return LeaveSpaceViewModel(spaceName: spaceRoomProxy.name,
                                    canEditRolesAndPermissions: true,
                                    leaveHandle: leaveHandle,
                                    userIndicatorController: UserIndicatorControllerMock(),

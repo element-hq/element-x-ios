@@ -172,6 +172,9 @@ struct RoomDetailsScreenViewStateBindings {
     
     /// A media item that will be previewed with QuickLook.
     var mediaPreviewItem: MediaPreviewItem?
+    
+    /// The view model used to display the leave space sheet, will only be used if the room is a space.
+    var leaveSpaceViewModel: LeaveSpaceViewModel?
 }
 
 struct LeaveRoomAlertItem: AlertProtocol {
