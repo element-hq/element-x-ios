@@ -182,25 +182,32 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentSpaceSettings(animated: Bool) {
-        let coordinator = SpaceSettingsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                           userSession: flowParameters.userSession,
-                                                                           analyticsService: flowParameters.analytics,
-                                                                           userIndicator: flowParameters.userIndicatorController,
-                                                                           notificationSettingsProxy: flowParameters.userSession.clientProxy.notificationSettings,
-                                                                           attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
-                                                                           appSettings: flowParameters.appSettings))
+        let coordinator = RoomDetailsScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                         userSession: flowParameters.userSession,
+                                                                         analyticsService: flowParameters.analytics,
+                                                                         userIndicatorController: flowParameters.userIndicatorController,
+                                                                         notificationSettings: flowParameters.userSession.clientProxy.notificationSettings,
+                                                                         attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
+                                                                         appSettings: flowParameters.appSettings))
         
-        coordinator.actionsPublisher.sink { [weak self] action in
+        coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
-            case .presentEditDetailsScreen:
+            case .presentRoomDetailsEditScreen:
                 stateMachine.tryEvent(.presentEditDetailsScreen)
             case .presentSecurityAndPrivacyScreen:
                 stateMachine.tryEvent(.presentSecurityAndPrivacyScreen)
-            case .presentMembersListScreen:
+            case .presentRoomMembersList:
                 stateMachine.tryEvent(.startMembersListFlow)
             case .presentRolesAndPermissionsScreen:
                 stateMachine.tryEvent(.startRolesAndPermissionsFlow)
+            case .leftRoom:
+                break // TODO:
+            case .presentRecipientDetails, .presentNotificationSettingsScreen, .transferOwnership,
+                 .presentInviteUsersScreen, .presentPollsHistory, .presentCall,
+                 .presentPinnedEventsTimeline, .presentMediaEventsTimeline, .presentKnockingRequestsListScreen,
+                 .presentReportRoomScreen:
+                fatalError("Not handled in the space context")
             }
         }
         .store(in: &cancellables)
