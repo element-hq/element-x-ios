@@ -59,14 +59,11 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private let roomProxy: JoinedRoomProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
+    private let initialCoordinator: CoordinatorProtocol?
     private let flowParameters: CommonFlowParameters
     
     private let stateMachine: StateMachine<State, Event>
     private var cancellables = Set<AnyCancellable>()
-    private var modalNavigationStackCoordinator: NavigationStackCoordinator?
-    
-    private var membersFlowCoordinator: RoomMembersFlowCoordinator?
-    private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?
     
     private var membersFlowCoordinator: RoomMembersFlowCoordinator?
     private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?
@@ -82,6 +79,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         self.roomProxy = roomProxy
         self.flowParameters = flowParameters
         self.navigationStackCoordinator = navigationStackCoordinator
+        initialCoordinator = navigationStackCoordinator.stackCoordinators.last ?? navigationStackCoordinator.rootCoordinator
         
         stateMachine = .init(state: .initial)
         configureStateMachine()
@@ -99,11 +97,9 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         switch stateMachine.state {
         case .initial:
             break
-        case .spaceSettings:
-            navigationStackCoordinator.pop(animated: animated)
-        case .securityAndPrivacy:
-            navigationStackCoordinator.pop(animated: animated)
-            clearRoute(animated: animated)
+        case .spaceSettings, .securityAndPrivacy:
+            guard let initialCoordinator else { return }
+            navigationStackCoordinator.pop(to: initialCoordinator, animated: animated)
         case .editDetailsScreen, .editAddress:
             navigationStackCoordinator.setSheetCoordinator(nil, animated: animated)
             clearRoute(animated: animated)

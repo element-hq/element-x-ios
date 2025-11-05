@@ -59,6 +59,8 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     private let entryPoint: RoomMembersFlowCoordinatorEntryPoint
     private let roomProxy: JoinedRoomProxyProtocol
     private let navigationStackCoordinator: NavigationStackCoordinator
+    /// The last coordinator in the `navigationStackCoordinator` stack at the initial state
+    private let initialCoordinator: CoordinatorProtocol?
     private let flowParameters: CommonFlowParameters
     
     private let stateMachine: StateMachine<State, Event>
@@ -79,8 +81,9 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
         self.roomProxy = roomProxy
         self.flowParameters = flowParameters
         self.navigationStackCoordinator = navigationStackCoordinator
+        initialCoordinator = navigationStackCoordinator.stackCoordinators.last ?? navigationStackCoordinator.rootCoordinator
         
-        stateMachine = .init(state: .initial)
+        stateMachine = flowParameters.stateMachineFactory.makeMembersFlowStateMachine(state: .initial)
         configureStateMachine()
     }
     
@@ -123,14 +126,21 @@ final class RoomMembersFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func clearRoute(animated: Bool) {
-        if stateMachine.state == .inviteUsersScreen {
+        switch stateMachine.state {
+        case .inviteUsersScreen:
             navigationStackCoordinator.setSheetCoordinator(nil, animated: animated)
-        } else if let roomFlowCoordinator {
-            roomFlowCoordinator.clearRoute(animated: animated)
+            clearRoute(animated: animated)
+        case .roomFlow:
+            roomFlowCoordinator?.clearRoute(animated: animated)
+            clearRoute(animated: animated)
+        case .initial:
+            break
+        case .roomMemberDetails, .roomMembersList, .userProfile:
+            guard let initialCoordinator else {
+                return
+            }
+            navigationStackCoordinator.pop(to: initialCoordinator, animated: animated)
         }
-        // We don't support dismissing a sub flow by itself, only the entire chain.
-        // The presenter flow will take care of dismissing it
-        actionsSubject.send(.finished)
     }
     
     private func configureStateMachine() {
