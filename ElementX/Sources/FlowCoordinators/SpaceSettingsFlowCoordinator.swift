@@ -25,6 +25,8 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case editDetailsScreen
         /// The security and privacy screen
         case securityAndPrivacy
+        /// The edit address screen
+        case editAddress
         
         // Other flows
         /// The roles and permissions screen
@@ -39,10 +41,13 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case presentSpaceSettings
         
         case presentEditDetailsScreen
-        case dismissEditDetailsScreen
+        case dismissedEditDetailsScreen
         
         case presentSecurityAndPrivacyScreen
-        case dismissSecurityAndPrivacyScreen
+        case dismissedSecurityAndPrivacyScreen
+        
+        case presentEditAddress
+        case dismissedEditAddress
         
         // Other flows
         case startMembersListFlow
@@ -58,7 +63,6 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: StateMachine<State, Event>
     private var cancellables = Set<AnyCancellable>()
-    private var modalNavigationStackCoordinator: NavigationStackCoordinator?
     
     private var membersFlowCoordinator: RoomMembersFlowCoordinator?
     private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?
@@ -92,17 +96,19 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case .initial:
             break
         case .spaceSettings:
-            navigationStackCoordinator.pop(animated: animated) // SpaceSettingsScreen
-        case .editDetailsScreen:
-            navigationStackCoordinator.setSheetCoordinator(nil, animated: animated)
             navigationStackCoordinator.pop(animated: animated)
         case .securityAndPrivacy:
             navigationStackCoordinator.pop(animated: animated)
-            navigationStackCoordinator.pop(animated: animated)
+            clearRoute(animated: animated)
+        case .editDetailsScreen, .editAddress:
+            navigationStackCoordinator.setSheetCoordinator(nil, animated: animated)
+            clearRoute(animated: animated)
         case .rolesAndPermissionsFlow:
-            break // NOT SURE ABOUT THIS
+            rolesAndPermissionsFlowCoordinator?.clearRoute(animated: animated)
+            clearRoute(animated: animated)
         case .membersFlow:
-            break // NOT SURE ABOUT THIS
+            membersFlowCoordinator?.clearRoute(animated: animated)
+            clearRoute(animated: animated)
         }
     }
     
@@ -114,13 +120,18 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                 
             case (.spaceSettings, .presentEditDetailsScreen):
                 return .editDetailsScreen
-            case (.editDetailsScreen, .dismissEditDetailsScreen):
+            case (.editDetailsScreen, .dismissedEditDetailsScreen):
                 return .spaceSettings
                 
             case (.spaceSettings, .presentSecurityAndPrivacyScreen):
                 return .securityAndPrivacy
-            case (.securityAndPrivacy, .dismissSecurityAndPrivacyScreen):
+            case (.securityAndPrivacy, .dismissedSecurityAndPrivacyScreen):
                 return .spaceSettings
+                
+            case (.securityAndPrivacy, .presentEditAddress):
+                return .editAddress
+            case (.editAddress, .dismissedEditAddress):
+                return .securityAndPrivacy
                 
             case (.spaceSettings, .startMembersListFlow):
                 return .membersFlow
@@ -147,12 +158,17 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
             case (.spaceSettings, .presentEditDetailsScreen, .editDetailsScreen):
                 presentEditDetailsScreen()
                 
-            case (.editDetailsScreen, .dismissEditDetailsScreen, .spaceSettings):
+            case (.editDetailsScreen, .dismissedEditDetailsScreen, .spaceSettings):
                 break
                 
             case (.spaceSettings, .presentSecurityAndPrivacyScreen, .securityAndPrivacy):
                 presentSecurityAndPrivacyScreen()
-            case (.securityAndPrivacy, .dismissSecurityAndPrivacyScreen, .spaceSettings):
+            case (.securityAndPrivacy, .dismissedSecurityAndPrivacyScreen, .spaceSettings):
+                break
+                
+            case (.securityAndPrivacy, .presentEditAddress, .editAddress):
+                presentEditAddressScreen()
+            case (.editAddress, .dismissedEditAddress, .securityAndPrivacy):
                 break
                 
             case (.spaceSettings, .startMembersListFlow, .membersFlow):
@@ -201,11 +217,11 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     private func presentEditDetailsScreen() {
-        let navCoordinator = NavigationStackCoordinator()
+        let stackCoordinator = NavigationStackCoordinator()
         let parameters = RoomDetailsEditScreenCoordinatorParameters(roomProxy: roomProxy,
                                                                     userSession: flowParameters.userSession,
                                                                     mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
-                                                                    navigationStackCoordinator: navCoordinator,
+                                                                    navigationStackCoordinator: stackCoordinator,
                                                                     userIndicatorController: flowParameters.userIndicatorController,
                                                                     orientationManager: flowParameters.appMediator.windowManager,
                                                                     appSettings: flowParameters.appSettings)
@@ -221,9 +237,9 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        navCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(navCoordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissEditDetailsScreen)
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedEditDetailsScreen)
         }
     }
     
@@ -236,13 +252,13 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .displayEditAddressScreen:
-                presentEditAddressScreen()
+                self.stateMachine.tryEvent(.presentEditAddress)
             }
         }
         .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator) { [weak self] in
-            self?.stateMachine.tryEvent(.dismissSecurityAndPrivacyScreen)
+            self?.stateMachine.tryEvent(.dismissedSecurityAndPrivacyScreen)
         }
     }
     
@@ -261,7 +277,9 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         stackCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(stackCoordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedEditAddress)
+        }
     }
     
     // MARK: - Other flows
