@@ -33,21 +33,15 @@ struct RoomScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
             }
             .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .overlay(alignment: .top) {
-                if !isVoiceOverEnabled {
-                    pinnedItemsBanner
-                }
-            }
+            .topBanner(pinnedItemsBanner, isVisible: context.viewState.shouldShowPinnedEventsBanner && !isVoiceOverEnabled)
             // This can overlay on top of the pinnedItemsBanner
-            .overlay(alignment: .top) {
-                knockRequestsBanner
-            }
+            .topBanner(knockRequestsBanner, isVisible: context.viewState.shouldSeeKnockRequests)
             .safeAreaInset(edge: .top) {
                 // When VoiceOver is enabled, the table view isn't reversed and the scroll gestures
                 // don't trigger meaning the banner never hides itself and so the .overlay layout
                 // above permanently obscures the top of the timeline. So whenever VoiceOver is
                 // enabled we use a safe area inset to vertically stack it above the timeline.
-                if isVoiceOverEnabled {
+                if context.viewState.shouldShowPinnedEventsBanner, isVoiceOverEnabled {
                     pinnedItemsBanner
                 }
             }
@@ -83,7 +77,6 @@ struct RoomScreen: View {
         PinnedItemsBannerView(state: context.viewState.pinnedEventsBannerState,
                               onMainButtonTap: { context.send(viewAction: .tappedPinnedEventsBanner) },
                               onViewAllButtonTap: { context.send(viewAction: .viewAllPins) })
-            .banner(isVisible: context.viewState.shouldShowPinnedEventsBanner)
     }
     
     @ViewBuilder
@@ -94,7 +87,6 @@ struct RoomScreen: View {
                                 onViewAll: onViewAllKnockRequests,
                                 mediaProvider: context.mediaProvider)
             .padding(.top, 16)
-            .banner(isVisible: context.viewState.shouldSeeKnockRequests)
     }
     
     private func dismissKnockRequestsBanner() {
