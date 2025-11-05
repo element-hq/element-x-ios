@@ -13,6 +13,7 @@ import SwiftState
 protocol StateMachineFactoryProtocol {
     func makeUserSessionFlowStateMachine(state: UserSessionFlowCoordinator.State) -> StateMachine<UserSessionFlowCoordinator.State, UserSessionFlowCoordinator.Event>
     func makeChatsFlowStateMachine() -> ChatsFlowCoordinatorStateMachine
+    func makeMembersFlowStateMachine(state: RoomMembersFlowCoordinator.State) -> StateMachine<RoomMembersFlowCoordinator.State, RoomMembersFlowCoordinator.Event>
 }
 
 struct StateMachineFactory: StateMachineFactoryProtocol {
@@ -22,6 +23,10 @@ struct StateMachineFactory: StateMachineFactoryProtocol {
     
     func makeChatsFlowStateMachine() -> ChatsFlowCoordinatorStateMachine {
         .init()
+    }
+    
+    func makeMembersFlowStateMachine(state: RoomMembersFlowCoordinator.State) -> StateMachine<RoomMembersFlowCoordinator.State, RoomMembersFlowCoordinator.Event> {
+        .init(state: state)
     }
 }
 
@@ -47,6 +52,16 @@ class PublishedStateMachineFactory: StateMachineFactoryProtocol {
     func makeChatsFlowStateMachine() -> ChatsFlowCoordinatorStateMachine {
         let stateMachine = baseFactory.makeChatsFlowStateMachine()
         stateMachine.addTransitionHandler { [weak self] in self?.chatsFlowStatePublisher.send($0.toState) }
+        return stateMachine
+    }
+    
+    // MARK: MembersFlowCoordinator
+    
+    let membersFlowStatePublisher = PassthroughSubject<RoomMembersFlowCoordinator.State, Never>()
+    
+    func makeMembersFlowStateMachine(state: RoomMembersFlowCoordinator.State) -> StateMachine<RoomMembersFlowCoordinator.State, RoomMembersFlowCoordinator.Event> {
+        let stateMachine = baseFactory.makeMembersFlowStateMachine(state: state)
+        stateMachine.addAnyHandler(.any => .any) { [weak self] in self?.membersFlowStatePublisher.send($0.toState) }
         return stateMachine
     }
 }

@@ -574,6 +574,21 @@ private struct NavigationSplitCoordinatorView: View {
         }
     }
     
+    func pop(to coordinator: CoordinatorProtocol, animated: Bool = true) {
+        if rootCoordinator === coordinator {
+            popToRoot(animated: animated)
+        } else if stackCoordinators.contains(where: { $0 === coordinator }) {
+            var transaction = Transaction()
+            transaction.disablesAnimations = !animated
+            
+            withTransaction(transaction) {
+                while stackCoordinators.last !== coordinator, !stackCoordinators.isEmpty {
+                    _ = stackModules.popLast()
+                }
+            }
+        }
+    }
+    
     /// Present a sheet on top of the stack. If this NavigationStackCoordinator is embedded within a NavigationSplitCoordinator
     /// then the presentation will be proxied to the split
     /// - Parameters:
