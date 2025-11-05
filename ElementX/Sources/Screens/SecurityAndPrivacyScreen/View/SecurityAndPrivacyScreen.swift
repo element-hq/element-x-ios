@@ -142,9 +142,14 @@ struct SecurityAndPrivacyScreen: View {
     private var addAddressSection: some View {
         Section {
             ListRow(kind: .custom {
-                Button(L10n.screenSecurityAndPrivacyAddRoomAddressAction) { context.send(viewAction: .editAddress) }
-                    .foregroundColor(.compound.textActionAccent)
-                    .padding(ListRowPadding.insets)
+                Button {
+                    context.send(viewAction: .editAddress)
+                } label: {
+                    Text(L10n.screenSecurityAndPrivacyAddRoomAddressAction)
+                        .foregroundColor(.compound.textActionAccent)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(ListRowPadding.insets)
             })
         }
     }

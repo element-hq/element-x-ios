@@ -18,7 +18,12 @@ struct SpaceSettingsScreenCoordinatorParameters {
     let appSettings: AppSettings
 }
 
-enum SpaceSettingsScreenCoordinatorAction { }
+enum SpaceSettingsScreenCoordinatorAction {
+    case presentEditDetailsScreen
+    case presentSecurityAndPrivacyScreen
+    case presentMembersListScreen
+    case presentRolesAndPermissionsScreen
+}
 
 final class SpaceSettingsScreenCoordinator: CoordinatorProtocol {
     private let viewModel: RoomDetailsScreenViewModelProtocol
@@ -46,15 +51,19 @@ final class SpaceSettingsScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .requestNotificationSettingsPresentation, .requestRecipientDetailsPresentation, .requestInvitePeoplePresentation, .leftRoom, .requestPollsHistoryPresentation, .requestRolesAndPermissionsPresentation, .startCall, .displayPinnedEventsTimeline, .displayMediaEventsTimeline, .displayKnockingRequests, .displayReportRoom:
+            case .requestNotificationSettingsPresentation, .requestRecipientDetailsPresentation, .requestInvitePeoplePresentation, .requestPollsHistoryPresentation,
+                 .startCall, .displayPinnedEventsTimeline, .displayMediaEventsTimeline, .displayKnockingRequests,
+                 .displayReportRoom, .transferOwnership:
                 break // Not handled in this context
             case .requestEditDetailsPresentation:
-                break // TODO:
+                actionsSubject.send(.presentEditDetailsScreen)
             case .displaySecurityAndPrivacy:
-                break // TODO:
-            case .transferOwnership:
-                break // TODO:
+                actionsSubject.send(.presentSecurityAndPrivacyScreen)
             case .requestMemberDetailsPresentation:
+                actionsSubject.send(.presentMembersListScreen)
+            case .requestRolesAndPermissionsPresentation:
+                actionsSubject.send(.presentRolesAndPermissionsScreen)
+            case .leftRoom:
                 break // TODO:
             }
         }

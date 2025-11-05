@@ -432,6 +432,10 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
             switch actions {
             case .finished:
                 stateMachine.tryEvent(.stopSettingsFlow)
+            case .presentCallScreen(let roomProxy):
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+            case .verifyUser(userID: let userID):
+                actionsSubject.send(.verifyUser(userID: userID))
             }
         }
         .store(in: &cancellables)

@@ -11,6 +11,8 @@ import SwiftState
 
 enum SpaceSettingsFlowCoordinatorAction {
     case finished
+    case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
+    case verifyUser(userID: String)
 }
 
 final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
@@ -19,12 +21,40 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case initial
         /// The space settings screen
         case spaceSettings
+        /// The edit details screen presented modally
+        case editDetailsScreen
+        /// The security and privacy screen
+        case securityAndPrivacy
+        /// The edit address screen
+        case editAddress
+        
+        // Other flows
+        /// The roles and permissions screen
+        case rolesAndPermissionsFlow
+        /// The members flow screen
+        case membersFlow
     }
     
     enum Event: EventType {
         case start
         
         case presentSpaceSettings
+        
+        case presentEditDetailsScreen
+        case dismissedEditDetailsScreen
+        
+        case presentSecurityAndPrivacyScreen
+        case dismissedSecurityAndPrivacyScreen
+        
+        case presentEditAddress
+        case dismissedEditAddress
+        
+        // Other flows
+        case startMembersListFlow
+        case stopMembersListFlow
+        
+        case startRolesAndPermissionsFlow
+        case stopRolesAndPermissionsFlow
     }
     
     private let roomProxy: JoinedRoomProxyProtocol
@@ -33,6 +63,9 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: StateMachine<State, Event>
     private var cancellables = Set<AnyCancellable>()
+    
+    private var membersFlowCoordinator: RoomMembersFlowCoordinator?
+    private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?
     
     private let actionsSubject: PassthroughSubject<SpaceSettingsFlowCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<SpaceSettingsFlowCoordinatorAction, Never> {
@@ -63,7 +96,19 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         case .initial:
             break
         case .spaceSettings:
-            navigationStackCoordinator.pop(animated: animated) // SpaceSettingsScreen
+            navigationStackCoordinator.pop(animated: animated)
+        case .securityAndPrivacy:
+            navigationStackCoordinator.pop(animated: animated)
+            clearRoute(animated: animated)
+        case .editDetailsScreen, .editAddress:
+            navigationStackCoordinator.setSheetCoordinator(nil, animated: animated)
+            clearRoute(animated: animated)
+        case .rolesAndPermissionsFlow:
+            rolesAndPermissionsFlowCoordinator?.clearRoute(animated: animated)
+            clearRoute(animated: animated)
+        case .membersFlow:
+            membersFlowCoordinator?.clearRoute(animated: animated)
+            clearRoute(animated: animated)
         }
     }
     
@@ -71,6 +116,31 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (fromState, event) {
             case (.initial, .presentSpaceSettings):
+                return .spaceSettings
+                
+            case (.spaceSettings, .presentEditDetailsScreen):
+                return .editDetailsScreen
+            case (.editDetailsScreen, .dismissedEditDetailsScreen):
+                return .spaceSettings
+                
+            case (.spaceSettings, .presentSecurityAndPrivacyScreen):
+                return .securityAndPrivacy
+            case (.securityAndPrivacy, .dismissedSecurityAndPrivacyScreen):
+                return .spaceSettings
+                
+            case (.securityAndPrivacy, .presentEditAddress):
+                return .editAddress
+            case (.editAddress, .dismissedEditAddress):
+                return .securityAndPrivacy
+                
+            case (.spaceSettings, .startMembersListFlow):
+                return .membersFlow
+            case (.membersFlow, .stopMembersListFlow):
+                return .spaceSettings
+                
+            case (.spaceSettings, .startRolesAndPermissionsFlow):
+                return .rolesAndPermissionsFlow
+            case (.rolesAndPermissionsFlow, .stopRolesAndPermissionsFlow):
                 return .spaceSettings
                 
             default:
@@ -84,6 +154,32 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .presentSpaceSettings, .spaceSettings):
                 presentSpaceSettings(animated: animated)
+                
+            case (.spaceSettings, .presentEditDetailsScreen, .editDetailsScreen):
+                presentEditDetailsScreen()
+                
+            case (.editDetailsScreen, .dismissedEditDetailsScreen, .spaceSettings):
+                break
+                
+            case (.spaceSettings, .presentSecurityAndPrivacyScreen, .securityAndPrivacy):
+                presentSecurityAndPrivacyScreen()
+            case (.securityAndPrivacy, .dismissedSecurityAndPrivacyScreen, .spaceSettings):
+                break
+                
+            case (.securityAndPrivacy, .presentEditAddress, .editAddress):
+                presentEditAddressScreen()
+            case (.editAddress, .dismissedEditAddress, .securityAndPrivacy):
+                break
+                
+            case (.spaceSettings, .startMembersListFlow, .membersFlow):
+                startMembersListFlow()
+            case (.membersFlow, .stopMembersListFlow, .spaceSettings):
+                membersFlowCoordinator = nil
+                
+            case (.spaceSettings, .startRolesAndPermissionsFlow, .rolesAndPermissionsFlow):
+                startRolesAndPermissionsFlow()
+            case (.rolesAndPermissionsFlow, .stopRolesAndPermissionsFlow, .spaceSettings):
+                rolesAndPermissionsFlowCoordinator = nil
                 
             default:
                 fatalError("Unhandled transition")
@@ -101,12 +197,131 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                            appSettings: flowParameters.appSettings))
         
         coordinator.actionsPublisher.sink { [weak self] action in
-            switch action { }
+            guard let self else { return }
+            switch action {
+            case .presentEditDetailsScreen:
+                stateMachine.tryEvent(.presentEditDetailsScreen)
+            case .presentSecurityAndPrivacyScreen:
+                stateMachine.tryEvent(.presentSecurityAndPrivacyScreen)
+            case .presentMembersListScreen:
+                stateMachine.tryEvent(.startMembersListFlow)
+            case .presentRolesAndPermissionsScreen:
+                stateMachine.tryEvent(.startRolesAndPermissionsFlow)
+            }
         }
         .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
             self?.actionsSubject.send(.finished)
         }
+    }
+    
+    private func presentEditDetailsScreen() {
+        let stackCoordinator = NavigationStackCoordinator()
+        let parameters = RoomDetailsEditScreenCoordinatorParameters(roomProxy: roomProxy,
+                                                                    userSession: flowParameters.userSession,
+                                                                    mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: flowParameters.appSettings),
+                                                                    navigationStackCoordinator: stackCoordinator,
+                                                                    userIndicatorController: flowParameters.userIndicatorController,
+                                                                    orientationManager: flowParameters.appMediator.windowManager,
+                                                                    appSettings: flowParameters.appSettings)
+        
+        let coordinator = RoomDetailsEditScreenCoordinator(parameters: parameters)
+        
+        coordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .dismiss:
+                navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedEditDetailsScreen)
+        }
+    }
+    
+    private func presentSecurityAndPrivacyScreen() {
+        let coordinator = SecurityAndPrivacyScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                                clientProxy: flowParameters.userSession.clientProxy,
+                                                                                userIndicatorController: flowParameters.userIndicatorController))
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .displayEditAddressScreen:
+                self.stateMachine.tryEvent(.presentEditAddress)
+            }
+        }
+        .store(in: &cancellables)
+        
+        navigationStackCoordinator.push(coordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedSecurityAndPrivacyScreen)
+        }
+    }
+    
+    private func presentEditAddressScreen() {
+        let stackCoordinator = NavigationStackCoordinator()
+        let coordinator = EditRoomAddressScreenCoordinator(parameters: .init(roomProxy: roomProxy,
+                                                                             clientProxy: flowParameters.userSession.clientProxy,
+                                                                             userIndicatorController: flowParameters.userIndicatorController))
+        
+        coordinator.actionsPublisher.sink { [weak self] action in
+            switch action {
+            case .dismiss:
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+            }
+        }
+        .store(in: &cancellables)
+        
+        stackCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(stackCoordinator) { [weak self] in
+            self?.stateMachine.tryEvent(.dismissedEditAddress)
+        }
+    }
+    
+    // MARK: - Other flows
+    
+    private func startRolesAndPermissionsFlow() {
+        let parameters = RoomRolesAndPermissionsFlowCoordinatorParameters(roomProxy: roomProxy,
+                                                                          mediaProvider: flowParameters.userSession.mediaProvider,
+                                                                          navigationStackCoordinator: navigationStackCoordinator,
+                                                                          userIndicatorController: flowParameters.userIndicatorController,
+                                                                          analytics: flowParameters.analytics)
+        let coordinator = RoomRolesAndPermissionsFlowCoordinator(parameters: parameters)
+        coordinator.actionsPublisher.sink { [weak self] action in
+            switch action {
+            case .complete:
+                self?.stateMachine.tryEvent(.stopRolesAndPermissionsFlow)
+            }
+        }
+        .store(in: &cancellables)
+        
+        rolesAndPermissionsFlowCoordinator = coordinator
+        coordinator.start()
+    }
+    
+    private func startMembersListFlow() {
+        let flowCoordinator = RoomMembersFlowCoordinator(entryPoint: .roomMembersList,
+                                                         roomProxy: roomProxy,
+                                                         navigationStackCoordinator: navigationStackCoordinator,
+                                                         flowParameters: flowParameters)
+        flowCoordinator.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .finished:
+                stateMachine.tryEvent(.stopMembersListFlow)
+            case .presentCallScreen(let roomProxy):
+                actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
+            case .verifyUser(let userID):
+                actionsSubject.send(.verifyUser(userID: userID))
+            }
+        }
+        .store(in: &cancellables)
+        
+        membersFlowCoordinator = flowCoordinator
+        flowCoordinator.start(animated: true)
     }
 }
