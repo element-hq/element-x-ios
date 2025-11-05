@@ -1,3 +1,50 @@
+## Changes in 25.11.0 (2025-11-05)
+
+### What's Changed
+
+✨ Features
+* Display members of a space by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4629
+
+🙌 Improvements
+* FF to enable/disable focussing the event on notification tap by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4698
+
+🐛 Bugfixes
+* Respect the order of joined spaces as defined by Element Web. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4663
+* Fix a potential bug where the token couldn't be refreshed when the cached server `/versions` had expired. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4687
+* Actually fix the bug where the token couldn't be refreshed when the cached `/versions` has expired. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4697
+* Fix a bug where the timeline disappeared when VoiceOver was enabled. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4701
+
+🗣 Translations
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4660
+* Translations update by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4690
+
+🧱 Build
+* Add timeouts to our GitHub actions. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4669
+* Stop repeating the simulator version throughout the Fastfile. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4677
+* Bump the calendar version ready for the next release by @RiotRobot in https://github.com/element-hq/element-x-ios/pull/4666
+
+🚧 In development 🚧
+* Threaded notifications by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4644
+* Test out a more prominent version of the new notification sound. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4667
+* Space Settings Screen by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4670
+* Space Settings UI tweaks by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4678
+* Reuse `RoomDetailsScreenViewModel` for the `SpaceSettingsScreen` by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4684
+
+Others
+* Update enterprise copyright holders by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4654
+* Update actions/upload-artifact action to v5 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4657
+* Remove the integration tests `tapOnMenu` as it's the same as `tapOnButton` by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4656
+* Update UI test snapshots by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4655
+* Update dependency SFSafeSymbols/SFSafeSymbols to v7 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4659
+* Remove the previous version of the AttributedStringBuilder by @stefanceriu in https://github.com/element-hq/element-x-ios/pull/4596
+* Refactored room flow coordinator to use the members flow coordinator by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4665
+* Introduce a StartChatFlowCoordinator instead of handing a navigation stack to the Screen Coordinator. by @pixlwave in https://github.com/element-hq/element-x-ios/pull/4674
+* Update IDETemplateMacros.plist by @Velin92 in https://github.com/element-hq/element-x-ios/pull/4692
+* Update dependency element-hq/compound-design-tokens to v6.3.0 by @renovate[bot] in https://github.com/element-hq/element-x-ios/pull/4693
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-ios/compare/release/25.10.2...release/25.11.0
+
 ## Changes in 25.10.2 (2025-10-22)
 
 ### What's Changed
