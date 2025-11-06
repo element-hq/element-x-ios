@@ -309,7 +309,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 switch await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID) {
                 case .success(let event):
                     if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
-                        stateMachine.tryEvent(.presentRoom(presentationAction: .thread(rootEventID: threadRootEventID, focusEvent: .init(eventID: focusEvent.eventID, shouldSetPin: focusEvent.shouldSetPin))), userInfo: EventUserInfo(animated: animated))
+                        stateMachine.tryEvent(.presentRoom(presentationAction: .thread(rootEventID: threadRootEventID,
+                                                                                       focusEvent: .init(eventID: focusEvent.eventID,
+                                                                                                         shouldSetPin: focusEvent.shouldSetPin))),
+                                              userInfo: EventUserInfo(animated: animated))
                     } else {
                         stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
                     }
