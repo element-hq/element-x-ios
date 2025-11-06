@@ -14,7 +14,7 @@ import Combine
 class RoomMembersFlowCoordinatorTests: XCTestCase {
     var membersFlowCoordinator: RoomMembersFlowCoordinator!
     var navigationStackCoordinator: NavigationStackCoordinator!
-    let stateMachineFactory = PublishedStateMachineFactory()
+    var stateMachineFactory: PublishedStateMachineFactory!
         
     func testClearRoute() async throws {
         try await setUp(entryPoint: .roomMembersList)
@@ -41,11 +41,15 @@ class RoomMembersFlowCoordinatorTests: XCTestCase {
     }
     
     private func setUp(entryPoint: RoomMembersFlowCoordinatorEntryPoint) async throws {
+        stateMachineFactory = .init()
         navigationStackCoordinator = NavigationStackCoordinator()
         navigationStackCoordinator.setRootCoordinator(PlaceholderScreenCoordinator(hideBrandChrome: false))
         navigationStackCoordinator.push(BlankFormCoordinator())
+        
+        let clientProxy = ClientProxyMock(.init())
+        clientProxy.directRoomForUserIDReturnValue = .success(nil)
                 
-        let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init()),
+        let flowParameters = CommonFlowParameters(userSession: UserSessionMock(.init(clientProxy: clientProxy)),
                                                   bugReportService: BugReportServiceMock(.init()),
                                                   elementCallService: ElementCallServiceMock(.init()),
                                                   timelineControllerFactory: TimelineControllerFactoryMock(.init()),
@@ -60,6 +64,10 @@ class RoomMembersFlowCoordinatorTests: XCTestCase {
                                                   stateMachineFactory: stateMachineFactory)
         
         let roomProxy = JoinedRoomProxyMock(.init())
+        roomProxy.getMemberUserIDClosure = { _ in
+            .success(RoomMemberProxyMock(with: .init(userID: "test", membership: .join)))
+        }
+        
         membersFlowCoordinator = RoomMembersFlowCoordinator(entryPoint: entryPoint,
                                                             roomProxy: roomProxy,
                                                             navigationStackCoordinator: navigationStackCoordinator,
