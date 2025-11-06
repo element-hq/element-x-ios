@@ -65,8 +65,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     private let stateMachine: StateMachine<State, Event>
     private var cancellables = Set<AnyCancellable>()
     
-    private var membersFlowCoordinator: RoomMembersFlowCoordinator?
-    private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?
+    private var childFlowCoordinator: FlowCoordinatorProtocol?
     
     private let actionsSubject: PassthroughSubject<SpaceSettingsFlowCoordinatorAction, Never> = .init()
     var actions: AnyPublisher<SpaceSettingsFlowCoordinatorAction, Never> {
@@ -94,22 +93,13 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     }
     
     func clearRoute(animated: Bool) {
-        switch stateMachine.state {
-        case .initial:
-            break
-        case .spaceSettings, .securityAndPrivacy:
-            guard let initialCoordinator else { return }
-            navigationStackCoordinator.pop(to: initialCoordinator, animated: animated)
-        case .editDetailsScreen, .editAddress:
-            navigationStackCoordinator.setSheetCoordinator(nil, animated: animated)
-            clearRoute(animated: animated)
-        case .rolesAndPermissionsFlow:
-            rolesAndPermissionsFlowCoordinator?.clearRoute(animated: animated)
-            clearRoute(animated: animated)
-        case .membersFlow:
-            membersFlowCoordinator?.clearRoute(animated: animated)
-            clearRoute(animated: animated)
+        childFlowCoordinator?.clearRoute(animated: animated)
+        navigationStackCoordinator.setSheetCoordinator(nil, animated: animated)
+        
+        guard let initialCoordinator else {
+            return
         }
+        navigationStackCoordinator.pop(to: initialCoordinator, animated: animated)
     }
     
     private func configureStateMachine() {
@@ -174,12 +164,12 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
             case (.spaceSettings, .startMembersListFlow, .membersFlow):
                 startMembersListFlow()
             case (.membersFlow, .stopMembersListFlow, .spaceSettings):
-                membersFlowCoordinator = nil
+                childFlowCoordinator = nil
                 
             case (.spaceSettings, .startRolesAndPermissionsFlow, .rolesAndPermissionsFlow):
                 startRolesAndPermissionsFlow()
             case (.rolesAndPermissionsFlow, .stopRolesAndPermissionsFlow, .spaceSettings):
-                rolesAndPermissionsFlowCoordinator = nil
+                childFlowCoordinator = nil
                 
             default:
                 fatalError("Unhandled transition")
@@ -299,7 +289,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        rolesAndPermissionsFlowCoordinator = coordinator
+        childFlowCoordinator = coordinator
         coordinator.start()
     }
     
@@ -321,7 +311,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         }
         .store(in: &cancellables)
         
-        membersFlowCoordinator = flowCoordinator
+        childFlowCoordinator = flowCoordinator
         flowCoordinator.start(animated: true)
     }
 }

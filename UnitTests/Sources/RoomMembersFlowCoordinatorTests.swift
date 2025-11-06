@@ -20,13 +20,13 @@ class RoomMembersFlowCoordinatorTests: XCTestCase {
         try await setUp(entryPoint: .roomMembersList)
         XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is RoomMembersListScreenCoordinator)
         
-        var deferred = deferFulfillment(stateMachineFactory.membersFlowStatePublisher) { $0 == .roomMemberDetails(userID: "test", previousState: .roomMembersList) }
+        var membersFlowStateExpectation = deferFulfillment(stateMachineFactory.membersFlowStatePublisher) { $0 == .roomMemberDetails(userID: "test", previousState: .roomMembersList) }
         membersFlowCoordinator.handleAppRoute(.roomMemberDetails(userID: "test"), animated: false)
-        try await deferred.fulfill()
+        try await membersFlowStateExpectation.fulfill()
         XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is RoomMemberDetailsScreenCoordinator)
         
-        deferred = deferFulfillment(stateMachineFactory.membersFlowStatePublisher) { $0 == .roomMembersList }
-        let deferredAction = deferFulfillment(membersFlowCoordinator.actions) { action in
+        membersFlowStateExpectation = deferFulfillment(stateMachineFactory.membersFlowStatePublisher) { $0 == .roomMembersList }
+        let membersFlowActionExpectation = deferFulfillment(membersFlowCoordinator.actions) { action in
             switch action {
             case .finished:
                 true
@@ -35,8 +35,8 @@ class RoomMembersFlowCoordinatorTests: XCTestCase {
             }
         }
         membersFlowCoordinator.clearRoute(animated: false)
-        try await deferred.fulfill()
-        try await deferredAction.fulfill()
+        try await membersFlowStateExpectation.fulfill()
+        try await membersFlowActionExpectation.fulfill()
         XCTAssertTrue(navigationStackCoordinator.stackCoordinators.last is BlankFormCoordinator)
     }
     
