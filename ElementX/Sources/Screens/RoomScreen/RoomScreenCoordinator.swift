@@ -206,6 +206,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         Task { await timelineViewModel.focusOnEvent(eventID: eventID) }
     }
     
+    func setSelectedPin(eventID: String) {
+        roomViewModel.setSelectedPinnedEventID(eventID)
+    }
+    
     func shareText(_ string: String) {
         composerViewModel.process(timelineAction: .setMode(mode: .default)) // Make sure we're not e.g. replying.
         composerViewModel.process(timelineAction: .setText(plainText: string, htmlText: nil))

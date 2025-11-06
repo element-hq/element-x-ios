@@ -406,6 +406,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 case .success(let event):
                     if appSettings.threadsEnabled,
                        let threadRootEventID = event.threadRootEventId() {
+                        actionsSubject.send(.focusEvent(eventID: threadRootEventID))
                         actionsSubject.send(.displayThread(threadRootEventID: threadRootEventID, focussedEventID: eventID))
                     } else {
                         actionsSubject.send(.focusEvent(eventID: eventID))

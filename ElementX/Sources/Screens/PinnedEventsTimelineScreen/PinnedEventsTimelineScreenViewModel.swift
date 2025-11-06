@@ -18,7 +18,7 @@ class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelTy
     var actionsPublisher: AnyPublisher<PinnedEventsTimelineScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
+    
     init(analyticsService: AnalyticsService) {
         self.analyticsService = analyticsService
         super.init(initialViewState: PinnedEventsTimelineScreenViewState())
