@@ -64,7 +64,6 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
     
     private let stateMachine: StateMachine<State, Event>
     private var cancellables = Set<AnyCancellable>()
-    private var modalNavigationStackCoordinator: NavigationStackCoordinator?
     
     private var membersFlowCoordinator: RoomMembersFlowCoordinator?
     private var rolesAndPermissionsFlowCoordinator: RoomRolesAndPermissionsFlowCoordinator?

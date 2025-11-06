@@ -476,7 +476,8 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
     
     private func startRolesAndPermissionsFlow(roomProxy: JoinedRoomProxyProtocol) {
         let flowCoordinator = RoomRolesAndPermissionsFlowCoordinator(parameters: .init(roomProxy: roomProxy,
-                                                                                       mediaProvider: flowParameters.userSession.mediaProvider, navigationStackCoordinator: navigationStackCoordinator,
+                                                                                       mediaProvider: flowParameters.userSession.mediaProvider,
+                                                                                       navigationStackCoordinator: navigationStackCoordinator,
                                                                                        userIndicatorController: flowParameters.userIndicatorController,
                                                                                        analytics: flowParameters.analytics))
         flowCoordinator.actionsPublisher.sink { [weak self] action in
