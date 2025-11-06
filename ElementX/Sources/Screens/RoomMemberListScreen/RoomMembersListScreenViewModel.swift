@@ -68,7 +68,8 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             hideLoadingIndicator(Self.setupMembersLoadingIndicatorIdentifier)
         }
         
-        roomProxy.membersPublisher.combineLatest(roomProxy.identityStatusChangesPublisher)
+        roomProxy.membersPublisher
+            .combineLatest(roomProxy.identityStatusChangesPublisher)
             .filter { !$0.0.isEmpty }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] members, _ in
@@ -80,6 +81,14 @@ class RoomMembersListScreenViewModel: RoomMembersListScreenViewModelType, RoomMe
             Task { await roomProxy.updateMembers() }
         }
         .store(in: &cancellables)
+        
+        roomProxy.infoPublisher
+            .map(\.powerLevels)
+            .removeDuplicates { $0?.userPowerLevels == $1?.userPowerLevels }
+            .sink { [weak self] _ in
+                Task { await self?.roomProxy.updateMembers() }
+            }
+            .store(in: &cancellables)
     }
     
     private func updateState(members: [RoomMemberProxyProtocol]) {
