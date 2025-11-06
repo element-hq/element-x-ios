@@ -10,7 +10,7 @@ import Foundation
 import SwiftState
 
 enum SpaceSettingsFlowCoordinatorAction {
-    case finished
+    case finished(leftRoom: Bool)
     case presentCallScreen(roomProxy: JoinedRoomProxyProtocol)
     case verifyUser(userID: String)
 }
@@ -190,6 +190,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
                                                                          attributedStringBuilder: AttributedStringBuilder(mentionBuilder: MentionBuilder()),
                                                                          appSettings: flowParameters.appSettings))
         
+        var leftRoom = false
         coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
@@ -202,7 +203,8 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
             case .presentRolesAndPermissionsScreen:
                 stateMachine.tryEvent(.startRolesAndPermissionsFlow)
             case .leftRoom:
-                break // TODO:
+                leftRoom = true
+                navigationStackCoordinator.pop()
             case .presentRecipientDetails, .presentNotificationSettingsScreen, .transferOwnership,
                  .presentInviteUsersScreen, .presentPollsHistory, .presentCall,
                  .presentPinnedEventsTimeline, .presentMediaEventsTimeline, .presentKnockingRequestsListScreen,
@@ -213,7 +215,7 @@ final class SpaceSettingsFlowCoordinator: FlowCoordinatorProtocol {
         .store(in: &cancellables)
         
         navigationStackCoordinator.push(coordinator, animated: animated) { [weak self] in
-            self?.actionsSubject.send(.finished)
+            self?.actionsSubject.send(.finished(leftRoom: leftRoom))
         }
     }
     

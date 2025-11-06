@@ -457,8 +457,11 @@ class SpaceFlowCoordinator: FlowCoordinatorProtocol {
         flowCoordinator.actions.sink { [weak self] actions in
             guard let self else { return }
             switch actions {
-            case .finished:
+            case .finished(let leftRoom):
                 stateMachine.tryEvent(.stopSettingsFlow)
+                if leftRoom {
+                    stateMachine.tryEvent(.leftSpace)
+                }
             case .presentCallScreen(let roomProxy):
                 actionsSubject.send(.presentCallScreen(roomProxy: roomProxy))
             case .verifyUser(userID: let userID):
