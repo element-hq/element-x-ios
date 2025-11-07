@@ -1016,17 +1016,31 @@ class AttributedStringBuilderTests: XCTestCase {
     }
 
     func testMxExternalPaymentDetailsRemoved() {
-        let htmlString = "This is visible<span data-msc4286-external-payment-details>. But text is hidden <a href=\"https://matrix.org\">and this link too</a></span>"
+        var htmlString = "This is visible.<span data-msc4286-external-payment-details> But this is hidden <a href=\"https://matrix.org\">and this link too</a></span>"
         
         guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
         
-        XCTAssertEqual(String(attributedString.characters), "This is visible")
+        XCTAssertEqual(String(attributedString.characters), "This is visible.")
         
         for run in attributedString.runs where run.link != nil {
             XCTFail("No link expected, but found one")
+            return
+        }
+        
+        htmlString = "This is visible.<span> And this text <a href=\"https://matrix.org\">and link</a> are visible too.</span>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(String(attributedString.characters), "This is visible. And this text and link are visible too.")
+        
+        guard attributedString.runs.first(where: { $0.link != nil })?.link != nil else {
+            XCTFail("Couldn't find the link")
             return
         }
     }
