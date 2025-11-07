@@ -136,6 +136,8 @@ protocol ClientProxyProtocol: AnyObject {
     
     func isOnlyDeviceLeft() async -> Result<Bool, ClientProxyError>
     
+    func hasDevicesToVerifyAgainst() async -> Result<Bool, ClientProxyError>
+    
     func startSync()
 
     func stopSync()
