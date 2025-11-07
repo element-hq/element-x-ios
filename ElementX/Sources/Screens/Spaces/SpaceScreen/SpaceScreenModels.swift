@@ -13,6 +13,7 @@ enum SpaceScreenViewModelAction {
     case selectUnjoinedSpace(SpaceRoomProxyProtocol)
     case selectRoom(roomID: String)
     case leftSpace
+    case presentRolesAndPermissions(roomProxy: JoinedRoomProxyProtocol)
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
     case displaySpaceSettings(roomProxy: JoinedRoomProxyProtocol)
 }
@@ -39,17 +40,12 @@ struct SpaceScreenViewState: BindableState {
 }
 
 struct SpaceScreenViewStateBindings {
-    var leaveHandle: LeaveSpaceHandleProxy?
+    var leaveSpaceViewModel: LeaveSpaceViewModel?
 }
 
 enum SpaceScreenViewAction {
     case spaceAction(SpaceRoomCell.Action)
     case leaveSpace
-    case deselectAllLeaveRoomDetails
-    case selectAllLeaveRoomDetails
-    case toggleLeaveSpaceRoomDetails(id: String)
-    case confirmLeaveSpace
     case spaceSettings(roomProxy: JoinedRoomProxyProtocol)
-    case rolesAndPermissions
     case displayMembers(roomProxy: JoinedRoomProxyProtocol)
 }

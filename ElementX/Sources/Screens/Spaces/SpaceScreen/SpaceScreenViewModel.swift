@@ -15,6 +15,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
     private let spaceRoomListProxy: SpaceRoomListProxyProtocol
     private let spaceServiceProxy: SpaceServiceProxyProtocol
     private let clientProxy: ClientProxyProtocol
+    private let mediaProvider: MediaProviderProtocol
     private let appSettings: AppSettings
     private let userIndicatorController: UserIndicatorControllerProtocol
     
@@ -32,6 +33,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         self.spaceRoomListProxy = spaceRoomListProxy
         self.spaceServiceProxy = spaceServiceProxy
         clientProxy = userSession.clientProxy
+        mediaProvider = userSession.mediaProvider
         self.userIndicatorController = userIndicatorController
         self.appSettings = appSettings
         
@@ -117,31 +119,10 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             Task { await join(spaceRoomProxy) }
         case .leaveSpace:
             Task { await showLeaveSpaceConfirmation() }
-        case .deselectAllLeaveRoomDetails:
-            guard let leaveHandle = state.bindings.leaveHandle else { fatalError("The leave handle should be available.") }
-            for room in leaveHandle.rooms {
-                room.isSelected = false
-            }
-        case .selectAllLeaveRoomDetails:
-            guard let leaveHandle = state.bindings.leaveHandle else { fatalError("The leave handle should be available.") }
-            for room in leaveHandle.rooms where !room.isLastAdmin {
-                room.isSelected = true
-            }
-        case .toggleLeaveSpaceRoomDetails(let spaceRoomID):
-            guard let room = state.bindings.leaveHandle?.rooms.first(where: { $0.spaceRoomProxy.id == spaceRoomID }) else {
-                fatalError("The space room to toggle is not in the list of rooms to leave.")
-            }
-            withTransaction(\.disablesAnimations, true) { // The button is adding an unwanted animation.
-                room.isSelected.toggle()
-            }
-        case .confirmLeaveSpace:
-            Task { await confirmLeaveSpace() }
         case .displayMembers(let roomProxy):
             actionsSubject.send(.displayMembers(roomProxy: roomProxy))
         case .spaceSettings(let roomProxy):
             actionsSubject.send(.displaySpaceSettings(roomProxy: roomProxy))
-        case .rolesAndPermissions:
-            break // Not implemented yet
         }
     }
     
@@ -180,40 +161,36 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
             return
         }
         
-        state.bindings.leaveHandle = leaveHandle
-    }
-    
-    private func confirmLeaveSpace() async {
-        guard let leaveHandle = state.bindings.leaveHandle else { fatalError("Leaving without a handle is impossible.") }
-        
-        showLeavingIndicator()
-        defer { hideLeavingIndicator() }
-        
-        switch await leaveHandle.leave() {
-        case .success:
-            state.bindings.leaveHandle = nil
-            actionsSubject.send(.leftSpace)
-        case .failure:
-            showFailureIndicator()
+        let leaveSpaceViewModel = LeaveSpaceViewModel(spaceName: state.space.name,
+                                                      canEditRolesAndPermissions: appSettings.spaceSettingsEnabled && state.canEditRolesAndPermissions,
+                                                      leaveHandle: leaveHandle,
+                                                      userIndicatorController: userIndicatorController,
+                                                      mediaProvider: mediaProvider)
+        leaveSpaceViewModel.actions.sink { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .didCancel:
+                state.bindings.leaveSpaceViewModel = nil
+            case .presentRolesAndPermissions:
+                guard let roomProxy = state.roomProxy else {
+                    fatalError("The space screen should always have a room proxy")
+                }
+                state.bindings.leaveSpaceViewModel = nil
+                actionsSubject.send(.presentRolesAndPermissions(roomProxy: roomProxy))
+            case .didLeaveSpace:
+                state.bindings.leaveSpaceViewModel = nil
+                actionsSubject.send(.leftSpace)
+            }
         }
+        .store(in: &cancellables)
+        
+        state.bindings.leaveSpaceViewModel = leaveSpaceViewModel
     }
-    
-    private func updatePermissions() { }
-    
+        
     // MARK: - Indicators
     
     private static var leavingIndicatorID: String { "\(Self.self)-Leaving" }
     private static var failureIndicatorID: String { "\(Self.self)-Failure" }
-    
-    private func showLeavingIndicator() {
-        userIndicatorController.submitIndicator(UserIndicator(id: Self.leavingIndicatorID,
-                                                              type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
-                                                              title: L10n.commonLeavingSpace))
-    }
-    
-    private func hideLeavingIndicator() {
-        userIndicatorController.retractIndicatorWithId(Self.leavingIndicatorID)
-    }
     
     private func showFailureIndicator() {
         userIndicatorController.submitIndicator(UserIndicator(id: Self.failureIndicatorID,

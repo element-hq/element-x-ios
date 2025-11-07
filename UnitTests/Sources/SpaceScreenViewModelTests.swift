@@ -178,29 +178,30 @@ class SpaceScreenViewModelTests: XCTestCase {
     
     func testLeavingSpace() async throws {
         setupViewModel()
-        XCTAssertNil(context.leaveHandle)
+        XCTAssertNil(context.leaveSpaceViewModel)
         
-        let deferredHandle = deferFulfillment(context.observe(\.leaveHandle)) { $0 != nil }
+        let deferredHandle = deferFulfillment(context.observe(\.leaveSpaceViewModel)) { $0 != nil }
         context.send(viewAction: .leaveSpace)
         try await deferredHandle.fulfill()
-        XCTAssertNotNil(context.leaveHandle, "The leave action should show the leave view.")
+        XCTAssertNotNil(context.leaveSpaceViewModel, "The leave action should show the leave view.")
         
-        let handle = try XCTUnwrap(context.leaveHandle)
+        let leaveSpaceViewModel = try XCTUnwrap(context.leaveSpaceViewModel)
+        let handle = try XCTUnwrap(context.leaveSpaceViewModel?.state.leaveHandle)
         let selectedCount = handle.selectedCount
         let firstSelectedRoom = try XCTUnwrap(handle.rooms.first { $0.isSelected })
         XCTAssertGreaterThan(selectedCount, 0, "The leave view should have selected rooms to begin with")
         
-        context.send(viewAction: .deselectAllLeaveRoomDetails)
+        leaveSpaceViewModel.context.send(viewAction: .deselectAll)
         XCTAssertEqual(handle.selectedCount, 0, "Deselecting all should result in no selected rooms.")
         
-        context.send(viewAction: .toggleLeaveSpaceRoomDetails(id: firstSelectedRoom.spaceRoomProxy.id))
+        leaveSpaceViewModel.context.send(viewAction: .toggleRoom(roomID: firstSelectedRoom.spaceRoomProxy.id))
         XCTAssertEqual(handle.selectedCount, 1, "Toggling a room should result in 1 selected room")
         
         // Confirming the leave should leave the selected room and then the space.
         let deferredAction = deferFulfillment(viewModel.actionsPublisher) { $0.isLeftSpace }
-        context.send(viewAction: .confirmLeaveSpace)
+        leaveSpaceViewModel.context.send(viewAction: .confirmLeaveSpace)
         try await deferredAction.fulfill()
-        XCTAssertNil(context.leaveHandle)
+        XCTAssertNil(context.leaveSpaceViewModel)
         XCTAssertTrue(rustLeaveHandle.leaveRoomIdsCalled)
         XCTAssertEqual(rustLeaveHandle.leaveRoomIdsReceivedRoomIds,
                        [firstSelectedRoom.spaceRoomProxy.id, spaceRoomListProxy.id],

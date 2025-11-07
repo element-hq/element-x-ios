@@ -209,10 +209,29 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
     
     private func processLeaveSpace() async {
         switch await userSession.clientProxy.spaceService.leaveSpace(spaceID: roomProxy.id) {
-        case .success:
-            // TODO: Handle leave space
-            break
-        case .failure(let failure):
+        case .success(let leaveHandle):
+            let leaveSpaceViewModel = LeaveSpaceViewModel(spaceName: state.details.name ?? state.details.id,
+                                                          canEditRolesAndPermissions: state.canEditRolesOrPermissions,
+                                                          leaveHandle: leaveHandle,
+                                                          userIndicatorController: userIndicatorController,
+                                                          mediaProvider: userSession.mediaProvider)
+            leaveSpaceViewModel.actions.sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .didCancel:
+                    state.bindings.leaveSpaceViewModel = nil
+                case .presentRolesAndPermissions:
+                    state.bindings.leaveSpaceViewModel = nil
+                    actionsSubject.send(.requestRolesAndPermissionsPresentation)
+                case .didLeaveSpace:
+                    state.bindings.leaveSpaceViewModel = nil
+                    actionsSubject.send(.leftRoom)
+                }
+            }
+            .store(in: &cancellables)
+            
+            state.bindings.leaveSpaceViewModel = leaveSpaceViewModel
+        case .failure:
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
         }
     }
