@@ -231,7 +231,7 @@ class RoomDetailsScreenViewModel: RoomDetailsScreenViewModelType, RoomDetailsScr
             .store(in: &cancellables)
             
             state.bindings.leaveSpaceViewModel = leaveSpaceViewModel
-        case .failure(let failure):
+        case .failure:
             userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
         }
     }

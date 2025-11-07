@@ -74,27 +74,6 @@ class LeaveSpaceViewModel: LeaveSpaceViewModelType {
     }
 }
 
-enum LeaveSpaceViewAction {
-    case confirmLeaveSpace
-    case deselectAll
-    case selectAll
-    case toggleRoom(roomID: String)
-    case rolesAndPermissions
-    case cancel
-}
-
-struct LeaveSpaceViewState: BindableState {
-    let spaceName: String
-    let canEditRolesAndPermissions: Bool
-    let leaveHandle: LeaveSpaceHandleProxy
-}
-
-enum LeaveSpaceViewModelAction {
-    case didLeaveSpace
-    case presentRolesAndPermissions
-    case didCancel
-}
-
 extension LeaveSpaceViewModel: Identifiable {
     var id: String { state.leaveHandle.id }
 }

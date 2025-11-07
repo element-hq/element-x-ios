@@ -162,7 +162,7 @@ class SpaceScreenViewModel: SpaceScreenViewModelType, SpaceScreenViewModelProtoc
         }
         
         let leaveSpaceViewModel = LeaveSpaceViewModel(spaceName: state.space.name,
-                                                      canEditRolesAndPermissions: state.canEditRolesAndPermissions,
+                                                      canEditRolesAndPermissions: appSettings.spaceSettingsEnabled && state.canEditRolesAndPermissions,
                                                       leaveHandle: leaveHandle,
                                                       userIndicatorController: userIndicatorController,
                                                       mediaProvider: mediaProvider)

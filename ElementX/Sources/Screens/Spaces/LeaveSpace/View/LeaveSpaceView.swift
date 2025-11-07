@@ -42,12 +42,12 @@ struct LeaveSpaceView: View {
             BigIcon(icon: \.errorSolid, style: .alertSolid)
             
             VStack(spacing: 8) {
-                Text(context.viewState.leaveHandle.title(spaceName: context.viewState.leaveHandle.spaceName))
+                Text(context.viewState.title)
                     .font(.compound.headingMDBold)
                     .foregroundStyle(.compound.textPrimary)
                     .multilineTextAlignment(.center)
                 
-                if let subtitle = context.viewState.leaveHandle.subtitle {
+                if let subtitle = context.viewState.subtitle {
                     Text(subtitle)
                         .font(.compound.bodyMD)
                         .foregroundStyle(.compound.textSecondary)
@@ -94,7 +94,7 @@ struct LeaveSpaceView: View {
                 Button(role: .destructive) {
                     context.send(viewAction: .confirmLeaveSpace)
                 } label: {
-                    Label(context.viewState.leaveHandle.confirmationTitle, icon: \.leave)
+                    Label(context.viewState.confirmationTitle, icon: \.leave)
                 }
                 .buttonStyle(.compound(.primary))
             } else if context.viewState.canEditRolesAndPermissions {
@@ -111,29 +111,6 @@ struct LeaveSpaceView: View {
         }
         .padding(.horizontal, 16)
         .padding(.top, 16)
-    }
-}
-
-private extension LeaveSpaceHandleProxy {
-    func title(spaceName: String) -> String {
-        switch mode {
-        case .lastSpaceAdmin: L10n.screenLeaveSpaceTitleLastAdmin(spaceName)
-        default: L10n.screenLeaveSpaceTitle(spaceName)
-        }
-    }
-    
-    var subtitle: String? {
-        switch mode {
-        case .manyRooms: L10n.screenLeaveSpaceSubtitle
-        case .onlyAdminRooms: L10n.screenLeaveSpaceSubtitleOnlyLastAdmin
-        case .noRooms: nil
-        case .lastSpaceAdmin: L10n.screenLeaveSpaceSubtitleLastAdmin
-        }
-    }
-    
-    var confirmationTitle: String {
-        let selectedCount = selectedCount
-        return selectedCount > 0 ? L10n.screenLeaveSpaceSubmit(selectedCount) : L10n.actionLeaveSpace
     }
 }
 

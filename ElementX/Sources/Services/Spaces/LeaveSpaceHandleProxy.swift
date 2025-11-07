@@ -11,7 +11,6 @@ import MatrixRustSDK
 
 final class LeaveSpaceHandleProxy {
     let id: String
-    let spaceName: String
     var rooms: [LeaveSpaceRoomDetails]
     
     enum Mode { case manyRooms, onlyAdminRooms, noRooms, lastSpaceAdmin }
@@ -28,7 +27,6 @@ final class LeaveSpaceHandleProxy {
         
         let rooms = leaveHandle.rooms()
         let space = rooms.first { $0.spaceRoom.roomId == spaceID }
-        spaceName = space?.spaceRoom.displayName ?? id
         
         self.rooms = rooms
             .compactMap { room in
