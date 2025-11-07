@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: Danger
-    runs-on: macos-15
+    runs-on: ubuntu-latest
     timeout-minutes: 15
 
     concurrency:
@@ -16,15 +16,8 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Setup environment
-        run: 
-          brew install danger/tap/danger-swift swiftlint
-
+      - uses: actions/checkout@v1
       - name: Danger
-        run: 
-          danger-swift ci
-        env: 
+        uses: danger/swift@3.22.0
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
