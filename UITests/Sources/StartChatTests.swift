@@ -41,6 +41,7 @@ class StartChatTests: XCTestCase {
         app.popovers.buttons.element(boundBy: 2).tap() // There are 2 buttons with the accessibility identifier, so use the index to get the right one.
         let cancelButton = app.buttons["Cancel"]
         XCTAssertTrue(cancelButton.waitForExistence(timeout: 1.0))
+        try await Task.sleep(for: .seconds(5)) // The first load of the photo picker can be slow.
         try await app.assertScreenshot(step: Step.createRoomAvatarPicker)
         cancelButton.tap()
         
