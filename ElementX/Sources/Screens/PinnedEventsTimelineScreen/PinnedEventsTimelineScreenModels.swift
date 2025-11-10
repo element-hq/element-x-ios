@@ -9,7 +9,7 @@
 import Foundation
 
 enum PinnedEventsTimelineScreenViewModelAction {
-    case viewInRoomTimeline(itemID: TimelineItemIdentifier)
+    case viewInRoomTimeline(eventID: String, threadRootEventID: String?)
     case displayMessageForwarding(MessageForwardingItem)
     case dismiss
 }

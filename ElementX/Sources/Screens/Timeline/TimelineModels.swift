@@ -28,7 +28,7 @@ enum TimelineViewModelAction {
     case displayThread(itemID: TimelineItemIdentifier)
     case composer(action: TimelineComposerAction)
     case hasScrolled(direction: ScrollDirection)
-    case viewInRoomTimeline(eventID: String)
+    case viewInRoomTimeline(eventID: String, threadRootEventID: String?)
     case displayRoom(roomID: String, via: [String])
     case displayMediaDetails(item: EventBasedMessageTimelineItemProtocol)
 }

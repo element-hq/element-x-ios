@@ -87,26 +87,13 @@ class PinnedEventsTimelineFlowCoordinator: FlowCoordinatorProtocol {
                     presentMapNavigator(geoURI: geoURI, description: description, timelineController: timelineController)
                 case .displayMessageForwarding(let forwardingItem):
                     presentMessageForwarding(with: forwardingItem)
-                case .displayRoomScreenWithFocussedPin(let eventID):
-                    Task { await self.displayRoomScreenWithFocussedPin(eventID: eventID) }
+                case .displayRoomScreenWithFocussedPin(let eventID, let threadRootEventID):
+                    actionsSubject.send(.displayRoomScreenWithFocussedPin(eventID: eventID, threadRootEventID: threadRootEventID))
                 }
             }
             .store(in: &cancellables)
         
         navigationStackCoordinator.setRootCoordinator(coordinator)
-    }
-    
-    private func displayRoomScreenWithFocussedPin(eventID: String) async {
-        switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
-        case .success(let event):
-            if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
-                actionsSubject.send(.displayRoomScreenWithFocussedPin(eventID: eventID, threadRootEventID: threadRootEventID))
-            } else {
-                actionsSubject.send(.displayRoomScreenWithFocussedPin(eventID: eventID, threadRootEventID: nil))
-            }
-        case .failure:
-            flowParameters.userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
-        }
     }
     
     private func presentMapNavigator(geoURI: GeoURI, description: String?, timelineController: TimelineControllerProtocol) {
