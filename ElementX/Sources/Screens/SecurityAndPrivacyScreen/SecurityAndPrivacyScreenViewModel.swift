@@ -16,6 +16,7 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     private let roomProxy: JoinedRoomProxyProtocol
     private let clientProxy: ClientProxyProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appSettings: AppSettings
     
     private let actionsSubject: PassthroughSubject<SecurityAndPrivacyScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<SecurityAndPrivacyScreenViewModelAction, Never> {
@@ -24,14 +25,23 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
     
     init(roomProxy: JoinedRoomProxyProtocol,
          clientProxy: ClientProxyProtocol,
-         userIndicatorController: UserIndicatorControllerProtocol) {
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appSettings: AppSettings) {
         self.roomProxy = roomProxy
         self.clientProxy = clientProxy
         self.userIndicatorController = userIndicatorController
+        self.appSettings = appSettings
+        
         super.init(initialViewState: SecurityAndPrivacyScreenViewState(serverName: clientProxy.userIDServerName ?? "",
                                                                        accessType: roomProxy.infoPublisher.value.joinRule.toSecurityAndPrivacyRoomAccessType,
                                                                        isEncryptionEnabled: roomProxy.infoPublisher.value.isEncrypted,
-                                                                       historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility))
+                                                                       historyVisibility: roomProxy.infoPublisher.value.historyVisibility.toSecurityAndPrivacyHistoryVisibility,
+                                                                       isSpace: roomProxy.infoPublisher.value.isSpace,
+                                                                       isKnockingEnabled: appSettings.knockingEnabled))
+        
+        if let powerLevels = roomProxy.infoPublisher.value.powerLevels {
+            setupPermissions(powerLevels: powerLevels)
+        }
         
         setupRoomDirectoryVisibility()
         setupSubscriptions()
@@ -82,7 +92,8 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
         
         let userIDServerName = clientProxy.userIDServerName
         
-        roomProxy.infoPublisher
+        let infoPublisher = roomProxy.infoPublisher
+        infoPublisher
             .compactMap { roomInfo in
                 guard let userIDServerName else {
                     return nil
@@ -96,6 +107,33 @@ class SecurityAndPrivacyScreenViewModel: SecurityAndPrivacyScreenViewModelType, 
             .receive(on: DispatchQueue.main)
             .weakAssign(to: \.state.canonicalAlias, on: self)
             .store(in: &cancellables)
+        
+        infoPublisher
+            .compactMap(\.powerLevels)
+            .removeDuplicates { $0.userPowerLevels == $1.userPowerLevels && $0.values == $1.values }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] powerLevels in
+                self?.setupPermissions(powerLevels: powerLevels)
+            }
+            .store(in: &cancellables)
+        
+        infoPublisher
+            .map(\.isSpace)
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.isSpace, on: self)
+            .store(in: &cancellables)
+        
+        appSettings.$knockingEnabled
+            .weakAssign(to: \.state.isKnockingEnabled, on: self)
+            .store(in: &cancellables)
+    }
+    
+    private func setupPermissions(powerLevels: RoomPowerLevelsProxyProtocol) {
+        state.canEditAddress = powerLevels.canOwnUser(sendStateEvent: .roomAliases)
+        state.canEditJoinRule = powerLevels.canOwnUser(sendStateEvent: .roomJoinRules)
+        state.canEditHistoryVisibility = powerLevels.canOwnUser(sendStateEvent: .roomHistoryVisibility)
+        state.canEnableEncryption = powerLevels.canOwnUser(sendStateEvent: .roomEncryption)
     }
     
     private func setupRoomDirectoryVisibility() {
