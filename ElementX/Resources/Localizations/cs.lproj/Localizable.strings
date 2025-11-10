@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Zpráva nebyla odeslána, protože ověřená identita uživatele %1$@ se změnila.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Zpráva nebyla odeslána, protože%1$@ neověřil(a) všechna zařízení.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Adresa domovského serveru";
 "screen_account_provider_form_notice" = "Zadejte hledaný výraz nebo adresu domény.";
 "screen_account_provider_form_subtitle" = "Vyhledejte společnost, komunitu nebo soukromý server.";

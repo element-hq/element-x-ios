@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Heb anfon y neges oherwydd bod hunaniaeth wedi 'i ddilysu %1$@ wedi'i ailosod.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Heb anfon y neges oherwydd nid yw %1$@ wedi gwirio pob dyfais.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Heb anfon y neges oherwydd nad ydych wedi gwirio un neu fwy o'ch dyfeisiau.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Cyfeiriad y gweinydd cartref";
 "screen_account_provider_form_notice" = "Rhowch derm chwilio neu gyfeiriad parth.";
 "screen_account_provider_form_subtitle" = "Chwiliwch am gwmni, gweinyddwr cymunedol neu weinydd preifat.";

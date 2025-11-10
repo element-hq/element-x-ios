@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Homeserver address";
 "screen_account_provider_form_notice" = "Enter a search term or a domain address.";
 "screen_account_provider_form_subtitle" = "Search for a company, community, or private server.";
@@ -1004,9 +1005,9 @@
 "screen_room_change_permissions_invite_people" = "Invite people and accept requests to join";
 "screen_room_change_permissions_moderators" = "Admins and moderators";
 "screen_room_change_permissions_remove_people" = "Remove people and decline requests to join";
-"screen_room_change_permissions_room_avatar" = "Change room avatar";
-"screen_room_change_permissions_room_name" = "Change room name";
-"screen_room_change_permissions_room_topic" = "Change room topic";
+"screen_room_change_permissions_room_avatar" = "Change avatar";
+"screen_room_change_permissions_room_name" = "Change name";
+"screen_room_change_permissions_room_topic" = "Change topic";
 "screen_room_change_permissions_send_messages" = "Send messages";
 "screen_room_change_role_administrators_title" = "Edit Admins";
 "screen_room_change_role_confirm_add_admin_description" = "You will not be able to undo this action. You are promoting the user to have the same power level as you.";

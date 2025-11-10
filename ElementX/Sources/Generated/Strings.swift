@@ -2310,13 +2310,13 @@ internal enum L10n {
   internal static var screenRoomChangePermissionsModerators: String { return L10n.tr("Localizable", "screen_room_change_permissions_moderators") }
   /// Remove people and decline requests to join
   internal static var screenRoomChangePermissionsRemovePeople: String { return L10n.tr("Localizable", "screen_room_change_permissions_remove_people") }
-  /// Change room avatar
+  /// Change avatar
   internal static var screenRoomChangePermissionsRoomAvatar: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_avatar") }
   /// Room details
   internal static var screenRoomChangePermissionsRoomDetails: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_details") }
-  /// Change room name
+  /// Change name
   internal static var screenRoomChangePermissionsRoomName: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_name") }
-  /// Change room topic
+  /// Change topic
   internal static var screenRoomChangePermissionsRoomTopic: String { return L10n.tr("Localizable", "screen_room_change_permissions_room_topic") }
   /// Send messages
   internal static var screenRoomChangePermissionsSendMessages: String { return L10n.tr("Localizable", "screen_room_change_permissions_send_messages") }
@@ -3435,6 +3435,13 @@ internal enum L10n {
     /// You're already logged in on this device as %1$@.
     internal static func accountAlreadyLoggedIn(_ p1: Any) -> String {
       return L10n.tr("Localizable", "error.account_already_logged_in", String(describing: p1))
+    }
+  }
+
+  internal enum Screen {
+    internal enum RoomRolesAndPermissions {
+      /// Space details
+      internal static var spaceDetails: String { return L10n.tr("Localizable", "screen.room_roles_and_permissions.space_details") }
     }
   }
 }

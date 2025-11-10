@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Messaggio non inviato perché l'identità verificata di %1$@ è stata reimpostata.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Messaggio non inviato perché %1$@ non ha verificato tutti i dispositivi.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Messaggio non inviato perché non hai verificato uno o più dispositivi.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Indirizzo dell'homeserver";
 "screen_account_provider_form_notice" = "Inserisci un termine di ricerca o un indirizzo di dominio.";
 "screen_account_provider_form_subtitle" = "Cerca un'azienda, una comunità o un server privato.";

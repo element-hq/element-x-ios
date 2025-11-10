@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "消息未发送，因为%1$@的已验证身份已被重置。";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "消息未发送，因为%1$@尚未验证所有设备。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "消息未发送，因为您有尚未验证的设备。";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "服务器地址";
 "screen_account_provider_form_notice" = "输入搜索词或域名地址。";
 "screen_account_provider_form_subtitle" = "搜索公司、社区或私人服务器。";

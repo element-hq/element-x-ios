@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Mensagem não enviada porque a identidade verificada de %1$@ foi redefinida.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "A mensagem não foi enviada porque %1$@ não verificou todos os dispositivos.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Mensagem não enviada porque você não verificou um ou mais dos seus dispositivos.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Endereço do servidor-casa";
 "screen_account_provider_form_notice" = "Digite um termo de pesquisa ou o endereço de um domínio.";
 "screen_account_provider_form_subtitle" = "Procure uma empresa, comunidade ou servidor privado.";

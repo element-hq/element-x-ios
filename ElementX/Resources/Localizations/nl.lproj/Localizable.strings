@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Bericht niet verzonden omdat %1$@'s geverifieerde identiteit is gewijzigd.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Bericht niet verzonden omdat %1$@ niet alle apparaten heeft geverifieerd.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Bericht is niet verzonden omdat je een of meerdere apparaten niet geverifieerd hebt";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Homeserver-adres";
 "screen_account_provider_form_notice" = "Voer een zoekterm of een domeinnaam in.";
 "screen_account_provider_form_subtitle" = "Zoek naar een bedrijf, community of privéserver.";

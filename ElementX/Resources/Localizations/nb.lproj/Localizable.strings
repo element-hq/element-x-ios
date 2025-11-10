@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Meldingen ble ikke sendt fordi %1$@s verifiserte identitet er tilbakestilt.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Meldingen ble ikke sendt fordi %1$@ ikke har verifisert alle enheter.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Meldingen ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Hjemmeserveradresse";
 "screen_account_provider_form_notice" = "Skriv inn et søkeord eller en domeneadresse.";
 "screen_account_provider_form_subtitle" = "Søk etter et selskap, fellesskap eller privat server.";

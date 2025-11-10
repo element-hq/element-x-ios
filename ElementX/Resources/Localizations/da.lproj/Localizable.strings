@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Beskeden blev ikke sendt fordi %1$@ s bekræftede identitet blev nulstillet.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Meddelelsen er ikke sendt, fordi %1$@ ikke har bekræftet alle enheder.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Beskeden er ikke sendt, fordi du ikke har verificeret en eller flere af dine enheder.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Hjemmeserverens adresse";
 "screen_account_provider_form_notice" = "Indtast et søgeudtryk eller en domæneadresse.";
 "screen_account_provider_form_subtitle" = "Søg efter en virksomhed, et fællesskab eller en privat server.";
