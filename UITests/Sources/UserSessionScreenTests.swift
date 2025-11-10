@@ -52,7 +52,7 @@ class UserSessionScreenTests: XCTestCase {
         try await Task.sleep(for: .seconds(1))
 
         let cell = app.cells.element(boundBy: 1) // Skip the typing indicator cell
-        cell.swipeRight(velocity: .fast)
+        cell.swipeRight(velocity: .slow) // The iOS 26 simulator doesn't like a fast swipe.
 
         try await app.assertScreenshot()
     }
