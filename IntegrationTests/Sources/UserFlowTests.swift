@@ -156,9 +156,8 @@ class UserFlowTests: XCTestCase {
         
         tapOnButton(A11yIdentifiers.startChatScreen.createRoom)
         
-        tapOnButton(A11yIdentifiers.inviteUsersScreen.proceed)
-        
-        tapOnBackButton("Invite people")
+        // Don't create the room, it will make the test account very noisy.
+        // The UI tests already test this flow with mocked data.
         
         tapOnBackButton("Start chat")
         
