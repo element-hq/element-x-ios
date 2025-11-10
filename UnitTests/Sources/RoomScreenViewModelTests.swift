@@ -22,6 +22,7 @@ class RoomScreenViewModelTests: XCTestCase {
     
     override func tearDown() {
         viewModel = nil
+        AppSettings.resetAllSettings()
     }
     
     func testPinnedEventsBanner() async throws {
@@ -163,10 +164,12 @@ class RoomScreenViewModelTests: XCTestCase {
     
     func testPinnedEventsBannerThreadedSelection() async throws {
         ServiceLocator.shared.settings.threadsEnabled = true
+        
         let roomProxyMock = JoinedRoomProxyMock(.init())
         let eventMock = TimelineEventSDKMock()
         eventMock.threadRootEventIdReturnValue = "thread"
         roomProxyMock.loadOrFetchEventDetailsForReturnValue = .success(eventMock)
+        
         // setup a way to inject the mock of the pinned events timeline
         let pinnedTimelineMock = TimelineProxyMock()
         let pinnedTimelineItemProviderMock = TimelineItemProviderMock()
@@ -176,6 +179,7 @@ class RoomScreenViewModelTests: XCTestCase {
                                                       .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: .init("2"))),
                                                       .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test3")), uniqueID: .init("3")))]
         roomProxyMock.pinnedEventsTimelineReturnValue = .success(pinnedTimelineMock)
+        
         let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
                                             roomProxy: roomProxyMock,
                                             initialSelectedPinnedEventID: "test1",
@@ -212,6 +216,7 @@ class RoomScreenViewModelTests: XCTestCase {
             }
             return false
         }
+        
         viewModel.context.send(viewAction: .tappedPinnedEventsBanner)
         try await deferred.fulfill()
         try await deferredAction1.fulfill()

@@ -187,7 +187,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentRoom(roomID: roomID, via: via))
                 case .displayMessageForwarding(let forwardingItem):
                     actionsSubject.send(.presentMessageForwarding(forwardingItem: forwardingItem))
-                case .displayThread(threadRootEventID: let threadRootEventID, focussedEventID: let focussedEventID):
+                case .displayThread(let threadRootEventID, let focussedEventID):
                     actionsSubject.send(.presentThread(threadRootEventID: threadRootEventID, focussedEventID: focussedEventID))
                 }
             }
@@ -206,6 +206,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         Task { await timelineViewModel.focusOnEvent(eventID: eventID) }
     }
     
+    /// Sets the banner to selection to a specific event ID, even if not visible in the main timeline (like a threaded event).
     func setSelectedPin(eventID: String) {
         roomViewModel.setSelectedPinnedEventID(eventID)
     }

@@ -310,8 +310,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .success(let event):
                     if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
                         stateMachine.tryEvent(.presentRoom(presentationAction: .thread(rootEventID: threadRootEventID,
-                                                                                       focusEvent: .init(eventID: focusEvent.eventID,
-                                                                                                         shouldSetPin: focusEvent.shouldSetPin))),
+                                                                                       focusEvent: focusEvent)),
                                               userInfo: EventUserInfo(animated: animated))
                     } else {
                         stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
@@ -621,10 +620,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         case .share(.mediaFiles(_, let mediaFiles)):
             stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: mediaFiles.map(\.url)),
                                   userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-        case .thread(let rootEventID, let focusEvent):
-            // Not sure if necessary here
-            stateMachine.tryEvent(.presentThread(threadRootEventID: rootEventID, focusEventID: focusEvent?.eventID))
-        case .share(.text), .eventFocus:
+        case .share(.text), .eventFocus, .thread:
             break // These are both handled in the coordinator's init.
         case .none:
             break
