@@ -17,6 +17,13 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     var currentSettings: SecurityAndPrivacySettings
     var bindings: SecurityAndPrivacyScreenViewStateBindings
     var canonicalAlias: String?
+    var isKnockingEnabled: Bool
+    var isSpace: Bool
+    
+    var canEditAddress = false
+    var canEditJoinRule = false
+    var canEnableEncryption = false
+    var canEditHistoryVisibility = false
     
     private var hasChanges: Bool {
         currentSettings != bindings.desiredSettings
@@ -42,8 +49,13 @@ struct SecurityAndPrivacyScreenViewState: BindableState {
     init(serverName: String,
          accessType: SecurityAndPrivacyRoomAccessType,
          isEncryptionEnabled: Bool,
-         historyVisibility: SecurityAndPrivacyHistoryVisibility) {
+         historyVisibility: SecurityAndPrivacyHistoryVisibility,
+         isSpace: Bool,
+         isKnockingEnabled: Bool) {
         self.serverName = serverName
+        self.isKnockingEnabled = isKnockingEnabled
+        self.isSpace = isSpace
+        
         let settings = SecurityAndPrivacySettings(accessType: accessType,
                                                   isEncryptionEnabled: isEncryptionEnabled,
                                                   historyVisibility: historyVisibility)

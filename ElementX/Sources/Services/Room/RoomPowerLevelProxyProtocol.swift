@@ -40,8 +40,13 @@ protocol RoomPowerLevelsProxyProtocol {
 // MARK: - Helpers
 
 extension RoomPowerLevelsProxyProtocol {
-    /// Can own user edit either the room name, avatar or topic
+    /// Can own user edit either the room name, avatar or topic.
     func canOwnUserEditBaseInfo() -> Bool {
         canOwnUser(sendStateEvent: .roomAvatar) || canOwnUser(sendStateEvent: .roomName) || canOwnUser(sendStateEvent: .roomTopic)
+    }
+    
+    /// Can own user edit any of the security and privacy settings.
+    func canOwnUserEditSecurityAndPrivacy() -> Bool {
+        canOwnUser(sendStateEvent: .roomEncryption) || canOwnUser(sendStateEvent: .roomAliases) || canOwnUser(sendStateEvent: .roomJoinRules) || canOwnUser(sendStateEvent: .roomHistoryVisibility)
     }
 }

@@ -57,6 +57,7 @@ struct RoomDetailsScreenViewState: BindableState {
     var canEditRoomTopic = false
     var canEditRoomAvatar = false
     var canEditRolesOrPermissions = false
+    var canEditSecurityAndPrivacy = false
     var canKickUsers = false
     var canBanUsers = false
     var notificationSettingsState: RoomDetailsNotificationSettingsState = .loading
@@ -74,7 +75,7 @@ struct RoomDetailsScreenViewState: BindableState {
     }
     
     var canSeeSecurityAndPrivacy: Bool {
-        knockingEnabled && dmRecipientInfo == nil && canEditRolesOrPermissions
+        dmRecipientInfo == nil && canEditSecurityAndPrivacy
     }
     
     var canEditBaseInfo: Bool {
