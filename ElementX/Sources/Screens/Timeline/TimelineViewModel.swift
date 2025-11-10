@@ -495,12 +495,26 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                 case .showDebugInfo(let debugInfo):
                     state.bindings.debugInfo = debugInfo
                 case .viewInRoomTimeline(let eventID):
-                    actionsSubject.send(.viewInRoomTimeline(eventID: eventID))
+                    Task { await self.viewInRoomTimeline(eventID: eventID) }
                 case .displayThread(let itemID):
                     actionsSubject.send(.displayThread(itemID: itemID))
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    func viewInRoomTimeline(eventID: String) async {
+        switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
+        case .success(let event):
+            let threadRootEventID: String? = if appSettings.threadsEnabled {
+                event.threadRootEventId()
+            } else {
+                nil
+            }
+            actionsSubject.send(.viewInRoomTimeline(eventID: eventID, threadRootEventID: threadRootEventID))
+        case .failure:
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+        }
     }
     
     private func setupAppSettingsSubscriptions() {

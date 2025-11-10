@@ -22,6 +22,7 @@ class RoomScreenViewModelTests: XCTestCase {
     
     override func tearDown() {
         viewModel = nil
+        AppSettings.resetAllSettings()
     }
     
     func testPinnedEventsBanner() async throws {
@@ -109,6 +110,7 @@ class RoomScreenViewModelTests: XCTestCase {
     
     func testPinnedEventsBannerSelection() async throws {
         let roomProxyMock = JoinedRoomProxyMock(.init())
+        roomProxyMock.loadOrFetchEventDetailsForReturnValue = .success(TimelineEventSDKMock())
         // setup a way to inject the mock of the pinned events timeline
         let pinnedTimelineMock = TimelineProxyMock()
         let pinnedTimelineItemProviderMock = TimelineItemProviderMock()
@@ -158,6 +160,67 @@ class RoomScreenViewModelTests: XCTestCase {
         }
         viewModel.setSelectedPinnedEventID("test2")
         try await deferred.fulfill()
+    }
+    
+    func testPinnedEventsBannerThreadedSelection() async throws {
+        ServiceLocator.shared.settings.threadsEnabled = true
+        
+        let roomProxyMock = JoinedRoomProxyMock(.init())
+        let eventMock = TimelineEventSDKMock()
+        eventMock.threadRootEventIdReturnValue = "thread"
+        roomProxyMock.loadOrFetchEventDetailsForReturnValue = .success(eventMock)
+        
+        // setup a way to inject the mock of the pinned events timeline
+        let pinnedTimelineMock = TimelineProxyMock()
+        let pinnedTimelineItemProviderMock = TimelineItemProviderMock()
+        pinnedTimelineMock.timelineItemProvider = pinnedTimelineItemProviderMock
+        pinnedTimelineItemProviderMock.underlyingUpdatePublisher = Empty<([TimelineItemProxy], PaginationState), Never>().eraseToAnyPublisher()
+        pinnedTimelineItemProviderMock.itemProxies = [.event(.init(item: EventTimelineItem(configuration: .init(eventID: "test1")), uniqueID: .init("1"))),
+                                                      .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test2")), uniqueID: .init("2"))),
+                                                      .event(.init(item: EventTimelineItem(configuration: .init(eventID: "test3")), uniqueID: .init("3")))]
+        roomProxyMock.pinnedEventsTimelineReturnValue = .success(pinnedTimelineMock)
+        
+        let viewModel = RoomScreenViewModel(userSession: UserSessionMock(.init()),
+                                            roomProxy: roomProxyMock,
+                                            initialSelectedPinnedEventID: "test1",
+                                            ongoingCallRoomIDPublisher: .init(.init(nil)),
+                                            appSettings: ServiceLocator.shared.settings,
+                                            appHooks: AppHooks(),
+                                            analyticsService: ServiceLocator.shared.analytics,
+                                            userIndicatorController: ServiceLocator.shared.userIndicatorController)
+        self.viewModel = viewModel
+        
+        // check if the banner is now in a loaded state and is showing the counter
+        var deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
+            !viewState.pinnedEventsBannerState.isLoading
+        }
+        try await deferred.fulfill()
+        XCTAssertEqual(viewModel.context.viewState.pinnedEventsBannerState.count, 3)
+        XCTAssertTrue(viewModel.context.viewState.shouldShowPinnedEventsBanner)
+        // And that is actually displaying the `initialSelectedPinEventID` which is gthe first one in the list
+        XCTAssertEqual(viewModel.context.viewState.pinnedEventsBannerState.selectedPinnedIndex, 0)
+        
+        // check if the banner scrolls when tapping the previous pin
+        deferred = deferFulfillment(viewModel.context.$viewState) { viewState in
+            viewState.pinnedEventsBannerState.selectedPinnedIndex == 2
+        }
+        let deferredAction1 = deferFulfillment(viewModel.actions) { action in
+            if case let .focusEvent(threadRootEventID) = action {
+                return threadRootEventID == "thread"
+            }
+            return false
+        }
+        let deferredAction2 = deferFulfillment(viewModel.actions) { action in
+            if case let .displayThread(threadRootEventID, focussedEventID) = action {
+                return threadRootEventID == "thread" && focussedEventID == "test1"
+            }
+            return false
+        }
+        
+        viewModel.context.send(viewAction: .tappedPinnedEventsBanner)
+        try await deferred.fulfill()
+        try await deferredAction1.fulfill()
+        try await deferredAction2.fulfill()
     }
     
     func testRoomInfoUpdate() async throws {

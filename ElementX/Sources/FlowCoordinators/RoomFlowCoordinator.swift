@@ -165,10 +165,15 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             }
         case .thread(let roomID, let threadRootEventID, let focusEventID):
             Task {
+                let focusEvent: FocusEvent? = if let focusEventID {
+                    .init(eventID: focusEventID, shouldSetPin: false)
+                } else {
+                    nil
+                }
                 await handleRoomRoute(roomID: roomID,
                                       via: [],
                                       presentationAction: .thread(rootEventID: threadRootEventID,
-                                                                  focusEventID: focusEventID),
+                                                                  focusEvent: focusEvent),
                                       animated: animated)
             }
         case .event(let eventID, let roomID, let via):
@@ -304,7 +309,10 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 switch await roomProxy.loadOrFetchEventDetails(for: focusEvent.eventID) {
                 case .success(let event):
                     if flowParameters.appSettings.threadsEnabled, let threadRootEventID = event.threadRootEventId() {
-                        stateMachine.tryEvent(.presentRoom(presentationAction: .thread(rootEventID: threadRootEventID, focusEventID: focusEvent.eventID)), userInfo: EventUserInfo(animated: animated))
+                        stateMachine.tryEvent(.presentRoom(presentationAction: .thread(rootEventID: threadRootEventID,
+                                                                                       focusEvent: .init(eventID: focusEvent.eventID,
+                                                                                                         shouldSetPin: focusEvent.shouldSetPin))),
+                                              userInfo: EventUserInfo(animated: animated))
                     } else {
                         stateMachine.tryEvent(.presentRoom(presentationAction: presentationAction), userInfo: EventUserInfo(animated: animated))
                     }
@@ -570,9 +578,15 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                           userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
                 case .share(.text(_, let text)):
                     roomScreenCoordinator?.shareText(text)
-                case .thread(let rootEventID, let focusEventID):
-                    roomScreenCoordinator?.focusOnEvent(.init(eventID: rootEventID, shouldSetPin: false))
-                    stateMachine.tryEvent(.presentThread(threadRootEventID: rootEventID, focusEventID: focusEventID))
+                case .thread(let rootEventID, let focusEvent):
+                    if let focusEvent, let roomScreenCoordinator {
+                        roomScreenCoordinator.focusOnEvent(.init(eventID: rootEventID, shouldSetPin: false))
+                        // Since the root is not the message we want to show in the pinned banner, but the actual event
+                        if focusEvent.shouldSetPin {
+                            roomScreenCoordinator.setSelectedPin(eventID: focusEvent.eventID)
+                        }
+                    }
+                    stateMachine.tryEvent(.presentThread(threadRootEventID: rootEventID, focusEventID: focusEvent?.eventID))
                 case .none:
                     break
                 }
@@ -607,8 +621,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         case .share(.mediaFiles(_, let mediaFiles)):
             stateMachine.tryEvent(.presentMediaUploadPreview(mediaURLs: mediaFiles.map(\.url)),
                                   userInfo: EventUserInfo(animated: animated, timelineController: timelineController))
-        case .thread(let rootEventID, let focusEventID):
-            stateMachine.tryEvent(.presentThread(threadRootEventID: rootEventID, focusEventID: focusEventID))
+        case .thread(let rootEventID, let focusEvent):
+            stateMachine.tryEvent(.presentThread(threadRootEventID: rootEventID, focusEventID: focusEvent?.eventID))
         case .share(.text), .eventFocus:
             break // These are both handled in the coordinator's init.
         case .none:
@@ -693,11 +707,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                                                                      sendHandle: sendHandle))
                 case .presentKnockRequestsList:
                     stateMachine.tryEvent(.presentKnockRequestsListScreen)
-                case .presentThread(let itemID):
-                    guard let threadRootEventID = itemID.eventID else {
-                        fatalError("A thread root has always an eventID")
-                    }
-                    stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: nil))
+                case .presentThread(let threadRootEventID, let focussedEventID):
+                    stateMachine.tryEvent(.presentThread(threadRootEventID: threadRootEventID, focusEventID: focussedEventID))
                 case .presentRoom(let roomID, let via):
                     stateMachine.tryEvent(.startChildFlow(roomID: roomID,
                                                           via: via,
@@ -1478,9 +1489,13 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .forwardedMessageToRoom(let roomID):
                 navigationStackCoordinator.setSheetCoordinator(nil)
                 stateMachine.tryEvent(.startChildFlow(roomID: roomID, via: [], entryPoint: .room))
-            case .displayRoomScreenWithFocussedPin(let eventID):
+            case .displayRoomScreenWithFocussedPin(let eventID, let threadRootEventID):
                 navigationStackCoordinator.setSheetCoordinator(nil)
-                stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: true))))
+                if let threadRootEventID {
+                    stateMachine.tryEvent(.presentRoom(presentationAction: .thread(rootEventID: threadRootEventID, focusEvent: .init(eventID: eventID, shouldSetPin: true))))
+                } else {
+                    stateMachine.tryEvent(.presentRoom(presentationAction: .eventFocus(.init(eventID: eventID, shouldSetPin: true))))
+                }
             }
         }
         .store(in: &cancellables)

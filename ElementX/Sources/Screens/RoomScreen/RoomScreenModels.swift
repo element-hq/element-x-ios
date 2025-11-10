@@ -11,6 +11,7 @@ import OrderedCollections
 
 enum RoomScreenViewModelAction: Equatable {
     case focusEvent(eventID: String)
+    case displayThread(threadRootEventID: String, focussedEventID: String)
     case displayPinnedEventsTimeline
     case displayRoomDetails
     case displayCall

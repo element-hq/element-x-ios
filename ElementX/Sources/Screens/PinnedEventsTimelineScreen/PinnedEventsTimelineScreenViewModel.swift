@@ -12,14 +12,23 @@ import SwiftUI
 typealias PinnedEventsTimelineScreenViewModelType = StateStoreViewModel<PinnedEventsTimelineScreenViewState, PinnedEventsTimelineScreenViewAction>
 
 class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelType, PinnedEventsTimelineScreenViewModelProtocol {
+    private let roomProxy: JoinedRoomProxyProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
+    private let appSettings: AppSettings
     private let analyticsService: AnalyticsService
     
     private let actionsSubject: PassthroughSubject<PinnedEventsTimelineScreenViewModelAction, Never> = .init()
     var actionsPublisher: AnyPublisher<PinnedEventsTimelineScreenViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-
-    init(analyticsService: AnalyticsService) {
+    
+    init(roomProxy: JoinedRoomProxyProtocol,
+         userIndicatorController: UserIndicatorControllerProtocol,
+         appSettings: AppSettings,
+         analyticsService: AnalyticsService) {
+        self.roomProxy = roomProxy
+        self.userIndicatorController = userIndicatorController
+        self.appSettings = appSettings
         self.analyticsService = analyticsService
         super.init(initialViewState: PinnedEventsTimelineScreenViewState())
     }
@@ -52,7 +61,10 @@ class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelTy
                     self.actionsSubject.send(.displayMessageForwarding(forwardingItem))
                 }
             case .viewInRoomTimeline(let itemID):
-                actionsSubject.send(.viewInRoomTimeline(itemID: itemID))
+                guard let eventID = itemID.eventID else {
+                    return
+                }
+                Task { await self.viewInRoomTimeline(eventID: eventID) }
             case .dismiss:
                 state.bindings.mediaPreviewViewModel = nil
             }
@@ -60,5 +72,19 @@ class PinnedEventsTimelineScreenViewModel: PinnedEventsTimelineScreenViewModelTy
         .store(in: &cancellables)
         
         state.bindings.mediaPreviewViewModel = mediaPreviewViewModel
+    }
+    
+    private func viewInRoomTimeline(eventID: String) async {
+        switch await roomProxy.loadOrFetchEventDetails(for: eventID) {
+        case .success(let event):
+            let threadRootEventID: String? = if appSettings.threadsEnabled {
+                event.threadRootEventId()
+            } else {
+                nil
+            }
+            actionsSubject.send(.viewInRoomTimeline(eventID: eventID, threadRootEventID: threadRootEventID))
+        case .failure:
+            userIndicatorController.submitIndicator(.init(title: L10n.errorUnknown))
+        }
     }
 }
