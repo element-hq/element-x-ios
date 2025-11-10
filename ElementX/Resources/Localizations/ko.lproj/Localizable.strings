@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "%1$@의 인증된 신원이 재설정되어 메시지가 전송되지 않았습니다.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "%1$@ 이 모든 장치를 확인하지 않았기 때문에 메시지가 전송되지 않았습니다.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "하나 이상의 기기를 확인하지 않았기 때문에 메시지가 전송되지 않았습니다.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "홈서버 주소";
 "screen_account_provider_form_notice" = "검색어 또는 도메인 주소를 입력하세요.";
 "screen_account_provider_form_subtitle" = "회사, 커뮤니티, 또는 개인 서버를 검색하세요.";

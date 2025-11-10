@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Sõnum on saatmata, kuna kasutaja %1$@ verifitseeritud identiteet on lähtestatud.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Sõnum on saatmata, kuna %1$@ pole verifitseerinud kõiki oma seadmeid.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Koduserveri aadress";
 "screen_account_provider_form_notice" = "Sisesta otsingusõna või domeeni nimi.";
 "screen_account_provider_form_subtitle" = "Otsi äriühingut, kogukonda või võrgus leiduvat Matrixi serverit.";

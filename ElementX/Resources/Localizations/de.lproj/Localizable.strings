@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$@ geändert hat.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Die Nachricht wurde nicht gesendet, weil %1$@ nicht alle Geräte verifiziert hat.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Die Nachricht wurde nicht gesendet, weil du eines oder mehrere deiner Geräte nicht verifiziert hast.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Homeserver-Adresse";
 "screen_account_provider_form_notice" = "Gib einen Suchbegriff oder eine Domainadresse ein.";
 "screen_account_provider_form_subtitle" = "Suche nach einem Unternehmen, einer Community oder einem privaten Server.";

@@ -106,7 +106,7 @@
 "action_manage_devices" = "Управление на устройствата";
 "action_message" = "Съобщение";
 "action_minimize" = "Minimise";
-"action_next" = "Next";
+"action_next" = "Напред";
 "action_no" = "Не";
 "action_not_now" = "Не сега";
 "action_ok" = "Добре";
@@ -569,11 +569,11 @@
 "screen_knock_requests_list_empty_state_description" = "When somebody will ask to join the room, you’ll be able to see their request here.";
 "screen_knock_requests_list_empty_state_title" = "No pending request to join";
 "screen_knock_requests_list_initial_loading_title" = "Loading requests to join…";
-"screen_labs_enable_threads" = "Enable thread replies";
+"screen_labs_enable_threads" = "Включване на отговори в нишка";
 "screen_labs_enable_threads_description" = "The app will restart to apply this change.";
 "screen_labs_header_description" = "Try out our latest ideas in development. These features are not finalised; they may be unstable, may change.";
-"screen_labs_header_title" = "Feeling experimental?";
-"screen_labs_title" = "Labs";
+"screen_labs_header_title" = "Искате ли да експериментирате?";
+"screen_labs_title" = "Експерименти";
 "screen_leave_space_last_admin_info" = "%1$@ (Admin)";
 "screen_leave_space_subtitle" = "Select the rooms you’d like to leave which you're not the only administrator for:";
 "screen_leave_space_subtitle_last_admin" = "You need to assign another admin for this space before you can leave.";
@@ -667,8 +667,8 @@
 "screen_space_announcement_title" = "Introducing Spaces";
 "screen_space_list_description" = "Spaces you have created or joined.";
 "screen_space_list_details" = "%1$@ • %2$@";
-"screen_space_list_parent_space" = "%1$@ space";
-"screen_space_list_title" = "Spaces";
+"screen_space_list_parent_space" = "%1$@ пространство";
+"screen_space_list_title" = "Пространства";
 "screen_space_settings_roles_and_permissions" = "Roles & permissions";
 "screen_start_chat_join_room_by_address_action" = "Присъединяване към стая по адрес";
 "screen_start_chat_join_room_by_address_invalid_address" = "Не е валиден адрес";
@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Message not sent because %1$@’s verified identity was reset.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Message not sent because %1$@ has not verified all devices.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message not sent because you have not verified one or more of your devices.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Адрес на сървъра";
 "screen_account_provider_form_notice" = "Въведете термин за търсене или адрес на домейн.";
 "screen_account_provider_form_subtitle" = "Потърсете компания, общност или частен сървър.";
@@ -1004,7 +1005,7 @@
 "screen_room_change_permissions_invite_people" = "Поканване на хора и приемане на заявки за присъединяване";
 "screen_room_change_permissions_moderators" = "Администратори и модератори";
 "screen_room_change_permissions_remove_people" = "Премахване на хора и отхвърляне на заявки за присъединяване";
-"screen_room_change_permissions_room_avatar" = "Change room avatar";
+"screen_room_change_permissions_room_avatar" = "Change avatar";
 "screen_room_change_permissions_room_name" = "Промяна на името на стаята";
 "screen_room_change_permissions_room_topic" = "Промяна на темата на стаята";
 "screen_room_change_permissions_send_messages" = "Изпращане на съобщения";
@@ -1338,7 +1339,7 @@
 "notification_invitation_action_reject" = "Reject";
 "notification_room_action_mark_as_read" = "Отбелязване като прочетено";
 "notification_room_action_quick_reply" = "Бърз отговор";
-"screen_advanced_settings_labs" = "Labs";
+"screen_advanced_settings_labs" = "Експерименти";
 "screen_bottom_sheet_manage_room_member_kick_member_confirmation_description" = "They will be able to join this room again if invited.";
 "screen_bottom_sheet_manage_room_member_unban_member_confirmation_action" = "Unban";
 "screen_bottom_sheet_manage_room_member_unbanning_user" = "Unbanning %1$@";
@@ -1346,7 +1347,7 @@
 "screen_decline_and_block_block_user_option_title" = "Блокиране на потребителя";
 "screen_decline_and_block_report_user_reason_placeholder" = "Describe the reason to report…";
 "screen_home_tab_chats" = "Всички чатове";
-"screen_home_tab_spaces" = "Spaces";
+"screen_home_tab_spaces" = "Пространства";
 "screen_join_room_decline_and_block_button_title" = "Отхвърляне и блокиране";
 "screen_knock_requests_list_title" = "Requests to join";
 "screen_pinned_timeline_screen_title_empty" = "Закачени съобщения";

@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "因為 %1$@ 的驗證身份已重設，因此未傳送訊息。";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "訊息未傳送，因為 %1$@ 尚未驗證所有裝置。";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "因為您尚未驗證一個或多個裝置，因此未傳送訊息";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "家伺服器位址";
 "screen_account_provider_form_notice" = "輸入關鍵字或網域名稱。";
 "screen_account_provider_form_subtitle" = "搜尋公司、社群、私有伺服器。";

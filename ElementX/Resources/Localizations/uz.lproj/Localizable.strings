@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Xabar yuborilmadi, chunki %1$@ʼning tasdiqlangan identifikatori asliga qaytarildi.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Xabar yuborilmadi, chunki %1$@ barcha qurilmalarni tasdiqlamagan.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Xabaringiz yuborilmadi, chunki siz bir yoki bir nechta qurilmangizni tasdiqlamagan ekansiz.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Uy server manzili";
 "screen_account_provider_form_notice" = "Qidiruv so'zini yoki domen manzilini kiriting.";
 "screen_account_provider_form_subtitle" = "Kompaniya, jamoa yoki shaxsiy serverni qidiring.";

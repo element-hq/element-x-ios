@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "%1$@ kullanıcısının doğrulanmış kimliği değiştiği için ileti gönderilmedi.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "%1$@ tüm cihazları doğrulamadığı için mesaj gönderilmedi.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Bir veya daha fazla cihazınızı doğrulamadığınız için mesaj gönderilmedi.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Ana sunucu adresi";
 "screen_account_provider_form_notice" = "Bir arama terimi veya alan adı adresi girin.";
 "screen_account_provider_form_subtitle" = "Bir şirket, topluluk veya özel sunucu arayın.";

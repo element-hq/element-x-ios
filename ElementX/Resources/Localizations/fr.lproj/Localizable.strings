@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Le message n'a pas été envoyé car l'identité vérifiée de %1$@ a été réinitialisée.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Le message n'a pas été envoyé car %1$@ n'a pas vérifié tous ses appareils.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Message non envoyé car vous n'avez pas vérifié tous vos appareils.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Adresse du serveur d’accueil";
 "screen_account_provider_form_notice" = "Entrez un terme de recherche ou une adresse de domaine.";
 "screen_account_provider_form_subtitle" = "Recherchez une entreprise, une communauté ou un serveur privé.";

@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "پیغام نہیں بھیجا گیا کیونکہ %1$@ کی تصدیق شدہ شناخت کو دوبارہ ترتیب دے دیا گیا ہے۔";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "پیغام نہیں بھیجا گیا کیونکہ%1$@ نے تمام آلات کی تصدیق نہیں کی ہے۔";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "پیغام نہیں بھیجا گیا کیونکہ آپ نے اپنے ایک یا زیادہ آلات کی تصدیق نہیں کی ہے۔";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "منزلی خادم پتہ";
 "screen_account_provider_form_notice" = "تلاش کی اصطلاح یا عنوانِ مجال درج کریں۔";
 "screen_account_provider_form_subtitle" = "کسی شرکت، برادری، یا نجی خادم کیلئے تلاش کریں۔";

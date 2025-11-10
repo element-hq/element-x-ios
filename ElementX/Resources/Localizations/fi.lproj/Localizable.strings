@@ -679,6 +679,7 @@
 "screen_timeline_item_menu_send_failure_changed_identity" = "Viestiä ei lähetetty, koska käyttäjän %1$@ vahvistettu identiteetti nollattiin.";
 "screen_timeline_item_menu_send_failure_unsigned_device" = "Viestiä ei lähetetty, koska %1$@ ei ole vahvistanut kaikkia laitteitaan.";
 "screen_timeline_item_menu_send_failure_you_unsigned_device" = "Viestiä ei lähetetty, koska et ole vahvistanut yhtä tai useampaa laitettasi.";
+"screen.room_roles_and_permissions.space_details" = "Space details";
 "screen_account_provider_form_hint" = "Kotipalvelimen osoite";
 "screen_account_provider_form_notice" = "Kirjoita hakutermi tai osoite.";
 "screen_account_provider_form_subtitle" = "Hae yritystä, yhteisöä tai yksityistä palvelinta.";
