@@ -11,7 +11,6 @@ import SwiftUI
 
 struct RoomChangePermissionsScreenCoordinatorParameters {
     let permissions: RoomPermissions
-    let permissionsGroup: RoomRolesAndPermissionsScreenPermissionsGroup
     let roomProxy: JoinedRoomProxyProtocol
     let userIndicatorController: UserIndicatorControllerProtocol
     let analytics: AnalyticsService
@@ -35,7 +34,6 @@ final class RoomChangePermissionsScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = RoomChangePermissionsScreenViewModel(currentPermissions: parameters.permissions,
-                                                         group: parameters.permissionsGroup,
                                                          roomProxy: parameters.roomProxy,
                                                          userIndicatorController: parameters.userIndicatorController,
                                                          analytics: parameters.analytics)
