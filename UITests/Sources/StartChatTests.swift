@@ -43,7 +43,7 @@ class StartChatTests: XCTestCase {
         // The system UI snapshot is unreliable, instead lets just assert something.
         // XCTAssertTrue(cancelButton.waitForExistence(timeout: 1.0))
         // try await app.assertScreenshot(step: Step.createRoomAvatarPicker)
-        XCTAssertTrue(app.navigationBars["Photos"].waitForExistence(timeout: 5.0)) // The first load of the photo picker can be slow.
+        XCTAssertTrue(app.navigationBars["Photos"].waitForExistence(timeout: 20.0)) // The first load of the photo picker can sometimes be *really* slow.
         cancelButton.tap()
         
         // typeText sometimes misses letters but it's faster than typing one letter at a time
