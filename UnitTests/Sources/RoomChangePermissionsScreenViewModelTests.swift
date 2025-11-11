@@ -22,7 +22,6 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
     override func setUp() {
         roomProxy = JoinedRoomProxyMock(.init())
         viewModel = RoomChangePermissionsScreenViewModel(currentPermissions: .init(powerLevels: .mock),
-                                                         group: .roomDetails,
                                                          roomProxy: roomProxy,
                                                          userIndicatorController: UserIndicatorControllerMock(),
                                                          analytics: ServiceLocator.shared.analytics)
@@ -30,30 +29,30 @@ class RoomChangePermissionsScreenViewModelTests: XCTestCase {
 
     func testChangeSetting() {
         // Given a screen with no changes.
-        guard let index = context.settings.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
+        guard let index = context.settings[.roomDetails]?.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
             XCTFail("There should be a setting for the room avatar.")
             return
         }
-        XCTAssertEqual(context.settings[index].value, .moderator)
+        XCTAssertEqual(context.settings[.roomDetails]?[index].value, .moderator)
         XCTAssertFalse(context.viewState.hasChanges)
         
         // When updating a setting.
         let setting = RoomPermissionsSetting(title: "", value: .user, keyPath: \.roomAvatar)
-        context.settings[index] = setting
+        context.settings[.roomDetails]?[index] = setting
         
         // Then the setting should update and the changes should be flagged.
-        XCTAssertEqual(context.settings[index].value, .user)
+        XCTAssertEqual(context.settings[.roomDetails]?[index].value, .user)
         XCTAssertTrue(context.viewState.hasChanges)
     }
     
     func testSave() async throws {
         // Given a screen with changes.
-        guard let index = context.settings.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
+        guard let index = context.settings[.roomDetails]?.firstIndex(where: { $0.keyPath == \.roomAvatar }) else {
             XCTFail("There should be a setting for the room avatar.")
             return
         }
-        context.settings[index] = RoomPermissionsSetting(title: "", value: .user, keyPath: \.roomAvatar)
-        XCTAssertEqual(context.settings[index].value, .user)
+        context.settings[.roomDetails]?[index] = RoomPermissionsSetting(title: "", value: .user, keyPath: \.roomAvatar)
+        XCTAssertEqual(context.settings[.roomDetails]?[index].value, .user)
         XCTAssertTrue(context.viewState.hasChanges)
         XCTAssertEqual(context.settings.count, 3)
         
