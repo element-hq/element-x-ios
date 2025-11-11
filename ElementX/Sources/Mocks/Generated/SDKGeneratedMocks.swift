@@ -3253,77 +3253,6 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         try await loginWithOidcCallbackCallbackUrlClosure?(callbackUrl)
     }
 
-    //MARK: - loginWithQrCode
-
-    var loginWithQrCodeOidcConfigurationUnderlyingCallsCount = 0
-    open var loginWithQrCodeOidcConfigurationCallsCount: Int {
-        get {
-            if Thread.isMainThread {
-                return loginWithQrCodeOidcConfigurationUnderlyingCallsCount
-            } else {
-                var returnValue: Int? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginWithQrCodeOidcConfigurationUnderlyingCallsCount
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginWithQrCodeOidcConfigurationUnderlyingCallsCount = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginWithQrCodeOidcConfigurationUnderlyingCallsCount = newValue
-                }
-            }
-        }
-    }
-    open var loginWithQrCodeOidcConfigurationCalled: Bool {
-        return loginWithQrCodeOidcConfigurationCallsCount > 0
-    }
-    open var loginWithQrCodeOidcConfigurationReceivedOidcConfiguration: OidcConfiguration?
-    open var loginWithQrCodeOidcConfigurationReceivedInvocations: [OidcConfiguration] = []
-
-    var loginWithQrCodeOidcConfigurationUnderlyingReturnValue: LoginWithQrCodeHandler!
-    open var loginWithQrCodeOidcConfigurationReturnValue: LoginWithQrCodeHandler! {
-        get {
-            if Thread.isMainThread {
-                return loginWithQrCodeOidcConfigurationUnderlyingReturnValue
-            } else {
-                var returnValue: LoginWithQrCodeHandler? = nil
-                DispatchQueue.main.sync {
-                    returnValue = loginWithQrCodeOidcConfigurationUnderlyingReturnValue
-                }
-
-                return returnValue!
-            }
-        }
-        set {
-            if Thread.isMainThread {
-                loginWithQrCodeOidcConfigurationUnderlyingReturnValue = newValue
-            } else {
-                DispatchQueue.main.sync {
-                    loginWithQrCodeOidcConfigurationUnderlyingReturnValue = newValue
-                }
-            }
-        }
-    }
-    open var loginWithQrCodeOidcConfigurationClosure: ((OidcConfiguration) -> LoginWithQrCodeHandler)?
-
-    open override func loginWithQrCode(oidcConfiguration: OidcConfiguration) -> LoginWithQrCodeHandler {
-        loginWithQrCodeOidcConfigurationCallsCount += 1
-        loginWithQrCodeOidcConfigurationReceivedOidcConfiguration = oidcConfiguration
-        DispatchQueue.main.async {
-            self.loginWithQrCodeOidcConfigurationReceivedInvocations.append(oidcConfiguration)
-        }
-        if let loginWithQrCodeOidcConfigurationClosure = loginWithQrCodeOidcConfigurationClosure {
-            return loginWithQrCodeOidcConfigurationClosure(oidcConfiguration)
-        } else {
-            return loginWithQrCodeOidcConfigurationReturnValue
-        }
-    }
-
     //MARK: - logout
 
     open var logoutThrowableError: Error?
@@ -3362,6 +3291,142 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         }
         logoutCallsCount += 1
         try await logoutClosure?()
+    }
+
+    //MARK: - newGrantLoginWithQrCodeHandler
+
+    var newGrantLoginWithQrCodeHandlerUnderlyingCallsCount = 0
+    open var newGrantLoginWithQrCodeHandlerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return newGrantLoginWithQrCodeHandlerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = newGrantLoginWithQrCodeHandlerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                newGrantLoginWithQrCodeHandlerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    newGrantLoginWithQrCodeHandlerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var newGrantLoginWithQrCodeHandlerCalled: Bool {
+        return newGrantLoginWithQrCodeHandlerCallsCount > 0
+    }
+
+    var newGrantLoginWithQrCodeHandlerUnderlyingReturnValue: GrantLoginWithQrCodeHandler!
+    open var newGrantLoginWithQrCodeHandlerReturnValue: GrantLoginWithQrCodeHandler! {
+        get {
+            if Thread.isMainThread {
+                return newGrantLoginWithQrCodeHandlerUnderlyingReturnValue
+            } else {
+                var returnValue: GrantLoginWithQrCodeHandler? = nil
+                DispatchQueue.main.sync {
+                    returnValue = newGrantLoginWithQrCodeHandlerUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                newGrantLoginWithQrCodeHandlerUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    newGrantLoginWithQrCodeHandlerUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var newGrantLoginWithQrCodeHandlerClosure: (() -> GrantLoginWithQrCodeHandler)?
+
+    open override func newGrantLoginWithQrCodeHandler() -> GrantLoginWithQrCodeHandler {
+        newGrantLoginWithQrCodeHandlerCallsCount += 1
+        if let newGrantLoginWithQrCodeHandlerClosure = newGrantLoginWithQrCodeHandlerClosure {
+            return newGrantLoginWithQrCodeHandlerClosure()
+        } else {
+            return newGrantLoginWithQrCodeHandlerReturnValue
+        }
+    }
+
+    //MARK: - newLoginWithQrCodeHandler
+
+    var newLoginWithQrCodeHandlerOidcConfigurationUnderlyingCallsCount = 0
+    open var newLoginWithQrCodeHandlerOidcConfigurationCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return newLoginWithQrCodeHandlerOidcConfigurationUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = newLoginWithQrCodeHandlerOidcConfigurationUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                newLoginWithQrCodeHandlerOidcConfigurationUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    newLoginWithQrCodeHandlerOidcConfigurationUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var newLoginWithQrCodeHandlerOidcConfigurationCalled: Bool {
+        return newLoginWithQrCodeHandlerOidcConfigurationCallsCount > 0
+    }
+    open var newLoginWithQrCodeHandlerOidcConfigurationReceivedOidcConfiguration: OidcConfiguration?
+    open var newLoginWithQrCodeHandlerOidcConfigurationReceivedInvocations: [OidcConfiguration] = []
+
+    var newLoginWithQrCodeHandlerOidcConfigurationUnderlyingReturnValue: LoginWithQrCodeHandler!
+    open var newLoginWithQrCodeHandlerOidcConfigurationReturnValue: LoginWithQrCodeHandler! {
+        get {
+            if Thread.isMainThread {
+                return newLoginWithQrCodeHandlerOidcConfigurationUnderlyingReturnValue
+            } else {
+                var returnValue: LoginWithQrCodeHandler? = nil
+                DispatchQueue.main.sync {
+                    returnValue = newLoginWithQrCodeHandlerOidcConfigurationUnderlyingReturnValue
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                newLoginWithQrCodeHandlerOidcConfigurationUnderlyingReturnValue = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    newLoginWithQrCodeHandlerOidcConfigurationUnderlyingReturnValue = newValue
+                }
+            }
+        }
+    }
+    open var newLoginWithQrCodeHandlerOidcConfigurationClosure: ((OidcConfiguration) -> LoginWithQrCodeHandler)?
+
+    open override func newLoginWithQrCodeHandler(oidcConfiguration: OidcConfiguration) -> LoginWithQrCodeHandler {
+        newLoginWithQrCodeHandlerOidcConfigurationCallsCount += 1
+        newLoginWithQrCodeHandlerOidcConfigurationReceivedOidcConfiguration = oidcConfiguration
+        DispatchQueue.main.async {
+            self.newLoginWithQrCodeHandlerOidcConfigurationReceivedInvocations.append(oidcConfiguration)
+        }
+        if let newLoginWithQrCodeHandlerOidcConfigurationClosure = newLoginWithQrCodeHandlerOidcConfigurationClosure {
+            return newLoginWithQrCodeHandlerOidcConfigurationClosure(oidcConfiguration)
+        } else {
+            return newLoginWithQrCodeHandlerOidcConfigurationReturnValue
+        }
     }
 
     //MARK: - notificationClient
@@ -3583,6 +3648,48 @@ open class ClientSDKMock: MatrixRustSDK.Client, @unchecked Sendable {
         } else {
             return observeRoomAccountDataEventRoomIdEventTypeListenerReturnValue
         }
+    }
+
+    //MARK: - registerNotificationHandler
+
+    var registerNotificationHandlerListenerUnderlyingCallsCount = 0
+    open var registerNotificationHandlerListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return registerNotificationHandlerListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = registerNotificationHandlerListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                registerNotificationHandlerListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    registerNotificationHandlerListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var registerNotificationHandlerListenerCalled: Bool {
+        return registerNotificationHandlerListenerCallsCount > 0
+    }
+    open var registerNotificationHandlerListenerReceivedListener: SyncNotificationListener?
+    open var registerNotificationHandlerListenerReceivedInvocations: [SyncNotificationListener] = []
+    open var registerNotificationHandlerListenerClosure: ((SyncNotificationListener) async -> Void)?
+
+    open override func registerNotificationHandler(listener: SyncNotificationListener) async {
+        registerNotificationHandlerListenerCallsCount += 1
+        registerNotificationHandlerListenerReceivedListener = listener
+        DispatchQueue.main.async {
+            self.registerNotificationHandlerListenerReceivedInvocations.append(listener)
+        }
+        await registerNotificationHandlerListenerClosure?(listener)
     }
 
     //MARK: - removeAvatar
@@ -8998,6 +9105,113 @@ open class EncryptionSDKMock: MatrixRustSDK.Encryption, @unchecked Sendable {
     open override func waitForE2eeInitializationTasks() async {
         waitForE2eeInitializationTasksCallsCount += 1
         await waitForE2eeInitializationTasksClosure?()
+    }
+}
+open class GrantLoginWithQrCodeHandlerSDKMock: MatrixRustSDK.GrantLoginWithQrCodeHandler, @unchecked Sendable {
+    init() {
+        super.init(noHandle: .init())
+    }
+
+    public required init(unsafeFromHandle handle: UInt64) {
+        fatalError("init(unsafeFromHandle:) has not been implemented")
+    }
+
+    fileprivate var handle: UInt64 {
+        get { return underlyingHandle }
+        set(value) { underlyingHandle = value }
+    }
+    fileprivate var underlyingHandle: UInt64!
+
+    //MARK: - generate
+
+    open var generateProgressListenerThrowableError: Error?
+    var generateProgressListenerUnderlyingCallsCount = 0
+    open var generateProgressListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return generateProgressListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = generateProgressListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                generateProgressListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    generateProgressListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var generateProgressListenerCalled: Bool {
+        return generateProgressListenerCallsCount > 0
+    }
+    open var generateProgressListenerReceivedProgressListener: GrantGeneratedQrLoginProgressListener?
+    open var generateProgressListenerReceivedInvocations: [GrantGeneratedQrLoginProgressListener] = []
+    open var generateProgressListenerClosure: ((GrantGeneratedQrLoginProgressListener) async throws -> Void)?
+
+    open override func generate(progressListener: GrantGeneratedQrLoginProgressListener) async throws {
+        if let error = generateProgressListenerThrowableError {
+            throw error
+        }
+        generateProgressListenerCallsCount += 1
+        generateProgressListenerReceivedProgressListener = progressListener
+        DispatchQueue.main.async {
+            self.generateProgressListenerReceivedInvocations.append(progressListener)
+        }
+        try await generateProgressListenerClosure?(progressListener)
+    }
+
+    //MARK: - scan
+
+    open var scanQrCodeDataProgressListenerThrowableError: Error?
+    var scanQrCodeDataProgressListenerUnderlyingCallsCount = 0
+    open var scanQrCodeDataProgressListenerCallsCount: Int {
+        get {
+            if Thread.isMainThread {
+                return scanQrCodeDataProgressListenerUnderlyingCallsCount
+            } else {
+                var returnValue: Int? = nil
+                DispatchQueue.main.sync {
+                    returnValue = scanQrCodeDataProgressListenerUnderlyingCallsCount
+                }
+
+                return returnValue!
+            }
+        }
+        set {
+            if Thread.isMainThread {
+                scanQrCodeDataProgressListenerUnderlyingCallsCount = newValue
+            } else {
+                DispatchQueue.main.sync {
+                    scanQrCodeDataProgressListenerUnderlyingCallsCount = newValue
+                }
+            }
+        }
+    }
+    open var scanQrCodeDataProgressListenerCalled: Bool {
+        return scanQrCodeDataProgressListenerCallsCount > 0
+    }
+    open var scanQrCodeDataProgressListenerReceivedArguments: (qrCodeData: QrCodeData, progressListener: GrantQrLoginProgressListener)?
+    open var scanQrCodeDataProgressListenerReceivedInvocations: [(qrCodeData: QrCodeData, progressListener: GrantQrLoginProgressListener)] = []
+    open var scanQrCodeDataProgressListenerClosure: ((QrCodeData, GrantQrLoginProgressListener) async throws -> Void)?
+
+    open override func scan(qrCodeData: QrCodeData, progressListener: GrantQrLoginProgressListener) async throws {
+        if let error = scanQrCodeDataProgressListenerThrowableError {
+            throw error
+        }
+        scanQrCodeDataProgressListenerCallsCount += 1
+        scanQrCodeDataProgressListenerReceivedArguments = (qrCodeData: qrCodeData, progressListener: progressListener)
+        DispatchQueue.main.async {
+            self.scanQrCodeDataProgressListenerReceivedInvocations.append((qrCodeData: qrCodeData, progressListener: progressListener))
+        }
+        try await scanQrCodeDataProgressListenerClosure?(qrCodeData, progressListener)
     }
 }
 open class HomeserverLoginDetailsSDKMock: MatrixRustSDK.HomeserverLoginDetails, @unchecked Sendable {
