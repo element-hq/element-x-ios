@@ -8,15 +8,16 @@
 
 import XCTest
 
+@MainActor
 class UserFlowTests: XCTestCase {
     private static let integrationTestsRoomName = "Element X iOS Integration Tests"
     private static let integrationTestsMessage = "Go down in flames!"
     
     private var app: XCUIApplication!
     
-    override func setUp() {
+    override func setUp() async throws {
         app = Application.launch()
-        app.login(currentTestCase: self)
+        try app.login(currentTestCase: self)
     }
     
     func testUserFlow() {
