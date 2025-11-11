@@ -8,10 +8,14 @@
 
 import XCTest
 
+enum IntegrationTestsError: Error {
+    case webAuthenticationSessionFailure
+}
+
 extension XCUIApplication {
     private var doesNotExistPredicate: NSPredicate { NSPredicate(format: "exists == 0") }
     
-    func login(currentTestCase: XCTestCase) {
+    func login(currentTestCase: XCTestCase) throws {
         let getStartedButton = buttons[A11yIdentifiers.authenticationStartScreen.signIn]
         
         XCTAssertTrue(getStartedButton.waitForExistence(timeout: 10.0))
@@ -55,6 +59,7 @@ extension XCUIApplication {
             remainingAttempts -= 1
             if remainingAttempts <= 0 {
                 XCTFail("Failed to present the web authentication session.")
+                throw IntegrationTestsError.webAuthenticationSessionFailure
             }
             
             if alerts.count > 0 {
